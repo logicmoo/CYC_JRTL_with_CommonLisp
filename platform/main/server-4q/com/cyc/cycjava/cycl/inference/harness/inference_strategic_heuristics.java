@@ -29,6 +29,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -960,7 +961,7 @@ public final class inference_strategic_heuristics extends SubLTranslatedFile imp
             }
             rest = rest.rest();
         } 
-        if ((NIL != bad) && (NIL == allow_other_keys_p)) {
+	if ((NIL != bad) && ((NIL == allow_other_keys_p && !SubLMain.BOOTY_HACKZ))) {
             cdestructuring_bind_error(plist, $list27);
         }
         final SubLObject function_tail = property_list_member($FUNCTION, plist);

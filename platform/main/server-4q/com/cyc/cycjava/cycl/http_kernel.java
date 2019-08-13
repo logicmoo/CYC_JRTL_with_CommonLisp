@@ -29,6 +29,7 @@ import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
 
+import org.armedbear.lisp.Debug;
 import org.armedbear.lisp.Main;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Environment;
@@ -1377,6 +1378,8 @@ public final class http_kernel extends SubLTranslatedFile implements V12 {
 			try {
 			    html_macros.$html_stream$.bind(out_stream, thread);
 			    cb_error($$$File_not_found, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+			    Debug.trace($$$File_not_found + " " + content);
+
 			} finally {
 			    html_macros.$html_stream$.rebind(_prev_bind_0_$6, thread);
 			}

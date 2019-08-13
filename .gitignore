@@ -34,6 +34,7 @@ powerloom-4.0.9.beta/
 rcyc/
 *~
 ~*
+*(2)*
 *~/
 ansi-tests/compile-file-test-lp.lsp
 ansi-tests/file-that-was-renamed.txt
@@ -106,12 +107,10 @@ uabcl/
 /tuprolog.git/
 /platform/e2c/sumo2loom/
 /platform/e2c/cycl/
-/platform/httpd/htdocs/cycdoc/app/
 /platform/e2c/XP/*.*
 /platform/units/*/
 /platform/Desktop/opencyc-server-jsrc/com/cyc/cycjava/cycl/module*
 /platform/unused/
-/platform/httpd/htdocs/*/
 /platform/data/
 /platform/e2c/myfrdcsa/
 /platform/transcripts/5022/i74930k*.ts
@@ -120,25 +119,10 @@ uabcl/
 /platform/StartMUD.sh
 /platform/units/*/
 /platform/transcripts/*/
-/astyleclipse-code-r42-branches/
-/pack/
-/swipl-pack/
-/runtime-EclipseApplication/
-/screamer-intro.html
-/webODE/
-/powerloom-4.0.10/
-
 CarBuilder.zip
-FairyTales/
-        LarKC platform/
-OntoPDDL/
-/SWeDE*
-/lojix/
 /platform/System.out
 /platform/main/lm-main/
 /platform/site-lisp/3t-frdcsa/
-/~HIDE~/
-
 /platform/site-lisp/shrdlu/srczzzz/*
 /platform/site-lisp/slime-ugh
 /platform/site-lisp/shrdlu/src/*._li

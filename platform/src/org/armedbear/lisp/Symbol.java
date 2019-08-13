@@ -329,15 +329,17 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	    return SubLObjectFactory.makeString("ERROR UNBOUND VALUE: " + getQualifiedName());
 	}
 	if (Main.isSubLisp()) {
-	    try {
-		if (SubLMain.BOOTY_HACKZ)
-		    Thread.sleep(1000);
-	    } catch (InterruptedException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+	    if (SubLMain.BOOTY_HACKZ) {
+		for (int i = 0; i < 10; i++)
+		    try {
+			Thread.sleep(1000);
+		    } catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		    }
+		if (value != null)
+		    return (LispObject) value;
 	    }
-	    if (value != null)
-		return (LispObject) value;
 	    Errors.error("ERROR UNBOUND VALUE: " + getQualifiedName());
 	}
 	return error(new UnboundVariable(this));
