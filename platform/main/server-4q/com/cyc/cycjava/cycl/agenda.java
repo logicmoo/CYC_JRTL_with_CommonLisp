@@ -1122,7 +1122,9 @@ public final class agenda extends SubLTranslatedFile implements V12 {
 		agenda.$within_agenda$.bind(T, thread);
 		funcall(action);
 	    } catch (final Throwable e) {
+		Errors.warn("UNABLE TO 1 " + action);
 		e.printStackTrace(SystemCurrent.err);
+		Errors.warn("UNABLE TO 2 " + action);
 		Errors.handleError(e);
 	    } finally {
 		agenda.$within_agenda$.rebind(_prev_bind_0, thread);

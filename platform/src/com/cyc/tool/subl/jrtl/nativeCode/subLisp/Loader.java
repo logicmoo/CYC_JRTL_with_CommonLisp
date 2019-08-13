@@ -267,10 +267,12 @@ public class Loader {
 
 	if (baseCheck == null) {
 	    if (notAgain.contains(className)) {
-		Errors.warn("Not again: " + className);
+		// Errors.warn("Not again: " + className);
 		return;
 	    } else if (notAgain.contains(shortClassName)) {
 		Errors.warn("Again: " + className);
+		notAgain.add(className);
+
 		if (!SubLTranslatedFile.installingUnderlay) {
 		    SubLTranslatedFile.installingUnderlay = true;
 		}

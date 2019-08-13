@@ -9,10 +9,13 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Loader;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLT;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 
 public class cycl implements SubLFile {
+    private static int rl;
+
     // // Constructors
     /**
      * Creates a new instance of cycl.
@@ -37,17 +40,34 @@ public class cycl implements SubLFile {
     }
 
     static public SubLObject setup_cycl_file() {
-	return setup_cycl_file_alt();
+	SubLObject r = SubLT.T;
+	for (int i = 2; i < 10; i++) {
+	    r = setup_cycl_file_alt(i);
+	    if (r == SubLT.T)
+		return r;
+	}
+	return r;
+    }
+
+    static public void initialize(int at, String here) {
+	if (rl >= at)
+	    initialize(here);
     }
 
     static public void initialize(String here) {
 	SubLFiles.initialize(here.replace("cycjava", "cycjava_2"));
     }
 
-    static public SubLObject setup_cycl_file_alt() {
+    static public SubLObject setup_cycl_file_alt(int useRl) {
+	rl = useRl;
 	INEXACT = true;
 	Loader.suffix = "";
 	Loader.else_do = false;
+	if (rl < 3) {
+	    Loader.skippedClasses.add(".*\\.inference.*");
+	} else {
+	    Loader.skippedClasses.clear();
+	}
 	initialize("com.cyc.cycjava.cycl.cyc_cvs_id");
 	initialize("com.cyc.cycjava.cycl.meta_macros");
 	initialize("com.cyc.cycjava.cycl.access_macros");
@@ -436,7 +456,7 @@ public class cycl implements SubLFile {
 	initialize("com.cyc.cycjava.cycl.backward_utilities");
 	initialize("com.cyc.cycjava.cycl.backward_results");
 
-	if (false) {
+	if (rl > 2) {
 
 	    initialize("com.cyc.cycjava.cycl.transformation_heuristics");
 	    initialize("com.cyc.cycjava.cycl.inference.inference_pad_data");
@@ -501,7 +521,7 @@ public class cycl implements SubLFile {
 
 	initialize("com.cyc.cycjava.cycl.neural_net");
 
-	if (false) {
+	if (rl > 2) {
 	    initialize("com.cyc.cycjava.cycl.inference.harness.inference_strategist");
 	    initialize("com.cyc.cycjava.cycl.inference.harness.inference_kernel");
 	    initialize("com.cyc.cycjava.cycl.inference.harness.inference_trivial");
@@ -627,7 +647,7 @@ public class cycl implements SubLFile {
 	initialize("com.cyc.cycjava.cycl.removal_modules_halo");
 	initialize("com.cyc.cycjava.cycl.chemistry_utilities");
 	initialize("com.cyc.cycjava.cycl.removal_modules_chemistry");
-	if (false) {
+	if (rl > 2) {
 
 	    initialize("com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_gis");
 	    initialize("com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_near_terms");
@@ -679,7 +699,7 @@ public class cycl implements SubLFile {
 	initialize("com.cyc.cycjava.cycl.kb_cleanup");
 	initialize("com.cyc.cycjava.cycl.genls_hierarchy_problems");
 	initialize("com.cyc.cycjava.cycl.encapsulation");
-	if (false) {
+	if (rl > 9) {
 	    initialize("com.cyc.cycjava.cycl.transcript_utilities");
 	    initialize("com.cyc.cycjava.cycl.transcript_server");
 	    initialize("com.cyc.cycjava.cycl.operation_communication");
@@ -875,7 +895,7 @@ public class cycl implements SubLFile {
 	initialize("com.cyc.cycjava.cycl.cb_form_widgets");
 	initialize("com.cyc.cycjava.cycl.cb_events");
 	initialize("com.cyc.cycjava.cycl.cb_adornments");
-	//initialize("com.cyc.cycjava.cycl.cb_frames");
+	initialize(5, "com.cyc.cycjava.cycl.cb_frames");
 	initialize("com.cyc.cycjava.cycl.cb_viewpoint");
 	initialize("com.cyc.cycjava.cycl.cb_java_utilities");
 	initialize("com.cyc.cycjava.cycl.cb_naut_utilities");
@@ -886,7 +906,7 @@ public class cycl implements SubLFile {
 	initialize("com.cyc.cycjava.cycl.inference.experiment_loop");
 	initialize("com.cyc.cycjava.cycl.cyc_navigator_internals");
 	initialize("com.cyc.cycjava.cycl.cyc_navigator_links");
-	//initialize("com.cyc.cycjava.cycl.cb_browser");
+	initialize(5, "com.cyc.cycjava.cycl.cb_browser");
 	initialize("com.cyc.cycjava.cycl.cb_inferred_index");
 	initialize("com.cyc.cycjava.cycl.cb_fact_sheets");
 	initialize("com.cyc.cycjava.cycl.cb_fet");
@@ -1220,55 +1240,6 @@ public class cycl implements SubLFile {
 	initialize("com.cyc.cycjava.cycl.sksi.corba.corba_module_utilities");
 	initialize("com.cyc.cycjava.cycl.sksi.corba.corba_hpac_removal_modules");
 	initialize("com.cyc.cycjava.cycl.collaborative_sense_making_utilities");
-	if (true) {
-	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.cycsecure_system_parameters");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.infrastructure_macros");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.infrastructure_vars");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.infrastructure_utilities");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.cycsecure_file_hash_table_utilities");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.info_lookup_utilities");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.cs_data_vars");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.cs_data_macros");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.cs_data_utilities");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.cs_data_definitions");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.cs_model");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.cs_removal_module_macros");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.cs_removal_module_utilities");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.cs_removal_module_definitions");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.rsa");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.cycsecure_after_addings");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.cycsecure_guid_map");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.package_interface.interface_vars");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.package_interface.cs_html_vars");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.package_interface.cs_html_macros");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.package_interface.interface_utilities");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.package_interface.cs_html_utilities");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.cs_adapters_nl");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.package_interface.cs_data_ui");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.knowledge_discovery.cs_policy_compliance_tool");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.package_interface.cs_html_policy_editor");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.knowledge_discovery.browser");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.knowledge_discovery.stats_page");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.knowledge_discovery.network_view_tool");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.knowledge_discovery.query_tool.cs_query_tool");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.knowledge_discovery.planner.planner_classes");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.knowledge_discovery.planner.plan_tasks");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.knowledge_discovery.planner.attack_goals");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.knowledge_discovery.planner.cs_defense_planner");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.knowledge_discovery.planner.plan_analysis");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.knowledge_discovery.planner.planner");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.network_representation.network_configuration_tool");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.network_representation.network_communication.network_import_helpers");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.network_representation.network_communication.network_importer");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.network_representation.network_communication.network_scan.sentinel_communication");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.network_representation.network_communication.network_scan.initial_scan");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.network_representation.network_communication.network_scan.complete_scan");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.network_representation.network_communication.network_scan.scanner_tool");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.network_representation.network_communication.network_scan.scan_scheduler");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.network_representation.network_communication.network_scan.vulnerability_analyzer");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.network_representation.model_management.model_manager");
-	    initialize("com.cyc.cycjava.cycl.cycsecure.network_representation.model_management.model_editor");
-	}
 
 	initialize("com.cyc.cycjava.cycl.rtp.rtp_vars");
 	initialize("com.cyc.cycjava.cycl.rtp_pipeline_integration");
@@ -1291,6 +1262,7 @@ public class cycl implements SubLFile {
 	initialize("com.cyc.cycjava.cycl.formula_template_utilities");
 	initialize("com.cyc.cycjava.cycl.cb_formula_templates");
 	initialize("com.cyc.cycjava.cycl.jubl");
+
 	if (true) {
 	    initialize("com.cyc.cycjava.cycl.cyblack.cyblack_lexifier");
 	    initialize("com.cyc.cycjava.cycl.cyblack.cyblack_lalr");
@@ -1552,6 +1524,57 @@ public class cycl implements SubLFile {
 	    initialize("com.cyc.cycjava.cycl.java_backend");
 	    initialize("com.cyc.cycjava.cycl.translator_utilities");
 	    initialize("com.cyc.cycjava.cycl.cb_translation_browser");
+	}
+	if (false)
+
+	{
+	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.cycsecure_system_parameters");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.infrastructure_macros");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.infrastructure_vars");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.infrastructure_utilities");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.cycsecure_file_hash_table_utilities");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.info_lookup_utilities");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.cs_data_vars");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.cs_data_macros");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.cs_data_utilities");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.cs_data_definitions");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.cs_model");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.cs_removal_module_macros");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.cs_removal_module_utilities");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.cs_removal_module_definitions");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.rsa");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.cycsecure_after_addings");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.cycsecure_guid_map");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.package_interface.interface_vars");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.package_interface.cs_html_vars");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.package_interface.cs_html_macros");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.package_interface.interface_utilities");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.package_interface.cs_html_utilities");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.infrastructure.cs_adapters_nl");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.package_interface.cs_data_ui");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.knowledge_discovery.cs_policy_compliance_tool");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.package_interface.cs_html_policy_editor");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.knowledge_discovery.browser");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.knowledge_discovery.stats_page");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.knowledge_discovery.network_view_tool");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.knowledge_discovery.query_tool.cs_query_tool");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.knowledge_discovery.planner.planner_classes");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.knowledge_discovery.planner.plan_tasks");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.knowledge_discovery.planner.attack_goals");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.knowledge_discovery.planner.cs_defense_planner");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.knowledge_discovery.planner.plan_analysis");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.knowledge_discovery.planner.planner");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.network_representation.network_configuration_tool");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.network_representation.network_communication.network_import_helpers");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.network_representation.network_communication.network_importer");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.network_representation.network_communication.network_scan.sentinel_communication");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.network_representation.network_communication.network_scan.initial_scan");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.network_representation.network_communication.network_scan.complete_scan");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.network_representation.network_communication.network_scan.scanner_tool");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.network_representation.network_communication.network_scan.scan_scheduler");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.network_representation.network_communication.network_scan.vulnerability_analyzer");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.network_representation.model_management.model_manager");
+	    initialize("com.cyc.cycjava.cycl.cycsecure.network_representation.model_management.model_editor");
 	}
 	return SubLNil.NIL;
     }

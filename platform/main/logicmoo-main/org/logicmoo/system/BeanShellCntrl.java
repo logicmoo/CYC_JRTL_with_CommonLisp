@@ -1121,16 +1121,38 @@ public class BeanShellCntrl {
     }
 
     @LispMethod
+    static public void init_server_2() {
+	synchronized (StartupInitLock) {
+	    final boolean wasSubLisp = Main.isSubLisp();
+	    SubLPackage prevPackage = Lisp.getCurrentPackage();
+	    try {
+
+		try {
+		    SubLMain.initialize1TranslatedSystem("com.cyc.cycjava.cycl.cycl");
+		} catch (Throwable e) {
+		    e.printStackTrace();
+		    doThrow(e);
+		}
+	    } finally {
+		SubLPackage.setCurrentPackage(prevPackage);
+		Main.setSubLisp(wasSubLisp);
+	    }
+
+	}
+    }
+
+    @LispMethod
     static public void init_server() {
 	synchronized (StartupLock) {
 	    if (inited_cyc_server)
 		return;
 	}
+	Throwable te = null;
 	synchronized (StartupInitLock) {
-	    boolean wasSubLisp = Main.isSubLisp();
-	    Main.setSubLisp(true);
+	    final boolean wasSubLisp = Main.isSubLisp();
+	    SubLPackage prevPackage = Lisp.getCurrentPackage();
 	    try {
-		SubLPackage prevPackage = Lisp.getCurrentPackage();
+		Main.setSubLisp(true);
 		try {
 		    init_cyc();
 		    SubLPackage.setCurrentPackage("CYC");
@@ -1141,20 +1163,30 @@ public class BeanShellCntrl {
 		    //SubLFiles.initialize("com.cyc.cycjava_3.cycl.cycl");
 		    //(cyc-eval (INITIALIZE-SUBL-INTERFACE-FILE "com.cyc.cycjava_2.cycl.cycl") :CYC)
 		    // if( !SubLMain.OPENCYC )
-		    // LarkcInit.initializeLarkc();
+		    if (false) {
+			eu.larkc.core.orchestrator.LarkcInit.initializeLarkc();
+		    }
 		    LarKCHttpServer.start_sparql_server();
 		    inited_cyc_server = true;
-		    SubLMain.initialize1TranslatedSystem("com.cyc.cycjava.cycl.cycl");
+		} catch (Throwable e) {
+		    e.printStackTrace();
+		    te = e;
+		}
+		init_server_2();
+		try {
 		    PrologSync.setPrologReady(true);
 		    LispSync.setLispReady(true);
 		} catch (Throwable e) {
-		    throw doThrow(e);
-		} finally {
-		    SubLPackage.setCurrentPackage(prevPackage);
+		    te = e;
+		}
+		if (te != null) {
+		    doThrow(te);
 		}
 	    } finally {
+		SubLPackage.setCurrentPackage(prevPackage);
 		Main.setSubLisp(wasSubLisp);
 	    }
+
 	}
     }
 

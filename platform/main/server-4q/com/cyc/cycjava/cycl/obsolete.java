@@ -111,7 +111,9 @@ public final class obsolete extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol FIND_CNAT = makeSymbol("FIND-CNAT");
 
-    static private final SubLList $list43 = list(makeSymbol("FIND-CLOSED-NAUT"));
+    private static final SubLSymbol FIND_CLOSED_NAUT = makeSymbol("FIND-CLOSED-NAUT");
+
+    static private final SubLList $list43 = list(FIND_CLOSED_NAUT);
 
     private static final SubLSymbol OPEN_NAT_P = makeSymbol("OPEN-NAT-P");
 
@@ -151,7 +153,7 @@ public final class obsolete extends SubLTranslatedFile implements V12 {
      */
     @LispMethod(comment = "obsolete -- use NART-P")
     public static final SubLObject nat_p_alt(SubLObject v_object) {
-	Errors.warn($str_alt2$NAT_P_is_obsolete___use_NART_P_or);
+	Errors.warn($str2$NAT_P_is_obsolete___use_NART_P_or);
 	return nart_handles.nart_p(v_object);
     }
 
@@ -170,7 +172,7 @@ public final class obsolete extends SubLTranslatedFile implements V12 {
      */
     @LispMethod(comment = "obsolete -- use FIND-NART")
     public static final SubLObject find_nat_alt(SubLObject nat_formula) {
-	Errors.warn($str_alt5$FIND_NAT_is_obsolete___use_FIND_N);
+	Errors.warn($str5$FIND_NAT_is_obsolete___use_FIND_N);
 	return narts_high.find_nart(nat_formula);
     }
 
@@ -220,24 +222,6 @@ public final class obsolete extends SubLTranslatedFile implements V12 {
      * @unknown deprecated in favour of @xref leave-some-terms-at-el-for-arg?
      */
     @LispMethod(comment = "@return boolean; t iff arg number ARGNUM of RELATION is an EL formula template.\r\n(note: variables within such templates are not canonicalized)\r\n@unknown deprecated in favour of @xref leave-some-terms-at-el-for-arg?")
-    public static final SubLObject el_template_argP_alt(SubLObject relation, SubLObject argnum, SubLObject mt) {
-	if (mt == UNPROVIDED) {
-	    mt = NIL;
-	}
-	if (argnum.numG(ZERO_INTEGER)) {
-	    return czer_utilities.leave_some_terms_at_el_for_argP(relation, argnum, mt);
-	}
-	return NIL;
-    }
-
-    /**
-     *
-     *
-     * @return boolean; t iff arg number ARGNUM of RELATION is an EL formula template.
-    (note: variables within such templates are not canonicalized)
-     * @unknown deprecated in favour of @xref leave-some-terms-at-el-for-arg?
-     */
-    @LispMethod(comment = "@return boolean; t iff arg number ARGNUM of RELATION is an EL formula template.\r\n(note: variables within such templates are not canonicalized)\r\n@unknown deprecated in favour of @xref leave-some-terms-at-el-for-arg?")
     public static SubLObject el_template_argP(final SubLObject relation, final SubLObject argnum, SubLObject mt) {
 	if (mt == UNPROVIDED) {
 	    mt = NIL;
@@ -248,12 +232,6 @@ public final class obsolete extends SubLTranslatedFile implements V12 {
 	return NIL;
     }
 
-    public static final SubLObject natP_alt(SubLObject nat, SubLObject varP) {
-	if (varP == UNPROVIDED) {
-	    varP = symbol_function($sym13$EL_VAR_);
-	}
-	return term.nautP(nat, varP);
-    }
 
     public static SubLObject natP(final SubLObject nat, SubLObject varP) {
 	if (varP == UNPROVIDED) {
@@ -262,30 +240,12 @@ public final class obsolete extends SubLTranslatedFile implements V12 {
 	return term.nautP(nat, varP);
     }
 
-    public static final SubLObject relationshipP_alt(SubLObject v_object) {
-	return kb_accessors.relationP(v_object);
-    }
-
     public static SubLObject relationshipP(final SubLObject v_object) {
 	return kb_accessors.relationP(v_object);
     }
 
-    public static final SubLObject reified_natP_alt(SubLObject v_term) {
-	return czer_utilities.naut_with_corresponding_nartP(v_term);
-    }
-
     public static SubLObject reified_natP(final SubLObject v_term) {
 	return czer_utilities.naut_with_corresponding_nartP(v_term);
-    }
-
-    public static final SubLObject reifiable_natP_alt(SubLObject v_term, SubLObject varP, SubLObject mt) {
-	if (varP == UNPROVIDED) {
-	    varP = symbol_function($sym20$CYC_VAR_);
-	}
-	if (mt == UNPROVIDED) {
-	    mt = NIL;
-	}
-	return czer_utilities.reifiable_nautP(v_term, varP, mt);
     }
 
     public static SubLObject reifiable_natP(final SubLObject v_term, SubLObject varP, SubLObject mt) {
@@ -422,27 +382,12 @@ public final class obsolete extends SubLTranslatedFile implements V12 {
 	return cycl_utilities.reify_when_closed_naut(v_object);
     }
 
-    public static final SubLObject find_when_cnat_alt(SubLObject v_object) {
-	return cycl_utilities.find_when_closed_naut(v_object);
-    }
-
     public static SubLObject find_when_cnat(final SubLObject v_object) {
 	return cycl_utilities.find_when_closed_naut(v_object);
     }
 
-    public static final SubLObject find_cnat_alt(SubLObject v_object) {
-	return cycl_utilities.find_closed_naut(v_object);
-    }
-
     public static SubLObject find_cnat(final SubLObject v_object) {
 	return cycl_utilities.find_closed_naut(v_object);
-    }
-
-    public static final SubLObject open_nat_p_alt(SubLObject v_object, SubLObject varP) {
-	if (varP == UNPROVIDED) {
-	    varP = symbol_function($sym20$CYC_VAR_);
-	}
-	return term.open_nautP(v_object, varP);
     }
 
     public static SubLObject open_nat_p(final SubLObject v_object, SubLObject varP) {
@@ -589,24 +534,6 @@ public final class obsolete extends SubLTranslatedFile implements V12 {
 	return NIL;
     }
 
-    static private final SubLList $list_alt1 = list(makeSymbol("NART-P"), makeSymbol("CYCL-NAT-P"));
-
-    static private final SubLString $str_alt2$NAT_P_is_obsolete___use_NART_P_or = makeString("NAT-P is obsolete ; use NART-P or CYCL-NAT-P");
-
-    static private final SubLList $list_alt4 = list(makeSymbol("NART-P"));
-
-    static private final SubLString $str_alt5$FIND_NAT_is_obsolete___use_FIND_N = makeString("FIND-NAT is obsolete ; use FIND-NART");
-
-    static private final SubLList $list_alt7 = list(makeSymbol("CYC-REVISION-NUMBERS"));
-
-    static private final SubLList $list_alt10 = list(makeSymbol("LEAVE-SOME-TERMS-AT-EL-FOR-ARG?"));
-
-    static private final SubLList $list_alt12 = list(makeSymbol("NAUT?"));
-
-    static private final SubLList $list_alt15 = list(makeSymbol("RELATION?"));
-
-    static private final SubLList $list_alt17 = list(makeSymbol("NAUT-WITH-CORRESPONDING-NART?"));
-
     public static SubLObject init_obsolete_file() {
 	return NIL;
     }
@@ -644,30 +571,10 @@ public final class obsolete extends SubLTranslatedFile implements V12 {
 	return NIL;
     }
 
-    static private final SubLList $list_alt19 = list(makeSymbol("REIFIABLE-NAUT?"));
-
-    static private final SubLList $list_alt22 = list(makeSymbol("KB-NAUT?"));
-
-    static private final SubLList $list_alt27 = list(makeSymbol("GROUND-NAUT?"));
-
-    static private final SubLList $list_alt29 = list(makeSymbol("HL-GROUND-NAUT?"));
-
-    static private final SubLList $list_alt31 = list(makeSymbol("FIND-GROUND-NAUT"));
-
-    static private final SubLList $list_alt33 = list(makeSymbol("CLOSED-NAUT?"));
-
-    static private final SubLList $list_alt36 = list(makeSymbol("REIFY-ARG-WHEN-CLOSED-NAUT"));
-
-    static private final SubLList $list_alt38 = list(makeSymbol("REIFY-WHEN-CLOSED-NAUT"));
-
-    static private final SubLList $list_alt41 = list(makeSymbol("FIND-WHEN-CLOSED-NAUT"));
-
     @Override
     public void declareFunctions() {
 	declare_obsolete_file();
     }
-
-    static private final SubLList $list_alt43 = list(makeSymbol("FIND-CLOSED-NAUT"));
 
     @Override
     public void initializeVariables() {
@@ -679,24 +586,6 @@ public final class obsolete extends SubLTranslatedFile implements V12 {
 	setup_obsolete_file();
     }
 
-    static private final SubLList $list_alt45 = list(makeSymbol("OPEN-NAUT?"));
-
-    static {
-    }
-
-    static private final SubLList $list_alt47 = list(makeSymbol("FIRST-ORDER-NAUT?"));
-
-    static private final SubLList $list_alt49 = list(makeSymbol("UNGROUND-NAUT?"));
-
-    static private final SubLList $list_alt51 = list(makeSymbol("SENTENCE-FREE-VARIABLES"));
-
-    static private final SubLList $list_alt53 = list(makeSymbol("SENTENCE-VARIABLES"));
-
-    static private final SubLList $list_alt55 = list(makeSymbol("COMPLETELY-ENUMERABLE-COLLECTION?"));
-
-    static private final SubLList $list_alt57 = list(makeSymbol("COMPLETE-EXTENT-ENUMERABLE?"));
-
-    static private final SubLList $list_alt59 = list(makeSymbol("BOOLEANP"));
 }
 
 /**
