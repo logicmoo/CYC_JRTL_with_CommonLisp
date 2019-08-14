@@ -77,11 +77,65 @@
 		</testResources>
 
 		<plugins>
-
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<id>validate.platform</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<ant antfile="${basedir}/build.xml">
+									<target name="abcl.compile.lisp" />
+								</ant>
+							</target>
+							<failOnError>false</failOnError>
+						</configuration>
+					</execution>
+					<execution>
+						<id>process-sources.platform</id>
+						<phase>process-sources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<ant antfile="${basedir}/build.xml">
+									<target name="abcl.jar" />
+								</ant>
+							</target>
+							<failOnError>true</failOnError>
+						</configuration>
+					</execution>
+					<execution>
+						<id>compile.platform</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<ant antfile="${basedir}/build.xml">
+									<target name="abcl.wrapper" />
+								</ant>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.0</version>
 				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 					<includes>
 						<include>src/**/*.java</include>
 						<include>main/cycjava-persistence-hacks/**/*.java</include>
@@ -112,15 +166,8 @@
 							<goal>add-source</goal>
 						</goals>
 						<configuration>
+							<skip>true</skip>
 							<sources>
-
-								<!-- <classpathentry excluding="bsh/" kind="src" path="main/logicmoo-main"/> 
-									<classpathentry excluding="com/cyc/cycjava/cycl/" kind="src" path="main/opencyc-server-jsrc-in-progress"/> 
-									<classpathentry excluding="org/abcl/util/StreamTaskTest.java" kind="src" 
-									path="test/src"/> <classpathentry excluding="src/" kind="src" path="test"/> 
-									<classpathentry excluding="com/cyc/tool/subl/jrtl/nativeCode/subLisp/UnitTest.java" 
-									including="**/*.*|META-INF/|com/|org/" kind="src" path="src"/> <classpathentry 
-									excluding="test/" including="**/*" kind="src" path="main/beanshell"/> -->
 								<source>main/cycjava-persistence-hacks</source>
 								<source>main/logicmoo-main</source>
 								<source>main/opencyc-server-jsrc-in-progress</source>
@@ -149,13 +196,14 @@
 				and </target> in a build.xml. </tasks> </configuration> <goals> <goal>run</goal> 
 				</goals> </execution> </executions> </plugin> -->
 
+
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>1.6.0</version>
 				<executions>
 					<execution>
-						<phase>compile</phase>
+						<phase>test</phase>
 						<goals>
 							<goal>java</goal>
 						</goals>
@@ -170,36 +218,7 @@
 							<value>${target.dir}</value>
 						</systemProperty>
 					</systemProperties>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>Setup Lisp Code</id>
-						<phase>process-sources</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<target>
-								<ant antfile="./build.xml">
-									<target name="abcl.wrapper" />
-								</ant>
-							</target>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.0</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-					<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+					<skip>true</skip>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -290,12 +309,6 @@
 			<artifactId>junit-dep</artifactId>
 			<version>4.8.2</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit-dep</artifactId>
-			<version>4.8.1</version>
-			<scope>runtime</scope>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/javax.servlet/servlet-api -->
 		<dependency>
