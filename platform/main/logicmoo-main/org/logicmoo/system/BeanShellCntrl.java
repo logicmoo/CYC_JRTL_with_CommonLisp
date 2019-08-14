@@ -521,6 +521,8 @@ public class BeanShellCntrl {
 
     @LispMethod
     static public void cl_imports_cyc() {
+		if (true)
+			return;
 	if (SubLMain.Never_REDEFINE)
 	    return;
 	synchronized (StartupLock) {
@@ -549,8 +551,6 @@ public class BeanShellCntrl {
 
     @LispMethod
     static public void cyc_imports_cl() {
-	if (true)
-	    return;
 	Symbol._PACKAGE_.setProcessScope(true);
 	if (!Main.isSubLisp()) {
 	    return;
