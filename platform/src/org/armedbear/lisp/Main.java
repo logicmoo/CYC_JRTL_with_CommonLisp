@@ -276,6 +276,7 @@ public final class Main {
 		}
 		if (argsList.remove("--noinit")) {
 			Interpreter.noinit = true;
+			argsList.add(0, "--noprolog");
 		}
 		if (argsList.remove("--j")) {
 			Interpreter.jlisp = true;

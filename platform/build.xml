@@ -369,7 +369,8 @@ from ${abcl.home.dir}
         <jvmarg value="-Dabcl.home=${abcl.home.dir}${file.separator}"/>
         <jvmarg value="-Dabcl.autoload.verbose=Y"/>
         <additional.jvmarg/>
-        <arg value="--noinit"/>
+	<arg value="--noinit"/>
+	<arg value="--noprolog"/>
         <arg value="--nosystem"/>
         <arg value="--eval"/>
         <arg value="(setf *load-verbose* t)"/>
@@ -1143,7 +1144,7 @@ ${basedir}/../cl-bench
       <java fork="true" dir="${basedir}"
             classpathref="abcl.classpath.dist"
             classname="org.armedbear.lisp.Main">
-        <arg value="--noinit"/>
+	<arg value="--noinit"/>
         <arg value="--eval"/><arg value="(require (quote asdf))"/>
         <arg value="--eval"/>
           <arg value="(asdf:initialize-source-registry `(:source-registry (:directory ,*default-pathname-defaults*) :inherit-configuration))"/>
