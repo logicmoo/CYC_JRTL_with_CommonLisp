@@ -253,6 +253,7 @@ For help on the automatic tests available, use the Ant target 'help.test'.
     	
       <!-- Stock build for Java 1.5 (aka Java 2) container -->
       <javac destdir="${build.classes.dir}"
+      	     fork="true"
              debug="true"
              target="${cv}"
              source="${cv}"          
@@ -1103,6 +1104,7 @@ ${basedir}/../cl-bench
       <mkdir dir="${abcl.test.classes.dir}"/>
       <javac destdir="${abcl.test.classes.dir}"
              classpathref="abcl.test.compile.classpath"
+      	     fork="true"
              debug="true"
              target="${cv}">
         <src path="${abcl.test.src.dir}"/>

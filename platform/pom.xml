@@ -148,34 +148,44 @@
 				Place any ant task here. You can add anything you can add between <target> 
 				and </target> in a build.xml. </tasks> </configuration> <goals> <goal>run</goal> 
 				</goals> </execution> </executions> </plugin> -->
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.6.0</version>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>java</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<mainClass>org.apache.tools.ant.launch.Launcher</mainClass>
+					<arguments>-f,build.xml</arguments>
+					<systemProperties>
+						<systemProperty>
+							<key>target.dir</key>
+							<value>${target.dir}</value>
+						</systemProperty>
+					</systemProperties>
+				</configuration>
+			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>Compile Lisp Code</id>
-						<phase>generate-sources</phase>
+						<id>Setup Lisp Code</id>
+						<phase>process-sources</phase>
 						<goals>
 							<goal>run</goal>
 						</goals>
 						<configuration>
 							<target>
-								<ant antfile="${basedir}/build.xml">
-									<target name="abcl.wrapper" />
-								</ant>
-							</target>
-						</configuration>
-					</execution>
-					<execution>
-						<id>Test Lisp Code</id>
-						<phase>process-test-resources</phase>
-						<!-- phase>generate-sources</phase> -->
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<target>
-								<ant antfile="${basedir}/build.xml">
+								<ant antfile="./build.xml">
 									<target name="abcl.wrapper" />
 								</ant>
 							</target>
@@ -227,6 +237,12 @@
 		</pluginManagement>
 	</build>
 	<dependencies>
+		<dependency>
+			<groupId>org.apache.ant</groupId>
+			<artifactId>ant</artifactId>
+			<version>1.10.5</version>
+			<scope>compile</scope>
+		</dependency>
 		<!-- Thanks for using https://jar-download.com -->
 		<dependency>
 			<groupId>org.apache.maven</groupId>
@@ -260,7 +276,7 @@
 			<version>1.2.5</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<!-- https://mvnrepository.com/artifact/log4j/log4j -->
 		<dependency>
 			<groupId>log4j</groupId>
