@@ -16,8 +16,8 @@
 (pushnew :use-cyc *features*)
 ;; (pushnew :use-dd *features*)
 
-     (cyc:init-cyc) ;; Loads CYC code (without a KB)
-     '(cyc::setup-kb-tables 0)
+     (user:init-cyc) ;; Loads CYC code (without a KB)
+     '(user::setup-kb-tables 0)
 
 ;; Starts AppdapterGUI
 ;; (UI-INSPECTOR)
@@ -143,7 +143,7 @@
 ;; Starts rest of CYC
 #+USE-CYC
 (let ((*PACKAGE* *PACKAGE*))
-   (cyc:init-cyc-server))
+   (user:init-cyc-server))
 
 
 ;; ABCL JSS:     (#"setText" my-label "The Larch")
