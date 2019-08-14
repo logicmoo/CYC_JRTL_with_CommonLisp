@@ -15,7 +15,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
 public abstract class SubLTranslatedFile extends SubLTrampolineFile implements CommonSymbols, CommonSymbols_CYC
 //
 {
-    static protected SubLFiles SubLFiles;
+	// static protected SubLFiles SubLFiles;
     public static boolean installingUnderlay = false;
     
     public static boolean transferOverwrite = false;

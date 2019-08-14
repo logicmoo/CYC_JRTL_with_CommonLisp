@@ -8,10 +8,7 @@ import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import javax.swing.JDesktopPane;
 import javax.swing.JPanel;
-
-import org.armedbear.lisp.java.swing.REPLConsole;
 
 import bsh.Interpreter;
 

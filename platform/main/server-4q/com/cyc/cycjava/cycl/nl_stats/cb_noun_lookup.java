@@ -3,14 +3,35 @@
  */
 package com.cyc.cycjava.cycl.nl_stats;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 
-import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.V02;
+import com.cyc.cycjava.cycl.cb_frames;
+import com.cyc.cycjava.cycl.cb_parameters;
+import com.cyc.cycjava.cycl.cb_utilities;
+import com.cyc.cycjava.cycl.constant_handles;
+import com.cyc.cycjava.cycl.el_utilities;
+import com.cyc.cycjava.cycl.forts;
+import com.cyc.cycjava.cycl.genls;
+import com.cyc.cycjava.cycl.html_complete;
+import com.cyc.cycjava.cycl.html_macros;
+import com.cyc.cycjava.cycl.html_script_utilities;
+import com.cyc.cycjava.cycl.html_utilities;
+import com.cyc.cycjava.cycl.integer_sequence_generator;
+import com.cyc.cycjava.cycl.isa;
+import com.cyc.cycjava.cycl.list_utilities;
+import com.cyc.cycjava.cycl.string_utilities;
+import com.cyc.cycjava.cycl.system_parameters;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;

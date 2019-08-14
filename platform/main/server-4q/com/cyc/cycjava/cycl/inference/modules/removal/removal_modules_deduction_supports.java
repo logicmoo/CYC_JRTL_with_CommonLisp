@@ -4,23 +4,37 @@
 package com.cyc.cycjava.cycl.inference.modules.removal;
 
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.control_vars.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
+import static com.cyc.cycjava.cycl.control_vars.$cheap_hl_module_check_cost$;
+import static com.cyc.cycjava.cycl.el_utilities.make_unary_formula;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.member;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
+import static com.cyc.tool.subl.util.SubLFiles.deflexical;
+import static com.cyc.tool.subl.util.SubLFiles.defparameter;
 
-import org.logicmoo.system.BeanShellCntrl;
-
-import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.V12;
+import com.cyc.cycjava.cycl.arguments;
+import com.cyc.cycjava.cycl.assertion_handles;
+import com.cyc.cycjava.cycl.assertions_high;
+import com.cyc.cycjava.cycl.backward;
+import com.cyc.cycjava.cycl.bindings;
+import com.cyc.cycjava.cycl.cycl_utilities;
+import com.cyc.cycjava.cycl.deduction_handles;
+import com.cyc.cycjava.cycl.deductions_high;
+import com.cyc.cycjava.cycl.unification_utilities;
+import com.cyc.cycjava.cycl.variables;
 import com.cyc.cycjava.cycl.inference.harness.inference_modules;
 import com.cyc.cycjava.cycl.inference.modules.preference_modules;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLFiles;
+import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 

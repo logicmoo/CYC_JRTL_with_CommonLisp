@@ -3,7 +3,7 @@
 //
 package com.cyc.tool.subl.jrtl.nativeCode.type.stream;
 
-import static org.armedbear.lisp.Keyword.*;
+import static org.armedbear.lisp.Keyword.BINARY_KEYWORD;
 
 import org.armedbear.lisp.Stream;
 import org.armedbear.lisp.Symbol;

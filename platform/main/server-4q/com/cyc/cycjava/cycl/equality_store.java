@@ -4,18 +4,33 @@
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-
-import org.logicmoo.system.BeanShellCntrl;
+import static com.cyc.cycjava.cycl.constant_handles.valid_constantP;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.declare_defglobal;
+import static com.cyc.cycjava.cycl.utilities_macros.$is_noting_progressP$;
+import static com.cyc.cycjava.cycl.utilities_macros.$noting_progress_start_time$;
+import static com.cyc.cycjava.cycl.utilities_macros.$progress_count$;
+import static com.cyc.cycjava.cycl.utilities_macros.$progress_elapsed_seconds_for_notification$;
+import static com.cyc.cycjava.cycl.utilities_macros.$progress_last_pacification_time$;
+import static com.cyc.cycjava.cycl.utilities_macros.$progress_notification_count$;
+import static com.cyc.cycjava.cycl.utilities_macros.$progress_pacifications_since_last_nl$;
+import static com.cyc.cycjava.cycl.utilities_macros.$progress_start_time$;
+import static com.cyc.cycjava.cycl.utilities_macros.$silent_progressP$;
+import static com.cyc.cycjava.cycl.utilities_macros.$suppress_all_progress_faster_than_seconds$;
+import static com.cyc.cycjava.cycl.utilities_macros.note_progress;
+import static com.cyc.cycjava.cycl.utilities_macros.noting_progress_postamble;
+import static com.cyc.cycjava.cycl.utilities_macros.noting_progress_preamble;
+import static com.cyc.cycjava.cycl.utilities_macros.register_kb_function;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.multiply;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.boundp;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.get_universal_time;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
+import static com.cyc.tool.subl.util.SubLFiles.deflexical;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -23,6 +38,8 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLFiles;
+import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 

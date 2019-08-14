@@ -34,7 +34,7 @@
 
 package org.armedbear.lisp.util;
 
-import static org.armedbear.lisp.Lisp.*;
+import static org.armedbear.lisp.Lisp.error;
 
 import java.io.IOException;
 import java.io.OutputStream;

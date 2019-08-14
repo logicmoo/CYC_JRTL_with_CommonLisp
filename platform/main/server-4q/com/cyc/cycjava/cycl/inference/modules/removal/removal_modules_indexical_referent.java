@@ -4,18 +4,33 @@
 package com.cyc.cycjava.cycl.inference.modules.removal;
 
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
+import static com.cyc.cycjava.cycl.utilities_macros.register_kb_function;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.arg2;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.multiple_value_list;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.resetMultipleValues;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
+import static com.cyc.tool.subl.util.SubLFiles.deflexical;
+import static com.cyc.tool.subl.util.SubLFiles.defparameter;
 
-import org.logicmoo.system.BeanShellCntrl;
-
-import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.V12;
+import com.cyc.cycjava.cycl.fi;
+import com.cyc.cycjava.cycl.hlmt;
+import com.cyc.cycjava.cycl.isa;
+import com.cyc.cycjava.cycl.kb_accessors;
+import com.cyc.cycjava.cycl.kb_mapping_utilities;
+import com.cyc.cycjava.cycl.list_utilities;
+import com.cyc.cycjava.cycl.memoization_state;
+import com.cyc.cycjava.cycl.mt_relevance_macros;
+import com.cyc.cycjava.cycl.operation_communication;
+import com.cyc.cycjava.cycl.relation_evaluation;
+import com.cyc.cycjava.cycl.subl_promotions;
+import com.cyc.cycjava.cycl.system_info;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_inference;
 import com.cyc.cycjava.cycl.inference.harness.inference_macros;
 import com.cyc.cycjava.cycl.inference.harness.inference_modules;
@@ -28,6 +43,8 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLFiles;
+import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 

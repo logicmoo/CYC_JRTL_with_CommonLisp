@@ -26,7 +26,6 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.exception.Unhandleable;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.PatchFileLoader;
-import com.cyc.tool.subl.util.SubLFiles;
 
 public class SubLCompiledFunction extends Function implements SubLFunction {
     public class FuncallCounts {

@@ -25,6 +25,11 @@
  *****************************************************************************/
 package bsh;
 
+import static bsh.Capabilities.haveAccessibility;
+import static bsh.This.Keys.BSHCLASSMODIFIERS;
+import static bsh.This.Keys.BSHSTATIC;
+import static bsh.This.Keys.BSHTHIS;
+
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
@@ -35,15 +40,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.regex.Pattern;
 import java.util.Objects;
 import java.util.WeakHashMap;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
-
-import static bsh.This.Keys.BSHTHIS;
-import static bsh.This.Keys.BSHSTATIC;
-import static bsh.This.Keys.BSHCLASSMODIFIERS;
-import static bsh.Capabilities.haveAccessibility;
 /**
  * All of the reflection API code lies here.  It is in the form of static
  * utilities.  Maybe this belongs in LHS.java or a generic object

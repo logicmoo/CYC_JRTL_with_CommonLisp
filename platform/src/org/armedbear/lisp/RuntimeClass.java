@@ -33,7 +33,10 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
+import static org.armedbear.lisp.Lisp.NIL;
+import static org.armedbear.lisp.Lisp.PACKAGE_JAVA;
+import static org.armedbear.lisp.Lisp.T;
+import static org.armedbear.lisp.Lisp.evalCall;
 
 import java.util.HashMap;
 import java.util.Map;

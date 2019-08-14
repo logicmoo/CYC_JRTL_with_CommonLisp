@@ -4,17 +4,35 @@
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.cb_parameters.*;
-import static com.cyc.cycjava.cycl.cb_utilities.*;
-import static com.cyc.cycjava.cycl.html_utilities.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.cycjava.cycl.cb_parameters.$cb_permit_robots_to_followP$;
+import static com.cyc.cycjava.cycl.cb_parameters.$cb_permit_robots_to_indexP$;
+import static com.cyc.cycjava.cycl.cb_parameters.cb_head_shortcut_icon;
+import static com.cyc.cycjava.cycl.cb_utilities.cb_error;
+import static com.cyc.cycjava.cycl.cb_utilities.cb_form;
+import static com.cyc.cycjava.cycl.cb_utilities.cb_guess_assertion;
+import static com.cyc.cycjava.cycl.cb_utilities.cb_guess_term;
+import static com.cyc.cycjava.cycl.cb_utilities.cb_show_hl_support_readably;
+import static com.cyc.cycjava.cycl.html_utilities.html_char;
+import static com.cyc.cycjava.cycl.html_utilities.html_color;
+import static com.cyc.cycjava.cycl.html_utilities.html_copyright_notice;
+import static com.cyc.cycjava.cycl.html_utilities.html_markup;
+import static com.cyc.cycjava.cycl.html_utilities.html_meta_robot_instructions;
+import static com.cyc.cycjava.cycl.html_utilities.html_newline;
+import static com.cyc.cycjava.cycl.html_utilities.html_princ;
+import static com.cyc.cycjava.cycl.html_utilities.html_simple_attribute;
+import static com.cyc.cycjava.cycl.html_utilities.html_source_readability_terpri;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.sethash;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.delete;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
@@ -23,6 +41,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 

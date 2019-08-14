@@ -10,33 +10,44 @@
 package com.cyc.tool.subl.jrtl.translatedCode.sublisp;
 
 
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.$double_float_minimum_exponent$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.abs;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.ceiling;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.divide;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.evenp;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.expt;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.float_digits;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.float_radix;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.floor;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.integer_decode_float;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.log;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.minus;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.multiply;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.round;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.scale_float;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.sublisp_float;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.subtract;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.truncate;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.values;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
+import static com.cyc.tool.subl.util.SubLFiles.defconstant;
+import static com.cyc.tool.subl.util.SubLFiles.defvar;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.math_utilities;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.$double_float_minimum_exponent$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.math_utilities.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
 public class math_utilities extends SubLTranslatedFile {

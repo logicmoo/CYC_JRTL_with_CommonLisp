@@ -1,8 +1,6 @@
 /* For LarKC */
 package com.cyc.tool.subl.util;
 
-import static org.armedbear.lisp.Lisp.*;
-
 import java.util.function.Supplier;
 
 import org.armedbear.lisp.Lisp;

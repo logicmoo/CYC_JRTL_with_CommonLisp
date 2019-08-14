@@ -1,14 +1,31 @@
 package com.cyc.cycjava.cycl.sksi.store_sks;
 
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.declare_defglobal;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.make_keyword;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
+import static com.cyc.tool.subl.util.SubLFiles.deflexical;
 
-import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.V10;
+import com.cyc.cycjava.cycl.clause_utilities;
+import com.cyc.cycjava.cycl.clauses;
+import com.cyc.cycjava.cycl.cycl_utilities;
+import com.cyc.cycjava.cycl.czer_main;
+import com.cyc.cycjava.cycl.dictionary;
+import com.cyc.cycjava.cycl.dictionary_utilities;
+import com.cyc.cycjava.cycl.hl_storage_modules;
+import com.cyc.cycjava.cycl.hlmt;
+import com.cyc.cycjava.cycl.list_utilities;
+import com.cyc.cycjava.cycl.mt_relevance_macros;
+import com.cyc.cycjava.cycl.string_utilities;
+import com.cyc.cycjava.cycl.variables;
 import com.cyc.cycjava.cycl.inference.ask_utilities;
 import com.cyc.cycjava.cycl.inference.harness.removal_module_utilities;
 import com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_store;

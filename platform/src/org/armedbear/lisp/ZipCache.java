@@ -32,7 +32,7 @@
  */
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
+import static org.armedbear.lisp.Lisp.error;
 
 import java.io.File;
 import java.io.IOException;

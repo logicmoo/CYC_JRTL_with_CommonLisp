@@ -4,15 +4,28 @@
 package com.cyc.cycjava.cycl.project.nsf_nwu_kdd;
 
 
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cadr;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cddr;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.close;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
+import static com.cyc.tool.subl.util.SubLFiles.deflexical;
 
-import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.V02;
+import com.cyc.cycjava.cycl.constant_handles;
+import com.cyc.cycjava.cycl.cycml;
+import com.cyc.cycjava.cycl.list_utilities;
+import com.cyc.cycjava.cycl.numeric_date_utilities;
+import com.cyc.cycjava.cycl.operation_communication;
+import com.cyc.cycjava.cycl.pph_main;
+import com.cyc.cycjava.cycl.system_info;
+import com.cyc.cycjava.cycl.xml_utilities;
+import com.cyc.cycjava.cycl.xml_vars;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;

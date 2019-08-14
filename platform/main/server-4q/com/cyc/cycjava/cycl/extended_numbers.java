@@ -4,17 +4,40 @@
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-
-import org.logicmoo.system.BeanShellCntrl;
+import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
+import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.define_test_case_table_int;
+import static com.cyc.cycjava.cycl.utilities_macros.register_kb_function;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.eql;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.equal;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.$exp1$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.abs;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.divide;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.exp;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.expt;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.integerDivide;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.log;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.max;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.min;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.minus;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.minusp;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.mod;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.multiply;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.numE;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.numG;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.numGE;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.plusp;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.sqrt;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.subtract;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.zerop;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.integerp;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
+import static com.cyc.tool.subl.util.SubLFiles.deflexical;
+import static com.cyc.tool.subl.util.SubLFiles.defparameter;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
@@ -24,6 +47,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 

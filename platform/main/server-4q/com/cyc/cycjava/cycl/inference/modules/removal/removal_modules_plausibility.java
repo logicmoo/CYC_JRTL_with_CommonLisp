@@ -1,13 +1,28 @@
 package com.cyc.cycjava.cycl.inference.modules.removal;
 
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
+import static com.cyc.cycjava.cycl.el_utilities.make_unary_formula;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 
-import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.V10;
+import com.cyc.cycjava.cycl.arguments;
+import com.cyc.cycjava.cycl.arithmetic;
+import com.cyc.cycjava.cycl.backward;
+import com.cyc.cycjava.cycl.bindings;
+import com.cyc.cycjava.cycl.cycl_grammar;
+import com.cyc.cycjava.cycl.cycl_utilities;
+import com.cyc.cycjava.cycl.czer_utilities;
+import com.cyc.cycjava.cycl.mt_relevance_macros;
+import com.cyc.cycjava.cycl.nart_handles;
+import com.cyc.cycjava.cycl.narts_high;
+import com.cyc.cycjava.cycl.plausibility_utilities;
+import com.cyc.cycjava.cycl.plausible_narts;
+import com.cyc.cycjava.cycl.unification_utilities;
 import com.cyc.cycjava.cycl.inference.harness.inference_modules;
 import com.cyc.cycjava.cycl.inference.modules.preference_modules;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;

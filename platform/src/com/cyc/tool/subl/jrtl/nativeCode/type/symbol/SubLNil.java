@@ -1,7 +1,8 @@
 /* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.type.symbol;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLSequence.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLSequence.EQL_TEST;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLSequence.IDENTITY_UNARY_FUNC;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,9 +17,30 @@ import org.armedbear.lisp.Symbol;
 import org.jpl7.JPL;
 import org.jpl7.Term;
 
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.*;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync.IPrologifiable;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Resourcer;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLListListIterator;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLSequence;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLLock;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLSequence;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.InvalidSubLExpressionException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFixnum;

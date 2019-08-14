@@ -26,8 +26,6 @@
  *                                                                           *
  *****************************************************************************/
 package bsh;
-import java.io.IOException;
-import java.io.Reader;
 
 /** Token Manager. */
 public class ParserTokenManager implements ParserConstants {

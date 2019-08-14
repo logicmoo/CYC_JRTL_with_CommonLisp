@@ -33,7 +33,13 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
+import static org.armedbear.lisp.Lisp.NIL;
+import static org.armedbear.lisp.Lisp.NULL;
+import static org.armedbear.lisp.Lisp.T;
+import static org.armedbear.lisp.Lisp.error;
+import static org.armedbear.lisp.Lisp.javaString;
+import static org.armedbear.lisp.Lisp.list;
+import static org.armedbear.lisp.Lisp.type_error;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;

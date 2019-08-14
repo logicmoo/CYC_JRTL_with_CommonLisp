@@ -27,9 +27,9 @@
 
 package bsh;
 
-import java.util.Stack;
 import java.io.Serializable;
 import java.util.EmptyStackException;
+import java.util.Stack;
 
 /**
     A stack of NameSpaces representing the call path.

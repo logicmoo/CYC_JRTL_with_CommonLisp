@@ -27,10 +27,10 @@
 
 package bsh;
 
-import java.util.stream.IntStream;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
+import java.util.stream.IntStream;
 
 /**
     This represents an instance of a bsh method declaration in a particular

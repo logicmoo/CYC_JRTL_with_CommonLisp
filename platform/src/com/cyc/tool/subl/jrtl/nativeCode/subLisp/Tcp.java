@@ -1,7 +1,5 @@
 /* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
-import static org.armedbear.lisp.Lisp.*;
-
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.InetAddress;

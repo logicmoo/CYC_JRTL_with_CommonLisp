@@ -25,10 +25,10 @@
  *****************************************************************************/
 package bsh;
 
+import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.lang.reflect.Array;
 
 import bsh.Types.MapEntry;
 

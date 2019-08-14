@@ -1,9 +1,7 @@
 /* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
-import static org.armedbear.lisp.Fixnum.*;
-import static org.armedbear.lisp.Keyword.*;
-import static org.armedbear.lisp.Lisp.*;
+import static org.armedbear.lisp.Fixnum.ZERO;
 
 import java.io.IOException;
 import java.io.InputStream;

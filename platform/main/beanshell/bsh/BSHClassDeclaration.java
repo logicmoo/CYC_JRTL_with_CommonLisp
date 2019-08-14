@@ -31,7 +31,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import static bsh.ClassGenerator.Type;
+
+import bsh.ClassGenerator.Type;
 
 /**
 */

@@ -13,14 +13,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.RandomAccess;
 import java.util.function.IntSupplier;
 
-
-import java.util.Map.Entry;
-
-import static bsh.Types.MapEntry;
+import bsh.Types.MapEntry;
 
 /** Collection of array manipulation functions. */
 public class BshArray {

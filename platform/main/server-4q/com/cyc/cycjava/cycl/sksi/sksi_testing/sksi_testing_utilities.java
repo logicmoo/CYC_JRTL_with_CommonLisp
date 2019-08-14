@@ -4,8 +4,8 @@
 package com.cyc.cycjava.cycl.sksi.sksi_testing;
 
 
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
 
 import com.cyc.cycjava.cycl.V12;
 import com.cyc.cycjava.cycl.sunit_external;

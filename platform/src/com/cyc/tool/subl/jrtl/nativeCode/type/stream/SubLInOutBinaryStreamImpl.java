@@ -1,7 +1,9 @@
 /* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.type.stream;
 
-import static org.armedbear.lisp.Keyword.*;
+import static org.armedbear.lisp.Keyword.BINARY_KEYWORD;
+import static org.armedbear.lisp.Keyword.ERROR_KEYWORD;
+import static org.armedbear.lisp.Keyword.IO_KEYWORD;
 
 import org.armedbear.lisp.Keyword;
 

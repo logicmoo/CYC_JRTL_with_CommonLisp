@@ -1,8 +1,6 @@
 /* For LarKC */
 package com.cyc.tool.subl.webserver;
 
-import static org.armedbear.lisp.Lisp.*;
-
 import java.util.ArrayList;
 import java.util.List;
 

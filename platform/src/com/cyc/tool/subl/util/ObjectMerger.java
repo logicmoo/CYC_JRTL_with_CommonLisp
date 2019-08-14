@@ -32,7 +32,8 @@
  */
 package com.cyc.tool.subl.util;
 
-import static org.armedbear.lisp.Lisp.*;
+import static org.armedbear.lisp.Lisp.NIL;
+import static org.armedbear.lisp.Lisp.T;
 
 import java.io.PrintStream;
 import java.util.HashMap;

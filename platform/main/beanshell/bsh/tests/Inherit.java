@@ -4,8 +4,12 @@ package bsh.tests;
  * This source corresponds with the `inherit.bsh' test script.
  */
 
-import bsh.tests.InheritanceTest.*;
+import bsh.tests.InheritanceTest.A;
 import bsh.tests.InheritanceTest.Accessor;
+import bsh.tests.InheritanceTest.B;
+import bsh.tests.InheritanceTest.C;
+import bsh.tests.InheritanceTest.X;
+import bsh.tests.InheritanceTest.Y;
 
 public class Inherit {
 

@@ -27,8 +27,9 @@
 
 package bsh.util;
 
-import bsh.ConsoleInterface;
 import java.awt.Color;
+
+import bsh.ConsoleInterface;
 
 /**
     Additional capabilities of an interactive console for BeanShell.

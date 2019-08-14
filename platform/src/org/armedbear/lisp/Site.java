@@ -33,7 +33,9 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
+import static org.armedbear.lisp.Lisp.NIL;
+import static org.armedbear.lisp.Lisp.PACKAGE_EXT;
+import static org.armedbear.lisp.Lisp.exportSpecial;
 
 import java.net.URL;
 

@@ -33,8 +33,27 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-import static org.armedbear.lisp.Main.*;
+import static org.armedbear.lisp.Lisp.EOF;
+import static org.armedbear.lisp.Lisp.LISP_NOT_JAVA;
+import static org.armedbear.lisp.Lisp.NIL;
+import static org.armedbear.lisp.Lisp.PACKAGE_SYS;
+import static org.armedbear.lisp.Lisp.PACKAGE_TPL;
+import static org.armedbear.lisp.Lisp.T;
+import static org.armedbear.lisp.Lisp._BATCH_MODE_;
+import static org.armedbear.lisp.Lisp._COMMAND_LINE_ARGUMENT_LIST_;
+import static org.armedbear.lisp.Lisp._NOINFORM_;
+import static org.armedbear.lisp.Lisp.addFeature;
+import static org.armedbear.lisp.Lisp.checkCallers;
+import static org.armedbear.lisp.Lisp.checkPathname;
+import static org.armedbear.lisp.Lisp.debug;
+import static org.armedbear.lisp.Lisp.error;
+import static org.armedbear.lisp.Lisp.flushOutputStreams;
+import static org.armedbear.lisp.Lisp.getStandardInput;
+import static org.armedbear.lisp.Lisp.getStandardOutput;
+import static org.armedbear.lisp.Lisp.initialized;
+import static org.armedbear.lisp.Lisp.intern;
+import static org.armedbear.lisp.Main.addUncaught;
+import static org.armedbear.lisp.Main.startTimeMillis;
 
 import java.io.BufferedReader;
 import java.io.File;

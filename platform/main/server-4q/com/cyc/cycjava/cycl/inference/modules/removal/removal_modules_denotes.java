@@ -4,18 +4,47 @@
 package com.cyc.cycjava.cycl.inference.modules.removal;
 
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.control_vars.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
+import static com.cyc.cycjava.cycl.control_vars.$hl_module_check_cost$;
+import static com.cyc.cycjava.cycl.utilities_macros.$is_noting_progressP$;
+import static com.cyc.cycjava.cycl.utilities_macros.$progress_count$;
+import static com.cyc.cycjava.cycl.utilities_macros.$progress_elapsed_seconds_for_notification$;
+import static com.cyc.cycjava.cycl.utilities_macros.$progress_last_pacification_time$;
+import static com.cyc.cycjava.cycl.utilities_macros.$progress_notification_count$;
+import static com.cyc.cycjava.cycl.utilities_macros.$progress_pacifications_since_last_nl$;
+import static com.cyc.cycjava.cycl.utilities_macros.$progress_start_time$;
+import static com.cyc.cycjava.cycl.utilities_macros.$silent_progressP$;
+import static com.cyc.cycjava.cycl.utilities_macros.$suppress_all_progress_faster_than_seconds$;
+import static com.cyc.cycjava.cycl.utilities_macros.note_progress;
+import static com.cyc.cycjava.cycl.utilities_macros.noting_progress_postamble;
+import static com.cyc.cycjava.cycl.utilities_macros.noting_progress_preamble;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.get_universal_time;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 
-import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.V12;
+import com.cyc.cycjava.cycl.arguments;
+import com.cyc.cycjava.cycl.assertions_high;
+import com.cyc.cycjava.cycl.backward;
+import com.cyc.cycjava.cycl.bindings;
+import com.cyc.cycjava.cycl.cycl_grammar;
+import com.cyc.cycjava.cycl.cycl_utilities;
+import com.cyc.cycjava.cycl.czer_main;
+import com.cyc.cycjava.cycl.enumeration_types;
+import com.cyc.cycjava.cycl.isa;
+import com.cyc.cycjava.cycl.iteration;
+import com.cyc.cycjava.cycl.kb_mapping_macros;
+import com.cyc.cycjava.cycl.unification_utilities;
+import com.cyc.cycjava.cycl.variables;
+import com.cyc.cycjava.cycl.virtual_indexing;
 import com.cyc.cycjava.cycl.inference.inference_trampolines;
 import com.cyc.cycjava.cycl.inference.harness.inference_modules;
 import com.cyc.cycjava.cycl.inference.modules.preference_modules;
@@ -25,6 +54,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 

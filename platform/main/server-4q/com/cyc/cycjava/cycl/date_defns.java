@@ -4,20 +4,50 @@
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.date_utilities.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.relation_evaluation.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-
-import org.logicmoo.system.BeanShellCntrl;
+import static com.cyc.cycjava.cycl.constant_handles.constant_p;
+import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
+import static com.cyc.cycjava.cycl.date_utilities.current_time_interval_of_type;
+import static com.cyc.cycjava.cycl.date_utilities.cyc_date_decode_string_internal;
+import static com.cyc.cycjava.cycl.date_utilities.cyc_date_encode_string_internal;
+import static com.cyc.cycjava.cycl.date_utilities.cyc_date_from_string_internal;
+import static com.cyc.cycjava.cycl.date_utilities.cyc_time_elapsed_decode_string_internal;
+import static com.cyc.cycjava.cycl.date_utilities.cyc_time_elapsed_encode_string_internal;
+import static com.cyc.cycjava.cycl.date_utilities.dateL;
+import static com.cyc.cycjava.cycl.date_utilities.date_after;
+import static com.cyc.cycjava.cycl.date_utilities.date_before;
+import static com.cyc.cycjava.cycl.date_utilities.date_p;
+import static com.cyc.cycjava.cycl.date_utilities.date_precision;
+import static com.cyc.cycjava.cycl.date_utilities.date_subsumes;
+import static com.cyc.cycjava.cycl.date_utilities.day_of_date;
+import static com.cyc.cycjava.cycl.date_utilities.day_of_week_after_date;
+import static com.cyc.cycjava.cycl.date_utilities.day_of_week_after_date_inclusive;
+import static com.cyc.cycjava.cycl.date_utilities.day_of_week_of_date;
+import static com.cyc.cycjava.cycl.date_utilities.day_of_week_p;
+import static com.cyc.cycjava.cycl.date_utilities.day_of_week_prior_to_date;
+import static com.cyc.cycjava.cycl.date_utilities.day_of_week_prior_to_date_inclusive;
+import static com.cyc.cycjava.cycl.date_utilities.extract_date_day;
+import static com.cyc.cycjava.cycl.date_utilities.extract_date_month;
+import static com.cyc.cycjava.cycl.date_utilities.extract_date_year;
+import static com.cyc.cycjava.cycl.date_utilities.generalized_date_p;
+import static com.cyc.cycjava.cycl.date_utilities.next_iterated_cyclic_interval_inclusive;
+import static com.cyc.cycjava.cycl.date_utilities.possibly_bind_temporal_indexical_in_object;
+import static com.cyc.cycjava.cycl.date_utilities.time_elapsed;
+import static com.cyc.cycjava.cycl.date_utilities.universal_date_to_cycl_date;
+import static com.cyc.cycjava.cycl.el_utilities.el_formula_p;
+import static com.cyc.cycjava.cycl.el_utilities.make_binary_formula;
+import static com.cyc.cycjava.cycl.el_utilities.make_el_formula;
+import static com.cyc.cycjava.cycl.relation_evaluation.throw_unevaluatable;
+import static com.cyc.cycjava.cycl.utilities_macros.register_kb_function;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.eq;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.remove;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.copy_list;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.member;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
 
 import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_indexical_referent;
 import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_rdf_date;
@@ -32,6 +62,8 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLFiles;
+import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 

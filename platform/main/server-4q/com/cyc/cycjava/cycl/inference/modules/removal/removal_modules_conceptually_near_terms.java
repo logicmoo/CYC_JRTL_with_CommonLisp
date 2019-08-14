@@ -4,12 +4,25 @@
 package com.cyc.cycjava.cycl.inference.modules.removal;
 
 
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.nreverse;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
+import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
+import static com.cyc.tool.subl.util.SubLFiles.defparameter;
 
-import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.V02;
+import com.cyc.cycjava.cycl.arguments;
+import com.cyc.cycjava.cycl.backward;
+import com.cyc.cycjava.cycl.collaborative_sense_making_utilities;
+import com.cyc.cycjava.cycl.constant_handles;
+import com.cyc.cycjava.cycl.control_vars;
+import com.cyc.cycjava.cycl.cycl_utilities;
+import com.cyc.cycjava.cycl.el_utilities;
+import com.cyc.cycjava.cycl.forts;
+import com.cyc.cycjava.cycl.list_utilities;
 import com.cyc.cycjava.cycl.inference.harness.inference_modules;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;

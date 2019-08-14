@@ -1,8 +1,6 @@
 /* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
-import static org.armedbear.lisp.Lisp.*;
-
 import java.math.BigInteger;
 import java.util.Arrays;
 
