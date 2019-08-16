@@ -1274,4 +1274,14 @@ public class SubLException extends RuntimeException implements SubLObject {
 	public boolean lispEquals(Object obj) {
 		return obj == this;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject#getBooleanValue()
+	 */
+	@Override
+	public boolean getBooleanValue() {
+		return true;
+	}
 }

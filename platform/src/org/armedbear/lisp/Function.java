@@ -49,7 +49,7 @@ public abstract class Function extends Operator implements SubLFunction {
 	public boolean isSpecial() {
 		return false;
 	}
-	
+
 	@Override
 	public SubLObject eval(SubLEnvironment env) throws InvalidSubLExpressionException {
 		return this; // self-evaluating
@@ -85,7 +85,8 @@ public abstract class Function extends Operator implements SubLFunction {
 	 * used for fetching the class bytes in case of disassembly.
 	 */
 	private final LispObject loadedFrom;
-    @Override
+
+	@Override
 	public LispObject getParts() {
 		LispObject result = NIL;
 		result = result.push(new Cons("lambda-name", lambdaName));
@@ -102,7 +103,7 @@ public abstract class Function extends Operator implements SubLFunction {
 			result = result.push(new Cons("loaded-from", v));
 		return result.nreverse();
 	}
-    
+
 	protected Function() {
 		super(null);
 		LispObject loadTruename = Symbol.LOAD_TRUENAME.symbolValueNoThrow();
@@ -294,7 +295,7 @@ public abstract class Function extends Operator implements SubLFunction {
 
 	@Override
 	public LispObject funcallCL(LispObject... args) {
-		return this.execute((LispObject[]) args);
+		return this.execute(args);
 	}
 
 	// Special operator
@@ -304,7 +305,7 @@ public abstract class Function extends Operator implements SubLFunction {
 			SubLObject toEval = super.apply((SubLCons) form, env);
 			return (LispObject) toEval;// (LispObject) toEval.eval(env);
 		}
-		return Lisp.eval((Cons) form, (Environment) env);
+		return Lisp.eval(form, env);
 	}
 
 	@Override
@@ -391,7 +392,8 @@ public abstract class Function extends Operator implements SubLFunction {
 		if (symbolFunction != this) {
 			symbolFunction.execute(args);
 		}
-		if(true) return super.execute(args);
+		if (true)
+			return super.execute(args);
 		switch (args.length) {
 		case 0:
 			return execute();
@@ -412,7 +414,7 @@ public abstract class Function extends Operator implements SubLFunction {
 		case 8:
 			return execute(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
 		default:
-			//if(true)return super.execute(args);
+			// if(true)return super.execute(args);
 		}
 		return error(new WrongNumberOfArgumentsException(this, args.length));
 	}

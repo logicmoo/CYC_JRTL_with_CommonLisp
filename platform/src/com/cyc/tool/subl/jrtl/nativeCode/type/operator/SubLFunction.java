@@ -31,6 +31,8 @@ public interface SubLFunction extends SubLOperator {
 
 	SubLObject funcall(SubLObject[] p0);
 
+	SubLObject funcallVA(SubLObject... p0);
+
 	BinaryFunction getBinaryFunction();
 
 	int getOptionalArgCount();

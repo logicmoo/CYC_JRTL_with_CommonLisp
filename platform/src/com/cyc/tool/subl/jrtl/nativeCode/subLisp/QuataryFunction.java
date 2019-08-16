@@ -22,18 +22,7 @@ public abstract class QuataryFunction extends FixedArityFunctor {
 			result = new QuataryFunction(function) {
 				@Override
 				public SubLObject processItem(SubLObject obj1, SubLObject obj2, SubLObject obj3, SubLObject obj4) {
-					SubLObject[] args = null;
-					Resourcer resourcer = Resourcer.getInstance();
-					try {
-						args = resourcer.acquireSubLObjectArray(4);
-						args[0] = obj1;
-						args[1] = obj2;
-						args[2] = obj3;
-						args[3] = obj4;
-						return func.funcall(args);
-					} finally {
-						resourcer.releaseSubLObjectArray(args);
-					}
+					return func.funcallVA(obj1, obj2, obj3, obj4);
 				}
 			};
 		return result;

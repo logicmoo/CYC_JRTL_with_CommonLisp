@@ -210,6 +210,8 @@ public interface SubLObject extends Cloneable {
 
     boolean isNil();
 
+	boolean getBooleanValue();
+
     boolean isNumber();
 
     boolean isPackage();

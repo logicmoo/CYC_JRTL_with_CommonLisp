@@ -44,7 +44,7 @@ public class PrintLow extends SubLTrampolineFile {
 	return format.really_format(destination, controlString, arg_list);
     }
 
-    public static SubLObject format(SubLObject destination, SubLObject controlString, SubLObject[] args) {
+	public static SubLObject format(SubLObject destination, SubLObject controlString, SubLObject... args) {
 	SubLObject arg_list = SubLObjectFactory.makeList(args);
 	return format.really_format(destination, controlString, arg_list);
     }

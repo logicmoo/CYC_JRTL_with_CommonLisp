@@ -21,19 +21,7 @@ public abstract class QuintaryFunction extends FixedArityFunctor {
 				@Override
 				public SubLObject processItem(SubLObject obj1, SubLObject obj2, SubLObject obj3, SubLObject obj4,
 						SubLObject obj5) {
-					SubLObject[] args = null;
-					Resourcer resourcer = Resourcer.getInstance();
-					try {
-						args = resourcer.acquireSubLObjectArray(5);
-						args[0] = obj1;
-						args[1] = obj2;
-						args[2] = obj3;
-						args[3] = obj4;
-						args[4] = obj5;
-						return func.funcall(args);
-					} finally {
-						resourcer.releaseSubLObjectArray(args);
-					}
+					return func.funcallVA(function, obj1, obj2, obj3, obj4, obj5);
 				}
 			};
 		return result;

@@ -4749,7 +4749,8 @@ public interface CommonSymbols_KW extends CommonSymbols_SYM {
     SubLSymbol $WORD_UNIT = makeKeyword("WORD-UNIT");
     SubLSymbol $WORK_DONE = makeKeyword("WORK-DONE");
     SubLSymbol $WORKING = makeKeyword("WORKING");
-    SubLSymbol $WORKING_ = makeKeyword("WORKING?");
+	SubLSymbol $WORKINGp = makeKeyword("WORKING?");
+	SubLSymbol $WORKING_ = makeKeyword("WORKING?");
     SubLSymbol $WORKING_MT = makeKeyword("WORKING-MT");
     SubLSymbol $WORK_SET = makeKeyword("WORK-SET");
     SubLSymbol $WORLD = makeKeyword("WORLD");

@@ -64,17 +64,7 @@ public abstract class TernaryFunction extends FixedArityFunctor {
 			result = new TernaryFunction(function) {
 				@Override
 				public SubLObject processItem(SubLObject obj1, SubLObject obj2, SubLObject obj3) {
-					SubLObject[] args = null;
-					Resourcer resourcer = Resourcer.getInstance();
-					try {
-						args = resourcer.acquireSubLObjectArray(3);
-						args[0] = obj1;
-						args[1] = obj2;
-						args[2] = obj3;
-						return func.funcall(args);
-					} finally {
-						resourcer.releaseSubLObjectArray(args);
-					}
+					return func.funcallVA(obj1, obj2, obj3);
 				}
 			};
 		return result;
