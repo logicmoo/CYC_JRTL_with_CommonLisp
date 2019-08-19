@@ -47,14 +47,14 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 /**
  * Copyright (c) 1995 - 2014 Cycorp, Inc. All rights reserved. module: EXPORT
  */
-public final class export extends SubLTranslatedFile {
+public final class export_to_swipl extends SubLTranslatedFile {
 
 	//// Constructor
 
-	private export() {
+	private export_to_swipl() {
 	}
 
-	public static final SubLFile me = new export();
+	public static final SubLFile me = new export_to_swipl();
 
 	public static final String myName = me.getClass().getName();
 
