@@ -17,236 +17,9 @@ var onNatMouseOut = function (event, matchedEl, container) {
 }
 
 Event.delegate(document, "mouseover", onNatMouseOver, "a.nat");
-Event.delegate(document, "mouseout", onNatMouseOut, "a.nat"); 
-
-var gatherAssertions = function (limit) {
-  if (limit == null || limit == undefined) {
-    limit = 250;
-  }
-  var anchors = document.getElementsByTagName("a");
-  var assertions = {lexical: [], nonLexical: [], rules: []};
-  var assertionCount = 0;
-  for (var i = 0; assertionCount <= limit && i < anchors.length; i++) {
-    var curAnchor = anchors[i];
-    if (Dom.hasClass(curAnchor, "assert")) {
-      if (Dom.hasClass(curAnchor, "lex")) {
-        assertions.lexical.push(curAnchor); 
-        assertionCount++;
-      } else if (Dom.hasClass(curAnchor, "rule")) {
-        assertions.rules.push(curAnchor); 
-        assertionCount++;
-      } else {
-        assertions.nonLexical.push(curAnchor);
-        assertionCount++;
-      }
-    }
-  }
-  return assertions;
-}
-  
-//these need to be global so they can be cleared when necessary.
-var cbAssertionContextMenu;
-var cbLexicalAssertionContextMenu;
-var cbRuleAssertionContextMenu;
-
-var addAssertionContextMenus = function (oType, aArgs, limit) {
-  var assertions = gatherAssertions(limit);
-  var nextIntValue = 0;
-  function nextInt() {
-    return nextIntValue ++;
-  }
-  
-  //the following two functions are necessitated by a bug in YUI that causes 
-  function getSubmenuData() {
-    return {id: "editSubmenu" + nextInt(),
-  	  itemdata: [{text: "Edit Assertion on new page", onclick: {fn: loadAssertionUrl, obj: {cmd: "edit"}}},
-                       {text: "Edit Mt", onclick: {fn: loadAssertionUrl, obj: {cmd:"change-mt"}}},
-                       {text: "Edit Direction", onclick: {fn: loadAssertionUrl, obj: {cmd:"change-direction"}}}]};
-  }
-  function getEditGroupData () {
-    return [{text: "Edit Assertion", onclick: {fn: editInline, obj: {cmd:this}}, submenu: getSubmenuData()},
-            {text: "Assert Similar", onclick: {fn: copyInline, obj: {cmd:this}}, submenu: assertSimilarSubmenuData},
-            {text: "Assert Meta", onclick: {fn: loadAssertionUrl, obj: {cmd:"assert-meta"}}},
-            {text: "Remove", submenu: unassertSubmenuData},
-            {text: "Redo", submenu: redoSubmenuData} 
-  	  ];
-  }
-  
-  var assertSimilarSubmenuData = 
-    {id: "assertSimilarSubmenu",
-     itemdata: [{text: "Assert Similar on new page", onclick: {fn: loadAssertionUrl, obj: {cmd: "similar"}}}]};
-  var unassertSubmenuData = 
-    {id: "unassertSubmenu", 
-     itemdata: [{text: "<span class='confirm'>Unassert</span>",  onclick: {fn: xhrLoadAssertionUrl, obj: {cmd:"unassert", evt: assertionRemovedEvent}}},
-    {text: "<span class='confirm'>Blast</span>",  onclick: {fn: xhrLoadAssertionUrl, obj: {cmd:"blast", evt: assertionRemovedEvent}}}]};
-  
-  var redoSubmenuData = 
-    {id: "redoSubmenu", 
-     itemdata: [{text: "Reassert",  onclick: {fn: bgLoadAssertionUrl, obj: {cmd: "reassert"}}},
-    {text: "Repropagate",  onclick: {fn: bgLoadAssertionUrl, obj: {cmd: "repropagate"}}},
-    {text: "Repropagate and Browse",  onclick: {fn: loadAssertionUrl, obj: {cmd: "repropagate-browsably"}}},
-    {text: "Recanonicalize",  onclick: {fn: bgLoadAssertionUrl, obj: {cmd: "recanonicalize"}}},
-    {text: "Redo TMS",  onclick: {fn: bgLoadAssertionUrl, obj: {cmd: "assertion-tms"}}},
-                ]};
-  
-  
-  var miscGroupData = [
-    {text: "Query Similar", onclick: {fn: loadAssertionUrl, obj: {cmd:"assertion-similar-query"}}},
-    {text: "WFF Check", onclick: {fn: loadAssertionUrl, obj: {cmd:"wff-assertion"}}},
-    {text: "HL Data", onclick: {fn: loadAssertionUrl, obj: {cmd:"describe-assertion"}}},
-    {text: "Arguments", onclick: {fn: loadAssertionUrl, obj: {cmd:"arguments"}}}
-  		       ];
-  
-  var lexical = [
-                 {text: "Add to Webservice Lexicon", onclick: {fn: xhrLoadAssertionUrl, obj: {cmd: "add-to-webservice-lexicon"}}}
-  		 ]; 
-  var rulesGroupData = [
-                        {text: "Use in Proof Checker", onclick: {fn: xhrLoadAssertionUrl, obj: {cmd: "use-in-proof"}}}
-  			]; 
-    if (cbAssertionContextMenu) {
-      cbAssertionContextMenu.destroy();
-    }
-    cbAssertionContextMenu = new YAHOO.widget.ContextMenu(
-  							"assertioncontextmenu", 
-      { trigger: assertions.nonLexical,
-        itemdata: [getEditGroupData(), miscGroupData],
-        lazyload: true
-      });
-    cbAssertionContextMenu.beforeShowEvent.subscribe(setDisabledContextMenuOptions); 
-  
-    if (cbLexicalAssertionContextMenu) {
-      cbLexicalAssertionContextMenu.destroy();
-    }
-    cbLexicalAssertionContextMenu = new YAHOO.widget.ContextMenu("lexicalassertioncontextmenu", 
-      { trigger: assertions.lexical,
-        itemdata: [getEditGroupData(), miscGroupData, lexical],
-        lazyload: true
-      });
-    cbLexicalAssertionContextMenu.beforeShowEvent.subscribe(setDisabledContextMenuOptions); 
-  
-    if (cbRuleAssertionContextMenu) {
-      cbRuleAssertionContextMenu.destroy();
-    }
-    cbRuleAssertionContextMenu = new YAHOO.widget.ContextMenu("ruleassertioncontextmenu", 
-      { trigger: assertions.rules,
-        itemdata: [getEditGroupData(), miscGroupData, rulesGroupData],
-        lazyload: true
-      });
-    cbRuleAssertionContextMenu.beforeShowEvent.subscribe(setDisabledContextMenuOptions); 
-  }
+Event.delegate(document, "mouseout", onNatMouseOut, "a.nat");
 
 
-  function setDisabledContextMenuOptions(arg1, arg2, oObj) {
-    var editable = ["Edit Assertion", "Edit Mt", "Edit Direction", "Reassert", "<span class='confirm'>Unassert</span>", "Recanonicalize"];
-    var nonEditable = ["<span class='confirm'>Blast</span>", "Redo TMS"];
-    var lexical     = ["Add to Webservice Lexicon"];
-    var assertElt   = Dom.getAncestorByClassName(getMenuTarget(this), "assert");
-    var isEditable  = Dom.hasClass(assertElt, "edit");
-    var menuItems   = this.getItems(); 
-    var subMenus    = this.getSubmenus();
-    for (var j = 0; j < subMenus.length; j++) {
-            subMenus[j].beforeShowEvent.subscribe(setDisabledContextMenuOptions);
-    }
-    for (i=0; i < menuItems.length; i++) {
-      var itemText = menuItems[i].cfg.getProperty("text");
-      if (editable.indexOf(itemText) >= 0) {
-	menuItems[i].cfg.setProperty("disabled", !isEditable);
-      } else if (nonEditable.indexOf(itemText) >= 0) {
-        menuItems[i].cfg.setProperty("disabled", isEditable);
-      }
-    }
-  }
-
-var loadAssertionUrl = function (arg1, arg2, oObj) {
-  var clickedElt = getMenuTarget(this);
-  var assertElt = Dom.getAncestorByClassName(clickedElt, "assert");
-  var assertId = assertElt.getAttribute("cycid");
-  var assertTarget = assertElt.getAttribute("target");
-  var targetFrame = getAncestorFrameByName(window, assertTarget);
-  var href = null;
-  if (oObj.cmd) {
-    var href = "cg?cb-" + oObj.cmd + "&" + assertId; 
-    targetFrame.location.href = href;
-  }
-}
-
-//load this url in the background, and then reload the current window.
-  var bgLoadAssertionUrl = function (arg1, arg2, oObj) {
-    var clickedElt = getMenuTarget(this);
-    var assertElt = Dom.getAncestorByClassName(clickedElt, "assert");
-    var assertId = assertElt.getAttribute("cycid");
-    var assertTarget = assertElt.getAttribute("target");
-    var targetFrame = getAncestorFrameByName(window, assertTarget);
-    if (oObj.cmd) {
-      var url = "cg?cb-" + oObj.cmd + "&" + assertId; 
-      var callback = {success: handlePageReload,
-		      failure: handleFailedBgLoad,
-		      argument: {target: targetFrame}
-      };
-      YAHOO.util.Connect.asyncRequest("get", url, callback);
-    }
-  }
-
-function handlePageReload (o) {
-  o.argument.target.location.reload();
-}
-
-function handleFailedBgLoad(o) {
-  alert("Unable to perform menu action");
-}
-
-
-  var copyInline = function (arg1, arg2, oObj) {
-    return editInlineInt(false, this, arg1, arg2, oObj);
-  }
-
-  var editInline = function (arg1, arg2, oObj) {
-    return editInlineInt(true, this, arg1, arg2, oObj);
-  }
-
-  var editInlineInt = function (bEdit, oMenuItem, arg1, arg2, oObj) {
-    var clickedElt = getMenuTarget(oMenuItem);
-    var assertElt = Dom.getAncestorByClassName(clickedElt, "assert");
-    var assertId = assertElt.getAttribute("cycid");
-    var eltId = assertElt.getAttribute("id");
-    var menu = getEnclosingMenu(oMenuItem);
-    menu.cfg.setProperty("visible", false);
-    genchange(eltId, assertId, bEdit);
-  }
-
-//assumes that o is a menuItem
-    function getEnclosingMenu(o) {
-      if (o.CSS_CLASS_NAME == "yuimenu") {
-        return o;
-      } else if (o.parent && o.parent != o) {
-        return getEnclosingMenu(o.parent);
-      } else return null;
-    }
- 
-//load this url in the background, and show the results in an alert window
-var xhrLoadAssertionUrl = function (arg1, arg2, oObj) {
-  var clickedElt = getMenuTarget(this);
-  var assertElt = Dom.getAncestorByClassName(clickedElt, "assert");
-  var assertId = assertElt.getAttribute("cycid");
-  var assertTarget = assertElt.getAttribute("target");
-  var targetFrame = getAncestorFrameByName(window, assertTarget);
-  if (oObj.cmd) {
-    var url = "cg?cb-" + oObj.cmd + "&" + assertId; 
-    var callback = {success: handleXHRLoad,
-                    failure: handleFailedBgLoad,
-                    argument: {target: targetFrame, evt: oObj.evt, assertId: assertId, assertElt: assertElt}
-    };
-    YAHOO.util.Connect.asyncRequest("get", url, callback);
-  }
-}
-
-function handleXHRLoad (oObj) {
-  if (oObj.argument.evt == undefined || oObj.argument.evt == null) {
-    alert(oObj.responseText);
-  } else {
-    oObj.argument.evt.fire(oObj.argument.assertElt, null, oObj.argument.assertId);
-  }
-} 
   function getAncestorFrameByName(elt, frameName) {
     if (elt.frameElement && elt.frameElement.name == frameName) {
       return elt;
@@ -255,15 +28,19 @@ function handleXHRLoad (oObj) {
     } else return null;
   }
 
-function getMenuTarget(oMenuElt) {
-  if (oMenuElt.contextEventTarget) {
-    return oMenuElt.contextEventTarget;
-  } else if (oMenuElt.parent) {
-    return getMenuTarget(oMenuElt.parent);
-  } else return null;
-}  
 
-  Event.onDOMReady(addAssertionContextMenus, 250);
+  function getAncestorIframeByName(elt, frameName) {
+      var ancestor = Dom.getAncestorByTagName(elt, "iframe");
+      if (ancestor == null) {
+	  return null;
+      }
+      if (ancestor.name == frameName) {
+	  return ancestor;
+      } else {
+	  return getAncestorIframeByName(ancestor, frameName);
+      }
+  }
+
 
 /* Monkeying around with the HTML of an existing page */
 
@@ -295,15 +72,18 @@ function handleAddAssertionToPage(sType, aArgs, oObj) {
       newElt.innerHTML = "<br>" + o.responseText;
       assertionElt.parentNode.insertBefore(newElt, assertionElt.nextSibling);
       var newId = YAHOO.util.Dom.generateId(YAHOO.util.Dom.getElementsByClassName("assert", null, newElt)[0]);
-      addAssertionContextMenus(null, null, 1000);
       possiblyActivateFrameReloadButton();
     }
-    var url = "cg?cb-form-smart&cycl=" + newSentence; //@TODO retrigger context menus for new items
+    var url = "cg?cb-form-smart&cycl=" + encodeURIComponent(newSentence); //@TODO retrigger context menus for new items
     var callback = {success: callbackFn,
                     failure: handleFailedBgLoad
     };
     YAHOO.util.Connect.asyncRequest("get", url, callback);
   }
+}
+
+function handleFailedBgLoad(o) {
+  alert("Unable to perform menu action");
 }
 
 function getSubsumingAssertionElt(elt) {
@@ -341,10 +121,10 @@ function reloadCurrentFrame(eltId) {
 
 function toggleCycLVisible (checkbox, eltId) {
   toggleEltClass(checkbox, eltId, "showcycl");
-}  
+}
 function toggleDebug (checkbox, eltId) {
   toggleEltClass(checkbox, eltId, "pf-debug");
-}  
+}
 
 function toggleEltClass (checkbox, eltId, newClass) {
   if (checkbox.checked) {
@@ -360,10 +140,20 @@ function initProofView () {
   }
     if (document.getElementById("pf-buttonbar")) {
       var pfButtonBar = new YAHOO.widget.Overlay("pf-buttonbar", {x: 1500, constraintoviewport: true, visible:true, width:"300px"} );
-      uncheck("pf-show-debugging-checkbox");
-      uncheck("pf-show-cycl-checkbox");
+	if (Dom.hasClass("body", "pf-debug")) {
+	    check("pf-show-debugging-checkbox");
+	} else {
+	    uncheck("pf-show-debugging-checkbox");
+	}
+	uncheck("pf-show-cycl-checkbox");
     pfButtonBar.render();
     pfButtonBar.show();
+  }
+}
+
+function check(checkboxName) {
+  if (document.getElementById(checkboxName) != null) {
+    document.getElementById(checkboxName).checked = true;
   }
 }
 
@@ -374,4 +164,185 @@ function uncheck(checkboxName) {
 }
 
 Event.onDOMReady(initProofView);
+
+
+function setBookmark(e) {
+  var target = e.target;
+  var bookmarkButton = Dom.getAncestorByClassName(target, "bookmarkButton");
+  var termIdRegex = /term(.*?) bookmarkB/
+  var clazz= bookmarkButton.getAttribute("class");
+  var rResult = termIdRegex.exec(clazz);
+  var termId = rResult[1];
+  var action = Dom.hasClass(bookmarkButton, "bookmarked") ? "remove" : "add";
+  var callback = {
+    success: handleSetBookmark,
+    failure: handleFailedSetBookmark,
+    argument: {elt: bookmarkButton}
+  };
+  var host = window.location.protocol + "//" + window.location.host;
+  var requestURL = host + "/cgi-bin/ws/xml-set-bookmark?term=" + termId + "&action=" + action;
+  Dom.addClass(bookmarkButton, "working");
+  var request = YAHOO.util.Connect.asyncRequest("get", requestURL, callback);
+}
+
+function handleFailedSetBookmark (o) {
+  alert("Error while setting/forgetting bookmark.");
+    Dom.removeClass(o.argument.elt, "working");
+  }
+
+function handleSetBookmark(o) {
+    var button = o.argument.elt;
+    var newClass = o.responseXML.getElementsByTagName("result")[0].getAttribute("newClass");
+    var newTitle = o.responseXML.getElementsByTagName("result")[0].getAttribute("title");
+    Dom.removeClass(o.argument.elt, "working");
+    if (newClass != "bookmarked") {
+      Dom.removeClass(button, "bookmarked");
+    }
+    Dom.addClass(button, newClass);
+    o.argument.elt.setAttribute("title", newTitle);
+  }
+
+function initBookmarks() {
+    var elts = [];
+    var elts = YAHOO.util.Dom.getElementsByClassName("bookmarkButton");
+    YAHOO.util.Event.addListener(elts, "click", setBookmark);
+}
+
+Event.onDOMReady(initBookmarks);
+
+//@public--this function is expected to be used from w/in html pages served up by cyc.
+function backgroundLoadUrl(url, successMessage, failureMessage) {
+    var callback = {
+	success: function() {
+	    if (successMessage) alert(successMessage);
+	},
+	failure: function() {
+            if (failureMessage)  alert(failureMessage);
+	}
+    };
+    YAHOO.util.Connect.asyncRequest("get", url, callback);
+}
+
+//@public--this function is expected to be used from w/in html pages served up by cyc.
+/**
+ * Load url, while simultaneously displaying a modal dialog with waitMessage.  When complete, displays the response
+ * in another dialog. If there is an error, failureMessage will be displayed instead.
+ */
+function modalBackgroundLoadUrl(url, waitMessage, failureMessage) {
+    var waitDivString = "\"<div title='Working'>" + waitMessage + "</div>\"";
+    var dialog = $(waitDivString).dialog({modal:true});
+    dialog.dialog("open");
+    $.ajax({
+	url: url,
+	dataType: "html",
+	error: function (response) {
+	    dialog.dialog("close");
+	    if (failureMessage) { 
+		alert(failureMessage); 
+	    } else {
+		alert("Error while switching user.");
+	    }
+	},
+	success: function(response) {
+	    dialog.dialog("close");
+	    $("<div title='Complete'>" + response + "</div>").dialog({buttons:[ { text: "Ok", click: function() { $( this ).dialog( "close" ); } }]});
+	}
+    });
+}
+
+
+
+
+/* KEA integration */
+
+function isKeaHosted() {
+	var DEFAULT_PORT_STR = "80";
+	var portStr = (window.location.port.length > 0) ? window.location.port : DEFAULT_PORT_STR;
+	var offset = parseInt(portStr.substring(portStr.length - 1));
+	if (offset == 3) // There is a slightly brittle assumption here about the KEA always being on offset 3. - nwinant
+		return true;
+	else
+		return false;
+}
+
+function isKeaPath(path) {
+	return (path) && (path.substring(0, 3) === "/a/");
+}
+
+function getKeaSessionId(path) {
+	if (!path) {
+		path = window.location.pathname;
+	}
+	if (isKeaHosted() && isKeaPath(path)) {
+		var tokens = path.split("/");
+		if ((tokens[1] === "a") && (tokens.length >= 4))
+			return tokens[2];
+		else
+			return;
+	} else {
+		return;
+	}
+}
+
+function keaizePath(path, sessionId) {
+	if (!isKeaPath(path)) {
+		var prefix = (sessionId) ? "/a/" + sessionId : "/a";
+		if (path.substring(0,12) === "/cgi-bin/cg?")
+			return prefix + "/" + path.substring(12);
+		else
+			return prefix + path;
+	} else {
+		return path;
+	}
+}
+
+function keaizePathIfNecessary(path) {
+	if (isKeaHosted()) {
+		return keaizePath(path, getKeaSessionId());
+	} else {
+		return path;
+	}
+}
+
+
+function positionedPopup(url,winName,w,h,t,l,scroll){
+  settings = 'height='+h+',width='+w+',top='+t+',left='+l+',scrollbars='+scroll+',resizable=yes,location=no';
+  window.open(url,winName,settings)
+}
+
+/** a numeric timestamp with seconds granularity */
+function numericTimestamp() {
+  var date = new Date().toISOString();
+  date = date.substring(0,19).replace("T","").replace(/-/g,"").replace(/:/g,"");
+  return date;
+}
+
+function sxhashExternalStringStandalone(string) {
+    var state_vector = 
+	[ 7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 
+	 23, 24, 25, 26, 27, 28, 29, 30, 31,  0,  1,  2,  3,  4,  5,  6];
+    var bit_limit    = 27;
+    var state = 4;
+    var hash  = 131;
+    for (var i = 0; i < string.length; i++) {
+        state = state_vector[state];
+        var charCode  = string.charCodeAt(i);
+        var subhash   = charCode & 223;
+        var high_bits = state;
+        var result    = null;
+        if (high_bits >= bit_limit) {
+            result = subhash;
+	} else {
+            var rest_bits    = bit_limit - high_bits;
+            var high_subhash = subhash >> rest_bits;
+            var low_mask     =  ~(-1  << rest_bits);
+            var low_subhash  = subhash & low_mask;
+            var low_rotated  = low_subhash << high_bits;
+            result = high_subhash | low_rotated;
+        }
+        hash = result ^ hash;
+    }
+    return hash;
+  }
+
 

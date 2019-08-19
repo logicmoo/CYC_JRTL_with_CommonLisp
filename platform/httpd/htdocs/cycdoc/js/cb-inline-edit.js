@@ -87,7 +87,7 @@ var handleAssertionSuccess = function(o) {
   inlineEditChangePoint = "deleteMe";
   targetElt.parentNode.insertBefore(newNode, targetElt.nextSibling);
 
-  newNode.innerHTML = '<span id=\"innerchange\" onClick=\"clearierr();\" onKeyDown=\"clearierr();\" style=\"font-size:10pt\"></span>';
+  newNode.innerHTML = '<span id=\"innerchange\" onClick=\"clearierr();\" onKeyDown=\"clearierr();\" style=\"font-size:10pt; z-index: 1\"></span>';
   dobject('innerchange').innerHTML += "<input value=\"Cancel\" type=\"button\" onClick=\"setTimeout('cancel(true)',100);\" title='close this window'>";
   dobject('innerchange').innerHTML += "<input value=\"Undo\" type=\"button\" onClick=\"uncommit();\" title='undo last normal change'>";
   dobject('innerchange').innerHTML += "<input value=\"Redo\" type=\"button\" onClick=\"recommit();\" title='redo last normal change'>";
@@ -166,35 +166,33 @@ function writecycl(sn) { // returns the cycl of the sentence 'cycl'+sn
 }
 
 function writecycl2(sname) { // returns the cycl of the sentence sname
-  var shtml = dobject(sname).innerHTML;
-  //if (shtml.match(/<textarea.*freeedittextarea/)) { shtml = dobject('freeedittextarea').value; }  // must use value, not innerHTML to let FF capture keyboard inputs
-  if (shtml.match(/<span.*postcommitspan_mt/)) { shtml = dobject('postcommitspan_mt').innerHTML; }
-  else if (shtml.match(/<span.*postcommitspan/)) { shtml = dobject('postcommitspan').innerHTML; }
-  shtml = removeoldhiddenresults(2, shtml); // cycl2 is the name of the editable sentence in this inline edit version
-  shtml = shtml.replace(/<[^>]*>/g, ''); // dehtml
-  shtml = shtml.replace(/^Mt : /,''); // remove superfluous Mt : at front if it is there
-  shtml = shtml.replace(/^Mt :&nbsp;/,''); // remove superfluous Mt : at front if it is there
-  shtml = encodeURI(shtml);
-  shtml = shtml.replace(/&nbsp;/g, '%20');
-  return(shtml);
+    var shtml = dobject(sname).innerHTML;
+    //if (shtml.match(/<textarea.*freeedittextarea/)) { shtml = dobject('freeedittextarea').value; }  // must use value, not innerHTML to let FF capture keyboard inputs
+    if (shtml.match(/<span.*postcommitspan_mt/)) { shtml = dobject('postcommitspan_mt').innerHTML; }
+    else if (shtml.match(/<span.*postcommitspan/)) { shtml = dobject('postcommitspan').innerHTML; }
+    var matches = /<span id=\"cycl(\d)/.exec(shtml)
+    var newId = matches ? matches[1] : 2 //cycl2 is the default name of the editable sentence in this inline editor
+    shtml = removeoldhiddenresults(newId, shtml); 
+    shtml = shtml.replace(/<[^>]*>/g, ''); // dehtml
+    shtml = shtml.replace(/^Mt : /,''); // remove superfluous Mt : at front if it is there
+    shtml = shtml.replace(/^Mt :&nbsp;/,''); // remove superfluous Mt : at front if it is there
+    shtml = encodeURI(shtml);
+    shtml = shtml.replace(/&nbsp;/g, '%20');
+    return(shtml);
+}
+
+function writeMt(sname) { // returns the cycl of the mt in sname 
+    return $('.mtCycl').text();
 }
 
 function writecyclcontext(n) { // returns the cycl context of the sentence containing textme n
   var shtml;
   var sn = textme2row[n];
   if (n in textisamt) {
-    shtml = dobject('cycl' + sn).innerHTML;
-    shtml = '(isa ' + shtml + ' Microtheory)';
+    return '(isa ' + $('#cycl' + sn).text() + ' Microtheory)';
   } else if (n in textme2row) {
-    shtml = dobject('cycl' + sn).innerHTML;
+      return $('#cycl' + sn).text();
   } else return('');
-  shtml = removeoldhiddenresults(sn, shtml);
-  shtml = encodeURI(shtml.replace(/<[^>]*>/g, '')); // dehtml
-  shtml = shtml.replace(/&nbsp;/g, '%20'); // amazingly, encodeURI does not touch the &nbsp;
-  shtml = shtml.replace(/%0[Aa]/g, ''); // nuisance LF's
-  shtml = shtml.replace(/:/g, '%3A'); // amazingly, encodeURI does not touch the : // probably optional
-  shtml = shtml.replace(/-/g, '%2D'); // amazingly, encodeURI does not touch the - // probably optional
-  return(shtml);
 }
 
 function openinputset(n, oldtext) { // opens a box set of term input, contextual autocomplete, and contextual search
@@ -206,6 +204,7 @@ function openinputset(n, oldtext) { // opens a box set of term input, contextual
   dobject('csi-input-' + n).value = oldtext;
   //showprops('csi-input-' + n); // works in IE only
   dobject('csi-input-' + n).focus();
+  dobject('csi-input-' + n).select();
   // looks like this: <font class="popmelinkme_class" id="popme12"><font class="textme_class" id="textme12" style="left:0" onClick="popme(12);">Mandarin</font>
   // dobject('textme' + n).setAttribute('onClick',''); // disable the onClick until restored
 }
@@ -239,7 +238,7 @@ function popme(n) { // handles a click on a term, for openinput candidates; also
     dismisspopme(lastpoppedn);
     textcommit(lastpoppedn, newvalue, 'popme-already-open');
     clearpopmeflags();
-  } else if (popmeopenflag && !popme2openflag) { 
+  } else if (popmeopenflag && !popme2openflag && dobject('csi-input-' + lastpoppedn)) { 
     var newvalue = dobject('csi-input-' + lastpoppedn).value;
     dismisspopme(lastpoppedn);
     if (acceptableresults[newvalue]) textcommit(lastpoppedn, newvalue, 'popme-already-open');
@@ -458,6 +457,7 @@ function freeedit() {
     dcontents = dcontents.replace(/&nbsp;/gm,' ');
     var divrowwidth = '90%';
     alldivs[idiv].innerHTML = '<span id="cycl' + rownum + '"><textarea id="freeedittextarea" cols="80" rows="12">' + dcontents + '</textarea></span>';
+      CycCodeEditor.fromTextArea(document.getElementById("freeedittextarea"));
     break;
   }
   dobject('button-row').innerHTML = "<input value=\"Cancel\" type=\"button\" onClick=\"freeeditcancel();\" style=\"font-size:8pt\">";
@@ -467,7 +467,7 @@ function freeedit() {
 } 
 
 function docommit() {
-  newcontents = dobject('freeedittextarea').value;
+  var newcontents = dobject('freeedittextarea').value;
   var alldivs = document.getElementsByTagName('div');
   for (var idiv in alldivs) if (alldivs[idiv] != undefined) if (alldivs[idiv].id != undefined) if (alldivs[idiv].id.match(/^divrow/)) alldivs[idiv].innerHTML = '<span id="postcommitspan">' + newcontents + '</span>';
   freeeditflag = false;
@@ -523,6 +523,7 @@ function freeedit_mt() {
     scontents = scontents.replace(/Mt : /,'');
     var spanrowwidth = allspans[ispan].style.width;
     allspans[ispan].innerHTML = '<span id="cycl' + rownum + '"><span id="prefree">Mt : </span><textarea id="freeedittextarea" cols="80">' + scontents + '</textarea></span>';
+    dobject('freeedittextarea').select();
     break;
   }
   dobject('button-row').innerHTML = "<input value=\"Cancel\" type=\"button\" onClick=\"freeeditcancel_mt();\" style=\"font-size:8pt\">";
@@ -533,8 +534,8 @@ function freeedit_mt() {
 
 
 function docommit_mt() {
-  newcontents = dobject('freeedittextarea').value;
-  if (!newcontents.match(/^ *Mt :/)) newcontents = 'Mt : ' + newcontents;
+  var newcontents = dobject('freeedittextarea').value;
+  if (!newcontents.match(/^ *Mt :/)) newcontents = 'Mt : <span class="mtCycl">' + newcontents + "</span>";
   dobject('prefree').innerHTML = '';
   var allspans = document.getElementsByTagName('span');
   for (var ispan in allspans) if (allspans[ispan] != undefined) if (allspans[ispan].id != undefined) if (allspans[ispan].id.match(/^mtrow/)) allspans[ispan].innerHTML = '<span id="postcommitspan_mt">' + newcontents + '</span>';
@@ -614,11 +615,9 @@ var mysavedwhere;
 var handleSubmitFailure = function(o) { }
 var handleSubmitSuccess = function(o) {
     var responsetext = '';
-    qox = o.responseXML.documentElement.tagName;
     var errcount = 0;
-    var rox = new Array();
-    var roxt = new Array();
-    var thiserr; var thistext; var thisrownum;
+    var errMessage = '';
+    var thiserr; var thistext;
 
     // sample responseXML:
     // <response newTermId="Mx4rQ1fWF4u7EeCRKQAhm0kILA">
@@ -628,37 +627,54 @@ var handleSubmitSuccess = function(o) {
     // </response>
 
     // check for invalid term
-    roxt = o.responseXML.getElementsByTagName('invalidTerm');
-    if (roxt[0] != undefined)
-      if (roxt[0] != undefined) {
-        var roxerr = roxt[0].textContent || roxt[0].innerText;
-        alert('old invalid term err ' + roxerr);
-      }
 
-    // pull out invalid sentences
-    rox = o.responseXML.getElementsByTagName('invalidSentence');
-    if (roxt.length != 0) errterm = true; else errterm = false;
-    if (!errterm) {
-      for (var i=0; i<rox.length; i++) {
-        thiserr = rox[i];
-        if (thiserr == undefined) continue; // sometimes there are 3 errs, but length is 5, go figure
-	thisrownum = thiserr.getAttribute('id');
-	if (thisrownum != undefined) {
-	  // we have a sentence number
-	  if (dobject('spanrow' + thisrownum) != undefined) dobject('spanrow' + thisrownum).className = 'err_class';
-	  errcount++;
+    if (!o.responseXML) {
+	errMessage = "Server response garbled\n<pre>" + o.responseText.replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</pre>";
+	errcount = 1;
+    } else { 
+
+	var roxt = o.responseXML.getElementsByTagName('invalidTerm');
+	if (roxt[0] != undefined) {
+            var roxerr = roxt[0].textContent || roxt[0].innerText;
+            alert('old invalid term err ' + roxerr);
 	}
-      }
+
+	// pull out invalid sentences
+	var errorElts = o.responseXML.getElementsByTagName('error');
+	var errterm = (roxt.length != 0) ? true : false;
+	if (!errterm) {
+	    for (var i=0; i<errorElts.length; i++) {
+		thisErr = errorElts[i];
+		if (thisErr == undefined) continue;
+		var theseSentences = thisErr.getElementsByTagName('invalidSentence');
+		var theseMessages  = thisErr.getElementsByTagName('message');
+		if (theseSentences != undefined) {
+		    var thisSentence = theseSentences[0];
+   		    var thisrownum = thisSentence.getAttribute('id');
+  		    if (thisrownum != undefined) {
+			// we have a sentence number
+			if (dobject('spanrow' + thisrownum) != undefined) dobject('spanrow' + thisrownum).className = 'err_class';
+			errcount++;
+		    }
+		}
+		if (theseMessages !=undefined && theseMessages.length > 0) {
+		    errMessage += "<br><pre style='font-size:smaller'>" + theseMessages[0].textContent + "</pre>";
+		}
+	    }
+	}
     }
     // summarize errs and non-errs
-errterm = false;
-    if (errterm || errcount) {
-      if (dobject('innerchangeerrmsg') != undefined) dobject('innerchangeerrmsg').innerHTML = 'There is an error; assertion not added';
-      else dobject('innerchange').innerHTML += '<font id=\"innerchangeerrmsg\" color=\"red\">There is an error; assertion not added</font>';
+    if (errcount) {
+	var msg = 'There is an error; assertion not added.' + errMessage;
+	if (dobject('innerchangeerrmsg') != undefined) {
+	    dobject('innerchangeerrmsg').innerHTML = msg;
+	} else {
+	    dobject('innerchange').innerHTML += '<font id=\"innerchangeerrmsg\" color=\"red\">' + msg + '</font>';
+	}
     } else {
-      //      o.argument.removeOriginal = true;
-      cancel(true, o.argument);
-      
+	//      o.argument.removeOriginal = true;
+	cancel(true, o.argument);
+	
     }
 
 } 
@@ -691,9 +707,17 @@ function dosubmit() { // handles final assertion
     }
   }
   var submitdata = 'cb-handle-edit-assertion';
-  var thismtcycl = writecycl2('mtrow');
+  var thismtcycl = writeMt('mtrow');
+    if (!thismtcycl) { //this strange hack is because the mt box has a different format if you got there via search than it has if you got there via free-edit.  If that is fixed, this hack can go away.
+      thismtcycl = writecycl2('mtrow');
+    }
   var alldivs = document.getElementsByTagName('div');
-  for (var idiv in alldivs) if (alldivs[idiv] != undefined) if (alldivs[idiv].id != undefined) if (alldivs[idiv].id.match(/^divrow/)) var divrow = alldivs[idiv].id;
+    var divrow;
+    for (var idiv in alldivs) {
+        if (alldivs[idiv] != undefined && alldivs[idiv].id != undefined && alldivs[idiv].id.match(/^divrow/)) {
+           divrow = alldivs[idiv].id;
+	} 
+    }
   var thisrowcycl = writecycl2(divrow);
   var thissentence;
   var cyclElt = getCyclElt(rownum);
@@ -972,7 +996,7 @@ function managecontentprepop(flushwhere) {
       for (i in newmttextmeset) textme2row[i] = rownum; // fix textme's so they point to this new box // they were set earlier, but the mt now claims its pieces
       for (i in newmttextmeset) textisamt[i] = true; // all textme's in this set are considered mt textme's
       for (i in newmttextmeset) delete newmttextmeset[i];
-      bdw("<span id=\"cycl" + rownum + "\">");
+      bdw("<span id='cycl" + rownum + "' class='mtCycl'>");
       bdw(newmt);
       bdw("</span>"); // end cycl
       bdw("</span>"); // end mt
@@ -1125,7 +1149,6 @@ function genchange(where, assertionid, removeboolean) {
   inlineEditRemoveBoolean = removeboolean;
 
   var sUrl = 'cg?xml-assertion-info&assertionId=' + assertionid;
-  // sUrl = 'http://achernar:3662/cgi-bin/cyccgi/cg?xml-assertion-info&assertionId=6189511';
   var assertioncallback = {
     success:handleAssertionSuccess,
     failure:handleAssertionFailure

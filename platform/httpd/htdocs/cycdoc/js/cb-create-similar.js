@@ -302,7 +302,7 @@ function popme(n) { // handles a click on a term, for openinput candidates; also
   dobject('textme' + n).innerHTML = '';
   // dmsg('popme context = ' + cyclcontext);
   cyclcontext = '';
-  constantCompleteDataSources[n].scriptQueryParam = 'xml-complete&filter=c297&constrainingSentence=' + cyclcontext + '&caseSensitive=nil&prefix';
+  constantCompleteDataSources[n].scriptQueryParam = 'xml-complete&filter=Mx4rvViA9JwpEbGdrcN5Y29ycA&constrainingSentence=' + cyclcontext + '&caseSensitive=nil&prefix';
 
 }
 
@@ -483,7 +483,9 @@ function textcommit(n, newtext, fromwhere) { // commits new text from a popped o
   if (popme2openflag && popme2stringflag) {
     // deal with textarea
     newtext = newtext.replace(/%0A%0D/, ' '); // remove newline // doesn't work if the browser is xlating textarea LF CR
-    newtext = decodeURI(newtext); // my browser encodes URI when textarea is committed
+    try {
+        newtext = decodeURI(newtext); // my browser encodes URI when textarea is committed
+    } catch (err) {} //if it decodeURI fails, we should use the original string
     newtext = newtext.replace(/"/g, '\\"');
     if (dobject('textme' + n).textContent != undefined) dobject('textme' + n).textContent = '"' + newtext + '"'; // supply double quotes
     else if (dobject('textme' + n).innerText != undefined) dobject('textme' + n).innerText = '"' + newtext + '"'; // supply double quotes
@@ -742,7 +744,7 @@ function dosubmit() { // handles final assertion
 	thisrowcycl = writecycl(i);
 
 	// somewhat a brain ufck, I am taking the &amp;quot; and making them &quot; for postdata; this is because we made &amp; so the user can see the escaped characters in the textarea of a string // technically I should only do this substitution under quotes, but writecycl is not that smart (yet)
-	thisrowcycl = thisrowcycl.replace(/&/g, '%26').replace(/;/g, '%3B'); // have to change &lt; to %26lt%3B etc., and &quot; goes to %26quot%3B under quotes // BECAUSE URI encoding in writecycl didn't encode the &, at least not under "... can you believe it!?
+	  thisrowcycl = thisrowcycl.replace(/&/g, '%26').replace(/;/g, '%3B').replace(/[+]/g, '%2B'); // have to change &lt; to %26lt%3B etc., and &quot; goes to %26quot%3B under quotes // BECAUSE URI encoding in writecycl didn't encode the &, at least not under "... can you believe it!?
 
         thissentence = '%28ist%20' + thismtcycl + '%20' + thisrowcycl + '%29';
         // if (nsubmitted%3 == 1) thissentence = '%28ist%20' + thismtcycl + '%20%28' + thisrowcycl + '%29'; // poison sentence for debugging:  added extra %28 to test errs 
@@ -925,7 +927,7 @@ var selectHandlers = new Array();
 function declareautos(ntextme) {
 // set up the focal term's input box and AC code
   var constantCompleteDataSource = new YAHOO.widget.DS_XHR('./cg', ['Term', 'cycl', 'nl']);
-    constantCompleteDataSource.scriptQueryParam = 'xml-complete&filter=c297&prefix';
+    constantCompleteDataSource.scriptQueryParam = 'xml-complete&filter=Mx4rvViA9JwpEbGdrcN5Y29ycA&prefix';
     // add constraining-stentence=...
     constantCompleteDataSource.responseType = YAHOO.widget.DS_XHR.TYPE_XML;
     var constantComplete = new YAHOO.widget.AutoComplete('input-0', 'autocomplete-results-0', constantCompleteDataSource);
@@ -946,7 +948,7 @@ function declareautos(ntextme) {
   for (var n=1; n<=ntextme; n++) {
     if (dobject('csi-input-' + n) == undefined) continue;
     constantCompleteDataSources[n] = new YAHOO.widget.DS_XHR('./cg', ['Term', 'cycl', 'nl']);
-    constantCompleteDataSources[n].scriptQueryParam = 'xml-complete&filter=c297&prefix';
+    constantCompleteDataSources[n].scriptQueryParam = 'xml-complete&filter=Mx4rvViA9JwpEbGdrcN5Y29ycA&prefix';
     constantCompleteDataSources[n].responseType = YAHOO.widget.DS_XHR.TYPE_XML;
     constantCompletes[n] = new YAHOO.widget.AutoComplete('csi-input-' + n, 'csi-ac-results-' + n, constantCompleteDataSources[n]);
     constantCompletes[n].allowBrowserAutocomplete = false;
@@ -982,7 +984,7 @@ function declareoneauto(ntextme) {
   for (var n=ntextme; n<=ntextme; n++) { // yeah, just do this one
     if (dobject('csi-input-' + n) == undefined) continue;
     constantCompleteDataSources[n] = new YAHOO.widget.DS_XHR('./cg', ['Term', 'cycl', 'nl']);
-    constantCompleteDataSources[n].scriptQueryParam = 'xml-complete&filter=c297&prefix';
+    constantCompleteDataSources[n].scriptQueryParam = 'xml-complete&filter=Mx4rvViA9JwpEbGdrcN5Y29ycA&prefix';
     constantCompleteDataSources[n].responseType = YAHOO.widget.DS_XHR.TYPE_XML;
     constantCompletes[n] = new YAHOO.widget.AutoComplete('csi-input-' + n, 'csi-ac-results-' + n, constantCompleteDataSources[n]);
     constantCompletes[n].allowBrowserAutocomplete = false;
@@ -1054,7 +1056,7 @@ function indent(x) { // used to show a bit of html and js, indented somewhat, bu
   return(result);
 }
 
-function writetopstuff(x, xg) { // note that we cannot call this until we pick up the focal guid from the parser
+function writetopstuff(x, xg, contentspec) { // note that we cannot call this until we pick up the focal guid from the parser
 dwln("<body class=\"yui-skin-sam\" onMouseOver=\"tc();\" onKeyUp=\"checkbodykey(event);\">");
 dwln("");
 dwln("<h3>Copied From <a href=\"cg?cb-cf&" + xg + "\">" + x + "</a>");
@@ -1088,10 +1090,28 @@ dwln("<input type=\"button\" value=\"Undo\" onClick=\"uncommit()\" style=\"font-
 dwln("<input type=\"button\" value=\"Redo\" onClick=\"recommit()\" style=\"font-size:10pt\">");
 dwln("<input id=\"lookupbutton\" type=\"button\" value=\"Switch To Browse Mode\" title=\"Switch between click-to-edit and click-to-view\" onClick=\"togglelookupmode();\" style=\"font-size:10pt\">");
 //dwln("<input id=\"escbutton\" type=\"button\" value=\"Escape\" title=\"Discard changes to the currently-open input box\" onClick=\"doescape();\" style=\"font-size:10pt\">");
+    var buttonText = (contentspec == ":DEFAULT") ? "Show All Inferred" : "Hide Inferred";
+    var newContentSpec = (contentspec == ":DEFAULT") ? ":ALL-INFERRED" : ":DEFAULT";
+    var title = (contentspec == ":DEFAULT") ? "Currently not showing all inferred assertions from the source term.  Click here to include all inferred assertions." : "Currently showing inferred assertions from the source term.  Click here to only show default assertions.";
+dwln("<input type=\"button\" value=\"" + buttonText + "\" title=\"" + title + "\" onClick=\"reloadFrameWithContent('" + newContentSpec + "');\" style=\"font-size:10pt;\">");
 dwln("<input id=\"submitbutton\" type=\"button\" value=\"SEND\" title=\"Assert selected sentences\" onClick=\"dosubmit();\" style=\"font-size:10pt;background-color:#ccccee\">");
 dwln("<br>");
 
 }
+
+function reloadFrameWithContent(contentSpec) {
+    var location;
+    if (getAncestorFrame(window)) {
+	location = getAncestorFrame(window).location;
+    } else {
+	location = window.location
+    }
+    var url = location.href;
+    url = url.replace(/&contentspec=.*[^&]/g, "");
+    url = url + "&contentspec=" + contentSpec;
+    location.href = url;
+}
+    
 
 function writebuttonrow() { 
   dwln("<input type=\"button\" value=\"All Mts\" title=\"Check All / Uncheck All\" onClick=\"togglecheckall();\" style=\"font-size:10pt\">");
@@ -1129,7 +1149,7 @@ if (true) {
 
   var matchtuple = remain.match("<[^>]*>"); // the match of each tag
   // this is the basic parser which does not know about < or > under quotes
-
+    var nextiskeyword = false;
   if (matchtuple != null) while (matchtuple[0] != "") {
 
     // note that the match has to be the most recent use of regexp, including any string replaces
@@ -1153,7 +1173,7 @@ if (true) {
           accbdw(tagstack[taglevel]);
         }
         // if (valstack[taglevel] != "") accbdw("....." + valstack[taglevel]);
-        managecontentprepop();
+        nextiskeyword = managecontentprepop(nextiskeyword);
         // accbdw(" pop");
         if (tagcontents.toLowerCase() == "/assertions") break;
         taglevel--;
@@ -1180,7 +1200,8 @@ if (true) {
   writebottomstuff();
 }
 
-function managecontentprepop() {
+function managecontentprepop(makekeyword) {
+    var nextiskeyword = false;
   // called during a pop before tag is popped
   if (tagstack[taglevel] == "guid") {
     stored['lastguid'] = valstack[taglevel];
@@ -1198,7 +1219,7 @@ function managecontentprepop() {
       obuffer = '';
       // set up a new mt header on the stored cycl fragment
       ++mtnum;
-      dw("<img src=\"/cycdoc/js/blank.gif\" border=\"0px\" height=\"30px\" width=\"1\" style=\"visibility:hidden\"><input type=\"button\" value=\"All\" style=\"font-size:9pt\" onClick=\"togglemt(" + mtnum + ");\"> "); // img is there to resize line in IE and chrome
+      dw("<img src=\"/cycdoc/img/cg/blank.gif\" border=\"0px\" height=\"30px\" width=\"1\" style=\"visibility:hidden\"><input type=\"button\" value=\"All\" style=\"font-size:9pt\" onClick=\"togglemt(" + mtnum + ");\"> "); // img is there to resize line in IE and chrome
       dw("<font color=\"#8888ff\" style=\"line-height:30px;text-decoration:underline\">Mt :"); // line height is there for Firefox
       ++rownum; // used to recover cycl fragments, but most are boxes, except these mt's which are just cycl terms // think of mt's as having boxes that are hidden in favor of the ALL button
       for (i in newmttextmeset) textme2row[i] = rownum; // fix textme's so they point to this new box // they were set earlier, but the mt now claims its pieces
@@ -1220,9 +1241,10 @@ function managecontentprepop() {
     }
   }
 
-
-  if (thispath0 == "name>symbol") {
-    // can we check that we just popped off <package>KEWYORD</package>?
+    if (thispath0 == "package>symbol" && valstack[taglevel] == "KEYWORD") {
+	nextiskeyword = true;
+    }
+  if (thispath0 == "name>symbol" && makekeyword) {
     newname = ':' + newname;
   }
 
@@ -1283,6 +1305,7 @@ function managecontentprepop() {
     accbdw(")");
     nextspaceflag = true;
   }
+    return nextiskeyword;
 
 }
 
@@ -1309,12 +1332,13 @@ function managecontentpostpush(shortlowertagname, tagcontents) {
   var thispath3 = tagstack[taglevel] + ">" + tagstack[taglevel-1] + ">" + tagstack[taglevel-2] + ">" + tagstack[taglevel-3] + ">" + tagstack[taglevel-4];
   if (shortlowertagname == "assertions") {
     // tag looked like <assertions focalTerm="IntelligenceCommunityFn" hlid="Mx4rv4nDAZwpEbGdrcN5Y29ycA">
-    focalname = tagcontents.replace(/.*focalterm=./i, "").replace(/\".*/, "");
+    focalname = /focalterm=['"](.*?)['"]/.exec(tagcontents)[1].replace(/\".*/, "");
     focalname = focalname.replace(/^\:/, "");
     focalname = focalname.replace(/^\#\$/, "");
 
-    focalguid = tagcontents.replace(/.*hlid="/i, "").replace(/\"/, "");
-    writetopstuff(focalname, focalguid);
+      var focalguid = /hlid=['"](.*?)['"]/.exec(tagcontents)[1];
+      var contentspec = /contentspec=['"](.*?)['"]/.exec(tagcontents)[1];
+      writetopstuff(focalname, focalguid, contentspec);
   }
   //if (thispath3 == "name>constant>predicate>sentence>assertions") {
   if (thispath0 == "sentence>assertions") {
@@ -1324,7 +1348,7 @@ function managecontentpostpush(shortlowertagname, tagcontents) {
     accbdw("<div id =\"divrow" + rownum + "\" style=\"width:90%\"><img src=\"/cycdoc/js/blank.gif\" height=\"25px\" width=\"1px\"><span class='dynamicline' id=\"spanrow" + rownum + "\" style=\"line-height:150%;width:50\">");
 
     //accbdw("<font onClick=\"togglebox(" + rownum + ");\">&nbsp;&nbsp;&nbsp;</font><input id=\"checkbox" + rownum + "\" type=\"checkbox\" onClick=\"setTimeout('checkrowerrstate(" + rownum + ")', 100);\"><font class=\"hoverclass\" id=\"checkadd" + rownum + "\" onClick=\"addrow(" + rownum + ");\" style=\"font-size:10pt\">&#9802;&nbsp;</font><font class=\"hoverclass\" onClick=\"freeedit(" + rownum + ");\">&#9872&nbsp;&nbsp;&nbsp;</font>");
-    accbdw("<font class=\"hoverclass\" id=\"checkadd" + rownum + "\" onClick=\"addrow(" + rownum + ");\" style=\"font-size:10pt\">&nbsp;<img class='hidebutton' id='addsign" + rownum + "' src='/cycdoc/js/addsign.png' height='12' title='clone this row'>&nbsp;</font><font class=\"hoverclass\" onClick=\"freeedit(" + rownum + ");\"><img class='hidebutton' id='textsign" + rownum + "' src='/cycdoc/js/text.png' height='15' title='edit this row as free text'>&nbsp;&nbsp;&nbsp;</font><input id=\"checkbox" + rownum + "\" type=\"checkbox\" onClick=\"setTimeout('checkrowerrstate(" + rownum + ")', 100);\">");
+    accbdw("<font class=\"hoverclass\" id=\"checkadd" + rownum + "\" onClick=\"addrow(" + rownum + ");\" style=\"font-size:10pt\">&nbsp;<img class='hidebutton' id='addsign" + rownum + "' src='/cycdoc/img/cb/addsign.png' height='12' title='clone this row'>&nbsp;</font><font class=\"hoverclass\" onClick=\"freeedit(" + rownum + ");\"><img class='hidebutton' id='textsign" + rownum + "' src='/cycdoc/img/cb/text.png' height='15' title='edit this row as free text'>&nbsp;&nbsp;&nbsp;</font><input id=\"checkbox" + rownum + "\" type=\"checkbox\" onClick=\"setTimeout('checkrowerrstate(" + rownum + ")', 100);\">");
     accbdw("<span id=\"cycl" + rownum + "\">");  
     nextspaceflag = false;
   } 
@@ -1464,7 +1488,7 @@ function addrow(arownum) {
   var cyclinnards = dobject("cycl" + arownum).innerHTML;
   row2mt[rownum] = row2mt[arownum];
   var s = "<img src=\"/cycdoc/js/blank.gif\" height=\"25px\" width=\"1px\"><span class='dynamicline' id=\"spanrow" + rownum + "\" style=\"line-height:150%;width:50\">";
-  s += "<font class=\"hoverclass\" id=\"checkadd" + rownum + "\" onClick=\"addrow(" + rownum + ");\" style=\"font-size:10pt\">&nbsp;<img class='hidebutton' id='addsign" + rownum + "' src='/cycdoc/js/addsign.png' height='12' title='clone this row'>&nbsp;</font><font class=\"hoverclass\" onClick=\"freeedit(" + rownum + ");\"><img class='hidebutton' id='textsign" + rownum + "' src='/cycdoc/js/text.png' height='15' title='edit this row as free text'>&nbsp;&nbsp;&nbsp;</font><input id=\"checkbox" + rownum + "\" type=\"checkbox\" onClick=\"setTimeout('checkrowerrstate(" + rownum + ")', 100);\">";
+  s += "<font class=\"hoverclass\" id=\"checkadd" + rownum + "\" onClick=\"addrow(" + rownum + ");\" style=\"font-size:10pt\">&nbsp;<img class='hidebutton' id='addsign" + rownum + "' src='/cycdoc/img/cb/addsign.png' height='12' title='clone this row'>&nbsp;</font><font class=\"hoverclass\" onClick=\"freeedit(" + rownum + ");\"><img class='hidebutton' id='textsign" + rownum + "' src='/cycdoc/img/cb/text.png' height='15' title='edit this row as free text'>&nbsp;&nbsp;&nbsp;</font><input id=\"checkbox" + rownum + "\" type=\"checkbox\" onClick=\"setTimeout('checkrowerrstate(" + rownum + ")', 100);\">";
   s += "<span id=\"cycl" + rownum + "\">";  
   nautos2declare = 0;
   s += renumber(cyclinnards,arownum);

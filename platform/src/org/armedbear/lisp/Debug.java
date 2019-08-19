@@ -38,6 +38,10 @@ import static org.armedbear.lisp.Lisp.PACKAGE_SYS;
 import static org.armedbear.lisp.Lisp.T;
 import static org.armedbear.lisp.Lisp.exportSpecial;
 
+import java.io.PrintStream;
+
+import org.logicmoo.system.SystemCurrent;
+
 public final class Debug {
 
 	public static final void assertTrue(boolean b) {
@@ -118,5 +122,17 @@ public final class Debug {
 		if (_DEBUG_WARN_.getSymbolValue() != null) {
 			trace(s);
 		}
+	}
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 * @param msg
+	 */
+	public static void debugPrintln(String msg) {
+		//final PrintStream debugIO = SystemCurrent.originalSystemErr;
+		// TODO Auto-generated method stub
+		// debugIO.println(msg);
+		// to some loggers
+	
 	}
 }

@@ -89,7 +89,7 @@ function setupSentenceEditor(tempid, cols, useqno, dowffchecking) {
     var parent = obj.parentNode;
     parent.insertBefore(preDiv, obj);
     var postDiv = document.createElement("span");
-    postDiv.innerHTML = "<font class='handhover' color='gray' id='opencommentbutton' onclick='opencomment();' title='click to manually open comment/matching parenthesis box (will otherwise open automatically when needed)' style='vertical-align:top'>&nbsp;&#8595;</font>";
+    postDiv.innerHTML = "<font class='handhover' color='gray' id='opencommentbutton' onclick='opencomment();' title='click to manually open comment/matching parenthesis box (will otherwise open automatically when needed)' style='vertical-align:top'>&nbsp;&nbsp;&nbsp;&#8595;</font>";
     parent.insertBefore(postDiv, obj.nextSibling);
   }
   obj.setAttribute("wrap", "soft");
@@ -948,7 +948,7 @@ function opencomment() {
   dobj('opencommentbutton').style.height = '0';
   dobj('commentspan').style.visibility = 'visible';
   dobj('commentspan').style.height = '';
-  dobj('commentspan').innerHTML = "<table><tr><td><div id='comment' height='100' style='height:80px;overflow:auto;padding:10px;border:dotted black 1px;font-size:10pt;font-style:italic;background-color:#eeeeee'>&nbsp;</div></td><td valign='top'><font class='handhover' onclick='clearcomment();' color='gray'>&nbsp;&#215;</font></td></tr></table>";
+  dobj('commentspan').innerHTML = "<table><tr><td><div id='comment' height='100' style='height:80px;overflow:auto;padding:10px;border:dotted black 1px;font-size:10pt;font-style:italic;background-color:#eeeeee'>&nbsp;</div></td><td valign='top'><font class='handhover' onclick='clearcomment();' color='gray'>&nbsp;&nbsp;&nbsp;&#215;</font></td></tr></table>";
   dobj('comment').style.width = bepix(dobj(focalid).offsetWidth - dobj(focalid).offsetLeft - 20 + 4);
   dobj('comment').style.height = '100';
 }

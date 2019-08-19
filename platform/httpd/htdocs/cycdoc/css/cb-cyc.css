@@ -13,17 +13,22 @@ hr.menuBreak                       {margin-top: -1px; margin-bottom: -2px;}
 .confirm:hover                     {color: white}
 #reloadFrameButton                 {position:fixed; right: 10px; visibility:hidden}
 #reloadFrameButton.visible         {visibility:visible}
-
+.mt-header                         {font-size: 80%; opacity:0.75;}
 
 /*Proof-view display */
 .pf-debug .pf-stepnum              {display:inline; background-color: yellow; float:right}
 .pf-debug .pf-root>tbody>tr>.pf-steprow      {display:inherit}
 .pf-debug .pf-entry-struct	   {display:inherit}
+.pf-debug .pf-proof       	   {display:inherit}
+.pf-debug .pf-function    	   {display:inherit}
+.pf-debug .pf-function-section	   {display:inherit}
+.pf-proof       	           {display:none}
+.pf-function    	           {display:none}
+.pf-function-section	           {display:none}
 .pf-debug .pf-toc	   	   {display:inherit}
 .pf-debug .pf-parameters	   {display:inherit}
 .pf-debug .pf-show-cycl-button     {display:none}
 .pf-debug a[name="filtered"]       {display:inherit}
-.pf-debug #filtered                {display:static}
 .pf-debug #pfFilteredItems         {display:inline}
 #pfFilteredItems                   {display:none}
 li#filtered			   {display:none}
@@ -31,7 +36,12 @@ li#filtered			   {display:none}
 #pf-buttonbar                      {position:fixed}
 .pf-object 			   {display:none}
 .showcycl .pf-object               {display:inline}
+.pf-bug                            {visibility:hidden}
+.pf-paraphrase:hover .pf-bug       {visibility:visible}
 .pf-indent-td                      {width: 20px}
+.pf-indent td                      {border-spacing: 0px}
+.pf-indent tr                      {border-spacing: 0px}
+.pf-indent table                   {border-spacing: 0px}
 .pf-stepnum                        {display:none}
 .pf-entry-struct	   	   {display:none}
 .pf-toc	   	   		   {display:none}
@@ -48,10 +58,32 @@ li#filtered			   {display:none}
 .pf-root td                        {padding: 0px}
 .pf-label			   {vertical-align:top; font-family: sans-serif}
 .pf-indent-td			   {vertical-align:top; padding-top: 0.3em}
+.pf-headline                       {font-family: Arial, Helvetica, sans-serif;}
+.pf-subheadline                    {font-family: "Times New Roman", Times, serif;}
+.pf-storyparagraph                 {font-family: "Times New Roman", Times, serif;}
+#tabStory h1                       {text-align: center}
+/*
+#tabStory div.entry                {margin-left:30%}
+#tabStory .story-paragraph         {margin-right:30%}
+*/
+#tabStory div.story-paragraph      {padding-bottom: 5px}
+#tabStory div.story-paragraph      {text-align: justify}
+#tabStory div.story-body           {-webkit-column-count:auto; column-count:auto; -moz-column-count:auto;
+				    -webkit-column-gap:40px; column-gap:40px; -moz-column-gap:40px; 
+				    -webkit-column-width:20em; column-width:20em; -moz-column-width:20em;
+				    -webkit-column-rule:1px outset; column-rule:1px outset; -moz-column-rule:1px outset}
+				    
 /*.pf-rule 			   {background-color: yellow}*/
 a[name="filtered"]                 {display:none}
 ul				   {margin-top: 0px; margin-bottom: 0px}
-td				   {padding:0px}
+.proof-view td			   {padding:0px} 
+.proof-view .highly-relevant       {font-weight: 900;}
+
+/* PPH Phrases */
+.pphphraseicon                    {margin-right: 2px}
+.phrase td                        {border: 1px solid gray; padding: 0.4em}
+.phrase th                        {border: 1px solid gray; padding: 0.4em; background-color: #EEEEEE}
+.phrase .head-dtr                 {border: 3px solid gray}
 
 
 /* Inline Editing */
@@ -71,15 +103,90 @@ td				   {padding:0px}
                                       border-width: o; font-size:0}
 .yui-ac-container.search-results           {background-color:white; border: solid black 1px; width:600px; top:-20px; 
                                             padding:5px; font-size:8pt;}
-.yui-ac-container.search-results.invisible {visibility:hidden; width:0; font-size:0; padding:0 border-width:0}
+.yui-ac-container.search-results.invisible {visibility:hidden; width:0; font-size:0; padding:0; border-width:0}
 .yui-ac-input.inline-edit-input            {position:relative; top: 0; width:200px; height:12pt; 
                                             padding:1px; border-width:1px; font-size: 12pt}
 .yui-ac-input.inline-edit-input.invisible  {visibility:hidden; width:0; height:0; border-width:0; font-size: 0; 
                                             padding: 0}
 .button-row input        {font-size: 8pt}
 
+.editContainer .CodeMirror {background:white}
+
 font.popmelinkme_class:hover      { cursor:pointer; text-decoration:underline} 
 font.dyntext_class                { color:#600030; } 
 font.searchresultline_class       { color:black; line-height:140%; font-size:10pt; } 
 font.searchresultline_class:hover { background-color:#ffdddd; } 
 font.err_class                    { border:solid red 1px; } 
+
+.bookmarkButton                         {cursor:pointer}
+.bookmarkButton.bookmarked #bookmarkOn  {display: inherit}
+.bookmarkButton.bookmarked #bookmarkOff {display: none}
+.bookmarkButton.working            #bookmarkWorking {display:inherit}
+.bookmarkButton.working            #bookmarkOff     {display:none}
+.bookmarkButton.working            #bookmarkOn      {display:none}
+.bookmarkButton.bookmarked.working #bookmarkWorking {display:inherit}
+.bookmarkButton.bookmarked.working #bookmarkOff     {display:none}
+.bookmarkButton.bookmarked.working #bookmarkOn      {display:none}
+
+#bookmarkOn              {display: none}
+#bookmarkOff             {display: inherit}
+#bookmarkArmed           {display: none}
+#bookmarkWorking         {display: none}
+
+.columnar               {column-gap: 2em; -moz-column-gap: 2em; -webkit-column-gap: 2em; }
+.bookmarks {}
+.bookmarked-constants   {column-width: 15em; -webkit-column-width: 15em; -moz-column-width: 15em; margin-bottom: .5em; }
+.history-constants      {column-width: 15em; -webkit-column-width: 15em; -moz-column-width: 15em; }
+
+.history-constant       {overflow: hidden}
+.history-nat            {overflow: hidden}
+.bookmarked-constant    {overflow: hidden}
+.bookmarked-nat         {overflow: hidden}
+
+.bookmarked-nats                 {column-width: 45em; -webkit-column-width: 45em; -moz-column-width: 45em; margin-bottom: .5em}
+.bookmarked-nats .bookmarked-nat {-webkit-column-break-inside: avoid; break-inside: avoid-column; } 
+.history-nats                    {column-width: 45em; -webkit-column-width: 45em; -moz-column-width: 45em; }
+.history-nats .history-nat       {display:inline-block; }
+
+.bookmarked-asserts                    {column-width: 45em; -webkit-column-width: 45em; -moz-column-width: 45em; margin-bottom: .5em}
+.bookmarked-asserts .bookmarked-assert {-webkit-column-break-inside: avoid; break-inside: avoid-column; } 
+.history-asserts                       {column-width: 45em; -webkit-column-width: 45em; -moz-column-width: 45em; }
+.history-asserts .history-assert       {-webkit-column-break-inside: avoid; break-inside: avoid-column; } 
+
+
+ 
+a:link     {text-decoration: none; color:DarkBlue}
+a:visited  {text-decoration: none; color:DarkBlue}
+/* make sure we don't override the font inside a <code> tag */
+code .const {font-family: monospace}
+code .cycl  {font-family: monospace}
+.const     {color: DarkBlue; font-family: sans-serif; white-space: nowrap;} 
+.cycl      {color: DarkBlue; font-family: sans-serif;} 
+a:hover    {color: #0808FF; }
+a:hover    {color: #0808FF; }
+.el-var, .hl-var                     {color: darkgreen; font-family: sans-serif;}
+.el-var.dont-care, .hl-var.dont-care {color: red;}
+.dont-care          {color: red;}
+.keyword            {color: darkorchid; font-family: sans-serif;}
+.symbol             {color: brown; font-family: sans-serif;}
+
+.history-table-heading       {font-style: italic}
+.history-categorized-column  {padding-right: 5px; padding-left: 5px; vertical-align: top}
+.history-categorized-column:first-child  {padding-left: 0px;}
+.history-table hr            {margin-top: .1em; margin-bottom: .1em; }
+
+
+table { border-collapse: collapse;}
+
+.const .obsolete { text-decoration: line-through; }
+.assert-sent.obsolete { opacity: .5; }
+
+/* context-menu icons */
+.context-menu-item.icon-bookmarked      { background-size: 12px; background-image: url(../img/cb/yellow-star-21x21.png); }
+.context-menu-item.icon-not-bookmarked  { background-size: 12px; background-image: url(../img/cb/yellow-star-off-21x21.png); }
+.context-menu-item.icon-derived         {background-size: 12px; background-image: url(../img/cb/green.gif);}
+.context-menu-item.icon-default         {background-size: 12px; background-image: url(../img/cb/yellow.gif);}
+.context-menu-item.icon-monotonic       {background-size: 12px; background-image: url(../img/cb/white.gif);}
+.context-menu-item.icon-known           {background-size: 12px; background-image: url(../img/cb/checkmark-green.png);}
+ul.context-menu-list                    {font-size: 10pt; max-width:500px;}
+.context-menu-item.context-menu-submenu {max-width: 500px;}
