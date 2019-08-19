@@ -14,6 +14,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 
 public class JRef {
 	public static void main(String argv[]) {
@@ -36,8 +38,9 @@ public class JRef {
 	}
 
 	@Rule
-    public TestRule watcher = new TestWatcher() { 		if (Main.noPrologJNI) return;
+    public TestRule watcher = new TestWatcher() { 	
         @Override
+        
 		protected void starting(Description description) {
 //            logger.info("{} being run...", description.getMethodName());
 

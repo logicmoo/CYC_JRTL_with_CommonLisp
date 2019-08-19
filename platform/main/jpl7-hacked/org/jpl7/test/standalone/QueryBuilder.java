@@ -15,7 +15,8 @@ import org.jpl7.Util;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestRule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 
 public class QueryBuilder {
 	//    final Logger logger = LoggerFactory.getLogger(GetSolution.class);
@@ -40,14 +41,14 @@ public class QueryBuilder {
 	}
 
 	@Rule
-    public TestRule watcher = new TestWatcher() { 		if (Main.noPrologJNI) return;
-        @Override
+	public TestWatcher watcher = new TestWatcher() {
+		@Override
 		protected void starting(Description description) {
-//            logger.info("{} being run...", description.getMethodName());
+			//            logger.info("{} being run...", description.getMethodName());
 
-            System.out.println("Starting test: " + description.getMethodName());
-        }
-    };
+			System.out.println("Starting test: " + description.getMethodName());
+		}
+	};
 
 	@Test
 	public void testTerm1() {
