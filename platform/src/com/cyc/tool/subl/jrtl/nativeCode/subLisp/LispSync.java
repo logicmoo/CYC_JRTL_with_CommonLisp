@@ -34,6 +34,7 @@ import org.jpl7.Atom;
 import org.jpl7.Term;
 import org.jpl7.fli.term_t;
 import org.logicmoo.system.BeanShellCntrl;
+import org.logicmoo.system.Startup;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLStruct;
@@ -50,6 +51,11 @@ import com.cyc.tool.subl.util.SubLTrampolineFile;
 
 public class LispSync extends SubLTrampolineFile {
 
+	static {
+		// temporary workarround apps not initialziing cyc like Junit
+		Startup.onAccess(LispSync.class);
+
+	}
 	static AbstractSubLStruct lastStruct;
 
 	static private LinkedList laterList = new LinkedList();
@@ -487,8 +493,7 @@ public class LispSync extends SubLTrampolineFile {
 	 * @param slotName
 	 * @return
 	 */
-	private static LispObject pred(SubLObject clazzConstant, SubLSymbol lispClassName, String className,
-			LispObject slotName) {
+	private static LispObject pred(SubLObject clazzConstant, SubLSymbol lispClassName, String className, LispObject slotName) {
 		if (slotName.isSymbol()) {
 
 			final Symbol checkSymbol = checkSymbol(slotName);
@@ -533,8 +538,7 @@ public class LispSync extends SubLTrampolineFile {
 			final LispObject pred = c(name);
 			println("  ");
 			assertLisp("isa", pred, c("Predicate"));
-			assertLisp("comment", pred, str("LispSync from class " + toQualifiedName(lispClassName) + " with slot "
-					+ toQualifiedName(slotName)));
+			assertLisp("comment", pred, str("LispSync from class " + toQualifiedName(lispClassName) + " with slot " + toQualifiedName(slotName)));
 			assertLisp("arg1Isa", pred, clazzConstant);
 
 			return pred;
@@ -744,7 +748,7 @@ public class LispSync extends SubLTrampolineFile {
 			return cs;
 		SubLObject lo = BeanShellCntrl.find_constant_by_name(cs);
 		if (lo == null || lo == NIL) {
-		  lo = BeanShellCntrl.create_constant(cs, (SubLBoolean) NIL);
+			lo = BeanShellCntrl.create_constant(cs, (SubLBoolean) NIL);
 		}
 		return (LispObject) lo;
 	}
@@ -976,10 +980,10 @@ public class LispSync extends SubLTrampolineFile {
 	public static SubLObject oops_add_inst(SubLObject... className) {
 		ObjectOutputStream oos = null;
 		try {
-//			copyRefsToBowls();
-//			FileOutputStream fout = new FileOutputStream(filename.toStr().getString());
-//			oos = new ObjectOutputStream(fout);
-//			oos.writeObject(bowls);
+			//			copyRefsToBowls();
+			//			FileOutputStream fout = new FileOutputStream(filename.toStr().getString());
+			//			oos = new ObjectOutputStream(fout);
+			//			oos.writeObject(bowls);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -1312,11 +1316,10 @@ public class LispSync extends SubLTrampolineFile {
 		neddsDoneThread.start();
 	}
 
-	public static void wasSetField(AbstractSubLStruct structureObject, int slotNum, int pingAt, Object was,
-			Object value) {
+	public static void wasSetField(AbstractSubLStruct structureObject, int slotNum, int pingAt, Object was, Object value) {
 
-//		if (!structureObject.isTracked())
-//			return;
+		//		if (!structureObject.isTracked())
+		//			return;
 
 		if (was == null) {
 			if (UNBOUND_VALUE == value || was == value || value == SubLNil.NIL)

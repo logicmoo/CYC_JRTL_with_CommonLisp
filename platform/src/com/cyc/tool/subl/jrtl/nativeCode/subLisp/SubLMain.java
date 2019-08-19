@@ -242,7 +242,7 @@ public class SubLMain {
 	public static boolean noInitCyc = true;
 	protected static boolean delayEvalParams = true;
 	protected static boolean noInit;
-	public static boolean commonSymbolsOK;
+	public static boolean commonSymbolsOK = false;
 	public static long fistStartTime;
 	protected static long startTime;
 	public static boolean shouldRunInBackground;

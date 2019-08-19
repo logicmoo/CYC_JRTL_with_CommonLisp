@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.jpl7.fli.term_t;
+import org.logicmoo.system.Startup;
 
 /**
  * This class provides a bunch of static utility methods to support JPL's Java API.
@@ -39,6 +40,13 @@ import org.jpl7.fli.term_t;
  * @version $Revision$
  */
 public final class Util {
+	
+
+	static {
+		// temporary workarround apps not initialziing cyc like Junit
+		Startup.onAccess(Util.class);
+	}
+
 	/**
 	 * Converts an array of Terms to a JPL representation of a Prolog list of terms whose members correspond to the
 	 * respective array elements.

@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.armedbear.lisp.Main;
+import org.jpl7.fli.Prolog;
 import org.logicmoo.system.Startup;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLSequence;
@@ -56,6 +57,8 @@ import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
 public class UnitTest extends TestCase {
+	static private String MYNIL = "NIL";
+
 	private static class CeilingTest extends DivisionTest {
 		public CeilingTest(String number, String quotient, String remainder) {
 			super(number, quotient, remainder);
@@ -497,11 +500,11 @@ public class UnitTest extends TestCase {
 		testEvalEquals("'a", "(append nil 'a)");
 		testEvalEquals("'(a)", "(append '(a . b) nil)");
 		testEvalEquals("'(a)", "(append nil '(a) nil)");
-		testEvalEquals("NIL", "(append)");
+		testEvalEquals(MYNIL, "(append)");
 		testEvalEquals("'a", "(append 'a)");
 		testEvalEquals("'(A B C D E F G)", "(append (cdr '(1 a b c)) (cdr '(1 d e f)) '() '(g))");
 		testEvalEquals("'(A B C . D)", "(append (cdr '(1 a b c)) 'd)");
-		testEvalEquals("nil", "(append nil nil nil)");
+		testEvalEquals(MYNIL, "(append nil nil nil)");
 	}
 
 	public static void testBasicEquality() {
@@ -509,10 +512,10 @@ public class UnitTest extends TestCase {
 		testEvalEquals("T", "(eql t t)");
 		testEvalEquals("T", "(equal t t)");
 		testEvalEquals("T", "(equalp t t)");
-		testEvalEquals("NIL", "(eq t nil)");
-		testEvalEquals("NIL", "(eql t nil)");
-		testEvalEquals("NIL", "(equal t nil)");
-		testEvalEquals("NIL", "(equalp t nil)");
+		testEvalEquals(MYNIL, "(eq t nil)");
+		testEvalEquals(MYNIL, "(eql t nil)");
+		testEvalEquals(MYNIL, "(equal t nil)");
+		testEvalEquals(MYNIL, "(equalp t nil)");
 		testEvalError("(eq)");
 		testEvalError("(eql)");
 		testEvalError("(equal)");
@@ -543,10 +546,10 @@ public class UnitTest extends TestCase {
 		testEvalEquals("T", "(cand)");
 		testEvalEquals("T", "(cand 'xx 'yy)");
 		testEvalEquals("T", "(cand T)");
-		testEvalEquals("NIL", "(cand NIL T)");
-		testEvalEquals("NIL", "(cand T NIL)");
+		testEvalEquals(MYNIL, "(cand NIL T)");
+		testEvalEquals(MYNIL, "(cand T NIL)");
 		testEvalEquals("T", "(cand T T T)");
-		testEvalEquals("NIL", "(cand NIL NIL NIL)");
+		testEvalEquals(MYNIL, "(cand NIL NIL NIL)");
 		testEvalEquals("T", "(cand 1 2)");
 		testEvalError("(cand 1 . 2)");
 		testEvalError("(cand xasdrwsefrax yasdfsdfasdfry)");
@@ -555,7 +558,7 @@ public class UnitTest extends TestCase {
 	public static void testCcatch() {
 		testEvalEquals("0", "(csetq x 0)");
 		testEvalEquals("0", "x");
-		testEvalEquals("NIL", "(ccatch :foo x)");
+		testEvalEquals(MYNIL, "(ccatch :foo x)");
 		testEvalEquals("0", "x");
 		testEvalEquals("2", "(ccatch :foo x (+ 1 1))");
 		testEvalEquals("0", "x");
@@ -601,13 +604,13 @@ public class UnitTest extends TestCase {
 		testEvalEquals("T", "(eql #\\a #\\a)");
 		testEvalEquals("T", "(equal #\\a #\\a)");
 		testEvalEquals("T", "(equalp #\\a #\\a)");
-		testEvalEquals("NIL", "(eq #\\a #\\b)");
-		testEvalEquals("NIL", "(eql #\\a #\\b)");
-		testEvalEquals("NIL", "(equal #\\a #\\b)");
-		testEvalEquals("NIL", "(equalp #\\a #\\b)");
-		testEvalEquals("NIL", "(eq #\\a #\\A)");
-		testEvalEquals("NIL", "(eql #\\a #\\A)");
-		testEvalEquals("NIL", "(equal #\\a #\\A)");
+		testEvalEquals(MYNIL, "(eq #\\a #\\b)");
+		testEvalEquals(MYNIL, "(eql #\\a #\\b)");
+		testEvalEquals(MYNIL, "(equal #\\a #\\b)");
+		testEvalEquals(MYNIL, "(equalp #\\a #\\b)");
+		testEvalEquals(MYNIL, "(eq #\\a #\\A)");
+		testEvalEquals(MYNIL, "(eql #\\a #\\A)");
+		testEvalEquals(MYNIL, "(equal #\\a #\\A)");
 		testEvalEquals("T", "(equalp #\\a #\\A)");
 	}
 
@@ -660,8 +663,8 @@ public class UnitTest extends TestCase {
 		testEvalEquals("#\\A", "(digit-char 10)");
 		testEvalEquals("#\\K", "(digit-char 20)");
 		testEvalEquals("#\\Z", "(digit-char 35)");
-		testEvalEquals("nil", "(digit-char-p #\\a)");
-		testEvalEquals("nil", "(digit-char-p #\\9 8)");
+		testEvalEquals(MYNIL, "(digit-char-p #\\a)");
+		testEvalEquals(MYNIL, "(digit-char-p #\\9 8)");
 		testEvalEquals(" 9", "(digit-char-p #\\9)");
 		testEvalEquals("10", "(digit-char-p #\\a 11)");
 		testEvalEquals("10", "(digit-char-p #\\a 16)");
@@ -670,39 +673,39 @@ public class UnitTest extends TestCase {
 		testEvalEquals("t", "(alphanumericp #\\a)");
 		testEvalEquals("t", "(alphanumericp #\\A)");
 		testEvalEquals("t", "(alphanumericp #\\1)");
-		testEvalEquals("nil", "(alphanumericp #\\,)");
-		testEvalEquals("nil", "(alphanumericp #\\Escape)");
+		testEvalEquals(MYNIL, "(alphanumericp #\\,)");
+		testEvalEquals(MYNIL, "(alphanumericp #\\Escape)");
 		testEvalError("(alphanumericp 37)");
 		testEvalEquals("t", "(alpha-char-p #\\a)");
-		testEvalEquals("nil", "(alpha-char-p #\\9)");
+		testEvalEquals(MYNIL, "(alpha-char-p #\\9)");
 		testEvalEquals("t", "(alpha-char-p #\\A)");
-		testEvalEquals("NIL", "(alpha-char-p #\\,)");
-		testEvalEquals("NIL", "(alpha-char-p #\\Space)");
-		testEvalEquals("NIL", "(alpha-char-p #\\))");
+		testEvalEquals(MYNIL, "(alpha-char-p #\\,)");
+		testEvalEquals(MYNIL, "(alpha-char-p #\\Space)");
+		testEvalEquals(MYNIL, "(alpha-char-p #\\))");
 		testEvalError("(alpha-char-p 'b)");
 		testEvalError("(alpha-char-p 10)");
 		testEvalEquals("t", "(upper-case-p #\\A)");
-		testEvalEquals("nil", "(upper-case-p #\\a)");
+		testEvalEquals(MYNIL, "(upper-case-p #\\a)");
 		testEvalEquals("t", "(upper-case-p #\\S)");
-		testEvalEquals("NIL", "(upper-case-p #\\,)");
-		testEvalEquals("NIL", "(upper-case-p #\\Space)");
-		testEvalEquals("NIL", "(upper-case-p #\\))");
+		testEvalEquals(MYNIL, "(upper-case-p #\\,)");
+		testEvalEquals(MYNIL, "(upper-case-p #\\Space)");
+		testEvalEquals(MYNIL, "(upper-case-p #\\))");
 		testEvalError("(upper-case-p 'b)");
 		testEvalError("(upper-case-p 10)");
-		testEvalEquals("nil", "(lower-case-p #\\A)");
+		testEvalEquals(MYNIL, "(lower-case-p #\\A)");
 		testEvalEquals("t", "(lower-case-p #\\a)");
-		testEvalEquals("nil", "(lower-case-p #\\S)");
-		testEvalEquals("NIL", "(lower-case-p #\\,)");
-		testEvalEquals("NIL", "(lower-case-p #\\Space)");
-		testEvalEquals("NIL", "(lower-case-p #\\))");
+		testEvalEquals(MYNIL, "(lower-case-p #\\S)");
+		testEvalEquals(MYNIL, "(lower-case-p #\\,)");
+		testEvalEquals(MYNIL, "(lower-case-p #\\Space)");
+		testEvalEquals(MYNIL, "(lower-case-p #\\))");
 		testEvalError("(lower-case-p 'b)");
 		testEvalError("(lower-case-p 10)");
 		testEvalEquals("t", "(both-case-p #\\a)");
-		testEvalEquals("nil", "(both-case-p #\\9)");
+		testEvalEquals(MYNIL, "(both-case-p #\\9)");
 		testEvalEquals("t", "(both-case-p #\\A)");
-		testEvalEquals("NIL", "(both-case-p #\\,)");
-		testEvalEquals("NIL", "(both-case-p #\\Space)");
-		testEvalEquals("NIL", "(both-case-p #\\))");
+		testEvalEquals(MYNIL, "(both-case-p #\\,)");
+		testEvalEquals(MYNIL, "(both-case-p #\\Space)");
+		testEvalEquals(MYNIL, "(both-case-p #\\))");
 		testEvalError("(both-case-p 'b)");
 		testEvalError("(both-case-p 10)");
 		testEvalEquals("97", "(char-code #\\a)");
@@ -717,8 +720,8 @@ public class UnitTest extends TestCase {
 		testEvalEquals("#\\A", "(code-char 65)");
 		testEvalEquals("#\\,", "(code-char 44)");
 		testEvalEquals("#\\Space", "(code-char 32)");
-		testEvalEquals("nil", "(code-char 256)");
-		testEvalEquals("nil", "(code-char -1)");
+		testEvalEquals(MYNIL, "(code-char 256)");
+		testEvalEquals(MYNIL, "(code-char -1)");
 		testEvalError("(code-char 'b)");
 		testEvalError("(code-char #\\A)");
 		assertEquals(Characters.name_character(SubLObjectFactory.makeString("Esc")), readAndEval("#\\esc"));
@@ -743,15 +746,15 @@ public class UnitTest extends TestCase {
 		testEvalError("(char-downcase 10)");
 		testEvalEquals("t", "(char-equal #\\a #\\a)");
 		testEvalEquals("T", "(char-equal #\\a #\\A)");
-		testEvalEquals("nil", "(char-equal #\\a #\\1)");
-		testEvalEquals("nil", "(char-equal #\\a #\\control-a)");
-		testEvalEquals("nil", "(char-equal #\\meta-a #\\control-a)");
+		testEvalEquals(MYNIL, "(char-equal #\\a #\\1)");
+		testEvalEquals(MYNIL, "(char-equal #\\a #\\control-a)");
+		testEvalEquals(MYNIL, "(char-equal #\\meta-a #\\control-a)");
 		testEvalError("(char-equal 10 #\\a)");
 		testEvalError("(char-equal #\\a 10)");
 		testEvalError("(char-equal)");
 		testEvalError("(char-equal #\\a)");
-		testEvalEquals("nil", "(char-not-equal #\\a #\\a)");
-		testEvalEquals("nil", "(char-not-equal #\\a #\\A)");
+		testEvalEquals(MYNIL, "(char-not-equal #\\a #\\a)");
+		testEvalEquals(MYNIL, "(char-not-equal #\\a #\\A)");
 		testEvalEquals("t", "(char-not-equal #\\a #\\1)");
 		testEvalEquals("t", "(char-not-equal #\\a #\\control-a)");
 		testEvalEquals("t", "(char-not-equal #\\meta-a #\\control-a)");
@@ -759,12 +762,12 @@ public class UnitTest extends TestCase {
 		testEvalError("(char-not-equal #\\a 10)");
 		testEvalError("(char-not-equal)");
 		testEvalError("(char-not-equal #\\a)");
-		testEvalEquals("nil", "(equal (read-from-string \"#\\\\b\") (read-from-string \"#\\\\B\"))");
-		testEvalEquals("nil", "(char-greaterp #\\a #\\a)");
-		testEvalEquals("nil", "(char-greaterp #\\A #\\a)");
-		testEvalEquals("nil", "(char-greaterp #\\a #\\b)");
-		testEvalEquals("nil", "(char-greaterp #\\A #\\b)");
-		testEvalEquals("nil", "(char-greaterp #\\a #\\B)");
+		testEvalEquals(MYNIL, "(equal (read-from-string \"#\\\\b\") (read-from-string \"#\\\\B\"))");
+		testEvalEquals(MYNIL, "(char-greaterp #\\a #\\a)");
+		testEvalEquals(MYNIL, "(char-greaterp #\\A #\\a)");
+		testEvalEquals(MYNIL, "(char-greaterp #\\a #\\b)");
+		testEvalEquals(MYNIL, "(char-greaterp #\\A #\\b)");
+		testEvalEquals(MYNIL, "(char-greaterp #\\a #\\B)");
 		testEvalEquals("t", "(char-greaterp #\\a #\\1)");
 		testEvalEquals("t", "(char-greaterp #\\a #\\control-a)");
 		testEvalEquals("t", "(char-greaterp #\\meta-a #\\control-a)");
@@ -772,14 +775,14 @@ public class UnitTest extends TestCase {
 		testEvalError("(char-greaterp #\\a 10)");
 		testEvalError("(char-greaterp)");
 		testEvalError("(char-greaterp 10)");
-		testEvalEquals("nil", "(char-lessp #\\a #\\a)");
+		testEvalEquals(MYNIL, "(char-lessp #\\a #\\a)");
 		testEvalEquals("t", "(char-lessp #\\a #\\b)");
 		testEvalEquals("t", "(char-lessp #\\A #\\b)");
 		testEvalEquals("t", "(char-lessp #\\a #\\B)");
-		testEvalEquals("nil", "(char-lessp #\\A #\\a)");
-		testEvalEquals("nil", "(char-lessp #\\a #\\1)");
-		testEvalEquals("nil", "(char-lessp #\\a #\\control-a)");
-		testEvalEquals("nil", "(char-lessp #\\meta-a #\\control-a)");
+		testEvalEquals(MYNIL, "(char-lessp #\\A #\\a)");
+		testEvalEquals(MYNIL, "(char-lessp #\\a #\\1)");
+		testEvalEquals(MYNIL, "(char-lessp #\\a #\\control-a)");
+		testEvalEquals(MYNIL, "(char-lessp #\\meta-a #\\control-a)");
 		testEvalError("(char-lessp 10 #\\a)");
 		testEvalError("(char-lessp #\\a 10)");
 		testEvalError("(char-lessp)");
@@ -789,17 +792,17 @@ public class UnitTest extends TestCase {
 		testEvalEquals("t", "(char-not-greaterp #\\A #\\b)");
 		testEvalEquals("t", "(char-not-greaterp #\\a #\\B)");
 		testEvalEquals("t", "(char-not-greaterp #\\A #\\a)");
-		testEvalEquals("nil", "(char-not-greaterp #\\a #\\1)");
-		testEvalEquals("nil", "(char-not-greaterp #\\a #\\control-a)");
-		testEvalEquals("nil", "(char-not-greaterp #\\meta-a #\\control-a)");
+		testEvalEquals(MYNIL, "(char-not-greaterp #\\a #\\1)");
+		testEvalEquals(MYNIL, "(char-not-greaterp #\\a #\\control-a)");
+		testEvalEquals(MYNIL, "(char-not-greaterp #\\meta-a #\\control-a)");
 		testEvalError("(char-not-greaterp 10 #\\a)");
 		testEvalError("(char-not-greaterp #\\a 10)");
 		testEvalError("(char-not-greaterp)");
 		testEvalError("(char-not-greaterp 10)");
 		testEvalEquals("t", "(char-not-lessp #\\a #\\a)");
-		testEvalEquals("nil", "(char-not-lessp #\\a #\\b)");
-		testEvalEquals("nil", "(char-not-lessp #\\A #\\b)");
-		testEvalEquals("nil", "(char-not-lessp #\\a #\\B)");
+		testEvalEquals(MYNIL, "(char-not-lessp #\\a #\\b)");
+		testEvalEquals(MYNIL, "(char-not-lessp #\\A #\\b)");
+		testEvalEquals(MYNIL, "(char-not-lessp #\\a #\\B)");
 		testEvalEquals("t", "(char-not-lessp #\\A #\\a)");
 		testEvalEquals("t", "(char-not-lessp #\\a #\\1)");
 		testEvalEquals("t", "(char-not-lessp #\\a #\\control-a)");
@@ -809,15 +812,15 @@ public class UnitTest extends TestCase {
 		testEvalError("(char-not-lessp)");
 		testEvalError("(char-not-lessp 10)");
 		testEvalEquals("t", "(char= #\\a #\\a)");
-		testEvalEquals("nil", "(char= #\\a #\\A)");
-		testEvalEquals("nil", "(char= #\\a #\\1)");
-		testEvalEquals("nil", "(char= #\\a #\\control-a)");
-		testEvalEquals("nil", "(char= #\\meta-a #\\control-a)");
-		testEvalEquals("nil", "(char= 10 #\\a)");
-		testEvalEquals("nil", "(char= #\\a 10)");
+		testEvalEquals(MYNIL, "(char= #\\a #\\A)");
+		testEvalEquals(MYNIL, "(char= #\\a #\\1)");
+		testEvalEquals(MYNIL, "(char= #\\a #\\control-a)");
+		testEvalEquals(MYNIL, "(char= #\\meta-a #\\control-a)");
+		testEvalEquals(MYNIL, "(char= 10 #\\a)");
+		testEvalEquals(MYNIL, "(char= #\\a 10)");
 		testEvalError("(char=)");
 		testEvalError("(char= #\\a)");
-		testEvalEquals("nil", "(char/= #\\a #\\a)");
+		testEvalEquals(MYNIL, "(char/= #\\a #\\a)");
 		testEvalEquals("t", "(char/= #\\a #\\A)");
 		testEvalEquals("t", "(char/= #\\a #\\1)");
 		testEvalEquals("t", "(char/= #\\a #\\control-a)");
@@ -826,10 +829,10 @@ public class UnitTest extends TestCase {
 		testEvalEquals("t", "(char/= #\\a 10)");
 		testEvalError("(char/=)");
 		testEvalError("(char/= #\\a)");
-		testEvalEquals("nil", "(char> #\\a #\\a)");
-		testEvalEquals("nil", "(char> #\\A #\\a)");
-		testEvalEquals("nil", "(char> #\\a #\\b)");
-		testEvalEquals("nil", "(char> #\\A #\\b)");
+		testEvalEquals(MYNIL, "(char> #\\a #\\a)");
+		testEvalEquals(MYNIL, "(char> #\\A #\\a)");
+		testEvalEquals(MYNIL, "(char> #\\a #\\b)");
+		testEvalEquals(MYNIL, "(char> #\\A #\\b)");
 		testEvalEquals("t", "(char> #\\a #\\B)");
 		testEvalEquals("t", "(char> #\\a #\\1)");
 		testEvalEquals("t", "(char> #\\a #\\control-a)");
@@ -838,14 +841,14 @@ public class UnitTest extends TestCase {
 		testEvalError("(char> #\\a 10)");
 		testEvalError("(char>)");
 		testEvalError("(char-greaterp 10)");
-		testEvalEquals("nil", "(char< #\\a #\\a)");
+		testEvalEquals(MYNIL, "(char< #\\a #\\a)");
 		testEvalEquals("t", "(char< #\\a #\\b)");
 		testEvalEquals("t", "(char< #\\A #\\b)");
-		testEvalEquals("nil", "(char< #\\a #\\B)");
+		testEvalEquals(MYNIL, "(char< #\\a #\\B)");
 		testEvalEquals("t", "(char< #\\A #\\a)");
-		testEvalEquals("nil", "(char< #\\a #\\1)");
-		testEvalEquals("nil", "(char< #\\a #\\control-a)");
-		testEvalEquals("nil", "(char< #\\meta-a #\\control-a)");
+		testEvalEquals(MYNIL, "(char< #\\a #\\1)");
+		testEvalEquals(MYNIL, "(char< #\\a #\\control-a)");
+		testEvalEquals(MYNIL, "(char< #\\meta-a #\\control-a)");
 		testEvalError("(char< 10 #\\a)");
 		testEvalError("(char< #\\a 10)");
 		testEvalError("(char<)");
@@ -853,20 +856,20 @@ public class UnitTest extends TestCase {
 		testEvalEquals("t", "(char<= #\\a #\\a)");
 		testEvalEquals("t", "(char<= #\\a #\\b)");
 		testEvalEquals("t", "(char<= #\\A #\\b)");
-		testEvalEquals("nil", "(char<= #\\a #\\B)");
+		testEvalEquals(MYNIL, "(char<= #\\a #\\B)");
 		testEvalEquals("t", "(char<= #\\A #\\a)");
-		testEvalEquals("nil", "(char<= #\\a #\\1)");
-		testEvalEquals("nil", "(char<= #\\a #\\control-a)");
-		testEvalEquals("nil", "(char<= #\\meta-a #\\control-a)");
+		testEvalEquals(MYNIL, "(char<= #\\a #\\1)");
+		testEvalEquals(MYNIL, "(char<= #\\a #\\control-a)");
+		testEvalEquals(MYNIL, "(char<= #\\meta-a #\\control-a)");
 		testEvalError("(char<= 10 #\\a)");
 		testEvalError("(char<= #\\a 10)");
 		testEvalError("(char<=)");
 		testEvalError("(char<= 10)");
 		testEvalEquals("t", "(char>= #\\a #\\a)");
-		testEvalEquals("nil", "(char>= #\\a #\\b)");
-		testEvalEquals("nil", "(char>= #\\A #\\b)");
+		testEvalEquals(MYNIL, "(char>= #\\a #\\b)");
+		testEvalEquals(MYNIL, "(char>= #\\A #\\b)");
 		testEvalEquals("t", "(char>= #\\a #\\B)");
-		testEvalEquals("nil", "(char>= #\\A #\\a)");
+		testEvalEquals(MYNIL, "(char>= #\\A #\\a)");
 		testEvalEquals("t", "(char>= #\\a #\\1)");
 		testEvalEquals("t", "(char>= #\\a #\\control-a)");
 		testEvalEquals("t", "(char>= #\\meta-a #\\control-a)");
@@ -877,8 +880,8 @@ public class UnitTest extends TestCase {
 	}
 
 	public static void testClet() {
-		testEvalEquals("NIL", "(clet)");
-		testEvalEquals("NIL", "(clet ())");
+		testEvalEquals(MYNIL, "(clet)");
+		testEvalEquals(MYNIL, "(clet ())");
 		testEvalEquals("212", "(clet () 212)");
 		testEvalEquals("212", "(clet ((x 212)) x)");
 		testEvalEquals("212", "(clet ((x 210)(y 2)) (+ x y))");
@@ -943,11 +946,11 @@ public class UnitTest extends TestCase {
 		assertEquals(firstVal, SubLNil.NIL);
 		assertEquals(secondVal, CommonSymbols.TWO_INTEGER);
 		assertEquals(thirdVal, SubLNil.NIL);
-		testEvalEquals("NIL", "(cmultiple-value-bind () 1)");
-		testEvalEquals("NIL", "(cmultiple-value-bind (x) 1)");
+		testEvalEquals(MYNIL, "(cmultiple-value-bind () 1)");
+		testEvalEquals(MYNIL, "(cmultiple-value-bind (x) 1)");
 		testEvalEquals("1", "(cmultiple-value-bind (x) 1 x)");
 		testEvalEquals("1", "(cmultiple-value-bind (x)(values 1) x)");
-		testEvalEquals("NIL", "(cmultiple-value-bind (x y)(values 1) y)");
+		testEvalEquals(MYNIL, "(cmultiple-value-bind (x y)(values 1) y)");
 		testEvalEquals("1", "(cmultiple-value-bind (x y) (values 1 2) x)");
 		testEvalEquals("2", "(cmultiple-value-bind (x y) (values 1 2) y)");
 		testEvalEquals("2", "(cmultiple-value-bind (x y) (values 1 2 3) y)");
@@ -962,10 +965,10 @@ public class UnitTest extends TestCase {
 
 	public static void testCnot() {
 		testEvalEquals("T", "(cnot NIL)");
-		testEvalEquals("NIL", "(cnot T)");
-		testEvalEquals("NIL", "(cnot 212)");
-		testEvalEquals("NIL", "(cnot '(1 2))");
-		testEvalEquals("NIL", "(cnot (= 1 1))");
+		testEvalEquals(MYNIL, "(cnot T)");
+		testEvalEquals(MYNIL, "(cnot 212)");
+		testEvalEquals(MYNIL, "(cnot '(1 2))");
+		testEvalEquals(MYNIL, "(cnot (= 1 1))");
 		testEvalEquals("T", "(cnot (= 1 2))");
 		testEvalError("(cnot 1 . 2)");
 	}
@@ -1028,7 +1031,7 @@ public class UnitTest extends TestCase {
 		testEvalEquals("#(1 2 3 4)", "(csetq *test-vector-093272* #(1 2 3 4))");
 		testEvalEquals("#\\T", "(csetf (aref *test-vector-093272* 1) #\\T)");
 		testEvalEquals("#(1 #\\T 3 4)", "*test-vector-093272*");
-		testEvalEquals("nil", "(put '*test-symbol-093272* 'a nil)");
+		testEvalEquals(MYNIL, "(put '*test-symbol-093272* 'a nil)");
 		testEvalEquals("'bar", "(csetf (get '*test-symbol-093272* 'a) 'bar)");
 		testEvalEquals("'bar", "(get '*test-symbol-093272* 'a)");
 		testEvalError("(csetf 1234 1234)");
@@ -1066,7 +1069,7 @@ public class UnitTest extends TestCase {
 		testEvalEquals("5", "(clet ((done? nil) (result 0)) (csome (x '(a b c d e) done?) (csetq result (+ result 1))) result)");
 		testEvalEquals("3", "(clet ((done? nil) (result 0)) (csome (x '(a b c d e) done?) (csetq result (+ result 1)) (pwhen (> result 2) (csetq done? t))) result)");
 		testEvalEquals("T", "(clet ((fail nil)) (csome (item '(1 2 3) fail) (csetq fail (eq item 2))) fail)");
-		testEvalEquals("NIL", "(clet ((fail nil)) (csome (item '(1 2 3) fail) (csetq fail (eq item 4))) fail)");
+		testEvalEquals(MYNIL, "(clet ((fail nil)) (csome (item '(1 2 3) fail) (csetq fail (eq item 4))) fail)");
 	}
 
 	public static void testCTime() {
@@ -1075,7 +1078,7 @@ public class UnitTest extends TestCase {
 		testEvalEquals("0", "*test-time-1*");
 		testEvalEquals("4000", "(ctime *test-time-1* (TEST-FUNC1 2000))");
 		testEvalNotEquals("0", "*test-time-1*");
-		testEvalEquals("NIL", "(clet (x) (ctime x) (null x))");
+		testEvalEquals(MYNIL, "(clet (x) (ctime x) (null x))");
 	}
 
 	public static void testCunwindProtect() {
@@ -1085,7 +1088,7 @@ public class UnitTest extends TestCase {
 		testEvalEquals("0", "x");
 		testEvalEquals("1", "(cunwind-protect (csetq x 1))");
 		testEvalEquals("1", "x");
-		testEvalEquals("NIL", "(cunwind-protect (progn)(csetq x 2))");
+		testEvalEquals(MYNIL, "(cunwind-protect (progn)(csetq x 2))");
 		testEvalEquals("2", "x");
 		testEvalEquals("3", "(cunwind-protect (csetq x 3)(csetq x 4))");
 		testEvalEquals("4", "x");
@@ -1093,7 +1096,7 @@ public class UnitTest extends TestCase {
 		testEvalEquals("5", "x");
 		testEvalError("(cunwind-protect (progn (error \"foo\")(csetq x 6)))");
 		testEvalEquals("5", "x");
-		testEvalEquals("NIL", "(cunwind-protect)");
+		testEvalEquals(MYNIL, "(cunwind-protect)");
 		testEvalError("(cunwind-protect . 1)");
 		testEvalError("(cunwind-protect 1 . 2)");
 	}
@@ -1199,9 +1202,9 @@ public class UnitTest extends TestCase {
 	}
 
 	public static void testDynamicBinding() {
-		testEvalEquals("NIL", "(boundp '*dummy-symbol-1234123938458394*)");
+		testEvalEquals(MYNIL, "(boundp '*dummy-symbol-1234123938458394*)");
 		testEvalError("*dummy-symbol-1234123938458394*");
-		testEvalEquals("NIL", "(clet ((*dummy-symbol-1234123938458394* \"TEST\")) (boundp '*dummy-symbol-1234123938458394*))");
+		testEvalEquals(MYNIL, "(clet ((*dummy-symbol-1234123938458394* \"TEST\")) (boundp '*dummy-symbol-1234123938458394*))");
 		testEvalEquals("T", "(clet ((*dummy-symbol-1234123938458394* \"TEST\")) (equalp  \"TEST\" *dummy-symbol-1234123938458394*))");
 		testEvalError("*dummy-symbol-1234123938458394*");
 		SubLFiles.defparameter("*DUMMY-SYMBOL-12341239384583945*", SubLNumberFactory.makeInteger(123));
@@ -1210,7 +1213,7 @@ public class UnitTest extends TestCase {
 		assertEquals((Object) null, sym.currentBinding(SubLProcess.currentSubLThread().bindingsList));
 		sym.bind(SubLNil.NIL, SubLProcess.currentSubLThread().bindingsList);
 		assertEquals(SubLNil.NIL, sym.currentBinding(SubLProcess.currentSubLThread().bindingsList));
-		testEvalEquals("nil", "*DUMMY-SYMBOL-12341239384583945*");
+		testEvalEquals(MYNIL, "*DUMMY-SYMBOL-12341239384583945*");
 		sym.rebind(null, SubLProcess.currentSubLThread().bindingsList);
 		assertEquals((Object) null, sym.currentBinding(SubLProcess.currentSubLThread().bindingsList));
 		testEvalEquals("123", "*DUMMY-SYMBOL-12341239384583945*");
@@ -1299,8 +1302,8 @@ public class UnitTest extends TestCase {
 		testEvalEquals("2", "(fif (identity nil) 1 2)");
 		testEvalEquals("2", "(fif t (progn 1 2) nil)");
 		testEvalEquals("2", "(fif nil nil (progn 1 2))");
-		testEvalEquals("NIL", "(fif)");
-		testEvalEquals("NIL", "(fif t)");
+		testEvalEquals(MYNIL, "(fif)");
+		testEvalEquals(MYNIL, "(fif t)");
 		testEvalEquals("1", "(fif t 1)");
 		testEvalEquals("1", "(fif t 1 2 3)");
 		testEvalError("(fif . t)");
@@ -1321,8 +1324,8 @@ public class UnitTest extends TestCase {
 		testEvalEquals("\"/cyc/top/units/latest/core-kb.lisp\"", "(find \"/cyc/top/units/latest/core-kb.lisp\" (directory \"/cyc/top/units/latest/\" t) 'string=)");
 		testEvalEquals("\"core-kb.lisp\"", "(find \"core-kb.lisp\" (directory \"/cyc/top/units/latest/\" NIL) 'string=)");
 		testEvalEquals("T", "(directory-p \"/cyc/top/units/\")");
-		testEvalEquals("NIL", "(directory-p \"/cyc/top/units/latest/core-kb.lisp\")");
-		testEvalEquals("NIL", "(directory-p 212)");
+		testEvalEquals(MYNIL, "(directory-p \"/cyc/top/units/latest/core-kb.lisp\")");
+		testEvalEquals(MYNIL, "(directory-p 212)");
 		testEvalEquals("T", "(null (probe-file \"/cyc/top/units/latest/donaudampfschifffahrtsgesellschaft.lisp\"))");
 		File tempDir = new File(System.getProperty("java.io.tmpdir"));
 		Assert.assertTrue("No valid temporary directory for file read/write testing.", tempDir.exists());
@@ -1332,7 +1335,7 @@ public class UnitTest extends TestCase {
 			testEvalEquals("T", "(stringp (make-directory \"" + subDirName + "\" \"" + tempDir + "\"))");
 			Assert.assertTrue("SubL MAKE-DIRECTORY failed to make directory " + newSubDir.getAbsolutePath(), newSubDir.isDirectory());
 			testEvalEquals("T", "(directory-p \"" + newSubDir.getAbsolutePath() + "\")");
-			testEvalEquals("NIL", "(directory \"" + newSubDir.getAbsolutePath() + "\")");
+			testEvalEquals(MYNIL, "(directory \"" + newSubDir.getAbsolutePath() + "\")");
 			testEvalEquals("T", "(numberp (file-write-date \"" + newSubDir.getAbsolutePath() + "\"))");
 			testEvalEquals("T", "(<= " + currentTime.toString() + " (file-write-date \"" + newSubDir.getAbsolutePath() + "\"))");
 			SubLObject dirModTime = Filesys.file_write_date(SubLObjectFactory.makeString(newSubDir.getAbsolutePath()));
@@ -1357,7 +1360,7 @@ public class UnitTest extends TestCase {
 				}
 				Assert.assertTrue("Failed to create testing file " + myFile.getAbsolutePath(), myFile.exists());
 				testEvalEquals("T", "(stringp (probe-file \"" + myFile.getAbsolutePath() + "\"))");
-				testEvalEquals("NIL", "(directory-p \"" + myFile.getAbsolutePath() + "\")");
+				testEvalEquals(MYNIL, "(directory-p \"" + myFile.getAbsolutePath() + "\")");
 				testEvalEquals("T", "(numberp (file-write-date \"" + myFile.getAbsolutePath() + "\"))");
 				testEvalEquals("T", "(<= " + currentTime.toString() + " (file-write-date \"" + myFile.getAbsolutePath() + "\"))");
 				testEvalEquals("T", "(<=  (file-write-date \"" + newSubDir.getAbsolutePath() + "\")" + " (file-write-date \"" + myFile.getAbsolutePath() + "\"))");
@@ -1367,11 +1370,11 @@ public class UnitTest extends TestCase {
 				Assert.assertTrue("File modification time " + fileModTimeTemp + " is less than the directory modification time " + dirModTimeTemp + "???", dirModTimeTemp.min(fileModTimeTemp) == dirModTimeTemp || dirModTimeTemp.equals(fileModTimeTemp));
 				testEvalEquals("T", "(cnot (null (member \"" + myFile.getAbsolutePath() + "\"" + " (directory \"" + newSubDir.getAbsolutePath() + "\" T) 'equalp)))");
 				testEvalEquals("T", "(stringp (rename-file \"" + myFile.getAbsolutePath() + "\" \"" + yourFile.getAbsolutePath() + "\"))");
-				testEvalEquals("NIL", "(stringp (probe-file \"" + myFile.getAbsolutePath() + "\"))");
+				testEvalEquals(MYNIL, "(stringp (probe-file \"" + myFile.getAbsolutePath() + "\"))");
 				testEvalEquals("T", "(stringp (probe-file \"" + yourFile.getAbsolutePath() + "\"))");
 				testEvalEquals("T", "(stringp (rename-file \"" + yourFile.getAbsolutePath() + "\" \"" + myFile.getAbsolutePath() + "\"))");
 				testEvalEquals("T", "(stringp (probe-file \"" + myFile.getAbsolutePath() + "\"))");
-				testEvalEquals("NIL", "(stringp (probe-file \"" + yourFile.getAbsolutePath() + "\"))");
+				testEvalEquals(MYNIL, "(stringp (probe-file \"" + yourFile.getAbsolutePath() + "\"))");
 				testEvalEquals("T", "(delete-file \"" + myFile.getAbsolutePath() + "\")");
 				Assert.assertTrue("Failed to remove testing file " + myFile.getAbsolutePath(), !myFile.exists());
 			} finally {
@@ -1379,7 +1382,7 @@ public class UnitTest extends TestCase {
 				yourFile.delete();
 			}
 			testEvalEquals("T", "(delete-directory \"" + newSubDir.getAbsolutePath() + "\")");
-			testEvalEquals("NIL", "(directory-p \"" + newSubDir.getAbsolutePath() + "\")");
+			testEvalEquals(MYNIL, "(directory-p \"" + newSubDir.getAbsolutePath() + "\")");
 			Assert.assertTrue("SubL DELETE-DIRECTORY failed to remove directory " + newSubDir.getAbsolutePath(), !newSubDir.exists());
 		} finally {
 			if (newSubDir.exists())
@@ -1392,17 +1395,17 @@ public class UnitTest extends TestCase {
 		testEvalEquals("T", "(eql 212 212)");
 		testEvalEquals("T", "(equal 212 212)");
 		testEvalEquals("T", "(equalp 212 212)");
-		testEvalEquals("NIL", "(eq 0 1)");
-		testEvalEquals("NIL", "(eql 0 1)");
-		testEvalEquals("NIL", "(equal 0 1)");
-		testEvalEquals("NIL", "(equalp 0 1)");
+		testEvalEquals(MYNIL, "(eq 0 1)");
+		testEvalEquals(MYNIL, "(eql 0 1)");
+		testEvalEquals(MYNIL, "(equal 0 1)");
+		testEvalEquals(MYNIL, "(equalp 0 1)");
 		int maxFixnum = SubLNumberFactory.MAX_FIXNUM;
 		testEvalEquals("T", "(eq " + maxFixnum + " " + maxFixnum + ")");
 		testEvalEquals("T", "(eql " + maxFixnum + " " + maxFixnum + ")");
 		testEvalEquals("T", "(equal " + maxFixnum + " " + maxFixnum + ")");
 		testEvalEquals("T", "(equalp " + maxFixnum + " " + maxFixnum + ")");
 		long minBignum = maxFixnum + 1;
-		testEvalEquals("NIL", "(eq " + minBignum + " " + minBignum + ")");
+		testEvalEquals(MYNIL, "(eq " + minBignum + " " + minBignum + ")");
 		testEvalEquals("T", "(eql " + minBignum + " " + minBignum + ")");
 		testEvalEquals("T", "(equal " + minBignum + " " + minBignum + ")");
 		testEvalEquals("T", "(equalp " + minBignum + " " + minBignum + ")");
@@ -1475,9 +1478,9 @@ public class UnitTest extends TestCase {
 		testEvalEquals("4", "(gethash 2 *test-hash-table*)");
 		testEvalEquals("2", "(gethash 1 *test-hash-table*)");
 		testEvalEquals("2", "(gethash 3 *test-hash-table* 2)");
-		testEvalEquals("NIL", "(gethash 3 *test-hash-table*)");
+		testEvalEquals(MYNIL, "(gethash 3 *test-hash-table*)");
 		readAndEval("(remhash 2 *test-hash-table*)");
-		testEvalEquals("NIL", "(gethash 2 *test-hash-table*)");
+		testEvalEquals(MYNIL, "(gethash 2 *test-hash-table*)");
 		readAndEval("(sethash 2 *test-hash-table* 4)");
 		testEvalEquals("2", "(hash-table-count *test-hash-table*)");
 		readAndEval("(clrhash *test-hash-table*)");
@@ -1494,21 +1497,21 @@ public class UnitTest extends TestCase {
 	public static void testInterpretedStructures() {
 		initCompiledStructures();
 		testEvalEquals("T", "(equalp (make-astruct '(:b-slot 100 :c-slot 200)) (make-astruct '(:b-slot 100 :c-slot 200)))");
-		testEvalEquals("NIL", "(equalp (make-astruct '(:b-slot 100 :c-slot 200)) (make-astruct '(:b-slot 200 :c-slot 100)))");
+		testEvalEquals(MYNIL, "(equalp (make-astruct '(:b-slot 100 :c-slot 200)) (make-astruct '(:b-slot 200 :c-slot 100)))");
 		testEvalEquals("T", "(astruct-p (make-astruct))");
 		SubLObject astructValue = readAndEval("(csetq *compiled-astruct-value* (make-astruct '(:b-slot 100 :c-slot 200)))");
 		Assert.assertTrue("*compiled-astruct-value* not a compiled structure.", astructValue instanceof SubLStructNative);
 		testEvalEquals("T", "(progn (defstruct (bstruct) a-slot c-slot) (bstruct-p (make-bstruct)))");
-		testEvalEquals("NIL", "(bstruct-p (make-astruct))");
-		testEvalEquals("NIL", "(astruct-p (make-bstruct))");
+		testEvalEquals(MYNIL, "(bstruct-p (make-astruct))");
+		testEvalEquals(MYNIL, "(astruct-p (make-bstruct))");
 		testEvalEquals("T", "(progn (defstruct (astruct) b-slot c-slot) (astruct-p (make-astruct)))");
 		astructValue = readAndEval("(csetq *interpreted-astruct-value* (make-astruct '(:b-slot 100 :c-slot 200)))");
 		Assert.assertTrue("*interpreted-astruct-value* not an interpreted structure.", astructValue instanceof SubLStructInterpreted);
-		testEvalEquals("NIL", "(bstruct-p (make-astruct))");
-		testEvalEquals("NIL", "(astruct-p (make-bstruct))");
+		testEvalEquals(MYNIL, "(bstruct-p (make-astruct))");
+		testEvalEquals(MYNIL, "(astruct-p (make-bstruct))");
 		testEvalEquals("T", "(equalp (make-astruct '(:b-slot 100 :c-slot 200)) (make-astruct '(:b-slot 100 :c-slot 200)))");
-		testEvalEquals("NIL", "(equalp (make-astruct '(:b-slot 100 :c-slot 200)) (make-astruct '(:b-slot 200 :c-slot 100)))");
-		testEvalEquals("NIL", "(equalp (make-astruct '(:b-slot 100 :c-slot 200)) (make-bstruct '(:a-slot 100 :c-slot 200)))");
+		testEvalEquals(MYNIL, "(equalp (make-astruct '(:b-slot 100 :c-slot 200)) (make-astruct '(:b-slot 200 :c-slot 100)))");
+		testEvalEquals(MYNIL, "(equalp (make-astruct '(:b-slot 100 :c-slot 200)) (make-bstruct '(:a-slot 100 :c-slot 200)))");
 		testEvalEquals("T", "(equalp *compiled-astruct-value* *interpreted-astruct-value*)");
 	}
 
@@ -1534,13 +1537,13 @@ public class UnitTest extends TestCase {
 	}
 
 	public static void testLambdaFunctions() {
-		testEvalEquals("nil", "((lambda ()))");
-		testEvalEquals("nil", "((lambda () (ret nil)))");
-		testEvalEquals("nil", "((lambda () T))");
-		testEvalEquals("nil", "((lambda (x)) nil)");
-		testEvalEquals("nil", "((lambda (x)) 212)");
-		testEvalEquals("nil", "((lambda (x) (ret nil)) 212)");
-		testEvalEquals("nil", "((lambda (x) (ret x)) nil)");
+		testEvalEquals(MYNIL, "((lambda ()))");
+		testEvalEquals(MYNIL, "((lambda () (ret nil)))");
+		testEvalEquals(MYNIL, "((lambda () T))");
+		testEvalEquals(MYNIL, "((lambda (x)) nil)");
+		testEvalEquals(MYNIL, "((lambda (x)) 212)");
+		testEvalEquals(MYNIL, "((lambda (x) (ret nil)) 212)");
+		testEvalEquals(MYNIL, "((lambda (x) (ret x)) nil)");
 		testEvalEquals("212", "((lambda (x) (ret x)) 212)");
 		testEvalEquals("#\\a", "((lambda (x) (ret x)) #\\a)");
 		testEvalEquals("#\\B", "((lambda (x) (ret #\\B)) #\\a)");
@@ -1551,7 +1554,7 @@ public class UnitTest extends TestCase {
 		testEvalEquals("212", "((lambda () (ret 212)))");
 		testEvalEquals("'(6 3)", "((lambda (&optional (a 2 b) (c (+ 1 2))) (ret (list a c))) 6)");
 		testEvalEquals("t", "((lambda (&optional (a 2 b) (c 3 d) &rest x) (ret b)) 6)");
-		testEvalEquals("nil", "((lambda (&optional (a 2 b) (c 3 d) &rest x) (ret d)) 6)");
+		testEvalEquals(MYNIL, "((lambda (&optional (a 2 b) (c 3 d) &rest x) (ret d)) 6)");
 		testEvalEquals("12", "((lambda (y z &optional (a 2 b) (c 3 d) &rest x) (ret (+ y z a c))) (+ 1 2) (identity 4) 2)");
 		testEvalEquals("'(10 11 12)", "((lambda (y z &optional (a 2 b) (c 3 d) &rest x) (ret x)) (+ 1 2) (identity 4) 2 1 10 11 12)");
 		testEvalEquals("'(6 t 3 nil nil)", "((lambda (&optional (a 2 b) (c 3 d) &rest x) (ret (list a b c d x))) 6)");
@@ -1565,44 +1568,44 @@ public class UnitTest extends TestCase {
 	}
 
 	public static void testLexicalVariables() {
-		testEvalEquals("NIL", "*");
+		testEvalEquals(MYNIL, "*");
 	}
 
 	public static void testListEquality() {
 		assertEquals(ConsesLow.list(CommonSymbols.ZERO_INTEGER, CommonSymbols.ONE_INTEGER, CommonSymbols.TWO_INTEGER), ConsesLow.list(CommonSymbols.ZERO_INTEGER, CommonSymbols.ONE_INTEGER, CommonSymbols.TWO_INTEGER).makeCopy());
-		testEvalEquals("NIL", "(eq '(1 2 3) '(1 2 3))");
-		testEvalEquals("NIL", "(eql '(1 2 3) '(1 2 3))");
+		testEvalEquals(MYNIL, "(eq '(1 2 3) '(1 2 3))");
+		testEvalEquals(MYNIL, "(eql '(1 2 3) '(1 2 3))");
 		testEvalEquals("T", "(equal '(1 2 3) '(1 2 3))");
 		testEvalEquals("T", "(equalp '(1 2 3) '(1 2 3))");
-		testEvalEquals("NIL", "(eq '(1 2 3) '(3 2 1))");
-		testEvalEquals("NIL", "(eql '(1 2 3) '(3 2 1))");
-		testEvalEquals("NIL", "(equal '(1 2 3) '(3 2 1))");
-		testEvalEquals("NIL", "(equalp '(1 2 3) '(3 2 1))");
-		testEvalEquals("NIL", "(eq '(1 . 2) '(1 . 2))");
-		testEvalEquals("NIL", "(eql '(1 . 2) '(1 . 2))");
+		testEvalEquals(MYNIL, "(eq '(1 2 3) '(3 2 1))");
+		testEvalEquals(MYNIL, "(eql '(1 2 3) '(3 2 1))");
+		testEvalEquals(MYNIL, "(equal '(1 2 3) '(3 2 1))");
+		testEvalEquals(MYNIL, "(equalp '(1 2 3) '(3 2 1))");
+		testEvalEquals(MYNIL, "(eq '(1 . 2) '(1 . 2))");
+		testEvalEquals(MYNIL, "(eql '(1 . 2) '(1 . 2))");
 		testEvalEquals("T", "(equal '(1 . 2) '(1 . 2))");
 		testEvalEquals("T", "(equalp '(1 . 2) '(1 . 2))");
-		testEvalEquals("NIL", "(eq '(1 . 2) '(1 . 3))");
-		testEvalEquals("NIL", "(eql '(1 . 2) '(1 . 3))");
-		testEvalEquals("NIL", "(equal '(1 . 2) '(1 . 3))");
-		testEvalEquals("NIL", "(equalp '(1 . 2) '(1 . 3))");
-		testEvalEquals("NIL", "(eq '(1 . 2) '(3 . 2))");
-		testEvalEquals("NIL", "(eql '(1 . 2) '(3 . 2))");
-		testEvalEquals("NIL", "(equal '(1 . 2) '(3 . 2))");
-		testEvalEquals("NIL", "(equalp '(1 . 2) '(3 . 2))");
-		testEvalEquals("NIL", "(eq '(1 . 2) '(1 2))");
-		testEvalEquals("NIL", "(eql '(1 . 2) '(1 2))");
-		testEvalEquals("NIL", "(equal '(1 . 2) '(1 2))");
-		testEvalEquals("NIL", "(equalp '(1 . 2) '(1 2))");
-		testEvalEquals("NIL", "(eq '(1) '(1 . NIL))");
-		testEvalEquals("NIL", "(eql '(1) '(1 . NIL))");
+		testEvalEquals(MYNIL, "(eq '(1 . 2) '(1 . 3))");
+		testEvalEquals(MYNIL, "(eql '(1 . 2) '(1 . 3))");
+		testEvalEquals(MYNIL, "(equal '(1 . 2) '(1 . 3))");
+		testEvalEquals(MYNIL, "(equalp '(1 . 2) '(1 . 3))");
+		testEvalEquals(MYNIL, "(eq '(1 . 2) '(3 . 2))");
+		testEvalEquals(MYNIL, "(eql '(1 . 2) '(3 . 2))");
+		testEvalEquals(MYNIL, "(equal '(1 . 2) '(3 . 2))");
+		testEvalEquals(MYNIL, "(equalp '(1 . 2) '(3 . 2))");
+		testEvalEquals(MYNIL, "(eq '(1 . 2) '(1 2))");
+		testEvalEquals(MYNIL, "(eql '(1 . 2) '(1 2))");
+		testEvalEquals(MYNIL, "(equal '(1 . 2) '(1 2))");
+		testEvalEquals(MYNIL, "(equalp '(1 . 2) '(1 2))");
+		testEvalEquals(MYNIL, "(eq '(1) '(1 . NIL))");
+		testEvalEquals(MYNIL, "(eql '(1) '(1 . NIL))");
 		testEvalEquals("T", "(equal '(1) '(1 . NIL))");
 		testEvalEquals("T", "(equalp '(1) '(1 . NIL))");
-		testEvalEquals("NIL", "(eq '(1 2 (\"foo\")) '(1 2 (\"FOO\")))");
-		testEvalEquals("NIL", "(eql '(1 2 (\"foo\")) '(1 2 (\"FOO\")))");
-		testEvalEquals("NIL", "(equal '(1 2 (\"foo\")) '(1 2 (\"FOO\")))");
+		testEvalEquals(MYNIL, "(eq '(1 2 (\"foo\")) '(1 2 (\"FOO\")))");
+		testEvalEquals(MYNIL, "(eql '(1 2 (\"foo\")) '(1 2 (\"FOO\")))");
+		testEvalEquals(MYNIL, "(equal '(1 2 (\"foo\")) '(1 2 (\"FOO\")))");
 		testEvalEquals("T", "(equalp '(1 2 (\"foo\")) '(1 2 (\"FOO\")))");
-		testEvalEquals("NIL", "(equal (cdr '(1 2 3)) (cdr '(1 2 3 4)))");
+		testEvalEquals(MYNIL, "(equal (cdr '(1 2 3)) (cdr '(1 2 3 4)))");
 		shouldPrintTests("Testing Java equals() method on lists ....");
 		SubLList listOne = readAndEval("(cdr '(1 2 3))").toList();
 		SubLList listTwo = readAndEval("(cdr '(1 2 3 4))").toList();
@@ -1620,8 +1623,8 @@ public class UnitTest extends TestCase {
 		testEvalEquals("'((1 100) (2 200) (3 300) (4 400))", "(mapcar 'identity '((1 100) (2 200) (3 300) (4 400)))");
 		testEvalEquals("'((a . 1) (b . 2) (c . 3))", "(mapcar 'cons '(a b c) '(1 2 3))");
 		testEvalEquals("'((a 1 X) (b 2 Y) (c 3 Z))", "(mapcar 'list '(a b c) '(1 2 3) '(X Y Z))");
-		testEvalEquals("nil", "(mapcar 'list 'NIL '(1 2 3) '(X Y Z))");
-		testEvalEquals("nil", "(mapcar 'list '(a b c) '(1 2 3) 'nil)");
+		testEvalEquals(MYNIL, "(mapcar 'list 'NIL '(1 2 3) '(X Y Z))");
+		testEvalEquals(MYNIL, "(mapcar 'list '(a b c) '(1 2 3) 'nil)");
 		testEvalEquals("'((a 1 X) (b 2 Y))", "(mapcar 'list '(a b c) '(1 2) '(X Y Z))");
 		testEvalEquals("'((a 1 X) )", "(mapcar 'list '(a) '(1 2 3) '(X Y Z))");
 		testEvalEquals("'((a 1 X) (b 2 Y) (c 3 Z))", "(mapcar 'list '(a b c) '(1 2 3) '(X Y Z Q))");
@@ -1638,49 +1641,49 @@ public class UnitTest extends TestCase {
 		testEvalEquals("2147483648", "(abs -2147483648)");
 		testEvalEquals("" + SubLObjectFactory.makeInteger(Long.MAX_VALUE).inc(), "(abs -9223372036854775808)");
 		testEvalEquals("t", "(< 1 2)");
-		testEvalEquals("nil", "(< 2 1)");
-		testEvalEquals("nil", "(< 2 2)");
+		testEvalEquals(MYNIL, "(< 2 1)");
+		testEvalEquals(MYNIL, "(< 2 2)");
 		testEvalEquals("t", "(< 1.0 2)");
-		testEvalEquals("nil", "(< 2.0 1)");
-		testEvalEquals("nil", "(< 2.0 2)");
+		testEvalEquals(MYNIL, "(< 2.0 1)");
+		testEvalEquals(MYNIL, "(< 2.0 2)");
 		testEvalEquals("t", "(< 1 2.0)");
-		testEvalEquals("nil", "(< 2 1.0)");
-		testEvalEquals("nil", "(< 2 2.0)");
-		testEvalEquals("nil", "(> 1 2)");
+		testEvalEquals(MYNIL, "(< 2 1.0)");
+		testEvalEquals(MYNIL, "(< 2 2.0)");
+		testEvalEquals(MYNIL, "(> 1 2)");
 		testEvalEquals("t", "(> 2 1)");
-		testEvalEquals("nil", "(> 2 2)");
-		testEvalEquals("nil", "(> 1.0 2)");
+		testEvalEquals(MYNIL, "(> 2 2)");
+		testEvalEquals(MYNIL, "(> 1.0 2)");
 		testEvalEquals("t", "(> 2.0 1)");
-		testEvalEquals("nil", "(> 2.0 2)");
-		testEvalEquals("nil", "(> 1 2.0)");
+		testEvalEquals(MYNIL, "(> 2.0 2)");
+		testEvalEquals(MYNIL, "(> 1 2.0)");
 		testEvalEquals("t", "(> 2 1.0)");
-		testEvalEquals("nil", "(> 2 2.0)");
+		testEvalEquals(MYNIL, "(> 2 2.0)");
 		testEvalEquals("t", "(<= 1 2)");
-		testEvalEquals("nil", "(<= 2 1)");
+		testEvalEquals(MYNIL, "(<= 2 1)");
 		testEvalEquals("t", "(<= 2 2)");
 		testEvalEquals("t", "(<= 1.0 2)");
-		testEvalEquals("nil", "(<= 2.0 1)");
+		testEvalEquals(MYNIL, "(<= 2.0 1)");
 		testEvalEquals("t", "(<= 2.0 2)");
 		testEvalEquals("t", "(<= 1 2.0)");
-		testEvalEquals("nil", "(<= 2 1.0)");
+		testEvalEquals(MYNIL, "(<= 2 1.0)");
 		testEvalEquals("t", "(<= 2 2.0)");
-		testEvalEquals("nil", "(>= 1 2)");
+		testEvalEquals(MYNIL, "(>= 1 2)");
 		testEvalEquals("t", "(>= 2 1)");
 		testEvalEquals("t", "(>= 2 2)");
-		testEvalEquals("nil", "(>= 1.0 2)");
+		testEvalEquals(MYNIL, "(>= 1.0 2)");
 		testEvalEquals("t", "(>= 2.0 1)");
 		testEvalEquals("t", "(>= 2.0 2)");
-		testEvalEquals("nil", "(>= 1 2.0)");
+		testEvalEquals(MYNIL, "(>= 1 2.0)");
 		testEvalEquals("t", "(>= 2 1.0)");
 		testEvalEquals("t", "(>= 2 2.0)");
-		testEvalEquals("nil", "(= 1 2)");
-		testEvalEquals("nil", "(= 2 1)");
+		testEvalEquals(MYNIL, "(= 1 2)");
+		testEvalEquals(MYNIL, "(= 2 1)");
 		testEvalEquals("t", "(= 2 2)");
-		testEvalEquals("nil", "(= 1.0 2)");
-		testEvalEquals("nil", "(= 2.0 1)");
+		testEvalEquals(MYNIL, "(= 1.0 2)");
+		testEvalEquals(MYNIL, "(= 2.0 1)");
 		testEvalEquals("t", "(= 2.0 2)");
-		testEvalEquals("nil", "(= 1 2.0)");
-		testEvalEquals("nil", "(= 2 1.0)");
+		testEvalEquals(MYNIL, "(= 1 2.0)");
+		testEvalEquals(MYNIL, "(= 2 1.0)");
 		testEvalEquals("t", "(= 2 2.0)");
 		testEvalEquals("-2", "(- 1 1 1 1)");
 		testEvalEquals("*EXP1*", "(exp 1)");
@@ -1707,8 +1710,8 @@ public class UnitTest extends TestCase {
 		testEvalEquals(Integer.toString(SubLNumberFactory.MAX_FIXNUM), "*most-positive-fixnum*");
 		testEvalEquals("T", "(fixnump *most-positive-fixnum*)");
 		testEvalEquals("T", "(fixnump *most-negative-fixnum*)");
-		testEvalEquals("NIL", "(fixnump (+ 1 *most-positive-fixnum*))");
-		testEvalEquals("NIL", "(fixnump (- *most-negative-fixnum* 1))");
+		testEvalEquals(MYNIL, "(fixnump (+ 1 *most-positive-fixnum*))");
+		testEvalEquals(MYNIL, "(fixnump (- *most-negative-fixnum* 1))");
 		testEvalEquals("32", "(ash 16 1)");
 		testEvalEquals("-1", "(ash -123 -23)");
 		testEvalEquals("16", "(ash 16 0)");
@@ -1718,13 +1721,13 @@ public class UnitTest extends TestCase {
 		testEvalEquals("848", number.toString());
 		testEvalEquals("T", "(evenp 2)");
 		testEvalEquals("T", "(evenp -2)");
-		testEvalEquals("NIL", "(evenp 3)");
-		testEvalEquals("NIL", "(evenp -3)");
+		testEvalEquals(MYNIL, "(evenp 3)");
+		testEvalEquals(MYNIL, "(evenp -3)");
 		testEvalEquals("T", "(evenp 0)");
 		testEvalEquals("T", "(evenp 123456789012345678902)");
 		testEvalEquals("T", "(evenp -123456789012345678902)");
-		testEvalEquals("NIL", "(evenp 123456789012345678903)");
-		testEvalEquals("NIL", "(evenp -123456789012345678903)");
+		testEvalEquals(MYNIL, "(evenp 123456789012345678903)");
+		testEvalEquals(MYNIL, "(evenp -123456789012345678903)");
 		testEvalEquals("T", "(evenp 123456789012345678900)");
 		testEvalEquals("'(3)", "(sl::fdl_generate 14033207267164160 45035996273704960 1000000000000000 1000000000000000 t)");
 		testEvalEquals("'(9 3)", "(sl::fdl_generate 41935717373050880 45035996273704960 100000000000000 100000000000000 t)");
@@ -3846,12 +3849,12 @@ public class UnitTest extends TestCase {
 	}
 
 	public static void testMember() {
-		testEvalEquals("NIL", "(member 1 '(a b c))");
+		testEvalEquals(MYNIL, "(member 1 '(a b c))");
 		testEvalEquals("'(b c)", "(member 'b '(a b c))");
-		testEvalEquals("NIL", "(member \"b\" '(\"A\" \"B\" \"C\"))");
+		testEvalEquals(MYNIL, "(member \"b\" '(\"A\" \"B\" \"C\"))");
 		testEvalEquals("'(\"B\" \"C\")", "(member \"b\" '(\"A\" \"B\" \"C\") #'equalp)");
 		testEvalEquals("'(\"B\" \"C\")", "(member \"b\" '(\"A\" \"B\" \"C\") #'equalp #'identity)");
-		testEvalEquals("NIL", "(cnot (null (member :subl-quote-fn '((1 . :after-adding) (0 . after-adding)) 'eql 'cdr)))");
+		testEvalEquals(MYNIL, "(cnot (null (member :subl-quote-fn '((1 . :after-adding) (0 . after-adding)) 'eql 'cdr)))");
 	}
 
 	public static void testMultipleValues() {
@@ -3958,7 +3961,7 @@ public class UnitTest extends TestCase {
 	}
 
 	public static void testNconc() {
-		testEvalEquals("nil", "(nconc)");
+		testEvalEquals(MYNIL, "(nconc)");
 		testEvalEquals("1", "(nconc 1)");
 		testEvalEquals("'(a b)", "(nconc '(a) '(b))");
 		testEvalEquals("'(a b c)", "(nconc '(a) '(b) '(c))");
@@ -3968,43 +3971,43 @@ public class UnitTest extends TestCase {
 		testEvalEquals("t", "(nconc nil t)");
 		testEvalEquals("'(a . b)", "(nconc '(a) nil 'b)");
 		testEvalEquals("t", "(nconc nil nil t)");
-		testEvalEquals("nil", "(nconc nil nil nil)");
+		testEvalEquals(MYNIL, "(nconc nil nil nil)");
 		testEvalEquals("1", "(nconc nil nil 1)");
 		testEvalError("(nconc 1 nil)");
 	}
 
 	public static void testNilEvaluation() {
-		testEvalEqualsObj(SubLNil.NIL, "NIL");
+		testEvalEqualsObj(SubLNil.NIL, MYNIL);
 	}
 
 	public static void testNumberComparison() {
 		testEvalEquals("T", "(> 2 1)");
-		testEvalEquals("NIL", "(> 1 2)");
+		testEvalEquals(MYNIL, "(> 1 2)");
 		testEvalEquals("T", "(>= 2 1)");
-		testEvalEquals("NIL", "(>= 1 2)");
-		testEvalEquals("NIL", "(< 2 1)");
+		testEvalEquals(MYNIL, "(>= 1 2)");
+		testEvalEquals(MYNIL, "(< 2 1)");
 		testEvalEquals("T", "(< 1 2)");
-		testEvalEquals("NIL", "(<= 2 1)");
+		testEvalEquals(MYNIL, "(<= 2 1)");
 		testEvalEquals("T", "(<= 1 2)");
 		testEvalEquals("T", "(< 50000000000000 50000000000001)");
-		testEvalEquals("NIL", "(> 50000000000000 50000000000001)");
-		testEvalEquals("NIL", "(> 413696 17976931348623157)");
-		testEvalEquals("NIL", "(> 413696 179769313486231570000)");
-		testEvalEquals("NIL", "(> 413696 1797693134862315700000)");
-		testEvalEquals("NIL", "(> 413696 17976931348623157000000)");
-		testEvalEquals("NIL", "(> 413696 179769313486231570000000)");
-		testEvalEquals("NIL", "(> 413696 1797693134862315700000000)");
-		testEvalEquals("NIL", "(> 413696 17976931348623157000000000000)");
-		testEvalEquals("NIL", "(> 413696 179769313486231570000000000000000)");
-		testEvalEquals("NIL", "(> 413696 179769313486231570000000000000000000000)");
-		testEvalEquals("NIL", "(> 413696 17976931348623157000000000000000000000000000000000000000000000000)");
-		testEvalEquals("NIL", "(> 413696 1797693134862315700000000000000000000000000000000000000000000000000000000000000000000000000000000000)");
-		testEvalEquals("NIL", "(> 413696 17976931348623157000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000)");
-		testEvalEquals("NIL", "(> 413696 179769313486231570000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000)");
+		testEvalEquals(MYNIL, "(> 50000000000000 50000000000001)");
+		testEvalEquals(MYNIL, "(> 413696 17976931348623157)");
+		testEvalEquals(MYNIL, "(> 413696 179769313486231570000)");
+		testEvalEquals(MYNIL, "(> 413696 1797693134862315700000)");
+		testEvalEquals(MYNIL, "(> 413696 17976931348623157000000)");
+		testEvalEquals(MYNIL, "(> 413696 179769313486231570000000)");
+		testEvalEquals(MYNIL, "(> 413696 1797693134862315700000000)");
+		testEvalEquals(MYNIL, "(> 413696 17976931348623157000000000000)");
+		testEvalEquals(MYNIL, "(> 413696 179769313486231570000000000000000)");
+		testEvalEquals(MYNIL, "(> 413696 179769313486231570000000000000000000000)");
+		testEvalEquals(MYNIL, "(> 413696 17976931348623157000000000000000000000000000000000000000000000000)");
+		testEvalEquals(MYNIL, "(> 413696 1797693134862315700000000000000000000000000000000000000000000000000000000000000000000000000000000000)");
+		testEvalEquals(MYNIL, "(> 413696 17976931348623157000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000)");
+		testEvalEquals(MYNIL, "(> 413696 179769313486231570000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000)");
 	}
 
 	public static void testNumberEquality() {
-		testEvalEquals("NIL", "(equal 0 0.0)");
+		testEvalEquals(MYNIL, "(equal 0 0.0)");
 		testEvalEquals("T", "(= 0 0.0)");
 		testEvalEquals("T", "(equalp 0 0.0)");
 	}
@@ -4122,44 +4125,44 @@ public class UnitTest extends TestCase {
 		testEvalEquals("\"BLAH\"", "(package-name *new-package*)");
 		testEvalError("(package-name NIL)");
 		testEvalError("(package-name 11)");
-		testEvalEquals("NIL", "(package-use-list *new-package*)");
+		testEvalEquals(MYNIL, "(package-use-list *new-package*)");
 		testEvalEquals("(list (find-package \"SUBLISP\"))", "(package-use-list (find-package \"CYC\"))");
-		testEvalEquals("NIL", "(package-use-list (find-package \"SUBLISP\"))");
-		testEvalEquals("NIL", "(package-use-list (find-package \"KEYWORD\"))");
+		testEvalEquals(MYNIL, "(package-use-list (find-package \"SUBLISP\"))");
+		testEvalEquals(MYNIL, "(package-use-list (find-package \"KEYWORD\"))");
 		testEvalError("(package-use-list NIL)");
 		testEvalError("(package-use-list)");
 		testEvalError("(package-use-list 123)");
-		testEvalEquals("NIL", "(package-used-by-list *new-package*)");
+		testEvalEquals(MYNIL, "(package-used-by-list *new-package*)");
 		testEvalEquals("(list (find-package \"CYC\"))", "(package-used-by-list (find-package \"SUBLISP\"))");
-		testEvalEquals("NIL", "(package-used-by-list (find-package \"CYC\"))");
-		testEvalEquals("NIL", "(package-used-by-list (find-package \"KEYWORD\"))");
+		testEvalEquals(MYNIL, "(package-used-by-list (find-package \"CYC\"))");
+		testEvalEquals(MYNIL, "(package-used-by-list (find-package \"KEYWORD\"))");
 		testEvalError("(package-used-by-list NIL)");
 		testEvalError("(package-used-by-list)");
 		testEvalError("(package-used-by-list (find-package \"KEYWORD\") nil)");
-		testEvalEquals("NIL", "(package-nicknames *new-package*)");
+		testEvalEquals(MYNIL, "(package-nicknames *new-package*)");
 		testEvalEquals("(list \"SL\")", "(package-nicknames (find-package \"SUBLISP\"))");
-		testEvalEquals("NIL", "(package-nicknames (find-package \"CYC\"))");
-		testEvalEquals("NIL", "(package-nicknames (find-package \"KEYWORD\"))");
+		testEvalEquals(MYNIL, "(package-nicknames (find-package \"CYC\"))");
+		testEvalEquals(MYNIL, "(package-nicknames (find-package \"KEYWORD\"))");
 		testEvalError("(package-nicknames NIL)");
 		testEvalError("(package-nicknames)");
 		testEvalError("(package-nicknames (find-package \"KEYWORD\") nil)");
-		testEvalEquals("NIL", "(package-locked-p *new-package*)");
+		testEvalEquals(MYNIL, "(package-locked-p *new-package*)");
 		testEvalEquals("T", "(package-locked-p (find-package \"SUBLISP\"))");
-		testEvalEquals("NIL", "(package-locked-p (find-package \"CYC\"))");
-		testEvalEquals("NIL", "(package-locked-p (find-package \"KEYWORD\"))");
+		testEvalEquals(MYNIL, "(package-locked-p (find-package \"CYC\"))");
+		testEvalEquals(MYNIL, "(package-locked-p (find-package \"KEYWORD\"))");
 		testEvalError("(package-locked-p NIL)");
 		testEvalError("(package-locked-p)");
 		testEvalError("(package-nicknames (find-package \"KEYWORD\") nil)");
 		testEvalEquals("*new-package*", "(find-package \"BLAH\")");
-		testEvalEquals("nil", "(find-package \"blah\")");
-		testEvalEquals("nil", "(find-package \"bLAh\")");
+		testEvalEquals(MYNIL, "(find-package \"blah\")");
+		testEvalEquals(MYNIL, "(find-package \"bLAh\")");
 		testEvalEquals("*new-package*", "(find-package 'bLAh)");
 		testEvalOfType("(csetq *tmp-package-list* (list-all-packages))", SubLList.class);
 		testEvalEquals("t", "(>= (position (find-package \"SUBLISP\") *tmp-package-list*) 0)");
 		testEvalEquals("t", "(>= (position (find-package \"CYC\") *tmp-package-list*) 0)");
 		testEvalEquals("t", "(>= (position (find-package \"KEYWORD\") *tmp-package-list*) 0)");
 		testEvalEquals("t", "(>= (position (find-package \"BLAH\") *tmp-package-list*) 0)");
-		testEvalEquals("nil", "(position (find-package \"ASFDSF\") *tmp-package-list*)");
+		testEvalEquals(MYNIL, "(position (find-package \"ASFDSF\") *tmp-package-list*)");
 		testEvalEquals("'SL::ASDFSDFVDSW", "(intern 'ASDFSDFVDSW \"SUBLISP\")");
 		testEvalEquals(":INTERNAL", "(second (multiple-value-list (intern 'ASDFSDFVDSW \"SUBLISP\")))");
 		testEvalEquals(":EXTERNAL", "(second (multiple-value-list (intern 'CONS :SL)))");
@@ -4174,30 +4177,30 @@ public class UnitTest extends TestCase {
 		testEvalError("(in-package \"SDF\")");
 		testEvalEquals("'*PACKAGE*", "(find-symbol \"*PACKAGE*\" (find-package \"SL\"))");
 		testEvalEquals("'*PACKAGE*", "(find-symbol \"*PACKAGE*\" (find-package \"CYC\"))");
-		testEvalEquals("NIL", "(find-symbol \"*PACKAGe*\" (find-package \"SL\"))");
+		testEvalEquals(MYNIL, "(find-symbol \"*PACKAGe*\" (find-package \"SL\"))");
 		testEvalEquals(":INTERNAL", "(second (multiple-value-list (find-symbol \"ASDFSDFVDSW\" :SL)))");
 		testEvalEquals(":EXTERNAL", "(second (multiple-value-list (find-symbol \"CONS\" :SL)))");
 		testEvalEquals(":INHERITED", "(second (multiple-value-list (find-symbol \"CONS\" :CYC)))");
 	}
 
 	public static void testPcond() {
-		testEvalEquals("NIL", "(pcond)");
-		testEvalEquals("NIL", "(pcond ())");
-		testEvalEquals("NIL", "(pcond nil)");
+		testEvalEquals(MYNIL, "(pcond)");
+		testEvalEquals(MYNIL, "(pcond ())");
+		testEvalEquals(MYNIL, "(pcond nil)");
 		testEvalEquals("212", "(pcond (t 212))");
 		testEvalEquals("212", "(pcond ((identity t) 212))");
 		testEvalEquals("212", "(pcond (nil nil) (t 212))");
 		testEvalEquals("212", "(pcond (nil nil) ((identity t) 212))");
 		testEvalEquals("212", "(pcond (nil nil) (212))");
-		testEvalEquals("NIL", "(pcond (nil 212) (212 nil))");
+		testEvalEquals(MYNIL, "(pcond (nil 212) (212 nil))");
 		testEvalEquals("212", "(pcond (nil nil) (nil nil) (nil nil) (nil nil) (nil nil) (nil nil) (nil nil) (nil nil) (nil nil) (nil nil) (nil nil) (nil nil) (nil nil) (nil nil) (nil nil) (nil nil) (nil nil) (t 212))");
-		testEvalEquals("NIL", "(pcond (nil 212) (212 4 3 2 1 nil))");
-		testEvalEquals("NIL", "(pcond (nil 212) (212 4 3 2 1 nil) (t t))");
-		testEvalEquals("NIL", "(pcond nil (nil 212))");
+		testEvalEquals(MYNIL, "(pcond (nil 212) (212 4 3 2 1 nil))");
+		testEvalEquals(MYNIL, "(pcond (nil 212) (212 4 3 2 1 nil) (t t))");
+		testEvalEquals(MYNIL, "(pcond nil (nil 212))");
 		testEvalEquals("212", "(pcond nil (t 212))");
 		testEvalError("(pcond 1)");
 		testEvalError("(pcond . 1)");
-		testEvalEquals("NIL", "(pcond nil)");
+		testEvalEquals(MYNIL, "(pcond nil)");
 		testEvalError("(pcond nil . 1)");
 		testEvalError("(pcond (nil nil) 1)");
 		testEvalError("(pcond (nil nil) . 1)");
@@ -4210,8 +4213,8 @@ public class UnitTest extends TestCase {
 		testEvalEquals("2", "(pif (identity nil) 1 2)");
 		testEvalEquals("2", "(pif t (progn 1 2) nil)");
 		testEvalEquals("2", "(pif nil nil (progn 1 2))");
-		testEvalEquals("NIL", "(pif)");
-		testEvalEquals("NIL", "(pif t)");
+		testEvalEquals(MYNIL, "(pif)");
+		testEvalEquals(MYNIL, "(pif t)");
 		testEvalEquals("1", "(pif t 1)");
 		testEvalEquals("1", "(pif t 1 2 3)");
 		testEvalError("(pif . t)");
@@ -4279,7 +4282,7 @@ public class UnitTest extends TestCase {
 	}
 
 	public static void testProgn() {
-		testEvalEquals("NIL", "(progn)");
+		testEvalEquals(MYNIL, "(progn)");
 		testEvalEquals("212", "(progn 212)");
 		testEvalEquals("212", "(progn 1 2 3 212)");
 		testEvalEquals("212", "(progn 1 2 3 (identity (progn 4 (identity 212))))");
@@ -4287,48 +4290,48 @@ public class UnitTest extends TestCase {
 	}
 
 	public static void testPunless() {
-		testEvalEquals("NIL", "(punless t)");
-		testEvalEquals("NIL", "(punless nil)");
-		testEvalEquals("NIL", "(punless t 212)");
-		testEvalEquals("NIL", "(punless (identity 212) 212)");
+		testEvalEquals(MYNIL, "(punless t)");
+		testEvalEquals(MYNIL, "(punless nil)");
+		testEvalEquals(MYNIL, "(punless t 212)");
+		testEvalEquals(MYNIL, "(punless (identity 212) 212)");
 		testEvalEquals("212", "(punless nil 212)");
 		testEvalEquals("212", "(punless (identity nil) 212)");
 		testEvalEquals("212", "(punless nil 1 2 3 212)");
 		testEvalEquals("212", "(punless nil 1 2 3 (progn 212))");
-		testEvalEquals("NIL", "(punless)");
+		testEvalEquals(MYNIL, "(punless)");
 		testEvalError("(punless . 1)");
-		testEvalEquals("nil", "(punless 1 . 2)");
-		testEvalEquals("NIL", "(punless 1 2 . 3)");
+		testEvalEquals(MYNIL, "(punless 1 . 2)");
+		testEvalEquals(MYNIL, "(punless 1 2 . 3)");
 	}
 
 	public static void testPwhen() {
-		testEvalEquals("NIL", "(pwhen t)");
-		testEvalEquals("NIL", "(pwhen nil)");
-		testEvalEquals("NIL", "(pwhen nil 212)");
-		testEvalEquals("NIL", "(pwhen (identity nil) 212)");
+		testEvalEquals(MYNIL, "(pwhen t)");
+		testEvalEquals(MYNIL, "(pwhen nil)");
+		testEvalEquals(MYNIL, "(pwhen nil 212)");
+		testEvalEquals(MYNIL, "(pwhen (identity nil) 212)");
 		testEvalEquals("212", "(pwhen t 212)");
 		testEvalEquals("212", "(pwhen 42 212)");
 		testEvalEquals("212", "(pwhen 42 1 2 3 212)");
 		testEvalEquals("212", "(pwhen 42 1 2 3 (progn 212))");
-		testEvalEquals("NIL", "(pwhen)");
+		testEvalEquals(MYNIL, "(pwhen)");
 		testEvalError("(pwhen . 1)");
 		testEvalError("(pwhen 1 . 2)");
-		testEvalEquals("NIL", "(pwhen NIL 2 . 3)");
+		testEvalEquals(MYNIL, "(pwhen NIL 2 . 3)");
 	}
 
 	public static void testQueues() {
 	}
 
 	public static void testQuote() {
-		testEvalEquals("NIL", "(quote NIL)");
+		testEvalEquals(MYNIL, "(quote NIL)");
 		testEvalEquals("212", "(quote 212)");
 		testEvalEquals("\"Foo\"", "(quote \"Foo\")");
 		testEvalEquals("(quote (1 2 3))", "(identity (quote (1 2 3)))");
-		testEvalEquals("NIL", "'NIL");
+		testEvalEquals(MYNIL, "'NIL");
 		testEvalEquals("212", "'212");
 		testEvalEquals("\"Foo\"", "'\"Foo\"");
 		testEvalEquals("(quote (1 2 3))", "(identity '(1 2 3))");
-		testEvalEquals("NIL", "(quote)");
+		testEvalEquals(MYNIL, "(quote)");
 		testEvalEquals("1", "(quote 1 2)");
 		testEvalEquals("1", "(quote 1 . 2)");
 	}
@@ -4366,7 +4369,7 @@ public class UnitTest extends TestCase {
 	public static void testSelfEvaluation() {
 		System.out.println();
 		try {
-			testOneSelfEvaluation("NIL");
+			testOneSelfEvaluation(MYNIL);
 			testOneSelfEvaluation("T");
 			testOneSelfEvaluation("KEYWORD:FOO");
 			testOneSelfEvaluation(":FOO");
@@ -4407,27 +4410,27 @@ public class UnitTest extends TestCase {
 		testEvalEquals("1", "(position #\\a \"baobab\")");
 		testEvalEquals("4", "(position #\\A \"baobab\" #'EQ #'CHAR-UPCASE 2 6)");
 		testEvalEquals("4", "(position #\\A \"baobab\" #'EQUALp #'IDENTITY 2 6)");
-		testEvalEquals("Nil", "(position #\\A \"baobab\" #'EQL #'IDENTITY 2 6)");
-		testEvalEquals("NiL", "(posItion #\\A \"baobab\" #'EQL #'IdENTITY 2 4)");
+		testEvalEquals(MYNIL, "(position #\\A \"baobab\" #'EQL #'IDENTITY 2 6)");
+		testEvalEquals(MYNIL, "(posItion #\\A \"baobab\" #'EQL #'IdENTITY 2 4)");
 		testEvalEquals("1", "(posItion #\\A \"baobab\" #'EQUALP #'IDENTITY -1 NIL)");
 		testEvalEquals("1", "(posItion #\\A \"baobab\" #'EQUALP #'IDENTITY -1 500)");
-		testEvalEquals("NIL", "(posItion #\\A \"baobab\" #'EQUALP #'IDENTITY -1 -1)");
+		testEvalEquals(MYNIL, "(posItion #\\A \"baobab\" #'EQUALP #'IDENTITY -1 -1)");
 		testEvalEquals("1", "(position #\\a '(#\\b #\\a 0 #\\b #\\a #\\b))");
 		testEvalEquals("4", "(position #\\A '(#\\b #\\a #\\o #\\b #\\a #\\b) #'EQ #'CHAR-UPCASE 2 6)");
 		testEvalEquals("4", "(position #\\A '(#\\b #\\a 0 #\\b #\\a #\\b) #'EQUALp #'IDENTITY 2 6)");
-		testEvalEquals("Nil", "(position #\\A '(#\\b #\\a 0 #\\b #\\a #\\b) #'EQL #'IDENTITY 2 6)");
-		testEvalEquals("NiL", "(posItion #\\A '(#\\b #\\a 0 #\\b #\\a #\\b) #'EQL #'IdENTITY 2 4)");
+		testEvalEquals(MYNIL, "(position #\\A '(#\\b #\\a 0 #\\b #\\a #\\b) #'EQL #'IDENTITY 2 6)");
+		testEvalEquals(MYNIL, "(posItion #\\A '(#\\b #\\a 0 #\\b #\\a #\\b) #'EQL #'IdENTITY 2 4)");
 		testEvalEquals("1", "(posItion #\\A '(#\\b #\\a 0 #\\b #\\a #\\b) #'EQUALP #'IDENTITY -1 NIL)");
 		testEvalEquals("1", "(posItion #\\A '(#\\b #\\a 0 #\\b #\\a #\\b) #'EQUALP #'IDENTITY -1 500)");
-		testEvalEquals("NIL", "(posItion #\\A '(#\\b #\\a 0 #\\b #\\a #\\b) #'EQUALP #'IDENTITY -1 -1)");
+		testEvalEquals(MYNIL, "(posItion #\\A '(#\\b #\\a 0 #\\b #\\a #\\b) #'EQUALP #'IDENTITY -1 -1)");
 		testEvalEquals("1", "(position #\\a #(#\\b #\\a 0 #\\b #\\a #\\b))");
 		testEvalEquals("4", "(position #\\A #(#\\b #\\a #\\o #\\b #\\a #\\b) #'EQ #'CHAR-UPCASE 2 6)");
 		testEvalEquals("4", "(position #\\A #(#\\b #\\a 0 #\\b #\\a #\\b) #'EQUALp #'IDENTITY 2 6)");
-		testEvalEquals("Nil", "(position #\\A #(#\\b #\\a 0 #\\b #\\a #\\b) #'EQL #'IDENTITY 2 6)");
-		testEvalEquals("NiL", "(posItion #\\A #(#\\b #\\a 0 #\\b #\\a #\\b) #'EQL #'IdENTITY 2 4)");
+		testEvalEquals(MYNIL, "(position #\\A #(#\\b #\\a 0 #\\b #\\a #\\b) #'EQL #'IDENTITY 2 6)");
+		testEvalEquals(MYNIL, "(posItion #\\A #(#\\b #\\a 0 #\\b #\\a #\\b) #'EQL #'IdENTITY 2 4)");
 		testEvalEquals("1", "(posItion #\\A #(#\\b #\\a 0 #\\b #\\a #\\b) #'EQUALP #'IDENTITY -1 NIL)");
 		testEvalEquals("1", "(posItion #\\A #(#\\b #\\a 0 #\\b #\\a #\\b) #'EQUALP #'IDENTITY -1 500)");
-		testEvalEquals("NIL", "(posItion #\\A #(#\\b #\\a 0 #\\b #\\a #\\b) #'EQUALP #'IDENTITY -1 -1)");
+		testEvalEquals(MYNIL, "(posItion #\\A #(#\\b #\\a 0 #\\b #\\a #\\b) #'EQUALP #'IDENTITY -1 -1)");
 		testEvalError("(posItion)");
 		testEvalError("(posItion 1)");
 		testEvalError("(posItion #\\A \"baobab\" #'EQUALP #'IDENTITY -1 NIL #\\A)");
@@ -4439,27 +4442,27 @@ public class UnitTest extends TestCase {
 		testEvalEquals("4", "(position-if #'upper-case-p \"baobAb\")");
 		testEvalEquals("2", "(position-if #'upper-case-p \"baobab\" #'CHAR-UPCASE 2 6)");
 		testEvalEquals("4", "(position-if #'upper-case-p \"bAobAb\" #'IDENTITY 2 6)");
-		testEvalEquals("Nil", "(position-if #'upper-case-p \"baobab\" #'IDENTITY 2 6)");
-		testEvalEquals("NiL", "(posItion-if #'upper-case-p \"bAobAb\" #'IdENTITY 2 4)");
+		testEvalEquals(MYNIL, "(position-if #'upper-case-p \"baobab\" #'IDENTITY 2 6)");
+		testEvalEquals(MYNIL, "(posItion-if #'upper-case-p \"bAobAb\" #'IdENTITY 2 4)");
 		testEvalEquals("1", "(posItion-if #'upper-case-p \"bAobAb\" #'IDENTITY -1 NIL)");
 		testEvalEquals("1", "(posItion-if #'upper-case-p \"bAobAb\" #'IDENTITY -1 500)");
-		testEvalEquals("NIL", "(posItion-if #'upper-case-p \"bAobAb\" #'IDENTITY -1 -1)");
+		testEvalEquals(MYNIL, "(posItion-if #'upper-case-p \"bAobAb\" #'IDENTITY -1 -1)");
 		testEvalEquals("1", "(position-if #'upper-case-p '(#\\b #\\A 0 #\\b #\\A #\\b))");
 		testEvalEquals("2", "(position-if #'upper-case-p '(#\\b #\\A #\\o #\\b #\\A #\\b) #'CHAR-UPCASE 2 6)");
 		testEvalEquals("4", "(position-if #'upper-case-p '(#\\b #\\A #\\o #\\b #\\A #\\b) #'IDENTITY 2 6)");
-		testEvalEquals("Nil", "(position-if #'upper-case-p '(#\\b #\\A #\\o #\\b #\\a #\\b) #'IDENTITY 2 6)");
-		testEvalEquals("NiL", "(posItion-if #'upper-case-p '(#\\b #\\A #\\o #\\b #\\a #\\b) #'IdENTITY 2 4)");
+		testEvalEquals(MYNIL, "(position-if #'upper-case-p '(#\\b #\\A #\\o #\\b #\\a #\\b) #'IDENTITY 2 6)");
+		testEvalEquals(MYNIL, "(posItion-if #'upper-case-p '(#\\b #\\A #\\o #\\b #\\a #\\b) #'IdENTITY 2 4)");
 		testEvalEquals("1", "(posItion-if #'upper-case-p '(#\\b #\\A #\\o #\\b #\\A #\\b) #'IDENTITY -1 NIL)");
 		testEvalEquals("1", "(posItion-if #'upper-case-p '(#\\b #\\A #\\o #\\b #\\A #\\b) #'IDENTITY -1 500)");
-		testEvalEquals("NIL", "(posItion-if #'upper-case-p '(#\\b #\\A #\\o #\\b #\\A #\\b) #'IDENTITY -1 -1)");
+		testEvalEquals(MYNIL, "(posItion-if #'upper-case-p '(#\\b #\\A #\\o #\\b #\\A #\\b) #'IDENTITY -1 -1)");
 		testEvalEquals("1", "(position-if #'upper-case-p #(#\\b #\\A #\\o #\\b #\\A #\\b))");
 		testEvalEquals("2", "(position-if #'upper-case-p #(#\\b #\\A #\\o #\\b #\\A #\\b) #'CHAR-UPCASE 2 6)");
 		testEvalEquals("4", "(position-if #'upper-case-p #(#\\b #\\A #\\o #\\b #\\A #\\b) #'IDENTITY 2 6)");
-		testEvalEquals("Nil", "(position-if #'upper-case-p #(#\\b #\\a #\\o #\\b #\\a #\\b) #'IDENTITY 2 6)");
-		testEvalEquals("NiL", "(posItion-if #'upper-case-p #(#\\b #\\A #\\o #\\b #\\A #\\b) #'IdENTITY 2 4)");
+		testEvalEquals(MYNIL, "(position-if #'upper-case-p #(#\\b #\\a #\\o #\\b #\\a #\\b) #'IDENTITY 2 6)");
+		testEvalEquals(MYNIL, "(posItion-if #'upper-case-p #(#\\b #\\A #\\o #\\b #\\A #\\b) #'IdENTITY 2 4)");
 		testEvalEquals("1", "(posItion-if #'upper-case-p #(#\\b #\\A #\\o #\\b #\\A #\\b) #'IDENTITY -1 NIL)");
 		testEvalEquals("1", "(posItion-if #'upper-case-p #(#\\b #\\A #\\o #\\b #\\A #\\b) #'IDENTITY -1 500)");
-		testEvalEquals("NIL", "(posItion-if #'upper-case-p #(#\\b #\\A #\\o #\\b #\\A #\\b) #'IDENTITY -1 -1)");
+		testEvalEquals(MYNIL, "(posItion-if #'upper-case-p #(#\\b #\\A #\\o #\\b #\\A #\\b) #'IDENTITY -1 -1)");
 		testEvalError("(posItion-if)");
 		testEvalError("(posItion-if #'upper-case-p)");
 		testEvalError("(posItion-if #'upper-case-p \"baobab\"  #'IDENTITY -1 NIL #\\A)");
@@ -4537,27 +4540,27 @@ public class UnitTest extends TestCase {
 		testEvalEquals("#\\a", "(find #\\a \"baobab\")");
 		testEvalEquals("#\\a", "(find #\\A \"baobab\" #'EQ #'CHAR-UPCASE 2 6)");
 		testEvalEquals("#\\a", "(find #\\A \"baobab\" #'EQUALp #'IDENTITY 2 6)");
-		testEvalEquals("Nil", "(find #\\A \"baobab\" #'EQL #'IDENTITY 2 6)");
-		testEvalEquals("NiL", "(find #\\A \"baobab\" #'EQL #'IdENTITY 2 4)");
+		testEvalEquals(MYNIL, "(find #\\A \"baobab\" #'EQL #'IDENTITY 2 6)");
+		testEvalEquals(MYNIL, "(find #\\A \"baobab\" #'EQL #'IdENTITY 2 4)");
 		testEvalEquals("#\\a", "(find #\\A \"baobab\" #'EQUALP #'IDENTITY -1 NIL)");
 		testEvalEquals("#\\a", "(find #\\A \"baobab\" #'EQUALP #'IDENTITY -1 500)");
-		testEvalEquals("NIL", "(find #\\A \"baobab\" #'EQUALP #'IDENTITY -1 -1)");
+		testEvalEquals(MYNIL, "(find #\\A \"baobab\" #'EQUALP #'IDENTITY -1 -1)");
 		testEvalEquals("#\\a", "(find #\\a '(#\\b #\\a 0 #\\b #\\a #\\b))");
 		testEvalEquals("#\\a", "(find #\\A '(#\\b #\\a #\\o #\\b #\\a #\\b) #'EQ #'CHAR-UPCASE 2 6)");
 		testEvalEquals("#\\a", "(find #\\A '(#\\b #\\a 0 #\\b #\\a #\\b) #'EQUALp #'IDENTITY 2 6)");
-		testEvalEquals("Nil", "(find #\\A '(#\\b #\\a 0 #\\b #\\a #\\b) #'EQL #'IDENTITY 2 6)");
-		testEvalEquals("NiL", "(find #\\A '(#\\b #\\a 0 #\\b #\\a #\\b) #'EQL #'IdENTITY 2 4)");
+		testEvalEquals(MYNIL, "(find #\\A '(#\\b #\\a 0 #\\b #\\a #\\b) #'EQL #'IDENTITY 2 6)");
+		testEvalEquals(MYNIL, "(find #\\A '(#\\b #\\a 0 #\\b #\\a #\\b) #'EQL #'IdENTITY 2 4)");
 		testEvalEquals("#\\a", "(find #\\A '(#\\b #\\a 0 #\\b #\\a #\\b) #'EQUALP #'IDENTITY -1 NIL)");
 		testEvalEquals("#\\a", "(find #\\A '(#\\b #\\a 0 #\\b #\\a #\\b) #'EQUALP #'IDENTITY -1 500)");
-		testEvalEquals("NIL", "(find #\\A '(#\\b #\\a 0 #\\b #\\a #\\b) #'EQUALP #'IDENTITY -1 -1)");
+		testEvalEquals(MYNIL, "(find #\\A '(#\\b #\\a 0 #\\b #\\a #\\b) #'EQUALP #'IDENTITY -1 -1)");
 		testEvalEquals("#\\a", "(find #\\a #(#\\b #\\a 0 #\\b #\\a #\\b))");
 		testEvalEquals("#\\a", "(find #\\A #(#\\b #\\a #\\o #\\b #\\a #\\b) #'EQ #'CHAR-UPCASE 2 6)");
 		testEvalEquals("#\\a", "(find #\\A #(#\\b #\\a 0 #\\b #\\a #\\b) #'EQUALp #'IDENTITY 2 6)");
-		testEvalEquals("Nil", "(find #\\A #(#\\b #\\a 0 #\\b #\\a #\\b) #'EQL #'IDENTITY 2 6)");
-		testEvalEquals("NiL", "(find #\\A #(#\\b #\\a 0 #\\b #\\a #\\b) #'EQL #'IdENTITY 2 4)");
+		testEvalEquals(MYNIL, "(find #\\A #(#\\b #\\a 0 #\\b #\\a #\\b) #'EQL #'IDENTITY 2 6)");
+		testEvalEquals(MYNIL, "(find #\\A #(#\\b #\\a 0 #\\b #\\a #\\b) #'EQL #'IdENTITY 2 4)");
 		testEvalEquals("#\\a", "(find #\\A #(#\\b #\\a 0 #\\b #\\a #\\b) #'EQUALP #'IDENTITY -1 NIL)");
 		testEvalEquals("#\\a", "(find #\\A #(#\\b #\\a 0 #\\b #\\a #\\b) #'EQUALP #'IDENTITY -1 500)");
-		testEvalEquals("NIL", "(find #\\A #(#\\b #\\a 0 #\\b #\\a #\\b) #'EQUALP #'IDENTITY -1 -1)");
+		testEvalEquals(MYNIL, "(find #\\A #(#\\b #\\a 0 #\\b #\\a #\\b) #'EQUALP #'IDENTITY -1 -1)");
 		testEvalError("(find)");
 		testEvalError("(find 1)");
 		testEvalError("(find #\\A \"baobab\" #'EQUALP #'IDENTITY -1 NIL #\\A)");
@@ -4569,27 +4572,27 @@ public class UnitTest extends TestCase {
 		testEvalEquals("#\\A", "(find-if #'upper-case-p \"baobAb\")");
 		testEvalEquals("#\\o", "(find-if #'upper-case-p \"baobab\" #'CHAR-UPCASE 2 6)");
 		testEvalEquals("#\\B", "(find-if #'upper-case-p \"bAobaB\" #'IDENTITY 2 6)");
-		testEvalEquals("Nil", "(find-if #'upper-case-p \"baobab\" #'IDENTITY 2 6)");
-		testEvalEquals("NiL", "(find-if #'upper-case-p \"bAobAb\" #'IdENTITY 2 4)");
+		testEvalEquals(MYNIL, "(find-if #'upper-case-p \"baobab\" #'IDENTITY 2 6)");
+		testEvalEquals(MYNIL, "(find-if #'upper-case-p \"bAobAb\" #'IdENTITY 2 4)");
 		testEvalEquals("#\\A", "(find-if #'upper-case-p \"bAobAb\" #'IDENTITY -1 NIL)");
 		testEvalEquals("#\\A", "(find-if #'upper-case-p \"bAobAb\" #'IDENTITY -1 500)");
-		testEvalEquals("NIL", "(find-if #'upper-case-p \"bAobAb\" #'IDENTITY -1 -1)");
+		testEvalEquals(MYNIL, "(find-if #'upper-case-p \"bAobAb\" #'IDENTITY -1 -1)");
 		testEvalEquals("#\\A", "(find-if #'upper-case-p '(#\\b #\\A 0 #\\b #\\A #\\b))");
 		testEvalEquals("#\\o", "(find-if #'upper-case-p '(#\\b #\\A #\\o #\\b #\\A #\\b) #'CHAR-UPCASE 2 6)");
 		testEvalEquals("#\\A", "(find-if #'upper-case-p '(#\\b #\\A #\\o #\\b #\\A #\\b) #'IDENTITY 2 6)");
-		testEvalEquals("Nil", "(find-if #'upper-case-p '(#\\b #\\A #\\o #\\b #\\a #\\b) #'IDENTITY 2 6)");
-		testEvalEquals("NiL", "(find-if #'upper-case-p '(#\\b #\\A #\\o #\\b #\\a #\\b) #'IdENTITY 2 4)");
+		testEvalEquals(MYNIL, "(find-if #'upper-case-p '(#\\b #\\A #\\o #\\b #\\a #\\b) #'IDENTITY 2 6)");
+		testEvalEquals(MYNIL, "(find-if #'upper-case-p '(#\\b #\\A #\\o #\\b #\\a #\\b) #'IdENTITY 2 4)");
 		testEvalEquals("#\\A", "(find-if #'upper-case-p '(#\\b #\\A #\\o #\\b #\\A #\\b) #'IDENTITY -1 NIL)");
 		testEvalEquals("#\\A", "(find-if #'upper-case-p '(#\\b #\\A #\\o #\\b #\\A #\\b) #'IDENTITY -1 500)");
-		testEvalEquals("NIL", "(find-if #'upper-case-p '(#\\b #\\A #\\o #\\b #\\A #\\b) #'IDENTITY -1 -1)");
+		testEvalEquals(MYNIL, "(find-if #'upper-case-p '(#\\b #\\A #\\o #\\b #\\A #\\b) #'IDENTITY -1 -1)");
 		testEvalEquals("#\\A", "(find-if #'upper-case-p #(#\\b #\\A #\\o #\\b #\\A #\\b))");
 		testEvalEquals("#\\o", "(find-if #'upper-case-p #(#\\b #\\A #\\o #\\b #\\A #\\b) #'CHAR-UPCASE 2 6)");
 		testEvalEquals("#\\A", "(find-if #'upper-case-p #(#\\b #\\A #\\o #\\b #\\A #\\b) #'IDENTITY 2 6)");
-		testEvalEquals("Nil", "(find-if #'upper-case-p #(#\\b #\\a #\\o #\\b #\\a #\\b) #'IDENTITY 2 6)");
-		testEvalEquals("NiL", "(find-if #'upper-case-p #(#\\b #\\A #\\o #\\b #\\A #\\b) #'IdENTITY 2 4)");
+		testEvalEquals(MYNIL, "(find-if #'upper-case-p #(#\\b #\\a #\\o #\\b #\\a #\\b) #'IDENTITY 2 6)");
+		testEvalEquals(MYNIL, "(find-if #'upper-case-p #(#\\b #\\A #\\o #\\b #\\A #\\b) #'IdENTITY 2 4)");
 		testEvalEquals("#\\A", "(find-if #'upper-case-p #(#\\b #\\A #\\o #\\b #\\A #\\b) #'IDENTITY -1 NIL)");
 		testEvalEquals("#\\A", "(find-if #'upper-case-p #(#\\b #\\A #\\o #\\b #\\A #\\b) #'IDENTITY -1 500)");
-		testEvalEquals("NIL", "(find-if #'upper-case-p #(#\\b #\\A #\\o #\\b #\\A #\\b) #'IDENTITY -1 -1)");
+		testEvalEquals(MYNIL, "(find-if #'upper-case-p #(#\\b #\\A #\\o #\\b #\\A #\\b) #'IDENTITY -1 -1)");
 		testEvalError("(find-if)");
 		testEvalError("(find-if #'upper-case-p)");
 		testEvalError("(find-if #'upper-case-p \"baobab\"  #'IDENTITY -1 NIL #\\A)");
@@ -4766,40 +4769,40 @@ public class UnitTest extends TestCase {
 		testEvalEquals("0", "(search #() #(a b c))");
 		testEvalEquals("0", "(search \"\" \"foobar\")");
 		testEvalEquals("7", "(search \"dog\" \"it's a dog's life\")");
-		testEvalEquals("NIL", "(search \"doggy\" \"it's a dog's life\")");
+		testEvalEquals(MYNIL, "(search \"doggy\" \"it's a dog's life\")");
 		testEvalEquals("1", "(search '(\"1980s\") '(\"mid\" \"1980s\") #'equal)");
-		testEvalEquals("NIL", "(search '(2 3) '(2 1) 'EQL 'IDENTITY 0 2)");
+		testEvalEquals(MYNIL, "(search '(2 3) '(2 1) 'EQL 'IDENTITY 0 2)");
 		testEvalEquals("0", "(search '(2 3) '(2 1) 'EQL 'IDENTITY 0 1)");
 		testEvalEquals("1", "(search '(\"1980s\") '(\"mid\" \"1980s\") #'equal)");
 		testEvalEquals("4", "(mismatch \"abcd\" \"ABCDE\" #'char-equal)");
 		testEvalEquals("4", "(mismatch \"abcdaa\" \"ABCDEa\" #'char-equal)");
-		testEvalEquals("NIL", "(mismatch \"abcdaa\" \"abcdaa\" #'char-equal)");
+		testEvalEquals(MYNIL, "(mismatch \"abcdaa\" \"abcdaa\" #'char-equal)");
 		testEvalEquals("2", "(MISMATCH '(\"big\" \"bilbonic\" \"in\" \"the\" \"garden\") '(\"Big\" \"bilbonic\") #'EQUALP)");
 		testEvalEquals("31", " (creduce '+ '(10 21))");
-		testEvalEquals("nil", " (creduce #'+ '())");
+		testEvalEquals(MYNIL, " (creduce #'+ '())");
 		testEvalEquals("3", " (creduce #'+ '(3))");
 		testEvalEquals("'(((1 2) 3) 4)", " (creduce #'list '(1 2 3 4))");
 		testEvalEquals("'(I N I T 1 2)", " (creduce #'append '((1) (2)) 0 NIL '(i n i t))");
 		testEvalEquals("\"all together now\"", "(cconcatenate \"all\" \" \" \"together\" \" \" \"now\")");
 		testEvalEquals("'(D E F #\\A #\\B #\\C 1 2 3)", "(cconcatenate '(d e f) \"ABC\" #(1 2 3))");
-		testEvalEquals("NIL", "(cconcatenate NIL)");
+		testEvalEquals(MYNIL, "(cconcatenate NIL)");
 		testEvalEquals("'(a b c)", "(cconcatenate NIL #(a b c))");
 		testEvalEquals("'(a b c d e)", "(cconcatenate NIL #(a b c) NIL '(d e))");
 		testEvalError("(cconcatenate \"ABC\" #(1 2 3))");
 		testEvalEquals("\"cba\"", "(reverse \"abc\")");
 		testEvalEquals("'(c b a)", "(reverse '(a b c))");
 		testEvalEquals("#(c b a)", "(reverse #(a b c))");
-		testEvalEquals("nil", "(reverse nil)");
+		testEvalEquals(MYNIL, "(reverse nil)");
 		testEvalEquals("\"bc\"", "(subseq \"abcde\" 1 3)");
 		testEvalEquals("'(b c)", "(subseq '(a b c d e) 1 3)");
 		testEvalEquals("#(b c)", "(subseq #(a b c d e) 1 3)");
-		testEvalEquals("nil", "(subseq nil 1 2)");
+		testEvalEquals(MYNIL, "(subseq nil 1 2)");
 	}
 
 	public static void testSimpleFunctionEvaluation() {
-		testEvalEquals("NIL", "(identity nil)");
-		testEvalEquals("NIL", "(IDENTITY nil)");
-		testEvalEquals("NIL", "(iDeNtIty nil)");
+		testEvalEquals(MYNIL, "(identity nil)");
+		testEvalEquals(MYNIL, "(IDENTITY nil)");
+		testEvalEquals(MYNIL, "(iDeNtIty nil)");
 		testEvalEquals("212", "212");
 		testEvalEquals("212", "(identity 212)");
 		testEvalEquals("212",
@@ -4818,13 +4821,13 @@ public class UnitTest extends TestCase {
 	}
 
 	public static void testStringEquality() {
-		testEvalEquals("NIL", "(eq \"foo\" \"foo\")");
-		testEvalEquals("NIL", "(eql \"foo\" \"foo\")");
+		testEvalEquals(MYNIL, "(eq \"foo\" \"foo\")");
+		testEvalEquals(MYNIL, "(eql \"foo\" \"foo\")");
 		testEvalEquals("T", "(equal \"foo\" \"foo\")");
 		testEvalEquals("T", "(equalp \"foo\" \"foo\")");
-		testEvalEquals("NIL", "(eq \"foo\" \"FOO\")");
-		testEvalEquals("NIL", "(eql \"foo\" \"FOO\")");
-		testEvalEquals("NIL", "(equal \"foo\" \"FOO\")");
+		testEvalEquals(MYNIL, "(eq \"foo\" \"FOO\")");
+		testEvalEquals(MYNIL, "(eql \"foo\" \"FOO\")");
+		testEvalEquals(MYNIL, "(equal \"foo\" \"FOO\")");
 		testEvalEquals("T", "(equalp \"foo\" \"FOO\")");
 	}
 
@@ -4843,99 +4846,99 @@ public class UnitTest extends TestCase {
 		testEvalError("(set-char \"hello\" 100 #\\p)");
 		testEvalError("(set-char NIL 4 #\\p)");
 		testEvalEquals("T", "(string= \"abc\" \"abc\")");
-		testEvalEquals("nil", "(string= \"aadd\" \"aacc\")");
-		testEvalEquals("nil", "(string= \"aacc\" \"aadd\")");
-		testEvalEquals("nil", "(string= \"aAdD\" \"aacc\")");
-		testEvalEquals("nil", "(string= \"aAcC\" \"aacc\")");
-		testEvalEquals("nil", "(string= \"aAcC\" \"aAcCa\")");
+		testEvalEquals(MYNIL, "(string= \"aadd\" \"aacc\")");
+		testEvalEquals(MYNIL, "(string= \"aacc\" \"aadd\")");
+		testEvalEquals(MYNIL, "(string= \"aAdD\" \"aacc\")");
+		testEvalEquals(MYNIL, "(string= \"aAcC\" \"aacc\")");
+		testEvalEquals(MYNIL, "(string= \"aAcC\" \"aAcCa\")");
 		testEvalEquals("T", "(string= \"hello\" \"shell\" 0 4 1 5)");
-		testEvalEquals("NIL", "(string= \"hello\" \"shell\" 2 4 2 4)");
-		testEvalEquals("nil", "(string/= \"abc\" \"abc\")");
+		testEvalEquals(MYNIL, "(string= \"hello\" \"shell\" 2 4 2 4)");
+		testEvalEquals(MYNIL, "(string/= \"abc\" \"abc\")");
 		testEvalEquals("t", "(string/= \"aadd\" \"aacc\")");
 		testEvalEquals("t", "(string/= \"aacc\" \"aadd\")");
 		testEvalEquals("t", "(string/= \"aAdD\" \"aacc\")");
 		testEvalEquals("t", "(string/= \"aAcC\" \"aacc\")");
 		testEvalEquals("t", "(string/= \"aAcC\" \"aAcCa\")");
-		testEvalEquals("nil", "(string/= \"hello\" \"shell\" 0 4 1 5)");
+		testEvalEquals(MYNIL, "(string/= \"hello\" \"shell\" 0 4 1 5)");
 		testEvalEquals("t", "(string/= \"hello\" \"shell\" 2 4 2 4)");
-		testEvalEquals("nil", "(string< \"abc\" \"abc\")");
-		testEvalEquals("nil", "(string< \"aadd\" \"aacc\")");
+		testEvalEquals(MYNIL, "(string< \"abc\" \"abc\")");
+		testEvalEquals(MYNIL, "(string< \"aadd\" \"aacc\")");
 		testEvalEquals("2", "(string< \"aacc\" \"aadd\")");
 		testEvalEquals("1", "(string< \"aAdD\" \"aacc\")");
 		testEvalEquals("1", "(string< \"aAcC\" \"aacc\")");
 		testEvalEquals("4", "(string< \"aAcC\" \"aAcCa\")");
-		testEvalEquals("nil", "(string< \"hello\" \"shell\" 0 4 1 5)");
-		testEvalEquals("NIL", "(string< \"hello\" \"shell\" 2 4 2 4)");
-		testEvalEquals("nil", "(string> \"abc\" \"abc\")");
+		testEvalEquals(MYNIL, "(string< \"hello\" \"shell\" 0 4 1 5)");
+		testEvalEquals(MYNIL, "(string< \"hello\" \"shell\" 2 4 2 4)");
+		testEvalEquals(MYNIL, "(string> \"abc\" \"abc\")");
 		testEvalEquals("2", "(string> \"aadd\" \"aacc\")");
-		testEvalEquals("nil", "(string> \"aacc\" \"aadd\")");
-		testEvalEquals("nil", "(string> \"aAdD\" \"aacc\")");
-		testEvalEquals("nil", "(string> \"aAcC\" \"aacc\")");
-		testEvalEquals("nil", "(string> \"aAcC\" \"aAcCa\")");
-		testEvalEquals("nil", "(string> \"hello\" \"shell\" 0 4 1 5)");
+		testEvalEquals(MYNIL, "(string> \"aacc\" \"aadd\")");
+		testEvalEquals(MYNIL, "(string> \"aAdD\" \"aacc\")");
+		testEvalEquals(MYNIL, "(string> \"aAcC\" \"aacc\")");
+		testEvalEquals(MYNIL, "(string> \"aAcC\" \"aAcCa\")");
+		testEvalEquals(MYNIL, "(string> \"hello\" \"shell\" 0 4 1 5)");
 		testEvalEquals("2", "(string> \"hello\" \"shell\" 2 4 2 4)");
 		testEvalEquals("3", "(string>= \"abc\" \"abc\")");
 		testEvalEquals("2", "(string>= \"aadd\" \"aacc\")");
-		testEvalEquals("nil", "(string>= \"aacc\" \"aadd\")");
-		testEvalEquals("nil", "(string>= \"aAdD\" \"aacc\")");
-		testEvalEquals("nil", "(string>= \"aAcC\" \"aacc\")");
-		testEvalEquals("nil", "(string>= \"aAcC\" \"aAcCa\")");
+		testEvalEquals(MYNIL, "(string>= \"aacc\" \"aadd\")");
+		testEvalEquals(MYNIL, "(string>= \"aAdD\" \"aacc\")");
+		testEvalEquals(MYNIL, "(string>= \"aAcC\" \"aacc\")");
+		testEvalEquals(MYNIL, "(string>= \"aAcC\" \"aAcCa\")");
 		testEvalEquals("4", "(string>= \"hello\" \"shell\" 0 4 1 5)");
 		testEvalEquals("2", "(string>= \"hello\" \"shell\" 2 4 2 4)");
 		testEvalEquals("3", "(string<= \"abc\" \"abc\")");
-		testEvalEquals("nil", "(string<= \"aadd\" \"aacc\")");
+		testEvalEquals(MYNIL, "(string<= \"aadd\" \"aacc\")");
 		testEvalEquals("2", "(string<= \"aacc\" \"aadd\")");
 		testEvalEquals("1", "(string<= \"aAdD\" \"aacc\")");
 		testEvalEquals("1", "(string<= \"aAcC\" \"aacc\")");
 		testEvalEquals("4", "(string<= \"aAcC\" \"aAcCa\")");
 		testEvalEquals("4", "(string<= \"hello\" \"shell\" 0 4 1 5)");
-		testEvalEquals("NIL", "(string<= \"hello\" \"shell\" 2 4 2 4)");
+		testEvalEquals(MYNIL, "(string<= \"hello\" \"shell\" 2 4 2 4)");
 		testEvalEquals("T", "(string-equal \"abc\" \"abc\")");
-		testEvalEquals("nil", "(string-equal \"aadd\" \"aacc\")");
-		testEvalEquals("nil", "(string-equal \"aacc\" \"aadd\")");
-		testEvalEquals("nil", "(string-equal \"aAdD\" \"aacc\")");
+		testEvalEquals(MYNIL, "(string-equal \"aadd\" \"aacc\")");
+		testEvalEquals(MYNIL, "(string-equal \"aacc\" \"aadd\")");
+		testEvalEquals(MYNIL, "(string-equal \"aAdD\" \"aacc\")");
 		testEvalEquals("t", "(string-equal \"aAcC\" \"aacc\")");
-		testEvalEquals("nil", "(string-equal \"aAcC\" \"aAcCa\")");
+		testEvalEquals(MYNIL, "(string-equal \"aAcC\" \"aAcCa\")");
 		testEvalEquals("T", "(string-equal \"hello\" \"shell\" 0 4 1 5)");
-		testEvalEquals("NIL", "(string-equal \"hello\" \"shell\" 2 4 2 4)");
-		testEvalEquals("nil", "(string-not-equal \"abc\" \"abc\")");
+		testEvalEquals(MYNIL, "(string-equal \"hello\" \"shell\" 2 4 2 4)");
+		testEvalEquals(MYNIL, "(string-not-equal \"abc\" \"abc\")");
 		testEvalEquals("t", "(string-not-equal \"aadd\" \"aacc\")");
 		testEvalEquals("t", "(string-not-equal \"aacc\" \"aadd\")");
 		testEvalEquals("t", "(string-not-equal \"aAdD\" \"aacc\")");
-		testEvalEquals("nil", "(string-not-equal \"aAcC\" \"aacc\")");
+		testEvalEquals(MYNIL, "(string-not-equal \"aAcC\" \"aacc\")");
 		testEvalEquals("t", "(string-not-equal \"aAcC\" \"aAcCa\")");
-		testEvalEquals("nil", "(string-not-equal \"hello\" \"shell\" 0 4 1 5)");
+		testEvalEquals(MYNIL, "(string-not-equal \"hello\" \"shell\" 0 4 1 5)");
 		testEvalEquals("t", "(string-not-equal \"hello\" \"shell\" 2 4 2 4)");
-		testEvalEquals("nil", "(string-lessp \"abc\" \"abc\")");
-		testEvalEquals("nil", "(string-lessp \"aadd\" \"aacc\")");
+		testEvalEquals(MYNIL, "(string-lessp \"abc\" \"abc\")");
+		testEvalEquals(MYNIL, "(string-lessp \"aadd\" \"aacc\")");
 		testEvalEquals("2", "(string-lessp \"aacc\" \"aadd\")");
-		testEvalEquals("nil", "(string-lessp \"aAdD\" \"aacc\")");
-		testEvalEquals("nil", "(string-lessp \"aAcC\" \"aacc\")");
+		testEvalEquals(MYNIL, "(string-lessp \"aAdD\" \"aacc\")");
+		testEvalEquals(MYNIL, "(string-lessp \"aAcC\" \"aacc\")");
 		testEvalEquals("4", "(string-lessp \"aAcC\" \"aAcCa\")");
-		testEvalEquals("NIL", "(string-lessp \"hello\" \"shell\" 0 4 1 5)");
-		testEvalEquals("NIL", "(string-lessp \"hello\" \"shell\" 2 4 2 4)");
-		testEvalEquals("nil", "(string-greaterp \"abc\" \"abc\")");
+		testEvalEquals(MYNIL, "(string-lessp \"hello\" \"shell\" 0 4 1 5)");
+		testEvalEquals(MYNIL, "(string-lessp \"hello\" \"shell\" 2 4 2 4)");
+		testEvalEquals(MYNIL, "(string-greaterp \"abc\" \"abc\")");
 		testEvalEquals("2", "(string-greaterp \"aadd\" \"aacc\")");
-		testEvalEquals("nil", "(string-greaterp \"aacc\" \"aadd\")");
+		testEvalEquals(MYNIL, "(string-greaterp \"aacc\" \"aadd\")");
 		testEvalEquals("2", "(string-greaterp \"aAdD\" \"aacc\")");
-		testEvalEquals("nil", "(string-greaterp \"aAcC\" \"aacc\")");
-		testEvalEquals("nil", "(string-greaterp \"aAcC\" \"aAcCa\")");
-		testEvalEquals("nil", "(string-greaterp \"hello\" \"shell\" 0 4 1 5)");
+		testEvalEquals(MYNIL, "(string-greaterp \"aAcC\" \"aacc\")");
+		testEvalEquals(MYNIL, "(string-greaterp \"aAcC\" \"aAcCa\")");
+		testEvalEquals(MYNIL, "(string-greaterp \"hello\" \"shell\" 0 4 1 5)");
 		testEvalEquals("2", "(string-greaterp \"hello\" \"shell\" 2 4 2 4)");
 		testEvalEquals("3", "(string-not-greaterp \"abc\" \"abc\")");
-		testEvalEquals("nil", "(string-not-greaterp \"aadd\" \"aacc\")");
+		testEvalEquals(MYNIL, "(string-not-greaterp \"aadd\" \"aacc\")");
 		testEvalEquals("2", "(string-not-greaterp \"aacc\" \"aadd\")");
-		testEvalEquals("nil", "(string-not-greaterp \"aAdD\" \"aacc\")");
+		testEvalEquals(MYNIL, "(string-not-greaterp \"aAdD\" \"aacc\")");
 		testEvalEquals("4", "(string-not-greaterp \"aAcC\" \"aacc\")");
 		testEvalEquals("4", "(string-not-greaterp \"aAcC\" \"aAcCa\")");
 		testEvalEquals("4", "(string-not-greaterp \"hello\" \"shell\" 0 4 1 5)");
-		testEvalEquals("NIL", "(string-not-greaterp \"hello\" \"shell\" 2 4 2 4)");
+		testEvalEquals(MYNIL, "(string-not-greaterp \"hello\" \"shell\" 2 4 2 4)");
 		testEvalEquals("3", "(string-not-lessp \"abc\" \"abc\")");
 		testEvalEquals("2", "(string-not-lessp \"aadd\" \"aacc\")");
-		testEvalEquals("nil", "(string-not-lessp \"aacc\" \"aadd\")");
+		testEvalEquals(MYNIL, "(string-not-lessp \"aacc\" \"aadd\")");
 		testEvalEquals("2", "(string-not-lessp \"aAdD\" \"aacc\")");
 		testEvalEquals("4", "(string-not-lessp \"aAcC\" \"aacc\")");
-		testEvalEquals("nil", "(string-not-lessp \"aAcC\" \"aAcCa\")");
+		testEvalEquals(MYNIL, "(string-not-lessp \"aAcC\" \"aAcCa\")");
 		testEvalEquals("4", "(string-not-lessp \"hello\" \"shell\" 0 4 1 5)");
 		testEvalEquals("2", "(string-not-lessp \"hello\" \"shell\" 2 4 2 4)");
 		testEvalEquals("\"ABC\"", "(string-upcase \"abc\")");
@@ -4978,43 +4981,43 @@ public class UnitTest extends TestCase {
 	public static void testSxhash() {
 		testEvalOfType("(sxhash '(a b c))", SubLFixnum.class);
 		testEvalEquals("T", "(equalp '(a b c) '(a b c))");
-		testEvalEquals("NIL", "(equalp '(a b c) '(a b d))");
+		testEvalEquals(MYNIL, "(equalp '(a b c) '(a b d))");
 		testEvalEquals("(sxhash '(a b c))", "(sxhash '(a b c))");
 		testEvalNotEquals("(sxhash '(a b c))", "(sxhash '(a b d))");
 		testEvalOfType("(sxhash #(a b c))", SubLFixnum.class);
 		testEvalEquals("T", "(equalp #(a b c) #(a b c))");
-		testEvalEquals("NIL", "(equalp #(a b c) #(a b d))");
+		testEvalEquals(MYNIL, "(equalp #(a b c) #(a b d))");
 		testEvalEquals("(sxhash #(a b c))", "(sxhash #(a b c))");
 		testEvalNotEquals("(sxhash #(a b c))", "(sxhash #(a b d))");
 		testEvalOfType("(sxhash \"blah\")", SubLFixnum.class);
 		testEvalEquals("T", "(equalp \"blah\" \"blah\")");
-		testEvalEquals("NIL", "(equalp \"blah\" \"blat\")");
+		testEvalEquals(MYNIL, "(equalp \"blah\" \"blat\")");
 		testEvalEquals("(sxhash \"blah\")", "(sxhash \"blah\")");
 		testEvalEquals("(sxhash \"blah\")", "(sxhash \"BLAH\")");
 		testEvalNotEquals("(sxhash \"blah\")", "(sxhash \"blaa\")");
 		testEvalOfType("(sxhash 'a)", SubLFixnum.class);
 		testEvalEquals("T", "(equalp 'a 'a)");
-		testEvalEquals("NIL", "(equalp 'a 'b)");
+		testEvalEquals(MYNIL, "(equalp 'a 'b)");
 		testEvalEquals("(sxhash 'a)", "(sxhash 'a)");
 		testEvalNotEquals("(sxhash 'a)", "(sxhash 'b)");
 		testEvalOfType("(sxhash 1)", SubLFixnum.class);
 		testEvalEquals("T", "(equalp 1 1)");
-		testEvalEquals("NIL", "(equalp 1 2)");
+		testEvalEquals(MYNIL, "(equalp 1 2)");
 		testEvalEquals("(sxhash 1)", "(sxhash 1)");
 		testEvalNotEquals("(sxhash 1)", "(sxhash 2)");
 		testEvalOfType("(sxhash 1.0)", SubLFixnum.class);
 		testEvalEquals("T", "(equalp 1.0 1.0)");
-		testEvalEquals("NIL", "(equalp 1.0 2.0)");
+		testEvalEquals(MYNIL, "(equalp 1.0 2.0)");
 		testEvalEquals("(sxhash 1.0)", "(sxhash 1.0)");
 		testEvalNotEquals("(sxhash 1.0)", "(sxhash 2.0)");
 		testEvalOfType("(sxhash #\\a)", SubLFixnum.class);
 		testEvalEquals("T", "(equalp #\\a #\\a)");
-		testEvalEquals("NIL", "(equalp #\\a #\\b)");
+		testEvalEquals(MYNIL, "(equalp #\\a #\\b)");
 		testEvalEquals("(sxhash #\\a)", "(sxhash #\\a)");
 		testEvalNotEquals("(sxhash #\\a)", "(sxhash #\\b)");
 		testEvalOfType("(sxhash 1000000000)", SubLFixnum.class);
 		testEvalEquals("T", "(equalp 1000000000 1000000000)");
-		testEvalEquals("NIL", "(equalp 1000000000 1000000001)");
+		testEvalEquals(MYNIL, "(equalp 1000000000 1000000001)");
 		testEvalEquals("(sxhash 1000000000)", "(sxhash 1000000000)");
 		testEvalNotEquals("(sxhash 1000000000)", "(sxhash 1000000001)");
 		long val = 461168601842738790L;
@@ -5022,25 +5025,25 @@ public class UnitTest extends TestCase {
 		testEvalOfType("" + val, SubLLongBignum.class);
 		testEvalOfType("(sxhash " + val + ")", SubLFixnum.class);
 		testEvalEquals("T", "(equalp " + val + " " + val + ")");
-		testEvalEquals("NIL", "(equalp " + val + " " + val2 + ")");
+		testEvalEquals(MYNIL, "(equalp " + val + " " + val2 + ")");
 		testEvalEquals("(sxhash " + val + ")", "(sxhash " + val + ")");
 		testEvalNotEquals("(sxhash " + val + ")", "(sxhash " + val2 + ")");
 		testEvalOfType("(sxhash 9999999999999999999999999999999999999999999999999999)", SubLFixnum.class);
 		testEvalEquals("T", "(equalp 9999999999999999999999999999999999999999999999999999 9999999999999999999999999999999999999999999999999999)");
-		testEvalEquals("NIL", "(equalp 9999999999999999999999999999999999999999999999999999 9999999999999999999999999999999999999999999999999998)");
+		testEvalEquals(MYNIL, "(equalp 9999999999999999999999999999999999999999999999999999 9999999999999999999999999999999999999999999999999998)");
 		testEvalEquals("(sxhash 9999999999999999999999999999999999999999999999999999)", "(sxhash 9999999999999999999999999999999999999999999999999999)");
 		testEvalNotEquals("(sxhash 9999999999999999999999999999999999999999999999999999)", "(sxhash 9999999999999999999999999999999999999999999999999998)");
 		testEvalOfType("(sxhash (string-to-guid \"c0fdc8ce-9c29-11b1-9dad-c379636f7270\"))", SubLFixnum.class);
 		testEvalEquals("T", "(equalp (string-to-guid \"c0fdc8ce-9c29-11b1-9dad-c379636f7270\") (string-to-guid \"c0fdc8ce-9c29-11b1-9dad-c379636f7270\"))");
-		testEvalEquals("NIL", "(equalp (string-to-guid \"c0fdc8ce-9c29-11b1-9dad-c379636f7270\") (string-to-guid \"c0fdc8ce-9c29-11b1-9dad-c379636f7271\"))");
+		testEvalEquals(MYNIL, "(equalp (string-to-guid \"c0fdc8ce-9c29-11b1-9dad-c379636f7270\") (string-to-guid \"c0fdc8ce-9c29-11b1-9dad-c379636f7271\"))");
 		testEvalEquals("(sxhash (string-to-guid \"c0fdc8ce-9c29-11b1-9dad-c379636f7270\"))", "(sxhash (string-to-guid \"c0fdc8ce-9c29-11b1-9dad-c379636f7270\"))");
 		testEvalNotEquals("(sxhash (string-to-guid \"c0fdc8ce-9c29-11b1-9dad-c379636f7270\"))", "(sxhash (string-to-guid \"c0fdc8ce-9c29-11b1-9dad-c379636f7271\"))");
 		shouldPrintTests("Testing SXHASH on CycL objects ... will error if CycL not loaded.");
 		testEvalOfType("(sxhash 'a)", SubLFixnum.class);
 		testEvalEquals("T", "(clet ((a (make-lock \"a\"))) (equalp a a))");
-		testEvalEquals("NIL", "(clet ((a (make-lock \"a1\")) (b (make-lock \"b1\"))) (equalp a b))");
+		testEvalEquals(MYNIL, "(clet ((a (make-lock \"a1\")) (b (make-lock \"b1\"))) (equalp a b))");
 		testEvalEquals("T", "(clet ((a (make-lock \"a2\"))) (equalp (sxhash a) (sxhash a)))");
-		testEvalEquals("NIL", "(clet ((a (make-lock \"a3\")) (b (make-lock \"b3\"))) (equalp (sxhash a) (sxhash b)))");
+		testEvalEquals(MYNIL, "(clet ((a (make-lock \"a3\")) (b (make-lock \"b3\"))) (equalp (sxhash a) (sxhash b)))");
 	}
 
 	public static void testSymbolEquality() {
@@ -5048,17 +5051,17 @@ public class UnitTest extends TestCase {
 		testEvalEquals("T", "(eql (quote foo) (quote foo))");
 		testEvalEquals("T", "(equal (quote foo) (quote foo))");
 		testEvalEquals("T", "(equalp (quote foo) (quote foo))");
-		testEvalEquals("NIL", "(eq (quote foo) (quote bar))");
-		testEvalEquals("NIL", "(eql (quote foo) (quote bar))");
-		testEvalEquals("NIL", "(equal (quote foo) (quote bar))");
-		testEvalEquals("NIL", "(equalp (quote foo) (quote bar))");
+		testEvalEquals(MYNIL, "(eq (quote foo) (quote bar))");
+		testEvalEquals(MYNIL, "(eql (quote foo) (quote bar))");
+		testEvalEquals(MYNIL, "(equal (quote foo) (quote bar))");
+		testEvalEquals(MYNIL, "(equalp (quote foo) (quote bar))");
 	}
 
 	public static void testSymbolFunctions() {
 		testEvalEquals("\"HALEAKALA\"", "(string (make-symbol \"HALEAKALA\"))");
 		testEvalNotEquals("'#:HALEAKALA", "(make-symbol \"HALEAKALA\")");
 		testEvalEquals("\"#:HALEAKALA\"", "(string (make-symbol \"#:HALEAKALA\"))");
-		testEvalEquals("NIL", "(symbol-package (make-symbol \"asdflaskf\"))");
+		testEvalEquals(MYNIL, "(symbol-package (make-symbol \"asdflaskf\"))");
 		testEvalEquals("\"HALEAKALA\"", "(string (make-keyword \"HALEAKALA\"))");
 		testEvalEquals(":HALEAKALA", "(make-keyword \"HALEAKALA\")");
 		testEvalEquals("\"NIL\"", "(symbol-name nil)");
@@ -5067,7 +5070,7 @@ public class UnitTest extends TestCase {
 		testEvalEquals("(find-package \"SUBLISP\")", "(symbol-package nil)");
 		testEvalEquals("(find-package \"CYC\")", "(symbol-package 'cyc::blah)");
 		testEvalEquals("(find-package \"KEYWORD\")", "(symbol-package :blah)");
-		testEvalEquals("nil", "(symbol-package (make-symbol \"HALEAKALA\"))");
+		testEvalEquals(MYNIL, "(symbol-package (make-symbol \"HALEAKALA\"))");
 		testEvalEquals("3", "(csetq *asd12312* 3)");
 		testEvalEquals("3", "(symbol-value '*asd12312*)");
 		testEvalError("(symbol-value (make-symbol \"HALEAKALA\"))");
@@ -5077,25 +5080,25 @@ public class UnitTest extends TestCase {
 		testEvalEquals("t", "(boundp '*asd12312*)");
 		testEvalEquals("t", "(boundp '*PACKAGE*)");
 		testEvalEquals("t", "(boundp 'nil)");
-		testEvalEquals("nil", "(boundp 'asdfalkajsdflkasfl)");
-		testEvalEquals("nil", "(boundp (make-symbol \"HALEAKALA\"))");
+		testEvalEquals(MYNIL, "(boundp 'asdfalkajsdflkasfl)");
+		testEvalEquals(MYNIL, "(boundp (make-symbol \"HALEAKALA\"))");
 		shouldPrintTests("Testing that newly created symbols are unbound ....");
 		SubLSymbol sym = SubLObjectFactory.makeSublispSymbol("*MY-PERSONAL-SYMBOL*");
 		Assert.assertEquals("We are not getting unbound back for a newly-created SYMBOL", sym.boundp(), false);
-		testEvalEquals("nil", "(boundp '*my-personal-symbol*)");
+		testEvalEquals(MYNIL, "(boundp '*my-personal-symbol*)");
 		testEvalEquals("t", "(fboundp 'clet)");
 		testEvalEquals("t", "(fboundp 'fboundp)");
 		testEvalError("(fboundp #'fboundp)");
-		testEvalEquals("nil", "(fboundp 'nil)");
-		testEvalEquals("nil", "(fboundp 'asdfalkajsdflkasfl)");
-		testEvalEquals("nil", "(fboundp (make-symbol \"HALEAKALA\"))");
+		testEvalEquals(MYNIL, "(fboundp 'nil)");
+		testEvalEquals(MYNIL, "(fboundp 'asdfalkajsdflkasfl)");
+		testEvalEquals(MYNIL, "(fboundp (make-symbol \"HALEAKALA\"))");
 		testEvalError("(set 'nil 3)");
 		testEvalError("(set 't 3)");
 		testEvalError("(set :BLAH 3)");
 		testEvalEquals("3", "(set '*asd12312* 3)");
 		testEvalEquals("3", "(symbol-value '*asd12312*)");
 		testEvalOfType("(gensym)", SubLSymbol.class);
-		testEvalEquals("nil", "(symbol-package (gensym))");
+		testEvalEquals(MYNIL, "(symbol-package (gensym))");
 		testEvalNotEquals("(gensym)", "(gensym)");
 		testEvalOfType("(gensym \"Foo-\")", SubLSymbol.class);
 		testEvalOfType("(gensym 34)", SubLSymbol.class);
@@ -5110,13 +5113,13 @@ public class UnitTest extends TestCase {
 		testEvalEquals("3", "(get 'a 'baz)");
 		testEvalEquals("\"huh?\"", "(get 'a 'hunoz)");
 		testEvalEquals("\"doh?\"", "(get 'a 'hunozz \"doh?\")");
-		testEvalEquals("nil", "(get 'a 'hunozz)");
+		testEvalEquals(MYNIL, "(get 'a 'hunozz)");
 		testEvalEquals("t", "(remprop 'a 'bar)");
-		testEvalEquals("nil", "(remprop 'a 'barr)");
-		testEvalEquals("nil", "(get 'a 'bar)");
+		testEvalEquals(MYNIL, "(remprop 'a 'barr)");
+		testEvalEquals(MYNIL, "(get 'a 'bar)");
 		testEvalEquals("'(BAZ 3 HUNOZ \"huh?\")", "(symbol-plist 'a)");
 		testEvalEquals("'()", "(symbol-plist 'b)");
-		testEvalEquals("NIL", "(find-symbol \"?sdfs\")");
+		testEvalEquals(MYNIL, "(find-symbol \"?sdfs\")");
 		testEvalEquals("'|?sdfs|", "(intern \"?sdfs\")");
 		testEvalEquals("'|?sdfs|", "(find-symbol \"?sdfs\")");
 		testEvalEquals("\"|?sdfs|\"", "(prin1-to-string '|?sdfs|)");
@@ -5125,7 +5128,7 @@ public class UnitTest extends TestCase {
 		testEvalEquals("'|123\\|456 |", "(intern \"123|456 \")");
 		testEvalEquals("'SL::IN-THE-SL-PACKAGE", "(intern \"IN-THE-SL-PACKAGE\" (find-package :SL))");
 		testEvalEquals("'SL::IN-THE-SL-PACKAGE", "(find-symbol \"IN-THE-SL-PACKAGE\" (find-package :SL))");
-		testEvalEquals("NIL", "(find-symbol \"IN-THE-SL-PACkAGE\" (find-package :CYC))");
+		testEvalEquals(MYNIL, "(find-symbol \"IN-THE-SL-PACkAGE\" (find-package :CYC))");
 	}
 
 	public static void testSymbolNames() {
@@ -5185,110 +5188,110 @@ public class UnitTest extends TestCase {
 		testEvalEquals("T", "(BOOLEANP ())");
 		testEvalEquals("T", "(BOOLEANP ())");
 		testEvalEquals("T", "(BOOLEANP ())");
-		testEvalEquals("NIL", "(BOOLEANP 'foo)");
-		testEvalEquals("NIL", "(BOOLEANP 4)");
+		testEvalEquals(MYNIL, "(BOOLEANP 'foo)");
+		testEvalEquals(MYNIL, "(BOOLEANP 4)");
 		testEvalError("(BOOLEANP)");
 		testEvalError("(BOOLEANP 4 4)");
 		testEvalEquals("T", "(NULL ())");
 		testEvalEquals("T", "(nuLL NIL)");
-		testEvalEquals("NIL", "(null T)");
-		testEvalEquals("NIL", "(NULL '(A B C))");
-		testEvalEquals("NIL", "(NULL #\\a)");
-		testEvalEquals("NIL", "(NULL #33ROOMBA)");
-		testEvalEquals("NIL", "(NULL \"\")");
+		testEvalEquals(MYNIL, "(null T)");
+		testEvalEquals(MYNIL, "(NULL '(A B C))");
+		testEvalEquals(MYNIL, "(NULL #\\a)");
+		testEvalEquals(MYNIL, "(NULL #33ROOMBA)");
+		testEvalEquals(MYNIL, "(NULL \"\")");
 		testEvalEquals("T", "(SYMBOLP NIL)");
 		testEvalEquals("T", "(SYMBOLP ())");
 		testEvalEquals("T", "(SYMBOLP T)");
 		testEvalEquals("T", "(SYMBOLP 'RUFFFF!!!!!!)");
 		testEvalEquals("T", "(SYMBOLP 'a\\ b)");
 		testEvalEquals("T", "(SYMBOLP ())");
-		testEvalEquals("NIL", "(SYMBOLP '(A B C))");
-		testEvalEquals("NIL", "(SYMBOLP #\\a)");
-		testEvalEquals("NIL", "(SYMBOLP #33ROOMBA)");
-		testEvalEquals("NIL", "(SYMBOLP \"bah humbug\")");
-		testEvalEquals("NIL", "(SYMBOLP 212)");
+		testEvalEquals(MYNIL, "(SYMBOLP '(A B C))");
+		testEvalEquals(MYNIL, "(SYMBOLP #\\a)");
+		testEvalEquals(MYNIL, "(SYMBOLP #33ROOMBA)");
+		testEvalEquals(MYNIL, "(SYMBOLP \"bah humbug\")");
+		testEvalEquals(MYNIL, "(SYMBOLP 212)");
 		testEvalEquals("T", "(ATOM \"howdy partner\")");
 		testEvalEquals("T", "(ATOM NIL)");
-		testEvalEquals("NIL", "(ATOM '(A B C))");
+		testEvalEquals(MYNIL, "(ATOM '(A B C))");
 		testEvalEquals("T", "(CONSP '(A B C))");
-		testEvalEquals("NIL", "(CONSP ())");
-		testEvalEquals("NIL", "(CONSP NIL)");
-		testEvalEquals("NIL", "(CONSP 212)");
-		testEvalEquals("NIL", "(CONSP \"DARTH VADER\")");
+		testEvalEquals(MYNIL, "(CONSP ())");
+		testEvalEquals(MYNIL, "(CONSP NIL)");
+		testEvalEquals(MYNIL, "(CONSP 212)");
+		testEvalEquals(MYNIL, "(CONSP \"DARTH VADER\")");
 		testEvalEquals("T", "(listp '(A B C))");
 		testEvalEquals("T", "(listp ())");
 		testEvalEquals("T", "(liStp NIL)");
-		testEvalEquals("NIL", "(listp 212)");
-		testEvalEquals("NIL", "(LISTP \"DARTH VADER\")");
+		testEvalEquals(MYNIL, "(listp 212)");
+		testEvalEquals(MYNIL, "(LISTP \"DARTH VADER\")");
 		testEvalEquals("T", "(sequencep '(A B C))");
 		testEvalEquals("T", "(sequencep ())");
 		testEvalEquals("T", "(sequencep NIL)");
-		testEvalEquals("NIL", "(sequencep 212)");
+		testEvalEquals(MYNIL, "(sequencep 212)");
 		testEvalEquals("T", "(numberp 10)");
 		testEvalEquals("T", "(numberp 9999999999999999999999999999999999999999999)");
 		testEvalEquals("T", "(numberp 1.0)");
 		testEvalEquals("T", "(numbeRp 4.0e99)");
 		testEvalEquals("T", "(numberp #33ROOMBA)");
-		testEvalEquals("NIL", "(numberp 'a)");
-		testEvalEquals("NIL", "(numberp #\\a)");
-		testEvalEquals("NIL", "(numberp \"a\")");
+		testEvalEquals(MYNIL, "(numberp 'a)");
+		testEvalEquals(MYNIL, "(numberp #\\a)");
+		testEvalEquals(MYNIL, "(numberp \"a\")");
 		testEvalEquals("T", "(fixnump 1)");
 		testEvalEquals("T", "(fixnump 0)");
 		testEvalEquals("T", "(fixnump -1)");
 		testEvalEquals("T", "(fixnumP 1024)");
 		testEvalEquals("T", "(fixnump -1024)");
-		testEvalEquals("NIL", "(fixnump #\\a)");
-		testEvalEquals("NIL", "(fixnump \"a\")");
-		testEvalEquals("NIL", "(fixnump '(A B C))");
+		testEvalEquals(MYNIL, "(fixnump #\\a)");
+		testEvalEquals(MYNIL, "(fixnump \"a\")");
+		testEvalEquals(MYNIL, "(fixnump '(A B C))");
 		testEvalEquals("T", "(fixnump " + SubLNumberFactory.MIN_FIXNUM + ")");
 		testEvalEquals("T", "(fixnump " + SubLNumberFactory.MAX_FIXNUM + ")");
 		testEvalEquals("T", "(bignump " + (SubLNumberFactory.MAX_FIXNUM + 1) + ")");
 		testEvalEquals("T", "(bignump " + (SubLNumberFactory.MIN_FIXNUM - 1) + ")");
 		testEvalEquals("T", "(bIgnump 3000000000000000)");
 		testEvalEquals("T", "(bignump 3000000000000000000000000000000000000000000000000000)");
-		testEvalEquals("NIL", "(bignump #\\a)");
-		testEvalEquals("NIL", "(bignump \"a\")");
-		testEvalEquals("NIL", "(bignump '(A B C))");
-		testEvalEquals("NIL", "(short-bignum-p 'a)");
-		testEvalEquals("NIL", "(short-bignum-p #\\a)");
-		testEvalEquals("NIL", "(short-bignum-p \"a\")");
-		testEvalEquals("NIL", "(short-bigNum-p '(A B C))");
-		testEvalEquals("NIL", "(short-bignum-p 0)");
+		testEvalEquals(MYNIL, "(bignump #\\a)");
+		testEvalEquals(MYNIL, "(bignump \"a\")");
+		testEvalEquals(MYNIL, "(bignump '(A B C))");
+		testEvalEquals(MYNIL, "(short-bignum-p 'a)");
+		testEvalEquals(MYNIL, "(short-bignum-p #\\a)");
+		testEvalEquals(MYNIL, "(short-bignum-p \"a\")");
+		testEvalEquals(MYNIL, "(short-bigNum-p '(A B C))");
+		testEvalEquals(MYNIL, "(short-bignum-p 0)");
 		testEvalEquals("t", "(short-bignum-p 214748364)");
-		testEvalEquals("NIL", "(medium-bignum-p 'a)");
-		testEvalEquals("NIL", "(medium-bignum-p #\\a)");
-		testEvalEquals("NIL", "(mediUm-bignum-p \"a\")");
-		testEvalEquals("NIL", "(medium-bignum-p '(A B C))");
-		testEvalEquals("NIL", "(medium-bignum-p 1.2)");
+		testEvalEquals(MYNIL, "(medium-bignum-p 'a)");
+		testEvalEquals(MYNIL, "(medium-bignum-p #\\a)");
+		testEvalEquals(MYNIL, "(mediUm-bignum-p \"a\")");
+		testEvalEquals(MYNIL, "(medium-bignum-p '(A B C))");
+		testEvalEquals(MYNIL, "(medium-bignum-p 1.2)");
 		testEvalEquals("t", "(medium-bignum-p 922337203685477580)");
-		testEvalEquals("NIL", "(long-bignum-p 'a)");
-		testEvalEquals("NIL", "(long-bignum-p #\\a)");
-		testEvalEquals("NIL", "(long-bignum-p \"a\")");
-		testEvalEquals("NIL", "(long-bignuM-p '(A B C))");
-		testEvalEquals("NIL", "(long-bignum-p 2e3)");
+		testEvalEquals(MYNIL, "(long-bignum-p 'a)");
+		testEvalEquals(MYNIL, "(long-bignum-p #\\a)");
+		testEvalEquals(MYNIL, "(long-bignum-p \"a\")");
+		testEvalEquals(MYNIL, "(long-bignuM-p '(A B C))");
+		testEvalEquals(MYNIL, "(long-bignum-p 2e3)");
 		testEvalEquals("T", "(long-bignum-p 999999999999999999999999999999999999999999999999)");
 		testEvalEquals("T", "(integerp -1000)");
 		testEvalEquals("T", "(integerp 999999999999999999999999999999999999999)");
-		testEvalEquals("NIL", "(integeRp 'a)");
-		testEvalEquals("NIL", "(integerp #\\a)");
-		testEvalEquals("NIL", "(integerp 'a)");
-		testEvalEquals("NIL", "(integerp '(10000))");
-		testEvalEquals("NIL", "(integerp '10\\000)");
+		testEvalEquals(MYNIL, "(integeRp 'a)");
+		testEvalEquals(MYNIL, "(integerp #\\a)");
+		testEvalEquals(MYNIL, "(integerp 'a)");
+		testEvalEquals(MYNIL, "(integerp '(10000))");
+		testEvalEquals(MYNIL, "(integerp '10\\000)");
 		testEvalEquals("T", "(Floatp 10000.00)");
 		testEvalEquals("T", "(floatp 1e3)");
 		testEvalEquals("T", "(floatp -100.234)");
-		testEvalEquals("NIL", "(floatp 'a)");
-		testEvalEquals("NIL", "(floatp '(10000.8432))");
+		testEvalEquals(MYNIL, "(floatp 'a)");
+		testEvalEquals(MYNIL, "(floatp '(10000.8432))");
 		testEvalEquals("T", "(characterp #\\a)");
 		testEvalEquals("T", "(charaCterp #\\C-M-\\a)");
-		testEvalEquals("NIL", "(characterp \"\")");
-		testEvalEquals("NIL", "(characterp 'a)");
-		testEvalEquals("NIL", "(characterp 234.234)");
+		testEvalEquals(MYNIL, "(characterp \"\")");
+		testEvalEquals(MYNIL, "(characterp 'a)");
+		testEvalEquals(MYNIL, "(characterp 234.234)");
 		testEvalEquals("T", "(striNgp \"\")");
 		testEvalEquals("T", "(stringp \"\\\\\")");
-		testEvalEquals("NIL", "(stringp 'a)");
-		testEvalEquals("NIL", "(stringp #\\a)");
-		testEvalEquals("NIL", "(stringp nil)");
+		testEvalEquals(MYNIL, "(stringp 'a)");
+		testEvalEquals(MYNIL, "(stringp #\\a)");
+		testEvalEquals(MYNIL, "(stringp nil)");
 		testEvalError("(NULL 'a 'b)");
 		testEvalError("(nuLL NIL . 3)");
 		testEvalError("(SYMBOLP 'a 'b)");
@@ -5345,7 +5348,12 @@ public class UnitTest extends TestCase {
 	private static SubLInteger twoTwelve;
 
 	static {
-		SubLMain.preInitLisp();
+		// temporary workarround apps not initialziing cyc like Junit
+		Startup.onAccess(UnitTest.class);
+
+	}
+
+	static {
 
 		DIVISION_TEST_CASE_TABLE = new DivisionTest[] { new RoundTest("0", "10", "0", "0"), new CeilingTest("0", "10", "0", "0"), new FloorTest("0", "10", "0", "0"), new TruncateTest("0", "10", "0", "0"), new FloorTest("1969", "4", "492", "1"), new FloorTest("-1969", "4", "-493", "3"), new FloorTest("2.6", "1", "2", "0.6000000000000001"), new CeilingTest("2.6", "1", "3", "-0.3999999999999999"),
 				new RoundTest("2.6", "1", "3", "-0.3999999999999999"), new TruncateTest("2.6", "1", "2", "0.6000000000000001"), new FloorTest("2.5", "1", "2", "0.5"), new CeilingTest("2.5", "1", "3", "-0.5"), new RoundTest("2.5", "1", "2", "0.5"), new TruncateTest("2.5", "1", "2", "0.5"), new FloorTest("2.4", "1", "2", "0.3999999999999999"), new CeilingTest("2.4", "1", "3", "-0.6000000000000001"),
@@ -5617,8 +5625,8 @@ public class UnitTest extends TestCase {
 		testEvalEquals("':ASFSDFLKD", ":ASFSDFLKD");
 		testEvalEquals("':ASFSDFLKD2", "KEYWORD::ASFSDFLKD2");
 		testEvalEquals("':ASFSDFLKD3", "KEYWORD::ASFSDFLKD3");
-		testEvalEquals("NIL", "(find-symbol \":BLAH23423423\")");
-		testEvalEquals("NIL", "(second (multiple-value-list (find-symbol \":BLAH23423423\")))");
+		testEvalEquals(MYNIL, "(find-symbol \":BLAH23423423\")");
+		testEvalEquals(MYNIL, "(second (multiple-value-list (find-symbol \":BLAH23423423\")))");
 		testEvalEquals("':ASFSDFLKD2", "(find-symbol \"ASFSDFLKD2\" :KEYWORD)");
 		testEvalEquals("':EXTERNAL", "(second (multiple-value-list (find-symbol \"ASFSDFLKD2\" :KEYWORD)))");
 		testEvalError("(csetq :KW1 :KW1)");
@@ -5628,7 +5636,7 @@ public class UnitTest extends TestCase {
 		testEvalEquals(":KW1", "(symbol-value :KW1)");
 		testEvalEquals("T", "(keywordp :KW1)");
 		testEvalEquals("T", "(constantp :KW1)");
-		testEvalEquals("NIL", "(fboundp :KW1)");
+		testEvalEquals(MYNIL, "(fboundp :KW1)");
 		testEvalEquals("T", "(boundp :KW1)");
 		testEvalError("(symbol-function :KW1)");
 		testEvalEquals("(find-package \"KEYWORD\")", "(symbol-package :KW1)");
@@ -5658,7 +5666,7 @@ public class UnitTest extends TestCase {
 
 	public void testProclaim() {
 		testEvalEquals("(quote xyz)", "(define xyz () (ret t))");
-		testEvalEquals("NIL", "(symbol-plist (quote xyz))");
+		testEvalEquals(MYNIL, "(symbol-plist (quote xyz))");
 		testEvalEquals("T", "(proclaim (list (quote faccess) (quote private) (quote xyz)))");
 		testEvalEquals("(list (quote faccess) (quote private))", "(symbol-plist (quote xyz))");
 		testEvalEquals("T", "(proclaim (list (quote optimize-funcall) (quote xyz)))");

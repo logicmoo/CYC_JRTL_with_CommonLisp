@@ -5,16 +5,23 @@ import java.util.ArrayList;
 
 import org.armedbear.lisp.Environment;
 import org.armedbear.lisp.Symbol;
+import org.logicmoo.system.Startup;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnitTest;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 abstract public class SubLEnvironment extends FromSubLisp {
 
+	static {
+		// temporary workarround apps not initialziing cyc like Junit
+		Startup.onAccess(SubLEnvironment.class);
+	}
+
 	@Override
 	public Environment toLispObject() {
-		return (Environment)this;
+		return (Environment) this;
 	}
 
 	private static class EnvironmentBinding {
@@ -53,7 +60,7 @@ abstract public class SubLEnvironment extends FromSubLisp {
 
 	public static SubLEnvironment currentEnvironment() {
 		SubLThread thread = SubLProcess.currentSubLThreadOrNull();
-		if (thread!=null && thread.env != null)
+		if (thread != null && thread.env != null)
 			return thread.env;
 		return SubLEnvironment.defaultEnvironment;
 	}
@@ -91,9 +98,9 @@ abstract public class SubLEnvironment extends FromSubLisp {
 		return SubLProcess.currentSubLThread().env = (Environment) extendedEnv;
 	}
 
-//	public SubLPackage getCurrentPackage() {
-//		return SubLPackage.getCurrentPackage();
-//	}
+	//	public SubLPackage getCurrentPackage() {
+	//		return SubLPackage.getCurrentPackage();
+	//	}
 
 	public SubLEnvironment getOuterEnvironment() {
 		return outerEnvironment;
@@ -114,7 +121,6 @@ abstract public class SubLEnvironment extends FromSubLisp {
 		return true;
 	}
 
-
 	public SubLObject lookupBinding(SubLSymbol var) {
 		if (!var.isUndeclared())
 			Errors.error("Illegal call of lookupBinding on declared symbol: " + var);
@@ -124,7 +130,7 @@ abstract public class SubLEnvironment extends FromSubLisp {
 				return currentBinding.getValue();
 		}
 		if (outerEnvironment == null)
-			return ((Symbol)var).getTLValue0();
+			return ((Symbol) var).getTLValue0();
 		return outerEnvironment.lookupBinding(var);
 	}
 
@@ -181,7 +187,7 @@ abstract public class SubLEnvironment extends FromSubLisp {
 	public void unextend() {
 		if (outerEnvironment != null) {
 			SubLThread thread = SubLProcess.currentSubLThread();
-			thread.env =  (Environment) outerEnvironment;
+			thread.env = (Environment) outerEnvironment;
 		} else
 			Errors.error("Illegal attempt to reclaim base enviroment.");
 	}

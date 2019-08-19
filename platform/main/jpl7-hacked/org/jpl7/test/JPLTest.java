@@ -10,6 +10,9 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import org.jpl7.Query;
+import org.logicmoo.system.Startup;
+
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 
 import junit.framework.TestCase;
 
@@ -71,6 +74,12 @@ public class JPLTest extends TestCase {
 }
 
 class AddWithThreads extends Thread {
+
+	static {
+		// temporary workarround apps not initialziing cyc like Junit
+		Startup.onAccess(AddWithThreads.class);
+	}
+	
 	private final CountDownLatch latch;
 	private final String namespace;
 	// private static final Logger logger =
@@ -90,6 +99,7 @@ class AddWithThreads extends Thread {
 	@Override
 	public void run() {
 		for (int i = 0; i < REPS; i++) {
+			Startup.onAccess(AddWithThreads.class);
 			// System.out.println("Asserting test('" + i + "')");
 			Query queryA = new Query("assert(" + namespace + "(test('" + i + "')))");
 			Thread.yield();

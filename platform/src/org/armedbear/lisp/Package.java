@@ -296,7 +296,6 @@ public class Package extends SubLPackage implements java.io.Serializable {
 
 	@Override
 	public LispObject findSymbol(String name) {
-		final AbstractString s = new SimpleString(name);
 		final LispThread thread = LispThread.currentThread();
 		// Look in external and internal symbols of this package.
 		Symbol symbol = externalSymbols.get(name);
@@ -307,6 +306,7 @@ public class Package extends SubLPackage implements java.io.Serializable {
 			return thread.setValues(symbol, Keyword.INTERNAL);
 		// Look in external symbols of used packages.
 		if (useList instanceof Cons) {
+			final AbstractString s = new SimpleString(name);
 			LispObject usedPackages = useList;
 			while (usedPackages != NIL) {
 				Package pkg = (Package) usedPackages.car();

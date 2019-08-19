@@ -1,6 +1,8 @@
 package org.jpl7.fli;
 
 import org.jpl7.JPL;
+import org.jpl7.Term;
+import org.logicmoo.system.Startup;
 
 /**
  * This class consists only of constants (static finals) and static native
@@ -66,8 +68,18 @@ import org.jpl7.JPL;
  * @version $Revision$
  */
 public final class Prolog {
+
 	static {
-		JPL.loadNativeLibrary();
+		// temporary workarround apps not initialziing cyc like Junit
+		Startup.onAccess(Prolog.class);
+	}
+
+	// Kills JUNIT5
+	static {
+
+		if (Term.Enabled)
+			JPL.loadNativeLibrary();
+
 	}
 
 	/* term types */

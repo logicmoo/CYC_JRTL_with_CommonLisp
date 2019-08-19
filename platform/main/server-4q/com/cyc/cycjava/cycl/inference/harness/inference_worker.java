@@ -10133,6 +10133,7 @@ public class inference_worker extends SubLTranslatedFile {
         $sym219$TACTICALLY_FINISHED_PROBLEM_P = makeSymbol("TACTICALLY-FINISHED-PROBLEM-P");
     }
 
+
 }
 /*
  *

@@ -76,6 +76,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
@@ -3669,6 +3670,25 @@ public class inference_trampolines extends SubLTranslatedFile {
             return inference_some_spec_pred_or_inverseP(arg1);
         }
     }
+
+	/**
+	 * Return T iff PROBLEM is backchain required
+	 */
+	@LispMethod(comment = "Return T iff PROBLEM is backchain required")
+	public static final SubLObject problem_backchain_requiredP(SubLObject problem) {
+	    checkType(problem, PROBLEM_P);
+	    {
+	        SubLObject query = inference_datastructures_problem.problem_query(problem);
+	        SubLObject cdolist_list_var = query;
+	        SubLObject contextualized_dnf_clause = NIL;
+	        for (contextualized_dnf_clause = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , contextualized_dnf_clause = cdolist_list_var.first()) {
+	            if (NIL == com.cyc.cycjava.cycl.inference.inference_trampolines.inference_some_backchain_required_asent_in_clauseP(contextualized_dnf_clause)) {
+	                return NIL;
+	            }
+	        }
+	        return T;
+	    }
+	}
 
 }
 /*

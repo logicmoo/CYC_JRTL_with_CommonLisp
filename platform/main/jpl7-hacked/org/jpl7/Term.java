@@ -51,6 +51,8 @@ import org.jpl7.fli.term_t;
  */
 public abstract class Term {
 
+	public static boolean Enabled = false;
+	
 	/**
 	 * This default constructor enables subclasses to define their own default constructors
 	 */
@@ -61,7 +63,7 @@ public abstract class Term {
 	 * returns the i-th (1+) argument of a Term;
 	 *
 	 * defined only for Compound
-     *
+	 *
 	 * @param i the index of argument to return
 	 * @return the i-th argument of a (Compound) Term
 	 * @throws JPLException if Term is not a Compound
@@ -173,8 +175,7 @@ public abstract class Term {
 	 * @param args
 	 *            an array of Terms to which the substitution is to be applied
 	 */
-	protected static void getSubsts(Map<String, Term> varnames_to_Terms, Map<term_t, Variable> vars_to_Vars,
-			Term[] args) {
+	protected static void getSubsts(Map<String, Term> varnames_to_Terms, Map<term_t, Variable> vars_to_Vars, Term[] args) {
 		for (int i = 0; i < args.length; ++i) {
 			args[i].getSubst(varnames_to_Terms, vars_to_Vars);
 		}
@@ -518,7 +519,7 @@ public abstract class Term {
 	 * @return the length (as an int) of this list, iff it is one.
 	 * @deprecated Use {@link Util#listToLength(Term)}
 	 */
-    @Deprecated
+	@Deprecated
 	public final int listLength() {
 		if (this.isListPair()) { // was .hasFunctor(".", 2)
 			return 1 + this.arg(2).listLength(); // TODO eliminate recursion
@@ -559,21 +560,21 @@ public abstract class Term {
 	 */
 	public Object object() { // overridden in JRef
 		if (this == JPL.JNULL)
-		    return null;
-        else
-            throw new JPLException("this term is not a JRef");
+			return null;
+		else
+			throw new JPLException("this term is not a JRef");
 	}
 
 	/**
-     * Returns the JREF term for an object
-     *
-     * @param object object of interest
+	 * Returns the JREF term for an object
+	 *
+	 * @param object object of interest
 	 * @return a new JRef which references object, or @(null) if object == null.
 	 * @throws JPLException
 	 *             if object is a String.
 	 * @deprecated Use {@link JPL#newJRef}
 	 */
-    @Deprecated
+	@Deprecated
 	public static final Term objectToJRef(Object object) {
 		if (object == null) {
 			return JPL.JNULL;
@@ -718,7 +719,7 @@ public abstract class Term {
 	 *             if this Term is not a JRef
 	 * @deprecated Use {@link JRef#object()}
 	 */
-    @Deprecated
+	@Deprecated
 	public Object ref() { // overridden in JRef
 		throw new JPLException("this Term is not a JRef");
 	}
@@ -818,13 +819,13 @@ public abstract class Term {
 	abstract public String toString();
 	//abstract public Object toJavaObject();
 
-	public Object getTag()
-	{
+	public Object getTag() {
 		return object;
 	}
-	Object object;
-	public void setTag(Object cons)
-	{
+
+	Object object;	
+
+	public void setTag(Object cons) {
 		object = cons;
 	}
 }

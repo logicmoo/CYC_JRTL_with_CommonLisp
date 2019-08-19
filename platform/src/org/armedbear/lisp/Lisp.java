@@ -56,11 +56,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.jpl7.JPL;
 import org.logicmoo.system.BeanShellCntrl;
+import org.logicmoo.system.Startup;
 import org.logicmoo.system.SystemCurrent;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnitTest;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
@@ -91,6 +93,11 @@ abstract public class Lisp extends ABCLStatic {
 
     static final WeakHashMap<LispObject, LispObject> documentationHashTable = new WeakHashMap<LispObject, LispObject>();
 
+	static {
+		// temporary workarround apps not initialziing cyc like Junit
+		Startup.onAccess(Lisp.class);
+
+	}
     // Packages.
     public static final Package PACKAGE_CL = Packages.createPackage("COMMON-LISP", 2048); // EH 10-10-2010: Actual number = 1014
     public static final Package PACKAGE_CL_USER = Packages.createPackage("COMMON-LISP-USER", 1024);
