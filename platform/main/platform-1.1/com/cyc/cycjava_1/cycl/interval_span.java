@@ -78,24 +78,24 @@ public  final class interval_span extends SubLTranslatedFile {
   private static SubLSymbol $interval_span_table$ = null;
 
   public static final SubLObject declare_interval_span_file() {
-    declareFunction(myName, "interval_span_print_function_trampoline", "INTERVAL-SPAN-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-    declareFunction(myName, "interval_span_p", "INTERVAL-SPAN-P", 1, 0, false); new $interval_span_p$UnaryFunction();
-    declareFunction(myName, "int_span_start", "INT-SPAN-START", 1, 0, false);
-    declareFunction(myName, "int_span_end", "INT-SPAN-END", 1, 0, false);
-    declareFunction(myName, "_csetf_int_span_start", "_CSETF-INT-SPAN-START", 2, 0, false);
-    declareFunction(myName, "_csetf_int_span_end", "_CSETF-INT-SPAN-END", 2, 0, false);
-    declareFunction(myName, "make_interval_span", "MAKE-INTERVAL-SPAN", 0, 1, false);
-    declareFunction(myName, "print_interval_span", "PRINT-INTERVAL-SPAN", 3, 0, false);
-    declareFunction(myName, "lookup_interval_span", "LOOKUP-INTERVAL-SPAN", 2, 0, false);
-    declareFunction(myName, "new_interval_span", "NEW-INTERVAL-SPAN", 2, 0, false);
-    declareFunction(myName, "get_interval_span", "GET-INTERVAL-SPAN", 2, 0, false);
-    declareFunction(myName, "interval_span_start", "INTERVAL-SPAN-START", 1, 0, false);
-    declareFunction(myName, "interval_span_end", "INTERVAL-SPAN-END", 1, 0, false);
-    declareFunction(myName, "interval_span_length", "INTERVAL-SPAN-LENGTH", 1, 0, false);
-    declareFunction(myName, "interval_span_G", "INTERVAL-SPAN->", 2, 0, false);
-    declareFunction(myName, "interval_span_L", "INTERVAL-SPAN-<", 2, 0, false);
-    declareFunction(myName, "interval_span_precedesP", "INTERVAL-SPAN-PRECEDES?", 2, 0, false);
-    declareFunction(myName, "interval_span_subsumesP", "INTERVAL-SPAN-SUBSUMES?", 2, 0, false);
+    declareFunction("interval_span_print_function_trampoline", "INTERVAL-SPAN-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+    declareFunction("interval_span_p", "INTERVAL-SPAN-P", 1, 0, false); new $interval_span_p$UnaryFunction();
+    declareFunction("int_span_start", "INT-SPAN-START", 1, 0, false);
+    declareFunction("int_span_end", "INT-SPAN-END", 1, 0, false);
+    declareFunction("_csetf_int_span_start", "_CSETF-INT-SPAN-START", 2, 0, false);
+    declareFunction("_csetf_int_span_end", "_CSETF-INT-SPAN-END", 2, 0, false);
+    declareFunction("make_interval_span", "MAKE-INTERVAL-SPAN", 0, 1, false);
+    declareFunction("print_interval_span", "PRINT-INTERVAL-SPAN", 3, 0, false);
+    declareFunction("lookup_interval_span", "LOOKUP-INTERVAL-SPAN", 2, 0, false);
+    declareFunction("new_interval_span", "NEW-INTERVAL-SPAN", 2, 0, false);
+    declareFunction("get_interval_span", "GET-INTERVAL-SPAN", 2, 0, false);
+    declareFunction("interval_span_start", "INTERVAL-SPAN-START", 1, 0, false);
+    declareFunction("interval_span_end", "INTERVAL-SPAN-END", 1, 0, false);
+    declareFunction("interval_span_length", "INTERVAL-SPAN-LENGTH", 1, 0, false);
+    declareFunction("interval_span_G", "INTERVAL-SPAN->", 2, 0, false);
+    declareFunction("interval_span_L", "INTERVAL-SPAN-<", 2, 0, false);
+    declareFunction("interval_span_precedesP", "INTERVAL-SPAN-PRECEDES?", 2, 0, false);
+    declareFunction("interval_span_subsumesP", "INTERVAL-SPAN-SUBSUMES?", 2, 0, false);
     return NIL;
   }
 

@@ -544,27 +544,27 @@ public  final class removal_modules_conjunctive_pruning extends SubLTranslatedFi
   }
 
   public static final SubLObject declare_removal_modules_conjunctive_pruning_file() {
-    declareFunction(myName, "conjunctive_pruning_module_p", "CONJUNCTIVE-PRUNING-MODULE-P", 1, 0, false);
-    declareFunction(myName, "supporting_residual_conjunction_problem_minimal_problem_query_internal", "SUPPORTING-RESIDUAL-CONJUNCTION-PROBLEM-MINIMAL-PROBLEM-QUERY-INTERNAL", 1, 0, false);
-    declareFunction(myName, "supporting_residual_conjunction_problem_minimal_problem_query", "SUPPORTING-RESIDUAL-CONJUNCTION-PROBLEM-MINIMAL-PROBLEM-QUERY", 1, 0, false);
-    declareFunction(myName, "residual_transformation_non_wff_applicability", "RESIDUAL-TRANSFORMATION-NON-WFF-APPLICABILITY", 1, 0, false); new $residual_transformation_non_wff_applicability$UnaryFunction();
-    declareFunction(myName, "residual_transformation_non_wff_expand", "RESIDUAL-TRANSFORMATION-NON-WFF-EXPAND", 1, 0, false);
-    declareFunction(myName, "problem_is_a_topological_mergingP", "PROBLEM-IS-A-TOPOLOGICAL-MERGING?", 1, 0, false);
-    declareFunction(myName, "why_problem_query_semantically_invalid", "WHY-PROBLEM-QUERY-SEMANTICALLY-INVALID", 1, 0, false);
-    declareFunction(myName, "problem_query_semantically_invalidP", "PROBLEM-QUERY-SEMANTICALLY-INVALID?", 1, 0, false);
-    declareFunction(myName, "problem_query_variable_constraint_tuples", "PROBLEM-QUERY-VARIABLE-CONSTRAINT-TUPLES", 1, 0, false);
-    declareFunction(myName, "dnf_variable_constraint_tuples_internal", "DNF-VARIABLE-CONSTRAINT-TUPLES-INTERNAL", 1, 0, false);
-    declareFunction(myName, "dnf_variable_constraint_tuples", "DNF-VARIABLE-CONSTRAINT-TUPLES", 1, 0, false);
-    declareFunction(myName, "variable_constraint_tuples_for_var", "VARIABLE-CONSTRAINT-TUPLES-FOR-VAR", 2, 0, false);
-    declareFunction(myName, "variable_semantically_invalidP", "VARIABLE-SEMANTICALLY-INVALID?", 1, 0, false);
-    declareFunction(myName, "thing_tupleP", "THING-TUPLE?", 1, 0, false); new $thing_tupleP$UnaryFunction();
-    declareFunction(myName, "prune_unknown_sentence_literal_inconsistency_applicability", "PRUNE-UNKNOWN-SENTENCE-LITERAL-INCONSISTENCY-APPLICABILITY", 1, 0, false); new $prune_unknown_sentence_literal_inconsistency_applicability$UnaryFunction();
-    declareFunction(myName, "prune_unknown_sentence_literal_inconsistency_expand", "PRUNE-UNKNOWN-SENTENCE-LITERAL-INCONSISTENCY-EXPAND", 1, 0, false);
-    declareFunction(myName, "prune_rt_problems_applicable_when_typed_only_when_specialization_applicability", "PRUNE-RT-PROBLEMS-APPLICABLE-WHEN-TYPED-ONLY-WHEN-SPECIALIZATION-APPLICABILITY", 1, 0, false);
-    declareFunction(myName, "transformation_non_applicable_due_to_rule_type_contraint_meta_assertionP", "TRANSFORMATION-NON-APPLICABLE-DUE-TO-RULE-TYPE-CONTRAINT-META-ASSERTION?", 2, 0, false);
-    declareFunction(myName, "prune_rt_problems_applicable_when_typed_only_when_specialization_expand", "PRUNE-RT-PROBLEMS-APPLICABLE-WHEN-TYPED-ONLY-WHEN-SPECIALIZATION-EXPAND", 1, 0, false);
-    declareFunction(myName, "prune_circular_term_of_unit_applicability", "PRUNE-CIRCULAR-TERM-OF-UNIT-APPLICABILITY", 1, 0, false);
-    declareFunction(myName, "prune_circular_term_of_unit_expand", "PRUNE-CIRCULAR-TERM-OF-UNIT-EXPAND", 1, 0, false);
+    declareFunction("conjunctive_pruning_module_p", "CONJUNCTIVE-PRUNING-MODULE-P", 1, 0, false);
+    declareFunction("supporting_residual_conjunction_problem_minimal_problem_query_internal", "SUPPORTING-RESIDUAL-CONJUNCTION-PROBLEM-MINIMAL-PROBLEM-QUERY-INTERNAL", 1, 0, false);
+    declareFunction("supporting_residual_conjunction_problem_minimal_problem_query", "SUPPORTING-RESIDUAL-CONJUNCTION-PROBLEM-MINIMAL-PROBLEM-QUERY", 1, 0, false);
+    declareFunction("residual_transformation_non_wff_applicability", "RESIDUAL-TRANSFORMATION-NON-WFF-APPLICABILITY", 1, 0, false); new $residual_transformation_non_wff_applicability$UnaryFunction();
+    declareFunction("residual_transformation_non_wff_expand", "RESIDUAL-TRANSFORMATION-NON-WFF-EXPAND", 1, 0, false);
+    declareFunction("problem_is_a_topological_mergingP", "PROBLEM-IS-A-TOPOLOGICAL-MERGING?", 1, 0, false);
+    declareFunction("why_problem_query_semantically_invalid", "WHY-PROBLEM-QUERY-SEMANTICALLY-INVALID", 1, 0, false);
+    declareFunction("problem_query_semantically_invalidP", "PROBLEM-QUERY-SEMANTICALLY-INVALID?", 1, 0, false);
+    declareFunction("problem_query_variable_constraint_tuples", "PROBLEM-QUERY-VARIABLE-CONSTRAINT-TUPLES", 1, 0, false);
+    declareFunction("dnf_variable_constraint_tuples_internal", "DNF-VARIABLE-CONSTRAINT-TUPLES-INTERNAL", 1, 0, false);
+    declareFunction("dnf_variable_constraint_tuples", "DNF-VARIABLE-CONSTRAINT-TUPLES", 1, 0, false);
+    declareFunction("variable_constraint_tuples_for_var", "VARIABLE-CONSTRAINT-TUPLES-FOR-VAR", 2, 0, false);
+    declareFunction("variable_semantically_invalidP", "VARIABLE-SEMANTICALLY-INVALID?", 1, 0, false);
+    declareFunction("thing_tupleP", "THING-TUPLE?", 1, 0, false); new $thing_tupleP$UnaryFunction();
+    declareFunction("prune_unknown_sentence_literal_inconsistency_applicability", "PRUNE-UNKNOWN-SENTENCE-LITERAL-INCONSISTENCY-APPLICABILITY", 1, 0, false); new $prune_unknown_sentence_literal_inconsistency_applicability$UnaryFunction();
+    declareFunction("prune_unknown_sentence_literal_inconsistency_expand", "PRUNE-UNKNOWN-SENTENCE-LITERAL-INCONSISTENCY-EXPAND", 1, 0, false);
+    declareFunction("prune_rt_problems_applicable_when_typed_only_when_specialization_applicability", "PRUNE-RT-PROBLEMS-APPLICABLE-WHEN-TYPED-ONLY-WHEN-SPECIALIZATION-APPLICABILITY", 1, 0, false);
+    declareFunction("transformation_non_applicable_due_to_rule_type_contraint_meta_assertionP", "TRANSFORMATION-NON-APPLICABLE-DUE-TO-RULE-TYPE-CONTRAINT-META-ASSERTION?", 2, 0, false);
+    declareFunction("prune_rt_problems_applicable_when_typed_only_when_specialization_expand", "PRUNE-RT-PROBLEMS-APPLICABLE-WHEN-TYPED-ONLY-WHEN-SPECIALIZATION-EXPAND", 1, 0, false);
+    declareFunction("prune_circular_term_of_unit_applicability", "PRUNE-CIRCULAR-TERM-OF-UNIT-APPLICABILITY", 1, 0, false);
+    declareFunction("prune_circular_term_of_unit_expand", "PRUNE-CIRCULAR-TERM-OF-UNIT-EXPAND", 1, 0, false);
     return NIL;
   }
 

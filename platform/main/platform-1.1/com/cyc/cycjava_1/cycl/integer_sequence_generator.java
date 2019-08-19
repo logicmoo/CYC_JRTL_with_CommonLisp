@@ -224,28 +224,28 @@ If LIMIT is NIL, it means there is no limit enforced. */
   }
 
   public static final SubLObject declare_integer_sequence_generator_file() {
-    declareFunction(myName, "integer_sequence_generator_print_function_trampoline", "INTEGER-SEQUENCE-GENERATOR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-    declareFunction(myName, "integer_sequence_generator_p", "INTEGER-SEQUENCE-GENERATOR-P", 1, 0, false); new $integer_sequence_generator_p$UnaryFunction();
-    declareFunction(myName, "isg_lock", "ISG-LOCK", 1, 0, false);
-    declareFunction(myName, "isg_current", "ISG-CURRENT", 1, 0, false);
-    declareFunction(myName, "isg_start", "ISG-START", 1, 0, false);
-    declareFunction(myName, "isg_limit", "ISG-LIMIT", 1, 0, false);
-    declareFunction(myName, "isg_delta", "ISG-DELTA", 1, 0, false);
-    declareFunction(myName, "_csetf_isg_lock", "_CSETF-ISG-LOCK", 2, 0, false);
-    declareFunction(myName, "_csetf_isg_current", "_CSETF-ISG-CURRENT", 2, 0, false);
-    declareFunction(myName, "_csetf_isg_start", "_CSETF-ISG-START", 2, 0, false);
-    declareFunction(myName, "_csetf_isg_limit", "_CSETF-ISG-LIMIT", 2, 0, false);
-    declareFunction(myName, "_csetf_isg_delta", "_CSETF-ISG-DELTA", 2, 0, false);
-    declareFunction(myName, "make_integer_sequence_generator", "MAKE-INTEGER-SEQUENCE-GENERATOR", 0, 1, false);
-    declareFunction(myName, "print_integer_sequence_generator", "PRINT-INTEGER-SEQUENCE-GENERATOR", 3, 0, false);
-    declareFunction(myName, "fast_forward_isg", "FAST-FORWARD-ISG", 2, 0, false);
-    declareFunction(myName, "new_integer_sequence_generator", "NEW-INTEGER-SEQUENCE-GENERATOR", 0, 3, false);
-    declareFunction(myName, "integer_sequence_generator_reset", "INTEGER-SEQUENCE-GENERATOR-RESET", 1, 0, false);
-    declareFunction(myName, "integer_sequence_generator_next", "INTEGER-SEQUENCE-GENERATOR-NEXT", 1, 0, false);
-    declareFunction(myName, "cfasl_output_object_integer_sequence_generator_method", "CFASL-OUTPUT-OBJECT-INTEGER-SEQUENCE-GENERATOR-METHOD", 2, 0, false);
-    declareFunction(myName, "cfasl_wide_output_isg", "CFASL-WIDE-OUTPUT-ISG", 2, 0, false);
-    declareFunction(myName, "cfasl_output_isg_internal", "CFASL-OUTPUT-ISG-INTERNAL", 2, 0, false);
-    declareFunction(myName, "cfasl_input_isg", "CFASL-INPUT-ISG", 1, 0, false);
+    declareFunction("integer_sequence_generator_print_function_trampoline", "INTEGER-SEQUENCE-GENERATOR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+    declareFunction("integer_sequence_generator_p", "INTEGER-SEQUENCE-GENERATOR-P", 1, 0, false); new $integer_sequence_generator_p$UnaryFunction();
+    declareFunction("isg_lock", "ISG-LOCK", 1, 0, false);
+    declareFunction("isg_current", "ISG-CURRENT", 1, 0, false);
+    declareFunction("isg_start", "ISG-START", 1, 0, false);
+    declareFunction("isg_limit", "ISG-LIMIT", 1, 0, false);
+    declareFunction("isg_delta", "ISG-DELTA", 1, 0, false);
+    declareFunction("_csetf_isg_lock", "_CSETF-ISG-LOCK", 2, 0, false);
+    declareFunction("_csetf_isg_current", "_CSETF-ISG-CURRENT", 2, 0, false);
+    declareFunction("_csetf_isg_start", "_CSETF-ISG-START", 2, 0, false);
+    declareFunction("_csetf_isg_limit", "_CSETF-ISG-LIMIT", 2, 0, false);
+    declareFunction("_csetf_isg_delta", "_CSETF-ISG-DELTA", 2, 0, false);
+    declareFunction("make_integer_sequence_generator", "MAKE-INTEGER-SEQUENCE-GENERATOR", 0, 1, false);
+    declareFunction("print_integer_sequence_generator", "PRINT-INTEGER-SEQUENCE-GENERATOR", 3, 0, false);
+    declareFunction("fast_forward_isg", "FAST-FORWARD-ISG", 2, 0, false);
+    declareFunction("new_integer_sequence_generator", "NEW-INTEGER-SEQUENCE-GENERATOR", 0, 3, false);
+    declareFunction("integer_sequence_generator_reset", "INTEGER-SEQUENCE-GENERATOR-RESET", 1, 0, false);
+    declareFunction("integer_sequence_generator_next", "INTEGER-SEQUENCE-GENERATOR-NEXT", 1, 0, false);
+    declareFunction("cfasl_output_object_integer_sequence_generator_method", "CFASL-OUTPUT-OBJECT-INTEGER-SEQUENCE-GENERATOR-METHOD", 2, 0, false);
+    declareFunction("cfasl_wide_output_isg", "CFASL-WIDE-OUTPUT-ISG", 2, 0, false);
+    declareFunction("cfasl_output_isg_internal", "CFASL-OUTPUT-ISG-INTERNAL", 2, 0, false);
+    declareFunction("cfasl_input_isg", "CFASL-INPUT-ISG", 1, 0, false);
     return NIL;
   }
 

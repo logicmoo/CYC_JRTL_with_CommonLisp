@@ -62,8 +62,8 @@ public  final class psc extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_psc_file() {
-    declareFunction(myName, "mt_inference_function", "MT-INFERENCE-FUNCTION", 1, 0, false);
-    declareFunction(myName, "pscP", "PSC?", 1, 0, false);
+    declareFunction("mt_inference_function", "MT-INFERENCE-FUNCTION", 1, 0, false);
+    declareFunction("pscP", "PSC?", 1, 0, false);
     return NIL;
   }
 

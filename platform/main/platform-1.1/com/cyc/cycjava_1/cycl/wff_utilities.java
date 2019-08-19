@@ -148,20 +148,20 @@ public  final class wff_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_wff_utilities_file() {
-    declareFunction(myName, "assertion_not_wffP", "ASSERTION-NOT-WFF?", 1, 0, false);
-    declareFunction(myName, "set_dont_check_wff_semantics", "SET-DONT-CHECK-WFF-SEMANTICS", 0, 0, false);
-    declareFunction(myName, "set_check_wff_semantics", "SET-CHECK-WFF-SEMANTICS", 0, 0, false);
-    declareFunction(myName, "check_assertible_literalP", "CHECK-ASSERTIBLE-LITERAL?", 0, 0, false);
-    declareFunction(myName, "mal_mt_specP", "MAL-MT-SPEC?", 1, 0, false);
-    declareFunction(myName, "valid_mt_specP", "VALID-MT-SPEC?", 1, 0, false);
-    declareFunction(myName, "wf_fort_p", "WF-FORT-P", 1, 0, false);
-    declareFunction(myName, "non_wf_fort_p", "NON-WF-FORT-P", 1, 0, false); new $non_wf_fort_p$UnaryFunction();
-    declareFunction(myName, "non_wf_variable_p", "NON-WF-VARIABLE-P", 1, 0, false); new $non_wf_variable_p$UnaryFunction();
-    declareFunction(myName, "mal_variablesP", "MAL-VARIABLES?", 1, 0, false);
-    declareFunction(myName, "mal_variables", "MAL-VARIABLES", 1, 0, false);
-    declareFunction(myName, "non_wff_cached_p", "NON-WFF-CACHED-P", 1, 0, false);
-    declareFunction(myName, "wff_check_assertion", "WFF-CHECK-ASSERTION", 1, 0, false);
-    declareFunction(myName, "wff_check_assertions_via_tl", "WFF-CHECK-ASSERTIONS-VIA-TL", 2, 0, false);
+    declareFunction("assertion_not_wffP", "ASSERTION-NOT-WFF?", 1, 0, false);
+    declareFunction("set_dont_check_wff_semantics", "SET-DONT-CHECK-WFF-SEMANTICS", 0, 0, false);
+    declareFunction("set_check_wff_semantics", "SET-CHECK-WFF-SEMANTICS", 0, 0, false);
+    declareFunction("check_assertible_literalP", "CHECK-ASSERTIBLE-LITERAL?", 0, 0, false);
+    declareFunction("mal_mt_specP", "MAL-MT-SPEC?", 1, 0, false);
+    declareFunction("valid_mt_specP", "VALID-MT-SPEC?", 1, 0, false);
+    declareFunction("wf_fort_p", "WF-FORT-P", 1, 0, false);
+    declareFunction("non_wf_fort_p", "NON-WF-FORT-P", 1, 0, false); new $non_wf_fort_p$UnaryFunction();
+    declareFunction("non_wf_variable_p", "NON-WF-VARIABLE-P", 1, 0, false); new $non_wf_variable_p$UnaryFunction();
+    declareFunction("mal_variablesP", "MAL-VARIABLES?", 1, 0, false);
+    declareFunction("mal_variables", "MAL-VARIABLES", 1, 0, false);
+    declareFunction("non_wff_cached_p", "NON-WFF-CACHED-P", 1, 0, false);
+    declareFunction("wff_check_assertion", "WFF-CHECK-ASSERTION", 1, 0, false);
+    declareFunction("wff_check_assertions_via_tl", "WFF-CHECK-ASSERTIONS-VIA-TL", 2, 0, false);
     return NIL;
   }
 

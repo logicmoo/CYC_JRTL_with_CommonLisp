@@ -87,21 +87,21 @@ public  final class removal_modules_indexical_referent extends SubLTranslatedFil
   private static SubLSymbol $indexical_the_cyc_process_owner_caching_state$ = null;
 
   public static final SubLObject declare_removal_modules_indexical_referent_file() {
-    declareFunction(myName, "register_indexical_referent_expansion", "REGISTER-INDEXICAL-REFERENT-EXPANSION", 2, 0, false);
-    declareFunction(myName, "cyc_indexical_referent", "CYC-INDEXICAL-REFERENT", 1, 0, false);
-    declareFunction(myName, "indexical_referent_term_p", "INDEXICAL-REFERENT-TERM-P", 1, 0, false); new $indexical_referent_term_p$UnaryFunction();
-    declareFunction(myName, "indexical_referent_expand", "INDEXICAL-REFERENT-EXPAND", 1, 0, false);
-    declareFunction(myName, "temporal_indexical_expand", "TEMPORAL-INDEXICAL-EXPAND", 1, 0, false); new $temporal_indexical_expand$UnaryFunction();
-    declareFunction(myName, "indexical_query_mt", "INDEXICAL-QUERY-MT", 0, 0, false);
-    declareFunction(myName, "indexical_the_user", "INDEXICAL-THE-USER", 0, 0, false);
-    declareFunction(myName, "indexical_the_purpose", "INDEXICAL-THE-PURPOSE", 0, 0, false);
-    declareFunction(myName, "clear_indexical_the_cyc_process_owner", "CLEAR-INDEXICAL-THE-CYC-PROCESS-OWNER", 0, 0, false);
-    declareFunction(myName, "remove_indexical_the_cyc_process_owner", "REMOVE-INDEXICAL-THE-CYC-PROCESS-OWNER", 0, 0, false);
-    declareFunction(myName, "indexical_the_cyc_process_owner_internal", "INDEXICAL-THE-CYC-PROCESS-OWNER-INTERNAL", 0, 0, false);
-    declareFunction(myName, "indexical_the_cyc_process_owner", "INDEXICAL-THE-CYC-PROCESS-OWNER", 0, 0, false);
-    declareFunction(myName, "indexical_the_current_kb_number", "INDEXICAL-THE-CURRENT-KB-NUMBER", 0, 0, false);
-    declareFunction(myName, "indexical_the_current_system_number", "INDEXICAL-THE-CURRENT-SYSTEM-NUMBER", 0, 0, false);
-    declareFunction(myName, "indexical_the_current_host_name", "INDEXICAL-THE-CURRENT-HOST-NAME", 0, 0, false);
+    declareFunction("register_indexical_referent_expansion", "REGISTER-INDEXICAL-REFERENT-EXPANSION", 2, 0, false);
+    declareFunction("cyc_indexical_referent", "CYC-INDEXICAL-REFERENT", 1, 0, false);
+    declareFunction("indexical_referent_term_p", "INDEXICAL-REFERENT-TERM-P", 1, 0, false); new $indexical_referent_term_p$UnaryFunction();
+    declareFunction("indexical_referent_expand", "INDEXICAL-REFERENT-EXPAND", 1, 0, false);
+    declareFunction("temporal_indexical_expand", "TEMPORAL-INDEXICAL-EXPAND", 1, 0, false); new $temporal_indexical_expand$UnaryFunction();
+    declareFunction("indexical_query_mt", "INDEXICAL-QUERY-MT", 0, 0, false);
+    declareFunction("indexical_the_user", "INDEXICAL-THE-USER", 0, 0, false);
+    declareFunction("indexical_the_purpose", "INDEXICAL-THE-PURPOSE", 0, 0, false);
+    declareFunction("clear_indexical_the_cyc_process_owner", "CLEAR-INDEXICAL-THE-CYC-PROCESS-OWNER", 0, 0, false);
+    declareFunction("remove_indexical_the_cyc_process_owner", "REMOVE-INDEXICAL-THE-CYC-PROCESS-OWNER", 0, 0, false);
+    declareFunction("indexical_the_cyc_process_owner_internal", "INDEXICAL-THE-CYC-PROCESS-OWNER-INTERNAL", 0, 0, false);
+    declareFunction("indexical_the_cyc_process_owner", "INDEXICAL-THE-CYC-PROCESS-OWNER", 0, 0, false);
+    declareFunction("indexical_the_current_kb_number", "INDEXICAL-THE-CURRENT-KB-NUMBER", 0, 0, false);
+    declareFunction("indexical_the_current_system_number", "INDEXICAL-THE-CURRENT-SYSTEM-NUMBER", 0, 0, false);
+    declareFunction("indexical_the_current_host_name", "INDEXICAL-THE-CURRENT-HOST-NAME", 0, 0, false);
     return NIL;
   }
 

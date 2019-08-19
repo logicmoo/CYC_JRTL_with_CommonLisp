@@ -117,19 +117,19 @@ public  final class wff_macros extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_wff_macros_file() {
-    declareMacro(myName, "within_wff", "WITHIN-WFF");
-    declareFunction(myName, "within_wffP", "WITHIN-WFF?", 0, 0, false);
-    declareMacro(myName, "with_wff_formula", "WITH-WFF-FORMULA");
-    declareMacro(myName, "with_wff_expansion", "WITH-WFF-EXPANSION");
-    declareMacro(myName, "with_specified_wff_memoization_state", "WITH-SPECIFIED-WFF-MEMOIZATION-STATE");
-    declareMacro(myName, "with_wff_memoization_state", "WITH-WFF-MEMOIZATION-STATE");
-    declareFunction(myName, "possibly_new_wff_memoization_state", "POSSIBLY-NEW-WFF-MEMOIZATION-STATE", 0, 0, false);
-    declareMacro(myName, "validating_expansion_of", "VALIDATING-EXPANSION-OF");
-    declareMacro(myName, "validating_expansion_of_nat", "VALIDATING-EXPANSION-OF-NAT");
-    declareMacro(myName, "defparameter_wff", "DEFPARAMETER-WFF");
-    declareMacro(myName, "with_wff_properties", "WITH-WFF-PROPERTIES");
-    declareFunction(myName, "new_wff_special_variable_state", "NEW-WFF-SPECIAL-VARIABLE-STATE", 1, 0, false);
-    declareMacro(myName, "with_wff_special_variable_state", "WITH-WFF-SPECIAL-VARIABLE-STATE");
+    declareMacro("within_wff", "WITHIN-WFF");
+    declareFunction("within_wffP", "WITHIN-WFF?", 0, 0, false);
+    declareMacro("with_wff_formula", "WITH-WFF-FORMULA");
+    declareMacro("with_wff_expansion", "WITH-WFF-EXPANSION");
+    declareMacro("with_specified_wff_memoization_state", "WITH-SPECIFIED-WFF-MEMOIZATION-STATE");
+    declareMacro("with_wff_memoization_state", "WITH-WFF-MEMOIZATION-STATE");
+    declareFunction("possibly_new_wff_memoization_state", "POSSIBLY-NEW-WFF-MEMOIZATION-STATE", 0, 0, false);
+    declareMacro("validating_expansion_of", "VALIDATING-EXPANSION-OF");
+    declareMacro("validating_expansion_of_nat", "VALIDATING-EXPANSION-OF-NAT");
+    declareMacro("defparameter_wff", "DEFPARAMETER-WFF");
+    declareMacro("with_wff_properties", "WITH-WFF-PROPERTIES");
+    declareFunction("new_wff_special_variable_state", "NEW-WFF-SPECIAL-VARIABLE-STATE", 1, 0, false);
+    declareMacro("with_wff_special_variable_state", "WITH-WFF-SPECIAL-VARIABLE-STATE");
     return NIL;
   }
 

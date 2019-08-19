@@ -139,24 +139,24 @@ public  final class virtual_indexing extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_virtual_indexing_file() {
-    //declareFunction(myName, "assertions_mentioning_terms", "ASSERTIONS-MENTIONING-TERMS", 1, 1, false);
-    //declareFunction(myName, "amt", "AMT", 1, 2, false);
-    //declareFunction(myName, "gather_overlap_index", "GATHER-OVERLAP-INDEX", 1, 1, false);
-    //declareFunction(myName, "gather_overlap_index_for_asent", "GATHER-OVERLAP-INDEX-FOR-ASENT", 1, 1, false);
-    //declareFunction(myName, "gather_overlap_index_for_mt", "GATHER-OVERLAP-INDEX-FOR-MT", 1, 0, false);
-    //declareFunction(myName, "num_overlap_index", "NUM-OVERLAP-INDEX", 1, 1, false);
-    //declareFunction(myName, "estimated_num_overlap_index", "ESTIMATED-NUM-OVERLAP-INDEX", 1, 1, false);
-    //declareFunction(myName, "num_overlap_index_for_asent", "NUM-OVERLAP-INDEX-FOR-ASENT", 1, 1, false);
-    //declareFunction(myName, "estimated_num_overlap_index_for_asent", "ESTIMATED-NUM-OVERLAP-INDEX-FOR-ASENT", 1, 1, false);
-    //declareFunction(myName, "estimated_num_overlap_index_for_mt", "ESTIMATED-NUM-OVERLAP-INDEX-FOR-MT", 1, 0, false);
-    //declareFunction(myName, "estimated_num_overlap_index_for_formula", "ESTIMATED-NUM-OVERLAP-INDEX-FOR-FORMULA", 1, 1, false);
-    //declareFunction(myName, "terms_for_overlap_index", "TERMS-FOR-OVERLAP-INDEX", 1, 0, false);
-    //declareFunction(myName, "terms_for_overlap_index_internal", "TERMS-FOR-OVERLAP-INDEX-INTERNAL", 1, 0, false);
-    declareFunction(myName, "good_term_for_overlap_index_p", "GOOD-TERM-FOR-OVERLAP-INDEX-P", 1, 0, false);
-    declareFunction(myName, "lookup_should_use_index_overlapP", "LOOKUP-SHOULD-USE-INDEX-OVERLAP?", 1, 1, false);
-    declareFunction(myName, "too_few_terms_for_index_overlapP", "TOO-FEW-TERMS-FOR-INDEX-OVERLAP?", 1, 0, false);
-    //declareFunction(myName, "overlap_greatest_benefit_nart", "OVERLAP-GREATEST-BENEFIT-NART", 0, 1, false);
-    //declareFunction(myName, "overlap_benefit_ratio", "OVERLAP-BENEFIT-RATIO", 1, 1, false);
+    //declareFunction("assertions_mentioning_terms", "ASSERTIONS-MENTIONING-TERMS", 1, 1, false);
+    //declareFunction("amt", "AMT", 1, 2, false);
+    //declareFunction("gather_overlap_index", "GATHER-OVERLAP-INDEX", 1, 1, false);
+    //declareFunction("gather_overlap_index_for_asent", "GATHER-OVERLAP-INDEX-FOR-ASENT", 1, 1, false);
+    //declareFunction("gather_overlap_index_for_mt", "GATHER-OVERLAP-INDEX-FOR-MT", 1, 0, false);
+    //declareFunction("num_overlap_index", "NUM-OVERLAP-INDEX", 1, 1, false);
+    //declareFunction("estimated_num_overlap_index", "ESTIMATED-NUM-OVERLAP-INDEX", 1, 1, false);
+    //declareFunction("num_overlap_index_for_asent", "NUM-OVERLAP-INDEX-FOR-ASENT", 1, 1, false);
+    //declareFunction("estimated_num_overlap_index_for_asent", "ESTIMATED-NUM-OVERLAP-INDEX-FOR-ASENT", 1, 1, false);
+    //declareFunction("estimated_num_overlap_index_for_mt", "ESTIMATED-NUM-OVERLAP-INDEX-FOR-MT", 1, 0, false);
+    //declareFunction("estimated_num_overlap_index_for_formula", "ESTIMATED-NUM-OVERLAP-INDEX-FOR-FORMULA", 1, 1, false);
+    //declareFunction("terms_for_overlap_index", "TERMS-FOR-OVERLAP-INDEX", 1, 0, false);
+    //declareFunction("terms_for_overlap_index_internal", "TERMS-FOR-OVERLAP-INDEX-INTERNAL", 1, 0, false);
+    declareFunction("good_term_for_overlap_index_p", "GOOD-TERM-FOR-OVERLAP-INDEX-P", 1, 0, false);
+    declareFunction("lookup_should_use_index_overlapP", "LOOKUP-SHOULD-USE-INDEX-OVERLAP?", 1, 1, false);
+    declareFunction("too_few_terms_for_index_overlapP", "TOO-FEW-TERMS-FOR-INDEX-OVERLAP?", 1, 0, false);
+    //declareFunction("overlap_greatest_benefit_nart", "OVERLAP-GREATEST-BENEFIT-NART", 0, 1, false);
+    //declareFunction("overlap_benefit_ratio", "OVERLAP-BENEFIT-RATIO", 1, 1, false);
     return NIL;
   }
 

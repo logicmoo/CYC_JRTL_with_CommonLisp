@@ -99,25 +99,25 @@ public  final class unicode_subsets extends SubLTranslatedFile {
   private static SubLSymbol $unicode_iswhitespace$ = null;
 
   public static final SubLObject declare_unicode_subsets_file() {
-    declareFunction(myName, "unicode_isdefined", "UNICODE-ISDEFINED", 1, 0, false);
-    declareFunction(myName, "unicode_isdigit", "UNICODE-ISDIGIT", 1, 0, false);
-    declareFunction(myName, "unicode_isidentifierignorable", "UNICODE-ISIDENTIFIERIGNORABLE", 1, 0, false);
-    declareFunction(myName, "unicode_isisocontrol", "UNICODE-ISISOCONTROL", 1, 0, false);
-    declareFunction(myName, "unicode_isjavaidentifierpart", "UNICODE-ISJAVAIDENTIFIERPART", 1, 0, false);
-    declareFunction(myName, "unicode_isjavaidentifierstart", "UNICODE-ISJAVAIDENTIFIERSTART", 1, 0, false);
-    declareFunction(myName, "unicode_isletter", "UNICODE-ISLETTER", 1, 0, false);
-    declareFunction(myName, "unicode_isletterordigit", "UNICODE-ISLETTERORDIGIT", 1, 0, false);
-    declareFunction(myName, "unicode_islowercase", "UNICODE-ISLOWERCASE", 1, 0, false);
-    declareFunction(myName, "unicode_ismirrored", "UNICODE-ISMIRRORED", 1, 0, false);
-    declareFunction(myName, "unicode_isspacechar", "UNICODE-ISSPACECHAR", 1, 0, false);
-    declareFunction(myName, "unicode_issupplementarycodepoint", "UNICODE-ISSUPPLEMENTARYCODEPOINT", 1, 0, false);
-    declareFunction(myName, "unicode_istitlecase", "UNICODE-ISTITLECASE", 1, 0, false);
-    declareFunction(myName, "unicode_isunicodeidentifierpart", "UNICODE-ISUNICODEIDENTIFIERPART", 1, 0, false);
-    declareFunction(myName, "unicode_isunicodeidentifierstart", "UNICODE-ISUNICODEIDENTIFIERSTART", 1, 0, false);
-    declareFunction(myName, "unicode_isuppercase", "UNICODE-ISUPPERCASE", 1, 0, false);
-    declareFunction(myName, "unicode_isvalidcodepoint", "UNICODE-ISVALIDCODEPOINT", 1, 0, false);
-    declareFunction(myName, "unicode_iswhitespace", "UNICODE-ISWHITESPACE", 1, 0, false);
-    declareFunction(myName, "is_unicode_char_type", "IS-UNICODE-CHAR-TYPE", 2, 0, false);
+    declareFunction("unicode_isdefined", "UNICODE-ISDEFINED", 1, 0, false);
+    declareFunction("unicode_isdigit", "UNICODE-ISDIGIT", 1, 0, false);
+    declareFunction("unicode_isidentifierignorable", "UNICODE-ISIDENTIFIERIGNORABLE", 1, 0, false);
+    declareFunction("unicode_isisocontrol", "UNICODE-ISISOCONTROL", 1, 0, false);
+    declareFunction("unicode_isjavaidentifierpart", "UNICODE-ISJAVAIDENTIFIERPART", 1, 0, false);
+    declareFunction("unicode_isjavaidentifierstart", "UNICODE-ISJAVAIDENTIFIERSTART", 1, 0, false);
+    declareFunction("unicode_isletter", "UNICODE-ISLETTER", 1, 0, false);
+    declareFunction("unicode_isletterordigit", "UNICODE-ISLETTERORDIGIT", 1, 0, false);
+    declareFunction("unicode_islowercase", "UNICODE-ISLOWERCASE", 1, 0, false);
+    declareFunction("unicode_ismirrored", "UNICODE-ISMIRRORED", 1, 0, false);
+    declareFunction("unicode_isspacechar", "UNICODE-ISSPACECHAR", 1, 0, false);
+    declareFunction("unicode_issupplementarycodepoint", "UNICODE-ISSUPPLEMENTARYCODEPOINT", 1, 0, false);
+    declareFunction("unicode_istitlecase", "UNICODE-ISTITLECASE", 1, 0, false);
+    declareFunction("unicode_isunicodeidentifierpart", "UNICODE-ISUNICODEIDENTIFIERPART", 1, 0, false);
+    declareFunction("unicode_isunicodeidentifierstart", "UNICODE-ISUNICODEIDENTIFIERSTART", 1, 0, false);
+    declareFunction("unicode_isuppercase", "UNICODE-ISUPPERCASE", 1, 0, false);
+    declareFunction("unicode_isvalidcodepoint", "UNICODE-ISVALIDCODEPOINT", 1, 0, false);
+    declareFunction("unicode_iswhitespace", "UNICODE-ISWHITESPACE", 1, 0, false);
+    declareFunction("is_unicode_char_type", "IS-UNICODE-CHAR-TYPE", 2, 0, false);
     return NIL;
   }
 

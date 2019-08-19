@@ -72,25 +72,25 @@ public  final class subl_macro_promotions extends SubLTranslatedFile {
   public static SubLSymbol $with_timeout_nesting_depth$ = null;
 
   public static final SubLObject declare_subl_macro_promotions_file() {
-    //declareMacro(myName, "defglobal", "DEFGLOBAL");
-    declareFunction(myName, "declare_defglobal", "DECLARE-DEFGLOBAL", 1, 0, false);
-    //declareMacro(myName, "catch_error_message", "CATCH-ERROR-MESSAGE");
-    declareFunction(myName, "catch_error_message_handler", "CATCH-ERROR-MESSAGE-HANDLER", 0, 0, false);
-    //declareMacro(myName, "with_timeout", "WITH-TIMEOUT");
-    //declareFunction(myName, "with_timeout_internal", "WITH-TIMEOUT-INTERNAL", 3, 0, false);
-    //declareFunction(myName, "with_timeout_make_tag", "WITH-TIMEOUT-MAKE-TAG", 0, 0, false);
-    //declareFunction(myName, "with_timeout_start_timer", "WITH-TIMEOUT-START-TIMER", 2, 0, false);
-    //declareFunction(myName, "timeout_tag_nesting_depth", "TIMEOUT-TAG-NESTING-DEPTH", 1, 0, false);
-    //declareFunction(myName, "with_timeout_stop_timer", "WITH-TIMEOUT-STOP-TIMER", 1, 0, false);
-    //declareFunction(myName, "with_timeout_timer_thread", "WITH-TIMEOUT-TIMER-THREAD", 5, 0, false);
-    //declareFunction(myName, "with_timeout_signal_timeout", "WITH-TIMEOUT-SIGNAL-TIMEOUT", 2, 0, false);
-    //declareFunction(myName, "with_timeout_throw", "WITH-TIMEOUT-THROW", 1, 0, false);
-    //declareMacro(myName, "with_tcp_connection", "WITH-TCP-CONNECTION");
-    //declareMacro(myName, "with_tcp_connection_with_timeout", "WITH-TCP-CONNECTION-WITH-TIMEOUT");
-    //declareMacro(myName, "cmultiple_value_setq", "CMULTIPLE-VALUE-SETQ");
-    //declareMacro(myName, "with_space_profiling", "WITH-SPACE-PROFILING");
-    //declareFunction(myName, "with_space_profiling_sl2c", "WITH-SPACE-PROFILING-SL2C", 2, 0, false);
-    //declareMacro(myName, "code_comment", "CODE-COMMENT");
+    //declareMacro("defglobal", "DEFGLOBAL");
+    declareFunction("declare_defglobal", "DECLARE-DEFGLOBAL", 1, 0, false);
+    //declareMacro("catch_error_message", "CATCH-ERROR-MESSAGE");
+    declareFunction("catch_error_message_handler", "CATCH-ERROR-MESSAGE-HANDLER", 0, 0, false);
+    //declareMacro("with_timeout", "WITH-TIMEOUT");
+    //declareFunction("with_timeout_internal", "WITH-TIMEOUT-INTERNAL", 3, 0, false);
+    //declareFunction("with_timeout_make_tag", "WITH-TIMEOUT-MAKE-TAG", 0, 0, false);
+    //declareFunction("with_timeout_start_timer", "WITH-TIMEOUT-START-TIMER", 2, 0, false);
+    //declareFunction("timeout_tag_nesting_depth", "TIMEOUT-TAG-NESTING-DEPTH", 1, 0, false);
+    //declareFunction("with_timeout_stop_timer", "WITH-TIMEOUT-STOP-TIMER", 1, 0, false);
+    //declareFunction("with_timeout_timer_thread", "WITH-TIMEOUT-TIMER-THREAD", 5, 0, false);
+    //declareFunction("with_timeout_signal_timeout", "WITH-TIMEOUT-SIGNAL-TIMEOUT", 2, 0, false);
+    //declareFunction("with_timeout_throw", "WITH-TIMEOUT-THROW", 1, 0, false);
+    //declareMacro("with_tcp_connection", "WITH-TCP-CONNECTION");
+    //declareMacro("with_tcp_connection_with_timeout", "WITH-TCP-CONNECTION-WITH-TIMEOUT");
+    //declareMacro("cmultiple_value_setq", "CMULTIPLE-VALUE-SETQ");
+    //declareMacro("with_space_profiling", "WITH-SPACE-PROFILING");
+    //declareFunction("with_space_profiling_sl2c", "WITH-SPACE-PROFILING-SL2C", 2, 0, false);
+    //declareMacro("code_comment", "CODE-COMMENT");
     return NIL;
   }
 

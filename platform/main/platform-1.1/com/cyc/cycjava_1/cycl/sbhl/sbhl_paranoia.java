@@ -208,22 +208,22 @@ public  final class sbhl_paranoia extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_sbhl_paranoia_file() {
-    declareFunction(myName, "sbhl_object_type_checking_p", "SBHL-OBJECT-TYPE-CHECKING-P", 0, 0, false);
-    //declareMacro(myName, "without_sbhl_object_type_checking", "WITHOUT-SBHL-OBJECT-TYPE-CHECKING");
-    //declareMacro(myName, "sbhl_check_type", "SBHL-CHECK-TYPE");
-    //declareMacro(myName, "sbhl_check_type_if_present", "SBHL-CHECK-TYPE-IF-PRESENT");
-    //declareFunction(myName, "sbhl_note", "SBHL-NOTE", 2, 5, false);
-    declareFunction(myName, "sbhl_error", "SBHL-ERROR", 2, 5, false);
-    //declareFunction(myName, "sbhl_cerror", "SBHL-CERROR", 3, 5, false);
-    declareFunction(myName, "sbhl_warn", "SBHL-WARN", 2, 5, false);
-    declareFunction(myName, "suspend_sbhl_type_checkingP", "SUSPEND-SBHL-TYPE-CHECKING?", 0, 0, false);
-    //declareMacro(myName, "sbhl_trace", "SBHL-TRACE");
-    //declareMacro(myName, "sbhl_test", "SBHL-TEST");
-    //declareMacro(myName, "sbhl_test_max", "SBHL-TEST-MAX");
-    //declareMacro(myName, "sbhl_trace_max", "SBHL-TRACE-MAX");
-    declareFunction(myName, "check_sbhl_cachesP", "CHECK-SBHL-CACHES?", 0, 0, false);
-    //declareMacro(myName, "without_sbhl_caches", "WITHOUT-SBHL-CACHES");
-    //declareMacro(myName, "with_sbhl_caches", "WITH-SBHL-CACHES");
+    declareFunction("sbhl_object_type_checking_p", "SBHL-OBJECT-TYPE-CHECKING-P", 0, 0, false);
+    //declareMacro("without_sbhl_object_type_checking", "WITHOUT-SBHL-OBJECT-TYPE-CHECKING");
+    //declareMacro("sbhl_check_type", "SBHL-CHECK-TYPE");
+    //declareMacro("sbhl_check_type_if_present", "SBHL-CHECK-TYPE-IF-PRESENT");
+    //declareFunction("sbhl_note", "SBHL-NOTE", 2, 5, false);
+    declareFunction("sbhl_error", "SBHL-ERROR", 2, 5, false);
+    //declareFunction("sbhl_cerror", "SBHL-CERROR", 3, 5, false);
+    declareFunction("sbhl_warn", "SBHL-WARN", 2, 5, false);
+    declareFunction("suspend_sbhl_type_checkingP", "SUSPEND-SBHL-TYPE-CHECKING?", 0, 0, false);
+    //declareMacro("sbhl_trace", "SBHL-TRACE");
+    //declareMacro("sbhl_test", "SBHL-TEST");
+    //declareMacro("sbhl_test_max", "SBHL-TEST-MAX");
+    //declareMacro("sbhl_trace_max", "SBHL-TRACE-MAX");
+    declareFunction("check_sbhl_cachesP", "CHECK-SBHL-CACHES?", 0, 0, false);
+    //declareMacro("without_sbhl_caches", "WITHOUT-SBHL-CACHES");
+    //declareMacro("with_sbhl_caches", "WITH-SBHL-CACHES");
     return NIL;
   }
 

@@ -76,24 +76,24 @@ public  final class nart_index_manager extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_nart_index_manager_file() {
-    declareFunction(myName, "setup_nart_index_table", "SETUP-NART-INDEX-TABLE", 2, 0, false);
-    declareFunction(myName, "optimize_nart_index_table", "OPTIMIZE-NART-INDEX-TABLE", 1, 0, false);
-    declareFunction(myName, "clear_nart_index_table", "CLEAR-NART-INDEX-TABLE", 0, 0, false);
-    declareFunction(myName, "maintain_nart_index_usage_counts", "MAINTAIN-NART-INDEX-USAGE-COUNTS", 0, 0, false);
-    declareFunction(myName, "dont_maintain_nart_index_usage_counts", "DONT-MAINTAIN-NART-INDEX-USAGE-COUNTS", 0, 0, false);
-    declareFunction(myName, "nart_index_usage_counts_enabled_p", "NART-INDEX-USAGE-COUNTS-ENABLED-P", 0, 0, false);
-    declareFunction(myName, "cached_nart_index_count", "CACHED-NART-INDEX-COUNT", 0, 0, false);
-    declareFunction(myName, "nart_indices_completely_cachedP", "NART-INDICES-COMPLETELY-CACHED?", 0, 0, false);
-    declareFunction(myName, "lookup_nart_index", "LOOKUP-NART-INDEX", 1, 0, false);
-    declareFunction(myName, "register_nart_index", "REGISTER-NART-INDEX", 2, 0, false);
-    declareFunction(myName, "deregister_nart_index", "DEREGISTER-NART-INDEX", 1, 0, false);
-    declareFunction(myName, "mark_nart_index_as_muted", "MARK-NART-INDEX-AS-MUTED", 1, 0, false);
-    declareFunction(myName, "meter_nart_index_swap_time", "METER-NART-INDEX-SWAP-TIME", 0, 0, false);
-    declareFunction(myName, "dont_meter_nart_index_swap_time", "DONT-METER-NART-INDEX-SWAP-TIME", 0, 0, false);
-    declareFunction(myName, "clear_nart_index_swap_time", "CLEAR-NART-INDEX-SWAP-TIME", 0, 0, false);
-    declareFunction(myName, "current_nart_index_swap_time", "CURRENT-NART-INDEX-SWAP-TIME", 0, 0, false);
-    declareFunction(myName, "swap_out_all_pristine_nart_indices", "SWAP-OUT-ALL-PRISTINE-NART-INDICES", 0, 0, false);
-    declareFunction(myName, "initialize_nart_index_hl_store_cache", "INITIALIZE-NART-INDEX-HL-STORE-CACHE", 0, 0, false);
+    declareFunction("setup_nart_index_table", "SETUP-NART-INDEX-TABLE", 2, 0, false);
+    declareFunction("optimize_nart_index_table", "OPTIMIZE-NART-INDEX-TABLE", 1, 0, false);
+    declareFunction("clear_nart_index_table", "CLEAR-NART-INDEX-TABLE", 0, 0, false);
+    declareFunction("maintain_nart_index_usage_counts", "MAINTAIN-NART-INDEX-USAGE-COUNTS", 0, 0, false);
+    declareFunction("dont_maintain_nart_index_usage_counts", "DONT-MAINTAIN-NART-INDEX-USAGE-COUNTS", 0, 0, false);
+    declareFunction("nart_index_usage_counts_enabled_p", "NART-INDEX-USAGE-COUNTS-ENABLED-P", 0, 0, false);
+    declareFunction("cached_nart_index_count", "CACHED-NART-INDEX-COUNT", 0, 0, false);
+    declareFunction("nart_indices_completely_cachedP", "NART-INDICES-COMPLETELY-CACHED?", 0, 0, false);
+    declareFunction("lookup_nart_index", "LOOKUP-NART-INDEX", 1, 0, false);
+    declareFunction("register_nart_index", "REGISTER-NART-INDEX", 2, 0, false);
+    declareFunction("deregister_nart_index", "DEREGISTER-NART-INDEX", 1, 0, false);
+    declareFunction("mark_nart_index_as_muted", "MARK-NART-INDEX-AS-MUTED", 1, 0, false);
+    declareFunction("meter_nart_index_swap_time", "METER-NART-INDEX-SWAP-TIME", 0, 0, false);
+    declareFunction("dont_meter_nart_index_swap_time", "DONT-METER-NART-INDEX-SWAP-TIME", 0, 0, false);
+    declareFunction("clear_nart_index_swap_time", "CLEAR-NART-INDEX-SWAP-TIME", 0, 0, false);
+    declareFunction("current_nart_index_swap_time", "CURRENT-NART-INDEX-SWAP-TIME", 0, 0, false);
+    declareFunction("swap_out_all_pristine_nart_indices", "SWAP-OUT-ALL-PRISTINE-NART-INDICES", 0, 0, false);
+    declareFunction("initialize_nart_index_hl_store_cache", "INITIALIZE-NART-INDEX-HL-STORE-CACHE", 0, 0, false);
     return NIL;
   }
 

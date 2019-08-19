@@ -298,25 +298,25 @@ continue at wff checks even after failure. */
   }
 
   public static final SubLObject declare_wff_vars_file() {
-    declareFunction(myName, "wff_properties_table", "WFF-PROPERTIES-TABLE", 0, 0, false);
-    declareFunction(myName, "note_wff_property", "NOTE-WFF-PROPERTY", 3, 0, false);
-    declareFunction(myName, "wff_property_variable", "WFF-PROPERTY-VARIABLE", 1, 0, false);
-    declareFunction(myName, "wff_property_default", "WFF-PROPERTY-DEFAULT", 1, 0, false);
-    declareFunction(myName, "wff_property_p", "WFF-PROPERTY-P", 1, 0, false);
-    declareFunction(myName, "wff_properties", "WFF-PROPERTIES", 0, 0, false);
-    declareFunction(myName, "wff_debugP", "WFF-DEBUG?", 0, 0, false);
-    declareFunction(myName, "wff_violation_data_terseP", "WFF-VIOLATION-DATA-TERSE?", 0, 0, false);
-    declareFunction(myName, "check_wff_properties", "CHECK-WFF-PROPERTIES", 1, 0, false);
-    declareFunction(myName, "wff_mode_p", "WFF-MODE-P", 1, 0, false);
-    declareFunction(myName, "wff_mode", "WFF-MODE", 0, 0, false);
-    declareFunction(myName, "wff_strictP", "WFF-STRICT?", 0, 0, false);
-    declareFunction(myName, "wff_lenientP", "WFF-LENIENT?", 0, 0, false);
-    declareFunction(myName, "wff_formula", "WFF-FORMULA", 0, 0, false);
-    declareFunction(myName, "wff_original_formula", "WFF-ORIGINAL-FORMULA", 0, 0, false);
-    declareFunction(myName, "wff_expansion_formula", "WFF-EXPANSION-FORMULA", 0, 0, false);
-    declareFunction(myName, "validating_expansionP", "VALIDATING-EXPANSION?", 0, 0, false);
-    declareFunction(myName, "validate_expansionsP", "VALIDATE-EXPANSIONS?", 0, 0, false);
-    declareFunction(myName, "unexpanded_formula", "UNEXPANDED-FORMULA", 0, 0, false);
+    declareFunction("wff_properties_table", "WFF-PROPERTIES-TABLE", 0, 0, false);
+    declareFunction("note_wff_property", "NOTE-WFF-PROPERTY", 3, 0, false);
+    declareFunction("wff_property_variable", "WFF-PROPERTY-VARIABLE", 1, 0, false);
+    declareFunction("wff_property_default", "WFF-PROPERTY-DEFAULT", 1, 0, false);
+    declareFunction("wff_property_p", "WFF-PROPERTY-P", 1, 0, false);
+    declareFunction("wff_properties", "WFF-PROPERTIES", 0, 0, false);
+    declareFunction("wff_debugP", "WFF-DEBUG?", 0, 0, false);
+    declareFunction("wff_violation_data_terseP", "WFF-VIOLATION-DATA-TERSE?", 0, 0, false);
+    declareFunction("check_wff_properties", "CHECK-WFF-PROPERTIES", 1, 0, false);
+    declareFunction("wff_mode_p", "WFF-MODE-P", 1, 0, false);
+    declareFunction("wff_mode", "WFF-MODE", 0, 0, false);
+    declareFunction("wff_strictP", "WFF-STRICT?", 0, 0, false);
+    declareFunction("wff_lenientP", "WFF-LENIENT?", 0, 0, false);
+    declareFunction("wff_formula", "WFF-FORMULA", 0, 0, false);
+    declareFunction("wff_original_formula", "WFF-ORIGINAL-FORMULA", 0, 0, false);
+    declareFunction("wff_expansion_formula", "WFF-EXPANSION-FORMULA", 0, 0, false);
+    declareFunction("validating_expansionP", "VALIDATING-EXPANSION?", 0, 0, false);
+    declareFunction("validate_expansionsP", "VALIDATE-EXPANSIONS?", 0, 0, false);
+    declareFunction("unexpanded_formula", "UNEXPANDED-FORMULA", 0, 0, false);
     return NIL;
   }
 

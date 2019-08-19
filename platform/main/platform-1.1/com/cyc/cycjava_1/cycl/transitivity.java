@@ -238,30 +238,30 @@ public  final class transitivity extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_transitivity_file() {
-    //declareMacro(myName, "with_new_gt_space", "WITH-NEW-GT-SPACE");
-    declareFunction(myName, "gtm", "GTM", 2, 5, false);
-    //declareFunction(myName, "gtm_in_mt", "GTM-IN-MT", 3, 3, false);
-    //declareFunction(myName, "gtm_in_all_mts", "GTM-IN-ALL-MTS", 2, 3, false);
-    //declareFunction(myName, "gti", "GTI", 2, 5, false);
-    //declareFunction(myName, "gti_predicate", "GTI-PREDICATE", 9, 0, false);
-    //declareFunction(myName, "gti_accessors", "GTI-ACCESSORS", 7, 0, false);
-    declareFunction(myName, "apply_gti_function", "APPLY-GTI-FUNCTION", 6, 0, false);
-    //declareFunction(myName, "reset_gti_state", "RESET-GTI-STATE", 0, 0, false);
-    declareFunction(myName, "gt_method_function", "GT-METHOD-FUNCTION", 1, 0, false);
-    //declareFunction(myName, "gt_method_arg_list", "GT-METHOD-ARG-LIST", 1, 0, false);
-    //declareFunction(myName, "add_mt_default", "ADD-MT-DEFAULT", 2, 0, false);
-    declareFunction(myName, "gt_mt_arg", "GT-MT-ARG", 1, 0, false);
-    declareFunction(myName, "gt_mt_arg_value", "GT-MT-ARG-VALUE", 1, 5, false);
-    //declareFunction(myName, "gt_methodP", "GT-METHOD?", 1, 0, false);
-    //declareFunction(myName, "gt_moduleP", "GT-MODULE?", 1, 0, false);
-    //declareFunction(myName, "gt_predicate", "GT-PREDICATE", 1, 0, false);
-    //declareFunction(myName, "gt_mt", "GT-MT", 1, 0, false);
-    //declareFunction(myName, "gt_index_arg", "GT-INDEX-ARG", 1, 0, false);
-    //declareFunction(myName, "gt_gather_arg", "GT-GATHER-ARG", 1, 0, false);
-    declareFunction(myName, "ggt_index_arg", "GGT-INDEX-ARG", 1, 0, false);
-    declareFunction(myName, "ggt_gather_arg", "GGT-GATHER-ARG", 1, 0, false);
-    //declareFunction(myName, "gt_accessors", "GT-ACCESSORS", 1, 0, false);
-    //declareFunction(myName, "setup_transitivity_module", "SETUP-TRANSITIVITY-MODULE", 2, 0, false);
+    //declareMacro("with_new_gt_space", "WITH-NEW-GT-SPACE");
+    declareFunction("gtm", "GTM", 2, 5, false);
+    //declareFunction("gtm_in_mt", "GTM-IN-MT", 3, 3, false);
+    //declareFunction("gtm_in_all_mts", "GTM-IN-ALL-MTS", 2, 3, false);
+    //declareFunction("gti", "GTI", 2, 5, false);
+    //declareFunction("gti_predicate", "GTI-PREDICATE", 9, 0, false);
+    //declareFunction("gti_accessors", "GTI-ACCESSORS", 7, 0, false);
+    declareFunction("apply_gti_function", "APPLY-GTI-FUNCTION", 6, 0, false);
+    //declareFunction("reset_gti_state", "RESET-GTI-STATE", 0, 0, false);
+    declareFunction("gt_method_function", "GT-METHOD-FUNCTION", 1, 0, false);
+    //declareFunction("gt_method_arg_list", "GT-METHOD-ARG-LIST", 1, 0, false);
+    //declareFunction("add_mt_default", "ADD-MT-DEFAULT", 2, 0, false);
+    declareFunction("gt_mt_arg", "GT-MT-ARG", 1, 0, false);
+    declareFunction("gt_mt_arg_value", "GT-MT-ARG-VALUE", 1, 5, false);
+    //declareFunction("gt_methodP", "GT-METHOD?", 1, 0, false);
+    //declareFunction("gt_moduleP", "GT-MODULE?", 1, 0, false);
+    //declareFunction("gt_predicate", "GT-PREDICATE", 1, 0, false);
+    //declareFunction("gt_mt", "GT-MT", 1, 0, false);
+    //declareFunction("gt_index_arg", "GT-INDEX-ARG", 1, 0, false);
+    //declareFunction("gt_gather_arg", "GT-GATHER-ARG", 1, 0, false);
+    declareFunction("ggt_index_arg", "GGT-INDEX-ARG", 1, 0, false);
+    declareFunction("ggt_gather_arg", "GGT-GATHER-ARG", 1, 0, false);
+    //declareFunction("gt_accessors", "GT-ACCESSORS", 1, 0, false);
+    //declareFunction("setup_transitivity_module", "SETUP-TRANSITIVITY-MODULE", 2, 0, false);
     return NIL;
   }
 

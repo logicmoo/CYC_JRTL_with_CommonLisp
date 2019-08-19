@@ -155,17 +155,17 @@ public  final class kb_indexing_declarations extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_kb_indexing_declarations_file() {
-    declareMacro(myName, "do_kb_indices", "DO-KB-INDICES");
-    declareFunction(myName, "kb_indexing_declaration_store", "KB-INDEXING-DECLARATION-STORE", 0, 0, false);
-    declareFunction(myName, "clear_kb_indexing_declaration_store", "CLEAR-KB-INDEXING-DECLARATION-STORE", 0, 0, false);
-    declareFunction(myName, "add_index_to_kb_indexing_declaration_store", "ADD-INDEX-TO-KB-INDEXING-DECLARATION-STORE", 2, 0, false);
-    declareFunction(myName, "remove_index_from_kb_indexing_declaration_store", "REMOVE-INDEX-FROM-KB-INDEXING-DECLARATION-STORE", 1, 0, false);
-    declareFunction(myName, "get_index_from_kb_indexing_declaration_store", "GET-INDEX-FROM-KB-INDEXING-DECLARATION-STORE", 1, 0, false);
-    declareFunction(myName, "find_index_by_top_level_key", "FIND-INDEX-BY-TOP-LEVEL-KEY", 1, 0, false);
-    declareFunction(myName, "get_index_key_prop", "GET-INDEX-KEY-PROP", 2, 1, false);
-    declareFunction(myName, "get_index_prop", "GET-INDEX-PROP", 2, 0, false);
-    declareFunction(myName, "declare_index", "DECLARE-INDEX", 2, 0, false);
-    declareFunction(myName, "index_equality_test_for_keys", "INDEX-EQUALITY-TEST-FOR-KEYS", 1, 0, false);
+    declareMacro("do_kb_indices", "DO-KB-INDICES");
+    declareFunction("kb_indexing_declaration_store", "KB-INDEXING-DECLARATION-STORE", 0, 0, false);
+    declareFunction("clear_kb_indexing_declaration_store", "CLEAR-KB-INDEXING-DECLARATION-STORE", 0, 0, false);
+    declareFunction("add_index_to_kb_indexing_declaration_store", "ADD-INDEX-TO-KB-INDEXING-DECLARATION-STORE", 2, 0, false);
+    declareFunction("remove_index_from_kb_indexing_declaration_store", "REMOVE-INDEX-FROM-KB-INDEXING-DECLARATION-STORE", 1, 0, false);
+    declareFunction("get_index_from_kb_indexing_declaration_store", "GET-INDEX-FROM-KB-INDEXING-DECLARATION-STORE", 1, 0, false);
+    declareFunction("find_index_by_top_level_key", "FIND-INDEX-BY-TOP-LEVEL-KEY", 1, 0, false);
+    declareFunction("get_index_key_prop", "GET-INDEX-KEY-PROP", 2, 1, false);
+    declareFunction("get_index_prop", "GET-INDEX-PROP", 2, 0, false);
+    declareFunction("declare_index", "DECLARE-INDEX", 2, 0, false);
+    declareFunction("index_equality_test_for_keys", "INDEX-EQUALITY-TEST-FOR-KEYS", 1, 0, false);
     return NIL;
   }
 

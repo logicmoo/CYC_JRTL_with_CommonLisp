@@ -164,13 +164,13 @@ public  final class removal_modules_evaluation extends SubLTranslatedFile {
   private static SubLSymbol $removal_generic_eval_modules$ = null;
 
   public static final SubLObject declare_removal_modules_evaluation_file() {
-    declareFunction(myName, "make_eval_support", "MAKE-EVAL-SUPPORT", 1, 1, false);
-    declareFunction(myName, "removal_eval_exclusive", "REMOVAL-EVAL-EXCLUSIVE", 1, 1, false); new $removal_eval_exclusive$UnaryFunction(); new $removal_eval_exclusive$BinaryFunction();
-    declareFunction(myName, "removal_eval_required", "REMOVAL-EVAL-REQUIRED", 1, 1, false); new $removal_eval_required$UnaryFunction(); new $removal_eval_required$BinaryFunction();
-    declareFunction(myName, "removal_eval_expand", "REMOVAL-EVAL-EXPAND", 1, 1, false);
-    declareFunction(myName, "removal_not_eval_exclusive", "REMOVAL-NOT-EVAL-EXCLUSIVE", 1, 1, false);
-    declareFunction(myName, "removal_not_eval_required", "REMOVAL-NOT-EVAL-REQUIRED", 1, 1, false);
-    declareFunction(myName, "removal_not_eval_expand", "REMOVAL-NOT-EVAL-EXPAND", 1, 1, false);
+    declareFunction("make_eval_support", "MAKE-EVAL-SUPPORT", 1, 1, false);
+    declareFunction("removal_eval_exclusive", "REMOVAL-EVAL-EXCLUSIVE", 1, 1, false); new $removal_eval_exclusive$UnaryFunction(); new $removal_eval_exclusive$BinaryFunction();
+    declareFunction("removal_eval_required", "REMOVAL-EVAL-REQUIRED", 1, 1, false); new $removal_eval_required$UnaryFunction(); new $removal_eval_required$BinaryFunction();
+    declareFunction("removal_eval_expand", "REMOVAL-EVAL-EXPAND", 1, 1, false);
+    declareFunction("removal_not_eval_exclusive", "REMOVAL-NOT-EVAL-EXCLUSIVE", 1, 1, false);
+    declareFunction("removal_not_eval_required", "REMOVAL-NOT-EVAL-REQUIRED", 1, 1, false);
+    declareFunction("removal_not_eval_expand", "REMOVAL-NOT-EVAL-EXPAND", 1, 1, false);
     return NIL;
   }
 

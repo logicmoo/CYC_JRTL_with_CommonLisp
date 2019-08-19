@@ -70,12 +70,12 @@ public  final class removal_modules_genlpreds extends SubLTranslatedFile {
   private static SubLSymbol $default_not_genlpreds_check_cost$ = null;
 
   public static final SubLObject declare_removal_modules_genlpreds_file() {
-    declareFunction(myName, "removal_genlpreds_check_expand", "REMOVAL-GENLPREDS-CHECK-EXPAND", 1, 1, false); new $removal_genlpreds_check_expand$UnaryFunction(); new $removal_genlpreds_check_expand$BinaryFunction();
-    declareFunction(myName, "removal_all_genlpreds_cost", "REMOVAL-ALL-GENLPREDS-COST", 1, 1, false);
-    declareFunction(myName, "removal_all_genlpreds_iterator", "REMOVAL-ALL-GENLPREDS-ITERATOR", 1, 0, false);
-    declareFunction(myName, "removal_all_spec_preds_cost", "REMOVAL-ALL-SPEC-PREDS-COST", 1, 1, false);
-    declareFunction(myName, "removal_all_spec_preds_iterator", "REMOVAL-ALL-SPEC-PREDS-ITERATOR", 1, 0, false);
-    declareFunction(myName, "removal_not_genlpreds_check_expand", "REMOVAL-NOT-GENLPREDS-CHECK-EXPAND", 1, 1, false);
+    declareFunction("removal_genlpreds_check_expand", "REMOVAL-GENLPREDS-CHECK-EXPAND", 1, 1, false); new $removal_genlpreds_check_expand$UnaryFunction(); new $removal_genlpreds_check_expand$BinaryFunction();
+    declareFunction("removal_all_genlpreds_cost", "REMOVAL-ALL-GENLPREDS-COST", 1, 1, false);
+    declareFunction("removal_all_genlpreds_iterator", "REMOVAL-ALL-GENLPREDS-ITERATOR", 1, 0, false);
+    declareFunction("removal_all_spec_preds_cost", "REMOVAL-ALL-SPEC-PREDS-COST", 1, 1, false);
+    declareFunction("removal_all_spec_preds_iterator", "REMOVAL-ALL-SPEC-PREDS-ITERATOR", 1, 0, false);
+    declareFunction("removal_not_genlpreds_check_expand", "REMOVAL-NOT-GENLPREDS-CHECK-EXPAND", 1, 1, false);
     return NIL;
   }
 

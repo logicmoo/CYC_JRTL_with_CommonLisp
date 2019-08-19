@@ -91,35 +91,35 @@ public  final class obsolete extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_obsolete_file() {
-    declareFunction(myName, "nat_p", "NAT-P", 1, 0, false);
-    declareFunction(myName, "find_nat", "FIND-NAT", 1, 0, false);
-    declareFunction(myName, "cycl_system_number", "CYCL-SYSTEM-NUMBER", 0, 0, false);
-    declareFunction(myName, "cycl_patch_number", "CYCL-PATCH-NUMBER", 0, 0, false);
-    declareFunction(myName, "el_template_argP", "EL-TEMPLATE-ARG?", 2, 1, false);
-    declareFunction(myName, "natP", "NAT?", 1, 1, false);
-    declareFunction(myName, "relationshipP", "RELATIONSHIP?", 1, 0, false);
-    declareFunction(myName, "reified_natP", "REIFIED-NAT?", 1, 0, false);
-    declareFunction(myName, "reifiable_natP", "REIFIABLE-NAT?", 1, 2, false);
-    declareFunction(myName, "kb_natP", "KB-NAT?", 1, 1, false);
-    declareFunction(myName, "naut_in_mtP", "NAUT-IN-MT?", 1, 2, false);
-    declareFunction(myName, "gnatP", "GNAT?", 1, 1, false);
-    declareFunction(myName, "gnat_p", "GNAT-P", 1, 0, false);
-    declareFunction(myName, "find_gnat", "FIND-GNAT", 1, 0, false);
-    declareFunction(myName, "cnat_p", "CNAT-P", 1, 1, false);
-    declareFunction(myName, "closed_nat_p", "CLOSED-NAT-P", 1, 1, false);
-    declareFunction(myName, "reify_arg_when_cnat", "REIFY-ARG-WHEN-CNAT", 2, 0, false);
-    declareFunction(myName, "reify_when_cnat", "REIFY-WHEN-CNAT", 1, 0, false);
-    declareFunction(myName, "fortify", "FORTIFY", 1, 0, false);
-    declareFunction(myName, "find_when_cnat", "FIND-WHEN-CNAT", 1, 0, false);
-    declareFunction(myName, "find_cnat", "FIND-CNAT", 1, 0, false);
-    declareFunction(myName, "open_nat_p", "OPEN-NAT-P", 1, 1, false);
-    declareFunction(myName, "fo_natP", "FO-NAT?", 1, 0, false);
-    declareFunction(myName, "nat_not_gnat", "NAT-NOT-GNAT", 1, 1, false);
-    declareFunction(myName, "formula_free_variables", "FORMULA-FREE-VARIABLES", 1, 3, false);
-    declareFunction(myName, "formula_variables", "FORMULA-VARIABLES", 1, 2, false);
-    declareFunction(myName, "complete_collection_extent", "COMPLETE-COLLECTION-EXTENT", 1, 1, false);
-    declareFunction(myName, "complete_extent_known", "COMPLETE-EXTENT-KNOWN", 1, 1, false);
-    declareFunction(myName, "booleanP", "BOOLEAN?", 1, 0, false);
+    declareFunction("nat_p", "NAT-P", 1, 0, false);
+    declareFunction("find_nat", "FIND-NAT", 1, 0, false);
+    declareFunction("cycl_system_number", "CYCL-SYSTEM-NUMBER", 0, 0, false);
+    declareFunction("cycl_patch_number", "CYCL-PATCH-NUMBER", 0, 0, false);
+    declareFunction("el_template_argP", "EL-TEMPLATE-ARG?", 2, 1, false);
+    declareFunction("natP", "NAT?", 1, 1, false);
+    declareFunction("relationshipP", "RELATIONSHIP?", 1, 0, false);
+    declareFunction("reified_natP", "REIFIED-NAT?", 1, 0, false);
+    declareFunction("reifiable_natP", "REIFIABLE-NAT?", 1, 2, false);
+    declareFunction("kb_natP", "KB-NAT?", 1, 1, false);
+    declareFunction("naut_in_mtP", "NAUT-IN-MT?", 1, 2, false);
+    declareFunction("gnatP", "GNAT?", 1, 1, false);
+    declareFunction("gnat_p", "GNAT-P", 1, 0, false);
+    declareFunction("find_gnat", "FIND-GNAT", 1, 0, false);
+    declareFunction("cnat_p", "CNAT-P", 1, 1, false);
+    declareFunction("closed_nat_p", "CLOSED-NAT-P", 1, 1, false);
+    declareFunction("reify_arg_when_cnat", "REIFY-ARG-WHEN-CNAT", 2, 0, false);
+    declareFunction("reify_when_cnat", "REIFY-WHEN-CNAT", 1, 0, false);
+    declareFunction("fortify", "FORTIFY", 1, 0, false);
+    declareFunction("find_when_cnat", "FIND-WHEN-CNAT", 1, 0, false);
+    declareFunction("find_cnat", "FIND-CNAT", 1, 0, false);
+    declareFunction("open_nat_p", "OPEN-NAT-P", 1, 1, false);
+    declareFunction("fo_natP", "FO-NAT?", 1, 0, false);
+    declareFunction("nat_not_gnat", "NAT-NOT-GNAT", 1, 1, false);
+    declareFunction("formula_free_variables", "FORMULA-FREE-VARIABLES", 1, 3, false);
+    declareFunction("formula_variables", "FORMULA-VARIABLES", 1, 2, false);
+    declareFunction("complete_collection_extent", "COMPLETE-COLLECTION-EXTENT", 1, 1, false);
+    declareFunction("complete_extent_known", "COMPLETE-EXTENT-KNOWN", 1, 1, false);
+    declareFunction("booleanP", "BOOLEAN?", 1, 0, false);
     return NIL;
   }
 

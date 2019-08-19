@@ -239,34 +239,34 @@ public  final class wff_module_datastructures extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_wff_module_datastructures_file() {
-    declareFunction(myName, "wff_module_print_function_trampoline", "WFF-MODULE-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-    declareFunction(myName, "wff_module_p", "WFF-MODULE-P", 1, 0, false); new $wff_module_p$UnaryFunction();
-    declareFunction(myName, "wff_mod_name", "WFF-MOD-NAME", 1, 0, false);
-    declareFunction(myName, "wff_mod_plist", "WFF-MOD-PLIST", 1, 0, false);
-    declareFunction(myName, "_csetf_wff_mod_name", "_CSETF-WFF-MOD-NAME", 2, 0, false);
-    declareFunction(myName, "_csetf_wff_mod_plist", "_CSETF-WFF-MOD-PLIST", 2, 0, false);
-    declareFunction(myName, "make_wff_module", "MAKE-WFF-MODULE", 0, 1, false);
-    declareFunction(myName, "print_wff_module", "PRINT-WFF-MODULE", 3, 0, false);
-    declareFunction(myName, "new_wff_module", "NEW-WFF-MODULE", 2, 0, false);
-    declareFunction(myName, "allocate_wff_module", "ALLOCATE-WFF-MODULE", 1, 0, false);
-    declareFunction(myName, "destroy_wff_module", "DESTROY-WFF-MODULE", 1, 0, false);
-    declareFunction(myName, "wff_module_name", "WFF-MODULE-NAME", 1, 0, false);
-    declareFunction(myName, "wff_module_plist", "WFF-MODULE-PLIST", 1, 0, false);
-    declareFunction(myName, "wff_module_property", "WFF-MODULE-PROPERTY", 2, 1, false);
-    declareMacro(myName, "do_wff_modules", "DO-WFF-MODULES");
-    declareFunction(myName, "wff_module_store", "WFF-MODULE-STORE", 0, 0, false);
-    declareFunction(myName, "find_wff_module_by_name", "FIND-WFF-MODULE-BY-NAME", 1, 0, false);
-    declareFunction(myName, "add_wff_module", "ADD-WFF-MODULE", 1, 0, false);
-    declareFunction(myName, "remove_wff_module", "REMOVE-WFF-MODULE", 1, 0, false);
-    declareFunction(myName, "setup_wff_module", "SETUP-WFF-MODULE", 3, 0, false);
-    declareFunction(myName, "wff_module_type", "WFF-MODULE-TYPE", 1, 0, false);
-    declareFunction(myName, "wff_violation_type_p", "WFF-VIOLATION-TYPE-P", 1, 0, false);
-    declareFunction(myName, "wff_violation_p", "WFF-VIOLATION-P", 1, 0, false);
-    declareFunction(myName, "wff_module_property_p", "WFF-MODULE-PROPERTY-P", 2, 0, false);
-    declareFunction(myName, "wff_module_property_list_p", "WFF-MODULE-PROPERTY-LIST-P", 1, 0, false);
-    declareFunction(myName, "wff_violation_module", "WFF-VIOLATION-MODULE", 2, 0, false);
-    declareFunction(myName, "wff_violation_explanation_function", "WFF-VIOLATION-EXPLANATION-FUNCTION", 1, 0, false);
-    declareFunction(myName, "wff_violation_explanation_function_args", "WFF-VIOLATION-EXPLANATION-FUNCTION-ARGS", 1, 0, false);
+    declareFunction("wff_module_print_function_trampoline", "WFF-MODULE-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+    declareFunction("wff_module_p", "WFF-MODULE-P", 1, 0, false); new $wff_module_p$UnaryFunction();
+    declareFunction("wff_mod_name", "WFF-MOD-NAME", 1, 0, false);
+    declareFunction("wff_mod_plist", "WFF-MOD-PLIST", 1, 0, false);
+    declareFunction("_csetf_wff_mod_name", "_CSETF-WFF-MOD-NAME", 2, 0, false);
+    declareFunction("_csetf_wff_mod_plist", "_CSETF-WFF-MOD-PLIST", 2, 0, false);
+    declareFunction("make_wff_module", "MAKE-WFF-MODULE", 0, 1, false);
+    declareFunction("print_wff_module", "PRINT-WFF-MODULE", 3, 0, false);
+    declareFunction("new_wff_module", "NEW-WFF-MODULE", 2, 0, false);
+    declareFunction("allocate_wff_module", "ALLOCATE-WFF-MODULE", 1, 0, false);
+    declareFunction("destroy_wff_module", "DESTROY-WFF-MODULE", 1, 0, false);
+    declareFunction("wff_module_name", "WFF-MODULE-NAME", 1, 0, false);
+    declareFunction("wff_module_plist", "WFF-MODULE-PLIST", 1, 0, false);
+    declareFunction("wff_module_property", "WFF-MODULE-PROPERTY", 2, 1, false);
+    declareMacro("do_wff_modules", "DO-WFF-MODULES");
+    declareFunction("wff_module_store", "WFF-MODULE-STORE", 0, 0, false);
+    declareFunction("find_wff_module_by_name", "FIND-WFF-MODULE-BY-NAME", 1, 0, false);
+    declareFunction("add_wff_module", "ADD-WFF-MODULE", 1, 0, false);
+    declareFunction("remove_wff_module", "REMOVE-WFF-MODULE", 1, 0, false);
+    declareFunction("setup_wff_module", "SETUP-WFF-MODULE", 3, 0, false);
+    declareFunction("wff_module_type", "WFF-MODULE-TYPE", 1, 0, false);
+    declareFunction("wff_violation_type_p", "WFF-VIOLATION-TYPE-P", 1, 0, false);
+    declareFunction("wff_violation_p", "WFF-VIOLATION-P", 1, 0, false);
+    declareFunction("wff_module_property_p", "WFF-MODULE-PROPERTY-P", 2, 0, false);
+    declareFunction("wff_module_property_list_p", "WFF-MODULE-PROPERTY-LIST-P", 1, 0, false);
+    declareFunction("wff_violation_module", "WFF-VIOLATION-MODULE", 2, 0, false);
+    declareFunction("wff_violation_explanation_function", "WFF-VIOLATION-EXPLANATION-FUNCTION", 1, 0, false);
+    declareFunction("wff_violation_explanation_function_args", "WFF-VIOLATION-EXPLANATION-FUNCTION-ARGS", 1, 0, false);
     return NIL;
   }
 

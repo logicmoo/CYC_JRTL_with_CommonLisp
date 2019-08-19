@@ -105,19 +105,19 @@ public  final class rewrite_of_propagation extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_rewrite_of_propagation_file() {
-    //declareFunction(myName, "rewrite_of_after_adding", "REWRITE-OF-AFTER-ADDING", 2, 0, false);
-    //declareFunction(myName, "rewrite_of_after_adding_internal", "REWRITE-OF-AFTER-ADDING-INTERNAL", 3, 0, false);
-    //declareFunction(myName, "propagate_rewrite_of_assertion", "PROPAGATE-REWRITE-OF-ASSERTION", 1, 0, false);
-    declareFunction(myName, "perform_rewrite_of_propagation", "PERFORM-REWRITE-OF-PROPAGATION", 1, 0, false);
-    //declareFunction(myName, "perform_rewrite_of_propagation_internal", "PERFORM-REWRITE-OF-PROPAGATION-INTERNAL", 2, 0, false);
-    declareFunction(myName, "fort_with_some_source_rewrite_of_assertions", "FORT-WITH-SOME-SOURCE-REWRITE-OF-ASSERTIONS", 1, 0, false); new $fort_with_some_source_rewrite_of_assertions$UnaryFunction();
-    //declareFunction(myName, "propagate_assertion_via_rewrite_of", "PROPAGATE-ASSERTION-VIA-REWRITE-OF", 4, 0, false);
-    //declareFunction(myName, "should_propagate_rewrite_of_cnf", "SHOULD-PROPAGATE-REWRITE-OF-CNF", 3, 0, false);
-    //declareFunction(myName, "note_should_propagate_rewrite_of_cnf", "NOTE-SHOULD-PROPAGATE-REWRITE-OF-CNF", 0, 0, false);
-    //declareFunction(myName, "propagate_rewrite_of_cnf", "PROPAGATE-REWRITE-OF-CNF", 3, 0, false);
-    //declareFunction(myName, "propagate_rewrite_of_cnf_internal", "PROPAGATE-REWRITE-OF-CNF-INTERNAL", 4, 0, false);
-    //declareFunction(myName, "propagate_rewrite_of_atomic_sentence", "PROPAGATE-REWRITE-OF-ATOMIC-SENTENCE", 4, 0, false);
-    //declareFunction(myName, "determine_propagate_rewrite_of_mt", "DETERMINE-PROPAGATE-REWRITE-OF-MT", 2, 0, false);
+    //declareFunction("rewrite_of_after_adding", "REWRITE-OF-AFTER-ADDING", 2, 0, false);
+    //declareFunction("rewrite_of_after_adding_internal", "REWRITE-OF-AFTER-ADDING-INTERNAL", 3, 0, false);
+    //declareFunction("propagate_rewrite_of_assertion", "PROPAGATE-REWRITE-OF-ASSERTION", 1, 0, false);
+    declareFunction("perform_rewrite_of_propagation", "PERFORM-REWRITE-OF-PROPAGATION", 1, 0, false);
+    //declareFunction("perform_rewrite_of_propagation_internal", "PERFORM-REWRITE-OF-PROPAGATION-INTERNAL", 2, 0, false);
+    declareFunction("fort_with_some_source_rewrite_of_assertions", "FORT-WITH-SOME-SOURCE-REWRITE-OF-ASSERTIONS", 1, 0, false); new $fort_with_some_source_rewrite_of_assertions$UnaryFunction();
+    //declareFunction("propagate_assertion_via_rewrite_of", "PROPAGATE-ASSERTION-VIA-REWRITE-OF", 4, 0, false);
+    //declareFunction("should_propagate_rewrite_of_cnf", "SHOULD-PROPAGATE-REWRITE-OF-CNF", 3, 0, false);
+    //declareFunction("note_should_propagate_rewrite_of_cnf", "NOTE-SHOULD-PROPAGATE-REWRITE-OF-CNF", 0, 0, false);
+    //declareFunction("propagate_rewrite_of_cnf", "PROPAGATE-REWRITE-OF-CNF", 3, 0, false);
+    //declareFunction("propagate_rewrite_of_cnf_internal", "PROPAGATE-REWRITE-OF-CNF-INTERNAL", 4, 0, false);
+    //declareFunction("propagate_rewrite_of_atomic_sentence", "PROPAGATE-REWRITE-OF-ATOMIC-SENTENCE", 4, 0, false);
+    //declareFunction("determine_propagate_rewrite_of_mt", "DETERMINE-PROPAGATE-REWRITE-OF-MT", 2, 0, false);
     return NIL;
   }
 

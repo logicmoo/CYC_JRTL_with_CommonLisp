@@ -94,20 +94,20 @@ public  final class removal_modules_termofunit extends SubLTranslatedFile {
   private static SubLSymbol $default_nat_unify_cost$ = null;
 
   public static final SubLObject declare_removal_modules_termofunit_file() {
-    declareFunction(myName, "nat_lookup_pos_preference", "NAT-LOOKUP-POS-PREFERENCE", 3, 0, false);
-    declareFunction(myName, "make_term_of_unit_support", "MAKE-TERM-OF-UNIT-SUPPORT", 2, 0, false);
-    declareFunction(myName, "tou_analog_asentsP", "TOU-ANALOG-ASENTS?", 2, 0, false);
-    declareFunction(myName, "tou_sibling_asentsP", "TOU-SIBLING-ASENTS?", 2, 0, false);
-    declareFunction(myName, "removal_nat_formula_cost", "REMOVAL-NAT-FORMULA-COST", 1, 1, false);
-    declareFunction(myName, "removal_nat_formula_expand", "REMOVAL-NAT-FORMULA-EXPAND", 1, 1, false);
-    declareFunction(myName, "removal_term_of_unit_unify_impossibleP", "REMOVAL-TERM-OF-UNIT-UNIFY-IMPOSSIBLE?", 1, 0, false); new $removal_term_of_unit_unify_impossibleP$UnaryFunction();
-    declareFunction(myName, "removal_skolemize_create_required", "REMOVAL-SKOLEMIZE-CREATE-REQUIRED", 1, 1, false);
-    declareFunction(myName, "removal_skolemize_create_expand", "REMOVAL-SKOLEMIZE-CREATE-EXPAND", 1, 1, false);
-    declareFunction(myName, "skolemization_allowed", "SKOLEMIZATION-ALLOWED", 1, 0, false);
-    declareFunction(myName, "removal_nat_lookup_completeness", "REMOVAL-NAT-LOOKUP-COMPLETENESS", 1, 0, false);
-    declareFunction(myName, "removal_nat_lookup_cost", "REMOVAL-NAT-LOOKUP-COST", 1, 1, false);
-    declareFunction(myName, "removal_nat_lookup_expand", "REMOVAL-NAT-LOOKUP-EXPAND", 1, 1, false);
-    declareFunction(myName, "removal_nat_unify_expand", "REMOVAL-NAT-UNIFY-EXPAND", 1, 1, false);
+    declareFunction("nat_lookup_pos_preference", "NAT-LOOKUP-POS-PREFERENCE", 3, 0, false);
+    declareFunction("make_term_of_unit_support", "MAKE-TERM-OF-UNIT-SUPPORT", 2, 0, false);
+    declareFunction("tou_analog_asentsP", "TOU-ANALOG-ASENTS?", 2, 0, false);
+    declareFunction("tou_sibling_asentsP", "TOU-SIBLING-ASENTS?", 2, 0, false);
+    declareFunction("removal_nat_formula_cost", "REMOVAL-NAT-FORMULA-COST", 1, 1, false);
+    declareFunction("removal_nat_formula_expand", "REMOVAL-NAT-FORMULA-EXPAND", 1, 1, false);
+    declareFunction("removal_term_of_unit_unify_impossibleP", "REMOVAL-TERM-OF-UNIT-UNIFY-IMPOSSIBLE?", 1, 0, false); new $removal_term_of_unit_unify_impossibleP$UnaryFunction();
+    declareFunction("removal_skolemize_create_required", "REMOVAL-SKOLEMIZE-CREATE-REQUIRED", 1, 1, false);
+    declareFunction("removal_skolemize_create_expand", "REMOVAL-SKOLEMIZE-CREATE-EXPAND", 1, 1, false);
+    declareFunction("skolemization_allowed", "SKOLEMIZATION-ALLOWED", 1, 0, false);
+    declareFunction("removal_nat_lookup_completeness", "REMOVAL-NAT-LOOKUP-COMPLETENESS", 1, 0, false);
+    declareFunction("removal_nat_lookup_cost", "REMOVAL-NAT-LOOKUP-COST", 1, 1, false);
+    declareFunction("removal_nat_lookup_expand", "REMOVAL-NAT-LOOKUP-EXPAND", 1, 1, false);
+    declareFunction("removal_nat_unify_expand", "REMOVAL-NAT-UNIFY-EXPAND", 1, 1, false);
     return NIL;
   }
 

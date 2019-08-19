@@ -81,14 +81,14 @@ public  final class removal_modules_different extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_removal_modules_different_file() {
-    declareFunction(myName, "asent_duplicate_args_p", "ASENT-DUPLICATE-ARGS-P", 1, 0, false);
-    declareFunction(myName, "make_binary_different_eval_support", "MAKE-BINARY-DIFFERENT-EVAL-SUPPORT", 2, 0, false);
-    declareFunction(myName, "different_delay_pos_preference", "DIFFERENT-DELAY-POS-PREFERENCE", 3, 0, false);
-    declareFunction(myName, "removal_different_duplicate_exclusive", "REMOVAL-DIFFERENT-DUPLICATE-EXCLUSIVE", 1, 1, false); new $removal_different_duplicate_exclusive$UnaryFunction(); new $removal_different_duplicate_exclusive$BinaryFunction();
-    declareFunction(myName, "different_symbols_delay_pos_preference", "DIFFERENT-SYMBOLS-DELAY-POS-PREFERENCE", 3, 0, false);
-    declareFunction(myName, "removal_different_symbols_duplicate_exclusive", "REMOVAL-DIFFERENT-SYMBOLS-DUPLICATE-EXCLUSIVE", 1, 1, false);
-    declareFunction(myName, "cyc_possibly_evaluate", "CYC-POSSIBLY-EVALUATE", 1, 0, false);
-    declareFunction(myName, "cyc_possibly_evaluate_args", "CYC-POSSIBLY-EVALUATE-ARGS", 1, 0, false);
+    declareFunction("asent_duplicate_args_p", "ASENT-DUPLICATE-ARGS-P", 1, 0, false);
+    declareFunction("make_binary_different_eval_support", "MAKE-BINARY-DIFFERENT-EVAL-SUPPORT", 2, 0, false);
+    declareFunction("different_delay_pos_preference", "DIFFERENT-DELAY-POS-PREFERENCE", 3, 0, false);
+    declareFunction("removal_different_duplicate_exclusive", "REMOVAL-DIFFERENT-DUPLICATE-EXCLUSIVE", 1, 1, false); new $removal_different_duplicate_exclusive$UnaryFunction(); new $removal_different_duplicate_exclusive$BinaryFunction();
+    declareFunction("different_symbols_delay_pos_preference", "DIFFERENT-SYMBOLS-DELAY-POS-PREFERENCE", 3, 0, false);
+    declareFunction("removal_different_symbols_duplicate_exclusive", "REMOVAL-DIFFERENT-SYMBOLS-DUPLICATE-EXCLUSIVE", 1, 1, false);
+    declareFunction("cyc_possibly_evaluate", "CYC-POSSIBLY-EVALUATE", 1, 0, false);
+    declareFunction("cyc_possibly_evaluate_args", "CYC-POSSIBLY-EVALUATE-ARGS", 1, 0, false);
     return NIL;
   }
 

@@ -148,16 +148,16 @@ public  final class keyhash_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_keyhash_utilities_file() {
-    declareFunction(myName, "keyhash_element_list", "KEYHASH-ELEMENT-LIST", 1, 0, false);
-    declareFunction(myName, "keyhash_list_elements", "KEYHASH-LIST-ELEMENTS", 1, 2, false);
-    declareFunction(myName, "keyhash_rebuild", "KEYHASH-REBUILD", 1, 0, false);
-    declareFunction(myName, "fast_intersection", "FAST-INTERSECTION", 2, 3, false);
-    //declareFunction(myName, "intersect_forts", "INTERSECT-FORTS", 2, 0, false);
-    //declareFunction(myName, "hash_intersection", "HASH-INTERSECTION", 2, 2, false);
-    //declareFunction(myName, "hash_intersection_int", "HASH-INTERSECTION-INT", 2, 2, false);
-    //declareFunction(myName, "fast_intersectP", "FAST-INTERSECT?", 2, 3, false);
-    //declareFunction(myName, "hash_intersectP", "HASH-INTERSECT?", 2, 2, false);
-    //declareFunction(myName, "hash_intersect_intP", "HASH-INTERSECT-INT?", 2, 2, false);
+    declareFunction("keyhash_element_list", "KEYHASH-ELEMENT-LIST", 1, 0, false);
+    declareFunction("keyhash_list_elements", "KEYHASH-LIST-ELEMENTS", 1, 2, false);
+    declareFunction("keyhash_rebuild", "KEYHASH-REBUILD", 1, 0, false);
+    declareFunction("fast_intersection", "FAST-INTERSECTION", 2, 3, false);
+    //declareFunction("intersect_forts", "INTERSECT-FORTS", 2, 0, false);
+    //declareFunction("hash_intersection", "HASH-INTERSECTION", 2, 2, false);
+    //declareFunction("hash_intersection_int", "HASH-INTERSECTION-INT", 2, 2, false);
+    //declareFunction("fast_intersectP", "FAST-INTERSECT?", 2, 3, false);
+    //declareFunction("hash_intersectP", "HASH-INTERSECT?", 2, 2, false);
+    //declareFunction("hash_intersect_intP", "HASH-INTERSECT-INT?", 2, 2, false);
     return NIL;
   }
 

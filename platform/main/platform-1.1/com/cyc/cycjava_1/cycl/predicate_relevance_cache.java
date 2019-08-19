@@ -201,31 +201,31 @@ public  final class predicate_relevance_cache extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_predicate_relevance_cache_file() {
-    declareFunction(myName, "cached_spec_predP", "CACHED-SPEC-PRED?", 2, 1, false);
-    declareFunction(myName, "cached_spec_inverseP", "CACHED-SPEC-INVERSE?", 2, 1, false);
-    declareFunction(myName, "cached_genl_predP", "CACHED-GENL-PRED?", 2, 1, false);
-    declareFunction(myName, "cached_genl_inverseP", "CACHED-GENL-INVERSE?", 2, 1, false);
-    declareFunction(myName, "clear_predicate_relevance_cache", "CLEAR-PREDICATE-RELEVANCE-CACHE", 0, 0, false);
-    declareFunction(myName, "fort_cache_relevant_predP", "FORT-CACHE-RELEVANT-PRED?", 5, 0, false);
-    declareFunction(myName, "update_relevant_pred_fort_cache", "UPDATE-RELEVANT-PRED-FORT-CACHE", 3, 0, false);
-    declareFunction(myName, "naut_cache_relevant_predP", "NAUT-CACHE-RELEVANT-PRED?", 5, 0, false);
-    declareFunction(myName, "update_relevant_pred_naut_cache", "UPDATE-RELEVANT-PRED-NAUT-CACHE", 4, 0, false);
-    declareFunction(myName, "fort_cache_spec_predP", "FORT-CACHE-SPEC-PRED?", 3, 0, false);
-    declareFunction(myName, "naut_cache_spec_predP", "NAUT-CACHE-SPEC-PRED?", 3, 0, false);
-    declareFunction(myName, "clear_spec_pred_fort_cache", "CLEAR-SPEC-PRED-FORT-CACHE", 0, 0, false);
-    declareFunction(myName, "clear_spec_pred_naut_cache", "CLEAR-SPEC-PRED-NAUT-CACHE", 0, 0, false);
-    declareFunction(myName, "fort_cache_spec_inverseP", "FORT-CACHE-SPEC-INVERSE?", 3, 0, false);
-    declareFunction(myName, "naut_cache_spec_inverseP", "NAUT-CACHE-SPEC-INVERSE?", 3, 0, false);
-    declareFunction(myName, "clear_spec_inverse_fort_cache", "CLEAR-SPEC-INVERSE-FORT-CACHE", 0, 0, false);
-    declareFunction(myName, "clear_spec_inverse_naut_cache", "CLEAR-SPEC-INVERSE-NAUT-CACHE", 0, 0, false);
-    declareFunction(myName, "fort_cache_genl_predP", "FORT-CACHE-GENL-PRED?", 3, 0, false);
-    declareFunction(myName, "naut_cache_genl_predP", "NAUT-CACHE-GENL-PRED?", 3, 0, false);
-    declareFunction(myName, "clear_genl_pred_fort_cache", "CLEAR-GENL-PRED-FORT-CACHE", 0, 0, false);
-    declareFunction(myName, "clear_genl_pred_naut_cache", "CLEAR-GENL-PRED-NAUT-CACHE", 0, 0, false);
-    declareFunction(myName, "fort_cache_genl_inverseP", "FORT-CACHE-GENL-INVERSE?", 3, 0, false);
-    declareFunction(myName, "naut_cache_genl_inverseP", "NAUT-CACHE-GENL-INVERSE?", 3, 0, false);
-    declareFunction(myName, "clear_genl_inverse_fort_cache", "CLEAR-GENL-INVERSE-FORT-CACHE", 0, 0, false);
-    declareFunction(myName, "clear_genl_inverse_naut_cache", "CLEAR-GENL-INVERSE-NAUT-CACHE", 0, 0, false);
+    declareFunction("cached_spec_predP", "CACHED-SPEC-PRED?", 2, 1, false);
+    declareFunction("cached_spec_inverseP", "CACHED-SPEC-INVERSE?", 2, 1, false);
+    declareFunction("cached_genl_predP", "CACHED-GENL-PRED?", 2, 1, false);
+    declareFunction("cached_genl_inverseP", "CACHED-GENL-INVERSE?", 2, 1, false);
+    declareFunction("clear_predicate_relevance_cache", "CLEAR-PREDICATE-RELEVANCE-CACHE", 0, 0, false);
+    declareFunction("fort_cache_relevant_predP", "FORT-CACHE-RELEVANT-PRED?", 5, 0, false);
+    declareFunction("update_relevant_pred_fort_cache", "UPDATE-RELEVANT-PRED-FORT-CACHE", 3, 0, false);
+    declareFunction("naut_cache_relevant_predP", "NAUT-CACHE-RELEVANT-PRED?", 5, 0, false);
+    declareFunction("update_relevant_pred_naut_cache", "UPDATE-RELEVANT-PRED-NAUT-CACHE", 4, 0, false);
+    declareFunction("fort_cache_spec_predP", "FORT-CACHE-SPEC-PRED?", 3, 0, false);
+    declareFunction("naut_cache_spec_predP", "NAUT-CACHE-SPEC-PRED?", 3, 0, false);
+    declareFunction("clear_spec_pred_fort_cache", "CLEAR-SPEC-PRED-FORT-CACHE", 0, 0, false);
+    declareFunction("clear_spec_pred_naut_cache", "CLEAR-SPEC-PRED-NAUT-CACHE", 0, 0, false);
+    declareFunction("fort_cache_spec_inverseP", "FORT-CACHE-SPEC-INVERSE?", 3, 0, false);
+    declareFunction("naut_cache_spec_inverseP", "NAUT-CACHE-SPEC-INVERSE?", 3, 0, false);
+    declareFunction("clear_spec_inverse_fort_cache", "CLEAR-SPEC-INVERSE-FORT-CACHE", 0, 0, false);
+    declareFunction("clear_spec_inverse_naut_cache", "CLEAR-SPEC-INVERSE-NAUT-CACHE", 0, 0, false);
+    declareFunction("fort_cache_genl_predP", "FORT-CACHE-GENL-PRED?", 3, 0, false);
+    declareFunction("naut_cache_genl_predP", "NAUT-CACHE-GENL-PRED?", 3, 0, false);
+    declareFunction("clear_genl_pred_fort_cache", "CLEAR-GENL-PRED-FORT-CACHE", 0, 0, false);
+    declareFunction("clear_genl_pred_naut_cache", "CLEAR-GENL-PRED-NAUT-CACHE", 0, 0, false);
+    declareFunction("fort_cache_genl_inverseP", "FORT-CACHE-GENL-INVERSE?", 3, 0, false);
+    declareFunction("naut_cache_genl_inverseP", "NAUT-CACHE-GENL-INVERSE?", 3, 0, false);
+    declareFunction("clear_genl_inverse_fort_cache", "CLEAR-GENL-INVERSE-FORT-CACHE", 0, 0, false);
+    declareFunction("clear_genl_inverse_naut_cache", "CLEAR-GENL-INVERSE-NAUT-CACHE", 0, 0, false);
     return NIL;
   }
 

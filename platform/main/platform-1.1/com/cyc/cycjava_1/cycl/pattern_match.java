@@ -780,34 +780,34 @@ public  final class pattern_match extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_pattern_match_file() {
-    declareFunction(myName, "pattern_matches_tree", "PATTERN-MATCHES-TREE", 2, 0, false);
-    declareFunction(myName, "pattern_matches_tree_without_bindings", "PATTERN-MATCHES-TREE-WITHOUT-BINDINGS", 2, 0, false);
-    declareFunction(myName, "tree_matches_pattern", "TREE-MATCHES-PATTERN", 2, 0, false);
-    declareMacro(myName, "with_tree_pattern_bindings", "WITH-TREE-PATTERN-BINDINGS");
-    declareFunction(myName, "pattern_bindings_variable_specs", "PATTERN-BINDINGS-VARIABLE-SPECS", 2, 0, false);
-    declareFunction(myName, "pattern_matches_tree_internal", "PATTERN-MATCHES-TREE-INTERNAL", 2, 0, false);
-    declareFunction(myName, "pattern_matches_tree_atomic_method_funcall", "PATTERN-MATCHES-TREE-ATOMIC-METHOD-FUNCALL", 2, 0, false);
-    declareFunction(myName, "pattern_matches_tree_method_funcall", "PATTERN-MATCHES-TREE-METHOD-FUNCALL", 3, 0, false);
-    declareFunction(myName, "pattern_matches_tree_recursive", "PATTERN-MATCHES-TREE-RECURSIVE", 2, 0, false); new $pattern_matches_tree_recursive$BinaryFunction();
-    declareFunction(myName, "pattern_matches_tree_bind", "PATTERN-MATCHES-TREE-BIND", 2, 0, false);
-    declareFunction(myName, "pattern_matches_tree_value", "PATTERN-MATCHES-TREE-VALUE", 2, 0, false);
-    declareFunction(myName, "pattern_matches_tree_and", "PATTERN-MATCHES-TREE-AND", 2, 0, false);
-    declareFunction(myName, "pattern_matches_tree_or", "PATTERN-MATCHES-TREE-OR", 2, 0, false);
-    declareFunction(myName, "pattern_matches_tree_test_funcall", "PATTERN-MATCHES-TREE-TEST-FUNCALL", 2, 0, false);
-    declareFunction(myName, "pattern_matches_tree_test_funcall_2", "PATTERN-MATCHES-TREE-TEST-FUNCALL-2", 3, 0, false);
-    declareFunction(myName, "pattern_matches_tree_test_funcall_3", "PATTERN-MATCHES-TREE-TEST-FUNCALL-3", 4, 0, false);
-    declareFunction(myName, "pattern_matches_tree_test_funcall_4", "PATTERN-MATCHES-TREE-TEST-FUNCALL-4", 5, 0, false);
-    declareFunction(myName, "pattern_matches_tree_tree_find", "PATTERN-MATCHES-TREE-TREE-FIND", 2, 0, false);
-    declareFunction(myName, "pattern_matches_tree_cons", "PATTERN-MATCHES-TREE-CONS", 2, 0, false);
-    declareFunction(myName, "pattern_transform_tree", "PATTERN-TRANSFORM-TREE", 2, 1, false);
-    declareFunction(myName, "tree_pattern_transform", "TREE-PATTERN-TRANSFORM", 2, 1, false);
-    declareFunction(myName, "pattern_transform_tree_internal", "PATTERN-TRANSFORM-TREE-INTERNAL", 2, 0, false);
-    declareFunction(myName, "pattern_transform_tree_recursive", "PATTERN-TRANSFORM-TREE-RECURSIVE", 2, 0, false);
-    declareFunction(myName, "pattern_transform_tuple", "PATTERN-TRANSFORM-TUPLE", 2, 0, false);
-    declareFunction(myName, "pattern_transform_template", "PATTERN-TRANSFORM-TEMPLATE", 2, 0, false);
-    declareFunction(myName, "pattern_transform_call", "PATTERN-TRANSFORM-CALL", 2, 0, false);
-    declareFunction(myName, "pattern_transform_cons", "PATTERN-TRANSFORM-CONS", 2, 0, false);
-    declareMacro(myName, "with_formula_pattern_bindings", "WITH-FORMULA-PATTERN-BINDINGS");
+    declareFunction("pattern_matches_tree", "PATTERN-MATCHES-TREE", 2, 0, false);
+    declareFunction("pattern_matches_tree_without_bindings", "PATTERN-MATCHES-TREE-WITHOUT-BINDINGS", 2, 0, false);
+    declareFunction("tree_matches_pattern", "TREE-MATCHES-PATTERN", 2, 0, false);
+    declareMacro("with_tree_pattern_bindings", "WITH-TREE-PATTERN-BINDINGS");
+    declareFunction("pattern_bindings_variable_specs", "PATTERN-BINDINGS-VARIABLE-SPECS", 2, 0, false);
+    declareFunction("pattern_matches_tree_internal", "PATTERN-MATCHES-TREE-INTERNAL", 2, 0, false);
+    declareFunction("pattern_matches_tree_atomic_method_funcall", "PATTERN-MATCHES-TREE-ATOMIC-METHOD-FUNCALL", 2, 0, false);
+    declareFunction("pattern_matches_tree_method_funcall", "PATTERN-MATCHES-TREE-METHOD-FUNCALL", 3, 0, false);
+    declareFunction("pattern_matches_tree_recursive", "PATTERN-MATCHES-TREE-RECURSIVE", 2, 0, false); new $pattern_matches_tree_recursive$BinaryFunction();
+    declareFunction("pattern_matches_tree_bind", "PATTERN-MATCHES-TREE-BIND", 2, 0, false);
+    declareFunction("pattern_matches_tree_value", "PATTERN-MATCHES-TREE-VALUE", 2, 0, false);
+    declareFunction("pattern_matches_tree_and", "PATTERN-MATCHES-TREE-AND", 2, 0, false);
+    declareFunction("pattern_matches_tree_or", "PATTERN-MATCHES-TREE-OR", 2, 0, false);
+    declareFunction("pattern_matches_tree_test_funcall", "PATTERN-MATCHES-TREE-TEST-FUNCALL", 2, 0, false);
+    declareFunction("pattern_matches_tree_test_funcall_2", "PATTERN-MATCHES-TREE-TEST-FUNCALL-2", 3, 0, false);
+    declareFunction("pattern_matches_tree_test_funcall_3", "PATTERN-MATCHES-TREE-TEST-FUNCALL-3", 4, 0, false);
+    declareFunction("pattern_matches_tree_test_funcall_4", "PATTERN-MATCHES-TREE-TEST-FUNCALL-4", 5, 0, false);
+    declareFunction("pattern_matches_tree_tree_find", "PATTERN-MATCHES-TREE-TREE-FIND", 2, 0, false);
+    declareFunction("pattern_matches_tree_cons", "PATTERN-MATCHES-TREE-CONS", 2, 0, false);
+    declareFunction("pattern_transform_tree", "PATTERN-TRANSFORM-TREE", 2, 1, false);
+    declareFunction("tree_pattern_transform", "TREE-PATTERN-TRANSFORM", 2, 1, false);
+    declareFunction("pattern_transform_tree_internal", "PATTERN-TRANSFORM-TREE-INTERNAL", 2, 0, false);
+    declareFunction("pattern_transform_tree_recursive", "PATTERN-TRANSFORM-TREE-RECURSIVE", 2, 0, false);
+    declareFunction("pattern_transform_tuple", "PATTERN-TRANSFORM-TUPLE", 2, 0, false);
+    declareFunction("pattern_transform_template", "PATTERN-TRANSFORM-TEMPLATE", 2, 0, false);
+    declareFunction("pattern_transform_call", "PATTERN-TRANSFORM-CALL", 2, 0, false);
+    declareFunction("pattern_transform_cons", "PATTERN-TRANSFORM-CONS", 2, 0, false);
+    declareMacro("with_formula_pattern_bindings", "WITH-FORMULA-PATTERN-BINDINGS");
     return NIL;
   }
 

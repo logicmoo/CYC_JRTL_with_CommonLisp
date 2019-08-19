@@ -294,32 +294,32 @@ public  final class preserves_genls_in_arg extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_preserves_genls_in_arg_file() {
-    //declareFunction(myName, "pgia_after_adding_pgia", "PGIA-AFTER-ADDING-PGIA", 2, 0, false);
-    //declareFunction(myName, "pgia_after_adding_pgia_1", "PGIA-AFTER-ADDING-PGIA-1", 1, 0, false);
-    //declareFunction(myName, "pgia_after_adding_pgia_2", "PGIA-AFTER-ADDING-PGIA-2", 1, 0, false);
-    //declareFunction(myName, "pgia_after_adding_pgia_3", "PGIA-AFTER-ADDING-PGIA-3", 1, 0, false);
-    declareFunction(myName, "pgia_after_adding_isa", "PGIA-AFTER-ADDING-ISA", 2, 0, false); new $pgia_after_adding_isa$BinaryFunction();
-    //declareFunction(myName, "pgia_after_adding_isa_1", "PGIA-AFTER-ADDING-ISA-1", 1, 0, false);
-    //declareFunction(myName, "pgia_after_adding_isa_2", "PGIA-AFTER-ADDING-ISA-2", 1, 0, false);
-    declareFunction(myName, "pgia_after_removing_genls", "PGIA-AFTER-REMOVING-GENLS", 2, 0, false);
-    //declareFunction(myName, "pgia_after_removing_genls_1", "PGIA-AFTER-REMOVING-GENLS-1", 1, 0, false);
-    //declareFunction(myName, "candidate_pgia", "CANDIDATE-PGIA", 5, 1, false);
-    //declareFunction(myName, "pgia_true_in_mts", "PGIA-TRUE-IN-MTS", 3, 0, false);
-    //declareFunction(myName, "recompute_functor_pgia", "RECOMPUTE-FUNCTOR-PGIA", 1, 0, false);
-    //declareFunction(myName, "recompute_functor_pgia_1", "RECOMPUTE-FUNCTOR-PGIA-1", 1, 0, false);
-    //declareFunction(myName, "recompute_nat_pgia", "RECOMPUTE-NAT-PGIA", 1, 0, false);
-    //declareFunction(myName, "recompute_nat_pgia_1", "RECOMPUTE-NAT-PGIA-1", 1, 0, false);
-    //declareFunction(myName, "current_pgia_specs", "CURRENT-PGIA-SPECS", 2, 0, false);
-    //declareFunction(myName, "current_pgia_genls", "CURRENT-PGIA-GENLS", 2, 0, false);
-    //declareFunction(myName, "gather_pgia", "GATHER-PGIA", 1, 0, false);
-    //declareFunction(myName, "pgia_assertionP", "PGIA-ASSERTION?", 1, 1, false);
-    //declareFunction(myName, "pgia_supportP", "PGIA-SUPPORT?", 1, 0, false);
-    //declareFunction(myName, "pgia_deductionP", "PGIA-DEDUCTION?", 1, 1, false);
-    //declareFunction(myName, "assert_candidate_pgia_genls", "ASSERT-CANDIDATE-PGIA-GENLS", 0, 0, false);
-    //declareFunction(myName, "assert_candidate_pgia_specs", "ASSERT-CANDIDATE-PGIA-SPECS", 0, 0, false);
-    //declareFunction(myName, "known_pgiaP", "KNOWN-PGIA?", 3, 0, false);
-    //declareFunction(myName, "candidate_pgiaP", "CANDIDATE-PGIA?", 3, 0, false);
-    //declareFunction(myName, "map_tous_of_fn_arg", "MAP-TOUS-OF-FN-ARG", 4, 0, false);
+    //declareFunction("pgia_after_adding_pgia", "PGIA-AFTER-ADDING-PGIA", 2, 0, false);
+    //declareFunction("pgia_after_adding_pgia_1", "PGIA-AFTER-ADDING-PGIA-1", 1, 0, false);
+    //declareFunction("pgia_after_adding_pgia_2", "PGIA-AFTER-ADDING-PGIA-2", 1, 0, false);
+    //declareFunction("pgia_after_adding_pgia_3", "PGIA-AFTER-ADDING-PGIA-3", 1, 0, false);
+    declareFunction("pgia_after_adding_isa", "PGIA-AFTER-ADDING-ISA", 2, 0, false); new $pgia_after_adding_isa$BinaryFunction();
+    //declareFunction("pgia_after_adding_isa_1", "PGIA-AFTER-ADDING-ISA-1", 1, 0, false);
+    //declareFunction("pgia_after_adding_isa_2", "PGIA-AFTER-ADDING-ISA-2", 1, 0, false);
+    declareFunction("pgia_after_removing_genls", "PGIA-AFTER-REMOVING-GENLS", 2, 0, false);
+    //declareFunction("pgia_after_removing_genls_1", "PGIA-AFTER-REMOVING-GENLS-1", 1, 0, false);
+    //declareFunction("candidate_pgia", "CANDIDATE-PGIA", 5, 1, false);
+    //declareFunction("pgia_true_in_mts", "PGIA-TRUE-IN-MTS", 3, 0, false);
+    //declareFunction("recompute_functor_pgia", "RECOMPUTE-FUNCTOR-PGIA", 1, 0, false);
+    //declareFunction("recompute_functor_pgia_1", "RECOMPUTE-FUNCTOR-PGIA-1", 1, 0, false);
+    //declareFunction("recompute_nat_pgia", "RECOMPUTE-NAT-PGIA", 1, 0, false);
+    //declareFunction("recompute_nat_pgia_1", "RECOMPUTE-NAT-PGIA-1", 1, 0, false);
+    //declareFunction("current_pgia_specs", "CURRENT-PGIA-SPECS", 2, 0, false);
+    //declareFunction("current_pgia_genls", "CURRENT-PGIA-GENLS", 2, 0, false);
+    //declareFunction("gather_pgia", "GATHER-PGIA", 1, 0, false);
+    //declareFunction("pgia_assertionP", "PGIA-ASSERTION?", 1, 1, false);
+    //declareFunction("pgia_supportP", "PGIA-SUPPORT?", 1, 0, false);
+    //declareFunction("pgia_deductionP", "PGIA-DEDUCTION?", 1, 1, false);
+    //declareFunction("assert_candidate_pgia_genls", "ASSERT-CANDIDATE-PGIA-GENLS", 0, 0, false);
+    //declareFunction("assert_candidate_pgia_specs", "ASSERT-CANDIDATE-PGIA-SPECS", 0, 0, false);
+    //declareFunction("known_pgiaP", "KNOWN-PGIA?", 3, 0, false);
+    //declareFunction("candidate_pgiaP", "CANDIDATE-PGIA?", 3, 0, false);
+    //declareFunction("map_tous_of_fn_arg", "MAP-TOUS-OF-FN-ARG", 4, 0, false);
     return NIL;
   }
 

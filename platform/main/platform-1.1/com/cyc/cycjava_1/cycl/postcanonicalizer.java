@@ -90,10 +90,10 @@ public  final class postcanonicalizer extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_postcanonicalizer_file() {
-    declareFunction(myName, "postcanonicalizations", "POSTCANONICALIZATIONS", 2, 0, false);
-    declareFunction(myName, "postcanonicalizations_int", "POSTCANONICALIZATIONS-INT", 2, 0, false);
-    //declareFunction(myName, "postcanonicalize_possible_disjunction", "POSTCANONICALIZE-POSSIBLE-DISJUNCTION", 2, 0, false);
-    //declareFunction(myName, "transform_dnf_and_binding_list_to_negated_el", "TRANSFORM-DNF-AND-BINDING-LIST-TO-NEGATED-EL", 1, 0, false);
+    declareFunction("postcanonicalizations", "POSTCANONICALIZATIONS", 2, 0, false);
+    declareFunction("postcanonicalizations_int", "POSTCANONICALIZATIONS-INT", 2, 0, false);
+    //declareFunction("postcanonicalize_possible_disjunction", "POSTCANONICALIZE-POSSIBLE-DISJUNCTION", 2, 0, false);
+    //declareFunction("transform_dnf_and_binding_list_to_negated_el", "TRANSFORM-DNF-AND-BINDING-LIST-TO-NEGATED-EL", 1, 0, false);
     return NIL;
   }
 

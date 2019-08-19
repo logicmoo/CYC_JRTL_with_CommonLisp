@@ -374,30 +374,30 @@ has not been initialized yet, should we initialize it? If NIL, we'll error inste
   }
 
   public static final SubLObject declare_somewhere_cache_file() {
-    declareFunction(myName, "some_pred_assertion_somewhereP", "SOME-PRED-ASSERTION-SOMEWHERE?", 3, 1, false);
-    declareFunction(myName, "maybe_some_pred_assertion_somewhereP", "MAYBE-SOME-PRED-ASSERTION-SOMEWHERE?", 3, 1, false);
-    declareFunction(myName, "possibly_initialize_all_somewhere_caches", "POSSIBLY-INITIALIZE-ALL-SOMEWHERE-CACHES", 0, 0, false);
-    declareFunction(myName, "initialize_all_somewhere_caches", "INITIALIZE-ALL-SOMEWHERE-CACHES", 0, 0, false);
-    declareFunction(myName, "clear_all_somewhere_caches", "CLEAR-ALL-SOMEWHERE-CACHES", 0, 0, false);
-    declareFunction(myName, "recache_some_pred_assertion_somewhere", "RECACHE-SOME-PRED-ASSERTION-SOMEWHERE", 2, 0, false);
-    declareFunction(myName, "somewhere_cached_preds", "SOMEWHERE-CACHED-PREDS", 0, 0, false);
-    declareFunction(myName, "somewhere_cached_pred_p", "SOMEWHERE-CACHED-PRED-P", 1, 0, false);
-    declareFunction(myName, "some_pred_assertion_somewhere_argnum", "SOME-PRED-ASSERTION-SOMEWHERE-ARGNUM", 1, 0, false);
-    declareFunction(myName, "indexed_terms_with_some_pred_assertion_somewhere", "INDEXED-TERMS-WITH-SOME-PRED-ASSERTION-SOMEWHERE", 1, 1, false);
-    declareFunction(myName, "inter_arg_result_isa_somewhere_cache", "INTER-ARG-RESULT-ISA-SOMEWHERE-CACHE", 1, 0, false);
-    declareFunction(myName, "inter_arg_result_isa_somewhereP", "INTER-ARG-RESULT-ISA-SOMEWHERE?", 2, 1, false);
-    declareFunction(myName, "some_pred_assertion_somewhereP_internal", "SOME-PRED-ASSERTION-SOMEWHERE?-INTERNAL", 4, 0, false);
-    declareFunction(myName, "check_somewhere_cache_argnum", "CHECK-SOMEWHERE-CACHE-ARGNUM", 2, 1, false);
-    declareFunction(myName, "lookup_somewhere_set_for_pred", "LOOKUP-SOMEWHERE-SET-FOR-PRED", 2, 0, false);
-    declareFunction(myName, "initialize_somewhere_cache", "INITIALIZE-SOMEWHERE-CACHE", 1, 0, false);
-    declareFunction(myName, "recache_some_pred_assertion_somewhere_int", "RECACHE-SOME-PRED-ASSERTION-SOMEWHERE-INT", 2, 0, false);
-    declareFunction(myName, "cache_some_pred_assertion_somewhere", "CACHE-SOME-PRED-ASSERTION-SOMEWHERE", 2, 0, false);
-    declareFunction(myName, "valid_somewhere_cache_itemP", "VALID-SOMEWHERE-CACHE-ITEM?", 1, 0, false);
-    declareFunction(myName, "some_pred_value_in_any_mt_with_argumentsP", "SOME-PRED-VALUE-IN-ANY-MT-WITH-ARGUMENTS?", 4, 0, false);
-    declareFunction(myName, "somewhere_cache_unbuiltP", "SOMEWHERE-CACHE-UNBUILT?", 0, 0, false);
-    declareFunction(myName, "rebuild_somewhere_cache", "REBUILD-SOMEWHERE-CACHE", 0, 0, false);
-    declareFunction(myName, "dump_somewhere_cache_to_stream", "DUMP-SOMEWHERE-CACHE-TO-STREAM", 1, 0, false);
-    declareFunction(myName, "load_somewhere_cache_from_stream", "LOAD-SOMEWHERE-CACHE-FROM-STREAM", 1, 0, false);
+    declareFunction("some_pred_assertion_somewhereP", "SOME-PRED-ASSERTION-SOMEWHERE?", 3, 1, false);
+    declareFunction("maybe_some_pred_assertion_somewhereP", "MAYBE-SOME-PRED-ASSERTION-SOMEWHERE?", 3, 1, false);
+    declareFunction("possibly_initialize_all_somewhere_caches", "POSSIBLY-INITIALIZE-ALL-SOMEWHERE-CACHES", 0, 0, false);
+    declareFunction("initialize_all_somewhere_caches", "INITIALIZE-ALL-SOMEWHERE-CACHES", 0, 0, false);
+    declareFunction("clear_all_somewhere_caches", "CLEAR-ALL-SOMEWHERE-CACHES", 0, 0, false);
+    declareFunction("recache_some_pred_assertion_somewhere", "RECACHE-SOME-PRED-ASSERTION-SOMEWHERE", 2, 0, false);
+    declareFunction("somewhere_cached_preds", "SOMEWHERE-CACHED-PREDS", 0, 0, false);
+    declareFunction("somewhere_cached_pred_p", "SOMEWHERE-CACHED-PRED-P", 1, 0, false);
+    declareFunction("some_pred_assertion_somewhere_argnum", "SOME-PRED-ASSERTION-SOMEWHERE-ARGNUM", 1, 0, false);
+    declareFunction("indexed_terms_with_some_pred_assertion_somewhere", "INDEXED-TERMS-WITH-SOME-PRED-ASSERTION-SOMEWHERE", 1, 1, false);
+    declareFunction("inter_arg_result_isa_somewhere_cache", "INTER-ARG-RESULT-ISA-SOMEWHERE-CACHE", 1, 0, false);
+    declareFunction("inter_arg_result_isa_somewhereP", "INTER-ARG-RESULT-ISA-SOMEWHERE?", 2, 1, false);
+    declareFunction("some_pred_assertion_somewhereP_internal", "SOME-PRED-ASSERTION-SOMEWHERE?-INTERNAL", 4, 0, false);
+    declareFunction("check_somewhere_cache_argnum", "CHECK-SOMEWHERE-CACHE-ARGNUM", 2, 1, false);
+    declareFunction("lookup_somewhere_set_for_pred", "LOOKUP-SOMEWHERE-SET-FOR-PRED", 2, 0, false);
+    declareFunction("initialize_somewhere_cache", "INITIALIZE-SOMEWHERE-CACHE", 1, 0, false);
+    declareFunction("recache_some_pred_assertion_somewhere_int", "RECACHE-SOME-PRED-ASSERTION-SOMEWHERE-INT", 2, 0, false);
+    declareFunction("cache_some_pred_assertion_somewhere", "CACHE-SOME-PRED-ASSERTION-SOMEWHERE", 2, 0, false);
+    declareFunction("valid_somewhere_cache_itemP", "VALID-SOMEWHERE-CACHE-ITEM?", 1, 0, false);
+    declareFunction("some_pred_value_in_any_mt_with_argumentsP", "SOME-PRED-VALUE-IN-ANY-MT-WITH-ARGUMENTS?", 4, 0, false);
+    declareFunction("somewhere_cache_unbuiltP", "SOMEWHERE-CACHE-UNBUILT?", 0, 0, false);
+    declareFunction("rebuild_somewhere_cache", "REBUILD-SOMEWHERE-CACHE", 0, 0, false);
+    declareFunction("dump_somewhere_cache_to_stream", "DUMP-SOMEWHERE-CACHE-TO-STREAM", 1, 0, false);
+    declareFunction("load_somewhere_cache_from_stream", "LOAD-SOMEWHERE-CACHE-FROM-STREAM", 1, 0, false);
     return NIL;
   }
 

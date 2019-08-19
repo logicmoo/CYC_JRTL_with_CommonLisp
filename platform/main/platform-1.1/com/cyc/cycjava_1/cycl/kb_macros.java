@@ -59,12 +59,12 @@ public  final class kb_macros extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_kb_macros_file() {
-    //declareMacro(myName, "note_fort_being_removed", "NOTE-FORT-BEING-REMOVED");
-    declareFunction(myName, "some_fort_being_removedP", "SOME-FORT-BEING-REMOVED?", 0, 0, false);
-    //declareFunction(myName, "fort_being_removedP", "FORT-BEING-REMOVED?", 1, 0, false);
-    //declareMacro(myName, "do_kb_suid_table", "DO-KB-SUID-TABLE");
-    //declareMacro(myName, "do_kb_suid_table_old_objects", "DO-KB-SUID-TABLE-OLD-OBJECTS");
-    //declareMacro(myName, "do_kb_suid_table_new_objects", "DO-KB-SUID-TABLE-NEW-OBJECTS");
+    //declareMacro("note_fort_being_removed", "NOTE-FORT-BEING-REMOVED");
+    declareFunction("some_fort_being_removedP", "SOME-FORT-BEING-REMOVED?", 0, 0, false);
+    //declareFunction("fort_being_removedP", "FORT-BEING-REMOVED?", 1, 0, false);
+    //declareMacro("do_kb_suid_table", "DO-KB-SUID-TABLE");
+    //declareMacro("do_kb_suid_table_old_objects", "DO-KB-SUID-TABLE-OLD-OBJECTS");
+    //declareMacro("do_kb_suid_table_new_objects", "DO-KB-SUID-TABLE-NEW-OBJECTS");
     return NIL;
   }
 

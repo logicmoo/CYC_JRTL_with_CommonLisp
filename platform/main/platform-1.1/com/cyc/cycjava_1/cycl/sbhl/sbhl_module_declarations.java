@@ -151,21 +151,21 @@ public  final class sbhl_module_declarations extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_sbhl_module_declarations_file() {
-    declareFunction(myName, "initialize_genls_module", "INITIALIZE-GENLS-MODULE", 0, 0, false);
-    declareFunction(myName, "initialize_disjoint_with_module", "INITIALIZE-DISJOINT-WITH-MODULE", 0, 0, false);
-    declareFunction(myName, "initialize_isa_module", "INITIALIZE-ISA-MODULE", 0, 0, false);
-    declareFunction(myName, "initialize_quoted_isa_module", "INITIALIZE-QUOTED-ISA-MODULE", 0, 0, false);
-    declareFunction(myName, "initialize_genl_mt_module", "INITIALIZE-GENL-MT-MODULE", 0, 0, false);
-    declareFunction(myName, "initialize_negation_mt_module", "INITIALIZE-NEGATION-MT-MODULE", 0, 0, false);
-    declareFunction(myName, "initialize_genl_preds_module", "INITIALIZE-GENL-PREDS-MODULE", 0, 0, false);
-    declareFunction(myName, "initialize_genl_inverse_module", "INITIALIZE-GENL-INVERSE-MODULE", 0, 0, false);
-    declareFunction(myName, "initialize_negation_preds_module", "INITIALIZE-NEGATION-PREDS-MODULE", 0, 0, false);
-    declareFunction(myName, "initialize_negation_inverse_module", "INITIALIZE-NEGATION-INVERSE-MODULE", 0, 0, false);
-    declareFunction(myName, "sbhl_modules_initializedP", "SBHL-MODULES-INITIALIZED?", 0, 0, false);
-    declareFunction(myName, "note_sbhl_modules_initialized", "NOTE-SBHL-MODULES-INITIALIZED", 0, 0, false);
-    declareFunction(myName, "initialize_sbhl_modules", "INITIALIZE-SBHL-MODULES", 0, 1, false);
-    //declareFunction(myName, "convert_legacy_sbhl_modules_to_structs", "CONVERT-LEGACY-SBHL-MODULES-TO-STRUCTS", 0, 1, false);
-    //declareFunction(myName, "verify_sbhl_modules", "VERIFY-SBHL-MODULES", 0, 1, false);
+    declareFunction("initialize_genls_module", "INITIALIZE-GENLS-MODULE", 0, 0, false);
+    declareFunction("initialize_disjoint_with_module", "INITIALIZE-DISJOINT-WITH-MODULE", 0, 0, false);
+    declareFunction("initialize_isa_module", "INITIALIZE-ISA-MODULE", 0, 0, false);
+    declareFunction("initialize_quoted_isa_module", "INITIALIZE-QUOTED-ISA-MODULE", 0, 0, false);
+    declareFunction("initialize_genl_mt_module", "INITIALIZE-GENL-MT-MODULE", 0, 0, false);
+    declareFunction("initialize_negation_mt_module", "INITIALIZE-NEGATION-MT-MODULE", 0, 0, false);
+    declareFunction("initialize_genl_preds_module", "INITIALIZE-GENL-PREDS-MODULE", 0, 0, false);
+    declareFunction("initialize_genl_inverse_module", "INITIALIZE-GENL-INVERSE-MODULE", 0, 0, false);
+    declareFunction("initialize_negation_preds_module", "INITIALIZE-NEGATION-PREDS-MODULE", 0, 0, false);
+    declareFunction("initialize_negation_inverse_module", "INITIALIZE-NEGATION-INVERSE-MODULE", 0, 0, false);
+    declareFunction("sbhl_modules_initializedP", "SBHL-MODULES-INITIALIZED?", 0, 0, false);
+    declareFunction("note_sbhl_modules_initialized", "NOTE-SBHL-MODULES-INITIALIZED", 0, 0, false);
+    declareFunction("initialize_sbhl_modules", "INITIALIZE-SBHL-MODULES", 0, 1, false);
+    //declareFunction("convert_legacy_sbhl_modules_to_structs", "CONVERT-LEGACY-SBHL-MODULES-TO-STRUCTS", 0, 1, false);
+    //declareFunction("verify_sbhl_modules", "VERIFY-SBHL-MODULES", 0, 1, false);
     return NIL;
   }
 

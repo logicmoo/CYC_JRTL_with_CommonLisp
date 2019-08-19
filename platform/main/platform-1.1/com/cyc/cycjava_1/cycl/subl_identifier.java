@@ -217,31 +217,31 @@ public  final class subl_identifier extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_subl_identifier_file() {
-    //declareFunction(myName, "sublid_p", "SUBLID-P", 1, 0, false);
-    //declareFunction(myName, "sublid_domain_p", "SUBLID-DOMAIN-P", 1, 0, false);
-    //declareFunction(myName, "cyc_entity_from_sublid", "CYC-ENTITY-FROM-SUBLID", 2, 0, false);
-    //declareFunction(myName, "sublid_from_cyc_entity", "SUBLID-FROM-CYC-ENTITY", 1, 0, false);
-    //declareFunction(myName, "sublid_add_domain_to_forts", "SUBLID-ADD-DOMAIN-TO-FORTS", 2, 0, false);
-    //declareFunction(myName, "sublid_remove_domain_to_forts", "SUBLID-REMOVE-DOMAIN-TO-FORTS", 2, 0, false);
-    //declareFunction(myName, "sublid_domain_to_forts_update", "SUBLID-DOMAIN-TO-FORTS-UPDATE", 3, 0, false);
-    //declareFunction(myName, "sublid_domain_to_forts_lookup", "SUBLID-DOMAIN-TO-FORTS-LOOKUP", 1, 0, false);
-    //declareFunction(myName, "sublid_add_id_to_forts", "SUBLID-ADD-ID-TO-FORTS", 2, 0, false);
-    //declareFunction(myName, "sublid_remove_id_to_forts", "SUBLID-REMOVE-ID-TO-FORTS", 2, 0, false);
-    //declareFunction(myName, "sublid_id_to_forts_update", "SUBLID-ID-TO-FORTS-UPDATE", 3, 0, false);
-    //declareFunction(myName, "cleanup_sublid_id_to_forts", "CLEANUP-SUBLID-ID-TO-FORTS", 1, 0, false);
-    //declareFunction(myName, "sublid_id_to_forts_lookup", "SUBLID-ID-TO-FORTS-LOOKUP", 1, 0, false);
-    //declareFunction(myName, "sublid_add_fort_to_id", "SUBLID-ADD-FORT-TO-ID", 2, 0, false);
-    //declareFunction(myName, "sublid_remove_fort_to_id", "SUBLID-REMOVE-FORT-TO-ID", 1, 0, false);
-    //declareFunction(myName, "sublid_fort_to_id_lookup", "SUBLID-FORT-TO-ID-LOOKUP", 1, 0, false);
-    declareFunction(myName, "initialize_sublid_mappings", "INITIALIZE-SUBLID-MAPPINGS", 0, 0, false);
-    //declareFunction(myName, "add_sublidentifier", "ADD-SUBLIDENTIFIER", 2, 0, false);
-    //declareFunction(myName, "remove_sublidentifier", "REMOVE-SUBLIDENTIFIER", 2, 0, false);
-    //declareFunction(myName, "sublid_mappings_add", "SUBLID-MAPPINGS-ADD", 1, 0, false);
-    //declareFunction(myName, "sublid_mappings_remove", "SUBLID-MAPPINGS-REMOVE", 1, 0, false);
-    //declareFunction(myName, "add_uniquelyidentifiedintype", "ADD-UNIQUELYIDENTIFIEDINTYPE", 2, 0, false);
-    //declareFunction(myName, "remove_uniquelyidentifiedintype", "REMOVE-UNIQUELYIDENTIFIEDINTYPE", 2, 0, false);
-    //declareFunction(myName, "uiit_mappings_add", "UIIT-MAPPINGS-ADD", 1, 0, false);
-    //declareFunction(myName, "uiit_mappings_remove", "UIIT-MAPPINGS-REMOVE", 1, 0, false);
+    //declareFunction("sublid_p", "SUBLID-P", 1, 0, false);
+    //declareFunction("sublid_domain_p", "SUBLID-DOMAIN-P", 1, 0, false);
+    //declareFunction("cyc_entity_from_sublid", "CYC-ENTITY-FROM-SUBLID", 2, 0, false);
+    //declareFunction("sublid_from_cyc_entity", "SUBLID-FROM-CYC-ENTITY", 1, 0, false);
+    //declareFunction("sublid_add_domain_to_forts", "SUBLID-ADD-DOMAIN-TO-FORTS", 2, 0, false);
+    //declareFunction("sublid_remove_domain_to_forts", "SUBLID-REMOVE-DOMAIN-TO-FORTS", 2, 0, false);
+    //declareFunction("sublid_domain_to_forts_update", "SUBLID-DOMAIN-TO-FORTS-UPDATE", 3, 0, false);
+    //declareFunction("sublid_domain_to_forts_lookup", "SUBLID-DOMAIN-TO-FORTS-LOOKUP", 1, 0, false);
+    //declareFunction("sublid_add_id_to_forts", "SUBLID-ADD-ID-TO-FORTS", 2, 0, false);
+    //declareFunction("sublid_remove_id_to_forts", "SUBLID-REMOVE-ID-TO-FORTS", 2, 0, false);
+    //declareFunction("sublid_id_to_forts_update", "SUBLID-ID-TO-FORTS-UPDATE", 3, 0, false);
+    //declareFunction("cleanup_sublid_id_to_forts", "CLEANUP-SUBLID-ID-TO-FORTS", 1, 0, false);
+    //declareFunction("sublid_id_to_forts_lookup", "SUBLID-ID-TO-FORTS-LOOKUP", 1, 0, false);
+    //declareFunction("sublid_add_fort_to_id", "SUBLID-ADD-FORT-TO-ID", 2, 0, false);
+    //declareFunction("sublid_remove_fort_to_id", "SUBLID-REMOVE-FORT-TO-ID", 1, 0, false);
+    //declareFunction("sublid_fort_to_id_lookup", "SUBLID-FORT-TO-ID-LOOKUP", 1, 0, false);
+    declareFunction("initialize_sublid_mappings", "INITIALIZE-SUBLID-MAPPINGS", 0, 0, false);
+    //declareFunction("add_sublidentifier", "ADD-SUBLIDENTIFIER", 2, 0, false);
+    //declareFunction("remove_sublidentifier", "REMOVE-SUBLIDENTIFIER", 2, 0, false);
+    //declareFunction("sublid_mappings_add", "SUBLID-MAPPINGS-ADD", 1, 0, false);
+    //declareFunction("sublid_mappings_remove", "SUBLID-MAPPINGS-REMOVE", 1, 0, false);
+    //declareFunction("add_uniquelyidentifiedintype", "ADD-UNIQUELYIDENTIFIEDINTYPE", 2, 0, false);
+    //declareFunction("remove_uniquelyidentifiedintype", "REMOVE-UNIQUELYIDENTIFIEDINTYPE", 2, 0, false);
+    //declareFunction("uiit_mappings_add", "UIIT-MAPPINGS-ADD", 1, 0, false);
+    //declareFunction("uiit_mappings_remove", "UIIT-MAPPINGS-REMOVE", 1, 0, false);
     return NIL;
   }
 

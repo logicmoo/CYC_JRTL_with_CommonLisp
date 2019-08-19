@@ -458,21 +458,21 @@ public  final class removal_modules_lookup extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_removal_modules_lookup_file() {
-    declareFunction(myName, "removal_lookup_pos_cost", "REMOVAL-LOOKUP-POS-COST", 1, 1, false); new $removal_lookup_pos_cost$UnaryFunction(); new $removal_lookup_pos_cost$BinaryFunction();
-    declareFunction(myName, "removal_completely_asserted_asentP", "REMOVAL-COMPLETELY-ASSERTED-ASENT?", 1, 0, false); new $removal_completely_asserted_asentP$UnaryFunction();
-    declareFunction(myName, "removal_lookup_pos_iterator", "REMOVAL-LOOKUP-POS-ITERATOR", 1, 0, false); new $removal_lookup_pos_iterator$UnaryFunction();
-    declareFunction(myName, "removal_lookup_neg_completeness", "REMOVAL-LOOKUP-NEG-COMPLETENESS", 1, 0, false);
-    declareFunction(myName, "removal_lookup_neg_cost", "REMOVAL-LOOKUP-NEG-COST", 1, 1, false);
-    declareFunction(myName, "removal_lookup_neg_iterator", "REMOVAL-LOOKUP-NEG-ITERATOR", 1, 0, false);
-    declareFunction(myName, "removal_lookup_expand_internal", "REMOVAL-LOOKUP-EXPAND-INTERNAL", 2, 0, false);
-    declareFunction(myName, "removal_pred_unbound_cost", "REMOVAL-PRED-UNBOUND-COST", 1, 1, false);
-    declareFunction(myName, "removal_pred_unbound_iterator", "REMOVAL-PRED-UNBOUND-ITERATOR", 1, 0, false);
-    declareFunction(myName, "pred_unbound_pos_preference", "PRED-UNBOUND-POS-PREFERENCE", 3, 0, false);
-    declareFunction(myName, "formula_contains_indexed_termP", "FORMULA-CONTAINS-INDEXED-TERM?", 1, 1, false);
-    declareFunction(myName, "formula_has_indexed_term_arg_p", "FORMULA-HAS-INDEXED-TERM-ARG-P", 1, 1, false);
-    declareFunction(myName, "formula_has_fort_arg_p", "FORMULA-HAS-FORT-ARG-P", 1, 1, false);
-    declareFunction(myName, "asent_has_fort_arg_p", "ASENT-HAS-FORT-ARG-P", 1, 1, false);
-    declareFunction(myName, "asent_has_indexed_term_arg_p", "ASENT-HAS-INDEXED-TERM-ARG-P", 1, 1, false); new $asent_has_indexed_term_arg_p$UnaryFunction(); new $asent_has_indexed_term_arg_p$BinaryFunction();
+    declareFunction("removal_lookup_pos_cost", "REMOVAL-LOOKUP-POS-COST", 1, 1, false); new $removal_lookup_pos_cost$UnaryFunction(); new $removal_lookup_pos_cost$BinaryFunction();
+    declareFunction("removal_completely_asserted_asentP", "REMOVAL-COMPLETELY-ASSERTED-ASENT?", 1, 0, false); new $removal_completely_asserted_asentP$UnaryFunction();
+    declareFunction("removal_lookup_pos_iterator", "REMOVAL-LOOKUP-POS-ITERATOR", 1, 0, false); new $removal_lookup_pos_iterator$UnaryFunction();
+    declareFunction("removal_lookup_neg_completeness", "REMOVAL-LOOKUP-NEG-COMPLETENESS", 1, 0, false);
+    declareFunction("removal_lookup_neg_cost", "REMOVAL-LOOKUP-NEG-COST", 1, 1, false);
+    declareFunction("removal_lookup_neg_iterator", "REMOVAL-LOOKUP-NEG-ITERATOR", 1, 0, false);
+    declareFunction("removal_lookup_expand_internal", "REMOVAL-LOOKUP-EXPAND-INTERNAL", 2, 0, false);
+    declareFunction("removal_pred_unbound_cost", "REMOVAL-PRED-UNBOUND-COST", 1, 1, false);
+    declareFunction("removal_pred_unbound_iterator", "REMOVAL-PRED-UNBOUND-ITERATOR", 1, 0, false);
+    declareFunction("pred_unbound_pos_preference", "PRED-UNBOUND-POS-PREFERENCE", 3, 0, false);
+    declareFunction("formula_contains_indexed_termP", "FORMULA-CONTAINS-INDEXED-TERM?", 1, 1, false);
+    declareFunction("formula_has_indexed_term_arg_p", "FORMULA-HAS-INDEXED-TERM-ARG-P", 1, 1, false);
+    declareFunction("formula_has_fort_arg_p", "FORMULA-HAS-FORT-ARG-P", 1, 1, false);
+    declareFunction("asent_has_fort_arg_p", "ASENT-HAS-FORT-ARG-P", 1, 1, false);
+    declareFunction("asent_has_indexed_term_arg_p", "ASENT-HAS-INDEXED-TERM-ARG-P", 1, 1, false); new $asent_has_indexed_term_arg_p$UnaryFunction(); new $asent_has_indexed_term_arg_p$BinaryFunction();
     return NIL;
   }
 

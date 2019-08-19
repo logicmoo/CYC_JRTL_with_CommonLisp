@@ -674,16 +674,16 @@ public  final class removal_modules_transitivity extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_removal_modules_transitivity_file() {
-    declareFunction(myName, "make_transitivity_support", "MAKE-TRANSITIVITY-SUPPORT", 1, 2, false);
-    declareFunction(myName, "gt_required_arg_type_p", "GT-REQUIRED-ARG-TYPE-P", 1, 0, false); new $gt_required_arg_type_p$UnaryFunction();
-    declareFunction(myName, "inference_transitivity_check", "INFERENCE-TRANSITIVITY-CHECK", 3, 2, false);
-    declareFunction(myName, "inference_transitivity_check_strict", "INFERENCE-TRANSITIVITY-CHECK-STRICT", 3, 2, false);
-    declareFunction(myName, "inference_transitivity_justify", "INFERENCE-TRANSITIVITY-JUSTIFY", 3, 2, false);
-    declareFunction(myName, "removal_transitive_arg1_walk_cost", "REMOVAL-TRANSITIVE-ARG1-WALK-COST", 1, 1, false); new $removal_transitive_arg1_walk_cost$UnaryFunction(); new $removal_transitive_arg1_walk_cost$BinaryFunction();
-    declareFunction(myName, "removal_transitive_arg1_walk_iterator", "REMOVAL-TRANSITIVE-ARG1-WALK-ITERATOR", 2, 0, false); new $removal_transitive_arg1_walk_iterator$BinaryFunction();
-    declareFunction(myName, "removal_transitive_arg2_walk_cost", "REMOVAL-TRANSITIVE-ARG2-WALK-COST", 1, 1, false);
-    declareFunction(myName, "removal_transitive_arg2_walk_iterator", "REMOVAL-TRANSITIVE-ARG2-WALK-ITERATOR", 2, 0, false);
-    declareFunction(myName, "inference_transitivity_gather_arg1", "INFERENCE-TRANSITIVITY-GATHER-ARG1", 2, 0, false);
+    declareFunction("make_transitivity_support", "MAKE-TRANSITIVITY-SUPPORT", 1, 2, false);
+    declareFunction("gt_required_arg_type_p", "GT-REQUIRED-ARG-TYPE-P", 1, 0, false); new $gt_required_arg_type_p$UnaryFunction();
+    declareFunction("inference_transitivity_check", "INFERENCE-TRANSITIVITY-CHECK", 3, 2, false);
+    declareFunction("inference_transitivity_check_strict", "INFERENCE-TRANSITIVITY-CHECK-STRICT", 3, 2, false);
+    declareFunction("inference_transitivity_justify", "INFERENCE-TRANSITIVITY-JUSTIFY", 3, 2, false);
+    declareFunction("removal_transitive_arg1_walk_cost", "REMOVAL-TRANSITIVE-ARG1-WALK-COST", 1, 1, false); new $removal_transitive_arg1_walk_cost$UnaryFunction(); new $removal_transitive_arg1_walk_cost$BinaryFunction();
+    declareFunction("removal_transitive_arg1_walk_iterator", "REMOVAL-TRANSITIVE-ARG1-WALK-ITERATOR", 2, 0, false); new $removal_transitive_arg1_walk_iterator$BinaryFunction();
+    declareFunction("removal_transitive_arg2_walk_cost", "REMOVAL-TRANSITIVE-ARG2-WALK-COST", 1, 1, false);
+    declareFunction("removal_transitive_arg2_walk_iterator", "REMOVAL-TRANSITIVE-ARG2-WALK-ITERATOR", 2, 0, false);
+    declareFunction("inference_transitivity_gather_arg1", "INFERENCE-TRANSITIVITY-GATHER-ARG1", 2, 0, false);
     return NIL;
   }
 

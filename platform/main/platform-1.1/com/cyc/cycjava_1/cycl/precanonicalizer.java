@@ -298,30 +298,30 @@ public  final class precanonicalizer extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_precanonicalizer_file() {
-    //declareFunction(myName, "immediate_precanonicalizationsP", "IMMEDIATE-PRECANONICALIZATIONS?", 1, 0, false);
-    //declareFunction(myName, "immediate_precanonicalizations", "IMMEDIATE-PRECANONICALIZATIONS", 1, 0, false);
-    declareFunction(myName, "precanonicalizationsP", "PRECANONICALIZATIONS?", 2, 1, false);
-    declareFunction(myName, "safe_precanonicalizations", "SAFE-PRECANONICALIZATIONS", 2, 0, false);
-    declareFunction(myName, "precanonicalizations", "PRECANONICALIZATIONS", 2, 0, false);
-    //declareFunction(myName, "precanonicalizations_int_internal", "PRECANONICALIZATIONS-INT-INTERNAL", 2, 0, false);
-    //declareFunction(myName, "precanonicalizations_int", "PRECANONICALIZATIONS-INT", 2, 0, false);
-    //declareFunction(myName, "el_evaluatable_expressions_out", "EL-EVALUATABLE-EXPRESSIONS-OUT", 1, 0, false);
-    //declareFunction(myName, "transform_evaluation_expression_or_throw", "TRANSFORM-EVALUATION-EXPRESSION-OR-THROW", 1, 0, false);
-    //declareFunction(myName, "transform_evaluation_expression", "TRANSFORM-EVALUATION-EXPRESSION", 1, 0, false);
-    declareFunction(myName, "el_evaluatable_expressionP", "EL-EVALUATABLE-EXPRESSION?", 1, 1, false); new $el_evaluatable_expressionP$UnaryFunction(); new $el_evaluatable_expressionP$BinaryFunction();
-    declareFunction(myName, "el_evaluatable_functorP", "EL-EVALUATABLE-FUNCTOR?", 1, 1, false);
-    declareFunction(myName, "el_evaluatable_functor_somewhereP", "EL-EVALUATABLE-FUNCTOR-SOMEWHERE?", 1, 0, false);
-    //declareFunction(myName, "el_evaluatable_subexpressionsP", "EL-EVALUATABLE-SUBEXPRESSIONS?", 1, 1, false);
-    //declareFunction(myName, "el_unevaluatable_expressionP", "EL-UNEVALUATABLE-EXPRESSION?", 1, 1, false);
-    //declareFunction(myName, "immediately_evaluatable_expressions_out", "IMMEDIATELY-EVALUATABLE-EXPRESSIONS-OUT", 1, 0, false);
-    //declareFunction(myName, "immediately_evaluatable_expressionP", "IMMEDIATELY-EVALUATABLE-EXPRESSION?", 1, 0, false);
-    //declareFunction(myName, "immediately_evaluatable_functorP", "IMMEDIATELY-EVALUATABLE-FUNCTOR?", 1, 0, false);
-    //declareFunction(myName, "immediately_evaluatable_functor_somewhereP", "IMMEDIATELY-EVALUATABLE-FUNCTOR-SOMEWHERE?", 1, 0, false);
-    //declareFunction(myName, "immediately_evaluatable_subexpressionsP", "IMMEDIATELY-EVALUATABLE-SUBEXPRESSIONS?", 1, 0, false);
-    //declareFunction(myName, "immediately_unevaluatable_expressionP", "IMMEDIATELY-UNEVALUATABLE-EXPRESSION?", 1, 0, false);
-    //declareFunction(myName, "implicit_meta_literals_out", "IMPLICIT-META-LITERALS-OUT", 1, 0, false);
-    //declareFunction(myName, "implicit_meta_literals_out_int", "IMPLICIT-META-LITERALS-OUT-INT", 1, 0, false);
-    //declareFunction(myName, "implicit_meta_literals_out_for_implict_meta_literal_sentence", "IMPLICIT-META-LITERALS-OUT-FOR-IMPLICT-META-LITERAL-SENTENCE", 1, 0, false);
+    //declareFunction("immediate_precanonicalizationsP", "IMMEDIATE-PRECANONICALIZATIONS?", 1, 0, false);
+    //declareFunction("immediate_precanonicalizations", "IMMEDIATE-PRECANONICALIZATIONS", 1, 0, false);
+    declareFunction("precanonicalizationsP", "PRECANONICALIZATIONS?", 2, 1, false);
+    declareFunction("safe_precanonicalizations", "SAFE-PRECANONICALIZATIONS", 2, 0, false);
+    declareFunction("precanonicalizations", "PRECANONICALIZATIONS", 2, 0, false);
+    //declareFunction("precanonicalizations_int_internal", "PRECANONICALIZATIONS-INT-INTERNAL", 2, 0, false);
+    //declareFunction("precanonicalizations_int", "PRECANONICALIZATIONS-INT", 2, 0, false);
+    //declareFunction("el_evaluatable_expressions_out", "EL-EVALUATABLE-EXPRESSIONS-OUT", 1, 0, false);
+    //declareFunction("transform_evaluation_expression_or_throw", "TRANSFORM-EVALUATION-EXPRESSION-OR-THROW", 1, 0, false);
+    //declareFunction("transform_evaluation_expression", "TRANSFORM-EVALUATION-EXPRESSION", 1, 0, false);
+    declareFunction("el_evaluatable_expressionP", "EL-EVALUATABLE-EXPRESSION?", 1, 1, false); new $el_evaluatable_expressionP$UnaryFunction(); new $el_evaluatable_expressionP$BinaryFunction();
+    declareFunction("el_evaluatable_functorP", "EL-EVALUATABLE-FUNCTOR?", 1, 1, false);
+    declareFunction("el_evaluatable_functor_somewhereP", "EL-EVALUATABLE-FUNCTOR-SOMEWHERE?", 1, 0, false);
+    //declareFunction("el_evaluatable_subexpressionsP", "EL-EVALUATABLE-SUBEXPRESSIONS?", 1, 1, false);
+    //declareFunction("el_unevaluatable_expressionP", "EL-UNEVALUATABLE-EXPRESSION?", 1, 1, false);
+    //declareFunction("immediately_evaluatable_expressions_out", "IMMEDIATELY-EVALUATABLE-EXPRESSIONS-OUT", 1, 0, false);
+    //declareFunction("immediately_evaluatable_expressionP", "IMMEDIATELY-EVALUATABLE-EXPRESSION?", 1, 0, false);
+    //declareFunction("immediately_evaluatable_functorP", "IMMEDIATELY-EVALUATABLE-FUNCTOR?", 1, 0, false);
+    //declareFunction("immediately_evaluatable_functor_somewhereP", "IMMEDIATELY-EVALUATABLE-FUNCTOR-SOMEWHERE?", 1, 0, false);
+    //declareFunction("immediately_evaluatable_subexpressionsP", "IMMEDIATELY-EVALUATABLE-SUBEXPRESSIONS?", 1, 0, false);
+    //declareFunction("immediately_unevaluatable_expressionP", "IMMEDIATELY-UNEVALUATABLE-EXPRESSION?", 1, 0, false);
+    //declareFunction("implicit_meta_literals_out", "IMPLICIT-META-LITERALS-OUT", 1, 0, false);
+    //declareFunction("implicit_meta_literals_out_int", "IMPLICIT-META-LITERALS-OUT-INT", 1, 0, false);
+    //declareFunction("implicit_meta_literals_out_for_implict_meta_literal_sentence", "IMPLICIT-META-LITERALS-OUT-FOR-IMPLICT-META-LITERAL-SENTENCE", 1, 0, false);
     return NIL;
   }
 

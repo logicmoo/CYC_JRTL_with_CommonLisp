@@ -72,12 +72,12 @@ public  final class removal_modules_reflexive_on extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_removal_modules_reflexive_on_file() {
-    declareFunction(myName, "reflexive_on_predicateP", "REFLEXIVE-ON-PREDICATE?", 1, 0, false); new $reflexive_on_predicateP$UnaryFunction();
-    declareFunction(myName, "reflexive_on_cols", "REFLEXIVE-ON-COLS", 1, 0, false);
-    declareFunction(myName, "removal_reflexive_on_expand", "REMOVAL-REFLEXIVE-ON-EXPAND", 1, 1, false);
-    declareFunction(myName, "reflexive_on_completness", "REFLEXIVE-ON-COMPLETNESS", 1, 0, false);
-    declareFunction(myName, "supports_for_reflexive_on", "SUPPORTS-FOR-REFLEXIVE-ON", 2, 0, false);
-    declareFunction(myName, "reflexive_on_isa_support", "REFLEXIVE-ON-ISA-SUPPORT", 3, 0, false);
+    declareFunction("reflexive_on_predicateP", "REFLEXIVE-ON-PREDICATE?", 1, 0, false); new $reflexive_on_predicateP$UnaryFunction();
+    declareFunction("reflexive_on_cols", "REFLEXIVE-ON-COLS", 1, 0, false);
+    declareFunction("removal_reflexive_on_expand", "REMOVAL-REFLEXIVE-ON-EXPAND", 1, 1, false);
+    declareFunction("reflexive_on_completness", "REFLEXIVE-ON-COMPLETNESS", 1, 0, false);
+    declareFunction("supports_for_reflexive_on", "SUPPORTS-FOR-REFLEXIVE-ON", 2, 0, false);
+    declareFunction("reflexive_on_isa_support", "REFLEXIVE-ON-ISA-SUPPORT", 3, 0, false);
     return NIL;
   }
 

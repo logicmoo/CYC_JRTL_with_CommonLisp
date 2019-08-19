@@ -51,9 +51,9 @@ public  final class sksi_macros extends SubLTranslatedFile {
   public static SubLSymbol $sksi_sql_statement_pool_lock$ = null;
 
   public static final SubLObject declare_sksi_macros_file() {
-    declareMacro(myName, "with_sksi_reformulation_caching", "WITH-SKSI-REFORMULATION-CACHING");
-    declareMacro(myName, "without_sksi_reformulation_caching", "WITHOUT-SKSI-REFORMULATION-CACHING");
-    declareMacro(myName, "with_sksi_sql_connection_resourcing", "WITH-SKSI-SQL-CONNECTION-RESOURCING");
+    declareMacro("with_sksi_reformulation_caching", "WITH-SKSI-REFORMULATION-CACHING");
+    declareMacro("without_sksi_reformulation_caching", "WITHOUT-SKSI-REFORMULATION-CACHING");
+    declareMacro("with_sksi_sql_connection_resourcing", "WITH-SKSI-SQL-CONNECTION-RESOURCING");
     return NIL;
   }
 

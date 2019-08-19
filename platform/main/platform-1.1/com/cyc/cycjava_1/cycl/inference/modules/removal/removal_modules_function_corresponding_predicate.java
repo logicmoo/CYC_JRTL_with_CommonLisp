@@ -997,18 +997,18 @@ public  final class removal_modules_function_corresponding_predicate extends Sub
   }
 
   public static final SubLObject declare_removal_modules_function_corresponding_predicate_file() {
-    declareMacro(myName, "do_fcp_assertions_for_pred", "DO-FCP-ASSERTIONS-FOR-PRED");
-    declareFunction(myName, "removal_fcp_check_expand", "REMOVAL-FCP-CHECK-EXPAND", 1, 1, false);
-    declareFunction(myName, "removal_fcp_check_required", "REMOVAL-FCP-CHECK-REQUIRED", 1, 1, false);
-    declareFunction(myName, "removal_fcp_find_nat_expand", "REMOVAL-FCP-FIND-NAT-EXPAND", 1, 1, false);
-    declareFunction(myName, "removal_fcp_find_nat_required", "REMOVAL-FCP-FIND-NAT-REQUIRED", 1, 1, false); new $removal_fcp_find_nat_required$UnaryFunction(); new $removal_fcp_find_nat_required$BinaryFunction();
-    declareFunction(myName, "removal_fcp_support", "REMOVAL-FCP-SUPPORT", 1, 0, false);
-    declareFunction(myName, "removal_fcp_bindings", "REMOVAL-FCP-BINDINGS", 1, 0, false);
-    declareFunction(myName, "removal_fcp_justify", "REMOVAL-FCP-JUSTIFY", 1, 0, false);
-    declareFunction(myName, "removal_fcp_verify", "REMOVAL-FCP-VERIFY", 1, 0, false);
-    declareMacro(myName, "do_corresponding_evaluatable_functions", "DO-CORRESPONDING-EVALUATABLE-FUNCTIONS");
-    declareFunction(myName, "removal_evaluatable_fcp_unify_required", "REMOVAL-EVALUATABLE-FCP-UNIFY-REQUIRED", 1, 1, false);
-    declareFunction(myName, "removal_evaluatable_fcp_unify_expand", "REMOVAL-EVALUATABLE-FCP-UNIFY-EXPAND", 1, 1, false);
+    declareMacro("do_fcp_assertions_for_pred", "DO-FCP-ASSERTIONS-FOR-PRED");
+    declareFunction("removal_fcp_check_expand", "REMOVAL-FCP-CHECK-EXPAND", 1, 1, false);
+    declareFunction("removal_fcp_check_required", "REMOVAL-FCP-CHECK-REQUIRED", 1, 1, false);
+    declareFunction("removal_fcp_find_nat_expand", "REMOVAL-FCP-FIND-NAT-EXPAND", 1, 1, false);
+    declareFunction("removal_fcp_find_nat_required", "REMOVAL-FCP-FIND-NAT-REQUIRED", 1, 1, false); new $removal_fcp_find_nat_required$UnaryFunction(); new $removal_fcp_find_nat_required$BinaryFunction();
+    declareFunction("removal_fcp_support", "REMOVAL-FCP-SUPPORT", 1, 0, false);
+    declareFunction("removal_fcp_bindings", "REMOVAL-FCP-BINDINGS", 1, 0, false);
+    declareFunction("removal_fcp_justify", "REMOVAL-FCP-JUSTIFY", 1, 0, false);
+    declareFunction("removal_fcp_verify", "REMOVAL-FCP-VERIFY", 1, 0, false);
+    declareMacro("do_corresponding_evaluatable_functions", "DO-CORRESPONDING-EVALUATABLE-FUNCTIONS");
+    declareFunction("removal_evaluatable_fcp_unify_required", "REMOVAL-EVALUATABLE-FCP-UNIFY-REQUIRED", 1, 1, false);
+    declareFunction("removal_evaluatable_fcp_unify_expand", "REMOVAL-EVALUATABLE-FCP-UNIFY-EXPAND", 1, 1, false);
     return NIL;
   }
 

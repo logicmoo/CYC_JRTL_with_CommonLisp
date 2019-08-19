@@ -98,36 +98,36 @@ public  final class timing extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_timing_file() {
-    //declareMacro(myName, "with_new_testing_environement", "WITH-NEW-TESTING-ENVIRONEMENT");
-    //declareMacro(myName, "timing_no_functions", "TIMING-NO-FUNCTIONS");
-    //declareMacro(myName, "timing_all_functions", "TIMING-ALL-FUNCTIONS");
-    //declareMacro(myName, "timing_these_functions", "TIMING-THESE-FUNCTIONS");
-    //declareFunction(myName, "report_fun", "REPORT-FUN", 1, 0, false);
-    //declareFunction(myName, "report_time", "REPORT-TIME", 1, 0, false);
-    //declareFunction(myName, "report_timing_info", "REPORT-TIMING-INFO", 0, 1, false);
-    //declareFunction(myName, "report_time_testing_info", "REPORT-TIME-TESTING-INFO", 0, 0, false);
-    //declareFunction(myName, "clear_timing_info", "CLEAR-TIMING-INFO", 0, 0, false);
-    //declareFunction(myName, "clear_time_testing_info", "CLEAR-TIME-TESTING-INFO", 0, 0, false);
-    declareFunction(myName, "timing_info_print_function_trampoline", "TIMING-INFO-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-    //declareFunction(myName, "timing_info_p", "TIMING-INFO-P", 1, 0, false); new $timing_info_p$UnaryFunction();
-    //declareFunction(myName, "timing_info_count", "TIMING-INFO-COUNT", 1, 0, false);
-    //declareFunction(myName, "timing_info_total", "TIMING-INFO-TOTAL", 1, 0, false);
-    //declareFunction(myName, "timing_info_max", "TIMING-INFO-MAX", 1, 0, false);
-    //declareFunction(myName, "_csetf_timing_info_count", "_CSETF-TIMING-INFO-COUNT", 2, 0, false);
-    //declareFunction(myName, "_csetf_timing_info_total", "_CSETF-TIMING-INFO-TOTAL", 2, 0, false);
-    //declareFunction(myName, "_csetf_timing_info_max", "_CSETF-TIMING-INFO-MAX", 2, 0, false);
-    //declareFunction(myName, "make_timing_info", "MAKE-TIMING-INFO", 0, 1, false);
-    //declareFunction(myName, "print_timing_info", "PRINT-TIMING-INFO", 3, 0, false);
-    //declareFunction(myName, "time_functionP", "TIME-FUNCTION?", 1, 0, false);
-    //declareFunction(myName, "record_time", "RECORD-TIME", 2, 0, false);
-    //declareFunction(myName, "new_timing_info", "NEW-TIMING-INFO", 1, 0, false);
-    //declareFunction(myName, "update_timing_info", "UPDATE-TIMING-INFO", 2, 0, false);
-    //declareMacro(myName, "deftimed_generic", "DEFTIMED-GENERIC");
-    //declareMacro(myName, "deftimed_private", "DEFTIMED-PRIVATE");
-    //declareMacro(myName, "deftimed_protected", "DEFTIMED-PROTECTED");
-    //declareMacro(myName, "deftimed", "DEFTIMED");
-    //declareMacro(myName, "deftimed_public", "DEFTIMED-PUBLIC");
-    //declareMacro(myName, "deftimed_api", "DEFTIMED-API");
+    //declareMacro("with_new_testing_environement", "WITH-NEW-TESTING-ENVIRONEMENT");
+    //declareMacro("timing_no_functions", "TIMING-NO-FUNCTIONS");
+    //declareMacro("timing_all_functions", "TIMING-ALL-FUNCTIONS");
+    //declareMacro("timing_these_functions", "TIMING-THESE-FUNCTIONS");
+    //declareFunction("report_fun", "REPORT-FUN", 1, 0, false);
+    //declareFunction("report_time", "REPORT-TIME", 1, 0, false);
+    //declareFunction("report_timing_info", "REPORT-TIMING-INFO", 0, 1, false);
+    //declareFunction("report_time_testing_info", "REPORT-TIME-TESTING-INFO", 0, 0, false);
+    //declareFunction("clear_timing_info", "CLEAR-TIMING-INFO", 0, 0, false);
+    //declareFunction("clear_time_testing_info", "CLEAR-TIME-TESTING-INFO", 0, 0, false);
+    declareFunction("timing_info_print_function_trampoline", "TIMING-INFO-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+    //declareFunction("timing_info_p", "TIMING-INFO-P", 1, 0, false); new $timing_info_p$UnaryFunction();
+    //declareFunction("timing_info_count", "TIMING-INFO-COUNT", 1, 0, false);
+    //declareFunction("timing_info_total", "TIMING-INFO-TOTAL", 1, 0, false);
+    //declareFunction("timing_info_max", "TIMING-INFO-MAX", 1, 0, false);
+    //declareFunction("_csetf_timing_info_count", "_CSETF-TIMING-INFO-COUNT", 2, 0, false);
+    //declareFunction("_csetf_timing_info_total", "_CSETF-TIMING-INFO-TOTAL", 2, 0, false);
+    //declareFunction("_csetf_timing_info_max", "_CSETF-TIMING-INFO-MAX", 2, 0, false);
+    //declareFunction("make_timing_info", "MAKE-TIMING-INFO", 0, 1, false);
+    //declareFunction("print_timing_info", "PRINT-TIMING-INFO", 3, 0, false);
+    //declareFunction("time_functionP", "TIME-FUNCTION?", 1, 0, false);
+    //declareFunction("record_time", "RECORD-TIME", 2, 0, false);
+    //declareFunction("new_timing_info", "NEW-TIMING-INFO", 1, 0, false);
+    //declareFunction("update_timing_info", "UPDATE-TIMING-INFO", 2, 0, false);
+    //declareMacro("deftimed_generic", "DEFTIMED-GENERIC");
+    //declareMacro("deftimed_private", "DEFTIMED-PRIVATE");
+    //declareMacro("deftimed_protected", "DEFTIMED-PROTECTED");
+    //declareMacro("deftimed", "DEFTIMED");
+    //declareMacro("deftimed_public", "DEFTIMED-PUBLIC");
+    //declareMacro("deftimed_api", "DEFTIMED-API");
     return NIL;
   }
 

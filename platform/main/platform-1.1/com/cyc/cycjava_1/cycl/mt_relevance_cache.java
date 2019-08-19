@@ -133,23 +133,23 @@ public  final class mt_relevance_cache extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_mt_relevance_cache_file() {
-    declareFunction(myName, "basemtP", "BASEMT?", 2, 0, false);
-    declareFunction(myName, "clear_mt_relevance_cache", "CLEAR-MT-RELEVANCE-CACHE", 0, 0, false);
-    declareFunction(myName, "update_mt_relevance_cache", "UPDATE-MT-RELEVANCE-CACHE", 2, 0, false);
-    declareFunction(myName, "bind_mt_indexicals", "BIND-MT-INDEXICALS", 1, 0, false);
-    declareFunction(myName, "monad_basemtP", "MONAD-BASEMT?", 2, 0, false);
-    declareFunction(myName, "hlmt_basemtP", "HLMT-BASEMT?", 2, 0, false);
-    declareFunction(myName, "non_monad_basemtP", "NON-MONAD-BASEMT?", 2, 0, false);
-    declareFunction(myName, "mt_relevance_cache_unknown_p", "MT-RELEVANCE-CACHE-UNKNOWN-P", 1, 0, false);
-    declareFunction(myName, "mt_relevance_cache_get", "MT-RELEVANCE-CACHE-GET", 2, 0, false);
-    declareFunction(myName, "mt_relevance_cache_set", "MT-RELEVANCE-CACHE-SET", 3, 0, false);
-    declareFunction(myName, "mt_relevance_cache_remove", "MT-RELEVANCE-CACHE-REMOVE", 2, 0, false);
-    declareFunction(myName, "mt_relevance_cache_base_mt", "MT-RELEVANCE-CACHE-BASE-MT", 4, 0, false);
-    declareFunction(myName, "mt_relevance_cache_update", "MT-RELEVANCE-CACHE-UPDATE", 5, 0, false);
-    declareFunction(myName, "monad_mt_fort_cache_base_mt", "MONAD-MT-FORT-CACHE-BASE-MT", 2, 0, false);
-    declareFunction(myName, "clear_monad_mt_fort_cache", "CLEAR-MONAD-MT-FORT-CACHE", 0, 0, false);
-    declareFunction(myName, "monad_mt_naut_cache_base_mt", "MONAD-MT-NAUT-CACHE-BASE-MT", 2, 0, false);
-    declareFunction(myName, "clear_monad_mt_naut_cache", "CLEAR-MONAD-MT-NAUT-CACHE", 0, 0, false);
+    declareFunction("basemtP", "BASEMT?", 2, 0, false);
+    declareFunction("clear_mt_relevance_cache", "CLEAR-MT-RELEVANCE-CACHE", 0, 0, false);
+    declareFunction("update_mt_relevance_cache", "UPDATE-MT-RELEVANCE-CACHE", 2, 0, false);
+    declareFunction("bind_mt_indexicals", "BIND-MT-INDEXICALS", 1, 0, false);
+    declareFunction("monad_basemtP", "MONAD-BASEMT?", 2, 0, false);
+    declareFunction("hlmt_basemtP", "HLMT-BASEMT?", 2, 0, false);
+    declareFunction("non_monad_basemtP", "NON-MONAD-BASEMT?", 2, 0, false);
+    declareFunction("mt_relevance_cache_unknown_p", "MT-RELEVANCE-CACHE-UNKNOWN-P", 1, 0, false);
+    declareFunction("mt_relevance_cache_get", "MT-RELEVANCE-CACHE-GET", 2, 0, false);
+    declareFunction("mt_relevance_cache_set", "MT-RELEVANCE-CACHE-SET", 3, 0, false);
+    declareFunction("mt_relevance_cache_remove", "MT-RELEVANCE-CACHE-REMOVE", 2, 0, false);
+    declareFunction("mt_relevance_cache_base_mt", "MT-RELEVANCE-CACHE-BASE-MT", 4, 0, false);
+    declareFunction("mt_relevance_cache_update", "MT-RELEVANCE-CACHE-UPDATE", 5, 0, false);
+    declareFunction("monad_mt_fort_cache_base_mt", "MONAD-MT-FORT-CACHE-BASE-MT", 2, 0, false);
+    declareFunction("clear_monad_mt_fort_cache", "CLEAR-MONAD-MT-FORT-CACHE", 0, 0, false);
+    declareFunction("monad_mt_naut_cache_base_mt", "MONAD-MT-NAUT-CACHE-BASE-MT", 2, 0, false);
+    declareFunction("clear_monad_mt_naut_cache", "CLEAR-MONAD-MT-NAUT-CACHE", 0, 0, false);
     return NIL;
   }
 

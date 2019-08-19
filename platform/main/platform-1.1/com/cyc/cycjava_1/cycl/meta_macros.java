@@ -49,9 +49,9 @@ public  final class meta_macros extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_meta_macros_file() {
-    declareMacro(myName, "with_temp_vars", "WITH-TEMP-VARS");
-    declareFunction(myName, "make_temp_var", "MAKE-TEMP-VAR", 1, 0, false);
-    declareFunction(myName, "declare_indention_pattern", "DECLARE-INDENTION-PATTERN", 2, 0, false);
+    declareMacro("with_temp_vars", "WITH-TEMP-VARS");
+    declareFunction("make_temp_var", "MAKE-TEMP-VAR", 1, 0, false);
+    declareFunction("declare_indention_pattern", "DECLARE-INDENTION-PATTERN", 2, 0, false);
     return NIL;
   }
 

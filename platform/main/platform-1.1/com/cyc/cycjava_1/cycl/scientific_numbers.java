@@ -58,27 +58,27 @@ public  final class scientific_numbers extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_scientific_numbers_file() {
-    //declareFunction(myName, "cyc_scientific_number_p", "CYC-SCIENTIFIC-NUMBER-P", 1, 0, false);
-    declareFunction(myName, "scientific_number_p", "SCIENTIFIC-NUMBER-P", 1, 0, false);
-    //declareFunction(myName, "new_scientific_number", "NEW-SCIENTIFIC-NUMBER", 2, 0, false);
-    //declareFunction(myName, "new_scientific_number_from_integer", "NEW-SCIENTIFIC-NUMBER-FROM-INTEGER", 1, 1, false);
-    //declareFunction(myName, "scientific_number_significand", "SCIENTIFIC-NUMBER-SIGNIFICAND", 1, 0, false);
-    //declareFunction(myName, "scientific_number_exponent", "SCIENTIFIC-NUMBER-EXPONENT", 1, 0, false);
-    //declareFunction(myName, "copy_scientific_number", "COPY-SCIENTIFIC-NUMBER", 1, 0, false);
-    //declareFunction(myName, "scientific_number_zero_p", "SCIENTIFIC-NUMBER-ZERO-P", 1, 0, false);
-    //declareFunction(myName, "scientific_number_minus_p", "SCIENTIFIC-NUMBER-MINUS-P", 1, 0, false);
-    //declareFunction(myName, "scientific_number_plus_p", "SCIENTIFIC-NUMBER-PLUS-P", 1, 0, false);
-    //declareFunction(myName, "scientific_number_non_negative_p", "SCIENTIFIC-NUMBER-NON-NEGATIVE-P", 1, 0, false);
-    //declareFunction(myName, "scientific_number_add_significant_zeros", "SCIENTIFIC-NUMBER-ADD-SIGNIFICANT-ZEROS", 2, 0, false);
-    //declareFunction(myName, "cyc_scientific_number_from_string", "CYC-SCIENTIFIC-NUMBER-FROM-STRING", 1, 0, false);
-    //declareFunction(myName, "scientific_number_from_string", "SCIENTIFIC-NUMBER-FROM-STRING", 1, 1, false);
-    //declareFunction(myName, "first_non_zero_digit_position", "FIRST-NON-ZERO-DIGIT-POSITION", 1, 0, false);
-    //declareFunction(myName, "non_zero_digit_char_p", "NON-ZERO-DIGIT-CHAR-P", 1, 0, false);
-    //declareFunction(myName, "cyc_scientific_number_to_string", "CYC-SCIENTIFIC-NUMBER-TO-STRING", 1, 0, false);
-    //declareFunction(myName, "cyc_scientific_number_from_subl_real", "CYC-SCIENTIFIC-NUMBER-FROM-SUBL-REAL", 1, 0, false);
-    //declareFunction(myName, "scientific_number_from_subl_real", "SCIENTIFIC-NUMBER-FROM-SUBL-REAL", 1, 1, false);
-    //declareFunction(myName, "cyc_scientific_number_to_subl_real", "CYC-SCIENTIFIC-NUMBER-TO-SUBL-REAL", 1, 0, false);
-    //declareFunction(myName, "cyc_scientific_number_significant_digit_count", "CYC-SCIENTIFIC-NUMBER-SIGNIFICANT-DIGIT-COUNT", 1, 0, false);
+    //declareFunction("cyc_scientific_number_p", "CYC-SCIENTIFIC-NUMBER-P", 1, 0, false);
+    declareFunction("scientific_number_p", "SCIENTIFIC-NUMBER-P", 1, 0, false);
+    //declareFunction("new_scientific_number", "NEW-SCIENTIFIC-NUMBER", 2, 0, false);
+    //declareFunction("new_scientific_number_from_integer", "NEW-SCIENTIFIC-NUMBER-FROM-INTEGER", 1, 1, false);
+    //declareFunction("scientific_number_significand", "SCIENTIFIC-NUMBER-SIGNIFICAND", 1, 0, false);
+    //declareFunction("scientific_number_exponent", "SCIENTIFIC-NUMBER-EXPONENT", 1, 0, false);
+    //declareFunction("copy_scientific_number", "COPY-SCIENTIFIC-NUMBER", 1, 0, false);
+    //declareFunction("scientific_number_zero_p", "SCIENTIFIC-NUMBER-ZERO-P", 1, 0, false);
+    //declareFunction("scientific_number_minus_p", "SCIENTIFIC-NUMBER-MINUS-P", 1, 0, false);
+    //declareFunction("scientific_number_plus_p", "SCIENTIFIC-NUMBER-PLUS-P", 1, 0, false);
+    //declareFunction("scientific_number_non_negative_p", "SCIENTIFIC-NUMBER-NON-NEGATIVE-P", 1, 0, false);
+    //declareFunction("scientific_number_add_significant_zeros", "SCIENTIFIC-NUMBER-ADD-SIGNIFICANT-ZEROS", 2, 0, false);
+    //declareFunction("cyc_scientific_number_from_string", "CYC-SCIENTIFIC-NUMBER-FROM-STRING", 1, 0, false);
+    //declareFunction("scientific_number_from_string", "SCIENTIFIC-NUMBER-FROM-STRING", 1, 1, false);
+    //declareFunction("first_non_zero_digit_position", "FIRST-NON-ZERO-DIGIT-POSITION", 1, 0, false);
+    //declareFunction("non_zero_digit_char_p", "NON-ZERO-DIGIT-CHAR-P", 1, 0, false);
+    //declareFunction("cyc_scientific_number_to_string", "CYC-SCIENTIFIC-NUMBER-TO-STRING", 1, 0, false);
+    //declareFunction("cyc_scientific_number_from_subl_real", "CYC-SCIENTIFIC-NUMBER-FROM-SUBL-REAL", 1, 0, false);
+    //declareFunction("scientific_number_from_subl_real", "SCIENTIFIC-NUMBER-FROM-SUBL-REAL", 1, 1, false);
+    //declareFunction("cyc_scientific_number_to_subl_real", "CYC-SCIENTIFIC-NUMBER-TO-SUBL-REAL", 1, 0, false);
+    //declareFunction("cyc_scientific_number_significant_digit_count", "CYC-SCIENTIFIC-NUMBER-SIGNIFICANT-DIGIT-COUNT", 1, 0, false);
     return NIL;
   }
 

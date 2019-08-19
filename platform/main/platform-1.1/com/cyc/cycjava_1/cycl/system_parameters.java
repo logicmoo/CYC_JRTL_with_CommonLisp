@@ -392,18 +392,18 @@ default Cyclist initially logged into the system. */
   public static SubLSymbol $cyc_execution_context$ = null;
 
   public static final SubLObject declare_system_parameters_file() {
-    declareFunction(myName, "all_system_parameters", "ALL-SYSTEM-PARAMETERS", 0, 0, false);
-    declareFunction(myName, "register_system_parameter", "REGISTER-SYSTEM-PARAMETER", 4, 0, false);
-    declareFunction(myName, "remove_system_parameter", "REMOVE-SYSTEM-PARAMETER", 1, 0, false);
-    declareMacro(myName, "define_system_parameter", "DEFINE-SYSTEM-PARAMETER");
-    declareFunction(myName, "system_parameter_value_unset_p", "SYSTEM-PARAMETER-VALUE-UNSET-P", 1, 0, false);
-    declareFunction(myName, "check_system_parameters", "CHECK-SYSTEM-PARAMETERS", 0, 0, false);
-    declareFunction(myName, "alphanumericize_string", "ALPHANUMERICIZE-STRING", 1, 0, false);
-    declareFunction(myName, "setup_system_parameters", "SETUP-SYSTEM-PARAMETERS", 1, 1, false);
-    declareFunction(myName, "load_system_parameters", "LOAD-SYSTEM-PARAMETERS", 0, 0, false);
-    declareFunction(myName, "read_parameter_form", "READ-PARAMETER-FORM", 1, 0, false);
-    declareFunction(myName, "evaluate_parameter_form", "EVALUATE-PARAMETER-FORM", 1, 0, false);
-    declareFunction(myName, "evaluate_parameter_value", "EVALUATE-PARAMETER-VALUE", 1, 0, false);
+    declareFunction("all_system_parameters", "ALL-SYSTEM-PARAMETERS", 0, 0, false);
+    declareFunction("register_system_parameter", "REGISTER-SYSTEM-PARAMETER", 4, 0, false);
+    declareFunction("remove_system_parameter", "REMOVE-SYSTEM-PARAMETER", 1, 0, false);
+    declareMacro("define_system_parameter", "DEFINE-SYSTEM-PARAMETER");
+    declareFunction("system_parameter_value_unset_p", "SYSTEM-PARAMETER-VALUE-UNSET-P", 1, 0, false);
+    declareFunction("check_system_parameters", "CHECK-SYSTEM-PARAMETERS", 0, 0, false);
+    declareFunction("alphanumericize_string", "ALPHANUMERICIZE-STRING", 1, 0, false);
+    declareFunction("setup_system_parameters", "SETUP-SYSTEM-PARAMETERS", 1, 1, false);
+    declareFunction("load_system_parameters", "LOAD-SYSTEM-PARAMETERS", 0, 0, false);
+    declareFunction("read_parameter_form", "READ-PARAMETER-FORM", 1, 0, false);
+    declareFunction("evaluate_parameter_form", "EVALUATE-PARAMETER-FORM", 1, 0, false);
+    declareFunction("evaluate_parameter_value", "EVALUATE-PARAMETER-VALUE", 1, 0, false);
     return NIL;
   }
 

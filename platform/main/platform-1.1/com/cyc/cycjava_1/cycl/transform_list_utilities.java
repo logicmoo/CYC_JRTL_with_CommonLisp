@@ -336,34 +336,34 @@ public  final class transform_list_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_transform_list_utilities_file() {
-    declareFunction(myName, "transform_pred_funcall", "TRANSFORM-PRED-FUNCALL", 2, 0, false);
-    //declareFunction(myName, "transform_key_funcall", "TRANSFORM-KEY-FUNCALL", 2, 0, false);
-    declareFunction(myName, "transform_transform_funcall", "TRANSFORM-TRANSFORM-FUNCALL", 2, 0, false);
-    //declareFunction(myName, "transform_quiescence_funcall", "TRANSFORM-QUIESCENCE-FUNCALL", 3, 0, false);
-    declareFunction(myName, "transform", "TRANSFORM", 3, 1, false);
-    declareFunction(myName, "ntransform", "NTRANSFORM", 3, 3, false);
-    declareFunction(myName, "ntransform_recursive", "NTRANSFORM-RECURSIVE", 6, 0, false);
-    //declareFunction(myName, "shy_ntransform_recursive", "SHY-NTRANSFORM-RECURSIVE", 8, 0, false);
-    declareFunction(myName, "ntransform_perform_transform", "NTRANSFORM-PERFORM-TRANSFORM", 4, 0, false);
-    //declareFunction(myName, "shy_ntransform_perform_transform", "SHY-NTRANSFORM-PERFORM-TRANSFORM", 6, 0, false);
-    //declareFunction(myName, "make_ntransform_info", "MAKE-NTRANSFORM-INFO", 3, 0, false);
-    //declareFunction(myName, "reuse_ntransform_info", "REUSE-NTRANSFORM-INFO", 4, 0, false);
-    //declareMacro(myName, "get_ntransform_info_parent_cons", "GET-NTRANSFORM-INFO-PARENT-CONS");
-    //declareMacro(myName, "get_ntransform_info_set_op", "GET-NTRANSFORM-INFO-SET-OP");
-    //declareMacro(myName, "get_ntransform_info_value", "GET-NTRANSFORM-INFO-VALUE");
-    //declareMacro(myName, "set_ntransform_info_parent_cons", "SET-NTRANSFORM-INFO-PARENT-CONS");
-    //declareMacro(myName, "set_ntransform_info_set_op", "SET-NTRANSFORM-INFO-SET-OP");
-    //declareMacro(myName, "set_ntransform_info_value", "SET-NTRANSFORM-INFO-VALUE");
-    //declareFunction(myName, "ntransform_iterative", "NTRANSFORM-ITERATIVE", 3, 1, false);
-    //declareFunction(myName, "shy_ntransform_iterative", "SHY-NTRANSFORM-ITERATIVE", 3, 3, false);
-    declareFunction(myName, "quiescent_transform", "QUIESCENT-TRANSFORM", 3, 2, false);
-    declareFunction(myName, "quiescent_ntransform", "QUIESCENT-NTRANSFORM", 3, 4, false);
-    //declareFunction(myName, "quiescent_ntransform_recursive", "QUIESCENT-NTRANSFORM-RECURSIVE", 7, 0, false);
-    declareFunction(myName, "shy_quiescent_ntransform_recursive", "SHY-QUIESCENT-NTRANSFORM-RECURSIVE", 9, 0, false);
-    //declareFunction(myName, "quiescent_ntransform_iterative", "QUIESCENT-NTRANSFORM-ITERATIVE", 3, 2, false);
-    //declareFunction(myName, "shy_quiescent_ntransform_iterative", "SHY-QUIESCENT-NTRANSFORM-ITERATIVE", 3, 4, false);
-    //declareFunction(myName, "ntransform_perform_quiescent_transform", "NTRANSFORM-PERFORM-QUIESCENT-TRANSFORM", 5, 0, false);
-    declareFunction(myName, "shy_ntransform_perform_quiescent_transform", "SHY-NTRANSFORM-PERFORM-QUIESCENT-TRANSFORM", 7, 0, false);
+    declareFunction("transform_pred_funcall", "TRANSFORM-PRED-FUNCALL", 2, 0, false);
+    //declareFunction("transform_key_funcall", "TRANSFORM-KEY-FUNCALL", 2, 0, false);
+    declareFunction("transform_transform_funcall", "TRANSFORM-TRANSFORM-FUNCALL", 2, 0, false);
+    //declareFunction("transform_quiescence_funcall", "TRANSFORM-QUIESCENCE-FUNCALL", 3, 0, false);
+    declareFunction("transform", "TRANSFORM", 3, 1, false);
+    declareFunction("ntransform", "NTRANSFORM", 3, 3, false);
+    declareFunction("ntransform_recursive", "NTRANSFORM-RECURSIVE", 6, 0, false);
+    //declareFunction("shy_ntransform_recursive", "SHY-NTRANSFORM-RECURSIVE", 8, 0, false);
+    declareFunction("ntransform_perform_transform", "NTRANSFORM-PERFORM-TRANSFORM", 4, 0, false);
+    //declareFunction("shy_ntransform_perform_transform", "SHY-NTRANSFORM-PERFORM-TRANSFORM", 6, 0, false);
+    //declareFunction("make_ntransform_info", "MAKE-NTRANSFORM-INFO", 3, 0, false);
+    //declareFunction("reuse_ntransform_info", "REUSE-NTRANSFORM-INFO", 4, 0, false);
+    //declareMacro("get_ntransform_info_parent_cons", "GET-NTRANSFORM-INFO-PARENT-CONS");
+    //declareMacro("get_ntransform_info_set_op", "GET-NTRANSFORM-INFO-SET-OP");
+    //declareMacro("get_ntransform_info_value", "GET-NTRANSFORM-INFO-VALUE");
+    //declareMacro("set_ntransform_info_parent_cons", "SET-NTRANSFORM-INFO-PARENT-CONS");
+    //declareMacro("set_ntransform_info_set_op", "SET-NTRANSFORM-INFO-SET-OP");
+    //declareMacro("set_ntransform_info_value", "SET-NTRANSFORM-INFO-VALUE");
+    //declareFunction("ntransform_iterative", "NTRANSFORM-ITERATIVE", 3, 1, false);
+    //declareFunction("shy_ntransform_iterative", "SHY-NTRANSFORM-ITERATIVE", 3, 3, false);
+    declareFunction("quiescent_transform", "QUIESCENT-TRANSFORM", 3, 2, false);
+    declareFunction("quiescent_ntransform", "QUIESCENT-NTRANSFORM", 3, 4, false);
+    //declareFunction("quiescent_ntransform_recursive", "QUIESCENT-NTRANSFORM-RECURSIVE", 7, 0, false);
+    declareFunction("shy_quiescent_ntransform_recursive", "SHY-QUIESCENT-NTRANSFORM-RECURSIVE", 9, 0, false);
+    //declareFunction("quiescent_ntransform_iterative", "QUIESCENT-NTRANSFORM-ITERATIVE", 3, 2, false);
+    //declareFunction("shy_quiescent_ntransform_iterative", "SHY-QUIESCENT-NTRANSFORM-ITERATIVE", 3, 4, false);
+    //declareFunction("ntransform_perform_quiescent_transform", "NTRANSFORM-PERFORM-QUIESCENT-TRANSFORM", 5, 0, false);
+    declareFunction("shy_ntransform_perform_quiescent_transform", "SHY-NTRANSFORM-PERFORM-QUIESCENT-TRANSFORM", 7, 0, false);
     return NIL;
   }
 

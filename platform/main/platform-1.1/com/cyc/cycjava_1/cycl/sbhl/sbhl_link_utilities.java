@@ -176,17 +176,17 @@ public  final class sbhl_link_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_sbhl_link_utilities_file() {
-    //declareFunction(myName, "print_sbhl_direction_link", "PRINT-SBHL-DIRECTION-LINK", 2, 0, false);
-    declareFunction(myName, "empty_tv_link_p", "EMPTY-TV-LINK-P", 2, 0, false);
-    declareFunction(myName, "empty_tv_links_p", "EMPTY-TV-LINKS-P", 1, 0, false);
-    declareFunction(myName, "empty_mt_link_p", "EMPTY-MT-LINK-P", 2, 0, false);
-    declareFunction(myName, "empty_mt_links_p", "EMPTY-MT-LINKS-P", 1, 0, false);
-    declareFunction(myName, "empty_direction_link_p", "EMPTY-DIRECTION-LINK-P", 2, 0, false);
-    declareFunction(myName, "empty_graph_link_p", "EMPTY-GRAPH-LINK-P", 2, 0, false);
-    //declareFunction(myName, "valid_sbhl_graph_link_p", "VALID-SBHL-GRAPH-LINK-P", 2, 0, false);
-    //declareFunction(myName, "valid_sbhl_module_p", "VALID-SBHL-MODULE-P", 1, 0, false);
-    //declareFunction(myName, "valid_sbhl_links_p", "VALID-SBHL-LINKS-P", 1, 0, false);
-    //declareFunction(myName, "valid_sbhl_p", "VALID-SBHL-P", 0, 0, false);
+    //declareFunction("print_sbhl_direction_link", "PRINT-SBHL-DIRECTION-LINK", 2, 0, false);
+    declareFunction("empty_tv_link_p", "EMPTY-TV-LINK-P", 2, 0, false);
+    declareFunction("empty_tv_links_p", "EMPTY-TV-LINKS-P", 1, 0, false);
+    declareFunction("empty_mt_link_p", "EMPTY-MT-LINK-P", 2, 0, false);
+    declareFunction("empty_mt_links_p", "EMPTY-MT-LINKS-P", 1, 0, false);
+    declareFunction("empty_direction_link_p", "EMPTY-DIRECTION-LINK-P", 2, 0, false);
+    declareFunction("empty_graph_link_p", "EMPTY-GRAPH-LINK-P", 2, 0, false);
+    //declareFunction("valid_sbhl_graph_link_p", "VALID-SBHL-GRAPH-LINK-P", 2, 0, false);
+    //declareFunction("valid_sbhl_module_p", "VALID-SBHL-MODULE-P", 1, 0, false);
+    //declareFunction("valid_sbhl_links_p", "VALID-SBHL-LINKS-P", 1, 0, false);
+    //declareFunction("valid_sbhl_p", "VALID-SBHL-P", 0, 0, false);
     return NIL;
   }
 

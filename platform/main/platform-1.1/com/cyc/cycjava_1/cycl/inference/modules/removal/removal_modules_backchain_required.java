@@ -99,10 +99,10 @@ public  final class removal_modules_backchain_required extends SubLTranslatedFil
   }
 
   public static final SubLObject declare_removal_modules_backchain_required_file() {
-    declareFunction(myName, "current_problem_store_transformation_allowedP", "CURRENT-PROBLEM-STORE-TRANSFORMATION-ALLOWED?", 0, 1, false); new $current_problem_store_transformation_allowedP$ZeroArityFunction(); new $current_problem_store_transformation_allowedP$UnaryFunction();
-    declareFunction(myName, "inference_backchain_forbidden_unless_arg_chosen_asent_in_relevant_mtP", "INFERENCE-BACKCHAIN-FORBIDDEN-UNLESS-ARG-CHOSEN-ASENT-IN-RELEVANT-MT?", 1, 0, false);
-    declareFunction(myName, "removal_backchain_required_prune_required", "REMOVAL-BACKCHAIN-REQUIRED-PRUNE-REQUIRED", 1, 1, false);
-    declareFunction(myName, "inference_backchain_required_asent_in_relevant_mtP", "INFERENCE-BACKCHAIN-REQUIRED-ASENT-IN-RELEVANT-MT?", 1, 1, false); new $inference_backchain_required_asent_in_relevant_mtP$UnaryFunction(); new $inference_backchain_required_asent_in_relevant_mtP$BinaryFunction();
+    declareFunction("current_problem_store_transformation_allowedP", "CURRENT-PROBLEM-STORE-TRANSFORMATION-ALLOWED?", 0, 1, false); new $current_problem_store_transformation_allowedP$ZeroArityFunction(); new $current_problem_store_transformation_allowedP$UnaryFunction();
+    declareFunction("inference_backchain_forbidden_unless_arg_chosen_asent_in_relevant_mtP", "INFERENCE-BACKCHAIN-FORBIDDEN-UNLESS-ARG-CHOSEN-ASENT-IN-RELEVANT-MT?", 1, 0, false);
+    declareFunction("removal_backchain_required_prune_required", "REMOVAL-BACKCHAIN-REQUIRED-PRUNE-REQUIRED", 1, 1, false);
+    declareFunction("inference_backchain_required_asent_in_relevant_mtP", "INFERENCE-BACKCHAIN-REQUIRED-ASENT-IN-RELEVANT-MT?", 1, 1, false); new $inference_backchain_required_asent_in_relevant_mtP$UnaryFunction(); new $inference_backchain_required_asent_in_relevant_mtP$BinaryFunction();
     return NIL;
   }
 

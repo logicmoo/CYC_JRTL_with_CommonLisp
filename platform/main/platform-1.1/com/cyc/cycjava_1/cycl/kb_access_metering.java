@@ -77,24 +77,24 @@ public  final class kb_access_metering extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_kb_access_metering_file() {
-    //declareMacro(myName, "with_kb_access_metering", "WITH-KB-ACCESS-METERING");
-    //declareFunction(myName, "eval_with_kb_access_metering", "EVAL-WITH-KB-ACCESS-METERING", 1, 2, false);
-    //declareFunction(myName, "new_kb_access_metering_table", "NEW-KB-ACCESS-METERING-TABLE", 2, 0, false);
-    //declareFunction(myName, "postprocess_kb_access_metering_table", "POSTPROCESS-KB-ACCESS-METERING-TABLE", 3, 0, false);
-    //declareFunction(myName, "possibly_note_kb_access_constant", "POSSIBLY-NOTE-KB-ACCESS-CONSTANT", 1, 0, false);
-    //declareFunction(myName, "possibly_note_kb_access_nart", "POSSIBLY-NOTE-KB-ACCESS-NART", 1, 0, false);
-    declareFunction(myName, "possibly_note_kb_access_assertion", "POSSIBLY-NOTE-KB-ACCESS-ASSERTION", 1, 0, false);
-    //declareFunction(myName, "note_kb_access_assertion", "NOTE-KB-ACCESS-ASSERTION", 1, 0, false);
-    //declareMacro(myName, "possibly_note_kb_access_sbhl_link", "POSSIBLY-NOTE-KB-ACCESS-SBHL-LINK");
-    //declareFunction(myName, "note_kb_access_sbhlP", "NOTE-KB-ACCESS-SBHL?", 0, 0, false);
-    //declareFunction(myName, "kb_access_metering_asserted_assertions", "KB-ACCESS-METERING-ASSERTED-ASSERTIONS", 1, 0, false);
-    //declareFunction(myName, "mean_asserted_assertion_dates", "MEAN-ASSERTED-ASSERTION-DATES", 1, 0, false);
-    //declareFunction(myName, "median_asserted_assertion_dates", "MEDIAN-ASSERTED-ASSERTION-DATES", 1, 0, false);
-    //declareFunction(myName, "weighted_mean_asserted_assertion_dates", "WEIGHTED-MEAN-ASSERTED-ASSERTION-DATES", 1, 0, false);
-    //declareFunction(myName, "weighted_median_asserted_assertion_dates", "WEIGHTED-MEDIAN-ASSERTED-ASSERTION-DATES", 1, 0, false);
-    //declareFunction(myName, "percent_before_date", "PERCENT-BEFORE-DATE", 2, 0, false);
-    //declareFunction(myName, "weighted_percent_before_date", "WEIGHTED-PERCENT-BEFORE-DATE", 2, 0, false);
-    //declareFunction(myName, "print_asserted_assertions_by_date", "PRINT-ASSERTED-ASSERTIONS-BY-DATE", 1, 1, false);
+    //declareMacro("with_kb_access_metering", "WITH-KB-ACCESS-METERING");
+    //declareFunction("eval_with_kb_access_metering", "EVAL-WITH-KB-ACCESS-METERING", 1, 2, false);
+    //declareFunction("new_kb_access_metering_table", "NEW-KB-ACCESS-METERING-TABLE", 2, 0, false);
+    //declareFunction("postprocess_kb_access_metering_table", "POSTPROCESS-KB-ACCESS-METERING-TABLE", 3, 0, false);
+    //declareFunction("possibly_note_kb_access_constant", "POSSIBLY-NOTE-KB-ACCESS-CONSTANT", 1, 0, false);
+    //declareFunction("possibly_note_kb_access_nart", "POSSIBLY-NOTE-KB-ACCESS-NART", 1, 0, false);
+    declareFunction("possibly_note_kb_access_assertion", "POSSIBLY-NOTE-KB-ACCESS-ASSERTION", 1, 0, false);
+    //declareFunction("note_kb_access_assertion", "NOTE-KB-ACCESS-ASSERTION", 1, 0, false);
+    //declareMacro("possibly_note_kb_access_sbhl_link", "POSSIBLY-NOTE-KB-ACCESS-SBHL-LINK");
+    //declareFunction("note_kb_access_sbhlP", "NOTE-KB-ACCESS-SBHL?", 0, 0, false);
+    //declareFunction("kb_access_metering_asserted_assertions", "KB-ACCESS-METERING-ASSERTED-ASSERTIONS", 1, 0, false);
+    //declareFunction("mean_asserted_assertion_dates", "MEAN-ASSERTED-ASSERTION-DATES", 1, 0, false);
+    //declareFunction("median_asserted_assertion_dates", "MEDIAN-ASSERTED-ASSERTION-DATES", 1, 0, false);
+    //declareFunction("weighted_mean_asserted_assertion_dates", "WEIGHTED-MEAN-ASSERTED-ASSERTION-DATES", 1, 0, false);
+    //declareFunction("weighted_median_asserted_assertion_dates", "WEIGHTED-MEDIAN-ASSERTED-ASSERTION-DATES", 1, 0, false);
+    //declareFunction("percent_before_date", "PERCENT-BEFORE-DATE", 2, 0, false);
+    //declareFunction("weighted_percent_before_date", "WEIGHTED-PERCENT-BEFORE-DATE", 2, 0, false);
+    //declareFunction("print_asserted_assertions_by_date", "PRINT-ASSERTED-ASSERTIONS-BY-DATE", 1, 1, false);
     return NIL;
   }
 

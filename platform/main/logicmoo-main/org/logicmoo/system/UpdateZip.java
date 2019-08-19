@@ -51,6 +51,7 @@ public class UpdateZip {
 		zipMap("data/caches/" + name + "/generic-singular-nl-generation-fort-cache.fht", "data" + name + ".zip", "data/");
 		zipMap("data/scg-repo-v2/service.properties", "scg-repo-v2.zip", "data/");
 		zipMap("webapps/apps/webapp-manifest.xml", "webapps7166.zip", "./");
+		zipMap("httpd/htdocs/javascript/simularity.js", "httpd.zip", "httpd/");
 
 	}
 

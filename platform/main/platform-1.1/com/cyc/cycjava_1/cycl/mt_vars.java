@@ -329,20 +329,20 @@ and the code assumes that these mts are the same. */
   }
 
   public static final SubLObject declare_mt_vars_file() {
-    declareMacro(myName, "defglobal_mt_var", "DEFGLOBAL-MT-VAR");
-    declareFunction(myName, "note_mt_var", "NOTE-MT-VAR", 1, 1, false);
-    declareFunction(myName, "note_mt_var_basis", "NOTE-MT-VAR-BASIS", 2, 0, false);
-    declareFunction(myName, "mt_mt_relevantP", "MT-MT-RELEVANT?", 1, 0, false);
-    declareFunction(myName, "core_microtheory_p", "CORE-MICROTHEORY-P", 1, 0, false); new $core_microtheory_p$UnaryFunction();
-    declareFunction(myName, "core_microtheory_L", "CORE-MICROTHEORY-<", 2, 0, false);
-    declareFunction(myName, "core_microtheory_G", "CORE-MICROTHEORY->", 2, 0, false);
-    declareFunction(myName, "core_genl_mtP", "CORE-GENL-MT?", 2, 0, false);
-    declareFunction(myName, "core_any_genl_mtP", "CORE-ANY-GENL-MT?", 2, 0, false);
-    declareFunction(myName, "special_core_loop_mt_p", "SPECIAL-CORE-LOOP-MT-P", 1, 0, false); new $special_core_loop_mt_p$UnaryFunction();
-    declareFunction(myName, "minimize_mts_wrt_core", "MINIMIZE-MTS-WRT-CORE", 1, 0, false);
-    declareFunction(myName, "maximize_mts_wrt_core", "MAXIMIZE-MTS-WRT-CORE", 1, 0, false);
-    declareFunction(myName, "minimize_mt_sets_wrt_core", "MINIMIZE-MT-SETS-WRT-CORE", 1, 0, false);
-    declareFunction(myName, "push_core_mts_to_beginning", "PUSH-CORE-MTS-TO-BEGINNING", 1, 0, false);
+    declareMacro("defglobal_mt_var", "DEFGLOBAL-MT-VAR");
+    declareFunction("note_mt_var", "NOTE-MT-VAR", 1, 1, false);
+    declareFunction("note_mt_var_basis", "NOTE-MT-VAR-BASIS", 2, 0, false);
+    declareFunction("mt_mt_relevantP", "MT-MT-RELEVANT?", 1, 0, false);
+    declareFunction("core_microtheory_p", "CORE-MICROTHEORY-P", 1, 0, false); new $core_microtheory_p$UnaryFunction();
+    declareFunction("core_microtheory_L", "CORE-MICROTHEORY-<", 2, 0, false);
+    declareFunction("core_microtheory_G", "CORE-MICROTHEORY->", 2, 0, false);
+    declareFunction("core_genl_mtP", "CORE-GENL-MT?", 2, 0, false);
+    declareFunction("core_any_genl_mtP", "CORE-ANY-GENL-MT?", 2, 0, false);
+    declareFunction("special_core_loop_mt_p", "SPECIAL-CORE-LOOP-MT-P", 1, 0, false); new $special_core_loop_mt_p$UnaryFunction();
+    declareFunction("minimize_mts_wrt_core", "MINIMIZE-MTS-WRT-CORE", 1, 0, false);
+    declareFunction("maximize_mts_wrt_core", "MAXIMIZE-MTS-WRT-CORE", 1, 0, false);
+    declareFunction("minimize_mt_sets_wrt_core", "MINIMIZE-MT-SETS-WRT-CORE", 1, 0, false);
+    declareFunction("push_core_mts_to_beginning", "PUSH-CORE-MTS-TO-BEGINNING", 1, 0, false);
     return NIL;
   }
 

@@ -81,23 +81,23 @@ public  final class unicode_streams extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_unicode_streams_file() {
-    declareFunction(myName, "utf8_stream_print_function_trampoline", "UTF8-STREAM-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-    //declareFunction(myName, "utf8_stream_p", "UTF8-STREAM-P", 1, 0, false); new $utf8_stream_p$UnaryFunction();
-    //declareFunction(myName, "utf8_stream_stream", "UTF8-STREAM-STREAM", 1, 0, false);
-    //declareFunction(myName, "utf8_stream_cache", "UTF8-STREAM-CACHE", 1, 0, false);
-    //declareFunction(myName, "_csetf_utf8_stream_stream", "_CSETF-UTF8-STREAM-STREAM", 2, 0, false);
-    //declareFunction(myName, "_csetf_utf8_stream_cache", "_CSETF-UTF8-STREAM-CACHE", 2, 0, false);
-    //declareFunction(myName, "make_utf8_stream", "MAKE-UTF8-STREAM", 0, 1, false);
-    //declareFunction(myName, "utf8_stream_create", "UTF8-STREAM-CREATE", 1, 0, false);
-    //declareFunction(myName, "print_utf8_stream", "PRINT-UTF8-STREAM", 3, 0, false);
-    //declareFunction(myName, "open_utf8", "OPEN-UTF8", 2, 0, false);
-    //declareFunction(myName, "close_utf8", "CLOSE-UTF8", 1, 0, false);
-    //declareFunction(myName, "write_unicode_char_to_utf8", "WRITE-UNICODE-CHAR-TO-UTF8", 1, 1, false);
-    //declareFunction(myName, "write_unicode_string_to_utf8", "WRITE-UNICODE-STRING-TO-UTF8", 1, 3, false);
-    //declareFunction(myName, "write_unicode_string_to_utf8_line", "WRITE-UNICODE-STRING-TO-UTF8-LINE", 1, 3, false);
-    //declareFunction(myName, "read_utf8_char", "READ-UTF8-CHAR", 0, 4, false);
-    //declareFunction(myName, "read_utf8_char_helper", "READ-UTF8-CHAR-HELPER", 0, 4, false);
-    //declareFunction(myName, "read_utf8_line", "READ-UTF8-LINE", 0, 4, false);
+    declareFunction("utf8_stream_print_function_trampoline", "UTF8-STREAM-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+    //declareFunction("utf8_stream_p", "UTF8-STREAM-P", 1, 0, false); new $utf8_stream_p$UnaryFunction();
+    //declareFunction("utf8_stream_stream", "UTF8-STREAM-STREAM", 1, 0, false);
+    //declareFunction("utf8_stream_cache", "UTF8-STREAM-CACHE", 1, 0, false);
+    //declareFunction("_csetf_utf8_stream_stream", "_CSETF-UTF8-STREAM-STREAM", 2, 0, false);
+    //declareFunction("_csetf_utf8_stream_cache", "_CSETF-UTF8-STREAM-CACHE", 2, 0, false);
+    //declareFunction("make_utf8_stream", "MAKE-UTF8-STREAM", 0, 1, false);
+    //declareFunction("utf8_stream_create", "UTF8-STREAM-CREATE", 1, 0, false);
+    //declareFunction("print_utf8_stream", "PRINT-UTF8-STREAM", 3, 0, false);
+    //declareFunction("open_utf8", "OPEN-UTF8", 2, 0, false);
+    //declareFunction("close_utf8", "CLOSE-UTF8", 1, 0, false);
+    //declareFunction("write_unicode_char_to_utf8", "WRITE-UNICODE-CHAR-TO-UTF8", 1, 1, false);
+    //declareFunction("write_unicode_string_to_utf8", "WRITE-UNICODE-STRING-TO-UTF8", 1, 3, false);
+    //declareFunction("write_unicode_string_to_utf8_line", "WRITE-UNICODE-STRING-TO-UTF8-LINE", 1, 3, false);
+    //declareFunction("read_utf8_char", "READ-UTF8-CHAR", 0, 4, false);
+    //declareFunction("read_utf8_char_helper", "READ-UTF8-CHAR-HELPER", 0, 4, false);
+    //declareFunction("read_utf8_line", "READ-UTF8-LINE", 0, 4, false);
     return NIL;
   }
 

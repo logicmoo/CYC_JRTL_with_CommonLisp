@@ -86,29 +86,29 @@ public  final class test_query_suite extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_test_query_suite_file() {
-    declareFunction(myName, "test_query_suite_print_function_trampoline", "TEST-QUERY-SUITE-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-    declareFunction(myName, "test_query_suite_p", "TEST-QUERY-SUITE-P", 1, 0, false); new $test_query_suite_p$UnaryFunction();
-    declareFunction(myName, "test_ste_cycl_id", "TEST-STE-CYCL-ID", 1, 0, false);
-    declareFunction(myName, "test_ste_comment", "TEST-STE-COMMENT", 1, 0, false);
-    declareFunction(myName, "test_ste_mt", "TEST-STE-MT", 1, 0, false);
-    declareFunction(myName, "test_ste_queries", "TEST-STE-QUERIES", 1, 0, false);
-    declareFunction(myName, "_csetf_test_ste_cycl_id", "_CSETF-TEST-STE-CYCL-ID", 2, 0, false);
-    declareFunction(myName, "_csetf_test_ste_comment", "_CSETF-TEST-STE-COMMENT", 2, 0, false);
-    declareFunction(myName, "_csetf_test_ste_mt", "_CSETF-TEST-STE-MT", 2, 0, false);
-    declareFunction(myName, "_csetf_test_ste_queries", "_CSETF-TEST-STE-QUERIES", 2, 0, false);
-    declareFunction(myName, "make_test_query_suite", "MAKE-TEST-QUERY-SUITE", 0, 1, false);
-    declareFunction(myName, "test_query_suite_cycl_id", "TEST-QUERY-SUITE-CYCL-ID", 1, 0, false);
-    declareFunction(myName, "test_query_suite_comment", "TEST-QUERY-SUITE-COMMENT", 1, 0, false);
-    declareFunction(myName, "test_query_suite_mt", "TEST-QUERY-SUITE-MT", 1, 0, false);
-    declareFunction(myName, "test_query_suite_queries", "TEST-QUERY-SUITE-QUERIES", 1, 0, false);
-    declareFunction(myName, "test_query_suite_print", "TEST-QUERY-SUITE-PRINT", 3, 1, false);
-    declareFunction(myName, "test_query_suite_get", "TEST-QUERY-SUITE-GET", 1, 1, false);
-    declareFunction(myName, "test_query_suite_find_query_by_id", "TEST-QUERY-SUITE-FIND-QUERY-BY-ID", 2, 0, false);
-    declareFunction(myName, "test_query_suite_set_queries", "TEST-QUERY-SUITE-SET-QUERIES", 2, 0, false);
-    declareFunction(myName, "test_query_suite_find_query_siblings", "TEST-QUERY-SUITE-FIND-QUERY-SIBLINGS", 2, 0, false);
-    declareFunction(myName, "test_query_suite_new", "TEST-QUERY-SUITE-NEW", 2, 0, false);
-    declareFunction(myName, "cycl_query_specification_comment_comparator", "CYCL-QUERY-SPECIFICATION-COMMENT-COMPARATOR", 2, 0, false);
-    declareFunction(myName, "test_query_suite_sort_by_comment", "TEST-QUERY-SUITE-SORT-BY-COMMENT", 1, 0, false);
+    declareFunction("test_query_suite_print_function_trampoline", "TEST-QUERY-SUITE-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+    declareFunction("test_query_suite_p", "TEST-QUERY-SUITE-P", 1, 0, false); new $test_query_suite_p$UnaryFunction();
+    declareFunction("test_ste_cycl_id", "TEST-STE-CYCL-ID", 1, 0, false);
+    declareFunction("test_ste_comment", "TEST-STE-COMMENT", 1, 0, false);
+    declareFunction("test_ste_mt", "TEST-STE-MT", 1, 0, false);
+    declareFunction("test_ste_queries", "TEST-STE-QUERIES", 1, 0, false);
+    declareFunction("_csetf_test_ste_cycl_id", "_CSETF-TEST-STE-CYCL-ID", 2, 0, false);
+    declareFunction("_csetf_test_ste_comment", "_CSETF-TEST-STE-COMMENT", 2, 0, false);
+    declareFunction("_csetf_test_ste_mt", "_CSETF-TEST-STE-MT", 2, 0, false);
+    declareFunction("_csetf_test_ste_queries", "_CSETF-TEST-STE-QUERIES", 2, 0, false);
+    declareFunction("make_test_query_suite", "MAKE-TEST-QUERY-SUITE", 0, 1, false);
+    declareFunction("test_query_suite_cycl_id", "TEST-QUERY-SUITE-CYCL-ID", 1, 0, false);
+    declareFunction("test_query_suite_comment", "TEST-QUERY-SUITE-COMMENT", 1, 0, false);
+    declareFunction("test_query_suite_mt", "TEST-QUERY-SUITE-MT", 1, 0, false);
+    declareFunction("test_query_suite_queries", "TEST-QUERY-SUITE-QUERIES", 1, 0, false);
+    declareFunction("test_query_suite_print", "TEST-QUERY-SUITE-PRINT", 3, 1, false);
+    declareFunction("test_query_suite_get", "TEST-QUERY-SUITE-GET", 1, 1, false);
+    declareFunction("test_query_suite_find_query_by_id", "TEST-QUERY-SUITE-FIND-QUERY-BY-ID", 2, 0, false);
+    declareFunction("test_query_suite_set_queries", "TEST-QUERY-SUITE-SET-QUERIES", 2, 0, false);
+    declareFunction("test_query_suite_find_query_siblings", "TEST-QUERY-SUITE-FIND-QUERY-SIBLINGS", 2, 0, false);
+    declareFunction("test_query_suite_new", "TEST-QUERY-SUITE-NEW", 2, 0, false);
+    declareFunction("cycl_query_specification_comment_comparator", "CYCL-QUERY-SPECIFICATION-COMMENT-COMPARATOR", 2, 0, false);
+    declareFunction("test_query_suite_sort_by_comment", "TEST-QUERY-SUITE-SORT-BY-COMMENT", 1, 0, false);
     return NIL;
   }
 

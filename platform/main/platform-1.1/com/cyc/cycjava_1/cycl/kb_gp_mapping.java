@@ -252,30 +252,30 @@ public  final class kb_gp_mapping extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_kb_gp_mapping_file() {
-    //declareMacro(myName, "do_gaf_arg_index_gp", "DO-GAF-ARG-INDEX-GP");
-    declareFunction(myName, "dgaigp_binaryP", "DGAIGP-BINARY?", 1, 0, false);
-    //declareMacro(myName, "do_gaf_arg_index_values_gp", "DO-GAF-ARG-INDEX-VALUES-GP");
-    //declareFunction(myName, "dgaivgp_arg", "DGAIVGP-ARG", 2, 0, false);
-    declareFunction(myName, "gp_map_arg_index", "GP-MAP-ARG-INDEX", 4, 0, false);
-    //declareFunction(myName, "gp_gather_gaf_arg_index", "GP-GATHER-GAF-ARG-INDEX", 3, 1, false);
-    //declareFunction(myName, "gp_fpred_value", "GP-FPRED-VALUE", 2, 2, false);
-    //declareFunction(myName, "gp_fpred_value_in_mt", "GP-FPRED-VALUE-IN-MT", 3, 2, false);
-    //declareFunction(myName, "gp_fpred_value_in_mts", "GP-FPRED-VALUE-IN-MTS", 3, 2, false);
-    //declareFunction(myName, "gp_fpred_value_in_any_mt", "GP-FPRED-VALUE-IN-ANY-MT", 2, 2, false);
-    //declareFunction(myName, "gp_fpred_value_in_relevant_mts", "GP-FPRED-VALUE-IN-RELEVANT-MTS", 2, 3, false);
-    //declareFunction(myName, "gp_pred_values", "GP-PRED-VALUES", 2, 2, false);
-    //declareFunction(myName, "gp_pred_values_in_mt", "GP-PRED-VALUES-IN-MT", 3, 2, false);
-    //declareFunction(myName, "gp_pred_values_in_mts", "GP-PRED-VALUES-IN-MTS", 3, 2, false);
-    //declareFunction(myName, "gp_pred_values_in_any_mt", "GP-PRED-VALUES-IN-ANY-MT", 2, 2, false);
-    //declareFunction(myName, "gp_pred_values_in_relevant_mts", "GP-PRED-VALUES-IN-RELEVANT-MTS", 2, 3, false);
-    //declareMacro(myName, "do_all_spec_predicates2", "DO-ALL-SPEC-PREDICATES2");
-    //declareMacro(myName, "do_all_spec_inverses2", "DO-ALL-SPEC-INVERSES2");
-    //declareFunction(myName, "some_spec_pred_value_in_relevant_mts", "SOME-SPEC-PRED-VALUE-IN-RELEVANT-MTS", 2, 3, false);
-    //declareMacro(myName, "do_spec_pred_index", "DO-SPEC-PRED-INDEX");
-    //declareMacro(myName, "do_spec_pred_index_in_any_mt", "DO-SPEC-PRED-INDEX-IN-ANY-MT");
-    //declareMacro(myName, "do_arg_index_with_spec_preds", "DO-ARG-INDEX-WITH-SPEC-PREDS");
-    //declareMacro(myName, "do_arg_index_in_any_mt_with_spec_preds", "DO-ARG-INDEX-IN-ANY-MT-WITH-SPEC-PREDS");
-    declareFunction(myName, "num_spec_pred_index", "NUM-SPEC-PRED-INDEX", 1, 1, false);
+    //declareMacro("do_gaf_arg_index_gp", "DO-GAF-ARG-INDEX-GP");
+    declareFunction("dgaigp_binaryP", "DGAIGP-BINARY?", 1, 0, false);
+    //declareMacro("do_gaf_arg_index_values_gp", "DO-GAF-ARG-INDEX-VALUES-GP");
+    //declareFunction("dgaivgp_arg", "DGAIVGP-ARG", 2, 0, false);
+    declareFunction("gp_map_arg_index", "GP-MAP-ARG-INDEX", 4, 0, false);
+    //declareFunction("gp_gather_gaf_arg_index", "GP-GATHER-GAF-ARG-INDEX", 3, 1, false);
+    //declareFunction("gp_fpred_value", "GP-FPRED-VALUE", 2, 2, false);
+    //declareFunction("gp_fpred_value_in_mt", "GP-FPRED-VALUE-IN-MT", 3, 2, false);
+    //declareFunction("gp_fpred_value_in_mts", "GP-FPRED-VALUE-IN-MTS", 3, 2, false);
+    //declareFunction("gp_fpred_value_in_any_mt", "GP-FPRED-VALUE-IN-ANY-MT", 2, 2, false);
+    //declareFunction("gp_fpred_value_in_relevant_mts", "GP-FPRED-VALUE-IN-RELEVANT-MTS", 2, 3, false);
+    //declareFunction("gp_pred_values", "GP-PRED-VALUES", 2, 2, false);
+    //declareFunction("gp_pred_values_in_mt", "GP-PRED-VALUES-IN-MT", 3, 2, false);
+    //declareFunction("gp_pred_values_in_mts", "GP-PRED-VALUES-IN-MTS", 3, 2, false);
+    //declareFunction("gp_pred_values_in_any_mt", "GP-PRED-VALUES-IN-ANY-MT", 2, 2, false);
+    //declareFunction("gp_pred_values_in_relevant_mts", "GP-PRED-VALUES-IN-RELEVANT-MTS", 2, 3, false);
+    //declareMacro("do_all_spec_predicates2", "DO-ALL-SPEC-PREDICATES2");
+    //declareMacro("do_all_spec_inverses2", "DO-ALL-SPEC-INVERSES2");
+    //declareFunction("some_spec_pred_value_in_relevant_mts", "SOME-SPEC-PRED-VALUE-IN-RELEVANT-MTS", 2, 3, false);
+    //declareMacro("do_spec_pred_index", "DO-SPEC-PRED-INDEX");
+    //declareMacro("do_spec_pred_index_in_any_mt", "DO-SPEC-PRED-INDEX-IN-ANY-MT");
+    //declareMacro("do_arg_index_with_spec_preds", "DO-ARG-INDEX-WITH-SPEC-PREDS");
+    //declareMacro("do_arg_index_in_any_mt_with_spec_preds", "DO-ARG-INDEX-IN-ANY-MT-WITH-SPEC-PREDS");
+    declareFunction("num_spec_pred_index", "NUM-SPEC-PRED-INDEX", 1, 1, false);
     return NIL;
   }
 

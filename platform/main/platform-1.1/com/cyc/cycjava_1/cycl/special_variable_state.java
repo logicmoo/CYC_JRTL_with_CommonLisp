@@ -176,28 +176,28 @@ public  final class special_variable_state extends SubLTranslatedFile {
   }
 
   public static final SubLObject declare_special_variable_state_file() {
-    declareFunction(myName, "bound_symbol_p", "BOUND-SYMBOL-P", 1, 0, false);
-    declareFunction(myName, "bound_special_variable_p", "BOUND-SPECIAL-VARIABLE-P", 1, 0, false);
-    declareFunction(myName, "bound_special_variable_list_p", "BOUND-SPECIAL-VARIABLE-LIST-P", 1, 0, false);
-    declareFunction(myName, "special_variable_state_print_function_trampoline", "SPECIAL-VARIABLE-STATE-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-    declareFunction(myName, "special_variable_state_p", "SPECIAL-VARIABLE-STATE-P", 1, 0, false); new $special_variable_state_p$UnaryFunction();
-    declareFunction(myName, "svs_variables", "SVS-VARIABLES", 1, 0, false);
-    declareFunction(myName, "svs_values", "SVS-VALUES", 1, 0, false);
-    declareFunction(myName, "_csetf_svs_variables", "_CSETF-SVS-VARIABLES", 2, 0, false);
-    declareFunction(myName, "_csetf_svs_values", "_CSETF-SVS-VALUES", 2, 0, false);
-    declareFunction(myName, "make_special_variable_state", "MAKE-SPECIAL-VARIABLE-STATE", 0, 1, false);
-    declareFunction(myName, "print_special_variable_state", "PRINT-SPECIAL-VARIABLE-STATE", 3, 0, false);
-    declareFunction(myName, "sxhash_special_variable_state_method", "SXHASH-SPECIAL-VARIABLE-STATE-METHOD", 1, 0, false);
-    declareFunction(myName, "new_special_variable_state", "NEW-SPECIAL-VARIABLE-STATE", 1, 0, false);
-    declareFunction(myName, "special_variable_state_variables", "SPECIAL-VARIABLE-STATE-VARIABLES", 1, 0, false);
-    declareFunction(myName, "special_variable_state_variable_value", "SPECIAL-VARIABLE-STATE-VARIABLE-VALUE", 2, 1, false);
-    declareMacro(myName, "with_special_variable_state", "WITH-SPECIAL-VARIABLE-STATE");
-    declareFunction(myName, "with_special_variable_state_variables", "WITH-SPECIAL-VARIABLE-STATE-VARIABLES", 1, 0, false);
-    declareFunction(myName, "with_special_variable_state_values", "WITH-SPECIAL-VARIABLE-STATE-VALUES", 1, 0, false);
-    declareFunction(myName, "update_special_variable_state", "UPDATE-SPECIAL-VARIABLE-STATE", 1, 0, false);
-    declareFunction(myName, "special_variable_state_push", "SPECIAL-VARIABLE-STATE-PUSH", 3, 0, false);
-    declareFunction(myName, "update_special_variable_value_list", "UPDATE-SPECIAL-VARIABLE-VALUE-LIST", 2, 0, false);
-    declareFunction(myName, "show_special_variable_state", "SHOW-SPECIAL-VARIABLE-STATE", 1, 1, false);
+    declareFunction("bound_symbol_p", "BOUND-SYMBOL-P", 1, 0, false);
+    declareFunction("bound_special_variable_p", "BOUND-SPECIAL-VARIABLE-P", 1, 0, false);
+    declareFunction("bound_special_variable_list_p", "BOUND-SPECIAL-VARIABLE-LIST-P", 1, 0, false);
+    declareFunction("special_variable_state_print_function_trampoline", "SPECIAL-VARIABLE-STATE-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+    declareFunction("special_variable_state_p", "SPECIAL-VARIABLE-STATE-P", 1, 0, false); new $special_variable_state_p$UnaryFunction();
+    declareFunction("svs_variables", "SVS-VARIABLES", 1, 0, false);
+    declareFunction("svs_values", "SVS-VALUES", 1, 0, false);
+    declareFunction("_csetf_svs_variables", "_CSETF-SVS-VARIABLES", 2, 0, false);
+    declareFunction("_csetf_svs_values", "_CSETF-SVS-VALUES", 2, 0, false);
+    declareFunction("make_special_variable_state", "MAKE-SPECIAL-VARIABLE-STATE", 0, 1, false);
+    declareFunction("print_special_variable_state", "PRINT-SPECIAL-VARIABLE-STATE", 3, 0, false);
+    declareFunction("sxhash_special_variable_state_method", "SXHASH-SPECIAL-VARIABLE-STATE-METHOD", 1, 0, false);
+    declareFunction("new_special_variable_state", "NEW-SPECIAL-VARIABLE-STATE", 1, 0, false);
+    declareFunction("special_variable_state_variables", "SPECIAL-VARIABLE-STATE-VARIABLES", 1, 0, false);
+    declareFunction("special_variable_state_variable_value", "SPECIAL-VARIABLE-STATE-VARIABLE-VALUE", 2, 1, false);
+    declareMacro("with_special_variable_state", "WITH-SPECIAL-VARIABLE-STATE");
+    declareFunction("with_special_variable_state_variables", "WITH-SPECIAL-VARIABLE-STATE-VARIABLES", 1, 0, false);
+    declareFunction("with_special_variable_state_values", "WITH-SPECIAL-VARIABLE-STATE-VALUES", 1, 0, false);
+    declareFunction("update_special_variable_state", "UPDATE-SPECIAL-VARIABLE-STATE", 1, 0, false);
+    declareFunction("special_variable_state_push", "SPECIAL-VARIABLE-STATE-PUSH", 3, 0, false);
+    declareFunction("update_special_variable_value_list", "UPDATE-SPECIAL-VARIABLE-VALUE-LIST", 2, 0, false);
+    declareFunction("show_special_variable_state", "SHOW-SPECIAL-VARIABLE-STATE", 1, 1, false);
     return NIL;
   }
 
