@@ -9,7 +9,9 @@ package org.jpl7.test;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import org.armedbear.lisp.Main;
 import org.jpl7.Query;
+import org.jpl7.Term;
 import org.logicmoo.system.Startup;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
@@ -48,9 +50,11 @@ public class JPLTest extends TestCase {
 	}
 
 	public void testThreadedAdds() {
+		if (Main.noPrologJNI)
+			return;
+
 		latch = new CountDownLatch(4);
-		final AddWithThreads[] addTasks = { new AddWithThreads("a", latch), new AddWithThreads("b", latch),
-				new AddWithThreads("c", latch), new AddWithThreads("d", latch) };
+		final AddWithThreads[] addTasks = { new AddWithThreads("a", latch), new AddWithThreads("b", latch), new AddWithThreads("c", latch), new AddWithThreads("d", latch) };
 		// System.out.println("Starting threads...");
 		for (int i = 0; i < addTasks.length; i++) {
 			addTasks[i].start();
@@ -77,9 +81,9 @@ class AddWithThreads extends Thread {
 
 	static {
 		// temporary workarround apps not initialziing cyc like Junit
-		Startup.onAccess(AddWithThreads.class);
+		Startup.needRunningSystem(AddWithThreads.class);
 	}
-	
+
 	private final CountDownLatch latch;
 	private final String namespace;
 	// private static final Logger logger =
@@ -99,7 +103,11 @@ class AddWithThreads extends Thread {
 	@Override
 	public void run() {
 		for (int i = 0; i < REPS; i++) {
-			Startup.onAccess(AddWithThreads.class);
+			Startup.needRunningSystem(AddWithThreads.class);
+			if (!Term.Enabled)
+				return;
+			if (Main.noPrologJNI)
+				return;
 			// System.out.println("Asserting test('" + i + "')");
 			Query queryA = new Query("assert(" + namespace + "(test('" + i + "')))");
 			Thread.yield();

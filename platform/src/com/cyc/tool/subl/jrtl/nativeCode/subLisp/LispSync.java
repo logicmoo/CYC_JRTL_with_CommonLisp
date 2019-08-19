@@ -53,7 +53,7 @@ public class LispSync extends SubLTrampolineFile {
 
 	static {
 		// temporary workarround apps not initialziing cyc like Junit
-		Startup.onAccess(LispSync.class);
+		Startup.needRunningSystem(LispSync.class);
 
 	}
 	static AbstractSubLStruct lastStruct;

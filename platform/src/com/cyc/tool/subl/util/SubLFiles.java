@@ -148,11 +148,11 @@ public class SubLFiles {
      */
     @Deprecated
     public static void declareFunction(String className, String methodName, String functionName, int requiredArgCount, int optionalArgCount, boolean allowsRest) {
-	declareFunction(methodName, functionName, requiredArgCount, optionalArgCount, allowsRest);
+    	Loader.declareFunction(null, className, methodName, functionName, requiredArgCount, optionalArgCount, allowsRest);
     }
 
     public static void declareFunction(String methodName, String functionName, int requiredArgCount, int optionalArgCount, boolean allowsRest) {
-	Loader.declareFunction(null, currentClassName, methodName, functionName, requiredArgCount, optionalArgCount, allowsRest);
+    	Loader.declareFunction(null, currentClassName, methodName, functionName, requiredArgCount, optionalArgCount, allowsRest);
     }
 
     /**

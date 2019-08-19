@@ -95,7 +95,7 @@ abstract public class Lisp extends ABCLStatic {
 
 	static {
 		// temporary workarround apps not initialziing cyc like Junit
-		Startup.onAccess(Lisp.class);
+		Startup.needRunningSystem(Lisp.class);
 
 	}
     // Packages.

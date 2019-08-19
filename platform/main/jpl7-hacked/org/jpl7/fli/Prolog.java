@@ -71,7 +71,7 @@ public final class Prolog {
 
 	static {
 		// temporary workarround apps not initialziing cyc like Junit
-		Startup.onAccess(Prolog.class);
+		Startup.needRunningSystem(Prolog.class);
 	}
 
 	// Kills JUNIT5

@@ -25,7 +25,7 @@ public interface CommonSymbols extends CommonSymbols_KW {
 	final Object commonSymbolsCheck = new Object() {
 		{
 			// temporary workarround apps not initialziing cyc like Junit
-			Startup.onAccess(CommonSymbols.class);
+			Startup.needRunningSystem(CommonSymbols.class);
 			if (!SubLMain.commonSymbolsOK) {
 				if (true) {
 					throw new Error("!commonSymbolsOK!");

@@ -107,7 +107,7 @@ public class Query implements Iterable<Map<String, Term>>, Iterator<Map<String, 
 
 	static {
 		// temporary workarround apps not initialziing cyc like Junit
-		Startup.onAccess(Query.class);
+		Startup.needRunningSystem(Query.class);
 	}
 
 	/**

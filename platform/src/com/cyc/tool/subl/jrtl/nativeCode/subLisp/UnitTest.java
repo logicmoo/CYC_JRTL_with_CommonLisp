@@ -321,13 +321,14 @@ public class UnitTest extends TestCase {
 	}
 
 	public static void initCompiledStructures() {
-		if (true)
-			throw new NoSuchFieldError(" initialize();");
+		//if (true)
+		//throw new NoSuchFieldError(" initialize();");
 		initSlotMethods();
 		SubLObjectFactory.makeSymbol("MAKE-ASTRUCT");
 		SubLObjectFactory.makeSymbol("ASTRUCT-P");
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnitTest", "make_astruct", "MAKE-ASTRUCT", 0, 1, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnitTest", "astruct_p", "ASTRUCT-P", 1, 0, false);
+		String myName = UnitTest.class.getName();
+		SubLFiles.declareFunction(myName, "make_astruct", "MAKE-ASTRUCT", 0, 1, false);
+		SubLFiles.declareFunction(myName, "astruct_p", "ASTRUCT-P", 1, 0, false);
 	}
 
 	public static void main(final String[] args) {
@@ -5349,7 +5350,7 @@ public class UnitTest extends TestCase {
 
 	static {
 		// temporary workarround apps not initialziing cyc like Junit
-		Startup.onAccess(UnitTest.class);
+		Startup.needRunningSystem(UnitTest.class);
 
 	}
 

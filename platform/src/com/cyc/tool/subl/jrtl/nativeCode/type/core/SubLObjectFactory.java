@@ -69,7 +69,7 @@ public class SubLObjectFactory {
 
 	static {
 		// temporary workarround apps not initialziing cyc like Junit
-		Startup.onAccess(SubLObjectFactory.class);
+		Startup.needRunningSystem(SubLObjectFactory.class);
 	}
 
 	public static SubLCons makeArrayList() {

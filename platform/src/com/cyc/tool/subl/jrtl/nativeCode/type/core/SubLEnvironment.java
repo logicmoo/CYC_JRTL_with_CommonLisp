@@ -16,7 +16,7 @@ abstract public class SubLEnvironment extends FromSubLisp {
 
 	static {
 		// temporary workarround apps not initialziing cyc like Junit
-		Startup.onAccess(SubLEnvironment.class);
+		Startup.needRunningSystem(SubLEnvironment.class);
 	}
 
 	@Override

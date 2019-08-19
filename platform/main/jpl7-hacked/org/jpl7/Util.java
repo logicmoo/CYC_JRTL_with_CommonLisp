@@ -44,7 +44,7 @@ public final class Util {
 
 	static {
 		// temporary workarround apps not initialziing cyc like Junit
-		Startup.onAccess(Util.class);
+		Startup.needRunningSystem(Util.class);
 	}
 
 	/**
