@@ -198,7 +198,7 @@ public class SystemCurrent {
     tryAgain: do {
       try {
         Field f = clz.getDeclaredField("out");
-        if ((!Modifier.isStatic(f.getModifiers())) && InputStream.class.isAssignableFrom(f.getType())) {
+				if ((!Modifier.isStatic(f.getModifiers())) && OutputStream.class.isAssignableFrom(f.getType())) {
           f.setAccessible(true);
           is2 = (OutputStream) f.get(is);
           return is2;

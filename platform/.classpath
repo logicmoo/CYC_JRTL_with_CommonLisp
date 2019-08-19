@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry combineaccessrules="false" kind="src" path="/spoon"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry exported="true" kind="src" path="/roaster-jdt"/>
+	<classpathentry exported="true" kind="lib" path="C:/pf/Java/jdk1.8.0_162/lib/tools.jar"/>
+	<classpathentry kind="lib" path="lib/bcel-6.3.1.jar"/>
+	<classpathentry exported="true" kind="src" path="/spoon"/>
 	<classpathentry kind="src" path="main/cycjava-persistence-hacks"/>
 	<classpathentry excluding="bsh/|org/logicmoo/system/spoon/gen/|org/logicmoo/translate/spoon/gen/|org/logicmoo/translate/spoon/spoon_test.java|com/cyc/cycjava_2/cycl/" kind="src" path="main/logicmoo-main"/>
 	<classpathentry excluding="com/cyc/cycjava/cycl/" kind="src" path="main/opencyc-server-jsrc-in-progress"/>
@@ -16,7 +12,7 @@
 	<classpathentry excluding="src/" kind="src" path="test"/>
 	<classpathentry kind="src" path="main/jpl7-hacked"/>
 	<classpathentry kind="src" path="main/java"/>
-	<classpathentry excluding="com/cyc/tool/subl/jrtl/nativeCode/subLisp/UnitTest.java|com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLHashtable_broken.java" including="**/*.*|META-INF/|com/|org/" kind="src" path="src"/>
+	<classpathentry excluding="com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLHashtable_broken.java" including="**/*.*|META-INF/|com/|org/" kind="src" path="src"/>
 	<classpathentry excluding="com/cyc/cycjava_1/cycl/" kind="src" path="main/platform-1.1"/>
 	<classpathentry excluding="test/" including="**/*" kind="src" path="main/beanshell"/>
 	<classpathentry kind="src" path="examples/google-app-engine/src"/>
@@ -30,7 +26,7 @@
 	<classpathentry kind="src" path="examples/misc"/>
 	<classpathentry kind="src" path="examples/pure-lisp-to-java"/>
 	<classpathentry kind="src" path="main/server-4q"/>
-	<classpathentry kind="src" path="main/eclipse-only"/>
+	<classpathentry excluding="org/logicmoo/translate/roaster/" kind="src" path="main/eclipse-only"/>
 	<classpathentry exported="true" kind="lib" path="lib/jetty-continuation-8.0.4.v20111024.jar" sourcepath="C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1559995346763/source/jetty-continuation-8.0.4.v20111024-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jsp-2.1-glassfish-2.1.v20100127.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jsp-api-2.1-glassfish-2.1.v20100127.jar"/>
@@ -257,7 +253,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/SftpGanymedAdaptor.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/SftpTrileadAdaptor.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/SgeAdaptor.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/slf4j-api-1.7.5.jar" sourcepath="C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1561097504017/source/slf4j-api-1.7.5-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/slf4j-api-1.7.5.jar" sourcepath="C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1566207773887/source/slf4j-api-1.7.5-sources-1566234685068.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/slf4j-log4j12-1.7.5.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/smartsockets-1.51.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/srm.jar"/>
@@ -314,8 +310,10 @@
 			<attribute name="optional" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="ansi-test" sourcepath="ansi-test"/>
-	<classpathentry exported="true" kind="lib" path="C:/pf/Java/jdk1.8.0_162/lib/tools.jar"/>
-	<classpathentry exported="true" kind="src" path="/FlexibleRefactoring"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -1685,7 +1685,7 @@ public final class backward extends SubLTranslatedFile implements V12 {
                                             SubLObject cdolist_list_var = justifications;
                                             SubLObject justification = NIL;
                                             for (justification = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , justification = cdolist_list_var.first()) {
-                                                if (!(((NIL != allow_abnormality_checkingP) && (NIL != abnormal.abnormality_except_support_enabledP())) && (NIL != inference_worker_transformation.supports_contain_excepted_assertionP(justification)))) {
+                                                if (!(((NIL != allow_abnormality_checkingP) && (NIL != abnormal.abnormality_except_support_enabledP())) && (NIL != inference_worker_transformation.supports_contain_excepted_assertionP(justification, UNPROVIDED_SYM)))) {
                                                     answers = cons(list(v_bindings, justification), answers);
                                                 }
                                             }

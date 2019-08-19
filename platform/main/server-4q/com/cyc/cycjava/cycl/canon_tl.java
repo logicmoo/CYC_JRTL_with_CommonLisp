@@ -1,4 +1,5 @@
 /**
+
  * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
  */
 package com.cyc.cycjava.cycl;
@@ -130,7 +131,7 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
     @LispMethod(comment = "Returns the TL (transcript level) formula of ASSERTION\r\n(sibling assertions (e.g., wrt skolems) are included)\nReturns the TL (transcript level) formula of ASSERTION\n(sibling assertions (e.g., wrt skolems) are included)")
     public static final SubLObject assertion_tl_formula_alt(SubLObject assertion) {
         {
-            SubLObject formulas = com.cyc.cycjava.cycl.canon_tl.assertion_tl_formulas(assertion);
+			SubLObject formulas = assertion_tl_formulas(assertion);
             if (NIL != list_utilities.singletonP(formulas)) {
                 return formulas.first();
             } else {
@@ -160,7 +161,7 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
     @LispMethod(comment = "Returns the TL (transcript level) ist formula of ASSERTION\r\n(sibling assertions (e.g., wrt skolems) are included)\nReturns the TL (transcript level) ist formula of ASSERTION\n(sibling assertions (e.g., wrt skolems) are included)")
     public static final SubLObject assertion_tl_ist_formula_alt(SubLObject assertion) {
         {
-            SubLObject formulas = com.cyc.cycjava.cycl.canon_tl.assertion_tl_ist_formulas(assertion);
+			SubLObject formulas = assertion_tl_ist_formulas(assertion);
             if (NIL != list_utilities.singletonP(formulas)) {
                 return formulas.first();
             } else {
@@ -198,7 +199,7 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
     public static final SubLObject assertion_tl_formulas_alt(SubLObject assertion) {
         {
             SubLObject mt = assertions_high.assertion_mt(assertion);
-            SubLObject siblings = com.cyc.cycjava.cycl.canon_tl.sibling_tl_assertions(assertion);
+			SubLObject siblings = sibling_tl_assertions(assertion);
             SubLObject multi_mtsP = NIL;
             SubLObject result = NIL;
             if (NIL == multi_mtsP) {
@@ -215,7 +216,7 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
                     SubLObject cdolist_list_var = siblings;
                     SubLObject sibling = NIL;
                     for (sibling = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , sibling = cdolist_list_var.first()) {
-                        result = cons(com.cyc.cycjava.cycl.canon_tl.assertion_tl_ist_formula_int(sibling), result);
+						result = cons(assertion_tl_ist_formula_int(sibling), result);
                     }
                 }
             } else {
@@ -223,7 +224,7 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
                     SubLObject cdolist_list_var = siblings;
                     SubLObject sibling = NIL;
                     for (sibling = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , sibling = cdolist_list_var.first()) {
-                        result = cons(com.cyc.cycjava.cycl.canon_tl.assertion_tl_formula_int(sibling), result);
+						result = cons(assertion_tl_formula_int(sibling), result);
                     }
                 }
             }
@@ -277,10 +278,10 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
     public static final SubLObject assertion_tl_ist_formulas_alt(SubLObject assertion) {
         {
             SubLObject result = NIL;
-            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.canon_tl.sibling_tl_assertions(assertion);
+			SubLObject cdolist_list_var = sibling_tl_assertions(assertion);
             SubLObject sibling = NIL;
             for (sibling = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , sibling = cdolist_list_var.first()) {
-                result = cons(com.cyc.cycjava.cycl.canon_tl.assertion_tl_ist_formula_int(sibling), result);
+				result = cons(assertion_tl_ist_formula_int(sibling), result);
             }
             return nreverse(result);
         }
@@ -333,8 +334,8 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
 
     public static final SubLObject assertion_tl_ist_formula_int_alt(SubLObject assertion) {
         {
-            SubLObject tl_mt = com.cyc.cycjava.cycl.canon_tl.transform_hl_terms_to_tl(assertions_high.assertion_mt(assertion));
-            SubLObject tl_formula = com.cyc.cycjava.cycl.canon_tl.assertion_tl_formula_int(assertion);
+			SubLObject tl_mt = transform_hl_terms_to_tl(assertions_high.assertion_mt(assertion));
+			SubLObject tl_formula = assertion_tl_formula_int(assertion);
             return make_binary_formula($$ist, tl_mt, tl_formula);
         }
     }
@@ -354,7 +355,7 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
                     SubLObject _prev_bind_0 = $el_var_names$.currentBinding(thread);
                     try {
                         $el_var_names$.bind(assertions_high.assertion_variable_names(assertion), thread);
-                        result = clauses.cnf_formula(com.cyc.cycjava.cycl.canon_tl.transform_hl_terms_to_tl(com.cyc.cycjava.cycl.canon_tl.assertion_tl_cnf(assertion)), UNPROVIDED);
+						result = clauses.cnf_formula(transform_hl_terms_to_tl(assertion_tl_cnf(assertion)), UNPROVIDED);
                     } finally {
                         $el_var_names$.rebind(_prev_bind_0, thread);
                     }
@@ -394,7 +395,7 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
     }
 
     public static final SubLObject tl_encapsulate_alt(SubLObject tree) {
-        return encapsulation.encapsulate(com.cyc.cycjava.cycl.canon_tl.transform_hl_terms_to_tl(tree));
+		return encapsulation.encapsulate(transform_hl_terms_to_tl(tree));
     }
 
     public static SubLObject tl_encapsulate(final SubLObject tree) {
@@ -408,7 +409,7 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
     @LispMethod(comment = "Return the single existing assertion (if any) specified by\r\nTL (transcript level) formula TL-FORMULA in MT.\nReturn the single existing assertion (if any) specified by\nTL (transcript level) formula TL-FORMULA in MT.")
     public static final SubLObject find_assertion_from_tl_formula_alt(SubLObject tl_formula, SubLObject mt) {
         {
-            SubLObject assertions = com.cyc.cycjava.cycl.canon_tl.find_assertions_from_tl_formula(tl_formula, mt);
+			SubLObject assertions = find_assertions_from_tl_formula(tl_formula, mt);
             if (NIL != list_utilities.singletonP(assertions)) {
                 return assertions.first();
             }
@@ -437,7 +438,7 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
     public static final SubLObject find_assertions_from_tl_formula_alt(SubLObject tl_formula, SubLObject mt) {
         if (!$$and.eql(cycl_utilities.formula_arg0(tl_formula))) {
             {
-                SubLObject assertion = com.cyc.cycjava.cycl.canon_tl.find_assertion_from_tl_cnf_formula(tl_formula, mt);
+				SubLObject assertion = find_assertion_from_tl_cnf_formula(tl_formula, mt);
                 if (NIL != assertion) {
                     return list(assertion);
                 }
@@ -453,7 +454,7 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
                         SubLObject sibling_spec = NIL;
                         for (sibling_spec = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , sibling_spec = cdolist_list_var.first()) {
                             {
-                                SubLObject assertion = com.cyc.cycjava.cycl.canon_tl.find_assertion_from_tl_cnf_formula(sibling_spec, mt);
+								SubLObject assertion = find_assertion_from_tl_cnf_formula(sibling_spec, mt);
                                 if (NIL != assertion) {
                                     assertions = cons(assertion, assertions);
                                 }
@@ -466,7 +467,7 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
                         SubLObject sibling_spec = NIL;
                         for (sibling_spec = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , sibling_spec = cdolist_list_var.first()) {
                             {
-                                SubLObject assertion = com.cyc.cycjava.cycl.canon_tl.find_assertion_from_tl_cnf_ist_formula(sibling_spec);
+								SubLObject assertion = find_assertion_from_tl_cnf_ist_formula(sibling_spec);
                                 if (NIL != assertion) {
                                     assertions = cons(assertion, assertions);
                                 }
@@ -526,9 +527,9 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
 
     public static final SubLObject find_assertion_from_tl_cnf_ist_formula_alt(SubLObject tl_cnf_ist_formula) {
         {
-            SubLObject mt = com.cyc.cycjava.cycl.canon_tl.tl_term_to_hl(cycl_utilities.formula_arg1(tl_cnf_ist_formula, UNPROVIDED));
+			SubLObject mt = tl_term_to_hl(cycl_utilities.formula_arg1(tl_cnf_ist_formula, UNPROVIDED));
             SubLObject tl_cnf_formula = cycl_utilities.formula_arg2(tl_cnf_ist_formula, UNPROVIDED);
-            return com.cyc.cycjava.cycl.canon_tl.find_assertion_from_tl_cnf_formula(tl_cnf_formula, mt);
+			return find_assertion_from_tl_cnf_formula(tl_cnf_formula, mt);
         }
     }
 
@@ -540,8 +541,8 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
 
     public static final SubLObject find_assertion_from_tl_cnf_formula_alt(SubLObject tl_cnf_formula, SubLObject tl_mt) {
         {
-            SubLObject hl_cnf = com.cyc.cycjava.cycl.canon_tl.tl_formula_to_hl_cnf(tl_cnf_formula);
-            SubLObject v_hlmt = com.cyc.cycjava.cycl.canon_tl.tlmt_to_hlmt(tl_mt);
+			SubLObject hl_cnf = tl_formula_to_hl_cnf(tl_cnf_formula);
+			SubLObject v_hlmt = tlmt_to_hlmt(tl_mt);
             if (NIL != hlmt.hlmt_p(v_hlmt)) {
                 return kb_indexing.find_assertion(hl_cnf, v_hlmt);
             }
@@ -559,7 +560,7 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
     }
 
     public static final SubLObject tl_formula_to_hl_cnf_alt(SubLObject tl_formula) {
-        return com.cyc.cycjava.cycl.canon_tl.tl_formula_to_cnf_int(com.cyc.cycjava.cycl.canon_tl.transform_tl_terms_to_hl(tl_formula));
+		return tl_formula_to_cnf_int(transform_tl_terms_to_hl(tl_formula));
     }
 
     public static SubLObject tl_formula_to_hl_cnf(final SubLObject tl_formula) {
@@ -567,7 +568,7 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
     }
 
     public static final SubLObject tlmt_to_hlmt_alt(SubLObject tl_mt) {
-        return com.cyc.cycjava.cycl.canon_tl.transform_tl_terms_to_hl(tl_mt);
+		return transform_tl_terms_to_hl(tl_mt);
     }
 
     public static SubLObject tlmt_to_hlmt(final SubLObject tl_mt) {
@@ -625,7 +626,8 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
     }
 
     public static final SubLObject tl_termP_alt(SubLObject v_object) {
-        return makeBoolean(((NIL != com.cyc.cycjava.cycl.canon_tl.tl_assertion_termP(v_object)) || (NIL != com.cyc.cycjava.cycl.canon_tl.tl_function_termP(v_object))) || (NIL != com.cyc.cycjava.cycl.canon_tl.tl_varP(v_object)));
+		return makeBoolean(((NIL != tl_assertion_termP(v_object)) || (NIL != tl_function_termP(v_object)))
+				|| (NIL != tl_varP(v_object)));
     }
 
     public static SubLObject tl_termP(final SubLObject v_object) {
@@ -700,13 +702,13 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
 
     public static final SubLObject hl_term_to_tl_alt(SubLObject v_object) {
         if (NIL != assertion_handles.assertion_p(v_object)) {
-            return com.cyc.cycjava.cycl.canon_tl.hl_assertion_term_to_tl(v_object);
+			return hl_assertion_term_to_tl(v_object);
         } else {
             if (NIL != nart_handles.nart_p(v_object)) {
-                return com.cyc.cycjava.cycl.canon_tl.hl_function_term_to_tl(v_object);
+				return hl_function_term_to_tl(v_object);
             } else {
                 if (NIL != variables.variable_p(v_object)) {
-                    return com.cyc.cycjava.cycl.canon_tl.hl_var_to_tl(v_object, UNPROVIDED);
+					return hl_var_to_tl(v_object, UNPROVIDED);
                 }
             }
         }
@@ -729,9 +731,9 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
     public static final SubLObject hl_assertion_term_to_tl_alt(SubLObject assertion) {
         {
             SubLObject mt = assertions_high.assertion_mt(assertion);
-            SubLObject tl_formula = com.cyc.cycjava.cycl.canon_tl.assertion_tl_formula_int(assertion);
-            SubLObject tl_mt = com.cyc.cycjava.cycl.canon_tl.transform_hl_terms_to_tl(mt);
-            if (!assertion.eql(com.cyc.cycjava.cycl.canon_tl.find_assertion_from_tl_formula(tl_formula, mt))) {
+			SubLObject tl_formula = assertion_tl_formula_int(assertion);
+			SubLObject tl_mt = transform_hl_terms_to_tl(mt);
+			if (!assertion.eql(find_assertion_from_tl_formula(tl_formula, mt))) {
                 el_error(THREE_INTEGER, $str_alt14$referenced_assertion_not_found___, assertion, UNPROVIDED, UNPROVIDED);
             }
             return make_binary_formula($$TLAssertionFn, tl_mt, tl_formula);
@@ -792,7 +794,7 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
      */
     @LispMethod(comment = "Return an expression which, if evaluated, would return OBJECT.\r\nQuotes HL things that are going to be turned into lists at the TL.\nReturn an expression which, if evaluated, would return OBJECT.\nQuotes HL things that are going to be turned into lists at the TL.")
     public static final SubLObject tl_quotify_alt(SubLObject v_object) {
-        if ((NIL != list_utilities.self_evaluating_form_p(v_object)) && (NIL == com.cyc.cycjava.cycl.canon_tl.hl_not_tl_termP(v_object))) {
+		if ((NIL != list_utilities.self_evaluating_form_p(v_object)) && (NIL == hl_not_tl_termP(v_object))) {
             return v_object;
         } else {
             return list(QUOTE, v_object);
@@ -808,14 +810,14 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
     }
 
     public static final SubLObject tl_term_to_hl_alt(SubLObject v_object) {
-        if (NIL != com.cyc.cycjava.cycl.canon_tl.tl_assertion_termP(v_object)) {
-            return com.cyc.cycjava.cycl.canon_tl.tl_assertion_term_to_hl(v_object);
+		if (NIL != tl_assertion_termP(v_object)) {
+			return tl_assertion_term_to_hl(v_object);
         } else {
-            if (NIL != com.cyc.cycjava.cycl.canon_tl.tl_function_termP(v_object)) {
-                return com.cyc.cycjava.cycl.canon_tl.tl_function_term_to_hl(v_object);
+			if (NIL != tl_function_termP(v_object)) {
+				return tl_function_term_to_hl(v_object);
             } else {
-                if (NIL != com.cyc.cycjava.cycl.canon_tl.tl_varP(v_object)) {
-                    return com.cyc.cycjava.cycl.canon_tl.tl_var_to_hl(v_object);
+				if (NIL != tl_varP(v_object)) {
+					return tl_var_to_hl(v_object);
                 }
             }
         }
@@ -838,13 +840,13 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
     public static final SubLObject tl_assertion_term_to_hl_alt(SubLObject tl_assertion_term) {
         {
             SubLObject tl_formula = cycl_utilities.nat_arg2(tl_assertion_term, UNPROVIDED);
-            SubLObject mt = com.cyc.cycjava.cycl.canon_tl.tl_term_to_hl(cycl_utilities.nat_arg1(tl_assertion_term, UNPROVIDED));
-            SubLObject assertion = com.cyc.cycjava.cycl.canon_tl.find_assertion_from_tl_formula(tl_formula, mt);
+			SubLObject mt = tl_term_to_hl(cycl_utilities.nat_arg1(tl_assertion_term, UNPROVIDED));
+			SubLObject assertion = find_assertion_from_tl_formula(tl_formula, mt);
             if (NIL != assertion_handles.assertion_p(assertion)) {
                 return assertion;
             }
             el_error(THREE_INTEGER, $str_alt17$referenced_TL_assertion_not_found, tl_assertion_term, UNPROVIDED, UNPROVIDED);
-            return com.cyc.cycjava.cycl.canon_tl.tl_assertion_term_to_el(tl_assertion_term);
+			return tl_assertion_term_to_el(tl_assertion_term);
         }
     }
 
@@ -862,12 +864,12 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
     public static final SubLObject tl_function_term_to_hl_alt(SubLObject tl_function_term) {
         {
             SubLObject nat_spec = cycl_utilities.nat_arg1(tl_function_term, UNPROVIDED);
-            SubLObject nart = com.cyc.cycjava.cycl.canon_tl.tl_find_nart(nat_spec);
+			SubLObject nart = tl_find_nart(nat_spec);
             if (NIL != nart_handles.nart_p(nart)) {
                 return nart;
             }
             el_error(THREE_INTEGER, $str_alt18$referenced_TL_nart_not_found_____, tl_function_term, UNPROVIDED, UNPROVIDED);
-            return com.cyc.cycjava.cycl.canon_tl.tl_function_term_to_el(tl_function_term);
+			return tl_function_term_to_el(tl_function_term);
         }
     }
 
@@ -901,14 +903,14 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
     }
 
     public static final SubLObject tl_term_to_el_alt(SubLObject v_object) {
-        if (NIL != com.cyc.cycjava.cycl.canon_tl.tl_assertion_termP(v_object)) {
-            return com.cyc.cycjava.cycl.canon_tl.tl_assertion_term_to_el(v_object);
+		if (NIL != tl_assertion_termP(v_object)) {
+			return tl_assertion_term_to_el(v_object);
         } else {
-            if (NIL != com.cyc.cycjava.cycl.canon_tl.tl_function_termP(v_object)) {
-                return com.cyc.cycjava.cycl.canon_tl.tl_function_term_to_el(v_object);
+			if (NIL != tl_function_termP(v_object)) {
+				return tl_function_term_to_el(v_object);
             } else {
-                if (NIL != com.cyc.cycjava.cycl.canon_tl.tl_varP(v_object)) {
-                    return com.cyc.cycjava.cycl.canon_tl.tl_var_to_el(v_object);
+				if (NIL != tl_varP(v_object)) {
+					return tl_var_to_el(v_object);
                 }
             }
         }
@@ -935,7 +937,7 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
     public static final SubLObject tl_assertion_term_to_el_alt(SubLObject tl_assertion_term) {
         {
             SubLObject tl_formula = cycl_utilities.nat_arg2(tl_assertion_term, UNPROVIDED);
-            SubLObject mt = com.cyc.cycjava.cycl.canon_tl.tl_term_to_el(cycl_utilities.nat_arg1(tl_assertion_term, UNPROVIDED));
+			SubLObject mt = tl_term_to_el(cycl_utilities.nat_arg1(tl_assertion_term, UNPROVIDED));
             return values(make_binary_formula($$ist, mt, tl_formula), mt_vars.$ist_mt$.getGlobalValue());
         }
     }
@@ -1035,7 +1037,7 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
     @LispMethod(comment = "Return the NART implementing lispy NAT-SPEC, or NIL if none is present.\r\nSubstitutions for sub-NATs are performed.\nReturn the NART implementing lispy NAT-SPEC, or NIL if none is present.\nSubstitutions for sub-NATs are performed.")
     public static final SubLObject tl_find_nart_alt(SubLObject nat_spec) {
         {
-            SubLObject nart = com.cyc.cycjava.cycl.canon_tl.tl_nart_substitute(nat_spec);
+			SubLObject nart = tl_nart_substitute(nat_spec);
             return NIL != nart_handles.nart_p(nart) ? ((SubLObject) (nart)) : NIL;
         }
     }
@@ -1067,9 +1069,9 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
                 SubLObject list = NIL;
                 SubLObject arg = NIL;
                 for (list = new_nat_formula, arg = list.first(); NIL != list; list = list.rest() , arg = list.first()) {
-                    if (NIL != com.cyc.cycjava.cycl.canon_tl.tl_function_termP(arg)) {
+					if (NIL != tl_function_termP(arg)) {
                         {
-                            SubLObject sub_nart = com.cyc.cycjava.cycl.canon_tl.tl_function_term_to_hl(arg);
+							SubLObject sub_nart = tl_function_term_to_hl(arg);
                             if (NIL != sub_nart) {
                                 rplaca(list, sub_nart);
                             }
@@ -1077,7 +1079,7 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
                     } else {
                         if (NIL != function_terms.nat_formula_p(arg)) {
                             {
-                                SubLObject sub_nart = com.cyc.cycjava.cycl.canon_tl.tl_nart_substitute(arg);
+								SubLObject sub_nart = tl_nart_substitute(arg);
                                 if (NIL != sub_nart) {
                                     rplaca(list, sub_nart);
                                 }
@@ -1144,7 +1146,7 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
     public static final SubLObject assertion_findable_via_tlP_alt(SubLObject assertion) {
         {
             SubLObject mt = assertions_high.assertion_mt(assertion);
-            SubLObject tl_formula = com.cyc.cycjava.cycl.canon_tl.assertion_tl_formula(assertion);
+			SubLObject tl_formula = assertion_tl_formula(assertion);
             SubLObject assertions_found_via_tl = ke.find_assertions_via_tl(tl_formula, mt);
             return subl_promotions.memberP(assertion, assertions_found_via_tl, UNPROVIDED, UNPROVIDED);
         }
@@ -1172,14 +1174,15 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
                         bind(Errors.$error_handler$, CATCH_ERROR_MESSAGE_HANDLER);
                         try {
                             {
-                                SubLObject tl_formula = com.cyc.cycjava.cycl.canon_tl.assertion_tl_formula(assertion);
+								SubLObject tl_formula = assertion_tl_formula(assertion);
                                 SubLObject mt = assertions_high.assertion_mt(assertion);
-                                SubLObject hl_cnf = com.cyc.cycjava.cycl.canon_tl.tl_formula_to_hl_cnf(tl_formula);
+								SubLObject hl_cnf = tl_formula_to_hl_cnf(tl_formula);
                                 SubLObject found_assertion = (NIL != hl_cnf) ? ((SubLObject) (kb_indexing.find_assertion(hl_cnf, mt))) : NIL;
                                 if (NIL != found_assertion) {
                                     foundP = eql(assertion, found_assertion);
                                 } else {
-                                    foundP = list_utilities.sets_equalP(com.cyc.cycjava.cycl.canon_tl.sibling_tl_assertions(assertion), com.cyc.cycjava.cycl.canon_tl.find_assertions_from_tl_formula(tl_formula, mt), UNPROVIDED);
+									foundP = list_utilities.sets_equalP(sibling_tl_assertions(assertion),
+											find_assertions_from_tl_formula(tl_formula, mt), UNPROVIDED);
                                 }
                             }
                         } catch (Throwable catch_var) {
@@ -1245,7 +1248,9 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
                     try {
                         bind(Errors.$error_handler$, CATCH_ERROR_MESSAGE_HANDLER);
                         try {
-                            foundP = eql(assertion, kb_indexing.find_assertion(com.cyc.cycjava.cycl.canon_tl.tl_formula_to_hl_cnf(com.cyc.cycjava.cycl.canon_tl.assertion_tl_formula(assertion)), assertions_high.assertion_mt(assertion)));
+							foundP = eql(assertion,
+									kb_indexing.find_assertion(tl_formula_to_hl_cnf(assertion_tl_formula(assertion)),
+											assertions_high.assertion_mt(assertion)));
                         } catch (Throwable catch_var) {
                             Errors.handleThrowable(catch_var, NIL);
                         }
@@ -1335,10 +1340,10 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
     public static final SubLObject unassert_assertion_via_tl_alt(SubLObject assertion) {
         {
             SubLObject mt = assertions_high.assertion_mt(assertion);
-            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.canon_tl.assertion_tl_formulas(assertion);
+			SubLObject cdolist_list_var = assertion_tl_formulas(assertion);
             SubLObject tl_formula = NIL;
             for (tl_formula = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , tl_formula = cdolist_list_var.first()) {
-                return com.cyc.cycjava.cycl.canon_tl.unassert_tl_formula(tl_formula, mt);
+				return unassert_tl_formula(tl_formula, mt);
             }
         }
         return NIL;
@@ -1358,7 +1363,7 @@ public final class canon_tl extends SubLTranslatedFile implements V12 {
     public static final SubLObject unassert_tl_formula_alt(SubLObject tl_formula, SubLObject mt) {
         {
             SubLObject ans = NIL;
-            SubLObject already_thereP = com.cyc.cycjava.cycl.canon_tl.find_assertion_from_tl_formula(tl_formula, mt);
+			SubLObject already_thereP = find_assertion_from_tl_formula(tl_formula, mt);
             if (NIL == already_thereP) {
                 fi.signal_fi_warning(list($ASSERTION_NOT_PRESENT, $str_alt25$formula__S_in_mt__S_cannot_be_fou, tl_formula, mt));
             } else {

@@ -2,7 +2,7 @@
  * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
  */
 package com.cyc.cycjava.cycl.sksi.query_sks;
-
+import static com.cyc.cycjava.cycl.control_vars.*;
 
 import static com.cyc.cycjava.cycl.el_utilities.make_conjunction;
 import static com.cyc.cycjava.cycl.el_utilities.sentence_free_variables;

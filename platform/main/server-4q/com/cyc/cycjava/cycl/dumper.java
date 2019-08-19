@@ -17504,7 +17504,7 @@ public class dumper extends SubLTranslatedFile implements V12 {
 			SubLObject experience_file = com.cyc.cycjava.cycl.dumper.kb_dump_file($str_alt30$rule_utility_experience,
 					directory_path, UNPROVIDED);
 			if (NIL != com.cyc.cycjava.cycl.dumper.verify_file_existence(experience_file, T)) {
-				inference_analysis.load_transformation_rule_statistics(experience_file, NIL);
+				inference_analysis.load_transformation_rule_statistics(experience_file, NIL, UNPROVIDED_SYM);
 			}
 		}
 		return NIL;

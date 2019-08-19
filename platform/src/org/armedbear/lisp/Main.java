@@ -40,8 +40,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.JVMImpl;
+import org.logicmoo.system.Startup;
 import org.logicmoo.system.SystemCurrent;
 import org.logicmoo.system.SystemCurrent.In;
 import org.logicmoo.system.UpdateZip;
@@ -94,7 +94,7 @@ public final class Main {
 		if (err == null)
 			err = System.out;
 		return err;
-	} 
+	}
 
 	public static void addUncaught(Throwable e) {
 		unexpectedThrowable.add(e);
@@ -151,7 +151,7 @@ public final class Main {
 				t.run();
 			} else {
 				final Thread currentThread = Thread.currentThread();
-				currentThread.setName("Old-"+currentThread.getName());
+				currentThread.setName("Old-" + currentThread.getName());
 				t.setName("main");
 				t.start();
 				t.join();
@@ -174,7 +174,8 @@ public final class Main {
 		needIOConsole = false;
 		Lisp.initLisp();
 		passedArgs = args;
-		if(!noProlog) BeanShellCntrl.start_prolog_from_lisp();
+		if (!noProlog)
+			Startup.start_prolog_from_lisp();
 		Runnable r = new SubLProcess("main") {
 			@Override
 			public void safeRun() {
@@ -219,9 +220,9 @@ public final class Main {
 	public static boolean isNoDebug() {
 		return isNoDebug.get();
 	}
-	
+
 	public static boolean noGUI = false;
-	
+
 	public static void setNoDebug(boolean isNoDebug) {
 		Main.isNoDebug.set(isNoDebug);
 	}
@@ -251,7 +252,7 @@ public final class Main {
 		};
 	};
 
-	public static boolean isSublispDefault = false;
+	public static boolean isSublispDefault = true;
 	public static InheritableThreadLocal<Boolean> isSubLisp = new InheritableThreadLocal<Boolean>() {
 		@Override
 		protected Boolean initialValue() {
@@ -339,7 +340,7 @@ public final class Main {
 		if (argsList.remove("--noprologsync")) {
 			disablePrologSync = true;
 		}
-		
+
 		if (argsList.remove("--lispsync")) {
 			disableLispSync = false;
 			trackStructs = true;
@@ -347,7 +348,7 @@ public final class Main {
 		if (argsList.remove("--nolispsync")) {
 			disableLispSync = true;
 		}
-		
+
 		if (argsList.remove("--headless") || argsList.remove("--nogui")) {
 			noGUI = true;
 			noBSHGUI = true;

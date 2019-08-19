@@ -34,16 +34,13 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.NIL;
-import static org.armedbear.lisp.Lisp.PACKAGE_CL;
-import static org.armedbear.lisp.Lisp._SOURCE_;
-import static org.armedbear.lisp.Lisp._WARN_ON_REDEFINITION_;
+import static org.armedbear.lisp.Lisp.*;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 
 import org.armedbear.lisp.util.Finalizer;
-import org.logicmoo.system.BeanShellCntrl.SpecialMethod;
+import org.logicmoo.system.SpecialMethod;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.util.SubLFiles.VariableAccessMode;
@@ -1804,7 +1801,7 @@ public final class Primitives {
             if (args.length < 1)
                 return error(new WrongNumberOfArgumentsException(this, 1, -1));
             if (args[0] instanceof Condition)
-                return error((Condition) args[0]);
+                return error(args[0]);
             return error(new SimpleCondition());
         }
     };

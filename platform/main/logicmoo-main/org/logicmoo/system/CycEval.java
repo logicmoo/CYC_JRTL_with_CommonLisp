@@ -175,7 +175,7 @@ public final class CycEval
 		@Override
 		public LispObject execute()
 		{
-			BeanShellCntrl.init_kb();
+			BeanShellCntrl.init_cyc_kb();
 			return T;
 		}
 	}
@@ -194,7 +194,7 @@ public final class CycEval
 		@Override
 		public LispObject execute()
 		{
-			BeanShellCntrl.init_cyc();
+			BeanShellCntrl.init_cyc_classes();
 			return T;
 		}
 	}

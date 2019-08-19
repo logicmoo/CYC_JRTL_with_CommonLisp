@@ -12238,7 +12238,9 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
         identity(ABSTRACT_LEXICON_ITERATOR_STATE);
         note_funcall_helper_function(ABSTRACT_LEXICON_ITERATOR_STATE_DONE_P);
         note_funcall_helper_function(ABSTRACT_LEXICON_ITERATOR_STATE_NEXT);
-        define_test_case_table_int(TEXT_NUMBERS, list(new SubLObject[]{ $TEST, EQUALP, $OWNER, $$$daves, $CLASSES, NIL, $KB, $FULL, $WORKING_, T }), $list_alt576);
+		define_test_case_table_int(TEXT_NUMBERS,
+				list(new SubLObject[] { $TEST, EQUALP, $OWNER, $$$daves, $CLASSES, NIL, $KB, $FULL, $WORKINGp, T }),
+				$list_alt576);
         define_test_case_table_int(NUMBER_MEANINGS, list(new SubLObject[]{ $TEST, EQUALP, $OWNER, $$$daves, $CLASSES, NIL, $KB, $FULL, $WORKING_, T }), $list_alt578);
         return NIL;
     }

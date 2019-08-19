@@ -1,7 +1,5 @@
 package org.logicmoo.translate.spoon;
 
-import static java.nio.file.FileVisitResult.*;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -11,14 +9,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.nio.file.FileSystems;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.PathMatcher;
-import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -28,13 +18,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.armedbear.lisp.Interpreter;
-import org.armedbear.lisp.Lisp;
-import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.IOUtils;
+import org.logicmoo.translate.FileRecurseVisitor;
+import org.logicmoo.translate.PreInitLoader;
 
 import com.cyc.cycjava.cycl.access_macros;
 import com.cyc.cycjava.cycl.cb_parameters;
@@ -134,7 +124,8 @@ public class TestSpooner {
 
 		dest = new File("../eclipse-workspace/cycjava_new/server-out/");
 		dest.mkdirs();
-		readySubLisp();
+		PreInitLoader.readySubLisp();
+		TestSpooner.populateImportedClasses();
 
 		int matches = 0;
 
@@ -210,7 +201,34 @@ public class TestSpooner {
 				// launcher.addInputResource("main/server-4u/com/cyc/cycjava_0/cycl/");
 				// launcher.addInputResource("main/server-4v/com/cyc/cycjava/cycl/");
 
-				matches = addInputResourceMask("main/server-4q/com/cyc/cycjava/cycl/", "*.java", 10, true);
+				final Predicate<File> offer = new Predicate<File>() {
+
+					@Override
+					public boolean test(File source) {
+						try {
+							final String relPath = source.getName();
+							File target = new File(dest, relPath);
+							String canonicalPath = null;
+							canonicalPath = target.getCanonicalPath();
+
+							if (target.exists()) {
+								if (TestSpooner.PROCESS_LEVEL > 1) {
+									System.out.println("exists already: " + canonicalPath);
+									return false;
+								}
+							}
+							System.out.println("Adding: " + source + " to be saved to " + target);
+							TestSpooner.launcher.addInputResource(source.getAbsolutePath());
+							return true;
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+							return false;
+						}
+					}
+				};
+				matches = FileRecurseVisitor.addInputResourceMask("main/server-4q/", "com/cyc/cycjava/cycl/*.java",
+						offer, 10, true);
 
 			}
 			if (matches == 0)
@@ -719,29 +737,6 @@ public class TestSpooner {
 	/**
 	 * TODO Describe the purpose of this method.
 	 * 
-	 * @param string
-	 * @throws IOException
-	 */
-	static void addInputResourceMask(String string) throws IOException {
-		final int indexOf = string.indexOf("*");
-		String startingDirStr = string.substring(0, indexOf + 1);
-		final int endIndex = startingDirStr.lastIndexOf('/') + 1;
-		startingDirStr = startingDirStr.substring(0, endIndex);
-		final String pattern = string.substring(endIndex);
-		addInputResourceMask(startingDirStr, pattern, Integer.MAX_VALUE, true);
-	}
-
-	static int addInputResourceMask(String startingDirStr, String pattern, int max, boolean recurse)
-			throws IOException {
-		final Path startingDir = Paths.get(startingDirStr);
-		final Finder finder = new Finder(pattern, startingDirStr, max, recurse);
-		Files.walkFileTree(startingDir, finder);
-		return finder.done();
-	}
-
-	/**
-	 * TODO Describe the purpose of this method.
-	 * 
 	 * @param lastWord
 	 * @return
 	 * @throws NoSuchFieldException
@@ -788,7 +783,7 @@ public class TestSpooner {
 	/**
 	 * TODO Describe the purpose of this method.
 	 */
-	static void populateImportedClasses() {
+	public static void populateImportedClasses() {
 		for (Class class1 : STATIC_IMPORT_CLASSES_ARRAY) {
 			STATIC_IMPORT_CLASSES.add(class1);
 			String cn = class1.getName();
@@ -817,17 +812,6 @@ public class TestSpooner {
 			}
 
 		}
-	}
-
-	/**
-	 * TODO Describe the purpose of this method.
-	 */
-	public static void readySubLisp() {
-		Lisp.initLisp();
-		Interpreter.createBasicInstance();
-		BeanShellCntrl.init_subl();
-		BeanShellCntrl.init_cyc();
-		populateImportedClasses();
 	}
 
 	public static CtMethod findMethod(CtType best, String mn, int len) {
@@ -1028,105 +1012,6 @@ public class TestSpooner {
 			}
 		}
 
-	}
-
-	/**
-	 * A {@code FileVisitor} that finds all files that match the specified pattern.
-	 */
-	static class Finder extends SimpleFileVisitor<Path> {
-
-		Finder(String pattern, String pattern2, int max, boolean recurse) {
-			this.max = max;
-			this.pattern2 = pattern2;
-			doRecurse = recurse;
-			matcher = FileSystems.getDefault().getPathMatcher("glob:" + pattern);
-
-		}
-
-		final PathMatcher matcher;
-		final int max;
-		int numMatches = 0;
-		final String pattern2;
-
-		final boolean doRecurse;
-
-		// Invoke the pattern matching
-		// method on each directory.
-		@Override
-		public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
-			find(dir);
-			if (noMore())
-				return TERMINATE;
-			return CONTINUE;
-		}
-
-		// Invoke the pattern matching
-		// method on each file.
-		@Override
-		public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
-			find(file);
-			if (noMore())
-				return TERMINATE;
-			return CONTINUE;
-		}
-
-		@Override
-		public FileVisitResult visitFileFailed(Path file, IOException exc) {
-			System.err.println(exc);
-			return CONTINUE;
-		}
-
-		/**
-		 * TODO Describe the purpose of this method.
-		 * 
-		 * @return
-		 */
-		boolean noMore() {
-			return numMatches >= max;
-		}
-
-		// Prints the total number of
-		// matches to standard out.
-		int done() {
-			System.out.println("Matched: " + numMatches);
-			return numMatches;
-		}
-
-		// Compares the glob pattern against
-		// the file or directory name.
-		void find(Path file) {
-			final Path name = file.getFileName();
-			final String string = file.toString();
-			String stem = string;
-			stem = stem.substring(Math.min(pattern2.length(), stem.length()));
-			String classStem = string.substring(pattern2.indexOf("com"));
-			if (name != null && matcher.matches(name)) {
-				final File target = new File(dest, classStem);
-				if (target.exists()) {
-					if (PROCESS_LEVEL > 1) {
-						try {
-							System.out.println("skipping: " + target.getCanonicalPath());
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						return;
-					}
-				}
-
-				if (!doRecurse) {
-					if (stem.contains("/") || stem.contains("\\")) {
-						return;
-					}
-				}
-				if (noMore())
-					return;
-				System.out.println(file);
-
-				numMatches++;
-				launcher.addInputResource(string);
-			}
-		}
 	}
 
 	static final class MergingCodeProcessor extends AbstractProcessor<CtType<?>> {

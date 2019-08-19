@@ -1,10 +1,17 @@
 package com.netbreeze.util;
 
-import java.util.*;
-import java.util.zip.*;
-import java.io.*;
-import java.lang.reflect.*;
-import org.apache.log4j.*;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Modifier;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
+import org.apache.log4j.Category;
 
 /**
  * This is a stateless utility class that contains code for looking up

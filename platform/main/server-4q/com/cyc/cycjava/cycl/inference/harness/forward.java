@@ -5118,7 +5118,7 @@ public final class forward extends SubLTranslatedFile implements V12 {
     }
 
     public static final SubLObject handle_forward_deduction_in_mt(SubLObject asent, SubLObject truth, SubLObject mt, SubLObject supports) {
-        if (NIL == (NIL != abnormal.abnormality_except_support_enabledP() ? ((SubLObject) (inference_worker_transformation.supports_contain_excepted_assertion_in_mtP(supports, mt))) : NIL)) {
+        if (NIL == (NIL != abnormal.abnormality_except_support_enabledP() ? ((SubLObject) (inference_worker_transformation.supports_contain_excepted_assertion_in_mtP(supports, mt, UNPROVIDED_SYM))) : NIL)) {
             {
                 SubLObject datum = supports;
                 SubLObject current = datum;

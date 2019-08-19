@@ -297,6 +297,11 @@
 			<version>1.2.5</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.bcel</groupId>
+			<artifactId>bcel</artifactId>
+			<version>6.3.1</version>
+		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/log4j/log4j -->
 		<dependency>
@@ -406,6 +411,7 @@
 									<mainClass>org.armedbear.lisp.Main</mainClass>
 									<arguments>
 										<argument>--noinit</argument>
+										<argument>--noprolog</argument>
 										<argument>--rcyc</argument>
 										<argument>--exec</argument>
 										<argument>"(init-cyc-server)"</argument>

@@ -342,7 +342,7 @@ public final class sksi_db_saturation extends SubLTranslatedFile implements V12 
             final SubLThread thread = SubLProcess.currentSubLThread();
             {
                 SubLObject consequent = cycl_utilities.formula_arg2(rule, UNPROVIDED);
-                SubLObject v_bindings = Mapping.mapcar(INFERENCE_ANSWER_BINDINGS, inference_datastructures_inference.inference_all_answers(inference));
+                SubLObject v_bindings = Mapping.mapcar(INFERENCE_ANSWER_BINDINGS, inference_datastructures_inference.inference_all_answers(inference, UNPROVIDED_SYM));
                 SubLObject target_sks_list = NIL;
                 SubLObject result = NIL;
                 if (NIL != v_bindings) {

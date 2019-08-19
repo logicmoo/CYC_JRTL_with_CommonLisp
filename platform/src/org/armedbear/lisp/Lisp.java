@@ -2777,6 +2777,7 @@ abstract public class Lisp extends ABCLStatic {
 	loadClass("org.logicmoo.system.BeanShellCntrl");
     }
 
+	// call <clinit> once
     public static void initLisp() {
 	// pro.hashCode();
 

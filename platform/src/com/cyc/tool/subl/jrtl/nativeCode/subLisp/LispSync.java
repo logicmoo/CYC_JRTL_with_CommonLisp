@@ -1,19 +1,7 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
-import static org.armedbear.lisp.Lisp.PACKAGE_CYC;
-import static org.armedbear.lisp.Lisp.UNBOUND_VALUE;
-import static org.armedbear.lisp.Lisp.addFeature;
-import static org.armedbear.lisp.Lisp.checkSymbol;
-import static org.armedbear.lisp.Lisp.cold;
-import static org.armedbear.lisp.Lisp.getDotName;
-import static org.armedbear.lisp.Lisp.initialized;
-import static org.armedbear.lisp.Lisp.internKeyword;
-import static org.armedbear.lisp.Lisp.isTooSoon;
-import static org.armedbear.lisp.Lisp.list;
-import static org.armedbear.lisp.Lisp.quote;
-import static org.armedbear.lisp.Lisp.readObjectFromString;
-import static org.armedbear.lisp.Lisp.valueOfString;
+import static org.armedbear.lisp.Lisp.*;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;

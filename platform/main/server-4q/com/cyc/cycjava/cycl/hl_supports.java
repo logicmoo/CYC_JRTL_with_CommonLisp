@@ -5942,7 +5942,7 @@ public final class hl_supports extends SubLTranslatedFile implements V12 {
             tv = current.first();
             current = current.rest();
             if (NIL == current) {
-                return removal_modules_tva_lookup.inference_tva_check(asent, mt);
+                return removal_modules_tva_lookup.inference_tva_check(asent, mt,UNPROVIDED_SYM);
             } else {
                 cdestructuring_bind_error(datum, $list_alt96);
             }
