@@ -117,6 +117,7 @@ public final class Main {
 	}
 
 	public static void main(final String[] args) throws InterruptedException {
+		Startup.MainThreaded = true;
 		Thread.setDefaultUncaughtExceptionHandler(uncaughtExceptionHandler);
 		setupABCLOptions();
 		String[] argsNew = extractOptions(args);
@@ -268,6 +269,7 @@ public final class Main {
 	public static boolean isSubLispBindingMode;
 
 	public static String[] extractOptions(String[] args) {
+
 		ArrayList<String> argsList = new ArrayList<String>(Arrays.asList(args));
 		if (argsList.remove("--main-thread")) {
 			Main.useMainThread = true;
