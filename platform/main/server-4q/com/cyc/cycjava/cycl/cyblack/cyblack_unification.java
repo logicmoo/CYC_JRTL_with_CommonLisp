@@ -64,7 +64,6 @@ public final class cyblack_unification extends SubLTranslatedFile implements V02
 
     public static final SubLFile me = new cyblack_unification();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_unification";
 
     // // Definitions
     /**

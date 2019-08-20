@@ -55,7 +55,6 @@ public final class assertion_gloss_cache extends SubLTranslatedFile implements V
 
     public static final SubLFile me = new assertion_gloss_cache();
 
-    public static final String myName = "com.cyc.cycjava.cycl.assertion_gloss_cache";
 
     // // Definitions
     /**

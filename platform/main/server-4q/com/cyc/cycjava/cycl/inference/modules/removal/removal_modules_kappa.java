@@ -30,7 +30,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_kappa extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_kappa";
     public static String myFingerPrint = "702d667b7e8dc79777041fdc0fdec92c35fd8f52e36327441e10d9db405d554b";
     private static SubLSymbol $REMOVAL_KAPPA;
     private static SubLList $list1;
@@ -134,12 +133,12 @@ public class removal_modules_kappa extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_kappa_file() {
-        declareFunction(myName, "removal_kappa_pos_gaf_cost", "REMOVAL-KAPPA-POS-GAF-COST", 1, 1, false);
-        declareFunction(myName, "removal_kappa_pos_gaf_completeness", "REMOVAL-KAPPA-POS-GAF-COMPLETENESS", 1, 1, false);
-        declareFunction(myName, "removal_kappa_pos_gaf_preference_level", "REMOVAL-KAPPA-POS-GAF-PREFERENCE-LEVEL", 3, 0, false);
-        declareFunction(myName, "removal_kappa_expand", "REMOVAL-KAPPA-EXPAND", 2, 0, false);
-        declareFunction(myName, "kappa_expression_query", "KAPPA-EXPRESSION-QUERY", 1, 0, false);
-        declareFunction(myName, "remove_bindings_to_ground_terms", "REMOVE-BINDINGS-TO-GROUND-TERMS", 1, 0, false);
+        declareFunction("removal_kappa_pos_gaf_cost", "REMOVAL-KAPPA-POS-GAF-COST", 1, 1, false);
+        declareFunction("removal_kappa_pos_gaf_completeness", "REMOVAL-KAPPA-POS-GAF-COMPLETENESS", 1, 1, false);
+        declareFunction("removal_kappa_pos_gaf_preference_level", "REMOVAL-KAPPA-POS-GAF-PREFERENCE-LEVEL", 3, 0, false);
+        declareFunction("removal_kappa_expand", "REMOVAL-KAPPA-EXPAND", 2, 0, false);
+        declareFunction("kappa_expression_query", "KAPPA-EXPRESSION-QUERY", 1, 0, false);
+        declareFunction("remove_bindings_to_ground_terms", "REMOVE-BINDINGS-TO-GROUND-TERMS", 1, 0, false);
         return NIL;
     }
 

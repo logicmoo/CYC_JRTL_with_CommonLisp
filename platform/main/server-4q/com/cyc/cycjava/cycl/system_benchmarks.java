@@ -117,7 +117,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class system_benchmarks extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new system_benchmarks();
 
- public static final String myName = "com.cyc.cycjava.cycl.system_benchmarks";
 
 
     // defvar

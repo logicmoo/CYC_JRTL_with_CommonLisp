@@ -49,7 +49,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class inference_viewer extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.inference_viewer";
     public static String myFingerPrint = "3f594a970b64229c683287384d71f02dd7fd00815159d3f403dc6c7b9f5e5ae1";
     @SubL(source = "cycl/inference/inference-viewer.lisp", position = 4300L)
     private static SubLSymbol $cyc_term_working_set_query_lock$;
@@ -296,13 +295,13 @@ public class inference_viewer extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_inference_viewer_file() {
-        declareFunction(myName, "inference_term_working_set", "INFERENCE-TERM-WORKING-SET", 1, 3, false);
-        declareFunction(myName, "fort_passes_inference_viewer_filterP", "FORT-PASSES-INFERENCE-VIEWER-FILTER?", 2, 0, false);
-        declareFunction(myName, "forbidden_inference_viewer_forts", "FORBIDDEN-INFERENCE-VIEWER-FORTS", 2, 0, false);
-        declareFunction(myName, "cyc_term_working_set_query_int", "CYC-TERM-WORKING-SET-QUERY-INT", 3, 0, false);
-        declareFunction(myName, "cyc_term_working_set_query", "CYC-TERM-WORKING-SET-QUERY", 1, 5, false);
-        declareFunction(myName, "externally_monitor_inference_term_working_set", "EXTERNALLY-MONITOR-INFERENCE-TERM-WORKING-SET", 2, 4, false);
-        declareFunction(myName, "print_term_working_set_data", "PRINT-TERM-WORKING-SET-DATA", 1, 0, false);
+        declareFunction("inference_term_working_set", "INFERENCE-TERM-WORKING-SET", 1, 3, false);
+        declareFunction("fort_passes_inference_viewer_filterP", "FORT-PASSES-INFERENCE-VIEWER-FILTER?", 2, 0, false);
+        declareFunction("forbidden_inference_viewer_forts", "FORBIDDEN-INFERENCE-VIEWER-FORTS", 2, 0, false);
+        declareFunction("cyc_term_working_set_query_int", "CYC-TERM-WORKING-SET-QUERY-INT", 3, 0, false);
+        declareFunction("cyc_term_working_set_query", "CYC-TERM-WORKING-SET-QUERY", 1, 5, false);
+        declareFunction("externally_monitor_inference_term_working_set", "EXTERNALLY-MONITOR-INFERENCE-TERM-WORKING-SET", 2, 4, false);
+        declareFunction("print_term_working_set_data", "PRINT-TERM-WORKING-SET-DATA", 1, 0, false);
         return NIL;
     }
 

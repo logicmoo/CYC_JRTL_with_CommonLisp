@@ -28,7 +28,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_sksi_sentence extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_sksi_sentence";
     public static String myFingerPrint = "281feab1d471ec7d1f07cb5dbf01c09788991ee65b6a5bd148217b4b3848f8ab";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-sksi-sentence.lisp", position = 800L)
     private static SubLSymbol $default_sksi_sentence_check_cost$;
@@ -157,11 +156,11 @@ public class removal_modules_sksi_sentence extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_sksi_sentence_file() {
-        declareFunction(myName, "removal_sksi_sentence_lookup_pos_cost", "REMOVAL-SKSI-SENTENCE-LOOKUP-POS-COST", 1, 1, false);
-        declareFunction(myName, "removal_sksi_sentence_lookup_pos_cost_int", "REMOVAL-SKSI-SENTENCE-LOOKUP-POS-COST-INT", 1, 0, false);
-        declareFunction(myName, "removal_sksi_sentence_lookup_pos_expand", "REMOVAL-SKSI-SENTENCE-LOOKUP-POS-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_sksi_sentence_lookup_neg_cost", "REMOVAL-SKSI-SENTENCE-LOOKUP-NEG-COST", 1, 1, false);
-        declareFunction(myName, "removal_sksi_sentence_lookup_neg_expand", "REMOVAL-SKSI-SENTENCE-LOOKUP-NEG-EXPAND", 1, 1, false);
+        declareFunction("removal_sksi_sentence_lookup_pos_cost", "REMOVAL-SKSI-SENTENCE-LOOKUP-POS-COST", 1, 1, false);
+        declareFunction("removal_sksi_sentence_lookup_pos_cost_int", "REMOVAL-SKSI-SENTENCE-LOOKUP-POS-COST-INT", 1, 0, false);
+        declareFunction("removal_sksi_sentence_lookup_pos_expand", "REMOVAL-SKSI-SENTENCE-LOOKUP-POS-EXPAND", 1, 1, false);
+        declareFunction("removal_sksi_sentence_lookup_neg_cost", "REMOVAL-SKSI-SENTENCE-LOOKUP-NEG-COST", 1, 1, false);
+        declareFunction("removal_sksi_sentence_lookup_neg_expand", "REMOVAL-SKSI-SENTENCE-LOOKUP-NEG-EXPAND", 1, 1, false);
         return NIL;
     }
 

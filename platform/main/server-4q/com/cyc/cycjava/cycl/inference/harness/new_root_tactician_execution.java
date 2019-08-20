@@ -14,7 +14,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class new_root_tactician_execution extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.harness.new_root_tactician_execution";
     public static String myFingerPrint = "efeacddaa0ba19fbb3b70c4d5b17cac684f442c33029a0107cb5e55e30d90fd8";
     private static SubLSymbol $sym0$NEW_ROOT_STRATEGY_DONE_;
     private static SubLSymbol $UNINTERESTING;
@@ -102,14 +101,14 @@ public class new_root_tactician_execution extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_new_root_tactician_execution_file() {
-        declareFunction(myName, "new_root_strategy_doneP", "NEW-ROOT-STRATEGY-DONE?", 1, 0, false);
-        declareFunction(myName, "new_root_strategy_do_one_step", "NEW-ROOT-STRATEGY-DO-ONE-STEP", 1, 0, false);
-        declareFunction(myName, "new_root_strategy_do_one_step_int", "NEW-ROOT-STRATEGY-DO-ONE-STEP-INT", 1, 0, false);
-        declareFunction(myName, "new_root_strategy_select_best_strategem", "NEW-ROOT-STRATEGY-SELECT-BEST-STRATEGEM", 1, 0, false);
-        declareFunction(myName, "new_root_strategy_peek_next_strategem", "NEW-ROOT-STRATEGY-PEEK-NEXT-STRATEGEM", 1, 0, false);
-        declareFunction(myName, "new_root_strategy_select_best_strategem_int", "NEW-ROOT-STRATEGY-SELECT-BEST-STRATEGEM-INT", 2, 0, false);
-        declareFunction(myName, "new_root_strategy_quiesce", "NEW-ROOT-STRATEGY-QUIESCE", 1, 0, false);
-        declareFunction(myName, "new_root_strategy_execute_strategem", "NEW-ROOT-STRATEGY-EXECUTE-STRATEGEM", 2, 0, false);
+        declareFunction("new_root_strategy_doneP", "NEW-ROOT-STRATEGY-DONE?", 1, 0, false);
+        declareFunction("new_root_strategy_do_one_step", "NEW-ROOT-STRATEGY-DO-ONE-STEP", 1, 0, false);
+        declareFunction("new_root_strategy_do_one_step_int", "NEW-ROOT-STRATEGY-DO-ONE-STEP-INT", 1, 0, false);
+        declareFunction("new_root_strategy_select_best_strategem", "NEW-ROOT-STRATEGY-SELECT-BEST-STRATEGEM", 1, 0, false);
+        declareFunction("new_root_strategy_peek_next_strategem", "NEW-ROOT-STRATEGY-PEEK-NEXT-STRATEGEM", 1, 0, false);
+        declareFunction("new_root_strategy_select_best_strategem_int", "NEW-ROOT-STRATEGY-SELECT-BEST-STRATEGEM-INT", 2, 0, false);
+        declareFunction("new_root_strategy_quiesce", "NEW-ROOT-STRATEGY-QUIESCE", 1, 0, false);
+        declareFunction("new_root_strategy_execute_strategem", "NEW-ROOT-STRATEGY-EXECUTE-STRATEGEM", 2, 0, false);
         return NIL;
     }
 

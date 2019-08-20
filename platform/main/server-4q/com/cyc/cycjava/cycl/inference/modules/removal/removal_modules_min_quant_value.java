@@ -20,7 +20,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_min_quant_value extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_min_quant_value";
     public static String myFingerPrint = "f223cd7326915c4bc9031648da21417954d9fdb3abfe4b53d984219f34cd80a1";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-min-quant-value.lisp", position = 1900L)
     public static SubLSymbol $min_quant_value_defining_mt$;
@@ -93,11 +92,11 @@ public class removal_modules_min_quant_value extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_min_quant_value_file() {
-        declareFunction(myName, "unreified_quantity_p", "UNREIFIED-QUANTITY-P", 1, 0, false);
-        declareFunction(myName, "removal_min_quant_value", "REMOVAL-MIN-QUANT-VALUE", 1, 0, false);
-        declareFunction(myName, "removal_max_quant_value", "REMOVAL-MAX-QUANT-VALUE", 1, 0, false);
-        declareFunction(myName, "removal_quantity_unit", "REMOVAL-QUANTITY-UNIT", 1, 0, false);
-        declareFunction(myName, "removal_quantity_measure", "REMOVAL-QUANTITY-MEASURE", 1, 0, false);
+        declareFunction("unreified_quantity_p", "UNREIFIED-QUANTITY-P", 1, 0, false);
+        declareFunction("removal_min_quant_value", "REMOVAL-MIN-QUANT-VALUE", 1, 0, false);
+        declareFunction("removal_max_quant_value", "REMOVAL-MAX-QUANT-VALUE", 1, 0, false);
+        declareFunction("removal_quantity_unit", "REMOVAL-QUANTITY-UNIT", 1, 0, false);
+        declareFunction("removal_quantity_measure", "REMOVAL-QUANTITY-MEASURE", 1, 0, false);
         return NIL;
     }
 

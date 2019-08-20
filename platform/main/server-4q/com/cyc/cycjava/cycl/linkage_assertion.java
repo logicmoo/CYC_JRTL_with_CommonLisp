@@ -79,7 +79,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class linkage_assertion extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new linkage_assertion();
 
- public static final String myName = "com.cyc.cycjava.cycl.linkage_assertion";
 
 
     // deflexical

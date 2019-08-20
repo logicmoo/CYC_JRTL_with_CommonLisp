@@ -47,7 +47,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class c_name_translation extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new c_name_translation();
 
- public static final String myName = "com.cyc.cycjava.cycl.c_name_translation";
 
 
     // deflexical

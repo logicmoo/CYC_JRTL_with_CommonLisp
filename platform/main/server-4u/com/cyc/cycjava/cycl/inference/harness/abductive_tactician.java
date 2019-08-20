@@ -21,7 +21,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class abductive_tactician extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new abductive_tactician();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.inference.harness.abductive_tactician";
 
 
     // defvar

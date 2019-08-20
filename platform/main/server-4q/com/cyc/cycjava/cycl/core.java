@@ -137,7 +137,6 @@ public final class core extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new core();
 
- public static final String myName = "com.cyc.cycjava.cycl.core";
 
 
     // deflexical

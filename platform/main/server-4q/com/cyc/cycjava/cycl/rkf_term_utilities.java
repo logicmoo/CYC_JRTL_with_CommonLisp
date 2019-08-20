@@ -68,7 +68,6 @@ public final class rkf_term_utilities extends SubLTranslatedFile implements V12 
 
     public static final SubLFile me = new rkf_term_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_term_utilities";
 
 
     // defparameter

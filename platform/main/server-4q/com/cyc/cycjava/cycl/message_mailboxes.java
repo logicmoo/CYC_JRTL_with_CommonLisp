@@ -65,7 +65,6 @@ public final class message_mailboxes extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new message_mailboxes();
 
- public static final String myName = "com.cyc.cycjava.cycl.message_mailboxes";
 
 
     // defconstant

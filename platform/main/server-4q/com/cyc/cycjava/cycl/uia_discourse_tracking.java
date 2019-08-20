@@ -30,7 +30,6 @@ public final class uia_discourse_tracking extends SubLTranslatedFile implements 
 
     public static final SubLFile me = new uia_discourse_tracking();
 
-    public static final String myName = "com.cyc.cycjava.cycl.uia_discourse_tracking";
 
     // // Definitions
     public static final SubLObject uiat_sr_extend_current_discourse(SubLObject interaction, SubLObject indexical_map, SubLObject constraint_table) {

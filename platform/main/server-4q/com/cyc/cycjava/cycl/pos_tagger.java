@@ -259,7 +259,6 @@ public final class pos_tagger extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new pos_tagger();
 
- public static final String myName = "com.cyc.cycjava.cycl.pos_tagger";
 
 
     // defparameter

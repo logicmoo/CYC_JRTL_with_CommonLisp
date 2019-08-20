@@ -126,7 +126,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class wff_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new wff_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.wff_utilities";
 
 
     // defparameter

@@ -156,7 +156,6 @@ public final class fi extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new fi();
 
- public static final String myName = "com.cyc.cycjava.cycl.fi";
 
 
     // deflexical

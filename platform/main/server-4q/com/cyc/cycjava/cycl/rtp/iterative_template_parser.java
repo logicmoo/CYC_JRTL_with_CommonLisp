@@ -493,7 +493,6 @@ public final class iterative_template_parser extends SubLTranslatedFile implemen
 
     public static final SubLFile me = new iterative_template_parser();
 
- public static final String myName = "com.cyc.cycjava.cycl.rtp.iterative_template_parser";
 
 
     // defparameter

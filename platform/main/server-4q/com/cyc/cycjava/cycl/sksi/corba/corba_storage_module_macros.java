@@ -37,7 +37,6 @@ public final class corba_storage_module_macros extends SubLTranslatedFile implem
 
     public static final SubLFile me = new corba_storage_module_macros();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.sksi.corba.corba_storage_module_macros";
 
     // // Definitions
     public static final SubLObject corba_sks_declare_storage_module_suite(SubLObject macroform, SubLObject environment) {

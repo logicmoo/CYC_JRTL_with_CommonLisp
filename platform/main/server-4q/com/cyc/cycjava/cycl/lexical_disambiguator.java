@@ -26,7 +26,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class lexical_disambiguator extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new lexical_disambiguator();
 
- public static final String myName = "com.cyc.cycjava.cycl.lexical_disambiguator";
 
 
     // Internal Constants

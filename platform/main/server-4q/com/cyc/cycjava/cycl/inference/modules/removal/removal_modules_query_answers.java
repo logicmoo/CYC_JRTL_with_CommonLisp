@@ -55,7 +55,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_query_answers extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_query_answers";
     public static String myFingerPrint = "289f05847544f84d7cf96921dbf12aa596ae2d34d717b1577a9bd248b9b4859f";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-query-answers.lisp", position = 17100L)
     private static SubLSymbol $removal_justification_partial_expand_max_justifications_count$;
@@ -849,40 +848,40 @@ public class removal_modules_query_answers extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_query_answers_file() {
-        declareFunction(myName, "removal_cycl_query_specification_p", "REMOVAL-CYCL-QUERY-SPECIFICATION-P", 1, 0, false);
-        declareFunction(myName, "removal_allowed_query_answers_sentenceP", "REMOVAL-ALLOWED-QUERY-ANSWERS-SENTENCE?", 1, 0, false);
-        declareFunction(myName, "removal_query_answers_cost", "REMOVAL-QUERY-ANSWERS-COST", 1, 0, false);
-        declareFunction(myName, "removal_query_answers_iterate", "REMOVAL-QUERY-ANSWERS-ITERATE", 1, 0, false);
-        declareFunction(myName, "removal_create_inference_answer_fns", "REMOVAL-CREATE-INFERENCE-ANSWER-FNS", 2, 0, false);
-        declareFunction(myName, "removal_create_inference_answer_fn_from_answers", "REMOVAL-CREATE-INFERENCE-ANSWER-FN-FROM-ANSWERS", 1, 0, false);
-        declareFunction(myName, "removal_create_inference_answer_fn_from_bindings", "REMOVAL-CREATE-INFERENCE-ANSWER-FN-FROM-BINDINGS", 1, 0, false);
-        declareFunction(myName, "removal_create_inference_answer_fn_from_supports", "REMOVAL-CREATE-INFERENCE-ANSWER-FN-FROM-SUPPORTS", 1, 0, false);
-        declareFunction(myName, "removal_create_inference_answer_fn_from_bindings_and_supports", "REMOVAL-CREATE-INFERENCE-ANSWER-FN-FROM-BINDINGS-AND-SUPPORTS", 1, 0, false);
-        declareFunction(myName, "removal_create_inference_answer_fn_from_bindings_and_hypothetical_bindings", "REMOVAL-CREATE-INFERENCE-ANSWER-FN-FROM-BINDINGS-AND-HYPOTHETICAL-BINDINGS", 1, 0, false);
-        declareFunction(myName, "removal_justification_fns", "REMOVAL-JUSTIFICATION-FNS", 1, 0, false);
-        declareFunction(myName, "removal_justification_fns_from_supports", "REMOVAL-JUSTIFICATION-FNS-FROM-SUPPORTS", 1, 0, false);
-        declareFunction(myName, "removal_create_justification_fn", "REMOVAL-CREATE-JUSTIFICATION-FN", 1, 0, false);
-        declareFunction(myName, "removal_support_datastructures", "REMOVAL-SUPPORT-DATASTRUCTURES", 1, 0, false);
-        declareFunction(myName, "removal_create_cycl_hl_support_fn", "REMOVAL-CREATE-CYCL-HL-SUPPORT-FN", 1, 0, false);
-        declareFunction(myName, "removal_create_inference_answer_fn", "REMOVAL-CREATE-INFERENCE-ANSWER-FN", 2, 0, false);
-        declareFunction(myName, "query_answers_kbq_run_query", "QUERY-ANSWERS-KBQ-RUN-QUERY", 1, 0, false);
-        declareFunction(myName, "removal_allowed_query_bindings_sentenceP", "REMOVAL-ALLOWED-QUERY-BINDINGS-SENTENCE?", 1, 0, false);
-        declareFunction(myName, "removal_query_bindings_cost", "REMOVAL-QUERY-BINDINGS-COST", 1, 0, false);
-        declareFunction(myName, "removal_query_bindings_iterate", "REMOVAL-QUERY-BINDINGS-ITERATE", 1, 0, false);
-        declareFunction(myName, "removal_create_el_bindings_sets", "REMOVAL-CREATE-EL-BINDINGS-SETS", 2, 0, false);
-        declareFunction(myName, "removal_allowed_query_variable_sentenceP", "REMOVAL-ALLOWED-QUERY-VARIABLE-SENTENCE?", 1, 0, false);
-        declareFunction(myName, "removal_query_variable_cost", "REMOVAL-QUERY-VARIABLE-COST", 1, 0, false);
-        declareFunction(myName, "removal_query_variable_iterate", "REMOVAL-QUERY-VARIABLE-ITERATE", 1, 0, false);
-        declareFunction(myName, "removal_create_set_of_variable_bindings", "REMOVAL-CREATE-SET-OF-VARIABLE-BINDINGS", 2, 0, false);
-        declareFunction(myName, "removal_query_variable_binding", "REMOVAL-QUERY-VARIABLE-BINDING", 1, 0, false);
-        declareFunction(myName, "removal_justification_partial_expand", "REMOVAL-JUSTIFICATION-PARTIAL-EXPAND", 1, 1, false);
-        declareFunction(myName, "entails_elP", "ENTAILS-EL?", 2, 0, false);
-        declareFunction(myName, "inference_justification_partial_recursive_inference", "INFERENCE-JUSTIFICATION-PARTIAL-RECURSIVE-INFERENCE", 3, 0, false);
-        declareFunction(myName, "inference_justification_partial_recursive_inference_one_more_justification", "INFERENCE-JUSTIFICATION-PARTIAL-RECURSIVE-INFERENCE-ONE-MORE-JUSTIFICATION", 2, 0, false);
-        declareFunction(myName, "inference_justification_partial_recursive_query_properties_initial", "INFERENCE-JUSTIFICATION-PARTIAL-RECURSIVE-QUERY-PROPERTIES-INITIAL", 1, 1, false);
-        declareFunction(myName, "inference_justification_partial_recursive_query_properties_continued", "INFERENCE-JUSTIFICATION-PARTIAL-RECURSIVE-QUERY-PROPERTIES-CONTINUED", 1, 1, false);
-        declareFunction(myName, "removal_firstinlistsatisfying_expand", "REMOVAL-FIRSTINLISTSATISFYING-EXPAND", 1, 1, false);
-        declareFunction(myName, "test_removal_firstinlistsatisfying_expand", "TEST-REMOVAL-FIRSTINLISTSATISFYING-EXPAND", 1, 2, false);
+        declareFunction("removal_cycl_query_specification_p", "REMOVAL-CYCL-QUERY-SPECIFICATION-P", 1, 0, false);
+        declareFunction("removal_allowed_query_answers_sentenceP", "REMOVAL-ALLOWED-QUERY-ANSWERS-SENTENCE?", 1, 0, false);
+        declareFunction("removal_query_answers_cost", "REMOVAL-QUERY-ANSWERS-COST", 1, 0, false);
+        declareFunction("removal_query_answers_iterate", "REMOVAL-QUERY-ANSWERS-ITERATE", 1, 0, false);
+        declareFunction("removal_create_inference_answer_fns", "REMOVAL-CREATE-INFERENCE-ANSWER-FNS", 2, 0, false);
+        declareFunction("removal_create_inference_answer_fn_from_answers", "REMOVAL-CREATE-INFERENCE-ANSWER-FN-FROM-ANSWERS", 1, 0, false);
+        declareFunction("removal_create_inference_answer_fn_from_bindings", "REMOVAL-CREATE-INFERENCE-ANSWER-FN-FROM-BINDINGS", 1, 0, false);
+        declareFunction("removal_create_inference_answer_fn_from_supports", "REMOVAL-CREATE-INFERENCE-ANSWER-FN-FROM-SUPPORTS", 1, 0, false);
+        declareFunction("removal_create_inference_answer_fn_from_bindings_and_supports", "REMOVAL-CREATE-INFERENCE-ANSWER-FN-FROM-BINDINGS-AND-SUPPORTS", 1, 0, false);
+        declareFunction("removal_create_inference_answer_fn_from_bindings_and_hypothetical_bindings", "REMOVAL-CREATE-INFERENCE-ANSWER-FN-FROM-BINDINGS-AND-HYPOTHETICAL-BINDINGS", 1, 0, false);
+        declareFunction("removal_justification_fns", "REMOVAL-JUSTIFICATION-FNS", 1, 0, false);
+        declareFunction("removal_justification_fns_from_supports", "REMOVAL-JUSTIFICATION-FNS-FROM-SUPPORTS", 1, 0, false);
+        declareFunction("removal_create_justification_fn", "REMOVAL-CREATE-JUSTIFICATION-FN", 1, 0, false);
+        declareFunction("removal_support_datastructures", "REMOVAL-SUPPORT-DATASTRUCTURES", 1, 0, false);
+        declareFunction("removal_create_cycl_hl_support_fn", "REMOVAL-CREATE-CYCL-HL-SUPPORT-FN", 1, 0, false);
+        declareFunction("removal_create_inference_answer_fn", "REMOVAL-CREATE-INFERENCE-ANSWER-FN", 2, 0, false);
+        declareFunction("query_answers_kbq_run_query", "QUERY-ANSWERS-KBQ-RUN-QUERY", 1, 0, false);
+        declareFunction("removal_allowed_query_bindings_sentenceP", "REMOVAL-ALLOWED-QUERY-BINDINGS-SENTENCE?", 1, 0, false);
+        declareFunction("removal_query_bindings_cost", "REMOVAL-QUERY-BINDINGS-COST", 1, 0, false);
+        declareFunction("removal_query_bindings_iterate", "REMOVAL-QUERY-BINDINGS-ITERATE", 1, 0, false);
+        declareFunction("removal_create_el_bindings_sets", "REMOVAL-CREATE-EL-BINDINGS-SETS", 2, 0, false);
+        declareFunction("removal_allowed_query_variable_sentenceP", "REMOVAL-ALLOWED-QUERY-VARIABLE-SENTENCE?", 1, 0, false);
+        declareFunction("removal_query_variable_cost", "REMOVAL-QUERY-VARIABLE-COST", 1, 0, false);
+        declareFunction("removal_query_variable_iterate", "REMOVAL-QUERY-VARIABLE-ITERATE", 1, 0, false);
+        declareFunction("removal_create_set_of_variable_bindings", "REMOVAL-CREATE-SET-OF-VARIABLE-BINDINGS", 2, 0, false);
+        declareFunction("removal_query_variable_binding", "REMOVAL-QUERY-VARIABLE-BINDING", 1, 0, false);
+        declareFunction("removal_justification_partial_expand", "REMOVAL-JUSTIFICATION-PARTIAL-EXPAND", 1, 1, false);
+        declareFunction("entails_elP", "ENTAILS-EL?", 2, 0, false);
+        declareFunction("inference_justification_partial_recursive_inference", "INFERENCE-JUSTIFICATION-PARTIAL-RECURSIVE-INFERENCE", 3, 0, false);
+        declareFunction("inference_justification_partial_recursive_inference_one_more_justification", "INFERENCE-JUSTIFICATION-PARTIAL-RECURSIVE-INFERENCE-ONE-MORE-JUSTIFICATION", 2, 0, false);
+        declareFunction("inference_justification_partial_recursive_query_properties_initial", "INFERENCE-JUSTIFICATION-PARTIAL-RECURSIVE-QUERY-PROPERTIES-INITIAL", 1, 1, false);
+        declareFunction("inference_justification_partial_recursive_query_properties_continued", "INFERENCE-JUSTIFICATION-PARTIAL-RECURSIVE-QUERY-PROPERTIES-CONTINUED", 1, 1, false);
+        declareFunction("removal_firstinlistsatisfying_expand", "REMOVAL-FIRSTINLISTSATISFYING-EXPAND", 1, 1, false);
+        declareFunction("test_removal_firstinlistsatisfying_expand", "TEST-REMOVAL-FIRSTINLISTSATISFYING-EXPAND", 1, 2, false);
         return NIL;
     }
 

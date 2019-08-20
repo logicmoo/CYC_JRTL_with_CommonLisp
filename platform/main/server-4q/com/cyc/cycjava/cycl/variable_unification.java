@@ -105,7 +105,6 @@ public final class variable_unification extends SubLTranslatedFile implements V1
 
     public static final SubLFile me = new variable_unification();
 
- public static final String myName = "com.cyc.cycjava.cycl.variable_unification";
 
 
     // deflexical

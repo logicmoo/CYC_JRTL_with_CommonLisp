@@ -48,7 +48,6 @@ public final class cyblack_derived_panels extends SubLTranslatedFile implements 
 
     public static final SubLFile me = new cyblack_derived_panels();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_derived_panels";
 
     // // Definitions
     public static final SubLObject get_cyblack_partitioned_panel_deactivated_postings(SubLObject cyblack_partitioned_panel) {

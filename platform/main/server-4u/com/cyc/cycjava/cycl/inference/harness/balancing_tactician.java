@@ -110,7 +110,6 @@ public final class balancing_tactician extends SubLTranslatedFile implements V12
 
     public static final SubLFile me = new balancing_tactician();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.harness.balancing_tactician";
 
 
     // defconstant

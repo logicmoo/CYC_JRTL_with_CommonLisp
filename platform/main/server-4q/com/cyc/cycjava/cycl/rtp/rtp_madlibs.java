@@ -77,7 +77,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rtp_madlibs extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rtp_madlibs();
 
- public static final String myName = "com.cyc.cycjava.cycl.rtp.rtp_madlibs";
 
 
     @LispMethod(comment = "Internal Constants")

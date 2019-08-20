@@ -91,7 +91,6 @@ public final class bbn_strengthening extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new bbn_strengthening();
 
-    public static final String myName = "com.cyc.cycjava.cycl.bbn_strengthening";
 
 
 

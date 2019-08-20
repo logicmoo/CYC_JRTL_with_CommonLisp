@@ -111,7 +111,6 @@ public final class cyblack_defks extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cyblack_defks();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_defks";
 
     // // Definitions
     public static final SubLObject cyblack_variable_list_p(SubLObject list) {

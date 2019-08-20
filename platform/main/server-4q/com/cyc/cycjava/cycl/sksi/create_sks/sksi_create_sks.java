@@ -73,7 +73,6 @@ public final class sksi_create_sks extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new sksi_create_sks();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.create_sks.sksi_create_sks";
 
 
     private static final SubLObject $$Database_Physical = reader_make_constant_shell("Database-Physical");

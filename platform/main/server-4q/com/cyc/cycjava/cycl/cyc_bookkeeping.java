@@ -43,7 +43,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class cyc_bookkeeping extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new cyc_bookkeeping();
 
- public static final String myName = "com.cyc.cycjava.cycl.cyc_bookkeeping";
 
 
 

@@ -49,7 +49,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_relevant_similar_queries extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_relevant_similar_queries";
     public static String myFingerPrint = "533e7a15ff2b19edd221092ce58c1e844a1ed6b4c074d1e66d20ddd06ac338f4";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-relevant-similar-queries.lisp", position = 9100L)
     public static SubLSymbol $pertinent_query_sentence_with_terms_cost$;
@@ -540,24 +539,24 @@ public class removal_modules_relevant_similar_queries extends SubLTranslatedFile
     }
 
     public static SubLObject declare_removal_modules_relevant_similar_queries_file() {
-        declareFunction(myName, "relevance_for_query", "RELEVANCE-FOR-QUERY", 1, 0, false);
-        declareFunction(myName, "formula_for_query", "FORMULA-FOR-QUERY", 1, 0, false);
-        declareFunction(myName, "pertinent_query_sentences_with_terms", "PERTINENT-QUERY-SENTENCES-WITH-TERMS", 2, 0, false);
-        declareFunction(myName, "term_in_sentence_of_query_specification_of_type_pos_unify_arg2_cost", "TERM-IN-SENTENCE-OF-QUERY-SPECIFICATION-OF-TYPE-POS-UNIFY-ARG2-COST", 1, 0, false);
-        declareFunction(myName, "term_in_sentence_of_query_specification_of_type_pos_unify_arg2_iterator", "TERM-IN-SENTENCE-OF-QUERY-SPECIFICATION-OF-TYPE-POS-UNIFY-ARG2-ITERATOR", 2, 0, false);
-        declareFunction(myName, "term_in_sentence_of_query_specification_of_type_pos_unify_arg2", "TERM-IN-SENTENCE-OF-QUERY-SPECIFICATION-OF-TYPE-POS-UNIFY-ARG2", 2, 0, false);
-        declareFunction(myName, "substitute_sentence_terms_into_query", "SUBSTITUTE-SENTENCE-TERMS-INTO-QUERY", 2, 0, false);
-        declareFunction(myName, "substitute_query", "SUBSTITUTE-QUERY", 3, 0, false);
-        declareFunction(myName, "substitute_query_terms_into_cycl", "SUBSTITUTE-QUERY-TERMS-INTO-CYCL", 2, 1, false);
-        declareFunction(myName, "query_subst_string_denots", "QUERY-SUBST-STRING-DENOTS", 1, 0, false);
-        declareFunction(myName, "query_subst_find_substitutable_terms", "QUERY-SUBST-FIND-SUBSTITUTABLE-TERMS", 1, 0, false);
-        declareFunction(myName, "substitution_gather_term", "SUBSTITUTION-GATHER-TERM", 1, 0, false);
-        declareFunction(myName, "substitution_weight", "SUBSTITUTION-WEIGHT", 3, 1, false);
-        declareFunction(myName, "filter_unsubstitutable_terms_for_argpos", "FILTER-UNSUBSTITUTABLE-TERMS-FOR-ARGPOS", 4, 1, false);
-        declareFunction(myName, "meets_heuristic_substitution_constraints", "MEETS-HEURISTIC-SUBSTITUTION-CONSTRAINTS", 5, 0, false);
-        declareFunction(myName, "term_already_in_literalP", "TERM-ALREADY-IN-LITERAL?", 3, 0, false);
-        declareFunction(myName, "terms_of_same_orderP", "TERMS-OF-SAME-ORDER?", 2, 0, false);
-        declareFunction(myName, "my_term_order", "MY-TERM-ORDER", 1, 0, false);
+        declareFunction("relevance_for_query", "RELEVANCE-FOR-QUERY", 1, 0, false);
+        declareFunction("formula_for_query", "FORMULA-FOR-QUERY", 1, 0, false);
+        declareFunction("pertinent_query_sentences_with_terms", "PERTINENT-QUERY-SENTENCES-WITH-TERMS", 2, 0, false);
+        declareFunction("term_in_sentence_of_query_specification_of_type_pos_unify_arg2_cost", "TERM-IN-SENTENCE-OF-QUERY-SPECIFICATION-OF-TYPE-POS-UNIFY-ARG2-COST", 1, 0, false);
+        declareFunction("term_in_sentence_of_query_specification_of_type_pos_unify_arg2_iterator", "TERM-IN-SENTENCE-OF-QUERY-SPECIFICATION-OF-TYPE-POS-UNIFY-ARG2-ITERATOR", 2, 0, false);
+        declareFunction("term_in_sentence_of_query_specification_of_type_pos_unify_arg2", "TERM-IN-SENTENCE-OF-QUERY-SPECIFICATION-OF-TYPE-POS-UNIFY-ARG2", 2, 0, false);
+        declareFunction("substitute_sentence_terms_into_query", "SUBSTITUTE-SENTENCE-TERMS-INTO-QUERY", 2, 0, false);
+        declareFunction("substitute_query", "SUBSTITUTE-QUERY", 3, 0, false);
+        declareFunction("substitute_query_terms_into_cycl", "SUBSTITUTE-QUERY-TERMS-INTO-CYCL", 2, 1, false);
+        declareFunction("query_subst_string_denots", "QUERY-SUBST-STRING-DENOTS", 1, 0, false);
+        declareFunction("query_subst_find_substitutable_terms", "QUERY-SUBST-FIND-SUBSTITUTABLE-TERMS", 1, 0, false);
+        declareFunction("substitution_gather_term", "SUBSTITUTION-GATHER-TERM", 1, 0, false);
+        declareFunction("substitution_weight", "SUBSTITUTION-WEIGHT", 3, 1, false);
+        declareFunction("filter_unsubstitutable_terms_for_argpos", "FILTER-UNSUBSTITUTABLE-TERMS-FOR-ARGPOS", 4, 1, false);
+        declareFunction("meets_heuristic_substitution_constraints", "MEETS-HEURISTIC-SUBSTITUTION-CONSTRAINTS", 5, 0, false);
+        declareFunction("term_already_in_literalP", "TERM-ALREADY-IN-LITERAL?", 3, 0, false);
+        declareFunction("terms_of_same_orderP", "TERMS-OF-SAME-ORDER?", 2, 0, false);
+        declareFunction("my_term_order", "MY-TERM-ORDER", 1, 0, false);
         return NIL;
     }
 

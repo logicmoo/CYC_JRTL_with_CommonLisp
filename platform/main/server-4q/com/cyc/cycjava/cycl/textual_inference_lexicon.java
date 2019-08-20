@@ -29,7 +29,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class textual_inference_lexicon extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new textual_inference_lexicon();
 
- public static final String myName = "com.cyc.cycjava.cycl.textual_inference_lexicon";
 
 
     // Internal Constants

@@ -64,7 +64,6 @@ public final class cyblack_ksb extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cyblack_ksb();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_ksb";
 
     // // Definitions
     public static final SubLObject cyblack_knowledge_source_battery_p(SubLObject cyblack_knowledge_source_battery) {

@@ -57,7 +57,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rtp_type_checkers extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rtp_type_checkers();
 
- public static final String myName = "com.cyc.cycjava.cycl.rtp.rtp_type_checkers";
 
 
     // defparameter

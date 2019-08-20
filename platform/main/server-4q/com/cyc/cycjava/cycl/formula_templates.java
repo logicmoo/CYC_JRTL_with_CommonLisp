@@ -308,7 +308,6 @@ public final class formula_templates extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new formula_templates();
 
- public static final String myName = "com.cyc.cycjava.cycl.formula_templates";
 
 
     // defconstant

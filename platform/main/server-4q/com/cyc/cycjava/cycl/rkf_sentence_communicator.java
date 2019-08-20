@@ -25,7 +25,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rkf_sentence_communicator extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rkf_sentence_communicator();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_sentence_communicator";
 
 
     // Definitions

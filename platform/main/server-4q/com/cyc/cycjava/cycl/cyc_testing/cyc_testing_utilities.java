@@ -298,7 +298,6 @@ public final class cyc_testing_utilities extends SubLTranslatedFile implements V
 
     public static final SubLFile me = new cyc_testing_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.cyc_testing.cyc_testing_utilities";
 
 
     // defparameter

@@ -30,7 +30,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class kct_variables extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new kct_variables();
 
- public static final String myName = "com.cyc.cycjava.cycl.cyc_testing.kb_content_test.kct_variables";
 
 
     // defparameter

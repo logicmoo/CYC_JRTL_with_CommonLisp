@@ -9470,7 +9470,6 @@ public final class sdbc extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new sdbc();
 
- public static final String myName = "com.cyc.cycjava.cycl.sdbc";
 
 
     // deflexical

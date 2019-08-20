@@ -110,7 +110,6 @@ public final class stacks extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new stacks();
 
- public static final String myName = "com.cyc.cycjava.cycl.stacks";
 
 
     // defconstant

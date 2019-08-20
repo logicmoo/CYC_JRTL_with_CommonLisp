@@ -53,7 +53,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class cycl_string extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new cycl_string();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.cycl_string";
 
 
     private static final SubLSymbol CYCL_TO_UTF8_STRING = makeSymbol("CYCL-TO-UTF8-STRING");

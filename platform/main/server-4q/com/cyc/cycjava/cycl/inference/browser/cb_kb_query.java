@@ -725,7 +725,6 @@ public final class cb_kb_query extends SubLTranslatedFile implements V12 {
 
 	public static final SubLFile me = new cb_kb_query();
 
-	public static final String myName = "com.cyc.cycjava.cycl.inference.browser.cb_kb_query";
 
 	// defparameter
 	// Definitions

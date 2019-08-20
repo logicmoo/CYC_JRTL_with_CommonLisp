@@ -53,7 +53,6 @@ public final class cyblack_lexifier extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cyblack_lexifier();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_lexifier";
 
     // // Definitions
     public static final SubLObject cyblack_lexeme_p(SubLObject cyblack_lexeme) {

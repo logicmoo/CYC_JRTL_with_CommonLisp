@@ -29,7 +29,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class constant_completion_interface extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new constant_completion_interface();
 
- public static final String myName = "com.cyc.cycjava.cycl.constant_completion_interface";
 
 
     private static final SubLSymbol KB_CONSTANT_COMPLETE_EXACT = makeSymbol("KB-CONSTANT-COMPLETE-EXACT");

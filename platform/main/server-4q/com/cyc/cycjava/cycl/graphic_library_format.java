@@ -290,7 +290,6 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
 
     public static final SubLFile me = new graphic_library_format();
 
- public static final String myName = "com.cyc.cycjava.cycl.graphic_library_format";
 
 
     // defconstant

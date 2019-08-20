@@ -63,7 +63,6 @@ public final class uia_tools_introduction extends SubLTranslatedFile implements 
 
     public static final SubLFile me = new uia_tools_introduction();
 
-    public static final String myName = "com.cyc.cycjava.cycl.uia_tools_introduction";
 
     // // Definitions
     public static final SubLObject uia_act_new_sentence_relator(SubLObject v_agenda, SubLObject mode, SubLObject cycl_sentence) {

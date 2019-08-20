@@ -67,7 +67,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sksi_hl_support_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sksi_hl_support_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.query_sks.sksi_hl_support_utilities";
 
 
     // defparameter

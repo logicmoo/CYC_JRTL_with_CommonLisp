@@ -174,7 +174,6 @@ public final class learning_reader extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new learning_reader();
 
- public static final String myName = "com.cyc.cycjava.cycl.learning_reader";
 
 
     // deflexical

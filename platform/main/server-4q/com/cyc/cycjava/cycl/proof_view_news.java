@@ -103,7 +103,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class proof_view_news extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new proof_view_news();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.proof_view_news";
 
 
     // defparameter

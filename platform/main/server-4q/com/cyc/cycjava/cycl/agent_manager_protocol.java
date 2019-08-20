@@ -36,7 +36,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class agent_manager_protocol extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new agent_manager_protocol();
 
- public static final String myName = "com.cyc.cycjava.cycl.agent_manager_protocol";
 
 
     // Internal Constants

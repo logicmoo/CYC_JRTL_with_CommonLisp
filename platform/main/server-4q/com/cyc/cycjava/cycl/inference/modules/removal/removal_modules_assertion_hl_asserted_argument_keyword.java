@@ -19,7 +19,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_assertion_hl_asserted_argument_keyword extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_assertion_hl_asserted_argument_keyword";
     public static String myFingerPrint = "edee9dfa29f4050f2566e2b05414ac0817cad25cf66391acf6dbf9c5fe1fb7b4";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-assertion-hl-asserted-argument-keyword.lisp", position = 1700L)
     private static SubLSymbol $default_assertion_hl_asserted_argument_keyword_check_cost$;
@@ -71,7 +70,7 @@ public class removal_modules_assertion_hl_asserted_argument_keyword extends SubL
     }
 
     public static SubLObject declare_removal_modules_assertion_hl_asserted_argument_keyword_file() {
-        declareFunction(myName, "assertion_keyword_terms", "ASSERTION-KEYWORD-TERMS", 1, 0, false);
+        declareFunction("assertion_keyword_terms", "ASSERTION-KEYWORD-TERMS", 1, 0, false);
         return NIL;
     }
 

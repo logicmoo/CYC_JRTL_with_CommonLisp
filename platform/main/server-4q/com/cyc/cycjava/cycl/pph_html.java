@@ -76,7 +76,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class pph_html extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new pph_html();
 
- public static final String myName = "com.cyc.cycjava.cycl.pph_html";
 
 
     // defconstant

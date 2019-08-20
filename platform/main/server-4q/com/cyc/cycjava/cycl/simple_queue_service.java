@@ -72,7 +72,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class simple_queue_service extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new simple_queue_service();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.simple_queue_service";
 
 
     // defparameter

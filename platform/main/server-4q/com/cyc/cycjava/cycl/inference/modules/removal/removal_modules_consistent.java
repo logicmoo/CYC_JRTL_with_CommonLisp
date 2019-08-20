@@ -33,7 +33,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_consistent extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_consistent";
     public static String myFingerPrint = "62f538f66c6010f9351e7722e22ebf103ecdd3f36c1440fc3b3206ba8eb31281";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-consistent.lisp", position = 1800L)
     private static SubLSymbol $default_removal_consistent_check_cost$;
@@ -236,11 +235,11 @@ public class removal_modules_consistent extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_consistent_file() {
-        declareFunction(myName, "removal_consistent_pos_expand", "REMOVAL-CONSISTENT-POS-EXPAND", 1, 1, false);
-        declareFunction(myName, "inference_consistent_check", "INFERENCE-CONSISTENT-CHECK", 2, 0, false);
-        declareFunction(myName, "inference_note_inconsistent_supports", "INFERENCE-NOTE-INCONSISTENT-SUPPORTS", 3, 0, false);
-        declareFunction(myName, "removal_consistent_neg_expand", "REMOVAL-CONSISTENT-NEG-EXPAND", 1, 1, false);
-        declareFunction(myName, "inference_inconsistent_check", "INFERENCE-INCONSISTENT-CHECK", 2, 0, false);
+        declareFunction("removal_consistent_pos_expand", "REMOVAL-CONSISTENT-POS-EXPAND", 1, 1, false);
+        declareFunction("inference_consistent_check", "INFERENCE-CONSISTENT-CHECK", 2, 0, false);
+        declareFunction("inference_note_inconsistent_supports", "INFERENCE-NOTE-INCONSISTENT-SUPPORTS", 3, 0, false);
+        declareFunction("removal_consistent_neg_expand", "REMOVAL-CONSISTENT-NEG-EXPAND", 1, 1, false);
+        declareFunction("inference_inconsistent_check", "INFERENCE-INCONSISTENT-CHECK", 2, 0, false);
         return NIL;
     }
 

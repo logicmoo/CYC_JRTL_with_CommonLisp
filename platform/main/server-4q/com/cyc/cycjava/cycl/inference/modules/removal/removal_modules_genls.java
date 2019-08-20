@@ -54,7 +54,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_genls extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_genls";
     public static String myFingerPrint = "5d2be9f0058338685071d2a13a2a9969d572416321d625912667306a205b8e4f";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-genls.lisp", position = 2800L)
     private static SubLSymbol $default_superset_cost$;
@@ -666,36 +665,36 @@ public class removal_modules_genls extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_genls_file() {
-        declareFunction(myName, "inference_genlP", "INFERENCE-GENL?", 2, 2, false);
-        declareFunction(myName, "inference_not_genlP", "INFERENCE-NOT-GENL?", 2, 2, false);
-        declareFunction(myName, "inference_all_genls", "INFERENCE-ALL-GENLS", 1, 2, false);
-        declareFunction(myName, "inference_all_specs", "INFERENCE-ALL-SPECS", 1, 2, false);
-        declareFunction(myName, "inference_genls_between", "INFERENCE-GENLS-BETWEEN", 2, 1, false);
-        declareFunction(myName, "removal_superset_expand", "REMOVAL-SUPERSET-EXPAND", 1, 1, false);
+        declareFunction("inference_genlP", "INFERENCE-GENL?", 2, 2, false);
+        declareFunction("inference_not_genlP", "INFERENCE-NOT-GENL?", 2, 2, false);
+        declareFunction("inference_all_genls", "INFERENCE-ALL-GENLS", 1, 2, false);
+        declareFunction("inference_all_specs", "INFERENCE-ALL-SPECS", 1, 2, false);
+        declareFunction("inference_genls_between", "INFERENCE-GENLS-BETWEEN", 2, 1, false);
+        declareFunction("removal_superset_expand", "REMOVAL-SUPERSET-EXPAND", 1, 1, false);
         new $removal_superset_expand$UnaryFunction();
         new $removal_superset_expand$BinaryFunction();
-        declareFunction(myName, "removal_nat_genls_expand", "REMOVAL-NAT-GENLS-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_all_genls_cost", "REMOVAL-ALL-GENLS-COST", 1, 1, false);
-        declareFunction(myName, "removal_all_genls_expand", "REMOVAL-ALL-GENLS-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_nat_all_genls_expand", "REMOVAL-NAT-ALL-GENLS-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_all_specs_cost", "REMOVAL-ALL-SPECS-COST", 1, 1, false);
-        declareFunction(myName, "removal_all_specs_iterator", "REMOVAL-ALL-SPECS-ITERATOR", 1, 0, false);
-        declareFunction(myName, "removal_not_superset_expand", "REMOVAL-NOT-SUPERSET-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_genls_between_applicability", "REMOVAL-GENLS-BETWEEN-APPLICABILITY", 1, 0, false);
+        declareFunction("removal_nat_genls_expand", "REMOVAL-NAT-GENLS-EXPAND", 1, 1, false);
+        declareFunction("removal_all_genls_cost", "REMOVAL-ALL-GENLS-COST", 1, 1, false);
+        declareFunction("removal_all_genls_expand", "REMOVAL-ALL-GENLS-EXPAND", 1, 1, false);
+        declareFunction("removal_nat_all_genls_expand", "REMOVAL-NAT-ALL-GENLS-EXPAND", 1, 1, false);
+        declareFunction("removal_all_specs_cost", "REMOVAL-ALL-SPECS-COST", 1, 1, false);
+        declareFunction("removal_all_specs_iterator", "REMOVAL-ALL-SPECS-ITERATOR", 1, 0, false);
+        declareFunction("removal_not_superset_expand", "REMOVAL-NOT-SUPERSET-EXPAND", 1, 1, false);
+        declareFunction("removal_genls_between_applicability", "REMOVAL-GENLS-BETWEEN-APPLICABILITY", 1, 0, false);
         new $removal_genls_between_applicability$UnaryFunction();
-        declareFunction(myName, "removal_genls_between_cost", "REMOVAL-GENLS-BETWEEN-COST", 1, 0, false);
-        declareFunction(myName, "removal_genls_between_completeness", "REMOVAL-GENLS-BETWEEN-COMPLETENESS", 0, 0, false);
-        declareFunction(myName, "removal_genls_between_expand", "REMOVAL-GENLS-BETWEEN-EXPAND", 1, 0, false);
-        declareFunction(myName, "removal_sbhl_between_applicability", "REMOVAL-SBHL-BETWEEN-APPLICABILITY", 2, 0, false);
-        declareFunction(myName, "find_pos_pred_indices_for_pred_between", "FIND-POS-PRED-INDICES-FOR-PRED-BETWEEN", 2, 0, false);
-        declareFunction(myName, "removal_genls_between_categorize_asents", "REMOVAL-GENLS-BETWEEN-CATEGORIZE-ASENTS", 2, 0, false);
-        declareFunction(myName, "removal_genls_collection_subset_check_pos_expand", "REMOVAL-GENLS-COLLECTION-SUBSET-CHECK-POS-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_genls_collection_subset_check_neg_expand", "REMOVAL-GENLS-COLLECTION-SUBSET-CHECK-NEG-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_genls_collection_subset_construct_query", "REMOVAL-GENLS-COLLECTION-SUBSET-CONSTRUCT-QUERY", 1, 0, false);
-        declareFunction(myName, "removal_genls_down_arg2_bound_cost", "REMOVAL-GENLS-DOWN-ARG2-BOUND-COST", 1, 1, false);
-        declareFunction(myName, "removal_genls_down_arg2_bound_completeness", "REMOVAL-GENLS-DOWN-ARG2-BOUND-COMPLETENESS", 1, 0, false);
-        declareFunction(myName, "removal_genls_down_arg2_bound_expand", "REMOVAL-GENLS-DOWN-ARG2-BOUND-EXPAND", 1, 1, false);
-        declareFunction(myName, "destructure_genls_down_asent", "DESTRUCTURE-GENLS-DOWN-ASENT", 1, 0, false);
+        declareFunction("removal_genls_between_cost", "REMOVAL-GENLS-BETWEEN-COST", 1, 0, false);
+        declareFunction("removal_genls_between_completeness", "REMOVAL-GENLS-BETWEEN-COMPLETENESS", 0, 0, false);
+        declareFunction("removal_genls_between_expand", "REMOVAL-GENLS-BETWEEN-EXPAND", 1, 0, false);
+        declareFunction("removal_sbhl_between_applicability", "REMOVAL-SBHL-BETWEEN-APPLICABILITY", 2, 0, false);
+        declareFunction("find_pos_pred_indices_for_pred_between", "FIND-POS-PRED-INDICES-FOR-PRED-BETWEEN", 2, 0, false);
+        declareFunction("removal_genls_between_categorize_asents", "REMOVAL-GENLS-BETWEEN-CATEGORIZE-ASENTS", 2, 0, false);
+        declareFunction("removal_genls_collection_subset_check_pos_expand", "REMOVAL-GENLS-COLLECTION-SUBSET-CHECK-POS-EXPAND", 1, 1, false);
+        declareFunction("removal_genls_collection_subset_check_neg_expand", "REMOVAL-GENLS-COLLECTION-SUBSET-CHECK-NEG-EXPAND", 1, 1, false);
+        declareFunction("removal_genls_collection_subset_construct_query", "REMOVAL-GENLS-COLLECTION-SUBSET-CONSTRUCT-QUERY", 1, 0, false);
+        declareFunction("removal_genls_down_arg2_bound_cost", "REMOVAL-GENLS-DOWN-ARG2-BOUND-COST", 1, 1, false);
+        declareFunction("removal_genls_down_arg2_bound_completeness", "REMOVAL-GENLS-DOWN-ARG2-BOUND-COMPLETENESS", 1, 0, false);
+        declareFunction("removal_genls_down_arg2_bound_expand", "REMOVAL-GENLS-DOWN-ARG2-BOUND-EXPAND", 1, 1, false);
+        declareFunction("destructure_genls_down_asent", "DESTRUCTURE-GENLS-DOWN-ASENT", 1, 0, false);
         return NIL;
     }
 

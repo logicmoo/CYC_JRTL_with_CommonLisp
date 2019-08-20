@@ -190,7 +190,6 @@ public final class predicate_suggestor extends SubLTranslatedFile implements V12
 
     public static final SubLFile me = new predicate_suggestor();
 
- public static final String myName = "com.cyc.cycjava.cycl.predicate_suggestor";
 
 
     // defconstant

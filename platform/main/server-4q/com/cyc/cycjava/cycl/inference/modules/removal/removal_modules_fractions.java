@@ -25,7 +25,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_fractions extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_fractions";
 	public static String myFingerPrint = "94310db00d16239ec1bf48b04a9bfdc3d7cda5323835b156c73c135b3735eee0";
 	@SubL(source = "cycl/inference/modules/removal/removal-modules-fractions.lisp", position = 1400L)
 	public static SubLSymbol $numerator_defining_mt$;
@@ -152,10 +151,10 @@ public class removal_modules_fractions extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_removal_modules_fractions_file() {
-		declareFunction(myName, "removal_fraction_with_measure_pos_check", "REMOVAL-FRACTION-WITH-MEASURE-POS-CHECK", 1,
+		declareFunction("removal_fraction_with_measure_pos_check", "REMOVAL-FRACTION-WITH-MEASURE-POS-CHECK", 1,
 				0, false);
-		declareFunction(myName, "el_fraction_numerator", "EL-FRACTION-NUMERATOR", 1, 1, false);
-		declareFunction(myName, "el_fraction_denominator", "EL-FRACTION-DENOMINATOR", 1, 1, false);
+		declareFunction("el_fraction_numerator", "EL-FRACTION-NUMERATOR", 1, 1, false);
+		declareFunction("el_fraction_denominator", "EL-FRACTION-DENOMINATOR", 1, 1, false);
 		return NIL;
 	}
 

@@ -69,7 +69,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class formula_template_vars extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new formula_template_vars();
 
- public static final String myName = "com.cyc.cycjava.cycl.formula_template_vars";
 
 
     // deflexical

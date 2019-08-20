@@ -238,7 +238,6 @@ public final class pph_phrase_resolution extends SubLTranslatedFile implements V
 
     public static final SubLFile me = new pph_phrase_resolution();
 
- public static final String myName = "com.cyc.cycjava.cycl.pph_phrase_resolution";
 
 
     // defparameter

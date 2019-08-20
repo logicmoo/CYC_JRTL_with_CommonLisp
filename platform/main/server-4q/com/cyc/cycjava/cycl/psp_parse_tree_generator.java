@@ -97,7 +97,6 @@ public final class psp_parse_tree_generator extends SubLTranslatedFile implement
 
     public static final SubLFile me = new psp_parse_tree_generator();
 
- public static final String myName = "com.cyc.cycjava.cycl.psp_parse_tree_generator";
 
 
     // defconstant

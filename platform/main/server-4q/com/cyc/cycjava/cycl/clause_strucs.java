@@ -166,7 +166,6 @@ public final class clause_strucs extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new clause_strucs();
 
- public static final String myName = "com.cyc.cycjava.cycl.clause_strucs";
 
 
     // defconstant

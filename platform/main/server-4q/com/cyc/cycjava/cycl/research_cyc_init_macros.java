@@ -33,7 +33,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class research_cyc_init_macros extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new research_cyc_init_macros();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.research_cyc_init_macros";
 
 
     private static final SubLString $$$CYC = makeString("CYC");

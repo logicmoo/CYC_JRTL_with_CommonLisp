@@ -21,7 +21,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_kb_estimates extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_kb_estimates";
 	public static String myFingerPrint = "61327860202280ad9b985f2ce37a9df245a017107e6311ca16de10c838a9ddef";
 	private static SubLObject $const0$termGeneralityEstimate;
 	private static SubLSymbol $kw$POS;
@@ -46,7 +45,7 @@ public class removal_modules_kb_estimates extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_removal_modules_kb_estimates_file() {
-		declareFunction(myName, "removal_term_generality_estimate_pos", "REMOVAL-TERM-GENERALITY-ESTIMATE-POS", 1, 1,
+		declareFunction("removal_term_generality_estimate_pos", "REMOVAL-TERM-GENERALITY-ESTIMATE-POS", 1, 1,
 				false);
 		return NIL;
 	}

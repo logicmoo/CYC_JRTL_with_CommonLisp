@@ -75,7 +75,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class cb_process_inspector extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new cb_process_inspector();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.cb_process_inspector";
 
 
     private static final SubLString $str0$_Process_Inspector_ = makeString("[Process Inspector]");

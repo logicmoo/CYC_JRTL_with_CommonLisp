@@ -15,7 +15,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class cb_html_parameters extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new cb_html_parameters();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.cb_html_parameters";
 
 
     // defparameter

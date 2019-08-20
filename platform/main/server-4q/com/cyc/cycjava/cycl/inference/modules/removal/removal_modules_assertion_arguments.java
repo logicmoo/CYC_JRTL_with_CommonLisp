@@ -24,7 +24,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_assertion_arguments extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_assertion_arguments";
     public static String myFingerPrint = "7b1642bca02fe06f05beab0d0426d61085fe3e418da3c597aad8eafadd818ff8";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-assertion-arguments.lisp", position = 3000L)
     private static SubLSymbol $default_assertion_arguments_check_cost$;
@@ -113,11 +112,11 @@ public class removal_modules_assertion_arguments extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_assertion_arguments_file() {
-        declareFunction(myName, "deduction_from_term", "DEDUCTION-FROM-TERM", 1, 0, false);
-        declareFunction(myName, "assertion_deduction_termP", "ASSERTION-DEDUCTION-TERM?", 2, 0, false);
-        declareFunction(myName, "assertion_hl_asserted_argument_keywordP", "ASSERTION-HL-ASSERTED-ARGUMENT-KEYWORD?", 2, 0, false);
-        declareFunction(myName, "assertion_argument_termP", "ASSERTION-ARGUMENT-TERM?", 2, 0, false);
-        declareFunction(myName, "assertion_argument_terms", "ASSERTION-ARGUMENT-TERMS", 1, 0, false);
+        declareFunction("deduction_from_term", "DEDUCTION-FROM-TERM", 1, 0, false);
+        declareFunction("assertion_deduction_termP", "ASSERTION-DEDUCTION-TERM?", 2, 0, false);
+        declareFunction("assertion_hl_asserted_argument_keywordP", "ASSERTION-HL-ASSERTED-ARGUMENT-KEYWORD?", 2, 0, false);
+        declareFunction("assertion_argument_termP", "ASSERTION-ARGUMENT-TERM?", 2, 0, false);
+        declareFunction("assertion_argument_terms", "ASSERTION-ARGUMENT-TERMS", 1, 0, false);
         return NIL;
     }
 

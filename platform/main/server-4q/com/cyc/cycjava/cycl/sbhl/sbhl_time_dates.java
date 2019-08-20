@@ -72,7 +72,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sbhl_time_dates extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sbhl_time_dates();
 
- public static final String myName = "com.cyc.cycjava.cycl.sbhl.sbhl_time_dates";
 
 
     // Internal Constants

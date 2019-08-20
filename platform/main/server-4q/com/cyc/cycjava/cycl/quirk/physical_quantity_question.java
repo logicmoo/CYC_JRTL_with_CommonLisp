@@ -40,7 +40,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class physical_quantity_question extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new physical_quantity_question();
 
- public static final String myName = "com.cyc.cycjava.cycl.quirk.physical_quantity_question";
 
 
     // Internal Constants

@@ -27,7 +27,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class preference_module_declarations extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new preference_module_declarations();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.modules.preference_module_declarations";
 
     // Internal Constants
     private static final SubLSymbol $ABNORMAL_DELAY_POS = makeKeyword("ABNORMAL-DELAY-POS");

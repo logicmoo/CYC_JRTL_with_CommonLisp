@@ -79,7 +79,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sksi_conjunctive_removal_module_generation extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sksi_conjunctive_removal_module_generation();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.query_sks.sksi_conjunctive_removal_module_generation";
 
 
     // deflexical

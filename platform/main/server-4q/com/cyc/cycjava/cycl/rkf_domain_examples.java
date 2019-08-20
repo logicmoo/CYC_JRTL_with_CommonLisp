@@ -88,7 +88,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rkf_domain_examples extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rkf_domain_examples();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_domain_examples";
 
 
     // Internal Constants

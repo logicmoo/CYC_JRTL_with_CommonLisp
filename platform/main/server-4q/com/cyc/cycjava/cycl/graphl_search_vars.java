@@ -423,7 +423,6 @@ public final class graphl_search_vars extends SubLTranslatedFile implements V12 
     private static final SubLSymbol GRAPHL_SEARCH_PRINT_FUNCTION_TRAMPOLINE = makeSymbol("GRAPHL-SEARCH-PRINT-FUNCTION-TRAMPOLINE");
 
 
- public static final String myName = "com.cyc.cycjava.cycl.graphl_search_vars";
 
     private static final SubLSymbol PRINT_GRAPHL_SEARCH = makeSymbol("PRINT-GRAPHL-SEARCH");
 

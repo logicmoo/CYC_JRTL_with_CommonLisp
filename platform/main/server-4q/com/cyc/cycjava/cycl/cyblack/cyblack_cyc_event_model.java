@@ -53,7 +53,6 @@ public final class cyblack_cyc_event_model extends SubLTranslatedFile implements
 
     public static final SubLFile me = new cyblack_cyc_event_model();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_cyc_event_model";
 
     // // Definitions
     public static final SubLObject get_cyblack_cem_event_root_posting_properties(SubLObject cyblack_cem_event_root_posting) {

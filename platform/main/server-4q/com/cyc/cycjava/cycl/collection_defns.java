@@ -106,7 +106,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class collection_defns extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new collection_defns();
 
- public static final String myName = "com.cyc.cycjava.cycl.collection_defns";
 
 
     // deflexical

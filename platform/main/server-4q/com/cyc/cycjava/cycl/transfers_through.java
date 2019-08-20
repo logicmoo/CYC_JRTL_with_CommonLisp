@@ -54,7 +54,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class transfers_through extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new transfers_through();
 
- public static final String myName = "com.cyc.cycjava.cycl.transfers_through";
 
 
     // Internal Constants

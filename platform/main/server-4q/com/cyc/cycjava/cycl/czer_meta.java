@@ -81,7 +81,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class czer_meta extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new czer_meta();
 
- public static final String myName = "com.cyc.cycjava.cycl.czer_meta";
 
 
     // deflexical

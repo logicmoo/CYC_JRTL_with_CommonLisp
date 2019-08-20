@@ -64,7 +64,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class what_question extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new what_question();
 
- public static final String myName = "com.cyc.cycjava.cycl.quirk.what_question";
 
 
     // Internal Constants

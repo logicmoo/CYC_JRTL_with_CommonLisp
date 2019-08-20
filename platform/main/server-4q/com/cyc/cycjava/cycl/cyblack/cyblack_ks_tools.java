@@ -57,7 +57,6 @@ public final class cyblack_ks_tools extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cyblack_ks_tools();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_ks_tools";
 
     // // Definitions
     public static final SubLObject with_ks_args(SubLObject macroform, SubLObject environment) {

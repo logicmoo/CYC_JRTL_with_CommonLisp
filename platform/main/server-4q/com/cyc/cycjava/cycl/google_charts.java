@@ -64,7 +64,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class google_charts extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new google_charts();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.google_charts";
 
 
     // deflexical

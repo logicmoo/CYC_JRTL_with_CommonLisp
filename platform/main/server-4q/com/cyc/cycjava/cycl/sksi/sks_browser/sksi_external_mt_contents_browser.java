@@ -78,7 +78,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sksi_external_mt_contents_browser extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sksi_external_mt_contents_browser();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.sks_browser.sksi_external_mt_contents_browser";
 
 
     static private final SubLString $str1$sksi_external_mt_contents__A = makeString("sksi-external-mt-contents&~A");

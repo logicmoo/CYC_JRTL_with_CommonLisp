@@ -21,7 +21,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class opencyc_api_widgets extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new opencyc_api_widgets();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.opencyc_api_widgets";
 
 
     private static final SubLObject $const0$CurrentWorldDataCollectorMt_NonHo = reader_make_constant_shell(makeString("CurrentWorldDataCollectorMt-NonHomocentric"));

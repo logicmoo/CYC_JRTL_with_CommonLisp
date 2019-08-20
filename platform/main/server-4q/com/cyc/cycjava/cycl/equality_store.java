@@ -53,7 +53,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class equality_store extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new equality_store();
 
- public static final String myName = "com.cyc.cycjava.cycl.equality_store";
 
 
 

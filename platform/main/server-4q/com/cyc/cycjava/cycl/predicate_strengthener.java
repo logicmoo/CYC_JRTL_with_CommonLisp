@@ -101,7 +101,6 @@ public final class predicate_strengthener extends SubLTranslatedFile implements 
 
     public static final SubLFile me = new predicate_strengthener();
 
- public static final String myName = "com.cyc.cycjava.cycl.predicate_strengthener";
 
 
     // defparameter

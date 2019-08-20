@@ -91,7 +91,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sparse_matrix extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sparse_matrix();
 
- public static final String myName = "com.cyc.cycjava.cycl.sparse_matrix";
 
 
     // defconstant

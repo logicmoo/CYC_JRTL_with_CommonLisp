@@ -72,7 +72,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class test_case_generator extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new test_case_generator();
 
- public static final String myName = "com.cyc.cycjava.cycl.test_case_generator";
 
 
     // defparameter

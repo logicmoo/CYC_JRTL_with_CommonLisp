@@ -43,7 +43,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class external_rule_reviewer_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new external_rule_reviewer_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.butler.external_rule_reviewer_utilities";
 
 
     @LispMethod(comment = "Internal Constants")

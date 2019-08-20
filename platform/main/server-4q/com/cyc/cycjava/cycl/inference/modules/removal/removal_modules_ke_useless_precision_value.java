@@ -28,7 +28,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_ke_useless_precision_value extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_ke_useless_precision_value";
     public static String myFingerPrint = "7dc7993fea930a9b42f6f392294bd07b437b2889664906070ba1602557ff54a3";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-ke-useless-precision-value.lisp", position = 800L)
     private static SubLSymbol $useless_precision_from_relevant_precision_rule_formula$;
@@ -166,10 +165,10 @@ public class removal_modules_ke_useless_precision_value extends SubLTranslatedFi
     }
 
     public static SubLObject declare_removal_modules_ke_useless_precision_value_file() {
-        declareFunction(myName, "make_useless_precision_from_relevant_precision_rule_support", "MAKE-USELESS-PRECISION-FROM-RELEVANT-PRECISION-RULE-SUPPORT", 0, 0, false);
-        declareFunction(myName, "useless_precision_from_relevant_precision_rule_antecedent_dnf", "USELESS-PRECISION-FROM-RELEVANT-PRECISION-RULE-ANTECEDENT-DNF", 2, 0, false);
-        declareFunction(myName, "removal_useless_precision_from_relevant_precision_antecedent_answers", "REMOVAL-USELESS-PRECISION-FROM-RELEVANT-PRECISION-ANTECEDENT-ANSWERS", 2, 1, false);
-        declareFunction(myName, "removal_useless_precision_from_relevant_precision_pos_expand", "REMOVAL-USELESS-PRECISION-FROM-RELEVANT-PRECISION-POS-EXPAND", 1, 1, false);
+        declareFunction("make_useless_precision_from_relevant_precision_rule_support", "MAKE-USELESS-PRECISION-FROM-RELEVANT-PRECISION-RULE-SUPPORT", 0, 0, false);
+        declareFunction("useless_precision_from_relevant_precision_rule_antecedent_dnf", "USELESS-PRECISION-FROM-RELEVANT-PRECISION-RULE-ANTECEDENT-DNF", 2, 0, false);
+        declareFunction("removal_useless_precision_from_relevant_precision_antecedent_answers", "REMOVAL-USELESS-PRECISION-FROM-RELEVANT-PRECISION-ANTECEDENT-ANSWERS", 2, 1, false);
+        declareFunction("removal_useless_precision_from_relevant_precision_pos_expand", "REMOVAL-USELESS-PRECISION-FROM-RELEVANT-PRECISION-POS-EXPAND", 1, 1, false);
         return NIL;
     }
 

@@ -157,7 +157,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class constant_handles extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new constant_handles();
 
- public static final String myName = "com.cyc.cycjava.cycl.constant_handles";
 
 
     // defconstant

@@ -134,7 +134,6 @@ public final class acip extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new acip();
 
- public static final String myName = "com.cyc.cycjava.cycl.acip";
 
 
     // deflexical

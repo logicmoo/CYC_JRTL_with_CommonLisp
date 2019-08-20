@@ -50,7 +50,6 @@ public final class uia_coa_utilities extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new uia_coa_utilities();
 
-    public static final String myName = "com.cyc.cycjava.cycl.uia_coa_utilities";
 
     // // Definitions
     public static final SubLObject uia_relevant_coas_for_refinement(SubLObject v_agenda) {

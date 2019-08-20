@@ -12,7 +12,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class new_root_tactician_motivation extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.harness.new_root_tactician_motivation";
     public static String myFingerPrint = "f1d826354f643db13887ef1320e31447a0d5c7f152ed02a417adf7391e25a2bc";
     private static SubLSymbol $sym0$PROBLEM_P;
     private static SubLSymbol $sym1$NEW_ROOT_STRATEGY_P;
@@ -84,14 +83,14 @@ public class new_root_tactician_motivation extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_new_root_tactician_motivation_file() {
-        declareFunction(myName, "new_root_strategy_possibly_propagate_motivation_to_problem", "NEW-ROOT-STRATEGY-POSSIBLY-PROPAGATE-MOTIVATION-TO-PROBLEM", 2, 0, false);
-        declareFunction(myName, "new_root_strategy_propagate_motivation_to_problem", "NEW-ROOT-STRATEGY-PROPAGATE-MOTIVATION-TO-PROBLEM", 2, 0, false);
-        declareFunction(myName, "new_root_strategy_possibly_activate_problem", "NEW-ROOT-STRATEGY-POSSIBLY-ACTIVATE-PROBLEM", 2, 0, false);
-        declareFunction(myName, "new_root_strategy_chooses_not_to_examine_problemP", "NEW-ROOT-STRATEGY-CHOOSES-NOT-TO-EXAMINE-PROBLEM?", 2, 0, false);
-        declareFunction(myName, "new_root_strategy_chooses_not_to_activate_problemP", "NEW-ROOT-STRATEGY-CHOOSES-NOT-TO-ACTIVATE-PROBLEM?", 2, 0, false);
-        declareFunction(myName, "new_root_strategy_activate_problem", "NEW-ROOT-STRATEGY-ACTIVATE-PROBLEM", 2, 0, false);
-        declareFunction(myName, "new_root_strategy_possibly_activate_strategems", "NEW-ROOT-STRATEGY-POSSIBLY-ACTIVATE-STRATEGEMS", 2, 0, false);
-        declareFunction(myName, "new_root_strategy_nothing_to_doP", "NEW-ROOT-STRATEGY-NOTHING-TO-DO?", 2, 0, false);
+        declareFunction("new_root_strategy_possibly_propagate_motivation_to_problem", "NEW-ROOT-STRATEGY-POSSIBLY-PROPAGATE-MOTIVATION-TO-PROBLEM", 2, 0, false);
+        declareFunction("new_root_strategy_propagate_motivation_to_problem", "NEW-ROOT-STRATEGY-PROPAGATE-MOTIVATION-TO-PROBLEM", 2, 0, false);
+        declareFunction("new_root_strategy_possibly_activate_problem", "NEW-ROOT-STRATEGY-POSSIBLY-ACTIVATE-PROBLEM", 2, 0, false);
+        declareFunction("new_root_strategy_chooses_not_to_examine_problemP", "NEW-ROOT-STRATEGY-CHOOSES-NOT-TO-EXAMINE-PROBLEM?", 2, 0, false);
+        declareFunction("new_root_strategy_chooses_not_to_activate_problemP", "NEW-ROOT-STRATEGY-CHOOSES-NOT-TO-ACTIVATE-PROBLEM?", 2, 0, false);
+        declareFunction("new_root_strategy_activate_problem", "NEW-ROOT-STRATEGY-ACTIVATE-PROBLEM", 2, 0, false);
+        declareFunction("new_root_strategy_possibly_activate_strategems", "NEW-ROOT-STRATEGY-POSSIBLY-ACTIVATE-STRATEGEMS", 2, 0, false);
+        declareFunction("new_root_strategy_nothing_to_doP", "NEW-ROOT-STRATEGY-NOTHING-TO-DO?", 2, 0, false);
         return NIL;
     }
 

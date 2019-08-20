@@ -79,7 +79,6 @@ public final class bbn_strengthening_metrics extends SubLTranslatedFile implemen
 
     public static final SubLFile me = new bbn_strengthening_metrics();
 
-    public static final String myName = "com.cyc.cycjava.cycl.bbn_strengthening_metrics";
 
     // // Definitions
     // deflexical

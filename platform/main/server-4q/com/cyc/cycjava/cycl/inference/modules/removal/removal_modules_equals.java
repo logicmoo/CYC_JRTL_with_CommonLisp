@@ -34,7 +34,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_equals extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_equals";
     public static String myFingerPrint = "5af699adaa7d9c1a4a4da9555c4c3300c95d31db99edd79e29aef7307c9adac2";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-equals.lisp", position = 2100L)
     private static SubLSymbol $default_equals_fort_check_cost$;
@@ -525,31 +524,31 @@ public class removal_modules_equals extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_equals_file() {
-        declareFunction(myName, "make_equals_hl_support", "MAKE-EQUALS-HL-SUPPORT", 2, 1, false);
-        declareFunction(myName, "removal_equals_fort_check_expand", "REMOVAL-EQUALS-FORT-CHECK-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_all_equals_expand", "REMOVAL-ALL-EQUALS-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_unify_required", "REMOVAL-UNIFY-REQUIRED", 1, 1, false);
-        declareFunction(myName, "removal_unify_expand", "REMOVAL-UNIFY-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_unique_names_cost", "REMOVAL-UNIQUE-NAMES-COST", 1, 1, false);
-        declareFunction(myName, "removal_unique_names_expand", "REMOVAL-UNIQUE-NAMES-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_not_equals_cost", "REMOVAL-NOT-EQUALS-COST", 1, 1, false);
-        declareFunction(myName, "removal_not_equals_expand", "REMOVAL-NOT-EQUALS-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_not_equals_non_atomic_cost", "REMOVAL-NOT-EQUALS-NON-ATOMIC-COST", 1, 1, false);
-        declareFunction(myName, "inference_equal_symbols_reject", "INFERENCE-EQUAL-SYMBOLS-REJECT", 2, 0, false);
-        declareFunction(myName, "make_equal_symbols_hl_support", "MAKE-EQUAL-SYMBOLS-HL-SUPPORT", 2, 1, false);
-        declareFunction(myName, "removal_equal_symbols_reject", "REMOVAL-EQUAL-SYMBOLS-REJECT", 1, 0, false);
-        declareFunction(myName, "removal_equal_symbols_check_cost", "REMOVAL-EQUAL-SYMBOLS-CHECK-COST", 1, 1, false);
-        declareFunction(myName, "removal_equal_symbols_check_expand", "REMOVAL-EQUAL-SYMBOLS-CHECK-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_equal_symbols_unify_required", "REMOVAL-EQUAL-SYMBOLS-UNIFY-REQUIRED", 1, 1, false);
-        declareFunction(myName, "removal_equal_symbols_unify_expand", "REMOVAL-EQUAL-SYMBOLS-UNIFY-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_not_equal_symbols_cost", "REMOVAL-NOT-EQUAL-SYMBOLS-COST", 1, 1, false);
-        declareFunction(myName, "removal_not_equal_symbols_expand", "REMOVAL-NOT-EQUAL-SYMBOLS-EXPAND", 1, 1, false);
-        declareFunction(myName, "make_equal_string_case_insensitive_support", "MAKE-EQUAL-STRING-CASE-INSENSITIVE-SUPPORT", 2, 1, false);
-        declareFunction(myName, "removal_equal_strings_case_insensitive_check_cost", "REMOVAL-EQUAL-STRINGS-CASE-INSENSITIVE-CHECK-COST", 1, 1, false);
-        declareFunction(myName, "removal_equal_strings_case_insensitive_check_expand", "REMOVAL-EQUAL-STRINGS-CASE-INSENSITIVE-CHECK-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_not_equal_strings_case_insensitive_cost", "REMOVAL-NOT-EQUAL-STRINGS-CASE-INSENSITIVE-COST", 1, 1, false);
-        declareFunction(myName, "removal_not_equal_strings_case_insensitive_expand", "REMOVAL-NOT-EQUAL-STRINGS-CASE-INSENSITIVE-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_equals_via_numerically_equals_expand", "REMOVAL-EQUALS-VIA-NUMERICALLY-EQUALS-EXPAND", 1, 1, false);
+        declareFunction("make_equals_hl_support", "MAKE-EQUALS-HL-SUPPORT", 2, 1, false);
+        declareFunction("removal_equals_fort_check_expand", "REMOVAL-EQUALS-FORT-CHECK-EXPAND", 1, 1, false);
+        declareFunction("removal_all_equals_expand", "REMOVAL-ALL-EQUALS-EXPAND", 1, 1, false);
+        declareFunction("removal_unify_required", "REMOVAL-UNIFY-REQUIRED", 1, 1, false);
+        declareFunction("removal_unify_expand", "REMOVAL-UNIFY-EXPAND", 1, 1, false);
+        declareFunction("removal_unique_names_cost", "REMOVAL-UNIQUE-NAMES-COST", 1, 1, false);
+        declareFunction("removal_unique_names_expand", "REMOVAL-UNIQUE-NAMES-EXPAND", 1, 1, false);
+        declareFunction("removal_not_equals_cost", "REMOVAL-NOT-EQUALS-COST", 1, 1, false);
+        declareFunction("removal_not_equals_expand", "REMOVAL-NOT-EQUALS-EXPAND", 1, 1, false);
+        declareFunction("removal_not_equals_non_atomic_cost", "REMOVAL-NOT-EQUALS-NON-ATOMIC-COST", 1, 1, false);
+        declareFunction("inference_equal_symbols_reject", "INFERENCE-EQUAL-SYMBOLS-REJECT", 2, 0, false);
+        declareFunction("make_equal_symbols_hl_support", "MAKE-EQUAL-SYMBOLS-HL-SUPPORT", 2, 1, false);
+        declareFunction("removal_equal_symbols_reject", "REMOVAL-EQUAL-SYMBOLS-REJECT", 1, 0, false);
+        declareFunction("removal_equal_symbols_check_cost", "REMOVAL-EQUAL-SYMBOLS-CHECK-COST", 1, 1, false);
+        declareFunction("removal_equal_symbols_check_expand", "REMOVAL-EQUAL-SYMBOLS-CHECK-EXPAND", 1, 1, false);
+        declareFunction("removal_equal_symbols_unify_required", "REMOVAL-EQUAL-SYMBOLS-UNIFY-REQUIRED", 1, 1, false);
+        declareFunction("removal_equal_symbols_unify_expand", "REMOVAL-EQUAL-SYMBOLS-UNIFY-EXPAND", 1, 1, false);
+        declareFunction("removal_not_equal_symbols_cost", "REMOVAL-NOT-EQUAL-SYMBOLS-COST", 1, 1, false);
+        declareFunction("removal_not_equal_symbols_expand", "REMOVAL-NOT-EQUAL-SYMBOLS-EXPAND", 1, 1, false);
+        declareFunction("make_equal_string_case_insensitive_support", "MAKE-EQUAL-STRING-CASE-INSENSITIVE-SUPPORT", 2, 1, false);
+        declareFunction("removal_equal_strings_case_insensitive_check_cost", "REMOVAL-EQUAL-STRINGS-CASE-INSENSITIVE-CHECK-COST", 1, 1, false);
+        declareFunction("removal_equal_strings_case_insensitive_check_expand", "REMOVAL-EQUAL-STRINGS-CASE-INSENSITIVE-CHECK-EXPAND", 1, 1, false);
+        declareFunction("removal_not_equal_strings_case_insensitive_cost", "REMOVAL-NOT-EQUAL-STRINGS-CASE-INSENSITIVE-COST", 1, 1, false);
+        declareFunction("removal_not_equal_strings_case_insensitive_expand", "REMOVAL-NOT-EQUAL-STRINGS-CASE-INSENSITIVE-EXPAND", 1, 1, false);
+        declareFunction("removal_equals_via_numerically_equals_expand", "REMOVAL-EQUALS-VIA-NUMERICALLY-EQUALS-EXPAND", 1, 1, false);
         return NIL;
     }
 

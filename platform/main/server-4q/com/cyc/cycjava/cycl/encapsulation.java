@@ -80,7 +80,6 @@ public final class encapsulation extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new encapsulation();
 
- public static final String myName = "com.cyc.cycjava.cycl.encapsulation";
 
 
     // deflexical

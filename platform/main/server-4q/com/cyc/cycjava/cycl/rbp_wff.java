@@ -96,7 +96,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rbp_wff extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rbp_wff();
 
- public static final String myName = "com.cyc.cycjava.cycl.rbp_wff";
 
 
     // defparameter

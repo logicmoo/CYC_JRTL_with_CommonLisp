@@ -51,7 +51,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class progress_modules extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new progress_modules();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.inference.modules.progress_modules";
 
 
 

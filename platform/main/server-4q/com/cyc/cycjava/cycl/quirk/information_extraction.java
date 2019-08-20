@@ -61,7 +61,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class information_extraction extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new information_extraction();
 
- public static final String myName = "com.cyc.cycjava.cycl.quirk.information_extraction";
 
 
     // Internal Constants

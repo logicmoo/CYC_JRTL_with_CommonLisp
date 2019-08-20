@@ -121,7 +121,6 @@ public final class recognition extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new recognition();
 
- public static final String myName = "com.cyc.cycjava.cycl.rtp.recognition";
 
 
     // defparameter

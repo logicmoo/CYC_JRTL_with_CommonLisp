@@ -102,7 +102,6 @@ public final class cb_hl_module_summary extends SubLTranslatedFile implements V1
 
     public static final SubLFile me = new cb_hl_module_summary();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.browser.cb_hl_module_summary";
 
 
     // defparameter

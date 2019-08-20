@@ -71,7 +71,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class rule_applicability_tree extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.rule_applicability_tree";
 	public static String myFingerPrint = "6c18b3c4181f2dc6a93e995231d519f2836ddc675bb0dcd79e0889f9a7defd02";
 	@SubL(source = "cycl/inference/rule-applicability-tree.lisp", position = 8900L)
 	private static SubLSymbol $rule_applicability_tree_map$;
@@ -907,47 +906,47 @@ public class rule_applicability_tree extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_rule_applicability_tree_file() {
-		declareFunction(myName, "kbq_extract_collated_rule_variable_bindings_map",
+		declareFunction("kbq_extract_collated_rule_variable_bindings_map",
 				"KBQ-EXTRACT-COLLATED-RULE-VARIABLE-BINDINGS-MAP", 1, 0, false);
-		declareFunction(myName, "kct_extract_collated_rule_variable_bindings_map",
+		declareFunction("kct_extract_collated_rule_variable_bindings_map",
 				"KCT-EXTRACT-COLLATED-RULE-VARIABLE-BINDINGS-MAP", 1, 0, false);
-		declareFunction(myName, "save_rule_variable_map_files", "SAVE-RULE-VARIABLE-MAP-FILES", 2, 0, false);
-		declareFunction(myName, "print_hash_pipe_delimited_list", "PRINT-HASH-PIPE-DELIMITED-LIST", 1, 1, false);
-		declareFunction(myName, "read_rule_applicability_tree_files", "READ-RULE-APPLICABILITY-TREE-FILES", 1, 0,
+		declareFunction("save_rule_variable_map_files", "SAVE-RULE-VARIABLE-MAP-FILES", 2, 0, false);
+		declareFunction("print_hash_pipe_delimited_list", "PRINT-HASH-PIPE-DELIMITED-LIST", 1, 1, false);
+		declareFunction("read_rule_applicability_tree_files", "READ-RULE-APPLICABILITY-TREE-FILES", 1, 0,
 				false);
-		declareFunction(myName, "read_rule_applicability_tree_file", "READ-RULE-APPLICABILITY-TREE-FILE", 1, 0, false);
-		declareFunction(myName, "canonicalize_rule_applicability_tree_recursive",
+		declareFunction("read_rule_applicability_tree_file", "READ-RULE-APPLICABILITY-TREE-FILE", 1, 0, false);
+		declareFunction("canonicalize_rule_applicability_tree_recursive",
 				"CANONICALIZE-RULE-APPLICABILITY-TREE-RECURSIVE", 1, 0, false);
-		declareFunction(myName, "rule_applicability_tree", "RULE-APPLICABILITY-TREE", 1, 0, false);
-		declareFunction(myName, "rule_has_applicability_treeP", "RULE-HAS-APPLICABILITY-TREE?", 1, 0, false);
-		declareFunction(myName, "generalized_transformation_link_success_probability_estimate",
+		declareFunction("rule_applicability_tree", "RULE-APPLICABILITY-TREE", 1, 0, false);
+		declareFunction("rule_has_applicability_treeP", "RULE-HAS-APPLICABILITY-TREE?", 1, 0, false);
+		declareFunction("generalized_transformation_link_success_probability_estimate",
 				"GENERALIZED-TRANSFORMATION-LINK-SUCCESS-PROBABILITY-ESTIMATE", 1, 0, false);
-		declareFunction(myName, "rule_bindings_success_probability_estimate",
+		declareFunction("rule_bindings_success_probability_estimate",
 				"RULE-BINDINGS-SUCCESS-PROBABILITY-ESTIMATE", 2, 0, false);
-		declareFunction(myName, "rule_bindings_success_probability_estimate_recursive",
+		declareFunction("rule_bindings_success_probability_estimate_recursive",
 				"RULE-BINDINGS-SUCCESS-PROBABILITY-ESTIMATE-RECURSIVE", 2, 0, false);
-		declareFunction(myName, "rule_bindings_value_satisfies_constraintP",
+		declareFunction("rule_bindings_value_satisfies_constraintP",
 				"RULE-BINDINGS-VALUE-SATISFIES-CONSTRAINT?", 2, 0, false);
-		declareFunction(myName, "rule_bindings_match_probability", "RULE-BINDINGS-MATCH-PROBABILITY", 2, 0, false);
-		declareFunction(myName, "generalized_transformation_link_bindings_wrt_applicability_tree",
+		declareFunction("rule_bindings_match_probability", "RULE-BINDINGS-MATCH-PROBABILITY", 2, 0, false);
+		declareFunction("generalized_transformation_link_bindings_wrt_applicability_tree",
 				"GENERALIZED-TRANSFORMATION-LINK-BINDINGS-WRT-APPLICABILITY-TREE", 1, 0, false);
-		declareFunction(myName, "transformation_link_bindings_wrt_applicability_tree",
+		declareFunction("transformation_link_bindings_wrt_applicability_tree",
 				"TRANSFORMATION-LINK-BINDINGS-WRT-APPLICABILITY-TREE", 1, 0, false);
-		declareFunction(myName, "residual_transformation_link_bindings_wrt_applicability_tree",
+		declareFunction("residual_transformation_link_bindings_wrt_applicability_tree",
 				"RESIDUAL-TRANSFORMATION-LINK-BINDINGS-WRT-APPLICABILITY-TREE", 1, 0, false);
-		declareFunction(myName, "transformation_link_bindings_wrt_applicability_tree_memoized_internal",
+		declareFunction("transformation_link_bindings_wrt_applicability_tree_memoized_internal",
 				"TRANSFORMATION-LINK-BINDINGS-WRT-APPLICABILITY-TREE-MEMOIZED-INTERNAL", 1, 0, false);
-		declareFunction(myName, "transformation_link_bindings_wrt_applicability_tree_memoized",
+		declareFunction("transformation_link_bindings_wrt_applicability_tree_memoized",
 				"TRANSFORMATION-LINK-BINDINGS-WRT-APPLICABILITY-TREE-MEMOIZED", 1, 0, false);
-		declareFunction(myName, "residual_transformation_link_bindings_wrt_applicability_tree_memoized_internal",
+		declareFunction("residual_transformation_link_bindings_wrt_applicability_tree_memoized_internal",
 				"RESIDUAL-TRANSFORMATION-LINK-BINDINGS-WRT-APPLICABILITY-TREE-MEMOIZED-INTERNAL", 1, 0, false);
-		declareFunction(myName, "residual_transformation_link_bindings_wrt_applicability_tree_memoized",
+		declareFunction("residual_transformation_link_bindings_wrt_applicability_tree_memoized",
 				"RESIDUAL-TRANSFORMATION-LINK-BINDINGS-WRT-APPLICABILITY-TREE-MEMOIZED", 1, 0, false);
-		declareFunction(myName, "compute_bindings_wrt_applicability_tree", "COMPUTE-BINDINGS-WRT-APPLICABILITY-TREE", 2,
+		declareFunction("compute_bindings_wrt_applicability_tree", "COMPUTE-BINDINGS-WRT-APPLICABILITY-TREE", 2,
 				0, false);
-		declareFunction(myName, "problem_variable_constraints_wrt_applicability",
+		declareFunction("problem_variable_constraints_wrt_applicability",
 				"PROBLEM-VARIABLE-CONSTRAINTS-WRT-APPLICABILITY", 2, 0, false);
-		declareFunction(myName, "problem_query_wrt_var", "PROBLEM-QUERY-WRT-VAR", 2, 0, false);
+		declareFunction("problem_query_wrt_var", "PROBLEM-QUERY-WRT-VAR", 2, 0, false);
 		return NIL;
 	}
 

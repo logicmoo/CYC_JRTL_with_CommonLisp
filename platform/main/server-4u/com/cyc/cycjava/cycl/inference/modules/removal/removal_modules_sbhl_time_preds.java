@@ -47,7 +47,6 @@ public final class removal_modules_sbhl_time_preds extends removal_modules_sbhl_
 
     public static final SubLFile me = new removal_modules_sbhl_time_preds();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_sbhl_time_preds";
 
     private static final SubLSymbol $ALL_BIRTH_DATE_INVERSE_POS = makeKeyword("ALL-BIRTH-DATE-INVERSE-POS");
 

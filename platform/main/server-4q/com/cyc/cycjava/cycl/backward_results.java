@@ -31,7 +31,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class backward_results extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new backward_results();
 
- public static final String myName = "com.cyc.cycjava.cycl.backward_results";
 
 
     // defparameter

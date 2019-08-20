@@ -52,7 +52,6 @@ public final class cyblack_ui_monitor extends SubLTranslatedFile implements V02 
 
     public static final SubLFile me = new cyblack_ui_monitor();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_ui_monitor";
 
     // // Definitions
     // defparameter

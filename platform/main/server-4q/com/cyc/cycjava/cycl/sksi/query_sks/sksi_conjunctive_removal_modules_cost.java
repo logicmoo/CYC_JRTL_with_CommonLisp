@@ -112,7 +112,6 @@ public final class sksi_conjunctive_removal_modules_cost extends SubLTranslatedF
 
     public static final SubLFile me = new sksi_conjunctive_removal_modules_cost();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.query_sks.sksi_conjunctive_removal_modules_cost";
 
 
     // defvar

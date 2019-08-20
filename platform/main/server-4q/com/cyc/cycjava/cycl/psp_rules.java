@@ -2114,7 +2114,6 @@ public final class psp_rules extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new psp_rules();
 
- public static final String myName = "com.cyc.cycjava.cycl.psp_rules";
 
 
     // defconstant

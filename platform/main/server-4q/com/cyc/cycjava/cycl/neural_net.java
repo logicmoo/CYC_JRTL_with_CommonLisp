@@ -73,7 +73,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class neural_net extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new neural_net();
 
- public static final String myName = "com.cyc.cycjava.cycl.neural_net";
 
 
     // defconstant

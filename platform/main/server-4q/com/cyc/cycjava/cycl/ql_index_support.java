@@ -98,7 +98,6 @@ public final class ql_index_support extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new ql_index_support();
 
- public static final String myName = "com.cyc.cycjava.cycl.ql_index_support";
 
 
     // defconstant

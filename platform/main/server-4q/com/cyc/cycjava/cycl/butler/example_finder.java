@@ -82,7 +82,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class example_finder extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new example_finder();
 
- public static final String myName = "com.cyc.cycjava.cycl.butler.example_finder";
 
 
     // deflexical

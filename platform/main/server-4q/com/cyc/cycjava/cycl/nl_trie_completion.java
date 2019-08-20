@@ -62,7 +62,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class nl_trie_completion extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new nl_trie_completion();
 
- public static final String myName = "com.cyc.cycjava.cycl.nl_trie_completion";
 
 
     // deflexical

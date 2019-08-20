@@ -46,7 +46,6 @@ public final class census extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new census();
 
-    public static final String myName = "com.cyc.cycjava.cycl.rdf.census";
 
     // // Definitions
     public static final SubLObject import_census_universe_definitions(SubLObject cyclist, SubLObject mapping_mt) {

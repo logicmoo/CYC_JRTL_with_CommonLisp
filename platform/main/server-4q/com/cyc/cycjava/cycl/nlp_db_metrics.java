@@ -99,7 +99,6 @@ public final class nlp_db_metrics extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new nlp_db_metrics();
 
- public static final String myName = "com.cyc.cycjava.cycl.nlp_db_metrics";
 
 
     // defparameter

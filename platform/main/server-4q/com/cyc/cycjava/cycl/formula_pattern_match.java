@@ -44,7 +44,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class formula_pattern_match extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new formula_pattern_match();
 
- public static final String myName = "com.cyc.cycjava.cycl.formula_pattern_match";
 
 
     // deflexical

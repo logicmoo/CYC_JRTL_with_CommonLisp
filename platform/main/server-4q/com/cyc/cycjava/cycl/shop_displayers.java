@@ -76,7 +76,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class shop_displayers extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new shop_displayers();
 
- public static final String myName = "com.cyc.cycjava.cycl.shop_displayers";
 
 
     // deflexical

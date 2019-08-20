@@ -48,7 +48,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class cb_kb_query_state extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new cb_kb_query_state();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.inference.browser.cb_kb_query_state";
 
 
     // defconstant

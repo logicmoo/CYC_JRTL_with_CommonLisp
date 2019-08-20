@@ -82,7 +82,6 @@ public final class form_translation extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new form_translation();
 
- public static final String myName = "com.cyc.cycjava.cycl.form_translation";
 
 
     // defparameter

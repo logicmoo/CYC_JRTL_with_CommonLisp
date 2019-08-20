@@ -60,7 +60,6 @@ public final class uia_tools_glossary extends SubLTranslatedFile implements V02 
 
     public static final SubLFile me = new uia_tools_glossary();
 
-    public static final String myName = "com.cyc.cycjava.cycl.uia_tools_glossary";
 
     // // Definitions
     public static final SubLObject uia_act_new_glossary(SubLObject v_agenda, SubLObject mode, SubLObject glossary, SubLObject alt_phrases_separate, SubLObject recompute) {

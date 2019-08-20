@@ -47,7 +47,6 @@ public final class inference_lookahead_productivity extends SubLTranslatedFile i
 
     public static final SubLFile me = new inference_lookahead_productivity();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.harness.inference_lookahead_productivity";
 
 
     private static final SubLSymbol MEMOIZED_PROBLEM_MAX_REMOVAL_PRODUCTIVITY_INT = makeSymbol("MEMOIZED-PROBLEM-MAX-REMOVAL-PRODUCTIVITY-INT");

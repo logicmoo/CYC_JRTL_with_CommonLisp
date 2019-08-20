@@ -92,7 +92,6 @@ public final class sbhl_links extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new sbhl_links();
 
- public static final String myName = "com.cyc.cycjava.cycl.sbhl.sbhl_links";
 
 
     // defconstant

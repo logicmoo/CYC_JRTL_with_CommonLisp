@@ -69,7 +69,6 @@ public final class term_learner extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new term_learner();
 
-    public static final String myName = "com.cyc.cycjava.cycl.term_learner";
 
     // // Definitions
     /**

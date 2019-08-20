@@ -94,7 +94,6 @@ public final class inverted_indexes_concrete extends SubLTranslatedFile implemen
 
     public static final SubLFile me = new inverted_indexes_concrete();
 
- public static final String myName = "com.cyc.cycjava.cycl.inverted_indexes_concrete";
 
 
     // Internal Constants

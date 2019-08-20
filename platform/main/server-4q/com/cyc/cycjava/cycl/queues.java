@@ -261,7 +261,6 @@ public final class queues extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new queues();
 
- public static final String myName = "com.cyc.cycjava.cycl.queues";
 
 
     // defconstant

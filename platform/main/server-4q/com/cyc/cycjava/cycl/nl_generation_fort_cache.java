@@ -157,7 +157,6 @@ public final class nl_generation_fort_cache extends SubLTranslatedFile implement
 
     public static final SubLFile me = new nl_generation_fort_cache();
 
- public static final String myName = "com.cyc.cycjava.cycl.nl_generation_fort_cache";
 
 
     // defparameter

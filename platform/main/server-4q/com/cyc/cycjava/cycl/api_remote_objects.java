@@ -26,7 +26,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class api_remote_objects extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new api_remote_objects();
 
- public static final String myName = "com.cyc.cycjava.cycl.api_remote_objects";
 
 
     // Internal Constants

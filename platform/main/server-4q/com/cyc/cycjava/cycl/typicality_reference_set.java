@@ -86,7 +86,6 @@ public final class typicality_reference_set extends SubLTranslatedFile implement
 
     public static final SubLFile me = new typicality_reference_set();
 
-    public static final String myName = "com.cyc.cycjava.cycl.typicality_reference_set";
 
 
 

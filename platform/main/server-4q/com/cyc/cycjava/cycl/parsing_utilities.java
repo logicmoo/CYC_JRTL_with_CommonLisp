@@ -263,7 +263,6 @@ public final class parsing_utilities extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new parsing_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.parsing_utilities";
 
 
     // deflexical

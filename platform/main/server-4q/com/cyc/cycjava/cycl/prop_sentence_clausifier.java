@@ -42,7 +42,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class prop_sentence_clausifier extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new prop_sentence_clausifier();
 
- public static final String myName = "com.cyc.cycjava.cycl.prop_sentence_clausifier";
 
 
     // defparameter

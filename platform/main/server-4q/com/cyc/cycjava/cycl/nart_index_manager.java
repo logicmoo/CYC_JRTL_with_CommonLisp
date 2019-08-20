@@ -40,7 +40,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class nart_index_manager extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new nart_index_manager();
 
- public static final String myName = "com.cyc.cycjava.cycl.nart_index_manager";
 
 
     // deflexical

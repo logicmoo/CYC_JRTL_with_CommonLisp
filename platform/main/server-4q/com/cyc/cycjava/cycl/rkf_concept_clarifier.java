@@ -113,7 +113,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rkf_concept_clarifier extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rkf_concept_clarifier();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_concept_clarifier";
 
 
     // deflexical

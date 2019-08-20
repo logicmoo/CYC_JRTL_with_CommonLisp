@@ -96,7 +96,6 @@ public final class cb_wordnet_import_concept_name extends SubLTranslatedFile imp
 
     public static final SubLFile me = new cb_wordnet_import_concept_name();
 
- public static final String myName = "com.cyc.cycjava.cycl.wordnet_import.cb_wordnet_import_concept_name";
 
 
     // defparameter

@@ -192,7 +192,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class alchemy_export extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new alchemy_export();
 
- public static final String myName = "com.cyc.cycjava.cycl.butler.alchemy_export";
 
 
     // defparameter

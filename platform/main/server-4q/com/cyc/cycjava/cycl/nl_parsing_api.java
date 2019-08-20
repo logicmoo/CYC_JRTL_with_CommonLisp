@@ -90,7 +90,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class nl_parsing_api extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new nl_parsing_api();
 
- public static final String myName = "com.cyc.cycjava.cycl.nl_parsing_api";
 
 
     // defconstant

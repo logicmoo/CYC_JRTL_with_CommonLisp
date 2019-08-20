@@ -110,7 +110,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rkf_solution_finder extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rkf_solution_finder();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_solution_finder";
 
 
     // defconstant

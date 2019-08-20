@@ -87,7 +87,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class tcp_server_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new tcp_server_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.tcp_server_utilities";
 
 
     // deflexical

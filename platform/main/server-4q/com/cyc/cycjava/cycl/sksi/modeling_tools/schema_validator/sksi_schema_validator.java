@@ -69,7 +69,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sksi_schema_validator extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sksi_schema_validator();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.modeling_tools.schema_validator.sksi_schema_validator";
 
 
     // deflexical

@@ -120,7 +120,6 @@ public final class rkf_term_agglomerator extends SubLTranslatedFile implements V
 
     public static final SubLFile me = new rkf_term_agglomerator();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_term_agglomerator";
 
 
     // defparameter

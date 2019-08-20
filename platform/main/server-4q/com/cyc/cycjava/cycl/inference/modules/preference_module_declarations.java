@@ -11,7 +11,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class preference_module_declarations extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.preference_module_declarations";
     public static String myFingerPrint = "1230d3a84dde5f6b3fcfc688beaf0bccbc1563481458e2b3afdc6f1c259a6999";
     private static SubLSymbol $ABNORMAL_DELAY_POS;
     private static SubLList $list1;

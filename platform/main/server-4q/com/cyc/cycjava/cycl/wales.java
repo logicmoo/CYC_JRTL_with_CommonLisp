@@ -63,7 +63,6 @@ public final class wales extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new wales();
 
-    public static final String myName = "com.cyc.cycjava.cycl.wales";
 
     // // Definitions
     // defparameter

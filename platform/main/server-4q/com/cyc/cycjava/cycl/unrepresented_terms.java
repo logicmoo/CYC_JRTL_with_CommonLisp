@@ -157,7 +157,6 @@ public final class unrepresented_terms extends SubLTranslatedFile implements V12
 
     public static final SubLFile me = new unrepresented_terms();
 
- public static final String myName = "com.cyc.cycjava.cycl.unrepresented_terms";
 
 
 

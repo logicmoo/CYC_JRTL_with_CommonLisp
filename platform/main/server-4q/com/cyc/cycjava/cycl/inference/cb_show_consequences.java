@@ -51,7 +51,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class cb_show_consequences extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.cb_show_consequences";
 	public static String myFingerPrint = "554e1a12a942f08d937484f458a68142c1d93bd4271899122baa9eaae89ad45f";
 	@SubL(source = "cycl/inference/cb-show-consequences.lisp", position = 800L)
 	public static SubLSymbol $cb_show_consequences_link_enabledP$;
@@ -653,20 +652,20 @@ public class cb_show_consequences extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_cb_show_consequences_file() {
-		declareFunction(myName, "cb_link_show_consequences", "CB-LINK-SHOW-CONSEQUENCES", 1, 2, false);
-		declareFunction(myName, "cb_show_consequences", "CB-SHOW-CONSEQUENCES", 1, 0, false);
-		declareFunction(myName, "cb_display_consequence", "CB-DISPLAY-CONSEQUENCE", 1, 0, false);
-		declareFunction(myName, "clear_show_consequences_rules_from_mt", "CLEAR-SHOW-CONSEQUENCES-RULES-FROM-MT", 0, 0,
+		declareFunction("cb_link_show_consequences", "CB-LINK-SHOW-CONSEQUENCES", 1, 2, false);
+		declareFunction("cb_show_consequences", "CB-SHOW-CONSEQUENCES", 1, 0, false);
+		declareFunction("cb_display_consequence", "CB-DISPLAY-CONSEQUENCE", 1, 0, false);
+		declareFunction("clear_show_consequences_rules_from_mt", "CLEAR-SHOW-CONSEQUENCES-RULES-FROM-MT", 0, 0,
 				false);
-		declareFunction(myName, "remove_show_consequences_rules_from_mt", "REMOVE-SHOW-CONSEQUENCES-RULES-FROM-MT", 1,
+		declareFunction("remove_show_consequences_rules_from_mt", "REMOVE-SHOW-CONSEQUENCES-RULES-FROM-MT", 1,
 				0, false);
-		declareFunction(myName, "show_consequences_rules_from_mt_internal", "SHOW-CONSEQUENCES-RULES-FROM-MT-INTERNAL",
+		declareFunction("show_consequences_rules_from_mt_internal", "SHOW-CONSEQUENCES-RULES-FROM-MT-INTERNAL",
 				1, 0, false);
-		declareFunction(myName, "show_consequences_rules_from_mt", "SHOW-CONSEQUENCES-RULES-FROM-MT", 1, 0, false);
-		declareFunction(myName, "clear_biology_practice_rules", "CLEAR-BIOLOGY-PRACTICE-RULES", 0, 0, false);
-		declareFunction(myName, "remove_biology_practice_rules", "REMOVE-BIOLOGY-PRACTICE-RULES", 0, 0, false);
-		declareFunction(myName, "biology_practice_rules_internal", "BIOLOGY-PRACTICE-RULES-INTERNAL", 0, 0, false);
-		declareFunction(myName, "biology_practice_rules", "BIOLOGY-PRACTICE-RULES", 0, 0, false);
+		declareFunction("show_consequences_rules_from_mt", "SHOW-CONSEQUENCES-RULES-FROM-MT", 1, 0, false);
+		declareFunction("clear_biology_practice_rules", "CLEAR-BIOLOGY-PRACTICE-RULES", 0, 0, false);
+		declareFunction("remove_biology_practice_rules", "REMOVE-BIOLOGY-PRACTICE-RULES", 0, 0, false);
+		declareFunction("biology_practice_rules_internal", "BIOLOGY-PRACTICE-RULES-INTERNAL", 0, 0, false);
+		declareFunction("biology_practice_rules", "BIOLOGY-PRACTICE-RULES", 0, 0, false);
 		return NIL;
 	}
 

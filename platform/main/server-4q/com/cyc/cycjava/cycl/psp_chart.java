@@ -405,7 +405,6 @@ public final class psp_chart extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new psp_chart();
 
- public static final String myName = "com.cyc.cycjava.cycl.psp_chart";
 
 
     // deflexical

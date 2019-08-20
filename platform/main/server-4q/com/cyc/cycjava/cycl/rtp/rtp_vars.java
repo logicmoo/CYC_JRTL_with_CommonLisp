@@ -26,7 +26,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rtp_vars extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rtp_vars();
 
- public static final String myName = "com.cyc.cycjava.cycl.rtp.rtp_vars";
 
 
     // deflexical

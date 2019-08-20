@@ -115,7 +115,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class ke_interaction_folder extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new ke_interaction_folder();
 
- public static final String myName = "com.cyc.cycjava.cycl.ke_interaction_folder";
 
 
     // deflexical

@@ -262,7 +262,6 @@ public final class dhtml_macros extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new dhtml_macros();
 
- public static final String myName = "com.cyc.cycjava.cycl.dhtml_macros";
 
 
     // defconstant

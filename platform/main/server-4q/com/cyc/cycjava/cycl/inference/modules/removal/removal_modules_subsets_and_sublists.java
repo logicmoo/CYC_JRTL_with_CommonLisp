@@ -46,7 +46,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_subsets_and_sublists extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_subsets_and_sublists";
 	public static String myFingerPrint = "7c4fb9e1736f45eda716013de32cf84984dc2f1ee3f8ddea7874401f52e43bb2";
 	@SubL(source = "cycl/inference/modules/removal/removal-modules-subsets-and-sublists.lisp", position = 800L)
 	private static SubLSymbol $default_list_has_max_sublist_meeting_condition_cost$;
@@ -485,33 +484,33 @@ public class removal_modules_subsets_and_sublists extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_removal_modules_subsets_and_sublists_file() {
-		declareFunction(myName, "removal_list_has_max_sublist_meeting_condition_expand",
+		declareFunction("removal_list_has_max_sublist_meeting_condition_expand",
 				"REMOVAL-LIST-HAS-MAX-SUBLIST-MEETING-CONDITION-EXPAND", 1, 1, false);
-		declareFunction(myName, "el_list_for_query_var_satisfies_queryP", "EL-LIST-FOR-QUERY-VAR-SATISFIES-QUERY?", 3,
+		declareFunction("el_list_for_query_var_satisfies_queryP", "EL-LIST-FOR-QUERY-VAR-SATISFIES-QUERY?", 3,
 				0, false);
-		declareFunction(myName, "removal_resultofsubstitutingtermslistfortermslistinformula_expand",
+		declareFunction("removal_resultofsubstitutingtermslistfortermslistinformula_expand",
 				"REMOVAL-RESULTOFSUBSTITUTINGTERMSLISTFORTERMSLISTINFORMULA-EXPAND", 1, 1, false);
-		declareFunction(myName, "test_removal_resultofsubstitutingtermslistfortermslistinformula_expand",
+		declareFunction("test_removal_resultofsubstitutingtermslistfortermslistinformula_expand",
 				"TEST-REMOVAL-RESULTOFSUBSTITUTINGTERMSLISTFORTERMSLISTINFORMULA-EXPAND", 1, 2, false);
-		declareFunction(myName, "removal_resultofsubstitutinglistoftermslistforlistoftermslistinformula_expand",
+		declareFunction("removal_resultofsubstitutinglistoftermslistforlistoftermslistinformula_expand",
 				"REMOVAL-RESULTOFSUBSTITUTINGLISTOFTERMSLISTFORLISTOFTERMSLISTINFORMULA-EXPAND", 1, 1, false);
-		declareFunction(me, "test_removal_resultofsubstitutinglistoftermslistforlistoftermslistinformula_expand",
+		declareFunction("test_removal_resultofsubstitutinglistoftermslistforlistoftermslistinformula_expand",
 				"TEST-REMOVAL-RESULTOFSUBSTITUTINGLISTOFTERMSLISTFORLISTOFTERMSLISTINFORMULA-EXPAND", 1, 2, false);
-		declareFunction(myName, "extract_lists_from_el_set_of_sets", "EXTRACT-LISTS-FROM-EL-SET-OF-SETS", 1, 0, false);
-		declareFunction(myName, "extract_lists_from_el_set_of_lists", "EXTRACT-LISTS-FROM-EL-SET-OF-LISTS", 1, 0,
+		declareFunction("extract_lists_from_el_set_of_sets", "EXTRACT-LISTS-FROM-EL-SET-OF-SETS", 1, 0, false);
+		declareFunction("extract_lists_from_el_set_of_lists", "EXTRACT-LISTS-FROM-EL-SET-OF-LISTS", 1, 0,
 				false);
-		declareFunction(myName, "removal_maximal_compatible_lists_from_list_pos_check",
+		declareFunction("removal_maximal_compatible_lists_from_list_pos_check",
 				"REMOVAL-MAXIMAL-COMPATIBLE-LISTS-FROM-LIST-POS-CHECK", 3, 0, false);
-		declareFunction(myName, "removal_maximal_compatible_lists_from_list_unify_pos_expand",
+		declareFunction("removal_maximal_compatible_lists_from_list_unify_pos_expand",
 				"REMOVAL-MAXIMAL-COMPATIBLE-LISTS-FROM-LIST-UNIFY-POS-EXPAND", 2, 0, false);
-		declareFunction(myName, "removal_nthinlist_unify_pos_cost", "REMOVAL-NTHINLIST-UNIFY-POS-COST", 1, 0, false);
-		declareFunction(myName, "removal_nthinlist_unify_pos_expand", "REMOVAL-NTHINLIST-UNIFY-POS-EXPAND", 2, 0,
+		declareFunction("removal_nthinlist_unify_pos_cost", "REMOVAL-NTHINLIST-UNIFY-POS-COST", 1, 0, false);
+		declareFunction("removal_nthinlist_unify_pos_expand", "REMOVAL-NTHINLIST-UNIFY-POS-EXPAND", 2, 0,
 				false);
-		declareFunction(myName, "removal_numberofoccurencesofiteminlist_unify_pos_cost",
+		declareFunction("removal_numberofoccurencesofiteminlist_unify_pos_cost",
 				"REMOVAL-NUMBEROFOCCURENCESOFITEMINLIST-UNIFY-POS-COST", 1, 0, false);
-		declareFunction(myName, "removal_numberofoccurencesofiteminlist_unify_pos_expand",
+		declareFunction("removal_numberofoccurencesofiteminlist_unify_pos_expand",
 				"REMOVAL-NUMBEROFOCCURENCESOFITEMINLIST-UNIFY-POS-EXPAND", 2, 0, false);
-		declareFunction(myName, "test_removal_numberofoccurencesofiteminlist_expand",
+		declareFunction("test_removal_numberofoccurencesofiteminlist_expand",
 				"TEST-REMOVAL-NUMBEROFOCCURENCESOFITEMINLIST-EXPAND", 1, 2, false);
 		return NIL;
 	}

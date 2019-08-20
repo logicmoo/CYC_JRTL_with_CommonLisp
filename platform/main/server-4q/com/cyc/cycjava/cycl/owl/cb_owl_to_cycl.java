@@ -298,7 +298,6 @@ public final class cb_owl_to_cycl extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new cb_owl_to_cycl();
 
- public static final String myName = "com.cyc.cycjava.cycl.owl.cb_owl_to_cycl";
 
 
     // deflexical

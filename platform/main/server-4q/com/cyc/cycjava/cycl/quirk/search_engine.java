@@ -149,7 +149,6 @@ public final class search_engine extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new search_engine();
 
- public static final String myName = "com.cyc.cycjava.cycl.quirk.search_engine";
 
 
     // defparameter

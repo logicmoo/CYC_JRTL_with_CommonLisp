@@ -15,7 +15,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class alexandria_iterators extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new alexandria_iterators();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.alexandria_iterators";
 
 
     private static final SubLSymbol ALEXANDRIA_KB_STORE_ITERATOR_DONE = makeSymbol("ALEXANDRIA-KB-STORE-ITERATOR-DONE");

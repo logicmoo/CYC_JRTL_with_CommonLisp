@@ -39,7 +39,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class parameter_specification_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new parameter_specification_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.parameter_specification_utilities";
 
 
     private static final SubLList $list0 = list(reader_make_constant_shell("QueryFn"), makeKeyword("ANYTHING"), list($BIND, makeSymbol("EL-SET")));

@@ -37,7 +37,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class pph_headline extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new pph_headline();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.pph_headline";
 
 
     private static final SubLObject $$EnglishHeadlineParaphraseMt = reader_make_constant_shell(makeString("EnglishHeadlineParaphraseMt"));

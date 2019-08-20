@@ -281,7 +281,6 @@ public final class concept_filter extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new concept_filter();
 
- public static final String myName = "com.cyc.cycjava.cycl.concept_filter";
 
 
     // defparameter

@@ -120,7 +120,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class isa extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new isa();
 
- public static final String myName = "com.cyc.cycjava.cycl.isa";
 
 
     // defparameter

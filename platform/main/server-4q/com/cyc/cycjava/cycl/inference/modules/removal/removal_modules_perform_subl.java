@@ -27,7 +27,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_perform_subl extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_perform_subl";
     public static String myFingerPrint = "5e3e6dd7a91752b7a6d3597d7c57eec664024986a5eb0a9b4b727a943f9adc68";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-perform-subl.lisp", position = 1500L)
     public static SubLSymbol $perform_subl_defining_mt$;
@@ -103,9 +102,9 @@ public class removal_modules_perform_subl extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_perform_subl_file() {
-        declareFunction(myName, "evaluate_subl_expression", "EVALUATE-SUBL-EXPRESSION", 1, 0, false);
-        declareFunction(myName, "inference_perform_subl", "INFERENCE-PERFORM-SUBL", 1, 0, false);
-        declareFunction(myName, "inference_evaluate_subl_expression", "INFERENCE-EVALUATE-SUBL-EXPRESSION", 1, 0, false);
+        declareFunction("evaluate_subl_expression", "EVALUATE-SUBL-EXPRESSION", 1, 0, false);
+        declareFunction("inference_perform_subl", "INFERENCE-PERFORM-SUBL", 1, 0, false);
+        declareFunction("inference_evaluate_subl_expression", "INFERENCE-EVALUATE-SUBL-EXPRESSION", 1, 0, false);
         return NIL;
     }
 

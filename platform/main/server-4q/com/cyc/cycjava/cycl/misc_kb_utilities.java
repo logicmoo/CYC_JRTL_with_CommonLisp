@@ -108,7 +108,6 @@ public final class misc_kb_utilities extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new misc_kb_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.misc_kb_utilities";
 
 
     // deflexical

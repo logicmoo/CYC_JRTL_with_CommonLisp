@@ -42,7 +42,6 @@ public final class sg_removal_modules extends SubLTranslatedFile implements V02 
 
     public static final SubLFile me = new sg_removal_modules();
 
-    public static final String myName = "com.cyc.cycjava.cycl.sg_removal_modules";
 
     // // Definitions
     // deflexical

@@ -296,7 +296,6 @@ public final class plot_generation extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new plot_generation();
 
- public static final String myName = "com.cyc.cycjava.cycl.plot_generation";
 
 
     // deflexical

@@ -124,7 +124,6 @@ public final class czer_graph extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new czer_graph();
 
- public static final String myName = "com.cyc.cycjava.cycl.czer_graph";
 
 
     // defconstant

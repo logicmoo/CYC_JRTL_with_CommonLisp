@@ -461,7 +461,6 @@ public final class cure_api extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new cure_api();
 
- public static final String myName = "com.cyc.cycjava.cycl.cure_api";
 
 
     // defparameter

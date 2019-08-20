@@ -49,7 +49,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rule_macros extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rule_macros();
 
- public static final String myName = "com.cyc.cycjava.cycl.rule_macros";
 
 
     // Internal Constants

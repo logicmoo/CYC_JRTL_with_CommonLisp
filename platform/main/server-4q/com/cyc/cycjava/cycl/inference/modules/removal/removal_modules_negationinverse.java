@@ -29,7 +29,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_negationinverse extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_negationinverse";
     public static String myFingerPrint = "a3a4a1aaec237688d9b1cafcedcaf431dbe23d7f2f539eceec9ec3134c1933c8";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-negationinverse.lisp", position = 700L)
     private static SubLSymbol $default_negationinverse_check_cost$;
@@ -149,10 +148,10 @@ public class removal_modules_negationinverse extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_negationinverse_file() {
-        declareFunction(myName, "removal_negationinverse_check_expand", "REMOVAL-NEGATIONINVERSE-CHECK-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_max_negationinverse_cost", "REMOVAL-MAX-NEGATIONINVERSE-COST", 1, 1, false);
-        declareFunction(myName, "removal_max_negationinverse_expand", "REMOVAL-MAX-NEGATIONINVERSE-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_not_negationinverse_check_expand", "REMOVAL-NOT-NEGATIONINVERSE-CHECK-EXPAND", 1, 1, false);
+        declareFunction("removal_negationinverse_check_expand", "REMOVAL-NEGATIONINVERSE-CHECK-EXPAND", 1, 1, false);
+        declareFunction("removal_max_negationinverse_cost", "REMOVAL-MAX-NEGATIONINVERSE-COST", 1, 1, false);
+        declareFunction("removal_max_negationinverse_expand", "REMOVAL-MAX-NEGATIONINVERSE-EXPAND", 1, 1, false);
+        declareFunction("removal_not_negationinverse_check_expand", "REMOVAL-NOT-NEGATIONINVERSE-CHECK-EXPAND", 1, 1, false);
         return NIL;
     }
 

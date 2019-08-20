@@ -28,7 +28,6 @@ public final class uia_after_addings extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new uia_after_addings();
 
-    public static final String myName = "com.cyc.cycjava.cycl.uia_after_addings";
 
     // // Definitions
     /**

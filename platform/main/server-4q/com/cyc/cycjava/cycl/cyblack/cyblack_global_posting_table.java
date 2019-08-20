@@ -50,7 +50,6 @@ public final class cyblack_global_posting_table extends SubLTranslatedFile imple
 
     public static final SubLFile me = new cyblack_global_posting_table();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_global_posting_table";
 
     // // Definitions
     // defparameter

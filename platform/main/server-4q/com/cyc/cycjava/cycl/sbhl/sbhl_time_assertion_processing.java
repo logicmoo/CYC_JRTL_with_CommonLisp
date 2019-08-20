@@ -91,7 +91,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sbhl_time_assertion_processing extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sbhl_time_assertion_processing();
 
- public static final String myName = "com.cyc.cycjava.cycl.sbhl.sbhl_time_assertion_processing";
 
 
     // Internal Constants

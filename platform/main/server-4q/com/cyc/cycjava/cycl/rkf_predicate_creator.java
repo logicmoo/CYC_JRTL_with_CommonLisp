@@ -188,7 +188,6 @@ public final class rkf_predicate_creator extends SubLTranslatedFile implements V
 
     public static final SubLFile me = new rkf_predicate_creator();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_predicate_creator";
 
 
     // deflexical

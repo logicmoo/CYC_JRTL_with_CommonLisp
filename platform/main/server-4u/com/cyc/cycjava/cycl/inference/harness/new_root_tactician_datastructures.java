@@ -74,7 +74,6 @@ public final class new_root_tactician_datastructures extends SubLTranslatedFile 
 
     public static final SubLFile me = new new_root_tactician_datastructures();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.harness.new_root_tactician_datastructures";
 
 
     // defconstant

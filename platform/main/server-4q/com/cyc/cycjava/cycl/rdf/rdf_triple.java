@@ -35,7 +35,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rdf_triple extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rdf_triple();
 
- public static final String myName = "com.cyc.cycjava.cycl.rdf.rdf_triple";
 
 
     // deflexical

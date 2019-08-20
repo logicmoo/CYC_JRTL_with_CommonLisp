@@ -44,7 +44,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rkf_knowledge_sorter extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rkf_knowledge_sorter();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_knowledge_sorter";
 
 
     // deflexical

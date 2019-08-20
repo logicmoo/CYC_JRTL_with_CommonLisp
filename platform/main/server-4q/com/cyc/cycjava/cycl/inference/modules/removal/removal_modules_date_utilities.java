@@ -36,7 +36,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_date_utilities extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_date_utilities";
     public static String myFingerPrint = "bb07720054526272bd4ee00e6a53001ac6f24bdcac5f9b2b31c4199ad6836830";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-date-utilities.lisp", position = 1200L)
     private static SubLSymbol $default_year_of_date_check_cost$;
@@ -353,24 +352,24 @@ public class removal_modules_date_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_date_utilities_file() {
-        declareFunction(myName, "inference_extract_date_year", "INFERENCE-EXTRACT-DATE-YEAR", 1, 0, false);
-        declareFunction(myName, "year_of_dateP", "YEAR-OF-DATE?", 2, 0, false);
-        declareFunction(myName, "inference_extract_date_month", "INFERENCE-EXTRACT-DATE-MONTH", 1, 0, false);
-        declareFunction(myName, "month_of_dateP", "MONTH-OF-DATE?", 2, 0, false);
-        declareFunction(myName, "inference_extract_date_day", "INFERENCE-EXTRACT-DATE-DAY", 1, 0, false);
-        declareFunction(myName, "day_number_of_dateP", "DAY-NUMBER-OF-DATE?", 2, 0, false);
-        declareFunction(myName, "inference_extract_date_hour", "INFERENCE-EXTRACT-DATE-HOUR", 1, 0, false);
-        declareFunction(myName, "hour_number_of_dateP", "HOUR-NUMBER-OF-DATE?", 2, 0, false);
-        declareFunction(myName, "inference_date_interval_duration", "INFERENCE-DATE-INTERVAL-DURATION", 1, 1, false);
-        declareFunction(myName, "inference_date_interval_durationP", "INFERENCE-DATE-INTERVAL-DURATION?", 2, 0, false);
-        declareFunction(myName, "inference_defining_time_unit_check", "INFERENCE-DEFINING-TIME-UNIT-CHECK", 2, 0, false);
-        declareFunction(myName, "make_defining_time_unit_support", "MAKE-DEFINING-TIME-UNIT-SUPPORT", 1, 1, false);
-        declareFunction(myName, "inference_defining_time_unit_arg1_unify", "INFERENCE-DEFINING-TIME-UNIT-ARG1-UNIFY", 1, 0, false);
-        declareFunction(myName, "inference_defining_time_unit_arg2_unify", "INFERENCE-DEFINING-TIME-UNIT-ARG2-UNIFY", 1, 0, false);
-        declareFunction(myName, "removal_latest_date_in_list_before_date_expand", "REMOVAL-LATEST-DATE-IN-LIST-BEFORE-DATE-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_starting_date_precise", "REMOVAL-STARTING-DATE-PRECISE", 1, 1, false);
-        declareFunction(myName, "find_most_precise_date", "FIND-MOST-PRECISE-DATE", 1, 0, false);
-        declareFunction(myName, "removal_ending_date_precise", "REMOVAL-ENDING-DATE-PRECISE", 1, 1, false);
+        declareFunction("inference_extract_date_year", "INFERENCE-EXTRACT-DATE-YEAR", 1, 0, false);
+        declareFunction("year_of_dateP", "YEAR-OF-DATE?", 2, 0, false);
+        declareFunction("inference_extract_date_month", "INFERENCE-EXTRACT-DATE-MONTH", 1, 0, false);
+        declareFunction("month_of_dateP", "MONTH-OF-DATE?", 2, 0, false);
+        declareFunction("inference_extract_date_day", "INFERENCE-EXTRACT-DATE-DAY", 1, 0, false);
+        declareFunction("day_number_of_dateP", "DAY-NUMBER-OF-DATE?", 2, 0, false);
+        declareFunction("inference_extract_date_hour", "INFERENCE-EXTRACT-DATE-HOUR", 1, 0, false);
+        declareFunction("hour_number_of_dateP", "HOUR-NUMBER-OF-DATE?", 2, 0, false);
+        declareFunction("inference_date_interval_duration", "INFERENCE-DATE-INTERVAL-DURATION", 1, 1, false);
+        declareFunction("inference_date_interval_durationP", "INFERENCE-DATE-INTERVAL-DURATION?", 2, 0, false);
+        declareFunction("inference_defining_time_unit_check", "INFERENCE-DEFINING-TIME-UNIT-CHECK", 2, 0, false);
+        declareFunction("make_defining_time_unit_support", "MAKE-DEFINING-TIME-UNIT-SUPPORT", 1, 1, false);
+        declareFunction("inference_defining_time_unit_arg1_unify", "INFERENCE-DEFINING-TIME-UNIT-ARG1-UNIFY", 1, 0, false);
+        declareFunction("inference_defining_time_unit_arg2_unify", "INFERENCE-DEFINING-TIME-UNIT-ARG2-UNIFY", 1, 0, false);
+        declareFunction("removal_latest_date_in_list_before_date_expand", "REMOVAL-LATEST-DATE-IN-LIST-BEFORE-DATE-EXPAND", 1, 1, false);
+        declareFunction("removal_starting_date_precise", "REMOVAL-STARTING-DATE-PRECISE", 1, 1, false);
+        declareFunction("find_most_precise_date", "FIND-MOST-PRECISE-DATE", 1, 0, false);
+        declareFunction("removal_ending_date_precise", "REMOVAL-ENDING-DATE-PRECISE", 1, 1, false);
         return NIL;
     }
 

@@ -144,7 +144,6 @@ public final class scenario extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new scenario();
 
- public static final String myName = "com.cyc.cycjava.cycl.quirk.scenario";
 
 
     static private final SubLList $list2 = list(new SubLObject[]{ list(makeSymbol("LEXICON"), makeKeyword("CLASS"), makeKeyword("PROTECTED")), list(makeSymbol("PARSER"), makeKeyword("CLASS"), makeKeyword("PROTECTED")), list(makeSymbol("TAGGER"), makeKeyword("CLASS"), makeKeyword("PROTECTED")), list(makeSymbol("STRING"), makeKeyword("INSTANCE"), makeKeyword("PROTECTED")), list(makeSymbol("CORPORA"), makeKeyword("INSTANCE"), makeKeyword("PROTECTED")), list(makeSymbol("SENTENCES"), makeKeyword("INSTANCE"), makeKeyword("PROTECTED")), list(makeSymbol("AUGMENTATION-TERMS"), makeKeyword("INSTANCE"), makeKeyword("PROTECTED")), list(makeSymbol("VECTOR"), makeKeyword("INSTANCE"), makeKeyword("PRIVATE")), list(makeSymbol("QUESTIONS"), makeKeyword("INSTANCE"), makeKeyword("PROTECTED")), list(makeSymbol("ANSWERS"), makeKeyword("INSTANCE"), makeKeyword("PROTECTED")), list(makeSymbol("DEF-CLASS-METHOD"), makeSymbol("VIABLE-QUESTION"), list(makeSymbol("QUESTION")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("INITIALIZE"), NIL, makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("GET-VECTOR"), NIL, makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("ANSWER"), NIL, makeKeyword("PUBLIC")) });

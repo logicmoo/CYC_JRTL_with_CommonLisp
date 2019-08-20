@@ -55,7 +55,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class drt_drs extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new drt_drs();
 
- public static final String myName = "com.cyc.cycjava.cycl.drt_drs";
 
 
     // defparameter

@@ -31,7 +31,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class cb_refresher_applet extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new cb_refresher_applet();
 
- public static final String myName = "com.cyc.cycjava.cycl.cb_refresher_applet";
 
 
     // deflexical

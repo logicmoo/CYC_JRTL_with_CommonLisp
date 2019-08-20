@@ -505,7 +505,6 @@ public final class cae_query_search extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new cae_query_search();
 
- public static final String myName = "com.cyc.cycjava.cycl.cae_query_search";
 
 
     // defparameter

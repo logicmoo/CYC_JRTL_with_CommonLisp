@@ -61,7 +61,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class extended_numbers extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new extended_numbers();
 
- public static final String myName = "com.cyc.cycjava.cycl.extended_numbers";
 
 
     // deflexical

@@ -68,7 +68,6 @@ public final class kbi_predicate extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new kbi_predicate();
 
-    public static final String myName = "com.cyc.cycjava.cycl.kbi_predicate";
 
     // // Definitions
     public static final SubLObject diagnose_qua_predicate(SubLObject predicate) {

@@ -79,7 +79,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class kb_iterators extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new kb_iterators();
 
- public static final String myName = "com.cyc.cycjava.cycl.kb_iterators";
 
 
     private static final SubLSymbol ITERATOR_SPECS_DONE = makeSymbol("ITERATOR-SPECS-DONE");

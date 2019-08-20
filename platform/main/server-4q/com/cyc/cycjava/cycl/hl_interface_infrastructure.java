@@ -78,7 +78,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class hl_interface_infrastructure extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new hl_interface_infrastructure();
 
- public static final String myName = "com.cyc.cycjava.cycl.hl_interface_infrastructure";
 
 
     // defvar

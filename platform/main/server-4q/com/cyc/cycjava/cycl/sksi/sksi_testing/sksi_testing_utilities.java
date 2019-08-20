@@ -25,7 +25,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sksi_testing_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sksi_testing_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.sksi_testing.sksi_testing_utilities";
 
 
     // Internal Constants

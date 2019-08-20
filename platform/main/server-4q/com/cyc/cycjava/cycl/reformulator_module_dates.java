@@ -92,7 +92,6 @@ public final class reformulator_module_dates extends SubLTranslatedFile implemen
 
     public static final SubLFile me = new reformulator_module_dates();
 
- public static final String myName = "com.cyc.cycjava.cycl.reformulator_module_dates";
 
 
     // deflexical

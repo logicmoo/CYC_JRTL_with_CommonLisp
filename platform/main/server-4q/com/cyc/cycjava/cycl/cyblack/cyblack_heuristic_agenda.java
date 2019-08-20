@@ -74,7 +74,6 @@ public final class cyblack_heuristic_agenda extends SubLTranslatedFile implement
 
     public static final SubLFile me = new cyblack_heuristic_agenda();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_heuristic_agenda";
 
     // // Definitions
     public static final SubLObject cyblack_heuristic_evaluator_p(SubLObject cyblack_heuristic_evaluator) {

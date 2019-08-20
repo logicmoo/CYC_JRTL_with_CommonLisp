@@ -246,7 +246,6 @@ public final class assertions_interface extends SubLTranslatedFile implements V1
 
     public static final SubLFile me = new assertions_interface();
 
- public static final String myName = "com.cyc.cycjava.cycl.assertions_interface";
 
 
     private static final SubLSymbol KB_CREATE_ASSERTION = makeSymbol("KB-CREATE-ASSERTION");

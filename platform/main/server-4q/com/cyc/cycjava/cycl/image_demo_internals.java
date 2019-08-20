@@ -89,7 +89,6 @@ public final class image_demo_internals extends SubLTranslatedFile implements V0
 
     public static final SubLFile me = new image_demo_internals();
 
-    public static final String myName = "com.cyc.cycjava.cycl.image_demo_internals";
 
 
 

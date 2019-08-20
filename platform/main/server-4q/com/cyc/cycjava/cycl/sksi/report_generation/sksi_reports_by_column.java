@@ -157,7 +157,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sksi_reports_by_column extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new sksi_reports_by_column();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.sksi.report_generation.sksi_reports_by_column";
 
 
     // defconstant

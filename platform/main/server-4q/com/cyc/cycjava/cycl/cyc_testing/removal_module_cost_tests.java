@@ -220,7 +220,6 @@ public final class removal_module_cost_tests extends SubLTranslatedFile implemen
 
     public static final SubLFile me = new removal_module_cost_tests();
 
- public static final String myName = "com.cyc.cycjava.cycl.cyc_testing.removal_module_cost_tests";
 
 
     // defconstant

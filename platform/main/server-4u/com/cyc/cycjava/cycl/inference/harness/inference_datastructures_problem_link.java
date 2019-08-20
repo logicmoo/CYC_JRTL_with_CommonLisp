@@ -163,7 +163,6 @@ public final class inference_datastructures_problem_link extends SubLTranslatedF
 
     public static final SubLFile me = new inference_datastructures_problem_link();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_link";
 
 
     // defconstant

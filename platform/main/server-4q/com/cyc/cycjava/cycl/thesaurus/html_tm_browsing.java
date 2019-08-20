@@ -122,7 +122,6 @@ public final class html_tm_browsing extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new html_tm_browsing();
 
-    public static final String myName = "com.cyc.cycjava.cycl.thesaurus.html_tm_browsing";
 
     // // Definitions
     /**

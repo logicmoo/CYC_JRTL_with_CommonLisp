@@ -78,7 +78,6 @@ public final class kbi_assertion extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new kbi_assertion();
 
-    public static final String myName = "com.cyc.cycjava.cycl.kbi_assertion";
 
     // // Definitions
     public static final SubLObject assertion_diagnostics(SubLObject mt, SubLObject printP) {

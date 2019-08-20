@@ -202,7 +202,6 @@ public final class binary_tree extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new binary_tree();
 
- public static final String myName = "com.cyc.cycjava.cycl.binary_tree";
 
 
     // defconstant

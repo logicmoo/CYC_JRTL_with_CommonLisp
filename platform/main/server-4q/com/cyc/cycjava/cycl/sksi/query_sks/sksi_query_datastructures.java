@@ -142,7 +142,6 @@ public final class sksi_query_datastructures extends SubLTranslatedFile implemen
 
     public static final SubLFile me = new sksi_query_datastructures();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.query_sks.sksi_query_datastructures";
 
 
     // defconstant

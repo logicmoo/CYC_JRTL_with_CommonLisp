@@ -116,7 +116,6 @@ public final class query_library_api extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new query_library_api();
 
- public static final String myName = "com.cyc.cycjava.cycl.query_library_api";
 
 
     // deflexical

@@ -17,7 +17,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_source_schema_object_fn extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_source_schema_object_fn";
     public static String myFingerPrint = "b911b141f08220e426b6b86ab00d1e5875bca46335a3ff0205a1e0509660e70f";
     private static SubLSymbol $REMOVAL_SOURCE_SCHEMA_OBJECT_FN_EQUALS_CHECK_POS;
     private static SubLList $list1;
@@ -61,9 +60,9 @@ public class removal_modules_source_schema_object_fn extends SubLTranslatedFile 
     }
 
     public static SubLObject declare_removal_modules_source_schema_object_fn_file() {
-        declareFunction(myName, "removal_source_schema_object_fn_unify_cost", "REMOVAL-SOURCE-SCHEMA-OBJECT-FN-UNIFY-COST", 1, 1, false);
-        declareFunction(myName, "removal_source_schema_object_fn_equals_support", "REMOVAL-SOURCE-SCHEMA-OBJECT-FN-EQUALS-SUPPORT", 1, 1, false);
-        declareFunction(myName, "removal_source_schema_object_fn_undefined_support", "REMOVAL-SOURCE-SCHEMA-OBJECT-FN-UNDEFINED-SUPPORT", 1, 1, false);
+        declareFunction("removal_source_schema_object_fn_unify_cost", "REMOVAL-SOURCE-SCHEMA-OBJECT-FN-UNIFY-COST", 1, 1, false);
+        declareFunction("removal_source_schema_object_fn_equals_support", "REMOVAL-SOURCE-SCHEMA-OBJECT-FN-EQUALS-SUPPORT", 1, 1, false);
+        declareFunction("removal_source_schema_object_fn_undefined_support", "REMOVAL-SOURCE-SCHEMA-OBJECT-FN-UNDEFINED-SUPPORT", 1, 1, false);
         return NIL;
     }
 

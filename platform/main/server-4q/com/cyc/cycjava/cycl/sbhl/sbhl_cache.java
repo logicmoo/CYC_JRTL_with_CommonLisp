@@ -156,7 +156,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sbhl_cache extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sbhl_cache();
 
- public static final String myName = "com.cyc.cycjava.cycl.sbhl.sbhl_cache";
 
 
     public static final SubLSymbol $cached_isas$ = makeSymbol("*CACHED-ISAS*");

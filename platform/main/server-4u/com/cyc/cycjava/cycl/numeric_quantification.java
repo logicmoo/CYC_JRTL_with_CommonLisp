@@ -202,7 +202,6 @@ public final class numeric_quantification extends SubLTranslatedFile implements 
 
     public static final SubLFile me = new numeric_quantification();
 
- public static final String myName = "com.cyc.cycjava.cycl.numeric_quantification";
 
 
     // deflexical

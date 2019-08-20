@@ -67,7 +67,6 @@ public final class cb_uiat_smart extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cb_uiat_smart();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_uiat_smart";
 
     // // Definitions
     public static final SubLObject uia_act_new_term_reader(SubLObject v_agenda, SubLObject mode, SubLObject utterance, SubLObject isas, SubLObject v_genls, SubLObject existance_checkP) {

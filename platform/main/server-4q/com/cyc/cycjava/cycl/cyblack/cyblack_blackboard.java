@@ -55,7 +55,6 @@ public final class cyblack_blackboard extends SubLTranslatedFile implements V02 
 
     public static final SubLFile me = new cyblack_blackboard();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_blackboard";
 
     // // Definitions
     public static final SubLObject cyblack_blackboard_p(SubLObject v_cyblack_blackboard) {

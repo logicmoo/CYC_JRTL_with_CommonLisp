@@ -98,7 +98,6 @@ public final class control_vars extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new control_vars();
 
- public static final String myName = "com.cyc.cycjava.cycl.control_vars";
 
 
     // defparameter

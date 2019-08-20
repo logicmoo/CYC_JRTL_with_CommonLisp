@@ -193,7 +193,6 @@ public final class folification extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new folification();
 
- public static final String myName = "com.cyc.cycjava.cycl.folification";
 
 
     // deflexical

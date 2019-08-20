@@ -18,7 +18,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_country_of_city extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_country_of_city";
     public static String myFingerPrint = "bc78ea23a7b8df4c95410d978a818839cfd6a3aae8bd10fdd26fd671639f21c7";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-country-of-city.lisp", position = 600L)
     public static SubLSymbol $country_of_city_mt$;
@@ -47,7 +46,7 @@ public class removal_modules_country_of_city extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_country_of_city_file() {
-        declareFunction(myName, "make_country_of_city_unify_pos_supports", "MAKE-COUNTRY-OF-CITY-UNIFY-POS-SUPPORTS", 1, 1, false);
+        declareFunction("make_country_of_city_unify_pos_supports", "MAKE-COUNTRY-OF-CITY-UNIFY-POS-SUPPORTS", 1, 1, false);
         return NIL;
     }
 

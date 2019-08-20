@@ -46,7 +46,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class wordnet_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new wordnet_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.wordnet_import.wordnet_utilities";
 
 
     @LispMethod(comment = "Internal Constants")

@@ -33,7 +33,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class inference_tactician_utilities extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.harness.inference_tactician_utilities";
     public static String myFingerPrint = "0a1f0874d3cfd9f14ac398e3295fbce90a0eebb03a2b3285ec8e264e6cdcdbdf";
     @SubL(source = "cycl/inference/harness/inference-tactician-utilities.lisp", position = 6500L)
     private static SubLSymbol $set_aside_implies_disallowedP$;
@@ -593,30 +592,30 @@ public class inference_tactician_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_inference_tactician_utilities_file() {
-        declareFunction(myName, "memoized_problem_global_preference_level", "MEMOIZED-PROBLEM-GLOBAL-PREFERENCE-LEVEL", 3, 0, false);
-        declareFunction(myName, "memoized_problem_global_preference_level_int_internal", "MEMOIZED-PROBLEM-GLOBAL-PREFERENCE-LEVEL-INT-INTERNAL", 3, 0, false);
-        declareFunction(myName, "memoized_problem_global_preference_level_int", "MEMOIZED-PROBLEM-GLOBAL-PREFERENCE-LEVEL-INT", 3, 0, false);
-        declareFunction(myName, "problem_global_preference_level", "PROBLEM-GLOBAL-PREFERENCE-LEVEL", 3, 0, false);
-        declareFunction(myName, "problem_global_preference_level_wrt_modules", "PROBLEM-GLOBAL-PREFERENCE-LEVEL-WRT-MODULES", 3, 0, false);
-        declareFunction(myName, "single_negative_literal_problem_p", "SINGLE-NEGATIVE-LITERAL-PROBLEM-P", 1, 0, false);
-        declareFunction(myName, "multi_literal_problem_global_preference_level", "MULTI-LITERAL-PROBLEM-GLOBAL-PREFERENCE-LEVEL", 2, 0, false);
-        declareFunction(myName, "multi_literal_problem_tactics_to_activate", "MULTI-LITERAL-PROBLEM-TACTICS-TO-ACTIVATE", 2, 0, false);
-        declareFunction(myName, "problem_has_some_complete_non_thrown_away_removal_tacticP", "PROBLEM-HAS-SOME-COMPLETE-NON-THROWN-AWAY-REMOVAL-TACTIC?", 2, 0, false);
-        declareFunction(myName, "problem_has_no_allowed_or_executed_tactics_wrt_removalP", "PROBLEM-HAS-NO-ALLOWED-OR-EXECUTED-TACTICS-WRT-REMOVAL?", 2, 0, false);
-        declareFunction(myName, "removal_unhappiness", "REMOVAL-UNHAPPINESS", 4, 0, false);
-        declareFunction(myName, "scale_unhappiness", "SCALE-UNHAPPINESS", 2, 0, false);
-        declareFunction(myName, "module_scaling_factor", "MODULE-SCALING-FACTOR", 1, 0, false);
-        declareFunction(myName, "preference_scaling_factor", "PREFERENCE-SCALING-FACTOR", 1, 0, false);
-        declareFunction(myName, "literal_count_scaling_factor", "LITERAL-COUNT-SCALING-FACTOR", 1, 0, false);
-        declareFunction(myName, "strategy_deems_conjunctive_tactic_spec_betterP", "STRATEGY-DEEMS-CONJUNCTIVE-TACTIC-SPEC-BETTER?", 8, 0, false);
-        declareFunction(myName, "magic_wand_tacticP", "MAGIC-WAND-TACTIC?", 2, 0, false);
-        declareFunction(myName, "under_magic_wand_max_preference_levelP", "UNDER-MAGIC-WAND-MAX-PREFERENCE-LEVEL?", 1, 0, false);
-        declareFunction(myName, "tactic_strictly_less_preferred_than_some_siblingP", "TACTIC-STRICTLY-LESS-PREFERRED-THAN-SOME-SIBLING?", 2, 0, false);
-        declareFunction(myName, "abductive_magic_wand_tacticP", "ABDUCTIVE-MAGIC-WAND-TACTIC?", 2, 0, false);
-        declareFunction(myName, "abductive_strategy_chooses_only_abductive_tacticP", "ABDUCTIVE-STRATEGY-CHOOSES-ONLY-ABDUCTIVE-TACTIC?", 2, 0, false);
-        declareFunction(myName, "inference_all_set_asides", "INFERENCE-ALL-SET-ASIDES", 1, 0, false);
-        declareFunction(myName, "inference_all_set_aside_problems", "INFERENCE-ALL-SET-ASIDE-PROBLEMS", 1, 0, false);
-        declareFunction(myName, "inference_all_set_aside_strategems", "INFERENCE-ALL-SET-ASIDE-STRATEGEMS", 1, 0, false);
+        declareFunction("memoized_problem_global_preference_level", "MEMOIZED-PROBLEM-GLOBAL-PREFERENCE-LEVEL", 3, 0, false);
+        declareFunction("memoized_problem_global_preference_level_int_internal", "MEMOIZED-PROBLEM-GLOBAL-PREFERENCE-LEVEL-INT-INTERNAL", 3, 0, false);
+        declareFunction("memoized_problem_global_preference_level_int", "MEMOIZED-PROBLEM-GLOBAL-PREFERENCE-LEVEL-INT", 3, 0, false);
+        declareFunction("problem_global_preference_level", "PROBLEM-GLOBAL-PREFERENCE-LEVEL", 3, 0, false);
+        declareFunction("problem_global_preference_level_wrt_modules", "PROBLEM-GLOBAL-PREFERENCE-LEVEL-WRT-MODULES", 3, 0, false);
+        declareFunction("single_negative_literal_problem_p", "SINGLE-NEGATIVE-LITERAL-PROBLEM-P", 1, 0, false);
+        declareFunction("multi_literal_problem_global_preference_level", "MULTI-LITERAL-PROBLEM-GLOBAL-PREFERENCE-LEVEL", 2, 0, false);
+        declareFunction("multi_literal_problem_tactics_to_activate", "MULTI-LITERAL-PROBLEM-TACTICS-TO-ACTIVATE", 2, 0, false);
+        declareFunction("problem_has_some_complete_non_thrown_away_removal_tacticP", "PROBLEM-HAS-SOME-COMPLETE-NON-THROWN-AWAY-REMOVAL-TACTIC?", 2, 0, false);
+        declareFunction("problem_has_no_allowed_or_executed_tactics_wrt_removalP", "PROBLEM-HAS-NO-ALLOWED-OR-EXECUTED-TACTICS-WRT-REMOVAL?", 2, 0, false);
+        declareFunction("removal_unhappiness", "REMOVAL-UNHAPPINESS", 4, 0, false);
+        declareFunction("scale_unhappiness", "SCALE-UNHAPPINESS", 2, 0, false);
+        declareFunction("module_scaling_factor", "MODULE-SCALING-FACTOR", 1, 0, false);
+        declareFunction("preference_scaling_factor", "PREFERENCE-SCALING-FACTOR", 1, 0, false);
+        declareFunction("literal_count_scaling_factor", "LITERAL-COUNT-SCALING-FACTOR", 1, 0, false);
+        declareFunction("strategy_deems_conjunctive_tactic_spec_betterP", "STRATEGY-DEEMS-CONJUNCTIVE-TACTIC-SPEC-BETTER?", 8, 0, false);
+        declareFunction("magic_wand_tacticP", "MAGIC-WAND-TACTIC?", 2, 0, false);
+        declareFunction("under_magic_wand_max_preference_levelP", "UNDER-MAGIC-WAND-MAX-PREFERENCE-LEVEL?", 1, 0, false);
+        declareFunction("tactic_strictly_less_preferred_than_some_siblingP", "TACTIC-STRICTLY-LESS-PREFERRED-THAN-SOME-SIBLING?", 2, 0, false);
+        declareFunction("abductive_magic_wand_tacticP", "ABDUCTIVE-MAGIC-WAND-TACTIC?", 2, 0, false);
+        declareFunction("abductive_strategy_chooses_only_abductive_tacticP", "ABDUCTIVE-STRATEGY-CHOOSES-ONLY-ABDUCTIVE-TACTIC?", 2, 0, false);
+        declareFunction("inference_all_set_asides", "INFERENCE-ALL-SET-ASIDES", 1, 0, false);
+        declareFunction("inference_all_set_aside_problems", "INFERENCE-ALL-SET-ASIDE-PROBLEMS", 1, 0, false);
+        declareFunction("inference_all_set_aside_strategems", "INFERENCE-ALL-SET-ASIDE-STRATEGEMS", 1, 0, false);
         return NIL;
     }
 

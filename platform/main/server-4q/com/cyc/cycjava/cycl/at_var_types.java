@@ -314,7 +314,6 @@ public final class at_var_types extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new at_var_types();
 
- public static final String myName = "com.cyc.cycjava.cycl.at_var_types";
 
 
     // defparameter

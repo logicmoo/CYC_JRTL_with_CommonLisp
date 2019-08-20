@@ -51,7 +51,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class cyc_kernel extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new cyc_kernel();
 
- public static final String myName = "com.cyc.cycjava.cycl.cyc_kernel";
 
 
     // deflexical

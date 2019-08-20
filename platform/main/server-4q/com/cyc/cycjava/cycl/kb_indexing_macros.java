@@ -41,7 +41,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class kb_indexing_macros extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new kb_indexing_macros();
 
- public static final String myName = "com.cyc.cycjava.cycl.kb_indexing_macros";
 
 
     // Internal Constants

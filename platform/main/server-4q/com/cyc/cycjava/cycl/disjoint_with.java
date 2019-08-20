@@ -59,7 +59,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class disjoint_with extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new disjoint_with();
 
- public static final String myName = "com.cyc.cycjava.cycl.disjoint_with";
 
 
     // deflexical

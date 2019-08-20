@@ -32,7 +32,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rkf_analogy_developer extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rkf_analogy_developer();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_analogy_developer";
 
 
     // Internal Constants

@@ -105,7 +105,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class cfasl_kb_methods extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new cfasl_kb_methods();
 
- public static final String myName = "com.cyc.cycjava.cycl.cfasl_kb_methods";
 
 
     // defparameter

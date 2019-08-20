@@ -71,7 +71,6 @@ public final class regular_expression_utilities extends SubLTranslatedFile imple
 
     public static final SubLFile me = new regular_expression_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.regular_expression_utilities";
 
 
     // defconstant

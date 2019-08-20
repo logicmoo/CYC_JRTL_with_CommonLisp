@@ -38,7 +38,6 @@ public final class cb_uia_problem_reporting extends SubLTranslatedFile implement
 
     public static final SubLFile me = new cb_uia_problem_reporting();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_uia_problem_reporting";
 
     // // Definitions
     /**

@@ -223,7 +223,6 @@ public final class html_arghash extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new html_arghash();
 
- public static final String myName = "com.cyc.cycjava.cycl.html_arghash";
 
 
     // defconstant

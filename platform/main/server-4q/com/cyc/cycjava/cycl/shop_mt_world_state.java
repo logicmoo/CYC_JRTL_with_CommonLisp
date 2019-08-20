@@ -47,7 +47,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class shop_mt_world_state extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new shop_mt_world_state();
 
- public static final String myName = "com.cyc.cycjava.cycl.shop_mt_world_state";
 
 
     // defparameter

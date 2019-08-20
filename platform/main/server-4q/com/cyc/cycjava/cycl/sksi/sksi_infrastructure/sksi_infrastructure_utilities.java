@@ -142,7 +142,6 @@ public final class sksi_infrastructure_utilities extends SubLTranslatedFile impl
 
     public static final SubLFile me = new sksi_infrastructure_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_infrastructure_utilities";
 
 
     // deflexical

@@ -35,7 +35,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class inference_event_filters extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.inference_event_filters";
     public static String myFingerPrint = "4c4f98219ddba86b1b78ded8971264e335e9ad74950381525b5904d28ba3ecb6";
     @SubL(source = "cycl/inference/inference-event-filters.lisp", position = 1000L)
     private static SubLSymbol $inference_event_filter_lock$;
@@ -374,21 +373,21 @@ public class inference_event_filters extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_inference_event_filters_file() {
-        declareMacro(me, "with_inference_event_filter_lock", "WITH-INFERENCE-EVENT-FILTER-LOCK");
-        declareFunction(myName, "rebuild_known_inference_events", "REBUILD-KNOWN-INFERENCE-EVENTS", 0, 0, false);
-        declareFunction(myName, "register_handler_for_all_inference_events", "REGISTER-HANDLER-FOR-ALL-INFERENCE-EVENTS", 2, 0, false);
-        declareFunction(myName, "register_handler_for_inference_event", "REGISTER-HANDLER-FOR-INFERENCE-EVENT", 3, 0, false);
-        declareFunction(myName, "deregister_handler_for_inference_event", "DEREGISTER-HANDLER-FOR-INFERENCE-EVENT", 3, 0, false);
-        declareFunction(myName, "register_inference_event_handlers_for_problem_store_and_inference", "REGISTER-INFERENCE-EVENT-HANDLERS-FOR-PROBLEM-STORE-AND-INFERENCE", 4, 0, false);
-        declareFunction(myName, "relay_inference_event", "RELAY-INFERENCE-EVENT", 1, 1, false);
-        declareFunction(myName, "relay_inference_new_answer_event", "RELAY-INFERENCE-NEW-ANSWER-EVENT", 1, 0, false);
-        declareFunction(myName, "print_new_inference_answer_message", "PRINT-NEW-INFERENCE-ANSWER-MESSAGE", 3, 0, false);
-        declareFunction(myName, "relay_inference_status_change_event", "RELAY-INFERENCE-STATUS-CHANGE-EVENT", 1, 0, false);
-        declareFunction(myName, "relay_sksi_query_event", "RELAY-SKSI-QUERY-EVENT", 1, 0, false);
-        declareFunction(myName, "print_sksi_query_message", "PRINT-SKSI-QUERY-MESSAGE", 3, 0, false);
-        declareFunction(myName, "get_inference_event_listeners_on_problem_store_and_inference", "GET-INFERENCE-EVENT-LISTENERS-ON-PROBLEM-STORE-AND-INFERENCE", 3, 1, false);
-        declareFunction(myName, "register_inference_event_handler_for_problem_store_and_inference", "REGISTER-INFERENCE-EVENT-HANDLER-FOR-PROBLEM-STORE-AND-INFERENCE", 4, 0, false);
-        declareFunction(myName, "deregister_inference_event_handlers_for_problem_store_and_inference", "DEREGISTER-INFERENCE-EVENT-HANDLERS-FOR-PROBLEM-STORE-AND-INFERENCE", 2, 1, false);
+        declareMacro("with_inference_event_filter_lock", "WITH-INFERENCE-EVENT-FILTER-LOCK");
+        declareFunction("rebuild_known_inference_events", "REBUILD-KNOWN-INFERENCE-EVENTS", 0, 0, false);
+        declareFunction("register_handler_for_all_inference_events", "REGISTER-HANDLER-FOR-ALL-INFERENCE-EVENTS", 2, 0, false);
+        declareFunction("register_handler_for_inference_event", "REGISTER-HANDLER-FOR-INFERENCE-EVENT", 3, 0, false);
+        declareFunction("deregister_handler_for_inference_event", "DEREGISTER-HANDLER-FOR-INFERENCE-EVENT", 3, 0, false);
+        declareFunction("register_inference_event_handlers_for_problem_store_and_inference", "REGISTER-INFERENCE-EVENT-HANDLERS-FOR-PROBLEM-STORE-AND-INFERENCE", 4, 0, false);
+        declareFunction("relay_inference_event", "RELAY-INFERENCE-EVENT", 1, 1, false);
+        declareFunction("relay_inference_new_answer_event", "RELAY-INFERENCE-NEW-ANSWER-EVENT", 1, 0, false);
+        declareFunction("print_new_inference_answer_message", "PRINT-NEW-INFERENCE-ANSWER-MESSAGE", 3, 0, false);
+        declareFunction("relay_inference_status_change_event", "RELAY-INFERENCE-STATUS-CHANGE-EVENT", 1, 0, false);
+        declareFunction("relay_sksi_query_event", "RELAY-SKSI-QUERY-EVENT", 1, 0, false);
+        declareFunction("print_sksi_query_message", "PRINT-SKSI-QUERY-MESSAGE", 3, 0, false);
+        declareFunction("get_inference_event_listeners_on_problem_store_and_inference", "GET-INFERENCE-EVENT-LISTENERS-ON-PROBLEM-STORE-AND-INFERENCE", 3, 1, false);
+        declareFunction("register_inference_event_handler_for_problem_store_and_inference", "REGISTER-INFERENCE-EVENT-HANDLER-FOR-PROBLEM-STORE-AND-INFERENCE", 4, 0, false);
+        declareFunction("deregister_inference_event_handlers_for_problem_store_and_inference", "DEREGISTER-INFERENCE-EVENT-HANDLERS-FOR-PROBLEM-STORE-AND-INFERENCE", 2, 1, false);
         return NIL;
     }
 

@@ -225,7 +225,6 @@ public final class after_adding_modules extends SubLTranslatedFile implements V1
 
     public static final SubLFile me = new after_adding_modules();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.modules.after_adding_modules";
 
 
     // deflexical

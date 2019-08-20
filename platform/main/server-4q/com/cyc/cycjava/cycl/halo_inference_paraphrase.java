@@ -42,7 +42,6 @@ public final class halo_inference_paraphrase extends SubLTranslatedFile implemen
 
     public static final SubLFile me = new halo_inference_paraphrase();
 
-    public static final String myName = "com.cyc.cycjava.cycl.halo_inference_paraphrase";
 
     // // Definitions
     // defparameter

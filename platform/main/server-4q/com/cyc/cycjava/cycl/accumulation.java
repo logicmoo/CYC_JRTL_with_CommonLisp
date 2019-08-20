@@ -166,7 +166,6 @@ public final class accumulation extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new accumulation();
 
-    public static final String myName = "com.cyc.cycjava.cycl.accumulation";
 
 
     // defconstant

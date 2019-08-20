@@ -915,7 +915,6 @@ public final class cb_browser extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new cb_browser();
 
- public static final String myName = "com.cyc.cycjava.cycl.cb_browser";
 
 
     // deflexical

@@ -52,7 +52,6 @@ public final class blackbook_integration extends SubLTranslatedFile implements V
 
     public static final SubLFile me = new blackbook_integration();
 
-    public static final String myName = "com.cyc.cycjava.cycl.project.nsf_nwu_kdd.blackbook_integration";
 
     // // Definitions
     /**

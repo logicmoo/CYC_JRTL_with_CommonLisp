@@ -70,7 +70,6 @@ public final class cb_uia_tools_salient_descriptor extends SubLTranslatedFile im
 
     public static final SubLFile me = new cb_uia_tools_salient_descriptor();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_uia_tools_salient_descriptor";
 
     // // Definitions
     public static final SubLObject cb_uiat_salient_descriptor_render_request(SubLObject request) {

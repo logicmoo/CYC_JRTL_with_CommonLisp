@@ -68,7 +68,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class mwp_affix_matcher extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new mwp_affix_matcher();
 
- public static final String myName = "com.cyc.cycjava.cycl.mwp_affix_matcher";
 
 
     // defparameter

@@ -45,7 +45,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class ctest_macros extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new ctest_macros();
 
- public static final String myName = "com.cyc.cycjava.cycl.cyc_testing.ctest_macros";
 
 
     // Internal Constants

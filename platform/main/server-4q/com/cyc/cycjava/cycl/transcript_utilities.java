@@ -350,7 +350,6 @@ public final class transcript_utilities extends SubLTranslatedFile implements V1
 
     public static final SubLFile me = new transcript_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.transcript_utilities";
 
 
     // defparameter

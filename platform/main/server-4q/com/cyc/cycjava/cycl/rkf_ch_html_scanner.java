@@ -146,7 +146,6 @@ public final class rkf_ch_html_scanner extends SubLTranslatedFile implements V12
 
     public static final SubLFile me = new rkf_ch_html_scanner();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_ch_html_scanner";
 
 
     // defconstant

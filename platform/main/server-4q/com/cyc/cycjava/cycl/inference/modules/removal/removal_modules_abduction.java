@@ -44,7 +44,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_abduction extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_abduction";
     public static String myFingerPrint = "fef98746ba2b18c68d4872c5492c321d1e183c0a0f79d3283c44084f4155bc05";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-abduction.lisp", position = 1000L)
     private static SubLSymbol $abductive_removal_modules$;
@@ -389,31 +388,31 @@ public class removal_modules_abduction extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_abduction_file() {
-        declareFunction(myName, "abductive_removal_modules", "ABDUCTIVE-REMOVAL-MODULES", 0, 0, false);
-        declareFunction(myName, "abductive_removal_moduleP", "ABDUCTIVE-REMOVAL-MODULE?", 1, 0, false);
-        declareFunction(myName, "abductive_modules_not_allowed_spec", "ABDUCTIVE-MODULES-NOT-ALLOWED-SPEC", 0, 0, false);
-        declareFunction(myName, "problem_store_next_abduced_term_id", "PROBLEM-STORE-NEXT-ABDUCED-TERM-ID", 1, 0, false);
-        declareFunction(myName, "abducing_completely_enumerable_instancesP", "ABDUCING-COMPLETELY-ENUMERABLE-INSTANCES?", 2, 0, false);
-        declareFunction(myName, "candidate_abductive_binding_sets", "CANDIDATE-ABDUCTIVE-BINDING-SETS", 3, 0, false);
-        declareFunction(myName, "abduced_collection_for_constraints", "ABDUCED-COLLECTION-FOR-CONSTRAINTS", 3, 0, false);
-        declareFunction(myName, "abduced_individual_for_constraints", "ABDUCED-INDIVIDUAL-FOR-CONSTRAINTS", 2, 0, false);
-        declareFunction(myName, "abduced_term_for_constraints", "ABDUCED-TERM-FOR-CONSTRAINTS", 4, 0, false);
-        declareFunction(myName, "abduced_type_from_constraints", "ABDUCED-TYPE-FROM-CONSTRAINTS", 1, 0, false);
-        declareFunction(myName, "abductive_asent_var_arg_constraints", "ABDUCTIVE-ASENT-VAR-ARG-CONSTRAINTS", 2, 0, false);
-        declareFunction(myName, "removal_abduction_required", "REMOVAL-ABDUCTION-REQUIRED", 2, 0, false);
-        declareFunction(myName, "removal_abduction_allowedP", "REMOVAL-ABDUCTION-ALLOWED?", 1, 1, false);
+        declareFunction("abductive_removal_modules", "ABDUCTIVE-REMOVAL-MODULES", 0, 0, false);
+        declareFunction("abductive_removal_moduleP", "ABDUCTIVE-REMOVAL-MODULE?", 1, 0, false);
+        declareFunction("abductive_modules_not_allowed_spec", "ABDUCTIVE-MODULES-NOT-ALLOWED-SPEC", 0, 0, false);
+        declareFunction("problem_store_next_abduced_term_id", "PROBLEM-STORE-NEXT-ABDUCED-TERM-ID", 1, 0, false);
+        declareFunction("abducing_completely_enumerable_instancesP", "ABDUCING-COMPLETELY-ENUMERABLE-INSTANCES?", 2, 0, false);
+        declareFunction("candidate_abductive_binding_sets", "CANDIDATE-ABDUCTIVE-BINDING-SETS", 3, 0, false);
+        declareFunction("abduced_collection_for_constraints", "ABDUCED-COLLECTION-FOR-CONSTRAINTS", 3, 0, false);
+        declareFunction("abduced_individual_for_constraints", "ABDUCED-INDIVIDUAL-FOR-CONSTRAINTS", 2, 0, false);
+        declareFunction("abduced_term_for_constraints", "ABDUCED-TERM-FOR-CONSTRAINTS", 4, 0, false);
+        declareFunction("abduced_type_from_constraints", "ABDUCED-TYPE-FROM-CONSTRAINTS", 1, 0, false);
+        declareFunction("abductive_asent_var_arg_constraints", "ABDUCTIVE-ASENT-VAR-ARG-CONSTRAINTS", 2, 0, false);
+        declareFunction("removal_abduction_required", "REMOVAL-ABDUCTION-REQUIRED", 2, 0, false);
+        declareFunction("removal_abduction_allowedP", "REMOVAL-ABDUCTION-ALLOWED?", 1, 1, false);
         new $removal_abduction_allowedP$UnaryFunction();
         new $removal_abduction_allowedP$BinaryFunction();
-        declareFunction(myName, "removal_abduction_check_sentence", "REMOVAL-ABDUCTION-CHECK-SENTENCE", 3, 0, false);
-        declareFunction(myName, "make_abduction_support", "MAKE-ABDUCTION-SUPPORT", 1, 2, false);
-        declareFunction(myName, "removal_abduction_pos_required", "REMOVAL-ABDUCTION-POS-REQUIRED", 1, 1, false);
-        declareFunction(myName, "removal_abduction_pos_check_expand", "REMOVAL-ABDUCTION-POS-CHECK-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_abduction_unify_sentence", "REMOVAL-ABDUCTION-UNIFY-SENTENCE", 4, 0, false);
-        declareFunction(myName, "removal_abduction_pos_unify_expand", "REMOVAL-ABDUCTION-POS-UNIFY-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_abduction_exclusiveP", "REMOVAL-ABDUCTION-EXCLUSIVE?", 1, 1, false);
-        declareFunction(myName, "removal_exclusive_abduction_pos_expand", "REMOVAL-EXCLUSIVE-ABDUCTION-POS-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_abduction_neg_required", "REMOVAL-ABDUCTION-NEG-REQUIRED", 1, 1, false);
-        declareFunction(myName, "removal_abduction_neg_check_expand", "REMOVAL-ABDUCTION-NEG-CHECK-EXPAND", 1, 1, false);
+        declareFunction("removal_abduction_check_sentence", "REMOVAL-ABDUCTION-CHECK-SENTENCE", 3, 0, false);
+        declareFunction("make_abduction_support", "MAKE-ABDUCTION-SUPPORT", 1, 2, false);
+        declareFunction("removal_abduction_pos_required", "REMOVAL-ABDUCTION-POS-REQUIRED", 1, 1, false);
+        declareFunction("removal_abduction_pos_check_expand", "REMOVAL-ABDUCTION-POS-CHECK-EXPAND", 1, 1, false);
+        declareFunction("removal_abduction_unify_sentence", "REMOVAL-ABDUCTION-UNIFY-SENTENCE", 4, 0, false);
+        declareFunction("removal_abduction_pos_unify_expand", "REMOVAL-ABDUCTION-POS-UNIFY-EXPAND", 1, 1, false);
+        declareFunction("removal_abduction_exclusiveP", "REMOVAL-ABDUCTION-EXCLUSIVE?", 1, 1, false);
+        declareFunction("removal_exclusive_abduction_pos_expand", "REMOVAL-EXCLUSIVE-ABDUCTION-POS-EXPAND", 1, 1, false);
+        declareFunction("removal_abduction_neg_required", "REMOVAL-ABDUCTION-NEG-REQUIRED", 1, 1, false);
+        declareFunction("removal_abduction_neg_check_expand", "REMOVAL-ABDUCTION-NEG-CHECK-EXPAND", 1, 1, false);
         return NIL;
     }
 

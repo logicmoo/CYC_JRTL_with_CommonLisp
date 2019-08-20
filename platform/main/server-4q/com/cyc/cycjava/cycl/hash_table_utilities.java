@@ -76,7 +76,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class hash_table_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new hash_table_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.hash_table_utilities";
 
 
     // defconstant

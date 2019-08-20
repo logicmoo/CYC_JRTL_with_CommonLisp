@@ -18,7 +18,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_assertion_deductions extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_assertion_deductions";
     public static String myFingerPrint = "03c499ba240103d689589f8e1d1b4ac7dce1aee28fe6aa62c83840ac71f6620d";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-assertion-deductions.lisp", position = 1200L)
     private static SubLSymbol $default_assertion_deductions_check_cost$;
@@ -56,7 +55,7 @@ public class removal_modules_assertion_deductions extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_assertion_deductions_file() {
-        declareFunction(myName, "assertion_deduction_terms", "ASSERTION-DEDUCTION-TERMS", 1, 0, false);
+        declareFunction("assertion_deduction_terms", "ASSERTION-DEDUCTION-TERMS", 1, 0, false);
         return NIL;
     }
 

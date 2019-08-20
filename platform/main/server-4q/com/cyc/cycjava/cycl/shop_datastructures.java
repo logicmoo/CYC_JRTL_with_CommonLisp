@@ -85,7 +85,6 @@ public final class shop_datastructures extends SubLTranslatedFile implements V12
 
     public static final SubLFile me = new shop_datastructures();
 
- public static final String myName = "com.cyc.cycjava.cycl.shop_datastructures";
 
 
     // deflexical

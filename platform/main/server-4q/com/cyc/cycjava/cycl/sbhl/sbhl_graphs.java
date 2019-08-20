@@ -147,7 +147,6 @@ public final class sbhl_graphs extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new sbhl_graphs();
 
- public static final String myName = "com.cyc.cycjava.cycl.sbhl.sbhl_graphs";
 
 
     // deflexical

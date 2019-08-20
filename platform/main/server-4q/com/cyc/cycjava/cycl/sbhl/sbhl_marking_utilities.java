@@ -67,7 +67,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sbhl_marking_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sbhl_marking_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.sbhl.sbhl_marking_utilities";
 
 
     private static final SubLObject $$weak_HL_TimePrecedence = reader_make_constant_shell("weak-HL-TimePrecedence");

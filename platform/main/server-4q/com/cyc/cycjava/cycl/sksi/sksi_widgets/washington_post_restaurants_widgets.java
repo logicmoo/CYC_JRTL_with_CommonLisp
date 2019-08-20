@@ -61,7 +61,6 @@ public final class washington_post_restaurants_widgets extends SubLTranslatedFil
 
     public static final SubLFile me = new washington_post_restaurants_widgets();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.sksi_widgets.washington_post_restaurants_widgets";
 
 
     // deflexical

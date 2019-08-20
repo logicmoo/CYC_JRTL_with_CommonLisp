@@ -67,7 +67,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class pph_string extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new pph_string();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.pph_string";
 
 
     // deflexical

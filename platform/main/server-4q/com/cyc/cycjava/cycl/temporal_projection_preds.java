@@ -39,7 +39,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class temporal_projection_preds extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new temporal_projection_preds();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.temporal_projection_preds";
 
 
     private static final SubLObject $$Now = reader_make_constant_shell(makeString("Now"));

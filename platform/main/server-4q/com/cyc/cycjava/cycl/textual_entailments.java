@@ -129,7 +129,6 @@ public final class textual_entailments extends SubLTranslatedFile implements V02
 
     public static final SubLFile me = new textual_entailments();
 
-    public static final String myName = "com.cyc.cycjava.cycl.textual_entailments";
 
     // // Definitions
     /**

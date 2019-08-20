@@ -172,7 +172,6 @@ public final class sbhl_time_utilities extends SubLTranslatedFile implements V12
 
     public static final SubLFile me = new sbhl_time_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.sbhl.sbhl_time_utilities";
 
 
     // deflexical

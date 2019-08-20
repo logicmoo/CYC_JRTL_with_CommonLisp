@@ -66,7 +66,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class html_cycl_string_printer extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new html_cycl_string_printer();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.html_cycl_string_printer";
 
 
     // defconstant

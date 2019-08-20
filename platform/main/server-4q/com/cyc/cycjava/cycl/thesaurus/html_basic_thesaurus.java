@@ -79,7 +79,6 @@ public final class html_basic_thesaurus extends SubLTranslatedFile implements V0
 
     public static final SubLFile me = new html_basic_thesaurus();
 
-    public static final String myName = "com.cyc.cycjava.cycl.thesaurus.html_basic_thesaurus";
 
     // // Definitions
     /**

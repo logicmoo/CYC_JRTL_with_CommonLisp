@@ -64,7 +64,6 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new sunit_classes();
 
-    public static final String myName = "com.cyc.cycjava.cycl.sunit_classes";
 
     // // Definitions
     // defparameter

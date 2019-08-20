@@ -201,7 +201,6 @@ public final class sbhl_link_iterators extends SubLTranslatedFile implements V12
 
     public static final SubLFile me = new sbhl_link_iterators();
 
- public static final String myName = "com.cyc.cycjava.cycl.sbhl.sbhl_link_iterators";
 
 
     // defconstant

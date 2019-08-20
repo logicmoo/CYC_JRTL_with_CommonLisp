@@ -64,7 +64,6 @@ public final class cb_disjointness extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cb_disjointness();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_disjointness";
 
     // // Definitions
     public static final SubLObject orthogonalP(SubLObject collection1, SubLObject collection2, SubLObject mt) {

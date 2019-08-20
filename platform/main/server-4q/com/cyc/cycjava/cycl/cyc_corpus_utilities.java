@@ -98,7 +98,6 @@ public final class cyc_corpus_utilities extends SubLTranslatedFile implements V1
 
     public static final SubLFile me = new cyc_corpus_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.cyc_corpus_utilities";
 
 
     // defparameter

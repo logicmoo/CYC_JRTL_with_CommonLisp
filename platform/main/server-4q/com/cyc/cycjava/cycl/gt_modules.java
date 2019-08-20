@@ -269,7 +269,6 @@ public final class gt_modules extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new gt_modules();
 
- public static final String myName = "com.cyc.cycjava.cycl.gt_modules";
 
 
     public static final SubLObject declare_gt_modules_file_alt() {

@@ -27,7 +27,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class ke_coherence extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new ke_coherence();
 
- public static final String myName = "com.cyc.cycjava.cycl.ke_coherence";
 
 
     static private final SubLSymbol $sym1$EL_VAR_ = makeSymbol("EL-VAR?");

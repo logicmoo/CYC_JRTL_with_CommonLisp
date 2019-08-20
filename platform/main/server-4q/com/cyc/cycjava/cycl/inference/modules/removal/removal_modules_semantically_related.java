@@ -30,7 +30,6 @@ public final class removal_modules_semantically_related
       SubLTranslatedFile
 {
   public static final SubLFile me;
-  public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_semantically_related";
   public static final String myFingerPrint = "6fe3a210f5a7a0ab00b0170463d13c0bb0d86fb347662d4d5a84a73bef8fbff3";
   @SubLTranslatedFile.SubL(source = "cycl/inference/modules/removal/removal-modules-semantically-related.lisp", position = 3595L)
   private static SubLSymbol $default_mutually_coherent_cost$;

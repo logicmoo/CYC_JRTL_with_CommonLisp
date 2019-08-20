@@ -78,7 +78,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class kct_cyc_testing extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new kct_cyc_testing();
 
- public static final String myName = "com.cyc.cycjava.cycl.cyc_testing.kb_content_test.kct_cyc_testing";
 
 
 

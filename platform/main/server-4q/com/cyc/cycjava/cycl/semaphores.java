@@ -42,7 +42,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class semaphores extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new semaphores();
 
- public static final String myName = "com.cyc.cycjava.cycl.semaphores";
 
 
     static private final SubLList $list1 = list(makeSymbol("SEMAPHORE-WAIT"));

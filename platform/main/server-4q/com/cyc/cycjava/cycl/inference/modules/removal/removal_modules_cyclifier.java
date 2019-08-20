@@ -35,7 +35,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_cyclifier extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_cyclifier";
     public static String myFingerPrint = "ca70ba9b6f893d0caad6f1ca1222ca3d0737b2a37ebf993c092851535bcc22bc";
     private static SubLObject $$cyclificationOfStringFromParser;
     private static SubLSymbol $POS;
@@ -378,23 +377,23 @@ public class removal_modules_cyclifier extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_cyclifier_file() {
-        declareFunction(myName, "cyclify_iterator", "CYCLIFY-ITERATOR", 2, 1, false);
-        declareFunction(myName, "unpack_parser_parameters_for_parser", "UNPACK-PARSER-PARAMETERS-FOR-PARSER", 2, 0, false);
-        declareFunction(myName, "psp_cyclifier_results", "PSP-CYCLIFIER-RESULTS", 2, 0, false);
-        declareFunction(myName, "new_parser_of_type", "NEW-PARSER-OF-TYPE", 1, 0, false);
-        declareFunction(myName, "get_parsing_parameter_value", "GET-PARSING-PARAMETER-VALUE", 3, 0, false);
-        declareFunction(myName, "parsing_parameter_plist", "PARSING-PARAMETER-PLIST", 1, 0, false);
-        declareFunction(myName, "parsing_parameter_plist_from_tuples", "PARSING-PARAMETER-PLIST-FROM-TUPLES", 1, 0, false);
-        declareFunction(myName, "parsing_parameter_from_keyword", "PARSING-PARAMETER-FROM-KEYWORD", 1, 0, false);
-        declareFunction(myName, "keyword_from_parsing_parameter", "KEYWORD-FROM-PARSING-PARAMETER", 1, 0, false);
-        declareFunction(myName, "parse_kb_parsing_parameter_value", "PARSE-KB-PARSING-PARAMETER-VALUE", 2, 0, false);
-        declareFunction(myName, "cyclify_sentence_string_input_arg", "CYCLIFY-SENTENCE-STRING-INPUT-ARG", 1, 0, false);
-        declareFunction(myName, "cyclify_sentence_cycl_arg", "CYCLIFY-SENTENCE-CYCL-ARG", 1, 0, false);
-        declareFunction(myName, "cyclify_sentence_parser_arg", "CYCLIFY-SENTENCE-PARSER-ARG", 1, 0, false);
-        declareFunction(myName, "cyclify_verify_general", "CYCLIFY-VERIFY-GENERAL", 2, 0, false);
-        declareFunction(myName, "cyclify_justify_general", "CYCLIFY-JUSTIFY-GENERAL", 2, 0, false);
-        declareFunction(myName, "ebmt_supports", "EBMT-SUPPORTS", 2, 0, false);
-        declareFunction(myName, "ebmt_template_justification_sentence", "EBMT-TEMPLATE-JUSTIFICATION-SENTENCE", 1, 0, false);
+        declareFunction("cyclify_iterator", "CYCLIFY-ITERATOR", 2, 1, false);
+        declareFunction("unpack_parser_parameters_for_parser", "UNPACK-PARSER-PARAMETERS-FOR-PARSER", 2, 0, false);
+        declareFunction("psp_cyclifier_results", "PSP-CYCLIFIER-RESULTS", 2, 0, false);
+        declareFunction("new_parser_of_type", "NEW-PARSER-OF-TYPE", 1, 0, false);
+        declareFunction("get_parsing_parameter_value", "GET-PARSING-PARAMETER-VALUE", 3, 0, false);
+        declareFunction("parsing_parameter_plist", "PARSING-PARAMETER-PLIST", 1, 0, false);
+        declareFunction("parsing_parameter_plist_from_tuples", "PARSING-PARAMETER-PLIST-FROM-TUPLES", 1, 0, false);
+        declareFunction("parsing_parameter_from_keyword", "PARSING-PARAMETER-FROM-KEYWORD", 1, 0, false);
+        declareFunction("keyword_from_parsing_parameter", "KEYWORD-FROM-PARSING-PARAMETER", 1, 0, false);
+        declareFunction("parse_kb_parsing_parameter_value", "PARSE-KB-PARSING-PARAMETER-VALUE", 2, 0, false);
+        declareFunction("cyclify_sentence_string_input_arg", "CYCLIFY-SENTENCE-STRING-INPUT-ARG", 1, 0, false);
+        declareFunction("cyclify_sentence_cycl_arg", "CYCLIFY-SENTENCE-CYCL-ARG", 1, 0, false);
+        declareFunction("cyclify_sentence_parser_arg", "CYCLIFY-SENTENCE-PARSER-ARG", 1, 0, false);
+        declareFunction("cyclify_verify_general", "CYCLIFY-VERIFY-GENERAL", 2, 0, false);
+        declareFunction("cyclify_justify_general", "CYCLIFY-JUSTIFY-GENERAL", 2, 0, false);
+        declareFunction("ebmt_supports", "EBMT-SUPPORTS", 2, 0, false);
+        declareFunction("ebmt_template_justification_sentence", "EBMT-TEMPLATE-JUSTIFICATION-SENTENCE", 1, 0, false);
         return NIL;
     }
 

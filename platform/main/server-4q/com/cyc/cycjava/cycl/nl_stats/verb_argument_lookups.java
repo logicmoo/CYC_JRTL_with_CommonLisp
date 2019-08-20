@@ -52,7 +52,6 @@ public final class verb_argument_lookups extends SubLTranslatedFile implements V
 
     public static final SubLFile me = new verb_argument_lookups();
 
-    public static final String myName = "com.cyc.cycjava.cycl.nl_stats.verb_argument_lookups";
 
     // // Definitions
     // defconstant

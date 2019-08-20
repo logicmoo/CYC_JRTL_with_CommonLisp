@@ -26,7 +26,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_kb_indexing extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_kb_indexing";
     public static String myFingerPrint = "1959364b4582ae9b9e9bf72f2a0ff961803c07a48542748f344b058668ce79aa";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-kb-indexing.lisp", position = 800L)
     private static SubLSymbol $default_removal_mt_cardinality_cost$;
@@ -95,10 +94,10 @@ public class removal_modules_kb_indexing extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_kb_indexing_file() {
-        declareFunction(myName, "removal_mt_cardinality", "REMOVAL-MT-CARDINALITY", 1, 0, false);
-        declareFunction(myName, "removal_mt_cardinality_for_term", "REMOVAL-MT-CARDINALITY-FOR-TERM", 2, 0, false);
-        declareFunction(myName, "removal_assertion_count_for_terms_set", "REMOVAL-ASSERTION-COUNT-FOR-TERMS-SET", 1, 0, false);
-        declareFunction(myName, "implementation_assertionP", "IMPLEMENTATION-ASSERTION?", 1, 0, false);
+        declareFunction("removal_mt_cardinality", "REMOVAL-MT-CARDINALITY", 1, 0, false);
+        declareFunction("removal_mt_cardinality_for_term", "REMOVAL-MT-CARDINALITY-FOR-TERM", 2, 0, false);
+        declareFunction("removal_assertion_count_for_terms_set", "REMOVAL-ASSERTION-COUNT-FOR-TERMS-SET", 1, 0, false);
+        declareFunction("implementation_assertionP", "IMPLEMENTATION-ASSERTION?", 1, 0, false);
         return NIL;
     }
 

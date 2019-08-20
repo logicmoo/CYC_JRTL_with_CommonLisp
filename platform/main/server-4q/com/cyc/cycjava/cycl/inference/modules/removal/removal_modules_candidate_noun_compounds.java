@@ -35,7 +35,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_candidate_noun_compounds extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_candidate_noun_compounds";
     public static String myFingerPrint = "b7ca3125e41cb2428aedd0ce9d723cff01061af2d56e2a3909dc49b9d111e75b";
     private static SubLObject $$datedCandidateNCTestHasResults;
     private static SubLSymbol $DATED_CNC_TEST_FOR_NCR_UNIFY_ARGS_2_AND_3;
@@ -300,23 +299,23 @@ public class removal_modules_candidate_noun_compounds extends SubLTranslatedFile
     }
 
     public static SubLObject declare_removal_modules_candidate_noun_compounds_file() {
-        declareFunction(myName, "check_dated_cnc_test_for_rule", "CHECK-DATED-CNC-TEST-FOR-RULE", 4, 0, false);
-        declareFunction(myName, "get_cnc_test_results_and_dates", "GET-CNC-TEST-RESULTS-AND-DATES", 2, 0, false);
-        declareFunction(myName, "get_aggregate_cnc_score_w_thresholds", "GET-AGGREGATE-CNC-SCORE-W-THRESHOLDS", 4, 0, false);
-        declareFunction(myName, "get_aggregate_score_for_all_w_thresholds", "GET-AGGREGATE-SCORE-FOR-ALL-W-THRESHOLDS", 3, 0, false);
-        declareFunction(myName, "get_aggregate_results_for_all_w_thresholds", "GET-AGGREGATE-RESULTS-FOR-ALL-W-THRESHOLDS", 3, 0, false);
-        declareFunction(myName, "get_aggregate_cnc_results_w_thresholds", "GET-AGGREGATE-CNC-RESULTS-W-THRESHOLDS", 4, 0, false);
-        declareFunction(myName, "remove_errors_from_cnc_test_results", "REMOVE-ERRORS-FROM-CNC-TEST-RESULTS", 1, 0, false);
-        declareFunction(myName, "get_search_engine_keyword", "GET-SEARCH-ENGINE-KEYWORD", 1, 0, false);
-        declareFunction(myName, "contains_server_errorP", "CONTAINS-SERVER-ERROR?", 1, 0, false);
-        declareFunction(myName, "contains_invalid_fortP", "CONTAINS-INVALID-FORT?", 1, 0, false);
-        declareFunction(myName, "evaluate_aggregate_cnc_results_w_thresholds", "EVALUATE-AGGREGATE-CNC-RESULTS-W-THRESHOLDS", 4, 0, false);
-        declareFunction(myName, "aggregate_cnc_results_for_rule", "AGGREGATE-CNC-RESULTS-FOR-RULE", 2, 1, false);
-        declareFunction(myName, "empty_cnc_testP", "EMPTY-CNC-TEST?", 1, 0, false);
-        declareFunction(myName, "remove_empty_cnc_tests", "REMOVE-EMPTY-CNC-TESTS", 1, 0, false);
-        declareFunction(myName, "cyclify_cnc_date_string", "CYCLIFY-CNC-DATE-STRING", 1, 0, false);
-        declareFunction(myName, "candidate_nc_test_verify_general", "CANDIDATE-NC-TEST-VERIFY-GENERAL", 2, 0, false);
-        declareFunction(myName, "candidate_nc_test_justify_general", "CANDIDATE-NC-TEST-JUSTIFY-GENERAL", 2, 0, false);
+        declareFunction("check_dated_cnc_test_for_rule", "CHECK-DATED-CNC-TEST-FOR-RULE", 4, 0, false);
+        declareFunction("get_cnc_test_results_and_dates", "GET-CNC-TEST-RESULTS-AND-DATES", 2, 0, false);
+        declareFunction("get_aggregate_cnc_score_w_thresholds", "GET-AGGREGATE-CNC-SCORE-W-THRESHOLDS", 4, 0, false);
+        declareFunction("get_aggregate_score_for_all_w_thresholds", "GET-AGGREGATE-SCORE-FOR-ALL-W-THRESHOLDS", 3, 0, false);
+        declareFunction("get_aggregate_results_for_all_w_thresholds", "GET-AGGREGATE-RESULTS-FOR-ALL-W-THRESHOLDS", 3, 0, false);
+        declareFunction("get_aggregate_cnc_results_w_thresholds", "GET-AGGREGATE-CNC-RESULTS-W-THRESHOLDS", 4, 0, false);
+        declareFunction("remove_errors_from_cnc_test_results", "REMOVE-ERRORS-FROM-CNC-TEST-RESULTS", 1, 0, false);
+        declareFunction("get_search_engine_keyword", "GET-SEARCH-ENGINE-KEYWORD", 1, 0, false);
+        declareFunction("contains_server_errorP", "CONTAINS-SERVER-ERROR?", 1, 0, false);
+        declareFunction("contains_invalid_fortP", "CONTAINS-INVALID-FORT?", 1, 0, false);
+        declareFunction("evaluate_aggregate_cnc_results_w_thresholds", "EVALUATE-AGGREGATE-CNC-RESULTS-W-THRESHOLDS", 4, 0, false);
+        declareFunction("aggregate_cnc_results_for_rule", "AGGREGATE-CNC-RESULTS-FOR-RULE", 2, 1, false);
+        declareFunction("empty_cnc_testP", "EMPTY-CNC-TEST?", 1, 0, false);
+        declareFunction("remove_empty_cnc_tests", "REMOVE-EMPTY-CNC-TESTS", 1, 0, false);
+        declareFunction("cyclify_cnc_date_string", "CYCLIFY-CNC-DATE-STRING", 1, 0, false);
+        declareFunction("candidate_nc_test_verify_general", "CANDIDATE-NC-TEST-VERIFY-GENERAL", 2, 0, false);
+        declareFunction("candidate_nc_test_justify_general", "CANDIDATE-NC-TEST-JUSTIFY-GENERAL", 2, 0, false);
         return NIL;
     }
 

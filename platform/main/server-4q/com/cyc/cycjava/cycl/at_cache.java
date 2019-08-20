@@ -71,7 +71,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class at_cache extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new at_cache();
 
- public static final String myName = "com.cyc.cycjava.cycl.at_cache";
 
 
     // deflexical

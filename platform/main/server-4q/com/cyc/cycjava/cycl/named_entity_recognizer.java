@@ -135,7 +135,6 @@ public final class named_entity_recognizer extends SubLTranslatedFile implements
 
     public static final SubLFile me = new named_entity_recognizer();
 
- public static final String myName = "com.cyc.cycjava.cycl.named_entity_recognizer";
 
 
     // defparameter

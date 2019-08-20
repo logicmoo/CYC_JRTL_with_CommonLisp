@@ -67,7 +67,6 @@ public final class kb_modification_event extends SubLTranslatedFile implements V
 
     public static final SubLFile me = new kb_modification_event();
 
- public static final String myName = "com.cyc.cycjava.cycl.kb_modification_event";
 
 
     // deflexical

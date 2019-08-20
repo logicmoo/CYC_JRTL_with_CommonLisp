@@ -38,7 +38,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class inference_proof_spec_store extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.harness.inference_proof_spec_store";
     public static String myFingerPrint = "8e34e9995de1906ff0095b83deac3484e7cbd9e51bfd2e4f707598e367ef98ce";
     @SubL(source = "cycl/inference/harness/inference-proof-spec-store.lisp", position = 3400L)
     public static SubLSymbol $default_proof_spec_store_host$;
@@ -518,31 +517,31 @@ public class inference_proof_spec_store extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_inference_proof_spec_store_file() {
-        declareFunction(myName, "query_to_proof_spec_lookup_key", "QUERY-TO-PROOF-SPEC-LOOKUP-KEY", 1, 1, false);
-        declareFunction(myName, "problem_query_to_proof_spec_lookup_key", "PROBLEM-QUERY-TO-PROOF-SPEC-LOOKUP-KEY", 1, 0, false);
-        declareFunction(myName, "externalize_proof_spec_lookup_key", "EXTERNALIZE-PROOF-SPEC-LOOKUP-KEY", 1, 0, false);
-        declareFunction(myName, "problem_query_signature_for_problem_query", "PROBLEM-QUERY-SIGNATURE-FOR-PROBLEM-QUERY", 1, 0, false);
-        declareFunction(myName, "problem_query_for_el_query", "PROBLEM-QUERY-FOR-EL-QUERY", 1, 0, false);
-        declareFunction(myName, "pickle_individual_proof_spec", "PICKLE-INDIVIDUAL-PROOF-SPEC", 1, 0, false);
-        declareFunction(myName, "pickle_genericized_proof_spec", "PICKLE-GENERICIZED-PROOF-SPEC", 1, 0, false);
-        declareFunction(myName, "unpickle_genericized_proof_spec", "UNPICKLE-GENERICIZED-PROOF-SPEC", 1, 0, false);
-        declareMacro(me, "with_proof_spec_store", "WITH-PROOF-SPEC-STORE");
-        declareFunction(myName, "is_proof_spec_store_availableP", "IS-PROOF-SPEC-STORE-AVAILABLE?", 0, 0, false);
-        declareFunction(myName, "suggest_proof_specs_for_problem_query", "SUGGEST-PROOF-SPECS-FOR-PROBLEM-QUERY", 1, 0, false);
-        declareFunction(myName, "proof_spec_store_version", "PROOF-SPEC-STORE-VERSION", 0, 0, false);
-        declareFunction(myName, "communicate_with_proof_spec_store", "COMMUNICATE-WITH-PROOF-SPEC-STORE", 1, 0, false);
-        declareFunction(myName, "proof_spec_store_reply_p", "PROOF-SPEC-STORE-REPLY-P", 1, 0, false);
-        declareFunction(myName, "proof_spec_store_error_reply_p", "PROOF-SPEC-STORE-ERROR-REPLY-P", 1, 0, false);
-        declareFunction(myName, "proof_spec_store_success_reply_p", "PROOF-SPEC-STORE-SUCCESS-REPLY-P", 1, 0, false);
-        declareFunction(myName, "proof_spec_store_reply_results", "PROOF-SPEC-STORE-REPLY-RESULTS", 1, 0, false);
-        declareFunction(myName, "proof_spec_store_reply_nth_result", "PROOF-SPEC-STORE-REPLY-NTH-RESULT", 2, 0, false);
-        declareMacro(me, "with_xml_tag", "WITH-XML-TAG");
-        declareMacro(me, "with_request_to_string", "WITH-REQUEST-TO-STRING");
-        declareFunction(myName, "generate_suggest_command", "GENERATE-SUGGEST-COMMAND", 1, 0, false);
-        declareFunction(myName, "generate_version_command", "GENERATE-VERSION-COMMAND", 0, 0, false);
-        declareFunction(myName, "generate_query_key_command_section", "GENERATE-QUERY-KEY-COMMAND-SECTION", 2, 0, false);
-        declareFunction(myName, "generate_proof_spec_from_kbq", "GENERATE-PROOF-SPEC-FROM-KBQ", 2, 0, false);
-        declareFunction(myName, "generate_query_lookup_key_from_kbq", "GENERATE-QUERY-LOOKUP-KEY-FROM-KBQ", 1, 0, false);
+        declareFunction("query_to_proof_spec_lookup_key", "QUERY-TO-PROOF-SPEC-LOOKUP-KEY", 1, 1, false);
+        declareFunction("problem_query_to_proof_spec_lookup_key", "PROBLEM-QUERY-TO-PROOF-SPEC-LOOKUP-KEY", 1, 0, false);
+        declareFunction("externalize_proof_spec_lookup_key", "EXTERNALIZE-PROOF-SPEC-LOOKUP-KEY", 1, 0, false);
+        declareFunction("problem_query_signature_for_problem_query", "PROBLEM-QUERY-SIGNATURE-FOR-PROBLEM-QUERY", 1, 0, false);
+        declareFunction("problem_query_for_el_query", "PROBLEM-QUERY-FOR-EL-QUERY", 1, 0, false);
+        declareFunction("pickle_individual_proof_spec", "PICKLE-INDIVIDUAL-PROOF-SPEC", 1, 0, false);
+        declareFunction("pickle_genericized_proof_spec", "PICKLE-GENERICIZED-PROOF-SPEC", 1, 0, false);
+        declareFunction("unpickle_genericized_proof_spec", "UNPICKLE-GENERICIZED-PROOF-SPEC", 1, 0, false);
+        declareMacro("with_proof_spec_store", "WITH-PROOF-SPEC-STORE");
+        declareFunction("is_proof_spec_store_availableP", "IS-PROOF-SPEC-STORE-AVAILABLE?", 0, 0, false);
+        declareFunction("suggest_proof_specs_for_problem_query", "SUGGEST-PROOF-SPECS-FOR-PROBLEM-QUERY", 1, 0, false);
+        declareFunction("proof_spec_store_version", "PROOF-SPEC-STORE-VERSION", 0, 0, false);
+        declareFunction("communicate_with_proof_spec_store", "COMMUNICATE-WITH-PROOF-SPEC-STORE", 1, 0, false);
+        declareFunction("proof_spec_store_reply_p", "PROOF-SPEC-STORE-REPLY-P", 1, 0, false);
+        declareFunction("proof_spec_store_error_reply_p", "PROOF-SPEC-STORE-ERROR-REPLY-P", 1, 0, false);
+        declareFunction("proof_spec_store_success_reply_p", "PROOF-SPEC-STORE-SUCCESS-REPLY-P", 1, 0, false);
+        declareFunction("proof_spec_store_reply_results", "PROOF-SPEC-STORE-REPLY-RESULTS", 1, 0, false);
+        declareFunction("proof_spec_store_reply_nth_result", "PROOF-SPEC-STORE-REPLY-NTH-RESULT", 2, 0, false);
+        declareMacro("with_xml_tag", "WITH-XML-TAG");
+        declareMacro("with_request_to_string", "WITH-REQUEST-TO-STRING");
+        declareFunction("generate_suggest_command", "GENERATE-SUGGEST-COMMAND", 1, 0, false);
+        declareFunction("generate_version_command", "GENERATE-VERSION-COMMAND", 0, 0, false);
+        declareFunction("generate_query_key_command_section", "GENERATE-QUERY-KEY-COMMAND-SECTION", 2, 0, false);
+        declareFunction("generate_proof_spec_from_kbq", "GENERATE-PROOF-SPEC-FROM-KBQ", 2, 0, false);
+        declareFunction("generate_query_lookup_key_from_kbq", "GENERATE-QUERY-LOOKUP-KEY-FROM-KBQ", 1, 0, false);
         return NIL;
     }
 

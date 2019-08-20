@@ -27,7 +27,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_deduction_supports extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_deduction_supports";
     public static String myFingerPrint = "56ece29b3c5aabe1d774937426208a43dda96b378d3e6d82e992939ae32d2122";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-deduction-supports.lisp", position = 1800L)
     private static SubLSymbol $default_deduction_supports_check_cost$;
@@ -116,10 +115,10 @@ public class removal_modules_deduction_supports extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_deduction_supports_file() {
-        declareFunction(myName, "deduction_supportP", "DEDUCTION-SUPPORT?", 2, 0, false);
-        declareFunction(myName, "find_deduction_from_term", "FIND-DEDUCTION-FROM-TERM", 1, 0, false);
-        declareFunction(myName, "deduction_term_supports", "DEDUCTION-TERM-SUPPORTS", 1, 0, false);
-        declareFunction(myName, "removal_deductionsupports_expand", "REMOVAL-DEDUCTIONSUPPORTS-EXPAND", 1, 1, false);
+        declareFunction("deduction_supportP", "DEDUCTION-SUPPORT?", 2, 0, false);
+        declareFunction("find_deduction_from_term", "FIND-DEDUCTION-FROM-TERM", 1, 0, false);
+        declareFunction("deduction_term_supports", "DEDUCTION-TERM-SUPPORTS", 1, 0, false);
+        declareFunction("removal_deductionsupports_expand", "REMOVAL-DEDUCTIONSUPPORTS-EXPAND", 1, 1, false);
         return NIL;
     }
 

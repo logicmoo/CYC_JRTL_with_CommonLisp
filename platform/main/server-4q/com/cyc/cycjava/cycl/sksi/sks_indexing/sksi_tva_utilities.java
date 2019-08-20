@@ -39,7 +39,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sksi_tva_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sksi_tva_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.sks_indexing.sksi_tva_utilities";
 
 
     // Internal Constants

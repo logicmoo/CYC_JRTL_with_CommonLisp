@@ -27,7 +27,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_genlpreds extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_genlpreds";
     public static String myFingerPrint = "fb566c69ffa4a5fd606d82e4c1773f9db984b3714a0bffad324c0f512a415e0b";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-genlpreds.lisp", position = 500L)
     private static SubLSymbol $default_genlpreds_check_cost$;
@@ -128,14 +127,14 @@ public class removal_modules_genlpreds extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_genlpreds_file() {
-        declareFunction(myName, "removal_genlpreds_check_expand", "REMOVAL-GENLPREDS-CHECK-EXPAND", 1, 1, false);
+        declareFunction("removal_genlpreds_check_expand", "REMOVAL-GENLPREDS-CHECK-EXPAND", 1, 1, false);
         new $removal_genlpreds_check_expand$UnaryFunction();
         new $removal_genlpreds_check_expand$BinaryFunction();
-        declareFunction(myName, "removal_all_genlpreds_cost", "REMOVAL-ALL-GENLPREDS-COST", 1, 1, false);
-        declareFunction(myName, "removal_all_genlpreds_iterator", "REMOVAL-ALL-GENLPREDS-ITERATOR", 1, 0, false);
-        declareFunction(myName, "removal_all_spec_preds_cost", "REMOVAL-ALL-SPEC-PREDS-COST", 1, 1, false);
-        declareFunction(myName, "removal_all_spec_preds_iterator", "REMOVAL-ALL-SPEC-PREDS-ITERATOR", 1, 0, false);
-        declareFunction(myName, "removal_not_genlpreds_check_expand", "REMOVAL-NOT-GENLPREDS-CHECK-EXPAND", 1, 1, false);
+        declareFunction("removal_all_genlpreds_cost", "REMOVAL-ALL-GENLPREDS-COST", 1, 1, false);
+        declareFunction("removal_all_genlpreds_iterator", "REMOVAL-ALL-GENLPREDS-ITERATOR", 1, 0, false);
+        declareFunction("removal_all_spec_preds_cost", "REMOVAL-ALL-SPEC-PREDS-COST", 1, 1, false);
+        declareFunction("removal_all_spec_preds_iterator", "REMOVAL-ALL-SPEC-PREDS-ITERATOR", 1, 0, false);
+        declareFunction("removal_not_genlpreds_check_expand", "REMOVAL-NOT-GENLPREDS-CHECK-EXPAND", 1, 1, false);
         return NIL;
     }
 

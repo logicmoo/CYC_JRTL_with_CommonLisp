@@ -117,7 +117,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class genl_mts extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new genl_mts();
 
- public static final String myName = "com.cyc.cycjava.cycl.genl_mts";
 
 
     // defvar

@@ -30,7 +30,6 @@ public final class external_code_constants extends SubLTranslatedFile implements
 
     public static final SubLFile me = new external_code_constants();
 
-    public static final String myName = "com.cyc.cycjava.cycl.external_code_constants";
 
     // // Definitions
     public static final SubLObject project_specific_constants_validP(SubLObject constant_list) {

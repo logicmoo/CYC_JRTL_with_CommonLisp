@@ -59,7 +59,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class timing_by_category extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new timing_by_category();
 
- public static final String myName = "com.cyc.cycjava.cycl.timing_by_category";
 
 
     // defparameter

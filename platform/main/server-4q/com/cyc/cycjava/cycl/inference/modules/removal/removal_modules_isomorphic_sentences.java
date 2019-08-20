@@ -27,7 +27,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_isomorphic_sentences extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_isomorphic_sentences";
     public static String myFingerPrint = "3c13f9a4ac913151468e97d02e5b938717e0f8d9e1cf2149036215bfd98fba4b";
     private static SubLObject $$isomorphicSentences;
     private static SubLSymbol $POS;
@@ -257,15 +256,15 @@ public class removal_modules_isomorphic_sentences extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_isomorphic_sentences_file() {
-        declareFunction(myName, "isomorphic_sentencesP", "ISOMORPHIC-SENTENCES?", 2, 0, false);
-        declareFunction(myName, "make_isomorphic_sentences_support", "MAKE-ISOMORPHIC-SENTENCES-SUPPORT", 1, 1, false);
-        declareFunction(myName, "make_isomorphic_sentences_rule_support", "MAKE-ISOMORPHIC-SENTENCES-RULE-SUPPORT", 0, 0, false);
-        declareFunction(myName, "removal_isomorphic_sentences_term_unify_expand", "REMOVAL-ISOMORPHIC-SENTENCES-TERM-UNIFY-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_determine_sentence_isomorphisms", "REMOVAL-DETERMINE-SENTENCE-ISOMORPHISMS", 1, 0, false);
-        declareFunction(myName, "removal_determine_different_terms_and_verify", "REMOVAL-DETERMINE-DIFFERENT-TERMS-AND-VERIFY", 4, 0, false);
-        declareFunction(myName, "removal_equal_length_list_difference", "REMOVAL-EQUAL-LENGTH-LIST-DIFFERENCE", 2, 1, false);
-        declareFunction(myName, "removal_isomorphic_sentences_prune_required", "REMOVAL-ISOMORPHIC-SENTENCES-PRUNE-REQUIRED", 1, 1, false);
-        declareFunction(myName, "removal_isomorphic_sentences_prune_required_int", "REMOVAL-ISOMORPHIC-SENTENCES-PRUNE-REQUIRED-INT", 3, 0, false);
+        declareFunction("isomorphic_sentencesP", "ISOMORPHIC-SENTENCES?", 2, 0, false);
+        declareFunction("make_isomorphic_sentences_support", "MAKE-ISOMORPHIC-SENTENCES-SUPPORT", 1, 1, false);
+        declareFunction("make_isomorphic_sentences_rule_support", "MAKE-ISOMORPHIC-SENTENCES-RULE-SUPPORT", 0, 0, false);
+        declareFunction("removal_isomorphic_sentences_term_unify_expand", "REMOVAL-ISOMORPHIC-SENTENCES-TERM-UNIFY-EXPAND", 1, 1, false);
+        declareFunction("removal_determine_sentence_isomorphisms", "REMOVAL-DETERMINE-SENTENCE-ISOMORPHISMS", 1, 0, false);
+        declareFunction("removal_determine_different_terms_and_verify", "REMOVAL-DETERMINE-DIFFERENT-TERMS-AND-VERIFY", 4, 0, false);
+        declareFunction("removal_equal_length_list_difference", "REMOVAL-EQUAL-LENGTH-LIST-DIFFERENCE", 2, 1, false);
+        declareFunction("removal_isomorphic_sentences_prune_required", "REMOVAL-ISOMORPHIC-SENTENCES-PRUNE-REQUIRED", 1, 1, false);
+        declareFunction("removal_isomorphic_sentences_prune_required_int", "REMOVAL-ISOMORPHIC-SENTENCES-PRUNE-REQUIRED-INT", 3, 0, false);
         return NIL;
     }
 

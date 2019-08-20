@@ -29,7 +29,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class new_root_tactician extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.harness.new_root_tactician";
     public static String myFingerPrint = "ee220bfc58cbb88351a046ba222422e72903c9392dbb1204103bf987942dc612";
     @SubL(source = "cycl/inference/harness/new-root-tactician.lisp", position = 4500L)
     public static SubLSymbol $new_root_heuristics_enabledP$;
@@ -221,19 +220,19 @@ public class new_root_tactician extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_new_root_tactician_file() {
-        declareFunction(myName, "new_root_strategy_p", "NEW-ROOT-STRATEGY-P", 1, 0, false);
-        declareFunction(myName, "new_root_strategy_initialize", "NEW-ROOT-STRATEGY-INITIALIZE", 1, 0, false);
-        declareFunction(myName, "new_root_strategy_current_contents", "NEW-ROOT-STRATEGY-CURRENT-CONTENTS", 1, 0, false);
-        declareFunction(myName, "new_root_strategy_peek_new_root", "NEW-ROOT-STRATEGY-PEEK-NEW-ROOT", 1, 0, false);
-        declareFunction(myName, "new_root_strategy_add_new_root", "NEW-ROOT-STRATEGY-ADD-NEW-ROOT", 2, 0, false);
-        declareFunction(myName, "new_root_tactician_heuristics", "NEW-ROOT-TACTICIAN-HEURISTICS", 0, 0, false);
-        declareMacro(me, "do_new_root_tactician_strategic_heuristics", "DO-NEW-ROOT-TACTICIAN-STRATEGIC-HEURISTICS");
-        declareFunction(myName, "new_root_tactician_strategic_heuristicP", "NEW-ROOT-TACTICIAN-STRATEGIC-HEURISTIC?", 1, 0, false);
-        declareFunction(myName, "enable_new_root_tactician_strategic_heuristic", "ENABLE-NEW-ROOT-TACTICIAN-STRATEGIC-HEURISTIC", 1, 0, false);
-        declareFunction(myName, "disable_new_root_tactician_strategic_heuristic", "DISABLE-NEW-ROOT-TACTICIAN-STRATEGIC-HEURISTIC", 1, 0, false);
-        declareFunction(myName, "new_root_strategy_new_root_happiness", "NEW-ROOT-STRATEGY-NEW-ROOT-HAPPINESS", 2, 0, false);
-        declareFunction(myName, "new_root_strategy_happiness_table", "NEW-ROOT-STRATEGY-HAPPINESS-TABLE", 1, 0, false);
-        declareFunction(myName, "new_root_strategy_happiness_breakdown", "NEW-ROOT-STRATEGY-HAPPINESS-BREAKDOWN", 2, 0, false);
+        declareFunction("new_root_strategy_p", "NEW-ROOT-STRATEGY-P", 1, 0, false);
+        declareFunction("new_root_strategy_initialize", "NEW-ROOT-STRATEGY-INITIALIZE", 1, 0, false);
+        declareFunction("new_root_strategy_current_contents", "NEW-ROOT-STRATEGY-CURRENT-CONTENTS", 1, 0, false);
+        declareFunction("new_root_strategy_peek_new_root", "NEW-ROOT-STRATEGY-PEEK-NEW-ROOT", 1, 0, false);
+        declareFunction("new_root_strategy_add_new_root", "NEW-ROOT-STRATEGY-ADD-NEW-ROOT", 2, 0, false);
+        declareFunction("new_root_tactician_heuristics", "NEW-ROOT-TACTICIAN-HEURISTICS", 0, 0, false);
+        declareMacro("do_new_root_tactician_strategic_heuristics", "DO-NEW-ROOT-TACTICIAN-STRATEGIC-HEURISTICS");
+        declareFunction("new_root_tactician_strategic_heuristicP", "NEW-ROOT-TACTICIAN-STRATEGIC-HEURISTIC?", 1, 0, false);
+        declareFunction("enable_new_root_tactician_strategic_heuristic", "ENABLE-NEW-ROOT-TACTICIAN-STRATEGIC-HEURISTIC", 1, 0, false);
+        declareFunction("disable_new_root_tactician_strategic_heuristic", "DISABLE-NEW-ROOT-TACTICIAN-STRATEGIC-HEURISTIC", 1, 0, false);
+        declareFunction("new_root_strategy_new_root_happiness", "NEW-ROOT-STRATEGY-NEW-ROOT-HAPPINESS", 2, 0, false);
+        declareFunction("new_root_strategy_happiness_table", "NEW-ROOT-STRATEGY-HAPPINESS-TABLE", 1, 0, false);
+        declareFunction("new_root_strategy_happiness_breakdown", "NEW-ROOT-STRATEGY-HAPPINESS-BREAKDOWN", 2, 0, false);
         return NIL;
     }
 

@@ -97,7 +97,6 @@ public final class opencyc_diagnostics extends SubLTranslatedFile implements V02
 
     public static final SubLFile me = new opencyc_diagnostics();
 
-    public static final String myName = "com.cyc.cycjava.cycl.owl.opencyc_diagnostics";
 
     // // Definitions
     /**

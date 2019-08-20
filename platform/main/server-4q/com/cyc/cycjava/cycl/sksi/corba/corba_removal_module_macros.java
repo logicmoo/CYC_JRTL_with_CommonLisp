@@ -34,7 +34,6 @@ public final class corba_removal_module_macros extends SubLTranslatedFile implem
 
     public static final SubLFile me = new corba_removal_module_macros();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.sksi.corba.corba_removal_module_macros";
 
     // // Definitions
     public static final SubLObject corba_sks_declare_removal_module_suite(SubLObject macroform, SubLObject environment) {

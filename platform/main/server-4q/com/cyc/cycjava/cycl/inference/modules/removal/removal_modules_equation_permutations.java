@@ -33,7 +33,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_equation_permutations extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_equation_permutations";
 	public static String myFingerPrint = "a16b132c140ef503b6bd67cdd3030fdb1a7c57ac9b4c89cb1b32cb1760335bf5";
 	@SubL(source = "cycl/inference/modules/removal/removal-modules-equation-permutations.lisp", position = 6100L)
 	private static SubLSymbol $equation_permutable_operators$;
@@ -402,36 +401,36 @@ public class removal_modules_equation_permutations extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_removal_modules_equation_permutations_file() {
-		declareFunction(myName, "cycl_equation_p", "CYCL-EQUATION-P", 1, 0, false);
-		declareFunction(myName, "equation_permutations", "EQUATION-PERMUTATIONS", 1, 0, false);
-		declareFunction(myName, "equation_canonical_permutations", "EQUATION-CANONICAL-PERMUTATIONS", 1, 0, false);
-		declareFunction(myName, "equation_has_canonical_permutationP", "EQUATION-HAS-CANONICAL-PERMUTATION?", 2, 0,
+		declareFunction("cycl_equation_p", "CYCL-EQUATION-P", 1, 0, false);
+		declareFunction("equation_permutations", "EQUATION-PERMUTATIONS", 1, 0, false);
+		declareFunction("equation_canonical_permutations", "EQUATION-CANONICAL-PERMUTATIONS", 1, 0, false);
+		declareFunction("equation_has_canonical_permutationP", "EQUATION-HAS-CANONICAL-PERMUTATION?", 2, 0,
 				false);
-		declareFunction(myName, "equation_canonical_permutationP", "EQUATION-CANONICAL-PERMUTATION?", 1, 0, false);
-		declareFunction(myName, "equation_immediate_permutations", "EQUATION-IMMEDIATE-PERMUTATIONS", 1, 0, false);
-		declareFunction(myName, "equation_permutable_operator_p", "EQUATION-PERMUTABLE-OPERATOR-P", 1, 0, false);
-		declareFunction(myName, "equation_permutations_from_addition", "EQUATION-PERMUTATIONS-FROM-ADDITION", 2, 0,
+		declareFunction("equation_canonical_permutationP", "EQUATION-CANONICAL-PERMUTATION?", 1, 0, false);
+		declareFunction("equation_immediate_permutations", "EQUATION-IMMEDIATE-PERMUTATIONS", 1, 0, false);
+		declareFunction("equation_permutable_operator_p", "EQUATION-PERMUTABLE-OPERATOR-P", 1, 0, false);
+		declareFunction("equation_permutations_from_addition", "EQUATION-PERMUTATIONS-FROM-ADDITION", 2, 0,
 				false);
-		declareFunction(myName, "equation_permutations_from_subtraction", "EQUATION-PERMUTATIONS-FROM-SUBTRACTION", 2,
+		declareFunction("equation_permutations_from_subtraction", "EQUATION-PERMUTATIONS-FROM-SUBTRACTION", 2,
 				0, false);
-		declareFunction(myName, "equation_permutations_from_multiplication",
+		declareFunction("equation_permutations_from_multiplication",
 				"EQUATION-PERMUTATIONS-FROM-MULTIPLICATION", 2, 0, false);
-		declareFunction(myName, "equation_permutations_from_division", "EQUATION-PERMUTATIONS-FROM-DIVISION", 2, 0,
+		declareFunction("equation_permutations_from_division", "EQUATION-PERMUTATIONS-FROM-DIVISION", 2, 0,
 				false);
-		declareFunction(myName, "equation_permutations_from_natural_log", "EQUATION-PERMUTATIONS-FROM-NATURAL-LOG", 2,
+		declareFunction("equation_permutations_from_natural_log", "EQUATION-PERMUTATIONS-FROM-NATURAL-LOG", 2,
 				0, false);
-		declareFunction(myName, "equation_permutations_from_natural_exp", "EQUATION-PERMUTATIONS-FROM-NATURAL-EXP", 2,
+		declareFunction("equation_permutations_from_natural_exp", "EQUATION-PERMUTATIONS-FROM-NATURAL-EXP", 2,
 				0, false);
-		declareFunction(myName, "make_equation", "MAKE-EQUATION", 2, 0, false);
-		declareFunction(myName, "make_commutative_formula", "MAKE-COMMUTATIVE-FORMULA", 2, 0, false);
-		declareFunction(myName, "make_symmetric_formula", "MAKE-SYMMETRIC-FORMULA", 3, 0, false);
-		declareFunction(myName, "make_associative_commutative_formula", "MAKE-ASSOCIATIVE-COMMUTATIVE-FORMULA", 2, 0,
+		declareFunction("make_equation", "MAKE-EQUATION", 2, 0, false);
+		declareFunction("make_commutative_formula", "MAKE-COMMUTATIVE-FORMULA", 2, 0, false);
+		declareFunction("make_symmetric_formula", "MAKE-SYMMETRIC-FORMULA", 3, 0, false);
+		declareFunction("make_associative_commutative_formula", "MAKE-ASSOCIATIVE-COMMUTATIVE-FORMULA", 2, 0,
 				false);
-		declareFunction(myName, "make_separator_formula", "MAKE-SEPARATOR-FORMULA", 4, 0, false);
-		declareFunction(myName, "make_addition", "MAKE-ADDITION", 1, 0, false);
-		declareFunction(myName, "make_multiplication", "MAKE-MULTIPLICATION", 1, 0, false);
-		declareFunction(myName, "make_difference", "MAKE-DIFFERENCE", 2, 0, false);
-		declareFunction(myName, "make_quotient", "MAKE-QUOTIENT", 2, 0, false);
+		declareFunction("make_separator_formula", "MAKE-SEPARATOR-FORMULA", 4, 0, false);
+		declareFunction("make_addition", "MAKE-ADDITION", 1, 0, false);
+		declareFunction("make_multiplication", "MAKE-MULTIPLICATION", 1, 0, false);
+		declareFunction("make_difference", "MAKE-DIFFERENCE", 2, 0, false);
+		declareFunction("make_quotient", "MAKE-QUOTIENT", 2, 0, false);
 		return NIL;
 	}
 

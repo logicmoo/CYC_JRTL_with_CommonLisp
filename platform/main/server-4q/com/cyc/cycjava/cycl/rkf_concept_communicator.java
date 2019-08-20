@@ -46,7 +46,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rkf_concept_communicator extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rkf_concept_communicator();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_concept_communicator";
 
 
     // defparameter

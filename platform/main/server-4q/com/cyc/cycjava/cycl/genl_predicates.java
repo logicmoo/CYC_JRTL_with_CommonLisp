@@ -87,7 +87,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class genl_predicates extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new genl_predicates();
 
- public static final String myName = "com.cyc.cycjava.cycl.genl_predicates";
 
 
     // defparameter

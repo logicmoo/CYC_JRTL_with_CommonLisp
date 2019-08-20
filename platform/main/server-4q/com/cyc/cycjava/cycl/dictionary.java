@@ -128,7 +128,6 @@ public final class dictionary extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new dictionary();
 
- public static final String myName = "com.cyc.cycjava.cycl.dictionary";
 
 
     // deflexical

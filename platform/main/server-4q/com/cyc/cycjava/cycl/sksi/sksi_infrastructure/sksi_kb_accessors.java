@@ -206,7 +206,6 @@ public final class sksi_kb_accessors extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new sksi_kb_accessors();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors";
 
 
     // deflexical

@@ -48,7 +48,6 @@ public final class kbi_word extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new kbi_word();
 
-    public static final String myName = "com.cyc.cycjava.cycl.kbi_word";
 
     // // Definitions
     public static final SubLObject diagnose_qua_nl_word(SubLObject word) {

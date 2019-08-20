@@ -13,7 +13,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_sks_registered extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_sks_registered";
 	public static String myFingerPrint = "c311cc18147476e0224b980fea02bde503dcc3d77612f84d0f7a3956bbdd41a6";
 	private static SubLObject $const0$sksRegistered;
 	private static SubLSymbol $kw$REMOVAL_SKS_REGISTERED_CHECK_POS;

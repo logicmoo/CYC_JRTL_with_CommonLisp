@@ -33,7 +33,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rkf_user_modeler extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rkf_user_modeler();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_user_modeler";
 
 
     // deflexical

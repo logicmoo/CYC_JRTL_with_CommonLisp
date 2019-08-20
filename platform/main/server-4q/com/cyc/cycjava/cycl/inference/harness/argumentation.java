@@ -32,7 +32,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class argumentation extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.harness.argumentation";
     public static String myFingerPrint = "4079e730969905ce6fb13b1941faeea665e8f394d408c9095c5b3cb6d0d62e70";
     @SubL(source = "cycl/inference/harness.lisp", position = 4900L)
     public static SubLSymbol $tms_treat_monotonic_contradiction_as_unknownP$;
@@ -261,16 +260,16 @@ public class argumentation extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_argumentation_file() {
-        declareFunction(myName, "compute_supports_tv", "COMPUTE-SUPPORTS-TV", 1, 1, false);
-        declareFunction(myName, "compute_deduction_tv", "COMPUTE-DEDUCTION-TV", 1, 0, false);
-        declareFunction(myName, "compute_assertion_tv", "COMPUTE-ASSERTION-TV", 1, 0, false);
-        declareFunction(myName, "strength_combine", "STRENGTH-COMBINE", 2, 0, false);
-        declareFunction(myName, "perform_argumentation", "PERFORM-ARGUMENTATION", 1, 0, false);
-        declareFunction(myName, "complex_argumentation", "COMPLEX-ARGUMENTATION", 1, 0, false);
-        declareFunction(myName, "resolve_contradiction", "RESOLVE-CONTRADICTION", 1, 0, false);
-        declareFunction(myName, "tms_deduction_spec_p", "TMS-DEDUCTION-SPEC-P", 1, 0, false);
-        declareFunction(myName, "tms_deduction_spec_tv", "TMS-DEDUCTION-SPEC-TV", 1, 0, false);
-        declareFunction(myName, "perform_tms_deduction_spec_argumentation", "PERFORM-TMS-DEDUCTION-SPEC-ARGUMENTATION", 1, 0, false);
+        declareFunction("compute_supports_tv", "COMPUTE-SUPPORTS-TV", 1, 1, false);
+        declareFunction("compute_deduction_tv", "COMPUTE-DEDUCTION-TV", 1, 0, false);
+        declareFunction("compute_assertion_tv", "COMPUTE-ASSERTION-TV", 1, 0, false);
+        declareFunction("strength_combine", "STRENGTH-COMBINE", 2, 0, false);
+        declareFunction("perform_argumentation", "PERFORM-ARGUMENTATION", 1, 0, false);
+        declareFunction("complex_argumentation", "COMPLEX-ARGUMENTATION", 1, 0, false);
+        declareFunction("resolve_contradiction", "RESOLVE-CONTRADICTION", 1, 0, false);
+        declareFunction("tms_deduction_spec_p", "TMS-DEDUCTION-SPEC-P", 1, 0, false);
+        declareFunction("tms_deduction_spec_tv", "TMS-DEDUCTION-SPEC-TV", 1, 0, false);
+        declareFunction("perform_tms_deduction_spec_argumentation", "PERFORM-TMS-DEDUCTION-SPEC-ARGUMENTATION", 1, 0, false);
         return NIL;
     }
 

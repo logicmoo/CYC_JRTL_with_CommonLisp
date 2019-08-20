@@ -20,7 +20,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_member_of_list extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_member_of_list";
     public static String myFingerPrint = "25a320dc88bfc478418ec060a75ec7b0fdd0acf6e70184f8c63dcc8915e242ff";
     private static SubLObject $$memberOfList;
     private static SubLSymbol $POS;
@@ -106,11 +105,11 @@ public class removal_modules_member_of_list extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_member_of_list_file() {
-        declareFunction(myName, "removal_member_of_list_check_int", "REMOVAL-MEMBER-OF-LIST-CHECK-INT", 1, 0, false);
-        declareFunction(myName, "removal_member_of_list_check", "REMOVAL-MEMBER-OF-LIST-CHECK", 1, 1, false);
-        declareFunction(myName, "removal_not_member_of_list_check", "REMOVAL-NOT-MEMBER-OF-LIST-CHECK", 1, 1, false);
-        declareFunction(myName, "removal_member_of_list_unify_cost", "REMOVAL-MEMBER-OF-LIST-UNIFY-COST", 1, 1, false);
-        declareFunction(myName, "removal_member_of_list_unify_generate", "REMOVAL-MEMBER-OF-LIST-UNIFY-GENERATE", 1, 0, false);
+        declareFunction("removal_member_of_list_check_int", "REMOVAL-MEMBER-OF-LIST-CHECK-INT", 1, 0, false);
+        declareFunction("removal_member_of_list_check", "REMOVAL-MEMBER-OF-LIST-CHECK", 1, 1, false);
+        declareFunction("removal_not_member_of_list_check", "REMOVAL-NOT-MEMBER-OF-LIST-CHECK", 1, 1, false);
+        declareFunction("removal_member_of_list_unify_cost", "REMOVAL-MEMBER-OF-LIST-UNIFY-COST", 1, 1, false);
+        declareFunction("removal_member_of_list_unify_generate", "REMOVAL-MEMBER-OF-LIST-UNIFY-GENERATE", 1, 0, false);
         return NIL;
     }
 

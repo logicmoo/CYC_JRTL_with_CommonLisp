@@ -27,7 +27,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class cyc_navigator_links extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new cyc_navigator_links();
 
- public static final String myName = "com.cyc.cycjava.cycl.cyc_navigator_links";
 
     // Internal Constants
     private static final SubLSymbol $COMPOSE_KE_TEXT = makeKeyword("COMPOSE-KE-TEXT");

@@ -62,7 +62,6 @@ public final class lexicon_slurpers extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new lexicon_slurpers();
 
- public static final String myName = "com.cyc.cycjava.cycl.lexicon_slurpers";
 
 
     // defvar

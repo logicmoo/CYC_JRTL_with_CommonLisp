@@ -49,7 +49,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class inference_kernel extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.harness.inference_kernel";
     public static String myFingerPrint = "babcee533184bc37a169f7393dc46790b1e9283cb48566db5ecad4ecdc3631ea";
     @SubL(source = "cycl/inference/harness/inference-kernel.lisp", position = 1100L)
     public static SubLSymbol $new_cyc_trivial_query_enabledP$;
@@ -1057,45 +1056,45 @@ public class inference_kernel extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_inference_kernel_file() {
-        declareFunction(myName, "new_browsable_cyc_query", "NEW-BROWSABLE-CYC-QUERY", 1, 2, false);
-        declareFunction(myName, "new_browsable_cyc_query_from_dnf", "NEW-BROWSABLE-CYC-QUERY-FROM-DNF", 2, 2, false);
-        declareMacro(me, "query_results_for_java", "QUERY-RESULTS-FOR-JAVA");
-        declareFunction(myName, "query_results_for_java_transform", "QUERY-RESULTS-FOR-JAVA-TRANSFORM", 1, 0, false);
-        declareFunction(myName, "new_cyc_query", "NEW-CYC-QUERY", 1, 2, false);
-        declareFunction(myName, "update_query_metrics_wrt_timing_info", "UPDATE-QUERY-METRICS-WRT-TIMING-INFO", 2, 0, false);
-        declareFunction(myName, "new_cyc_query_from_dnf", "NEW-CYC-QUERY-FROM-DNF", 2, 2, false);
-        declareFunction(myName, "new_cyc_query_int", "NEW-CYC-QUERY-INT", 4, 0, false);
-        declareFunction(myName, "new_continuable_inference", "NEW-CONTINUABLE-INFERENCE", 1, 2, false);
-        declareFunction(myName, "new_continuable_inference_int", "NEW-CONTINUABLE-INFERENCE-INT", 1, 3, false);
-        declareFunction(myName, "new_continuable_inference_from_dnf", "NEW-CONTINUABLE-INFERENCE-FROM-DNF", 2, 2, false);
-        declareFunction(myName, "new_continuable_inference_from_dnf_int", "NEW-CONTINUABLE-INFERENCE-FROM-DNF-INT", 5, 0, false);
-        declareFunction(myName, "extract_some_inference_properties", "EXTRACT-SOME-INFERENCE-PROPERTIES", 1, 0, false);
-        declareFunction(myName, "initialize_inference_properties", "INITIALIZE-INFERENCE-PROPERTIES", 4, 0, false);
-        declareFunction(myName, "problem_store_from_properties", "PROBLEM-STORE-FROM-PROPERTIES", 1, 0, false);
-        declareFunction(myName, "extract_problem_store_properties_from_query_static_properties", "EXTRACT-PROBLEM-STORE-PROPERTIES-FROM-QUERY-STATIC-PROPERTIES", 1, 0, false);
-        declareFunction(myName, "continue_inference", "CONTINUE-INFERENCE", 1, 1, false);
-        declareFunction(myName, "continue_inference_int", "CONTINUE-INFERENCE-INT", 3, 0, false);
-        declareFunction(myName, "inference_update_properties", "INFERENCE-UPDATE-PROPERTIES", 3, 0, false);
-        declareFunction(myName, "inference_postprocess", "INFERENCE-POSTPROCESS", 1, 0, false);
-        declareFunction(myName, "inference_result_from_answers", "INFERENCE-RESULT-FROM-ANSWERS", 2, 0, false);
-        declareFunction(myName, "inference_result_from_all_answers", "INFERENCE-RESULT-FROM-ALL-ANSWERS", 1, 0, false);
-        declareFunction(myName, "inference_template_return_type_template", "INFERENCE-TEMPLATE-RETURN-TYPE-TEMPLATE", 1, 0, false);
-        declareFunction(myName, "inference_result_from_answers_via_template", "INFERENCE-RESULT-FROM-ANSWERS-VIA-TEMPLATE", 2, 0, false);
-        declareFunction(myName, "inference_result_from_binding_lists_via_template", "INFERENCE-RESULT-FROM-BINDING-LISTS-VIA-TEMPLATE", 2, 0, false);
-        declareFunction(myName, "inference_one_result_from_bindings_via_template", "INFERENCE-ONE-RESULT-FROM-BINDINGS-VIA-TEMPLATE", 2, 0, false);
-        declareFunction(myName, "inference_answers_via_format", "INFERENCE-ANSWERS-VIA-FORMAT", 2, 0, false);
-        declareFunction(myName, "inference_all_answer_result_bindings", "INFERENCE-ALL-ANSWER-RESULT-BINDINGS", 1, 0, false);
-        declareFunction(myName, "filter_out_extra_inference_results", "FILTER-OUT-EXTRA-INFERENCE-RESULTS", 2, 0, false);
-        declareFunction(myName, "handle_non_continuable_inference_status", "HANDLE-NON-CONTINUABLE-INFERENCE-STATUS", 1, 0, false);
-        declareFunction(myName, "inference_answers_to_bindings", "INFERENCE-ANSWERS-TO-BINDINGS", 2, 0, false);
-        declareFunction(myName, "inference_answer_to_bindings", "INFERENCE-ANSWER-TO-BINDINGS", 2, 0, false);
-        declareFunction(myName, "inference_answer_el_bindings", "INFERENCE-ANSWER-EL-BINDINGS", 1, 0, false);
-        declareFunction(myName, "inference_bindings_hl_to_el", "INFERENCE-BINDINGS-HL-TO-EL", 1, 0, false);
+        declareFunction("new_browsable_cyc_query", "NEW-BROWSABLE-CYC-QUERY", 1, 2, false);
+        declareFunction("new_browsable_cyc_query_from_dnf", "NEW-BROWSABLE-CYC-QUERY-FROM-DNF", 2, 2, false);
+        declareMacro("query_results_for_java", "QUERY-RESULTS-FOR-JAVA");
+        declareFunction("query_results_for_java_transform", "QUERY-RESULTS-FOR-JAVA-TRANSFORM", 1, 0, false);
+        declareFunction("new_cyc_query", "NEW-CYC-QUERY", 1, 2, false);
+        declareFunction("update_query_metrics_wrt_timing_info", "UPDATE-QUERY-METRICS-WRT-TIMING-INFO", 2, 0, false);
+        declareFunction("new_cyc_query_from_dnf", "NEW-CYC-QUERY-FROM-DNF", 2, 2, false);
+        declareFunction("new_cyc_query_int", "NEW-CYC-QUERY-INT", 4, 0, false);
+        declareFunction("new_continuable_inference", "NEW-CONTINUABLE-INFERENCE", 1, 2, false);
+        declareFunction("new_continuable_inference_int", "NEW-CONTINUABLE-INFERENCE-INT", 1, 3, false);
+        declareFunction("new_continuable_inference_from_dnf", "NEW-CONTINUABLE-INFERENCE-FROM-DNF", 2, 2, false);
+        declareFunction("new_continuable_inference_from_dnf_int", "NEW-CONTINUABLE-INFERENCE-FROM-DNF-INT", 5, 0, false);
+        declareFunction("extract_some_inference_properties", "EXTRACT-SOME-INFERENCE-PROPERTIES", 1, 0, false);
+        declareFunction("initialize_inference_properties", "INITIALIZE-INFERENCE-PROPERTIES", 4, 0, false);
+        declareFunction("problem_store_from_properties", "PROBLEM-STORE-FROM-PROPERTIES", 1, 0, false);
+        declareFunction("extract_problem_store_properties_from_query_static_properties", "EXTRACT-PROBLEM-STORE-PROPERTIES-FROM-QUERY-STATIC-PROPERTIES", 1, 0, false);
+        declareFunction("continue_inference", "CONTINUE-INFERENCE", 1, 1, false);
+        declareFunction("continue_inference_int", "CONTINUE-INFERENCE-INT", 3, 0, false);
+        declareFunction("inference_update_properties", "INFERENCE-UPDATE-PROPERTIES", 3, 0, false);
+        declareFunction("inference_postprocess", "INFERENCE-POSTPROCESS", 1, 0, false);
+        declareFunction("inference_result_from_answers", "INFERENCE-RESULT-FROM-ANSWERS", 2, 0, false);
+        declareFunction("inference_result_from_all_answers", "INFERENCE-RESULT-FROM-ALL-ANSWERS", 1, 0, false);
+        declareFunction("inference_template_return_type_template", "INFERENCE-TEMPLATE-RETURN-TYPE-TEMPLATE", 1, 0, false);
+        declareFunction("inference_result_from_answers_via_template", "INFERENCE-RESULT-FROM-ANSWERS-VIA-TEMPLATE", 2, 0, false);
+        declareFunction("inference_result_from_binding_lists_via_template", "INFERENCE-RESULT-FROM-BINDING-LISTS-VIA-TEMPLATE", 2, 0, false);
+        declareFunction("inference_one_result_from_bindings_via_template", "INFERENCE-ONE-RESULT-FROM-BINDINGS-VIA-TEMPLATE", 2, 0, false);
+        declareFunction("inference_answers_via_format", "INFERENCE-ANSWERS-VIA-FORMAT", 2, 0, false);
+        declareFunction("inference_all_answer_result_bindings", "INFERENCE-ALL-ANSWER-RESULT-BINDINGS", 1, 0, false);
+        declareFunction("filter_out_extra_inference_results", "FILTER-OUT-EXTRA-INFERENCE-RESULTS", 2, 0, false);
+        declareFunction("handle_non_continuable_inference_status", "HANDLE-NON-CONTINUABLE-INFERENCE-STATUS", 1, 0, false);
+        declareFunction("inference_answers_to_bindings", "INFERENCE-ANSWERS-TO-BINDINGS", 2, 0, false);
+        declareFunction("inference_answer_to_bindings", "INFERENCE-ANSWER-TO-BINDINGS", 2, 0, false);
+        declareFunction("inference_answer_el_bindings", "INFERENCE-ANSWER-EL-BINDINGS", 1, 0, false);
+        declareFunction("inference_bindings_hl_to_el", "INFERENCE-BINDINGS-HL-TO-EL", 1, 0, false);
         new $inference_bindings_hl_to_el$UnaryFunction();
-        declareFunction(myName, "inference_answer_hl_to_el", "INFERENCE-ANSWER-HL-TO-EL", 1, 0, false);
-        declareFunction(myName, "inference_answer_supports", "INFERENCE-ANSWER-SUPPORTS", 1, 0, false);
-        declareFunction(myName, "inference_answer_bindings_and_supports", "INFERENCE-ANSWER-BINDINGS-AND-SUPPORTS", 1, 0, false);
-        declareFunction(myName, "inference_answer_el_bindings_and_supports", "INFERENCE-ANSWER-EL-BINDINGS-AND-SUPPORTS", 1, 0, false);
+        declareFunction("inference_answer_hl_to_el", "INFERENCE-ANSWER-HL-TO-EL", 1, 0, false);
+        declareFunction("inference_answer_supports", "INFERENCE-ANSWER-SUPPORTS", 1, 0, false);
+        declareFunction("inference_answer_bindings_and_supports", "INFERENCE-ANSWER-BINDINGS-AND-SUPPORTS", 1, 0, false);
+        declareFunction("inference_answer_el_bindings_and_supports", "INFERENCE-ANSWER-EL-BINDINGS-AND-SUPPORTS", 1, 0, false);
         return NIL;
     }
 

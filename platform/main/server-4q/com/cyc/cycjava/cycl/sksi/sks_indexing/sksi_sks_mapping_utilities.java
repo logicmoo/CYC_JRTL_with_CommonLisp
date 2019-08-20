@@ -65,7 +65,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sksi_sks_mapping_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sksi_sks_mapping_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.sks_indexing.sksi_sks_mapping_utilities";
 
 
     private static final SubLSymbol $BINDINGS_AND_SUPPORTS = makeKeyword("BINDINGS-AND-SUPPORTS");

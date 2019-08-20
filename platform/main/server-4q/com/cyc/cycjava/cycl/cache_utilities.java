@@ -131,7 +131,6 @@ public final class cache_utilities extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new cache_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.cache_utilities";
 
 
     // deflexical

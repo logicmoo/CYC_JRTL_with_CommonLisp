@@ -40,7 +40,6 @@ public final class cb_forward_propagate extends SubLTranslatedFile implements V0
 
     public static final SubLFile me = new cb_forward_propagate();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_forward_propagate";
 
     // // Definitions
     public static final SubLObject cb_forward_propagate_mt_background(SubLObject source_mt, SubLObject target_mt, SubLObject filter_trivial, SubLObject number, SubLObject time, SubLObject depth) {

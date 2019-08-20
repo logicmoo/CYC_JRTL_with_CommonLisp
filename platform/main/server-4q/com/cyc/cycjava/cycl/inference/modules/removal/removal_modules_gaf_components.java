@@ -36,7 +36,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_gaf_components extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_gaf_components";
 	public static String myFingerPrint = "98334943796ae4eab3b164d5942753e90ade80e29d5c74c11d0740604b1550bd";
 	@SubL(source = "cycl/inference/modules/removal/removal-modules-gaf-components.lisp", position = 800L)
 	private static SubLSymbol $default_gaf_predicate_check_cost$;
@@ -405,23 +404,23 @@ public class removal_modules_gaf_components extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_removal_modules_gaf_components_file() {
-		declareFunction(myName, "make_gaf_predicate_code_rule_support", "MAKE-GAF-PREDICATE-CODE-RULE-SUPPORT", 0, 0,
+		declareFunction("make_gaf_predicate_code_rule_support", "MAKE-GAF-PREDICATE-CODE-RULE-SUPPORT", 0, 0,
 				false);
-		declareFunction(myName, "removal_gaf_predicate_bound_unbound_cost", "REMOVAL-GAF-PREDICATE-BOUND-UNBOUND-COST",
+		declareFunction("removal_gaf_predicate_bound_unbound_cost", "REMOVAL-GAF-PREDICATE-BOUND-UNBOUND-COST",
 				1, 0, false);
-		declareFunction(myName, "removal_gaf_predicate_unbound_bound_cost", "REMOVAL-GAF-PREDICATE-UNBOUND-BOUND-COST",
+		declareFunction("removal_gaf_predicate_unbound_bound_cost", "REMOVAL-GAF-PREDICATE-UNBOUND-BOUND-COST",
 				1, 0, false);
-		declareFunction(myName, "make_gaf_argument_code_rule_support", "MAKE-GAF-ARGUMENT-CODE-RULE-SUPPORT", 0, 0,
+		declareFunction("make_gaf_argument_code_rule_support", "MAKE-GAF-ARGUMENT-CODE-RULE-SUPPORT", 0, 0,
 				false);
-		declareFunction(myName, "removal_gaf_argument_bound_bound_unbound_cost",
+		declareFunction("removal_gaf_argument_bound_bound_unbound_cost",
 				"REMOVAL-GAF-ARGUMENT-BOUND-BOUND-UNBOUND-COST", 1, 0, false);
-		declareFunction(myName, "removal_gaf_argument_bound_unbound_unbound_cost",
+		declareFunction("removal_gaf_argument_bound_unbound_unbound_cost",
 				"REMOVAL-GAF-ARGUMENT-BOUND-UNBOUND-UNBOUND-COST", 1, 0, false);
-		declareFunction(myName, "term_arg_pos_for_formula", "TERM-ARG-POS-FOR-FORMULA", 1, 0, false);
-		declareFunction(myName, "removal_gaf_argument_unbound_unbound_bound_cost",
+		declareFunction("term_arg_pos_for_formula", "TERM-ARG-POS-FOR-FORMULA", 1, 0, false);
+		declareFunction("removal_gaf_argument_unbound_unbound_bound_cost",
 				"REMOVAL-GAF-ARGUMENT-UNBOUND-UNBOUND-BOUND-COST", 1, 0, false);
-		declareFunction(myName, "get_gafs_with_term_argnum", "GET-GAFS-WITH-TERM-ARGNUM", 2, 0, false);
-		declareFunction(myName, "get_gaf_argnum_tuple_with_term", "GET-GAF-ARGNUM-TUPLE-WITH-TERM", 1, 0, false);
+		declareFunction("get_gafs_with_term_argnum", "GET-GAFS-WITH-TERM-ARGNUM", 2, 0, false);
+		declareFunction("get_gaf_argnum_tuple_with_term", "GET-GAF-ARGNUM-TUPLE-WITH-TERM", 1, 0, false);
 		return NIL;
 	}
 

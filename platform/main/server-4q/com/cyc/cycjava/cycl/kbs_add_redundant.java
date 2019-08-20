@@ -131,7 +131,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new kbs_add_redundant();
 
- public static final String myName = "com.cyc.cycjava.cycl.kbs_add_redundant";
 
 
     // defparameter

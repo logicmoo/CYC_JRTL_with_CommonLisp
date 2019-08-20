@@ -227,7 +227,6 @@ public final class candidate_nc_utilities extends SubLTranslatedFile implements 
 
     public static final SubLFile me = new candidate_nc_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.candidate_nc_utilities";
 
 
     // defparameter

@@ -41,7 +41,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class nart_hl_formula_manager extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new nart_hl_formula_manager();
 
- public static final String myName = "com.cyc.cycjava.cycl.nart_hl_formula_manager";
 
 
     // deflexical

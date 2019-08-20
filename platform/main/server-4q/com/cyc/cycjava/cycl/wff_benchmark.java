@@ -77,7 +77,6 @@ public final class wff_benchmark extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new wff_benchmark();
 
-    public static final String myName = "com.cyc.cycjava.cycl.wff_benchmark";
 
     // // Definitions
     // defvar

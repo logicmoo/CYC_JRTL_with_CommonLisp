@@ -50,7 +50,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class agent_manager extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new agent_manager();
 
- public static final String myName = "com.cyc.cycjava.cycl.agent_manager";
 
 
     // deflexical

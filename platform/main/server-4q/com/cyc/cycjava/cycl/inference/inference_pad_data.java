@@ -13,7 +13,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class inference_pad_data extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.inference_pad_data";
     public static String myFingerPrint = "edb308e68fb63d1c59a2f2a741ccc13aa721e89a8a5ab1e042b24d91ee28e197";
     @SubL(source = "cycl/inference/inference-pad-data.lisp", position = 800L)
     public static SubLSymbol $non_tkb_final_bogomips$;

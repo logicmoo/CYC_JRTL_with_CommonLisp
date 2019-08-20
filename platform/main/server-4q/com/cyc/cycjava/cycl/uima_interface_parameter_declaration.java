@@ -64,7 +64,6 @@ public final class uima_interface_parameter_declaration extends SubLTranslatedFi
 
     public static final SubLFile me = new uima_interface_parameter_declaration();
 
-    public static final String myName = "com.cyc.cycjava.cycl.uima_interface_parameter_declaration";
 
 
 

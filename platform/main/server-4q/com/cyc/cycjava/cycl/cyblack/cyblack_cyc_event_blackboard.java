@@ -45,7 +45,6 @@ public final class cyblack_cyc_event_blackboard extends SubLTranslatedFile imple
 
     public static final SubLFile me = new cyblack_cyc_event_blackboard();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_cyc_event_blackboard";
 
     // // Definitions
     public static final SubLObject get_cyblack_cyc_event_test_root_posting_timestamp(SubLObject cyblack_cyc_event_test_root_posting) {

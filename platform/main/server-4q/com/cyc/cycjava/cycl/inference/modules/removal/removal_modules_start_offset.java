@@ -16,7 +16,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_start_offset extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_start_offset";
     public static String myFingerPrint = "8b1870ef90c82e8c15c150b66ddf7099a0f1137297f42360f41b9252f14ad7c4";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-start-offset.lisp", position = 500L)
     private static SubLSymbol $start_offset_check_cost$;
@@ -49,9 +48,9 @@ public class removal_modules_start_offset extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_start_offset_file() {
-        declareFunction(myName, "string_has_offsetP", "STRING-HAS-OFFSET?", 3, 0, false);
-        declareFunction(myName, "string_has_offset_negP", "STRING-HAS-OFFSET-NEG?", 3, 0, false);
-        declareFunction(myName, "start_offset_of_string_iterator", "START-OFFSET-OF-STRING-ITERATOR", 2, 0, false);
+        declareFunction("string_has_offsetP", "STRING-HAS-OFFSET?", 3, 0, false);
+        declareFunction("string_has_offset_negP", "STRING-HAS-OFFSET-NEG?", 3, 0, false);
+        declareFunction("start_offset_of_string_iterator", "START-OFFSET-OF-STRING-ITERATOR", 2, 0, false);
         return NIL;
     }
 

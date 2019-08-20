@@ -400,7 +400,6 @@ public final class file_hash_table extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new file_hash_table();
 
- public static final String myName = "com.cyc.cycjava.cycl.file_hash_table";
 
 
     // defconstant

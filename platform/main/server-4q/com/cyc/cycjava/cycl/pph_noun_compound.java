@@ -69,7 +69,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class pph_noun_compound extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new pph_noun_compound();
 
- public static final String myName = "com.cyc.cycjava.cycl.pph_noun_compound";
 
 
     // defconstant

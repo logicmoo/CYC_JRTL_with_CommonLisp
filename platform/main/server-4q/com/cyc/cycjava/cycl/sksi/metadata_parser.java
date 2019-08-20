@@ -61,7 +61,6 @@ public final class metadata_parser extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new metadata_parser();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.metadata_parser";
 
 
     private static final SubLSymbol $EXPORTED_KEYS_INFO = makeKeyword("EXPORTED-KEYS-INFO");

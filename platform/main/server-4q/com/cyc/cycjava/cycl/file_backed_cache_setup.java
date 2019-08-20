@@ -156,7 +156,6 @@ public final class file_backed_cache_setup extends SubLTranslatedFile implements
 
     public static final SubLFile me = new file_backed_cache_setup();
 
- public static final String myName = "com.cyc.cycjava.cycl.file_backed_cache_setup";
 
 
     // defparameter

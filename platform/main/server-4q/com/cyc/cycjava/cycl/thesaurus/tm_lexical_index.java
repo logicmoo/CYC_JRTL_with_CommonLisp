@@ -58,7 +58,6 @@ public final class tm_lexical_index extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new tm_lexical_index();
 
-    public static final String myName = "com.cyc.cycjava.cycl.thesaurus.tm_lexical_index";
 
     // // Definitions
     /**

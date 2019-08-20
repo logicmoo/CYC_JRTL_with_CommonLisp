@@ -114,7 +114,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class string_relevant_assertions extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new string_relevant_assertions();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.string_relevant_assertions";
 
 
     // deflexical

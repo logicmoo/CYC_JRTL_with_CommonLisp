@@ -83,7 +83,6 @@ public final class graph extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new graph();
 
- public static final String myName = "com.cyc.cycjava.cycl.quirk.graph";
 
 
     // Internal Constants

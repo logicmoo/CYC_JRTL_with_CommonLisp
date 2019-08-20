@@ -64,7 +64,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class cb_inference_monitors extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.browser.cb_inference_monitors";
 	public static String myFingerPrint = "f255ee92e65aeb74cccab2deb9c5c1a2a5c1f0ac5d25bd43b2e751e5664138bf";
 	@SubL(source = "cycl/inference/browser/cb-inference-monitors.lisp", position = 3300L)
 	private static SubLSymbol $cb_inference_monitor_style$;
@@ -1407,54 +1406,54 @@ public class cb_inference_monitors extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_cb_inference_monitors_file() {
-		declareFunction(myName, "cb_monitor_inference", "CB-MONITOR-INFERENCE", 1, 0, false);
-		declareFunction(myName, "cb_monitor_problem_store", "CB-MONITOR-PROBLEM-STORE", 1, 0, false);
-		declareFunction(myName, "cb_monitor_all_inferences", "CB-MONITOR-ALL-INFERENCES", 1, 0, false);
-		declareFunction(myName, "cb_link_monitor_inference", "CB-LINK-MONITOR-INFERENCE", 1, 1, false);
-		declareFunction(myName, "inference_monitorableP", "INFERENCE-MONITORABLE?", 1, 0, false);
-		declareFunction(myName, "inference_monitor_head_script", "INFERENCE-MONITOR-HEAD-SCRIPT", 0, 0, false);
-		declareFunction(myName, "inference_monitor_tail_script", "INFERENCE-MONITOR-TAIL-SCRIPT", 0, 0, false);
-		declareFunction(myName, "inference_monitor_tree_script", "INFERENCE-MONITOR-TREE-SCRIPT", 0, 0, false);
-		declareFunction(myName, "inference_monitor_user_table_script", "INFERENCE-MONITOR-USER-TABLE-SCRIPT", 0, 0,
+		declareFunction("cb_monitor_inference", "CB-MONITOR-INFERENCE", 1, 0, false);
+		declareFunction("cb_monitor_problem_store", "CB-MONITOR-PROBLEM-STORE", 1, 0, false);
+		declareFunction("cb_monitor_all_inferences", "CB-MONITOR-ALL-INFERENCES", 1, 0, false);
+		declareFunction("cb_link_monitor_inference", "CB-LINK-MONITOR-INFERENCE", 1, 1, false);
+		declareFunction("inference_monitorableP", "INFERENCE-MONITORABLE?", 1, 0, false);
+		declareFunction("inference_monitor_head_script", "INFERENCE-MONITOR-HEAD-SCRIPT", 0, 0, false);
+		declareFunction("inference_monitor_tail_script", "INFERENCE-MONITOR-TAIL-SCRIPT", 0, 0, false);
+		declareFunction("inference_monitor_tree_script", "INFERENCE-MONITOR-TREE-SCRIPT", 0, 0, false);
+		declareFunction("inference_monitor_user_table_script", "INFERENCE-MONITOR-USER-TABLE-SCRIPT", 0, 0,
 				false);
-		declareFunction(myName, "cb_monitor_inference_guts", "CB-MONITOR-INFERENCE-GUTS", 2, 0, false);
-		declareFunction(myName, "inference_monitor_info", "INFERENCE-MONITOR-INFO", 1, 4, false);
-		declareFunction(myName, "inference_monitor_warn", "INFERENCE-MONITOR-WARN", 1, 4, false);
-		declareFunction(myName, "cb_inference_monitor_frame", "CB-INFERENCE-MONITOR-FRAME", 1, 0, false);
-		declareFunction(myName, "html_output_inference_monitor_focal_object",
+		declareFunction("cb_monitor_inference_guts", "CB-MONITOR-INFERENCE-GUTS", 2, 0, false);
+		declareFunction("inference_monitor_info", "INFERENCE-MONITOR-INFO", 1, 4, false);
+		declareFunction("inference_monitor_warn", "INFERENCE-MONITOR-WARN", 1, 4, false);
+		declareFunction("cb_inference_monitor_frame", "CB-INFERENCE-MONITOR-FRAME", 1, 0, false);
+		declareFunction("html_output_inference_monitor_focal_object",
 				"HTML-OUTPUT-INFERENCE-MONITOR-FOCAL-OBJECT", 2, 0, false);
-		declareFunction(myName, "clear_inference_monitor_focal_object_html",
+		declareFunction("clear_inference_monitor_focal_object_html",
 				"CLEAR-INFERENCE-MONITOR-FOCAL-OBJECT-HTML", 0, 0, false);
-		declareFunction(myName, "remove_inference_monitor_focal_object_html",
+		declareFunction("remove_inference_monitor_focal_object_html",
 				"REMOVE-INFERENCE-MONITOR-FOCAL-OBJECT-HTML", 2, 0, false);
-		declareFunction(myName, "inference_monitor_focal_object_html_internal",
+		declareFunction("inference_monitor_focal_object_html_internal",
 				"INFERENCE-MONITOR-FOCAL-OBJECT-HTML-INTERNAL", 2, 0, false);
-		declareFunction(myName, "inference_monitor_focal_object_html", "INFERENCE-MONITOR-FOCAL-OBJECT-HTML", 2, 0,
+		declareFunction("inference_monitor_focal_object_html", "INFERENCE-MONITOR-FOCAL-OBJECT-HTML", 2, 0,
 				false);
-		declareFunction(myName, "html_output_inference_monitor_focal_object_internal",
+		declareFunction("html_output_inference_monitor_focal_object_internal",
 				"HTML-OUTPUT-INFERENCE-MONITOR-FOCAL-OBJECT-INTERNAL", 2, 0, false);
-		declareFunction(myName, "show_inference_monitor_focal_object_paraphrase",
+		declareFunction("show_inference_monitor_focal_object_paraphrase",
 				"SHOW-INFERENCE-MONITOR-FOCAL-OBJECT-PARAPHRASE", 2, 0, false);
-		declareFunction(myName, "clear_inference_monitor_focal_object_paraphrase",
+		declareFunction("clear_inference_monitor_focal_object_paraphrase",
 				"CLEAR-INFERENCE-MONITOR-FOCAL-OBJECT-PARAPHRASE", 0, 0, false);
-		declareFunction(myName, "remove_inference_monitor_focal_object_paraphrase",
+		declareFunction("remove_inference_monitor_focal_object_paraphrase",
 				"REMOVE-INFERENCE-MONITOR-FOCAL-OBJECT-PARAPHRASE", 2, 0, false);
-		declareFunction(myName, "inference_monitor_focal_object_paraphrase_internal",
+		declareFunction("inference_monitor_focal_object_paraphrase_internal",
 				"INFERENCE-MONITOR-FOCAL-OBJECT-PARAPHRASE-INTERNAL", 2, 0, false);
-		declareFunction(myName, "inference_monitor_focal_object_paraphrase",
+		declareFunction("inference_monitor_focal_object_paraphrase",
 				"INFERENCE-MONITOR-FOCAL-OBJECT-PARAPHRASE", 2, 0, false);
-		declareFunction(myName, "construct_cb_monitor_refresh_template", "CONSTRUCT-CB-MONITOR-REFRESH-TEMPLATE", 2, 0,
+		declareFunction("construct_cb_monitor_refresh_template", "CONSTRUCT-CB-MONITOR-REFRESH-TEMPLATE", 2, 0,
 				false);
-		declareFunction(myName, "update_cb_monitor_latest_frame", "UPDATE-CB-MONITOR-LATEST-FRAME", 2, 0, false);
-		declareFunction(myName, "cb_inference_monitor_refresh_frame", "CB-INFERENCE-MONITOR-REFRESH-FRAME", 1, 0,
+		declareFunction("update_cb_monitor_latest_frame", "UPDATE-CB-MONITOR-LATEST-FRAME", 2, 0, false);
+		declareFunction("cb_inference_monitor_refresh_frame", "CB-INFERENCE-MONITOR-REFRESH-FRAME", 1, 0,
 				false);
-		declareMacro(me, "do_problem_stores_descending", "DO-PROBLEM-STORES-DESCENDING");
-		declareFunction(myName, "latest_monitorable_problem_store", "LATEST-MONITORABLE-PROBLEM-STORE", 0, 0, false);
-		declareFunction(myName, "problem_store_monitorableP", "PROBLEM-STORE-MONITORABLE?", 1, 0, false);
-		declareFunction(myName, "latest_monitorable_inference", "LATEST-MONITORABLE-INFERENCE", 0, 0, false);
-		declareFunction(myName, "write_inference_monitor_args", "WRITE-INFERENCE-MONITOR-ARGS", 2, 0, false);
-		declareFunction(myName, "problem_store_tick_count_total", "PROBLEM-STORE-TICK-COUNT-TOTAL", 1, 0, false);
-		declareFunction(myName, "get_inference_monitor_html", "GET-INFERENCE-MONITOR-HTML", 0, 0, false);
+		declareMacro("do_problem_stores_descending", "DO-PROBLEM-STORES-DESCENDING");
+		declareFunction("latest_monitorable_problem_store", "LATEST-MONITORABLE-PROBLEM-STORE", 0, 0, false);
+		declareFunction("problem_store_monitorableP", "PROBLEM-STORE-MONITORABLE?", 1, 0, false);
+		declareFunction("latest_monitorable_inference", "LATEST-MONITORABLE-INFERENCE", 0, 0, false);
+		declareFunction("write_inference_monitor_args", "WRITE-INFERENCE-MONITOR-ARGS", 2, 0, false);
+		declareFunction("problem_store_tick_count_total", "PROBLEM-STORE-TICK-COUNT-TOTAL", 1, 0, false);
+		declareFunction("get_inference_monitor_html", "GET-INFERENCE-MONITOR-HTML", 0, 0, false);
 		return NIL;
 	}
 

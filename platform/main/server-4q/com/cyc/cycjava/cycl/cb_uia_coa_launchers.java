@@ -35,7 +35,6 @@ public final class cb_uia_coa_launchers extends SubLTranslatedFile implements V0
 
     public static final SubLFile me = new cb_uia_coa_launchers();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_uia_coa_launchers";
 
     // // Definitions
     public static final SubLObject cb_uia_launch_coa_dimensions_salient_descriptor(SubLObject args) {

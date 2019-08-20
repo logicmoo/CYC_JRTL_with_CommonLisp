@@ -90,7 +90,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class forward_rule_propagation extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new forward_rule_propagation();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.inference.harness.forward_rule_propagation";
 
 
     // deflexical

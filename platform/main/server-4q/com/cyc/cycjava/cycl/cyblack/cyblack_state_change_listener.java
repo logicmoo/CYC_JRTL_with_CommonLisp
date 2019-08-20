@@ -44,7 +44,6 @@ public final class cyblack_state_change_listener extends SubLTranslatedFile impl
 
     public static final SubLFile me = new cyblack_state_change_listener();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_state_change_listener";
 
     // // Definitions
     public static final SubLObject cyblack_state_change_listener_p(SubLObject v_cyblack_state_change_listener) {

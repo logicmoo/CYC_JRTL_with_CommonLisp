@@ -247,7 +247,6 @@ public final class hl_supports extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new hl_supports();
 
- public static final String myName = "com.cyc.cycjava.cycl.hl_supports";
 
 
     // deflexical

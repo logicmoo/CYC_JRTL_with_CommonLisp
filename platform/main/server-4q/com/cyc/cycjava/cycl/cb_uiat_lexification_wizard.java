@@ -40,7 +40,6 @@ public final class cb_uiat_lexification_wizard extends SubLTranslatedFile implem
 
     public static final SubLFile me = new cb_uiat_lexification_wizard();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_uiat_lexification_wizard";
 
     // // Definitions
     /**

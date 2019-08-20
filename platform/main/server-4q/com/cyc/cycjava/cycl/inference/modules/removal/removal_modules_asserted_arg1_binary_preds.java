@@ -74,7 +74,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_asserted_arg1_binary_preds extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_asserted_arg1_binary_preds";
     public static String myFingerPrint = "a33045c12a715bc7eae56796bd2098f7788709aacf17730db25677f6cf80c7b5";
     private static SubLObject $$assertedArg1BinaryPreds;
     private static SubLSymbol $POS;

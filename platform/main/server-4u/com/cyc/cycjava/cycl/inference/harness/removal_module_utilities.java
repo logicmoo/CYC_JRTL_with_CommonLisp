@@ -63,7 +63,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class removal_module_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new removal_module_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.harness.removal_module_utilities";
 
 
     // deflexical

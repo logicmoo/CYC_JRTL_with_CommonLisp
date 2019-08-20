@@ -73,7 +73,6 @@ public final class cb_uia_tools_review_and_testing extends SubLTranslatedFile im
 
     public static final SubLFile me = new cb_uia_tools_review_and_testing();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_uia_tools_review_and_testing";
 
     // // Definitions
     public static final SubLObject uiat_query_constructor_hint(SubLObject interaction) {

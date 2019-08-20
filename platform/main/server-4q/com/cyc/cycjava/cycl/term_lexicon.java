@@ -116,7 +116,6 @@ public final class term_lexicon extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new term_lexicon();
 
-    public static final String myName = "com.cyc.cycjava.cycl.term_lexicon";
 
     // defparameter
     @LispMethod(comment = "the singleton term lexicon\ndefparameter")

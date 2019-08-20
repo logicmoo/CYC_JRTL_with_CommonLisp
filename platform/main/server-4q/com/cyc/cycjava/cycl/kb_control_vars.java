@@ -43,7 +43,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class kb_control_vars extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new kb_control_vars();
 
- public static final String myName = "com.cyc.cycjava.cycl.kb_control_vars";
 
 
     // deflexical

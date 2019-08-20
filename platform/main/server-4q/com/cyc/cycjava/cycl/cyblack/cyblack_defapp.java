@@ -96,7 +96,6 @@ public final class cyblack_defapp extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cyblack_defapp();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_defapp";
 
     // // Definitions
     // defvar

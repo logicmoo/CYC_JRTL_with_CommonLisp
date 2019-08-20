@@ -145,7 +145,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class random_thought_generator extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new random_thought_generator();
 
- public static final String myName = "com.cyc.cycjava.cycl.random_thought_generator";
 
 
     // deflexical

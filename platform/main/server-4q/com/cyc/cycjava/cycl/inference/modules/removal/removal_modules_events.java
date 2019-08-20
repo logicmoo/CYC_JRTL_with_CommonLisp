@@ -27,7 +27,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_events extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_events";
 	public static String myFingerPrint = "b804476d8b7903d95d79750c4ca83bfede084408eaf7ae2d803eee18941fc6cb";
 	@SubL(source = "cycl/inference/modules/removal/removal-modules-events.lisp", position = 1200L)
 	public static SubLSymbol $event_defining_mt$;
@@ -138,10 +137,10 @@ public class removal_modules_events extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_removal_modules_events_file() {
-		declareFunction(myName, "event_completion_value", "EVENT-COMPLETION-VALUE", 1, 0, false);
-		declareFunction(myName, "get_proper_sub_events", "GET-PROPER-SUB-EVENTS", 1, 0, false);
-		declareFunction(myName, "get_completion_value", "GET-COMPLETION-VALUE", 1, 0, false);
-		declareFunction(myName, "get_proper_sub_events_inf", "GET-PROPER-SUB-EVENTS-INF", 1, 0, false);
+		declareFunction("event_completion_value", "EVENT-COMPLETION-VALUE", 1, 0, false);
+		declareFunction("get_proper_sub_events", "GET-PROPER-SUB-EVENTS", 1, 0, false);
+		declareFunction("get_completion_value", "GET-COMPLETION-VALUE", 1, 0, false);
+		declareFunction("get_proper_sub_events_inf", "GET-PROPER-SUB-EVENTS-INF", 1, 0, false);
 		return NIL;
 	}
 

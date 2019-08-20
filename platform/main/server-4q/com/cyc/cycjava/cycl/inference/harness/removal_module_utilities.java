@@ -32,7 +32,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_module_utilities extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.harness.removal_module_utilities";
     public static String myFingerPrint = "bab082c2b86823f5fd6d3a14560488abd4ca75f913c17f579f3586d6aeb7d173";
     @SubL(source = "cycl/inference/harness/removal-module-utilities.lisp", position = 7200L)
     private static SubLSymbol $modules_require_negation_by_failure$;
@@ -262,27 +261,27 @@ public class removal_module_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_module_utilities_file() {
-        declareFunction(myName, "negation_grossly_incompleteP", "NEGATION-GROSSLY-INCOMPLETE?", 2, 0, false);
-        declareFunction(myName, "invert_removal_check_cost", "INVERT-REMOVAL-CHECK-COST", 1, 0, false);
-        declareFunction(myName, "answer_to_singleton", "ANSWER-TO-SINGLETON", 1, 0, false);
-        declareFunction(myName, "non_null_answer_to_singleton", "NON-NULL-ANSWER-TO-SINGLETON", 1, 0, false);
-        declareFunction(myName, "invert_boolean_answer", "INVERT-BOOLEAN-ANSWER", 1, 0, false);
-        declareFunction(myName, "additional_isa_support", "ADDITIONAL-ISA-SUPPORT", 2, 0, false);
-        declareFunction(myName, "additional_isa_supports", "ADDITIONAL-ISA-SUPPORTS", 2, 0, false);
-        declareFunction(myName, "make_genl_inverse_support", "MAKE-GENL-INVERSE-SUPPORT", 2, 0, false);
-        declareFunction(myName, "additional_genl_inverse_supports", "ADDITIONAL-GENL-INVERSE-SUPPORTS", 2, 0, false);
-        declareFunction(myName, "make_genl_preds_support", "MAKE-GENL-PREDS-SUPPORT", 2, 0, false);
-        declareFunction(myName, "additional_genl_preds_supports", "ADDITIONAL-GENL-PREDS-SUPPORTS", 2, 0, false);
-        declareFunction(myName, "make_simplification_support", "MAKE-SIMPLIFICATION-SUPPORT", 0, 0, false);
-        declareFunction(myName, "hl_module_count", "HL-MODULE-COUNT", 0, 0, false);
-        declareFunction(myName, "hl_module_statistics", "HL-MODULE-STATISTICS", 0, 1, false);
-        declareFunction(myName, "determine_hl_module_name", "DETERMINE-HL-MODULE-NAME", 2, 0, false);
-        declareFunction(myName, "make_removal_module_name", "MAKE-REMOVAL-MODULE-NAME", 1, 0, false);
-        declareFunction(myName, "current_query_allows_new_termsP", "CURRENT-QUERY-ALLOWS-NEW-TERMS?", 0, 0, false);
-        declareFunction(myName, "module_requires_negation_by_failureP", "MODULE-REQUIRES-NEGATION-BY-FAILURE?", 1, 0, false);
-        declareFunction(myName, "module_requires_completeness_minimization_for_supportP", "MODULE-REQUIRES-COMPLETENESS-MINIMIZATION-FOR-SUPPORT?", 2, 0, false);
-        declareFunction(myName, "module_requires_new_terms_allowedP", "MODULE-REQUIRES-NEW-TERMS-ALLOWED?", 1, 0, false);
-        declareFunction(myName, "module_requires_evaluate_sublP", "MODULE-REQUIRES-EVALUATE-SUBL?", 1, 0, false);
+        declareFunction("negation_grossly_incompleteP", "NEGATION-GROSSLY-INCOMPLETE?", 2, 0, false);
+        declareFunction("invert_removal_check_cost", "INVERT-REMOVAL-CHECK-COST", 1, 0, false);
+        declareFunction("answer_to_singleton", "ANSWER-TO-SINGLETON", 1, 0, false);
+        declareFunction("non_null_answer_to_singleton", "NON-NULL-ANSWER-TO-SINGLETON", 1, 0, false);
+        declareFunction("invert_boolean_answer", "INVERT-BOOLEAN-ANSWER", 1, 0, false);
+        declareFunction("additional_isa_support", "ADDITIONAL-ISA-SUPPORT", 2, 0, false);
+        declareFunction("additional_isa_supports", "ADDITIONAL-ISA-SUPPORTS", 2, 0, false);
+        declareFunction("make_genl_inverse_support", "MAKE-GENL-INVERSE-SUPPORT", 2, 0, false);
+        declareFunction("additional_genl_inverse_supports", "ADDITIONAL-GENL-INVERSE-SUPPORTS", 2, 0, false);
+        declareFunction("make_genl_preds_support", "MAKE-GENL-PREDS-SUPPORT", 2, 0, false);
+        declareFunction("additional_genl_preds_supports", "ADDITIONAL-GENL-PREDS-SUPPORTS", 2, 0, false);
+        declareFunction("make_simplification_support", "MAKE-SIMPLIFICATION-SUPPORT", 0, 0, false);
+        declareFunction("hl_module_count", "HL-MODULE-COUNT", 0, 0, false);
+        declareFunction("hl_module_statistics", "HL-MODULE-STATISTICS", 0, 1, false);
+        declareFunction("determine_hl_module_name", "DETERMINE-HL-MODULE-NAME", 2, 0, false);
+        declareFunction("make_removal_module_name", "MAKE-REMOVAL-MODULE-NAME", 1, 0, false);
+        declareFunction("current_query_allows_new_termsP", "CURRENT-QUERY-ALLOWS-NEW-TERMS?", 0, 0, false);
+        declareFunction("module_requires_negation_by_failureP", "MODULE-REQUIRES-NEGATION-BY-FAILURE?", 1, 0, false);
+        declareFunction("module_requires_completeness_minimization_for_supportP", "MODULE-REQUIRES-COMPLETENESS-MINIMIZATION-FOR-SUPPORT?", 2, 0, false);
+        declareFunction("module_requires_new_terms_allowedP", "MODULE-REQUIRES-NEW-TERMS-ALLOWED?", 1, 0, false);
+        declareFunction("module_requires_evaluate_sublP", "MODULE-REQUIRES-EVALUATE-SUBL?", 1, 0, false);
         return NIL;
     }
 

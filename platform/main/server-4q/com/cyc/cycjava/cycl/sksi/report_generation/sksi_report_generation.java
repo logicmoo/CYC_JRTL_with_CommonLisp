@@ -94,7 +94,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sksi_report_generation extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new sksi_report_generation();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.sksi.report_generation.sksi_report_generation";
 
 
     // deflexical

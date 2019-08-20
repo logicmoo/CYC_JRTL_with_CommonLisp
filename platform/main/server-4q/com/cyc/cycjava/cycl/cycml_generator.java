@@ -125,7 +125,6 @@ public final class cycml_generator extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new cycml_generator();
 
- public static final String myName = "com.cyc.cycjava.cycl.cycml_generator";
 
 
     // defconstant

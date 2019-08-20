@@ -71,7 +71,6 @@ public final class matrix_utilities extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new matrix_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.matrix_utilities";
 
 
     // Internal Constants

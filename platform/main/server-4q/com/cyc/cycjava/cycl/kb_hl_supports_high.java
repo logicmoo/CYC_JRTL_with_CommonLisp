@@ -99,7 +99,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class kb_hl_supports_high extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new kb_hl_supports_high();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.kb_hl_supports_high";
 
 
     // defparameter

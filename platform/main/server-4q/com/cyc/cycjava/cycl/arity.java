@@ -97,7 +97,6 @@ public final class arity extends SubLTranslatedFile implements V12 {
     @LispMethod(comment = "The me for arity")
     public static final SubLFile me = new arity();
 
-    public static final String myName = "com.cyc.cycjava.cycl.arity";
 
     // deflexical
     // Definitions

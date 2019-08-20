@@ -485,7 +485,6 @@ public final class sksi_conjunctive_removal_module_utilities extends SubLTransla
 
     public static final SubLFile me = new sksi_conjunctive_removal_module_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.query_sks.sksi_conjunctive_removal_module_utilities";
 
 
     // defparameter

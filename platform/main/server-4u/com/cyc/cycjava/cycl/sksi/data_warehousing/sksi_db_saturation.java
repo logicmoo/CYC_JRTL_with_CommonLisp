@@ -106,7 +106,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sksi_db_saturation extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sksi_db_saturation();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_db_saturation";
 
 
     // Internal Constants

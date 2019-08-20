@@ -129,7 +129,6 @@ public final class collaborative_sense_making_utilities extends SubLTranslatedFi
 
     public static final SubLFile me = new collaborative_sense_making_utilities();
 
-    public static final String myName = "com.cyc.cycjava.cycl.collaborative_sense_making_utilities";
 
     // deflexical
     private static final SubLSymbol $csm_akb_assertions_directory$ = makeSymbol("*CSM-AKB-ASSERTIONS-DIRECTORY*");

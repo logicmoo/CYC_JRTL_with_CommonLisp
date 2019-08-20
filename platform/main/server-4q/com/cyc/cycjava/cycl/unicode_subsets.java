@@ -33,7 +33,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class unicode_subsets extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new unicode_subsets();
 
- public static final String myName = "com.cyc.cycjava.cycl.unicode_subsets";
 
 
     // deflexical

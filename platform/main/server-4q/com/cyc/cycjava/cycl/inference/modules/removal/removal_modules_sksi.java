@@ -14,7 +14,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_sksi extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_sksi";
 	public static String myFingerPrint = "627e0be01d9f35acc392823e0f8595b634e484e1e9a180e8b062d9f6bfab6358";
 	private static SubLObject $const0$sksiEqualsAny;
 	private static SubLSymbol $kw$POS;

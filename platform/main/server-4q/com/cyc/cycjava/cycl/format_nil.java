@@ -71,7 +71,6 @@ public final class format_nil extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new format_nil();
 
- public static final String myName = "com.cyc.cycjava.cycl.format_nil";
 
 
     // Internal Constants

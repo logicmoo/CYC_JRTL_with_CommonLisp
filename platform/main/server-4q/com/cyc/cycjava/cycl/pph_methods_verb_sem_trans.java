@@ -77,7 +77,6 @@ public final class pph_methods_verb_sem_trans extends SubLTranslatedFile impleme
 
     public static final SubLFile me = new pph_methods_verb_sem_trans();
 
- public static final String myName = "com.cyc.cycjava.cycl.pph_methods_verb_sem_trans";
 
 
     // deflexical

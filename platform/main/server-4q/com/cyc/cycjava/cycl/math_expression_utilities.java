@@ -97,7 +97,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class math_expression_utilities extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new math_expression_utilities();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.math_expression_utilities";
 
 
     // deflexical

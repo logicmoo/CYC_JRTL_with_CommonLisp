@@ -141,7 +141,6 @@ public final class cb_inferred_index extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new cb_inferred_index();
 
- public static final String myName = "com.cyc.cycjava.cycl.cb_inferred_index";
 
 
     // deflexical

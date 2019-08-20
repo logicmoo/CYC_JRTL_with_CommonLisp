@@ -120,7 +120,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rkf_text_processors extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rkf_text_processors();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_text_processors";
 
 
     // defparameter

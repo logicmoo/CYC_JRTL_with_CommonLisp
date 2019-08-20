@@ -102,7 +102,6 @@ public final class sbhl_search_datastructures extends SubLTranslatedFile impleme
 
     public static final SubLFile me = new sbhl_search_datastructures();
 
- public static final String myName = "com.cyc.cycjava.cycl.sbhl.sbhl_search_datastructures";
 
 
     // defconstant

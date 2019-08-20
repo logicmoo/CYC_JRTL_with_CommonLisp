@@ -81,7 +81,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_function_corresponding_predicate extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_function_corresponding_predicate";
     public static String myFingerPrint = "795abd12108bf40c2d27c9cc2d8d065e6038b964c3e321fd6d558ccbb2b63e14";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-function-corresponding-predicate.lisp", position = 900L)
     public static SubLSymbol $use_fcp_removal_moduleP$;
@@ -2843,29 +2842,29 @@ public class removal_modules_function_corresponding_predicate extends SubLTransl
     }
 
     public static SubLObject declare_removal_modules_function_corresponding_predicate_file() {
-        declareMacro(me, "do_fcp_assertions_for_pred", "DO-FCP-ASSERTIONS-FOR-PRED");
-        declareMacro(me, "do_corresponding_evaluatable_functions", "DO-CORRESPONDING-EVALUATABLE-FUNCTIONS");
-        declareFunction(myName, "should_bind_all_but_functional_in_arg_position", "SHOULD-BIND-ALL-BUT-FUNCTIONAL-IN-ARG-POSITION", 3, 0, false);
-        declareFunction(myName, "fcp_canonical_predicateP", "FCP-CANONICAL-PREDICATE?", 1, 0, false);
-        declareFunction(myName, "removal_fcp_check_expand", "REMOVAL-FCP-CHECK-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_fcp_check_required", "REMOVAL-FCP-CHECK-REQUIRED", 1, 1, false);
-        declareFunction(myName, "removal_fcp_find_nat_expand", "REMOVAL-FCP-FIND-NAT-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_fcp_find_nat_required", "REMOVAL-FCP-FIND-NAT-REQUIRED", 1, 1, false);
+        declareMacro("do_fcp_assertions_for_pred", "DO-FCP-ASSERTIONS-FOR-PRED");
+        declareMacro("do_corresponding_evaluatable_functions", "DO-CORRESPONDING-EVALUATABLE-FUNCTIONS");
+        declareFunction("should_bind_all_but_functional_in_arg_position", "SHOULD-BIND-ALL-BUT-FUNCTIONAL-IN-ARG-POSITION", 3, 0, false);
+        declareFunction("fcp_canonical_predicateP", "FCP-CANONICAL-PREDICATE?", 1, 0, false);
+        declareFunction("removal_fcp_check_expand", "REMOVAL-FCP-CHECK-EXPAND", 1, 1, false);
+        declareFunction("removal_fcp_check_required", "REMOVAL-FCP-CHECK-REQUIRED", 1, 1, false);
+        declareFunction("removal_fcp_find_nat_expand", "REMOVAL-FCP-FIND-NAT-EXPAND", 1, 1, false);
+        declareFunction("removal_fcp_find_nat_required", "REMOVAL-FCP-FIND-NAT-REQUIRED", 1, 1, false);
         new $removal_fcp_find_nat_required$UnaryFunction();
         new $removal_fcp_find_nat_required$BinaryFunction();
-        declareFunction(myName, "removal_fcp_support", "REMOVAL-FCP-SUPPORT", 1, 0, false);
-        declareFunction(myName, "removal_fcp_bindings", "REMOVAL-FCP-BINDINGS", 1, 0, false);
-        declareFunction(myName, "removal_fcp_justify", "REMOVAL-FCP-JUSTIFY", 1, 0, false);
-        declareFunction(myName, "removal_fcp_verify", "REMOVAL-FCP-VERIFY", 1, 0, false);
-        declareFunction(myName, "removal_evaluatable_fcp_unify_required", "REMOVAL-EVALUATABLE-FCP-UNIFY-REQUIRED", 1, 1, false);
-        declareFunction(myName, "removal_evaluatable_fcp_unify_expand", "REMOVAL-EVALUATABLE-FCP-UNIFY-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_fcp_with_genl_preds_wrt_args_required", "REMOVAL-FCP-WITH-GENL-PREDS-WRT-ARGS-REQUIRED", 1, 1, false);
-        declareFunction(myName, "removal_fcp_with_genl_preds_wrt_args_expand", "REMOVAL-FCP-WITH-GENL-PREDS-WRT-ARGS-EXPAND", 1, 1, false);
-        declareFunction(myName, "fcp_with_genl_preds_wrt_args_arg2", "FCP-WITH-GENL-PREDS-WRT-ARGS-ARG2", 1, 0, false);
-        declareFunction(me, "asent_uses_predicate_with_corresponding_evaluatable_function_with_non_functional_arg_unboundP", "ASENT-USES-PREDICATE-WITH-CORRESPONDING-EVALUATABLE-FUNCTION-WITH-NON-FUNCTIONAL-ARG-UNBOUND?", 1, 0, false);
-        declareFunction(myName, "removal_fcp_syntactic_required", "REMOVAL-FCP-SYNTACTIC-REQUIRED", 1, 1, false);
-        declareFunction(myName, "removal_fcp_syntactic_expand", "REMOVAL-FCP-SYNTACTIC-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_fcp_syntactic_bindings", "REMOVAL-FCP-SYNTACTIC-BINDINGS", 1, 0, false);
+        declareFunction("removal_fcp_support", "REMOVAL-FCP-SUPPORT", 1, 0, false);
+        declareFunction("removal_fcp_bindings", "REMOVAL-FCP-BINDINGS", 1, 0, false);
+        declareFunction("removal_fcp_justify", "REMOVAL-FCP-JUSTIFY", 1, 0, false);
+        declareFunction("removal_fcp_verify", "REMOVAL-FCP-VERIFY", 1, 0, false);
+        declareFunction("removal_evaluatable_fcp_unify_required", "REMOVAL-EVALUATABLE-FCP-UNIFY-REQUIRED", 1, 1, false);
+        declareFunction("removal_evaluatable_fcp_unify_expand", "REMOVAL-EVALUATABLE-FCP-UNIFY-EXPAND", 1, 1, false);
+        declareFunction("removal_fcp_with_genl_preds_wrt_args_required", "REMOVAL-FCP-WITH-GENL-PREDS-WRT-ARGS-REQUIRED", 1, 1, false);
+        declareFunction("removal_fcp_with_genl_preds_wrt_args_expand", "REMOVAL-FCP-WITH-GENL-PREDS-WRT-ARGS-EXPAND", 1, 1, false);
+        declareFunction("fcp_with_genl_preds_wrt_args_arg2", "FCP-WITH-GENL-PREDS-WRT-ARGS-ARG2", 1, 0, false);
+        declareFunction("asent_uses_predicate_with_corresponding_evaluatable_function_with_non_functional_arg_unboundP", "ASENT-USES-PREDICATE-WITH-CORRESPONDING-EVALUATABLE-FUNCTION-WITH-NON-FUNCTIONAL-ARG-UNBOUND?", 1, 0, false);
+        declareFunction("removal_fcp_syntactic_required", "REMOVAL-FCP-SYNTACTIC-REQUIRED", 1, 1, false);
+        declareFunction("removal_fcp_syntactic_expand", "REMOVAL-FCP-SYNTACTIC-EXPAND", 1, 1, false);
+        declareFunction("removal_fcp_syntactic_bindings", "REMOVAL-FCP-SYNTACTIC-BINDINGS", 1, 0, false);
         return NIL;
     }
 

@@ -76,7 +76,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class date_defns extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new date_defns();
 
- public static final String myName = "com.cyc.cycjava.cycl.date_defns";
 
 
 

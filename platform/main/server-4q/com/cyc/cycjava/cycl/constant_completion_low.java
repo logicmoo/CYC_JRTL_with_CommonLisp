@@ -46,7 +46,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class constant_completion_low extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new constant_completion_low();
 
- public static final String myName = "com.cyc.cycjava.cycl.constant_completion_low";
 
 
     // defparameter

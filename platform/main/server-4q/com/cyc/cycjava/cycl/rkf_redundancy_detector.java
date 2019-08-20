@@ -38,7 +38,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rkf_redundancy_detector extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rkf_redundancy_detector();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_redundancy_detector";
 
 
     private static final SubLSymbol $kw2$CACHE_INFERENCE_RESULTS_ = makeKeyword("CACHE-INFERENCE-RESULTS?");

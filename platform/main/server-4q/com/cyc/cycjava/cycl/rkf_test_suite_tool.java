@@ -237,7 +237,6 @@ public final class rkf_test_suite_tool extends SubLTranslatedFile implements V12
 
     public static final SubLFile me = new rkf_test_suite_tool();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_test_suite_tool";
 
 
     // defconstant

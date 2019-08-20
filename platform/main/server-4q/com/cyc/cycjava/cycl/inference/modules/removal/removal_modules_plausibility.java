@@ -31,7 +31,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_plausibility extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_plausibility";
 	public static String myFingerPrint = "139109a1efbc8f0721cacb41d4d3af9e12e67ce4a95bbe4d70406982728247e4";
 	private static SubLObject $const0$referentiallyEmptyNAT;
 	private static SubLSymbol $kw$POS;
@@ -174,14 +173,14 @@ public class removal_modules_plausibility extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_removal_modules_plausibility_file() {
-		declareFunction(myName, "removal_referentially_empty_nat_expand", "REMOVAL-REFERENTIALLY-EMPTY-NAT-EXPAND", 1,
+		declareFunction("removal_referentially_empty_nat_expand", "REMOVAL-REFERENTIALLY-EMPTY-NAT-EXPAND", 1,
 				1, false);
-		declareFunction(myName, "removal_sentence_plausibility_score_expand",
+		declareFunction("removal_sentence_plausibility_score_expand",
 				"REMOVAL-SENTENCE-PLAUSIBILITY-SCORE-EXPAND", 1, 1, false);
-		declareFunction(myName, "removal_plausibility_of_collection", "REMOVAL-PLAUSIBILITY-OF-COLLECTION", 2, 0,
+		declareFunction("removal_plausibility_of_collection", "REMOVAL-PLAUSIBILITY-OF-COLLECTION", 2, 0,
 				false);
-		declareFunction(myName, "removal_plausibility_of_sentence", "REMOVAL-PLAUSIBILITY-OF-SENTENCE", 2, 0, false);
-		declareFunction(myName, "removal_distance_between_term_sets", "REMOVAL-DISTANCE-BETWEEN-TERM-SETS", 2, 0,
+		declareFunction("removal_plausibility_of_sentence", "REMOVAL-PLAUSIBILITY-OF-SENTENCE", 2, 0, false);
+		declareFunction("removal_distance_between_term_sets", "REMOVAL-DISTANCE-BETWEEN-TERM-SETS", 2, 0,
 				false);
 		return NIL;
 	}

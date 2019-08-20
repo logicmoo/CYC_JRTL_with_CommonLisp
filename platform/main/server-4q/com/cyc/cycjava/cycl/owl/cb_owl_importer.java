@@ -67,7 +67,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class cb_owl_importer extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new cb_owl_importer();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.owl.cb_owl_importer";
 
 
     private static final SubLString $$$OWL_Importer = makeString("OWL Importer");

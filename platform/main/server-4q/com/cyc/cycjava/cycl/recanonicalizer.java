@@ -100,7 +100,6 @@ public final class recanonicalizer extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new recanonicalizer();
 
-    public static final String myName = "com.cyc.cycjava.cycl.recanonicalizer";
 
     // // Definitions
     /**

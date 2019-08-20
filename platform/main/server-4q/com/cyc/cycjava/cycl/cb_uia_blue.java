@@ -37,7 +37,6 @@ public final class cb_uia_blue extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cb_uia_blue();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_uia_blue";
 
     // // Definitions
     public static final SubLObject create_uia_blue_signature_from_uia(SubLObject uia) {

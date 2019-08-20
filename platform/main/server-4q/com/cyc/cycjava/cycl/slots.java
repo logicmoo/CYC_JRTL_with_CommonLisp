@@ -133,7 +133,6 @@ public final class slots extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new slots();
 
- public static final String myName = "com.cyc.cycjava.cycl.slots";
 
 
     // defconstant

@@ -54,7 +54,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class fi_edit extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new fi_edit();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.fi_edit";
 
 
     // defparameter

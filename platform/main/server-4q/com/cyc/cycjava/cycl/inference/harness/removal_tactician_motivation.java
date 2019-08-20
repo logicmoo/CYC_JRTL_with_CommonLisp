@@ -28,7 +28,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_tactician_motivation extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.harness.removal_tactician_motivation";
     public static String myFingerPrint = "1216b00d69a9eaede323d81c8698b10a8b3062a3d93d6f8f10ab29b0c39b3213";
     @SubL(source = "cycl/inference/harness/removal-tactician-motivation.lisp", position = 12100L)
     private static SubLSymbol $removal_strategy_rl_tactician_tactic_types$;
@@ -1045,46 +1044,46 @@ public class removal_tactician_motivation extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_tactician_motivation_file() {
-        declareMacro(me, "removal_strategy_with_strategically_active_strategem", "REMOVAL-STRATEGY-WITH-STRATEGICALLY-ACTIVE-STRATEGEM");
-        declareFunction(myName, "removal_strategy_possibly_propagate_motivation_to_link_head", "REMOVAL-STRATEGY-POSSIBLY-PROPAGATE-MOTIVATION-TO-LINK-HEAD", 2, 0, false);
-        declareFunction(myName, "removal_strategy_propagate_motivation_to_link_head", "REMOVAL-STRATEGY-PROPAGATE-MOTIVATION-TO-LINK-HEAD", 2, 0, false);
-        declareFunction(myName, "removal_strategy_link_motivates_problemP", "REMOVAL-STRATEGY-LINK-MOTIVATES-PROBLEM?", 2, 1, false);
-        declareFunction(myName, "removal_strategy_link_motivates_lookahead_problemP", "REMOVAL-STRATEGY-LINK-MOTIVATES-LOOKAHEAD-PROBLEM?", 2, 0, false);
-        declareFunction(myName, "removal_strategy_possibly_propagate_motivation_to_problem", "REMOVAL-STRATEGY-POSSIBLY-PROPAGATE-MOTIVATION-TO-PROBLEM", 2, 0, false);
-        declareFunction(myName, "removal_strategy_possibly_activate_problem", "REMOVAL-STRATEGY-POSSIBLY-ACTIVATE-PROBLEM", 2, 0, false);
-        declareFunction(myName, "removal_strategy_problem_is_the_rest_of_a_removalP", "REMOVAL-STRATEGY-PROBLEM-IS-THE-REST-OF-A-REMOVAL?", 2, 0, false);
-        declareFunction(myName, "removal_strategy_problem_is_the_rest_of_a_join_orderedP", "REMOVAL-STRATEGY-PROBLEM-IS-THE-REST-OF-A-JOIN-ORDERED?", 2, 0, false);
-        declareFunction(myName, "removal_strategy_possibly_propagate_proof_spec_to_restricted_non_focals", "REMOVAL-STRATEGY-POSSIBLY-PROPAGATE-PROOF-SPEC-TO-RESTRICTED-NON-FOCALS", 2, 0, false);
-        declareFunction(myName, "removal_strategy_motivates_problem_via_rewriteP", "REMOVAL-STRATEGY-MOTIVATES-PROBLEM-VIA-REWRITE?", 2, 0, false);
-        declareFunction(myName, "removal_strategy_chooses_not_to_examine_problemP", "REMOVAL-STRATEGY-CHOOSES-NOT-TO-EXAMINE-PROBLEM?", 2, 0, false);
-        declareFunction(myName, "removal_strategy_chooses_not_to_activate_problemP", "REMOVAL-STRATEGY-CHOOSES-NOT-TO-ACTIVATE-PROBLEM?", 2, 0, false);
-        declareFunction(myName, "removal_strategy_activate_problem", "REMOVAL-STRATEGY-ACTIVATE-PROBLEM", 2, 0, false);
-        declareFunction(myName, "removal_strategy_possibly_activate_strategems", "REMOVAL-STRATEGY-POSSIBLY-ACTIVATE-STRATEGEMS", 2, 0, false);
-        declareFunction(myName, "removal_strategy_filter_strategems_by_rlt_tactic_types", "REMOVAL-STRATEGY-FILTER-STRATEGEMS-BY-RLT-TACTIC-TYPES", 2, 0, false);
-        declareFunction(myName, "removal_strategy_filter_strategems_by_rlt_tactic_types_int", "REMOVAL-STRATEGY-FILTER-STRATEGEMS-BY-RLT-TACTIC-TYPES-INT", 2, 0, false);
-        declareFunction(myName, "removal_strategy_note_new_tactic", "REMOVAL-STRATEGY-NOTE-NEW-TACTIC", 2, 0, false);
-        declareFunction(myName, "removal_strategy_note_split_tactics_strategically_possible", "REMOVAL-STRATEGY-NOTE-SPLIT-TACTICS-STRATEGICALLY-POSSIBLE", 2, 0, false);
-        declareFunction(myName, "removal_strategy_note_new_tactic_possible", "REMOVAL-STRATEGY-NOTE-NEW-TACTIC-POSSIBLE", 2, 0, false);
-        declareFunction(myName, "removal_strategy_categorize_strategems", "REMOVAL-STRATEGY-CATEGORIZE-STRATEGEMS", 2, 0, false);
-        declareFunction(myName, "removal_strategy_categorize_motivation_strategems", "REMOVAL-STRATEGY-CATEGORIZE-MOTIVATION-STRATEGEMS", 4, 0, false);
-        declareFunction(myName, "removal_strategy_categorize_removal_tactics", "REMOVAL-STRATEGY-CATEGORIZE-REMOVAL-TACTICS", 4, 0, false);
-        declareFunction(myName, "removal_strategy_categorize_disjunctive_tactics", "REMOVAL-STRATEGY-CATEGORIZE-DISJUNCTIVE-TACTICS", 4, 0, false);
-        declareFunction(myName, "removal_strategy_categorize_split_tactics", "REMOVAL-STRATEGY-CATEGORIZE-SPLIT-TACTICS", 4, 0, false);
-        declareFunction(myName, "removal_strategy_categorize_connected_conjunction_tactics", "REMOVAL-STRATEGY-CATEGORIZE-CONNECTED-CONJUNCTION-TACTICS", 4, 0, false);
-        declareFunction(myName, "removal_strategy_deems_conjunctive_tactic_spec_betterP", "REMOVAL-STRATEGY-DEEMS-CONJUNCTIVE-TACTIC-SPEC-BETTER?", 11, 0, false);
-        declareFunction(myName, "join_ordered_tactic_that_leads_to_a_potentially_simplifying_literalP", "JOIN-ORDERED-TACTIC-THAT-LEADS-TO-A-POTENTIALLY-SIMPLIFYING-LITERAL?", 1, 0, false);
-        declareFunction(myName, "removal_strategy_commits_to_no_removal_backtrackingP", "REMOVAL-STRATEGY-COMMITS-TO-NO-REMOVAL-BACKTRACKING?", 3, 0, false);
-        declareFunction(myName, "removal_strategy_logical_tactic_removal_backtracking_cheapP", "REMOVAL-STRATEGY-LOGICAL-TACTIC-REMOVAL-BACKTRACKING-CHEAP?", 2, 0, false);
-        declareFunction(myName, "removal_strategy_possibly_reconsider_split_set_asides", "REMOVAL-STRATEGY-POSSIBLY-RECONSIDER-SPLIT-SET-ASIDES", 2, 0, false);
-        declareFunction(myName, "removal_strategy_reconsider_one_split_set_aside", "REMOVAL-STRATEGY-RECONSIDER-ONE-SPLIT-SET-ASIDE", 2, 0, false);
-        declareFunction(myName, "removal_strategy_possibly_clear_strategic_status", "REMOVAL-STRATEGY-POSSIBLY-CLEAR-STRATEGIC-STATUS", 2, 0, false);
-        declareFunction(myName, "removal_strategy_reactivate_executable_strategem", "REMOVAL-STRATEGY-REACTIVATE-EXECUTABLE-STRATEGEM", 2, 0, false);
-        declareFunction(myName, "removal_strategy_strategically_deactivate_strategem", "REMOVAL-STRATEGY-STRATEGICALLY-DEACTIVATE-STRATEGEM", 2, 0, false);
-        declareFunction(myName, "removal_strategy_deactivate_strategem", "REMOVAL-STRATEGY-DEACTIVATE-STRATEGEM", 2, 0, false);
-        declareFunction(myName, "removal_strategy_possibly_deactivate_problem", "REMOVAL-STRATEGY-POSSIBLY-DEACTIVATE-PROBLEM", 2, 0, false);
-        declareFunction(myName, "removal_strategy_consider_that_problem_could_be_strategically_pending", "REMOVAL-STRATEGY-CONSIDER-THAT-PROBLEM-COULD-BE-STRATEGICALLY-PENDING", 2, 0, false);
-        declareFunction(myName, "removal_strategy_make_problem_pending", "REMOVAL-STRATEGY-MAKE-PROBLEM-PENDING", 2, 0, false);
-        declareFunction(myName, "removal_strategy_problem_nothing_to_doP", "REMOVAL-STRATEGY-PROBLEM-NOTHING-TO-DO?", 2, 0, false);
+        declareMacro("removal_strategy_with_strategically_active_strategem", "REMOVAL-STRATEGY-WITH-STRATEGICALLY-ACTIVE-STRATEGEM");
+        declareFunction("removal_strategy_possibly_propagate_motivation_to_link_head", "REMOVAL-STRATEGY-POSSIBLY-PROPAGATE-MOTIVATION-TO-LINK-HEAD", 2, 0, false);
+        declareFunction("removal_strategy_propagate_motivation_to_link_head", "REMOVAL-STRATEGY-PROPAGATE-MOTIVATION-TO-LINK-HEAD", 2, 0, false);
+        declareFunction("removal_strategy_link_motivates_problemP", "REMOVAL-STRATEGY-LINK-MOTIVATES-PROBLEM?", 2, 1, false);
+        declareFunction("removal_strategy_link_motivates_lookahead_problemP", "REMOVAL-STRATEGY-LINK-MOTIVATES-LOOKAHEAD-PROBLEM?", 2, 0, false);
+        declareFunction("removal_strategy_possibly_propagate_motivation_to_problem", "REMOVAL-STRATEGY-POSSIBLY-PROPAGATE-MOTIVATION-TO-PROBLEM", 2, 0, false);
+        declareFunction("removal_strategy_possibly_activate_problem", "REMOVAL-STRATEGY-POSSIBLY-ACTIVATE-PROBLEM", 2, 0, false);
+        declareFunction("removal_strategy_problem_is_the_rest_of_a_removalP", "REMOVAL-STRATEGY-PROBLEM-IS-THE-REST-OF-A-REMOVAL?", 2, 0, false);
+        declareFunction("removal_strategy_problem_is_the_rest_of_a_join_orderedP", "REMOVAL-STRATEGY-PROBLEM-IS-THE-REST-OF-A-JOIN-ORDERED?", 2, 0, false);
+        declareFunction("removal_strategy_possibly_propagate_proof_spec_to_restricted_non_focals", "REMOVAL-STRATEGY-POSSIBLY-PROPAGATE-PROOF-SPEC-TO-RESTRICTED-NON-FOCALS", 2, 0, false);
+        declareFunction("removal_strategy_motivates_problem_via_rewriteP", "REMOVAL-STRATEGY-MOTIVATES-PROBLEM-VIA-REWRITE?", 2, 0, false);
+        declareFunction("removal_strategy_chooses_not_to_examine_problemP", "REMOVAL-STRATEGY-CHOOSES-NOT-TO-EXAMINE-PROBLEM?", 2, 0, false);
+        declareFunction("removal_strategy_chooses_not_to_activate_problemP", "REMOVAL-STRATEGY-CHOOSES-NOT-TO-ACTIVATE-PROBLEM?", 2, 0, false);
+        declareFunction("removal_strategy_activate_problem", "REMOVAL-STRATEGY-ACTIVATE-PROBLEM", 2, 0, false);
+        declareFunction("removal_strategy_possibly_activate_strategems", "REMOVAL-STRATEGY-POSSIBLY-ACTIVATE-STRATEGEMS", 2, 0, false);
+        declareFunction("removal_strategy_filter_strategems_by_rlt_tactic_types", "REMOVAL-STRATEGY-FILTER-STRATEGEMS-BY-RLT-TACTIC-TYPES", 2, 0, false);
+        declareFunction("removal_strategy_filter_strategems_by_rlt_tactic_types_int", "REMOVAL-STRATEGY-FILTER-STRATEGEMS-BY-RLT-TACTIC-TYPES-INT", 2, 0, false);
+        declareFunction("removal_strategy_note_new_tactic", "REMOVAL-STRATEGY-NOTE-NEW-TACTIC", 2, 0, false);
+        declareFunction("removal_strategy_note_split_tactics_strategically_possible", "REMOVAL-STRATEGY-NOTE-SPLIT-TACTICS-STRATEGICALLY-POSSIBLE", 2, 0, false);
+        declareFunction("removal_strategy_note_new_tactic_possible", "REMOVAL-STRATEGY-NOTE-NEW-TACTIC-POSSIBLE", 2, 0, false);
+        declareFunction("removal_strategy_categorize_strategems", "REMOVAL-STRATEGY-CATEGORIZE-STRATEGEMS", 2, 0, false);
+        declareFunction("removal_strategy_categorize_motivation_strategems", "REMOVAL-STRATEGY-CATEGORIZE-MOTIVATION-STRATEGEMS", 4, 0, false);
+        declareFunction("removal_strategy_categorize_removal_tactics", "REMOVAL-STRATEGY-CATEGORIZE-REMOVAL-TACTICS", 4, 0, false);
+        declareFunction("removal_strategy_categorize_disjunctive_tactics", "REMOVAL-STRATEGY-CATEGORIZE-DISJUNCTIVE-TACTICS", 4, 0, false);
+        declareFunction("removal_strategy_categorize_split_tactics", "REMOVAL-STRATEGY-CATEGORIZE-SPLIT-TACTICS", 4, 0, false);
+        declareFunction("removal_strategy_categorize_connected_conjunction_tactics", "REMOVAL-STRATEGY-CATEGORIZE-CONNECTED-CONJUNCTION-TACTICS", 4, 0, false);
+        declareFunction("removal_strategy_deems_conjunctive_tactic_spec_betterP", "REMOVAL-STRATEGY-DEEMS-CONJUNCTIVE-TACTIC-SPEC-BETTER?", 11, 0, false);
+        declareFunction("join_ordered_tactic_that_leads_to_a_potentially_simplifying_literalP", "JOIN-ORDERED-TACTIC-THAT-LEADS-TO-A-POTENTIALLY-SIMPLIFYING-LITERAL?", 1, 0, false);
+        declareFunction("removal_strategy_commits_to_no_removal_backtrackingP", "REMOVAL-STRATEGY-COMMITS-TO-NO-REMOVAL-BACKTRACKING?", 3, 0, false);
+        declareFunction("removal_strategy_logical_tactic_removal_backtracking_cheapP", "REMOVAL-STRATEGY-LOGICAL-TACTIC-REMOVAL-BACKTRACKING-CHEAP?", 2, 0, false);
+        declareFunction("removal_strategy_possibly_reconsider_split_set_asides", "REMOVAL-STRATEGY-POSSIBLY-RECONSIDER-SPLIT-SET-ASIDES", 2, 0, false);
+        declareFunction("removal_strategy_reconsider_one_split_set_aside", "REMOVAL-STRATEGY-RECONSIDER-ONE-SPLIT-SET-ASIDE", 2, 0, false);
+        declareFunction("removal_strategy_possibly_clear_strategic_status", "REMOVAL-STRATEGY-POSSIBLY-CLEAR-STRATEGIC-STATUS", 2, 0, false);
+        declareFunction("removal_strategy_reactivate_executable_strategem", "REMOVAL-STRATEGY-REACTIVATE-EXECUTABLE-STRATEGEM", 2, 0, false);
+        declareFunction("removal_strategy_strategically_deactivate_strategem", "REMOVAL-STRATEGY-STRATEGICALLY-DEACTIVATE-STRATEGEM", 2, 0, false);
+        declareFunction("removal_strategy_deactivate_strategem", "REMOVAL-STRATEGY-DEACTIVATE-STRATEGEM", 2, 0, false);
+        declareFunction("removal_strategy_possibly_deactivate_problem", "REMOVAL-STRATEGY-POSSIBLY-DEACTIVATE-PROBLEM", 2, 0, false);
+        declareFunction("removal_strategy_consider_that_problem_could_be_strategically_pending", "REMOVAL-STRATEGY-CONSIDER-THAT-PROBLEM-COULD-BE-STRATEGICALLY-PENDING", 2, 0, false);
+        declareFunction("removal_strategy_make_problem_pending", "REMOVAL-STRATEGY-MAKE-PROBLEM-PENDING", 2, 0, false);
+        declareFunction("removal_strategy_problem_nothing_to_doP", "REMOVAL-STRATEGY-PROBLEM-NOTHING-TO-DO?", 2, 0, false);
         return NIL;
     }
 

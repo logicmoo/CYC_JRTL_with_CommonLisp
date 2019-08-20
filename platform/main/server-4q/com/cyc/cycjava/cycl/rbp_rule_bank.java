@@ -121,7 +121,6 @@ public final class rbp_rule_bank extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new rbp_rule_bank();
 
- public static final String myName = "com.cyc.cycjava.cycl.rbp_rule_bank";
 
 
 

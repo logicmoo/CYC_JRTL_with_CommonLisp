@@ -174,7 +174,6 @@ public final class modules extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new modules();
 
- public static final String myName = "com.cyc.cycjava.cycl.modules";
 
 
     // deflexical

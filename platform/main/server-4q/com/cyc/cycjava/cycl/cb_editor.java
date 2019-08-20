@@ -963,7 +963,6 @@ public final class cb_editor extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new cb_editor();
 
- public static final String myName = "com.cyc.cycjava.cycl.cb_editor";
 
 
     // defparameter

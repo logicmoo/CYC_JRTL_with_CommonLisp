@@ -39,7 +39,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class related_concepts extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new related_concepts();
 
- public static final String myName = "com.cyc.cycjava.cycl.related_concepts";
 
 
     // Internal Constants

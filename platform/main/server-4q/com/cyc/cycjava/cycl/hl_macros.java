@@ -42,7 +42,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class hl_macros extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new hl_macros();
 
- public static final String myName = "com.cyc.cycjava.cycl.hl_macros";
 
 
     // Internal Constants

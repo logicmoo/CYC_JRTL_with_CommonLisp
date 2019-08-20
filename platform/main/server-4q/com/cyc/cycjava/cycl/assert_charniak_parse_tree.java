@@ -43,7 +43,6 @@ public final class assert_charniak_parse_tree extends SubLTranslatedFile impleme
 
     public static final SubLFile me = new assert_charniak_parse_tree();
 
-    public static final String myName = "com.cyc.cycjava.cycl.assert_charniak_parse_tree";
 
     // // Definitions
     public static final SubLObject assert_charniak_parse_for_sentence(SubLObject sentence, SubLObject tokenization) {

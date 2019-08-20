@@ -32,7 +32,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class inference_worker_union extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.harness.inference_worker_union";
     public static String myFingerPrint = "bfdbdac834928b99022a32fedbbf92f5a8ba0f278bbcdc658ace7f962672804a";
     @SubL(source = "cycl/inference/harness/inference-worker-union.lisp", position = 3700L)
     private static SubLSymbol $union_module$;
@@ -449,34 +448,34 @@ public class inference_worker_union extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_inference_worker_union_file() {
-        declareFunction(myName, "union_link_p", "UNION-LINK-P", 1, 0, false);
-        declareFunction(myName, "maybe_new_union_link", "MAYBE-NEW-UNION-LINK", 2, 0, false);
-        declareFunction(myName, "new_union_link", "NEW-UNION-LINK", 2, 0, false);
-        declareFunction(myName, "destroy_union_link", "DESTROY-UNION-LINK", 1, 0, false);
-        declareFunction(myName, "union_link_supporting_problem", "UNION-LINK-SUPPORTING-PROBLEM", 1, 0, false);
-        declareFunction(myName, "union_link_tactic", "UNION-LINK-TACTIC", 1, 0, false);
-        declareFunction(myName, "union_link_tactic_int", "UNION-LINK-TACTIC-INT", 1, 0, false);
-        declareFunction(myName, "union_tactic_p", "UNION-TACTIC-P", 1, 0, false);
-        declareFunction(myName, "new_union_tactic", "NEW-UNION-TACTIC", 2, 0, false);
-        declareFunction(myName, "union_tactic_disjunct_index", "UNION-TACTIC-DISJUNCT-INDEX", 1, 0, false);
-        declareFunction(myName, "union_tactic_link", "UNION-TACTIC-LINK", 1, 0, false);
-        declareFunction(myName, "union_tactic_link_int", "UNION-TACTIC-LINK-INT", 1, 0, false);
-        declareFunction(myName, "find_union_tactic_disjunct_mapped_problem", "FIND-UNION-TACTIC-DISJUNCT-MAPPED-PROBLEM", 2, 0, false);
-        declareFunction(myName, "find_union_link_supporting_mapped_problem", "FIND-UNION-LINK-SUPPORTING-MAPPED-PROBLEM", 3, 0, false);
-        declareFunction(myName, "find_disjunct_problem_from_contextualized_clause", "FIND-DISJUNCT-PROBLEM-FROM-CONTEXTUALIZED-CLAUSE", 3, 0, false);
-        declareFunction(myName, "find_or_create_union_tactic_disjunct_mapped_problem", "FIND-OR-CREATE-UNION-TACTIC-DISJUNCT-MAPPED-PROBLEM", 1, 0, false);
-        declareFunction(myName, "find_or_create_union_link_supporting_mapped_problem", "FIND-OR-CREATE-UNION-LINK-SUPPORTING-MAPPED-PROBLEM", 2, 0, false);
-        declareFunction(myName, "determine_new_union_tactics", "DETERMINE-NEW-UNION-TACTICS", 2, 0, false);
-        declareFunction(myName, "compute_strategic_properties_of_union_tactic", "COMPUTE-STRATEGIC-PROPERTIES-OF-UNION-TACTIC", 3, 0, false);
-        declareFunction(myName, "compute_union_tactic_productivity", "COMPUTE-UNION-TACTIC-PRODUCTIVITY", 3, 0, false);
-        declareFunction(myName, "compute_union_tactic_preference_level", "COMPUTE-UNION-TACTIC-PREFERENCE-LEVEL", 3, 0, false);
-        declareFunction(myName, "union_tactic_lookahead_problem", "UNION-TACTIC-LOOKAHEAD-PROBLEM", 1, 0, false);
-        declareFunction(myName, "execute_union_tactic", "EXECUTE-UNION-TACTIC", 1, 0, false);
-        declareFunction(myName, "possibly_clean_union_tactic", "POSSIBLY-CLEAN-UNION-TACTIC", 1, 0, false);
-        declareFunction(myName, "new_union_proof", "NEW-UNION-PROOF", 3, 0, false);
-        declareFunction(myName, "bubble_up_proof_to_union_link", "BUBBLE-UP-PROOF-TO-UNION-LINK", 3, 0, false);
-        declareFunction(myName, "disjunctive_assumption_link_p", "DISJUNCTIVE-ASSUMPTION-LINK-P", 1, 0, false);
-        declareFunction(myName, "disjunctive_assumption_tactic_p", "DISJUNCTIVE-ASSUMPTION-TACTIC-P", 1, 0, false);
+        declareFunction("union_link_p", "UNION-LINK-P", 1, 0, false);
+        declareFunction("maybe_new_union_link", "MAYBE-NEW-UNION-LINK", 2, 0, false);
+        declareFunction("new_union_link", "NEW-UNION-LINK", 2, 0, false);
+        declareFunction("destroy_union_link", "DESTROY-UNION-LINK", 1, 0, false);
+        declareFunction("union_link_supporting_problem", "UNION-LINK-SUPPORTING-PROBLEM", 1, 0, false);
+        declareFunction("union_link_tactic", "UNION-LINK-TACTIC", 1, 0, false);
+        declareFunction("union_link_tactic_int", "UNION-LINK-TACTIC-INT", 1, 0, false);
+        declareFunction("union_tactic_p", "UNION-TACTIC-P", 1, 0, false);
+        declareFunction("new_union_tactic", "NEW-UNION-TACTIC", 2, 0, false);
+        declareFunction("union_tactic_disjunct_index", "UNION-TACTIC-DISJUNCT-INDEX", 1, 0, false);
+        declareFunction("union_tactic_link", "UNION-TACTIC-LINK", 1, 0, false);
+        declareFunction("union_tactic_link_int", "UNION-TACTIC-LINK-INT", 1, 0, false);
+        declareFunction("find_union_tactic_disjunct_mapped_problem", "FIND-UNION-TACTIC-DISJUNCT-MAPPED-PROBLEM", 2, 0, false);
+        declareFunction("find_union_link_supporting_mapped_problem", "FIND-UNION-LINK-SUPPORTING-MAPPED-PROBLEM", 3, 0, false);
+        declareFunction("find_disjunct_problem_from_contextualized_clause", "FIND-DISJUNCT-PROBLEM-FROM-CONTEXTUALIZED-CLAUSE", 3, 0, false);
+        declareFunction("find_or_create_union_tactic_disjunct_mapped_problem", "FIND-OR-CREATE-UNION-TACTIC-DISJUNCT-MAPPED-PROBLEM", 1, 0, false);
+        declareFunction("find_or_create_union_link_supporting_mapped_problem", "FIND-OR-CREATE-UNION-LINK-SUPPORTING-MAPPED-PROBLEM", 2, 0, false);
+        declareFunction("determine_new_union_tactics", "DETERMINE-NEW-UNION-TACTICS", 2, 0, false);
+        declareFunction("compute_strategic_properties_of_union_tactic", "COMPUTE-STRATEGIC-PROPERTIES-OF-UNION-TACTIC", 3, 0, false);
+        declareFunction("compute_union_tactic_productivity", "COMPUTE-UNION-TACTIC-PRODUCTIVITY", 3, 0, false);
+        declareFunction("compute_union_tactic_preference_level", "COMPUTE-UNION-TACTIC-PREFERENCE-LEVEL", 3, 0, false);
+        declareFunction("union_tactic_lookahead_problem", "UNION-TACTIC-LOOKAHEAD-PROBLEM", 1, 0, false);
+        declareFunction("execute_union_tactic", "EXECUTE-UNION-TACTIC", 1, 0, false);
+        declareFunction("possibly_clean_union_tactic", "POSSIBLY-CLEAN-UNION-TACTIC", 1, 0, false);
+        declareFunction("new_union_proof", "NEW-UNION-PROOF", 3, 0, false);
+        declareFunction("bubble_up_proof_to_union_link", "BUBBLE-UP-PROOF-TO-UNION-LINK", 3, 0, false);
+        declareFunction("disjunctive_assumption_link_p", "DISJUNCTIVE-ASSUMPTION-LINK-P", 1, 0, false);
+        declareFunction("disjunctive_assumption_tactic_p", "DISJUNCTIVE-ASSUMPTION-TACTIC-P", 1, 0, false);
         return NIL;
     }
 

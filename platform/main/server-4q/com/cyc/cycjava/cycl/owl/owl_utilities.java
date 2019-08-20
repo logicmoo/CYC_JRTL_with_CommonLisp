@@ -96,7 +96,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class owl_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new owl_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.owl.owl_utilities";
 
 
     // deflexical

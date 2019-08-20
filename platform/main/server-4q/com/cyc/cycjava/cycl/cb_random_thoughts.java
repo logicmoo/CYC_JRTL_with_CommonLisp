@@ -88,7 +88,6 @@ public final class cb_random_thoughts extends SubLTranslatedFile implements V12 
 
     public static final SubLFile me = new cb_random_thoughts();
 
- public static final String myName = "com.cyc.cycjava.cycl.cb_random_thoughts";
 
 
     // deflexical

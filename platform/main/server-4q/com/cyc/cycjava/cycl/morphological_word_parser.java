@@ -77,7 +77,6 @@ public final class morphological_word_parser extends SubLTranslatedFile implemen
 
     public static final SubLFile me = new morphological_word_parser();
 
- public static final String myName = "com.cyc.cycjava.cycl.morphological_word_parser";
 
 
     // deflexical

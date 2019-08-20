@@ -72,7 +72,6 @@ public final class hlmt_czer extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new hlmt_czer();
 
- public static final String myName = "com.cyc.cycjava.cycl.hlmt_czer";
 
 
 

@@ -31,7 +31,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rkf_todo_lists extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rkf_todo_lists();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_todo_lists";
 
 
     // Internal Constants

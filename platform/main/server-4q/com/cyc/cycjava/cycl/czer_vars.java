@@ -58,7 +58,6 @@ public final class czer_vars extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new czer_vars();
 
- public static final String myName = "com.cyc.cycjava.cycl.czer_vars";
 
 
     // defparameter

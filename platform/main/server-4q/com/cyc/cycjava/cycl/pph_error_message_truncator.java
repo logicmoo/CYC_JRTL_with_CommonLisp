@@ -43,7 +43,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class pph_error_message_truncator extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new pph_error_message_truncator();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.pph_error_message_truncator";
 
 
     // deflexical

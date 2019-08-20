@@ -166,7 +166,6 @@ public final class numeric_date_utilities extends SubLTranslatedFile implements 
 
     public static final SubLFile me = new numeric_date_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.numeric_date_utilities";
 
 
     // defconstant

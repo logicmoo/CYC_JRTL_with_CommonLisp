@@ -84,7 +84,6 @@ public final class cyblack_panel extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cyblack_panel();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_panel";
 
     // // Definitions
     /**

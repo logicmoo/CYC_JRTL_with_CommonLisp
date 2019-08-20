@@ -41,7 +41,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class rule_after_adding extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.harness.rule_after_adding";
     public static String myFingerPrint = "0e7a823bd51bc74ba604db023a0bda43ca065e6a6a3b66988f6ceb31f65372a5";
     @SubL(source = "cycl/inference/harness/rule-after-adding.lisp", position = 700L)
     public static SubLSymbol $rule_after_adding_predicates$;
@@ -819,25 +818,25 @@ public class rule_after_adding extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_rule_after_adding_file() {
-        declareFunction(myName, "clear_rule_after_addings", "CLEAR-RULE-AFTER-ADDINGS", 0, 0, false);
-        declareFunction(myName, "clear_rule_after_removings", "CLEAR-RULE-AFTER-REMOVINGS", 0, 0, false);
-        declareFunction(myName, "handle_rule_after_addings", "HANDLE-RULE-AFTER-ADDINGS", 2, 0, false);
-        declareFunction(myName, "handle_rule_after_addings_int", "HANDLE-RULE-AFTER-ADDINGS-INT", 3, 0, false);
-        declareFunction(myName, "handle_rule_after_removings", "HANDLE-RULE-AFTER-REMOVINGS", 2, 0, false);
-        declareFunction(myName, "handle_rule_after_removings_int", "HANDLE-RULE-AFTER-REMOVINGS-INT", 3, 0, false);
-        declareFunction(myName, "get_rule_after_addings", "GET-RULE-AFTER-ADDINGS", 1, 0, false);
-        declareFunction(myName, "get_rule_after_removings", "GET-RULE-AFTER-REMOVINGS", 1, 0, false);
-        declareFunction(myName, "handle_rule_after_adding", "HANDLE-RULE-AFTER-ADDING", 4, 0, false);
-        declareFunction(myName, "handle_rule_after_removing", "HANDLE-RULE-AFTER-REMOVING", 4, 0, false);
-        declareFunction(myName, "rebuild_rule_after_adding_caches", "REBUILD-RULE-AFTER-ADDING-CACHES", 0, 0, false);
-        declareFunction(myName, "initialize_rule_after_addings_hash", "INITIALIZE-RULE-AFTER-ADDINGS-HASH", 0, 0, false);
-        declareFunction(myName, "initialize_rule_after_removings_hash", "INITIALIZE-RULE-AFTER-REMOVINGS-HASH", 0, 0, false);
-        declareFunction(myName, "recache_rule_after_addings", "RECACHE-RULE-AFTER-ADDINGS", 1, 0, false);
-        declareFunction(myName, "recache_rule_after_removings", "RECACHE-RULE-AFTER-REMOVINGS", 1, 0, false);
-        declareFunction(myName, "propagate_rule_after_adding", "PROPAGATE-RULE-AFTER-ADDING", 2, 0, false);
-        declareFunction(myName, "repropagate_rule_after_adding", "REPROPAGATE-RULE-AFTER-ADDING", 3, 0, false);
-        declareFunction(myName, "repropagate_rule_after_adding_internal", "REPROPAGATE-RULE-AFTER-ADDING-INTERNAL", 2, 0, false);
-        declareFunction(myName, "gather_literals_with_pred", "GATHER-LITERALS-WITH-PRED", 2, 0, false);
+        declareFunction("clear_rule_after_addings", "CLEAR-RULE-AFTER-ADDINGS", 0, 0, false);
+        declareFunction("clear_rule_after_removings", "CLEAR-RULE-AFTER-REMOVINGS", 0, 0, false);
+        declareFunction("handle_rule_after_addings", "HANDLE-RULE-AFTER-ADDINGS", 2, 0, false);
+        declareFunction("handle_rule_after_addings_int", "HANDLE-RULE-AFTER-ADDINGS-INT", 3, 0, false);
+        declareFunction("handle_rule_after_removings", "HANDLE-RULE-AFTER-REMOVINGS", 2, 0, false);
+        declareFunction("handle_rule_after_removings_int", "HANDLE-RULE-AFTER-REMOVINGS-INT", 3, 0, false);
+        declareFunction("get_rule_after_addings", "GET-RULE-AFTER-ADDINGS", 1, 0, false);
+        declareFunction("get_rule_after_removings", "GET-RULE-AFTER-REMOVINGS", 1, 0, false);
+        declareFunction("handle_rule_after_adding", "HANDLE-RULE-AFTER-ADDING", 4, 0, false);
+        declareFunction("handle_rule_after_removing", "HANDLE-RULE-AFTER-REMOVING", 4, 0, false);
+        declareFunction("rebuild_rule_after_adding_caches", "REBUILD-RULE-AFTER-ADDING-CACHES", 0, 0, false);
+        declareFunction("initialize_rule_after_addings_hash", "INITIALIZE-RULE-AFTER-ADDINGS-HASH", 0, 0, false);
+        declareFunction("initialize_rule_after_removings_hash", "INITIALIZE-RULE-AFTER-REMOVINGS-HASH", 0, 0, false);
+        declareFunction("recache_rule_after_addings", "RECACHE-RULE-AFTER-ADDINGS", 1, 0, false);
+        declareFunction("recache_rule_after_removings", "RECACHE-RULE-AFTER-REMOVINGS", 1, 0, false);
+        declareFunction("propagate_rule_after_adding", "PROPAGATE-RULE-AFTER-ADDING", 2, 0, false);
+        declareFunction("repropagate_rule_after_adding", "REPROPAGATE-RULE-AFTER-ADDING", 3, 0, false);
+        declareFunction("repropagate_rule_after_adding_internal", "REPROPAGATE-RULE-AFTER-ADDING-INTERNAL", 2, 0, false);
+        declareFunction("gather_literals_with_pred", "GATHER-LITERALS-WITH-PRED", 2, 0, false);
         return NIL;
     }
 

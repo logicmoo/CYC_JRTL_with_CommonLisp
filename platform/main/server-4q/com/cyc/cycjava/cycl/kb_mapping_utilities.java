@@ -66,7 +66,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class kb_mapping_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new kb_mapping_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.kb_mapping_utilities";
 
 
     // defparameter

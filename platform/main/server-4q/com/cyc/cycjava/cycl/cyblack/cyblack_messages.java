@@ -78,7 +78,6 @@ public final class cyblack_messages extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cyblack_messages();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_messages";
 
     // // Definitions
     /**

@@ -33,7 +33,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rkf_mumbler extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rkf_mumbler();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_mumbler";
 
 
     // deflexical

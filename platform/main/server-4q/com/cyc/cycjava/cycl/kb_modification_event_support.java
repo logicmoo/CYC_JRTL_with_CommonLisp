@@ -45,7 +45,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class kb_modification_event_support extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new kb_modification_event_support();
 
- public static final String myName = "com.cyc.cycjava.cycl.kb_modification_event_support";
 
 
     // deflexical

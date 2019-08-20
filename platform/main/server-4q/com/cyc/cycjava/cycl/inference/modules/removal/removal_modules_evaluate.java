@@ -37,7 +37,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_evaluate extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_evaluate";
     public static String myFingerPrint = "e55ba8005ac332b4b4026fee30507b5dfa05435156c6a03af4574f3d388749e7";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-evaluate.lisp", position = 800L)
     private static SubLSymbol $default_evaluate_bind_cost$;
@@ -392,16 +391,16 @@ public class removal_modules_evaluate extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_evaluate_file() {
-        declareFunction(myName, "make_evaluate_sentence", "MAKE-EVALUATE-SENTENCE", 2, 0, false);
-        declareFunction(myName, "removal_evaluate_bind_expand", "REMOVAL-EVALUATE-BIND-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_evaluate_neg_check_expand", "REMOVAL-EVALUATE-NEG-CHECK-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_evaluate_bind_conjunction_applicability", "REMOVAL-EVALUATE-BIND-CONJUNCTION-APPLICABILITY", 1, 0, false);
-        declareFunction(myName, "total_evaluation_related_conjunction_solvableP", "TOTAL-EVALUATION-RELATED-CONJUNCTION-SOLVABLE?", 1, 2, false);
-        declareFunction(myName, "evaluation_related_contextualized_asent_solvableP", "EVALUATION-RELATED-CONTEXTUALIZED-ASENT-SOLVABLE?", 3, 0, false);
-        declareFunction(myName, "evaluation_related_asentP", "EVALUATION-RELATED-ASENT?", 1, 0, false);
-        declareFunction(myName, "removal_evaluate_bind_conjunction_expand", "REMOVAL-EVALUATE-BIND-CONJUNCTION-EXPAND", 1, 0, false);
-        declareFunction(myName, "total_evaluation_related_conjunction_solution", "TOTAL-EVALUATION-RELATED-CONJUNCTION-SOLUTION", 1, 3, false);
-        declareFunction(myName, "evaluation_related_contextualized_asent_solution", "EVALUATION-RELATED-CONTEXTUALIZED-ASENT-SOLUTION", 3, 0, false);
+        declareFunction("make_evaluate_sentence", "MAKE-EVALUATE-SENTENCE", 2, 0, false);
+        declareFunction("removal_evaluate_bind_expand", "REMOVAL-EVALUATE-BIND-EXPAND", 1, 1, false);
+        declareFunction("removal_evaluate_neg_check_expand", "REMOVAL-EVALUATE-NEG-CHECK-EXPAND", 1, 1, false);
+        declareFunction("removal_evaluate_bind_conjunction_applicability", "REMOVAL-EVALUATE-BIND-CONJUNCTION-APPLICABILITY", 1, 0, false);
+        declareFunction("total_evaluation_related_conjunction_solvableP", "TOTAL-EVALUATION-RELATED-CONJUNCTION-SOLVABLE?", 1, 2, false);
+        declareFunction("evaluation_related_contextualized_asent_solvableP", "EVALUATION-RELATED-CONTEXTUALIZED-ASENT-SOLVABLE?", 3, 0, false);
+        declareFunction("evaluation_related_asentP", "EVALUATION-RELATED-ASENT?", 1, 0, false);
+        declareFunction("removal_evaluate_bind_conjunction_expand", "REMOVAL-EVALUATE-BIND-CONJUNCTION-EXPAND", 1, 0, false);
+        declareFunction("total_evaluation_related_conjunction_solution", "TOTAL-EVALUATION-RELATED-CONJUNCTION-SOLUTION", 1, 3, false);
+        declareFunction("evaluation_related_contextualized_asent_solution", "EVALUATION-RELATED-CONTEXTUALIZED-ASENT-SOLUTION", 3, 0, false);
         return NIL;
     }
 

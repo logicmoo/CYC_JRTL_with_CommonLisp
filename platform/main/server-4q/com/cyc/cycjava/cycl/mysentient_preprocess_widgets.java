@@ -74,7 +74,6 @@ public final class mysentient_preprocess_widgets extends SubLTranslatedFile impl
 
     public static final SubLFile me = new mysentient_preprocess_widgets();
 
-    public static final String myName = "com.cyc.cycjava.cycl.mysentient_preprocess_widgets";
 
     // // Definitions
     // defparameter

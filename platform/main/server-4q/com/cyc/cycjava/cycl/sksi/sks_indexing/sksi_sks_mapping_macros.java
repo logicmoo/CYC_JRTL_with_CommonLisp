@@ -35,7 +35,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sksi_sks_mapping_macros extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sksi_sks_mapping_macros();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.sks_indexing.sksi_sks_mapping_macros";
 
 
     // Internal Constants

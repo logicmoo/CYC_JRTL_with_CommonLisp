@@ -68,7 +68,6 @@
 //
 //    public static final SubLFile me = new cfasl_HIDE();
 //
-//    public static final String myName = "com.cyc.cycjava.cycl.cfasl";
 //
 //    // // Definitions
 //    /**

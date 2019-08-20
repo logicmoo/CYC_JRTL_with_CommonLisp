@@ -154,7 +154,6 @@ public final class cb_template_oe extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new cb_template_oe();
 
- public static final String myName = "com.cyc.cycjava.cycl.cb_template_oe";
 
 
     // defparameter

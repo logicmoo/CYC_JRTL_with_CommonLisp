@@ -46,7 +46,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class negation_predicate extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new negation_predicate();
 
-    public static final String myName = "com.cyc.cycjava.cycl.negation_predicate";
 
     private static final SubLSymbol ALL_NEGATION_PREDICATES_MEMOIZED = makeSymbol("ALL-NEGATION-PREDICATES-MEMOIZED");
 

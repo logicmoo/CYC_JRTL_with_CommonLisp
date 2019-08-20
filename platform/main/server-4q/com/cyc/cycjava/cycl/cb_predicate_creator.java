@@ -55,7 +55,6 @@ public final class cb_predicate_creator extends SubLTranslatedFile implements V0
 
     public static final SubLFile me = new cb_predicate_creator();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_predicate_creator";
 
     // // Definitions
     public static final SubLObject cb_uia_debug_pc_session(SubLObject args) {

@@ -180,7 +180,6 @@ public final class tm_internals extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new tm_internals();
 
-    public static final String myName = "com.cyc.cycjava.cycl.thesaurus.tm_internals";
 
     // // Definitions
     public static final SubLObject thesaurus_gensymP(SubLObject constant) {

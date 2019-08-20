@@ -222,7 +222,6 @@ public final class subl_promotions extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new subl_promotions();
 
- public static final String myName = "com.cyc.cycjava.cycl.subl_promotions";
 
 
     // deflexical

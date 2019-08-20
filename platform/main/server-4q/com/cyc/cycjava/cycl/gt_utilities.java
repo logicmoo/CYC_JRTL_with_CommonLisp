@@ -49,7 +49,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class gt_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new gt_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.gt_utilities";
 
 
     static private final SubLSymbol $sym1$GT_INDEX_ARG_OK_ = makeSymbol("GT-INDEX-ARG-OK?");

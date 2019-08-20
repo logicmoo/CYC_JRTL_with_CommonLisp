@@ -45,7 +45,6 @@ public final class cb_query_sentence_lexifier extends SubLTranslatedFile impleme
 
     public static final SubLFile me = new cb_query_sentence_lexifier();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_query_sentence_lexifier";
 
 
 

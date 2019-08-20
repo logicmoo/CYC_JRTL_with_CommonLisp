@@ -65,7 +65,6 @@ public final class ghl_link_iterators extends SubLTranslatedFile implements V12 
 
     public static final SubLFile me = new ghl_link_iterators();
 
- public static final String myName = "com.cyc.cycjava.cycl.ghl_link_iterators";
 
 
     // Internal Constants

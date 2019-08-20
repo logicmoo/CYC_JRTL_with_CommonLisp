@@ -251,7 +251,6 @@ public final class reformulator_hub extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new reformulator_hub();
 
- public static final String myName = "com.cyc.cycjava.cycl.reformulator_hub";
 
 
     // defparameter

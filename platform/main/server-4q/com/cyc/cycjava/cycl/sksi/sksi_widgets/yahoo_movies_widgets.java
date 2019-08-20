@@ -52,7 +52,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class yahoo_movies_widgets extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new yahoo_movies_widgets();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.sksi_widgets.yahoo_movies_widgets";
 
 
     // deflexical

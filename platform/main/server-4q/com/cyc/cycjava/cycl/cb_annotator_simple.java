@@ -83,7 +83,6 @@ public final class cb_annotator_simple extends SubLTranslatedFile implements V12
 
     public static final SubLFile me = new cb_annotator_simple();
 
- public static final String myName = "com.cyc.cycjava.cycl.cb_annotator_simple";
 
 
     // Internal Constants

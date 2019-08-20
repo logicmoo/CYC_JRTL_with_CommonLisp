@@ -64,7 +64,6 @@ public final class benchmarks extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new benchmarks();
 
-    public static final String myName = "com.cyc.cycjava.cycl.benchmarks";
 
     // // Definitions
     /**

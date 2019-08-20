@@ -264,7 +264,6 @@ public final class value_tables extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new value_tables();
 
- public static final String myName = "com.cyc.cycjava.cycl.value_tables";
 
 
     // defconstant

@@ -113,7 +113,6 @@ public final class event_learning extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new event_learning();
 
- public static final String myName = "com.cyc.cycjava.cycl.event_learning";
 
 
     // defparameter

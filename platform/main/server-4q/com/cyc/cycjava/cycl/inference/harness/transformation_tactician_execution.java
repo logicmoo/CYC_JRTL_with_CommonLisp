@@ -19,7 +19,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class transformation_tactician_execution extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.harness.transformation_tactician_execution";
     public static String myFingerPrint = "b119e976d22be831bdcea40531c850d79b05dad0f99c26881a9da0c16aa28eba";
     @SubL(source = "cycl/inference/harness/transformation-tactician-execution.lisp", position = 3000L)
     private static SubLSymbol $transformation_strategy_box_shaking_frequency$;
@@ -182,17 +181,17 @@ public class transformation_tactician_execution extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_transformation_tactician_execution_file() {
-        declareFunction(myName, "transformation_strategy_doneP", "TRANSFORMATION-STRATEGY-DONE?", 1, 0, false);
-        declareFunction(myName, "transformation_strategy_do_one_step", "TRANSFORMATION-STRATEGY-DO-ONE-STEP", 1, 0, false);
-        declareFunction(myName, "transformation_strategy_do_one_step_int", "TRANSFORMATION-STRATEGY-DO-ONE-STEP-INT", 1, 0, false);
-        declareFunction(myName, "transformation_strategy_select_best_strategem", "TRANSFORMATION-STRATEGY-SELECT-BEST-STRATEGEM", 1, 0, false);
-        declareFunction(myName, "transformation_strategy_default_select_best_strategem", "TRANSFORMATION-STRATEGY-DEFAULT-SELECT-BEST-STRATEGEM", 1, 0, false);
-        declareFunction(myName, "transformation_strategy_quiesce", "TRANSFORMATION-STRATEGY-QUIESCE", 1, 0, false);
-        declareFunction(myName, "transformation_strategy_execute_strategem", "TRANSFORMATION-STRATEGY-EXECUTE-STRATEGEM", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_execute_tactic", "TRANSFORMATION-STRATEGY-EXECUTE-TACTIC", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_execute_content_tactic", "TRANSFORMATION-STRATEGY-EXECUTE-CONTENT-TACTIC", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_execute_meta_structural_tactic", "TRANSFORMATION-STRATEGY-EXECUTE-META-STRUCTURAL-TACTIC", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_execute_executable_strategem", "TRANSFORMATION-STRATEGY-EXECUTE-EXECUTABLE-STRATEGEM", 2, 0, false);
+        declareFunction("transformation_strategy_doneP", "TRANSFORMATION-STRATEGY-DONE?", 1, 0, false);
+        declareFunction("transformation_strategy_do_one_step", "TRANSFORMATION-STRATEGY-DO-ONE-STEP", 1, 0, false);
+        declareFunction("transformation_strategy_do_one_step_int", "TRANSFORMATION-STRATEGY-DO-ONE-STEP-INT", 1, 0, false);
+        declareFunction("transformation_strategy_select_best_strategem", "TRANSFORMATION-STRATEGY-SELECT-BEST-STRATEGEM", 1, 0, false);
+        declareFunction("transformation_strategy_default_select_best_strategem", "TRANSFORMATION-STRATEGY-DEFAULT-SELECT-BEST-STRATEGEM", 1, 0, false);
+        declareFunction("transformation_strategy_quiesce", "TRANSFORMATION-STRATEGY-QUIESCE", 1, 0, false);
+        declareFunction("transformation_strategy_execute_strategem", "TRANSFORMATION-STRATEGY-EXECUTE-STRATEGEM", 2, 0, false);
+        declareFunction("transformation_strategy_execute_tactic", "TRANSFORMATION-STRATEGY-EXECUTE-TACTIC", 2, 0, false);
+        declareFunction("transformation_strategy_execute_content_tactic", "TRANSFORMATION-STRATEGY-EXECUTE-CONTENT-TACTIC", 2, 0, false);
+        declareFunction("transformation_strategy_execute_meta_structural_tactic", "TRANSFORMATION-STRATEGY-EXECUTE-META-STRUCTURAL-TACTIC", 2, 0, false);
+        declareFunction("transformation_strategy_execute_executable_strategem", "TRANSFORMATION-STRATEGY-EXECUTE-EXECUTABLE-STRATEGEM", 2, 0, false);
         return NIL;
     }
 

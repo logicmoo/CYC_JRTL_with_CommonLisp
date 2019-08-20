@@ -45,7 +45,6 @@ public final class rename_utilities extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new rename_utilities();
 
-    public static final String myName = "com.cyc.cycjava.cycl.rename_utilities";
 
     // // Definitions
     public static final SubLObject optionally_rename_constants_in_string_assertions(SubLObject path_string) {

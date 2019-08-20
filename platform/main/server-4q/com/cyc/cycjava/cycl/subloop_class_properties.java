@@ -21,7 +21,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class subloop_class_properties extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new subloop_class_properties();
 
- public static final String myName = "com.cyc.cycjava.cycl.subloop_class_properties";
 
 
     // Definitions

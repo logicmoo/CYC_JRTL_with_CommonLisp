@@ -158,7 +158,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sbhl_link_methods extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sbhl_link_methods();
 
- public static final String myName = "com.cyc.cycjava.cycl.sbhl.sbhl_link_methods";
 
 
     // deflexical

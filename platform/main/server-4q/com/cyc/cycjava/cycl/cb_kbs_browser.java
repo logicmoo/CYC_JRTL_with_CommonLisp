@@ -56,7 +56,6 @@ public final class cb_kbs_browser extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new cb_kbs_browser();
 
- public static final String myName = "com.cyc.cycjava.cycl.cb_kbs_browser";
 
 
     static private final SubLString $str1$kbs_positive_gif = makeString("kbs-positive.gif");

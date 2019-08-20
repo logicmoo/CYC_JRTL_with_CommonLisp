@@ -43,7 +43,6 @@ public final class cyblack_rkf_events extends SubLTranslatedFile implements V02 
 
     public static final SubLFile me = new cyblack_rkf_events();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_rkf_events";
 
     // // Definitions
     public static final SubLObject get_cyblack_rkf_base_event_posting_hierarchy(SubLObject cyblack_rkf_base_event_posting) {

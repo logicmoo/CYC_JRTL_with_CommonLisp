@@ -56,7 +56,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rdf_blank_node extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rdf_blank_node();
 
- public static final String myName = "com.cyc.cycjava.cycl.rdf.rdf_blank_node";
 
 
     // defconstant

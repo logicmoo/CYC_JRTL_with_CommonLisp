@@ -279,7 +279,6 @@ public final class kb_accessors extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new kb_accessors();
 
- public static final String myName = "com.cyc.cycjava.cycl.kb_accessors";
 
 
     // defparameter

@@ -34,7 +34,6 @@ public final class cyblack_missing_knowledge_discovery_events extends SubLTransl
 
     public static final SubLFile me = new cyblack_missing_knowledge_discovery_events();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_missing_knowledge_discovery_events";
 
     // // Definitions
     public static final SubLObject subloop_reserved_initialize_cyblack_missing_knowledge_discovery_event_posting_class(SubLObject new_instance) {

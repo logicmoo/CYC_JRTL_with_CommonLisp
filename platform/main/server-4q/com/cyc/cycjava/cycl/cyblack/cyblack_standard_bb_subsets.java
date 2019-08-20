@@ -30,7 +30,6 @@ public final class cyblack_standard_bb_subsets extends SubLTranslatedFile implem
 
     public static final SubLFile me = new cyblack_standard_bb_subsets();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_standard_bb_subsets";
 
     // // Definitions
     public static final SubLObject declare_cyblack_standard_bb_subsets_file() {

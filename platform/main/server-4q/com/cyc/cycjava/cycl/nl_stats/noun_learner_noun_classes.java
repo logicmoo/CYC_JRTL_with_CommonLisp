@@ -98,7 +98,6 @@ public final class noun_learner_noun_classes extends SubLTranslatedFile implemen
 
     public static final SubLFile me = new noun_learner_noun_classes();
 
-    public static final String myName = "com.cyc.cycjava.cycl.nl_stats.noun_learner_noun_classes";
 
     // // Definitions
     // defparameter

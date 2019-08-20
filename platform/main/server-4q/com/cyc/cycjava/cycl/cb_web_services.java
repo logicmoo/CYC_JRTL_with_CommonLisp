@@ -54,7 +54,6 @@ public final class cb_web_services extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new cb_web_services();
 
- public static final String myName = "com.cyc.cycjava.cycl.cb_web_services";
 
 
     private static final SubLString $$$createType = makeString("createType");

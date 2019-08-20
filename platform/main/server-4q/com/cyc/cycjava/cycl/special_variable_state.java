@@ -89,7 +89,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class special_variable_state extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new special_variable_state();
 
- public static final String myName = "com.cyc.cycjava.cycl.special_variable_state";
 
 
     // defconstant

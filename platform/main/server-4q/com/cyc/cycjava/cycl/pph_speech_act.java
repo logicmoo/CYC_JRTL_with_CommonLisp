@@ -33,7 +33,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class pph_speech_act extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new pph_speech_act();
 
- public static final String myName = "com.cyc.cycjava.cycl.pph_speech_act";
 
 
     // defconstant

@@ -59,7 +59,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sksi_result_set_iterators extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sksi_result_set_iterators();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_result_set_iterators";
 
 
     // defvar

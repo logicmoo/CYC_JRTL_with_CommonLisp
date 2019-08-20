@@ -595,7 +595,6 @@ public final class scheduled_queries extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new scheduled_queries();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.scheduled_queries";
 
 
     // deflexical

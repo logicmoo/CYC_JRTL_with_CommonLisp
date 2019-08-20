@@ -81,7 +81,6 @@ public final class cyclifier_testing extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cyclifier_testing();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyclifier_testing";
 
     // // Definitions
     public static final class $cyclify_result_stats_native extends SubLStructNative {

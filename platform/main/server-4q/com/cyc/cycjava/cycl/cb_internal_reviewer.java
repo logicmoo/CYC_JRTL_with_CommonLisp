@@ -35,7 +35,6 @@ public final class cb_internal_reviewer extends SubLTranslatedFile implements V0
 
     public static final SubLFile me = new cb_internal_reviewer();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_internal_reviewer";
 
     // // Definitions
     // deflexical

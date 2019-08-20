@@ -96,7 +96,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sksi_field_translation_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sksi_field_translation_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_field_translation_utilities";
 
 
     // Internal Constants

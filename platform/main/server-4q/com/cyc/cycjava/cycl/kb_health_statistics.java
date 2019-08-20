@@ -32,7 +32,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class kb_health_statistics extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new kb_health_statistics();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.kb_health_statistics";
 
 
     // deflexical

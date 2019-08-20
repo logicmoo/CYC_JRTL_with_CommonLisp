@@ -72,7 +72,6 @@ public final class cb_user_interaction_agenda extends SubLTranslatedFile impleme
 
     public static final SubLFile me = new cb_user_interaction_agenda();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_user_interaction_agenda";
 
     // // Definitions
     // deflexical

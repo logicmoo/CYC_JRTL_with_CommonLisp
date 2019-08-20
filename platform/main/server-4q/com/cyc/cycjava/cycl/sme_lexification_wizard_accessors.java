@@ -33,7 +33,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sme_lexification_wizard_accessors extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sme_lexification_wizard_accessors();
 
- public static final String myName = "com.cyc.cycjava.cycl.sme_lexification_wizard_accessors";
 
 
     private static final SubLSymbol RKF_UIA_SME_LEXIFICATION_WIZARD = makeSymbol("RKF-UIA-SME-LEXIFICATION-WIZARD");

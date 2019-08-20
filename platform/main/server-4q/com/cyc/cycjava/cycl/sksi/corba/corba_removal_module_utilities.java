@@ -45,7 +45,6 @@ public final class corba_removal_module_utilities extends SubLTranslatedFile imp
 
     public static final SubLFile me = new corba_removal_module_utilities();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.sksi.corba.corba_removal_module_utilities";
 
     // // Definitions
     public static final SubLObject corba_removal_module_generic_expand_fn(SubLObject literal, SubLObject sense) {

@@ -179,7 +179,6 @@ public final class iteration extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new iteration();
 
- public static final String myName = "com.cyc.cycjava.cycl.iteration";
 
 
     // defconstant

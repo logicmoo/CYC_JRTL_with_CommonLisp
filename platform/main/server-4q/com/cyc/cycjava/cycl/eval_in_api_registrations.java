@@ -35,7 +35,6 @@ public final class eval_in_api_registrations extends SubLTranslatedFile implemen
 
     public static final SubLFile me = new eval_in_api_registrations();
 
- public static final String myName = "com.cyc.cycjava.cycl.eval_in_api_registrations";
 
 
     // deflexical

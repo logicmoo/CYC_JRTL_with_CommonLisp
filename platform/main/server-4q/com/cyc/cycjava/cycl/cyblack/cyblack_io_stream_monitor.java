@@ -57,7 +57,6 @@ public final class cyblack_io_stream_monitor extends SubLTranslatedFile implemen
 
     public static final SubLFile me = new cyblack_io_stream_monitor();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_io_stream_monitor";
 
     // // Definitions
     public static final SubLObject with_cyblack_io_stream_monitor(SubLObject macroform, SubLObject environment) {

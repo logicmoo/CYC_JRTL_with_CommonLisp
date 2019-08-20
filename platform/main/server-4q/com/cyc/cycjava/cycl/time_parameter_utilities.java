@@ -73,7 +73,6 @@ public final class time_parameter_utilities extends SubLTranslatedFile implement
 
     public static final SubLFile me = new time_parameter_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.time_parameter_utilities";
 
 
     // defconstant

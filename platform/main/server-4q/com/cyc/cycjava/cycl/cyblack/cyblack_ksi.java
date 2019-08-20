@@ -74,7 +74,6 @@ public final class cyblack_ksi extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cyblack_ksi();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_ksi";
 
     // // Definitions
     public static final SubLObject cyblack_knowledge_source_instantiation_p(SubLObject cyblack_knowledge_source_instantiation) {

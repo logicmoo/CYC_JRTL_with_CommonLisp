@@ -60,7 +60,6 @@ public final class cyblack_datatype extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cyblack_datatype();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_datatype";
 
     // // Definitions
     public static final SubLObject cyblack_datatype_p(SubLObject v_cyblack_datatype) {

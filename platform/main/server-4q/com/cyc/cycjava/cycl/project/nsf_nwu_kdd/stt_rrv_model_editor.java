@@ -90,7 +90,6 @@ public final class stt_rrv_model_editor extends SubLTranslatedFile implements V0
 
     public static final SubLFile me = new stt_rrv_model_editor();
 
-    public static final String myName = "com.cyc.cycjava.cycl.project.nsf_nwu_kdd.stt_rrv_model_editor";
 
     // // Definitions
     // deflexical

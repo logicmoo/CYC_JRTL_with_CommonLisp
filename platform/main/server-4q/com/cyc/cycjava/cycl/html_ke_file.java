@@ -96,7 +96,6 @@ public final class html_ke_file extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new html_ke_file();
 
- public static final String myName = "com.cyc.cycjava.cycl.html_ke_file";
 
 
     // Internal Constants

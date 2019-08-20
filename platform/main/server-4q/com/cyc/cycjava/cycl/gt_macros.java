@@ -36,7 +36,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class gt_macros extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new gt_macros();
 
- public static final String myName = "com.cyc.cycjava.cycl.gt_macros";
 
 
     // defparameter

@@ -317,7 +317,6 @@ public final class list_utilities extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new list_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.list_utilities";
 
 
     // defparameter

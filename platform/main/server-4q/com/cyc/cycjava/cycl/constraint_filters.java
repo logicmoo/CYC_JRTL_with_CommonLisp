@@ -45,7 +45,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class constraint_filters extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new constraint_filters();
 
- public static final String myName = "com.cyc.cycjava.cycl.constraint_filters";
 
 
     // Internal Constants

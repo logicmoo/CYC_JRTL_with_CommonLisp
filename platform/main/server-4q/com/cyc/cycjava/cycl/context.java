@@ -58,7 +58,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class context extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new context();
 
- public static final String myName = "com.cyc.cycjava.cycl.context";
 
 
     static private final SubLList $list2 = list(list(makeSymbol("PARSE-TREE-CONTEXT"), makeKeyword("INSTANCE"), makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("GET-PARSE-TREE-CONTEXT"), NIL, makeKeyword("PUBLIC")));

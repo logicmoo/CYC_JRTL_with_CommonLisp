@@ -213,7 +213,6 @@ public final class lexicon_accessors extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new lexicon_accessors();
 
- public static final String myName = "com.cyc.cycjava.cycl.lexicon_accessors";
 
 
     // deflexical

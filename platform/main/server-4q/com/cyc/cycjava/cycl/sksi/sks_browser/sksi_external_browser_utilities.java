@@ -88,7 +88,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sksi_external_browser_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sksi_external_browser_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.sks_browser.sksi_external_browser_utilities";
 
 
     // deflexical

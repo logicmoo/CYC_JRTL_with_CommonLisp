@@ -45,7 +45,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class generic_table_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new generic_table_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.generic_table_utilities";
 
 
     // Internal Constants

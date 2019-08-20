@@ -76,7 +76,6 @@ public final class cb_parameters extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new cb_parameters();
 
- public static final String myName = "com.cyc.cycjava.cycl.cb_parameters";
 
 
     // defparameter

@@ -68,7 +68,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class preserves_genls_in_arg extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new preserves_genls_in_arg();
 
- public static final String myName = "com.cyc.cycjava.cycl.preserves_genls_in_arg";
 
 
     // defparameter

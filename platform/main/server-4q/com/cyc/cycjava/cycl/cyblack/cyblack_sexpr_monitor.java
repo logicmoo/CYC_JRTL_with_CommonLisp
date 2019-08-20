@@ -48,7 +48,6 @@ public final class cyblack_sexpr_monitor extends SubLTranslatedFile implements V
 
     public static final SubLFile me = new cyblack_sexpr_monitor();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_sexpr_monitor";
 
     // // Definitions
     public static final SubLObject cyblack_sexpr_monitor_raw_to_posting_function(SubLObject sexpr) {

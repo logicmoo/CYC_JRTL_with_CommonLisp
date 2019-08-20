@@ -47,7 +47,6 @@ public final class kbi_macros_2 extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new kbi_macros_2();
 
-    public static final String myName = "com.cyc.cycjava.cycl.kbi_macros_2";
 
     // // Definitions
     public static final SubLObject define_kbi_module(SubLObject macroform, SubLObject environment) {

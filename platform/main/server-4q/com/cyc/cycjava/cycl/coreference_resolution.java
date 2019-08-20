@@ -418,7 +418,6 @@ public final class coreference_resolution extends SubLTranslatedFile implements 
 
     public static final SubLFile me = new coreference_resolution();
 
- public static final String myName = "com.cyc.cycjava.cycl.coreference_resolution";
 
 
     // defconstant

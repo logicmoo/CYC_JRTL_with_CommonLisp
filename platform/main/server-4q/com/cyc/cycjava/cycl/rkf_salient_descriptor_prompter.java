@@ -186,7 +186,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rkf_salient_descriptor_prompter extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rkf_salient_descriptor_prompter();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_salient_descriptor_prompter";
 
 
     // deflexical

@@ -79,7 +79,6 @@ public final class dcyc_kernel extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new dcyc_kernel();
 
-    public static final String myName = "com.cyc.cycjava.cycl.dcyc_kernel";
 
     // // Definitions
     // defparameter

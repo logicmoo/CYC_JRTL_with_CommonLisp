@@ -529,7 +529,6 @@ public final class cyc_navigator_internals extends SubLTranslatedFile implements
 
     public static final SubLFile me = new cyc_navigator_internals();
 
- public static final String myName = "com.cyc.cycjava.cycl.cyc_navigator_internals";
 
 
     // defparameter

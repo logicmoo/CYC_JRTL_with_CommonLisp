@@ -42,7 +42,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class removal_modules_rkf_irrelevant_fort_cache extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new removal_modules_rkf_irrelevant_fort_cache();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_rkf_irrelevant_fort_cache";
 
 
     @LispMethod(comment = "Internal Constants")

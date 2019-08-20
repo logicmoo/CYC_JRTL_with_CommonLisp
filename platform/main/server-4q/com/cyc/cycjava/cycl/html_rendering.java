@@ -53,7 +53,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class html_rendering extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new html_rendering();
 
- public static final String myName = "com.cyc.cycjava.cycl.html_rendering";
 
 
     // Internal Constants

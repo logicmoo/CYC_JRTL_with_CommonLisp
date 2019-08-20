@@ -38,7 +38,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class reformulator_module_query_processing extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new reformulator_module_query_processing();
 
- public static final String myName = "com.cyc.cycjava.cycl.reformulator_module_query_processing";
 
 
     // deflexical

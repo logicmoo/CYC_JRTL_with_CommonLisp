@@ -1315,7 +1315,6 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 
 	public static final SubLFile me = new inference_datastructures_strategy();
 
-	public static final String myName = "com.cyc.cycjava.cycl.inference.harness.inference_datastructures_strategy";
 
 	// defconstant
 	@LispMethod(comment = "defconstant")

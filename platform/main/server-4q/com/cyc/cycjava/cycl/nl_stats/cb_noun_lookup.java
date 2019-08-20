@@ -55,7 +55,6 @@ public final class cb_noun_lookup extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cb_noun_lookup();
 
-    public static final String myName = "com.cyc.cycjava.cycl.nl_stats.cb_noun_lookup";
 
     // // Definitions
     public static final SubLObject cb_link_noun_lookup(SubLObject linktext) {

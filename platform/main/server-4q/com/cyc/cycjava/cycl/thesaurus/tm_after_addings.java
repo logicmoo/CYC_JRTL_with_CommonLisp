@@ -33,7 +33,6 @@ public final class tm_after_addings extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new tm_after_addings();
 
-    public static final String myName = "com.cyc.cycjava.cycl.thesaurus.tm_after_addings";
 
     // // Definitions
     public static final SubLObject add_thesaurus_vocab(SubLObject argument, SubLObject assertion) {

@@ -146,7 +146,6 @@ public final class reformulator_module_wff_options extends SubLTranslatedFile im
 
     public static final SubLFile me = new reformulator_module_wff_options();
 
- public static final String myName = "com.cyc.cycjava.cycl.reformulator_module_wff_options";
 
 
     // deflexical

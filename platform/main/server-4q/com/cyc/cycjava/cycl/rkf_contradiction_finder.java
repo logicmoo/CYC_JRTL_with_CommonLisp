@@ -39,7 +39,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rkf_contradiction_finder extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rkf_contradiction_finder();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_contradiction_finder";
 
 
     // Internal Constants

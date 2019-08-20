@@ -66,7 +66,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class constrained_term_finder extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new constrained_term_finder();
 
- public static final String myName = "com.cyc.cycjava.cycl.constrained_term_finder";
 
 
     // defparameter

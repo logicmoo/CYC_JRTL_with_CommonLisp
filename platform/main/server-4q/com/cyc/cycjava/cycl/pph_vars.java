@@ -81,7 +81,6 @@ public final class pph_vars extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new pph_vars();
 
- public static final String myName = "com.cyc.cycjava.cycl.pph_vars";
 
 
     // defparameter

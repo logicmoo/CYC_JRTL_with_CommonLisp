@@ -33,7 +33,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class query_relaxation extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.query_relaxation";
 	public static String myFingerPrint = "3454002a1533d4b1e43feb1114e5592ed507d2e81dc2414b70685efa9951171a";
 	private static SubLObject $const0$QueryRelaxationStrategy_RemoveLit;
 	private static SubLObject $const1$QueryRelaxationStrategyChangeValu;
@@ -290,22 +289,22 @@ public class query_relaxation extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_query_relaxation_file() {
-		declareFunction(myName, "new_cyc_query_with_relaxation", "NEW-CYC-QUERY-WITH-RELAXATION", 1, 3, false);
-		declareFunction(myName, "relaxtion_strategy_termination_condition_satisfiedP",
+		declareFunction("new_cyc_query_with_relaxation", "NEW-CYC-QUERY-WITH-RELAXATION", 1, 3, false);
+		declareFunction("relaxtion_strategy_termination_condition_satisfiedP",
 				"RELAXTION-STRATEGY-TERMINATION-CONDITION-SATISFIED?", 2, 0, false);
-		declareFunction(myName, "relax_query_sentence", "RELAX-QUERY-SENTENCE", 2, 0, false);
-		declareFunction(myName, "relax_query_sentence_by_removing_literals",
+		declareFunction("relax_query_sentence", "RELAX-QUERY-SENTENCE", 2, 0, false);
+		declareFunction("relax_query_sentence_by_removing_literals",
 				"RELAX-QUERY-SENTENCE-BY-REMOVING-LITERALS", 2, 0, false);
-		declareFunction(myName, "relax_query_sentence_by_changing_value", "RELAX-QUERY-SENTENCE-BY-CHANGING-VALUE", 2,
+		declareFunction("relax_query_sentence_by_changing_value", "RELAX-QUERY-SENTENCE-BY-CHANGING-VALUE", 2,
 				0, false);
-		declareFunction(myName, "gather_value_change_list_specs_for_strategy",
+		declareFunction("gather_value_change_list_specs_for_strategy",
 				"GATHER-VALUE-CHANGE-LIST-SPECS-FOR-STRATEGY", 1, 0, false);
-		declareFunction(myName, "relax_query_sentence_apply_value_change_spec",
+		declareFunction("relax_query_sentence_apply_value_change_spec",
 				"RELAX-QUERY-SENTENCE-APPLY-VALUE-CHANGE-SPEC", 4, 0, false);
-		declareFunction(myName, "cycl_remove_predicate_literals_from_sentence",
+		declareFunction("cycl_remove_predicate_literals_from_sentence",
 				"CYCL-REMOVE-PREDICATE-LITERALS-FROM-SENTENCE", 2, 0, false);
-		declareFunction(myName, "conjunction_with_target_literal_p", "CONJUNCTION-WITH-TARGET-LITERAL-P", 1, 1, false);
-		declareFunction(myName, "conjunction_without_target_literal", "CONJUNCTION-WITHOUT-TARGET-LITERAL", 1, 1,
+		declareFunction("conjunction_with_target_literal_p", "CONJUNCTION-WITH-TARGET-LITERAL-P", 1, 1, false);
+		declareFunction("conjunction_without_target_literal", "CONJUNCTION-WITHOUT-TARGET-LITERAL", 1, 1,
 				false);
 		return NIL;
 	}

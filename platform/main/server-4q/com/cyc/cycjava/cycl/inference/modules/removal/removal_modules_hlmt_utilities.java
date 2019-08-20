@@ -32,7 +32,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_hlmt_utilities extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_hlmt_utilities";
     public static String myFingerPrint = "b4624fb9fb800cd564c461a0c35fc94a17bb993f2e3ddf57f3ff4af27af1b245";
     private static SubLObject $$mtMonad;
     private static SubLSymbol $POS;
@@ -170,12 +169,12 @@ public class removal_modules_hlmt_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_hlmt_utilities_file() {
-        declareFunction(myName, "removal_mt_monad_unify_arg1_cost", "REMOVAL-MT-MONAD-UNIFY-ARG1-COST", 1, 1, false);
-        declareFunction(myName, "hlmts_with_monad", "HLMTS-WITH-MONAD", 1, 0, false);
-        declareFunction(myName, "inference_temporal_mt_intersection_setP", "INFERENCE-TEMPORAL-MT-INTERSECTION-SET?", 1, 0, false);
-        declareFunction(myName, "inference_precedes_metric_check", "INFERENCE-PRECEDES-METRIC-CHECK", 4, 0, false);
-        declareFunction(myName, "inference_time_of_type_before_interval", "INFERENCE-TIME-OF-TYPE-BEFORE-INTERVAL", 3, 0, false);
-        declareFunction(myName, "inference_time_of_type_after_interval", "INFERENCE-TIME-OF-TYPE-AFTER-INTERVAL", 3, 0, false);
+        declareFunction("removal_mt_monad_unify_arg1_cost", "REMOVAL-MT-MONAD-UNIFY-ARG1-COST", 1, 1, false);
+        declareFunction("hlmts_with_monad", "HLMTS-WITH-MONAD", 1, 0, false);
+        declareFunction("inference_temporal_mt_intersection_setP", "INFERENCE-TEMPORAL-MT-INTERSECTION-SET?", 1, 0, false);
+        declareFunction("inference_precedes_metric_check", "INFERENCE-PRECEDES-METRIC-CHECK", 4, 0, false);
+        declareFunction("inference_time_of_type_before_interval", "INFERENCE-TIME-OF-TYPE-BEFORE-INTERVAL", 3, 0, false);
+        declareFunction("inference_time_of_type_after_interval", "INFERENCE-TIME-OF-TYPE-AFTER-INTERVAL", 3, 0, false);
         return NIL;
     }
 

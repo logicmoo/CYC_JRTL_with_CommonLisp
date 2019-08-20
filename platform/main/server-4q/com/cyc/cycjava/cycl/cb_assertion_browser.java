@@ -1045,7 +1045,6 @@ public final class cb_assertion_browser extends SubLTranslatedFile implements V1
 
     public static final SubLFile me = new cb_assertion_browser();
 
- public static final String myName = "com.cyc.cycjava.cycl.cb_assertion_browser";
 
 
     // defparameter

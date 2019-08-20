@@ -30,7 +30,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class misc_widgets extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new misc_widgets();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.sksi_widgets.misc_widgets";
 
 
     // Internal Constants

@@ -63,7 +63,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class cb_non_wff extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new cb_non_wff();
 
- public static final String myName = "com.cyc.cycjava.cycl.cb_non_wff";
 
 
     static private final SubLString $str1$nonwff_gif = makeString("nonwff.gif");

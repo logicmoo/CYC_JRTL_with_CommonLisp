@@ -45,7 +45,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_rule_cascade extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_rule_cascade";
 	public static String myFingerPrint = "324e66cf9f465ddafc373a1404059dac34b10b65081f2ffc7aab2b8a270a329f";
 	@SubL(source = "cycl/inference/modules/removal/removal-modules-rule-cascade.lisp", position = 1100L)
 	private static SubLSymbol $default_first_implied_dependent_of_sentence_check_cost$;
@@ -424,10 +423,10 @@ public class removal_modules_rule_cascade extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_removal_modules_rule_cascade_file() {
-		declareFunction(myName, "removal_first_implied_dependent_of_sentence_check_expand",
+		declareFunction("removal_first_implied_dependent_of_sentence_check_expand",
 				"REMOVAL-FIRST-IMPLIED-DEPENDENT-OF-SENTENCE-CHECK-EXPAND", 1, 1, false);
-		declareFunction(myName, "sorted_rules_in_cascade", "SORTED-RULES-IN-CASCADE", 1, 0, false);
-		declareFunction(myName, "cascade_rule_L", "CASCADE-RULE-<", 2, 0, false);
+		declareFunction("sorted_rules_in_cascade", "SORTED-RULES-IN-CASCADE", 1, 0, false);
+		declareFunction("cascade_rule_L", "CASCADE-RULE-<", 2, 0, false);
 		return NIL;
 	}
 

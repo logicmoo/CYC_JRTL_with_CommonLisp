@@ -35,7 +35,6 @@ public final class cb_populator extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cb_populator();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_populator";
 
     // // Definitions
     // deflexical

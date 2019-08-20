@@ -62,7 +62,6 @@ public final class cb_fact_sheets extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cb_fact_sheets();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_fact_sheets";
 
     // // Definitions
     // deflexical

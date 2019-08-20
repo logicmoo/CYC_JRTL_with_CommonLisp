@@ -22,7 +22,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_term_strings extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_term_strings";
     public static String myFingerPrint = "efd131bd0a0ae7a325638a5a4585b292477ff7ba1762dc53f7ed032ef4d1421b";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-term-strings.lisp", position = 4000L)
     public static SubLSymbol $term_strings_defining_mt$;
@@ -91,13 +90,13 @@ public class removal_modules_term_strings extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_term_strings_file() {
-        declareFunction(myName, "removal_term_strings_check_pos_output_check", "REMOVAL-TERM-STRINGS-CHECK-POS-OUTPUT-CHECK", 2, 0, false);
-        declareFunction(myName, "removal_term_strings_check_neg_output_check", "REMOVAL-TERM-STRINGS-CHECK-NEG-OUTPUT-CHECK", 2, 0, false);
-        declareFunction(myName, "inference_strings_for_term", "INFERENCE-STRINGS-FOR-TERM", 1, 2, false);
-        declareFunction(myName, "inference_terms_for_string", "INFERENCE-TERMS-FOR-STRING", 1, 0, false);
-        declareFunction(myName, "make_term_strings_hl_support", "MAKE-TERM-STRINGS-HL-SUPPORT", 1, 0, false);
-        declareFunction(myName, "removal_term_strings_unify_output_generate", "REMOVAL-TERM-STRINGS-UNIFY-OUTPUT-GENERATE", 1, 0, false);
-        declareFunction(myName, "removal_term_strings_lookup_output_generate", "REMOVAL-TERM-STRINGS-LOOKUP-OUTPUT-GENERATE", 1, 0, false);
+        declareFunction("removal_term_strings_check_pos_output_check", "REMOVAL-TERM-STRINGS-CHECK-POS-OUTPUT-CHECK", 2, 0, false);
+        declareFunction("removal_term_strings_check_neg_output_check", "REMOVAL-TERM-STRINGS-CHECK-NEG-OUTPUT-CHECK", 2, 0, false);
+        declareFunction("inference_strings_for_term", "INFERENCE-STRINGS-FOR-TERM", 1, 2, false);
+        declareFunction("inference_terms_for_string", "INFERENCE-TERMS-FOR-STRING", 1, 0, false);
+        declareFunction("make_term_strings_hl_support", "MAKE-TERM-STRINGS-HL-SUPPORT", 1, 0, false);
+        declareFunction("removal_term_strings_unify_output_generate", "REMOVAL-TERM-STRINGS-UNIFY-OUTPUT-GENERATE", 1, 0, false);
+        declareFunction("removal_term_strings_lookup_output_generate", "REMOVAL-TERM-STRINGS-LOOKUP-OUTPUT-GENERATE", 1, 0, false);
         return NIL;
     }
 

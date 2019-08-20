@@ -72,7 +72,6 @@ public final class kbi_fort extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new kbi_fort();
 
-    public static final String myName = "com.cyc.cycjava.cycl.kbi_fort";
 
     // // Definitions
     public static final SubLObject fort_diagnostics(SubLObject repairP, SubLObject printP) {

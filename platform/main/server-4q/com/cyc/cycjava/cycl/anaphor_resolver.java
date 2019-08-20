@@ -34,7 +34,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class anaphor_resolver extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new anaphor_resolver();
 
- public static final String myName = "com.cyc.cycjava.cycl.anaphor_resolver";
 
 
     // Internal Constants

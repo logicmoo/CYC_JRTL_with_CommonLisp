@@ -22,7 +22,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class inference_event extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.inference_event";
     public static String myFingerPrint = "df150891dd5d0cfdffae7710426a52b716f7737ee92497148a050dd7440ec36d";
     @SubL(source = "cycl/inference/inference-event.lisp", position = 5000L)
     private static SubLSymbol $inference_event_dispatcher_lock$;
@@ -313,37 +312,37 @@ public class inference_event extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_inference_event_file() {
-        declareFunction(myName, "post_inference_new_answer_event", "POST-INFERENCE-NEW-ANSWER-EVENT", 3, 0, false);
-        declareFunction(myName, "inference_new_answer_retrieve_new_answer_id", "INFERENCE-NEW-ANSWER-RETRIEVE-NEW-ANSWER-ID", 1, 0, false);
-        declareFunction(myName, "inference_new_answer_retrieve_inference_id", "INFERENCE-NEW-ANSWER-RETRIEVE-INFERENCE-ID", 1, 0, false);
-        declareFunction(myName, "inference_new_answer_retrieve_problem_store_id", "INFERENCE-NEW-ANSWER-RETRIEVE-PROBLEM-STORE-ID", 1, 0, false);
-        declareFunction(myName, "post_inference_status_change_event", "POST-INFERENCE-STATUS-CHANGE-EVENT", 3, 0, false);
-        declareFunction(myName, "inference_status_change_retrieve_new_status", "INFERENCE-STATUS-CHANGE-RETRIEVE-NEW-STATUS", 1, 0, false);
-        declareFunction(myName, "inference_status_change_retrieve_inference_id", "INFERENCE-STATUS-CHANGE-RETRIEVE-INFERENCE-ID", 1, 0, false);
-        declareFunction(myName, "inference_status_change_retrieve_problem_store_id", "INFERENCE-STATUS-CHANGE-RETRIEVE-PROBLEM-STORE-ID", 1, 0, false);
-        declareFunction(myName, "post_inference_new_transformation_depth_reached_event", "POST-INFERENCE-NEW-TRANSFORMATION-DEPTH-REACHED-EVENT", 3, 0, false);
-        declareFunction(myName, "inference_new_transformation_depth_reached_retrieve_new_depth", "INFERENCE-NEW-TRANSFORMATION-DEPTH-REACHED-RETRIEVE-NEW-DEPTH", 1, 0, false);
-        declareFunction(myName, "inference_new_transformation_depth_reached_retrieve_inference_id", "INFERENCE-NEW-TRANSFORMATION-DEPTH-REACHED-RETRIEVE-INFERENCE-ID", 1, 0, false);
-        declareFunction(myName, "inference_new_transformation_depth_reached_retrieve_problem_store_id", "INFERENCE-NEW-TRANSFORMATION-DEPTH-REACHED-RETRIEVE-PROBLEM-STORE-ID", 1, 0, false);
-        declareFunction(myName, "post_sksi_query_event", "POST-SKSI-QUERY-EVENT", 5, 1, false);
-        declareFunction(myName, "sksi_query_retrieve_end_time", "SKSI-QUERY-RETRIEVE-END-TIME", 1, 0, false);
-        declareFunction(myName, "sksi_query_retrieve_start_time", "SKSI-QUERY-RETRIEVE-START-TIME", 1, 0, false);
-        declareFunction(myName, "sksi_query_retrieve_status", "SKSI-QUERY-RETRIEVE-STATUS", 1, 0, false);
-        declareFunction(myName, "sksi_query_retrieve_tactic_id", "SKSI-QUERY-RETRIEVE-TACTIC-ID", 1, 0, false);
-        declareFunction(myName, "sksi_query_retrieve_problem_id", "SKSI-QUERY-RETRIEVE-PROBLEM-ID", 1, 0, false);
-        declareFunction(myName, "sksi_query_retrieve_inference_id", "SKSI-QUERY-RETRIEVE-INFERENCE-ID", 1, 0, false);
-        declareFunction(myName, "sksi_query_retrieve_problem_store_id", "SKSI-QUERY-RETRIEVE-PROBLEM-STORE-ID", 1, 0, false);
-        declareFunction(myName, "post_new_inference_event", "POST-NEW-INFERENCE-EVENT", 2, 0, false);
-        declareFunction(myName, "new_inference_event", "NEW-INFERENCE-EVENT", 2, 0, false);
-        declareFunction(myName, "post_inference_event", "POST-INFERENCE-EVENT", 1, 0, false);
-        declareFunction(myName, "anyone_interested_in_inference_eventP", "ANYONE-INTERESTED-IN-INFERENCE-EVENT?", 1, 0, false);
-        declareFunction(myName, "current_inference_event_broker", "CURRENT-INFERENCE-EVENT-BROKER", 0, 0, false);
-        declareFunction(myName, "inference_event_dispatcher_runningP", "INFERENCE-EVENT-DISPATCHER-RUNNING?", 0, 0, false);
-        declareFunction(myName, "ensure_inference_event_dispatcher_running", "ENSURE-INFERENCE-EVENT-DISPATCHER-RUNNING", 0, 0, false);
-        declareFunction(myName, "register_listener_with_inference_event_dispatcher", "REGISTER-LISTENER-WITH-INFERENCE-EVENT-DISPATCHER", 1, 0, false);
-        declareFunction(myName, "deregister_listener_with_inference_event_dispatcher", "DEREGISTER-LISTENER-WITH-INFERENCE-EVENT-DISPATCHER", 1, 0, false);
-        declareFunction(myName, "stop_inference_event_dispatcher", "STOP-INFERENCE-EVENT-DISPATCHER", 0, 0, false);
-        declareFunction(myName, "start_inference_event_dispatcher", "START-INFERENCE-EVENT-DISPATCHER", 0, 0, false);
+        declareFunction("post_inference_new_answer_event", "POST-INFERENCE-NEW-ANSWER-EVENT", 3, 0, false);
+        declareFunction("inference_new_answer_retrieve_new_answer_id", "INFERENCE-NEW-ANSWER-RETRIEVE-NEW-ANSWER-ID", 1, 0, false);
+        declareFunction("inference_new_answer_retrieve_inference_id", "INFERENCE-NEW-ANSWER-RETRIEVE-INFERENCE-ID", 1, 0, false);
+        declareFunction("inference_new_answer_retrieve_problem_store_id", "INFERENCE-NEW-ANSWER-RETRIEVE-PROBLEM-STORE-ID", 1, 0, false);
+        declareFunction("post_inference_status_change_event", "POST-INFERENCE-STATUS-CHANGE-EVENT", 3, 0, false);
+        declareFunction("inference_status_change_retrieve_new_status", "INFERENCE-STATUS-CHANGE-RETRIEVE-NEW-STATUS", 1, 0, false);
+        declareFunction("inference_status_change_retrieve_inference_id", "INFERENCE-STATUS-CHANGE-RETRIEVE-INFERENCE-ID", 1, 0, false);
+        declareFunction("inference_status_change_retrieve_problem_store_id", "INFERENCE-STATUS-CHANGE-RETRIEVE-PROBLEM-STORE-ID", 1, 0, false);
+        declareFunction("post_inference_new_transformation_depth_reached_event", "POST-INFERENCE-NEW-TRANSFORMATION-DEPTH-REACHED-EVENT", 3, 0, false);
+        declareFunction("inference_new_transformation_depth_reached_retrieve_new_depth", "INFERENCE-NEW-TRANSFORMATION-DEPTH-REACHED-RETRIEVE-NEW-DEPTH", 1, 0, false);
+        declareFunction("inference_new_transformation_depth_reached_retrieve_inference_id", "INFERENCE-NEW-TRANSFORMATION-DEPTH-REACHED-RETRIEVE-INFERENCE-ID", 1, 0, false);
+        declareFunction("inference_new_transformation_depth_reached_retrieve_problem_store_id", "INFERENCE-NEW-TRANSFORMATION-DEPTH-REACHED-RETRIEVE-PROBLEM-STORE-ID", 1, 0, false);
+        declareFunction("post_sksi_query_event", "POST-SKSI-QUERY-EVENT", 5, 1, false);
+        declareFunction("sksi_query_retrieve_end_time", "SKSI-QUERY-RETRIEVE-END-TIME", 1, 0, false);
+        declareFunction("sksi_query_retrieve_start_time", "SKSI-QUERY-RETRIEVE-START-TIME", 1, 0, false);
+        declareFunction("sksi_query_retrieve_status", "SKSI-QUERY-RETRIEVE-STATUS", 1, 0, false);
+        declareFunction("sksi_query_retrieve_tactic_id", "SKSI-QUERY-RETRIEVE-TACTIC-ID", 1, 0, false);
+        declareFunction("sksi_query_retrieve_problem_id", "SKSI-QUERY-RETRIEVE-PROBLEM-ID", 1, 0, false);
+        declareFunction("sksi_query_retrieve_inference_id", "SKSI-QUERY-RETRIEVE-INFERENCE-ID", 1, 0, false);
+        declareFunction("sksi_query_retrieve_problem_store_id", "SKSI-QUERY-RETRIEVE-PROBLEM-STORE-ID", 1, 0, false);
+        declareFunction("post_new_inference_event", "POST-NEW-INFERENCE-EVENT", 2, 0, false);
+        declareFunction("new_inference_event", "NEW-INFERENCE-EVENT", 2, 0, false);
+        declareFunction("post_inference_event", "POST-INFERENCE-EVENT", 1, 0, false);
+        declareFunction("anyone_interested_in_inference_eventP", "ANYONE-INTERESTED-IN-INFERENCE-EVENT?", 1, 0, false);
+        declareFunction("current_inference_event_broker", "CURRENT-INFERENCE-EVENT-BROKER", 0, 0, false);
+        declareFunction("inference_event_dispatcher_runningP", "INFERENCE-EVENT-DISPATCHER-RUNNING?", 0, 0, false);
+        declareFunction("ensure_inference_event_dispatcher_running", "ENSURE-INFERENCE-EVENT-DISPATCHER-RUNNING", 0, 0, false);
+        declareFunction("register_listener_with_inference_event_dispatcher", "REGISTER-LISTENER-WITH-INFERENCE-EVENT-DISPATCHER", 1, 0, false);
+        declareFunction("deregister_listener_with_inference_event_dispatcher", "DEREGISTER-LISTENER-WITH-INFERENCE-EVENT-DISPATCHER", 1, 0, false);
+        declareFunction("stop_inference_event_dispatcher", "STOP-INFERENCE-EVENT-DISPATCHER", 0, 0, false);
+        declareFunction("start_inference_event_dispatcher", "START-INFERENCE-EVENT-DISPATCHER", 0, 0, false);
         return NIL;
     }
 

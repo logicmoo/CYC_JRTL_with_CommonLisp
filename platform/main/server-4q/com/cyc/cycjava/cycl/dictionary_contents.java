@@ -59,7 +59,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class dictionary_contents extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new dictionary_contents();
 
- public static final String myName = "com.cyc.cycjava.cycl.dictionary_contents";
 
 
     // deflexical

@@ -74,7 +74,6 @@ public final class kbi_cnf extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new kbi_cnf();
 
-    public static final String myName = "com.cyc.cycjava.cycl.kbi_cnf";
 
     // // Definitions
     public static final SubLObject cnf_diagnostics(SubLObject repairP, SubLObject printP) {

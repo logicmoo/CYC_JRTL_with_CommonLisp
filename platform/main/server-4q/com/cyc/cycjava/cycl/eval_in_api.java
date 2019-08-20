@@ -124,7 +124,6 @@ public final class eval_in_api extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new eval_in_api();
 
- public static final String myName = "com.cyc.cycjava.cycl.eval_in_api";
 
 
     // defvar

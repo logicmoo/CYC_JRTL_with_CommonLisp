@@ -261,7 +261,6 @@ public final class memoization_state extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new memoization_state();
 
- public static final String myName = "com.cyc.cycjava.cycl.memoization_state";
 
 
     // deflexical

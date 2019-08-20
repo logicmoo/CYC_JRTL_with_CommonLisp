@@ -86,7 +86,6 @@ public final class narts_low extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new narts_low();
 
- public static final String myName = "com.cyc.cycjava.cycl.narts_low";
 
 
     private static final SubLList $list0 = list(makeKeyword("NART-ARG"), makeKeyword("FUNCTION-EXTENT"));

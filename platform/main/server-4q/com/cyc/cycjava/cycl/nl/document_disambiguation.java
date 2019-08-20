@@ -54,7 +54,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class document_disambiguation extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new document_disambiguation();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.nl.document_disambiguation";
 
 
     // defconstant

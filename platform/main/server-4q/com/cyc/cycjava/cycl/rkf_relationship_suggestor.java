@@ -61,7 +61,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rkf_relationship_suggestor extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rkf_relationship_suggestor();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_relationship_suggestor";
 
 
     // defparameter

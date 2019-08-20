@@ -252,7 +252,6 @@ public final class inference_worker_join_ordered extends SubLTranslatedFile impl
 
     public static final SubLFile me = new inference_worker_join_ordered();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.harness.inference_worker_join_ordered";
 
 
     // defconstant

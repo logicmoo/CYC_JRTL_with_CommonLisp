@@ -122,7 +122,6 @@ public final class pph_diagnostics extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new pph_diagnostics();
 
-    public static final String myName = "com.cyc.cycjava.cycl.pph_diagnostics";
 
 
 

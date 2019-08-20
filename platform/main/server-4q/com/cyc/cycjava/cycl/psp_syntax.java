@@ -44,7 +44,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class psp_syntax extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new psp_syntax();
 
- public static final String myName = "com.cyc.cycjava.cycl.psp_syntax";
 
 
     private static final SubLSymbol PSP_LEXICON_P = makeSymbol("PSP-LEXICON-P");

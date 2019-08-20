@@ -43,7 +43,6 @@ public final class removal_modules_induced_typical_arg extends SubLTranslatedFil
 
     public static final SubLFile me = new removal_modules_induced_typical_arg();
 
-    public static final String myName = "com.cyc.cycjava.cycl.nl_stats.removal_modules_induced_typical_arg";
 
     // // Definitions
     public static final SubLObject removal_induced_typical_subject_type_of_verb_bind_expand(SubLObject asent, SubLObject sense) {

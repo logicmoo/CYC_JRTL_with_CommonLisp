@@ -31,7 +31,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_different extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_different";
     public static String myFingerPrint = "940d912db85fcdc5b293015df6787176ba74adcd43e808234a3c33edf87164f2";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-different.lisp", position = 500L)
     private static SubLSymbol $default_different_duplicate_cost$;
@@ -149,17 +148,17 @@ public class removal_modules_different extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_different_file() {
-        declareFunction(myName, "asent_duplicate_args_p", "ASENT-DUPLICATE-ARGS-P", 1, 0, false);
-        declareFunction(myName, "make_binary_different_eval_support", "MAKE-BINARY-DIFFERENT-EVAL-SUPPORT", 2, 0, false);
-        declareFunction(myName, "removal_different_duplicate_exclusive", "REMOVAL-DIFFERENT-DUPLICATE-EXCLUSIVE", 1, 1, false);
+        declareFunction("asent_duplicate_args_p", "ASENT-DUPLICATE-ARGS-P", 1, 0, false);
+        declareFunction("make_binary_different_eval_support", "MAKE-BINARY-DIFFERENT-EVAL-SUPPORT", 2, 0, false);
+        declareFunction("removal_different_duplicate_exclusive", "REMOVAL-DIFFERENT-DUPLICATE-EXCLUSIVE", 1, 1, false);
         new $removal_different_duplicate_exclusive$UnaryFunction();
         new $removal_different_duplicate_exclusive$BinaryFunction();
-        declareFunction(myName, "removal_different_symbols_duplicate_exclusive", "REMOVAL-DIFFERENT-SYMBOLS-DUPLICATE-EXCLUSIVE", 1, 1, false);
-        declareFunction(myName, "cyc_possibly_evaluate", "CYC-POSSIBLY-EVALUATE", 1, 0, false);
-        declareFunction(myName, "cyc_possibly_evaluate_args", "CYC-POSSIBLY-EVALUATE-ARGS", 1, 0, false);
-        declareFunction(myName, "removal_sksi_different_expand", "REMOVAL-SKSI-DIFFERENT-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_sksi_different_symbols_expand", "REMOVAL-SKSI-DIFFERENT-SYMBOLS-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_sksi_different_expand_int", "REMOVAL-SKSI-DIFFERENT-EXPAND-INT", 1, 0, false);
+        declareFunction("removal_different_symbols_duplicate_exclusive", "REMOVAL-DIFFERENT-SYMBOLS-DUPLICATE-EXCLUSIVE", 1, 1, false);
+        declareFunction("cyc_possibly_evaluate", "CYC-POSSIBLY-EVALUATE", 1, 0, false);
+        declareFunction("cyc_possibly_evaluate_args", "CYC-POSSIBLY-EVALUATE-ARGS", 1, 0, false);
+        declareFunction("removal_sksi_different_expand", "REMOVAL-SKSI-DIFFERENT-EXPAND", 1, 1, false);
+        declareFunction("removal_sksi_different_symbols_expand", "REMOVAL-SKSI-DIFFERENT-SYMBOLS-EXPAND", 1, 1, false);
+        declareFunction("removal_sksi_different_expand_int", "REMOVAL-SKSI-DIFFERENT-EXPAND-INT", 1, 0, false);
         return NIL;
     }
 

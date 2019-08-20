@@ -25,7 +25,6 @@ public final class mysentient_lexification_utilities extends SubLTranslatedFile 
 
     public static final SubLFile me = new mysentient_lexification_utilities();
 
-    public static final String myName = "com.cyc.cycjava.cycl.mysentient_lexification_utilities";
 
     // // Definitions
     /**

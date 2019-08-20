@@ -177,7 +177,6 @@ public final class czer_main extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new czer_main();
 
- public static final String myName = "com.cyc.cycjava.cycl.czer_main";
 
 
     // defparameter

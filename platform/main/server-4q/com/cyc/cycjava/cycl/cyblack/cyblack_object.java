@@ -43,7 +43,6 @@ public final class cyblack_object extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cyblack_object();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_object";
 
     // // Definitions
     public static final SubLObject get_cyblack_object_html_indent_by(SubLObject v_cyblack_object) {

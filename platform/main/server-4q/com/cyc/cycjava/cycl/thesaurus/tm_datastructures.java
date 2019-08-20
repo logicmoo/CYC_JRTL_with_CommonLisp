@@ -129,7 +129,6 @@ public final class tm_datastructures extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new tm_datastructures();
 
-    public static final String myName = "com.cyc.cycjava.cycl.thesaurus.tm_datastructures";
 
 
 

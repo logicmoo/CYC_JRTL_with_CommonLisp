@@ -24,7 +24,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_genlinverse extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_genlinverse";
     public static String myFingerPrint = "3a30f363df17cbac5a8369fc81aaff29702eff50f806dfce2067532dae017ba7";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-genlinverse.lisp", position = 500L)
     private static SubLSymbol $default_genlinverse_check_cost$;
@@ -124,12 +123,12 @@ public class removal_modules_genlinverse extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_genlinverse_file() {
-        declareFunction(myName, "removal_genlinverse_check_expand", "REMOVAL-GENLINVERSE-CHECK-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_all_genl_inverses_cost", "REMOVAL-ALL-GENL-INVERSES-COST", 1, 1, false);
-        declareFunction(myName, "removal_all_genl_inverses_iterator", "REMOVAL-ALL-GENL-INVERSES-ITERATOR", 1, 0, false);
-        declareFunction(myName, "removal_all_spec_inverses_cost", "REMOVAL-ALL-SPEC-INVERSES-COST", 1, 1, false);
-        declareFunction(myName, "removal_all_spec_inverses_iterator", "REMOVAL-ALL-SPEC-INVERSES-ITERATOR", 1, 0, false);
-        declareFunction(myName, "removal_not_genlinverse_check_expand", "REMOVAL-NOT-GENLINVERSE-CHECK-EXPAND", 1, 1, false);
+        declareFunction("removal_genlinverse_check_expand", "REMOVAL-GENLINVERSE-CHECK-EXPAND", 1, 1, false);
+        declareFunction("removal_all_genl_inverses_cost", "REMOVAL-ALL-GENL-INVERSES-COST", 1, 1, false);
+        declareFunction("removal_all_genl_inverses_iterator", "REMOVAL-ALL-GENL-INVERSES-ITERATOR", 1, 0, false);
+        declareFunction("removal_all_spec_inverses_cost", "REMOVAL-ALL-SPEC-INVERSES-COST", 1, 1, false);
+        declareFunction("removal_all_spec_inverses_iterator", "REMOVAL-ALL-SPEC-INVERSES-ITERATOR", 1, 0, false);
+        declareFunction("removal_not_genlinverse_check_expand", "REMOVAL-NOT-GENLINVERSE-CHECK-EXPAND", 1, 1, false);
         return NIL;
     }
 

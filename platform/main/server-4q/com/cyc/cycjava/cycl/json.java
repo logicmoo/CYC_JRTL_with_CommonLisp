@@ -83,7 +83,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class json extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new json();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.json";
 
 
 

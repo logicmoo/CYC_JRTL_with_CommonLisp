@@ -437,7 +437,6 @@ public final class rtp_datastructures extends SubLTranslatedFile implements V12 
 
     public static final SubLFile me = new rtp_datastructures();
 
- public static final String myName = "com.cyc.cycjava.cycl.rtp.rtp_datastructures";
 
 
     // deflexical

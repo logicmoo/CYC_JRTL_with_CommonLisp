@@ -29,7 +29,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_set_of_list_with_same_member_in_pos extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_set_of_list_with_same_member_in_pos";
     public static String myFingerPrint = "92d4731a6764c24c2604100e1ce8b9240876815ae9ea171275054d674b66bf80";
     private static SubLObject $$setOfListWithSameMemberInPos;
     private static SubLSymbol $POS;
@@ -101,8 +100,8 @@ public class removal_modules_set_of_list_with_same_member_in_pos extends SubLTra
     }
 
     public static SubLObject declare_removal_modules_set_of_list_with_same_member_in_pos_file() {
-        declareFunction(myName, "set_of_list_with_same_member_in_pos", "SET-OF-LIST-WITH-SAME-MEMBER-IN-POS", 1, 1, false);
-        declareFunction(myName, "removal_set_of_list_with_same_member_in_pos_cost", "REMOVAL-SET-OF-LIST-WITH-SAME-MEMBER-IN-POS-COST", 1, 1, false);
+        declareFunction("set_of_list_with_same_member_in_pos", "SET-OF-LIST-WITH-SAME-MEMBER-IN-POS", 1, 1, false);
+        declareFunction("removal_set_of_list_with_same_member_in_pos_cost", "REMOVAL-SET-OF-LIST-WITH-SAME-MEMBER-IN-POS-COST", 1, 1, false);
         return NIL;
     }
 

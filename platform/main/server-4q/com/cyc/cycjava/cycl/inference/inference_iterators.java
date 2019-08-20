@@ -35,7 +35,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class inference_iterators extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.inference_iterators";
     public static String myFingerPrint = "92163ba67342e07ce2eb1be3c49178831a957bc6d2dd2a8c6842a5e24edbd88e";
     @SubL(source = "cycl/inference/inference-iterators.lisp", position = 5700L)
     private static SubLSymbol $new_cyc_query_iterative_results$;
@@ -388,18 +387,18 @@ public class inference_iterators extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_inference_iterators_file() {
-        declareFunction(myName, "new_inference_iterator", "NEW-INFERENCE-ITERATOR", 1, 2, false);
-        declareFunction(myName, "make_inference_iterator_state", "MAKE-INFERENCE-ITERATOR-STATE", 3, 0, false);
-        declareFunction(myName, "inference_iterator_done", "INFERENCE-ITERATOR-DONE", 1, 0, false);
-        declareFunction(myName, "inference_iterator_next", "INFERENCE-ITERATOR-NEXT", 1, 0, false);
-        declareFunction(myName, "inference_iterator_finalize", "INFERENCE-ITERATOR-FINALIZE", 1, 0, false);
-        declareFunction(myName, "new_query_iterator", "NEW-QUERY-ITERATOR", 1, 2, false);
-        declareFunction(myName, "make_query_iterator_state", "MAKE-QUERY-ITERATOR-STATE", 3, 0, false);
-        declareFunction(myName, "query_iterator_done", "QUERY-ITERATOR-DONE", 1, 0, false);
-        declareFunction(myName, "query_iterator_next", "QUERY-ITERATOR-NEXT", 1, 0, false);
-        declareFunction(myName, "query_iterator_finalize", "QUERY-ITERATOR-FINALIZE", 1, 0, false);
-        declareFunction(myName, "new_cyc_query_iterative", "NEW-CYC-QUERY-ITERATIVE", 1, 3, false);
-        declareFunction(myName, "new_cyc_query_iterative_int", "NEW-CYC-QUERY-ITERATIVE-INT", 3, 0, false);
+        declareFunction("new_inference_iterator", "NEW-INFERENCE-ITERATOR", 1, 2, false);
+        declareFunction("make_inference_iterator_state", "MAKE-INFERENCE-ITERATOR-STATE", 3, 0, false);
+        declareFunction("inference_iterator_done", "INFERENCE-ITERATOR-DONE", 1, 0, false);
+        declareFunction("inference_iterator_next", "INFERENCE-ITERATOR-NEXT", 1, 0, false);
+        declareFunction("inference_iterator_finalize", "INFERENCE-ITERATOR-FINALIZE", 1, 0, false);
+        declareFunction("new_query_iterator", "NEW-QUERY-ITERATOR", 1, 2, false);
+        declareFunction("make_query_iterator_state", "MAKE-QUERY-ITERATOR-STATE", 3, 0, false);
+        declareFunction("query_iterator_done", "QUERY-ITERATOR-DONE", 1, 0, false);
+        declareFunction("query_iterator_next", "QUERY-ITERATOR-NEXT", 1, 0, false);
+        declareFunction("query_iterator_finalize", "QUERY-ITERATOR-FINALIZE", 1, 0, false);
+        declareFunction("new_cyc_query_iterative", "NEW-CYC-QUERY-ITERATIVE", 1, 3, false);
+        declareFunction("new_cyc_query_iterative_int", "NEW-CYC-QUERY-ITERATIVE-INT", 3, 0, false);
         return NIL;
     }
 

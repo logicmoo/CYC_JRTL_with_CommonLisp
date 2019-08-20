@@ -55,7 +55,6 @@ public final class mysentient_user_profile_dumper extends SubLTranslatedFile imp
 
     public static final SubLFile me = new mysentient_user_profile_dumper();
 
-    public static final String myName = "com.cyc.cycjava.cycl.mysentient_user_profile_dumper";
 
     // // Definitions
     /**

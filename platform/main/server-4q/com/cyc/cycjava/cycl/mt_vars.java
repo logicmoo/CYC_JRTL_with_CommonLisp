@@ -44,7 +44,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class mt_vars extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new mt_vars();
 
- public static final String myName = "com.cyc.cycjava.cycl.mt_vars";
 
 
     // deflexical

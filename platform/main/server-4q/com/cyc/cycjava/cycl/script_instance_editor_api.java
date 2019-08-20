@@ -59,7 +59,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class script_instance_editor_api extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new script_instance_editor_api();
 
- public static final String myName = "com.cyc.cycjava.cycl.script_instance_editor_api";
 
 
     // deflexical

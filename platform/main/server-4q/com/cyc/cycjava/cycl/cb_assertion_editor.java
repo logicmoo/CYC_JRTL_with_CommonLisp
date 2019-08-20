@@ -466,7 +466,6 @@ public final class cb_assertion_editor extends SubLTranslatedFile implements V12
 
     public static final SubLFile me = new cb_assertion_editor();
 
- public static final String myName = "com.cyc.cycjava.cycl.cb_assertion_editor";
 
 
     // defconstant

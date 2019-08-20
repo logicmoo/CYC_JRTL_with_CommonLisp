@@ -84,7 +84,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sksi_sks_gaf_arg_indexing extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sksi_sks_gaf_arg_indexing();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.sks_indexing.sksi_sks_gaf_arg_indexing";
 
 
     // defconstant

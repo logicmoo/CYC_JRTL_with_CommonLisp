@@ -58,7 +58,6 @@ public final class java_name_translation extends SubLTranslatedFile implements V
 
     public static final SubLFile me = new java_name_translation();
 
- public static final String myName = "com.cyc.cycjava.cycl.java_name_translation";
 
 
     // deflexical

@@ -409,7 +409,6 @@ public final class html_utilities extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new html_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.html_utilities";
 
 
     // defparameter

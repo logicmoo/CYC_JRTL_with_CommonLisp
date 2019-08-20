@@ -136,7 +136,6 @@ public final class quirk_java_gui extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new quirk_java_gui();
 
- public static final String myName = "com.cyc.cycjava.cycl.quirk.quirk_java_gui";
 
 
     // defvar

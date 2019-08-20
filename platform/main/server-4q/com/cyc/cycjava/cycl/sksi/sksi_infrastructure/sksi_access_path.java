@@ -78,7 +78,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sksi_access_path extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sksi_access_path();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_access_path";
 
 
 

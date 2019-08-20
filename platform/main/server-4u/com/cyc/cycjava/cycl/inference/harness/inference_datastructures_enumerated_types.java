@@ -95,7 +95,6 @@ public final class inference_datastructures_enumerated_types extends SubLTransla
 
     public static final SubLFile me = new inference_datastructures_enumerated_types();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.harness.inference_datastructures_enumerated_types";
 
 
     // deflexical

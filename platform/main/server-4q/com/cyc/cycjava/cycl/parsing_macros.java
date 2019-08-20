@@ -58,7 +58,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class parsing_macros extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new parsing_macros();
 
- public static final String myName = "com.cyc.cycjava.cycl.parsing_macros";
 
 
 

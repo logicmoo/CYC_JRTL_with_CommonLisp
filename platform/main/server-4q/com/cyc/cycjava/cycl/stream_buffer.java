@@ -115,7 +115,6 @@ public final class stream_buffer extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new stream_buffer();
 
- public static final String myName = "com.cyc.cycjava.cycl.stream_buffer";
 
 
     // defconstant

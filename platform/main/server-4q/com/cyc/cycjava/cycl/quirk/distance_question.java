@@ -42,7 +42,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class distance_question extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new distance_question();
 
- public static final String myName = "com.cyc.cycjava.cycl.quirk.distance_question";
 
 
     // Internal Constants

@@ -54,7 +54,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class cb_unicode extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new cb_unicode();
 
- public static final String myName = "com.cyc.cycjava.cycl.cb_unicode";
 
 
 

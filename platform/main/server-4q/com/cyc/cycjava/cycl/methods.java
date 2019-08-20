@@ -78,7 +78,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class methods extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new methods();
 
- public static final String myName = "com.cyc.cycjava.cycl.methods";
 
 
     // defvar

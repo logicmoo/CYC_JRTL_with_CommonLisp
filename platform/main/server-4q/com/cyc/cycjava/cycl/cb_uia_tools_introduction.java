@@ -60,7 +60,6 @@ public final class cb_uia_tools_introduction extends SubLTranslatedFile implemen
 
     public static final SubLFile me = new cb_uia_tools_introduction();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_uia_tools_introduction";
 
     // // Definitions
     public static final SubLObject cb_uiat_sentence_relator_render_request(SubLObject request) {

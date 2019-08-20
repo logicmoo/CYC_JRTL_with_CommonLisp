@@ -354,7 +354,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
 
     public static final SubLFile me = new document_annotation_widgets();
 
- public static final String myName = "com.cyc.cycjava.cycl.document_annotation_widgets";
 
 
     // defparameter

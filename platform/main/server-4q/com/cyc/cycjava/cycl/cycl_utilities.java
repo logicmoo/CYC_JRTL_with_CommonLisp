@@ -190,7 +190,6 @@ public final class cycl_utilities extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new cycl_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.cycl_utilities";
 
 
     // defparameter

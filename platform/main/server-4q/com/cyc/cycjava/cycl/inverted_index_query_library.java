@@ -152,7 +152,6 @@ public final class inverted_index_query_library extends SubLTranslatedFile imple
 
     public static final SubLFile me = new inverted_index_query_library();
 
- public static final String myName = "com.cyc.cycjava.cycl.inverted_index_query_library";
 
 
     // defparameter

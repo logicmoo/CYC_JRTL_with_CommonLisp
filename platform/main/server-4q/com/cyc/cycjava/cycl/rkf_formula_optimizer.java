@@ -141,7 +141,6 @@ public final class rkf_formula_optimizer extends SubLTranslatedFile implements V
 
     public static final SubLFile me = new rkf_formula_optimizer();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_formula_optimizer";
 
 
     // defparameter

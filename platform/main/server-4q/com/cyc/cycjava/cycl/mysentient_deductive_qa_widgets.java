@@ -77,7 +77,6 @@ public final class mysentient_deductive_qa_widgets extends SubLTranslatedFile im
 
     public static final SubLFile me = new mysentient_deductive_qa_widgets();
 
-    public static final String myName = "com.cyc.cycjava.cycl.mysentient_deductive_qa_widgets";
 
     // // Definitions
     /**

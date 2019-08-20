@@ -308,7 +308,6 @@ public final class cb_adornments extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new cb_adornments();
 
 
- public static final String myName = "com.cyc.cycjava.cycl.cb_adornments";
 
     private static final SubLSymbol _CSETF_ADORNMENT_ACTIVE_P = makeSymbol("_CSETF-ADORNMENT-ACTIVE-P");
 

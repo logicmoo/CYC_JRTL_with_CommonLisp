@@ -35,7 +35,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rkf_ontology_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rkf_ontology_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_ontology_utilities";
 
 
     private static final SubLObject $$Set_Mathematical = reader_make_constant_shell("Set-Mathematical");

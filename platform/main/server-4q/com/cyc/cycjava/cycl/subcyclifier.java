@@ -76,7 +76,6 @@ public final class subcyclifier extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new subcyclifier();
 
- public static final String myName = "com.cyc.cycjava.cycl.subcyclifier";
 
 
     // defconstant

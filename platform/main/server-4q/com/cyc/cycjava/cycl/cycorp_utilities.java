@@ -41,7 +41,6 @@ public final class cycorp_utilities extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cycorp_utilities();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cycorp_utilities";
 
     // // Definitions
     // deflexical

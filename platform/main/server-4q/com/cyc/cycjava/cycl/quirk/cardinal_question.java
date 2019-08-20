@@ -34,7 +34,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class cardinal_question extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new cardinal_question();
 
- public static final String myName = "com.cyc.cycjava.cycl.quirk.cardinal_question";
 
 
     // Internal Constants

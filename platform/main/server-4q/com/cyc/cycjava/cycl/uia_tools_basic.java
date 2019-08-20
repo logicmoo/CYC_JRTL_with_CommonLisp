@@ -106,7 +106,6 @@ public final class uia_tools_basic extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new uia_tools_basic();
 
-    public static final String myName = "com.cyc.cycjava.cycl.uia_tools_basic";
 
     // // Definitions
     public static final SubLObject uia_act_new_reset_agenda(SubLObject v_agenda) {

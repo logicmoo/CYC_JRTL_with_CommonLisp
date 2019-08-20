@@ -51,7 +51,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class removal_modules_equation_permutations extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new removal_modules_equation_permutations();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.inference.modules.removal.removal_modules_equation_permutations";
 
 
     // deflexical

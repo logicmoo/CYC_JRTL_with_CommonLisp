@@ -93,7 +93,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class hl_transcripts extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new hl_transcripts();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.hl_transcripts";
 
 
     // defparameter

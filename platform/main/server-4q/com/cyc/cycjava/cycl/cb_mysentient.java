@@ -60,7 +60,6 @@ public final class cb_mysentient extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cb_mysentient();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_mysentient";
 
 
 

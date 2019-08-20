@@ -148,7 +148,6 @@ public final class lexicon_dumping extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new lexicon_dumping();
 
- public static final String myName = "com.cyc.cycjava.cycl.nl.lexicon_dumping";
 
 
     // defparameter

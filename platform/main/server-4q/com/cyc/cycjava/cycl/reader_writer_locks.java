@@ -38,7 +38,6 @@ public final class reader_writer_locks extends SubLTranslatedFile implements V12
 
     public static final SubLFile me = new reader_writer_locks();
 
- public static final String myName = "com.cyc.cycjava.cycl.reader_writer_locks";
 
 
     // Internal Constants

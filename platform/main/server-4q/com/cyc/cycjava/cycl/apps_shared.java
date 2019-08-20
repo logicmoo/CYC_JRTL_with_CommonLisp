@@ -35,7 +35,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class apps_shared extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new apps_shared();
 
- public static final String myName = "com.cyc.cycjava.cycl.apps_shared";
 
 
     // defparameter

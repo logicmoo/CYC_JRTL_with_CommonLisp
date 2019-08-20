@@ -68,7 +68,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class set_contents extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new set_contents();
 
- public static final String myName = "com.cyc.cycjava.cycl.set_contents";
 
 
     // deflexical

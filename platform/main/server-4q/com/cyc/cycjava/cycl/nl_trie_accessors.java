@@ -203,7 +203,6 @@ public final class nl_trie_accessors extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new nl_trie_accessors();
 
- public static final String myName = "com.cyc.cycjava.cycl.nl_trie_accessors";
 
 
     // deflexical

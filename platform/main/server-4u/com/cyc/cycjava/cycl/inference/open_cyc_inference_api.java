@@ -182,7 +182,6 @@ public final class open_cyc_inference_api extends SubLTranslatedFile implements 
 
     public static final SubLFile me = new open_cyc_inference_api();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.open_cyc_inference_api";
 
 
     // defparameter

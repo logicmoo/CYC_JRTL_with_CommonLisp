@@ -45,7 +45,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sg_search extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sg_search();
 
- public static final String myName = "com.cyc.cycjava.cycl.sg_search";
 
 
     // deflexical

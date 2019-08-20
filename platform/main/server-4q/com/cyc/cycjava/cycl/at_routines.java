@@ -68,7 +68,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class at_routines extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new at_routines();
 
- public static final String myName = "com.cyc.cycjava.cycl.at_routines";
 
 
     // deflexical

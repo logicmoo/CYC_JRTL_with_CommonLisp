@@ -34,7 +34,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_reflexive_on extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_reflexive_on";
     public static String myFingerPrint = "73c4796a6598b0c194daa1aef1f63790dde4a265a6bc8d2154364d5fc873374f";
     private static SubLObject $$reflexiveOn;
     private static SubLSymbol $TRUE;
@@ -210,13 +209,13 @@ public class removal_modules_reflexive_on extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_reflexive_on_file() {
-        declareFunction(myName, "reflexive_on_predicateP", "REFLEXIVE-ON-PREDICATE?", 1, 0, false);
+        declareFunction("reflexive_on_predicateP", "REFLEXIVE-ON-PREDICATE?", 1, 0, false);
         new $reflexive_on_predicateP$UnaryFunction();
-        declareFunction(myName, "reflexive_on_cols", "REFLEXIVE-ON-COLS", 1, 0, false);
-        declareFunction(myName, "removal_reflexive_on_expand", "REMOVAL-REFLEXIVE-ON-EXPAND", 1, 1, false);
-        declareFunction(myName, "reflexive_on_completness", "REFLEXIVE-ON-COMPLETNESS", 1, 0, false);
-        declareFunction(myName, "supports_for_reflexive_on", "SUPPORTS-FOR-REFLEXIVE-ON", 2, 0, false);
-        declareFunction(myName, "reflexive_on_isa_support", "REFLEXIVE-ON-ISA-SUPPORT", 3, 0, false);
+        declareFunction("reflexive_on_cols", "REFLEXIVE-ON-COLS", 1, 0, false);
+        declareFunction("removal_reflexive_on_expand", "REMOVAL-REFLEXIVE-ON-EXPAND", 1, 1, false);
+        declareFunction("reflexive_on_completness", "REFLEXIVE-ON-COMPLETNESS", 1, 0, false);
+        declareFunction("supports_for_reflexive_on", "SUPPORTS-FOR-REFLEXIVE-ON", 2, 0, false);
+        declareFunction("reflexive_on_isa_support", "REFLEXIVE-ON-ISA-SUPPORT", 3, 0, false);
         return NIL;
     }
 

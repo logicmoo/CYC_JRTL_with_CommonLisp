@@ -160,7 +160,6 @@ public final class assertion_handles extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new assertion_handles();
 
- public static final String myName = "com.cyc.cycjava.cycl.assertion_handles";
 
 
     // defconstant

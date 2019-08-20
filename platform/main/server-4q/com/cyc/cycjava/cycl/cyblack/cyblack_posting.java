@@ -97,7 +97,6 @@ public final class cyblack_posting extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cyblack_posting();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_posting";
 
     // // Definitions
     /**

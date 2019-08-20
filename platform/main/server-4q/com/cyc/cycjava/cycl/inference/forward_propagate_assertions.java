@@ -43,7 +43,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class forward_propagate_assertions extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.forward_propagate_assertions";
     public static String myFingerPrint = "0d325bd78fc1451a2e616f80e4de19cab14912623c0a871964fdd9395f34fb88";
     @SubL(source = "cycl/inference/forward-propagate-assertions.lisp", position = 900L)
     public static SubLSymbol $forward_propagate_assertions_skolem_depth$;
@@ -503,17 +502,17 @@ public class forward_propagate_assertions extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_forward_propagate_assertions_file() {
-        declareFunction(myName, "forward_propagate_mt", "FORWARD-PROPAGATE-MT", 1, 4, false);
-        declareFunction(myName, "forward_propagate_assertions_in_mt", "FORWARD-PROPAGATE-ASSERTIONS-IN-MT", 2, 3, false);
-        declareFunction(myName, "forward_propagate_assertion_in_mt", "FORWARD-PROPAGATE-ASSERTION-IN-MT", 2, 3, false);
-        declareFunction(myName, "inference_forward_propagate_mt", "INFERENCE-FORWARD-PROPAGATE-MT", 5, 0, false);
-        declareFunction(myName, "forward_propagate_assertion_against_rules_in_mt", "FORWARD-PROPAGATE-ASSERTION-AGAINST-RULES-IN-MT", 3, 3, false);
-        declareFunction(myName, "forward_propagate_assertions_against_rules_in_mt", "FORWARD-PROPAGATE-ASSERTIONS-AGAINST-RULES-IN-MT", 3, 3, false);
-        declareFunction(myName, "forward_consequences_of_assertion", "FORWARD-CONSEQUENCES-OF-ASSERTION", 1, 2, false);
-        declareFunction(myName, "forward_propagate_assertions_in_mt_internal", "FORWARD-PROPAGATE-ASSERTIONS-IN-MT-INTERNAL", 5, 0, false);
-        declareFunction(myName, "forward_propagate_assertions_from_struct", "FORWARD-PROPAGATE-ASSERTIONS-FROM-STRUCT", 5, 0, false);
-        declareFunction(myName, "generate_consequences", "GENERATE-CONSEQUENCES", 1, 3, false);
-        declareFunction(myName, "hl_assertible_to_queryable", "HL-ASSERTIBLE-TO-QUERYABLE", 1, 0, false);
+        declareFunction("forward_propagate_mt", "FORWARD-PROPAGATE-MT", 1, 4, false);
+        declareFunction("forward_propagate_assertions_in_mt", "FORWARD-PROPAGATE-ASSERTIONS-IN-MT", 2, 3, false);
+        declareFunction("forward_propagate_assertion_in_mt", "FORWARD-PROPAGATE-ASSERTION-IN-MT", 2, 3, false);
+        declareFunction("inference_forward_propagate_mt", "INFERENCE-FORWARD-PROPAGATE-MT", 5, 0, false);
+        declareFunction("forward_propagate_assertion_against_rules_in_mt", "FORWARD-PROPAGATE-ASSERTION-AGAINST-RULES-IN-MT", 3, 3, false);
+        declareFunction("forward_propagate_assertions_against_rules_in_mt", "FORWARD-PROPAGATE-ASSERTIONS-AGAINST-RULES-IN-MT", 3, 3, false);
+        declareFunction("forward_consequences_of_assertion", "FORWARD-CONSEQUENCES-OF-ASSERTION", 1, 2, false);
+        declareFunction("forward_propagate_assertions_in_mt_internal", "FORWARD-PROPAGATE-ASSERTIONS-IN-MT-INTERNAL", 5, 0, false);
+        declareFunction("forward_propagate_assertions_from_struct", "FORWARD-PROPAGATE-ASSERTIONS-FROM-STRUCT", 5, 0, false);
+        declareFunction("generate_consequences", "GENERATE-CONSEQUENCES", 1, 3, false);
+        declareFunction("hl_assertible_to_queryable", "HL-ASSERTIBLE-TO-QUERYABLE", 1, 0, false);
         return NIL;
     }
 

@@ -254,7 +254,6 @@ public final class cb_lexical_info extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new cb_lexical_info();
 
- public static final String myName = "com.cyc.cycjava.cycl.cb_lexical_info";
 
 
 

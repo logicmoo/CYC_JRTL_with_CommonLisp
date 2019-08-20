@@ -30,7 +30,6 @@ public final class removal_modules_chemistry extends SubLTranslatedFile implemen
 
     public static final SubLFile me = new removal_modules_chemistry();
 
-    public static final String myName = "com.cyc.cycjava.cycl.removal_modules_chemistry";
 
     // // Definitions
     public static final SubLObject removal_matrix_of_reaction_type_bind_output_generate(SubLObject reaction_type) {

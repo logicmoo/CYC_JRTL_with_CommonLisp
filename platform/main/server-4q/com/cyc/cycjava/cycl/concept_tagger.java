@@ -307,7 +307,6 @@ public final class concept_tagger extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new concept_tagger();
 
- public static final String myName = "com.cyc.cycjava.cycl.concept_tagger";
 
 
     // defparameter

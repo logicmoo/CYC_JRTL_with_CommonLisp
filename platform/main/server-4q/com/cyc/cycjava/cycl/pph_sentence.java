@@ -56,7 +56,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class pph_sentence extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new pph_sentence();
 
- public static final String myName = "com.cyc.cycjava.cycl.pph_sentence";
 
 
     // defparameter

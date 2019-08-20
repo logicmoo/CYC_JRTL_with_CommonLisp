@@ -244,7 +244,6 @@ public final class kb_modification_event_filters extends SubLTranslatedFile impl
 
     public static final SubLFile me = new kb_modification_event_filters();
 
- public static final String myName = "com.cyc.cycjava.cycl.kb_modification_event_filters";
 
 
     // deflexical

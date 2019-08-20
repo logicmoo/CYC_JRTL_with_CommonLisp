@@ -47,7 +47,6 @@ public final class removal_modules_halo extends SubLTranslatedFile implements V0
 
     public static final SubLFile me = new removal_modules_halo();
 
-    public static final String myName = "com.cyc.cycjava.cycl.removal_modules_halo";
 
     // // Definitions
     // defvar

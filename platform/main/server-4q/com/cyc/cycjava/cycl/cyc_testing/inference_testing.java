@@ -126,7 +126,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class inference_testing extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new inference_testing();
 
- public static final String myName = "com.cyc.cycjava.cycl.cyc_testing.inference_testing";
 
 
     // defparameter

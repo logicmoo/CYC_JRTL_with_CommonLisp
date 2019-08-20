@@ -1303,7 +1303,6 @@ public final class user_interaction_agenda extends SubLTranslatedFile implements
 
     public static final SubLFile me = new user_interaction_agenda();
 
- public static final String myName = "com.cyc.cycjava.cycl.user_interaction_agenda";
 
 
     // deflexical

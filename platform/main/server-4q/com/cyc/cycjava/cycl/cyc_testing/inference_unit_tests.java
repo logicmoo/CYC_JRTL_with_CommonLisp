@@ -356,7 +356,6 @@ public final class inference_unit_tests extends SubLTranslatedFile implements V1
 
     public static final SubLFile me = new inference_unit_tests();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyc_testing.inference_unit_tests";
 
     // defparameter
     // Definitions

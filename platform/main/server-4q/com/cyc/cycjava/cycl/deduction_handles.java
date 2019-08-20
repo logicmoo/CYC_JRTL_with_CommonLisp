@@ -148,7 +148,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class deduction_handles extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new deduction_handles();
 
- public static final String myName = "com.cyc.cycjava.cycl.deduction_handles";
 
 
     // defconstant

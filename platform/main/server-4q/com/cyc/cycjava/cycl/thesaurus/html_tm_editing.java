@@ -127,7 +127,6 @@ public final class html_tm_editing extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new html_tm_editing();
 
-    public static final String myName = "com.cyc.cycjava.cycl.thesaurus.html_tm_editing";
 
     // // Definitions
     public static final SubLObject html_show_tm_arg(SubLObject arg) {

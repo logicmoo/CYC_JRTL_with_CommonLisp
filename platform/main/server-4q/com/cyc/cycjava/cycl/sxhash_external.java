@@ -86,7 +86,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sxhash_external extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sxhash_external();
 
- public static final String myName = "com.cyc.cycjava.cycl.sxhash_external";
 
 
     // defparameter

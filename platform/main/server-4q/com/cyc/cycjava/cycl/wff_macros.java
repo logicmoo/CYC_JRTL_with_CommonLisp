@@ -40,7 +40,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class wff_macros extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new wff_macros();
 
- public static final String myName = "com.cyc.cycjava.cycl.wff_macros";
 
 
     static private final SubLList $list1 = list(list(makeSymbol("*WITHIN-WFF?*"), T));

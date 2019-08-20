@@ -52,7 +52,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class similarity extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new similarity();
 
- public static final String myName = "com.cyc.cycjava.cycl.similarity";
 
 
     // defparameter

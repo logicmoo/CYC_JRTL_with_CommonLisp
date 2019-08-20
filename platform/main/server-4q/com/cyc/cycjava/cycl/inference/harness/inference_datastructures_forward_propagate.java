@@ -36,7 +36,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class inference_datastructures_forward_propagate extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.harness.inference_datastructures_forward_propagate";
     public static String myFingerPrint = "124acc916b3f9d8c2b19bd91f24dece51d03d76b95e2de05bf05c2c9b11b6068";
     @SubL(source = "cycl/inference/harness/inference-datastructures-forward-propagate.lisp", position = 1100L)
     public static SubLSymbol $dtp_forward_propagate$;
@@ -272,27 +271,27 @@ public class inference_datastructures_forward_propagate extends SubLTranslatedFi
     }
 
     public static SubLObject declare_inference_datastructures_forward_propagate_file() {
-        declareFunction(myName, "forward_propagate_print_function_trampoline", "FORWARD-PROPAGATE-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction(myName, "forward_propagate_p", "FORWARD-PROPAGATE-P", 1, 0, false);
+        declareFunction("forward_propagate_print_function_trampoline", "FORWARD-PROPAGATE-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("forward_propagate_p", "FORWARD-PROPAGATE-P", 1, 0, false);
         new $forward_propagate_p$UnaryFunction();
-        declareFunction(myName, "fpmt_old_queue", "FPMT-OLD-QUEUE", 1, 0, false);
-        declareFunction(myName, "fpmt_new_queue", "FPMT-NEW-QUEUE", 1, 0, false);
-        declareFunction(myName, "_csetf_fpmt_old_queue", "_CSETF-FPMT-OLD-QUEUE", 2, 0, false);
-        declareFunction(myName, "_csetf_fpmt_new_queue", "_CSETF-FPMT-NEW-QUEUE", 2, 0, false);
-        declareFunction(myName, "make_forward_propagate", "MAKE-FORWARD-PROPAGATE", 0, 1, false);
-        declareFunction(myName, "visit_defstruct_forward_propagate", "VISIT-DEFSTRUCT-FORWARD-PROPAGATE", 2, 0, false);
-        declareFunction(myName, "visit_defstruct_object_forward_propagate_method", "VISIT-DEFSTRUCT-OBJECT-FORWARD-PROPAGATE-METHOD", 2, 0, false);
-        declareFunction(myName, "print_forward_propagate", "PRINT-FORWARD-PROPAGATE", 3, 0, false);
-        declareFunction(myName, "new_forward_propagate", "NEW-FORWARD-PROPAGATE", 0, 1, false);
-        declareFunction(myName, "destroy_forward_propagate", "DESTROY-FORWARD-PROPAGATE", 1, 0, false);
-        declareFunction(myName, "forward_propagate_old_queue", "FORWARD-PROPAGATE-OLD-QUEUE", 1, 0, false);
-        declareFunction(myName, "set_forward_propagate_old_queue", "SET-FORWARD-PROPAGATE-OLD-QUEUE", 2, 0, false);
-        declareFunction(myName, "clear_forward_propagate_old_queue", "CLEAR-FORWARD-PROPAGATE-OLD-QUEUE", 1, 0, false);
-        declareFunction(myName, "forward_propagate_new_queue", "FORWARD-PROPAGATE-NEW-QUEUE", 1, 0, false);
-        declareFunction(myName, "set_forward_propagate_new_queue", "SET-FORWARD-PROPAGATE-NEW-QUEUE", 2, 0, false);
-        declareFunction(myName, "swap_forward_propagate_queues", "SWAP-FORWARD-PROPAGATE-QUEUES", 1, 0, false);
-        declareFunction(myName, "enqueue_forward_propagate_assertions_to_new_queue", "ENQUEUE-FORWARD-PROPAGATE-ASSERTIONS-TO-NEW-QUEUE", 2, 0, false);
-        declareFunction(myName, "dequeue_forward_propagate_assertion_from_old_queue", "DEQUEUE-FORWARD-PROPAGATE-ASSERTION-FROM-OLD-QUEUE", 1, 0, false);
+        declareFunction("fpmt_old_queue", "FPMT-OLD-QUEUE", 1, 0, false);
+        declareFunction("fpmt_new_queue", "FPMT-NEW-QUEUE", 1, 0, false);
+        declareFunction("_csetf_fpmt_old_queue", "_CSETF-FPMT-OLD-QUEUE", 2, 0, false);
+        declareFunction("_csetf_fpmt_new_queue", "_CSETF-FPMT-NEW-QUEUE", 2, 0, false);
+        declareFunction("make_forward_propagate", "MAKE-FORWARD-PROPAGATE", 0, 1, false);
+        declareFunction("visit_defstruct_forward_propagate", "VISIT-DEFSTRUCT-FORWARD-PROPAGATE", 2, 0, false);
+        declareFunction("visit_defstruct_object_forward_propagate_method", "VISIT-DEFSTRUCT-OBJECT-FORWARD-PROPAGATE-METHOD", 2, 0, false);
+        declareFunction("print_forward_propagate", "PRINT-FORWARD-PROPAGATE", 3, 0, false);
+        declareFunction("new_forward_propagate", "NEW-FORWARD-PROPAGATE", 0, 1, false);
+        declareFunction("destroy_forward_propagate", "DESTROY-FORWARD-PROPAGATE", 1, 0, false);
+        declareFunction("forward_propagate_old_queue", "FORWARD-PROPAGATE-OLD-QUEUE", 1, 0, false);
+        declareFunction("set_forward_propagate_old_queue", "SET-FORWARD-PROPAGATE-OLD-QUEUE", 2, 0, false);
+        declareFunction("clear_forward_propagate_old_queue", "CLEAR-FORWARD-PROPAGATE-OLD-QUEUE", 1, 0, false);
+        declareFunction("forward_propagate_new_queue", "FORWARD-PROPAGATE-NEW-QUEUE", 1, 0, false);
+        declareFunction("set_forward_propagate_new_queue", "SET-FORWARD-PROPAGATE-NEW-QUEUE", 2, 0, false);
+        declareFunction("swap_forward_propagate_queues", "SWAP-FORWARD-PROPAGATE-QUEUES", 1, 0, false);
+        declareFunction("enqueue_forward_propagate_assertions_to_new_queue", "ENQUEUE-FORWARD-PROPAGATE-ASSERTIONS-TO-NEW-QUEUE", 2, 0, false);
+        declareFunction("dequeue_forward_propagate_assertion_from_old_queue", "DEQUEUE-FORWARD-PROPAGATE-ASSERTION-FROM-OLD-QUEUE", 1, 0, false);
         return NIL;
     }
 

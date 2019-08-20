@@ -64,7 +64,6 @@ public final class cb_uia_widgets extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cb_uia_widgets();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_uia_widgets";
 
     // // Definitions
     // deflexical

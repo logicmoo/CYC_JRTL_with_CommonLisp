@@ -40,7 +40,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class arithmetic extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new arithmetic();
 
- public static final String myName = "com.cyc.cycjava.cycl.arithmetic";
 
 
     // Internal Constants

@@ -40,7 +40,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_rdf extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_rdf";
     public static String myFingerPrint = "85ed2a3db5621990c7bceb0468633b017620db042880fa6ff0897da92deda64c";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-rdf.lisp", position = 2000L)
     public static SubLSymbol $allow_rdf_removalP$;
@@ -746,21 +745,21 @@ public class removal_modules_rdf extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_rdf_file() {
-        declareFunction(myName, "allow_rdf_removalP", "ALLOW-RDF-REMOVAL?", 1, 1, false);
-        declareFunction(myName, "has_rdf_uriP", "HAS-RDF-URI?", 1, 0, false);
-        declareFunction(myName, "inference_rdf_uris_for_cyc_term", "INFERENCE-RDF-URIS-FOR-CYC-TERM", 1, 0, false);
-        declareMacro(me, "do_removal_rdf_unify_arg1", "DO-REMOVAL-RDF-UNIFY-ARG1");
-        declareMacro(me, "do_removal_rdf_unify_arg2", "DO-REMOVAL-RDF-UNIFY-ARG2");
-        declareFunction(myName, "make_rdf_uri_support", "MAKE-RDF-URI-SUPPORT", 2, 0, false);
-        declareFunction(myName, "possibly_rdf_uri_to_cyc_string", "POSSIBLY-RDF-URI-TO-CYC-STRING", 1, 0, false);
-        declareFunction(myName, "make_rdf_ist_graph_support", "MAKE-RDF-IST-GRAPH-SUPPORT", 4, 0, false);
-        declareFunction(myName, "removal_rdf_unify_arg1", "REMOVAL-RDF-UNIFY-ARG1", 1, 1, false);
-        declareFunction(myName, "removal_rdf_unify_arg2", "REMOVAL-RDF-UNIFY-ARG2", 1, 1, false);
-        declareFunction(myName, "supports_for_rdf", "SUPPORTS-FOR-RDF", 2, 0, false);
-        declareFunction(myName, "hl_verify_rdf", "HL-VERIFY-RDF", 1, 0, false);
-        declareFunction(myName, "hl_justify_rdf", "HL-JUSTIFY-RDF", 1, 0, false);
-        declareFunction(myName, "hl_forward_mt_combos_rdf", "HL-FORWARD-MT-COMBOS-RDF", 1, 0, false);
-        declareFunction(myName, "max_floor_mts_where_rdf", "MAX-FLOOR-MTS-WHERE-RDF", 1, 0, false);
+        declareFunction("allow_rdf_removalP", "ALLOW-RDF-REMOVAL?", 1, 1, false);
+        declareFunction("has_rdf_uriP", "HAS-RDF-URI?", 1, 0, false);
+        declareFunction("inference_rdf_uris_for_cyc_term", "INFERENCE-RDF-URIS-FOR-CYC-TERM", 1, 0, false);
+        declareMacro("do_removal_rdf_unify_arg1", "DO-REMOVAL-RDF-UNIFY-ARG1");
+        declareMacro("do_removal_rdf_unify_arg2", "DO-REMOVAL-RDF-UNIFY-ARG2");
+        declareFunction("make_rdf_uri_support", "MAKE-RDF-URI-SUPPORT", 2, 0, false);
+        declareFunction("possibly_rdf_uri_to_cyc_string", "POSSIBLY-RDF-URI-TO-CYC-STRING", 1, 0, false);
+        declareFunction("make_rdf_ist_graph_support", "MAKE-RDF-IST-GRAPH-SUPPORT", 4, 0, false);
+        declareFunction("removal_rdf_unify_arg1", "REMOVAL-RDF-UNIFY-ARG1", 1, 1, false);
+        declareFunction("removal_rdf_unify_arg2", "REMOVAL-RDF-UNIFY-ARG2", 1, 1, false);
+        declareFunction("supports_for_rdf", "SUPPORTS-FOR-RDF", 2, 0, false);
+        declareFunction("hl_verify_rdf", "HL-VERIFY-RDF", 1, 0, false);
+        declareFunction("hl_justify_rdf", "HL-JUSTIFY-RDF", 1, 0, false);
+        declareFunction("hl_forward_mt_combos_rdf", "HL-FORWARD-MT-COMBOS-RDF", 1, 0, false);
+        declareFunction("max_floor_mts_where_rdf", "MAX-FLOOR-MTS-WHERE-RDF", 1, 0, false);
         return NIL;
     }
 

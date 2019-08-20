@@ -42,7 +42,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rkf_string_weeders extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rkf_string_weeders();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_string_weeders";
 
 
     // deflexical

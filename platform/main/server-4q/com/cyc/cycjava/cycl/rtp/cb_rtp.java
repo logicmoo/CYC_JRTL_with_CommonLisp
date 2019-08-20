@@ -83,7 +83,6 @@ public final class cb_rtp extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new cb_rtp();
 
- public static final String myName = "com.cyc.cycjava.cycl.rtp.cb_rtp";
 
 
     // Internal Constants

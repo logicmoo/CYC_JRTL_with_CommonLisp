@@ -61,7 +61,6 @@ public final class cb_uia_tools_misc extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cb_uia_tools_misc();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_uia_tools_misc";
 
     // // Definitions
     public static final SubLObject cb_uiat_wff_checker_render_request(SubLObject request) {

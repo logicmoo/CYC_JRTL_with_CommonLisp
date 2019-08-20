@@ -35,7 +35,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class cb_kb_query_state extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.browser.cb_kb_query_state";
 	public static String myFingerPrint = "3d743076b42bb8861778f9675c3b125f11763ac0470db5d295a3ab140ef49a91";
 	@SubL(source = "cycl/inference/browser/cb-kb-query-state.lisp", position = 800L)
 	public static SubLSymbol $dtp_kb_query_state$;
@@ -458,61 +457,61 @@ public class cb_kb_query_state extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_cb_kb_query_state_file() {
-		declareFunction(myName, "kb_query_state_print_function_trampoline", "KB-QUERY-STATE-PRINT-FUNCTION-TRAMPOLINE",
+		declareFunction("kb_query_state_print_function_trampoline", "KB-QUERY-STATE-PRINT-FUNCTION-TRAMPOLINE",
 				2, 0, false);
-		declareFunction(myName, "kb_query_state_p", "KB-QUERY-STATE-P", 1, 0, false);
+		declareFunction("kb_query_state_p", "KB-QUERY-STATE-P", 1, 0, false);
 		new $kb_query_state_p$UnaryFunction();
-		declareFunction(myName, "kb_query_state_query_spec", "KB-QUERY-STATE-QUERY-SPEC", 1, 0, false);
-		declareFunction(myName, "kb_query_state_name", "KB-QUERY-STATE-NAME", 1, 0, false);
-		declareFunction(myName, "kb_query_state_comments", "KB-QUERY-STATE-COMMENTS", 1, 0, false);
-		declareFunction(myName, "kb_query_state_test_state", "KB-QUERY-STATE-TEST-STATE", 1, 0, false);
-		declareFunction(myName, "kb_query_state_save_mt", "KB-QUERY-STATE-SAVE-MT", 1, 0, false);
-		declareFunction(myName, "kb_query_state_inference", "KB-QUERY-STATE-INFERENCE", 1, 0, false);
-		declareFunction(myName, "kb_query_state_sentences", "KB-QUERY-STATE-SENTENCES", 1, 0, false);
-		declareFunction(myName, "kb_query_state_query_mts", "KB-QUERY-STATE-QUERY-MTS", 1, 0, false);
-		declareFunction(myName, "kb_query_state_template", "KB-QUERY-STATE-TEMPLATE", 1, 0, false);
-		declareFunction(myName, "kb_query_state_template_folder_mt_pairs", "KB-QUERY-STATE-TEMPLATE-FOLDER-MT-PAIRS", 1,
+		declareFunction("kb_query_state_query_spec", "KB-QUERY-STATE-QUERY-SPEC", 1, 0, false);
+		declareFunction("kb_query_state_name", "KB-QUERY-STATE-NAME", 1, 0, false);
+		declareFunction("kb_query_state_comments", "KB-QUERY-STATE-COMMENTS", 1, 0, false);
+		declareFunction("kb_query_state_test_state", "KB-QUERY-STATE-TEST-STATE", 1, 0, false);
+		declareFunction("kb_query_state_save_mt", "KB-QUERY-STATE-SAVE-MT", 1, 0, false);
+		declareFunction("kb_query_state_inference", "KB-QUERY-STATE-INFERENCE", 1, 0, false);
+		declareFunction("kb_query_state_sentences", "KB-QUERY-STATE-SENTENCES", 1, 0, false);
+		declareFunction("kb_query_state_query_mts", "KB-QUERY-STATE-QUERY-MTS", 1, 0, false);
+		declareFunction("kb_query_state_template", "KB-QUERY-STATE-TEMPLATE", 1, 0, false);
+		declareFunction("kb_query_state_template_folder_mt_pairs", "KB-QUERY-STATE-TEMPLATE-FOLDER-MT-PAIRS", 1,
 				0, false);
-		declareFunction(myName, "kb_query_state_template_glosses", "KB-QUERY-STATE-TEMPLATE-GLOSSES", 1, 0, false);
-		declareFunction(myName, "kb_query_state_query_properties", "KB-QUERY-STATE-QUERY-PROPERTIES", 1, 0, false);
-		declareFunction(myName, "kb_query_state_non_explanatory_sentence", "KB-QUERY-STATE-NON-EXPLANATORY-SENTENCE", 1,
+		declareFunction("kb_query_state_template_glosses", "KB-QUERY-STATE-TEMPLATE-GLOSSES", 1, 0, false);
+		declareFunction("kb_query_state_query_properties", "KB-QUERY-STATE-QUERY-PROPERTIES", 1, 0, false);
+		declareFunction("kb_query_state_non_explanatory_sentence", "KB-QUERY-STATE-NON-EXPLANATORY-SENTENCE", 1,
 				0, false);
-		declareFunction(myName, "kb_query_state_multiple_choice_option_specs",
+		declareFunction("kb_query_state_multiple_choice_option_specs",
 				"KB-QUERY-STATE-MULTIPLE-CHOICE-OPTION-SPECS", 1, 0, false);
-		declareFunction(myName, "_csetf_kb_query_state_query_spec", "_CSETF-KB-QUERY-STATE-QUERY-SPEC", 2, 0, false);
-		declareFunction(myName, "_csetf_kb_query_state_name", "_CSETF-KB-QUERY-STATE-NAME", 2, 0, false);
-		declareFunction(myName, "_csetf_kb_query_state_comments", "_CSETF-KB-QUERY-STATE-COMMENTS", 2, 0, false);
-		declareFunction(myName, "_csetf_kb_query_state_test_state", "_CSETF-KB-QUERY-STATE-TEST-STATE", 2, 0, false);
-		declareFunction(myName, "_csetf_kb_query_state_save_mt", "_CSETF-KB-QUERY-STATE-SAVE-MT", 2, 0, false);
-		declareFunction(myName, "_csetf_kb_query_state_inference", "_CSETF-KB-QUERY-STATE-INFERENCE", 2, 0, false);
-		declareFunction(myName, "_csetf_kb_query_state_sentences", "_CSETF-KB-QUERY-STATE-SENTENCES", 2, 0, false);
-		declareFunction(myName, "_csetf_kb_query_state_query_mts", "_CSETF-KB-QUERY-STATE-QUERY-MTS", 2, 0, false);
-		declareFunction(myName, "_csetf_kb_query_state_template", "_CSETF-KB-QUERY-STATE-TEMPLATE", 2, 0, false);
-		declareFunction(myName, "_csetf_kb_query_state_template_folder_mt_pairs",
+		declareFunction("_csetf_kb_query_state_query_spec", "_CSETF-KB-QUERY-STATE-QUERY-SPEC", 2, 0, false);
+		declareFunction("_csetf_kb_query_state_name", "_CSETF-KB-QUERY-STATE-NAME", 2, 0, false);
+		declareFunction("_csetf_kb_query_state_comments", "_CSETF-KB-QUERY-STATE-COMMENTS", 2, 0, false);
+		declareFunction("_csetf_kb_query_state_test_state", "_CSETF-KB-QUERY-STATE-TEST-STATE", 2, 0, false);
+		declareFunction("_csetf_kb_query_state_save_mt", "_CSETF-KB-QUERY-STATE-SAVE-MT", 2, 0, false);
+		declareFunction("_csetf_kb_query_state_inference", "_CSETF-KB-QUERY-STATE-INFERENCE", 2, 0, false);
+		declareFunction("_csetf_kb_query_state_sentences", "_CSETF-KB-QUERY-STATE-SENTENCES", 2, 0, false);
+		declareFunction("_csetf_kb_query_state_query_mts", "_CSETF-KB-QUERY-STATE-QUERY-MTS", 2, 0, false);
+		declareFunction("_csetf_kb_query_state_template", "_CSETF-KB-QUERY-STATE-TEMPLATE", 2, 0, false);
+		declareFunction("_csetf_kb_query_state_template_folder_mt_pairs",
 				"_CSETF-KB-QUERY-STATE-TEMPLATE-FOLDER-MT-PAIRS", 2, 0, false);
-		declareFunction(myName, "_csetf_kb_query_state_template_glosses", "_CSETF-KB-QUERY-STATE-TEMPLATE-GLOSSES", 2,
+		declareFunction("_csetf_kb_query_state_template_glosses", "_CSETF-KB-QUERY-STATE-TEMPLATE-GLOSSES", 2,
 				0, false);
-		declareFunction(myName, "_csetf_kb_query_state_query_properties", "_CSETF-KB-QUERY-STATE-QUERY-PROPERTIES", 2,
+		declareFunction("_csetf_kb_query_state_query_properties", "_CSETF-KB-QUERY-STATE-QUERY-PROPERTIES", 2,
 				0, false);
-		declareFunction(myName, "_csetf_kb_query_state_non_explanatory_sentence",
+		declareFunction("_csetf_kb_query_state_non_explanatory_sentence",
 				"_CSETF-KB-QUERY-STATE-NON-EXPLANATORY-SENTENCE", 2, 0, false);
-		declareFunction(myName, "_csetf_kb_query_state_multiple_choice_option_specs",
+		declareFunction("_csetf_kb_query_state_multiple_choice_option_specs",
 				"_CSETF-KB-QUERY-STATE-MULTIPLE-CHOICE-OPTION-SPECS", 2, 0, false);
-		declareFunction(myName, "make_kb_query_state", "MAKE-KB-QUERY-STATE", 0, 1, false);
-		declareFunction(myName, "visit_defstruct_kb_query_state", "VISIT-DEFSTRUCT-KB-QUERY-STATE", 2, 0, false);
-		declareFunction(myName, "visit_defstruct_object_kb_query_state_method",
+		declareFunction("make_kb_query_state", "MAKE-KB-QUERY-STATE", 0, 1, false);
+		declareFunction("visit_defstruct_kb_query_state", "VISIT-DEFSTRUCT-KB-QUERY-STATE", 2, 0, false);
+		declareFunction("visit_defstruct_object_kb_query_state_method",
 				"VISIT-DEFSTRUCT-OBJECT-KB-QUERY-STATE-METHOD", 2, 0, false);
-		declareFunction(myName, "cb_kbq_new_query_state_from_query_spec", "CB-KBQ-NEW-QUERY-STATE-FROM-QUERY-SPEC", 1,
+		declareFunction("cb_kbq_new_query_state_from_query_spec", "CB-KBQ-NEW-QUERY-STATE-FROM-QUERY-SPEC", 1,
 				1, false);
-		declareFunction(myName, "cb_kbq_new_query_state_from_inference", "CB-KBQ-NEW-QUERY-STATE-FROM-INFERENCE", 1, 1,
+		declareFunction("cb_kbq_new_query_state_from_inference", "CB-KBQ-NEW-QUERY-STATE-FROM-INFERENCE", 1, 1,
 				false);
-		declareFunction(myName, "kb_query_state_best_sentence", "KB-QUERY-STATE-BEST-SENTENCE", 1, 0, false);
-		declareFunction(myName, "kb_query_state_other_sentences", "KB-QUERY-STATE-OTHER-SENTENCES", 1, 0, false);
-		declareFunction(myName, "kb_query_state_best_mt", "KB-QUERY-STATE-BEST-MT", 1, 0, false);
-		declareFunction(myName, "kb_query_state_other_mts", "KB-QUERY-STATE-OTHER-MTS", 1, 0, false);
-		declareFunction(myName, "cb_clear_kb_query_being_saved", "CB-CLEAR-KB-QUERY-BEING-SAVED", 0, 0, false);
-		declareFunction(myName, "cb_kb_query_being_saved", "CB-KB-QUERY-BEING-SAVED", 0, 0, false);
-		declareFunction(myName, "cb_set_kb_query_being_saved", "CB-SET-KB-QUERY-BEING-SAVED", 1, 0, false);
+		declareFunction("kb_query_state_best_sentence", "KB-QUERY-STATE-BEST-SENTENCE", 1, 0, false);
+		declareFunction("kb_query_state_other_sentences", "KB-QUERY-STATE-OTHER-SENTENCES", 1, 0, false);
+		declareFunction("kb_query_state_best_mt", "KB-QUERY-STATE-BEST-MT", 1, 0, false);
+		declareFunction("kb_query_state_other_mts", "KB-QUERY-STATE-OTHER-MTS", 1, 0, false);
+		declareFunction("cb_clear_kb_query_being_saved", "CB-CLEAR-KB-QUERY-BEING-SAVED", 0, 0, false);
+		declareFunction("cb_kb_query_being_saved", "CB-KB-QUERY-BEING-SAVED", 0, 0, false);
+		declareFunction("cb_set_kb_query_being_saved", "CB-SET-KB-QUERY-BEING-SAVED", 1, 0, false);
 		return NIL;
 	}
 

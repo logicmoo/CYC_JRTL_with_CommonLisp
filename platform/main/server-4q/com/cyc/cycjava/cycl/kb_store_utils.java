@@ -17,7 +17,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class kb_store_utils extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new kb_store_utils();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.kb_store_utils";
 
 
 

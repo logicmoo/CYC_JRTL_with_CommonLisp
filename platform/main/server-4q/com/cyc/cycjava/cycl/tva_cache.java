@@ -175,7 +175,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class tva_cache extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new tva_cache();
 
- public static final String myName = "com.cyc.cycjava.cycl.tva_cache";
 
 
     // defparameter

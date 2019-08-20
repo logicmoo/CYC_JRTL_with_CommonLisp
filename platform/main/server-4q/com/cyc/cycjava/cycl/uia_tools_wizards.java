@@ -74,7 +74,6 @@ public final class uia_tools_wizards extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new uia_tools_wizards();
 
-    public static final String myName = "com.cyc.cycjava.cycl.uia_tools_wizards";
 
     // // Definitions
     public static final SubLObject uia_act_new_scenario_constructor(SubLObject v_agenda, SubLObject phrase, SubLObject mode, SubLObject v_scenario) {

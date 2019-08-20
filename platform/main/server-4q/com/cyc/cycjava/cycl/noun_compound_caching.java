@@ -68,7 +68,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class noun_compound_caching extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new noun_compound_caching();
 
- public static final String myName = "com.cyc.cycjava.cycl.noun_compound_caching";
 
 
     // deflexical

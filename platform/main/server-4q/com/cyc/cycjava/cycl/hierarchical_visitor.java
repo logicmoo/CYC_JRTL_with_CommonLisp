@@ -67,7 +67,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class hierarchical_visitor extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new hierarchical_visitor();
 
- public static final String myName = "com.cyc.cycjava.cycl.hierarchical_visitor";
 
 
     // deflexical

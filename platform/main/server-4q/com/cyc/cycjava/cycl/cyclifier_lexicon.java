@@ -32,7 +32,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class cyclifier_lexicon extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new cyclifier_lexicon();
 
- public static final String myName = "com.cyc.cycjava.cycl.cyclifier_lexicon";
 
 
     static private final SubLList $list2 = list(list(makeSymbol("DEFAULT-KB-SPEC"), makeKeyword("CLASS"), makeKeyword("PROTECTED"), makeKeyword("VALUE"), reader_make_constant_shell("CyclifierLexiconSpecification")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("CREATE-LEX-ENTRIES-NL-TRIE-WORD"), list(makeSymbol("STRING"), makeSymbol("NL-TRIE-ENTRY")), makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("CREATE-LEX-ENTRIES-NUMBER"), list(makeSymbol("STRING")), makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("FABRICATE-VERBAL-SEMTRANS"), list(makeSymbol("STRING"), makeSymbol("KEYWORDS"))));

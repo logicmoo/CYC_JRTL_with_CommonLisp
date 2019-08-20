@@ -79,7 +79,6 @@ public final class index_space extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new index_space();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.index_space";
 
     // // Definitions
     // defconstant

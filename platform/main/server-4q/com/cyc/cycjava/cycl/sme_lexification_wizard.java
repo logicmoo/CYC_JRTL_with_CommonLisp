@@ -189,7 +189,6 @@ public final class sme_lexification_wizard extends SubLTranslatedFile implements
     public static final SubLFile me = new sme_lexification_wizard();
 
 
- public static final String myName = "com.cyc.cycjava.cycl.sme_lexification_wizard";
 
     private static final SubLSymbol RKF_BB_PROXY_ADD_ACTIONS_METHOD = makeSymbol("RKF-BB-PROXY-ADD-ACTIONS-METHOD");
 

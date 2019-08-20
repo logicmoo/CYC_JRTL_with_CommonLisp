@@ -41,7 +41,6 @@ public final class cyblack_activation_pattern extends SubLTranslatedFile impleme
 
     public static final SubLFile me = new cyblack_activation_pattern();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_activation_pattern";
 
     // // Definitions
     public static final SubLObject cyblack_activation_pattern_p(SubLObject v_cyblack_activation_pattern) {

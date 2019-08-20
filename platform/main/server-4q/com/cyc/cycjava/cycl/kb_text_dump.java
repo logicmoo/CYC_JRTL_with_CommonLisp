@@ -112,7 +112,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class kb_text_dump extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new kb_text_dump();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.kb_text_dump";
 
 
     // defparameter

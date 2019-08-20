@@ -42,7 +42,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class xml_writer extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new xml_writer();
 
- public static final String myName = "com.cyc.cycjava.cycl.xml_writer";
 
 
     private static final SubLSymbol TEXT_WRITER = makeSymbol("TEXT-WRITER");

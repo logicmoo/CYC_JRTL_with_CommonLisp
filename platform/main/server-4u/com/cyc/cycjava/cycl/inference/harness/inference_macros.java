@@ -174,7 +174,6 @@ public final class inference_macros extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new inference_macros();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.harness.inference_macros";
 
 
     // Internal Constants

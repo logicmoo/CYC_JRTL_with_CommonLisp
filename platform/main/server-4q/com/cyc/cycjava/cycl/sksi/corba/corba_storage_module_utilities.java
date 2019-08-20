@@ -39,7 +39,6 @@ public final class corba_storage_module_utilities extends SubLTranslatedFile imp
 
     public static final SubLFile me = new corba_storage_module_utilities();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.sksi.corba.corba_storage_module_utilities";
 
     // // Definitions
     public static final SubLObject corba_set_object_method_args_hl_storage_module_applicableP(SubLObject argument_spec, SubLObject cnf, SubLObject mt, SubLObject direction, SubLObject variable_map) {

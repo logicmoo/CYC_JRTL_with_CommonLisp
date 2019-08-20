@@ -99,7 +99,6 @@ public final class lilliput extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new lilliput();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.lilliput";
 
 
     // deflexical

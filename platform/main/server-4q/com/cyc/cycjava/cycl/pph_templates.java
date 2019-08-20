@@ -1009,7 +1009,6 @@ public final class pph_templates extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new pph_templates();
 
- public static final String myName = "com.cyc.cycjava.cycl.pph_templates";
 
 
     // defparameter

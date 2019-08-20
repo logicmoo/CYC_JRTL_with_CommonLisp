@@ -30,7 +30,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_physics extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_physics";
 	public static String myFingerPrint = "8b9f51f4fdcaa3b9a6024ba4df93da10bb10782dce68519eec8b6a838e86c7c6";
 	@SubL(source = "cycl/inference/modules/removal/removal-modules-physics.lisp", position = 2600L)
 	private static SubLSymbol $default_type_has_boiling_point_temperature_and_pressure_cost$;
@@ -255,17 +254,17 @@ public class removal_modules_physics extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_removal_modules_physics_file() {
-		declareFunction(myName, "antoine_equation_constants_for_temperature_of_liquid",
+		declareFunction("antoine_equation_constants_for_temperature_of_liquid",
 				"ANTOINE-EQUATION-CONSTANTS-FOR-TEMPERATURE-OF-LIQUID", 2, 0, false);
-		declareFunction(myName, "boiling_point_temperature_to_pressure", "BOILING-POINT-TEMPERATURE-TO-PRESSURE", 2, 0,
+		declareFunction("boiling_point_temperature_to_pressure", "BOILING-POINT-TEMPERATURE-TO-PRESSURE", 2, 0,
 				false);
-		declareFunction(myName, "antoine_equation_constants_for_pressure_of_liquid",
+		declareFunction("antoine_equation_constants_for_pressure_of_liquid",
 				"ANTOINE-EQUATION-CONSTANTS-FOR-PRESSURE-OF-LIQUID", 2, 0, false);
-		declareFunction(myName, "boiling_point_pressure_to_temperature", "BOILING-POINT-PRESSURE-TO-TEMPERATURE", 2, 0,
+		declareFunction("boiling_point_pressure_to_temperature", "BOILING-POINT-PRESSURE-TO-TEMPERATURE", 2, 0,
 				false);
-		declareFunction(myName, "removal_type_has_boiling_point_temperature_at_pressure_expand",
+		declareFunction("removal_type_has_boiling_point_temperature_at_pressure_expand",
 				"REMOVAL-TYPE-HAS-BOILING-POINT-TEMPERATURE-AT-PRESSURE-EXPAND", 1, 1, false);
-		declareFunction(myName, "removal_type_has_boiling_point_pressure_at_temperature_expand",
+		declareFunction("removal_type_has_boiling_point_pressure_at_temperature_expand",
 				"REMOVAL-TYPE-HAS-BOILING-POINT-PRESSURE-AT-TEMPERATURE-EXPAND", 1, 1, false);
 		return NIL;
 	}

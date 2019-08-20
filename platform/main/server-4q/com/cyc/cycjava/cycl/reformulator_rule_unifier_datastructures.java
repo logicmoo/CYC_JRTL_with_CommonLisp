@@ -167,7 +167,6 @@ public final class reformulator_rule_unifier_datastructures extends SubLTranslat
 
     public static final SubLFile me = new reformulator_rule_unifier_datastructures();
 
- public static final String myName = "com.cyc.cycjava.cycl.reformulator_rule_unifier_datastructures";
 
 
     // defconstant

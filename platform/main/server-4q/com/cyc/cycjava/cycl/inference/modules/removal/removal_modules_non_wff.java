@@ -23,7 +23,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_non_wff extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_non_wff";
     public static String myFingerPrint = "a222370274558e9f7c472bde77a238b30c3fbf9685fa2fd4a495c5feb86106ee";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-non-wff.lisp", position = 1400L)
     private static SubLSymbol $default_non_wff_check_neg_cost$;
@@ -83,11 +82,11 @@ public class removal_modules_non_wff extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_non_wff_file() {
-        declareFunction(myName, "removal_non_wffP", "REMOVAL-NON-WFF?", 2, 0, false);
-        declareFunction(myName, "removal_non_wff_check_neg_expand", "REMOVAL-NON-WFF-CHECK-NEG-EXPAND", 1, 1, false);
-        declareFunction(myName, "proof_has_some_non_wff_subproofP", "PROOF-HAS-SOME-NON-WFF-SUBPROOF?", 1, 0, false);
-        declareFunction(myName, "non_wff_removal_module_p", "NON-WFF-REMOVAL-MODULE-P", 1, 0, false);
-        declareFunction(myName, "non_wff_removal_proof_p", "NON-WFF-REMOVAL-PROOF-P", 1, 0, false);
+        declareFunction("removal_non_wffP", "REMOVAL-NON-WFF?", 2, 0, false);
+        declareFunction("removal_non_wff_check_neg_expand", "REMOVAL-NON-WFF-CHECK-NEG-EXPAND", 1, 1, false);
+        declareFunction("proof_has_some_non_wff_subproofP", "PROOF-HAS-SOME-NON-WFF-SUBPROOF?", 1, 0, false);
+        declareFunction("non_wff_removal_module_p", "NON-WFF-REMOVAL-MODULE-P", 1, 0, false);
+        declareFunction("non_wff_removal_proof_p", "NON-WFF-REMOVAL-PROOF-P", 1, 0, false);
         return NIL;
     }
 

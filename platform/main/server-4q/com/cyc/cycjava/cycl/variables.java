@@ -118,7 +118,6 @@ public final class variables extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new variables();
 
- public static final String myName = "com.cyc.cycjava.cycl.variables";
 
 
     // defconstant

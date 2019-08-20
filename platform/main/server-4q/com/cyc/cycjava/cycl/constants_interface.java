@@ -40,7 +40,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class constants_interface extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new constants_interface();
 
- public static final String myName = "com.cyc.cycjava.cycl.constants_interface";
 
 
     // Internal Constants

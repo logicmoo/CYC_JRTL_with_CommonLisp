@@ -75,7 +75,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sbhl_search_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sbhl_search_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.sbhl.sbhl_search_utilities";
 
 
     private static final SubLSymbol SBHL_SIMPLE_TRUE_SEARCH = makeSymbol("SBHL-SIMPLE-TRUE-SEARCH");

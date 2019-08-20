@@ -115,7 +115,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class vector_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new vector_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.vector_utilities";
 
 
     private static final SubLSymbol CLEAR_VECTOR = makeSymbol("CLEAR-VECTOR");

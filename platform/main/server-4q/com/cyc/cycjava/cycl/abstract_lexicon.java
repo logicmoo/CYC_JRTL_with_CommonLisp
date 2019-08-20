@@ -189,7 +189,6 @@ public final class abstract_lexicon extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new abstract_lexicon();
 
- public static final String myName = "com.cyc.cycjava.cycl.abstract_lexicon";
 
 
     // deflexical

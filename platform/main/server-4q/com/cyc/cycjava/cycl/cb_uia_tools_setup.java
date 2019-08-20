@@ -51,7 +51,6 @@ public final class cb_uia_tools_setup extends SubLTranslatedFile implements V02 
 
     public static final SubLFile me = new cb_uia_tools_setup();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_uia_tools_setup";
 
     // // Definitions
     public static final SubLObject cb_uiat_configure_interface_render_request(SubLObject request) {

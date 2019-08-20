@@ -55,7 +55,6 @@ public final class cyblack_external_module_table extends SubLTranslatedFile impl
 
     public static final SubLFile me = new cyblack_external_module_table();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_external_module_table";
 
     // // Definitions
     public static final class $external_module_association_native extends SubLStructNative {

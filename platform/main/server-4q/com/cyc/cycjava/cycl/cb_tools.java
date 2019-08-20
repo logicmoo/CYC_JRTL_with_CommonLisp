@@ -817,7 +817,6 @@ public final class cb_tools extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new cb_tools();
 
- public static final String myName = "com.cyc.cycjava.cycl.cb_tools";
 
 
     // defparameter

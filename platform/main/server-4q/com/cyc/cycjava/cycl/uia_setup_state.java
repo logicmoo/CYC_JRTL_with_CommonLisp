@@ -46,7 +46,6 @@ public final class uia_setup_state extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new uia_setup_state();
 
-    public static final String myName = "com.cyc.cycjava.cycl.uia_setup_state";
 
     // // Definitions
     /**

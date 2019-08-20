@@ -30,7 +30,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rkf_example_queries extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rkf_example_queries();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_example_queries";
 
 
     static private final SubLList $list1 = list(reader_make_constant_shell("keCommonQueryExample"), makeKeyword("SENTENCE"));

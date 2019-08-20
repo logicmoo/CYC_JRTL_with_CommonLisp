@@ -247,7 +247,6 @@ public final class assertions_low extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new assertions_low();
 
- public static final String myName = "com.cyc.cycjava.cycl.assertions_low";
 
 
     // defconstant

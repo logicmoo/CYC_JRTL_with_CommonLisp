@@ -254,7 +254,6 @@ public final class html_script_utilities extends SubLTranslatedFile implements V
 
     public static final SubLFile me = new html_script_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.html_script_utilities";
 
 
     // defparameter

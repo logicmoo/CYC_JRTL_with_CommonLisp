@@ -35,7 +35,6 @@ public final class cb_java_web_start_launcher extends SubLTranslatedFile impleme
 
     public static final SubLFile me = new cb_java_web_start_launcher();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_java_web_start_launcher";
 
     // // Definitions
     /**

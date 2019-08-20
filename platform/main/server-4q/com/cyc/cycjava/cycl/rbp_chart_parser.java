@@ -53,7 +53,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rbp_chart_parser extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rbp_chart_parser();
 
- public static final String myName = "com.cyc.cycjava.cycl.rbp_chart_parser";
 
 
     // defconstant

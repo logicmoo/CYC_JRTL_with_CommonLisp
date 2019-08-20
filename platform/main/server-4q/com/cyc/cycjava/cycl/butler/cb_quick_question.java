@@ -63,7 +63,6 @@ public final class cb_quick_question extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cb_quick_question();
 
-    public static final String myName = "com.cyc.cycjava.cycl.butler.cb_quick_question";
 
     // // Definitions
     // deflexical

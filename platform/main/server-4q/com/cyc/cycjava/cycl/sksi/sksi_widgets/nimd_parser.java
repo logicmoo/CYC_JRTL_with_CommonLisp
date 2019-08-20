@@ -79,7 +79,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class nimd_parser extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new nimd_parser();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.sksi_widgets.nimd_parser";
 
 
     // defparameter

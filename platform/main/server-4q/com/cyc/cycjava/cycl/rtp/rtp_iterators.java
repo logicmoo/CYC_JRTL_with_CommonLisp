@@ -241,7 +241,6 @@ public final class rtp_iterators extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new rtp_iterators();
 
- public static final String myName = "com.cyc.cycjava.cycl.rtp.rtp_iterators";
 
 
     // defconstant

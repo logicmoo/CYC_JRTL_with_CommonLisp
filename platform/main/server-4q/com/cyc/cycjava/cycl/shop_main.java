@@ -62,7 +62,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class shop_main extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new shop_main();
 
- public static final String myName = "com.cyc.cycjava.cycl.shop_main";
 
 
     // deflexical

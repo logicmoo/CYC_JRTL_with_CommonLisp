@@ -44,7 +44,6 @@ public final class nl_logging extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new nl_logging();
 
-    public static final String myName = "com.cyc.cycjava.cycl.nl_logging";
 
     // // Definitions
     /**

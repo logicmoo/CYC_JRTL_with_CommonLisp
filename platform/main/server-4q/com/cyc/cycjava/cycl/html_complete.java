@@ -299,7 +299,6 @@ public final class html_complete extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new html_complete();
 
- public static final String myName = "com.cyc.cycjava.cycl.html_complete";
 
 
     // defparameter

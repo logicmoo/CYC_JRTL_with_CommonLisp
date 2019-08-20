@@ -119,7 +119,6 @@ public final class evaluatable_relation_tests extends SubLTranslatedFile impleme
 
     public static final SubLFile me = new evaluatable_relation_tests();
 
- public static final String myName = "com.cyc.cycjava.cycl.cyc_testing.evaluatable_relation_tests";
 
 
     // defconstant

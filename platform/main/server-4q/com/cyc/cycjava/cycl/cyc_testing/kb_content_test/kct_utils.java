@@ -366,7 +366,6 @@ public final class kct_utils extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new kct_utils();
 
- public static final String myName = "com.cyc.cycjava.cycl.cyc_testing.kb_content_test.kct_utils";
 
 
     // defconstant

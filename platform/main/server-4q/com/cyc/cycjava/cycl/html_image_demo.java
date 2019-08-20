@@ -84,7 +84,6 @@ public final class html_image_demo extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new html_image_demo();
 
-    public static final String myName = "com.cyc.cycjava.cycl.html_image_demo";
 
     // // Definitions
     // defparameter

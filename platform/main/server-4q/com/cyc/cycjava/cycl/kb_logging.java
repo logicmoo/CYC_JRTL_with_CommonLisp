@@ -64,7 +64,6 @@ public final class kb_logging extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new kb_logging();
 
-    public static final String myName = "com.cyc.cycjava.cycl.kb_logging";
 
     // // Definitions
     public static final SubLObject with_exclusive_sql_connection_access(SubLObject macroform, SubLObject environment) {

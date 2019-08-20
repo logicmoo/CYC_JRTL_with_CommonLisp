@@ -29,7 +29,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_formula_arg_n extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_formula_arg_n";
     public static String myFingerPrint = "e699eb68995320d05ab0f3473de211d038418ab07763e56b925c395629d73950";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-formula-arg-n.lisp", position = 900L)
     public static SubLSymbol $operator_formulas_defining_mt$;
@@ -196,18 +195,18 @@ public class removal_modules_formula_arg_n extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_formula_arg_n_file() {
-        declareFunction(myName, "make_operator_formulas_supports", "MAKE-OPERATOR-FORMULAS-SUPPORTS", 2, 0, false);
-        declareFunction(myName, "operator_formulas_rule_support", "OPERATOR-FORMULAS-RULE-SUPPORT", 0, 0, false);
-        declareFunction(myName, "formula_has_operatorP", "FORMULA-HAS-OPERATOR?", 2, 0, false);
-        declareFunction(myName, "make_arg_n_supports", "MAKE-ARG-N-SUPPORTS", 2, 0, false);
-        declareFunction(myName, "arg_n_rule_support", "ARG-N-RULE-SUPPORT", 0, 0, false);
-        declareFunction(myName, "removal_arg_n_check", "REMOVAL-ARG-N-CHECK", 3, 0, false);
-        declareFunction(myName, "removal_arg_n_iterate_cost", "REMOVAL-ARG-N-ITERATE-COST", 1, 1, false);
-        declareFunction(myName, "removal_arg_n_iterate_expand", "REMOVAL-ARG-N-ITERATE-EXPAND", 1, 1, false);
-        declareFunction(myName, "formula_has_arityP", "FORMULA-HAS-ARITY?", 2, 0, false);
-        declareFunction(myName, "make_cycl_for_subl_supports", "MAKE-CYCL-FOR-SUBL-SUPPORTS", 2, 0, false);
-        declareFunction(myName, "cycl_for_subl_rule_support", "CYCL-FOR-SUBL-RULE-SUPPORT", 0, 0, false);
-        declareFunction(myName, "removal_cycl_for_subl_check", "REMOVAL-CYCL-FOR-SUBL-CHECK", 2, 0, false);
+        declareFunction("make_operator_formulas_supports", "MAKE-OPERATOR-FORMULAS-SUPPORTS", 2, 0, false);
+        declareFunction("operator_formulas_rule_support", "OPERATOR-FORMULAS-RULE-SUPPORT", 0, 0, false);
+        declareFunction("formula_has_operatorP", "FORMULA-HAS-OPERATOR?", 2, 0, false);
+        declareFunction("make_arg_n_supports", "MAKE-ARG-N-SUPPORTS", 2, 0, false);
+        declareFunction("arg_n_rule_support", "ARG-N-RULE-SUPPORT", 0, 0, false);
+        declareFunction("removal_arg_n_check", "REMOVAL-ARG-N-CHECK", 3, 0, false);
+        declareFunction("removal_arg_n_iterate_cost", "REMOVAL-ARG-N-ITERATE-COST", 1, 1, false);
+        declareFunction("removal_arg_n_iterate_expand", "REMOVAL-ARG-N-ITERATE-EXPAND", 1, 1, false);
+        declareFunction("formula_has_arityP", "FORMULA-HAS-ARITY?", 2, 0, false);
+        declareFunction("make_cycl_for_subl_supports", "MAKE-CYCL-FOR-SUBL-SUPPORTS", 2, 0, false);
+        declareFunction("cycl_for_subl_rule_support", "CYCL-FOR-SUBL-RULE-SUPPORT", 0, 0, false);
+        declareFunction("removal_cycl_for_subl_check", "REMOVAL-CYCL-FOR-SUBL-CHECK", 2, 0, false);
         return NIL;
     }
 

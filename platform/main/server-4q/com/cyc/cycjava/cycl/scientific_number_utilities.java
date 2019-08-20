@@ -60,7 +60,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class scientific_number_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new scientific_number_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.scientific_number_utilities";
 
 
     // defconstant

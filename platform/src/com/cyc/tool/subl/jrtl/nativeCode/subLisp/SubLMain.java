@@ -616,7 +616,7 @@ public class SubLMain {
 			}
 
 			if (!SubLMain.OPENCYC)
-				initialize1TranslatedSystem("org.logicmoo.system.export");
+				initialize1TranslatedSystem("org.logicmoo.system.export_to_swipl");
 			if (SubLMain.TINY_KB)
 				initialize1TranslatedSystem("com.cyc.cycjava_1.cycl.dumper_larkc");
 

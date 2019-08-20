@@ -56,7 +56,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class format_cycl_expression extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new format_cycl_expression();
 
- public static final String myName = "com.cyc.cycjava.cycl.format_cycl_expression";
 
 
     // defparameter

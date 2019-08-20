@@ -34,7 +34,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_minimization extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_minimization";
     public static String myFingerPrint = "4293429246dc9867d2d3d53382ff592b8783e3e55eb5227f53673eda04121a30";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-minimization.lisp", position = 2600L)
     private static SubLSymbol $default_minimize_extent_cost$;
@@ -177,13 +176,13 @@ public class removal_modules_minimization extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_minimization_file() {
-        declareFunction(myName, "make_minimization_support", "MAKE-MINIMIZATION-SUPPORT", 2, 0, false);
-        declareFunction(myName, "removal_completeness_minimization_allowedP", "REMOVAL-COMPLETENESS-MINIMIZATION-ALLOWED?", 0, 0, false);
-        declareFunction(myName, "removal_unprovable_negation", "REMOVAL-UNPROVABLE-NEGATION", 3, 0, false);
-        declareFunction(myName, "removal_minimize_extent_required", "REMOVAL-MINIMIZE-EXTENT-REQUIRED", 1, 1, false);
-        declareFunction(myName, "removal_minimize_extent_expand", "REMOVAL-MINIMIZE-EXTENT-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_completely_decidable_neg_required", "REMOVAL-COMPLETELY-DECIDABLE-NEG-REQUIRED", 1, 1, false);
-        declareFunction(myName, "removal_completely_decidable_neg_expand", "REMOVAL-COMPLETELY-DECIDABLE-NEG-EXPAND", 1, 1, false);
+        declareFunction("make_minimization_support", "MAKE-MINIMIZATION-SUPPORT", 2, 0, false);
+        declareFunction("removal_completeness_minimization_allowedP", "REMOVAL-COMPLETENESS-MINIMIZATION-ALLOWED?", 0, 0, false);
+        declareFunction("removal_unprovable_negation", "REMOVAL-UNPROVABLE-NEGATION", 3, 0, false);
+        declareFunction("removal_minimize_extent_required", "REMOVAL-MINIMIZE-EXTENT-REQUIRED", 1, 1, false);
+        declareFunction("removal_minimize_extent_expand", "REMOVAL-MINIMIZE-EXTENT-EXPAND", 1, 1, false);
+        declareFunction("removal_completely_decidable_neg_required", "REMOVAL-COMPLETELY-DECIDABLE-NEG-REQUIRED", 1, 1, false);
+        declareFunction("removal_completely_decidable_neg_expand", "REMOVAL-COMPLETELY-DECIDABLE-NEG-EXPAND", 1, 1, false);
         return NIL;
     }
 

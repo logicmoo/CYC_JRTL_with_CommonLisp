@@ -367,7 +367,6 @@ public final class rkf_rule_constructor extends SubLTranslatedFile implements V1
 
     public static final SubLFile me = new rkf_rule_constructor();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_rule_constructor";
 
 
     // deflexical

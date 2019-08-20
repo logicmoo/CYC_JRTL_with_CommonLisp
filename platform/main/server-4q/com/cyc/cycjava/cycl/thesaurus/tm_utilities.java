@@ -104,7 +104,6 @@ public final class tm_utilities extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new tm_utilities();
 
-    public static final String myName = "com.cyc.cycjava.cycl.thesaurus.tm_utilities";
 
     // // Definitions
     // defparameter

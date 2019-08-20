@@ -87,7 +87,6 @@ public final class constants_low extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new constants_low();
 
- public static final String myName = "com.cyc.cycjava.cycl.constants_low";
 
 
     private static final SubLSymbol $constant_guid_table$ = makeSymbol("*CONSTANT-GUID-TABLE*");

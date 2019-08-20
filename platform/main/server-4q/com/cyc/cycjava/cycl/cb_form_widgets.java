@@ -395,7 +395,6 @@ public final class cb_form_widgets extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new cb_form_widgets();
 
- public static final String myName = "com.cyc.cycjava.cycl.cb_form_widgets";
 
 
     // defconstant

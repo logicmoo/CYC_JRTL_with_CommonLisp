@@ -143,7 +143,6 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
 
     public static final SubLFile me = new kb_indexing_datastructures();
 
- public static final String myName = "com.cyc.cycjava.cycl.kb_indexing_datastructures";
 
 
     // deflexical

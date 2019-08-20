@@ -58,7 +58,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_parse_trees extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_parse_trees";
     public static String myFingerPrint = "9f565b442a3b0b3ed575ceaa015b115bd791e90c12afc699b0c5b238d9fff842";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-parse-trees.lisp", position = 800L)
     private static SubLSymbol $predicates_to_parse_tree_methods$;
@@ -740,19 +739,19 @@ public class removal_modules_parse_trees extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_parse_trees_file() {
-        declareFunction(myName, "clear_predicates_with_parse_tree_support_in_some_mt", "CLEAR-PREDICATES-WITH-PARSE-TREE-SUPPORT-IN-SOME-MT", 0, 0, false);
-        declareFunction(myName, "remove_predicates_with_parse_tree_support_in_some_mt", "REMOVE-PREDICATES-WITH-PARSE-TREE-SUPPORT-IN-SOME-MT", 0, 0, false);
-        declareFunction(myName, "predicates_with_parse_tree_support_in_some_mt_internal", "PREDICATES-WITH-PARSE-TREE-SUPPORT-IN-SOME-MT-INTERNAL", 0, 0, false);
-        declareFunction(myName, "predicates_with_parse_tree_support_in_some_mt", "PREDICATES-WITH-PARSE-TREE-SUPPORT-IN-SOME-MT", 0, 0, false);
-        declareFunction(myName, "predicate_with_parse_tree_support_p", "PREDICATE-WITH-PARSE-TREE-SUPPORT-P", 1, 0, false);
+        declareFunction("clear_predicates_with_parse_tree_support_in_some_mt", "CLEAR-PREDICATES-WITH-PARSE-TREE-SUPPORT-IN-SOME-MT", 0, 0, false);
+        declareFunction("remove_predicates_with_parse_tree_support_in_some_mt", "REMOVE-PREDICATES-WITH-PARSE-TREE-SUPPORT-IN-SOME-MT", 0, 0, false);
+        declareFunction("predicates_with_parse_tree_support_in_some_mt_internal", "PREDICATES-WITH-PARSE-TREE-SUPPORT-IN-SOME-MT-INTERNAL", 0, 0, false);
+        declareFunction("predicates_with_parse_tree_support_in_some_mt", "PREDICATES-WITH-PARSE-TREE-SUPPORT-IN-SOME-MT", 0, 0, false);
+        declareFunction("predicate_with_parse_tree_support_p", "PREDICATE-WITH-PARSE-TREE-SUPPORT-P", 1, 0, false);
         new $predicate_with_parse_tree_support_p$UnaryFunction();
-        declareFunction(myName, "predicate_with_parse_tree_direct_support_p", "PREDICATE-WITH-PARSE-TREE-DIRECT-SUPPORT-P", 1, 0, false);
-        declareFunction(myName, "removal_parse_tree_relation_answer_list", "REMOVAL-PARSE-TREE-RELATION-ANSWER-LIST", 1, 0, false);
-        declareFunction(myName, "parse_tree_relation_supports", "PARSE-TREE-RELATION-SUPPORTS", 1, 0, false);
-        declareFunction(myName, "removal_parse_tree_relation_int", "REMOVAL-PARSE-TREE-RELATION-INT", 2, 0, false);
-        declareFunction(myName, "apply_parse_tree_removal_method", "APPLY-PARSE-TREE-REMOVAL-METHOD", 2, 0, false);
-        declareFunction(myName, "syntactic_node_for_parse_tree", "SYNTACTIC-NODE-FOR-PARSE-TREE", 2, 0, false);
-        declareFunction(myName, "parse_tree_for_syntactic_node", "PARSE-TREE-FOR-SYNTACTIC-NODE", 2, 0, false);
+        declareFunction("predicate_with_parse_tree_direct_support_p", "PREDICATE-WITH-PARSE-TREE-DIRECT-SUPPORT-P", 1, 0, false);
+        declareFunction("removal_parse_tree_relation_answer_list", "REMOVAL-PARSE-TREE-RELATION-ANSWER-LIST", 1, 0, false);
+        declareFunction("parse_tree_relation_supports", "PARSE-TREE-RELATION-SUPPORTS", 1, 0, false);
+        declareFunction("removal_parse_tree_relation_int", "REMOVAL-PARSE-TREE-RELATION-INT", 2, 0, false);
+        declareFunction("apply_parse_tree_removal_method", "APPLY-PARSE-TREE-REMOVAL-METHOD", 2, 0, false);
+        declareFunction("syntactic_node_for_parse_tree", "SYNTACTIC-NODE-FOR-PARSE-TREE", 2, 0, false);
+        declareFunction("parse_tree_for_syntactic_node", "PARSE-TREE-FOR-SYNTACTIC-NODE", 2, 0, false);
         return NIL;
     }
 

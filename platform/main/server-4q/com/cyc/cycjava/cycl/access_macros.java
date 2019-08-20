@@ -69,7 +69,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class access_macros extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new access_macros();
 
- public static final String myName = "com.cyc.cycjava.cycl.access_macros";
 
 
     // deflexical

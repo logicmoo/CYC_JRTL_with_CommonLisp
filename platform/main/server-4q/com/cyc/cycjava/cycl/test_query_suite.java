@@ -61,7 +61,6 @@ public final class test_query_suite extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new test_query_suite();
 
- public static final String myName = "com.cyc.cycjava.cycl.test_query_suite";
 
 
     // defconstant

@@ -145,7 +145,6 @@ public final class agenda extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new agenda();
 
-    public static final String myName = "com.cyc.cycjava.cycl.agenda";
 
     // defparameter
     @LispMethod(comment = "defparameter")

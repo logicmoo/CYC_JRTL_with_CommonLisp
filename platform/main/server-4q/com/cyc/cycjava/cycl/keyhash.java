@@ -627,7 +627,6 @@ public final class keyhash extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new keyhash();
 
- public static final String myName = "com.cyc.cycjava.cycl.keyhash";
 
 
     // defconstant

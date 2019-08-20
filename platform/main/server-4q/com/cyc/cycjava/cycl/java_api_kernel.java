@@ -77,7 +77,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class java_api_kernel extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new java_api_kernel();
 
- public static final String myName = "com.cyc.cycjava.cycl.java_api_kernel";
 
 
     // deflexical

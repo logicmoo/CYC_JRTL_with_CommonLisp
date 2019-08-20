@@ -60,7 +60,6 @@ public final class remote_operation_filters extends SubLTranslatedFile implement
 
     public static final SubLFile me = new remote_operation_filters();
 
-    public static final String myName = "com.cyc.cycjava.cycl.remote_operation_filters";
 
     // // Definitions
     // deflexical

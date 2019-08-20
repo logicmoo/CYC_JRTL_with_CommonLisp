@@ -51,7 +51,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rkf_event_dispatcher extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rkf_event_dispatcher();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_event_dispatcher";
 
 
     // deflexical

@@ -44,7 +44,6 @@ public final class cyblack_inspection_tools extends SubLTranslatedFile implement
 
     public static final SubLFile me = new cyblack_inspection_tools();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_inspection_tools";
 
     // // Definitions
     public static final SubLObject cyblack_it_tab_to(SubLObject stream, SubLObject columns) {

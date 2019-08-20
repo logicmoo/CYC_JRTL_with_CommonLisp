@@ -82,7 +82,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class word_linkage extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new word_linkage();
 
- public static final String myName = "com.cyc.cycjava.cycl.word_linkage";
 
 
     // Internal Constants

@@ -32,7 +32,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class xml_retrieval extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new xml_retrieval();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.xml_retrieval";
 
 
     // deflexical

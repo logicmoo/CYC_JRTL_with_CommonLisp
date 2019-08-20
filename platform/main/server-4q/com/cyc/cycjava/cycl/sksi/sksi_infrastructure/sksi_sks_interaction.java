@@ -347,7 +347,6 @@ public final class sksi_sks_interaction extends SubLTranslatedFile implements V1
 
     public static final SubLFile me = new sksi_sks_interaction();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_sks_interaction";
 
 
     // defparameter

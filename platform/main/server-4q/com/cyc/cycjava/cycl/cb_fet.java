@@ -40,7 +40,6 @@ public final class cb_fet extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cb_fet();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_fet";
 
     // // Definitions
     public static final SubLObject cb_link_fet_new_instance(SubLObject coll, SubLObject template_topic, SubLObject template_topic_mt) {

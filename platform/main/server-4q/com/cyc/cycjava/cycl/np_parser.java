@@ -135,7 +135,6 @@ public final class np_parser extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new np_parser();
 
- public static final String myName = "com.cyc.cycjava.cycl.np_parser";
 
 
     // defparameter

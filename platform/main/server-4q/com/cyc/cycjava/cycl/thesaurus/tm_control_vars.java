@@ -39,7 +39,6 @@ public final class tm_control_vars extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new tm_control_vars();
 
-    public static final String myName = "com.cyc.cycjava.cycl.thesaurus.tm_control_vars";
 
     // // Definitions
     /**

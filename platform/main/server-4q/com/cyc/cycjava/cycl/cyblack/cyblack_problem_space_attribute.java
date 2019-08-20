@@ -31,7 +31,6 @@ public final class cyblack_problem_space_attribute extends SubLTranslatedFile im
 
     public static final SubLFile me = new cyblack_problem_space_attribute();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_problem_space_attribute";
 
     // // Definitions
     public static final SubLObject cyblack_problem_space_attribute_p(SubLObject v_cyblack_problem_space_attribute) {

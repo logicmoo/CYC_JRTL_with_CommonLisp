@@ -54,7 +54,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class term_classification_tree extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new term_classification_tree();
 
- public static final String myName = "com.cyc.cycjava.cycl.term_classification_tree";
 
 
     // defparameter

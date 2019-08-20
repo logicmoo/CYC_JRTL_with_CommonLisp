@@ -71,7 +71,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sksi_data_warehousing_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sksi_data_warehousing_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_data_warehousing_utilities";
 
 
     // Internal Constants

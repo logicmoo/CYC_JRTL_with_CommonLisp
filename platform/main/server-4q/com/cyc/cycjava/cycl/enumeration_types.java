@@ -36,7 +36,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class enumeration_types extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new enumeration_types();
 
- public static final String myName = "com.cyc.cycjava.cycl.enumeration_types";
 
 
     // defconstant

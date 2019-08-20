@@ -29,7 +29,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class abnormal extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.harness.abnormal";
     public static String myFingerPrint = "d400dd4ee17eaf4bf5510471b022d207cd7d2218a41e137a2e1f6f58f52a1ca8";
     @SubL(source = "cycl/inference/harness.lisp", position = 400L)
     public static SubLSymbol $abnormality_checking_enabled$;
@@ -211,18 +210,18 @@ public class abnormal extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_abnormal_file() {
-        declareFunction(myName, "abnormality_except_support_enabledP", "ABNORMALITY-EXCEPT-SUPPORT-ENABLED?", 0, 0, false);
-        declareFunction(myName, "rule_has_exceptionsP", "RULE-HAS-EXCEPTIONS?", 1, 0, false);
-        declareFunction(myName, "rule_bindings_abnormalP", "RULE-BINDINGS-ABNORMAL?", 4, 0, false);
-        declareFunction(myName, "abnormality_check_internal", "ABNORMALITY-CHECK-INTERNAL", 4, 0, false);
-        declareFunction(myName, "abnormality_check_sentence", "ABNORMALITY-CHECK-SENTENCE", 2, 0, false);
-        declareFunction(myName, "abnormality_check_query_properties", "ABNORMALITY-CHECK-QUERY-PROPERTIES", 1, 0, false);
-        declareFunction(myName, "abnormality_query_used_illegal_proofP", "ABNORMALITY-QUERY-USED-ILLEGAL-PROOF?", 2, 0, false);
-        declareFunction(myName, "abnormality_justification_used_illegal_proofP", "ABNORMALITY-JUSTIFICATION-USED-ILLEGAL-PROOF?", 2, 0, false);
-        declareFunction(myName, "backward_abnormality_check", "BACKWARD-ABNORMALITY-CHECK", 3, 0, false);
-        declareFunction(myName, "forward_bindings_abnormalP", "FORWARD-BINDINGS-ABNORMAL?", 4, 0, false);
-        declareFunction(myName, "forward_abnormality_check", "FORWARD-ABNORMALITY-CHECK", 4, 0, false);
-        declareFunction(myName, "signal_abnormal", "SIGNAL-ABNORMAL", 2, 0, false);
+        declareFunction("abnormality_except_support_enabledP", "ABNORMALITY-EXCEPT-SUPPORT-ENABLED?", 0, 0, false);
+        declareFunction("rule_has_exceptionsP", "RULE-HAS-EXCEPTIONS?", 1, 0, false);
+        declareFunction("rule_bindings_abnormalP", "RULE-BINDINGS-ABNORMAL?", 4, 0, false);
+        declareFunction("abnormality_check_internal", "ABNORMALITY-CHECK-INTERNAL", 4, 0, false);
+        declareFunction("abnormality_check_sentence", "ABNORMALITY-CHECK-SENTENCE", 2, 0, false);
+        declareFunction("abnormality_check_query_properties", "ABNORMALITY-CHECK-QUERY-PROPERTIES", 1, 0, false);
+        declareFunction("abnormality_query_used_illegal_proofP", "ABNORMALITY-QUERY-USED-ILLEGAL-PROOF?", 2, 0, false);
+        declareFunction("abnormality_justification_used_illegal_proofP", "ABNORMALITY-JUSTIFICATION-USED-ILLEGAL-PROOF?", 2, 0, false);
+        declareFunction("backward_abnormality_check", "BACKWARD-ABNORMALITY-CHECK", 3, 0, false);
+        declareFunction("forward_bindings_abnormalP", "FORWARD-BINDINGS-ABNORMAL?", 4, 0, false);
+        declareFunction("forward_abnormality_check", "FORWARD-ABNORMALITY-CHECK", 4, 0, false);
+        declareFunction("signal_abnormal", "SIGNAL-ABNORMAL", 2, 0, false);
         return NIL;
     }
 

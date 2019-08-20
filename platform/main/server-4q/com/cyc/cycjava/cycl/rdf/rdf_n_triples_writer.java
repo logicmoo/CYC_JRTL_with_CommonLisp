@@ -61,7 +61,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rdf_n_triples_writer extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rdf_n_triples_writer();
 
- public static final String myName = "com.cyc.cycjava.cycl.rdf.rdf_n_triples_writer";
 
 
     // defparameter

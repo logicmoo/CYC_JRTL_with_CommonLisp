@@ -42,7 +42,6 @@ public final class deductions_interface extends SubLTranslatedFile implements V1
 
     public static final SubLFile me = new deductions_interface();
 
- public static final String myName = "com.cyc.cycjava.cycl.deductions_interface";
 
 
     private static final SubLSymbol KB_CREATE_DEDUCTION = makeSymbol("KB-CREATE-DEDUCTION");

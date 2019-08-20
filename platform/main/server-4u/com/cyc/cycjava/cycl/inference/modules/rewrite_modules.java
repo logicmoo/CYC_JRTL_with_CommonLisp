@@ -35,7 +35,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rewrite_modules extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rewrite_modules();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.modules.rewrite_modules";
 
 
     public static final SubLSymbol $ral_sub_situations_from_sub_situation_types_rule$ = makeSymbol("*RAL-SUB-SITUATIONS-FROM-SUB-SITUATION-TYPES-RULE*");

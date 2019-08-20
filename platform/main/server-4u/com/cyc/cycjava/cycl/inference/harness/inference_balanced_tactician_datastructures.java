@@ -65,7 +65,6 @@ public final class inference_balanced_tactician_datastructures extends SubLTrans
 
     public static final SubLFile me = new inference_balanced_tactician_datastructures();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.harness.inference_balanced_tactician_datastructures";
 
     // // Definitions
     public static final SubLObject balanced_strategy_motivation_p(SubLObject v_object) {

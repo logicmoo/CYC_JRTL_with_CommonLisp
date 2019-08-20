@@ -98,7 +98,6 @@ public final class wordnet_import_offline_tasks extends SubLTranslatedFile imple
 
     public static final SubLFile me = new wordnet_import_offline_tasks();
 
- public static final String myName = "com.cyc.cycjava.cycl.wordnet_import.wordnet_import_offline_tasks";
 
 
     // defparameter

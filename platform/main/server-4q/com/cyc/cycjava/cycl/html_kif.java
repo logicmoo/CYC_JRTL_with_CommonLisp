@@ -76,7 +76,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class html_kif extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new html_kif();
 
- public static final String myName = "com.cyc.cycjava.cycl.html_kif";
 
 
     // Internal Constants

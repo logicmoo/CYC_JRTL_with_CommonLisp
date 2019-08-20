@@ -109,7 +109,6 @@ public final class pph_drs extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new pph_drs();
 
- public static final String myName = "com.cyc.cycjava.cycl.pph_drs";
 
 
     // deflexical

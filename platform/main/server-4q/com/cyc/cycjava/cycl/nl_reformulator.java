@@ -133,7 +133,6 @@ public final class nl_reformulator extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new nl_reformulator();
 
- public static final String myName = "com.cyc.cycjava.cycl.nl_reformulator";
 
 
     // defparameter

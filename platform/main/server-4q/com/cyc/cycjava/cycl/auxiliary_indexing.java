@@ -90,7 +90,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class auxiliary_indexing extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new auxiliary_indexing();
 
- public static final String myName = "com.cyc.cycjava.cycl.auxiliary_indexing";
 
 
     // defparameter

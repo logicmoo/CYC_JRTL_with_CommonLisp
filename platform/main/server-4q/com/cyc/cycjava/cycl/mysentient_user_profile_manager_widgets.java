@@ -96,7 +96,6 @@ public final class mysentient_user_profile_manager_widgets extends SubLTranslate
 
     public static final SubLFile me = new mysentient_user_profile_manager_widgets();
 
-    public static final String myName = "com.cyc.cycjava.cycl.mysentient_user_profile_manager_widgets";
 
 
 

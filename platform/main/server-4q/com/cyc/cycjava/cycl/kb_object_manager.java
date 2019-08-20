@@ -176,7 +176,6 @@ public final class kb_object_manager extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new kb_object_manager();
 
- public static final String myName = "com.cyc.cycjava.cycl.kb_object_manager";
 
 
     // defconstant

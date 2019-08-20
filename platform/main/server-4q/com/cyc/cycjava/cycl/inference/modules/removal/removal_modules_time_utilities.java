@@ -45,7 +45,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_time_utilities extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_time_utilities";
     public static String myFingerPrint = "555bcbbf807d9c66dea7c5efd36267a361995f3a17af711923dc99827bfbd725";
     private static SubLSymbol $REMOVAL_SUB_TIME_INTERVAL_OF_TYPE;
     private static SubLList $list1;
@@ -751,24 +750,24 @@ public class removal_modules_time_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_time_utilities_file() {
-        declareFunction(myName, "removal_sub_time_interval_of_type_applicability", "REMOVAL-SUB-TIME-INTERVAL-OF-TYPE-APPLICABILITY", 1, 0, false);
-        declareFunction(myName, "removal_sub_time_interval_of_type_cost", "REMOVAL-SUB-TIME-INTERVAL-OF-TYPE-COST", 1, 0, false);
-        declareFunction(myName, "removal_sub_time_interval_of_type_output_generate", "REMOVAL-SUB-TIME-INTERVAL-OF-TYPE-OUTPUT-GENERATE", 1, 0, false);
-        declareFunction(myName, "removal_sub_time_interval_of_type_literals", "REMOVAL-SUB-TIME-INTERVAL-OF-TYPE-LITERALS", 1, 0, false);
-        declareFunction(myName, "new_sub_time_interval_of_type_iterator", "NEW-SUB-TIME-INTERVAL-OF-TYPE-ITERATOR", 4, 0, false);
-        declareFunction(myName, "sub_time_interval_of_type_iterator_state", "SUB-TIME-INTERVAL-OF-TYPE-ITERATOR-STATE", 4, 0, false);
-        declareFunction(myName, "sub_time_interval_of_type_iterator_done", "SUB-TIME-INTERVAL-OF-TYPE-ITERATOR-DONE", 1, 0, false);
-        declareFunction(myName, "sub_time_interval_of_type_iterator_next", "SUB-TIME-INTERVAL-OF-TYPE-ITERATOR-NEXT", 1, 0, false);
-        declareFunction(myName, "sub_time_interval_of_type_iterator_finalize", "SUB-TIME-INTERVAL-OF-TYPE-ITERATOR-FINALIZE", 1, 0, false);
-        declareFunction(myName, "removal_starting_day_pos_expand", "REMOVAL-STARTING-DAY-POS-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_starting_day_check_pos_expand", "REMOVAL-STARTING-DAY-CHECK-POS-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_starting_day_check_neg_expand", "REMOVAL-STARTING-DAY-CHECK-NEG-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_ending_day_pos_expand", "REMOVAL-ENDING-DAY-POS-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_ending_day_check_pos_expand", "REMOVAL-ENDING-DAY-CHECK-POS-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_ending_day_check_neg_expand", "REMOVAL-ENDING-DAY-CHECK-NEG-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_maximalcontiguousspanninginterval_expand", "REMOVAL-MAXIMALCONTIGUOUSSPANNINGINTERVAL-EXPAND", 1, 1, false);
-        declareFunction(myName, "first_cycl_interval_initial_second_possibly_indeterminate_late", "FIRST-CYCL-INTERVAL-INITIAL-SECOND-POSSIBLY-INDETERMINATE-LATE", 1, 0, false);
-        declareFunction(myName, "maximal_intervals_subsuming_intervals", "MAXIMAL-INTERVALS-SUBSUMING-INTERVALS", 1, 2, false);
+        declareFunction("removal_sub_time_interval_of_type_applicability", "REMOVAL-SUB-TIME-INTERVAL-OF-TYPE-APPLICABILITY", 1, 0, false);
+        declareFunction("removal_sub_time_interval_of_type_cost", "REMOVAL-SUB-TIME-INTERVAL-OF-TYPE-COST", 1, 0, false);
+        declareFunction("removal_sub_time_interval_of_type_output_generate", "REMOVAL-SUB-TIME-INTERVAL-OF-TYPE-OUTPUT-GENERATE", 1, 0, false);
+        declareFunction("removal_sub_time_interval_of_type_literals", "REMOVAL-SUB-TIME-INTERVAL-OF-TYPE-LITERALS", 1, 0, false);
+        declareFunction("new_sub_time_interval_of_type_iterator", "NEW-SUB-TIME-INTERVAL-OF-TYPE-ITERATOR", 4, 0, false);
+        declareFunction("sub_time_interval_of_type_iterator_state", "SUB-TIME-INTERVAL-OF-TYPE-ITERATOR-STATE", 4, 0, false);
+        declareFunction("sub_time_interval_of_type_iterator_done", "SUB-TIME-INTERVAL-OF-TYPE-ITERATOR-DONE", 1, 0, false);
+        declareFunction("sub_time_interval_of_type_iterator_next", "SUB-TIME-INTERVAL-OF-TYPE-ITERATOR-NEXT", 1, 0, false);
+        declareFunction("sub_time_interval_of_type_iterator_finalize", "SUB-TIME-INTERVAL-OF-TYPE-ITERATOR-FINALIZE", 1, 0, false);
+        declareFunction("removal_starting_day_pos_expand", "REMOVAL-STARTING-DAY-POS-EXPAND", 1, 1, false);
+        declareFunction("removal_starting_day_check_pos_expand", "REMOVAL-STARTING-DAY-CHECK-POS-EXPAND", 1, 1, false);
+        declareFunction("removal_starting_day_check_neg_expand", "REMOVAL-STARTING-DAY-CHECK-NEG-EXPAND", 1, 1, false);
+        declareFunction("removal_ending_day_pos_expand", "REMOVAL-ENDING-DAY-POS-EXPAND", 1, 1, false);
+        declareFunction("removal_ending_day_check_pos_expand", "REMOVAL-ENDING-DAY-CHECK-POS-EXPAND", 1, 1, false);
+        declareFunction("removal_ending_day_check_neg_expand", "REMOVAL-ENDING-DAY-CHECK-NEG-EXPAND", 1, 1, false);
+        declareFunction("removal_maximalcontiguousspanninginterval_expand", "REMOVAL-MAXIMALCONTIGUOUSSPANNINGINTERVAL-EXPAND", 1, 1, false);
+        declareFunction("first_cycl_interval_initial_second_possibly_indeterminate_late", "FIRST-CYCL-INTERVAL-INITIAL-SECOND-POSSIBLY-INDETERMINATE-LATE", 1, 0, false);
+        declareFunction("maximal_intervals_subsuming_intervals", "MAXIMAL-INTERVALS-SUBSUMING-INTERVALS", 1, 2, false);
         return NIL;
     }
 

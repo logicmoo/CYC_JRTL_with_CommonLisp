@@ -39,7 +39,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class postcanonicalizer extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new postcanonicalizer();
 
- public static final String myName = "com.cyc.cycjava.cycl.postcanonicalizer";
 
 
     // Internal Constants

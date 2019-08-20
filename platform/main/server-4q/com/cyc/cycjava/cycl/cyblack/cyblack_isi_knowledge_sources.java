@@ -43,7 +43,6 @@ public final class cyblack_isi_knowledge_sources extends SubLTranslatedFile impl
 
     public static final SubLFile me = new cyblack_isi_knowledge_sources();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_isi_knowledge_sources";
 
     // // Definitions
     public static final SubLObject subloop_reserved_initialize_cyblack_isi_why_not_ks_class(SubLObject new_instance) {

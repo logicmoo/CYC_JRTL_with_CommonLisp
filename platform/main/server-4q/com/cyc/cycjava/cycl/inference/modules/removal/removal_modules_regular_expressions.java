@@ -32,7 +32,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_regular_expressions extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_regular_expressions";
 	public static String myFingerPrint = "fdb2f380e66a8821ff611aa2ca888c386f7a9488894f7861d7788024e017f286";
 	@SubL(source = "cycl/inference/modules/removal/removal-modules-regular-expressions.lisp", position = 1300L)
 	public static SubLSymbol $regex_string_match_mt$;
@@ -201,21 +200,21 @@ public class removal_modules_regular_expressions extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_removal_modules_regular_expressions_file() {
-		declareFunction(myName, "removal_regex_string_match_required", "REMOVAL-REGEX-STRING-MATCH-REQUIRED", 1, 1,
+		declareFunction("removal_regex_string_match_required", "REMOVAL-REGEX-STRING-MATCH-REQUIRED", 1, 1,
 				false);
-		declareFunction(myName, "regex_string_match", "REGEX-STRING-MATCH", 2, 0, false);
-		declareFunction(myName, "regex_string_match_with_bindings", "REGEX-STRING-MATCH-WITH-BINDINGS", 2, 0, false);
-		declareFunction(myName, "regex_string_match_with_bindings_int", "REGEX-STRING-MATCH-WITH-BINDINGS-INT", 3, 0,
+		declareFunction("regex_string_match", "REGEX-STRING-MATCH", 2, 0, false);
+		declareFunction("regex_string_match_with_bindings", "REGEX-STRING-MATCH-WITH-BINDINGS", 2, 0, false);
+		declareFunction("regex_string_match_with_bindings_int", "REGEX-STRING-MATCH-WITH-BINDINGS-INT", 3, 0,
 				false);
-		declareFunction(myName, "removal_regex_string_match_case_insensitive_required",
+		declareFunction("removal_regex_string_match_case_insensitive_required",
 				"REMOVAL-REGEX-STRING-MATCH-CASE-INSENSITIVE-REQUIRED", 1, 1, false);
-		declareFunction(myName, "regex_string_match_case_insensitive", "REGEX-STRING-MATCH-CASE-INSENSITIVE", 2, 0,
+		declareFunction("regex_string_match_case_insensitive", "REGEX-STRING-MATCH-CASE-INSENSITIVE", 2, 0,
 				false);
-		declareFunction(myName, "regex_string_match_with_bindings_case_insensitive",
+		declareFunction("regex_string_match_with_bindings_case_insensitive",
 				"REGEX-STRING-MATCH-WITH-BINDINGS-CASE-INSENSITIVE", 2, 0, false);
-		declareFunction(myName, "removal_regex_substring_match_iterator", "REMOVAL-REGEX-SUBSTRING-MATCH-ITERATOR", 1,
+		declareFunction("removal_regex_substring_match_iterator", "REMOVAL-REGEX-SUBSTRING-MATCH-ITERATOR", 1,
 				0, false);
-		declareFunction(myName, "removal_regex_substring_match_iterator_int",
+		declareFunction("removal_regex_substring_match_iterator_int",
 				"REMOVAL-REGEX-SUBSTRING-MATCH-ITERATOR-INT", 1, 1, false);
 		return NIL;
 	}

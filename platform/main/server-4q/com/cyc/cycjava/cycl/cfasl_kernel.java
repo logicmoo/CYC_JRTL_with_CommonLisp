@@ -59,7 +59,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class cfasl_kernel extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new cfasl_kernel();
 
- public static final String myName = "com.cyc.cycjava.cycl.cfasl_kernel";
 
 
     // defparameter

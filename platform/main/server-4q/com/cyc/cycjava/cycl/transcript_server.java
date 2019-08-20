@@ -192,7 +192,6 @@ public final class transcript_server extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new transcript_server();
 
- public static final String myName = "com.cyc.cycjava.cycl.transcript_server";
 
 
     // deflexical

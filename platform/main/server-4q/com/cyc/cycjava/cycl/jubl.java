@@ -88,7 +88,6 @@ public final class jubl extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new jubl();
 
-    public static final String myName = "com.cyc.cycjava.cycl.jubl";
 
     // // Definitions
     // deflexical

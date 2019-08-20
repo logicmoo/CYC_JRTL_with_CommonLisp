@@ -255,7 +255,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new owl_cycl_to_xml();
 
- public static final String myName = "com.cyc.cycjava.cycl.owl.owl_cycl_to_xml";
 
 
     // deflexical

@@ -102,7 +102,6 @@ public final class subl_identifier extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new subl_identifier();
 
- public static final String myName = "com.cyc.cycjava.cycl.subl_identifier";
 
 
     // defconstant

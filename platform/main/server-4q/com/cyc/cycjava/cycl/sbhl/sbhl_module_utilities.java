@@ -52,7 +52,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sbhl_module_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sbhl_module_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.sbhl.sbhl_module_utilities";
 
 
     private static final SubLSymbol GET_SBHL_PREDICATES = makeSymbol("GET-SBHL-PREDICATES");

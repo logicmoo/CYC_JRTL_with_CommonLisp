@@ -46,7 +46,6 @@ public final class cb_query_constructor extends SubLTranslatedFile implements V0
 
     public static final SubLFile me = new cb_query_constructor();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_query_constructor";
 
     // // Definitions
     public static final SubLObject cb_qc_show_cycl_p() {

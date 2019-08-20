@@ -55,7 +55,6 @@ public final class wff_consequences extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new wff_consequences();
 
-    public static final String myName = "com.cyc.cycjava.cycl.wff_consequences";
 
     // // Definitions
     /**

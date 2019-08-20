@@ -108,7 +108,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class transformation_module_tests extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new transformation_module_tests();
 
- public static final String myName = "com.cyc.cycjava.cycl.cyc_testing.transformation_module_tests";
 
 
     // defconstant

@@ -59,7 +59,6 @@ public final class cb_uia_display_primitives extends SubLTranslatedFile implemen
 
     public static final SubLFile me = new cb_uia_display_primitives();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_uia_display_primitives";
 
     // // Definitions
     public static final SubLObject cb_uia_show_term(SubLObject v_term, SubLObject phrase) {

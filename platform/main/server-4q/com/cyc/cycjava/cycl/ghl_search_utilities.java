@@ -32,7 +32,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class ghl_search_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new ghl_search_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.ghl_search_utilities";
 
 
 

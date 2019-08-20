@@ -31,7 +31,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class denots_of_string_lexicon extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new denots_of_string_lexicon();
 
- public static final String myName = "com.cyc.cycjava.cycl.denots_of_string_lexicon";
 
 
     // Internal Constants

@@ -32,7 +32,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class xml_vars extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new xml_vars();
 
- public static final String myName = "com.cyc.cycjava.cycl.xml_vars";
 
 
     // defparameter

@@ -132,7 +132,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class web_services extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new web_services();
 
- public static final String myName = "com.cyc.cycjava.cycl.web_services";
 
 
     // deflexical

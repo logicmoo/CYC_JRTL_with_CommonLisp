@@ -244,7 +244,6 @@ public final class removal_module_tests extends SubLTranslatedFile implements V1
 
     public static final SubLFile me = new removal_module_tests();
 
- public static final String myName = "com.cyc.cycjava.cycl.cyc_testing.removal_module_tests";
 
 
     // defconstant

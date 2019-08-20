@@ -53,7 +53,6 @@ public final class cyblack_isi_postings extends SubLTranslatedFile implements V0
 
     public static final SubLFile me = new cyblack_isi_postings();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_isi_postings";
 
     // // Definitions
     public static final SubLObject subloop_reserved_initialize_isi_root_posting_class(SubLObject new_instance) {

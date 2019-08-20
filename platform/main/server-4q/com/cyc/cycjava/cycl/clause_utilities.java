@@ -72,7 +72,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class clause_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new clause_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.clause_utilities";
 
 
     // Internal Constants

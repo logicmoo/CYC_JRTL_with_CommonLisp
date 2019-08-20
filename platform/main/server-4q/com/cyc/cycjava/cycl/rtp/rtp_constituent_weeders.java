@@ -246,7 +246,6 @@ public final class rtp_constituent_weeders extends SubLTranslatedFile implements
 
     public static final SubLFile me = new rtp_constituent_weeders();
 
- public static final String myName = "com.cyc.cycjava.cycl.rtp.rtp_constituent_weeders";
 
 
     // deflexical

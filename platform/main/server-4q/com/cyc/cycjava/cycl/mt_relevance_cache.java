@@ -39,7 +39,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class mt_relevance_cache extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new mt_relevance_cache();
 
- public static final String myName = "com.cyc.cycjava.cycl.mt_relevance_cache";
 
 
     // deflexical

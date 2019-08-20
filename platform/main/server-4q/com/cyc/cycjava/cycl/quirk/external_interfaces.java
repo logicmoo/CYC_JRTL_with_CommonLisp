@@ -75,7 +75,6 @@ public final class external_interfaces extends SubLTranslatedFile implements V12
 
     public static final SubLFile me = new external_interfaces();
 
- public static final String myName = "com.cyc.cycjava.cycl.quirk.external_interfaces";
 
 
     // defparameter

@@ -60,7 +60,6 @@ public final class html_tm_users extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new html_tm_users();
 
-    public static final String myName = "com.cyc.cycjava.cycl.thesaurus.html_tm_users";
 
     // // Definitions
     public static final SubLObject tm_manage_users(SubLObject args) {

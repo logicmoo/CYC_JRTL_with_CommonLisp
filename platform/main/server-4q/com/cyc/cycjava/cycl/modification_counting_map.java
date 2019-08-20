@@ -39,7 +39,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
  public final class modification_counting_map extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new modification_counting_map();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.modification_counting_map";
 
 
     // defconstant

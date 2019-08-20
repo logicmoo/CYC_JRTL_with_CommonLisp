@@ -1400,7 +1400,6 @@ public class dumper extends SubLTranslatedFile implements V12 {
 
 	public static final SubLFile me = new dumper();
 
-	public static final String myName = "com.cyc.cycjava.cycl.dumper";
 
 	// defparameter
 	@LispMethod(comment = "defparameter")

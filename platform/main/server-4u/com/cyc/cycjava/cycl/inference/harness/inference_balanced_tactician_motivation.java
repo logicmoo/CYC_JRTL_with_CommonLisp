@@ -66,7 +66,6 @@ public final class inference_balanced_tactician_motivation extends SubLTranslate
 
     public static final SubLFile me = new inference_balanced_tactician_motivation();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.harness.inference_balanced_tactician_motivation";
 
     // // Definitions
     public static final SubLObject balanced_strategy_with_strategically_active_strategem(SubLObject macroform, SubLObject environment) {

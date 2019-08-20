@@ -69,7 +69,6 @@ public final class cb_uia_debugging extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cb_uia_debugging();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_uia_debugging";
 
     // // Definitions
     public static final SubLObject html_princ_title_only(SubLObject macroform, SubLObject environment) {

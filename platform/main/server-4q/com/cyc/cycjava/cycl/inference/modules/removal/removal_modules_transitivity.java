@@ -72,7 +72,6 @@ public final class removal_modules_transitivity
       SubLTranslatedFile
 {
   public static final SubLFile me;
-  public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_transitivity";
   public static final String myFingerPrint = "20644c724b069e7c1beaa5d12ab1cecda5ea54ff3c752fb702f1dd1522a8cc09";
   @SubLTranslatedFile.SubL(source = "cycl/inference/modules/removal/removal-modules-transitivity.lisp", position = 1064L)
   private static SubLSymbol $default_transitive_check_cost$;

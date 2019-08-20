@@ -1831,7 +1831,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
 
     public static final SubLFile me = new lexification_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.lexification_utilities";
 
 
     // defconstant

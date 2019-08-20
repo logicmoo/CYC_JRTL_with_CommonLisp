@@ -64,7 +64,6 @@ public final class chemistry_utilities extends SubLTranslatedFile implements V02
 
     public static final SubLFile me = new chemistry_utilities();
 
-    public static final String myName = "com.cyc.cycjava.cycl.chemistry_utilities";
 
 
 

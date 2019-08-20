@@ -99,7 +99,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class open_cyc_simple_inference_api extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new open_cyc_simple_inference_api();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.open_cyc_simple_inference_api";
 
 
     // defparameter

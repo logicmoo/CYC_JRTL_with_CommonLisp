@@ -54,7 +54,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class owl_uris_and_prefixes extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new owl_uris_and_prefixes();
 
- public static final String myName = "com.cyc.cycjava.cycl.owl.owl_uris_and_prefixes";
 
 
     // deflexical

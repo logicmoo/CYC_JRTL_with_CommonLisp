@@ -115,7 +115,6 @@ public final class html_create_term extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new html_create_term();
 
- public static final String myName = "com.cyc.cycjava.cycl.html_create_term";
 
 
     // deflexical

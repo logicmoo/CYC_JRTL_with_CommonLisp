@@ -966,7 +966,6 @@ public final class noun_compound_parser extends SubLTranslatedFile implements V1
 
     public static final SubLFile me = new noun_compound_parser();
 
- public static final String myName = "com.cyc.cycjava.cycl.noun_compound_parser";
 
 
     // defconstant

@@ -34,7 +34,6 @@ public final class cyblack_cb_events extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cyblack_cb_events();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_cb_events";
 
     // // Definitions
     public static final SubLObject subloop_reserved_initialize_cyblack_cyc_browser_base_event_posting_class(SubLObject new_instance) {

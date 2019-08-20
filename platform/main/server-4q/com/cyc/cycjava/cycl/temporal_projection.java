@@ -63,7 +63,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class temporal_projection extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new temporal_projection();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.temporal_projection";
 
 
     // defparameter

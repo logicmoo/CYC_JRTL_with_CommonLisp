@@ -169,7 +169,6 @@ public final class sksi_batch_translate extends SubLTranslatedFile implements V1
 
     public static final SubLFile me = new sksi_batch_translate();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate";
 
 
     // defvar

@@ -421,7 +421,6 @@ public final class sksi_database_fusion extends SubLTranslatedFile implements V1
 
     public static final SubLFile me = new sksi_database_fusion();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.sksi_database_fusion";
 
 
     // defparameter

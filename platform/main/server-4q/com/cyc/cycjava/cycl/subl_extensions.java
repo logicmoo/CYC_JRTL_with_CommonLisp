@@ -108,7 +108,6 @@ public final class subl_extensions extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new subl_extensions();
 
- public static final String myName = "com.cyc.cycjava.cycl.subl_extensions";
 
 
     // defconstant

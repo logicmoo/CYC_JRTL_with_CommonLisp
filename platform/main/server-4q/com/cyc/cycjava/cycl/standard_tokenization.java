@@ -87,7 +87,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class standard_tokenization extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new standard_tokenization();
 
- public static final String myName = "com.cyc.cycjava.cycl.standard_tokenization";
 
 
     // deflexical

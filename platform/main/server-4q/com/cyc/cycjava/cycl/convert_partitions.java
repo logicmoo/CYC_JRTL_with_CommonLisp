@@ -55,7 +55,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class convert_partitions extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new convert_partitions();
 
- public static final String myName = "com.cyc.cycjava.cycl.convert_partitions";
 
 
     // defparameter

@@ -833,7 +833,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new builder_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.builder_utilities";
 
 
     // deflexical

@@ -19,7 +19,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class inference_event_support extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.inference_event_support";
     public static String myFingerPrint = "04653ae6e0875b7e9880a81e3855c467bfaebd26ebb7123610852baecaff23f3";
     @SubL(source = "cycl/inference/inference-event-support.lisp", position = 1400L)
     private static SubLSymbol $inference_event_property_classes$;
@@ -173,16 +172,16 @@ public class inference_event_support extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_inference_event_support_file() {
-        declareMacro(me, "declare_inference_event_class", "DECLARE-INFERENCE-EVENT-CLASS");
-        declareFunction(myName, "note_inference_event_class_properties", "NOTE-INFERENCE-EVENT-CLASS-PROPERTIES", 2, 0, false);
-        declareFunction(myName, "inference_event_class_has_propertyP", "INFERENCE-EVENT-CLASS-HAS-PROPERTY?", 2, 0, false);
-        declareFunction(myName, "get_inference_event_classes_with_property", "GET-INFERENCE-EVENT-CLASSES-WITH-PROPERTY", 1, 0, false);
-        declareFunction(myName, "get_inference_event_classes_with_some_properties", "GET-INFERENCE-EVENT-CLASSES-WITH-SOME-PROPERTIES", 1, 0, false);
-        declareFunction(myName, "get_inference_event_classes_with_all_properties", "GET-INFERENCE-EVENT-CLASSES-WITH-ALL-PROPERTIES", 1, 0, false);
-        declareFunction(myName, "valid_inference_event_class_p", "VALID-INFERENCE-EVENT-CLASS-P", 1, 0, false);
-        declareFunction(myName, "valid_inference_event_property_p", "VALID-INFERENCE-EVENT-PROPERTY-P", 1, 0, false);
-        declareFunction(myName, "all_inference_event_classes", "ALL-INFERENCE-EVENT-CLASSES", 0, 0, false);
-        declareFunction(myName, "all_inference_event_properties", "ALL-INFERENCE-EVENT-PROPERTIES", 0, 0, false);
+        declareMacro("declare_inference_event_class", "DECLARE-INFERENCE-EVENT-CLASS");
+        declareFunction("note_inference_event_class_properties", "NOTE-INFERENCE-EVENT-CLASS-PROPERTIES", 2, 0, false);
+        declareFunction("inference_event_class_has_propertyP", "INFERENCE-EVENT-CLASS-HAS-PROPERTY?", 2, 0, false);
+        declareFunction("get_inference_event_classes_with_property", "GET-INFERENCE-EVENT-CLASSES-WITH-PROPERTY", 1, 0, false);
+        declareFunction("get_inference_event_classes_with_some_properties", "GET-INFERENCE-EVENT-CLASSES-WITH-SOME-PROPERTIES", 1, 0, false);
+        declareFunction("get_inference_event_classes_with_all_properties", "GET-INFERENCE-EVENT-CLASSES-WITH-ALL-PROPERTIES", 1, 0, false);
+        declareFunction("valid_inference_event_class_p", "VALID-INFERENCE-EVENT-CLASS-P", 1, 0, false);
+        declareFunction("valid_inference_event_property_p", "VALID-INFERENCE-EVENT-PROPERTY-P", 1, 0, false);
+        declareFunction("all_inference_event_classes", "ALL-INFERENCE-EVENT-CLASSES", 0, 0, false);
+        declareFunction("all_inference_event_properties", "ALL-INFERENCE-EVENT-PROPERTIES", 0, 0, false);
         return NIL;
     }
 

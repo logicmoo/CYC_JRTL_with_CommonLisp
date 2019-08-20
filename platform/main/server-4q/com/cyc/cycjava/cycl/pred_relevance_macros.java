@@ -69,7 +69,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class pred_relevance_macros extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new pred_relevance_macros();
 
- public static final String myName = "com.cyc.cycjava.cycl.pred_relevance_macros";
 
 
     // defconstant

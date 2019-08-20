@@ -82,7 +82,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sksi_external_predicate_extent_browser extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sksi_external_predicate_extent_browser();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.sks_browser.sksi_external_predicate_extent_browser";
 
 
     private static final SubLSymbol WITH_PPH_MEMOIZATION = makeSymbol("WITH-PPH-MEMOIZATION");

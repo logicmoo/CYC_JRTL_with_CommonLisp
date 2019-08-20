@@ -99,7 +99,6 @@ public final class clustering extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new clustering();
 
- public static final String myName = "com.cyc.cycjava.cycl.clustering";
 
 
     // defparameter

@@ -45,7 +45,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rkf_sme_lexification_wizard extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new rkf_sme_lexification_wizard();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.rkf_sme_lexification_wizard";
 
 
     // deflexical

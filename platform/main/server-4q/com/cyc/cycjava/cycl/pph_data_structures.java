@@ -1314,7 +1314,6 @@ public final class pph_data_structures extends SubLTranslatedFile implements V12
 
     // public static final SubLFile me = new pph_data_structures();
 
-    //public static final String myName = "com.cyc.cycjava.cycl.pph_data_structures";
 
     private static final SubLSymbol PPH_OI_CYCL = makeSymbol("PPH-OI-CYCL");
 
@@ -1507,7 +1506,6 @@ public final class pph_data_structures extends SubLTranslatedFile implements V12
     //
     public static final SubLFile me = new pph_data_structures();
     //
- public static final String myName = "com.cyc.cycjava.cycl.pph_data_structures";
     //
     //
     private static final SubLString $str0$_Revision__148135__ = makeString("$Revision: 148135 $");

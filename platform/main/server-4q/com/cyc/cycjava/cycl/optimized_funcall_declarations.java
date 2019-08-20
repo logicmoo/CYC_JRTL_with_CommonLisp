@@ -22,7 +22,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class optimized_funcall_declarations extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new optimized_funcall_declarations();
 
- public static final String myName = "com.cyc.cycjava.cycl.optimized_funcall_declarations";
 
 
     private static final SubLObject $list0 = _constant_0_initializer();

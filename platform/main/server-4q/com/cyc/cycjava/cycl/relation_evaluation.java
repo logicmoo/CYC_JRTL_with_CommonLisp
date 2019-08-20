@@ -84,7 +84,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class relation_evaluation extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new relation_evaluation();
 
- public static final String myName = "com.cyc.cycjava.cycl.relation_evaluation";
 
 
     // defparameter

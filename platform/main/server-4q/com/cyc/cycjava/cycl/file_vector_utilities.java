@@ -128,7 +128,6 @@ public final class file_vector_utilities extends SubLTranslatedFile implements V
 
     public static final SubLFile me = new file_vector_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.file_vector_utilities";
 
 
     // defparameter

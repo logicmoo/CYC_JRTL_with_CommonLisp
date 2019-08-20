@@ -67,7 +67,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class deep_inference_generator extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.deep_inference_generator";
     public static String myFingerPrint = "e1ca6d41c15299b591eaf557e72e97eee0346e9dcf4abdda37a5e4d4ca4cdd0f";
     @SubL(source = "cycl/inference/deep-inference-generator.lisp", position = 900L)
     private static SubLSymbol $deep_inference_gaf_table$;
@@ -912,43 +911,43 @@ public class deep_inference_generator extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_deep_inference_generator_file() {
-        declareFunction(myName, "generate_deep_inference", "GENERATE-DEEP-INFERENCE", 1, 0, false);
-        declareFunction(myName, "initialize_deep_inference_gaf_table", "INITIALIZE-DEEP-INFERENCE-GAF-TABLE", 0, 1, false);
-        declareFunction(myName, "assertion_provability_depth", "ASSERTION-PROVABILITY-DEPTH", 1, 0, false);
-        declareFunction(myName, "backward_rule_required_for_assertionP", "BACKWARD-RULE-REQUIRED-FOR-ASSERTION?", 1, 0, false);
-        declareFunction(myName, "backward_rule_deductionP", "BACKWARD-RULE-DEDUCTION?", 1, 0, false);
-        declareFunction(myName, "haystack_p", "HAYSTACK-P", 1, 0, false);
-        declareFunction(myName, "interesting_haystack_p", "INTERESTING-HAYSTACK-P", 1, 0, false);
-        declareFunction(myName, "haystack_query", "HAYSTACK-QUERY", 1, 0, false);
-        declareFunction(myName, "haystack_rules", "HAYSTACK-RULES", 1, 0, false);
-        declareFunction(myName, "haystack_size", "HAYSTACK-SIZE", 1, 0, false);
-        declareFunction(myName, "straw_p", "STRAW-P", 1, 0, false);
-        declareFunction(myName, "generate_haystack", "GENERATE-HAYSTACK", 1, 0, false);
-        declareFunction(myName, "collapse_haystack", "COLLAPSE-HAYSTACK", 1, 0, false);
-        declareFunction(myName, "fix_haystack_variables", "FIX-HAYSTACK-VARIABLES", 1, 0, false);
-        declareFunction(myName, "generate_haystack_int", "GENERATE-HAYSTACK-INT", 1, 0, false);
-        declareFunction(myName, "abort_haystackP", "ABORT-HAYSTACK?", 2, 0, false);
-        declareFunction(myName, "grow_haystack", "GROW-HAYSTACK", 2, 0, false);
-        declareFunction(myName, "choose_random_needle", "CHOOSE-RANDOM-NEEDLE", 0, 0, false);
-        declareFunction(myName, "choose_next_needle", "CHOOSE-NEXT-NEEDLE", 1, 0, false);
-        declareFunction(myName, "generate_straw_from_needle", "GENERATE-STRAW-FROM-NEEDLE", 1, 0, false);
-        declareFunction(myName, "add_straw_to_haystack", "ADD-STRAW-TO-HAYSTACK", 3, 0, false);
-        declareFunction(myName, "verify_haystack", "VERIFY-HAYSTACK", 1, 1, false);
-        declareFunction(myName, "look_for_needle_in_haystack", "LOOK-FOR-NEEDLE-IN-HAYSTACK", 1, 1, false);
-        declareFunction(myName, "nonstandard_transformation_asent_p", "NONSTANDARD-TRANSFORMATION-ASENT-P", 1, 0, false);
-        declareFunction(myName, "standard_transformation_asent_p", "STANDARD-TRANSFORMATION-ASENT-P", 1, 0, false);
-        declareFunction(myName, "make_isa_x_thing_asent", "MAKE-ISA-X-THING-ASENT", 1, 0, false);
-        declareFunction(myName, "inference_answer_justification_uses_at_least_one_ruleP", "INFERENCE-ANSWER-JUSTIFICATION-USES-AT-LEAST-ONE-RULE?", 1, 0, false);
-        declareFunction(myName, "clear_abduced_term_to_random_variable", "CLEAR-ABDUCED-TERM-TO-RANDOM-VARIABLE", 0, 0, false);
-        declareFunction(myName, "remove_abduced_term_to_random_variable", "REMOVE-ABDUCED-TERM-TO-RANDOM-VARIABLE", 1, 0, false);
-        declareFunction(myName, "abduced_term_to_random_variable_internal", "ABDUCED-TERM-TO-RANDOM-VARIABLE-INTERNAL", 1, 0, false);
-        declareFunction(myName, "abduced_term_to_random_variable", "ABDUCED-TERM-TO-RANDOM-VARIABLE", 1, 0, false);
-        declareFunction(myName, "find_good_instantiated_haystack", "FIND-GOOD-INSTANTIATED-HAYSTACK", 1, 0, false);
-        declareFunction(myName, "instantiate_haystack_if_good", "INSTANTIATE-HAYSTACK-IF-GOOD", 1, 0, false);
-        declareFunction(myName, "instantiate_haystack", "INSTANTIATE-HAYSTACK", 1, 0, false);
-        declareFunction(myName, "instantiate_haystack_var", "INSTANTIATE-HAYSTACK-VAR", 2, 0, false);
-        declareFunction(myName, "cripple_haystack", "CRIPPLE-HAYSTACK", 1, 0, false);
-        declareFunction(myName, "potentially_cripple_haystack", "POTENTIALLY-CRIPPLE-HAYSTACK", 1, 0, false);
+        declareFunction("generate_deep_inference", "GENERATE-DEEP-INFERENCE", 1, 0, false);
+        declareFunction("initialize_deep_inference_gaf_table", "INITIALIZE-DEEP-INFERENCE-GAF-TABLE", 0, 1, false);
+        declareFunction("assertion_provability_depth", "ASSERTION-PROVABILITY-DEPTH", 1, 0, false);
+        declareFunction("backward_rule_required_for_assertionP", "BACKWARD-RULE-REQUIRED-FOR-ASSERTION?", 1, 0, false);
+        declareFunction("backward_rule_deductionP", "BACKWARD-RULE-DEDUCTION?", 1, 0, false);
+        declareFunction("haystack_p", "HAYSTACK-P", 1, 0, false);
+        declareFunction("interesting_haystack_p", "INTERESTING-HAYSTACK-P", 1, 0, false);
+        declareFunction("haystack_query", "HAYSTACK-QUERY", 1, 0, false);
+        declareFunction("haystack_rules", "HAYSTACK-RULES", 1, 0, false);
+        declareFunction("haystack_size", "HAYSTACK-SIZE", 1, 0, false);
+        declareFunction("straw_p", "STRAW-P", 1, 0, false);
+        declareFunction("generate_haystack", "GENERATE-HAYSTACK", 1, 0, false);
+        declareFunction("collapse_haystack", "COLLAPSE-HAYSTACK", 1, 0, false);
+        declareFunction("fix_haystack_variables", "FIX-HAYSTACK-VARIABLES", 1, 0, false);
+        declareFunction("generate_haystack_int", "GENERATE-HAYSTACK-INT", 1, 0, false);
+        declareFunction("abort_haystackP", "ABORT-HAYSTACK?", 2, 0, false);
+        declareFunction("grow_haystack", "GROW-HAYSTACK", 2, 0, false);
+        declareFunction("choose_random_needle", "CHOOSE-RANDOM-NEEDLE", 0, 0, false);
+        declareFunction("choose_next_needle", "CHOOSE-NEXT-NEEDLE", 1, 0, false);
+        declareFunction("generate_straw_from_needle", "GENERATE-STRAW-FROM-NEEDLE", 1, 0, false);
+        declareFunction("add_straw_to_haystack", "ADD-STRAW-TO-HAYSTACK", 3, 0, false);
+        declareFunction("verify_haystack", "VERIFY-HAYSTACK", 1, 1, false);
+        declareFunction("look_for_needle_in_haystack", "LOOK-FOR-NEEDLE-IN-HAYSTACK", 1, 1, false);
+        declareFunction("nonstandard_transformation_asent_p", "NONSTANDARD-TRANSFORMATION-ASENT-P", 1, 0, false);
+        declareFunction("standard_transformation_asent_p", "STANDARD-TRANSFORMATION-ASENT-P", 1, 0, false);
+        declareFunction("make_isa_x_thing_asent", "MAKE-ISA-X-THING-ASENT", 1, 0, false);
+        declareFunction("inference_answer_justification_uses_at_least_one_ruleP", "INFERENCE-ANSWER-JUSTIFICATION-USES-AT-LEAST-ONE-RULE?", 1, 0, false);
+        declareFunction("clear_abduced_term_to_random_variable", "CLEAR-ABDUCED-TERM-TO-RANDOM-VARIABLE", 0, 0, false);
+        declareFunction("remove_abduced_term_to_random_variable", "REMOVE-ABDUCED-TERM-TO-RANDOM-VARIABLE", 1, 0, false);
+        declareFunction("abduced_term_to_random_variable_internal", "ABDUCED-TERM-TO-RANDOM-VARIABLE-INTERNAL", 1, 0, false);
+        declareFunction("abduced_term_to_random_variable", "ABDUCED-TERM-TO-RANDOM-VARIABLE", 1, 0, false);
+        declareFunction("find_good_instantiated_haystack", "FIND-GOOD-INSTANTIATED-HAYSTACK", 1, 0, false);
+        declareFunction("instantiate_haystack_if_good", "INSTANTIATE-HAYSTACK-IF-GOOD", 1, 0, false);
+        declareFunction("instantiate_haystack", "INSTANTIATE-HAYSTACK", 1, 0, false);
+        declareFunction("instantiate_haystack_var", "INSTANTIATE-HAYSTACK-VAR", 2, 0, false);
+        declareFunction("cripple_haystack", "CRIPPLE-HAYSTACK", 1, 0, false);
+        declareFunction("potentially_cripple_haystack", "POTENTIALLY-CRIPPLE-HAYSTACK", 1, 0, false);
         return NIL;
     }
 

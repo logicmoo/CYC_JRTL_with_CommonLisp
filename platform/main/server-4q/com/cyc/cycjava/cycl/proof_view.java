@@ -2420,7 +2420,6 @@ public final class proof_view extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new proof_view();
 
- public static final String myName = "com.cyc.cycjava.cycl.proof_view";
 
 
     // defparameter

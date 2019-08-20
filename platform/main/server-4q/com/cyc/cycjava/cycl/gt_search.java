@@ -73,7 +73,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class gt_search extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new gt_search();
 
- public static final String myName = "com.cyc.cycjava.cycl.gt_search";
 
 
     static private final SubLString $str4$illegal_value_of__gt_mode____s = makeString("illegal value of *gt-mode*: ~s");

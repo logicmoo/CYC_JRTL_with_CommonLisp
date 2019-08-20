@@ -76,7 +76,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class forward_harness extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new forward_harness();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.inference.harness.forward_harness";
 
 
     // defconstant

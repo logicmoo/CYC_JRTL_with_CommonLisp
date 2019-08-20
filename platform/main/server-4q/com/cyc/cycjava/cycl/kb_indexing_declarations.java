@@ -50,7 +50,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class kb_indexing_declarations extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new kb_indexing_declarations();
 
- public static final String myName = "com.cyc.cycjava.cycl.kb_indexing_declarations";
 
 
     // deflexical

@@ -56,7 +56,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class simplification_modules extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.simplification_modules";
     public static String myFingerPrint = "6e1be3dfc87d405ed2301324c0f28187698d34e9549fd4fa8a8920966ab8fabf";
     @SubL(source = "cycl/inference/modules/simplification-modules.lisp", position = 900L)
     private static SubLSymbol $simplification_module_names$;
@@ -574,27 +573,27 @@ public class simplification_modules extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_simplification_modules_file() {
-        declareFunction(myName, "simplification_module_p", "SIMPLIFICATION-MODULE-P", 1, 0, false);
-        declareFunction(myName, "simplification_duplicate_literals_via_functionality_pos_lits_applicability", "SIMPLIFICATION-DUPLICATE-LITERALS-VIA-FUNCTIONALITY-POS-LITS-APPLICABILITY", 1, 0, false);
+        declareFunction("simplification_module_p", "SIMPLIFICATION-MODULE-P", 1, 0, false);
+        declareFunction("simplification_duplicate_literals_via_functionality_pos_lits_applicability", "SIMPLIFICATION-DUPLICATE-LITERALS-VIA-FUNCTIONALITY-POS-LITS-APPLICABILITY", 1, 0, false);
         new $simplification_duplicate_literals_via_functionality_pos_lits_applicability$UnaryFunction();
-        declareFunction(myName, "problem_is_a_topological_rootP", "PROBLEM-IS-A-TOPOLOGICAL-ROOT?", 1, 0, false);
-        declareFunction(myName, "simplification_duplicate_literals_via_functionality_expand", "SIMPLIFICATION-DUPLICATE-LITERALS-VIA-FUNCTIONALITY-EXPAND", 1, 0, false);
-        declareFunction(myName, "problem_query_simplify_via_functionality", "PROBLEM-QUERY-SIMPLIFY-VIA-FUNCTIONALITY", 1, 0, false);
-        declareFunction(myName, "problem_query_compute_simplification_via_functionality_variable_map", "PROBLEM-QUERY-COMPUTE-SIMPLIFICATION-VIA-FUNCTIONALITY-VARIABLE-MAP", 1, 0, false);
-        declareFunction(myName, "compute_simplification_via_functionality_variable_map", "COMPUTE-SIMPLIFICATION-VIA-FUNCTIONALITY-VARIABLE-MAP", 1, 0, false);
-        declareFunction(myName, "asent_pred_inter_arg_dependent_cardinalities_internal", "ASENT-PRED-INTER-ARG-DEPENDENT-CARDINALITIES-INTERNAL", 1, 0, false);
-        declareFunction(myName, "asent_pred_inter_arg_dependent_cardinalities", "ASENT-PRED-INTER-ARG-DEPENDENT-CARDINALITIES", 1, 0, false);
-        declareFunction(myName, "any_specP_memoized_internal", "ANY-SPEC?-MEMOIZED-INTERNAL", 2, 2, false);
-        declareFunction(myName, "any_specP_memoized", "ANY-SPEC?-MEMOIZED", 2, 2, false);
-        declareFunction(me, "simplification_duplicate_literals_via_functionality_pos_lits_equivalence_classes", "SIMPLIFICATION-DUPLICATE-LITERALS-VIA-FUNCTIONALITY-POS-LITS-EQUIVALENCE-CLASSES", 1, 0, false);
-        declareFunction(myName, "new_equivalence_map", "NEW-EQUIVALENCE-MAP", 0, 1, false);
-        declareFunction(myName, "print_equivalence_map", "PRINT-EQUIVALENCE-MAP", 1, 0, false);
-        declareFunction(myName, "equivalence_map_class_ids", "EQUIVALENCE-MAP-CLASS-IDS", 1, 0, false);
-        declareFunction(myName, "equivalence_map_class_id_for_object", "EQUIVALENCE-MAP-CLASS-ID-FOR-OBJECT", 2, 0, false);
-        declareFunction(myName, "equivalence_map_class_list_by_id", "EQUIVALENCE-MAP-CLASS-LIST-BY-ID", 2, 0, false);
-        declareFunction(myName, "equivalence_map_equivalentP", "EQUIVALENCE-MAP-EQUIVALENT?", 3, 0, false);
-        declareFunction(myName, "equivalence_map_insert", "EQUIVALENCE-MAP-INSERT", 2, 0, false);
-        declareFunction(myName, "equivalence_map_join", "EQUIVALENCE-MAP-JOIN", 3, 0, false);
+        declareFunction("problem_is_a_topological_rootP", "PROBLEM-IS-A-TOPOLOGICAL-ROOT?", 1, 0, false);
+        declareFunction("simplification_duplicate_literals_via_functionality_expand", "SIMPLIFICATION-DUPLICATE-LITERALS-VIA-FUNCTIONALITY-EXPAND", 1, 0, false);
+        declareFunction("problem_query_simplify_via_functionality", "PROBLEM-QUERY-SIMPLIFY-VIA-FUNCTIONALITY", 1, 0, false);
+        declareFunction("problem_query_compute_simplification_via_functionality_variable_map", "PROBLEM-QUERY-COMPUTE-SIMPLIFICATION-VIA-FUNCTIONALITY-VARIABLE-MAP", 1, 0, false);
+        declareFunction("compute_simplification_via_functionality_variable_map", "COMPUTE-SIMPLIFICATION-VIA-FUNCTIONALITY-VARIABLE-MAP", 1, 0, false);
+        declareFunction("asent_pred_inter_arg_dependent_cardinalities_internal", "ASENT-PRED-INTER-ARG-DEPENDENT-CARDINALITIES-INTERNAL", 1, 0, false);
+        declareFunction("asent_pred_inter_arg_dependent_cardinalities", "ASENT-PRED-INTER-ARG-DEPENDENT-CARDINALITIES", 1, 0, false);
+        declareFunction("any_specP_memoized_internal", "ANY-SPEC?-MEMOIZED-INTERNAL", 2, 2, false);
+        declareFunction("any_specP_memoized", "ANY-SPEC?-MEMOIZED", 2, 2, false);
+        declareFunction("simplification_duplicate_literals_via_functionality_pos_lits_equivalence_classes", "SIMPLIFICATION-DUPLICATE-LITERALS-VIA-FUNCTIONALITY-POS-LITS-EQUIVALENCE-CLASSES", 1, 0, false);
+        declareFunction("new_equivalence_map", "NEW-EQUIVALENCE-MAP", 0, 1, false);
+        declareFunction("print_equivalence_map", "PRINT-EQUIVALENCE-MAP", 1, 0, false);
+        declareFunction("equivalence_map_class_ids", "EQUIVALENCE-MAP-CLASS-IDS", 1, 0, false);
+        declareFunction("equivalence_map_class_id_for_object", "EQUIVALENCE-MAP-CLASS-ID-FOR-OBJECT", 2, 0, false);
+        declareFunction("equivalence_map_class_list_by_id", "EQUIVALENCE-MAP-CLASS-LIST-BY-ID", 2, 0, false);
+        declareFunction("equivalence_map_equivalentP", "EQUIVALENCE-MAP-EQUIVALENT?", 3, 0, false);
+        declareFunction("equivalence_map_insert", "EQUIVALENCE-MAP-INSERT", 2, 0, false);
+        declareFunction("equivalence_map_join", "EQUIVALENCE-MAP-JOIN", 3, 0, false);
         return NIL;
     }
 

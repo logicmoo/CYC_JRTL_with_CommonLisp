@@ -54,7 +54,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sort_variants extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new sort_variants();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.sort_variants";
 
 
     // deflexical

@@ -98,7 +98,6 @@ public final class probably_approximately_done extends SubLTranslatedFile implem
 
     public static final SubLFile me = new probably_approximately_done();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.harness.probably_approximately_done";
 
     // // Definitions
     /**

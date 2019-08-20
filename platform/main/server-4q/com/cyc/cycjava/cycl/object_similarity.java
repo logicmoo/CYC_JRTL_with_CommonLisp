@@ -71,7 +71,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class object_similarity extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new object_similarity();
 
- public static final String myName = "com.cyc.cycjava.cycl.object_similarity";
 
 
     // defparameter

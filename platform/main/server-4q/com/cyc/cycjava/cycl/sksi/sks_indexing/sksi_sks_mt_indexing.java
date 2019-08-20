@@ -126,7 +126,6 @@ public final class sksi_sks_mt_indexing extends SubLTranslatedFile implements V1
 
     public static final SubLFile me = new sksi_sks_mt_indexing();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.sks_indexing.sksi_sks_mt_indexing";
 
 
     // defconstant

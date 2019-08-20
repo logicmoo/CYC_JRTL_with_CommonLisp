@@ -232,7 +232,6 @@ public final class cb_formula_templates extends SubLTranslatedFile implements V1
 
     public static final SubLFile me = new cb_formula_templates();
 
- public static final String myName = "com.cyc.cycjava.cycl.cb_formula_templates";
 
 
     // defconstant

@@ -22,7 +22,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_term_external_id_string extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_term_external_id_string";
     public static String myFingerPrint = "65f0f4c02ce87fde97e5aebc1975826f6a39623b0fcb823a2fb46015d9df00b7";
     private static SubLObject $$termExternalIDString;
     private static SubLSymbol $POS;
@@ -98,10 +97,10 @@ public class removal_modules_term_external_id_string extends SubLTranslatedFile 
     }
 
     public static SubLObject declare_removal_modules_term_external_id_string_file() {
-        declareFunction(myName, "make_term_external_id_string_support", "MAKE-TERM-EXTERNAL-ID-STRING-SUPPORT", 2, 0, false);
-        declareFunction(myName, "removal_term_external_id_string_fully_bound", "REMOVAL-TERM-EXTERNAL-ID-STRING-FULLY-BOUND", 1, 1, false);
-        declareFunction(myName, "removal_term_external_id_string_bound_unbound", "REMOVAL-TERM-EXTERNAL-ID-STRING-BOUND-UNBOUND", 1, 1, false);
-        declareFunction(myName, "removal_term_external_id_string_unbound_bound", "REMOVAL-TERM-EXTERNAL-ID-STRING-UNBOUND-BOUND", 1, 1, false);
+        declareFunction("make_term_external_id_string_support", "MAKE-TERM-EXTERNAL-ID-STRING-SUPPORT", 2, 0, false);
+        declareFunction("removal_term_external_id_string_fully_bound", "REMOVAL-TERM-EXTERNAL-ID-STRING-FULLY-BOUND", 1, 1, false);
+        declareFunction("removal_term_external_id_string_bound_unbound", "REMOVAL-TERM-EXTERNAL-ID-STRING-BOUND-UNBOUND", 1, 1, false);
+        declareFunction("removal_term_external_id_string_unbound_bound", "REMOVAL-TERM-EXTERNAL-ID-STRING-UNBOUND-BOUND", 1, 1, false);
         return NIL;
     }
 

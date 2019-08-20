@@ -98,7 +98,6 @@ public final class sksi_infrastructure_macros extends SubLTranslatedFile impleme
 
     public static final SubLFile me = new sksi_infrastructure_macros();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_infrastructure_macros";
 
 
     // defparameter

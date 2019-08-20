@@ -40,7 +40,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class pragma_induction extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.pragma_induction";
 	public static String myFingerPrint = "a7f50c107406abe08f5c8aafded9d8760dddf40bdc39d70c8deba4d1155fc588";
 	@SubL(source = "cycl/inference/pragma-induction.lisp", position = 2000L)
 	private static SubLSymbol $ontology_contraint_gain_threshold$;
@@ -664,40 +663,40 @@ public class pragma_induction extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_pragma_induction_file() {
-		declareFunction(myName, "some_suggested_pragma_sentences_for_ruleP",
+		declareFunction("some_suggested_pragma_sentences_for_ruleP",
 				"SOME-SUGGESTED-PRAGMA-SENTENCES-FOR-RULE?", 1, 0, false);
-		declareFunction(myName, "rule_suggested_pragma_sentences", "RULE-SUGGESTED-PRAGMA-SENTENCES", 1, 1, false);
-		declareFunction(myName, "possibly_suggest_ontology_constraints_wrt_rule",
+		declareFunction("rule_suggested_pragma_sentences", "RULE-SUGGESTED-PRAGMA-SENTENCES", 1, 1, false);
+		declareFunction("possibly_suggest_ontology_constraints_wrt_rule",
 				"POSSIBLY-SUGGEST-ONTOLOGY-CONSTRAINTS-WRT-RULE", 2, 1, false);
-		declareFunction(myName, "possibly_suggest_forward_non_trigger_literals",
+		declareFunction("possibly_suggest_forward_non_trigger_literals",
 				"POSSIBLY-SUGGEST-FORWARD-NON-TRIGGER-LITERALS", 2, 1, false);
-		declareFunction(myName, "possibly_suggest_different_literals", "POSSIBLY-SUGGEST-DIFFERENT-LITERALS", 2, 1,
+		declareFunction("possibly_suggest_different_literals", "POSSIBLY-SUGGEST-DIFFERENT-LITERALS", 2, 1,
 				false);
-		declareFunction(myName, "rule_pragmatic_dnf_for_strengthening_literals",
+		declareFunction("rule_pragmatic_dnf_for_strengthening_literals",
 				"RULE-PRAGMATIC-DNF-FOR-STRENGTHENING-LITERALS", 1, 1, false);
-		declareFunction(myName, "rule_antecedent_variables_min_constraints_alist",
+		declareFunction("rule_antecedent_variables_min_constraints_alist",
 				"RULE-ANTECEDENT-VARIABLES-MIN-CONSTRAINTS-ALIST", 1, 1, false);
-		declareFunction(myName, "rule_antecedent_literal_variables_min_constraints_alist",
+		declareFunction("rule_antecedent_literal_variables_min_constraints_alist",
 				"RULE-ANTECEDENT-LITERAL-VARIABLES-MIN-CONSTRAINTS-ALIST", 2, 1, false);
-		declareFunction(myName, "rule_pragmatic_pos_lits_for_strengthening_literal",
+		declareFunction("rule_pragmatic_pos_lits_for_strengthening_literal",
 				"RULE-PRAGMATIC-POS-LITS-FOR-STRENGTHENING-LITERAL", 2, 2, false);
-		declareFunction(myName, "nsort_variable_alist", "NSORT-VARIABLE-ALIST", 1, 0, false);
-		declareFunction(myName, "rule_open_isa_literals", "RULE-OPEN-ISA-LITERALS", 1, 0, false);
-		declareFunction(myName, "rule_open_genls_literals", "RULE-OPEN-GENLS-LITERALS", 1, 0, false);
-		declareFunction(myName, "rule_suggested_antecedent_ontology_variable_constraints",
+		declareFunction("nsort_variable_alist", "NSORT-VARIABLE-ALIST", 1, 0, false);
+		declareFunction("rule_open_isa_literals", "RULE-OPEN-ISA-LITERALS", 1, 0, false);
+		declareFunction("rule_open_genls_literals", "RULE-OPEN-GENLS-LITERALS", 1, 0, false);
+		declareFunction("rule_suggested_antecedent_ontology_variable_constraints",
 				"RULE-SUGGESTED-ANTECEDENT-ONTOLOGY-VARIABLE-CONSTRAINTS", 1, 0, false);
-		declareFunction(myName, "generality_estimate_restriction_ratio", "GENERALITY-ESTIMATE-RESTRICTION-RATIO", 2, 0,
+		declareFunction("generality_estimate_restriction_ratio", "GENERALITY-ESTIMATE-RESTRICTION-RATIO", 2, 0,
 				false);
-		declareFunction(myName, "rule_antecedent_ontology_variable_baseline_constraints",
+		declareFunction("rule_antecedent_ontology_variable_baseline_constraints",
 				"RULE-ANTECEDENT-ONTOLOGY-VARIABLE-BASELINE-CONSTRAINTS", 1, 0, false);
-		declareFunction(myName, "rule_antecedent_ontology_variable_potential_constraints",
+		declareFunction("rule_antecedent_ontology_variable_potential_constraints",
 				"RULE-ANTECEDENT-ONTOLOGY-VARIABLE-POTENTIAL-CONSTRAINTS", 1, 0, false);
-		declareFunction(myName, "rule_antecedent_ontology_variables", "RULE-ANTECEDENT-ONTOLOGY-VARIABLES", 1, 0,
+		declareFunction("rule_antecedent_ontology_variables", "RULE-ANTECEDENT-ONTOLOGY-VARIABLES", 1, 0,
 				false);
-		declareFunction(myName, "rule_antecedent_ontology_literals", "RULE-ANTECEDENT-ONTOLOGY-LITERALS", 1, 0, false);
-		declareFunction(myName, "rule_antecedent_dnf", "RULE-ANTECEDENT-DNF", 1, 0, false);
-		declareFunction(myName, "rule_neg_lits", "RULE-NEG-LITS", 1, 0, false);
-		declareFunction(myName, "rule_pos_lits", "RULE-POS-LITS", 1, 0, false);
+		declareFunction("rule_antecedent_ontology_literals", "RULE-ANTECEDENT-ONTOLOGY-LITERALS", 1, 0, false);
+		declareFunction("rule_antecedent_dnf", "RULE-ANTECEDENT-DNF", 1, 0, false);
+		declareFunction("rule_neg_lits", "RULE-NEG-LITS", 1, 0, false);
+		declareFunction("rule_pos_lits", "RULE-POS-LITS", 1, 0, false);
 		return NIL;
 	}
 

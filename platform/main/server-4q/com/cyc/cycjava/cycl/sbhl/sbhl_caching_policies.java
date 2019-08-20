@@ -82,7 +82,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sbhl_caching_policies extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sbhl_caching_policies();
 
- public static final String myName = "com.cyc.cycjava.cycl.sbhl.sbhl_caching_policies";
 
 
     // deflexical

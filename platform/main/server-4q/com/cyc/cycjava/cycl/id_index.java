@@ -557,7 +557,6 @@ public final class id_index extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new id_index();
 
- public static final String myName = "com.cyc.cycjava.cycl.id_index";
 
 
     public static final SubLSymbol $id_index_empty_list$ = makeSymbol("*ID-INDEX-EMPTY-LIST*");

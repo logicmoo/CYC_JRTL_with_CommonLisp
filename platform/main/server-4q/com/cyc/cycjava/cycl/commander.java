@@ -64,7 +64,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class commander extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new commander();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.commander";
 
 
     // defparameter

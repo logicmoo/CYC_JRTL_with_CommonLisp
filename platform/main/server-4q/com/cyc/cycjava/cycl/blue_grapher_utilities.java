@@ -162,7 +162,6 @@ public final class blue_grapher_utilities extends SubLTranslatedFile implements 
 
     public static final SubLFile me = new blue_grapher_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.blue_grapher_utilities";
 
 
     // deflexical

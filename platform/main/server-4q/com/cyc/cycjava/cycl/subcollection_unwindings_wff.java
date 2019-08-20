@@ -51,7 +51,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class subcollection_unwindings_wff extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new subcollection_unwindings_wff();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.subcollection_unwindings_wff";
 
 
     // defparameter

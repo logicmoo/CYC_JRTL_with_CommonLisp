@@ -62,7 +62,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class scg_api extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new scg_api();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.nl.scg_api";
 
 
     // defparameter

@@ -68,7 +68,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sksi_cross_editing extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sksi_cross_editing();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_cross_editing";
 
 
     private static final SubLSymbol $sym4$ATOMIC_SENTENCE_MEMOIZED_ = makeSymbol("ATOMIC-SENTENCE-MEMOIZED?");

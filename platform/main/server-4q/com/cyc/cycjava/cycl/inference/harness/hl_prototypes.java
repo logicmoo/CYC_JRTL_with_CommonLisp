@@ -56,7 +56,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class hl_prototypes extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.harness.hl_prototypes";
     public static String myFingerPrint = "bcebc931fb4bf2531fbdafb317616ca381abb7f166f7e85db7ab112ff20d6026";
     @SubL(source = "cycl/inference/harness/hl-prototypes.lisp", position = 1100L)
     private static SubLSymbol $hl_prototypes_enabledP$;
@@ -583,35 +582,35 @@ public class hl_prototypes extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_hl_prototypes_file() {
-        declareFunction(myName, "hl_prototypes_enabledP", "HL-PROTOTYPES-ENABLED?", 0, 0, false);
-        declareFunction(myName, "hl_prototype_allowed_forward_rules", "HL-PROTOTYPE-ALLOWED-FORWARD-RULES", 1, 0, false);
-        declareFunction(myName, "hl_prototype_forbidden_forward_rules", "HL-PROTOTYPE-FORBIDDEN-FORWARD-RULES", 1, 0, false);
-        declareFunction(myName, "hl_prototypical_instance_after_adding", "HL-PROTOTYPICAL-INSTANCE-AFTER-ADDING", 2, 0, false);
-        declareFunction(myName, "hl_prototypical_instance_after_removing", "HL-PROTOTYPICAL-INSTANCE-AFTER-REMOVING", 2, 0, false);
-        declareFunction(myName, "clear_the_hl_prototype_ke_irrelevant_rule", "CLEAR-THE-HL-PROTOTYPE-KE-IRRELEVANT-RULE", 0, 0, false);
-        declareFunction(myName, "remove_the_hl_prototype_ke_irrelevant_rule", "REMOVE-THE-HL-PROTOTYPE-KE-IRRELEVANT-RULE", 0, 0, false);
-        declareFunction(myName, "the_hl_prototype_ke_irrelevant_rule_internal", "THE-HL-PROTOTYPE-KE-IRRELEVANT-RULE-INTERNAL", 0, 0, false);
-        declareFunction(myName, "the_hl_prototype_ke_irrelevant_rule", "THE-HL-PROTOTYPE-KE-IRRELEVANT-RULE", 0, 0, false);
-        declareFunction(myName, "relevant_hl_prototype_rules", "RELEVANT-HL-PROTOTYPE-RULES", 1, 0, false);
-        declareFunction(myName, "clear_hl_prototype_caches", "CLEAR-HL-PROTOTYPE-CACHES", 0, 0, false);
-        declareFunction(myName, "possibly_hl_prototype_assertionP", "POSSIBLY-HL-PROTOTYPE-ASSERTION?", 1, 0, false);
-        declareFunction(myName, "find_or_create_hl_prototypical_instance", "FIND-OR-CREATE-HL-PROTOTYPICAL-INSTANCE", 1, 1, false);
-        declareFunction(myName, "hl_prototypical_instance", "HL-PROTOTYPICAL-INSTANCE", 1, 0, false);
-        declareFunction(myName, "create_hl_prototypical_instance", "CREATE-HL-PROTOTYPICAL-INSTANCE", 1, 1, false);
-        declareFunction(myName, "hl_prototypical_instance_name", "HL-PROTOTYPICAL-INSTANCE-NAME", 1, 0, false);
-        declareFunction(myName, "hl_prototype_collections", "HL-PROTOTYPE-COLLECTIONS", 0, 0, false);
-        declareFunction(myName, "hl_prototypical_collection", "HL-PROTOTYPICAL-COLLECTION", 1, 0, false);
-        declareFunction(myName, "hl_prototypical_instanceP", "HL-PROTOTYPICAL-INSTANCE?", 1, 0, false);
-        declareFunction(myName, "show_hl_prototype_statistics", "SHOW-HL-PROTOTYPE-STATISTICS", 0, 0, false);
-        declareFunction(myName, "clear_hl_prototype_statistics", "CLEAR-HL-PROTOTYPE-STATISTICS", 0, 0, false);
-        declareFunction(myName, "create_hl_prototypical_instances_for_common_collections", "CREATE-HL-PROTOTYPICAL-INSTANCES-FOR-COMMON-COLLECTIONS", 1, 1, false);
-        declareFunction(myName, "n_most_useful_hl_prototype_collections", "N-MOST-USEFUL-HL-PROTOTYPE-COLLECTIONS", 1, 1, false);
-        declareFunction(myName, "most_useful_hl_prototypical_instances_dict", "MOST-USEFUL-HL-PROTOTYPICAL-INSTANCES-DICT", 0, 0, false);
-        declareFunction(myName, "likely_first_asserted_isa_col", "LIKELY-FIRST-ASSERTED-ISA-COL", 1, 0, false);
-        declareFunction(myName, "likely_first_asserted_isa_gaf", "LIKELY-FIRST-ASSERTED-ISA-GAF", 1, 0, false);
-        declareFunction(myName, "hl_prototype_benchmark_1", "HL-PROTOTYPE-BENCHMARK-1", 0, 1, false);
-        declareFunction(myName, "hl_prototype_benchmark_2", "HL-PROTOTYPE-BENCHMARK-2", 0, 1, false);
-        declareFunction(myName, "hl_prototype_benchmark_3", "HL-PROTOTYPE-BENCHMARK-3", 0, 1, false);
+        declareFunction("hl_prototypes_enabledP", "HL-PROTOTYPES-ENABLED?", 0, 0, false);
+        declareFunction("hl_prototype_allowed_forward_rules", "HL-PROTOTYPE-ALLOWED-FORWARD-RULES", 1, 0, false);
+        declareFunction("hl_prototype_forbidden_forward_rules", "HL-PROTOTYPE-FORBIDDEN-FORWARD-RULES", 1, 0, false);
+        declareFunction("hl_prototypical_instance_after_adding", "HL-PROTOTYPICAL-INSTANCE-AFTER-ADDING", 2, 0, false);
+        declareFunction("hl_prototypical_instance_after_removing", "HL-PROTOTYPICAL-INSTANCE-AFTER-REMOVING", 2, 0, false);
+        declareFunction("clear_the_hl_prototype_ke_irrelevant_rule", "CLEAR-THE-HL-PROTOTYPE-KE-IRRELEVANT-RULE", 0, 0, false);
+        declareFunction("remove_the_hl_prototype_ke_irrelevant_rule", "REMOVE-THE-HL-PROTOTYPE-KE-IRRELEVANT-RULE", 0, 0, false);
+        declareFunction("the_hl_prototype_ke_irrelevant_rule_internal", "THE-HL-PROTOTYPE-KE-IRRELEVANT-RULE-INTERNAL", 0, 0, false);
+        declareFunction("the_hl_prototype_ke_irrelevant_rule", "THE-HL-PROTOTYPE-KE-IRRELEVANT-RULE", 0, 0, false);
+        declareFunction("relevant_hl_prototype_rules", "RELEVANT-HL-PROTOTYPE-RULES", 1, 0, false);
+        declareFunction("clear_hl_prototype_caches", "CLEAR-HL-PROTOTYPE-CACHES", 0, 0, false);
+        declareFunction("possibly_hl_prototype_assertionP", "POSSIBLY-HL-PROTOTYPE-ASSERTION?", 1, 0, false);
+        declareFunction("find_or_create_hl_prototypical_instance", "FIND-OR-CREATE-HL-PROTOTYPICAL-INSTANCE", 1, 1, false);
+        declareFunction("hl_prototypical_instance", "HL-PROTOTYPICAL-INSTANCE", 1, 0, false);
+        declareFunction("create_hl_prototypical_instance", "CREATE-HL-PROTOTYPICAL-INSTANCE", 1, 1, false);
+        declareFunction("hl_prototypical_instance_name", "HL-PROTOTYPICAL-INSTANCE-NAME", 1, 0, false);
+        declareFunction("hl_prototype_collections", "HL-PROTOTYPE-COLLECTIONS", 0, 0, false);
+        declareFunction("hl_prototypical_collection", "HL-PROTOTYPICAL-COLLECTION", 1, 0, false);
+        declareFunction("hl_prototypical_instanceP", "HL-PROTOTYPICAL-INSTANCE?", 1, 0, false);
+        declareFunction("show_hl_prototype_statistics", "SHOW-HL-PROTOTYPE-STATISTICS", 0, 0, false);
+        declareFunction("clear_hl_prototype_statistics", "CLEAR-HL-PROTOTYPE-STATISTICS", 0, 0, false);
+        declareFunction("create_hl_prototypical_instances_for_common_collections", "CREATE-HL-PROTOTYPICAL-INSTANCES-FOR-COMMON-COLLECTIONS", 1, 1, false);
+        declareFunction("n_most_useful_hl_prototype_collections", "N-MOST-USEFUL-HL-PROTOTYPE-COLLECTIONS", 1, 1, false);
+        declareFunction("most_useful_hl_prototypical_instances_dict", "MOST-USEFUL-HL-PROTOTYPICAL-INSTANCES-DICT", 0, 0, false);
+        declareFunction("likely_first_asserted_isa_col", "LIKELY-FIRST-ASSERTED-ISA-COL", 1, 0, false);
+        declareFunction("likely_first_asserted_isa_gaf", "LIKELY-FIRST-ASSERTED-ISA-GAF", 1, 0, false);
+        declareFunction("hl_prototype_benchmark_1", "HL-PROTOTYPE-BENCHMARK-1", 0, 1, false);
+        declareFunction("hl_prototype_benchmark_2", "HL-PROTOTYPE-BENCHMARK-2", 0, 1, false);
+        declareFunction("hl_prototype_benchmark_3", "HL-PROTOTYPE-BENCHMARK-3", 0, 1, false);
         return NIL;
     }
 

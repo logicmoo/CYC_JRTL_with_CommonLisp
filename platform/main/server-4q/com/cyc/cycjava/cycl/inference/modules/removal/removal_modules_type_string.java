@@ -24,7 +24,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_type_string extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_type_string";
     public static String myFingerPrint = "ac4a59849b6e02f3841ee7a5abc153a01252ab3569c7f17465e91ee62a27b027";
     private static SubLObject $$typeFromString;
     private static SubLSymbol $POS;
@@ -116,9 +115,9 @@ public class removal_modules_type_string extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_type_string_file() {
-        declareFunction(myName, "removal_type_string_arg2_unbound", "REMOVAL-TYPE-STRING-ARG2-UNBOUND", 1, 1, false);
-        declareFunction(myName, "removal_type_string_all_bound", "REMOVAL-TYPE-STRING-ALL-BOUND", 1, 1, false);
-        declareFunction(myName, "removal_type_string_all_bound_neg", "REMOVAL-TYPE-STRING-ALL-BOUND-NEG", 1, 1, false);
+        declareFunction("removal_type_string_arg2_unbound", "REMOVAL-TYPE-STRING-ARG2-UNBOUND", 1, 1, false);
+        declareFunction("removal_type_string_all_bound", "REMOVAL-TYPE-STRING-ALL-BOUND", 1, 1, false);
+        declareFunction("removal_type_string_all_bound_neg", "REMOVAL-TYPE-STRING-ALL-BOUND-NEG", 1, 1, false);
         return NIL;
     }
 

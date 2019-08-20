@@ -238,7 +238,6 @@ public final class subloop_collections extends subloop_collections_p2 {
     public static final SubLFile me = new subloop_collections();
 
 
- public static final String myName = "com.cyc.cycjava.cycl.subloop_collections";
 
     private static final SubLSymbol PROTECTED_MEMBERSHIP_TEMPLATE = makeSymbol("PROTECTED-MEMBERSHIP-TEMPLATE");
 

@@ -40,7 +40,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class relationship_generality_estimates extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new relationship_generality_estimates();
 
- public static final String myName = "com.cyc.cycjava.cycl.relationship_generality_estimates";
 
 
 

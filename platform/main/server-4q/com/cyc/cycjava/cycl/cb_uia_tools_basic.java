@@ -71,7 +71,6 @@ public final class cb_uia_tools_basic extends SubLTranslatedFile implements V02 
 
     public static final SubLFile me = new cb_uia_tools_basic();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_uia_tools_basic";
 
     // // Definitions
     public static final SubLObject cb_uiat_reset_agenda_render_request(SubLObject request) {

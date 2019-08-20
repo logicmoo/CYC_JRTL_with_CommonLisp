@@ -58,7 +58,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class constant_completion extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new constant_completion();
 
- public static final String myName = "com.cyc.cycjava.cycl.constant_completion";
 
 
     // Internal Constants

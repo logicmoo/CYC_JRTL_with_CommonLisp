@@ -77,7 +77,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sanity_checker extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sanity_checker();
 
- public static final String myName = "com.cyc.cycjava.cycl.quirk.sanity_checker";
 
 
     // defvar

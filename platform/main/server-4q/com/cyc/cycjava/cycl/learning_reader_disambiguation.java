@@ -144,7 +144,6 @@ public final class learning_reader_disambiguation extends SubLTranslatedFile imp
 
     public static final SubLFile me = new learning_reader_disambiguation();
 
-    public static final String myName = "com.cyc.cycjava.cycl.learning_reader_disambiguation";
 
     // // Definitions
     // defparameter

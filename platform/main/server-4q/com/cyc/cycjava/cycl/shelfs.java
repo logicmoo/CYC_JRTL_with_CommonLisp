@@ -109,7 +109,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class shelfs extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new shelfs();
 
- public static final String myName = "com.cyc.cycjava.cycl.shelfs";
 
 
     // defconstant

@@ -35,7 +35,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class mwp_parse extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new mwp_parse();
 
- public static final String myName = "com.cyc.cycjava.cycl.mwp_parse";
 
 
     // Internal Constants

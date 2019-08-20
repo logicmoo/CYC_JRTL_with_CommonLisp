@@ -74,7 +74,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class timing extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new timing();
 
- public static final String myName = "com.cyc.cycjava.cycl.timing";
 
 
     // defparameter

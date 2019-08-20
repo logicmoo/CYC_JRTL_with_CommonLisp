@@ -94,7 +94,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class simplification_modules extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new simplification_modules();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.modules.simplification_modules";
 
 
     // deflexical

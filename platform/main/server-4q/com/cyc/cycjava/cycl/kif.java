@@ -147,7 +147,6 @@ public final class kif extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new kif();
 
- public static final String myName = "com.cyc.cycjava.cycl.kif";
 
 
     // defparameter

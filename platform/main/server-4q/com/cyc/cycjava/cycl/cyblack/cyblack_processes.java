@@ -53,7 +53,6 @@ public final class cyblack_processes extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cyblack_processes();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_processes";
 
     // // Definitions
     // deflexical

@@ -19,7 +19,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class meta_removal_modules extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.meta_removal_modules";
     public static String myFingerPrint = "8db4160f1aa0e18e6a1e01a247e65f629b1bb22b92b9bde8515cbca63111add7";
     private static SubLSymbol $TACTICAL;
     private static SubLSymbol $META_REMOVAL_COMPLETELY_ENUMERABLE_POS;
@@ -68,10 +67,10 @@ public class meta_removal_modules extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_meta_removal_modules_file() {
-        declareFunction(myName, "meta_removal_complete_pos_required", "META-REMOVAL-COMPLETE-POS-REQUIRED", 0, 0, false);
-        declareFunction(myName, "meta_removal_complete_pos_cost", "META-REMOVAL-COMPLETE-POS-COST", 1, 1, false);
-        declareFunction(myName, "meta_removal_completely_enumerable_pos_required", "META-REMOVAL-COMPLETELY-ENUMERABLE-POS-REQUIRED", 1, 1, false);
-        declareFunction(myName, "meta_removal_completely_decidable_pos_required", "META-REMOVAL-COMPLETELY-DECIDABLE-POS-REQUIRED", 1, 1, false);
+        declareFunction("meta_removal_complete_pos_required", "META-REMOVAL-COMPLETE-POS-REQUIRED", 0, 0, false);
+        declareFunction("meta_removal_complete_pos_cost", "META-REMOVAL-COMPLETE-POS-COST", 1, 1, false);
+        declareFunction("meta_removal_completely_enumerable_pos_required", "META-REMOVAL-COMPLETELY-ENUMERABLE-POS-REQUIRED", 1, 1, false);
+        declareFunction("meta_removal_completely_decidable_pos_required", "META-REMOVAL-COMPLETELY-DECIDABLE-POS-REQUIRED", 1, 1, false);
         return NIL;
     }
 

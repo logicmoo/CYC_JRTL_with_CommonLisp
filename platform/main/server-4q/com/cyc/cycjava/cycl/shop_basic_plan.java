@@ -86,7 +86,6 @@ public final class shop_basic_plan extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new shop_basic_plan();
 
- public static final String myName = "com.cyc.cycjava.cycl.shop_basic_plan";
 
 
     // Internal Constants

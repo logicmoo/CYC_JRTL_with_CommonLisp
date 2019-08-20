@@ -41,7 +41,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class unrepresented_term_index_manager extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new unrepresented_term_index_manager();
 
- public static final String myName = "com.cyc.cycjava.cycl.unrepresented_term_index_manager";
 
 
     // deflexical

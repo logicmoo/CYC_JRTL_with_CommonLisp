@@ -63,7 +63,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class cb_uia_forwarding extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new cb_uia_forwarding();
 
- public static final String myName = "com.cyc.cycjava.cycl.cb_uia_forwarding";
 
 
     // Internal Constants

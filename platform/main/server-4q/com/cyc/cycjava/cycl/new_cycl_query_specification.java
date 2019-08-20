@@ -89,7 +89,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class new_cycl_query_specification extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new new_cycl_query_specification();
 
- public static final String myName = "com.cyc.cycjava.cycl.new_cycl_query_specification";
 
 
     // defconstant

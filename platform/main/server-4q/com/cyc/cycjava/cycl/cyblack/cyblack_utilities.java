@@ -29,7 +29,6 @@ public final class cyblack_utilities extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cyblack_utilities();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_utilities";
 
     // // Definitions
     public static final SubLObject non_null_symbol_p(SubLObject v_object) {

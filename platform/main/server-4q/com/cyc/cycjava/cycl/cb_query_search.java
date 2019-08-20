@@ -67,7 +67,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class cb_query_search extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new cb_query_search();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.cb_query_search";
 
 
     // defparameter

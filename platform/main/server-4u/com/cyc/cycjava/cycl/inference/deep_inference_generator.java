@@ -140,7 +140,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class deep_inference_generator extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new deep_inference_generator();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.deep_inference_generator";
 
 
     // defparameter

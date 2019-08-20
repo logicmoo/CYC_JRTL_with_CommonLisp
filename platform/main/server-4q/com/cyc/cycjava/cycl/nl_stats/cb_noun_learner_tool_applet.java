@@ -48,7 +48,6 @@ public final class cb_noun_learner_tool_applet extends SubLTranslatedFile implem
 
     public static final SubLFile me = new cb_noun_learner_tool_applet();
 
-    public static final String myName = "com.cyc.cycjava.cycl.nl_stats.cb_noun_learner_tool_applet";
 
     // // Definitions
     // deflexical

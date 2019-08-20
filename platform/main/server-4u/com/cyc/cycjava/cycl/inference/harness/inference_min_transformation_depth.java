@@ -200,7 +200,6 @@ public final class inference_min_transformation_depth extends SubLTranslatedFile
 
     public static final SubLFile me = new inference_min_transformation_depth();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.harness.inference_min_transformation_depth";
 
 
     static private final SubLString $str2$Unexpected_logical_tactic____S = makeString("Unexpected logical-tactic : ~S");

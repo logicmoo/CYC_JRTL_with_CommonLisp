@@ -64,7 +64,6 @@ public final class super_file_hash_table extends SubLTranslatedFile implements V
 
     public static final SubLFile me = new super_file_hash_table();
 
-    public static final String myName = "com.cyc.cycjava.cycl.super_file_hash_table";
 
     // // Definitions
     public static final class $super_file_hash_table_native extends SubLStructNative {

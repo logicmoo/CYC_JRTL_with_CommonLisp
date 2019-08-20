@@ -145,7 +145,6 @@ public final class generate_gafs extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new generate_gafs();
 
-    public static final String myName = "com.cyc.cycjava.cycl.generate_gafs";
 
     // // Definitions
     /**

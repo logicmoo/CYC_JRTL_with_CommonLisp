@@ -2482,7 +2482,6 @@ public final class numeral_parser extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new numeral_parser();
 
- public static final String myName = "com.cyc.cycjava.cycl.numeral_parser";
 
 
     // deflexical

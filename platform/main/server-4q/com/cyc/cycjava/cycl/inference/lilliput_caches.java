@@ -49,7 +49,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class lilliput_caches extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.lilliput_caches";
     public static String myFingerPrint = "2b411b76e458d076a67868768a57c87f0c3daa5318645109ee6759493777db16";
     @SubL(source = "cycl/inference/lilliput-caches.lisp", position = 900L)
     private static SubLSymbol $lilliput_all_instances_caching_state$;
@@ -688,19 +687,19 @@ public class lilliput_caches extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_lilliput_caches_file() {
-        declareFunction(myName, "clear_lilliput_all_instances", "CLEAR-LILLIPUT-ALL-INSTANCES", 0, 0, false);
-        declareFunction(myName, "remove_lilliput_all_instances", "REMOVE-LILLIPUT-ALL-INSTANCES", 1, 0, false);
-        declareFunction(myName, "lilliput_all_instances_internal", "LILLIPUT-ALL-INSTANCES-INTERNAL", 1, 0, false);
-        declareFunction(myName, "lilliput_all_instances", "LILLIPUT-ALL-INSTANCES", 1, 0, false);
-        declareFunction(myName, "clear_lilliput_all_instances_if_tkb_fort", "CLEAR-LILLIPUT-ALL-INSTANCES-IF-TKB-FORT", 0, 0, false);
-        declareFunction(myName, "remove_lilliput_all_instances_if_tkb_fort", "REMOVE-LILLIPUT-ALL-INSTANCES-IF-TKB-FORT", 1, 0, false);
-        declareFunction(myName, "lilliput_all_instances_if_tkb_fort_internal", "LILLIPUT-ALL-INSTANCES-IF-TKB-FORT-INTERNAL", 1, 0, false);
-        declareFunction(myName, "lilliput_all_instances_if_tkb_fort", "LILLIPUT-ALL-INSTANCES-IF-TKB-FORT", 1, 0, false);
-        declareFunction(myName, "clear_all_valid_lilliput_queries", "CLEAR-ALL-VALID-LILLIPUT-QUERIES", 0, 0, false);
-        declareFunction(myName, "remove_all_valid_lilliput_queries", "REMOVE-ALL-VALID-LILLIPUT-QUERIES", 0, 0, false);
-        declareFunction(myName, "all_valid_lilliput_queries_internal", "ALL-VALID-LILLIPUT-QUERIES-INTERNAL", 0, 0, false);
-        declareFunction(myName, "all_valid_lilliput_queries", "ALL-VALID-LILLIPUT-QUERIES", 0, 0, false);
-        declareFunction(myName, "clear_lilliput_caches", "CLEAR-LILLIPUT-CACHES", 0, 0, false);
+        declareFunction("clear_lilliput_all_instances", "CLEAR-LILLIPUT-ALL-INSTANCES", 0, 0, false);
+        declareFunction("remove_lilliput_all_instances", "REMOVE-LILLIPUT-ALL-INSTANCES", 1, 0, false);
+        declareFunction("lilliput_all_instances_internal", "LILLIPUT-ALL-INSTANCES-INTERNAL", 1, 0, false);
+        declareFunction("lilliput_all_instances", "LILLIPUT-ALL-INSTANCES", 1, 0, false);
+        declareFunction("clear_lilliput_all_instances_if_tkb_fort", "CLEAR-LILLIPUT-ALL-INSTANCES-IF-TKB-FORT", 0, 0, false);
+        declareFunction("remove_lilliput_all_instances_if_tkb_fort", "REMOVE-LILLIPUT-ALL-INSTANCES-IF-TKB-FORT", 1, 0, false);
+        declareFunction("lilliput_all_instances_if_tkb_fort_internal", "LILLIPUT-ALL-INSTANCES-IF-TKB-FORT-INTERNAL", 1, 0, false);
+        declareFunction("lilliput_all_instances_if_tkb_fort", "LILLIPUT-ALL-INSTANCES-IF-TKB-FORT", 1, 0, false);
+        declareFunction("clear_all_valid_lilliput_queries", "CLEAR-ALL-VALID-LILLIPUT-QUERIES", 0, 0, false);
+        declareFunction("remove_all_valid_lilliput_queries", "REMOVE-ALL-VALID-LILLIPUT-QUERIES", 0, 0, false);
+        declareFunction("all_valid_lilliput_queries_internal", "ALL-VALID-LILLIPUT-QUERIES-INTERNAL", 0, 0, false);
+        declareFunction("all_valid_lilliput_queries", "ALL-VALID-LILLIPUT-QUERIES", 0, 0, false);
+        declareFunction("clear_lilliput_caches", "CLEAR-LILLIPUT-CACHES", 0, 0, false);
         return NIL;
     }
 

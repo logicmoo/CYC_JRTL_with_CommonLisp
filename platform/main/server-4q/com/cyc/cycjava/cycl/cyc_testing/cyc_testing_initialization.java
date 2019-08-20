@@ -21,7 +21,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class cyc_testing_initialization extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new cyc_testing_initialization();
 
- public static final String myName = "com.cyc.cycjava.cycl.cyc_testing.cyc_testing_initialization";
 
 
 

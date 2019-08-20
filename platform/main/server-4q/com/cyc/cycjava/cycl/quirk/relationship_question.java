@@ -44,7 +44,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class relationship_question extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new relationship_question();
 
- public static final String myName = "com.cyc.cycjava.cycl.quirk.relationship_question";
 
 
     // Internal Constants

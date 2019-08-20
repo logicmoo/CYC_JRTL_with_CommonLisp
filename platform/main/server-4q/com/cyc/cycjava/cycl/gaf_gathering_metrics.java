@@ -86,7 +86,6 @@ public final class gaf_gathering_metrics extends SubLTranslatedFile implements V
 
     public static final SubLFile me = new gaf_gathering_metrics();
 
-    public static final String myName = "com.cyc.cycjava.cycl.gaf_gathering_metrics";
 
 
 

@@ -222,7 +222,6 @@ public final class wff extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new wff();
 
- public static final String myName = "com.cyc.cycjava.cycl.wff";
 
 
     // deflexical

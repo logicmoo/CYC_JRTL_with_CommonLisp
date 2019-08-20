@@ -321,7 +321,6 @@ public final class sksi_sks_manager extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new sksi_sks_manager();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_sks_manager";
 
 
     // defparameter

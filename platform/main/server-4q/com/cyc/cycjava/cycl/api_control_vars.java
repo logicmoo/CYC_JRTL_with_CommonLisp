@@ -25,7 +25,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class api_control_vars extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new api_control_vars();
 
- public static final String myName = "com.cyc.cycjava.cycl.api_control_vars";
 
 
     // defparameter

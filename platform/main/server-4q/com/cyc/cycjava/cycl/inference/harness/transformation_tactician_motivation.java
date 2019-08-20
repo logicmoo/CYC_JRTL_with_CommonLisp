@@ -27,7 +27,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class transformation_tactician_motivation extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.harness.transformation_tactician_motivation";
     public static String myFingerPrint = "2f1fc1a1e2ca1d51fd49dbcc04074c88f29c2c7f75d64ae6febf15309a7fe488";
     @SubL(source = "cycl/inference/harness/transformation-tactician-motivation.lisp", position = 9200L)
     private static SubLSymbol $transformation_strategy_self_looping_rule_fix_enabledP$;
@@ -622,36 +621,36 @@ public class transformation_tactician_motivation extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_transformation_tactician_motivation_file() {
-        declareMacro(me, "transformation_strategy_with_strategically_active_strategem", "TRANSFORMATION-STRATEGY-WITH-STRATEGICALLY-ACTIVE-STRATEGEM");
-        declareFunction(myName, "transformation_strategy_possibly_propagate_motivation_to_link_head", "TRANSFORMATION-STRATEGY-POSSIBLY-PROPAGATE-MOTIVATION-TO-LINK-HEAD", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_propagate_motivation_to_link_head", "TRANSFORMATION-STRATEGY-PROPAGATE-MOTIVATION-TO-LINK-HEAD", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_link_motivates_problemP", "TRANSFORMATION-STRATEGY-LINK-MOTIVATES-PROBLEM?", 2, 1, false);
-        declareFunction(myName, "transformation_strategy_link_motivates_lookahead_problemP", "TRANSFORMATION-STRATEGY-LINK-MOTIVATES-LOOKAHEAD-PROBLEM?", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_possibly_propagate_motivation_to_problem", "TRANSFORMATION-STRATEGY-POSSIBLY-PROPAGATE-MOTIVATION-TO-PROBLEM", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_propagate_motivation_to_problem", "TRANSFORMATION-STRATEGY-PROPAGATE-MOTIVATION-TO-PROBLEM", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_possibly_activate_problem", "TRANSFORMATION-STRATEGY-POSSIBLY-ACTIVATE-PROBLEM", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_problem_is_the_rest_of_a_join_orderedP", "TRANSFORMATION-STRATEGY-PROBLEM-IS-THE-REST-OF-A-JOIN-ORDERED?", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_possibly_propagate_proof_spec_to_restricted_non_focals", "TRANSFORMATION-STRATEGY-POSSIBLY-PROPAGATE-PROOF-SPEC-TO-RESTRICTED-NON-FOCALS", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_chooses_not_to_examine_problemP", "TRANSFORMATION-STRATEGY-CHOOSES-NOT-TO-EXAMINE-PROBLEM?", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_chooses_not_to_activate_problemP", "TRANSFORMATION-STRATEGY-CHOOSES-NOT-TO-ACTIVATE-PROBLEM?", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_activate_problem", "TRANSFORMATION-STRATEGY-ACTIVATE-PROBLEM", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_possibly_activate_strategems", "TRANSFORMATION-STRATEGY-POSSIBLY-ACTIVATE-STRATEGEMS", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_activate_transformation_argument_links", "TRANSFORMATION-STRATEGY-ACTIVATE-TRANSFORMATION-ARGUMENT-LINKS", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_note_argument_link_added", "TRANSFORMATION-STRATEGY-NOTE-ARGUMENT-LINK-ADDED", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_possibly_activate_transformation_link", "TRANSFORMATION-STRATEGY-POSSIBLY-ACTIVATE-TRANSFORMATION-LINK", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_activate_transformation_link", "TRANSFORMATION-STRATEGY-ACTIVATE-TRANSFORMATION-LINK", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_note_new_tactic", "TRANSFORMATION-STRATEGY-NOTE-NEW-TACTIC", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_note_split_tactics_strategically_possible", "TRANSFORMATION-STRATEGY-NOTE-SPLIT-TACTICS-STRATEGICALLY-POSSIBLE", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_note_new_tactic_possible", "TRANSFORMATION-STRATEGY-NOTE-NEW-TACTIC-POSSIBLE", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_categorize_strategems", "TRANSFORMATION-STRATEGY-CATEGORIZE-STRATEGEMS", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_reactivate_executable_strategem", "TRANSFORMATION-STRATEGY-REACTIVATE-EXECUTABLE-STRATEGEM", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_strategically_deactivate_strategem", "TRANSFORMATION-STRATEGY-STRATEGICALLY-DEACTIVATE-STRATEGEM", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_deactivate_strategem", "TRANSFORMATION-STRATEGY-DEACTIVATE-STRATEGEM", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_possibly_deactivate_problem", "TRANSFORMATION-STRATEGY-POSSIBLY-DEACTIVATE-PROBLEM", 2, 0, false);
-        declareFunction(me, "transformation_strategy_consider_that_problem_could_be_strategically_totally_pending", "TRANSFORMATION-STRATEGY-CONSIDER-THAT-PROBLEM-COULD-BE-STRATEGICALLY-TOTALLY-PENDING", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_consider_that_problem_could_be_strategically_pending", "TRANSFORMATION-STRATEGY-CONSIDER-THAT-PROBLEM-COULD-BE-STRATEGICALLY-PENDING", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_make_problem_pending", "TRANSFORMATION-STRATEGY-MAKE-PROBLEM-PENDING", 2, 0, false);
-        declareFunction(myName, "transformation_strategy_problem_nothing_to_doP", "TRANSFORMATION-STRATEGY-PROBLEM-NOTHING-TO-DO?", 2, 0, false);
+        declareMacro("transformation_strategy_with_strategically_active_strategem", "TRANSFORMATION-STRATEGY-WITH-STRATEGICALLY-ACTIVE-STRATEGEM");
+        declareFunction("transformation_strategy_possibly_propagate_motivation_to_link_head", "TRANSFORMATION-STRATEGY-POSSIBLY-PROPAGATE-MOTIVATION-TO-LINK-HEAD", 2, 0, false);
+        declareFunction("transformation_strategy_propagate_motivation_to_link_head", "TRANSFORMATION-STRATEGY-PROPAGATE-MOTIVATION-TO-LINK-HEAD", 2, 0, false);
+        declareFunction("transformation_strategy_link_motivates_problemP", "TRANSFORMATION-STRATEGY-LINK-MOTIVATES-PROBLEM?", 2, 1, false);
+        declareFunction("transformation_strategy_link_motivates_lookahead_problemP", "TRANSFORMATION-STRATEGY-LINK-MOTIVATES-LOOKAHEAD-PROBLEM?", 2, 0, false);
+        declareFunction("transformation_strategy_possibly_propagate_motivation_to_problem", "TRANSFORMATION-STRATEGY-POSSIBLY-PROPAGATE-MOTIVATION-TO-PROBLEM", 2, 0, false);
+        declareFunction("transformation_strategy_propagate_motivation_to_problem", "TRANSFORMATION-STRATEGY-PROPAGATE-MOTIVATION-TO-PROBLEM", 2, 0, false);
+        declareFunction("transformation_strategy_possibly_activate_problem", "TRANSFORMATION-STRATEGY-POSSIBLY-ACTIVATE-PROBLEM", 2, 0, false);
+        declareFunction("transformation_strategy_problem_is_the_rest_of_a_join_orderedP", "TRANSFORMATION-STRATEGY-PROBLEM-IS-THE-REST-OF-A-JOIN-ORDERED?", 2, 0, false);
+        declareFunction("transformation_strategy_possibly_propagate_proof_spec_to_restricted_non_focals", "TRANSFORMATION-STRATEGY-POSSIBLY-PROPAGATE-PROOF-SPEC-TO-RESTRICTED-NON-FOCALS", 2, 0, false);
+        declareFunction("transformation_strategy_chooses_not_to_examine_problemP", "TRANSFORMATION-STRATEGY-CHOOSES-NOT-TO-EXAMINE-PROBLEM?", 2, 0, false);
+        declareFunction("transformation_strategy_chooses_not_to_activate_problemP", "TRANSFORMATION-STRATEGY-CHOOSES-NOT-TO-ACTIVATE-PROBLEM?", 2, 0, false);
+        declareFunction("transformation_strategy_activate_problem", "TRANSFORMATION-STRATEGY-ACTIVATE-PROBLEM", 2, 0, false);
+        declareFunction("transformation_strategy_possibly_activate_strategems", "TRANSFORMATION-STRATEGY-POSSIBLY-ACTIVATE-STRATEGEMS", 2, 0, false);
+        declareFunction("transformation_strategy_activate_transformation_argument_links", "TRANSFORMATION-STRATEGY-ACTIVATE-TRANSFORMATION-ARGUMENT-LINKS", 2, 0, false);
+        declareFunction("transformation_strategy_note_argument_link_added", "TRANSFORMATION-STRATEGY-NOTE-ARGUMENT-LINK-ADDED", 2, 0, false);
+        declareFunction("transformation_strategy_possibly_activate_transformation_link", "TRANSFORMATION-STRATEGY-POSSIBLY-ACTIVATE-TRANSFORMATION-LINK", 2, 0, false);
+        declareFunction("transformation_strategy_activate_transformation_link", "TRANSFORMATION-STRATEGY-ACTIVATE-TRANSFORMATION-LINK", 2, 0, false);
+        declareFunction("transformation_strategy_note_new_tactic", "TRANSFORMATION-STRATEGY-NOTE-NEW-TACTIC", 2, 0, false);
+        declareFunction("transformation_strategy_note_split_tactics_strategically_possible", "TRANSFORMATION-STRATEGY-NOTE-SPLIT-TACTICS-STRATEGICALLY-POSSIBLE", 2, 0, false);
+        declareFunction("transformation_strategy_note_new_tactic_possible", "TRANSFORMATION-STRATEGY-NOTE-NEW-TACTIC-POSSIBLE", 2, 0, false);
+        declareFunction("transformation_strategy_categorize_strategems", "TRANSFORMATION-STRATEGY-CATEGORIZE-STRATEGEMS", 2, 0, false);
+        declareFunction("transformation_strategy_reactivate_executable_strategem", "TRANSFORMATION-STRATEGY-REACTIVATE-EXECUTABLE-STRATEGEM", 2, 0, false);
+        declareFunction("transformation_strategy_strategically_deactivate_strategem", "TRANSFORMATION-STRATEGY-STRATEGICALLY-DEACTIVATE-STRATEGEM", 2, 0, false);
+        declareFunction("transformation_strategy_deactivate_strategem", "TRANSFORMATION-STRATEGY-DEACTIVATE-STRATEGEM", 2, 0, false);
+        declareFunction("transformation_strategy_possibly_deactivate_problem", "TRANSFORMATION-STRATEGY-POSSIBLY-DEACTIVATE-PROBLEM", 2, 0, false);
+        declareFunction("transformation_strategy_consider_that_problem_could_be_strategically_totally_pending", "TRANSFORMATION-STRATEGY-CONSIDER-THAT-PROBLEM-COULD-BE-STRATEGICALLY-TOTALLY-PENDING", 2, 0, false);
+        declareFunction("transformation_strategy_consider_that_problem_could_be_strategically_pending", "TRANSFORMATION-STRATEGY-CONSIDER-THAT-PROBLEM-COULD-BE-STRATEGICALLY-PENDING", 2, 0, false);
+        declareFunction("transformation_strategy_make_problem_pending", "TRANSFORMATION-STRATEGY-MAKE-PROBLEM-PENDING", 2, 0, false);
+        declareFunction("transformation_strategy_problem_nothing_to_doP", "TRANSFORMATION-STRATEGY-PROBLEM-NOTHING-TO-DO?", 2, 0, false);
         return NIL;
     }
 

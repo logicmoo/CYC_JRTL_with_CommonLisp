@@ -596,7 +596,6 @@ public final class gke_main extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new gke_main();
 
- public static final String myName = "com.cyc.cycjava.cycl.gke_main";
 
 
     // deflexical

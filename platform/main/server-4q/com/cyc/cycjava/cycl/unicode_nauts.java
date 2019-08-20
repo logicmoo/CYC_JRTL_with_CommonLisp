@@ -42,7 +42,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class unicode_nauts extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new unicode_nauts();
 
- public static final String myName = "com.cyc.cycjava.cycl.unicode_nauts";
 
 
     // defconstant

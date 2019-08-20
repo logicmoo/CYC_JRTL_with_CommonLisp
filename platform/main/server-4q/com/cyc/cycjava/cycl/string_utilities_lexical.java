@@ -37,7 +37,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class string_utilities_lexical extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new string_utilities_lexical();
 
- public static final String myName = "com.cyc.cycjava.cycl.string_utilities_lexical";
 
 
     // Internal Constants

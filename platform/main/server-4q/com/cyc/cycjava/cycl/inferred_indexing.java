@@ -68,7 +68,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class inferred_indexing extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new inferred_indexing();
 
- public static final String myName = "com.cyc.cycjava.cycl.inferred_indexing";
 
 
 

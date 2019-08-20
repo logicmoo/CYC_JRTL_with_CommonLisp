@@ -56,7 +56,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class ebl extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new ebl();
 
- public static final String myName = "com.cyc.cycjava.cycl.ebl";
 
 
     // defparameter

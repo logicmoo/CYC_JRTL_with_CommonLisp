@@ -53,7 +53,6 @@ public final class cyblack_list_element_object extends SubLTranslatedFile implem
 
     public static final SubLFile me = new cyblack_list_element_object();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_list_element_object";
 
     // // Definitions
     public static final SubLObject get_cyblack_list_element_object_qua_list_element_parent_links(SubLObject v_cyblack_list_element_object) {

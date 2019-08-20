@@ -179,7 +179,6 @@ public final class lexicon_cache extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new lexicon_cache();
 
- public static final String myName = "com.cyc.cycjava.cycl.lexicon_cache";
 
 
     // deflexical

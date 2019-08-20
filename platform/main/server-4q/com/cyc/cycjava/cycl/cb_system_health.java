@@ -49,7 +49,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class cb_system_health extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new cb_system_health();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.cb_system_health";
 
 
     // defparameter

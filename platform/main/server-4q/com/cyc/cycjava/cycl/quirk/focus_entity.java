@@ -143,7 +143,6 @@ public final class focus_entity extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new focus_entity();
 
- public static final String myName = "com.cyc.cycjava.cycl.quirk.focus_entity";
 
 
     // Internal Constants

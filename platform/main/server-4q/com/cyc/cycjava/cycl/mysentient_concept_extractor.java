@@ -46,7 +46,6 @@ public final class mysentient_concept_extractor extends SubLTranslatedFile imple
 
     public static final SubLFile me = new mysentient_concept_extractor();
 
-    public static final String myName = "com.cyc.cycjava.cycl.mysentient_concept_extractor";
 
     // // Definitions
     /**

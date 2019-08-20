@@ -99,7 +99,6 @@ public final class cb_similarity extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new cb_similarity();
 
- public static final String myName = "com.cyc.cycjava.cycl.cb_similarity";
 
 
     static private final SubLString $str1$blue_gif = makeString("blue.gif");

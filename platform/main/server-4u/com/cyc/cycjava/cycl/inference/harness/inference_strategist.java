@@ -158,7 +158,6 @@ public final class inference_strategist extends SubLTranslatedFile implements V1
 
     public static final SubLFile me = new inference_strategist();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.harness.inference_strategist";
 
 
     // defvar

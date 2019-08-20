@@ -111,7 +111,6 @@ public final class halo_qa_interface extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new halo_qa_interface();
 
-    public static final String myName = "com.cyc.cycjava.cycl.halo_qa_interface";
 
     // // Definitions
     // defparameter

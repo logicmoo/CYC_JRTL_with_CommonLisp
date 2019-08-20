@@ -39,7 +39,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_subset_of extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_subset_of";
     public static String myFingerPrint = "d858e5df7b3a48113aa127e4351ba14762b1a95c30ec588b671b6258bc4c40d6";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-subset-of.lisp", position = 4000L)
     private static SubLSymbol $removal_subsetof_theset_theset_cost$;
@@ -429,29 +428,29 @@ public class removal_modules_subset_of extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_subset_of_file() {
-        declareFunction(myName, "make_subsetof_hl_support", "MAKE-SUBSETOF-HL-SUPPORT", 1, 2, false);
-        declareFunction(myName, "removal_subsetof_theset_theset_pos_expand", "REMOVAL-SUBSETOF-THESET-THESET-POS-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_subsetof_theset_theset_neg_expand", "REMOVAL-SUBSETOF-THESET-THESET-NEG-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_subsetof_theset_thesetof_pos_expand", "REMOVAL-SUBSETOF-THESET-THESETOF-POS-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_subsetof_theset_thesetof_neg_expand", "REMOVAL-SUBSETOF-THESET-THESETOF-NEG-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_subsetof_thesetof_fort_pos_expand", "REMOVAL-SUBSETOF-THESETOF-FORT-POS-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_subsetof_thesetof_fort_neg_expand", "REMOVAL-SUBSETOF-THESETOF-FORT-NEG-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_subsetof_thesetof_fort_expand", "REMOVAL-SUBSETOF-THESETOF-FORT-EXPAND", 2, 0, false);
-        declareFunction(myName, "inference_hypothesize_element", "INFERENCE-HYPOTHESIZE-ELEMENT", 1, 1, false);
-        declareFunction(myName, "removal_genls_thecollectionof_fort_pos_expand", "REMOVAL-GENLS-THECOLLECTIONOF-FORT-POS-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_genls_thecollectionof_fort_neg_expand", "REMOVAL-GENLS-THECOLLECTIONOF-FORT-NEG-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_subsetof_thesetof_thesetof_pos_expand", "REMOVAL-SUBSETOF-THESETOF-THESETOF-POS-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_subsetof_thesetof_thesetof_neg_expand", "REMOVAL-SUBSETOF-THESETOF-THESETOF-NEG-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_subsetof_thesetof_thesetof_expand", "REMOVAL-SUBSETOF-THESETOF-THESETOF-EXPAND", 2, 0, false);
-        declareFunction(myName, "removal_genls_thecollectionof_thecollectionof_pos_expand", "REMOVAL-GENLS-THECOLLECTIONOF-THECOLLECTIONOF-POS-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_genls_thecollectionof_thecollectionof_neg_expand", "REMOVAL-GENLS-THECOLLECTIONOF-THECOLLECTIONOF-NEG-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_subsetof_variable_theset_cost", "REMOVAL-SUBSETOF-VARIABLE-THESET-COST", 1, 0, false);
-        declareFunction(myName, "removal_subsetof_variable_theset_expand", "REMOVAL-SUBSETOF-VARIABLE-THESET-EXPAND", 2, 0, false);
-        declareFunction(myName, "small_extensional_set_wrt_powersetP", "SMALL-EXTENSIONAL-SET-WRT-POWERSET?", 1, 0, false);
-        declareFunction(myName, "all_extensional_set_elements_unboundP", "ALL-EXTENSIONAL-SET-ELEMENTS-UNBOUND?", 1, 0, false);
-        declareFunction(myName, "removal_subsetof_not_fully_bound_theset_expand", "REMOVAL-SUBSETOF-NOT-FULLY-BOUND-THESET-EXPAND", 2, 0, false);
-        declareFunction(myName, "make_empty_set_support", "MAKE-EMPTY-SET-SUPPORT", 0, 0, false);
-        declareFunction(myName, "removal_subsetof_theemptyset_set_or_collection_expand", "REMOVAL-SUBSETOF-THEEMPTYSET-SET-OR-COLLECTION-EXPAND", 1, 1, false);
+        declareFunction("make_subsetof_hl_support", "MAKE-SUBSETOF-HL-SUPPORT", 1, 2, false);
+        declareFunction("removal_subsetof_theset_theset_pos_expand", "REMOVAL-SUBSETOF-THESET-THESET-POS-EXPAND", 1, 1, false);
+        declareFunction("removal_subsetof_theset_theset_neg_expand", "REMOVAL-SUBSETOF-THESET-THESET-NEG-EXPAND", 1, 1, false);
+        declareFunction("removal_subsetof_theset_thesetof_pos_expand", "REMOVAL-SUBSETOF-THESET-THESETOF-POS-EXPAND", 1, 1, false);
+        declareFunction("removal_subsetof_theset_thesetof_neg_expand", "REMOVAL-SUBSETOF-THESET-THESETOF-NEG-EXPAND", 1, 1, false);
+        declareFunction("removal_subsetof_thesetof_fort_pos_expand", "REMOVAL-SUBSETOF-THESETOF-FORT-POS-EXPAND", 1, 1, false);
+        declareFunction("removal_subsetof_thesetof_fort_neg_expand", "REMOVAL-SUBSETOF-THESETOF-FORT-NEG-EXPAND", 1, 1, false);
+        declareFunction("removal_subsetof_thesetof_fort_expand", "REMOVAL-SUBSETOF-THESETOF-FORT-EXPAND", 2, 0, false);
+        declareFunction("inference_hypothesize_element", "INFERENCE-HYPOTHESIZE-ELEMENT", 1, 1, false);
+        declareFunction("removal_genls_thecollectionof_fort_pos_expand", "REMOVAL-GENLS-THECOLLECTIONOF-FORT-POS-EXPAND", 1, 1, false);
+        declareFunction("removal_genls_thecollectionof_fort_neg_expand", "REMOVAL-GENLS-THECOLLECTIONOF-FORT-NEG-EXPAND", 1, 1, false);
+        declareFunction("removal_subsetof_thesetof_thesetof_pos_expand", "REMOVAL-SUBSETOF-THESETOF-THESETOF-POS-EXPAND", 1, 1, false);
+        declareFunction("removal_subsetof_thesetof_thesetof_neg_expand", "REMOVAL-SUBSETOF-THESETOF-THESETOF-NEG-EXPAND", 1, 1, false);
+        declareFunction("removal_subsetof_thesetof_thesetof_expand", "REMOVAL-SUBSETOF-THESETOF-THESETOF-EXPAND", 2, 0, false);
+        declareFunction("removal_genls_thecollectionof_thecollectionof_pos_expand", "REMOVAL-GENLS-THECOLLECTIONOF-THECOLLECTIONOF-POS-EXPAND", 1, 1, false);
+        declareFunction("removal_genls_thecollectionof_thecollectionof_neg_expand", "REMOVAL-GENLS-THECOLLECTIONOF-THECOLLECTIONOF-NEG-EXPAND", 1, 1, false);
+        declareFunction("removal_subsetof_variable_theset_cost", "REMOVAL-SUBSETOF-VARIABLE-THESET-COST", 1, 0, false);
+        declareFunction("removal_subsetof_variable_theset_expand", "REMOVAL-SUBSETOF-VARIABLE-THESET-EXPAND", 2, 0, false);
+        declareFunction("small_extensional_set_wrt_powersetP", "SMALL-EXTENSIONAL-SET-WRT-POWERSET?", 1, 0, false);
+        declareFunction("all_extensional_set_elements_unboundP", "ALL-EXTENSIONAL-SET-ELEMENTS-UNBOUND?", 1, 0, false);
+        declareFunction("removal_subsetof_not_fully_bound_theset_expand", "REMOVAL-SUBSETOF-NOT-FULLY-BOUND-THESET-EXPAND", 2, 0, false);
+        declareFunction("make_empty_set_support", "MAKE-EMPTY-SET-SUPPORT", 0, 0, false);
+        declareFunction("removal_subsetof_theemptyset_set_or_collection_expand", "REMOVAL-SUBSETOF-THEEMPTYSET-SET-OR-COLLECTION-EXPAND", 1, 1, false);
         return NIL;
     }
 

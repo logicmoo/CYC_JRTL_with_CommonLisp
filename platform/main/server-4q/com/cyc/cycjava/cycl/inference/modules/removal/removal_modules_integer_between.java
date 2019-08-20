@@ -39,7 +39,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_integer_between extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_integer_between";
     public static String myFingerPrint = "c48cb2be6f75355a028581e7ba74c464d2c2851f7a52d513740187740b727e1b";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-integer-between.lisp", position = 700L)
     private static SubLSymbol $default_integer_between_check_cost$;
@@ -308,15 +307,15 @@ public class removal_modules_integer_between extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_integer_between_file() {
-        declareFunction(myName, "removal_integer_between_check_expand", "REMOVAL-INTEGER-BETWEEN-CHECK-EXPAND", 1, 1, false);
-        declareFunction(myName, "make_integer_between_support", "MAKE-INTEGER-BETWEEN-SUPPORT", 3, 1, false);
-        declareFunction(myName, "removal_integer_between_unify_cost", "REMOVAL-INTEGER-BETWEEN-UNIFY-COST", 1, 1, false);
-        declareFunction(myName, "removal_integer_between_verify", "REMOVAL-INTEGER-BETWEEN-VERIFY", 1, 0, false);
-        declareFunction(myName, "removal_not_integer_between_check_expand", "REMOVAL-NOT-INTEGER-BETWEEN-CHECK-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_conjunctive_integer_between_applicability", "REMOVAL-CONJUNCTIVE-INTEGER-BETWEEN-APPLICABILITY", 1, 0, false);
-        declareFunction(myName, "removal_conjunctive_integer_between_cost", "REMOVAL-CONJUNCTIVE-INTEGER-BETWEEN-COST", 1, 0, false);
-        declareFunction(myName, "removal_conjunctive_integer_between_expand", "REMOVAL-CONJUNCTIVE-INTEGER-BETWEEN-EXPAND", 1, 0, false);
-        declareFunction(myName, "removal_conjunctive_integer_between_destructure", "REMOVAL-CONJUNCTIVE-INTEGER-BETWEEN-DESTRUCTURE", 1, 0, false);
+        declareFunction("removal_integer_between_check_expand", "REMOVAL-INTEGER-BETWEEN-CHECK-EXPAND", 1, 1, false);
+        declareFunction("make_integer_between_support", "MAKE-INTEGER-BETWEEN-SUPPORT", 3, 1, false);
+        declareFunction("removal_integer_between_unify_cost", "REMOVAL-INTEGER-BETWEEN-UNIFY-COST", 1, 1, false);
+        declareFunction("removal_integer_between_verify", "REMOVAL-INTEGER-BETWEEN-VERIFY", 1, 0, false);
+        declareFunction("removal_not_integer_between_check_expand", "REMOVAL-NOT-INTEGER-BETWEEN-CHECK-EXPAND", 1, 1, false);
+        declareFunction("removal_conjunctive_integer_between_applicability", "REMOVAL-CONJUNCTIVE-INTEGER-BETWEEN-APPLICABILITY", 1, 0, false);
+        declareFunction("removal_conjunctive_integer_between_cost", "REMOVAL-CONJUNCTIVE-INTEGER-BETWEEN-COST", 1, 0, false);
+        declareFunction("removal_conjunctive_integer_between_expand", "REMOVAL-CONJUNCTIVE-INTEGER-BETWEEN-EXPAND", 1, 0, false);
+        declareFunction("removal_conjunctive_integer_between_destructure", "REMOVAL-CONJUNCTIVE-INTEGER-BETWEEN-DESTRUCTURE", 1, 0, false);
         return NIL;
     }
 

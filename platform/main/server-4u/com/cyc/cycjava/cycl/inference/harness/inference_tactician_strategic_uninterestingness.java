@@ -79,7 +79,6 @@ public final class inference_tactician_strategic_uninterestingness extends SubLT
 
     public static final SubLFile me = new inference_tactician_strategic_uninterestingness();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.harness.inference_tactician_strategic_uninterestingness";
 
 
     // defparameter

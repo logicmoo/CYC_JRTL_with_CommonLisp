@@ -46,7 +46,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class kb_hl_support_manager extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new kb_hl_support_manager();
 
- public static final String myName = "com.cyc.cycjava.cycl.kb_hl_support_manager";
 
 
     // deflexical

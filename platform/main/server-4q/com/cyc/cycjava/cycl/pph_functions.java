@@ -34,7 +34,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class pph_functions extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new pph_functions();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.pph_functions";
 
 
 

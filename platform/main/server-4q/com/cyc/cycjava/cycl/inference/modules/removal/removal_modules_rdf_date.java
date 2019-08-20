@@ -50,7 +50,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_rdf_date extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_rdf_date";
 	public static String myFingerPrint = "fe1b3a19d2bd14ff9e5e7bc9ccff1778373342e2d8257c0e94c5ecd017d01aec";
 	@SubL(source = "cycl/inference/modules/removal/removal-modules-rdf-date.lisp", position = 9700L)
 	private static SubLSymbol $rdf_date_debugP$;
@@ -707,42 +706,42 @@ public class removal_modules_rdf_date extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_removal_modules_rdf_date_file() {
-		declareFunction(myName, "removal_rdf_date_unify_arg1", "REMOVAL-RDF-DATE-UNIFY-ARG1", 1, 1, false);
-		declareFunction(myName, "removal_rdf_date_unify_arg2", "REMOVAL-RDF-DATE-UNIFY-ARG2", 1, 1, false);
-		declareFunction(myName, "removal_rdf_date_check_expand", "REMOVAL-RDF-DATE-CHECK-EXPAND", 1, 1, false);
-		declareFunction(myName, "construct_time_literal", "CONSTRUCT-TIME-LITERAL", 1, 0, false);
-		declareFunction(myName, "removal_time_interval_spec_check_expand", "REMOVAL-TIME-INTERVAL-SPEC-CHECK-EXPAND", 1,
+		declareFunction("removal_rdf_date_unify_arg1", "REMOVAL-RDF-DATE-UNIFY-ARG1", 1, 1, false);
+		declareFunction("removal_rdf_date_unify_arg2", "REMOVAL-RDF-DATE-UNIFY-ARG2", 1, 1, false);
+		declareFunction("removal_rdf_date_check_expand", "REMOVAL-RDF-DATE-CHECK-EXPAND", 1, 1, false);
+		declareFunction("construct_time_literal", "CONSTRUCT-TIME-LITERAL", 1, 0, false);
+		declareFunction("removal_time_interval_spec_check_expand", "REMOVAL-TIME-INTERVAL-SPEC-CHECK-EXPAND", 1,
 				1, false);
-		declareFunction(myName, "removal_time_interval_spec_unify_arg1", "REMOVAL-TIME-INTERVAL-SPEC-UNIFY-ARG1", 1, 1,
+		declareFunction("removal_time_interval_spec_unify_arg1", "REMOVAL-TIME-INTERVAL-SPEC-UNIFY-ARG1", 1, 1,
 				false);
-		declareFunction(myName, "removal_time_interval_spec_unify_arg2", "REMOVAL-TIME-INTERVAL-SPEC-UNIFY-ARG2", 1, 1,
+		declareFunction("removal_time_interval_spec_unify_arg2", "REMOVAL-TIME-INTERVAL-SPEC-UNIFY-ARG2", 1, 1,
 				false);
-		declareFunction(myName, "cycl_time_interval_to_rdf", "CYCL-TIME-INTERVAL-TO-RDF", 1, 1, false);
-		declareFunction(myName, "output_time_interval_terminus_range", "OUTPUT-TIME-INTERVAL-TERMINUS-RANGE", 4, 0,
+		declareFunction("cycl_time_interval_to_rdf", "CYCL-TIME-INTERVAL-TO-RDF", 1, 1, false);
+		declareFunction("output_time_interval_terminus_range", "OUTPUT-TIME-INTERVAL-TERMINUS-RANGE", 4, 0,
 				false);
-		declareFunction(myName, "output_time_interval_terminus", "OUTPUT-TIME-INTERVAL-TERMINUS", 3, 0, false);
-		declareFunction(myName, "output_duration_range_spec", "OUTPUT-DURATION-RANGE-SPEC", 5, 0, false);
-		declareFunction(myName, "output_duration_spec", "OUTPUT-DURATION-SPEC", 2, 0, false);
-		declareFunction(myName, "earliest_possible_start_day", "EARLIEST-POSSIBLE-START-DAY", 1, 0, false);
-		declareFunction(myName, "earliest_possible_end_day", "EARLIEST-POSSIBLE-END-DAY", 1, 0, false);
-		declareFunction(myName, "latest_possible_start_day", "LATEST-POSSIBLE-START-DAY", 1, 0, false);
-		declareFunction(myName, "latest_possible_end_day", "LATEST-POSSIBLE-END-DAY", 1, 0, false);
-		declareFunction(myName, "cycl_date_to_rdf", "CYCL-DATE-TO-RDF", 1, 0, false);
-		declareFunction(myName, "rdf_time_interval_to_cycl", "RDF-TIME-INTERVAL-TO-CYCL", 1, 0, false);
-		declareFunction(myName, "duration_tokens_p", "DURATION-TOKENS-P", 1, 0, false);
-		declareFunction(myName, "rdf_time_interval_tokens_to_cycl", "RDF-TIME-INTERVAL-TOKENS-TO-CYCL", 1, 0, false);
-		declareFunction(myName, "make_possibly_indefinite_time_interval", "MAKE-POSSIBLY-INDEFINITE-TIME-INTERVAL", 2,
+		declareFunction("output_time_interval_terminus", "OUTPUT-TIME-INTERVAL-TERMINUS", 3, 0, false);
+		declareFunction("output_duration_range_spec", "OUTPUT-DURATION-RANGE-SPEC", 5, 0, false);
+		declareFunction("output_duration_spec", "OUTPUT-DURATION-SPEC", 2, 0, false);
+		declareFunction("earliest_possible_start_day", "EARLIEST-POSSIBLE-START-DAY", 1, 0, false);
+		declareFunction("earliest_possible_end_day", "EARLIEST-POSSIBLE-END-DAY", 1, 0, false);
+		declareFunction("latest_possible_start_day", "LATEST-POSSIBLE-START-DAY", 1, 0, false);
+		declareFunction("latest_possible_end_day", "LATEST-POSSIBLE-END-DAY", 1, 0, false);
+		declareFunction("cycl_date_to_rdf", "CYCL-DATE-TO-RDF", 1, 0, false);
+		declareFunction("rdf_time_interval_to_cycl", "RDF-TIME-INTERVAL-TO-CYCL", 1, 0, false);
+		declareFunction("duration_tokens_p", "DURATION-TOKENS-P", 1, 0, false);
+		declareFunction("rdf_time_interval_tokens_to_cycl", "RDF-TIME-INTERVAL-TOKENS-TO-CYCL", 1, 0, false);
+		declareFunction("make_possibly_indefinite_time_interval", "MAKE-POSSIBLY-INDEFINITE-TIME-INTERVAL", 2,
 				0, false);
-		declareFunction(myName, "sometimify_interval", "SOMETIMIFY-INTERVAL", 1, 0, false);
-		declareFunction(myName, "sometime_interval_p", "SOMETIME-INTERVAL-P", 1, 0, false);
-		declareFunction(myName, "possibly_indefinite_time_intervals_equalP",
+		declareFunction("sometimify_interval", "SOMETIMIFY-INTERVAL", 1, 0, false);
+		declareFunction("sometime_interval_p", "SOMETIME-INTERVAL-P", 1, 0, false);
+		declareFunction("possibly_indefinite_time_intervals_equalP",
 				"POSSIBLY-INDEFINITE-TIME-INTERVALS-EQUAL?", 2, 0, false);
-		declareFunction(myName, "rdf_time_interval_to_cycl_results_okayP", "RDF-TIME-INTERVAL-TO-CYCL-RESULTS-OKAY?", 2,
+		declareFunction("rdf_time_interval_to_cycl_results_okayP", "RDF-TIME-INTERVAL-TO-CYCL-RESULTS-OKAY?", 2,
 				0, false);
-		declareFunction(myName, "indeterminate_time_intervals_equalP", "INDETERMINATE-TIME-INTERVALS-EQUAL?", 2, 0,
+		declareFunction("indeterminate_time_intervals_equalP", "INDETERMINATE-TIME-INTERVALS-EQUAL?", 2, 0,
 				false);
-		declareFunction(myName, "anonymize_sometimes", "ANONYMIZE-SOMETIMES", 1, 0, false);
-		declareFunction(myName, "get_sometime_dummy", "GET-SOMETIME-DUMMY", 1, 0, false);
+		declareFunction("anonymize_sometimes", "ANONYMIZE-SOMETIMES", 1, 0, false);
+		declareFunction("get_sometime_dummy", "GET-SOMETIME-DUMMY", 1, 0, false);
 		return NIL;
 	}
 

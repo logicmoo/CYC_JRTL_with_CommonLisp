@@ -141,7 +141,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class cb_proof_view extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new cb_proof_view();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.cb_proof_view";
 
 
 

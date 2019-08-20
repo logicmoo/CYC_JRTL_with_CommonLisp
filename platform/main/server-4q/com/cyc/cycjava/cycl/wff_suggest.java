@@ -58,7 +58,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class wff_suggest extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new wff_suggest();
 
- public static final String myName = "com.cyc.cycjava.cycl.wff_suggest";
 
 
     // defparameter

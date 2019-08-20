@@ -65,7 +65,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class open_cyc_simple_inference_api extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.open_cyc_simple_inference_api";
     public static String myFingerPrint = "146335e13ec352d6dde2420b329a049e5d8e0c91bbff5e1ae6c9ffa2deef250f";
     @SubL(source = "cycl/inference/open-cyc-simple-inference-api.lisp", position = 900L)
     private static SubLSymbol $simple_query_default_mt$;
@@ -857,33 +856,33 @@ public class open_cyc_simple_inference_api extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_open_cyc_simple_inference_api_file() {
-        declareFunction(myName, "get_simple_query_default_mt", "GET-SIMPLE-QUERY-DEFAULT-MT", 0, 0, false);
-        declareFunction(myName, "get_simple_query_default_nl_mt", "GET-SIMPLE-QUERY-DEFAULT-NL-MT", 0, 0, false);
-        declareFunction(myName, "simple_boolean_query_external_id", "SIMPLE-BOOLEAN-QUERY-EXTERNAL-ID", 2, 2, false);
-        declareFunction(myName, "simple_boolean_query_cycl", "SIMPLE-BOOLEAN-QUERY-CYCL", 2, 2, false);
-        declareFunction(myName, "simple_boolean_query_nl", "SIMPLE-BOOLEAN-QUERY-NL", 2, 3, false);
-        declareFunction(myName, "clear_nl_query_denots_of_string", "CLEAR-NL-QUERY-DENOTS-OF-STRING", 0, 0, false);
-        declareFunction(myName, "remove_nl_query_denots_of_string", "REMOVE-NL-QUERY-DENOTS-OF-STRING", 1, 1, false);
-        declareFunction(myName, "nl_query_denots_of_string_internal", "NL-QUERY-DENOTS-OF-STRING-INTERNAL", 2, 0, false);
-        declareFunction(myName, "nl_query_denots_of_string", "NL-QUERY-DENOTS-OF-STRING", 1, 1, false);
-        declareFunction(myName, "add_quantifiers_if_needed", "ADD-QUANTIFIERS-IF-NEEDED", 2, 0, false);
-        declareFunction(myName, "term_order_integer", "TERM-ORDER-INTEGER", 1, 0, false);
-        declareFunction(myName, "clear_first_order_collectionP", "CLEAR-FIRST-ORDER-COLLECTION?", 0, 0, false);
-        declareFunction(myName, "remove_first_order_collectionP", "REMOVE-FIRST-ORDER-COLLECTION?", 1, 1, false);
-        declareFunction(myName, "first_order_collectionP_internal", "FIRST-ORDER-COLLECTION?-INTERNAL", 2, 0, false);
-        declareFunction(myName, "first_order_collectionP", "FIRST-ORDER-COLLECTION?", 1, 1, false);
-        declareFunction(myName, "clear_variable_order_collectionP", "CLEAR-VARIABLE-ORDER-COLLECTION?", 0, 0, false);
-        declareFunction(myName, "remove_variable_order_collectionP", "REMOVE-VARIABLE-ORDER-COLLECTION?", 1, 1, false);
-        declareFunction(myName, "variable_order_collectionP_internal", "VARIABLE-ORDER-COLLECTION?-INTERNAL", 2, 0, false);
-        declareFunction(myName, "variable_order_collectionP", "VARIABLE-ORDER-COLLECTION?", 1, 1, false);
-        declareFunction(myName, "pred_arg_expected_order", "PRED-ARG-EXPECTED-ORDER", 2, 0, false);
-        declareFunction(myName, "get_semtrans_sentences", "GET-SEMTRANS-SENTENCES", 2, 0, false);
-        declareFunction(myName, "add_quantifiers_to_semtrans_if_needed", "ADD-QUANTIFIERS-TO-SEMTRANS-IF-NEEDED", 3, 1, false);
-        declareFunction(myName, "arg_expected_order_from_constraints", "ARG-EXPECTED-ORDER-FROM-CONSTRAINTS", 2, 0, false);
-        declareFunction(myName, "get_simple_inference_semtrans_lexicon", "GET-SIMPLE-INFERENCE-SEMTRANS-LEXICON", 0, 0, false);
-        declareFunction(myName, "make_simple_inference_semtrans_lexicon", "MAKE-SIMPLE-INFERENCE-SEMTRANS-LEXICON", 0, 0, false);
-        declareFunction(myName, "simple_boolean_query_test", "SIMPLE-BOOLEAN-QUERY-TEST", 2, 2, false);
-        declareFunction(myName, "simple_boolean_query_nl_test", "SIMPLE-BOOLEAN-QUERY-NL-TEST", 2, 0, false);
+        declareFunction("get_simple_query_default_mt", "GET-SIMPLE-QUERY-DEFAULT-MT", 0, 0, false);
+        declareFunction("get_simple_query_default_nl_mt", "GET-SIMPLE-QUERY-DEFAULT-NL-MT", 0, 0, false);
+        declareFunction("simple_boolean_query_external_id", "SIMPLE-BOOLEAN-QUERY-EXTERNAL-ID", 2, 2, false);
+        declareFunction("simple_boolean_query_cycl", "SIMPLE-BOOLEAN-QUERY-CYCL", 2, 2, false);
+        declareFunction("simple_boolean_query_nl", "SIMPLE-BOOLEAN-QUERY-NL", 2, 3, false);
+        declareFunction("clear_nl_query_denots_of_string", "CLEAR-NL-QUERY-DENOTS-OF-STRING", 0, 0, false);
+        declareFunction("remove_nl_query_denots_of_string", "REMOVE-NL-QUERY-DENOTS-OF-STRING", 1, 1, false);
+        declareFunction("nl_query_denots_of_string_internal", "NL-QUERY-DENOTS-OF-STRING-INTERNAL", 2, 0, false);
+        declareFunction("nl_query_denots_of_string", "NL-QUERY-DENOTS-OF-STRING", 1, 1, false);
+        declareFunction("add_quantifiers_if_needed", "ADD-QUANTIFIERS-IF-NEEDED", 2, 0, false);
+        declareFunction("term_order_integer", "TERM-ORDER-INTEGER", 1, 0, false);
+        declareFunction("clear_first_order_collectionP", "CLEAR-FIRST-ORDER-COLLECTION?", 0, 0, false);
+        declareFunction("remove_first_order_collectionP", "REMOVE-FIRST-ORDER-COLLECTION?", 1, 1, false);
+        declareFunction("first_order_collectionP_internal", "FIRST-ORDER-COLLECTION?-INTERNAL", 2, 0, false);
+        declareFunction("first_order_collectionP", "FIRST-ORDER-COLLECTION?", 1, 1, false);
+        declareFunction("clear_variable_order_collectionP", "CLEAR-VARIABLE-ORDER-COLLECTION?", 0, 0, false);
+        declareFunction("remove_variable_order_collectionP", "REMOVE-VARIABLE-ORDER-COLLECTION?", 1, 1, false);
+        declareFunction("variable_order_collectionP_internal", "VARIABLE-ORDER-COLLECTION?-INTERNAL", 2, 0, false);
+        declareFunction("variable_order_collectionP", "VARIABLE-ORDER-COLLECTION?", 1, 1, false);
+        declareFunction("pred_arg_expected_order", "PRED-ARG-EXPECTED-ORDER", 2, 0, false);
+        declareFunction("get_semtrans_sentences", "GET-SEMTRANS-SENTENCES", 2, 0, false);
+        declareFunction("add_quantifiers_to_semtrans_if_needed", "ADD-QUANTIFIERS-TO-SEMTRANS-IF-NEEDED", 3, 1, false);
+        declareFunction("arg_expected_order_from_constraints", "ARG-EXPECTED-ORDER-FROM-CONSTRAINTS", 2, 0, false);
+        declareFunction("get_simple_inference_semtrans_lexicon", "GET-SIMPLE-INFERENCE-SEMTRANS-LEXICON", 0, 0, false);
+        declareFunction("make_simple_inference_semtrans_lexicon", "MAKE-SIMPLE-INFERENCE-SEMTRANS-LEXICON", 0, 0, false);
+        declareFunction("simple_boolean_query_test", "SIMPLE-BOOLEAN-QUERY-TEST", 2, 2, false);
+        declareFunction("simple_boolean_query_nl_test", "SIMPLE-BOOLEAN-QUERY-NL-TEST", 2, 0, false);
         return NIL;
     }
 

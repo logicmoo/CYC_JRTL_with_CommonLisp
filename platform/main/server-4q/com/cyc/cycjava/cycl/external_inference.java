@@ -22,7 +22,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class external_inference extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new external_inference();
 
- public static final String myName = "com.cyc.cycjava.cycl.external_inference";
 
 
     private static final SubLSymbol EXTERNAL_REMOVAL_SERVER_REQUIRED = makeSymbol("EXTERNAL-REMOVAL-SERVER-REQUIRED");

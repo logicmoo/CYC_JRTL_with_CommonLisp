@@ -140,7 +140,6 @@ public final class learned_nouns extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new learned_nouns();
 
-    public static final String myName = "com.cyc.cycjava.cycl.nl_stats.learned_nouns";
 
     // // Definitions
     public static final SubLObject do_learned_nouns(SubLObject macroform, SubLObject environment) {

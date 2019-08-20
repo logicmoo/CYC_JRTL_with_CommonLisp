@@ -33,7 +33,6 @@ public final class cyblack_posting_dispatch_functions extends SubLTranslatedFile
 
     public static final SubLFile me = new cyblack_posting_dispatch_functions();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_posting_dispatch_functions";
 
     // // Definitions
     public static final SubLObject cyblack_posting_internalize_external_representation(SubLObject v_cyblack_posting, SubLObject external_representation) {

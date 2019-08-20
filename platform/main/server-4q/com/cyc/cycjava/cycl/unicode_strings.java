@@ -132,7 +132,6 @@ public final class unicode_strings extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new unicode_strings();
 
- public static final String myName = "com.cyc.cycjava.cycl.unicode_strings";
 
 
     // defconstant

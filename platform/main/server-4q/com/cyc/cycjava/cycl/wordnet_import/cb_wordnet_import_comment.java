@@ -103,7 +103,6 @@ public final class cb_wordnet_import_comment extends SubLTranslatedFile implemen
 
     public static final SubLFile me = new cb_wordnet_import_comment();
 
- public static final String myName = "com.cyc.cycjava.cycl.wordnet_import.cb_wordnet_import_comment";
 
 
     // defconstant

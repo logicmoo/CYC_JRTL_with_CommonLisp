@@ -50,7 +50,6 @@ public final class cb_phrase_structure_parser extends SubLTranslatedFile impleme
 
     public static final SubLFile me = new cb_phrase_structure_parser();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_phrase_structure_parser";
 
     // // Definitions
     // deflexical

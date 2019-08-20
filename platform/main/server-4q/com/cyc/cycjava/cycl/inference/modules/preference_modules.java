@@ -140,7 +140,6 @@ public final class preference_modules extends SubLTranslatedFile implements V12 
 
 	public static final SubLFile me = new preference_modules();
 
-	public static final String myName = "com.cyc.cycjava.cycl.inference.modules.preference_modules";
 
 	// defvar
 	@LispMethod(comment = "defvar")

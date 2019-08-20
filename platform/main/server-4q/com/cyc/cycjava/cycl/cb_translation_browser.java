@@ -125,7 +125,6 @@ public final class cb_translation_browser extends SubLTranslatedFile implements 
 
     public static final SubLFile me = new cb_translation_browser();
 
- public static final String myName = "com.cyc.cycjava.cycl.cb_translation_browser";
 
 
     // deflexical

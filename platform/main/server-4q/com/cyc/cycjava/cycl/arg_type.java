@@ -166,7 +166,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class arg_type extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new arg_type();
 
- public static final String myName = "com.cyc.cycjava.cycl.arg_type";
 
 
     // defparameter

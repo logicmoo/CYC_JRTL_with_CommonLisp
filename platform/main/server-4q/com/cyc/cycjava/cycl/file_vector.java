@@ -138,7 +138,6 @@ public final class file_vector extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new file_vector();
 
- public static final String myName = "com.cyc.cycjava.cycl.file_vector";
 
 
     // defconstant

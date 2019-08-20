@@ -37,7 +37,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_temporal_projection extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_temporal_projection";
 	public static String myFingerPrint = "c1139927e9efdc5589369ce813ab55044c1f39ef9693bdacc9b31b80138c8af2";
 	private static SubLObject $const0$likelihoodOfTruthOfAssertionAtTim;
 	private static SubLSymbol $kw$POS;
@@ -482,30 +481,30 @@ public class removal_modules_temporal_projection extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_removal_modules_temporal_projection_file() {
-		declareFunction(myName, "removal_likelihood_of_assertion_at_time", "REMOVAL-LIKELIHOOD-OF-ASSERTION-AT-TIME", 1,
+		declareFunction("removal_likelihood_of_assertion_at_time", "REMOVAL-LIKELIHOOD-OF-ASSERTION-AT-TIME", 1,
 				1, false);
-		declareFunction(myName, "removal_location_has_qualitative_time_of_day_at_time",
+		declareFunction("removal_location_has_qualitative_time_of_day_at_time",
 				"REMOVAL-LOCATION-HAS-QUALITATIVE-TIME-OF-DAY-AT-TIME", 1, 1, false);
-		declareFunction(myName, "removal_location_has_qualitative_time_of_day_at_time_check",
+		declareFunction("removal_location_has_qualitative_time_of_day_at_time_check",
 				"REMOVAL-LOCATION-HAS-QUALITATIVE-TIME-OF-DAY-AT-TIME-CHECK", 1, 1, false);
-		declareFunction(myName, "removal_location_has_sunrise_time", "REMOVAL-LOCATION-HAS-SUNRISE-TIME", 1, 1, false);
-		declareFunction(myName, "removal_local_sunrise_time_for_coordinates",
+		declareFunction("removal_location_has_sunrise_time", "REMOVAL-LOCATION-HAS-SUNRISE-TIME", 1, 1, false);
+		declareFunction("removal_local_sunrise_time_for_coordinates",
 				"REMOVAL-LOCAL-SUNRISE-TIME-FOR-COORDINATES", 1, 1, false);
-		declareFunction(myName, "removal_local_sunset_time_for_coordinates",
+		declareFunction("removal_local_sunset_time_for_coordinates",
 				"REMOVAL-LOCAL-SUNSET-TIME-FOR-COORDINATES", 1, 1, false);
-		declareFunction(myName, "removal_location_has_sunset_time", "REMOVAL-LOCATION-HAS-SUNSET-TIME", 1, 1, false);
-		declareFunction(myName, "removal_likelihood_of_truth_of_sentence", "REMOVAL-LIKELIHOOD-OF-TRUTH-OF-SENTENCE", 1,
+		declareFunction("removal_location_has_sunset_time", "REMOVAL-LOCATION-HAS-SUNSET-TIME", 1, 1, false);
+		declareFunction("removal_likelihood_of_truth_of_sentence", "REMOVAL-LIKELIHOOD-OF-TRUTH-OF-SENTENCE", 1,
 				1, false);
-		declareFunction(myName, "removal_time_intervals_for_sentence", "REMOVAL-TIME-INTERVALS-FOR-SENTENCE", 1, 1,
+		declareFunction("removal_time_intervals_for_sentence", "REMOVAL-TIME-INTERVALS-FOR-SENTENCE", 1, 1,
 				false);
-		declareFunction(myName, "removal_has_level_of_opaque_expertise_on_topic_with_rating",
+		declareFunction("removal_has_level_of_opaque_expertise_on_topic_with_rating",
 				"REMOVAL-HAS-LEVEL-OF-OPAQUE-EXPERTISE-ON-TOPIC-WITH-RATING", 1, 1, false);
-		declareFunction(myName, "removal_time_intervals_intersect", "REMOVAL-TIME-INTERVALS-INTERSECT", 1, 1, false);
-		declareFunction(myName, "time_intervals_intersectP", "TIME-INTERVALS-INTERSECT?", 2, 0, false);
-		declareFunction(myName, "removal_likely_close_acquaintances", "REMOVAL-LIKELY-CLOSE-ACQUAINTANCES", 1, 1,
+		declareFunction("removal_time_intervals_intersect", "REMOVAL-TIME-INTERVALS-INTERSECT", 1, 1, false);
+		declareFunction("time_intervals_intersectP", "TIME-INTERVALS-INTERSECT?", 2, 0, false);
+		declareFunction("removal_likely_close_acquaintances", "REMOVAL-LIKELY-CLOSE-ACQUAINTANCES", 1, 1,
 				false);
-		declareFunction(myName, "removal_language_spoken", "REMOVAL-LANGUAGE-SPOKEN", 1, 1, false);
-		declareFunction(myName, "removal_average_deviation_from_guidelines_in_interval",
+		declareFunction("removal_language_spoken", "REMOVAL-LANGUAGE-SPOKEN", 1, 1, false);
+		declareFunction("removal_average_deviation_from_guidelines_in_interval",
 				"REMOVAL-AVERAGE-DEVIATION-FROM-GUIDELINES-IN-INTERVAL", 1, 1, false);
 		return NIL;
 	}

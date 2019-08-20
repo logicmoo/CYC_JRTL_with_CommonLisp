@@ -129,7 +129,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
  public final class el_partitions extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new el_partitions();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.el_partitions";
 
 
     // deflexical

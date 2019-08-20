@@ -113,7 +113,6 @@ public final class system_parameters extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new system_parameters();
 
- public static final String myName = "com.cyc.cycjava.cycl.system_parameters";
 
 
 

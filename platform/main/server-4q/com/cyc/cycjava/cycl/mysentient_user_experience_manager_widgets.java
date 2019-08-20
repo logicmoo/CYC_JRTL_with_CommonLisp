@@ -54,7 +54,6 @@ public final class mysentient_user_experience_manager_widgets extends SubLTransl
 
     public static final SubLFile me = new mysentient_user_experience_manager_widgets();
 
-    public static final String myName = "com.cyc.cycjava.cycl.mysentient_user_experience_manager_widgets";
 
     // // Definitions
     // deflexical

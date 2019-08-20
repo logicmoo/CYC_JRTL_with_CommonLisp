@@ -26,7 +26,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class el_grammar extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new el_grammar();
 
- public static final String myName = "com.cyc.cycjava.cycl.el_grammar";
 
 
     // Definitions

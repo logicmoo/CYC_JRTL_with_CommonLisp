@@ -97,7 +97,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rdf_n_triples_parser extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rdf_n_triples_parser();
 
- public static final String myName = "com.cyc.cycjava.cycl.rdf.rdf_n_triples_parser";
 
 
     // deflexical

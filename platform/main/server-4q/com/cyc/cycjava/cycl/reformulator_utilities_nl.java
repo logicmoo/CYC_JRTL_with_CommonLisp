@@ -32,7 +32,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class reformulator_utilities_nl extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new reformulator_utilities_nl();
 
- public static final String myName = "com.cyc.cycjava.cycl.reformulator_utilities_nl";
 
 
     // defparameter

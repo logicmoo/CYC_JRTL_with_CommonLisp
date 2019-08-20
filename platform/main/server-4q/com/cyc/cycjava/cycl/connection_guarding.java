@@ -30,7 +30,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class connection_guarding extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new connection_guarding();
 
- public static final String myName = "com.cyc.cycjava.cycl.connection_guarding";
 
 
     // Internal Constants

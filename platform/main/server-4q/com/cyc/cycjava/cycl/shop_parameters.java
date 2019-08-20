@@ -31,7 +31,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class shop_parameters extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new shop_parameters();
 
- public static final String myName = "com.cyc.cycjava.cycl.shop_parameters";
 
 
     // deflexical

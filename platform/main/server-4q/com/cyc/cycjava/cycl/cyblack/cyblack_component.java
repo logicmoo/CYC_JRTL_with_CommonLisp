@@ -30,7 +30,6 @@ public final class cyblack_component extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cyblack_component();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_component";
 
     // // Definitions
     public static final SubLObject cyblack_component_p(SubLObject v_cyblack_component) {

@@ -71,7 +71,6 @@ public final class gaf_gathering_master extends SubLTranslatedFile implements V0
 
     public static final SubLFile me = new gaf_gathering_master();
 
-    public static final String myName = "com.cyc.cycjava.cycl.gaf_gathering_master";
 
     // // Definitions
     /**

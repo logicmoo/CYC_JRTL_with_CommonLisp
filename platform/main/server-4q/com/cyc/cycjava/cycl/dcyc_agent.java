@@ -91,7 +91,6 @@ public final class dcyc_agent extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new dcyc_agent();
 
-    public static final String myName = "com.cyc.cycjava.cycl.dcyc_agent";
 
     // // Definitions
     /**

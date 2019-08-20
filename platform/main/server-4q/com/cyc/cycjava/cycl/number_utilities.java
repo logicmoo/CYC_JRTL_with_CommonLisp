@@ -236,7 +236,6 @@ public final class number_utilities extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new number_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.number_utilities";
 
 
     // deflexical

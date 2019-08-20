@@ -12,7 +12,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_classification extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_classification";
     public static String myFingerPrint = "05f03f1656e3ea4de9bf9e9d09d875d645a2362755488d6a9b44c44425aa6595";
     private static SubLSymbol $REMOVAL_INSTANCE_GENERATOR_DAY_FN_FROM_DAY_OF_YEAR_FN;
     private static SubLList $list1;

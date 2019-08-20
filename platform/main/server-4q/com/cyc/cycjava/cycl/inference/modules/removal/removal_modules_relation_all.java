@@ -58,7 +58,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_relation_all extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_relation_all";
     public static String myFingerPrint = "2b509e8e853db926767f6557d255411fa42b69ab0c3a55b12c601d2defe7fa72";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-relation-all.lisp", position = 1300L)
     private static SubLSymbol $estimated_per_collection_relation_all_fraction$;
@@ -737,19 +736,19 @@ public class removal_modules_relation_all extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_relation_all_file() {
-        declareFunction(myName, "removal_some_relation_all_for_predicate", "REMOVAL-SOME-RELATION-ALL-FOR-PREDICATE", 1, 1, false);
-        declareFunction(myName, "removal_some_relation_all_for_collection", "REMOVAL-SOME-RELATION-ALL-FOR-COLLECTION", 1, 1, false);
-        declareFunction(myName, "relation_all_predicate_cost_estimate", "RELATION-ALL-PREDICATE-COST-ESTIMATE", 1, 0, false);
-        declareFunction(myName, "relation_all_collection_cost_estimate", "RELATION-ALL-COLLECTION-COST-ESTIMATE", 0, 0, false);
-        declareFunction(myName, "removal_relation_all_required", "REMOVAL-RELATION-ALL-REQUIRED", 1, 0, false);
-        declareFunction(myName, "make_relation_all_support", "MAKE-RELATION-ALL-SUPPORT", 0, 0, false);
-        declareFunction(myName, "removal_relation_all_check_required", "REMOVAL-RELATION-ALL-CHECK-REQUIRED", 1, 1, false);
-        declareFunction(myName, "removal_relation_all_check_expand", "REMOVAL-RELATION-ALL-CHECK-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_relation_all_check_via_collection_expand", "REMOVAL-RELATION-ALL-CHECK-VIA-COLLECTION-EXPAND", 2, 0, false);
-        declareFunction(myName, "removal_relation_all_check_via_predicate_expand", "REMOVAL-RELATION-ALL-CHECK-VIA-PREDICATE-EXPAND", 2, 0, false);
-        declareFunction(myName, "removal_relation_all_check_expand_guts", "REMOVAL-RELATION-ALL-CHECK-EXPAND-GUTS", 2, 0, false);
-        declareFunction(myName, "unary_pred_holds", "UNARY-PRED-HOLDS", 2, 1, false);
-        declareFunction(myName, "unary_pred_holds_via_relation_all", "UNARY-PRED-HOLDS-VIA-RELATION-ALL", 2, 1, false);
+        declareFunction("removal_some_relation_all_for_predicate", "REMOVAL-SOME-RELATION-ALL-FOR-PREDICATE", 1, 1, false);
+        declareFunction("removal_some_relation_all_for_collection", "REMOVAL-SOME-RELATION-ALL-FOR-COLLECTION", 1, 1, false);
+        declareFunction("relation_all_predicate_cost_estimate", "RELATION-ALL-PREDICATE-COST-ESTIMATE", 1, 0, false);
+        declareFunction("relation_all_collection_cost_estimate", "RELATION-ALL-COLLECTION-COST-ESTIMATE", 0, 0, false);
+        declareFunction("removal_relation_all_required", "REMOVAL-RELATION-ALL-REQUIRED", 1, 0, false);
+        declareFunction("make_relation_all_support", "MAKE-RELATION-ALL-SUPPORT", 0, 0, false);
+        declareFunction("removal_relation_all_check_required", "REMOVAL-RELATION-ALL-CHECK-REQUIRED", 1, 1, false);
+        declareFunction("removal_relation_all_check_expand", "REMOVAL-RELATION-ALL-CHECK-EXPAND", 1, 1, false);
+        declareFunction("removal_relation_all_check_via_collection_expand", "REMOVAL-RELATION-ALL-CHECK-VIA-COLLECTION-EXPAND", 2, 0, false);
+        declareFunction("removal_relation_all_check_via_predicate_expand", "REMOVAL-RELATION-ALL-CHECK-VIA-PREDICATE-EXPAND", 2, 0, false);
+        declareFunction("removal_relation_all_check_expand_guts", "REMOVAL-RELATION-ALL-CHECK-EXPAND-GUTS", 2, 0, false);
+        declareFunction("unary_pred_holds", "UNARY-PRED-HOLDS", 2, 1, false);
+        declareFunction("unary_pred_holds_via_relation_all", "UNARY-PRED-HOLDS-VIA-RELATION-ALL", 2, 1, false);
         return NIL;
     }
 

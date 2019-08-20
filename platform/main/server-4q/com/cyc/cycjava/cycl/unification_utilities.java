@@ -57,7 +57,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class unification_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new unification_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.unification_utilities";
 
 
     // deflexical

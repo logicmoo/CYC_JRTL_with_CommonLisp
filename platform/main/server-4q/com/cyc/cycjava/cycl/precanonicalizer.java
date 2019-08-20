@@ -75,7 +75,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class precanonicalizer extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new precanonicalizer();
 
- public static final String myName = "com.cyc.cycjava.cycl.precanonicalizer";
 
 
     private static final SubLSymbol UNICODE_STRING_P = makeSymbol("UNICODE-STRING-P");

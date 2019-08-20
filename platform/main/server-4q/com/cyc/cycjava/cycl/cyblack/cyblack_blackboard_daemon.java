@@ -56,7 +56,6 @@ public final class cyblack_blackboard_daemon extends SubLTranslatedFile implemen
 
     public static final SubLFile me = new cyblack_blackboard_daemon();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_blackboard_daemon";
 
     // // Definitions
     public static final SubLObject cyblack_blackboard_daemon_p(SubLObject v_cyblack_blackboard_daemon) {

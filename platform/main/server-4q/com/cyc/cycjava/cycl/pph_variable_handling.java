@@ -385,7 +385,6 @@ public final class pph_variable_handling extends SubLTranslatedFile implements V
 
     public static final SubLFile me = new pph_variable_handling();
 
- public static final String myName = "com.cyc.cycjava.cycl.pph_variable_handling";
 
 
     // defconstant
@@ -4935,7 +4934,6 @@ class pph_variable_handling_v2 extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new pph_variable_handling();
 
-    public static final String myName = "com.cyc.cycjava.cycl.pph_variable_handling";
 
     // defconstant
     public static final SubLSymbol $dtp_pph_var_entry$ = makeSymbol("*DTP-PPH-VAR-ENTRY*");

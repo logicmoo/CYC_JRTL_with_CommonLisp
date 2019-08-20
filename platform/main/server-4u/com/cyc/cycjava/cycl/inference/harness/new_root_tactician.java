@@ -57,7 +57,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class new_root_tactician extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new new_root_tactician();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.harness.new_root_tactician";
 
 
     // defparameter

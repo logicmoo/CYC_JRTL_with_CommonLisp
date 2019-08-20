@@ -117,7 +117,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class simple_db extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new simple_db();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.sksi.modeling_tools.schema_validator.simple_db";
 
 
 

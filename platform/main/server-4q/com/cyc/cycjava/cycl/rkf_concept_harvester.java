@@ -95,7 +95,6 @@ public final class rkf_concept_harvester extends SubLTranslatedFile implements V
 
     public static final SubLFile me = new rkf_concept_harvester();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_concept_harvester";
 
 
     // defparameter

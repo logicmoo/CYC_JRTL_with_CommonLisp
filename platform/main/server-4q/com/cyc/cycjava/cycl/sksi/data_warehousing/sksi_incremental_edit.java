@@ -128,7 +128,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sksi_incremental_edit extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sksi_incremental_edit();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_incremental_edit";
 
 
     // Internal Constants

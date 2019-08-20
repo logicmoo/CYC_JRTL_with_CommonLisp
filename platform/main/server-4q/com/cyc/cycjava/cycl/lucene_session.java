@@ -78,7 +78,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class lucene_session extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new lucene_session();
 
- public static final String myName = "com.cyc.cycjava.cycl.lucene_session";
 
 
     // defparameter

@@ -45,7 +45,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class system_parameter_types extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new system_parameter_types();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.system_parameter_types";
 
 
 

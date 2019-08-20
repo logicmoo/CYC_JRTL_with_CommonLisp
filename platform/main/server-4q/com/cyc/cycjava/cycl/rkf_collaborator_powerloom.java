@@ -64,7 +64,6 @@ public final class rkf_collaborator_powerloom extends SubLTranslatedFile impleme
 
     public static final SubLFile me = new rkf_collaborator_powerloom();
 
-    public static final String myName = "com.cyc.cycjava.cycl.rkf_collaborator_powerloom";
 
     // // Definitions
     // defparameter

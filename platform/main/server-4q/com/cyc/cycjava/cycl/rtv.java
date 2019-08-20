@@ -59,7 +59,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rtv extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new rtv();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.rtv";
 
 
     // defvar

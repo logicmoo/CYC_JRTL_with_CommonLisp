@@ -142,7 +142,6 @@ public final class c_backend extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new c_backend();
 
- public static final String myName = "com.cyc.cycjava.cycl.c_backend";
 
 
     // defparameter

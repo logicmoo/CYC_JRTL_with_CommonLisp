@@ -62,7 +62,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class decision_tree extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new decision_tree();
 
- public static final String myName = "com.cyc.cycjava.cycl.decision_tree";
 
 
     // defparameter

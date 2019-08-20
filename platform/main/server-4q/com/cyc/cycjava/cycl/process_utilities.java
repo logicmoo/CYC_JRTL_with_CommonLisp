@@ -520,7 +520,6 @@ public class process_utilities extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new process_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.process_utilities";
 
 
     // deflexical

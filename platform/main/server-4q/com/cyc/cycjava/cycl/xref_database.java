@@ -475,7 +475,6 @@ public final class xref_database extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new xref_database();
 
- public static final String myName = "com.cyc.cycjava.cycl.xref_database";
 
 
     // deflexical

@@ -132,7 +132,6 @@ public final class cyc_file_dependencies extends SubLTranslatedFile implements V
 
     public static final SubLFile me = new cyc_file_dependencies();
 
- public static final String myName = "com.cyc.cycjava.cycl.cyc_file_dependencies";
 
 
     // defparameter

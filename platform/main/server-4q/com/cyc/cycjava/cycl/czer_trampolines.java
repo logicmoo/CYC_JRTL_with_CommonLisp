@@ -28,7 +28,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class czer_trampolines extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new czer_trampolines();
 
- public static final String myName = "com.cyc.cycjava.cycl.czer_trampolines";
 
 
     private static final SubLSymbol CZER_ARGN_QUOTED_ISA_INT = makeSymbol("CZER-ARGN-QUOTED-ISA-INT");

@@ -103,7 +103,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class hl_transcript_tracing extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new hl_transcript_tracing();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.hl_transcript_tracing";
 
 
     // deflexical

@@ -168,7 +168,6 @@ public final class rdf_utilities extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new rdf_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.rdf.rdf_utilities";
 
 
     // deflexical

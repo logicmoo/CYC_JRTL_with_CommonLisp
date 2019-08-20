@@ -68,7 +68,6 @@ public final class kbi_skolem extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new kbi_skolem();
 
-    public static final String myName = "com.cyc.cycjava.cycl.kbi_skolem";
 
     // // Definitions
     public static final SubLObject diagnose_qua_skolem(SubLObject skolem) {

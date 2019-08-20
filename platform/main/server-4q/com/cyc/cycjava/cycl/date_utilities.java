@@ -235,7 +235,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new date_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.date_utilities";
 
 
     // deflexical

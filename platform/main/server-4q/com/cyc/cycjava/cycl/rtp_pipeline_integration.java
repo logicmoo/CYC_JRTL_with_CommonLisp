@@ -65,7 +65,6 @@ public final class rtp_pipeline_integration extends SubLTranslatedFile implement
 
     public static final SubLFile me = new rtp_pipeline_integration();
 
-    public static final String myName = "com.cyc.cycjava.cycl.rtp_pipeline_integration";
 
     // // Definitions
     // deflexical

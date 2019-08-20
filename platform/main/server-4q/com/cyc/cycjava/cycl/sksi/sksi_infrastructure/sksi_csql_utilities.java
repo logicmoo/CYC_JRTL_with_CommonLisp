@@ -131,7 +131,6 @@ public final class sksi_csql_utilities extends SubLTranslatedFile implements V12
 
     public static final SubLFile me = new sksi_csql_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_csql_utilities";
 
 
     // deflexical

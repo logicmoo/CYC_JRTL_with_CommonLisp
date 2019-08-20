@@ -139,7 +139,6 @@ public final class web_game extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new web_game();
 
- public static final String myName = "com.cyc.cycjava.cycl.butler.web_game";
 
 
     // defparameter

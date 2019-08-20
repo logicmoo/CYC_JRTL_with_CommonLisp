@@ -63,7 +63,6 @@ public final class sunit_external extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new sunit_external();
 
- public static final String myName = "com.cyc.cycjava.cycl.sunit_external";
 
 
     // Definitions

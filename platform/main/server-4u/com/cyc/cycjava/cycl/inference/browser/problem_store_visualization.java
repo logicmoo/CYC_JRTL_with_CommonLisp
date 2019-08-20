@@ -317,7 +317,6 @@ public final class problem_store_visualization extends SubLTranslatedFile implem
 
     public static final SubLFile me = new problem_store_visualization();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.browser.problem_store_visualization";
 
 
     // defconstant

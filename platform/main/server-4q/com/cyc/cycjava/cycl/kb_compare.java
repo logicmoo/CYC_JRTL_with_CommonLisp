@@ -254,7 +254,6 @@ public final class kb_compare extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new kb_compare();
 
- public static final String myName = "com.cyc.cycjava.cycl.kb_compare";
 
 
     // defconstant

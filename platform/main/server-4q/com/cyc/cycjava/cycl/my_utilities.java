@@ -20,7 +20,6 @@ public final class my_utilities extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new my_utilities();
 
-    public static final String myName = "com.cyc.cycjava.cycl.my_utilities";
 
     // // Definitions
     public static final SubLObject declare_my_utilities_file() {

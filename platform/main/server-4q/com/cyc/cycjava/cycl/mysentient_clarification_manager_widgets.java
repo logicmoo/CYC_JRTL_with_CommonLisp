@@ -70,7 +70,6 @@ public final class mysentient_clarification_manager_widgets extends SubLTranslat
 
     public static final SubLFile me = new mysentient_clarification_manager_widgets();
 
-    public static final String myName = "com.cyc.cycjava.cycl.mysentient_clarification_manager_widgets";
 
 
 

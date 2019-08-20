@@ -56,7 +56,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class finite_state_cascade_parser extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new finite_state_cascade_parser();
 
- public static final String myName = "com.cyc.cycjava.cycl.finite_state_cascade_parser";
 
 
     // defconstant

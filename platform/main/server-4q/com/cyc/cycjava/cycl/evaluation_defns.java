@@ -316,7 +316,6 @@ public final class evaluation_defns extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new evaluation_defns();
 
- public static final String myName = "com.cyc.cycjava.cycl.evaluation_defns";
 
 
     // deflexical

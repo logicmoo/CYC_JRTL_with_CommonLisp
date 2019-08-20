@@ -67,7 +67,6 @@ public final class sg_modules extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new sg_modules();
 
-    public static final String myName = "com.cyc.cycjava.cycl.sg_modules";
 
     // // Definitions
     /**

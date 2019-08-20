@@ -66,7 +66,6 @@ public final class query_augmenter_subloop_utils extends SubLTranslatedFile impl
 
     public static final SubLFile me = new query_augmenter_subloop_utils();
 
-    public static final String myName = "com.cyc.cycjava.cycl.query_augmenter.query_augmenter_subloop_utils";
 
     // // Definitions
     public static final SubLObject get_nl_annotated_cycl_term_pph_info(SubLObject nl_annotated_cycl_term) {

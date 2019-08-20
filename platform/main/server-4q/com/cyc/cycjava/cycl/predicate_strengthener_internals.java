@@ -55,7 +55,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class predicate_strengthener_internals extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new predicate_strengthener_internals();
 
- public static final String myName = "com.cyc.cycjava.cycl.predicate_strengthener_internals";
 
 
     // defparameter

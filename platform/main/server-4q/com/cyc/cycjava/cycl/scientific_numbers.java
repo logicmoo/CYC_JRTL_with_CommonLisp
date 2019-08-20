@@ -69,7 +69,6 @@ public final class scientific_numbers extends SubLTranslatedFile implements V12 
 
     public static final SubLFile me = new scientific_numbers();
 
- public static final String myName = "com.cyc.cycjava.cycl.scientific_numbers";
 
 
     // Internal Constants

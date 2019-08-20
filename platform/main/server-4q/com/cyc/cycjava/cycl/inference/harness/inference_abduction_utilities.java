@@ -865,7 +865,6 @@ public final class inference_abduction_utilities extends SubLTranslatedFile impl
 
     public static final SubLFile me = new inference_abduction_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.harness.inference_abduction_utilities";
 
 
     static private final SubLList $list2 = list(makeSymbol("LIT-MT"), makeSymbol("LIT-FORMULA"));

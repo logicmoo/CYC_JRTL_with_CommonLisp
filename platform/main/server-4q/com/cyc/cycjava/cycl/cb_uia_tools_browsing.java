@@ -78,7 +78,6 @@ public final class cb_uia_tools_browsing extends SubLTranslatedFile implements V
 
     public static final SubLFile me = new cb_uia_tools_browsing();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_uia_tools_browsing";
 
     // // Definitions
     public static final SubLObject cb_uiat_concept_clarifier_render_request(SubLObject request) {

@@ -25,7 +25,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_backchain_required extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_backchain_required";
     public static String myFingerPrint = "e9e37d94e86f18fc1a4fbb9b47417f403e5c2c7e4ed9eea66be6e604a9db4414";
     private static SubLSymbol $BACKCHAIN_REQUIRED_POS;
     private static SubLList $list1;
@@ -69,12 +68,12 @@ public class removal_modules_backchain_required extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_backchain_required_file() {
-        declareFunction(myName, "current_problem_store_transformation_allowedP", "CURRENT-PROBLEM-STORE-TRANSFORMATION-ALLOWED?", 0, 1, false);
+        declareFunction("current_problem_store_transformation_allowedP", "CURRENT-PROBLEM-STORE-TRANSFORMATION-ALLOWED?", 0, 1, false);
         new $current_problem_store_transformation_allowedP$ZeroArityFunction();
         new $current_problem_store_transformation_allowedP$UnaryFunction();
-        declareFunction(myName, "inference_backchain_forbidden_unless_arg_chosen_asent_in_relevant_mtP", "INFERENCE-BACKCHAIN-FORBIDDEN-UNLESS-ARG-CHOSEN-ASENT-IN-RELEVANT-MT?", 1, 0, false);
-        declareFunction(myName, "removal_backchain_required_prune_required", "REMOVAL-BACKCHAIN-REQUIRED-PRUNE-REQUIRED", 1, 1, false);
-        declareFunction(myName, "inference_backchain_required_asent_in_relevant_mtP", "INFERENCE-BACKCHAIN-REQUIRED-ASENT-IN-RELEVANT-MT?", 1, 1, false);
+        declareFunction("inference_backchain_forbidden_unless_arg_chosen_asent_in_relevant_mtP", "INFERENCE-BACKCHAIN-FORBIDDEN-UNLESS-ARG-CHOSEN-ASENT-IN-RELEVANT-MT?", 1, 0, false);
+        declareFunction("removal_backchain_required_prune_required", "REMOVAL-BACKCHAIN-REQUIRED-PRUNE-REQUIRED", 1, 1, false);
+        declareFunction("inference_backchain_required_asent_in_relevant_mtP", "INFERENCE-BACKCHAIN-REQUIRED-ASENT-IN-RELEVANT-MT?", 1, 1, false);
         new $inference_backchain_required_asent_in_relevant_mtP$UnaryFunction();
         new $inference_backchain_required_asent_in_relevant_mtP$BinaryFunction();
         return NIL;

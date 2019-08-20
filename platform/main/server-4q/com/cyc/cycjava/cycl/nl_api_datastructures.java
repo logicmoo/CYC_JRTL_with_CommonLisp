@@ -47,7 +47,6 @@ public final class nl_api_datastructures extends SubLTranslatedFile implements V
 
     public static final SubLFile me = new nl_api_datastructures();
 
- public static final String myName = "com.cyc.cycjava.cycl.nl_api_datastructures";
 
 
     // Internal Constants

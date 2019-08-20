@@ -84,7 +84,6 @@ public final class story_constructor extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new story_constructor();
 
-    public static final String myName = "com.cyc.cycjava.cycl.story_constructor";
 
     // // Definitions
     public static final SubLObject get_story_sentences_wrt_reference_set(SubLObject v_term, SubLObject reference_set) {

@@ -593,7 +593,6 @@ public final class string_utilities extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new string_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.string_utilities";
 
 
     // defconstant

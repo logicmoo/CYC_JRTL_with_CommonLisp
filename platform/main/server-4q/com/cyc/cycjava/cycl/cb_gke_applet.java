@@ -42,7 +42,6 @@ public final class cb_gke_applet extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cb_gke_applet();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_gke_applet";
 
     // // Definitions
     // deflexical

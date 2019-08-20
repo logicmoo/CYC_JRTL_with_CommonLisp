@@ -171,7 +171,6 @@ public final class simple_lru_cache_strategy extends SubLTranslatedFile implemen
 
     public static final SubLFile me = new simple_lru_cache_strategy();
 
- public static final String myName = "com.cyc.cycjava.cycl.simple_lru_cache_strategy";
 
 
     // defconstant

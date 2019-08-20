@@ -80,7 +80,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class user_actions extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new user_actions();
 
- public static final String myName = "com.cyc.cycjava.cycl.user_actions";
 
 
     // defconstant

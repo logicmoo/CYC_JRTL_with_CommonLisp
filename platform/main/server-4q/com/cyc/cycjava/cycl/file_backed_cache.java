@@ -237,7 +237,6 @@ public final class file_backed_cache extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new file_backed_cache();
 
- public static final String myName = "com.cyc.cycjava.cycl.file_backed_cache";
 
 
     // deflexical

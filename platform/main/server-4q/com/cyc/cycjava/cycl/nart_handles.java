@@ -152,7 +152,6 @@ public final class nart_handles extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new nart_handles();
 
- public static final String myName = "com.cyc.cycjava.cycl.nart_handles";
 
 
     // defconstant

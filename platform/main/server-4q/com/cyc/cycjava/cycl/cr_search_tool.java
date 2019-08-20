@@ -81,7 +81,6 @@ public final class cr_search_tool extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cr_search_tool();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cr_search_tool";
 
     // // Definitions
     public static final SubLObject new_cr_search(SubLObject fort) {

@@ -82,7 +82,6 @@ public final class cb_scenario_constructor extends SubLTranslatedFile implements
 
     public static final SubLFile me = new cb_scenario_constructor();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_scenario_constructor";
 
     // // Definitions
     public static final SubLObject cb_sc_show_cycl_p() {

@@ -51,7 +51,6 @@ public final class cyblack_ui_panel extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cyblack_ui_panel();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_ui_panel";
 
     // // Definitions
     public static final SubLObject cyblack_user_interaction_panel_p(SubLObject cyblack_user_interaction_panel) {

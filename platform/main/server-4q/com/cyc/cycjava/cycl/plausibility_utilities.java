@@ -80,7 +80,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class plausibility_utilities extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new plausibility_utilities();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.plausibility_utilities";
 
     // defparameter
     private static final SubLSymbol $default_plausibility_check_mt$ = makeSymbol("*DEFAULT-PLAUSIBILITY-CHECK-MT*");

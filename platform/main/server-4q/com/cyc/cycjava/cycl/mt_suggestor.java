@@ -123,7 +123,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class mt_suggestor extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new mt_suggestor();
 
- public static final String myName = "com.cyc.cycjava.cycl.mt_suggestor";
 
 
     // defparameter

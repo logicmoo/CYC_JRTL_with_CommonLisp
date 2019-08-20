@@ -2330,7 +2330,6 @@ public final class web_utilities extends SubLTranslatedFile implements V12 {
     @LispMethod(comment = "private web_utilities() {}")
     public static final SubLFile me = new web_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.web_utilities";
 
 
     // deflexical

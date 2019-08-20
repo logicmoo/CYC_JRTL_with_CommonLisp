@@ -60,7 +60,6 @@ public final class query_augmenter_subtopic_followups extends SubLTranslatedFile
 
     public static final SubLFile me = new query_augmenter_subtopic_followups();
 
-    public static final String myName = "com.cyc.cycjava.cycl.query_augmenter.query_augmenter_subtopic_followups";
 
     // // Definitions
     /**

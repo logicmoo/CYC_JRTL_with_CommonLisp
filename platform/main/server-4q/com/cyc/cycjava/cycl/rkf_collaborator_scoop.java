@@ -140,7 +140,6 @@ public final class rkf_collaborator_scoop extends SubLTranslatedFile implements 
 
     public static final SubLFile me = new rkf_collaborator_scoop();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_collaborator_scoop";
 
 
     // defparameter

@@ -174,7 +174,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class owl_exporter2 extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new owl_exporter2();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.owl.owl_exporter2";
 
 
     // defparameter

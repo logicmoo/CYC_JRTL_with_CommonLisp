@@ -30,7 +30,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class graphl_graph_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new graphl_graph_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.graphl_graph_utilities";
 
 
     // defparameter

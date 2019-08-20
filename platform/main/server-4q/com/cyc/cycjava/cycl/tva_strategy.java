@@ -180,7 +180,6 @@ public final class tva_strategy extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new tva_strategy();
 
- public static final String myName = "com.cyc.cycjava.cycl.tva_strategy";
 
 
     // defconstant

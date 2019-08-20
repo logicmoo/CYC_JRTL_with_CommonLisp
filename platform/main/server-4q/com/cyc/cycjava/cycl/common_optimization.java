@@ -40,7 +40,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class common_optimization extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new common_optimization();
 
- public static final String myName = "com.cyc.cycjava.cycl.common_optimization";
 
 
     // Internal Constants

@@ -45,7 +45,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class xml_question_answering_agent extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new xml_question_answering_agent();
 
- public static final String myName = "com.cyc.cycjava.cycl.xml_question_answering_agent";
 
 
     // Internal Constants

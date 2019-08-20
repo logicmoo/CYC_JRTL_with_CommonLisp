@@ -112,7 +112,6 @@ public final class uia_tools_browsing extends SubLTranslatedFile implements V02 
 
     public static final SubLFile me = new uia_tools_browsing();
 
-    public static final String myName = "com.cyc.cycjava.cycl.uia_tools_browsing";
 
     // // Definitions
     public static final SubLObject uia_act_new_concept_clarifier(SubLObject v_agenda, SubLObject mode, SubLObject v_term) {

@@ -117,7 +117,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class butler_inference_store extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new butler_inference_store();
 
- public static final String myName = "com.cyc.cycjava.cycl.butler.butler_inference_store";
 
 
     // deflexical

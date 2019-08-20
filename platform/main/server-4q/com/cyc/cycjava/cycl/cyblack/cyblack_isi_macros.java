@@ -43,7 +43,6 @@ public final class cyblack_isi_macros extends SubLTranslatedFile implements V02 
 
     public static final SubLFile me = new cyblack_isi_macros();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_isi_macros";
 
     // // Definitions
     public static final SubLObject stringify_symbol_or_number(SubLObject symbol_or_number) {

@@ -62,7 +62,6 @@ public final class bugzilla extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new bugzilla();
 
-    public static final String myName = "com.cyc.cycjava.cycl.bugzilla";
 
     // // Definitions
     /**

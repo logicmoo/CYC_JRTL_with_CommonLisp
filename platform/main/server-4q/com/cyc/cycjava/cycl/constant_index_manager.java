@@ -56,7 +56,6 @@ public final class constant_index_manager extends SubLTranslatedFile implements 
 
     public static final SubLFile me = new constant_index_manager();
 
- public static final String myName = "com.cyc.cycjava.cycl.constant_index_manager";
 
 
     // deflexical

@@ -47,7 +47,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
  public final class locking_map extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new locking_map();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.locking_map";
 
 
     // defconstant

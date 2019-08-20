@@ -557,7 +557,6 @@ public final class task_processor extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new task_processor();
 
- public static final String myName = "com.cyc.cycjava.cycl.task_processor";
 
 
     // defparameter

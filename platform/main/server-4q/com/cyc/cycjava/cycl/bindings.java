@@ -117,7 +117,6 @@ public final class bindings extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new bindings();
 
- public static final String myName = "com.cyc.cycjava.cycl.bindings";
 
 
     // defconstant

@@ -118,7 +118,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class kbs_cleanup extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new kbs_cleanup();
 
- public static final String myName = "com.cyc.cycjava.cycl.kbs_cleanup";
 
 
     // defvar

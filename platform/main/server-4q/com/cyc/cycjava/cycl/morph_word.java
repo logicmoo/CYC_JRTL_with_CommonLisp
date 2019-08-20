@@ -61,7 +61,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class morph_word extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new morph_word();
 
- public static final String myName = "com.cyc.cycjava.cycl.morph_word";
 
 
     private static final SubLSymbol MORPH_WORD_P = makeSymbol("MORPH-WORD-P");

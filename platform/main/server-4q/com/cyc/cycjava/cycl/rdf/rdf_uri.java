@@ -152,7 +152,6 @@ public final class rdf_uri extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new rdf_uri();
 
- public static final String myName = "com.cyc.cycjava.cycl.rdf.rdf_uri";
 
 
     // deflexical

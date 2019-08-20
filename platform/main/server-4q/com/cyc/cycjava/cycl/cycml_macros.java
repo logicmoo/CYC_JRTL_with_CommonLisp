@@ -38,7 +38,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class cycml_macros extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new cycml_macros();
 
- public static final String myName = "com.cyc.cycjava.cycl.cycml_macros";
 
 
     // Internal Constants

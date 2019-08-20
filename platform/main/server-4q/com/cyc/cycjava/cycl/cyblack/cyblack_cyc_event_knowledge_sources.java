@@ -64,7 +64,6 @@ public final class cyblack_cyc_event_knowledge_sources extends SubLTranslatedFil
 
     public static final SubLFile me = new cyblack_cyc_event_knowledge_sources();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_cyc_event_knowledge_sources";
 
     // // Definitions
     public static final SubLObject subloop_reserved_initialize_acknowledge_event_root_stimulation_ks_class(SubLObject new_instance) {

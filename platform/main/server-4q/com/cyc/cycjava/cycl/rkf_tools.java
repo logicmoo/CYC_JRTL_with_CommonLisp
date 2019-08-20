@@ -58,7 +58,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rkf_tools extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rkf_tools();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_tools";
 
 
     // deflexical

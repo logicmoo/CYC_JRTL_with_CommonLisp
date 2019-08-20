@@ -45,7 +45,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class ghl_marking_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new ghl_marking_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.ghl_marking_utilities";
 
 
     // defparameter

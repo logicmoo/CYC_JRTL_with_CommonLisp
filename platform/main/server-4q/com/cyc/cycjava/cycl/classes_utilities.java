@@ -69,7 +69,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class classes_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new classes_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.classes_utilities";
 
 
     // defconstant

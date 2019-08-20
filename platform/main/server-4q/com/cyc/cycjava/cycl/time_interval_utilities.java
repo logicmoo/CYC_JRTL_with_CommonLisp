@@ -57,7 +57,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class time_interval_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new time_interval_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.time_interval_utilities";
 
 
 

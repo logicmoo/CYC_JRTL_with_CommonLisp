@@ -49,7 +49,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class subloop_writer extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new subloop_writer();
 
- public static final String myName = "com.cyc.cycjava.cycl.subloop_writer";
 
 
     // Internal Constants

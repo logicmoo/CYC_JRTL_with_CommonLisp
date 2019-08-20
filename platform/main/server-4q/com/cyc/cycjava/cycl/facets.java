@@ -48,7 +48,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class facets extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new facets();
 
- public static final String myName = "com.cyc.cycjava.cycl.facets";
 
 
     // defconstant

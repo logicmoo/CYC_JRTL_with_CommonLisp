@@ -49,7 +49,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_subword_index extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_subword_index";
 	public static String myFingerPrint = "ed3659f9cf0d48d0c3c8b5d0528a4339e1758f82f4b56e830c7314d90cf6fb61";
 	private static SubLSymbol $kw$REMOVAL_CONJUNCTIVE_SUBWORD_INDEX;
 	private static SubLList $list1;
@@ -349,14 +348,14 @@ public class removal_modules_subword_index extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_removal_modules_subword_index_file() {
-		declareFunction(myName, "removal_conjunctive_subword_index_applicability",
+		declareFunction("removal_conjunctive_subword_index_applicability",
 				"REMOVAL-CONJUNCTIVE-SUBWORD-INDEX-APPLICABILITY", 1, 0, false);
-		declareFunction(myName, "removal_conjunctive_subword_index_cost", "REMOVAL-CONJUNCTIVE-SUBWORD-INDEX-COST", 1,
+		declareFunction("removal_conjunctive_subword_index_cost", "REMOVAL-CONJUNCTIVE-SUBWORD-INDEX-COST", 1,
 				0, false);
-		declareFunction(myName, "removal_conjunctive_subword_index_expand", "REMOVAL-CONJUNCTIVE-SUBWORD-INDEX-EXPAND",
+		declareFunction("removal_conjunctive_subword_index_expand", "REMOVAL-CONJUNCTIVE-SUBWORD-INDEX-EXPAND",
 				1, 0, false);
-		declareFunction(myName, "removal_substring_matchesP", "REMOVAL-SUBSTRING-MATCHES?", 3, 0, false);
-		declareFunction(myName, "removal_conjunctive_subword_index_destructure",
+		declareFunction("removal_substring_matchesP", "REMOVAL-SUBSTRING-MATCHES?", 3, 0, false);
+		declareFunction("removal_conjunctive_subword_index_destructure",
 				"REMOVAL-CONJUNCTIVE-SUBWORD-INDEX-DESTRUCTURE", 1, 0, false);
 		return NIL;
 	}

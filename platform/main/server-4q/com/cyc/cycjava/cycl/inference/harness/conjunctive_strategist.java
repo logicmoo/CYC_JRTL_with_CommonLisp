@@ -44,7 +44,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class conjunctive_strategist extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.harness.conjunctive_strategist";
 	public static String myFingerPrint = "1f386c6099b47ec0899305cfd95305cd1a777eee1ac23bbba30bd2f24856fb03";
 	@SubL(source = "cycl/inference/harness/conjunctive-strategist.lisp", position = 12700L)
 	private static SubLSymbol $conjunctive_strategist_properties$;
@@ -861,32 +860,32 @@ public class conjunctive_strategist extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_conjunctive_strategist_file() {
-		declareFunction(myName, "new_cyc_conjunctive_query", "NEW-CYC-CONJUNCTIVE-QUERY", 1, 2, false);
-		declareFunction(myName, "new_cyc_ordered_conjunctive_query", "NEW-CYC-ORDERED-CONJUNCTIVE-QUERY", 1, 2, false);
-		declareFunction(myName, "contextualize_conjunctive_query", "CONTEXTUALIZE-CONJUNCTIVE-QUERY", 1, 1, false);
-		declareFunction(myName, "el_unwrap_existentials", "EL-UNWRAP-EXISTENTIALS", 1, 0, false);
-		declareFunction(myName, "el_wrap_existentials", "EL-WRAP-EXISTENTIALS", 2, 0, false);
-		declareFunction(myName, "new_cyc_conjunctive_contextualized_query", "NEW-CYC-CONJUNCTIVE-CONTEXTUALIZED-QUERY",
+		declareFunction("new_cyc_conjunctive_query", "NEW-CYC-CONJUNCTIVE-QUERY", 1, 2, false);
+		declareFunction("new_cyc_ordered_conjunctive_query", "NEW-CYC-ORDERED-CONJUNCTIVE-QUERY", 1, 2, false);
+		declareFunction("contextualize_conjunctive_query", "CONTEXTUALIZE-CONJUNCTIVE-QUERY", 1, 1, false);
+		declareFunction("el_unwrap_existentials", "EL-UNWRAP-EXISTENTIALS", 1, 0, false);
+		declareFunction("el_wrap_existentials", "EL-WRAP-EXISTENTIALS", 2, 0, false);
+		declareFunction("new_cyc_conjunctive_contextualized_query", "NEW-CYC-CONJUNCTIVE-CONTEXTUALIZED-QUERY",
 				1, 1, false);
-		declareFunction(myName, "new_cyc_ordered_conjunctive_contextualized_query",
+		declareFunction("new_cyc_ordered_conjunctive_contextualized_query",
 				"NEW-CYC-ORDERED-CONJUNCTIVE-CONTEXTUALIZED-QUERY", 1, 1, false);
-		declareFunction(myName, "canonicalize_conjunctive_contextualized_query",
+		declareFunction("canonicalize_conjunctive_contextualized_query",
 				"CANONICALIZE-CONJUNCTIVE-CONTEXTUALIZED-QUERY", 1, 0, false);
-		declareFunction(myName, "new_cyc_conjunctive_contextualized_hl_query",
+		declareFunction("new_cyc_conjunctive_contextualized_hl_query",
 				"NEW-CYC-CONJUNCTIVE-CONTEXTUALIZED-HL-QUERY", 1, 1, false);
-		declareFunction(myName, "order_conjunctive_contextualized_hl_query_wrt_removal",
+		declareFunction("order_conjunctive_contextualized_hl_query_wrt_removal",
 				"ORDER-CONJUNCTIVE-CONTEXTUALIZED-HL-QUERY-WRT-REMOVAL", 1, 0, false);
-		declareFunction(myName, "new_cyc_ordered_conjunctive_contextualized_hl_query",
+		declareFunction("new_cyc_ordered_conjunctive_contextualized_hl_query",
 				"NEW-CYC-ORDERED-CONJUNCTIVE-CONTEXTUALIZED-HL-QUERY", 1, 1, false);
-		declareFunction(myName, "process_conjunctive_removal_hl_query_recursive",
+		declareFunction("process_conjunctive_removal_hl_query_recursive",
 				"PROCESS-CONJUNCTIVE-REMOVAL-HL-QUERY-RECURSIVE", 6, 2, false);
-		declareFunction(myName, "categorize_query_properties_wrt_conjunctive_strategist",
+		declareFunction("categorize_query_properties_wrt_conjunctive_strategist",
 				"CATEGORIZE-QUERY-PROPERTIES-WRT-CONJUNCTIVE-STRATEGIST", 1, 0, false);
-		declareFunction(myName, "conjunctive_removal_literal_result", "CONJUNCTIVE-REMOVAL-LITERAL-RESULT", 1, 1,
+		declareFunction("conjunctive_removal_literal_result", "CONJUNCTIVE-REMOVAL-LITERAL-RESULT", 1, 1,
 				false);
-		declareFunction(myName, "extend_bindings", "EXTEND-BINDINGS", 2, 0, false);
-		declareFunction(myName, "nextend_bindings", "NEXTEND-BINDINGS", 2, 0, false);
-		declareFunction(myName, "test_canonicalize_conjunctive_contextualized_query",
+		declareFunction("extend_bindings", "EXTEND-BINDINGS", 2, 0, false);
+		declareFunction("nextend_bindings", "NEXTEND-BINDINGS", 2, 0, false);
+		declareFunction("test_canonicalize_conjunctive_contextualized_query",
 				"TEST-CANONICALIZE-CONJUNCTIVE-CONTEXTUALIZED-QUERY", 1, 0, false);
 		return NIL;
 	}

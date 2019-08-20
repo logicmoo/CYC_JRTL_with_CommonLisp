@@ -40,7 +40,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class missing_knowledge_discovery_events extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new missing_knowledge_discovery_events();
 
- public static final String myName = "com.cyc.cycjava.cycl.missing_knowledge_discovery_events";
 
 
     // defparameter

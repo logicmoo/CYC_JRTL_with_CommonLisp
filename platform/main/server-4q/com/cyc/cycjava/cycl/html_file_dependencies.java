@@ -18,7 +18,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class html_file_dependencies extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new html_file_dependencies();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.html_file_dependencies";
 
 
     private static final SubLString $str0$cb_cyc_css = makeString("cb-cyc.css");

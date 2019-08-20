@@ -190,7 +190,6 @@ public final class ebmt_template_parser extends SubLTranslatedFile implements V1
 
     public static final SubLFile me = new ebmt_template_parser();
 
- public static final String myName = "com.cyc.cycjava.cycl.ebmt_template_parser";
 
 
     // defparameter

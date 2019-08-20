@@ -93,7 +93,6 @@ public final class kb_hl_supports extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new kb_hl_supports();
 
-    public static final String myName = "com.cyc.cycjava.cycl.kb_hl_supports";
 
     // // Definitions
     public static final SubLObject find_kb_hl_support(SubLObject hl_support) {

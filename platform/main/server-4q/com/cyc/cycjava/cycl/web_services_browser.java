@@ -76,7 +76,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class web_services_browser extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new web_services_browser();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.web_services_browser";
 
 
     private static final SubLString $$$userName = makeString("userName");

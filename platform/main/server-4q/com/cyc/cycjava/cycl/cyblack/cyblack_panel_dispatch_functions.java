@@ -33,7 +33,6 @@ public final class cyblack_panel_dispatch_functions extends SubLTranslatedFile i
 
     public static final SubLFile me = new cyblack_panel_dispatch_functions();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_panel_dispatch_functions";
 
     // // Definitions
     public static final SubLObject cyblack_panel_clear_all_marks(SubLObject v_cyblack_panel) {

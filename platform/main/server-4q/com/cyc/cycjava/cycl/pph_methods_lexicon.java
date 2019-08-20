@@ -141,7 +141,6 @@ public final class pph_methods_lexicon extends SubLTranslatedFile implements V12
 
     public static final SubLFile me = new pph_methods_lexicon();
 
- public static final String myName = "com.cyc.cycjava.cycl.pph_methods_lexicon";
 
 
 

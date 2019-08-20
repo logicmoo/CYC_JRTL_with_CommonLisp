@@ -73,7 +73,6 @@ public final class html_tm_correlate extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new html_tm_correlate();
 
-    public static final String myName = "com.cyc.cycjava.cycl.thesaurus.html_tm_correlate";
 
     // // Definitions
     public static final SubLObject tm_correlate_guts() {

@@ -61,7 +61,6 @@ public final class cyblack_function_object_posting extends SubLTranslatedFile im
 
     public static final SubLFile me = new cyblack_function_object_posting();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_function_object_posting";
 
     // // Definitions
     public static final SubLObject get_cyblack_function_object_posting_domain_tuple(SubLObject v_cyblack_function_object_posting) {

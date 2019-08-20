@@ -52,7 +52,6 @@ public final class cyblack_mumbler_ks extends SubLTranslatedFile implements V02 
 
     public static final SubLFile me = new cyblack_mumbler_ks();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_mumbler_ks";
 
     // // Definitions
     public static final SubLObject get_cyblack_rkf_tool_queue_manager_most_recent_source(SubLObject cyblack_rkf_tool_queue_manager) {

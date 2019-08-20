@@ -49,7 +49,6 @@ public final class cyblack_lockable extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cyblack_lockable();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_lockable";
 
     // // Definitions
     public static final SubLObject cyblack_lockable_p(SubLObject v_cyblack_lockable) {

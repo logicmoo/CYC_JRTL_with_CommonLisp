@@ -60,7 +60,6 @@ public final class lexicon_macros extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new lexicon_macros();
 
- public static final String myName = "com.cyc.cycjava.cycl.lexicon_macros";
 
 
     // defparameter

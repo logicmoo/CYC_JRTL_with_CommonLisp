@@ -35,7 +35,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class inference_datastructures_problem_query extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_query";
     public static String myFingerPrint = "8a090912a0eaaeed9fdbfe35d7574ad773ec3b0ac212544d0b39086a3b4e5108";
     @SubL(source = "cycl/inference/harness/inference-datastructures-problem-query.lisp", position = 11000L)
     private static SubLSymbol $formula_term_signature_counts$;
@@ -650,48 +649,48 @@ public class inference_datastructures_problem_query extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_inference_datastructures_problem_query_file() {
-        declareFunction(myName, "hl_contextualized_asent_p", "HL-CONTEXTUALIZED-ASENT-P", 1, 0, false);
-        declareFunction(myName, "inference_context_spec_p", "INFERENCE-CONTEXT-SPEC-P", 1, 0, false);
-        declareFunction(myName, "make_contextualized_asent", "MAKE-CONTEXTUALIZED-ASENT", 2, 0, false);
-        declareFunction(myName, "contextualized_asent_mt", "CONTEXTUALIZED-ASENT-MT", 1, 0, false);
-        declareFunction(myName, "contextualized_asent_asent", "CONTEXTUALIZED-ASENT-ASENT", 1, 0, false);
-        declareFunction(myName, "contextualized_asent_predicate", "CONTEXTUALIZED-ASENT-PREDICATE", 1, 0, false);
-        declareFunction(myName, "contextualized_dnf_clause_p", "CONTEXTUALIZED-DNF-CLAUSE-P", 1, 0, false);
-        declareMacro(me, "do_contextualized_clause_literals", "DO-CONTEXTUALIZED-CLAUSE-LITERALS");
-        declareFunction(myName, "contextualized_clause_has_literal_with_predicateP", "CONTEXTUALIZED-CLAUSE-HAS-LITERAL-WITH-PREDICATE?", 2, 0, false);
-        declareFunction(myName, "mt_asent_sense_from_atomic_contextualized_clause", "MT-ASENT-SENSE-FROM-ATOMIC-CONTEXTUALIZED-CLAUSE", 1, 0, false);
-        declareFunction(myName, "contextualized_dnf_clauses_p", "CONTEXTUALIZED-DNF-CLAUSES-P", 1, 0, false);
-        declareMacro(me, "do_contextualized_clauses_literals", "DO-CONTEXTUALIZED-CLAUSES-LITERALS");
-        declareFunction(myName, "sole_contextualized_asent_from_contextualized_clauses", "SOLE-CONTEXTUALIZED-ASENT-FROM-CONTEXTUALIZED-CLAUSES", 1, 0, false);
-        declareFunction(myName, "sole_contextualized_clause_from_singleton_contextualized_clauses", "SOLE-CONTEXTUALIZED-CLAUSE-FROM-SINGLETON-CONTEXTUALIZED-CLAUSES", 1, 0, false);
-        declareFunction(myName, "problem_query_p", "PROBLEM-QUERY-P", 1, 0, false);
-        declareFunction(myName, "explanatory_subquery_spec_p", "EXPLANATORY-SUBQUERY-SPEC-P", 1, 0, false);
-        declareFunction(myName, "non_explanatory_subquery_spec_p", "NON-EXPLANATORY-SUBQUERY-SPEC-P", 1, 0, false);
-        declareFunction(myName, "new_problem_query_from_contextualized_clause", "NEW-PROBLEM-QUERY-FROM-CONTEXTUALIZED-CLAUSE", 1, 0, false);
-        declareFunction(myName, "new_problem_query_without_literal", "NEW-PROBLEM-QUERY-WITHOUT-LITERAL", 3, 0, false);
-        declareFunction(myName, "new_problem_query_from_subclause_spec", "NEW-PROBLEM-QUERY-FROM-SUBCLAUSE-SPEC", 2, 0, false);
-        declareFunction(myName, "new_problem_query_without_subclause_spec", "NEW-PROBLEM-QUERY-WITHOUT-SUBCLAUSE-SPEC", 2, 0, false);
-        declareFunction(myName, "new_problem_query_from_contextualized_asent_sense", "NEW-PROBLEM-QUERY-FROM-CONTEXTUALIZED-ASENT-SENSE", 2, 0, false);
-        declareFunction(myName, "new_problem_query_from_mt_asent_sense", "NEW-PROBLEM-QUERY-FROM-MT-ASENT-SENSE", 3, 0, false);
-        declareMacro(me, "do_problem_query_literals", "DO-PROBLEM-QUERY-LITERALS");
-        declareFunction(myName, "problem_query_in_equality_reasoning_domainP", "PROBLEM-QUERY-IN-EQUALITY-REASONING-DOMAIN?", 2, 0, false);
-        declareFunction(myName, "problem_query_variables", "PROBLEM-QUERY-VARIABLES", 1, 0, false);
-        declareFunction(myName, "single_clause_problem_query_p", "SINGLE-CLAUSE-PROBLEM-QUERY-P", 1, 0, false);
-        declareFunction(myName, "sole_contextualized_clause_from_single_clause_problem_query", "SOLE-CONTEXTUALIZED-CLAUSE-FROM-SINGLE-CLAUSE-PROBLEM-QUERY", 1, 0, false);
-        declareFunction(myName, "single_literal_problem_query_p", "SINGLE-LITERAL-PROBLEM-QUERY-P", 1, 0, false);
-        declareFunction(myName, "problem_query_has_single_literal_p", "PROBLEM-QUERY-HAS-SINGLE-LITERAL-P", 1, 0, false);
-        declareFunction(myName, "asent_sense_and_mt_to_problem_query", "ASENT-SENSE-AND-MT-TO-PROBLEM-QUERY", 3, 0, false);
-        declareFunction(myName, "single_literal_problem_query_sense", "SINGLE-LITERAL-PROBLEM-QUERY-SENSE", 1, 0, false);
-        declareFunction(myName, "single_literal_problem_query_mt", "SINGLE-LITERAL-PROBLEM-QUERY-MT", 1, 0, false);
-        declareFunction(myName, "single_literal_problem_query_atomic_sentence", "SINGLE-LITERAL-PROBLEM-QUERY-ATOMIC-SENTENCE", 1, 0, false);
-        declareFunction(myName, "single_literal_problem_query_predicate", "SINGLE-LITERAL-PROBLEM-QUERY-PREDICATE", 1, 0, false);
-        declareFunction(myName, "mt_asent_sense_from_singleton_query", "MT-ASENT-SENSE-FROM-SINGLETON-QUERY", 1, 0, false);
-        declareFunction(myName, "formula_term_signature", "FORMULA-TERM-SIGNATURE", 1, 1, false);
-        declareFunction(myName, "problem_query_term_signature", "PROBLEM-QUERY-TERM-SIGNATURE", 1, 0, false);
-        declareFunction(myName, "problem_query_term_signature_estimated_size", "PROBLEM-QUERY-TERM-SIGNATURE-ESTIMATED-SIZE", 1, 0, false);
-        declareFunction(myName, "formula_term_signature_visit", "FORMULA-TERM-SIGNATURE-VISIT", 1, 0, false);
+        declareFunction("hl_contextualized_asent_p", "HL-CONTEXTUALIZED-ASENT-P", 1, 0, false);
+        declareFunction("inference_context_spec_p", "INFERENCE-CONTEXT-SPEC-P", 1, 0, false);
+        declareFunction("make_contextualized_asent", "MAKE-CONTEXTUALIZED-ASENT", 2, 0, false);
+        declareFunction("contextualized_asent_mt", "CONTEXTUALIZED-ASENT-MT", 1, 0, false);
+        declareFunction("contextualized_asent_asent", "CONTEXTUALIZED-ASENT-ASENT", 1, 0, false);
+        declareFunction("contextualized_asent_predicate", "CONTEXTUALIZED-ASENT-PREDICATE", 1, 0, false);
+        declareFunction("contextualized_dnf_clause_p", "CONTEXTUALIZED-DNF-CLAUSE-P", 1, 0, false);
+        declareMacro("do_contextualized_clause_literals", "DO-CONTEXTUALIZED-CLAUSE-LITERALS");
+        declareFunction("contextualized_clause_has_literal_with_predicateP", "CONTEXTUALIZED-CLAUSE-HAS-LITERAL-WITH-PREDICATE?", 2, 0, false);
+        declareFunction("mt_asent_sense_from_atomic_contextualized_clause", "MT-ASENT-SENSE-FROM-ATOMIC-CONTEXTUALIZED-CLAUSE", 1, 0, false);
+        declareFunction("contextualized_dnf_clauses_p", "CONTEXTUALIZED-DNF-CLAUSES-P", 1, 0, false);
+        declareMacro("do_contextualized_clauses_literals", "DO-CONTEXTUALIZED-CLAUSES-LITERALS");
+        declareFunction("sole_contextualized_asent_from_contextualized_clauses", "SOLE-CONTEXTUALIZED-ASENT-FROM-CONTEXTUALIZED-CLAUSES", 1, 0, false);
+        declareFunction("sole_contextualized_clause_from_singleton_contextualized_clauses", "SOLE-CONTEXTUALIZED-CLAUSE-FROM-SINGLETON-CONTEXTUALIZED-CLAUSES", 1, 0, false);
+        declareFunction("problem_query_p", "PROBLEM-QUERY-P", 1, 0, false);
+        declareFunction("explanatory_subquery_spec_p", "EXPLANATORY-SUBQUERY-SPEC-P", 1, 0, false);
+        declareFunction("non_explanatory_subquery_spec_p", "NON-EXPLANATORY-SUBQUERY-SPEC-P", 1, 0, false);
+        declareFunction("new_problem_query_from_contextualized_clause", "NEW-PROBLEM-QUERY-FROM-CONTEXTUALIZED-CLAUSE", 1, 0, false);
+        declareFunction("new_problem_query_without_literal", "NEW-PROBLEM-QUERY-WITHOUT-LITERAL", 3, 0, false);
+        declareFunction("new_problem_query_from_subclause_spec", "NEW-PROBLEM-QUERY-FROM-SUBCLAUSE-SPEC", 2, 0, false);
+        declareFunction("new_problem_query_without_subclause_spec", "NEW-PROBLEM-QUERY-WITHOUT-SUBCLAUSE-SPEC", 2, 0, false);
+        declareFunction("new_problem_query_from_contextualized_asent_sense", "NEW-PROBLEM-QUERY-FROM-CONTEXTUALIZED-ASENT-SENSE", 2, 0, false);
+        declareFunction("new_problem_query_from_mt_asent_sense", "NEW-PROBLEM-QUERY-FROM-MT-ASENT-SENSE", 3, 0, false);
+        declareMacro("do_problem_query_literals", "DO-PROBLEM-QUERY-LITERALS");
+        declareFunction("problem_query_in_equality_reasoning_domainP", "PROBLEM-QUERY-IN-EQUALITY-REASONING-DOMAIN?", 2, 0, false);
+        declareFunction("problem_query_variables", "PROBLEM-QUERY-VARIABLES", 1, 0, false);
+        declareFunction("single_clause_problem_query_p", "SINGLE-CLAUSE-PROBLEM-QUERY-P", 1, 0, false);
+        declareFunction("sole_contextualized_clause_from_single_clause_problem_query", "SOLE-CONTEXTUALIZED-CLAUSE-FROM-SINGLE-CLAUSE-PROBLEM-QUERY", 1, 0, false);
+        declareFunction("single_literal_problem_query_p", "SINGLE-LITERAL-PROBLEM-QUERY-P", 1, 0, false);
+        declareFunction("problem_query_has_single_literal_p", "PROBLEM-QUERY-HAS-SINGLE-LITERAL-P", 1, 0, false);
+        declareFunction("asent_sense_and_mt_to_problem_query", "ASENT-SENSE-AND-MT-TO-PROBLEM-QUERY", 3, 0, false);
+        declareFunction("single_literal_problem_query_sense", "SINGLE-LITERAL-PROBLEM-QUERY-SENSE", 1, 0, false);
+        declareFunction("single_literal_problem_query_mt", "SINGLE-LITERAL-PROBLEM-QUERY-MT", 1, 0, false);
+        declareFunction("single_literal_problem_query_atomic_sentence", "SINGLE-LITERAL-PROBLEM-QUERY-ATOMIC-SENTENCE", 1, 0, false);
+        declareFunction("single_literal_problem_query_predicate", "SINGLE-LITERAL-PROBLEM-QUERY-PREDICATE", 1, 0, false);
+        declareFunction("mt_asent_sense_from_singleton_query", "MT-ASENT-SENSE-FROM-SINGLETON-QUERY", 1, 0, false);
+        declareFunction("formula_term_signature", "FORMULA-TERM-SIGNATURE", 1, 1, false);
+        declareFunction("problem_query_term_signature", "PROBLEM-QUERY-TERM-SIGNATURE", 1, 0, false);
+        declareFunction("problem_query_term_signature_estimated_size", "PROBLEM-QUERY-TERM-SIGNATURE-ESTIMATED-SIZE", 1, 0, false);
+        declareFunction("formula_term_signature_visit", "FORMULA-TERM-SIGNATURE-VISIT", 1, 0, false);
         new $formula_term_signature_visit$UnaryFunction();
-        declareFunction(myName, "postprocess_formula_term_signature", "POSTPROCESS-FORMULA-TERM-SIGNATURE", 1, 0, false);
+        declareFunction("postprocess_formula_term_signature", "POSTPROCESS-FORMULA-TERM-SIGNATURE", 1, 0, false);
         return NIL;
     }
 

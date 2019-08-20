@@ -179,7 +179,6 @@ public final class finite_state_transducer extends SubLTranslatedFile implements
 
     public static final SubLFile me = new finite_state_transducer();
 
- public static final String myName = "com.cyc.cycjava.cycl.finite_state_transducer";
 
 
     // defconstant

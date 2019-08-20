@@ -242,7 +242,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rdf_graph extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rdf_graph();
 
- public static final String myName = "com.cyc.cycjava.cycl.rdf.rdf_graph";
 
 
     // deflexical

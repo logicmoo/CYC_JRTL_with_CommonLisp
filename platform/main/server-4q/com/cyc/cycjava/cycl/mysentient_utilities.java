@@ -84,7 +84,6 @@ public final class mysentient_utilities extends SubLTranslatedFile implements V0
 
     public static final SubLFile me = new mysentient_utilities();
 
-    public static final String myName = "com.cyc.cycjava.cycl.mysentient_utilities";
 
     // // Definitions
     // deflexical

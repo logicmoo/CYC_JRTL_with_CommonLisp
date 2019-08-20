@@ -61,7 +61,6 @@ public final class cb_uiat_ontology_browser extends SubLTranslatedFile implement
 
     public static final SubLFile me = new cb_uiat_ontology_browser();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_uiat_ontology_browser";
 
     // // Definitions
     public static final SubLObject cb_uiat_ontology_browser_examples(SubLObject interaction, SubLObject selectP) {

@@ -35,7 +35,6 @@ public final class uia_user_modeler extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new uia_user_modeler();
 
-    public static final String myName = "com.cyc.cycjava.cycl.uia_user_modeler";
 
     // // Definitions
     /**

@@ -28,7 +28,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class narts_interface extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new narts_interface();
 
- public static final String myName = "com.cyc.cycjava.cycl.narts_interface";
 
 
     // Internal Constants

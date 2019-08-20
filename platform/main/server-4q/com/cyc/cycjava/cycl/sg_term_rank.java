@@ -73,7 +73,6 @@ public final class sg_term_rank extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new sg_term_rank();
 
-    public static final String myName = "com.cyc.cycjava.cycl.sg_term_rank";
 
     // // Definitions
     // defparameter

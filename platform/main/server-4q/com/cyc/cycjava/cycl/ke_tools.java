@@ -75,7 +75,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class ke_tools extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new ke_tools();
 
- public static final String myName = "com.cyc.cycjava.cycl.ke_tools";
 
 
     // defparameter

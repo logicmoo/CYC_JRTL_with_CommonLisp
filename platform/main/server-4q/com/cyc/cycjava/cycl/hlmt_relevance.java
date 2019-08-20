@@ -163,7 +163,6 @@ public final class hlmt_relevance extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new hlmt_relevance();
 
- public static final String myName = "com.cyc.cycjava.cycl.hlmt_relevance";
 
 
     // defparameter

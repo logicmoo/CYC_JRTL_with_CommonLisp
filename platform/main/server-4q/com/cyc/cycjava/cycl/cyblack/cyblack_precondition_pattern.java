@@ -113,7 +113,6 @@ public final class cyblack_precondition_pattern extends SubLTranslatedFile imple
 
     public static final SubLFile me = new cyblack_precondition_pattern();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_precondition_pattern";
 
     // // Definitions
     /**

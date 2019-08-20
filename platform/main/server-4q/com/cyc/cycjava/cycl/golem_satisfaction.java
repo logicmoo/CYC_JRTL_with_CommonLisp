@@ -82,7 +82,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class golem_satisfaction extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new golem_satisfaction();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.golem_satisfaction";
 
 
     // defvar

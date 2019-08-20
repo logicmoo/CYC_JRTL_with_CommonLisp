@@ -73,7 +73,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class taxonomy extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new taxonomy();
 
- public static final String myName = "com.cyc.cycjava.cycl.taxonomy";
 
 
     // defparameter

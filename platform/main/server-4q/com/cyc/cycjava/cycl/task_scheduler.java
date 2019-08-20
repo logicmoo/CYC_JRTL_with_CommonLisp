@@ -103,7 +103,6 @@ public final class task_scheduler extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new task_scheduler();
 
-    public static final String myName = "com.cyc.cycjava.cycl.task_scheduler";
 
     // // Definitions
     /**

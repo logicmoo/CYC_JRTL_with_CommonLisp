@@ -97,7 +97,6 @@ public final class lexification_wizard extends SubLTranslatedFile implements V12
 
     public static final SubLFile me = new lexification_wizard();
 
- public static final String myName = "com.cyc.cycjava.cycl.lexification_wizard";
 
 
     // defconstant

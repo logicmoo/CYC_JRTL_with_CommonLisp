@@ -353,7 +353,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new forward();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.harness.forward";
 
 
     // defparameter

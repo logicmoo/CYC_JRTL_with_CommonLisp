@@ -208,7 +208,6 @@ public final class indexing_utilities extends SubLTranslatedFile implements V12 
 
     public static final SubLFile me = new indexing_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.indexing_utilities";
 
 
     // defparameter

@@ -38,7 +38,6 @@ public final class uia_listeners extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new uia_listeners();
 
-    public static final String myName = "com.cyc.cycjava.cycl.uia_listeners";
 
     // // Definitions
     public static final SubLObject define_uia_event_listener(SubLObject macroform, SubLObject environment) {

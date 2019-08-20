@@ -525,11 +525,9 @@ public final class inference_datastructures_problem extends SubLTranslatedFile i
     @LispMethod(comment = "public static final SubLFile me = new inference_datastructures_problem();")
 
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem";
 
     // private static final SubLSymbol PREFERENCE_LEVEL_P = makeSymbol("PREFERENCE-LEVEL-P");
     // 
-    @LispMethod(comment = "public static final String myName = \"com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem\";\nprivate static final SubLSymbol PREFERENCE_LEVEL_P = makeSymbol(\"PREFERENCE-LEVEL-P\");")
     private static final SubLSymbol PRINT_PROBLEM = makeSymbol("PRINT-PROBLEM");
 
     // 

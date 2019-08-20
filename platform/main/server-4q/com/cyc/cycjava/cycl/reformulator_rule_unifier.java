@@ -56,7 +56,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class reformulator_rule_unifier extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new reformulator_rule_unifier();
 
- public static final String myName = "com.cyc.cycjava.cycl.reformulator_rule_unifier";
 
 
     // defconstant

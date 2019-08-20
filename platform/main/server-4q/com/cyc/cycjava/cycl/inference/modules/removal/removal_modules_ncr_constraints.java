@@ -26,7 +26,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_ncr_constraints extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_ncr_constraints";
     public static String myFingerPrint = "0ea956e5ff688f5585061f1c6a0b4357c99d41af6570db53de7ae2a3a1cf34de";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-ncr-constraints.lisp", position = 18700L)
     private static SubLSymbol $excluded_nc_rules$;
@@ -351,20 +350,20 @@ public class removal_modules_ncr_constraints extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_ncr_constraints_file() {
-        declareFunction(myName, "check_potential_ncr_for_node", "CHECK-POTENTIAL-NCR-FOR-NODE", 3, 3, false);
-        declareFunction(myName, "get_potential_ncrs_for_node", "GET-POTENTIAL-NCRS-FOR-NODE", 2, 3, false);
-        declareFunction(myName, "get_potential_ncrs_for_node_w_denot", "GET-POTENTIAL-NCRS-FOR-NODE-W-DENOT", 3, 3, false);
-        declareFunction(myName, "get_potential_denots_for_node_w_rule", "GET-POTENTIAL-DENOTS-FOR-NODE-W-RULE", 3, 2, false);
-        declareFunction(myName, "get_potential_ncrs_for_node_w_denot_int", "GET-POTENTIAL-NCRS-FOR-NODE-W-DENOT-INT", 3, 3, false);
-        declareFunction(myName, "get_blocks_for_node_w_denot", "GET-BLOCKS-FOR-NODE-W-DENOT", 2, 1, false);
-        declareFunction(myName, "get_blocks_from_node_info", "GET-BLOCKS-FROM-NODE-INFO", 7, 0, false);
-        declareFunction(myName, "get_excluded_nc_rules", "GET-EXCLUDED-NC-RULES", 0, 0, false);
-        declareFunction(myName, "get_basic_nc_rule_count", "GET-BASIC-NC-RULE-COUNT", 0, 0, false);
-        declareFunction(myName, "set_basic_nc_rule_count", "SET-BASIC-NC-RULE-COUNT", 0, 0, false);
-        declareFunction(myName, "get_derived_nc_rule_count", "GET-DERIVED-NC-RULE-COUNT", 0, 0, false);
-        declareFunction(myName, "set_derived_nc_rule_count", "SET-DERIVED-NC-RULE-COUNT", 0, 0, false);
-        declareFunction(myName, "nc_parse_verify_general", "NC-PARSE-VERIFY-GENERAL", 2, 0, false);
-        declareFunction(myName, "nc_parse_justify_general", "NC-PARSE-JUSTIFY-GENERAL", 2, 0, false);
+        declareFunction("check_potential_ncr_for_node", "CHECK-POTENTIAL-NCR-FOR-NODE", 3, 3, false);
+        declareFunction("get_potential_ncrs_for_node", "GET-POTENTIAL-NCRS-FOR-NODE", 2, 3, false);
+        declareFunction("get_potential_ncrs_for_node_w_denot", "GET-POTENTIAL-NCRS-FOR-NODE-W-DENOT", 3, 3, false);
+        declareFunction("get_potential_denots_for_node_w_rule", "GET-POTENTIAL-DENOTS-FOR-NODE-W-RULE", 3, 2, false);
+        declareFunction("get_potential_ncrs_for_node_w_denot_int", "GET-POTENTIAL-NCRS-FOR-NODE-W-DENOT-INT", 3, 3, false);
+        declareFunction("get_blocks_for_node_w_denot", "GET-BLOCKS-FOR-NODE-W-DENOT", 2, 1, false);
+        declareFunction("get_blocks_from_node_info", "GET-BLOCKS-FROM-NODE-INFO", 7, 0, false);
+        declareFunction("get_excluded_nc_rules", "GET-EXCLUDED-NC-RULES", 0, 0, false);
+        declareFunction("get_basic_nc_rule_count", "GET-BASIC-NC-RULE-COUNT", 0, 0, false);
+        declareFunction("set_basic_nc_rule_count", "SET-BASIC-NC-RULE-COUNT", 0, 0, false);
+        declareFunction("get_derived_nc_rule_count", "GET-DERIVED-NC-RULE-COUNT", 0, 0, false);
+        declareFunction("set_derived_nc_rule_count", "SET-DERIVED-NC-RULE-COUNT", 0, 0, false);
+        declareFunction("nc_parse_verify_general", "NC-PARSE-VERIFY-GENERAL", 2, 0, false);
+        declareFunction("nc_parse_justify_general", "NC-PARSE-JUSTIFY-GENERAL", 2, 0, false);
         return NIL;
     }
 

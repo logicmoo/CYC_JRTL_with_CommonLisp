@@ -71,7 +71,6 @@ public final class cb_uia_collaborators extends SubLTranslatedFile implements V0
 
     public static final SubLFile me = new cb_uia_collaborators();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_uia_collaborators";
 
     // // Definitions
     // defparameter

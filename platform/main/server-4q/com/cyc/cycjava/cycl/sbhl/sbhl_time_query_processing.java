@@ -69,7 +69,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sbhl_time_query_processing extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sbhl_time_query_processing();
 
- public static final String myName = "com.cyc.cycjava.cycl.sbhl.sbhl_time_query_processing";
 
 
     static private final SubLList $list3 = list(makeKeyword("WEAK-SUCCESSORS-SUCCESSOR"), makeKeyword("SUCCESSORS-SUCCESSOR-STRICT"));

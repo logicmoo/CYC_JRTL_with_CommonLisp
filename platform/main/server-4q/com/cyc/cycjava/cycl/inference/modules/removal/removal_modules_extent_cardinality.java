@@ -32,7 +32,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_extent_cardinality extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_extent_cardinality";
     public static String myFingerPrint = "32c5bc8bac82b488fb9c91d7ce418c392195ed24ef56c3e082388ebd7f69e93a";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-extent-cardinality.lisp", position = 1300L)
     private static SubLSymbol $default_removal_extent_cardinality_cost$;
@@ -149,13 +148,13 @@ public class removal_modules_extent_cardinality extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_extent_cardinality_file() {
-        declareFunction(myName, "removal_extent_cardinality_set", "REMOVAL-EXTENT-CARDINALITY-SET", 1, 0, false);
-        declareFunction(myName, "removal_extent_cardinality_collection", "REMOVAL-EXTENT-CARDINALITY-COLLECTION", 1, 0, false);
-        declareFunction(myName, "removal_fort_extent_cardinality", "REMOVAL-FORT-EXTENT-CARDINALITY", 1, 0, false);
-        declareFunction(myName, "fort_has_extent_cardinalityP", "FORT-HAS-EXTENT-CARDINALITY?", 2, 0, false);
-        declareFunction(myName, "el_list_lengthE", "EL-LIST-LENGTH=", 2, 0, false);
-        declareFunction(myName, "removal_el_list_lengthE", "REMOVAL-EL-LIST-LENGTH=", 2, 0, false);
-        declareFunction(myName, "removal_length_of_the_list_prune", "REMOVAL-LENGTH-OF-THE-LIST-PRUNE", 1, 1, false);
+        declareFunction("removal_extent_cardinality_set", "REMOVAL-EXTENT-CARDINALITY-SET", 1, 0, false);
+        declareFunction("removal_extent_cardinality_collection", "REMOVAL-EXTENT-CARDINALITY-COLLECTION", 1, 0, false);
+        declareFunction("removal_fort_extent_cardinality", "REMOVAL-FORT-EXTENT-CARDINALITY", 1, 0, false);
+        declareFunction("fort_has_extent_cardinalityP", "FORT-HAS-EXTENT-CARDINALITY?", 2, 0, false);
+        declareFunction("el_list_lengthE", "EL-LIST-LENGTH=", 2, 0, false);
+        declareFunction("removal_el_list_lengthE", "REMOVAL-EL-LIST-LENGTH=", 2, 0, false);
+        declareFunction("removal_length_of_the_list_prune", "REMOVAL-LENGTH-OF-THE-LIST-PRUNE", 1, 1, false);
         return NIL;
     }
 

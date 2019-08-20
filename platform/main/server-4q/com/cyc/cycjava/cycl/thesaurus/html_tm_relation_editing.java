@@ -80,7 +80,6 @@ public final class html_tm_relation_editing extends SubLTranslatedFile implement
 
     public static final SubLFile me = new html_tm_relation_editing();
 
-    public static final String myName = "com.cyc.cycjava.cycl.thesaurus.html_tm_relation_editing";
 
     // // Definitions
     public static final SubLObject clear_define_relation_state() {

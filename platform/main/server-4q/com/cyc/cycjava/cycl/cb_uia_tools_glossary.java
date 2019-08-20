@@ -63,7 +63,6 @@ public final class cb_uia_tools_glossary extends SubLTranslatedFile implements V
 
     public static final SubLFile me = new cb_uia_tools_glossary();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_uia_tools_glossary";
 
     // // Definitions
     public static final SubLObject cb_uia_glossary_hint_method(SubLObject interaction) {

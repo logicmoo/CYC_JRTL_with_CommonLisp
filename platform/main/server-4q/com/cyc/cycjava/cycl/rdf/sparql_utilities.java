@@ -90,7 +90,6 @@ public final class sparql_utilities extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new sparql_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.rdf.sparql_utilities";
 
 
     // Internal Constants

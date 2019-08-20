@@ -110,7 +110,6 @@ public final class lexicon_vars extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new lexicon_vars();
 
- public static final String myName = "com.cyc.cycjava.cycl.lexicon_vars";
 
 
     // defparameter

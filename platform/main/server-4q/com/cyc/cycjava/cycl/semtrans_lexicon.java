@@ -87,7 +87,6 @@ public final class semtrans_lexicon extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new semtrans_lexicon();
 
-    public static final String myName = "com.cyc.cycjava.cycl.semtrans_lexicon";
 
     // defparameter
     @LispMethod(comment = "defparameter")

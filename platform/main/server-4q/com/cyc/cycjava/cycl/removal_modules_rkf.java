@@ -33,7 +33,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class removal_modules_rkf extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new removal_modules_rkf();
 
- public static final String myName = "com.cyc.cycjava.cycl.removal_modules_rkf";
 
 
 

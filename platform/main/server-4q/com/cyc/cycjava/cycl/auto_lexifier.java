@@ -74,7 +74,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class auto_lexifier extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new auto_lexifier();
 
- public static final String myName = "com.cyc.cycjava.cycl.auto_lexifier";
 
 
     // deflexical

@@ -46,7 +46,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sbhl_search_vars extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sbhl_search_vars();
 
- public static final String myName = "com.cyc.cycjava.cycl.sbhl.sbhl_search_vars";
 
 
     // defparameter

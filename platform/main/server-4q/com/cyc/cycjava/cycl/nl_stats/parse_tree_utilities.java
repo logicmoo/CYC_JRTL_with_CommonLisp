@@ -73,7 +73,6 @@ public final class parse_tree_utilities extends SubLTranslatedFile implements V1
 
     public static final SubLFile me = new parse_tree_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.nl_stats.parse_tree_utilities";
 
 
     // defparameter

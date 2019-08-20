@@ -60,7 +60,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class mt_context extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new mt_context();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.mt_context";
 
 
 

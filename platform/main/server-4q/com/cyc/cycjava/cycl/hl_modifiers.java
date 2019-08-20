@@ -33,7 +33,6 @@ public final class hl_modifiers extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new hl_modifiers();
 
-    public static final String myName = "com.cyc.cycjava.cycl.hl_modifiers";
 
     // // Definitions
     public static final SubLObject possibly_replace_assertion_asserted_argument_with_tv(SubLObject assertion, SubLObject new_tv) {

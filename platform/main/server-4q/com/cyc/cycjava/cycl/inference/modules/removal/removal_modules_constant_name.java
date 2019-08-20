@@ -24,7 +24,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_constant_name extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_constant_name";
     public static String myFingerPrint = "5ef31cead88851b9028b46a85a9d21b79c72e71c696c35c5f1d7ccf3faa54649";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-constant-name.lisp", position = 900L)
     public static SubLSymbol $constant_name_defining_mt$;
@@ -260,27 +259,27 @@ public class removal_modules_constant_name extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_constant_name_file() {
-        declareFunction(myName, "inference_constant_name_check", "INFERENCE-CONSTANT-NAME-CHECK", 2, 0, false);
-        declareFunction(myName, "removal_constant_name_check_pos_cost", "REMOVAL-CONSTANT-NAME-CHECK-POS-COST", 1, 1, false);
-        declareFunction(myName, "removal_constant_name_check_neg_cost", "REMOVAL-CONSTANT-NAME-CHECK-NEG-COST", 1, 1, false);
-        declareFunction(myName, "removal_constant_name_check", "REMOVAL-CONSTANT-NAME-CHECK", 1, 0, false);
-        declareFunction(myName, "removal_constant_name_lookup_cost", "REMOVAL-CONSTANT-NAME-LOOKUP-COST", 1, 1, false);
-        declareFunction(myName, "inference_denotational_term_check", "INFERENCE-DENOTATIONAL-TERM-CHECK", 2, 0, false);
-        declareFunction(myName, "removal_denotational_term_check_pos_cost", "REMOVAL-DENOTATIONAL-TERM-CHECK-POS-COST", 1, 1, false);
-        declareFunction(myName, "removal_denotational_term_check_neg_cost", "REMOVAL-DENOTATIONAL-TERM-CHECK-NEG-COST", 1, 1, false);
-        declareFunction(myName, "removal_denotational_term_check", "REMOVAL-DENOTATIONAL-TERM-CHECK", 1, 0, false);
-        declareFunction(myName, "removal_denotational_term_name_lookup_cost", "REMOVAL-DENOTATIONAL-TERM-NAME-LOOKUP-COST", 1, 1, false);
-        declareFunction(myName, "inference_constant_id_check", "INFERENCE-CONSTANT-ID-CHECK", 2, 0, false);
-        declareFunction(myName, "make_constant_id_support", "MAKE-CONSTANT-ID-SUPPORT", 2, 1, false);
-        declareFunction(myName, "removal_constant_id_check_pos_cost", "REMOVAL-CONSTANT-ID-CHECK-POS-COST", 1, 1, false);
-        declareFunction(myName, "removal_constant_id_check_neg_cost", "REMOVAL-CONSTANT-ID-CHECK-NEG-COST", 1, 1, false);
-        declareFunction(myName, "removal_constant_id_check", "REMOVAL-CONSTANT-ID-CHECK", 1, 0, false);
-        declareFunction(myName, "removal_constant_id_lookup_cost", "REMOVAL-CONSTANT-ID-LOOKUP-COST", 1, 1, false);
-        declareFunction(myName, "inference_constant_guid_check", "INFERENCE-CONSTANT-GUID-CHECK", 2, 0, false);
-        declareFunction(myName, "inference_constant_guid_lookup", "INFERENCE-CONSTANT-GUID-LOOKUP", 1, 0, false);
-        declareFunction(myName, "removal_constant_guid_check_pos_cost", "REMOVAL-CONSTANT-GUID-CHECK-POS-COST", 1, 1, false);
-        declareFunction(myName, "removal_constant_guid_check_neg_cost", "REMOVAL-CONSTANT-GUID-CHECK-NEG-COST", 1, 1, false);
-        declareFunction(myName, "removal_constant_guid_check", "REMOVAL-CONSTANT-GUID-CHECK", 1, 0, false);
+        declareFunction("inference_constant_name_check", "INFERENCE-CONSTANT-NAME-CHECK", 2, 0, false);
+        declareFunction("removal_constant_name_check_pos_cost", "REMOVAL-CONSTANT-NAME-CHECK-POS-COST", 1, 1, false);
+        declareFunction("removal_constant_name_check_neg_cost", "REMOVAL-CONSTANT-NAME-CHECK-NEG-COST", 1, 1, false);
+        declareFunction("removal_constant_name_check", "REMOVAL-CONSTANT-NAME-CHECK", 1, 0, false);
+        declareFunction("removal_constant_name_lookup_cost", "REMOVAL-CONSTANT-NAME-LOOKUP-COST", 1, 1, false);
+        declareFunction("inference_denotational_term_check", "INFERENCE-DENOTATIONAL-TERM-CHECK", 2, 0, false);
+        declareFunction("removal_denotational_term_check_pos_cost", "REMOVAL-DENOTATIONAL-TERM-CHECK-POS-COST", 1, 1, false);
+        declareFunction("removal_denotational_term_check_neg_cost", "REMOVAL-DENOTATIONAL-TERM-CHECK-NEG-COST", 1, 1, false);
+        declareFunction("removal_denotational_term_check", "REMOVAL-DENOTATIONAL-TERM-CHECK", 1, 0, false);
+        declareFunction("removal_denotational_term_name_lookup_cost", "REMOVAL-DENOTATIONAL-TERM-NAME-LOOKUP-COST", 1, 1, false);
+        declareFunction("inference_constant_id_check", "INFERENCE-CONSTANT-ID-CHECK", 2, 0, false);
+        declareFunction("make_constant_id_support", "MAKE-CONSTANT-ID-SUPPORT", 2, 1, false);
+        declareFunction("removal_constant_id_check_pos_cost", "REMOVAL-CONSTANT-ID-CHECK-POS-COST", 1, 1, false);
+        declareFunction("removal_constant_id_check_neg_cost", "REMOVAL-CONSTANT-ID-CHECK-NEG-COST", 1, 1, false);
+        declareFunction("removal_constant_id_check", "REMOVAL-CONSTANT-ID-CHECK", 1, 0, false);
+        declareFunction("removal_constant_id_lookup_cost", "REMOVAL-CONSTANT-ID-LOOKUP-COST", 1, 1, false);
+        declareFunction("inference_constant_guid_check", "INFERENCE-CONSTANT-GUID-CHECK", 2, 0, false);
+        declareFunction("inference_constant_guid_lookup", "INFERENCE-CONSTANT-GUID-LOOKUP", 1, 0, false);
+        declareFunction("removal_constant_guid_check_pos_cost", "REMOVAL-CONSTANT-GUID-CHECK-POS-COST", 1, 1, false);
+        declareFunction("removal_constant_guid_check_neg_cost", "REMOVAL-CONSTANT-GUID-CHECK-NEG-COST", 1, 1, false);
+        declareFunction("removal_constant_guid_check", "REMOVAL-CONSTANT-GUID-CHECK", 1, 0, false);
         return NIL;
     }
 

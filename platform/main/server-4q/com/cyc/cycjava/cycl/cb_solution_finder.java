@@ -59,7 +59,6 @@ public final class cb_solution_finder extends SubLTranslatedFile implements V02 
 
     public static final SubLFile me = new cb_solution_finder();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_solution_finder";
 
     // // Definitions
     public static final SubLObject cb_sf_show_cycl_p() {

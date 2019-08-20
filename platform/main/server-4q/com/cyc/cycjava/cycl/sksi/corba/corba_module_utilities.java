@@ -63,7 +63,6 @@ public final class corba_module_utilities extends SubLTranslatedFile implements 
 
     public static final SubLFile me = new corba_module_utilities();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.sksi.corba.corba_module_utilities";
 
     // // Definitions
     // deflexical

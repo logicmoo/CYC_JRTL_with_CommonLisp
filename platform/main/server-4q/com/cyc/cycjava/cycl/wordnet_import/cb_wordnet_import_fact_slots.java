@@ -59,7 +59,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class cb_wordnet_import_fact_slots extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new cb_wordnet_import_fact_slots();
 
- public static final String myName = "com.cyc.cycjava.cycl.wordnet_import.cb_wordnet_import_fact_slots";
 
 
     // Internal Constants

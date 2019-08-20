@@ -21,7 +21,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class nl_pragmatics extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new nl_pragmatics();
 
-    public static final String myName = "com.cyc.cycjava.cycl.nl_pragmatics";
 
     // Definitions
     /**

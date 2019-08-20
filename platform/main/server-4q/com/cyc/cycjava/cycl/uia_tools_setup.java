@@ -52,7 +52,6 @@ public final class uia_tools_setup extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new uia_tools_setup();
 
-    public static final String myName = "com.cyc.cycjava.cycl.uia_tools_setup";
 
     // // Definitions
     public static final SubLObject uia_act_new_configure_interface(SubLObject v_agenda) {

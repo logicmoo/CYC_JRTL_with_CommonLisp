@@ -2934,7 +2934,6 @@ public final class fact_sheets extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new fact_sheets();
 
- public static final String myName = "com.cyc.cycjava.cycl.fact_sheets";
 
 
     // defparameter

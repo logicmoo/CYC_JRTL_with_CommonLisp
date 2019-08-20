@@ -47,7 +47,6 @@ public final class cb_rule_constructor extends SubLTranslatedFile implements V02
 
     public static final SubLFile me = new cb_rule_constructor();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_rule_constructor";
 
     // // Definitions
     public static final SubLObject cb_rc_show_cycl_p() {

@@ -76,7 +76,6 @@ public final class cyblack_defksb extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cyblack_defksb();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_defksb";
 
     // // Definitions
     public static final SubLObject subloop_reserved_initialize_cyblack_defksb_base_class(SubLObject new_instance) {

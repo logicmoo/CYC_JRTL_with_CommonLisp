@@ -28,7 +28,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_genlmt extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_genlmt";
     public static String myFingerPrint = "52c3b1afae129193be9aa85bd3cf1ef3f9f74ca81b8d6867c9e1a1fcbc2e40e1";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-genlmt.lisp", position = 1100L)
     private static SubLSymbol $default_genlmt_check_cost$;
@@ -171,18 +170,18 @@ public class removal_modules_genlmt extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_genlmt_file() {
-        declareFunction(myName, "possibly_make_query_mt_support", "POSSIBLY-MAKE-QUERY-MT-SUPPORT", 2, 0, false);
-        declareFunction(myName, "make_genl_mt_support", "MAKE-GENL-MT-SUPPORT", 2, 0, false);
-        declareFunction(myName, "removal_genlmt_check_expand", "REMOVAL-GENLMT-CHECK-EXPAND", 1, 1, false);
-        declareFunction(myName, "inference_genl_mtP", "INFERENCE-GENL-MT?", 2, 0, false);
-        declareFunction(myName, "removal_all_genlmt_cost", "REMOVAL-ALL-GENLMT-COST", 1, 1, false);
-        declareFunction(myName, "removal_all_genlmt_iterator", "REMOVAL-ALL-GENLMT-ITERATOR", 1, 0, false);
-        declareFunction(myName, "inference_all_genl_mts", "INFERENCE-ALL-GENL-MTS", 1, 0, false);
-        declareFunction(myName, "removal_all_spec_mts_cost", "REMOVAL-ALL-SPEC-MTS-COST", 1, 1, false);
-        declareFunction(myName, "removal_all_spec_mts_iterator", "REMOVAL-ALL-SPEC-MTS-ITERATOR", 1, 0, false);
-        declareFunction(myName, "inference_all_spec_mts", "INFERENCE-ALL-SPEC-MTS", 1, 0, false);
-        declareFunction(myName, "removal_not_genlmt_check_expand", "REMOVAL-NOT-GENLMT-CHECK-EXPAND", 1, 1, false);
-        declareFunction(myName, "inference_not_genl_mtP", "INFERENCE-NOT-GENL-MT?", 2, 0, false);
+        declareFunction("possibly_make_query_mt_support", "POSSIBLY-MAKE-QUERY-MT-SUPPORT", 2, 0, false);
+        declareFunction("make_genl_mt_support", "MAKE-GENL-MT-SUPPORT", 2, 0, false);
+        declareFunction("removal_genlmt_check_expand", "REMOVAL-GENLMT-CHECK-EXPAND", 1, 1, false);
+        declareFunction("inference_genl_mtP", "INFERENCE-GENL-MT?", 2, 0, false);
+        declareFunction("removal_all_genlmt_cost", "REMOVAL-ALL-GENLMT-COST", 1, 1, false);
+        declareFunction("removal_all_genlmt_iterator", "REMOVAL-ALL-GENLMT-ITERATOR", 1, 0, false);
+        declareFunction("inference_all_genl_mts", "INFERENCE-ALL-GENL-MTS", 1, 0, false);
+        declareFunction("removal_all_spec_mts_cost", "REMOVAL-ALL-SPEC-MTS-COST", 1, 1, false);
+        declareFunction("removal_all_spec_mts_iterator", "REMOVAL-ALL-SPEC-MTS-ITERATOR", 1, 0, false);
+        declareFunction("inference_all_spec_mts", "INFERENCE-ALL-SPEC-MTS", 1, 0, false);
+        declareFunction("removal_not_genlmt_check_expand", "REMOVAL-NOT-GENLMT-CHECK-EXPAND", 1, 1, false);
+        declareFunction("inference_not_genl_mtP", "INFERENCE-NOT-GENL-MT?", 2, 0, false);
         return NIL;
     }
 

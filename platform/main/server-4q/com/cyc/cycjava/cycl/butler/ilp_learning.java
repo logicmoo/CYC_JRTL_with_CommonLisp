@@ -40,7 +40,6 @@ public final class ilp_learning extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new ilp_learning();
 
-    public static final String myName = "com.cyc.cycjava.cycl.butler.ilp_learning";
 
     // // Definitions
     public static final SubLObject aleph_fileset_name() {

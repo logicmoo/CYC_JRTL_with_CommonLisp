@@ -46,7 +46,6 @@ public final class cyblack_cyc_event_model_glue extends SubLTranslatedFile imple
 
     public static final SubLFile me = new cyblack_cyc_event_model_glue();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_cyc_event_model_glue";
 
     // // Definitions
     public static final SubLObject cyblack_event_class_to_cyblack_type(SubLObject event_class) {

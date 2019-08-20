@@ -23,7 +23,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class cyc_cvs_id extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new cyc_cvs_id();
 
- public static final String myName = "com.cyc.cycjava.cycl.cyc_cvs_id";
 
 
     // defvar

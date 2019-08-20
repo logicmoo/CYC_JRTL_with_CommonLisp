@@ -368,7 +368,6 @@ public final class operation_communication extends SubLTranslatedFile implements
 
     public static final SubLFile me = new operation_communication();
 
- public static final String myName = "com.cyc.cycjava.cycl.operation_communication";
 
 
     // defparameter

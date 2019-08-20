@@ -135,7 +135,6 @@ public final class hl_storage_module_declarations extends SubLTranslatedFile imp
 
     public static final SubLFile me = new hl_storage_module_declarations();
 
- public static final String myName = "com.cyc.cycjava.cycl.hl_storage_module_declarations";
 
 
     @LispMethod(comment = "Internal Constants")

@@ -78,7 +78,6 @@ public final class cb_lexification_reminders extends SubLTranslatedFile implemen
 
     public static final SubLFile me = new cb_lexification_reminders();
 
- public static final String myName = "com.cyc.cycjava.cycl.cb_lexification_reminders";
 
 
     // defconstant

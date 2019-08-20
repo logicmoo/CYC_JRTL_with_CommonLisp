@@ -35,7 +35,6 @@ public final class kbi_vars extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new kbi_vars();
 
-    public static final String myName = "com.cyc.cycjava.cycl.kbi_vars";
 
 
 

@@ -22,7 +22,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class wordnet extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new wordnet();
 
- public static final String myName = "com.cyc.cycjava.cycl.wordnet";
 
 
     // deflexical

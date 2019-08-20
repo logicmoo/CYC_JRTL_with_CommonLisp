@@ -58,7 +58,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sksi_rewrite_modules extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sksi_rewrite_modules();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.query_sks.sksi_rewrite_modules";
 
 
     public static final SubLSymbol $isa_genls_rule$ = makeSymbol("*ISA-GENLS-RULE*");

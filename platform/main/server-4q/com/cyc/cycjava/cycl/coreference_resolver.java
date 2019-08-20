@@ -24,7 +24,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class coreference_resolver extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new coreference_resolver();
 
- public static final String myName = "com.cyc.cycjava.cycl.coreference_resolver";
 
 
     static private final SubLList $list1 = list(list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("RUN"), list(makeSymbol("PARSE-TREES")), makeKeyword("PUBLIC")));

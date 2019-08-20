@@ -18,7 +18,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_mean_stdev extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_mean_stdev";
 	public static String myFingerPrint = "d846f69ab60440df89f992b7576d7c8e93bdd5721f6cd6470614c7656f576f02";
 	private static SubLObject $const0$averageOfListElementsWithStandard;
 	private static SubLSymbol $kw$POS;
@@ -33,7 +32,7 @@ public class removal_modules_mean_stdev extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_removal_modules_mean_stdev_file() {
-		declareFunction(myName, "removal_standard_deviation_tuple", "REMOVAL-STANDARD-DEVIATION-TUPLE", 1, 0, false);
+		declareFunction("removal_standard_deviation_tuple", "REMOVAL-STANDARD-DEVIATION-TUPLE", 1, 0, false);
 		return NIL;
 	}
 

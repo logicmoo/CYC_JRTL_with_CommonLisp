@@ -79,7 +79,6 @@ public final class uia_tools_review_and_testing extends SubLTranslatedFile imple
 
     public static final SubLFile me = new uia_tools_review_and_testing();
 
-    public static final String myName = "com.cyc.cycjava.cycl.uia_tools_review_and_testing";
 
     // // Definitions
     public static final SubLObject uia_act_new_common_queries(SubLObject v_agenda, SubLObject mode, SubLObject focus_term) {

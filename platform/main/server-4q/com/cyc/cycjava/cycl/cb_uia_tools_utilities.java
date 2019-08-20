@@ -20,7 +20,6 @@ public final class cb_uia_tools_utilities extends SubLTranslatedFile implements 
 
     public static final SubLFile me = new cb_uia_tools_utilities();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_uia_tools_utilities";
 
     // // Definitions
     public static final SubLObject declare_cb_uia_tools_utilities_file() {

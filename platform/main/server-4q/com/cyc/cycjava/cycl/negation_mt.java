@@ -50,7 +50,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class negation_mt extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new negation_mt();
 
- public static final String myName = "com.cyc.cycjava.cycl.negation_mt";
 
 
     // defparameter

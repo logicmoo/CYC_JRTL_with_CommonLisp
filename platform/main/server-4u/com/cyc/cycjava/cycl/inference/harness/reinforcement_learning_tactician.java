@@ -92,7 +92,6 @@ public final class reinforcement_learning_tactician extends SubLTranslatedFile i
 
     public static final SubLFile me = new reinforcement_learning_tactician();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.harness.reinforcement_learning_tactician";
 
     // // Definitions
     // defvar

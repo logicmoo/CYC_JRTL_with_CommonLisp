@@ -31,7 +31,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class proof_view_linear extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new proof_view_linear();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.proof_view_linear";
 
 
     // defparameter

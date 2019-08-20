@@ -33,7 +33,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_nth_largest_element extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_nth_largest_element";
     public static String myFingerPrint = "4e0ed3816b2fc8e5c8ade5a044d7b97fd9d8c8fed14c26c67abd82cbe4621fea";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-nth-largest-element.lisp", position = 4600L)
     private static SubLSymbol $default_removal_nth_extremal_n_cost$;
@@ -363,34 +362,34 @@ public class removal_modules_nth_largest_element extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_nth_largest_element_file() {
-        declareFunction(myName, "cyc_quantity_decreasing_sort", "CYC-QUANTITY-DECREASING-SORT", 1, 1, false);
-        declareFunction(myName, "cyc_quantity_increasing_sort", "CYC-QUANTITY-INCREASING-SORT", 1, 1, false);
-        declareFunction(myName, "removal_nth_largest_n_collection_required", "REMOVAL-NTH-LARGEST-N-COLLECTION-REQUIRED", 1, 1, false);
-        declareFunction(myName, "removal_nth_largest_n_collection_output_generate", "REMOVAL-NTH-LARGEST-N-COLLECTION-OUTPUT-GENERATE", 3, 0, false);
-        declareFunction(myName, "removal_nth_smallest_n_collection_required", "REMOVAL-NTH-SMALLEST-N-COLLECTION-REQUIRED", 1, 1, false);
-        declareFunction(myName, "removal_nth_smallest_n_collection_output_generate", "REMOVAL-NTH-SMALLEST-N-COLLECTION-OUTPUT-GENERATE", 3, 0, false);
-        declareFunction(myName, "removal_nth_extremal_n_required", "REMOVAL-NTH-EXTREMAL-N-REQUIRED", 1, 0, false);
-        declareFunction(myName, "removal_nth_extremal_n_output_generate", "REMOVAL-NTH-EXTREMAL-N-OUTPUT-GENERATE", 4, 0, false);
-        declareFunction(myName, "removal_nth_largest_n_the_set_required", "REMOVAL-NTH-LARGEST-N-THE-SET-REQUIRED", 1, 1, false);
-        declareFunction(myName, "removal_nth_largest_n_the_set_output_generate", "REMOVAL-NTH-LARGEST-N-THE-SET-OUTPUT-GENERATE", 3, 0, false);
-        declareFunction(myName, "removal_nth_smallest_n_the_set_required", "REMOVAL-NTH-SMALLEST-N-THE-SET-REQUIRED", 1, 1, false);
-        declareFunction(myName, "removal_nth_smallest_n_the_set_output_generate", "REMOVAL-NTH-SMALLEST-N-THE-SET-OUTPUT-GENERATE", 3, 0, false);
-        declareFunction(myName, "removal_nth_largest_n_the_set_of_required", "REMOVAL-NTH-LARGEST-N-THE-SET-OF-REQUIRED", 1, 1, false);
-        declareFunction(myName, "removal_nth_largest_n_the_set_of_output_generate", "REMOVAL-NTH-LARGEST-N-THE-SET-OF-OUTPUT-GENERATE", 3, 0, false);
-        declareFunction(myName, "removal_nth_smallest_n_the_set_of_required", "REMOVAL-NTH-SMALLEST-N-THE-SET-OF-REQUIRED", 1, 1, false);
-        declareFunction(myName, "removal_nth_smallest_n_the_set_of_output_generate", "REMOVAL-NTH-SMALLEST-N-THE-SET-OF-OUTPUT-GENERATE", 3, 0, false);
-        declareFunction(myName, "removal_nth_largest_iterate_collection_cost", "REMOVAL-NTH-LARGEST-ITERATE-COLLECTION-COST", 1, 1, false);
-        declareFunction(myName, "removal_nth_largest_iterate_collection_expand", "REMOVAL-NTH-LARGEST-ITERATE-COLLECTION-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_nth_smallest_iterate_collection_cost", "REMOVAL-NTH-SMALLEST-ITERATE-COLLECTION-COST", 1, 1, false);
-        declareFunction(myName, "removal_nth_smallest_iterate_collection_expand", "REMOVAL-NTH-SMALLEST-ITERATE-COLLECTION-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_nth_extremal_iterate_expand", "REMOVAL-NTH-EXTREMAL-ITERATE-EXPAND", 1, 0, false);
-        declareFunction(myName, "removal_nth_extremal_convert_to_rankings", "REMOVAL-NTH-EXTREMAL-CONVERT-TO-RANKINGS", 1, 0, false);
-        declareFunction(myName, "removal_nth_largest_iterate_the_set_cost", "REMOVAL-NTH-LARGEST-ITERATE-THE-SET-COST", 1, 1, false);
-        declareFunction(myName, "removal_nth_largest_iterate_the_set_expand", "REMOVAL-NTH-LARGEST-ITERATE-THE-SET-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_nth_smallest_iterate_the_set_cost", "REMOVAL-NTH-SMALLEST-ITERATE-THE-SET-COST", 1, 1, false);
-        declareFunction(myName, "removal_nth_smallest_iterate_the_set_expand", "REMOVAL-NTH-SMALLEST-ITERATE-THE-SET-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_nth_largest_iterate_the_set_of_expand", "REMOVAL-NTH-LARGEST-ITERATE-THE-SET-OF-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_nth_smallest_iterate_the_set_of_expand", "REMOVAL-NTH-SMALLEST-ITERATE-THE-SET-OF-EXPAND", 1, 1, false);
+        declareFunction("cyc_quantity_decreasing_sort", "CYC-QUANTITY-DECREASING-SORT", 1, 1, false);
+        declareFunction("cyc_quantity_increasing_sort", "CYC-QUANTITY-INCREASING-SORT", 1, 1, false);
+        declareFunction("removal_nth_largest_n_collection_required", "REMOVAL-NTH-LARGEST-N-COLLECTION-REQUIRED", 1, 1, false);
+        declareFunction("removal_nth_largest_n_collection_output_generate", "REMOVAL-NTH-LARGEST-N-COLLECTION-OUTPUT-GENERATE", 3, 0, false);
+        declareFunction("removal_nth_smallest_n_collection_required", "REMOVAL-NTH-SMALLEST-N-COLLECTION-REQUIRED", 1, 1, false);
+        declareFunction("removal_nth_smallest_n_collection_output_generate", "REMOVAL-NTH-SMALLEST-N-COLLECTION-OUTPUT-GENERATE", 3, 0, false);
+        declareFunction("removal_nth_extremal_n_required", "REMOVAL-NTH-EXTREMAL-N-REQUIRED", 1, 0, false);
+        declareFunction("removal_nth_extremal_n_output_generate", "REMOVAL-NTH-EXTREMAL-N-OUTPUT-GENERATE", 4, 0, false);
+        declareFunction("removal_nth_largest_n_the_set_required", "REMOVAL-NTH-LARGEST-N-THE-SET-REQUIRED", 1, 1, false);
+        declareFunction("removal_nth_largest_n_the_set_output_generate", "REMOVAL-NTH-LARGEST-N-THE-SET-OUTPUT-GENERATE", 3, 0, false);
+        declareFunction("removal_nth_smallest_n_the_set_required", "REMOVAL-NTH-SMALLEST-N-THE-SET-REQUIRED", 1, 1, false);
+        declareFunction("removal_nth_smallest_n_the_set_output_generate", "REMOVAL-NTH-SMALLEST-N-THE-SET-OUTPUT-GENERATE", 3, 0, false);
+        declareFunction("removal_nth_largest_n_the_set_of_required", "REMOVAL-NTH-LARGEST-N-THE-SET-OF-REQUIRED", 1, 1, false);
+        declareFunction("removal_nth_largest_n_the_set_of_output_generate", "REMOVAL-NTH-LARGEST-N-THE-SET-OF-OUTPUT-GENERATE", 3, 0, false);
+        declareFunction("removal_nth_smallest_n_the_set_of_required", "REMOVAL-NTH-SMALLEST-N-THE-SET-OF-REQUIRED", 1, 1, false);
+        declareFunction("removal_nth_smallest_n_the_set_of_output_generate", "REMOVAL-NTH-SMALLEST-N-THE-SET-OF-OUTPUT-GENERATE", 3, 0, false);
+        declareFunction("removal_nth_largest_iterate_collection_cost", "REMOVAL-NTH-LARGEST-ITERATE-COLLECTION-COST", 1, 1, false);
+        declareFunction("removal_nth_largest_iterate_collection_expand", "REMOVAL-NTH-LARGEST-ITERATE-COLLECTION-EXPAND", 1, 1, false);
+        declareFunction("removal_nth_smallest_iterate_collection_cost", "REMOVAL-NTH-SMALLEST-ITERATE-COLLECTION-COST", 1, 1, false);
+        declareFunction("removal_nth_smallest_iterate_collection_expand", "REMOVAL-NTH-SMALLEST-ITERATE-COLLECTION-EXPAND", 1, 1, false);
+        declareFunction("removal_nth_extremal_iterate_expand", "REMOVAL-NTH-EXTREMAL-ITERATE-EXPAND", 1, 0, false);
+        declareFunction("removal_nth_extremal_convert_to_rankings", "REMOVAL-NTH-EXTREMAL-CONVERT-TO-RANKINGS", 1, 0, false);
+        declareFunction("removal_nth_largest_iterate_the_set_cost", "REMOVAL-NTH-LARGEST-ITERATE-THE-SET-COST", 1, 1, false);
+        declareFunction("removal_nth_largest_iterate_the_set_expand", "REMOVAL-NTH-LARGEST-ITERATE-THE-SET-EXPAND", 1, 1, false);
+        declareFunction("removal_nth_smallest_iterate_the_set_cost", "REMOVAL-NTH-SMALLEST-ITERATE-THE-SET-COST", 1, 1, false);
+        declareFunction("removal_nth_smallest_iterate_the_set_expand", "REMOVAL-NTH-SMALLEST-ITERATE-THE-SET-EXPAND", 1, 1, false);
+        declareFunction("removal_nth_largest_iterate_the_set_of_expand", "REMOVAL-NTH-LARGEST-ITERATE-THE-SET-OF-EXPAND", 1, 1, false);
+        declareFunction("removal_nth_smallest_iterate_the_set_of_expand", "REMOVAL-NTH-SMALLEST-ITERATE-THE-SET-OF-EXPAND", 1, 1, false);
         return NIL;
     }
 

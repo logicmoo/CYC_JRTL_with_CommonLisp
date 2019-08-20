@@ -137,7 +137,6 @@ public final class czer_utilities extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new czer_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.czer_utilities";
 
 
     // deflexical

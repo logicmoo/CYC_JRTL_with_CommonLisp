@@ -130,7 +130,6 @@ public final class cyblack_message_broker extends SubLTranslatedFile implements 
 
     public static final SubLFile me = new cyblack_message_broker();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_message_broker";
 
 
 

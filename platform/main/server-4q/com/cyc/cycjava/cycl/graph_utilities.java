@@ -56,7 +56,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class graph_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new graph_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.graph_utilities";
 
 
     // defparameter

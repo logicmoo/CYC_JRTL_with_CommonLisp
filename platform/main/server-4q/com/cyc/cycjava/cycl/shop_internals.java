@@ -67,7 +67,6 @@ public final class shop_internals extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new shop_internals();
 
- public static final String myName = "com.cyc.cycjava.cycl.shop_internals";
 
 
     // defparameter

@@ -206,7 +206,6 @@ public final class owl_importer2 extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new owl_importer2();
 
- public static final String myName = "com.cyc.cycjava.cycl.owl.owl_importer2";
 
 
     // defparameter

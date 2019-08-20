@@ -75,7 +75,6 @@ public final class kbi_collection extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new kbi_collection();
 
-    public static final String myName = "com.cyc.cycjava.cycl.kbi_collection";
 
     // // Definitions
     public static final SubLObject diagnose_qua_collection(SubLObject collection) {

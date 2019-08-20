@@ -78,7 +78,6 @@ public final class noun_learner extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new noun_learner();
 
-    public static final String myName = "com.cyc.cycjava.cycl.nl_stats.noun_learner";
 
     // // Definitions
     /**

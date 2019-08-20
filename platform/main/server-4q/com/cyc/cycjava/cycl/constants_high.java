@@ -115,7 +115,6 @@ public final class constants_high extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new constants_high();
 
- public static final String myName = "com.cyc.cycjava.cycl.constants_high";
 
 
     // deflexical

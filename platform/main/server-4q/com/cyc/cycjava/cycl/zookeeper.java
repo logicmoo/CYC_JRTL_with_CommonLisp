@@ -54,7 +54,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class zookeeper extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new zookeeper();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.zookeeper";
 
 
     // defparameter

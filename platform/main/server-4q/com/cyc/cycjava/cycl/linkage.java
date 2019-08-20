@@ -429,7 +429,6 @@ public final class linkage extends linkage_file_base {
     public static final SubLFile me = new linkage();
 
 
- public static final String myName = "com.cyc.cycjava.cycl.linkage";
 
     private static final SubLSymbol PREFIX_KEYS_FROM_STRING = makeSymbol("PREFIX-KEYS-FROM-STRING");
 

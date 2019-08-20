@@ -45,7 +45,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class shallow_parser extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new shallow_parser();
 
- public static final String myName = "com.cyc.cycjava.cycl.shallow_parser";
 
 
     // Internal Constants

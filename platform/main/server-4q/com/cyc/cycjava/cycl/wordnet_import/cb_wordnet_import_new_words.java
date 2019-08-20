@@ -90,7 +90,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class cb_wordnet_import_new_words extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new cb_wordnet_import_new_words();
 
- public static final String myName = "com.cyc.cycjava.cycl.wordnet_import.cb_wordnet_import_new_words";
 
 
     static private final SubLString $str1$WordNet_Import___New_Words = makeString("WordNet Import - New Words");

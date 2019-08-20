@@ -66,7 +66,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class subloop_queues extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new subloop_queues();
 
- public static final String myName = "com.cyc.cycjava.cycl.subloop_queues";
 
 
     // Internal Constants

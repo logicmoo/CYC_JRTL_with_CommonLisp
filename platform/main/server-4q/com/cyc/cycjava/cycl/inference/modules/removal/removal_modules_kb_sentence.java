@@ -26,7 +26,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_kb_sentence extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_kb_sentence";
     public static String myFingerPrint = "665bef54de72dfaf42b09baae2b592fd7dcec9d5e88c253dd51d9edfd4b4b7fc";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-kb-sentence.lisp", position = 900L)
     private static SubLSymbol $default_kb_sentence_check_cost$;
@@ -168,16 +167,16 @@ public class removal_modules_kb_sentence extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_kb_sentence_file() {
-        declareFunction(myName, "removal_kb_sentence_lookup_pos_cost", "REMOVAL-KB-SENTENCE-LOOKUP-POS-COST", 1, 1, false);
-        declareFunction(myName, "removal_kb_sentence_lookup_pos_cost_int", "REMOVAL-KB-SENTENCE-LOOKUP-POS-COST-INT", 1, 0, false);
-        declareFunction(myName, "removal_kb_sentence_lookup_pos_conjunction_cost", "REMOVAL-KB-SENTENCE-LOOKUP-POS-CONJUNCTION-COST", 1, 0, false);
-        declareFunction(myName, "removal_kb_sentence_guess_cost_from_literal_costs", "REMOVAL-KB-SENTENCE-GUESS-COST-FROM-LITERAL-COSTS", 1, 0, false);
-        declareFunction(myName, "removal_kb_sentence_adjust_cost_guess", "REMOVAL-KB-SENTENCE-ADJUST-COST-GUESS", 1, 0, false);
-        declareFunction(myName, "removal_kb_sentence_lookup_pos_expand", "REMOVAL-KB-SENTENCE-LOOKUP-POS-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_kb_sentence_lookup_pos_expand_subsentence", "REMOVAL-KB-SENTENCE-LOOKUP-POS-EXPAND-SUBSENTENCE", 3, 0, false);
-        declareFunction(myName, "removal_kb_sentence_neg_gaf_cost", "REMOVAL-KB-SENTENCE-NEG-GAF-COST", 1, 1, false);
-        declareFunction(myName, "removal_kb_sentence_check_neg_expand", "REMOVAL-KB-SENTENCE-CHECK-NEG-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_kb_sentence_check_neg_expand_subsentence", "REMOVAL-KB-SENTENCE-CHECK-NEG-EXPAND-SUBSENTENCE", 3, 0, false);
+        declareFunction("removal_kb_sentence_lookup_pos_cost", "REMOVAL-KB-SENTENCE-LOOKUP-POS-COST", 1, 1, false);
+        declareFunction("removal_kb_sentence_lookup_pos_cost_int", "REMOVAL-KB-SENTENCE-LOOKUP-POS-COST-INT", 1, 0, false);
+        declareFunction("removal_kb_sentence_lookup_pos_conjunction_cost", "REMOVAL-KB-SENTENCE-LOOKUP-POS-CONJUNCTION-COST", 1, 0, false);
+        declareFunction("removal_kb_sentence_guess_cost_from_literal_costs", "REMOVAL-KB-SENTENCE-GUESS-COST-FROM-LITERAL-COSTS", 1, 0, false);
+        declareFunction("removal_kb_sentence_adjust_cost_guess", "REMOVAL-KB-SENTENCE-ADJUST-COST-GUESS", 1, 0, false);
+        declareFunction("removal_kb_sentence_lookup_pos_expand", "REMOVAL-KB-SENTENCE-LOOKUP-POS-EXPAND", 1, 1, false);
+        declareFunction("removal_kb_sentence_lookup_pos_expand_subsentence", "REMOVAL-KB-SENTENCE-LOOKUP-POS-EXPAND-SUBSENTENCE", 3, 0, false);
+        declareFunction("removal_kb_sentence_neg_gaf_cost", "REMOVAL-KB-SENTENCE-NEG-GAF-COST", 1, 1, false);
+        declareFunction("removal_kb_sentence_check_neg_expand", "REMOVAL-KB-SENTENCE-CHECK-NEG-EXPAND", 1, 1, false);
+        declareFunction("removal_kb_sentence_check_neg_expand_subsentence", "REMOVAL-KB-SENTENCE-CHECK-NEG-EXPAND-SUBSENTENCE", 3, 0, false);
         return NIL;
     }
 

@@ -76,7 +76,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class wff_module_datastructures extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new wff_module_datastructures();
 
- public static final String myName = "com.cyc.cycjava.cycl.wff_module_datastructures";
 
 
     // defconstant

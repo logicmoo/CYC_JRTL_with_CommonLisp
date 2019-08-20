@@ -18,7 +18,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_tactician_execution extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.harness.removal_tactician_execution";
     public static String myFingerPrint = "04be76b85e98b5daa1bfdd184a00027d3f6d575705957b0ab978c1b7192bede7";
     @SubL(source = "cycl/inference/harness/removal-tactician-execution.lisp", position = 3900L)
     private static SubLSymbol $removal_strategy_does_not_activate_disallowed_tacticsP$;
@@ -195,17 +194,17 @@ public class removal_tactician_execution extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_tactician_execution_file() {
-        declareFunction(myName, "removal_strategy_doneP", "REMOVAL-STRATEGY-DONE?", 1, 0, false);
-        declareFunction(myName, "removal_strategy_do_one_step", "REMOVAL-STRATEGY-DO-ONE-STEP", 1, 0, false);
-        declareFunction(myName, "removal_strategy_do_one_step_int", "REMOVAL-STRATEGY-DO-ONE-STEP-INT", 1, 0, false);
-        declareFunction(myName, "removal_strategy_select_best_strategem", "REMOVAL-STRATEGY-SELECT-BEST-STRATEGEM", 1, 0, false);
-        declareFunction(myName, "removal_strategy_default_select_best_strategem", "REMOVAL-STRATEGY-DEFAULT-SELECT-BEST-STRATEGEM", 1, 0, false);
-        declareFunction(myName, "removal_strategy_quiesce", "REMOVAL-STRATEGY-QUIESCE", 1, 0, false);
-        declareFunction(myName, "removal_strategy_execute_strategem", "REMOVAL-STRATEGY-EXECUTE-STRATEGEM", 2, 0, false);
-        declareFunction(myName, "removal_strategy_execute_tactic", "REMOVAL-STRATEGY-EXECUTE-TACTIC", 2, 0, false);
-        declareFunction(myName, "removal_strategy_execute_content_tactic", "REMOVAL-STRATEGY-EXECUTE-CONTENT-TACTIC", 2, 0, false);
-        declareFunction(myName, "removal_strategy_execute_meta_structural_tactic", "REMOVAL-STRATEGY-EXECUTE-META-STRUCTURAL-TACTIC", 2, 0, false);
-        declareFunction(myName, "removal_strategy_execute_executable_strategem", "REMOVAL-STRATEGY-EXECUTE-EXECUTABLE-STRATEGEM", 2, 0, false);
+        declareFunction("removal_strategy_doneP", "REMOVAL-STRATEGY-DONE?", 1, 0, false);
+        declareFunction("removal_strategy_do_one_step", "REMOVAL-STRATEGY-DO-ONE-STEP", 1, 0, false);
+        declareFunction("removal_strategy_do_one_step_int", "REMOVAL-STRATEGY-DO-ONE-STEP-INT", 1, 0, false);
+        declareFunction("removal_strategy_select_best_strategem", "REMOVAL-STRATEGY-SELECT-BEST-STRATEGEM", 1, 0, false);
+        declareFunction("removal_strategy_default_select_best_strategem", "REMOVAL-STRATEGY-DEFAULT-SELECT-BEST-STRATEGEM", 1, 0, false);
+        declareFunction("removal_strategy_quiesce", "REMOVAL-STRATEGY-QUIESCE", 1, 0, false);
+        declareFunction("removal_strategy_execute_strategem", "REMOVAL-STRATEGY-EXECUTE-STRATEGEM", 2, 0, false);
+        declareFunction("removal_strategy_execute_tactic", "REMOVAL-STRATEGY-EXECUTE-TACTIC", 2, 0, false);
+        declareFunction("removal_strategy_execute_content_tactic", "REMOVAL-STRATEGY-EXECUTE-CONTENT-TACTIC", 2, 0, false);
+        declareFunction("removal_strategy_execute_meta_structural_tactic", "REMOVAL-STRATEGY-EXECUTE-META-STRUCTURAL-TACTIC", 2, 0, false);
+        declareFunction("removal_strategy_execute_executable_strategem", "REMOVAL-STRATEGY-EXECUTE-EXECUTABLE-STRATEGEM", 2, 0, false);
         return NIL;
     }
 

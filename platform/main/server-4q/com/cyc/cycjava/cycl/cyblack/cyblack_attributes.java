@@ -34,7 +34,6 @@ public final class cyblack_attributes extends SubLTranslatedFile implements V02 
 
     public static final SubLFile me = new cyblack_attributes();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_attributes";
 
     // // Definitions
     public static final SubLObject posting_attribute_p(SubLObject v_object) {

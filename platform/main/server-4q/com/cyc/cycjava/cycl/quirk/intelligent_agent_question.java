@@ -43,7 +43,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class intelligent_agent_question extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new intelligent_agent_question();
 
- public static final String myName = "com.cyc.cycjava.cycl.quirk.intelligent_agent_question";
 
 
     // Internal Constants

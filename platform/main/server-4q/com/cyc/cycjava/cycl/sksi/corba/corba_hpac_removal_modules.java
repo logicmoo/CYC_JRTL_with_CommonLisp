@@ -60,7 +60,6 @@ public final class corba_hpac_removal_modules extends SubLTranslatedFile impleme
 
     public static final SubLFile me = new corba_hpac_removal_modules();
 
-    public static final String myName = "com.cyc.cycjava.cycl.sksi.corba.corba_hpac_removal_modules";
 
     // // Definitions
     public static final SubLObject corba_hpac_fatality_rate_for_project_at_lat_long_expand_old(SubLObject literal, SubLObject sense) {

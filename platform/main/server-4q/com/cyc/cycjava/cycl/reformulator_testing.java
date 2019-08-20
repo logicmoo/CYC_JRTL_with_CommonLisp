@@ -68,7 +68,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class reformulator_testing extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new reformulator_testing();
 
- public static final String myName = "com.cyc.cycjava.cycl.reformulator_testing";
 
 
     private static final SubLSymbol REFORMULATE_CYCL = makeSymbol("REFORMULATE-CYCL");

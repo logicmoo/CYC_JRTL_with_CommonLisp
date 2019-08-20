@@ -45,7 +45,6 @@ public final class cb_story_constructor extends SubLTranslatedFile implements V0
 
     public static final SubLFile me = new cb_story_constructor();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_story_constructor";
 
     // // Definitions
     // defvar

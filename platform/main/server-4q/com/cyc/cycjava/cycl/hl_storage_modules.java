@@ -102,7 +102,6 @@ public final class hl_storage_modules extends SubLTranslatedFile implements V12 
 
     public static final SubLFile me = new hl_storage_modules();
 
- public static final String myName = "com.cyc.cycjava.cycl.hl_storage_modules";
 
 
     // deflexical

@@ -39,7 +39,6 @@ public final class cyblack_function_object_panel extends SubLTranslatedFile impl
 
     public static final SubLFile me = new cyblack_function_object_panel();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_function_object_panel";
 
     // // Definitions
     public static final SubLObject subloop_reserved_initialize_cyblack_function_object_panel_class(SubLObject new_instance) {

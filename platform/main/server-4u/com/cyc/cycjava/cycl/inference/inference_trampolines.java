@@ -151,7 +151,6 @@ public final class inference_trampolines extends SubLTranslatedFile implements V
 
     public static final SubLFile me = new inference_trampolines();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.inference_trampolines";
 
 
     // deflexical

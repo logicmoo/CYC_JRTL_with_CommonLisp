@@ -33,7 +33,6 @@ public final class red_implementation extends SubLTranslatedFile implements V12 
 
     public static final SubLFile me = new red_implementation();
 
- public static final String myName = "com.cyc.cycjava.cycl.red_implementation";
 
 
     static private final SubLList $list1 = list(new SubLObject[]{ makeKeyword("COMMENT"), makeString("RED Cyc Configuration Repository"), makeKeyword("AUTHOR"), makeString("Chester John <cjohn@cyc.com>"), makeKeyword("FILENAME"), makeString("RED Library (auto-loaded)"), makeKeyword("DEPENDS-ON"), NIL, makeKeyword("COPYRIGHT"), makeString("Copyright (c) 2004 - 2006 Cycorp Inc."), makeKeyword("URI"), makeString("http://www.opencyc.com") });

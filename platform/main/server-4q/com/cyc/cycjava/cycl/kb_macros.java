@@ -200,7 +200,6 @@ public final class kb_macros extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new kb_macros();
 
- public static final String myName = "com.cyc.cycjava.cycl.kb_macros";
 
 
     // Internal Constants

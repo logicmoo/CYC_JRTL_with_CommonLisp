@@ -55,7 +55,6 @@ public final class cb_subloop extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cb_subloop();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_subloop";
 
     // // Definitions
     // defconstant

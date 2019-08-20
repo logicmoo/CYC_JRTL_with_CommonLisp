@@ -75,7 +75,6 @@ public final class red_infrastructure extends SubLTranslatedFile implements V12 
 
     public static final SubLFile me = new red_infrastructure();
 
- public static final String myName = "com.cyc.cycjava.cycl.red_infrastructure";
 
 
     // defconstant

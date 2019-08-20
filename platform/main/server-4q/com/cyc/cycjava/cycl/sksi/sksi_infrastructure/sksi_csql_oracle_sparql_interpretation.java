@@ -52,7 +52,6 @@ public final class sksi_csql_oracle_sparql_interpretation extends SubLTranslated
 
     public static final SubLFile me = new sksi_csql_oracle_sparql_interpretation();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_csql_oracle_sparql_interpretation";
 
 
     // Internal Constants

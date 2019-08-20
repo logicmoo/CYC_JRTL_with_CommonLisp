@@ -119,7 +119,6 @@ public final class leviathan
       SubLTranslatedFile
 {
   public static final SubLFile me;
-  public static final String myName = "com.cyc.cycjava.cycl.inference.leviathan";
   public static final String myFingerPrint = "7a5863f587482f3cfef4070b227c575a3de5875a542c3ab309acacd66afeb1e4";
   @SubLTranslatedFile.SubL(source = "cycl/inference/lisp", position = 866L)
   private static SubLSymbol $leviathan_directory$;

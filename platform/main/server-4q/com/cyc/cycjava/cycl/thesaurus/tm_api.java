@@ -100,7 +100,6 @@ public final class tm_api extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new tm_api();
 
-    public static final String myName = "com.cyc.cycjava.cycl.thesaurus.tm_api";
 
     // // Definitions
     /**

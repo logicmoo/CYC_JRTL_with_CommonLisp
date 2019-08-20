@@ -179,7 +179,6 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
 
     public static final SubLFile me = new rule_disambiguation();
 
- public static final String myName = "com.cyc.cycjava.cycl.rule_disambiguation";
 
 
     // defparameter

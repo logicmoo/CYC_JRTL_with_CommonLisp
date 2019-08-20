@@ -58,7 +58,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class file_hash_table_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new file_hash_table_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.file_hash_table_utilities";
 
 
     // defparameter

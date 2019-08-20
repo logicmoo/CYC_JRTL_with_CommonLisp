@@ -14,7 +14,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_tactician extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.harness.removal_tactician";
     public static String myFingerPrint = "b18065b17f747e85484ef1e15647b3555122545603621e4fcd7addc77defe05a";
     private static SubLSymbol $REMOVAL;
     private static SubLList $list1;
@@ -34,8 +33,8 @@ public class removal_tactician extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_tactician_file() {
-        declareFunction(myName, "removal_strategy_p", "REMOVAL-STRATEGY-P", 1, 0, false);
-        declareFunction(myName, "removal_strategy_initialize", "REMOVAL-STRATEGY-INITIALIZE", 1, 0, false);
+        declareFunction("removal_strategy_p", "REMOVAL-STRATEGY-P", 1, 0, false);
+        declareFunction("removal_strategy_initialize", "REMOVAL-STRATEGY-INITIALIZE", 1, 0, false);
         return NIL;
     }
 

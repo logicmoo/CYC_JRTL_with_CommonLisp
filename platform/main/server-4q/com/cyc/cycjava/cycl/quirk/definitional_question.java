@@ -99,7 +99,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class definitional_question extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new definitional_question();
 
- public static final String myName = "com.cyc.cycjava.cycl.quirk.definitional_question";
 
 
     // Internal Constants

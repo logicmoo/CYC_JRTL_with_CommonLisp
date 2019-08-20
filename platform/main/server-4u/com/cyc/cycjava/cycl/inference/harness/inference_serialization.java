@@ -120,7 +120,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class inference_serialization extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new inference_serialization();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.harness.inference_serialization";
 
 
     // defparameter

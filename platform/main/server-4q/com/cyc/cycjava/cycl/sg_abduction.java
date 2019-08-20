@@ -76,7 +76,6 @@ public final class sg_abduction extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new sg_abduction();
 
-    public static final String myName = "com.cyc.cycjava.cycl.sg_abduction";
 
     // // Definitions
     // deflexical

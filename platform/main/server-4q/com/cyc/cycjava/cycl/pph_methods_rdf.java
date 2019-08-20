@@ -31,7 +31,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class pph_methods_rdf extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new pph_methods_rdf();
 
- public static final String myName = "com.cyc.cycjava.cycl.pph_methods_rdf";
 
 
     private static final SubLSymbol RDF_LABEL_METHOD = makeSymbol("RDF-LABEL-METHOD");

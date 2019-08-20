@@ -202,7 +202,6 @@ public final class word_frequencies extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new word_frequencies();
 
- public static final String myName = "com.cyc.cycjava.cycl.word_frequencies";
 
 
     // deflexical

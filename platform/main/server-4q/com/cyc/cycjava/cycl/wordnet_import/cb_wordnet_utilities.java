@@ -93,7 +93,6 @@ public final class cb_wordnet_utilities extends SubLTranslatedFile implements V1
 
     public static final SubLFile me = new cb_wordnet_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.wordnet_import.cb_wordnet_utilities";
 
 
     static private final SubLList $list1 = list(reader_make_constant_shell("WordNet2_0-KS"));

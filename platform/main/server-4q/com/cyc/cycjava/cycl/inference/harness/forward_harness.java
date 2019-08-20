@@ -55,7 +55,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class forward_harness extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.harness.forward_harness";
 	public static String myFingerPrint = "a4ab7139be5f1262430b4441ee2ba044c74a482b2c4eced600bb28815c3679f9";
 	@SubL(source = "cycl/inference/harness/forward-harness.lisp", position = 2000L)
 	public static SubLSymbol $dtp_forward_propagation_state$;
@@ -1657,225 +1656,225 @@ public class forward_harness extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_forward_harness_file() {
-		declareFunction(myName, "forward_propagation_state_print_function_trampoline",
+		declareFunction("forward_propagation_state_print_function_trampoline",
 				"FORWARD-PROPAGATION-STATE-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-		declareFunction(myName, "forward_propagation_state_p", "FORWARD-PROPAGATION-STATE-P", 1, 0, false);
+		declareFunction("forward_propagation_state_p", "FORWARD-PROPAGATION-STATE-P", 1, 0, false);
 		new $forward_propagation_state_p$UnaryFunction();
-		declareFunction(myName, "forward_ps_assertions_working_set", "FORWARD-PS-ASSERTIONS-WORKING-SET", 1, 0, false);
-		declareFunction(myName, "forward_ps_triggerings_working_set", "FORWARD-PS-TRIGGERINGS-WORKING-SET", 1, 0,
+		declareFunction("forward_ps_assertions_working_set", "FORWARD-PS-ASSERTIONS-WORKING-SET", 1, 0, false);
+		declareFunction("forward_ps_triggerings_working_set", "FORWARD-PS-TRIGGERINGS-WORKING-SET", 1, 0,
 				false);
-		declareFunction(myName, "forward_ps_skeletal_proofs_working_set", "FORWARD-PS-SKELETAL-PROOFS-WORKING-SET", 1,
+		declareFunction("forward_ps_skeletal_proofs_working_set", "FORWARD-PS-SKELETAL-PROOFS-WORKING-SET", 1,
 				0, false);
-		declareFunction(myName, "forward_ps_placeable_proofs_working_set", "FORWARD-PS-PLACEABLE-PROOFS-WORKING-SET", 1,
+		declareFunction("forward_ps_placeable_proofs_working_set", "FORWARD-PS-PLACEABLE-PROOFS-WORKING-SET", 1,
 				0, false);
-		declareFunction(myName, "forward_ps_propagation_mt", "FORWARD-PS-PROPAGATION-MT", 1, 0, false);
-		declareFunction(myName, "_csetf_forward_ps_assertions_working_set", "_CSETF-FORWARD-PS-ASSERTIONS-WORKING-SET",
+		declareFunction("forward_ps_propagation_mt", "FORWARD-PS-PROPAGATION-MT", 1, 0, false);
+		declareFunction("_csetf_forward_ps_assertions_working_set", "_CSETF-FORWARD-PS-ASSERTIONS-WORKING-SET",
 				2, 0, false);
-		declareFunction(myName, "_csetf_forward_ps_triggerings_working_set",
+		declareFunction("_csetf_forward_ps_triggerings_working_set",
 				"_CSETF-FORWARD-PS-TRIGGERINGS-WORKING-SET", 2, 0, false);
-		declareFunction(myName, "_csetf_forward_ps_skeletal_proofs_working_set",
+		declareFunction("_csetf_forward_ps_skeletal_proofs_working_set",
 				"_CSETF-FORWARD-PS-SKELETAL-PROOFS-WORKING-SET", 2, 0, false);
-		declareFunction(myName, "_csetf_forward_ps_placeable_proofs_working_set",
+		declareFunction("_csetf_forward_ps_placeable_proofs_working_set",
 				"_CSETF-FORWARD-PS-PLACEABLE-PROOFS-WORKING-SET", 2, 0, false);
-		declareFunction(myName, "_csetf_forward_ps_propagation_mt", "_CSETF-FORWARD-PS-PROPAGATION-MT", 2, 0, false);
-		declareFunction(myName, "make_forward_propagation_state", "MAKE-FORWARD-PROPAGATION-STATE", 0, 1, false);
-		declareFunction(myName, "visit_defstruct_forward_propagation_state",
+		declareFunction("_csetf_forward_ps_propagation_mt", "_CSETF-FORWARD-PS-PROPAGATION-MT", 2, 0, false);
+		declareFunction("make_forward_propagation_state", "MAKE-FORWARD-PROPAGATION-STATE", 0, 1, false);
+		declareFunction("visit_defstruct_forward_propagation_state",
 				"VISIT-DEFSTRUCT-FORWARD-PROPAGATION-STATE", 2, 0, false);
-		declareFunction(myName, "visit_defstruct_object_forward_propagation_state_method",
+		declareFunction("visit_defstruct_object_forward_propagation_state_method",
 				"VISIT-DEFSTRUCT-OBJECT-FORWARD-PROPAGATION-STATE-METHOD", 2, 0, false);
-		declareFunction(myName, "print_forward_propagation_state", "PRINT-FORWARD-PROPAGATION-STATE", 3, 0, false);
-		declareFunction(myName, "new_forward_propagation_state", "NEW-FORWARD-PROPAGATION-STATE", 0, 2, false);
-		declareFunction(myName, "forward_propagation_state_propagation_mt", "FORWARD-PROPAGATION-STATE-PROPAGATION-MT",
+		declareFunction("print_forward_propagation_state", "PRINT-FORWARD-PROPAGATION-STATE", 3, 0, false);
+		declareFunction("new_forward_propagation_state", "NEW-FORWARD-PROPAGATION-STATE", 0, 2, false);
+		declareFunction("forward_propagation_state_propagation_mt", "FORWARD-PROPAGATION-STATE-PROPAGATION-MT",
 				1, 0, false);
-		declareFunction(myName, "forward_propagation_state_assertions_size",
+		declareFunction("forward_propagation_state_assertions_size",
 				"FORWARD-PROPAGATION-STATE-ASSERTIONS-SIZE", 1, 0, false);
-		declareFunction(myName, "forward_propagation_some_assertionsP", "FORWARD-PROPAGATION-SOME-ASSERTIONS?", 1, 0,
+		declareFunction("forward_propagation_some_assertionsP", "FORWARD-PROPAGATION-SOME-ASSERTIONS?", 1, 0,
 				false);
-		declareFunction(myName, "forward_propagation_state_triggerings_size",
+		declareFunction("forward_propagation_state_triggerings_size",
 				"FORWARD-PROPAGATION-STATE-TRIGGERINGS-SIZE", 1, 0, false);
-		declareFunction(myName, "forward_propagation_some_triggeringsP", "FORWARD-PROPAGATION-SOME-TRIGGERINGS?", 1, 0,
+		declareFunction("forward_propagation_some_triggeringsP", "FORWARD-PROPAGATION-SOME-TRIGGERINGS?", 1, 0,
 				false);
-		declareFunction(myName, "forward_propagation_state_skeletal_proofs_size",
+		declareFunction("forward_propagation_state_skeletal_proofs_size",
 				"FORWARD-PROPAGATION-STATE-SKELETAL-PROOFS-SIZE", 1, 0, false);
-		declareFunction(myName, "forward_propagation_some_skeletal_proofsP",
+		declareFunction("forward_propagation_some_skeletal_proofsP",
 				"FORWARD-PROPAGATION-SOME-SKELETAL-PROOFS?", 1, 0, false);
-		declareFunction(myName, "forward_propagation_state_placeable_proofs_size",
+		declareFunction("forward_propagation_state_placeable_proofs_size",
 				"FORWARD-PROPAGATION-STATE-PLACEABLE-PROOFS-SIZE", 1, 0, false);
-		declareFunction(myName, "forward_propagation_some_placeable_proofsP",
+		declareFunction("forward_propagation_some_placeable_proofsP",
 				"FORWARD-PROPAGATION-SOME-PLACEABLE-PROOFS?", 1, 0, false);
-		declareFunction(myName, "forward_propagation_add_assertions", "FORWARD-PROPAGATION-ADD-ASSERTIONS", 2, 0,
+		declareFunction("forward_propagation_add_assertions", "FORWARD-PROPAGATION-ADD-ASSERTIONS", 2, 0,
 				false);
-		declareFunction(myName, "forward_propagation_remove_assertions", "FORWARD-PROPAGATION-REMOVE-ASSERTIONS", 2, 0,
+		declareFunction("forward_propagation_remove_assertions", "FORWARD-PROPAGATION-REMOVE-ASSERTIONS", 2, 0,
 				false);
-		declareFunction(myName, "forward_propagation_add_triggerings", "FORWARD-PROPAGATION-ADD-TRIGGERINGS", 2, 0,
+		declareFunction("forward_propagation_add_triggerings", "FORWARD-PROPAGATION-ADD-TRIGGERINGS", 2, 0,
 				false);
-		declareFunction(myName, "forward_propagation_remove_triggerings", "FORWARD-PROPAGATION-REMOVE-TRIGGERINGS", 2,
+		declareFunction("forward_propagation_remove_triggerings", "FORWARD-PROPAGATION-REMOVE-TRIGGERINGS", 2,
 				0, false);
-		declareFunction(myName, "forward_propagation_add_skeletal_proofs", "FORWARD-PROPAGATION-ADD-SKELETAL-PROOFS", 2,
+		declareFunction("forward_propagation_add_skeletal_proofs", "FORWARD-PROPAGATION-ADD-SKELETAL-PROOFS", 2,
 				0, false);
-		declareFunction(myName, "forward_propagation_remove_skeletal_proofs",
+		declareFunction("forward_propagation_remove_skeletal_proofs",
 				"FORWARD-PROPAGATION-REMOVE-SKELETAL-PROOFS", 2, 0, false);
-		declareFunction(myName, "forward_propagation_add_placeable_proofs", "FORWARD-PROPAGATION-ADD-PLACEABLE-PROOFS",
+		declareFunction("forward_propagation_add_placeable_proofs", "FORWARD-PROPAGATION-ADD-PLACEABLE-PROOFS",
 				2, 0, false);
-		declareFunction(myName, "forward_propagation_remove_placeable_proofs",
+		declareFunction("forward_propagation_remove_placeable_proofs",
 				"FORWARD-PROPAGATION-REMOVE-PLACEABLE-PROOFS", 2, 0, false);
-		declareFunction(myName, "forward_triggering_print_function_trampoline",
+		declareFunction("forward_triggering_print_function_trampoline",
 				"FORWARD-TRIGGERING-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-		declareFunction(myName, "forward_triggering_p", "FORWARD-TRIGGERING-P", 1, 0, false);
+		declareFunction("forward_triggering_p", "FORWARD-TRIGGERING-P", 1, 0, false);
 		new $forward_triggering_p$UnaryFunction();
-		declareFunction(myName, "forward_trig_rule", "FORWARD-TRIG-RULE", 1, 0, false);
-		declareFunction(myName, "forward_trig_source_asent", "FORWARD-TRIG-SOURCE-ASENT", 1, 0, false);
-		declareFunction(myName, "forward_trig_source_truth", "FORWARD-TRIG-SOURCE-TRUTH", 1, 0, false);
-		declareFunction(myName, "forward_trig_target_asent", "FORWARD-TRIG-TARGET-ASENT", 1, 0, false);
-		declareFunction(myName, "forward_trig_target_truth", "FORWARD-TRIG-TARGET-TRUTH", 1, 0, false);
-		declareFunction(myName, "forward_trig_query_dnf", "FORWARD-TRIG-QUERY-DNF", 1, 0, false);
-		declareFunction(myName, "forward_trig_pragmatic_dnf", "FORWARD-TRIG-PRAGMATIC-DNF", 1, 0, false);
-		declareFunction(myName, "forward_trig_propagation_mt", "FORWARD-TRIG-PROPAGATION-MT", 1, 0, false);
-		declareFunction(myName, "forward_trig_restricted_examine_asent", "FORWARD-TRIG-RESTRICTED-EXAMINE-ASENT", 1, 0,
+		declareFunction("forward_trig_rule", "FORWARD-TRIG-RULE", 1, 0, false);
+		declareFunction("forward_trig_source_asent", "FORWARD-TRIG-SOURCE-ASENT", 1, 0, false);
+		declareFunction("forward_trig_source_truth", "FORWARD-TRIG-SOURCE-TRUTH", 1, 0, false);
+		declareFunction("forward_trig_target_asent", "FORWARD-TRIG-TARGET-ASENT", 1, 0, false);
+		declareFunction("forward_trig_target_truth", "FORWARD-TRIG-TARGET-TRUTH", 1, 0, false);
+		declareFunction("forward_trig_query_dnf", "FORWARD-TRIG-QUERY-DNF", 1, 0, false);
+		declareFunction("forward_trig_pragmatic_dnf", "FORWARD-TRIG-PRAGMATIC-DNF", 1, 0, false);
+		declareFunction("forward_trig_propagation_mt", "FORWARD-TRIG-PROPAGATION-MT", 1, 0, false);
+		declareFunction("forward_trig_restricted_examine_asent", "FORWARD-TRIG-RESTRICTED-EXAMINE-ASENT", 1, 0,
 				false);
-		declareFunction(myName, "forward_trig_trigger_bindings", "FORWARD-TRIG-TRIGGER-BINDINGS", 1, 0, false);
-		declareFunction(myName, "forward_trig_trigger_supports", "FORWARD-TRIG-TRIGGER-SUPPORTS", 1, 0, false);
-		declareFunction(myName, "_csetf_forward_trig_rule", "_CSETF-FORWARD-TRIG-RULE", 2, 0, false);
-		declareFunction(myName, "_csetf_forward_trig_source_asent", "_CSETF-FORWARD-TRIG-SOURCE-ASENT", 2, 0, false);
-		declareFunction(myName, "_csetf_forward_trig_source_truth", "_CSETF-FORWARD-TRIG-SOURCE-TRUTH", 2, 0, false);
-		declareFunction(myName, "_csetf_forward_trig_target_asent", "_CSETF-FORWARD-TRIG-TARGET-ASENT", 2, 0, false);
-		declareFunction(myName, "_csetf_forward_trig_target_truth", "_CSETF-FORWARD-TRIG-TARGET-TRUTH", 2, 0, false);
-		declareFunction(myName, "_csetf_forward_trig_query_dnf", "_CSETF-FORWARD-TRIG-QUERY-DNF", 2, 0, false);
-		declareFunction(myName, "_csetf_forward_trig_pragmatic_dnf", "_CSETF-FORWARD-TRIG-PRAGMATIC-DNF", 2, 0, false);
-		declareFunction(myName, "_csetf_forward_trig_propagation_mt", "_CSETF-FORWARD-TRIG-PROPAGATION-MT", 2, 0,
+		declareFunction("forward_trig_trigger_bindings", "FORWARD-TRIG-TRIGGER-BINDINGS", 1, 0, false);
+		declareFunction("forward_trig_trigger_supports", "FORWARD-TRIG-TRIGGER-SUPPORTS", 1, 0, false);
+		declareFunction("_csetf_forward_trig_rule", "_CSETF-FORWARD-TRIG-RULE", 2, 0, false);
+		declareFunction("_csetf_forward_trig_source_asent", "_CSETF-FORWARD-TRIG-SOURCE-ASENT", 2, 0, false);
+		declareFunction("_csetf_forward_trig_source_truth", "_CSETF-FORWARD-TRIG-SOURCE-TRUTH", 2, 0, false);
+		declareFunction("_csetf_forward_trig_target_asent", "_CSETF-FORWARD-TRIG-TARGET-ASENT", 2, 0, false);
+		declareFunction("_csetf_forward_trig_target_truth", "_CSETF-FORWARD-TRIG-TARGET-TRUTH", 2, 0, false);
+		declareFunction("_csetf_forward_trig_query_dnf", "_CSETF-FORWARD-TRIG-QUERY-DNF", 2, 0, false);
+		declareFunction("_csetf_forward_trig_pragmatic_dnf", "_CSETF-FORWARD-TRIG-PRAGMATIC-DNF", 2, 0, false);
+		declareFunction("_csetf_forward_trig_propagation_mt", "_CSETF-FORWARD-TRIG-PROPAGATION-MT", 2, 0,
 				false);
-		declareFunction(myName, "_csetf_forward_trig_restricted_examine_asent",
+		declareFunction("_csetf_forward_trig_restricted_examine_asent",
 				"_CSETF-FORWARD-TRIG-RESTRICTED-EXAMINE-ASENT", 2, 0, false);
-		declareFunction(myName, "_csetf_forward_trig_trigger_bindings", "_CSETF-FORWARD-TRIG-TRIGGER-BINDINGS", 2, 0,
+		declareFunction("_csetf_forward_trig_trigger_bindings", "_CSETF-FORWARD-TRIG-TRIGGER-BINDINGS", 2, 0,
 				false);
-		declareFunction(myName, "_csetf_forward_trig_trigger_supports", "_CSETF-FORWARD-TRIG-TRIGGER-SUPPORTS", 2, 0,
+		declareFunction("_csetf_forward_trig_trigger_supports", "_CSETF-FORWARD-TRIG-TRIGGER-SUPPORTS", 2, 0,
 				false);
-		declareFunction(myName, "make_forward_triggering", "MAKE-FORWARD-TRIGGERING", 0, 1, false);
-		declareFunction(myName, "visit_defstruct_forward_triggering", "VISIT-DEFSTRUCT-FORWARD-TRIGGERING", 2, 0,
+		declareFunction("make_forward_triggering", "MAKE-FORWARD-TRIGGERING", 0, 1, false);
+		declareFunction("visit_defstruct_forward_triggering", "VISIT-DEFSTRUCT-FORWARD-TRIGGERING", 2, 0,
 				false);
-		declareFunction(myName, "visit_defstruct_object_forward_triggering_method",
+		declareFunction("visit_defstruct_object_forward_triggering_method",
 				"VISIT-DEFSTRUCT-OBJECT-FORWARD-TRIGGERING-METHOD", 2, 0, false);
-		declareFunction(myName, "sxhash_forward_triggering_method", "SXHASH-FORWARD-TRIGGERING-METHOD", 1, 0, false);
-		declareFunction(myName, "print_forward_triggering", "PRINT-FORWARD-TRIGGERING", 3, 0, false);
-		declareFunction(myName, "new_forward_triggering", "NEW-FORWARD-TRIGGERING", 11, 0, false);
-		declareFunction(myName, "forward_triggering_rule", "FORWARD-TRIGGERING-RULE", 1, 0, false);
-		declareFunction(myName, "forward_triggering_source_asent", "FORWARD-TRIGGERING-SOURCE-ASENT", 1, 0, false);
-		declareFunction(myName, "forward_triggering_source_truth", "FORWARD-TRIGGERING-SOURCE-TRUTH", 1, 0, false);
-		declareFunction(myName, "forward_triggering_target_asent", "FORWARD-TRIGGERING-TARGET-ASENT", 1, 0, false);
-		declareFunction(myName, "forward_triggering_target_truth", "FORWARD-TRIGGERING-TARGET-TRUTH", 1, 0, false);
-		declareFunction(myName, "forward_triggering_query_dnf", "FORWARD-TRIGGERING-QUERY-DNF", 1, 0, false);
-		declareFunction(myName, "forward_triggering_pragmatic_dnf", "FORWARD-TRIGGERING-PRAGMATIC-DNF", 1, 0, false);
-		declareFunction(myName, "forward_triggering_propagation_mt", "FORWARD-TRIGGERING-PROPAGATION-MT", 1, 0, false);
-		declareFunction(myName, "forward_triggering_restricted_examine_asent",
+		declareFunction("sxhash_forward_triggering_method", "SXHASH-FORWARD-TRIGGERING-METHOD", 1, 0, false);
+		declareFunction("print_forward_triggering", "PRINT-FORWARD-TRIGGERING", 3, 0, false);
+		declareFunction("new_forward_triggering", "NEW-FORWARD-TRIGGERING", 11, 0, false);
+		declareFunction("forward_triggering_rule", "FORWARD-TRIGGERING-RULE", 1, 0, false);
+		declareFunction("forward_triggering_source_asent", "FORWARD-TRIGGERING-SOURCE-ASENT", 1, 0, false);
+		declareFunction("forward_triggering_source_truth", "FORWARD-TRIGGERING-SOURCE-TRUTH", 1, 0, false);
+		declareFunction("forward_triggering_target_asent", "FORWARD-TRIGGERING-TARGET-ASENT", 1, 0, false);
+		declareFunction("forward_triggering_target_truth", "FORWARD-TRIGGERING-TARGET-TRUTH", 1, 0, false);
+		declareFunction("forward_triggering_query_dnf", "FORWARD-TRIGGERING-QUERY-DNF", 1, 0, false);
+		declareFunction("forward_triggering_pragmatic_dnf", "FORWARD-TRIGGERING-PRAGMATIC-DNF", 1, 0, false);
+		declareFunction("forward_triggering_propagation_mt", "FORWARD-TRIGGERING-PROPAGATION-MT", 1, 0, false);
+		declareFunction("forward_triggering_restricted_examine_asent",
 				"FORWARD-TRIGGERING-RESTRICTED-EXAMINE-ASENT", 1, 0, false);
-		declareFunction(myName, "forward_triggering_trigger_bindings", "FORWARD-TRIGGERING-TRIGGER-BINDINGS", 1, 0,
+		declareFunction("forward_triggering_trigger_bindings", "FORWARD-TRIGGERING-TRIGGER-BINDINGS", 1, 0,
 				false);
-		declareFunction(myName, "forward_triggering_trigger_supports", "FORWARD-TRIGGERING-TRIGGER-SUPPORTS", 1, 0,
+		declareFunction("forward_triggering_trigger_supports", "FORWARD-TRIGGERING-TRIGGER-SUPPORTS", 1, 0,
 				false);
-		declareFunction(myName, "skeletal_proof_print_function_trampoline", "SKELETAL-PROOF-PRINT-FUNCTION-TRAMPOLINE",
+		declareFunction("skeletal_proof_print_function_trampoline", "SKELETAL-PROOF-PRINT-FUNCTION-TRAMPOLINE",
 				2, 0, false);
-		declareFunction(myName, "skeletal_proof_p", "SKELETAL-PROOF-P", 1, 0, false);
+		declareFunction("skeletal_proof_p", "SKELETAL-PROOF-P", 1, 0, false);
 		new $skeletal_proof_p$UnaryFunction();
-		declareFunction(myName, "skel_proof_concluded_asent", "SKEL-PROOF-CONCLUDED-ASENT", 1, 0, false);
-		declareFunction(myName, "skel_proof_concluded_truth", "SKEL-PROOF-CONCLUDED-TRUTH", 1, 0, false);
-		declareFunction(myName, "skel_proof_trigger_bindings", "SKEL-PROOF-TRIGGER-BINDINGS", 1, 0, false);
-		declareFunction(myName, "skel_proof_inference_bindings", "SKEL-PROOF-INFERENCE-BINDINGS", 1, 0, false);
-		declareFunction(myName, "skel_proof_concluded_supports", "SKEL-PROOF-CONCLUDED-SUPPORTS", 1, 0, false);
-		declareFunction(myName, "skel_proof_pragmatic_supports", "SKEL-PROOF-PRAGMATIC-SUPPORTS", 1, 0, false);
-		declareFunction(myName, "skel_proof_rule", "SKEL-PROOF-RULE", 1, 0, false);
-		declareFunction(myName, "skel_proof_propagation_mt", "SKEL-PROOF-PROPAGATION-MT", 1, 0, false);
-		declareFunction(myName, "_csetf_skel_proof_concluded_asent", "_CSETF-SKEL-PROOF-CONCLUDED-ASENT", 2, 0, false);
-		declareFunction(myName, "_csetf_skel_proof_concluded_truth", "_CSETF-SKEL-PROOF-CONCLUDED-TRUTH", 2, 0, false);
-		declareFunction(myName, "_csetf_skel_proof_trigger_bindings", "_CSETF-SKEL-PROOF-TRIGGER-BINDINGS", 2, 0,
+		declareFunction("skel_proof_concluded_asent", "SKEL-PROOF-CONCLUDED-ASENT", 1, 0, false);
+		declareFunction("skel_proof_concluded_truth", "SKEL-PROOF-CONCLUDED-TRUTH", 1, 0, false);
+		declareFunction("skel_proof_trigger_bindings", "SKEL-PROOF-TRIGGER-BINDINGS", 1, 0, false);
+		declareFunction("skel_proof_inference_bindings", "SKEL-PROOF-INFERENCE-BINDINGS", 1, 0, false);
+		declareFunction("skel_proof_concluded_supports", "SKEL-PROOF-CONCLUDED-SUPPORTS", 1, 0, false);
+		declareFunction("skel_proof_pragmatic_supports", "SKEL-PROOF-PRAGMATIC-SUPPORTS", 1, 0, false);
+		declareFunction("skel_proof_rule", "SKEL-PROOF-RULE", 1, 0, false);
+		declareFunction("skel_proof_propagation_mt", "SKEL-PROOF-PROPAGATION-MT", 1, 0, false);
+		declareFunction("_csetf_skel_proof_concluded_asent", "_CSETF-SKEL-PROOF-CONCLUDED-ASENT", 2, 0, false);
+		declareFunction("_csetf_skel_proof_concluded_truth", "_CSETF-SKEL-PROOF-CONCLUDED-TRUTH", 2, 0, false);
+		declareFunction("_csetf_skel_proof_trigger_bindings", "_CSETF-SKEL-PROOF-TRIGGER-BINDINGS", 2, 0,
 				false);
-		declareFunction(myName, "_csetf_skel_proof_inference_bindings", "_CSETF-SKEL-PROOF-INFERENCE-BINDINGS", 2, 0,
+		declareFunction("_csetf_skel_proof_inference_bindings", "_CSETF-SKEL-PROOF-INFERENCE-BINDINGS", 2, 0,
 				false);
-		declareFunction(myName, "_csetf_skel_proof_concluded_supports", "_CSETF-SKEL-PROOF-CONCLUDED-SUPPORTS", 2, 0,
+		declareFunction("_csetf_skel_proof_concluded_supports", "_CSETF-SKEL-PROOF-CONCLUDED-SUPPORTS", 2, 0,
 				false);
-		declareFunction(myName, "_csetf_skel_proof_pragmatic_supports", "_CSETF-SKEL-PROOF-PRAGMATIC-SUPPORTS", 2, 0,
+		declareFunction("_csetf_skel_proof_pragmatic_supports", "_CSETF-SKEL-PROOF-PRAGMATIC-SUPPORTS", 2, 0,
 				false);
-		declareFunction(myName, "_csetf_skel_proof_rule", "_CSETF-SKEL-PROOF-RULE", 2, 0, false);
-		declareFunction(myName, "_csetf_skel_proof_propagation_mt", "_CSETF-SKEL-PROOF-PROPAGATION-MT", 2, 0, false);
-		declareFunction(myName, "make_skeletal_proof", "MAKE-SKELETAL-PROOF", 0, 1, false);
-		declareFunction(myName, "visit_defstruct_skeletal_proof", "VISIT-DEFSTRUCT-SKELETAL-PROOF", 2, 0, false);
-		declareFunction(myName, "visit_defstruct_object_skeletal_proof_method",
+		declareFunction("_csetf_skel_proof_rule", "_CSETF-SKEL-PROOF-RULE", 2, 0, false);
+		declareFunction("_csetf_skel_proof_propagation_mt", "_CSETF-SKEL-PROOF-PROPAGATION-MT", 2, 0, false);
+		declareFunction("make_skeletal_proof", "MAKE-SKELETAL-PROOF", 0, 1, false);
+		declareFunction("visit_defstruct_skeletal_proof", "VISIT-DEFSTRUCT-SKELETAL-PROOF", 2, 0, false);
+		declareFunction("visit_defstruct_object_skeletal_proof_method",
 				"VISIT-DEFSTRUCT-OBJECT-SKELETAL-PROOF-METHOD", 2, 0, false);
-		declareFunction(myName, "sxhash_skeletal_proof_method", "SXHASH-SKELETAL-PROOF-METHOD", 1, 0, false);
-		declareFunction(myName, "print_skeletal_proof", "PRINT-SKELETAL-PROOF", 3, 0, false);
-		declareFunction(myName, "new_skeletal_proof", "NEW-SKELETAL-PROOF", 8, 0, false);
-		declareFunction(myName, "skeletal_proof_concluded_asent", "SKELETAL-PROOF-CONCLUDED-ASENT", 1, 0, false);
-		declareFunction(myName, "skeletal_proof_concluded_truth", "SKELETAL-PROOF-CONCLUDED-TRUTH", 1, 0, false);
-		declareFunction(myName, "skeletal_proof_trigger_bindings", "SKELETAL-PROOF-TRIGGER-BINDINGS", 1, 0, false);
-		declareFunction(myName, "skeletal_proof_inference_bindings", "SKELETAL-PROOF-INFERENCE-BINDINGS", 1, 0, false);
-		declareFunction(myName, "skeletal_proof_concluded_supports", "SKELETAL-PROOF-CONCLUDED-SUPPORTS", 1, 0, false);
-		declareFunction(myName, "skeletal_proof_pragmatic_supports", "SKELETAL-PROOF-PRAGMATIC-SUPPORTS", 1, 0, false);
-		declareFunction(myName, "skeletal_proof_rule", "SKELETAL-PROOF-RULE", 1, 0, false);
-		declareFunction(myName, "skeletal_proof_propagation_mt", "SKELETAL-PROOF-PROPAGATION-MT", 1, 0, false);
-		declareFunction(myName, "placeable_proof_print_function_trampoline",
+		declareFunction("sxhash_skeletal_proof_method", "SXHASH-SKELETAL-PROOF-METHOD", 1, 0, false);
+		declareFunction("print_skeletal_proof", "PRINT-SKELETAL-PROOF", 3, 0, false);
+		declareFunction("new_skeletal_proof", "NEW-SKELETAL-PROOF", 8, 0, false);
+		declareFunction("skeletal_proof_concluded_asent", "SKELETAL-PROOF-CONCLUDED-ASENT", 1, 0, false);
+		declareFunction("skeletal_proof_concluded_truth", "SKELETAL-PROOF-CONCLUDED-TRUTH", 1, 0, false);
+		declareFunction("skeletal_proof_trigger_bindings", "SKELETAL-PROOF-TRIGGER-BINDINGS", 1, 0, false);
+		declareFunction("skeletal_proof_inference_bindings", "SKELETAL-PROOF-INFERENCE-BINDINGS", 1, 0, false);
+		declareFunction("skeletal_proof_concluded_supports", "SKELETAL-PROOF-CONCLUDED-SUPPORTS", 1, 0, false);
+		declareFunction("skeletal_proof_pragmatic_supports", "SKELETAL-PROOF-PRAGMATIC-SUPPORTS", 1, 0, false);
+		declareFunction("skeletal_proof_rule", "SKELETAL-PROOF-RULE", 1, 0, false);
+		declareFunction("skeletal_proof_propagation_mt", "SKELETAL-PROOF-PROPAGATION-MT", 1, 0, false);
+		declareFunction("placeable_proof_print_function_trampoline",
 				"PLACEABLE-PROOF-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-		declareFunction(myName, "placeable_proof_p", "PLACEABLE-PROOF-P", 1, 0, false);
+		declareFunction("placeable_proof_p", "PLACEABLE-PROOF-P", 1, 0, false);
 		new $placeable_proof_p$UnaryFunction();
-		declareFunction(myName, "plac_proof_concluded_asent", "PLAC-PROOF-CONCLUDED-ASENT", 1, 0, false);
-		declareFunction(myName, "plac_proof_concluded_mt", "PLAC-PROOF-CONCLUDED-MT", 1, 0, false);
-		declareFunction(myName, "plac_proof_concluded_truth", "PLAC-PROOF-CONCLUDED-TRUTH", 1, 0, false);
-		declareFunction(myName, "plac_proof_assertible", "PLAC-PROOF-ASSERTIBLE", 1, 0, false);
-		declareFunction(myName, "_csetf_plac_proof_concluded_asent", "_CSETF-PLAC-PROOF-CONCLUDED-ASENT", 2, 0, false);
-		declareFunction(myName, "_csetf_plac_proof_concluded_mt", "_CSETF-PLAC-PROOF-CONCLUDED-MT", 2, 0, false);
-		declareFunction(myName, "_csetf_plac_proof_concluded_truth", "_CSETF-PLAC-PROOF-CONCLUDED-TRUTH", 2, 0, false);
-		declareFunction(myName, "_csetf_plac_proof_assertible", "_CSETF-PLAC-PROOF-ASSERTIBLE", 2, 0, false);
-		declareFunction(myName, "make_placeable_proof", "MAKE-PLACEABLE-PROOF", 0, 1, false);
-		declareFunction(myName, "visit_defstruct_placeable_proof", "VISIT-DEFSTRUCT-PLACEABLE-PROOF", 2, 0, false);
-		declareFunction(myName, "visit_defstruct_object_placeable_proof_method",
+		declareFunction("plac_proof_concluded_asent", "PLAC-PROOF-CONCLUDED-ASENT", 1, 0, false);
+		declareFunction("plac_proof_concluded_mt", "PLAC-PROOF-CONCLUDED-MT", 1, 0, false);
+		declareFunction("plac_proof_concluded_truth", "PLAC-PROOF-CONCLUDED-TRUTH", 1, 0, false);
+		declareFunction("plac_proof_assertible", "PLAC-PROOF-ASSERTIBLE", 1, 0, false);
+		declareFunction("_csetf_plac_proof_concluded_asent", "_CSETF-PLAC-PROOF-CONCLUDED-ASENT", 2, 0, false);
+		declareFunction("_csetf_plac_proof_concluded_mt", "_CSETF-PLAC-PROOF-CONCLUDED-MT", 2, 0, false);
+		declareFunction("_csetf_plac_proof_concluded_truth", "_CSETF-PLAC-PROOF-CONCLUDED-TRUTH", 2, 0, false);
+		declareFunction("_csetf_plac_proof_assertible", "_CSETF-PLAC-PROOF-ASSERTIBLE", 2, 0, false);
+		declareFunction("make_placeable_proof", "MAKE-PLACEABLE-PROOF", 0, 1, false);
+		declareFunction("visit_defstruct_placeable_proof", "VISIT-DEFSTRUCT-PLACEABLE-PROOF", 2, 0, false);
+		declareFunction("visit_defstruct_object_placeable_proof_method",
 				"VISIT-DEFSTRUCT-OBJECT-PLACEABLE-PROOF-METHOD", 2, 0, false);
-		declareFunction(myName, "sxhash_placeable_proof_method", "SXHASH-PLACEABLE-PROOF-METHOD", 1, 0, false);
-		declareFunction(myName, "print_placeable_proof", "PRINT-PLACEABLE-PROOF", 3, 0, false);
-		declareFunction(myName, "new_placeable_proof_from_assertible", "NEW-PLACEABLE-PROOF-FROM-ASSERTIBLE", 1, 0,
+		declareFunction("sxhash_placeable_proof_method", "SXHASH-PLACEABLE-PROOF-METHOD", 1, 0, false);
+		declareFunction("print_placeable_proof", "PRINT-PLACEABLE-PROOF", 3, 0, false);
+		declareFunction("new_placeable_proof_from_assertible", "NEW-PLACEABLE-PROOF-FROM-ASSERTIBLE", 1, 0,
 				false);
-		declareFunction(myName, "placeable_proof_concluded_asent", "PLACEABLE-PROOF-CONCLUDED-ASENT", 1, 0, false);
-		declareFunction(myName, "placeable_proof_concluded_mt", "PLACEABLE-PROOF-CONCLUDED-MT", 1, 0, false);
-		declareFunction(myName, "placeable_proof_concluded_truth", "PLACEABLE-PROOF-CONCLUDED-TRUTH", 1, 0, false);
-		declareFunction(myName, "placeable_proof_assertible", "PLACEABLE-PROOF-ASSERTIBLE", 1, 0, false);
-		declareFunction(myName, "forward_propagate_assertion_to_quiescence",
+		declareFunction("placeable_proof_concluded_asent", "PLACEABLE-PROOF-CONCLUDED-ASENT", 1, 0, false);
+		declareFunction("placeable_proof_concluded_mt", "PLACEABLE-PROOF-CONCLUDED-MT", 1, 0, false);
+		declareFunction("placeable_proof_concluded_truth", "PLACEABLE-PROOF-CONCLUDED-TRUTH", 1, 0, false);
+		declareFunction("placeable_proof_assertible", "PLACEABLE-PROOF-ASSERTIBLE", 1, 0, false);
+		declareFunction("forward_propagate_assertion_to_quiescence",
 				"FORWARD-PROPAGATE-ASSERTION-TO-QUIESCENCE", 1, 1, false);
-		declareFunction(myName, "forward_propagate_assertions_to_quiescence",
+		declareFunction("forward_propagate_assertions_to_quiescence",
 				"FORWARD-PROPAGATE-ASSERTIONS-TO-QUIESCENCE", 1, 1, false);
-		declareFunction(myName, "forward_propagation_state_exhaustedP", "FORWARD-PROPAGATION-STATE-EXHAUSTED?", 1, 0,
+		declareFunction("forward_propagation_state_exhaustedP", "FORWARD-PROPAGATION-STATE-EXHAUSTED?", 1, 0,
 				false);
-		declareFunction(myName, "forward_propagation_process_some_assertions",
+		declareFunction("forward_propagation_process_some_assertions",
 				"FORWARD-PROPAGATION-PROCESS-SOME-ASSERTIONS", 1, 0, false);
-		declareFunction(myName, "forward_propagation_select_next_assertions",
+		declareFunction("forward_propagation_select_next_assertions",
 				"FORWARD-PROPAGATION-SELECT-NEXT-ASSERTIONS", 1, 0, false);
-		declareFunction(myName, "forward_propatation_sort_assertions", "FORWARD-PROPATATION-SORT-ASSERTIONS", 1, 0,
+		declareFunction("forward_propatation_sort_assertions", "FORWARD-PROPATATION-SORT-ASSERTIONS", 1, 0,
 				false);
-		declareFunction(myName, "forward_propagation_generate_triggerings", "FORWARD-PROPAGATION-GENERATE-TRIGGERINGS",
+		declareFunction("forward_propagation_generate_triggerings", "FORWARD-PROPAGATION-GENERATE-TRIGGERINGS",
 				2, 0, false);
-		declareFunction(myName, "forward_propagate_note_generated_triggering",
+		declareFunction("forward_propagate_note_generated_triggering",
 				"FORWARD-PROPAGATE-NOTE-GENERATED-TRIGGERING", 8, 0, false);
-		declareFunction(myName, "forward_propagation_process_some_triggerings",
+		declareFunction("forward_propagation_process_some_triggerings",
 				"FORWARD-PROPAGATION-PROCESS-SOME-TRIGGERINGS", 1, 0, false);
-		declareFunction(myName, "forward_propagation_select_next_triggerings",
+		declareFunction("forward_propagation_select_next_triggerings",
 				"FORWARD-PROPAGATION-SELECT-NEXT-TRIGGERINGS", 1, 0, false);
-		declareFunction(myName, "forward_propatation_sort_triggerings", "FORWARD-PROPATATION-SORT-TRIGGERINGS", 1, 0,
+		declareFunction("forward_propatation_sort_triggerings", "FORWARD-PROPATATION-SORT-TRIGGERINGS", 1, 0,
 				false);
-		declareFunction(myName, "forward_propagation_generate_skeletal_proofs",
+		declareFunction("forward_propagation_generate_skeletal_proofs",
 				"FORWARD-PROPAGATION-GENERATE-SKELETAL-PROOFS", 1, 0, false);
-		declareFunction(myName, "forward_propagate_note_generated_skeletal_proof",
+		declareFunction("forward_propagate_note_generated_skeletal_proof",
 				"FORWARD-PROPAGATE-NOTE-GENERATED-SKELETAL-PROOF", 8, 0, false);
-		declareFunction(myName, "forward_propagation_process_some_skeletal_proofs",
+		declareFunction("forward_propagation_process_some_skeletal_proofs",
 				"FORWARD-PROPAGATION-PROCESS-SOME-SKELETAL-PROOFS", 1, 0, false);
-		declareFunction(myName, "forward_propagation_select_next_skeletal_proofs",
+		declareFunction("forward_propagation_select_next_skeletal_proofs",
 				"FORWARD-PROPAGATION-SELECT-NEXT-SKELETAL-PROOFS", 1, 0, false);
-		declareFunction(myName, "forward_propatation_sort_skeletal_proofs", "FORWARD-PROPATATION-SORT-SKELETAL-PROOFS",
+		declareFunction("forward_propatation_sort_skeletal_proofs", "FORWARD-PROPATATION-SORT-SKELETAL-PROOFS",
 				1, 0, false);
-		declareFunction(myName, "forward_propagation_generate_placeable_proofs",
+		declareFunction("forward_propagation_generate_placeable_proofs",
 				"FORWARD-PROPAGATION-GENERATE-PLACEABLE-PROOFS", 1, 0, false);
-		declareFunction(myName, "forward_propagation_process_some_placeable_proofs",
+		declareFunction("forward_propagation_process_some_placeable_proofs",
 				"FORWARD-PROPAGATION-PROCESS-SOME-PLACEABLE-PROOFS", 1, 0, false);
-		declareFunction(myName, "forward_propagation_select_next_placeable_proofs",
+		declareFunction("forward_propagation_select_next_placeable_proofs",
 				"FORWARD-PROPAGATION-SELECT-NEXT-PLACEABLE-PROOFS", 1, 0, false);
-		declareFunction(myName, "forward_propatation_sort_placeable_proofs",
+		declareFunction("forward_propatation_sort_placeable_proofs",
 				"FORWARD-PROPATATION-SORT-PLACEABLE-PROOFS", 1, 0, false);
-		declareFunction(myName, "forward_propagation_assertibles_queue_from_placeable_proofs",
+		declareFunction("forward_propagation_assertibles_queue_from_placeable_proofs",
 				"FORWARD-PROPAGATION-ASSERTIBLES-QUEUE-FROM-PLACEABLE-PROOFS", 1, 0, false);
 		return NIL;
 	}

@@ -69,7 +69,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class gt_methods extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new gt_methods();
 
- public static final String myName = "com.cyc.cycjava.cycl.gt_methods";
 
 
     private static final SubLSymbol GT_SUPERIORS = makeSymbol("GT-SUPERIORS");

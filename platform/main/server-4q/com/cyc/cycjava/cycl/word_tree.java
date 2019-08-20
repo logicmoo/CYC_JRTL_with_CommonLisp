@@ -98,7 +98,6 @@ public final class word_tree extends word_tree_base_file {
     public static final SubLFile me = new word_tree();
 
 
- public static final String myName = "com.cyc.cycjava.cycl.word_tree";
 
     public static SubLObject adjectival_word_tree_get_complements_method(final SubLObject self) {
 	final SubLObject modifieds = methods.funcall_instance_method_with_0_args(self, GET_MODIFIEDS);

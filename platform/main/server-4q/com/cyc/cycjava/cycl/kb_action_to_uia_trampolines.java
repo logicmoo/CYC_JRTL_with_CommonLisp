@@ -113,7 +113,6 @@ public final class kb_action_to_uia_trampolines extends SubLTranslatedFile imple
 
 	public static final SubLFile me = new kb_action_to_uia_trampolines();
 
-	public static final String myName = "com.cyc.cycjava.cycl.kb_action_to_uia_trampolines";
 
 	// // Definitions
 	/**

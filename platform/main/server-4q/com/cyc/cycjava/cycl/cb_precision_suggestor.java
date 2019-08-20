@@ -150,7 +150,6 @@ public final class cb_precision_suggestor extends SubLTranslatedFile implements 
 
     public static final SubLFile me = new cb_precision_suggestor();
 
- public static final String myName = "com.cyc.cycjava.cycl.cb_precision_suggestor";
 
 
     // defconstant

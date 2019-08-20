@@ -81,7 +81,6 @@ public final class interval_span extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new interval_span();
 
- public static final String myName = "com.cyc.cycjava.cycl.interval_span";
 
 
     // defconstant

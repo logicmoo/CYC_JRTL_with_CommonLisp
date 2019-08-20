@@ -817,7 +817,6 @@ public final class semantic_etl_bus extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new semantic_etl_bus();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.semantic_etl_bus";
 
 
     // defvar

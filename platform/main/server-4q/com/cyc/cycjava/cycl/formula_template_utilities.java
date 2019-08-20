@@ -2048,7 +2048,6 @@ public final class formula_template_utilities extends SubLTranslatedFile impleme
 
     public static final SubLFile me = new formula_template_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.formula_template_utilities";
 
 
     // defparameter

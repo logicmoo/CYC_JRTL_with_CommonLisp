@@ -65,7 +65,6 @@ public final class cb_halo extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cb_halo();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_halo";
 
     // // Definitions
     // defparameter

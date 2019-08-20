@@ -94,7 +94,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class query_suggestor extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new query_suggestor();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.query_suggestor";
 
 
     // defvar

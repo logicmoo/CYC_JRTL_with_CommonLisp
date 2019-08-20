@@ -145,7 +145,6 @@ public final class sksi_sks_structure_importer_utilities extends SubLTranslatedF
 
     public static final SubLFile me = new sksi_sks_structure_importer_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.modeling_tools.sksi_sks_structure_importer_utilities";
 
 
     // deflexical

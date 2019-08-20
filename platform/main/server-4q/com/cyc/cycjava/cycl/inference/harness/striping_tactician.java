@@ -59,7 +59,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class striping_tactician extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.harness.striping_tactician";
 	public static String myFingerPrint = "6ce3dab8b7e5899fec69abefd6fa35778c22900c23567761764d7696126ce67b";
 	@SubL(source = "cycl/inference/harness/striping-tactician.lisp", position = 4300L)
 	public static SubLSymbol $dtp_striping_tactician_data$;
@@ -2799,303 +2798,303 @@ public class striping_tactician extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_striping_tactician_file() {
-		declareFunction(myName, "striping_tactician_data_print_function_trampoline",
+		declareFunction("striping_tactician_data_print_function_trampoline",
 				"STRIPING-TACTICIAN-DATA-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-		declareFunction(myName, "striping_tactician_data_p", "STRIPING-TACTICIAN-DATA-P", 1, 0, false);
+		declareFunction("striping_tactician_data_p", "STRIPING-TACTICIAN-DATA-P", 1, 0, false);
 		new $striping_tactician_data_p$UnaryFunction();
-		declareFunction(myName, "str_tac_data_new_root_substrategy", "STR-TAC-DATA-NEW-ROOT-SUBSTRATEGY", 1, 0, false);
-		declareFunction(myName, "str_tac_data_transformation_substrategy", "STR-TAC-DATA-TRANSFORMATION-SUBSTRATEGY", 1,
+		declareFunction("str_tac_data_new_root_substrategy", "STR-TAC-DATA-NEW-ROOT-SUBSTRATEGY", 1, 0, false);
+		declareFunction("str_tac_data_transformation_substrategy", "STR-TAC-DATA-TRANSFORMATION-SUBSTRATEGY", 1,
 				0, false);
-		declareFunction(myName, "str_tac_data_removal_substrategies", "STR-TAC-DATA-REMOVAL-SUBSTRATEGIES", 1, 0,
+		declareFunction("str_tac_data_removal_substrategies", "STR-TAC-DATA-REMOVAL-SUBSTRATEGIES", 1, 0,
 				false);
-		declareFunction(myName, "str_tac_data_new_root_r_map", "STR-TAC-DATA-NEW-ROOT-R-MAP", 1, 0, false);
-		declareFunction(myName, "str_tac_data_new_root_proofiness_map", "STR-TAC-DATA-NEW-ROOT-PROOFINESS-MAP", 1, 0,
+		declareFunction("str_tac_data_new_root_r_map", "STR-TAC-DATA-NEW-ROOT-R-MAP", 1, 0, false);
+		declareFunction("str_tac_data_new_root_proofiness_map", "STR-TAC-DATA-NEW-ROOT-PROOFINESS-MAP", 1, 0,
 				false);
-		declareFunction(myName, "str_tac_data_new_root_delay_map", "STR-TAC-DATA-NEW-ROOT-DELAY-MAP", 1, 0, false);
-		declareFunction(myName, "str_tac_data_new_root_metrics_map", "STR-TAC-DATA-NEW-ROOT-METRICS-MAP", 1, 0, false);
-		declareFunction(myName, "_csetf_str_tac_data_new_root_substrategy", "_CSETF-STR-TAC-DATA-NEW-ROOT-SUBSTRATEGY",
+		declareFunction("str_tac_data_new_root_delay_map", "STR-TAC-DATA-NEW-ROOT-DELAY-MAP", 1, 0, false);
+		declareFunction("str_tac_data_new_root_metrics_map", "STR-TAC-DATA-NEW-ROOT-METRICS-MAP", 1, 0, false);
+		declareFunction("_csetf_str_tac_data_new_root_substrategy", "_CSETF-STR-TAC-DATA-NEW-ROOT-SUBSTRATEGY",
 				2, 0, false);
-		declareFunction(myName, "_csetf_str_tac_data_transformation_substrategy",
+		declareFunction("_csetf_str_tac_data_transformation_substrategy",
 				"_CSETF-STR-TAC-DATA-TRANSFORMATION-SUBSTRATEGY", 2, 0, false);
-		declareFunction(myName, "_csetf_str_tac_data_removal_substrategies",
+		declareFunction("_csetf_str_tac_data_removal_substrategies",
 				"_CSETF-STR-TAC-DATA-REMOVAL-SUBSTRATEGIES", 2, 0, false);
-		declareFunction(myName, "_csetf_str_tac_data_new_root_r_map", "_CSETF-STR-TAC-DATA-NEW-ROOT-R-MAP", 2, 0,
+		declareFunction("_csetf_str_tac_data_new_root_r_map", "_CSETF-STR-TAC-DATA-NEW-ROOT-R-MAP", 2, 0,
 				false);
-		declareFunction(myName, "_csetf_str_tac_data_new_root_proofiness_map",
+		declareFunction("_csetf_str_tac_data_new_root_proofiness_map",
 				"_CSETF-STR-TAC-DATA-NEW-ROOT-PROOFINESS-MAP", 2, 0, false);
-		declareFunction(myName, "_csetf_str_tac_data_new_root_delay_map", "_CSETF-STR-TAC-DATA-NEW-ROOT-DELAY-MAP", 2,
+		declareFunction("_csetf_str_tac_data_new_root_delay_map", "_CSETF-STR-TAC-DATA-NEW-ROOT-DELAY-MAP", 2,
 				0, false);
-		declareFunction(myName, "_csetf_str_tac_data_new_root_metrics_map", "_CSETF-STR-TAC-DATA-NEW-ROOT-METRICS-MAP",
+		declareFunction("_csetf_str_tac_data_new_root_metrics_map", "_CSETF-STR-TAC-DATA-NEW-ROOT-METRICS-MAP",
 				2, 0, false);
-		declareFunction(myName, "make_striping_tactician_data", "MAKE-STRIPING-TACTICIAN-DATA", 0, 1, false);
-		declareFunction(myName, "visit_defstruct_striping_tactician_data", "VISIT-DEFSTRUCT-STRIPING-TACTICIAN-DATA", 2,
+		declareFunction("make_striping_tactician_data", "MAKE-STRIPING-TACTICIAN-DATA", 0, 1, false);
+		declareFunction("visit_defstruct_striping_tactician_data", "VISIT-DEFSTRUCT-STRIPING-TACTICIAN-DATA", 2,
 				0, false);
-		declareFunction(myName, "visit_defstruct_object_striping_tactician_data_method",
+		declareFunction("visit_defstruct_object_striping_tactician_data_method",
 				"VISIT-DEFSTRUCT-OBJECT-STRIPING-TACTICIAN-DATA-METHOD", 2, 0, false);
-		declareFunction(myName, "striping_tactician_p", "STRIPING-TACTICIAN-P", 1, 0, false);
-		declareMacro(me, "do_striping_tactician_substrategies", "DO-STRIPING-TACTICIAN-SUBSTRATEGIES");
-		declareMacro(me, "do_striping_tactician_spineful_substrategies",
+		declareFunction("striping_tactician_p", "STRIPING-TACTICIAN-P", 1, 0, false);
+		declareMacro("do_striping_tactician_substrategies", "DO-STRIPING-TACTICIAN-SUBSTRATEGIES");
+		declareMacro("do_striping_tactician_spineful_substrategies",
 				"DO-STRIPING-TACTICIAN-SPINEFUL-SUBSTRATEGIES");
-		declareMacro(me, "do_striping_tactician_removal_substrategies", "DO-STRIPING-TACTICIAN-REMOVAL-SUBSTRATEGIES");
-		declareMacro(me, "do_striping_tactician_active_removal_substrategies",
+		declareMacro("do_striping_tactician_removal_substrategies", "DO-STRIPING-TACTICIAN-REMOVAL-SUBSTRATEGIES");
+		declareMacro("do_striping_tactician_active_removal_substrategies",
 				"DO-STRIPING-TACTICIAN-ACTIVE-REMOVAL-SUBSTRATEGIES");
-		declareMacro(me, "do_striping_tactician_inactive_removal_substrategies",
+		declareMacro("do_striping_tactician_inactive_removal_substrategies",
 				"DO-STRIPING-TACTICIAN-INACTIVE-REMOVAL-SUBSTRATEGIES");
-		declareFunction(myName, "new_striping_tactician_data", "NEW-STRIPING-TACTICIAN-DATA", 2, 0, false);
-		declareFunction(myName, "striping_tactician_initialize", "STRIPING-TACTICIAN-INITIALIZE", 1, 0, false);
-		declareFunction(myName, "new_striping_tactician_data_from_inference",
+		declareFunction("new_striping_tactician_data", "NEW-STRIPING-TACTICIAN-DATA", 2, 0, false);
+		declareFunction("striping_tactician_initialize", "STRIPING-TACTICIAN-INITIALIZE", 1, 0, false);
+		declareFunction("new_striping_tactician_data_from_inference",
 				"NEW-STRIPING-TACTICIAN-DATA-FROM-INFERENCE", 1, 0, false);
-		declareFunction(myName, "striping_tactician_new_root_substrategy", "STRIPING-TACTICIAN-NEW-ROOT-SUBSTRATEGY", 1,
+		declareFunction("striping_tactician_new_root_substrategy", "STRIPING-TACTICIAN-NEW-ROOT-SUBSTRATEGY", 1,
 				0, false);
-		declareFunction(myName, "striping_tactician_transformation_substrategy",
+		declareFunction("striping_tactician_transformation_substrategy",
 				"STRIPING-TACTICIAN-TRANSFORMATION-SUBSTRATEGY", 1, 0, false);
-		declareFunction(myName, "striping_tactician_removal_substrategies", "STRIPING-TACTICIAN-REMOVAL-SUBSTRATEGIES",
+		declareFunction("striping_tactician_removal_substrategies", "STRIPING-TACTICIAN-REMOVAL-SUBSTRATEGIES",
 				1, 0, false);
-		declareFunction(myName, "striping_tactician_new_root_r_map", "STRIPING-TACTICIAN-NEW-ROOT-R-MAP", 1, 0, false);
-		declareFunction(myName, "striping_tactician_new_root_proofiness_map",
+		declareFunction("striping_tactician_new_root_r_map", "STRIPING-TACTICIAN-NEW-ROOT-R-MAP", 1, 0, false);
+		declareFunction("striping_tactician_new_root_proofiness_map",
 				"STRIPING-TACTICIAN-NEW-ROOT-PROOFINESS-MAP", 1, 0, false);
-		declareFunction(myName, "striping_tactician_new_root_delay_map", "STRIPING-TACTICIAN-NEW-ROOT-DELAY-MAP", 1, 0,
+		declareFunction("striping_tactician_new_root_delay_map", "STRIPING-TACTICIAN-NEW-ROOT-DELAY-MAP", 1, 0,
 				false);
-		declareFunction(myName, "striping_tactician_new_root_metrics_map", "STRIPING-TACTICIAN-NEW-ROOT-METRICS-MAP", 1,
+		declareFunction("striping_tactician_new_root_metrics_map", "STRIPING-TACTICIAN-NEW-ROOT-METRICS-MAP", 1,
 				0, false);
-		declareFunction(myName, "striping_tactician_new_removal_substrategy",
+		declareFunction("striping_tactician_new_removal_substrategy",
 				"STRIPING-TACTICIAN-NEW-REMOVAL-SUBSTRATEGY", 2, 0, false);
-		declareFunction(myName, "striping_tactician_new_throwaway_removal_substrategy",
+		declareFunction("striping_tactician_new_throwaway_removal_substrategy",
 				"STRIPING-TACTICIAN-NEW-THROWAWAY-REMOVAL-SUBSTRATEGY", 1, 0, false);
-		declareFunction(myName, "set_striping_tactician_new_root_metrics", "SET-STRIPING-TACTICIAN-NEW-ROOT-METRICS", 3,
+		declareFunction("set_striping_tactician_new_root_metrics", "SET-STRIPING-TACTICIAN-NEW-ROOT-METRICS", 3,
 				0, false);
-		declareFunction(myName, "set_new_root_proofiness", "SET-NEW-ROOT-PROOFINESS", 2, 0, false);
-		declareFunction(myName, "decrement_new_root_proofiness", "DECREMENT-NEW-ROOT-PROOFINESS", 1, 0, false);
-		declareFunction(myName, "set_new_root_delay", "SET-NEW-ROOT-DELAY", 2, 0, false);
-		declareFunction(myName, "decrement_new_root_delay", "DECREMENT-NEW-ROOT-DELAY", 2, 0, false);
-		declareFunction(myName, "striping_tactician_all_substrategies", "STRIPING-TACTICIAN-ALL-SUBSTRATEGIES", 1, 0,
+		declareFunction("set_new_root_proofiness", "SET-NEW-ROOT-PROOFINESS", 2, 0, false);
+		declareFunction("decrement_new_root_proofiness", "DECREMENT-NEW-ROOT-PROOFINESS", 1, 0, false);
+		declareFunction("set_new_root_delay", "SET-NEW-ROOT-DELAY", 2, 0, false);
+		declareFunction("decrement_new_root_delay", "DECREMENT-NEW-ROOT-DELAY", 2, 0, false);
+		declareFunction("striping_tactician_all_substrategies", "STRIPING-TACTICIAN-ALL-SUBSTRATEGIES", 1, 0,
 				false);
-		declareFunction(myName, "striping_tactician_removal_substrategy_count",
+		declareFunction("striping_tactician_removal_substrategy_count",
 				"STRIPING-TACTICIAN-REMOVAL-SUBSTRATEGY-COUNT", 1, 0, false);
-		declareFunction(myName, "striping_tactician_problem_motivated_wrt_nP",
+		declareFunction("striping_tactician_problem_motivated_wrt_nP",
 				"STRIPING-TACTICIAN-PROBLEM-MOTIVATED-WRT-N?", 2, 0, false);
-		declareFunction(myName, "striping_tactician_problem_motivated_wrt_any_rP",
+		declareFunction("striping_tactician_problem_motivated_wrt_any_rP",
 				"STRIPING-TACTICIAN-PROBLEM-MOTIVATED-WRT-ANY-R?", 2, 0, false);
-		declareFunction(myName, "striping_tactician_problem_motivated_wrt_tP",
+		declareFunction("striping_tactician_problem_motivated_wrt_tP",
 				"STRIPING-TACTICIAN-PROBLEM-MOTIVATED-WRT-T?", 2, 0, false);
-		declareFunction(myName, "striping_tactician_link_head_motivated_wrt_any_rP",
+		declareFunction("striping_tactician_link_head_motivated_wrt_any_rP",
 				"STRIPING-TACTICIAN-LINK-HEAD-MOTIVATED-WRT-ANY-R?", 2, 0, false);
-		declareFunction(myName, "striping_tactician_substrategy_p", "STRIPING-TACTICIAN-SUBSTRATEGY-P", 1, 0, false);
-		declareFunction(myName, "striping_tactician_proper_substrategy_p", "STRIPING-TACTICIAN-PROPER-SUBSTRATEGY-P", 1,
+		declareFunction("striping_tactician_substrategy_p", "STRIPING-TACTICIAN-SUBSTRATEGY-P", 1, 0, false);
+		declareFunction("striping_tactician_proper_substrategy_p", "STRIPING-TACTICIAN-PROPER-SUBSTRATEGY-P", 1,
 				0, false);
-		declareFunction(myName, "striping_tactician_spineless_substrategy_p",
+		declareFunction("striping_tactician_spineless_substrategy_p",
 				"STRIPING-TACTICIAN-SPINELESS-SUBSTRATEGY-P", 1, 0, false);
-		declareFunction(myName, "striping_tactician_new_root_removal_strategy",
+		declareFunction("striping_tactician_new_root_removal_strategy",
 				"STRIPING-TACTICIAN-NEW-ROOT-REMOVAL-STRATEGY", 2, 0, false);
-		declareFunction(myName, "striping_tactician_removal_strategy_new_root",
+		declareFunction("striping_tactician_removal_strategy_new_root",
 				"STRIPING-TACTICIAN-REMOVAL-STRATEGY-NEW-ROOT", 2, 0, false);
-		declareFunction(myName, "new_root_proofiness", "NEW-ROOT-PROOFINESS", 1, 0, false);
-		declareFunction(myName, "new_root_delay", "NEW-ROOT-DELAY", 1, 0, false);
-		declareFunction(myName, "new_root_metrics", "NEW-ROOT-METRICS", 1, 0, false);
-		declareFunction(myName, "new_root_metrics_print_function_trampoline",
+		declareFunction("new_root_proofiness", "NEW-ROOT-PROOFINESS", 1, 0, false);
+		declareFunction("new_root_delay", "NEW-ROOT-DELAY", 1, 0, false);
+		declareFunction("new_root_metrics", "NEW-ROOT-METRICS", 1, 0, false);
+		declareFunction("new_root_metrics_print_function_trampoline",
 				"NEW-ROOT-METRICS-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-		declareFunction(myName, "new_root_metrics_p", "NEW-ROOT-METRICS-P", 1, 0, false);
+		declareFunction("new_root_metrics_p", "NEW-ROOT-METRICS-P", 1, 0, false);
 		new $new_root_metrics_p$UnaryFunction();
-		declareFunction(myName, "nr_metrics_start_inference_step_count", "NR-METRICS-START-INFERENCE-STEP-COUNT", 1, 0,
+		declareFunction("nr_metrics_start_inference_step_count", "NR-METRICS-START-INFERENCE-STEP-COUNT", 1, 0,
 				false);
-		declareFunction(myName, "nr_metrics_index", "NR-METRICS-INDEX", 1, 0, false);
-		declareFunction(myName, "nr_metrics_start_time", "NR-METRICS-START-TIME", 1, 0, false);
-		declareFunction(myName, "nr_metrics_time_to_first_answer", "NR-METRICS-TIME-TO-FIRST-ANSWER", 1, 0, false);
-		declareFunction(myName, "nr_metrics_steps_to_first_answer", "NR-METRICS-STEPS-TO-FIRST-ANSWER", 1, 0, false);
-		declareFunction(myName, "nr_metrics_time_to_last_answer", "NR-METRICS-TIME-TO-LAST-ANSWER", 1, 0, false);
-		declareFunction(myName, "nr_metrics_steps_to_last_answer", "NR-METRICS-STEPS-TO-LAST-ANSWER", 1, 0, false);
-		declareFunction(myName, "nr_metrics_answer_count", "NR-METRICS-ANSWER-COUNT", 1, 0, false);
-		declareFunction(myName, "_csetf_nr_metrics_start_inference_step_count",
+		declareFunction("nr_metrics_index", "NR-METRICS-INDEX", 1, 0, false);
+		declareFunction("nr_metrics_start_time", "NR-METRICS-START-TIME", 1, 0, false);
+		declareFunction("nr_metrics_time_to_first_answer", "NR-METRICS-TIME-TO-FIRST-ANSWER", 1, 0, false);
+		declareFunction("nr_metrics_steps_to_first_answer", "NR-METRICS-STEPS-TO-FIRST-ANSWER", 1, 0, false);
+		declareFunction("nr_metrics_time_to_last_answer", "NR-METRICS-TIME-TO-LAST-ANSWER", 1, 0, false);
+		declareFunction("nr_metrics_steps_to_last_answer", "NR-METRICS-STEPS-TO-LAST-ANSWER", 1, 0, false);
+		declareFunction("nr_metrics_answer_count", "NR-METRICS-ANSWER-COUNT", 1, 0, false);
+		declareFunction("_csetf_nr_metrics_start_inference_step_count",
 				"_CSETF-NR-METRICS-START-INFERENCE-STEP-COUNT", 2, 0, false);
-		declareFunction(myName, "_csetf_nr_metrics_index", "_CSETF-NR-METRICS-INDEX", 2, 0, false);
-		declareFunction(myName, "_csetf_nr_metrics_start_time", "_CSETF-NR-METRICS-START-TIME", 2, 0, false);
-		declareFunction(myName, "_csetf_nr_metrics_time_to_first_answer", "_CSETF-NR-METRICS-TIME-TO-FIRST-ANSWER", 2,
+		declareFunction("_csetf_nr_metrics_index", "_CSETF-NR-METRICS-INDEX", 2, 0, false);
+		declareFunction("_csetf_nr_metrics_start_time", "_CSETF-NR-METRICS-START-TIME", 2, 0, false);
+		declareFunction("_csetf_nr_metrics_time_to_first_answer", "_CSETF-NR-METRICS-TIME-TO-FIRST-ANSWER", 2,
 				0, false);
-		declareFunction(myName, "_csetf_nr_metrics_steps_to_first_answer", "_CSETF-NR-METRICS-STEPS-TO-FIRST-ANSWER", 2,
+		declareFunction("_csetf_nr_metrics_steps_to_first_answer", "_CSETF-NR-METRICS-STEPS-TO-FIRST-ANSWER", 2,
 				0, false);
-		declareFunction(myName, "_csetf_nr_metrics_time_to_last_answer", "_CSETF-NR-METRICS-TIME-TO-LAST-ANSWER", 2, 0,
+		declareFunction("_csetf_nr_metrics_time_to_last_answer", "_CSETF-NR-METRICS-TIME-TO-LAST-ANSWER", 2, 0,
 				false);
-		declareFunction(myName, "_csetf_nr_metrics_steps_to_last_answer", "_CSETF-NR-METRICS-STEPS-TO-LAST-ANSWER", 2,
+		declareFunction("_csetf_nr_metrics_steps_to_last_answer", "_CSETF-NR-METRICS-STEPS-TO-LAST-ANSWER", 2,
 				0, false);
-		declareFunction(myName, "_csetf_nr_metrics_answer_count", "_CSETF-NR-METRICS-ANSWER-COUNT", 2, 0, false);
-		declareFunction(myName, "make_new_root_metrics", "MAKE-NEW-ROOT-METRICS", 0, 1, false);
-		declareFunction(myName, "visit_defstruct_new_root_metrics", "VISIT-DEFSTRUCT-NEW-ROOT-METRICS", 2, 0, false);
-		declareFunction(myName, "visit_defstruct_object_new_root_metrics_method",
+		declareFunction("_csetf_nr_metrics_answer_count", "_CSETF-NR-METRICS-ANSWER-COUNT", 2, 0, false);
+		declareFunction("make_new_root_metrics", "MAKE-NEW-ROOT-METRICS", 0, 1, false);
+		declareFunction("visit_defstruct_new_root_metrics", "VISIT-DEFSTRUCT-NEW-ROOT-METRICS", 2, 0, false);
+		declareFunction("visit_defstruct_object_new_root_metrics_method",
 				"VISIT-DEFSTRUCT-OBJECT-NEW-ROOT-METRICS-METHOD", 2, 0, false);
-		declareFunction(myName, "striping_tactician_initialize_new_root_metrics_from_inference",
+		declareFunction("striping_tactician_initialize_new_root_metrics_from_inference",
 				"STRIPING-TACTICIAN-INITIALIZE-NEW-ROOT-METRICS-FROM-INFERENCE", 3, 0, false);
-		declareFunction(myName, "new_root_start_inference_step_count", "NEW-ROOT-START-INFERENCE-STEP-COUNT", 1, 0,
+		declareFunction("new_root_start_inference_step_count", "NEW-ROOT-START-INFERENCE-STEP-COUNT", 1, 0,
 				false);
-		declareFunction(myName, "new_root_index", "NEW-ROOT-INDEX", 1, 0, false);
-		declareFunction(myName, "new_root_start_time", "NEW-ROOT-START-TIME", 1, 0, false);
-		declareFunction(myName, "new_root_time_to_first_answer", "NEW-ROOT-TIME-TO-FIRST-ANSWER", 1, 0, false);
-		declareFunction(myName, "new_root_steps_to_first_answer", "NEW-ROOT-STEPS-TO-FIRST-ANSWER", 1, 0, false);
-		declareFunction(myName, "new_root_time_to_last_answer", "NEW-ROOT-TIME-TO-LAST-ANSWER", 1, 0, false);
-		declareFunction(myName, "new_root_steps_to_last_answer", "NEW-ROOT-STEPS-TO-LAST-ANSWER", 1, 0, false);
-		declareFunction(myName, "new_root_answer_count", "NEW-ROOT-ANSWER-COUNT", 1, 0, false);
-		declareFunction(myName, "set_new_root_time_to_first_answer", "SET-NEW-ROOT-TIME-TO-FIRST-ANSWER", 2, 0, false);
-		declareFunction(myName, "set_new_root_steps_to_first_answer", "SET-NEW-ROOT-STEPS-TO-FIRST-ANSWER", 2, 0,
+		declareFunction("new_root_index", "NEW-ROOT-INDEX", 1, 0, false);
+		declareFunction("new_root_start_time", "NEW-ROOT-START-TIME", 1, 0, false);
+		declareFunction("new_root_time_to_first_answer", "NEW-ROOT-TIME-TO-FIRST-ANSWER", 1, 0, false);
+		declareFunction("new_root_steps_to_first_answer", "NEW-ROOT-STEPS-TO-FIRST-ANSWER", 1, 0, false);
+		declareFunction("new_root_time_to_last_answer", "NEW-ROOT-TIME-TO-LAST-ANSWER", 1, 0, false);
+		declareFunction("new_root_steps_to_last_answer", "NEW-ROOT-STEPS-TO-LAST-ANSWER", 1, 0, false);
+		declareFunction("new_root_answer_count", "NEW-ROOT-ANSWER-COUNT", 1, 0, false);
+		declareFunction("set_new_root_time_to_first_answer", "SET-NEW-ROOT-TIME-TO-FIRST-ANSWER", 2, 0, false);
+		declareFunction("set_new_root_steps_to_first_answer", "SET-NEW-ROOT-STEPS-TO-FIRST-ANSWER", 2, 0,
 				false);
-		declareFunction(myName, "set_new_root_time_to_last_answer", "SET-NEW-ROOT-TIME-TO-LAST-ANSWER", 2, 0, false);
-		declareFunction(myName, "set_new_root_steps_to_last_answer", "SET-NEW-ROOT-STEPS-TO-LAST-ANSWER", 2, 0, false);
-		declareFunction(myName, "set_new_root_answer_count", "SET-NEW-ROOT-ANSWER-COUNT", 2, 0, false);
-		declareFunction(myName, "new_root_metrics_plist", "NEW-ROOT-METRICS-PLIST", 1, 0, false);
-		declareFunction(myName, "construct_new_root_metrics_plist", "CONSTRUCT-NEW-ROOT-METRICS-PLIST", 9, 0, false);
-		declareFunction(myName, "striping_tactician_new_root_metrics", "STRIPING-TACTICIAN-NEW-ROOT-METRICS", 1, 0,
+		declareFunction("set_new_root_time_to_last_answer", "SET-NEW-ROOT-TIME-TO-LAST-ANSWER", 2, 0, false);
+		declareFunction("set_new_root_steps_to_last_answer", "SET-NEW-ROOT-STEPS-TO-LAST-ANSWER", 2, 0, false);
+		declareFunction("set_new_root_answer_count", "SET-NEW-ROOT-ANSWER-COUNT", 2, 0, false);
+		declareFunction("new_root_metrics_plist", "NEW-ROOT-METRICS-PLIST", 1, 0, false);
+		declareFunction("construct_new_root_metrics_plist", "CONSTRUCT-NEW-ROOT-METRICS-PLIST", 9, 0, false);
+		declareFunction("striping_tactician_new_root_metrics", "STRIPING-TACTICIAN-NEW-ROOT-METRICS", 1, 0,
 				false);
-		declareFunction(myName, "striping_tactician_remember_new_root_metrics",
+		declareFunction("striping_tactician_remember_new_root_metrics",
 				"STRIPING-TACTICIAN-REMEMBER-NEW-ROOT-METRICS", 1, 0, false);
-		declareFunction(myName, "new_root_answerableP", "NEW-ROOT-ANSWERABLE?", 1, 0, false);
-		declareFunction(myName, "new_root_unanswerableP", "NEW-ROOT-UNANSWERABLE?", 1, 0, false);
-		declareFunction(myName, "increment_new_root_answer_count", "INCREMENT-NEW-ROOT-ANSWER-COUNT", 2, 0, false);
-		declareFunction(myName, "striping_tactician_update_new_root_metrics",
+		declareFunction("new_root_answerableP", "NEW-ROOT-ANSWERABLE?", 1, 0, false);
+		declareFunction("new_root_unanswerableP", "NEW-ROOT-UNANSWERABLE?", 1, 0, false);
+		declareFunction("increment_new_root_answer_count", "INCREMENT-NEW-ROOT-ANSWER-COUNT", 2, 0, false);
+		declareFunction("striping_tactician_update_new_root_metrics",
 				"STRIPING-TACTICIAN-UPDATE-NEW-ROOT-METRICS", 2, 0, false);
-		declareFunction(myName, "striping_tactician_doneP", "STRIPING-TACTICIAN-DONE?", 1, 0, false);
-		declareFunction(myName, "striping_tactician_do_one_step", "STRIPING-TACTICIAN-DO-ONE-STEP", 1, 0, false);
-		declareFunction(myName, "striping_tactician_do_one_step_int", "STRIPING-TACTICIAN-DO-ONE-STEP-INT", 1, 0,
+		declareFunction("striping_tactician_doneP", "STRIPING-TACTICIAN-DONE?", 1, 0, false);
+		declareFunction("striping_tactician_do_one_step", "STRIPING-TACTICIAN-DO-ONE-STEP", 1, 0, false);
+		declareFunction("striping_tactician_do_one_step_int", "STRIPING-TACTICIAN-DO-ONE-STEP-INT", 1, 0,
 				false);
-		declareFunction(myName, "new_root_needs_removal_motivationP", "NEW-ROOT-NEEDS-REMOVAL-MOTIVATION?", 2, 0,
+		declareFunction("new_root_needs_removal_motivationP", "NEW-ROOT-NEEDS-REMOVAL-MOTIVATION?", 2, 0,
 				false);
-		declareFunction(myName, "striping_tactician_should_reconsider_set_asidesP",
+		declareFunction("striping_tactician_should_reconsider_set_asidesP",
 				"STRIPING-TACTICIAN-SHOULD-RECONSIDER-SET-ASIDES?", 1, 0, false);
-		declareFunction(myName, "striping_tactician_reconsider_set_asides", "STRIPING-TACTICIAN-RECONSIDER-SET-ASIDES",
+		declareFunction("striping_tactician_reconsider_set_asides", "STRIPING-TACTICIAN-RECONSIDER-SET-ASIDES",
 				1, 0, false);
-		declareFunction(myName, "striping_tactician_new_root_with_highest_proofiness",
+		declareFunction("striping_tactician_new_root_with_highest_proofiness",
 				"STRIPING-TACTICIAN-NEW-ROOT-WITH-HIGHEST-PROOFINESS", 1, 0, false);
-		declareFunction(myName, "striping_tactician_chooses_to_do_removalP",
+		declareFunction("striping_tactician_chooses_to_do_removalP",
 				"STRIPING-TACTICIAN-CHOOSES-TO-DO-REMOVAL?", 1, 0, false);
-		declareFunction(myName, "striping_tactician_chooses_to_focus_on_a_new_rootP",
+		declareFunction("striping_tactician_chooses_to_focus_on_a_new_rootP",
 				"STRIPING-TACTICIAN-CHOOSES-TO-FOCUS-ON-A-NEW-ROOT?", 1, 0, false);
-		declareFunction(myName, "new_root_freshP", "NEW-ROOT-FRESH?", 1, 0, false);
-		declareFunction(myName, "striping_tactician_unanswerable_new_root_with_lowest_delay",
+		declareFunction("new_root_freshP", "NEW-ROOT-FRESH?", 1, 0, false);
+		declareFunction("striping_tactician_unanswerable_new_root_with_lowest_delay",
 				"STRIPING-TACTICIAN-UNANSWERABLE-NEW-ROOT-WITH-LOWEST-DELAY", 1, 0, false);
-		declareFunction(myName, "striping_tactician_favor_answerable_new_roots",
+		declareFunction("striping_tactician_favor_answerable_new_roots",
 				"STRIPING-TACTICIAN-FAVOR-ANSWERABLE-NEW-ROOTS", 1, 0, false);
-		declareFunction(myName, "striping_tactician_reset_delay", "STRIPING-TACTICIAN-RESET-DELAY", 1, 0, false);
-		declareFunction(myName, "striping_tactician_compute_new_root_delay",
+		declareFunction("striping_tactician_reset_delay", "STRIPING-TACTICIAN-RESET-DELAY", 1, 0, false);
+		declareFunction("striping_tactician_compute_new_root_delay",
 				"STRIPING-TACTICIAN-COMPUTE-NEW-ROOT-DELAY", 1, 0, false);
-		declareFunction(myName, "striping_tactician_compute_new_root_delay_based_on_step_count",
+		declareFunction("striping_tactician_compute_new_root_delay_based_on_step_count",
 				"STRIPING-TACTICIAN-COMPUTE-NEW-ROOT-DELAY-BASED-ON-STEP-COUNT", 1, 0, false);
-		declareFunction(myName, "striping_tactician_compute_new_root_delay_based_on_index",
+		declareFunction("striping_tactician_compute_new_root_delay_based_on_index",
 				"STRIPING-TACTICIAN-COMPUTE-NEW-ROOT-DELAY-BASED-ON-INDEX", 1, 0, false);
-		declareFunction(myName, "striping_tactician_decrement_all_unanswerable_new_root_delays_except",
+		declareFunction("striping_tactician_decrement_all_unanswerable_new_root_delays_except",
 				"STRIPING-TACTICIAN-DECREMENT-ALL-UNANSWERABLE-NEW-ROOT-DELAYS-EXCEPT", 3, 0, false);
-		declareFunction(myName, "striping_tactician_new_root_do_one_step", "STRIPING-TACTICIAN-NEW-ROOT-DO-ONE-STEP", 1,
+		declareFunction("striping_tactician_new_root_do_one_step", "STRIPING-TACTICIAN-NEW-ROOT-DO-ONE-STEP", 1,
 				0, false);
-		declareFunction(myName, "striping_tactician_active_removal_strategies",
+		declareFunction("striping_tactician_active_removal_strategies",
 				"STRIPING-TACTICIAN-ACTIVE-REMOVAL-STRATEGIES", 1, 0, false);
-		declareFunction(myName, "striping_tactician_has_some_removal_to_doP",
+		declareFunction("striping_tactician_has_some_removal_to_doP",
 				"STRIPING-TACTICIAN-HAS-SOME-REMOVAL-TO-DO?", 1, 0, false);
-		declareFunction(myName, "striping_tactician_first_active_removal_substrategy",
+		declareFunction("striping_tactician_first_active_removal_substrategy",
 				"STRIPING-TACTICIAN-FIRST-ACTIVE-REMOVAL-SUBSTRATEGY", 1, 0, false);
-		declareFunction(myName, "striping_tactician_continuation_possibleP",
+		declareFunction("striping_tactician_continuation_possibleP",
 				"STRIPING-TACTICIAN-CONTINUATION-POSSIBLE?", 1, 0, false);
-		declareFunction(myName, "striping_tactician_chooses_to_throw_away_problemP",
+		declareFunction("striping_tactician_chooses_to_throw_away_problemP",
 				"STRIPING-TACTICIAN-CHOOSES-TO-THROW-AWAY-PROBLEM?", 2, 0, false);
-		declareFunction(myName, "striping_tactician_chooses_to_set_aside_problemP",
+		declareFunction("striping_tactician_chooses_to_set_aside_problemP",
 				"STRIPING-TACTICIAN-CHOOSES-TO-SET-ASIDE-PROBLEM?", 2, 0, false);
-		declareFunction(myName, "striping_tactician_chooses_to_throw_away_tacticP",
+		declareFunction("striping_tactician_chooses_to_throw_away_tacticP",
 				"STRIPING-TACTICIAN-CHOOSES-TO-THROW-AWAY-TACTIC?", 4, 0, false);
-		declareFunction(myName, "striping_tactician_chooses_to_set_aside_tacticP",
+		declareFunction("striping_tactician_chooses_to_set_aside_tacticP",
 				"STRIPING-TACTICIAN-CHOOSES-TO-SET-ASIDE-TACTIC?", 4, 0, false);
-		declareFunction(myName, "striping_tactician_throw_away_uninteresting_set_asides",
+		declareFunction("striping_tactician_throw_away_uninteresting_set_asides",
 				"STRIPING-TACTICIAN-THROW-AWAY-UNINTERESTING-SET-ASIDES", 1, 0, false);
-		declareFunction(myName, "striping_tactician_note_inference_dynamic_properties_updated",
+		declareFunction("striping_tactician_note_inference_dynamic_properties_updated",
 				"STRIPING-TACTICIAN-NOTE-INFERENCE-DYNAMIC-PROPERTIES-UPDATED", 1, 0, false);
-		declareFunction(myName, "striping_tactician_initialize_properties", "STRIPING-TACTICIAN-INITIALIZE-PROPERTIES",
+		declareFunction("striping_tactician_initialize_properties", "STRIPING-TACTICIAN-INITIALIZE-PROPERTIES",
 				2, 0, false);
-		declareFunction(myName, "striping_tactician_update_properties", "STRIPING-TACTICIAN-UPDATE-PROPERTIES", 2, 0,
+		declareFunction("striping_tactician_update_properties", "STRIPING-TACTICIAN-UPDATE-PROPERTIES", 2, 0,
 				false);
-		declareFunction(myName, "striping_tactician_initial_relevant_strategies",
+		declareFunction("striping_tactician_initial_relevant_strategies",
 				"STRIPING-TACTICIAN-INITIAL-RELEVANT-STRATEGIES", 1, 0, false);
-		declareFunction(myName, "striping_tactician_possibly_activate_problem",
+		declareFunction("striping_tactician_possibly_activate_problem",
 				"STRIPING-TACTICIAN-POSSIBLY-ACTIVATE-PROBLEM", 2, 0, false);
-		declareFunction(myName, "striping_tactician_problem_is_the_rest_of_an_early_removalP",
+		declareFunction("striping_tactician_problem_is_the_rest_of_an_early_removalP",
 				"STRIPING-TACTICIAN-PROBLEM-IS-THE-REST-OF-AN-EARLY-REMOVAL?", 2, 0, false);
 		declareFunction(me,
 				"striping_tactician_chooses_to_propagate_new_root_motivation_to_restricted_non_focal_problemP",
 				"STRIPING-TACTICIAN-CHOOSES-TO-PROPAGATE-NEW-ROOT-MOTIVATION-TO-RESTRICTED-NON-FOCAL-PROBLEM?", 3, 0,
 				false);
-		declareFunction(myName, "striping_tactician_treats_restricted_non_focal_as_new_rootP",
+		declareFunction("striping_tactician_treats_restricted_non_focal_as_new_rootP",
 				"STRIPING-TACTICIAN-TREATS-RESTRICTED-NON-FOCAL-AS-NEW-ROOT?", 2, 0, false);
-		declareFunction(myName, "striping_tactician_early_removal_linkP", "STRIPING-TACTICIAN-EARLY-REMOVAL-LINK?", 2,
+		declareFunction("striping_tactician_early_removal_linkP", "STRIPING-TACTICIAN-EARLY-REMOVAL-LINK?", 2,
 				0, false);
-		declareFunction(myName, "striping_tactician_problem_is_the_result_of_a_simplificationP",
+		declareFunction("striping_tactician_problem_is_the_result_of_a_simplificationP",
 				"STRIPING-TACTICIAN-PROBLEM-IS-THE-RESULT-OF-A-SIMPLIFICATION?", 2, 0, false);
-		declareFunction(myName, "striping_tactician_note_argument_link", "STRIPING-TACTICIAN-NOTE-ARGUMENT-LINK", 2, 0,
+		declareFunction("striping_tactician_note_argument_link", "STRIPING-TACTICIAN-NOTE-ARGUMENT-LINK", 2, 0,
 				false);
-		declareFunction(myName, "striping_tactician_early_removal_productivity_limit",
+		declareFunction("striping_tactician_early_removal_productivity_limit",
 				"STRIPING-TACTICIAN-EARLY-REMOVAL-PRODUCTIVITY-LIMIT", 1, 0, false);
-		declareFunction(myName, "striping_tactician_substrategy_strategem_motivated",
+		declareFunction("striping_tactician_substrategy_strategem_motivated",
 				"STRIPING-TACTICIAN-SUBSTRATEGY-STRATEGEM-MOTIVATED", 3, 0, false);
-		declareFunction(myName, "striping_tactician_substrategy_problem_motivated",
+		declareFunction("striping_tactician_substrategy_problem_motivated",
 				"STRIPING-TACTICIAN-SUBSTRATEGY-PROBLEM-MOTIVATED", 3, 0, false);
-		declareFunction(myName, "striping_tactician_substrategy_link_motivated",
+		declareFunction("striping_tactician_substrategy_link_motivated",
 				"STRIPING-TACTICIAN-SUBSTRATEGY-LINK-MOTIVATED", 3, 0, false);
-		declareFunction(myName, "striping_tactician_chooses_to_make_d_a_new_rootP",
+		declareFunction("striping_tactician_chooses_to_make_d_a_new_rootP",
 				"STRIPING-TACTICIAN-CHOOSES-TO-MAKE-D-A-NEW-ROOT?", 2, 0, false);
-		declareFunction(myName, "striping_tactician_residual_conjunction_new_root_candidates",
+		declareFunction("striping_tactician_residual_conjunction_new_root_candidates",
 				"STRIPING-TACTICIAN-RESIDUAL-CONJUNCTION-NEW-ROOT-CANDIDATES", 2, 0, false);
-		declareFunction(myName, "striping_tactician_transformation_new_root_candidates",
+		declareFunction("striping_tactician_transformation_new_root_candidates",
 				"STRIPING-TACTICIAN-TRANSFORMATION-NEW-ROOT-CANDIDATES", 2, 0, false);
-		declareFunction(myName, "striping_tactician_possibly_make_new_root",
+		declareFunction("striping_tactician_possibly_make_new_root",
 				"STRIPING-TACTICIAN-POSSIBLY-MAKE-NEW-ROOT", 2, 0, false);
-		declareFunction(myName, "striping_tactician_substrategy_tactic_motivated",
+		declareFunction("striping_tactician_substrategy_tactic_motivated",
 				"STRIPING-TACTICIAN-SUBSTRATEGY-TACTIC-MOTIVATED", 3, 0, false);
-		declareFunction(myName, "striping_tactician_substrategy_connected_conjunction_tactic_motivated",
+		declareFunction("striping_tactician_substrategy_connected_conjunction_tactic_motivated",
 				"STRIPING-TACTICIAN-SUBSTRATEGY-CONNECTED-CONJUNCTION-TACTIC-MOTIVATED", 3, 0, false);
-		declareFunction(myName, "striping_tactician_possibly_motivate_new_root_via_residual_transformation_link",
+		declareFunction("striping_tactician_possibly_motivate_new_root_via_residual_transformation_link",
 				"STRIPING-TACTICIAN-POSSIBLY-MOTIVATE-NEW-ROOT-VIA-RESIDUAL-TRANSFORMATION-LINK", 2, 0, false);
-		declareFunction(myName, "striping_tactician_substrategy_split_tactic_motivated",
+		declareFunction("striping_tactician_substrategy_split_tactic_motivated",
 				"STRIPING-TACTICIAN-SUBSTRATEGY-SPLIT-TACTIC-MOTIVATED", 3, 0, false);
-		declareFunction(myName, "striping_tactician_possibly_propagate_new_root_motivation_down_split_link",
+		declareFunction("striping_tactician_possibly_propagate_new_root_motivation_down_split_link",
 				"STRIPING-TACTICIAN-POSSIBLY-PROPAGATE-NEW-ROOT-MOTIVATION-DOWN-SPLIT-LINK", 2, 0, false);
-		declareFunction(myName, "striping_tactician_substrategy_union_tactic_motivated",
+		declareFunction("striping_tactician_substrategy_union_tactic_motivated",
 				"STRIPING-TACTICIAN-SUBSTRATEGY-UNION-TACTIC-MOTIVATED", 3, 0, false);
-		declareFunction(myName, "striping_tactician_possibly_propagate_new_root_motivation_down_union_link",
+		declareFunction("striping_tactician_possibly_propagate_new_root_motivation_down_union_link",
 				"STRIPING-TACTICIAN-POSSIBLY-PROPAGATE-NEW-ROOT-MOTIVATION-DOWN-UNION-LINK", 2, 0, false);
-		declareFunction(myName, "striping_tactician_allows_split_tactic_to_be_set_aside_wrt_removalP",
+		declareFunction("striping_tactician_allows_split_tactic_to_be_set_aside_wrt_removalP",
 				"STRIPING-TACTICIAN-ALLOWS-SPLIT-TACTIC-TO-BE-SET-ASIDE-WRT-REMOVAL?", 3, 0, false);
-		declareFunction(myName, "striping_tactician_chooses_to_totally_throw_away_tacticP",
+		declareFunction("striping_tactician_chooses_to_totally_throw_away_tacticP",
 				"STRIPING-TACTICIAN-CHOOSES-TO-TOTALLY-THROW-AWAY-TACTIC?", 5, 0, false);
-		declareFunction(myName, "striping_tactician_substrategy_problem_status_change",
+		declareFunction("striping_tactician_substrategy_problem_status_change",
 				"STRIPING-TACTICIAN-SUBSTRATEGY-PROBLEM-STATUS-CHANGE", 5, 0, false);
-		declareFunction(myName, "striping_tactician_recompute_problem_status",
+		declareFunction("striping_tactician_recompute_problem_status",
 				"STRIPING-TACTICIAN-RECOMPUTE-PROBLEM-STATUS", 2, 0, false);
-		declareFunction(myName, "striping_tactician_recompute_uninterestingness_for_sibling_split_tactics",
+		declareFunction("striping_tactician_recompute_uninterestingness_for_sibling_split_tactics",
 				"STRIPING-TACTICIAN-RECOMPUTE-UNINTERESTINGNESS-FOR-SIBLING-SPLIT-TACTICS", 2, 0, false);
-		declareFunction(myName, "striping_tactician_possibly_propagate_strategic_status_to_tactical_status",
+		declareFunction("striping_tactician_possibly_propagate_strategic_status_to_tactical_status",
 				"STRIPING-TACTICIAN-POSSIBLY-PROPAGATE-STRATEGIC-STATUS-TO-TACTICAL-STATUS", 3, 0, false);
-		declareFunction(myName, "striping_tactician_make_problem_no_good", "STRIPING-TACTICIAN-MAKE-PROBLEM-NO-GOOD", 2,
+		declareFunction("striping_tactician_make_problem_no_good", "STRIPING-TACTICIAN-MAKE-PROBLEM-NO-GOOD", 2,
 				0, false);
-		declareFunction(myName, "striping_tactician_make_problem_pending", "STRIPING-TACTICIAN-MAKE-PROBLEM-PENDING", 2,
+		declareFunction("striping_tactician_make_problem_pending", "STRIPING-TACTICIAN-MAKE-PROBLEM-PENDING", 2,
 				0, false);
-		declareFunction(myName, "striping_tactician_arbitrary_relevant_removal_substrategy",
+		declareFunction("striping_tactician_arbitrary_relevant_removal_substrategy",
 				"STRIPING-TACTICIAN-ARBITRARY-RELEVANT-REMOVAL-SUBSTRATEGY", 2, 0, false);
-		declareFunction(myName, "sibling_removal_strategy", "SIBLING-REMOVAL-STRATEGY", 2, 0, false);
-		declareFunction(myName, "sibling_transformation_strategy", "SIBLING-TRANSFORMATION-STRATEGY", 1, 0, false);
-		declareFunction(myName, "cb_show_striping_tactician_stripes", "CB-SHOW-STRIPING-TACTICIAN-STRIPES", 1, 0,
+		declareFunction("sibling_removal_strategy", "SIBLING-REMOVAL-STRATEGY", 2, 0, false);
+		declareFunction("sibling_transformation_strategy", "SIBLING-TRANSFORMATION-STRATEGY", 1, 0, false);
+		declareFunction("cb_show_striping_tactician_stripes", "CB-SHOW-STRIPING-TACTICIAN-STRIPES", 1, 0,
 				false);
-		declareFunction(myName, "cb_show_striping_tactician_one_stripe", "CB-SHOW-STRIPING-TACTICIAN-ONE-STRIPE", 2, 0,
+		declareFunction("cb_show_striping_tactician_one_stripe", "CB-SHOW-STRIPING-TACTICIAN-ONE-STRIPE", 2, 0,
 				false);
-		declareFunction(myName, "all_new_root_metrics_from_kbq_experiment", "ALL-NEW-ROOT-METRICS-FROM-KBQ-EXPERIMENT",
+		declareFunction("all_new_root_metrics_from_kbq_experiment", "ALL-NEW-ROOT-METRICS-FROM-KBQ-EXPERIMENT",
 				1, 0, false);
-		declareFunction(myName, "answerable_new_root_metrics", "ANSWERABLE-NEW-ROOT-METRICS", 1, 0, false);
-		declareFunction(myName, "answerable_new_root_metrics_count", "ANSWERABLE-NEW-ROOT-METRICS-COUNT", 1, 0, false);
-		declareFunction(myName, "unanswerable_new_root_metrics", "UNANSWERABLE-NEW-ROOT-METRICS", 1, 0, false);
-		declareFunction(myName, "answerable_new_root_metricP", "ANSWERABLE-NEW-ROOT-METRIC?", 1, 0, false);
-		declareFunction(myName, "new_root_metric_step_count", "NEW-ROOT-METRIC-STEP-COUNT", 1, 0, false);
-		declareFunction(myName, "new_root_metric_exhaustedP", "NEW-ROOT-METRIC-EXHAUSTED?", 1, 0, false);
-		declareFunction(myName, "new_root_metric_start_inference_step_count",
+		declareFunction("answerable_new_root_metrics", "ANSWERABLE-NEW-ROOT-METRICS", 1, 0, false);
+		declareFunction("answerable_new_root_metrics_count", "ANSWERABLE-NEW-ROOT-METRICS-COUNT", 1, 0, false);
+		declareFunction("unanswerable_new_root_metrics", "UNANSWERABLE-NEW-ROOT-METRICS", 1, 0, false);
+		declareFunction("answerable_new_root_metricP", "ANSWERABLE-NEW-ROOT-METRIC?", 1, 0, false);
+		declareFunction("new_root_metric_step_count", "NEW-ROOT-METRIC-STEP-COUNT", 1, 0, false);
+		declareFunction("new_root_metric_exhaustedP", "NEW-ROOT-METRIC-EXHAUSTED?", 1, 0, false);
+		declareFunction("new_root_metric_start_inference_step_count",
 				"NEW-ROOT-METRIC-START-INFERENCE-STEP-COUNT", 1, 0, false);
-		declareFunction(myName, "new_root_metric_steps_to_first_answer", "NEW-ROOT-METRIC-STEPS-TO-FIRST-ANSWER", 1, 0,
+		declareFunction("new_root_metric_steps_to_first_answer", "NEW-ROOT-METRIC-STEPS-TO-FIRST-ANSWER", 1, 0,
 				false);
-		declareFunction(myName, "answerable_new_root_steps_to_first_answer",
+		declareFunction("answerable_new_root_steps_to_first_answer",
 				"ANSWERABLE-NEW-ROOT-STEPS-TO-FIRST-ANSWER", 1, 0, false);
-		declareFunction(myName, "unanswerable_new_root_step_counts", "UNANSWERABLE-NEW-ROOT-STEP-COUNTS", 1, 0, false);
-		declareFunction(myName, "compute_new_root_answerability_expectation",
+		declareFunction("unanswerable_new_root_step_counts", "UNANSWERABLE-NEW-ROOT-STEP-COUNTS", 1, 0, false);
+		declareFunction("compute_new_root_answerability_expectation",
 				"COMPUTE-NEW-ROOT-ANSWERABILITY-EXPECTATION", 1, 0, false);
-		declareFunction(myName, "exhausted_new_root_answerability_probabilities_by_order",
+		declareFunction("exhausted_new_root_answerability_probabilities_by_order",
 				"EXHAUSTED-NEW-ROOT-ANSWERABILITY-PROBABILITIES-BY-ORDER", 1, 0, false);
 		return NIL;
 	}

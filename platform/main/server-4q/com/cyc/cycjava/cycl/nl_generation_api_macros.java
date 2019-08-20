@@ -32,7 +32,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class nl_generation_api_macros extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new nl_generation_api_macros();
 
- public static final String myName = "com.cyc.cycjava.cycl.nl_generation_api_macros";
 
 
     // Internal Constants

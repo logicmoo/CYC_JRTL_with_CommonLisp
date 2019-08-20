@@ -86,7 +86,6 @@ public final class mapping_engine extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new mapping_engine();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.mapping_engine";
 
 
     // defparameter

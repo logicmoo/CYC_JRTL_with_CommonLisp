@@ -128,7 +128,6 @@ public final class inverted_index extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new inverted_index();
 
- public static final String myName = "com.cyc.cycjava.cycl.inverted_index";
 
 
     // defconstant

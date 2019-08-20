@@ -87,7 +87,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rule_after_adding extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rule_after_adding();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.harness.rule_after_adding";
 
 
     // deflexical

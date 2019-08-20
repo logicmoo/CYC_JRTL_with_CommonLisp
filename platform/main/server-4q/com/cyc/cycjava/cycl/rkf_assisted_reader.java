@@ -469,7 +469,6 @@ public final class rkf_assisted_reader extends SubLTranslatedFile implements V12
 
     public static final SubLFile me = new rkf_assisted_reader();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_assisted_reader";
 
 
     // deflexical

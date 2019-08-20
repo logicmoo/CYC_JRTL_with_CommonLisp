@@ -80,7 +80,6 @@ public final class predicate_populator extends SubLTranslatedFile implements V02
 
     public static final SubLFile me = new predicate_populator();
 
-    public static final String myName = "com.cyc.cycjava.cycl.predicate_populator";
 
     // // Definitions
     public static final class $sapp_task_native extends SubLStructNative {

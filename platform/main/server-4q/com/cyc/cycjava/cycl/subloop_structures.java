@@ -369,7 +369,6 @@ public final class subloop_structures extends SubLTranslatedFile implements V12 
 
     public static final SubLFile me = new subloop_structures();
 
- public static final String myName = "com.cyc.cycjava.cycl.subloop_structures";
 
 
     // defconstant

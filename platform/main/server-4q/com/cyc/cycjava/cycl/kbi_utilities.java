@@ -91,7 +91,6 @@ public final class kbi_utilities extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new kbi_utilities();
 
-    public static final String myName = "com.cyc.cycjava.cycl.kbi_utilities";
 
     // // Definitions
     // defparameter

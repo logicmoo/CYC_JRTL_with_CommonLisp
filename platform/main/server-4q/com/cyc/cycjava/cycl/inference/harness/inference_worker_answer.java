@@ -11,7 +11,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class inference_worker_answer extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.harness.inference_worker_answer";
     public static String myFingerPrint = "f85af1c4cc9823ebc7cd6cb3409daf488454879add6f05669bfd68e6f2244cf3";
     private static SubLSymbol $ANSWER;
     private static SubLSymbol $sym1$INFERENCE_P;
@@ -91,17 +90,17 @@ public class inference_worker_answer extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_inference_worker_answer_file() {
-        declareFunction(myName, "answer_link_p", "ANSWER-LINK-P", 1, 0, false);
-        declareFunction(myName, "new_answer_link", "NEW-ANSWER-LINK", 1, 0, false);
-        declareFunction(myName, "new_answer_link_int", "NEW-ANSWER-LINK-INT", 1, 0, false);
-        declareFunction(myName, "answer_link_supported_inference", "ANSWER-LINK-SUPPORTED-INFERENCE", 1, 0, false);
-        declareFunction(myName, "answer_link_propagatedP", "ANSWER-LINK-PROPAGATED?", 1, 0, false);
-        declareFunction(myName, "answer_link_supporting_mapped_problem", "ANSWER-LINK-SUPPORTING-MAPPED-PROBLEM", 1, 0, false);
-        declareFunction(myName, "answer_link_explanatory_subquery", "ANSWER-LINK-EXPLANATORY-SUBQUERY", 1, 0, false);
-        declareFunction(myName, "set_answer_link_explanatory_subquery", "SET-ANSWER-LINK-EXPLANATORY-SUBQUERY", 2, 0, false);
-        declareFunction(myName, "note_answer_link_propagated", "NOTE-ANSWER-LINK-PROPAGATED", 1, 0, false);
-        declareFunction(myName, "answer_link_supporting_problem", "ANSWER-LINK-SUPPORTING-PROBLEM", 1, 0, false);
-        declareFunction(myName, "answer_link_supporting_problem_wholly_explanatoryP", "ANSWER-LINK-SUPPORTING-PROBLEM-WHOLLY-EXPLANATORY?", 1, 0, false);
+        declareFunction("answer_link_p", "ANSWER-LINK-P", 1, 0, false);
+        declareFunction("new_answer_link", "NEW-ANSWER-LINK", 1, 0, false);
+        declareFunction("new_answer_link_int", "NEW-ANSWER-LINK-INT", 1, 0, false);
+        declareFunction("answer_link_supported_inference", "ANSWER-LINK-SUPPORTED-INFERENCE", 1, 0, false);
+        declareFunction("answer_link_propagatedP", "ANSWER-LINK-PROPAGATED?", 1, 0, false);
+        declareFunction("answer_link_supporting_mapped_problem", "ANSWER-LINK-SUPPORTING-MAPPED-PROBLEM", 1, 0, false);
+        declareFunction("answer_link_explanatory_subquery", "ANSWER-LINK-EXPLANATORY-SUBQUERY", 1, 0, false);
+        declareFunction("set_answer_link_explanatory_subquery", "SET-ANSWER-LINK-EXPLANATORY-SUBQUERY", 2, 0, false);
+        declareFunction("note_answer_link_propagated", "NOTE-ANSWER-LINK-PROPAGATED", 1, 0, false);
+        declareFunction("answer_link_supporting_problem", "ANSWER-LINK-SUPPORTING-PROBLEM", 1, 0, false);
+        declareFunction("answer_link_supporting_problem_wholly_explanatoryP", "ANSWER-LINK-SUPPORTING-PROBLEM-WHOLLY-EXPLANATORY?", 1, 0, false);
         return NIL;
     }
 

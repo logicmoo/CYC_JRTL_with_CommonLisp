@@ -70,7 +70,6 @@ public final class workflow_queue extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new workflow_queue();
 
-    public static final String myName = "com.cyc.cycjava.cycl.workflow_queue";
 
     // // Definitions
     public static final SubLObject get_workflow_queue_queue_filler_task(SubLObject v_workflow_queue) {

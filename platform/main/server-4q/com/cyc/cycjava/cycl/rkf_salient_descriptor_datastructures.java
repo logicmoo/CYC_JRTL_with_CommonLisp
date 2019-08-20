@@ -479,7 +479,6 @@ public final class rkf_salient_descriptor_datastructures extends SubLTranslatedF
 
     public static final SubLFile me = new rkf_salient_descriptor_datastructures();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_salient_descriptor_datastructures";
 
 
     // defconstant

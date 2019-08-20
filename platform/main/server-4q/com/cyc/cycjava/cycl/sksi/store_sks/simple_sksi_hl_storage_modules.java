@@ -45,7 +45,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class simple_sksi_hl_storage_modules extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new simple_sksi_hl_storage_modules();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.sksi.store_sks.simple_sksi_hl_storage_modules";
 
 
 

@@ -91,7 +91,6 @@ public final class api_kernel extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new api_kernel();
 
- public static final String myName = "com.cyc.cycjava.cycl.api_kernel";
 
 
     // defparameter

@@ -84,7 +84,6 @@ public final class cb_ke_reviewer extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new cb_ke_reviewer();
 
- public static final String myName = "com.cyc.cycjava.cycl.cb_ke_reviewer";
 
 
     // Internal Constants

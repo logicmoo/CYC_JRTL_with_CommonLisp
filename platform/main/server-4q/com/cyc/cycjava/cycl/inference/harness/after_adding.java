@@ -44,7 +44,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class after_adding extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.harness.after_adding";
     public static String myFingerPrint = "029dedfcf09de50224069b5696f4f7eb7421e4c27cd06bd35146ce7a44ef04d6";
     @SubL(source = "cycl/inference/harness/after-adding.lisp", position = 700L)
     public static SubLSymbol $debug_after_addingsP$;
@@ -874,31 +873,31 @@ public class after_adding extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_after_adding_file() {
-        declareFunction(myName, "clear_after_addings", "CLEAR-AFTER-ADDINGS", 0, 0, false);
-        declareFunction(myName, "clear_gaf_after_addings", "CLEAR-GAF-AFTER-ADDINGS", 0, 0, false);
-        declareFunction(myName, "clear_after_removings", "CLEAR-AFTER-REMOVINGS", 0, 0, false);
-        declareFunction(myName, "clear_gaf_after_removings", "CLEAR-GAF-AFTER-REMOVINGS", 0, 0, false);
-        declareMacro(me, "disable_after_addings", "DISABLE-AFTER-ADDINGS");
-        declareFunction(myName, "handle_after_addings", "HANDLE-AFTER-ADDINGS", 2, 0, false);
-        declareFunction(myName, "handle_gaf_after_addings", "HANDLE-GAF-AFTER-ADDINGS", 2, 0, false);
-        declareFunction(myName, "handle_after_removings", "HANDLE-AFTER-REMOVINGS", 2, 0, false);
-        declareFunction(myName, "handle_gaf_after_removings", "HANDLE-GAF-AFTER-REMOVINGS", 2, 0, false);
-        declareFunction(myName, "get_gaf_after_addings", "GET-GAF-AFTER-ADDINGS", 1, 0, false);
-        declareFunction(myName, "get_gaf_after_removings", "GET-GAF-AFTER-REMOVINGS", 1, 0, false);
-        declareFunction(myName, "handle_gaf_after_adding", "HANDLE-GAF-AFTER-ADDING", 3, 0, false);
-        declareFunction(myName, "handle_gaf_after_removing", "HANDLE-GAF-AFTER-REMOVING", 3, 0, false);
-        declareFunction(myName, "rebuild_after_adding_caches", "REBUILD-AFTER-ADDING-CACHES", 0, 0, false);
-        declareFunction(myName, "rebuild_gaf_after_adding_caches", "REBUILD-GAF-AFTER-ADDING-CACHES", 0, 0, false);
-        declareFunction(myName, "initialize_gaf_after_addings_hash", "INITIALIZE-GAF-AFTER-ADDINGS-HASH", 0, 0, false);
-        declareFunction(myName, "initialize_gaf_after_removings_hash", "INITIALIZE-GAF-AFTER-REMOVINGS-HASH", 0, 0, false);
-        declareFunction(myName, "recache_gaf_after_addings", "RECACHE-GAF-AFTER-ADDINGS", 1, 0, false);
-        declareFunction(myName, "recache_gaf_after_removings", "RECACHE-GAF-AFTER-REMOVINGS", 1, 0, false);
-        declareFunction(myName, "propagate_gaf_after_adding", "PROPAGATE-GAF-AFTER-ADDING", 2, 0, false);
-        declareFunction(myName, "repropagate_gaf_after_adding", "REPROPAGATE-GAF-AFTER-ADDING", 3, 0, false);
-        declareFunction(myName, "repropagate_gaf_after_adding_internal", "REPROPAGATE-GAF-AFTER-ADDING-INTERNAL", 1, 0, false);
-        declareFunction(myName, "initial_assertion_argumentP", "INITIAL-ASSERTION-ARGUMENT?", 2, 0, false);
-        declareFunction(myName, "final_assertion_argumentP", "FINAL-ASSERTION-ARGUMENT?", 2, 0, false);
-        declareFunction(myName, "assertion_sole_argumentP", "ASSERTION-SOLE-ARGUMENT?", 2, 0, false);
+        declareFunction("clear_after_addings", "CLEAR-AFTER-ADDINGS", 0, 0, false);
+        declareFunction("clear_gaf_after_addings", "CLEAR-GAF-AFTER-ADDINGS", 0, 0, false);
+        declareFunction("clear_after_removings", "CLEAR-AFTER-REMOVINGS", 0, 0, false);
+        declareFunction("clear_gaf_after_removings", "CLEAR-GAF-AFTER-REMOVINGS", 0, 0, false);
+        declareMacro("disable_after_addings", "DISABLE-AFTER-ADDINGS");
+        declareFunction("handle_after_addings", "HANDLE-AFTER-ADDINGS", 2, 0, false);
+        declareFunction("handle_gaf_after_addings", "HANDLE-GAF-AFTER-ADDINGS", 2, 0, false);
+        declareFunction("handle_after_removings", "HANDLE-AFTER-REMOVINGS", 2, 0, false);
+        declareFunction("handle_gaf_after_removings", "HANDLE-GAF-AFTER-REMOVINGS", 2, 0, false);
+        declareFunction("get_gaf_after_addings", "GET-GAF-AFTER-ADDINGS", 1, 0, false);
+        declareFunction("get_gaf_after_removings", "GET-GAF-AFTER-REMOVINGS", 1, 0, false);
+        declareFunction("handle_gaf_after_adding", "HANDLE-GAF-AFTER-ADDING", 3, 0, false);
+        declareFunction("handle_gaf_after_removing", "HANDLE-GAF-AFTER-REMOVING", 3, 0, false);
+        declareFunction("rebuild_after_adding_caches", "REBUILD-AFTER-ADDING-CACHES", 0, 0, false);
+        declareFunction("rebuild_gaf_after_adding_caches", "REBUILD-GAF-AFTER-ADDING-CACHES", 0, 0, false);
+        declareFunction("initialize_gaf_after_addings_hash", "INITIALIZE-GAF-AFTER-ADDINGS-HASH", 0, 0, false);
+        declareFunction("initialize_gaf_after_removings_hash", "INITIALIZE-GAF-AFTER-REMOVINGS-HASH", 0, 0, false);
+        declareFunction("recache_gaf_after_addings", "RECACHE-GAF-AFTER-ADDINGS", 1, 0, false);
+        declareFunction("recache_gaf_after_removings", "RECACHE-GAF-AFTER-REMOVINGS", 1, 0, false);
+        declareFunction("propagate_gaf_after_adding", "PROPAGATE-GAF-AFTER-ADDING", 2, 0, false);
+        declareFunction("repropagate_gaf_after_adding", "REPROPAGATE-GAF-AFTER-ADDING", 3, 0, false);
+        declareFunction("repropagate_gaf_after_adding_internal", "REPROPAGATE-GAF-AFTER-ADDING-INTERNAL", 1, 0, false);
+        declareFunction("initial_assertion_argumentP", "INITIAL-ASSERTION-ARGUMENT?", 2, 0, false);
+        declareFunction("final_assertion_argumentP", "FINAL-ASSERTION-ARGUMENT?", 2, 0, false);
+        declareFunction("assertion_sole_argumentP", "ASSERTION-SOLE-ARGUMENT?", 2, 0, false);
         return NIL;
     }
 

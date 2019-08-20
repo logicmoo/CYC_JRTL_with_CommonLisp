@@ -12,7 +12,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class janus_macros extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.janus_macros";
     public static String myFingerPrint = "2c8a2f76005522b75216eea405c2cb75a3289f863ce0c828abae8f87502c3493";
     private static SubLSymbol $sym0$CLET;
     private static SubLList $list1;
@@ -43,9 +42,9 @@ public class janus_macros extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_janus_macros_file() {
-        declareMacro(me, "janus_within_create", "JANUS-WITHIN-CREATE");
-        declareMacro(me, "janus_within_assert", "JANUS-WITHIN-ASSERT");
-        declareMacro(me, "janus_within_query", "JANUS-WITHIN-QUERY");
+        declareMacro("janus_within_create", "JANUS-WITHIN-CREATE");
+        declareMacro("janus_within_assert", "JANUS-WITHIN-ASSERT");
+        declareMacro("janus_within_query", "JANUS-WITHIN-QUERY");
         return NIL;
     }
 

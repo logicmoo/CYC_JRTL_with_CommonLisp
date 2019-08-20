@@ -529,7 +529,6 @@ public final class rkf_scenario_manipulator extends SubLTranslatedFile implement
 
     public static final SubLFile me = new rkf_scenario_manipulator();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_scenario_manipulator";
 
 
     // deflexical

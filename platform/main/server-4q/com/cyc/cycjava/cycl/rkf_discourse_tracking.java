@@ -63,7 +63,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rkf_discourse_tracking extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rkf_discourse_tracking();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_discourse_tracking";
 
 
     // defparameter

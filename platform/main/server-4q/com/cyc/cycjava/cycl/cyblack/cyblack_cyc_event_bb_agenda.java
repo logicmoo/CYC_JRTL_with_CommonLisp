@@ -69,7 +69,6 @@ public final class cyblack_cyc_event_bb_agenda extends SubLTranslatedFile implem
 
     public static final SubLFile me = new cyblack_cyc_event_bb_agenda();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_cyc_event_bb_agenda";
 
     // // Definitions
     // defvar

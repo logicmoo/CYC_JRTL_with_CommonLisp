@@ -96,7 +96,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class simple_indexing extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new simple_indexing();
 
- public static final String myName = "com.cyc.cycjava.cycl.simple_indexing";
 
 
     // defparameter

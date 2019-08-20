@@ -117,7 +117,6 @@ public final class secure_translation extends SubLTranslatedFile implements V12 
 
     public static final SubLFile me = new secure_translation();
 
- public static final String myName = "com.cyc.cycjava.cycl.secure_translation";
 
 
     // deflexical

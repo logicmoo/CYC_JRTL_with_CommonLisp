@@ -163,7 +163,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class at_defns extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new at_defns();
 
- public static final String myName = "com.cyc.cycjava.cycl.at_defns";
 
 
     // defvar

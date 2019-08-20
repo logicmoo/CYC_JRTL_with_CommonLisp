@@ -71,7 +71,6 @@ public final class cb_uia_launchers extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cb_uia_launchers();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_uia_launchers";
 
     // // Definitions
     // deflexical

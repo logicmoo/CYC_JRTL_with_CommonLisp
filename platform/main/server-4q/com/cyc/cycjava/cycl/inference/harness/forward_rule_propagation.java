@@ -49,7 +49,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class forward_rule_propagation extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.harness.forward_rule_propagation";
 	public static String myFingerPrint = "4645cb8f47c66914087d89fa25a4bad6224917b2991e9cdd25ec7882bcb9b431";
 	@SubL(source = "cycl/inference/harness/forward-rule-propagation.lisp", position = 3700L)
 	public static SubLSymbol $forward_trigger_lazy_iteration_threshold$;
@@ -547,21 +546,21 @@ public class forward_rule_propagation extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_forward_rule_propagation_file() {
-		declareFunction(myName, "forward_propagate_rule_via_trigger_gafs", "FORWARD-PROPAGATE-RULE-VIA-TRIGGER-GAFS", 1,
+		declareFunction("forward_propagate_rule_via_trigger_gafs", "FORWARD-PROPAGATE-RULE-VIA-TRIGGER-GAFS", 1,
 				1, false);
-		declareFunction(myName, "possibly_change_assertion_direction_to_forward_without_repropagation",
+		declareFunction("possibly_change_assertion_direction_to_forward_without_repropagation",
 				"POSSIBLY-CHANGE-ASSERTION-DIRECTION-TO-FORWARD-WITHOUT-REPROPAGATION", 1, 0, false);
-		declareFunction(myName, "repropagate_trigger_gaf_against_rule", "REPROPAGATE-TRIGGER-GAF-AGAINST-RULE", 2, 0,
+		declareFunction("repropagate_trigger_gaf_against_rule", "REPROPAGATE-TRIGGER-GAF-AGAINST-RULE", 2, 0,
 				false);
-		declareFunction(myName, "forward_rule_trigger_gafs", "FORWARD-RULE-TRIGGER-GAFS", 1, 1, false);
-		declareFunction(myName, "new_forward_rule_trigger_gaf_iterator", "NEW-FORWARD-RULE-TRIGGER-GAF-ITERATOR", 1, 1,
+		declareFunction("forward_rule_trigger_gafs", "FORWARD-RULE-TRIGGER-GAFS", 1, 1, false);
+		declareFunction("new_forward_rule_trigger_gaf_iterator", "NEW-FORWARD-RULE-TRIGGER-GAF-ITERATOR", 1, 1,
 				false);
-		declareFunction(myName, "forward_rule_trigger_gafs_int", "FORWARD-RULE-TRIGGER-GAFS-INT", 2, 0, false);
-		declareFunction(myName, "forward_rule_trigger_asent", "FORWARD-RULE-TRIGGER-ASENT", 1, 1, false);
-		declareFunction(myName, "obfuscate_non_trigger_literal_lits", "OBFUSCATE-NON-TRIGGER-LITERAL-LITS", 3, 0,
+		declareFunction("forward_rule_trigger_gafs_int", "FORWARD-RULE-TRIGGER-GAFS-INT", 2, 0, false);
+		declareFunction("forward_rule_trigger_asent", "FORWARD-RULE-TRIGGER-ASENT", 1, 1, false);
+		declareFunction("obfuscate_non_trigger_literal_lits", "OBFUSCATE-NON-TRIGGER-LITERAL-LITS", 3, 0,
 				false);
-		declareFunction(myName, "forward_rule_initial_fanout", "FORWARD-RULE-INITIAL-FANOUT", 1, 1, false);
-		declareFunction(myName, "first_gaf_in_supports", "FIRST-GAF-IN-SUPPORTS", 1, 0, false);
+		declareFunction("forward_rule_initial_fanout", "FORWARD-RULE-INITIAL-FANOUT", 1, 1, false);
+		declareFunction("first_gaf_in_supports", "FIRST-GAF-IN-SUPPORTS", 1, 0, false);
 		return NIL;
 	}
 

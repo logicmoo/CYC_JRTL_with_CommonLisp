@@ -36,7 +36,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class progress_modules extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.modules.progress_modules";
 	public static String myFingerPrint = "81a5fc86f3d77ee370df73b1994e0abcd9791ae2c9266b5bd301a46e9bc29208";
 	private static SubLSymbol $kw$TACTICAL;
 	private static SubLSymbol $sym1$MEMOIZED_COMPUTE_JOIN_ORDERED_LINK_TOTAL_STRATEGIC_PROGRESS_INT;
@@ -497,20 +496,20 @@ public class progress_modules extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_progress_modules_file() {
-		declareFunction(myName, "compute_join_ordered_link_total_strategic_progress",
+		declareFunction("compute_join_ordered_link_total_strategic_progress",
 				"COMPUTE-JOIN-ORDERED-LINK-TOTAL-STRATEGIC-PROGRESS", 1, 1, false);
-		declareFunction(myName, "memoized_compute_join_ordered_link_total_strategic_progress_int_internal",
+		declareFunction("memoized_compute_join_ordered_link_total_strategic_progress_int_internal",
 				"MEMOIZED-COMPUTE-JOIN-ORDERED-LINK-TOTAL-STRATEGIC-PROGRESS-INT-INTERNAL", 2, 0, false);
-		declareFunction(myName, "memoized_compute_join_ordered_link_total_strategic_progress_int",
+		declareFunction("memoized_compute_join_ordered_link_total_strategic_progress_int",
 				"MEMOIZED-COMPUTE-JOIN-ORDERED-LINK-TOTAL-STRATEGIC-PROGRESS-INT", 2, 0, false);
-		declareFunction(myName, "compute_literal_total_strategic_progress_qua_subquery",
+		declareFunction("compute_literal_total_strategic_progress_qua_subquery",
 				"COMPUTE-LITERAL-TOTAL-STRATEGIC-PROGRESS-QUA-SUBQUERY", 4, 1, false);
-		declareFunction(myName, "literal_shared_vars_qua_subquery", "LITERAL-SHARED-VARS-QUA-SUBQUERY", 4, 0, false);
-		declareFunction(myName, "strategic_progress_wrt_varsP", "STRATEGIC-PROGRESS-WRT-VARS?", 5, 1, false);
-		declareFunction(myName, "test_literal_shared_vars_qua_subquery", "TEST-LITERAL-SHARED-VARS-QUA-SUBQUERY", 4, 0,
+		declareFunction("literal_shared_vars_qua_subquery", "LITERAL-SHARED-VARS-QUA-SUBQUERY", 4, 0, false);
+		declareFunction("strategic_progress_wrt_varsP", "STRATEGIC-PROGRESS-WRT-VARS?", 5, 1, false);
+		declareFunction("test_literal_shared_vars_qua_subquery", "TEST-LITERAL-SHARED-VARS-QUA-SUBQUERY", 4, 0,
 				false);
-		declareFunction(myName, "test_strategic_progress_wrt_varsP", "TEST-STRATEGIC-PROGRESS-WRT-VARS?", 5, 0, false);
-		declareFunction(myName, "test_compute_all_literals_total_strategic_progress_qua_subquery",
+		declareFunction("test_strategic_progress_wrt_varsP", "TEST-STRATEGIC-PROGRESS-WRT-VARS?", 5, 0, false);
+		declareFunction("test_compute_all_literals_total_strategic_progress_qua_subquery",
 				"TEST-COMPUTE-ALL-LITERALS-TOTAL-STRATEGIC-PROGRESS-QUA-SUBQUERY", 1, 0, false);
 		return NIL;
 	}

@@ -67,7 +67,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class deductions_high extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new deductions_high();
 
- public static final String myName = "com.cyc.cycjava.cycl.deductions_high";
 
 
     // defparameter

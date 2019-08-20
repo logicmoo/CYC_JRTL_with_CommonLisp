@@ -394,7 +394,6 @@ public final class reformulator_module_quantifier_optimizer_3 extends SubLTransl
 
     public static final SubLFile me = new reformulator_module_quantifier_optimizer_3();
 
- public static final String myName = "com.cyc.cycjava.cycl.reformulator_module_quantifier_optimizer_3";
 
 
     // deflexical

@@ -125,7 +125,6 @@ public final class integer_sequence_generator extends SubLTranslatedFile impleme
 
     public static final SubLFile me = new integer_sequence_generator();
 
- public static final String myName = "com.cyc.cycjava.cycl.integer_sequence_generator";
 
 
     // defconstant

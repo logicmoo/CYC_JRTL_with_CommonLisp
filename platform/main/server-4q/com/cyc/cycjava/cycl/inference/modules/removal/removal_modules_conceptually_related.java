@@ -48,7 +48,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_conceptually_related extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related";
     public static String myFingerPrint = "2ba04d75e6613f80b13183db713fc9c04c4683f5c4869c614497bdf6201aa819";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-conceptually-related.lisp", position = 1000L)
     public static SubLSymbol $conceptually_related_generality_threshold$;
@@ -1308,30 +1307,30 @@ public class removal_modules_conceptually_related extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_conceptually_related_file() {
-        declareFunction(myName, "new_conceptually_related_mapping_table", "NEW-CONCEPTUALLY-RELATED-MAPPING-TABLE", 0, 0, false);
-        declareFunction(myName, "new_conceptually_related_answer_table", "NEW-CONCEPTUALLY-RELATED-ANSWER-TABLE", 0, 0, false);
-        declareFunction(myName, "conceptually_relatedP", "CONCEPTUALLY-RELATED?", 2, 2, false);
-        declareFunction(myName, "check_conceptually_related_limited", "CHECK-CONCEPTUALLY-RELATED-LIMITED", 3, 1, false);
-        declareFunction(myName, "check_conceptually_related", "CHECK-CONCEPTUALLY-RELATED", 1, 0, false);
-        declareFunction(myName, "check_immediate_conceptually_related", "CHECK-IMMEDIATE-CONCEPTUALLY-RELATED", 1, 0, false);
-        declareFunction(myName, "check_superior_conceptually_related", "CHECK-SUPERIOR-CONCEPTUALLY-RELATED", 1, 0, false);
-        declareFunction(myName, "conceptual_generality_acceptable", "CONCEPTUAL-GENERALITY-ACCEPTABLE", 1, 0, false);
-        declareFunction(myName, "all_conceptually_related", "ALL-CONCEPTUALLY-RELATED", 1, 1, false);
-        declareFunction(myName, "all_conceptually_related_limited", "ALL-CONCEPTUALLY-RELATED-LIMITED", 3, 1, false);
-        declareFunction(myName, "mark_conceptually_related", "MARK-CONCEPTUALLY-RELATED", 1, 0, false);
-        declareFunction(myName, "mark_immediate_conceptually_related", "MARK-IMMEDIATE-CONCEPTUALLY-RELATED", 1, 0, false);
-        declareFunction(myName, "mark_superior_conceptually_related", "MARK-SUPERIOR-CONCEPTUALLY-RELATED", 1, 0, false);
-        declareFunction(myName, "max_conceptually_related_to", "MAX-CONCEPTUALLY-RELATED-TO", 1, 1, false);
-        declareFunction(myName, "not_conceptually_relatedP", "NOT-CONCEPTUALLY-RELATED?", 2, 1, false);
-        declareFunction(myName, "max_floor_mts_of_conceptually_related_paths", "MAX-FLOOR-MTS-OF-CONCEPTUALLY-RELATED-PATHS", 2, 0, false);
-        declareFunction(myName, "why_conceptually_relatedP", "WHY-CONCEPTUALLY-RELATED?", 2, 1, false);
-        declareFunction(myName, "why_conceptually_relatedP_internal", "WHY-CONCEPTUALLY-RELATED?-INTERNAL", 4, 0, false);
-        declareFunction(myName, "why_not_conceptually_relatedP", "WHY-NOT-CONCEPTUALLY-RELATED?", 2, 1, false);
-        declareFunction(myName, "removal_conceptually_related_expand", "REMOVAL-CONCEPTUALLY-RELATED-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_all_conceptually_related_expand", "REMOVAL-ALL-CONCEPTUALLY-RELATED-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_max_conceptually_related_to_cost", "REMOVAL-MAX-CONCEPTUALLY-RELATED-TO-COST", 1, 1, false);
-        declareFunction(myName, "removal_max_conceptually_related_to_expand", "REMOVAL-MAX-CONCEPTUALLY-RELATED-TO-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_not_conceptually_related_expand", "REMOVAL-NOT-CONCEPTUALLY-RELATED-EXPAND", 1, 1, false);
+        declareFunction("new_conceptually_related_mapping_table", "NEW-CONCEPTUALLY-RELATED-MAPPING-TABLE", 0, 0, false);
+        declareFunction("new_conceptually_related_answer_table", "NEW-CONCEPTUALLY-RELATED-ANSWER-TABLE", 0, 0, false);
+        declareFunction("conceptually_relatedP", "CONCEPTUALLY-RELATED?", 2, 2, false);
+        declareFunction("check_conceptually_related_limited", "CHECK-CONCEPTUALLY-RELATED-LIMITED", 3, 1, false);
+        declareFunction("check_conceptually_related", "CHECK-CONCEPTUALLY-RELATED", 1, 0, false);
+        declareFunction("check_immediate_conceptually_related", "CHECK-IMMEDIATE-CONCEPTUALLY-RELATED", 1, 0, false);
+        declareFunction("check_superior_conceptually_related", "CHECK-SUPERIOR-CONCEPTUALLY-RELATED", 1, 0, false);
+        declareFunction("conceptual_generality_acceptable", "CONCEPTUAL-GENERALITY-ACCEPTABLE", 1, 0, false);
+        declareFunction("all_conceptually_related", "ALL-CONCEPTUALLY-RELATED", 1, 1, false);
+        declareFunction("all_conceptually_related_limited", "ALL-CONCEPTUALLY-RELATED-LIMITED", 3, 1, false);
+        declareFunction("mark_conceptually_related", "MARK-CONCEPTUALLY-RELATED", 1, 0, false);
+        declareFunction("mark_immediate_conceptually_related", "MARK-IMMEDIATE-CONCEPTUALLY-RELATED", 1, 0, false);
+        declareFunction("mark_superior_conceptually_related", "MARK-SUPERIOR-CONCEPTUALLY-RELATED", 1, 0, false);
+        declareFunction("max_conceptually_related_to", "MAX-CONCEPTUALLY-RELATED-TO", 1, 1, false);
+        declareFunction("not_conceptually_relatedP", "NOT-CONCEPTUALLY-RELATED?", 2, 1, false);
+        declareFunction("max_floor_mts_of_conceptually_related_paths", "MAX-FLOOR-MTS-OF-CONCEPTUALLY-RELATED-PATHS", 2, 0, false);
+        declareFunction("why_conceptually_relatedP", "WHY-CONCEPTUALLY-RELATED?", 2, 1, false);
+        declareFunction("why_conceptually_relatedP_internal", "WHY-CONCEPTUALLY-RELATED?-INTERNAL", 4, 0, false);
+        declareFunction("why_not_conceptually_relatedP", "WHY-NOT-CONCEPTUALLY-RELATED?", 2, 1, false);
+        declareFunction("removal_conceptually_related_expand", "REMOVAL-CONCEPTUALLY-RELATED-EXPAND", 1, 1, false);
+        declareFunction("removal_all_conceptually_related_expand", "REMOVAL-ALL-CONCEPTUALLY-RELATED-EXPAND", 1, 1, false);
+        declareFunction("removal_max_conceptually_related_to_cost", "REMOVAL-MAX-CONCEPTUALLY-RELATED-TO-COST", 1, 1, false);
+        declareFunction("removal_max_conceptually_related_to_expand", "REMOVAL-MAX-CONCEPTUALLY-RELATED-TO-EXPAND", 1, 1, false);
+        declareFunction("removal_not_conceptually_related_expand", "REMOVAL-NOT-CONCEPTUALLY-RELATED-EXPAND", 1, 1, false);
         return NIL;
     }
 

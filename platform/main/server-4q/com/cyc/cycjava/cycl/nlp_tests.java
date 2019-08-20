@@ -34,7 +34,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class nlp_tests extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new nlp_tests();
 
- public static final String myName = "com.cyc.cycjava.cycl.nlp_tests";
 
 
     // Internal Constants

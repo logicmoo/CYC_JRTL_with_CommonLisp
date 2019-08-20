@@ -25,7 +25,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class quirk_trampolines extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new quirk_trampolines();
 
- public static final String myName = "com.cyc.cycjava.cycl.quirk.quirk_trampolines";
 
 
     // Internal Constants

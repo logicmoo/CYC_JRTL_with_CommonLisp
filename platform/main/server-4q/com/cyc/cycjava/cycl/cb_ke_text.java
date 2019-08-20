@@ -91,7 +91,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class cb_ke_text extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new cb_ke_text();
 
- public static final String myName = "com.cyc.cycjava.cycl.cb_ke_text";
 
 
     // defparameter

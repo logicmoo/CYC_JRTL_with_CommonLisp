@@ -63,7 +63,6 @@ public final class nsf_nwu_kdd_stt_integration extends SubLTranslatedFile implem
 
     public static final SubLFile me = new nsf_nwu_kdd_stt_integration();
 
-    public static final String myName = "com.cyc.cycjava.cycl.project.nsf_nwu_kdd.nsf_nwu_kdd_stt_integration";
 
     // // Definitions
     public static final SubLObject get_actively_tracked_stt_cases() {

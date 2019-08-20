@@ -32,7 +32,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class reformulator_module_negation_processor extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new reformulator_module_negation_processor();
 
- public static final String myName = "com.cyc.cycjava.cycl.reformulator_module_negation_processor";
 
 
     // deflexical

@@ -111,7 +111,6 @@ public final class rkf_collaborator_nusketch extends SubLTranslatedFile implemen
 
     public static final SubLFile me = new rkf_collaborator_nusketch();
 
-    public static final String myName = "com.cyc.cycjava.cycl.rkf_collaborator_nusketch";
 
     // // Definitions
     public static final class $nusketch_session_native extends SubLStructNative {

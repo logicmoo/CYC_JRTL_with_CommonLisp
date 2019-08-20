@@ -37,7 +37,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_concatenate_strings extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_concatenate_strings";
     public static String myFingerPrint = "51ee9128ac3ff1a799865d1f3aced9205608557bc7b9114b8f3878eee9c3e7ad";
     private static SubLObject $$concatenateStrings;
     private static SubLSymbol $POS;
@@ -465,23 +464,23 @@ public class removal_modules_concatenate_strings extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_concatenate_strings_file() {
-        declareFunction(myName, "removal_concatenate_strings_bound_args_supported_p", "REMOVAL-CONCATENATE-STRINGS-BOUND-ARGS-SUPPORTED-P", 1, 1, false);
-        declareFunction(myName, "removal_concatenate_strings_arg_supported_p", "REMOVAL-CONCATENATE-STRINGS-ARG-SUPPORTED-P", 1, 0, false);
-        declareFunction(myName, "removal_concatenate_strings_concatenate_arg1_pos", "REMOVAL-CONCATENATE-STRINGS-CONCATENATE-ARG1-POS", 1, 1, false);
-        declareFunction(myName, "removal_concatenate_strings_concatenate_neg", "REMOVAL-CONCATENATE-STRINGS-CONCATENATE-NEG", 1, 1, false);
-        declareFunction(myName, "removal_concatenate_strings_permute_cost", "REMOVAL-CONCATENATE-STRINGS-PERMUTE-COST", 1, 1, false);
-        declareFunction(myName, "removal_concatenate_strings_permute_pos_output_generate", "REMOVAL-CONCATENATE-STRINGS-PERMUTE-POS-OUTPUT-GENERATE", 1, 1, false);
-        declareFunction(myName, "new_concatenate_strings_permute_pos_iterator", "NEW-CONCATENATE-STRINGS-PERMUTE-POS-ITERATOR", 6, 0, false);
-        declareFunction(myName, "concatenate_strings_permute_pos_iterator_state", "CONCATENATE-STRINGS-PERMUTE-POS-ITERATOR-STATE", 6, 0, false);
-        declareFunction(myName, "concatenate_strings_permute_pos_iterator_done", "CONCATENATE-STRINGS-PERMUTE-POS-ITERATOR-DONE", 1, 0, false);
-        declareFunction(myName, "concatenate_strings_permute_pos_iterator_next", "CONCATENATE-STRINGS-PERMUTE-POS-ITERATOR-NEXT", 1, 0, false);
-        declareFunction(myName, "concatenate_strings_permute_pos_iterator_finalize", "CONCATENATE-STRINGS-PERMUTE-POS-ITERATOR-FINALIZE", 1, 0, false);
-        declareFunction(myName, "preprocess_stringy_args", "PREPROCESS-STRINGY-ARGS", 1, 0, false);
-        declareFunction(myName, "generate_concatenate_strings_permutation_iterator", "GENERATE-CONCATENATE-STRINGS-PERMUTATION-ITERATOR", 2, 0, false);
-        declareFunction(myName, "permutation_ordered_consistentlyP", "PERMUTATION-ORDERED-CONSISTENTLY?", 2, 0, false);
-        declareFunction(myName, "concatenate_strings_permute_pos_iterator_next_int", "CONCATENATE-STRINGS-PERMUTE-POS-ITERATOR-NEXT-INT", 4, 0, false);
-        declareFunction(myName, "removal_concatenate_strings_partial_bindings", "REMOVAL-CONCATENATE-STRINGS-PARTIAL-BINDINGS", 5, 0, false);
-        declareFunction(myName, "insert_empty_strings_between_adjacent_variables", "INSERT-EMPTY-STRINGS-BETWEEN-ADJACENT-VARIABLES", 1, 0, false);
+        declareFunction("removal_concatenate_strings_bound_args_supported_p", "REMOVAL-CONCATENATE-STRINGS-BOUND-ARGS-SUPPORTED-P", 1, 1, false);
+        declareFunction("removal_concatenate_strings_arg_supported_p", "REMOVAL-CONCATENATE-STRINGS-ARG-SUPPORTED-P", 1, 0, false);
+        declareFunction("removal_concatenate_strings_concatenate_arg1_pos", "REMOVAL-CONCATENATE-STRINGS-CONCATENATE-ARG1-POS", 1, 1, false);
+        declareFunction("removal_concatenate_strings_concatenate_neg", "REMOVAL-CONCATENATE-STRINGS-CONCATENATE-NEG", 1, 1, false);
+        declareFunction("removal_concatenate_strings_permute_cost", "REMOVAL-CONCATENATE-STRINGS-PERMUTE-COST", 1, 1, false);
+        declareFunction("removal_concatenate_strings_permute_pos_output_generate", "REMOVAL-CONCATENATE-STRINGS-PERMUTE-POS-OUTPUT-GENERATE", 1, 1, false);
+        declareFunction("new_concatenate_strings_permute_pos_iterator", "NEW-CONCATENATE-STRINGS-PERMUTE-POS-ITERATOR", 6, 0, false);
+        declareFunction("concatenate_strings_permute_pos_iterator_state", "CONCATENATE-STRINGS-PERMUTE-POS-ITERATOR-STATE", 6, 0, false);
+        declareFunction("concatenate_strings_permute_pos_iterator_done", "CONCATENATE-STRINGS-PERMUTE-POS-ITERATOR-DONE", 1, 0, false);
+        declareFunction("concatenate_strings_permute_pos_iterator_next", "CONCATENATE-STRINGS-PERMUTE-POS-ITERATOR-NEXT", 1, 0, false);
+        declareFunction("concatenate_strings_permute_pos_iterator_finalize", "CONCATENATE-STRINGS-PERMUTE-POS-ITERATOR-FINALIZE", 1, 0, false);
+        declareFunction("preprocess_stringy_args", "PREPROCESS-STRINGY-ARGS", 1, 0, false);
+        declareFunction("generate_concatenate_strings_permutation_iterator", "GENERATE-CONCATENATE-STRINGS-PERMUTATION-ITERATOR", 2, 0, false);
+        declareFunction("permutation_ordered_consistentlyP", "PERMUTATION-ORDERED-CONSISTENTLY?", 2, 0, false);
+        declareFunction("concatenate_strings_permute_pos_iterator_next_int", "CONCATENATE-STRINGS-PERMUTE-POS-ITERATOR-NEXT-INT", 4, 0, false);
+        declareFunction("removal_concatenate_strings_partial_bindings", "REMOVAL-CONCATENATE-STRINGS-PARTIAL-BINDINGS", 5, 0, false);
+        declareFunction("insert_empty_strings_between_adjacent_variables", "INSERT-EMPTY-STRINGS-BETWEEN-ADJACENT-VARIABLES", 1, 0, false);
         return NIL;
     }
 

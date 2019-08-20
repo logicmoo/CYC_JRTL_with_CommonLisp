@@ -158,7 +158,6 @@ public final class somewhere_cache extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new somewhere_cache();
 
- public static final String myName = "com.cyc.cycjava.cycl.somewhere_cache";
 
 
     // defparameter

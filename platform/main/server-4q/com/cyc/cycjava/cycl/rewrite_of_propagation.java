@@ -39,7 +39,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rewrite_of_propagation extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rewrite_of_propagation();
 
- public static final String myName = "com.cyc.cycjava.cycl.rewrite_of_propagation";
 
 
     // defparameter

@@ -142,7 +142,6 @@ public final class hlmt extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new hlmt();
 
- public static final String myName = "com.cyc.cycjava.cycl.hlmt";
 
 
     // defvar

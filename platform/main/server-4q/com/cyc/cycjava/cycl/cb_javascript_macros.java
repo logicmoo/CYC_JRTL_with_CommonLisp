@@ -36,7 +36,6 @@ public final class cb_javascript_macros extends SubLTranslatedFile implements V1
 
     public static final SubLFile me = new cb_javascript_macros();
 
- public static final String myName = "com.cyc.cycjava.cycl.cb_javascript_macros";
 
 
     // Internal Constants

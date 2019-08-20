@@ -36,7 +36,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_admitted_formula extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_admitted_formula";
     public static String myFingerPrint = "6d343951bb19ad9dd8668f78dcdd51fa16961dfb548ad2d336a19e8907af439a";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-admitted-formula.lisp", position = 1900L)
     private static SubLSymbol $default_removal_admitted_formula_cost$;
@@ -305,13 +304,13 @@ public class removal_modules_admitted_formula extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_admitted_formula_file() {
-        declareFunction(myName, "removal_admitted_sentence_pos_expand", "REMOVAL-ADMITTED-SENTENCE-POS-EXPAND", 1, 1, false);
-        declareFunction(myName, "inference_admitted_formula", "INFERENCE-ADMITTED-FORMULA", 1, 1, false);
-        declareFunction(myName, "inference_admitted_sentence", "INFERENCE-ADMITTED-SENTENCE", 1, 1, false);
-        declareFunction(myName, "removal_admitted_sentence_neg_expand", "REMOVAL-ADMITTED-SENTENCE-NEG-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_admitted_argument_check_pos_expand", "REMOVAL-ADMITTED-ARGUMENT-CHECK-POS-EXPAND", 1, 1, false);
-        declareFunction(myName, "inference_admitted_argument", "INFERENCE-ADMITTED-ARGUMENT", 3, 1, false);
-        declareFunction(myName, "removal_admitted_argument_check_neg_expand", "REMOVAL-ADMITTED-ARGUMENT-CHECK-NEG-EXPAND", 1, 1, false);
+        declareFunction("removal_admitted_sentence_pos_expand", "REMOVAL-ADMITTED-SENTENCE-POS-EXPAND", 1, 1, false);
+        declareFunction("inference_admitted_formula", "INFERENCE-ADMITTED-FORMULA", 1, 1, false);
+        declareFunction("inference_admitted_sentence", "INFERENCE-ADMITTED-SENTENCE", 1, 1, false);
+        declareFunction("removal_admitted_sentence_neg_expand", "REMOVAL-ADMITTED-SENTENCE-NEG-EXPAND", 1, 1, false);
+        declareFunction("removal_admitted_argument_check_pos_expand", "REMOVAL-ADMITTED-ARGUMENT-CHECK-POS-EXPAND", 1, 1, false);
+        declareFunction("inference_admitted_argument", "INFERENCE-ADMITTED-ARGUMENT", 3, 1, false);
+        declareFunction("removal_admitted_argument_check_neg_expand", "REMOVAL-ADMITTED-ARGUMENT-CHECK-NEG-EXPAND", 1, 1, false);
         return NIL;
     }
 

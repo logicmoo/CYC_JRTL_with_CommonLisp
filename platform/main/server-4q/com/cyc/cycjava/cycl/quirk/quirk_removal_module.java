@@ -124,7 +124,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class quirk_removal_module extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new quirk_removal_module();
 
- public static final String myName = "com.cyc.cycjava.cycl.quirk.quirk_removal_module";
 
 
     // defparameter

@@ -265,7 +265,6 @@ public final class rkf_scenario_constructor extends SubLTranslatedFile implement
 
     public static final SubLFile me = new rkf_scenario_constructor();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_scenario_constructor";
 
 
     // defparameter

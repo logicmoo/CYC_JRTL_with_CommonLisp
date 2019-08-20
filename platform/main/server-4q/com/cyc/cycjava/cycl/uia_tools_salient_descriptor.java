@@ -73,7 +73,6 @@ public final class uia_tools_salient_descriptor extends SubLTranslatedFile imple
 
     public static final SubLFile me = new uia_tools_salient_descriptor();
 
-    public static final String myName = "com.cyc.cycjava.cycl.uia_tools_salient_descriptor";
 
     // // Definitions
     /**

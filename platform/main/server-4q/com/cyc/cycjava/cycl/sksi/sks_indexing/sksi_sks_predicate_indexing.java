@@ -164,7 +164,6 @@ public final class sksi_sks_predicate_indexing extends SubLTranslatedFile implem
 
     public static final SubLFile me = new sksi_sks_predicate_indexing();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.sks_indexing.sksi_sks_predicate_indexing";
 
 
     // defconstant

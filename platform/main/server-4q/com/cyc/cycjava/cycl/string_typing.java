@@ -191,7 +191,6 @@ public final class string_typing extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new string_typing();
 
- public static final String myName = "com.cyc.cycjava.cycl.string_typing";
 
 
     private static final SubLSymbol $IGNORE_ERRORS_TARGET = makeKeyword("IGNORE-ERRORS-TARGET");

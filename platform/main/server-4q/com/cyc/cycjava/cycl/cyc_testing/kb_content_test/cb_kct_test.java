@@ -483,7 +483,6 @@ public final class cb_kct_test extends SubLTranslatedFile implements V12 {
 
 	public static final SubLFile me = new cb_kct_test();
 
-	public static final String myName = "com.cyc.cycjava.cycl.cyc_testing.kb_content_test.cb_kct_test";
 
 	// defparameter
 	@LispMethod(comment = "defparameter")

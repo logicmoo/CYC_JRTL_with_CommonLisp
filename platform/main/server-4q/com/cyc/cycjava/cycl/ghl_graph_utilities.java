@@ -24,7 +24,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class ghl_graph_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new ghl_graph_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.ghl_graph_utilities";
 
 
     // Internal Constants

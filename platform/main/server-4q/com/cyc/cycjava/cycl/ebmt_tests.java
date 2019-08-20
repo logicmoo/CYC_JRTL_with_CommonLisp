@@ -1102,7 +1102,6 @@ public final class ebmt_tests extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new ebmt_tests();
 
- public static final String myName = "com.cyc.cycjava.cycl.ebmt_tests";
 
 
     // deflexical

@@ -52,7 +52,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class kct_thinking extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new kct_thinking();
 
- public static final String myName = "com.cyc.cycjava.cycl.cyc_testing.kb_content_test.kct_thinking";
 
 
     // deflexical

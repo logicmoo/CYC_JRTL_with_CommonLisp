@@ -120,7 +120,6 @@ public final class generic_testing extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new generic_testing();
 
- public static final String myName = "com.cyc.cycjava.cycl.cyc_testing.generic_testing";
 
 
     // deflexical

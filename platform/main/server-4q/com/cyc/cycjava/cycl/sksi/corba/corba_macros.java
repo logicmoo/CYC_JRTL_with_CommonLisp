@@ -38,7 +38,6 @@ public final class corba_macros extends SubLTranslatedFile implements V10 {
 
     public static final SubLFile me = new corba_macros();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.sksi.corba.corba_macros";
 
     // // Definitions
     public static final SubLObject with_open_corba_connection(SubLObject macroform, SubLObject environment) {

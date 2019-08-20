@@ -112,7 +112,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rule_applicability_tree extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new rule_applicability_tree();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.inference.rule_applicability_tree";
 
 
 

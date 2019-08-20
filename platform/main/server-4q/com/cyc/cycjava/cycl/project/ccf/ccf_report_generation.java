@@ -94,7 +94,6 @@ public final class ccf_report_generation extends SubLTranslatedFile implements V
 
     public static final SubLFile me = new ccf_report_generation();
 
-    public static final String myName = "com.cyc.cycjava.cycl.project.ccf.ccf_report_generation";
 
     // // Definitions
     // deflexical

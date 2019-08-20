@@ -50,7 +50,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class query_suggestor extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.query_suggestor";
     public static String myFingerPrint = "6dbd3f02d8302c3e5fc2393c02078f6537475f084e4c4d8499b30fe729948178";
     @SubL(source = "cycl/inference/query-suggestor.lisp", position = 800L)
     public static SubLSymbol $query_suggestor_test_types$;
@@ -1284,34 +1283,34 @@ public class query_suggestor extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_query_suggestor_file() {
-        declareFunction(myName, "query_suggestor_singleton_test_typeP", "QUERY-SUGGESTOR-SINGLETON-TEST-TYPE?", 1, 0, false);
-        declareFunction(myName, "query_suggestor_singleton_test_type_sole_instance", "QUERY-SUGGESTOR-SINGLETON-TEST-TYPE-SOLE-INSTANCE", 1, 0, false);
-        declareFunction(myName, "query_suggestor_test_typeP", "QUERY-SUGGESTOR-TEST-TYPE?", 1, 0, false);
-        declareFunction(myName, "query_suggestor_concepts", "QUERY-SUGGESTOR-CONCEPTS", 1, 0, false);
-        declareFunction(myName, "assert_query_suggestor_concept_info", "ASSERT-QUERY-SUGGESTOR-CONCEPT-INFO", 1, 0, false);
-        declareFunction(myName, "unassert_query_suggestor_concept_info", "UNASSERT-QUERY-SUGGESTOR-CONCEPT-INFO", 1, 0, false);
-        declareFunction(myName, "query_suggestor_relevant_queries", "QUERY-SUGGESTOR-RELEVANT-QUERIES", 1, 0, false);
-        declareFunction(myName, "english_gloss_for_relevant_query", "ENGLISH-GLOSS-FOR-RELEVANT-QUERY", 1, 0, false);
-        declareFunction(myName, "run_query_suggestor_query", "RUN-QUERY-SUGGESTOR-QUERY", 1, 0, false);
-        declareFunction(myName, "query_suggestor_concept_computations", "QUERY-SUGGESTOR-CONCEPT-COMPUTATIONS", 1, 0, false);
-        declareFunction(myName, "query_suggestor_run_test_for_concept", "QUERY-SUGGESTOR-RUN-TEST-FOR-CONCEPT", 4, 0, false);
-        declareFunction(myName, "make_query_suggestor_html_file", "MAKE-QUERY-SUGGESTOR-HTML-FILE", 1, 0, false);
-        declareFunction(myName, "query_suggestor_html_strong_desc_row", "QUERY-SUGGESTOR-HTML-STRONG-DESC-ROW", 2, 0, false);
-        declareFunction(myName, "query_suggestor_html_row", "QUERY-SUGGESTOR-HTML-ROW", 2, 0, false);
-        declareFunction(myName, "update_query_suggestor_html_intro", "UPDATE-QUERY-SUGGESTOR-HTML-INTRO", 3, 0, false);
-        declareFunction(myName, "update_query_suggestor_html_output", "UPDATE-QUERY-SUGGESTOR-HTML-OUTPUT", 3, 0, false);
-        declareFunction(myName, "update_query_suggestor_html_with_query_result", "UPDATE-QUERY-SUGGESTOR-HTML-WITH-QUERY-RESULT", 3, 0, false);
-        declareFunction(myName, "update_query_suggestor_html_with_results", "UPDATE-QUERY-SUGGESTOR-HTML-WITH-RESULTS", 5, 0, false);
-        declareFunction(myName, "update_query_suggestor_html_with_computations", "UPDATE-QUERY-SUGGESTOR-HTML-WITH-COMPUTATIONS", 3, 0, false);
-        declareFunction(myName, "query_suggestor_run_tests_for_test_type", "QUERY-SUGGESTOR-RUN-TESTS-FOR-TEST-TYPE", 1, 1, false);
-        declareFunction(myName, "query_suggestor_run_tests", "QUERY-SUGGESTOR-RUN-TESTS", 0, 1, false);
-        declareFunction(myName, "query_suggestor_run_tests_for_instances_to_dir", "QUERY-SUGGESTOR-RUN-TESTS-FOR-INSTANCES-TO-DIR", 2, 1, false);
-        declareFunction(myName, "query_suggestor_run_tests_for_to_dir", "QUERY-SUGGESTOR-RUN-TESTS-FOR-TO-DIR", 2, 1, false);
-        declareFunction(myName, "query_suggestor_run_trial_test", "QUERY-SUGGESTOR-RUN-TRIAL-TEST", 0, 0, false);
-        declareFunction(myName, "filter_query_runs_by_test", "FILTER-QUERY-RUNS-BY-TEST", 2, 1, false);
-        declareFunction(myName, "filter_query_runs_by_property_value", "FILTER-QUERY-RUNS-BY-PROPERTY-VALUE", 3, 1, false);
-        declareFunction(myName, "answerable_query_runs", "ANSWERABLE-QUERY-RUNS", 1, 0, false);
-        declareFunction(myName, "unanswerable_query_runs", "UNANSWERABLE-QUERY-RUNS", 1, 0, false);
+        declareFunction("query_suggestor_singleton_test_typeP", "QUERY-SUGGESTOR-SINGLETON-TEST-TYPE?", 1, 0, false);
+        declareFunction("query_suggestor_singleton_test_type_sole_instance", "QUERY-SUGGESTOR-SINGLETON-TEST-TYPE-SOLE-INSTANCE", 1, 0, false);
+        declareFunction("query_suggestor_test_typeP", "QUERY-SUGGESTOR-TEST-TYPE?", 1, 0, false);
+        declareFunction("query_suggestor_concepts", "QUERY-SUGGESTOR-CONCEPTS", 1, 0, false);
+        declareFunction("assert_query_suggestor_concept_info", "ASSERT-QUERY-SUGGESTOR-CONCEPT-INFO", 1, 0, false);
+        declareFunction("unassert_query_suggestor_concept_info", "UNASSERT-QUERY-SUGGESTOR-CONCEPT-INFO", 1, 0, false);
+        declareFunction("query_suggestor_relevant_queries", "QUERY-SUGGESTOR-RELEVANT-QUERIES", 1, 0, false);
+        declareFunction("english_gloss_for_relevant_query", "ENGLISH-GLOSS-FOR-RELEVANT-QUERY", 1, 0, false);
+        declareFunction("run_query_suggestor_query", "RUN-QUERY-SUGGESTOR-QUERY", 1, 0, false);
+        declareFunction("query_suggestor_concept_computations", "QUERY-SUGGESTOR-CONCEPT-COMPUTATIONS", 1, 0, false);
+        declareFunction("query_suggestor_run_test_for_concept", "QUERY-SUGGESTOR-RUN-TEST-FOR-CONCEPT", 4, 0, false);
+        declareFunction("make_query_suggestor_html_file", "MAKE-QUERY-SUGGESTOR-HTML-FILE", 1, 0, false);
+        declareFunction("query_suggestor_html_strong_desc_row", "QUERY-SUGGESTOR-HTML-STRONG-DESC-ROW", 2, 0, false);
+        declareFunction("query_suggestor_html_row", "QUERY-SUGGESTOR-HTML-ROW", 2, 0, false);
+        declareFunction("update_query_suggestor_html_intro", "UPDATE-QUERY-SUGGESTOR-HTML-INTRO", 3, 0, false);
+        declareFunction("update_query_suggestor_html_output", "UPDATE-QUERY-SUGGESTOR-HTML-OUTPUT", 3, 0, false);
+        declareFunction("update_query_suggestor_html_with_query_result", "UPDATE-QUERY-SUGGESTOR-HTML-WITH-QUERY-RESULT", 3, 0, false);
+        declareFunction("update_query_suggestor_html_with_results", "UPDATE-QUERY-SUGGESTOR-HTML-WITH-RESULTS", 5, 0, false);
+        declareFunction("update_query_suggestor_html_with_computations", "UPDATE-QUERY-SUGGESTOR-HTML-WITH-COMPUTATIONS", 3, 0, false);
+        declareFunction("query_suggestor_run_tests_for_test_type", "QUERY-SUGGESTOR-RUN-TESTS-FOR-TEST-TYPE", 1, 1, false);
+        declareFunction("query_suggestor_run_tests", "QUERY-SUGGESTOR-RUN-TESTS", 0, 1, false);
+        declareFunction("query_suggestor_run_tests_for_instances_to_dir", "QUERY-SUGGESTOR-RUN-TESTS-FOR-INSTANCES-TO-DIR", 2, 1, false);
+        declareFunction("query_suggestor_run_tests_for_to_dir", "QUERY-SUGGESTOR-RUN-TESTS-FOR-TO-DIR", 2, 1, false);
+        declareFunction("query_suggestor_run_trial_test", "QUERY-SUGGESTOR-RUN-TRIAL-TEST", 0, 0, false);
+        declareFunction("filter_query_runs_by_test", "FILTER-QUERY-RUNS-BY-TEST", 2, 1, false);
+        declareFunction("filter_query_runs_by_property_value", "FILTER-QUERY-RUNS-BY-PROPERTY-VALUE", 3, 1, false);
+        declareFunction("answerable_query_runs", "ANSWERABLE-QUERY-RUNS", 1, 0, false);
+        declareFunction("unanswerable_query_runs", "UNANSWERABLE-QUERY-RUNS", 1, 0, false);
         return NIL;
     }
 

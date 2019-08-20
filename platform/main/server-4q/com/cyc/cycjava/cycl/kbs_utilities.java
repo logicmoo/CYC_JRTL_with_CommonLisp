@@ -199,7 +199,6 @@ public final class kbs_utilities extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new kbs_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.kbs_utilities";
 
 
     // defparameter

@@ -66,7 +66,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class plausible_narts extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new plausible_narts();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.plausible_narts";
 
 
 

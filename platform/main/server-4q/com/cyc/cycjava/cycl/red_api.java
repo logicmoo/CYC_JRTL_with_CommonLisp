@@ -108,7 +108,6 @@ public final class red_api extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new red_api();
 
- public static final String myName = "com.cyc.cycjava.cycl.red_api";
 
 
     // deflexical

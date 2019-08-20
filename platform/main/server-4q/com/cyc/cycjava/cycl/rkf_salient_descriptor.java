@@ -332,7 +332,6 @@ public final class rkf_salient_descriptor extends SubLTranslatedFile implements 
 
     public static final SubLFile me = new rkf_salient_descriptor();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_salient_descriptor";
 
 
     // deflexical

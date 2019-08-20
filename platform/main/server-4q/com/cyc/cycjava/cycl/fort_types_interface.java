@@ -67,7 +67,6 @@ public final class fort_types_interface extends SubLTranslatedFile implements V1
 
     public static final SubLFile me = new fort_types_interface();
 
- public static final String myName = "com.cyc.cycjava.cycl.fort_types_interface";
 
 
     // deflexical

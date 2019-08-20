@@ -159,7 +159,6 @@ public final class cb_wordnet_import_concept_match extends SubLTranslatedFile im
 
     public static final SubLFile me = new cb_wordnet_import_concept_match();
 
- public static final String myName = "com.cyc.cycjava.cycl.wordnet_import.cb_wordnet_import_concept_match";
 
 
     // defconstant

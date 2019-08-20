@@ -158,7 +158,6 @@ public final class constrained_parsing extends SubLTranslatedFile implements V12
 
     public static final SubLFile me = new constrained_parsing();
 
- public static final String myName = "com.cyc.cycjava.cycl.constrained_parsing";
 
 
     // defparameter

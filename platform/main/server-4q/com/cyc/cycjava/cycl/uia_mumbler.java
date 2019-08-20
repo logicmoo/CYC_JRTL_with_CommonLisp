@@ -36,7 +36,6 @@ public final class uia_mumbler extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new uia_mumbler();
 
-    public static final String myName = "com.cyc.cycjava.cycl.uia_mumbler";
 
     // // Definitions
     public static final SubLObject uia_with_my_mumbling(SubLObject macroform, SubLObject environment) {

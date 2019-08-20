@@ -357,7 +357,6 @@ public final class wordnet_import extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new wordnet_import();
 
- public static final String myName = "com.cyc.cycjava.cycl.wordnet_import.wordnet_import";
 
 
     // deflexical

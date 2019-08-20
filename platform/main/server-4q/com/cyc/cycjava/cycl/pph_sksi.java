@@ -94,7 +94,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class pph_sksi extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new pph_sksi();
 
- public static final String myName = "com.cyc.cycjava.cycl.pph_sksi";
 
 
     // defparameter

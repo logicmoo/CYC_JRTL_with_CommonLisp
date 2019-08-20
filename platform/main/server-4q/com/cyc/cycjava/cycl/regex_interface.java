@@ -18,7 +18,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class regex_interface extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new regex_interface();
 
- public static final String myName = "com.cyc.cycjava.cycl.regex_interface";
 
 
     public static SubLObject declare_regex_interface_file() {

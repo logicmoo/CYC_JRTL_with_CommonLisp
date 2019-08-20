@@ -44,7 +44,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_owl extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_owl";
     public static String myFingerPrint = "f40be090bfa082d89be83a0b3d5015dc1053c86df662e226c5121077c6888ea3";
     private static SubLObject $$owlExportTermFromContextsWithIsaF;
     private static SubLSymbol $POS;
@@ -265,8 +264,8 @@ public class removal_modules_owl extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_owl_file() {
-        declareFunction(myName, "removal_owl_export_term_from_contexts_with_isa_filters_cost", "REMOVAL-OWL-EXPORT-TERM-FROM-CONTEXTS-WITH-ISA-FILTERS-COST", 1, 1, false);
-        declareFunction(myName, "removal_owl_export_term_from_contexts_with_isa_filters_expand", "REMOVAL-OWL-EXPORT-TERM-FROM-CONTEXTS-WITH-ISA-FILTERS-EXPAND", 1, 1, false);
+        declareFunction("removal_owl_export_term_from_contexts_with_isa_filters_cost", "REMOVAL-OWL-EXPORT-TERM-FROM-CONTEXTS-WITH-ISA-FILTERS-COST", 1, 1, false);
+        declareFunction("removal_owl_export_term_from_contexts_with_isa_filters_expand", "REMOVAL-OWL-EXPORT-TERM-FROM-CONTEXTS-WITH-ISA-FILTERS-EXPAND", 1, 1, false);
         return NIL;
     }
 

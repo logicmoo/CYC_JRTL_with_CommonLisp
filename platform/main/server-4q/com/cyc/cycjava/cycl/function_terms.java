@@ -54,7 +54,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class function_terms extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new function_terms();
 
- public static final String myName = "com.cyc.cycjava.cycl.function_terms";
 
 
     // deflexical

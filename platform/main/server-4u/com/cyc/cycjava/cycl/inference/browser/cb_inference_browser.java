@@ -1939,7 +1939,6 @@ public final class cb_inference_browser extends SubLTranslatedFile implements V1
 
     public static final SubLFile me = new cb_inference_browser();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.browser.cb_inference_browser";
 
 
 

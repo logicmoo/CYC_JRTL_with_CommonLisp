@@ -61,7 +61,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class slot_listeners extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new slot_listeners();
 
- public static final String myName = "com.cyc.cycjava.cycl.slot_listeners";
 
 
     // defparameter

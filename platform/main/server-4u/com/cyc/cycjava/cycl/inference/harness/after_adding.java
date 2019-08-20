@@ -93,7 +93,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class after_adding extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new after_adding();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.harness.after_adding";
 
 
     // defparameter

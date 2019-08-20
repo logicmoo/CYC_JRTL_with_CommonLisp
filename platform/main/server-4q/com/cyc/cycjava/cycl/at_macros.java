@@ -38,7 +38,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class at_macros extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new at_macros();
 
- public static final String myName = "com.cyc.cycjava.cycl.at_macros";
 
 
     static private final SubLList $list1 = list(list(makeSymbol("*DEFN-FN-HISTORY*"), list(makeSymbol("MAKE-DEFN-FN-HISTORY-TABLE"))), list(makeSymbol("*QUOTED-DEFN-FN-HISTORY*"), list(makeSymbol("MAKE-QUOTED-DEFN-FN-HISTORY-TABLE"))), list(makeSymbol("*DEFN-COL-HISTORY*"), list(makeSymbol("MAKE-DEFN-COL-HISTORY-TABLE"))), list(makeSymbol("*QUOTED-DEFN-COL-HISTORY*"), list(makeSymbol("MAKE-QUOTED-DEFN-COL-HISTORY-TABLE"))));

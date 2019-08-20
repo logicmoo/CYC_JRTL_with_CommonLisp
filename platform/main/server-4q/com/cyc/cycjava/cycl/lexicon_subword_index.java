@@ -159,7 +159,6 @@ public final class lexicon_subword_index extends SubLTranslatedFile implements V
 
     public static final SubLFile me = new lexicon_subword_index();
 
- public static final String myName = "com.cyc.cycjava.cycl.lexicon_subword_index";
 
 
     // deflexical

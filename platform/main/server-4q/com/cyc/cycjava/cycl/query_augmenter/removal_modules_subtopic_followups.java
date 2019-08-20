@@ -40,7 +40,6 @@ public final class removal_modules_subtopic_followups extends SubLTranslatedFile
 
     public static final SubLFile me = new removal_modules_subtopic_followups();
 
-    public static final String myName = "com.cyc.cycjava.cycl.query_augmenter.removal_modules_subtopic_followups";
 
     // // Definitions
     public static final SubLObject removal_subtopic_followups_pos_expand(SubLObject asent, SubLObject sense) {

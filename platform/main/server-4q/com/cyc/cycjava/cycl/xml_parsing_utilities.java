@@ -118,7 +118,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public class xml_parsing_utilities extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new xml_parsing_utilities();
 
-    public static final String myName = "com.cyc.cycjava_2.cycl.xml_parsing_utilities";
 
 
     // defparameter

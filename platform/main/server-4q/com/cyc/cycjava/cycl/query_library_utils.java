@@ -176,7 +176,6 @@ public final class query_library_utils extends SubLTranslatedFile implements V12
 
     public static final SubLFile me = new query_library_utils();
 
- public static final String myName = "com.cyc.cycjava.cycl.query_library_utils";
 
 
     // defparameter

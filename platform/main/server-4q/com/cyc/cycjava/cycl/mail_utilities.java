@@ -198,7 +198,6 @@ public final class mail_utilities extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new mail_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.mail_utilities";
 
 
     // deflexical

@@ -528,7 +528,6 @@ public final class pph_methods_formulas extends SubLTranslatedFile implements V1
 
     public static final SubLFile me = new pph_methods_formulas();
 
- public static final String myName = "com.cyc.cycjava.cycl.pph_methods_formulas";
 
 
     // deflexical

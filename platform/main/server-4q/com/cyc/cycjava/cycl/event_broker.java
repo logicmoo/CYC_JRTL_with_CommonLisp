@@ -297,7 +297,6 @@ public final class event_broker extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new event_broker();
 
- public static final String myName = "com.cyc.cycjava.cycl.event_broker";
 
 
     // deflexical

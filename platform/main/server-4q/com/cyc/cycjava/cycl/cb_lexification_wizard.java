@@ -669,7 +669,6 @@ public final class cb_lexification_wizard extends SubLTranslatedFile implements 
 
     public static final SubLFile me = new cb_lexification_wizard();
 
- public static final String myName = "com.cyc.cycjava.cycl.cb_lexification_wizard";
 
 
 

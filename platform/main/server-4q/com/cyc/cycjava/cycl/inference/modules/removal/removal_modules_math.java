@@ -48,7 +48,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_math extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_math";
 	public static String myFingerPrint = "6cd63cf6ff87581a938838c5c29c78f0502960e9c51c9fce9949bb35f89c08f5";
 	@SubL(source = "cycl/inference/modules/removal/removal-modules-math.lisp", position = 1000L)
 	public static SubLSymbol $default_math_module_cost$;
@@ -1195,52 +1194,52 @@ public class removal_modules_math extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_removal_modules_math_file() {
-		declareFunction(myName, "removal_interpolation_with_cubic_spline_expand",
+		declareFunction("removal_interpolation_with_cubic_spline_expand",
 				"REMOVAL-INTERPOLATION-WITH-CUBIC-SPLINE-EXPAND", 1, 1, false);
-		declareFunction(myName, "removal_interpolation_with_piecewise_linear_polynomial_expand",
+		declareFunction("removal_interpolation_with_piecewise_linear_polynomial_expand",
 				"REMOVAL-INTERPOLATION-WITH-PIECEWISE-LINEAR-POLYNOMIAL-EXPAND", 1, 1, false);
-		declareFunction(myName, "removal_extrapolation_with_simple_linear_regression_expand",
+		declareFunction("removal_extrapolation_with_simple_linear_regression_expand",
 				"REMOVAL-EXTRAPOLATION-WITH-SIMPLE-LINEAR-REGRESSION-EXPAND", 1, 1, false);
-		declareFunction(myName, "removal_interpolation_or_extrapolation_with_java_link_function_expand_helper",
+		declareFunction("removal_interpolation_or_extrapolation_with_java_link_function_expand_helper",
 				"REMOVAL-INTERPOLATION-OR-EXTRAPOLATION-WITH-JAVA-LINK-FUNCTION-EXPAND-HELPER", 2, 0, false);
-		declareFunction(myName, "removal_extrapolation_with_simple_linear_regression_with_error_bars_expand",
+		declareFunction("removal_extrapolation_with_simple_linear_regression_with_error_bars_expand",
 				"REMOVAL-EXTRAPOLATION-WITH-SIMPLE-LINEAR-REGRESSION-WITH-ERROR-BARS-EXPAND", 1, 1, false);
 		declareFunction(me,
 				"removal_interpolation_or_extrapolation_with_error_bars_with_java_link_function_expand_helper",
 				"REMOVAL-INTERPOLATION-OR-EXTRAPOLATION-WITH-ERROR-BARS-WITH-JAVA-LINK-FUNCTION-EXPAND-HELPER", 2, 0,
 				false);
-		declareFunction(myName, "removal_regression_lines_for_sets_intersect_at_point_expand",
+		declareFunction("removal_regression_lines_for_sets_intersect_at_point_expand",
 				"REMOVAL-REGRESSION-LINES-FOR-SETS-INTERSECT-AT-POINT-EXPAND", 1, 1, false);
-		declareFunction(myName, "removal_slope_of_regression_line_for_set_of_points_expand",
+		declareFunction("removal_slope_of_regression_line_for_set_of_points_expand",
 				"REMOVAL-SLOPE-OF-REGRESSION-LINE-FOR-SET-OF-POINTS-EXPAND", 1, 1, false);
-		declareFunction(myName, "removal_set_of_first_derivative_points_based_on_set_of_points_expand",
+		declareFunction("removal_set_of_first_derivative_points_based_on_set_of_points_expand",
 				"REMOVAL-SET-OF-FIRST-DERIVATIVE-POINTS-BASED-ON-SET-OF-POINTS-EXPAND", 1, 1, false);
-		declareFunction(me, "removal_set_has_points_with_y_value_reln_to_matching_x_value_points_in_set_expand",
+		declareFunction("removal_set_has_points_with_y_value_reln_to_matching_x_value_points_in_set_expand",
 				"REMOVAL-SET-HAS-POINTS-WITH-Y-VALUE-RELN-TO-MATCHING-X-VALUE-POINTS-IN-SET-EXPAND", 1, 1, false);
-		declareFunction(myName, "java_link_debug_modeP", "JAVA-LINK-DEBUG-MODE?", 0, 0, false);
-		declareFunction(myName, "java_link_slope_and_intercept_of_x_y_regression",
+		declareFunction("java_link_debug_modeP", "JAVA-LINK-DEBUG-MODE?", 0, 0, false);
+		declareFunction("java_link_slope_and_intercept_of_x_y_regression",
 				"JAVA-LINK-SLOPE-AND-INTERCEPT-OF-X-Y-REGRESSION", 1, 0, false);
-		declareFunction(myName, "java_link_x_y_cubic_spline_find_y_for_x", "JAVA-LINK-X-Y-CUBIC-SPLINE-FIND-Y-FOR-X", 2,
+		declareFunction("java_link_x_y_cubic_spline_find_y_for_x", "JAVA-LINK-X-Y-CUBIC-SPLINE-FIND-Y-FOR-X", 2,
 				0, false);
-		declareFunction(myName, "java_link_x_y_piecewise_linear_find_y_for_x",
+		declareFunction("java_link_x_y_piecewise_linear_find_y_for_x",
 				"JAVA-LINK-X-Y-PIECEWISE-LINEAR-FIND-Y-FOR-X", 2, 0, false);
-		declareFunction(myName, "java_link_x_y_regression_find_y_for_x", "JAVA-LINK-X-Y-REGRESSION-FIND-Y-FOR-X", 2, 0,
+		declareFunction("java_link_x_y_regression_find_y_for_x", "JAVA-LINK-X-Y-REGRESSION-FIND-Y-FOR-X", 2, 0,
 				false);
-		declareFunction(myName, "java_link_x_y_regression_find_y_for_x_with_error_bars",
+		declareFunction("java_link_x_y_regression_find_y_for_x_with_error_bars",
 				"JAVA-LINK-X-Y-REGRESSION-FIND-Y-FOR-X-WITH-ERROR-BARS", 2, 0, false);
-		declareFunction(myName, "java_link_point_intersection_of_two_x_y_regressions",
+		declareFunction("java_link_point_intersection_of_two_x_y_regressions",
 				"JAVA-LINK-POINT-INTERSECTION-OF-TWO-X-Y-REGRESSIONS", 2, 0, false);
-		declareFunction(myName, "java_link_x_y_derivatives_for_interpolation_at_each_x",
+		declareFunction("java_link_x_y_derivatives_for_interpolation_at_each_x",
 				"JAVA-LINK-X-Y-DERIVATIVES-FOR-INTERPOLATION-AT-EACH-X", 2, 0, false);
-		declareFunction(myName, "el_2d_point_p", "EL-2D-POINT-P", 1, 0, false);
-		declareFunction(myName, "explode_2d_points_with_units", "EXPLODE-2D-POINTS-WITH-UNITS", 1, 2, false);
-		declareFunction(myName, "removal_set_has_points_with_y_value_reln_to_expand",
+		declareFunction("el_2d_point_p", "EL-2D-POINT-P", 1, 0, false);
+		declareFunction("explode_2d_points_with_units", "EXPLODE-2D-POINTS-WITH-UNITS", 1, 2, false);
+		declareFunction("removal_set_has_points_with_y_value_reln_to_expand",
 				"REMOVAL-SET-HAS-POINTS-WITH-Y-VALUE-RELN-TO-EXPAND", 1, 1, false);
-		declareFunction(myName, "removal_operation_result_comparison_pos_check",
+		declareFunction("removal_operation_result_comparison_pos_check",
 				"REMOVAL-OPERATION-RESULT-COMPARISON-POS-CHECK", 1, 1, false);
-		declareFunction(myName, "removal_operation_result_comparison_neg_check",
+		declareFunction("removal_operation_result_comparison_neg_check",
 				"REMOVAL-OPERATION-RESULT-COMPARISON-NEG-CHECK", 1, 1, false);
-		declareFunction(myName, "removal_inflow_lengths_with_starting_depths_expand",
+		declareFunction("removal_inflow_lengths_with_starting_depths_expand",
 				"REMOVAL-INFLOW-LENGTHS-WITH-STARTING-DEPTHS-EXPAND", 1, 1, false);
 		return NIL;
 	}

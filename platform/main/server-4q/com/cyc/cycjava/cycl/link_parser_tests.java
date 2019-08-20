@@ -38,7 +38,6 @@ public final class link_parser_tests extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new link_parser_tests();
 
- public static final String myName = "com.cyc.cycjava.cycl.link_parser_tests";
 
 
     // Internal Constants

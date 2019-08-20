@@ -26,7 +26,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_evaluation extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_evaluation";
     public static String myFingerPrint = "a5e33da004b66a5fa4c973f6ed1fe8bb1d3d981ce1d9638e5caacc339aa9a8af";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-evaluation.lisp", position = 1100L)
     private static SubLSymbol $default_eval_cost$;
@@ -144,17 +143,17 @@ public class removal_modules_evaluation extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_evaluation_file() {
-        declareFunction(myName, "make_eval_support", "MAKE-EVAL-SUPPORT", 1, 1, false);
-        declareFunction(myName, "removal_eval_exclusive", "REMOVAL-EVAL-EXCLUSIVE", 1, 1, false);
+        declareFunction("make_eval_support", "MAKE-EVAL-SUPPORT", 1, 1, false);
+        declareFunction("removal_eval_exclusive", "REMOVAL-EVAL-EXCLUSIVE", 1, 1, false);
         new $removal_eval_exclusive$UnaryFunction();
         new $removal_eval_exclusive$BinaryFunction();
-        declareFunction(myName, "removal_eval_required", "REMOVAL-EVAL-REQUIRED", 1, 1, false);
+        declareFunction("removal_eval_required", "REMOVAL-EVAL-REQUIRED", 1, 1, false);
         new $removal_eval_required$UnaryFunction();
         new $removal_eval_required$BinaryFunction();
-        declareFunction(myName, "removal_eval_expand", "REMOVAL-EVAL-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_not_eval_exclusive", "REMOVAL-NOT-EVAL-EXCLUSIVE", 1, 1, false);
-        declareFunction(myName, "removal_not_eval_required", "REMOVAL-NOT-EVAL-REQUIRED", 1, 1, false);
-        declareFunction(myName, "removal_not_eval_expand", "REMOVAL-NOT-EVAL-EXPAND", 1, 1, false);
+        declareFunction("removal_eval_expand", "REMOVAL-EVAL-EXPAND", 1, 1, false);
+        declareFunction("removal_not_eval_exclusive", "REMOVAL-NOT-EVAL-EXCLUSIVE", 1, 1, false);
+        declareFunction("removal_not_eval_required", "REMOVAL-NOT-EVAL-REQUIRED", 1, 1, false);
+        declareFunction("removal_not_eval_expand", "REMOVAL-NOT-EVAL-EXPAND", 1, 1, false);
         return NIL;
     }
 

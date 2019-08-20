@@ -56,7 +56,6 @@ public final class cyblack_datatype_dictionary extends SubLTranslatedFile implem
 
     public static final SubLFile me = new cyblack_datatype_dictionary();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_datatype_dictionary";
 
     // // Definitions
     public static final SubLObject cyblack_datatype_dictionary_p(SubLObject v_cyblack_datatype_dictionary) {

@@ -56,7 +56,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class sksi_batch_store extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sksi_batch_store();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_store";
 
 
     private static final SubLObject $$Database_Physical = reader_make_constant_shell("Database-Physical");

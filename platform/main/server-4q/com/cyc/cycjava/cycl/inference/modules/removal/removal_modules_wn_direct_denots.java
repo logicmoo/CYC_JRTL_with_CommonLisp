@@ -22,7 +22,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_wn_direct_denots extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_wn_direct_denots";
     public static String myFingerPrint = "fd63d6bcc192803354f5543787ece60ae38892a6643de50ab9ddb0d6411d7ac0";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-wn-direct-denots.lisp", position = 700L)
     public static SubLSymbol $wn_direct_denots_check_cost$;
@@ -71,10 +70,10 @@ public class removal_modules_wn_direct_denots extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_wn_direct_denots_file() {
-        declareFunction(myName, "string_has_wn_direct_denotP", "STRING-HAS-WN-DIRECT-DENOT?", 2, 0, false);
-        declareFunction(myName, "string_has_wn_direct_denot_negP", "STRING-HAS-WN-DIRECT-DENOT-NEG?", 2, 0, false);
-        declareFunction(myName, "removal_wn_direct_denots_pos_cost", "REMOVAL-WN-DIRECT-DENOTS-POS-COST", 1, 1, false);
-        declareFunction(myName, "wn_direct_denots_of_string_iterator", "WN-DIRECT-DENOTS-OF-STRING-ITERATOR", 0, 0, false);
+        declareFunction("string_has_wn_direct_denotP", "STRING-HAS-WN-DIRECT-DENOT?", 2, 0, false);
+        declareFunction("string_has_wn_direct_denot_negP", "STRING-HAS-WN-DIRECT-DENOT-NEG?", 2, 0, false);
+        declareFunction("removal_wn_direct_denots_pos_cost", "REMOVAL-WN-DIRECT-DENOTS-POS-COST", 1, 1, false);
+        declareFunction("wn_direct_denots_of_string_iterator", "WN-DIRECT-DENOTS-OF-STRING-ITERATOR", 0, 0, false);
         return NIL;
     }
 

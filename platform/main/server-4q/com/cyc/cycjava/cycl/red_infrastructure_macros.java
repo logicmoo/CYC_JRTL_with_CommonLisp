@@ -48,7 +48,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class red_infrastructure_macros extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new red_infrastructure_macros();
 
- public static final String myName = "com.cyc.cycjava.cycl.red_infrastructure_macros";
 
 
     // defconstant

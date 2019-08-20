@@ -31,7 +31,6 @@ public final class cyblack_markable extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cyblack_markable();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_markable";
 
     // // Definitions
     public static final SubLObject cyblack_markable_p(SubLObject v_cyblack_markable) {

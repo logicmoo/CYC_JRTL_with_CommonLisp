@@ -109,7 +109,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class cache extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new cache();
 
- public static final String myName = "com.cyc.cycjava.cycl.cache";
 
 
     // defconstant

@@ -79,7 +79,6 @@ public final class uia_trampolines extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new uia_trampolines();
 
-    public static final String myName = "com.cyc.cycjava.cycl.uia_trampolines";
 
     // // Definitions
     public static final SubLObject uia_phrase_candidate_terms(SubLObject v_agenda, SubLObject phrase, SubLObject parsing_mt, SubLObject domain_mt, SubLObject parse_template) {

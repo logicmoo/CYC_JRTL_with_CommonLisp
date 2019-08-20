@@ -49,7 +49,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class parsing_vars extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new parsing_vars();
 
- public static final String myName = "com.cyc.cycjava.cycl.parsing_vars";
 
 
     // deflexical

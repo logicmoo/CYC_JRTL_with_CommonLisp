@@ -224,7 +224,6 @@ public final class psp_semantics extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new psp_semantics();
 
- public static final String myName = "com.cyc.cycjava.cycl.psp_semantics";
 
 
     // defparameter

@@ -116,7 +116,6 @@ public final class suggestions_review_tool extends SubLTranslatedFile implements
 
     public static final SubLFile me = new suggestions_review_tool();
 
-    public static final String myName = "com.cyc.cycjava.cycl.butler.suggestions_review_tool";
 
     // // Definitions
     /**

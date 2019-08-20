@@ -72,7 +72,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rkf_precision_suggestor extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rkf_precision_suggestor();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_precision_suggestor";
 
 
     // defparameter

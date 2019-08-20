@@ -127,7 +127,6 @@ public final class tm_logging extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new tm_logging();
 
-    public static final String myName = "com.cyc.cycjava.cycl.thesaurus.tm_logging";
 
     // // Definitions
     /**

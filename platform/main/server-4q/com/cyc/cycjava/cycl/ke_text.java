@@ -107,7 +107,6 @@ public final class ke_text extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new ke_text();
 
- public static final String myName = "com.cyc.cycjava.cycl.ke_text";
 
 
     // defparameter

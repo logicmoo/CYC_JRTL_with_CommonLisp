@@ -54,7 +54,6 @@ public final class cb_uia_macros extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new cb_uia_macros();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_uia_macros";
 
     // // Definitions
     public static final SubLObject cb_uiat_with_hoverover_support(SubLObject macroform, SubLObject environment) {

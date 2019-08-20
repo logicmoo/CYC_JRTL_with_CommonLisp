@@ -25,7 +25,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class new_root_tactician_execution extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new new_root_tactician_execution();
 
- public static final String myName = "com.cyc.cycjava.cycl.inference.harness.new_root_tactician_execution";
 
 
     // Internal Constants

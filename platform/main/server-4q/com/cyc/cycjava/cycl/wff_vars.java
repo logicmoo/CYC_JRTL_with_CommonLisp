@@ -43,7 +43,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class wff_vars extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new wff_vars();
 
- public static final String myName = "com.cyc.cycjava.cycl.wff_vars";
 
 
     // defvar

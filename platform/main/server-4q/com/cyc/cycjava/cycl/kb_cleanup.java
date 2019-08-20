@@ -165,7 +165,6 @@ public final class kb_cleanup extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new kb_cleanup();
 
- public static final String myName = "com.cyc.cycjava.cycl.kb_cleanup";
 
 
     // defparameter

@@ -92,7 +92,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class search extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new search();
 
- public static final String myName = "com.cyc.cycjava.cycl.search";
 
 
     // defconstant

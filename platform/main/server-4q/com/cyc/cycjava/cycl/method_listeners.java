@@ -48,7 +48,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class method_listeners extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new method_listeners();
 
- public static final String myName = "com.cyc.cycjava.cycl.method_listeners";
 
 
     // defconstant

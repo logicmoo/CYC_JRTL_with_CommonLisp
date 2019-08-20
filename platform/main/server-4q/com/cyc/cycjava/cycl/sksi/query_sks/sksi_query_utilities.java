@@ -313,7 +313,6 @@ public final class sksi_query_utilities extends SubLTranslatedFile implements V1
 
     public static final SubLFile me = new sksi_query_utilities();
 
- public static final String myName = "com.cyc.cycjava.cycl.sksi.query_sks.sksi_query_utilities";
 
 
     // deflexical

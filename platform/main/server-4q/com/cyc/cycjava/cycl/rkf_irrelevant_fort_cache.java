@@ -90,7 +90,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class rkf_irrelevant_fort_cache extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rkf_irrelevant_fort_cache();
 
- public static final String myName = "com.cyc.cycjava.cycl.rkf_irrelevant_fort_cache";
 
 
     // deflexical

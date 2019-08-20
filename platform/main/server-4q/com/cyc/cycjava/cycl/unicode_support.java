@@ -61,7 +61,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class unicode_support extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new unicode_support();
 
- public static final String myName = "com.cyc.cycjava.cycl.unicode_support";
 
 
     static private final SubLString $str2$_u__a__does_not_specify_a__UNICOD = makeString("#u\"~a\" does not specify a  UNICODE string.");

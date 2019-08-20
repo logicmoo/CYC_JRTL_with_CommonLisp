@@ -30,7 +30,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_distance_between extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_distance_between";
 	public static String myFingerPrint = "2f28d53345ccbaa8518c715d8c9ac42368d38b4ba478b7d8b8b8d0898ac8aac9";
 	@SubL(source = "cycl/inference/modules/removal/removal-modules-distance-between.lisp", position = 800L)
 	private static SubLSymbol $distance_between_great_circle_rule_formula$;
@@ -170,10 +169,10 @@ public class removal_modules_distance_between extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_removal_modules_distance_between_file() {
-		declareFunction(myName, "make_distance_between_great_circle_rule_support", "MAKE-DISTANCE-BETWEEN-GREAT-CIRCLE-RULE-SUPPORT", 0, 0, false);
-		declareFunction(myName, "distance_between_great_circle_rule_antecedent_dnf", "DISTANCE-BETWEEN-GREAT-CIRCLE-RULE-ANTECEDENT-DNF", 2, 0, false);
-		declareFunction(myName, "removal_distance_between_great_circle_antecedent_answers", "REMOVAL-DISTANCE-BETWEEN-GREAT-CIRCLE-ANTECEDENT-ANSWERS", 2, 1, false);
-		declareFunction(myName, "removal_distance_between_great_circle_pos_expand", "REMOVAL-DISTANCE-BETWEEN-GREAT-CIRCLE-POS-EXPAND", 1, 1, false);
+		declareFunction("make_distance_between_great_circle_rule_support", "MAKE-DISTANCE-BETWEEN-GREAT-CIRCLE-RULE-SUPPORT", 0, 0, false);
+		declareFunction("distance_between_great_circle_rule_antecedent_dnf", "DISTANCE-BETWEEN-GREAT-CIRCLE-RULE-ANTECEDENT-DNF", 2, 0, false);
+		declareFunction("removal_distance_between_great_circle_antecedent_answers", "REMOVAL-DISTANCE-BETWEEN-GREAT-CIRCLE-ANTECEDENT-ANSWERS", 2, 1, false);
+		declareFunction("removal_distance_between_great_circle_pos_expand", "REMOVAL-DISTANCE-BETWEEN-GREAT-CIRCLE-POS-EXPAND", 1, 1, false);
 		return NIL;
 	}
 

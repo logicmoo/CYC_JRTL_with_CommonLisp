@@ -57,7 +57,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class ctest_utils extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new ctest_utils();
 
- public static final String myName = "com.cyc.cycjava.cycl.cyc_testing.ctest_utils";
 
 
     // deflexical

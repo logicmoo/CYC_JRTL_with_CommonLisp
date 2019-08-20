@@ -28,7 +28,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_relevant_weighted_similarity extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_relevant_weighted_similarity";
 	public static String myFingerPrint = "34264a9ac5fd0c6265e8f6dddf0c0ec945134cdffb2075330404f002053ea723";
 	private static SubLObject $const0$weightedSimilarityQuaInstanceOf_S;
 	private static SubLSymbol $kw$POS;
@@ -130,7 +129,7 @@ public class removal_modules_relevant_weighted_similarity extends SubLTranslated
 	}
 
 	public static SubLObject declare_removal_modules_relevant_weighted_similarity_file() {
-		declareFunction(myName, "removal_weightedsimilarityquainstanceof_setexplicit_expand",
+		declareFunction("removal_weightedsimilarityquainstanceof_setexplicit_expand",
 				"REMOVAL-WEIGHTEDSIMILARITYQUAINSTANCEOF-SETEXPLICIT-EXPAND", 1, 1, false);
 		return NIL;
 	}

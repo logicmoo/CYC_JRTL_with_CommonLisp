@@ -77,7 +77,6 @@ public final class sg_browser extends SubLTranslatedFile implements V02 {
 
     public static final SubLFile me = new sg_browser();
 
-    public static final String myName = "com.cyc.cycjava.cycl.sg_browser";
 
     // // Definitions
     public static final SubLObject cb_link_scen_gen(SubLObject linktext) {

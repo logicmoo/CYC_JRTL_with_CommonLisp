@@ -33,7 +33,6 @@ public final class cyblack_ks_dispatch_functions extends SubLTranslatedFile impl
 
     public static final SubLFile me = new cyblack_ks_dispatch_functions();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyblack.cyblack_ks_dispatch_functions";
 
     // // Definitions
     public static final SubLObject cyblack_mks_get_state_change_listener(SubLObject cyblack_monitoring_ks) {

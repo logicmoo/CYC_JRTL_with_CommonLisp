@@ -52,7 +52,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_formula_implies extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_formula_implies";
     public static String myFingerPrint = "1d9c0c4e0fd0dcccef160d101cb2aa9925611af0f1d6a41acbaeab26fe56aa73";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-formula-implies.lisp", position = 1000L)
     private static SubLSymbol $removal_formula_implies_allow_subsumption$;
@@ -1098,35 +1097,35 @@ public class removal_modules_formula_implies extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_formula_implies_file() {
-        declareFunction(myName, "make_formula_implies_hl_support", "MAKE-FORMULA-IMPLIES-HL-SUPPORT", 2, 0, false);
-        declareFunction(myName, "removal_formula_implies_pos_check_expand", "REMOVAL-FORMULA-IMPLIES-POS-CHECK-EXPAND", 1, 1, false);
-        declareFunction(myName, "make_formula_implies_subsumption_hl_support", "MAKE-FORMULA-IMPLIES-SUBSUMPTION-HL-SUPPORT", 2, 0, false);
-        declareFunction(myName, "removal_formula_implies_subsumption_pos_check_expand", "REMOVAL-FORMULA-IMPLIES-SUBSUMPTION-POS-CHECK-EXPAND", 1, 1, false);
-        declareFunction(myName, "make_formula_equiv_hl_support", "MAKE-FORMULA-EQUIV-HL-SUPPORT", 2, 0, false);
-        declareFunction(myName, "removal_formula_equiv_pos_check_expand", "REMOVAL-FORMULA-EQUIV-POS-CHECK-EXPAND", 1, 1, false);
-        declareFunction(myName, "inference_formula_equiv", "INFERENCE-FORMULA-EQUIV", 2, 0, false);
-        declareFunction(myName, "inference_formula_implies", "INFERENCE-FORMULA-IMPLIES", 2, 0, false);
-        declareFunction(myName, "canonicalize_scoped_el_existentials_to_hl", "CANONICALIZE-SCOPED-EL-EXISTENTIALS-TO-HL", 1, 0, false);
-        declareFunction(myName, "inference_formula_implies_in_mt", "INFERENCE-FORMULA-IMPLIES-IN-MT", 3, 0, false);
-        declareFunction(myName, "inference_formula_equiv_commutative_relationP", "INFERENCE-FORMULA-EQUIV-COMMUTATIVE-RELATION?", 1, 0, false);
-        declareFunction(myName, "inference_formula_implies_formula", "INFERENCE-FORMULA-IMPLIES-FORMULA", 3, 0, false);
-        declareFunction(myName, "inference_formula_implies_eliminate_double_negations", "INFERENCE-FORMULA-IMPLIES-ELIMINATE-DOUBLE-NEGATIONS", 1, 0, false);
-        declareFunction(myName, "inference_formula_implies_eliminate_implication", "INFERENCE-FORMULA-IMPLIES-ELIMINATE-IMPLICATION", 1, 0, false);
-        declareFunction(myName, "inference_formula_implies_term", "INFERENCE-FORMULA-IMPLIES-TERM", 3, 0, false);
-        declareFunction(myName, "inference_formula_implies_and", "INFERENCE-FORMULA-IMPLIES-AND", 3, 0, false);
-        declareFunction(myName, "inference_formula_implies_or", "INFERENCE-FORMULA-IMPLIES-OR", 3, 0, false);
-        declareFunction(myName, "inference_formula_implies_not", "INFERENCE-FORMULA-IMPLIES-NOT", 3, 0, false);
-        declareFunction(myName, "inference_formula_implies_exists", "INFERENCE-FORMULA-IMPLIES-EXISTS", 3, 0, false);
-        declareFunction(myName, "inference_formula_implies_all", "INFERENCE-FORMULA-IMPLIES-ALL", 3, 0, false);
-        declareFunction(myName, "inference_formula_implies_the_set_of", "INFERENCE-FORMULA-IMPLIES-THE-SET-OF", 3, 0, false);
-        declareFunction(myName, "inference_formula_implies_literal", "INFERENCE-FORMULA-IMPLIES-LITERAL", 3, 0, false);
-        declareFunction(myName, "inference_formula_implies_non_commutative_asent", "INFERENCE-FORMULA-IMPLIES-NON-COMMUTATIVE-ASENT", 3, 0, false);
-        declareFunction(myName, "inference_formula_implies_commutative_asent", "INFERENCE-FORMULA-IMPLIES-COMMUTATIVE-ASENT", 3, 0, false);
-        declareFunction(myName, "inference_formula_implies_asent", "INFERENCE-FORMULA-IMPLIES-ASENT", 3, 0, false);
-        declareFunction(myName, "inference_formula_implies_genl_inverse", "INFERENCE-FORMULA-IMPLIES-GENL-INVERSE", 3, 0, false);
-        declareFunction(myName, "removal_sentence_implication_conditions_expand", "REMOVAL-SENTENCE-IMPLICATION-CONDITIONS-EXPAND", 1, 1, false);
-        declareFunction(myName, "sic_possibly_add_node_for_possibly_matching_rule", "SIC-POSSIBLY-ADD-NODE-FOR-POSSIBLY-MATCHING-RULE", 2, 1, false);
-        declareFunction(myName, "rule_trivial_for_sentence_implication_conditionsP", "RULE-TRIVIAL-FOR-SENTENCE-IMPLICATION-CONDITIONS?", 1, 0, false);
+        declareFunction("make_formula_implies_hl_support", "MAKE-FORMULA-IMPLIES-HL-SUPPORT", 2, 0, false);
+        declareFunction("removal_formula_implies_pos_check_expand", "REMOVAL-FORMULA-IMPLIES-POS-CHECK-EXPAND", 1, 1, false);
+        declareFunction("make_formula_implies_subsumption_hl_support", "MAKE-FORMULA-IMPLIES-SUBSUMPTION-HL-SUPPORT", 2, 0, false);
+        declareFunction("removal_formula_implies_subsumption_pos_check_expand", "REMOVAL-FORMULA-IMPLIES-SUBSUMPTION-POS-CHECK-EXPAND", 1, 1, false);
+        declareFunction("make_formula_equiv_hl_support", "MAKE-FORMULA-EQUIV-HL-SUPPORT", 2, 0, false);
+        declareFunction("removal_formula_equiv_pos_check_expand", "REMOVAL-FORMULA-EQUIV-POS-CHECK-EXPAND", 1, 1, false);
+        declareFunction("inference_formula_equiv", "INFERENCE-FORMULA-EQUIV", 2, 0, false);
+        declareFunction("inference_formula_implies", "INFERENCE-FORMULA-IMPLIES", 2, 0, false);
+        declareFunction("canonicalize_scoped_el_existentials_to_hl", "CANONICALIZE-SCOPED-EL-EXISTENTIALS-TO-HL", 1, 0, false);
+        declareFunction("inference_formula_implies_in_mt", "INFERENCE-FORMULA-IMPLIES-IN-MT", 3, 0, false);
+        declareFunction("inference_formula_equiv_commutative_relationP", "INFERENCE-FORMULA-EQUIV-COMMUTATIVE-RELATION?", 1, 0, false);
+        declareFunction("inference_formula_implies_formula", "INFERENCE-FORMULA-IMPLIES-FORMULA", 3, 0, false);
+        declareFunction("inference_formula_implies_eliminate_double_negations", "INFERENCE-FORMULA-IMPLIES-ELIMINATE-DOUBLE-NEGATIONS", 1, 0, false);
+        declareFunction("inference_formula_implies_eliminate_implication", "INFERENCE-FORMULA-IMPLIES-ELIMINATE-IMPLICATION", 1, 0, false);
+        declareFunction("inference_formula_implies_term", "INFERENCE-FORMULA-IMPLIES-TERM", 3, 0, false);
+        declareFunction("inference_formula_implies_and", "INFERENCE-FORMULA-IMPLIES-AND", 3, 0, false);
+        declareFunction("inference_formula_implies_or", "INFERENCE-FORMULA-IMPLIES-OR", 3, 0, false);
+        declareFunction("inference_formula_implies_not", "INFERENCE-FORMULA-IMPLIES-NOT", 3, 0, false);
+        declareFunction("inference_formula_implies_exists", "INFERENCE-FORMULA-IMPLIES-EXISTS", 3, 0, false);
+        declareFunction("inference_formula_implies_all", "INFERENCE-FORMULA-IMPLIES-ALL", 3, 0, false);
+        declareFunction("inference_formula_implies_the_set_of", "INFERENCE-FORMULA-IMPLIES-THE-SET-OF", 3, 0, false);
+        declareFunction("inference_formula_implies_literal", "INFERENCE-FORMULA-IMPLIES-LITERAL", 3, 0, false);
+        declareFunction("inference_formula_implies_non_commutative_asent", "INFERENCE-FORMULA-IMPLIES-NON-COMMUTATIVE-ASENT", 3, 0, false);
+        declareFunction("inference_formula_implies_commutative_asent", "INFERENCE-FORMULA-IMPLIES-COMMUTATIVE-ASENT", 3, 0, false);
+        declareFunction("inference_formula_implies_asent", "INFERENCE-FORMULA-IMPLIES-ASENT", 3, 0, false);
+        declareFunction("inference_formula_implies_genl_inverse", "INFERENCE-FORMULA-IMPLIES-GENL-INVERSE", 3, 0, false);
+        declareFunction("removal_sentence_implication_conditions_expand", "REMOVAL-SENTENCE-IMPLICATION-CONDITIONS-EXPAND", 1, 1, false);
+        declareFunction("sic_possibly_add_node_for_possibly_matching_rule", "SIC-POSSIBLY-ADD-NODE-FOR-POSSIBLY-MATCHING-RULE", 2, 1, false);
+        declareFunction("rule_trivial_for_sentence_implication_conditionsP", "RULE-TRIVIAL-FOR-SENTENCE-IMPLICATION-CONDITIONS?", 1, 0, false);
         return NIL;
     }
 

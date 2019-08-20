@@ -176,7 +176,6 @@ public final class lexicon_after_addings extends SubLTranslatedFile implements V
 
     public static final SubLFile me = new lexicon_after_addings();
 
- public static final String myName = "com.cyc.cycjava.cycl.lexicon_after_addings";
 
 
     private static final SubLSymbol $append_stack_traces_to_error_messagesP$ = makeSymbol("*APPEND-STACK-TRACES-TO-ERROR-MESSAGES?*");

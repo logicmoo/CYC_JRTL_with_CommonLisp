@@ -59,7 +59,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class genls_hierarchy_problems extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new genls_hierarchy_problems();
 
- public static final String myName = "com.cyc.cycjava.cycl.genls_hierarchy_problems";
 
 
     // Internal Constants

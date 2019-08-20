@@ -217,7 +217,6 @@ public final class gke_template_specification extends SubLTranslatedFile impleme
 
     public static final SubLFile me = new gke_template_specification();
 
- public static final String myName = "com.cyc.cycjava.cycl.gke_template_specification";
 
 
     // defconstant

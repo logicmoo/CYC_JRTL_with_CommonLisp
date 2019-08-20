@@ -13,7 +13,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class abductive_tactician extends SubLTranslatedFile {
 	public static SubLFile me;
-	public static String myName = "com.cyc.cycjava.cycl.inference.harness.abductive_tactician";
 	public static String myFingerPrint = "44d6c31da66b5582b1063bac339fbd1f5f5dc7b4da9cb197f71d47d668243c34";
 	@SubL(source = "cycl/inference/harness/abductive-tactician.lisp", position = 800L)
 	public static SubLSymbol $abductive_strategy_type$;
@@ -28,7 +27,7 @@ public class abductive_tactician extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_abductive_tactician_file() {
-		declareFunction(myName, "abductive_strategy_p", "ABDUCTIVE-STRATEGY-P", 1, 0, false);
+		declareFunction("abductive_strategy_p", "ABDUCTIVE-STRATEGY-P", 1, 0, false);
 		return NIL;
 	}
 

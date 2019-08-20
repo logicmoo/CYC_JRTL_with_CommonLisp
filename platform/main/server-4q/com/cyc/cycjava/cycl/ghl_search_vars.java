@@ -86,7 +86,6 @@ public final class ghl_search_vars extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new ghl_search_vars();
 
- public static final String myName = "com.cyc.cycjava.cycl.ghl_search_vars";
 
 
     // deflexical

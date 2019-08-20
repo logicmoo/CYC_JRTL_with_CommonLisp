@@ -29,7 +29,6 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class removal_modules_negationpreds extends SubLTranslatedFile {
     public static SubLFile me;
-    public static String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_negationpreds";
     public static String myFingerPrint = "d442a29d4b5f70fcef40638746f8390262819a47716cca8918ecc425e0a5aaa1";
     @SubL(source = "cycl/inference/modules/removal/removal-modules-negationpreds.lisp", position = 700L)
     private static SubLSymbol $default_negationpreds_check_cost$;
@@ -149,10 +148,10 @@ public class removal_modules_negationpreds extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_negationpreds_file() {
-        declareFunction(myName, "removal_negationpreds_check_expand", "REMOVAL-NEGATIONPREDS-CHECK-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_max_negationpreds_cost", "REMOVAL-MAX-NEGATIONPREDS-COST", 1, 1, false);
-        declareFunction(myName, "removal_max_negationpreds_expand", "REMOVAL-MAX-NEGATIONPREDS-EXPAND", 1, 1, false);
-        declareFunction(myName, "removal_not_negationpreds_check_expand", "REMOVAL-NOT-NEGATIONPREDS-CHECK-EXPAND", 1, 1, false);
+        declareFunction("removal_negationpreds_check_expand", "REMOVAL-NEGATIONPREDS-CHECK-EXPAND", 1, 1, false);
+        declareFunction("removal_max_negationpreds_cost", "REMOVAL-MAX-NEGATIONPREDS-COST", 1, 1, false);
+        declareFunction("removal_max_negationpreds_expand", "REMOVAL-MAX-NEGATIONPREDS-EXPAND", 1, 1, false);
+        declareFunction("removal_not_negationpreds_check_expand", "REMOVAL-NOT-NEGATIONPREDS-CHECK-EXPAND", 1, 1, false);
         return NIL;
     }
 

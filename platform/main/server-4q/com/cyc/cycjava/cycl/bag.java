@@ -156,7 +156,6 @@ public final class bag extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new bag();
 
- public static final String myName = "com.cyc.cycjava.cycl.bag";
 
 
     // defconstant
