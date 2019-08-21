@@ -100,6 +100,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class striping_tactician extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new striping_tactician();
 
+    public static final String myName = "com.cyc.cycjava_2.cycl.inference.harness.striping_tactician";
 
 
     // defconstant

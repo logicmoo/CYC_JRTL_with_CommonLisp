@@ -142,6 +142,7 @@ public final class arete extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new arete();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.arete";
 
 
     // deflexical

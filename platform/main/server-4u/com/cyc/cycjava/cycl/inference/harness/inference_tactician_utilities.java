@@ -65,6 +65,7 @@ public final class inference_tactician_utilities extends SubLTranslatedFile impl
 
     public static final SubLFile me = new inference_tactician_utilities();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.harness.inference_tactician_utilities";
 
 
     // defparameter

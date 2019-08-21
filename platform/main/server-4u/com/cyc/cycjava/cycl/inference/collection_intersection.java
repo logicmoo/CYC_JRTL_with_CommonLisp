@@ -98,6 +98,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class collection_intersection extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new collection_intersection();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.collection_intersection";
 
 
     // defparameter

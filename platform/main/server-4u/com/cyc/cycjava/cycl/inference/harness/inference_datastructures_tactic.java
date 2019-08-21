@@ -123,6 +123,7 @@ public final class inference_datastructures_tactic extends SubLTranslatedFile im
 
     public static final SubLFile me = new inference_datastructures_tactic();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.harness.inference_datastructures_tactic";
 
 
     // defvar

@@ -74,6 +74,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class inference_iterators extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new inference_iterators();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.inference_iterators";
 
 
     // defparameter

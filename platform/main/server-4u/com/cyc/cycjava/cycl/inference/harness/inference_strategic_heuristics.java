@@ -469,6 +469,7 @@ public final class inference_strategic_heuristics extends SubLTranslatedFile imp
 
     public static final SubLFile me = new inference_strategic_heuristics();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.harness.inference_strategic_heuristics";
 
 
     // deflexical

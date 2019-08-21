@@ -145,6 +145,7 @@ public final class removal_tactician_datastructures extends SubLTranslatedFile i
 
     public static final SubLFile me = new removal_tactician_datastructures();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.harness.removal_tactician_datastructures";
 
 
     // defconstant

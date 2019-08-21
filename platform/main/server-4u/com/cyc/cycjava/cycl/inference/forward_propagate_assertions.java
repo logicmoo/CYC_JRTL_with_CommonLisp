@@ -75,6 +75,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class forward_propagate_assertions extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new forward_propagate_assertions();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.forward_propagate_assertions";
 
 
     // defparameter

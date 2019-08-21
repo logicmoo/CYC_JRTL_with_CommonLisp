@@ -46,6 +46,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class removal_modules_ncr_constraints extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new removal_modules_ncr_constraints();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_ncr_constraints";
 
 
     // defparameter

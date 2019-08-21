@@ -78,6 +78,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class inference_viewer extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new inference_viewer();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.inference_viewer";
 
 
     static private final SubLList $list2 = cons(makeSymbol("PROBLEM"), makeSymbol("TIME"));

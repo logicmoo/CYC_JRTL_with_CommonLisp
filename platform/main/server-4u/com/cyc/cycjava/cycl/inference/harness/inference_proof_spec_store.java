@@ -77,6 +77,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class inference_proof_spec_store extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new inference_proof_spec_store();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.harness.inference_proof_spec_store";
 
 
     // deflexical

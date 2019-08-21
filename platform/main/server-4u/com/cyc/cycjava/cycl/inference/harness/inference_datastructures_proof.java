@@ -303,6 +303,7 @@ public final class inference_datastructures_proof extends SubLTranslatedFile imp
 
     public static final SubLFile me = new inference_datastructures_proof();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.harness.inference_datastructures_proof";
 
 
     // defconstant

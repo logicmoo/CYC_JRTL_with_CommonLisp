@@ -28,6 +28,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class new_root_tactician_motivation extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new new_root_tactician_motivation();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.harness.new_root_tactician_motivation";
 
 
     private static final SubLSymbol NEW_ROOT_STRATEGY_P = makeSymbol("NEW-ROOT-STRATEGY-P");

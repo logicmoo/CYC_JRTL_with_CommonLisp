@@ -134,6 +134,7 @@ public final class transformation_tactician_datastructures extends SubLTranslate
 
     public static final SubLFile me = new transformation_tactician_datastructures();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.harness.transformation_tactician_datastructures";
 
 
     // defconstant

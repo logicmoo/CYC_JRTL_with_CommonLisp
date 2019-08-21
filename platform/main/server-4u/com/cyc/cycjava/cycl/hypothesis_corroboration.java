@@ -75,6 +75,7 @@ public final class hypothesis_corroboration extends SubLTranslatedFile implement
 
     public static final SubLFile me = new hypothesis_corroboration();
 
+    public static final String myName = "com.cyc.cycjava.cycl.hypothesis_corroboration";
 
     // // Definitions
     public static final SubLObject cb_link_hyp_corrob(SubLObject linktext) {

@@ -31,6 +31,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class inference_pad_data extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new inference_pad_data();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.inference_pad_data";
 
 
     // Internal Constants

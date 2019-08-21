@@ -58,6 +58,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class inference_event_filters extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new inference_event_filters();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.inference_event_filters";
 
 
     // deflexical

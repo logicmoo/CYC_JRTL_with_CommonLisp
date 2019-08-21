@@ -53,6 +53,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class removal_modules_admitted_formula extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new removal_modules_admitted_formula();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_admitted_formula";
 
 
     // defparameter

@@ -438,6 +438,7 @@ public final class transformation_modules extends SubLTranslatedFile implements 
 
     public static final SubLFile me = new transformation_modules();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.modules.transformation_modules";
 
 
     // defparameter

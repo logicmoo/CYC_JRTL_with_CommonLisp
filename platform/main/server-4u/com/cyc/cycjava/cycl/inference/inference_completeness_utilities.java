@@ -46,6 +46,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class inference_completeness_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new inference_completeness_utilities();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.inference_completeness_utilities";
 
 
     // Internal Constants

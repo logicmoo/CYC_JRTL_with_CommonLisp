@@ -52,6 +52,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class transformation_tactician_uninterestingness extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new transformation_tactician_uninterestingness();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.harness.transformation_tactician_uninterestingness";
 
 
     // defparameter

@@ -115,6 +115,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class hl_prototypes extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new hl_prototypes();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.harness.hl_prototypes";
 
 
     // defparameter

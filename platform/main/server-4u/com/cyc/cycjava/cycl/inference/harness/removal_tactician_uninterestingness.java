@@ -247,6 +247,7 @@ public final class removal_tactician_uninterestingness extends SubLTranslatedFil
 
     public static final SubLFile me = new removal_tactician_uninterestingness();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.harness.removal_tactician_uninterestingness";
 
 
     // defparameter

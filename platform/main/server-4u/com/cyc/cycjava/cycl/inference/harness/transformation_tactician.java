@@ -134,6 +134,7 @@ public final class transformation_tactician extends SubLTranslatedFile implement
 
     public static final SubLFile me = new transformation_tactician();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.harness.transformation_tactician";
 
 
     // deflexical

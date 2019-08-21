@@ -235,6 +235,7 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile imple
 
     public static final SubLFile me = new cb_forward_inference_browser();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser";
 
 
     // defparameter

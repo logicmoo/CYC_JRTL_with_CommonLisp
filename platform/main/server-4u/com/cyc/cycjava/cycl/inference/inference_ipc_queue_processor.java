@@ -120,6 +120,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class inference_ipc_queue_processor extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new inference_ipc_queue_processor();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.inference_ipc_queue_processor";
 
 
     // defparameter

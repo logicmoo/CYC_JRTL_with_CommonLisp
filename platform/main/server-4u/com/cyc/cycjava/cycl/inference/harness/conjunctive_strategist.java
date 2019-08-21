@@ -70,6 +70,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class conjunctive_strategist extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new conjunctive_strategist();
 
+    public static final String myName = "com.cyc.cycjava_2.cycl.inference.harness.conjunctive_strategist";
 
 
     // deflexical

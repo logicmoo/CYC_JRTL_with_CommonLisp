@@ -114,6 +114,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class cb_show_consequences extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new cb_show_consequences();
 
+    public static final String myName = "com.cyc.cycjava_2.cycl.inference.cb_show_consequences";
 
 
     // defparameter

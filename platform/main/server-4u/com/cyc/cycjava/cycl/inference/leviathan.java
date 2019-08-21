@@ -221,6 +221,7 @@ public final class leviathan extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new leviathan();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.leviathan";
 
 
     // deflexical

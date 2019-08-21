@@ -44,6 +44,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class query_relaxation extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new query_relaxation();
 
+    public static final String myName = "com.cyc.cycjava_2.cycl.inference.query_relaxation";
 
 
     private static final SubLObject $const0$QueryRelaxationStrategy_RemoveLit = reader_make_constant_shell(makeString("QueryRelaxationStrategy-RemoveLiteralViaSpecifiedOrder"));

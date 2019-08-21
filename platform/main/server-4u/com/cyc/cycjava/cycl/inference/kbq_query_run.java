@@ -715,6 +715,7 @@ public final class kbq_query_run extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new kbq_query_run();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.kbq_query_run";
 
 
     // defparameter

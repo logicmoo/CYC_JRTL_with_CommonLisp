@@ -116,6 +116,7 @@ public final class cb_inference_debugger extends SubLTranslatedFile implements V
 
     public static final SubLFile me = new cb_inference_debugger();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.browser.cb_inference_debugger";
 
 
     // defparameter

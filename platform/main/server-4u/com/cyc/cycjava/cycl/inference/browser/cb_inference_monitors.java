@@ -115,6 +115,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class cb_inference_monitors extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new cb_inference_monitors();
 
+    public static final String myName = "com.cyc.cycjava_2.cycl.inference.browser.cb_inference_monitors";
 
 
     // deflexical

@@ -1939,6 +1939,7 @@ public final class cb_inference_browser extends SubLTranslatedFile implements V1
 
     public static final SubLFile me = new cb_inference_browser();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.browser.cb_inference_browser";
 
 
 
@@ -5411,7 +5412,20 @@ public final class cb_inference_browser extends SubLTranslatedFile implements V1
                     try {
                         memoization_state.$memoization_state$.bind(local_state, thread);
                         {
-                            SubLObject original_memoization_process = memoization_state.aquireMemoStateLock(local_state);
+                            SubLObject original_memoization_process = NIL;
+                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                {
+                                    SubLObject current_proc = current_process();
+                                    if (NIL == original_memoization_process) {
+                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                    } else {
+                                        if (original_memoization_process != current_proc) {
+                                            Errors.error($str_alt199$Invalid_attempt_to_reuse_memoizat);
+                                        }
+                                    }
+                                }
+                            }
                             try {
                                 {
                                     SubLObject space_var = problem_store_sbhl_resource_space(store_var);
@@ -7039,7 +7053,20 @@ public final class cb_inference_browser extends SubLTranslatedFile implements V1
                     try {
                         memoization_state.$memoization_state$.bind(local_state, thread);
                         {
-                            SubLObject original_memoization_process = memoization_state.aquireMemoStateLock(local_state);
+                            SubLObject original_memoization_process = NIL;
+                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                {
+                                    SubLObject current_proc = current_process();
+                                    if (NIL == original_memoization_process) {
+                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                    } else {
+                                        if (original_memoization_process != current_proc) {
+                                            Errors.error($str_alt199$Invalid_attempt_to_reuse_memoizat);
+                                        }
+                                    }
+                                }
+                            }
                             try {
                                 {
                                     SubLObject space_var = problem_store_sbhl_resource_space(store_var);
@@ -9122,7 +9149,20 @@ public final class cb_inference_browser extends SubLTranslatedFile implements V1
                     try {
                         memoization_state.$memoization_state$.bind(local_state, thread);
                         {
-                            SubLObject original_memoization_process = memoization_state.aquireMemoStateLock(local_state);
+                            SubLObject original_memoization_process = NIL;
+                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                {
+                                    SubLObject current_proc = current_process();
+                                    if (NIL == original_memoization_process) {
+                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                    } else {
+                                        if (original_memoization_process != current_proc) {
+                                            Errors.error($str_alt199$Invalid_attempt_to_reuse_memoizat);
+                                        }
+                                    }
+                                }
+                            }
                             try {
                                 {
                                     SubLObject space_var = problem_store_sbhl_resource_space(store_var);
@@ -16518,7 +16558,20 @@ public final class cb_inference_browser extends SubLTranslatedFile implements V1
                     try {
                         memoization_state.$memoization_state$.bind(local_state, thread);
                         {
-                            SubLObject original_memoization_process = memoization_state.aquireMemoStateLock(local_state);
+                            SubLObject original_memoization_process = NIL;
+                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                {
+                                    SubLObject current_proc = current_process();
+                                    if (NIL == original_memoization_process) {
+                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                    } else {
+                                        if (original_memoization_process != current_proc) {
+                                            Errors.error($str_alt199$Invalid_attempt_to_reuse_memoizat);
+                                        }
+                                    }
+                                }
+                            }
                             try {
                                 {
                                     SubLObject space_var = problem_store_sbhl_resource_space(store_var);
@@ -20839,7 +20892,20 @@ public final class cb_inference_browser extends SubLTranslatedFile implements V1
                     try {
                         memoization_state.$memoization_state$.bind(local_state, thread);
                         {
-                            SubLObject original_memoization_process = memoization_state.aquireMemoStateLock(local_state);
+                            SubLObject original_memoization_process = NIL;
+                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                {
+                                    SubLObject current_proc = current_process();
+                                    if (NIL == original_memoization_process) {
+                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                    } else {
+                                        if (original_memoization_process != current_proc) {
+                                            Errors.error($str_alt199$Invalid_attempt_to_reuse_memoizat);
+                                        }
+                                    }
+                                }
+                            }
                             try {
                                 {
                                     SubLObject space_var = problem_store_sbhl_resource_space(store_var);
@@ -22088,7 +22154,20 @@ public final class cb_inference_browser extends SubLTranslatedFile implements V1
                     try {
                         memoization_state.$memoization_state$.bind(local_state, thread);
                         {
-                            SubLObject original_memoization_process = memoization_state.aquireMemoStateLock(local_state);
+                            SubLObject original_memoization_process = NIL;
+                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                {
+                                    SubLObject current_proc = current_process();
+                                    if (NIL == original_memoization_process) {
+                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                    } else {
+                                        if (original_memoization_process != current_proc) {
+                                            Errors.error($str_alt199$Invalid_attempt_to_reuse_memoizat);
+                                        }
+                                    }
+                                }
+                            }
                             try {
                                 {
                                     SubLObject space_var = problem_store_sbhl_resource_space(store_var);
@@ -23670,7 +23749,20 @@ public final class cb_inference_browser extends SubLTranslatedFile implements V1
                     try {
                         memoization_state.$memoization_state$.bind(local_state, thread);
                         {
-                            SubLObject original_memoization_process = memoization_state.aquireMemoStateLock(local_state);
+                            SubLObject original_memoization_process = NIL;
+                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                {
+                                    SubLObject current_proc = current_process();
+                                    if (NIL == original_memoization_process) {
+                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                    } else {
+                                        if (original_memoization_process != current_proc) {
+                                            Errors.error($str_alt199$Invalid_attempt_to_reuse_memoizat);
+                                        }
+                                    }
+                                }
+                            }
                             try {
                                 {
                                     SubLObject space_var = problem_store_sbhl_resource_space(store_var);

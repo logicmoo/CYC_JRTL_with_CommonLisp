@@ -51,6 +51,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class removal_modules_kappa extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new removal_modules_kappa();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_kappa";
 
 
     static private final SubLList $list1 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("REQUIRED-PATTERN"), cons(list($TEST, makeSymbol("KAPPA-PREDICATE-P")), makeKeyword("ANYTHING")), $COST, makeSymbol("REMOVAL-KAPPA-POS-GAF-COST"), makeKeyword("COMPLETENESS-PATTERN"), list($CALL, makeSymbol("REMOVAL-KAPPA-POS-GAF-COMPLETENESS"), makeKeyword("INPUT"), makeKeyword("POS")), makeKeyword("EXPAND"), makeSymbol("REMOVAL-KAPPA-EXPAND"), makeKeyword("EXCLUSIVE"), makeSymbol("TRUE"), makeKeyword("SUPPLANTS"), makeKeyword("ALL"), makeKeyword("DOCUMENTATION"), makeString("((#$Kappa <formal-args> <sentence>) <args>)"), makeKeyword("EXAMPLE"), makeString("((#$Kappa (?X ?Y) (#$isa ?X ?Y)) #$Guyren ?WHAT)") });

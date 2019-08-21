@@ -100,6 +100,7 @@ public final class removal_tactician_motivation extends SubLTranslatedFile imple
 
     public static final SubLFile me = new removal_tactician_motivation();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.harness.removal_tactician_motivation";
 
 
     // defparameter

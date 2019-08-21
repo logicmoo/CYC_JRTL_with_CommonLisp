@@ -127,6 +127,7 @@ public final class backward extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new backward();
 
+ public static final String myName = "com.cyc.cycjava.cycl.backward";
 
 
     // defparameter

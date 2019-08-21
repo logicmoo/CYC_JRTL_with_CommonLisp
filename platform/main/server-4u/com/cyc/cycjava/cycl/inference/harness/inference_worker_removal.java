@@ -334,6 +334,7 @@ public final class inference_worker_removal extends SubLTranslatedFile implement
 
     public static final SubLFile me = new inference_worker_removal();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.harness.inference_worker_removal";
 
 
     // defconstant

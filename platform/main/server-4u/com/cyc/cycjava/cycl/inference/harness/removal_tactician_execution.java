@@ -36,6 +36,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class removal_tactician_execution extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new removal_tactician_execution();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.harness.removal_tactician_execution";
 
 
     // defparameter

@@ -137,6 +137,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class forward_modules extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new forward_modules();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.modules.forward_modules";
 
 
     // defparameter

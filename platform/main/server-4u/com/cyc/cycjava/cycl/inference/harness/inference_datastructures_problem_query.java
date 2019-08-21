@@ -64,6 +64,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class inference_datastructures_problem_query extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new inference_datastructures_problem_query();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_query";
 
 
     // defparameter

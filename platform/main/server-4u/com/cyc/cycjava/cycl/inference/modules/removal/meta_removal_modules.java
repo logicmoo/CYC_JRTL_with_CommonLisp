@@ -37,6 +37,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class meta_removal_modules extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new meta_removal_modules();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.meta_removal_modules";
 
 
     private static final SubLSymbol $META_REMOVAL_COMPLETELY_ENUMERABLE_POS = makeKeyword("META-REMOVAL-COMPLETELY-ENUMERABLE-POS");

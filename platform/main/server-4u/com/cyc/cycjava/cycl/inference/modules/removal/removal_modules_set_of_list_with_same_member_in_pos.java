@@ -50,6 +50,7 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 public final class removal_modules_set_of_list_with_same_member_in_pos extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new removal_modules_set_of_list_with_same_member_in_pos();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_set_of_list_with_same_member_in_pos";
 
 
 

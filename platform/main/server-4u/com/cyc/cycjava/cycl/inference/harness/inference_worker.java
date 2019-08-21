@@ -360,6 +360,7 @@ public final class inference_worker extends SubLTranslatedFile implements V12 {
 
     public static final SubLFile me = new inference_worker();
 
+ public static final String myName = "com.cyc.cycjava.cycl.inference.harness.inference_worker";
 
 
     // defparameter
@@ -15866,7 +15867,20 @@ public final class inference_worker extends SubLTranslatedFile implements V12 {
                     try {
                         memoization_state.$memoization_state$.bind(local_state, thread);
                         {
-                            SubLObject original_memoization_process = memoization_state.aquireMemoStateLock(local_state);
+                            SubLObject original_memoization_process = NIL;
+                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                {
+                                    SubLObject current_proc = current_process();
+                                    if (NIL == original_memoization_process) {
+                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                    } else {
+                                        if (original_memoization_process != current_proc) {
+                                            Errors.error($str_alt169$Invalid_attempt_to_reuse_memoizat);
+                                        }
+                                    }
+                                }
+                            }
                             try {
                                 {
                                     SubLObject space_var = inference_datastructures_problem_store.problem_store_sbhl_resource_space(store_var);
