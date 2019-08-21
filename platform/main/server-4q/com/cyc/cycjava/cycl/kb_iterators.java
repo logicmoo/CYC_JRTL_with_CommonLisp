@@ -1,83 +1,79 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.assertions_high.gaf_arg;
-import static com.cyc.cycjava.cycl.kb_mapping_macros.destroy_final_index_iterator;
-import static com.cyc.cycjava.cycl.kb_mapping_macros.do_gaf_arg_index_key_validator;
-import static com.cyc.cycjava.cycl.kb_mapping_macros.new_final_index_iterator;
-import static com.cyc.cycjava.cycl.kb_mapping_macros.new_gaf_arg_final_index_spec_iterator;
-import static com.cyc.cycjava.cycl.utilities_macros.$is_noting_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_elapsed_seconds_for_notification$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_last_pacification_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_notification_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_pacifications_since_last_nl$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$silent_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$suppress_all_progress_faster_than_seconds$;
-import static com.cyc.cycjava.cycl.utilities_macros.note_progress;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_progress_postamble;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_progress_preamble;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.set_nth;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.bind;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.currentBinding;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.rebind;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.gethash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.make_hash_table;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.sethash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.nreverse;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.get_universal_time;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.values;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.aref;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.vector;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.second;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.third;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-
+import com.cyc.cycjava.cycl.kb_iterators;
 import com.cyc.cycjava.cycl.sbhl.sbhl_graphs;
 import com.cyc.cycjava.cycl.sbhl.sbhl_link_methods;
-import com.cyc.cycjava.cycl.sbhl.sbhl_link_vars;
 import com.cyc.cycjava.cycl.sbhl.sbhl_links;
 import com.cyc.cycjava.cycl.sbhl.sbhl_module_utilities;
 import com.cyc.cycjava.cycl.sbhl.sbhl_module_vars;
 import com.cyc.cycjava.cycl.sbhl.sbhl_search_vars;
+import com.cyc.cycjava.cycl.utilities_macros;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.kb_iterators.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- * module:      KB-ITERATORS
- * source file: /cyc/top/cycl/kb-iterators.lisp
- * created:     2019/07/03 17:37:25
- */
-public final class kb_iterators extends SubLTranslatedFile implements V12 {
+
+public final class kb_iterators extends SubLTranslatedFile {
     public static final SubLFile me = new kb_iterators();
+
+    public static final String myName = "com.cyc.cycjava.cycl.kb_iterators";
+
+    public static final String myFingerPrint = "062538c4085bdef2dbac8cecdac18bbd9d778d1a70376276f1709bf7148ae9c3";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -85,13 +81,15 @@ public final class kb_iterators extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol ITERATOR_SPECS_NEXT = makeSymbol("ITERATOR-SPECS-NEXT");
 
+
+
     private static final SubLList $list12 = list(makeSymbol("PENDING-QUEUE"), makeSymbol("VISITED-TABLE"));
 
-
+    private static final SubLObject $$genls = reader_make_constant_shell(makeString("genls"));
 
     private static final SubLString $str14$_A_is_neither_SET_P_nor_LISTP_ = makeString("~A is neither SET-P nor LISTP.");
 
-
+    private static final SubLObject $$isa = reader_make_constant_shell(makeString("isa"));
 
     private static final SubLList $list16 = list(makeSymbol("INSTANCE"), makeUninternedSymbol("MT-VAR"), makeUninternedSymbol("TV-VAR"));
 
@@ -111,28 +109,8 @@ public final class kb_iterators extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol ITERATOR_TRANSITIVE_NEXT = makeSymbol("ITERATOR-TRANSITIVE-NEXT");
 
-    // Definitions
-    /**
-     * Return a new ITERATOR for iterating over all assertions under the
-     * gaf arg index at TERM ARG PRED MT.
-     */
-    @LispMethod(comment = "Return a new ITERATOR for iterating over all assertions under the\r\ngaf arg index at TERM ARG PRED MT.\nReturn a new ITERATOR for iterating over all assertions under the\ngaf arg index at TERM ARG PRED MT.")
-    public static final SubLObject new_gaf_arg_index_iterator_alt(SubLObject v_term, SubLObject arg, SubLObject pred, SubLObject mt) {
-        if (pred == UNPROVIDED) {
-            pred = NIL;
-        }
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        return iteration.new_list_iterator(kb_mapping.gather_gaf_arg_index(v_term, arg, pred, mt, UNPROVIDED));
-    }
 
-    // Definitions
-    /**
-     * Return a new ITERATOR for iterating over all assertions under the
-     * gaf arg index at TERM ARG PRED MT.
-     */
-    @LispMethod(comment = "Return a new ITERATOR for iterating over all assertions under the\r\ngaf arg index at TERM ARG PRED MT.\nReturn a new ITERATOR for iterating over all assertions under the\ngaf arg index at TERM ARG PRED MT.")
+
     public static SubLObject new_gaf_arg_index_iterator(final SubLObject v_term, final SubLObject arg, SubLObject pred, SubLObject mt) {
         if (pred == UNPROVIDED) {
             pred = NIL;
@@ -143,23 +121,6 @@ public final class kb_iterators extends SubLTranslatedFile implements V12 {
         return iteration.new_list_iterator(kb_mapping.gather_gaf_arg_index(v_term, arg, pred, mt, UNPROVIDED));
     }
 
-    /**
-     * Return a new ITERATOR for iterating over all assertions under the
-     * nart arg index at TERM ARG FUNC.
-     */
-    @LispMethod(comment = "Return a new ITERATOR for iterating over all assertions under the\r\nnart arg index at TERM ARG FUNC.\nReturn a new ITERATOR for iterating over all assertions under the\nnart arg index at TERM ARG FUNC.")
-    public static final SubLObject new_nart_arg_index_iterator_alt(SubLObject v_term, SubLObject arg, SubLObject func) {
-        if (func == UNPROVIDED) {
-            func = NIL;
-        }
-        return iteration.new_list_iterator(kb_mapping.gather_nart_arg_index(v_term, arg, func));
-    }
-
-    /**
-     * Return a new ITERATOR for iterating over all assertions under the
-     * nart arg index at TERM ARG FUNC.
-     */
-    @LispMethod(comment = "Return a new ITERATOR for iterating over all assertions under the\r\nnart arg index at TERM ARG FUNC.\nReturn a new ITERATOR for iterating over all assertions under the\nnart arg index at TERM ARG FUNC.")
     public static SubLObject new_nart_arg_index_iterator(final SubLObject v_term, final SubLObject arg, SubLObject func) {
         if (func == UNPROVIDED) {
             func = NIL;
@@ -167,23 +128,6 @@ public final class kb_iterators extends SubLTranslatedFile implements V12 {
         return iteration.new_list_iterator(kb_mapping.gather_nart_arg_index(v_term, arg, func));
     }
 
-    /**
-     * Return a new ITERATOR for iterating over all assertions under the
-     * predicate extent index at PRED MT.
-     */
-    @LispMethod(comment = "Return a new ITERATOR for iterating over all assertions under the\r\npredicate extent index at PRED MT.\nReturn a new ITERATOR for iterating over all assertions under the\npredicate extent index at PRED MT.")
-    public static final SubLObject new_predicate_extent_index_iterator_alt(SubLObject pred, SubLObject mt) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        return iteration.new_list_iterator(kb_mapping.gather_predicate_extent_index(pred, mt, UNPROVIDED));
-    }
-
-    /**
-     * Return a new ITERATOR for iterating over all assertions under the
-     * predicate extent index at PRED MT.
-     */
-    @LispMethod(comment = "Return a new ITERATOR for iterating over all assertions under the\r\npredicate extent index at PRED MT.\nReturn a new ITERATOR for iterating over all assertions under the\npredicate extent index at PRED MT.")
     public static SubLObject new_predicate_extent_index_iterator(final SubLObject pred, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -191,38 +135,10 @@ public final class kb_iterators extends SubLTranslatedFile implements V12 {
         return iteration.new_list_iterator(kb_mapping.gather_predicate_extent_index(pred, mt, UNPROVIDED));
     }
 
-    /**
-     * Return a new ITERATOR for iterating over all assertions under the
-     * function extent index at FUNC MT.
-     */
-    @LispMethod(comment = "Return a new ITERATOR for iterating over all assertions under the\r\nfunction extent index at FUNC MT.\nReturn a new ITERATOR for iterating over all assertions under the\nfunction extent index at FUNC MT.")
-    public static final SubLObject new_function_extent_index_iterator_alt(SubLObject func) {
-        return iteration.new_list_iterator(kb_mapping.gather_function_extent_index(func));
-    }
-
-    /**
-     * Return a new ITERATOR for iterating over all assertions under the
-     * function extent index at FUNC MT.
-     */
-    @LispMethod(comment = "Return a new ITERATOR for iterating over all assertions under the\r\nfunction extent index at FUNC MT.\nReturn a new ITERATOR for iterating over all assertions under the\nfunction extent index at FUNC MT.")
     public static SubLObject new_function_extent_index_iterator(final SubLObject func) {
         return iteration.new_list_iterator(kb_mapping.gather_function_extent_index(func));
     }
 
-    /**
-     * Return a new ITERATOR for iterating over all assertions under the
-     * mt-index at MT.
-     */
-    @LispMethod(comment = "Return a new ITERATOR for iterating over all assertions under the\r\nmt-index at MT.\nReturn a new ITERATOR for iterating over all assertions under the\nmt-index at MT.")
-    public static final SubLObject new_mt_index_iterator_alt(SubLObject v_term) {
-        return iteration.new_list_iterator(kb_mapping.gather_mt_index(v_term));
-    }
-
-    /**
-     * Return a new ITERATOR for iterating over all assertions under the
-     * mt-index at MT.
-     */
-    @LispMethod(comment = "Return a new ITERATOR for iterating over all assertions under the\r\nmt-index at MT.\nReturn a new ITERATOR for iterating over all assertions under the\nmt-index at MT.")
     public static SubLObject new_mt_index_iterator(final SubLObject v_term) {
         return iteration.new_list_iterator(kb_mapping.gather_mt_index(v_term));
     }
@@ -515,44 +431,19 @@ public final class kb_iterators extends SubLTranslatedFile implements V12 {
         return iteration.new_list_iterator(nreverse(result));
     }
 
-    public static final SubLObject new_genls_iterator_alt(SubLObject collection) {
-        SubLTrampolineFile.checkType(collection, FORT_P);
-        return iteration.new_list_iterator(genls.all_genls(collection, UNPROVIDED, UNPROVIDED));
-    }
-
     public static SubLObject new_genls_iterator(final SubLObject collection) {
-        assert NIL != forts.fort_p(collection) : "! forts.fort_p(collection) " + ("forts.fort_p(collection) " + "CommonSymbols.NIL != forts.fort_p(collection) ") + collection;
+        assert NIL != forts.fort_p(collection) : "forts.fort_p(collection) " + "CommonSymbols.NIL != forts.fort_p(collection) " + collection;
         return iteration.new_list_iterator(genls.all_genls(collection, UNPROVIDED, UNPROVIDED));
-    }
-
-    public static final SubLObject new_isa_iterator_alt(SubLObject fort) {
-        SubLTrampolineFile.checkType(fort, FORT_P);
-        return iteration.new_list_iterator(isa.all_isa(fort, UNPROVIDED, UNPROVIDED));
     }
 
     public static SubLObject new_isa_iterator(final SubLObject fort) {
-        assert NIL != forts.fort_p(fort) : "! forts.fort_p(fort) " + ("forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) ") + fort;
+        assert NIL != forts.fort_p(fort) : "forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) " + fort;
         return iteration.new_list_iterator(isa.all_isa(fort, UNPROVIDED, UNPROVIDED));
     }
 
-    public static final SubLObject new_specs_iterator_alt(SubLObject collection) {
-        SubLTrampolineFile.checkType(collection, FORT_P);
-        return iteration.new_iterator(com.cyc.cycjava.cycl.kb_iterators.make_iterator_specs_state(collection), symbol_function(ITERATOR_SPECS_DONE), symbol_function(ITERATOR_SPECS_NEXT), UNPROVIDED);
-    }
-
     public static SubLObject new_specs_iterator(final SubLObject collection) {
-        assert NIL != forts.fort_p(collection) : "! forts.fort_p(collection) " + ("forts.fort_p(collection) " + "CommonSymbols.NIL != forts.fort_p(collection) ") + collection;
+        assert NIL != forts.fort_p(collection) : "forts.fort_p(collection) " + "CommonSymbols.NIL != forts.fort_p(collection) " + collection;
         return iteration.new_iterator(make_iterator_specs_state(collection), symbol_function(ITERATOR_SPECS_DONE), symbol_function(ITERATOR_SPECS_NEXT), UNPROVIDED);
-    }
-
-    public static final SubLObject make_iterator_specs_state_alt(SubLObject collection) {
-        {
-            SubLObject pending_queue = queues.create_queue();
-            SubLObject visited_table = make_hash_table($int$100, symbol_function(EQ), UNPROVIDED);
-            queues.enqueue(collection, pending_queue);
-            sethash(collection, visited_table, T);
-            return list(pending_queue, visited_table);
-        }
     }
 
     public static SubLObject make_iterator_specs_state(final SubLObject collection) {
@@ -563,109 +454,8 @@ public final class kb_iterators extends SubLTranslatedFile implements V12 {
         return list(pending_queue, visited_table);
     }
 
-    public static final SubLObject iterator_specs_done_alt(SubLObject state) {
-        return queues.queue_empty_p(state.first());
-    }
-
     public static SubLObject iterator_specs_done(final SubLObject state) {
         return queues.queue_empty_p(state.first());
-    }
-
-    public static final SubLObject iterator_specs_next_alt(SubLObject state) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject datum = state;
-                SubLObject current = datum;
-                SubLObject pending_queue = NIL;
-                SubLObject visited_table = NIL;
-                destructuring_bind_must_consp(current, datum, $list_alt4);
-                pending_queue = current.first();
-                current = current.rest();
-                destructuring_bind_must_consp(current, datum, $list_alt4);
-                visited_table = current.first();
-                current = current.rest();
-                if (NIL == current) {
-                    {
-                        SubLObject next_item = NIL;
-                        while (!((NIL != queues.queue_empty_p(pending_queue)) || (NIL != next_item))) {
-                            next_item = queues.dequeue(pending_queue);
-                            {
-                                SubLObject _prev_bind_0 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                try {
-                                    sbhl_module_vars.$sbhl_module$.bind(NIL != sbhl_module_vars.get_sbhl_module($$genls) ? ((SubLObject) (sbhl_module_vars.get_sbhl_module($$genls))) : sbhl_module_vars.$sbhl_module$.getDynamicValue(thread), thread);
-                                    {
-                                        SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(next_item, sbhl_module_vars.get_sbhl_module($$genls));
-                                        if (NIL != d_link) {
-                                            {
-                                                SubLObject cdolist_list_var = sbhl_module_utilities.get_relevant_sbhl_directions(sbhl_module_vars.get_sbhl_module($$genls));
-                                                SubLObject direction = NIL;
-                                                for (direction = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , direction = cdolist_list_var.first()) {
-                                                    {
-                                                        SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, direction, sbhl_module_vars.get_sbhl_module($$genls));
-                                                        if (NIL != mt_links) {
-                                                            if (direction == sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$genls))) {
-                                                                {
-                                                                    SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
-                                                                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                                                                        thread.resetMultipleValues();
-                                                                        {
-                                                                            SubLObject mt_var = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                            SubLObject tv_links = thread.secondMultipleValue();
-                                                                            thread.resetMultipleValues();
-                                                                            {
-                                                                                SubLObject iteration_state_1 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
-                                                                                while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_1)) {
-                                                                                    thread.resetMultipleValues();
-                                                                                    {
-                                                                                        SubLObject tv_var = dictionary_contents.do_dictionary_contents_key_value(iteration_state_1);
-                                                                                        SubLObject link_nodes_var = thread.secondMultipleValue();
-                                                                                        thread.resetMultipleValues();
-                                                                                        if (NIL != sbhl_search_vars.sbhl_true_tv_p(tv_var)) {
-                                                                                            {
-                                                                                                SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes_var))) : link_nodes_var;
-                                                                                                SubLObject cdolist_list_var_2 = new_list;
-                                                                                                SubLObject spec = NIL;
-                                                                                                for (spec = cdolist_list_var_2.first(); NIL != cdolist_list_var_2; cdolist_list_var_2 = cdolist_list_var_2.rest() , spec = cdolist_list_var_2.first()) {
-                                                                                                    if (NIL != mt_relevance_macros.relevant_mtP(mt_var)) {
-                                                                                                        if (NIL == gethash(spec, visited_table, UNPROVIDED)) {
-                                                                                                            sethash(spec, visited_table, T);
-                                                                                                            queues.enqueue(spec, pending_queue);
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                        iteration_state_1 = dictionary_contents.do_dictionary_contents_next(iteration_state_1);
-                                                                                    }
-                                                                                } 
-                                                                                dictionary_contents.do_dictionary_contents_finalize(iteration_state_1);
-                                                                            }
-                                                                            iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                                        }
-                                                                    } 
-                                                                    dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                } finally {
-                                    sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0, thread);
-                                }
-                            }
-                        } 
-                        return values(next_item, state, NIL);
-                    }
-                } else {
-                    cdestructuring_bind_error(datum, $list_alt4);
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject iterator_specs_next(final SubLObject state) {
@@ -757,115 +547,9 @@ public final class kb_iterators extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject new_local_instances_iterator_alt(SubLObject collection) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(collection, FORT_P);
-            {
-                SubLObject v_instances = NIL;
-                {
-                    SubLObject _prev_bind_0 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                    try {
-                        sbhl_module_vars.$sbhl_module$.bind(NIL != sbhl_module_vars.get_sbhl_module($$isa) ? ((SubLObject) (sbhl_module_vars.get_sbhl_module($$isa))) : sbhl_module_vars.$sbhl_module$.getDynamicValue(thread), thread);
-                        {
-                            SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(collection, sbhl_module_vars.get_sbhl_module($$isa));
-                            if (NIL != d_link) {
-                                {
-                                    SubLObject cdolist_list_var = sbhl_module_utilities.get_relevant_sbhl_directions(sbhl_module_vars.get_sbhl_module($$isa));
-                                    SubLObject direction = NIL;
-                                    for (direction = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , direction = cdolist_list_var.first()) {
-                                        {
-                                            SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, direction, sbhl_module_vars.get_sbhl_module($$isa));
-                                            if (NIL != mt_links) {
-                                                if (direction == sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa))) {
-                                                    {
-                                                        SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
-                                                        while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                                                            thread.resetMultipleValues();
-                                                            {
-                                                                SubLObject mt_var = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                SubLObject tv_links = thread.secondMultipleValue();
-                                                                thread.resetMultipleValues();
-                                                                {
-                                                                    SubLObject iteration_state_3 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
-                                                                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_3)) {
-                                                                        thread.resetMultipleValues();
-                                                                        {
-                                                                            SubLObject tv_var = dictionary_contents.do_dictionary_contents_key_value(iteration_state_3);
-                                                                            SubLObject link_nodes_var = thread.secondMultipleValue();
-                                                                            thread.resetMultipleValues();
-                                                                            if (NIL != sbhl_search_vars.sbhl_true_tv_p(tv_var)) {
-                                                                                {
-                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes_var))) : link_nodes_var;
-                                                                                    SubLObject cdolist_list_var_4 = new_list;
-                                                                                    SubLObject instance = NIL;
-                                                                                    for (instance = cdolist_list_var_4.first(); NIL != cdolist_list_var_4; cdolist_list_var_4 = cdolist_list_var_4.rest() , instance = cdolist_list_var_4.first()) {
-                                                                                        if (NIL != mt_relevance_macros.relevant_mtP(mt_var)) {
-                                                                                            v_instances = cons(instance, v_instances);
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                            iteration_state_3 = dictionary_contents.do_dictionary_contents_next(iteration_state_3);
-                                                                        }
-                                                                    } 
-                                                                    dictionary_contents.do_dictionary_contents_finalize(iteration_state_3);
-                                                                }
-                                                                iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                            }
-                                                        } 
-                                                        dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                {
-                    SubLObject csome_list_var = sbhl_link_methods.non_fort_instance_table_lookup(collection);
-                    SubLObject instance_tuple = NIL;
-                    for (instance_tuple = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , instance_tuple = csome_list_var.first()) {
-                        {
-                            SubLObject datum = instance_tuple;
-                            SubLObject current = datum;
-                            SubLObject instance = NIL;
-                            SubLObject mt_var = NIL;
-                            SubLObject tv_var = NIL;
-                            destructuring_bind_must_consp(current, datum, $list_alt7);
-                            instance = current.first();
-                            current = current.rest();
-                            destructuring_bind_must_consp(current, datum, $list_alt7);
-                            mt_var = current.first();
-                            current = current.rest();
-                            destructuring_bind_must_consp(current, datum, $list_alt7);
-                            tv_var = current.first();
-                            current = current.rest();
-                            if (NIL == current) {
-                                if (NIL != sbhl_search_vars.sbhl_true_tv_p(tv_var)) {
-                                    if (NIL != mt_relevance_macros.relevant_mtP(mt_var)) {
-                                        v_instances = cons(instance, v_instances);
-                                    }
-                                }
-                            } else {
-                                cdestructuring_bind_error(datum, $list_alt7);
-                            }
-                        }
-                    }
-                }
-                return iteration.new_list_iterator(nreverse(v_instances));
-            }
-        }
-    }
-
     public static SubLObject new_local_instances_iterator(final SubLObject collection) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != forts.fort_p(collection) : "! forts.fort_p(collection) " + ("forts.fort_p(collection) " + "CommonSymbols.NIL != forts.fort_p(collection) ") + collection;
+        assert NIL != forts.fort_p(collection) : "forts.fort_p(collection) " + "CommonSymbols.NIL != forts.fort_p(collection) " + collection;
         SubLObject v_instances = NIL;
         final SubLObject _prev_bind_0 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
         try {
@@ -963,23 +647,9 @@ public final class kb_iterators extends SubLTranslatedFile implements V12 {
         return iteration.new_list_iterator(nreverse(v_instances));
     }
 
-    public static final SubLObject new_instances_iterator_alt(SubLObject collection) {
-        SubLTrampolineFile.checkType(collection, FORT_P);
-        return iteration.new_iterator(com.cyc.cycjava.cycl.kb_iterators.make_iterator_instances_state(collection), symbol_function(ITERATOR_INSTANCES_DONE), symbol_function(ITERATOR_INSTANCES_NEXT), UNPROVIDED);
-    }
-
     public static SubLObject new_instances_iterator(final SubLObject collection) {
-        assert NIL != forts.fort_p(collection) : "! forts.fort_p(collection) " + ("forts.fort_p(collection) " + "CommonSymbols.NIL != forts.fort_p(collection) ") + collection;
+        assert NIL != forts.fort_p(collection) : "forts.fort_p(collection) " + "CommonSymbols.NIL != forts.fort_p(collection) " + collection;
         return iteration.new_iterator(make_iterator_instances_state(collection), symbol_function(ITERATOR_INSTANCES_DONE), symbol_function(ITERATOR_INSTANCES_NEXT), UNPROVIDED);
-    }
-
-    public static final SubLObject make_iterator_instances_state_alt(SubLObject collection) {
-        {
-            SubLObject specs_iterator = com.cyc.cycjava.cycl.kb_iterators.new_specs_iterator(collection);
-            SubLObject local_instances_iterator = NIL;
-            SubLObject visited_table = make_hash_table($int$100, symbol_function(EQUAL), UNPROVIDED);
-            return list(specs_iterator, local_instances_iterator, visited_table);
-        }
     }
 
     public static SubLObject make_iterator_instances_state(final SubLObject collection) {
@@ -989,64 +659,8 @@ public final class kb_iterators extends SubLTranslatedFile implements V12 {
         return list(specs_iterator, local_instances_iterator, visited_table);
     }
 
-    public static final SubLObject iterator_instances_done_alt(SubLObject state) {
-        return makeBoolean((NIL == state.first()) && (NIL == second(state)));
-    }
-
     public static SubLObject iterator_instances_done(final SubLObject state) {
         return makeBoolean((NIL == state.first()) && (NIL == second(state)));
-    }
-
-    public static final SubLObject iterator_instances_next_alt(SubLObject state) {
-        {
-            SubLObject datum = state;
-            SubLObject current = datum;
-            SubLObject specs_iterator = NIL;
-            SubLObject local_instances_iterator = NIL;
-            SubLObject visited_table = NIL;
-            destructuring_bind_must_consp(current, datum, $list_alt10);
-            specs_iterator = current.first();
-            current = current.rest();
-            destructuring_bind_must_consp(current, datum, $list_alt10);
-            local_instances_iterator = current.first();
-            current = current.rest();
-            destructuring_bind_must_consp(current, datum, $list_alt10);
-            visited_table = current.first();
-            current = current.rest();
-            if (NIL == current) {
-                while (true) {
-                    if ((NIL != local_instances_iterator) && (NIL == iteration.iteration_done(local_instances_iterator))) {
-                        {
-                            SubLObject next_instance = iteration.iteration_next(local_instances_iterator);
-                            if (NIL == gethash(next_instance, visited_table, UNPROVIDED)) {
-                                sethash(next_instance, visited_table, T);
-                                return values(next_instance, state, NIL);
-                            }
-                        }
-                    } else {
-                        if (NIL != local_instances_iterator) {
-                            local_instances_iterator = NIL;
-                            set_nth(ONE_INTEGER, state, local_instances_iterator);
-                        } else {
-                            if (NIL == iteration.iteration_done(specs_iterator)) {
-                                {
-                                    SubLObject next_spec = iteration.iteration_next(specs_iterator);
-                                    local_instances_iterator = com.cyc.cycjava.cycl.kb_iterators.new_local_instances_iterator(next_spec);
-                                    set_nth(ONE_INTEGER, state, local_instances_iterator);
-                                }
-                            } else {
-                                specs_iterator = NIL;
-                                set_nth(ZERO_INTEGER, state, specs_iterator);
-                                return values(NIL, state, T);
-                            }
-                        }
-                    }
-                } 
-            } else {
-                cdestructuring_bind_error(datum, $list_alt10);
-            }
-        }
-        return NIL;
     }
 
     public static SubLObject iterator_instances_next(final SubLObject state) {
@@ -1092,25 +706,9 @@ public final class kb_iterators extends SubLTranslatedFile implements V12 {
         } 
     }
 
-    public static final SubLObject new_ontology_iterator_alt(SubLObject collection) {
-        SubLTrampolineFile.checkType(collection, FORT_P);
-        return iteration.new_iterator(com.cyc.cycjava.cycl.kb_iterators.make_iterator_ontology_state(collection), symbol_function(ITERATOR_ONTOLOGY_DONE), symbol_function(ITERATOR_ONTOLOGY_NEXT), UNPROVIDED);
-    }
-
     public static SubLObject new_ontology_iterator(final SubLObject collection) {
-        assert NIL != forts.fort_p(collection) : "! forts.fort_p(collection) " + ("forts.fort_p(collection) " + "CommonSymbols.NIL != forts.fort_p(collection) ") + collection;
+        assert NIL != forts.fort_p(collection) : "forts.fort_p(collection) " + "CommonSymbols.NIL != forts.fort_p(collection) " + collection;
         return iteration.new_iterator(make_iterator_ontology_state(collection), symbol_function(ITERATOR_ONTOLOGY_DONE), symbol_function(ITERATOR_ONTOLOGY_NEXT), UNPROVIDED);
-    }
-
-    public static final SubLObject make_iterator_ontology_state_alt(SubLObject collection) {
-        {
-            SubLObject pending_specs_queue = queues.create_queue();
-            SubLObject pending_instances_queue = queues.create_queue();
-            SubLObject visited_table = make_hash_table(add(cardinality_estimates.spec_cardinality(collection), cardinality_estimates.instance_cardinality(collection)), UNPROVIDED, UNPROVIDED);
-            queues.enqueue(collection, pending_specs_queue);
-            sethash(collection, visited_table, T);
-            return list(pending_specs_queue, pending_instances_queue, visited_table);
-        }
     }
 
     public static SubLObject make_iterator_ontology_state(final SubLObject collection) {
@@ -1122,203 +720,8 @@ public final class kb_iterators extends SubLTranslatedFile implements V12 {
         return list(pending_specs_queue, pending_instances_queue, visited_table);
     }
 
-    public static final SubLObject iterator_ontology_done_alt(SubLObject state) {
-        return makeBoolean((NIL != queues.queue_empty_p(state.first())) && (NIL != queues.queue_empty_p(second(state))));
-    }
-
     public static SubLObject iterator_ontology_done(final SubLObject state) {
         return makeBoolean((NIL != queues.queue_empty_p(state.first())) && (NIL != queues.queue_empty_p(second(state))));
-    }
-
-    public static final SubLObject iterator_ontology_next_alt(SubLObject state) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject pending_specs_queue = state.first();
-                SubLObject pending_instances_queue = second(state);
-                SubLObject visited_table = third(state);
-                SubLObject next_item = NIL;
-                if (NIL == queues.queue_empty_p(pending_specs_queue)) {
-                    next_item = queues.dequeue(pending_specs_queue);
-                    {
-                        SubLObject _prev_bind_0 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                        try {
-                            sbhl_module_vars.$sbhl_module$.bind(NIL != sbhl_module_vars.get_sbhl_module($$genls) ? ((SubLObject) (sbhl_module_vars.get_sbhl_module($$genls))) : sbhl_module_vars.$sbhl_module$.getDynamicValue(thread), thread);
-                            {
-                                SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(next_item, sbhl_module_vars.get_sbhl_module($$genls));
-                                if (NIL != d_link) {
-                                    {
-                                        SubLObject cdolist_list_var = sbhl_module_utilities.get_relevant_sbhl_directions(sbhl_module_vars.get_sbhl_module($$genls));
-                                        SubLObject direction = NIL;
-                                        for (direction = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , direction = cdolist_list_var.first()) {
-                                            {
-                                                SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, direction, sbhl_module_vars.get_sbhl_module($$genls));
-                                                if (NIL != mt_links) {
-                                                    if (direction == sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$genls))) {
-                                                        {
-                                                            SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
-                                                            while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                                                                thread.resetMultipleValues();
-                                                                {
-                                                                    SubLObject mt_var = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                    SubLObject tv_links = thread.secondMultipleValue();
-                                                                    thread.resetMultipleValues();
-                                                                    {
-                                                                        SubLObject iteration_state_5 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
-                                                                        while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_5)) {
-                                                                            thread.resetMultipleValues();
-                                                                            {
-                                                                                SubLObject tv_var = dictionary_contents.do_dictionary_contents_key_value(iteration_state_5);
-                                                                                SubLObject link_nodes_var = thread.secondMultipleValue();
-                                                                                thread.resetMultipleValues();
-                                                                                if (NIL != sbhl_search_vars.sbhl_true_tv_p(tv_var)) {
-                                                                                    {
-                                                                                        SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes_var))) : link_nodes_var;
-                                                                                        SubLObject cdolist_list_var_6 = new_list;
-                                                                                        SubLObject spec = NIL;
-                                                                                        for (spec = cdolist_list_var_6.first(); NIL != cdolist_list_var_6; cdolist_list_var_6 = cdolist_list_var_6.rest() , spec = cdolist_list_var_6.first()) {
-                                                                                            if (NIL != mt_relevance_macros.relevant_mtP(mt_var)) {
-                                                                                                if (NIL == gethash(spec, visited_table, UNPROVIDED)) {
-                                                                                                    sethash(spec, visited_table, T);
-                                                                                                    queues.enqueue(spec, pending_specs_queue);
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                                iteration_state_5 = dictionary_contents.do_dictionary_contents_next(iteration_state_5);
-                                                                            }
-                                                                        } 
-                                                                        dictionary_contents.do_dictionary_contents_finalize(iteration_state_5);
-                                                                    }
-                                                                    iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                                }
-                                                            } 
-                                                            dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        } finally {
-                            sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    {
-                        SubLObject _prev_bind_0 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                        try {
-                            sbhl_module_vars.$sbhl_module$.bind(NIL != sbhl_module_vars.get_sbhl_module($$isa) ? ((SubLObject) (sbhl_module_vars.get_sbhl_module($$isa))) : sbhl_module_vars.$sbhl_module$.getDynamicValue(thread), thread);
-                            {
-                                SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(next_item, sbhl_module_vars.get_sbhl_module($$isa));
-                                if (NIL != d_link) {
-                                    {
-                                        SubLObject cdolist_list_var = sbhl_module_utilities.get_relevant_sbhl_directions(sbhl_module_vars.get_sbhl_module($$isa));
-                                        SubLObject direction = NIL;
-                                        for (direction = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , direction = cdolist_list_var.first()) {
-                                            {
-                                                SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, direction, sbhl_module_vars.get_sbhl_module($$isa));
-                                                if (NIL != mt_links) {
-                                                    if (direction == sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa))) {
-                                                        {
-                                                            SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
-                                                            while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                                                                thread.resetMultipleValues();
-                                                                {
-                                                                    SubLObject mt_var = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                    SubLObject tv_links = thread.secondMultipleValue();
-                                                                    thread.resetMultipleValues();
-                                                                    {
-                                                                        SubLObject iteration_state_7 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
-                                                                        while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_7)) {
-                                                                            thread.resetMultipleValues();
-                                                                            {
-                                                                                SubLObject tv_var = dictionary_contents.do_dictionary_contents_key_value(iteration_state_7);
-                                                                                SubLObject link_nodes_var = thread.secondMultipleValue();
-                                                                                thread.resetMultipleValues();
-                                                                                if (NIL != sbhl_search_vars.sbhl_true_tv_p(tv_var)) {
-                                                                                    {
-                                                                                        SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes_var))) : link_nodes_var;
-                                                                                        SubLObject cdolist_list_var_8 = new_list;
-                                                                                        SubLObject instance = NIL;
-                                                                                        for (instance = cdolist_list_var_8.first(); NIL != cdolist_list_var_8; cdolist_list_var_8 = cdolist_list_var_8.rest() , instance = cdolist_list_var_8.first()) {
-                                                                                            if (NIL != mt_relevance_macros.relevant_mtP(mt_var)) {
-                                                                                                if (NIL == gethash(instance, visited_table, UNPROVIDED)) {
-                                                                                                    sethash(instance, visited_table, T);
-                                                                                                    queues.enqueue(instance, pending_instances_queue);
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                                iteration_state_7 = dictionary_contents.do_dictionary_contents_next(iteration_state_7);
-                                                                            }
-                                                                        } 
-                                                                        dictionary_contents.do_dictionary_contents_finalize(iteration_state_7);
-                                                                    }
-                                                                    iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                                }
-                                                            } 
-                                                            dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        } finally {
-                            sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    {
-                        SubLObject csome_list_var = sbhl_link_methods.non_fort_instance_table_lookup(next_item);
-                        SubLObject instance_tuple = NIL;
-                        for (instance_tuple = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , instance_tuple = csome_list_var.first()) {
-                            {
-                                SubLObject datum = instance_tuple;
-                                SubLObject current = datum;
-                                SubLObject instance = NIL;
-                                SubLObject mt_var = NIL;
-                                SubLObject tv_var = NIL;
-                                destructuring_bind_must_consp(current, datum, $list_alt7);
-                                instance = current.first();
-                                current = current.rest();
-                                destructuring_bind_must_consp(current, datum, $list_alt7);
-                                mt_var = current.first();
-                                current = current.rest();
-                                destructuring_bind_must_consp(current, datum, $list_alt7);
-                                tv_var = current.first();
-                                current = current.rest();
-                                if (NIL == current) {
-                                    if (NIL != sbhl_search_vars.sbhl_true_tv_p(tv_var)) {
-                                        if (NIL != mt_relevance_macros.relevant_mtP(mt_var)) {
-                                            if (NIL == gethash(instance, visited_table, UNPROVIDED)) {
-                                                sethash(instance, visited_table, T);
-                                                queues.enqueue(instance, pending_instances_queue);
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    cdestructuring_bind_error(datum, $list_alt7);
-                                }
-                            }
-                        }
-                    }
-                    return values(next_item, state);
-                } else {
-                    if (NIL == queues.queue_empty_p(pending_instances_queue)) {
-                        next_item = queues.dequeue(pending_instances_queue);
-                        return values(next_item, state);
-                    } else {
-                        return values(NIL, state, T);
-                    }
-                }
-            }
-        }
     }
 
     public static SubLObject iterator_ontology_next(final SubLObject state) {
@@ -1501,12 +904,6 @@ public final class kb_iterators extends SubLTranslatedFile implements V12 {
         return values(NIL, state, T);
     }
 
-    static private final SubLList $list_alt4 = list(makeSymbol("PENDING-QUEUE"), makeSymbol("VISITED-TABLE"));
-
-    static private final SubLList $list_alt7 = list(makeSymbol("INSTANCE"), makeUninternedSymbol("MT-VAR"), makeUninternedSymbol("TV-VAR"));
-
-    static private final SubLList $list_alt10 = list(makeSymbol("SPECS-ITERATOR"), makeSymbol("LOCAL-INSTANCES-ITERATOR"), makeSymbol("VISITED-TABLE"));
-
     public static SubLObject new_rule_iterator() {
         final SubLObject rule_set = assertions_low.kb_rule_set();
         if (NIL != keyhash.keyhash_p(rule_set)) {
@@ -1518,32 +915,13 @@ public final class kb_iterators extends SubLTranslatedFile implements V12 {
         return Errors.error($str22$Rule_set_is_not_initialized_);
     }
 
-    public static final SubLObject new_transitive_iterator_alt(SubLObject fort, SubLObject predicate, SubLObject argnum) {
-        if (argnum == UNPROVIDED) {
-            argnum = ONE_INTEGER;
-        }
-        SubLTrampolineFile.checkType(fort, FORT_P);
-        SubLTrampolineFile.checkType(predicate, FORT_P);
-        return iteration.new_iterator(com.cyc.cycjava.cycl.kb_iterators.make_iterator_transitive_state(fort, predicate, argnum), symbol_function(ITERATOR_TRANSITIVE_DONE), symbol_function(ITERATOR_TRANSITIVE_NEXT), UNPROVIDED);
-    }
-
     public static SubLObject new_transitive_iterator(final SubLObject fort, final SubLObject predicate, SubLObject argnum) {
         if (argnum == UNPROVIDED) {
             argnum = ONE_INTEGER;
         }
-        assert NIL != forts.fort_p(fort) : "! forts.fort_p(fort) " + ("forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) ") + fort;
-        assert NIL != forts.fort_p(predicate) : "! forts.fort_p(predicate) " + ("forts.fort_p(predicate) " + "CommonSymbols.NIL != forts.fort_p(predicate) ") + predicate;
+        assert NIL != forts.fort_p(fort) : "forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) " + fort;
+        assert NIL != forts.fort_p(predicate) : "forts.fort_p(predicate) " + "CommonSymbols.NIL != forts.fort_p(predicate) " + predicate;
         return iteration.new_iterator(make_iterator_transitive_state(fort, predicate, argnum), symbol_function(ITERATOR_TRANSITIVE_DONE), symbol_function(ITERATOR_TRANSITIVE_NEXT), UNPROVIDED);
-    }
-
-    public static final SubLObject make_iterator_transitive_state_alt(SubLObject fort, SubLObject predicate, SubLObject from_arg) {
-        {
-            SubLObject pending_queue = queues.create_queue();
-            SubLObject visited_table = make_hash_table(TEN_INTEGER, UNPROVIDED, UNPROVIDED);
-            queues.enqueue(fort, pending_queue);
-            sethash(fort, visited_table, T);
-            return vector(new SubLObject[]{ pending_queue, visited_table, predicate, from_arg });
-        }
     }
 
     public static SubLObject make_iterator_transitive_state(final SubLObject fort, final SubLObject predicate, final SubLObject from_arg) {
@@ -1554,83 +932,8 @@ public final class kb_iterators extends SubLTranslatedFile implements V12 {
         return vector(new SubLObject[]{ pending_queue, visited_table, predicate, from_arg });
     }
 
-    public static final SubLObject iterator_transitive_done_alt(SubLObject state) {
-        return queues.queue_empty_p(aref(state, ZERO_INTEGER));
-    }
-
     public static SubLObject iterator_transitive_done(final SubLObject state) {
         return queues.queue_empty_p(aref(state, ZERO_INTEGER));
-    }
-
-    public static final SubLObject iterator_transitive_next_alt(SubLObject state) {
-        {
-            SubLObject pending_queue = aref(state, ZERO_INTEGER);
-            SubLObject visited_table = aref(state, ONE_INTEGER);
-            SubLObject predicate = aref(state, TWO_INTEGER);
-            SubLObject from_arg = aref(state, THREE_INTEGER);
-            SubLObject to_arg = (from_arg.eql(ONE_INTEGER)) ? ((SubLObject) (TWO_INTEGER)) : ONE_INTEGER;
-            SubLObject next_item = NIL;
-            for (; !((NIL != queues.queue_empty_p(pending_queue)) || (NIL != next_item));) {
-                next_item = queues.dequeue(pending_queue);
-                {
-                    SubLObject spec = NIL;
-                    SubLObject pred_var = predicate;
-                    if (NIL != do_gaf_arg_index_key_validator(next_item, from_arg, pred_var)) {
-                        {
-                            SubLObject iterator_var = new_gaf_arg_final_index_spec_iterator(next_item, from_arg, pred_var);
-                            SubLObject done_var = NIL;
-                            SubLObject token_var = NIL;
-                            while (NIL == done_var) {
-                                {
-                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                    if (NIL != valid) {
-                                        {
-                                            SubLObject final_index_iterator = NIL;
-                                            try {
-                                                final_index_iterator = new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
-                                                {
-                                                    SubLObject done_var_9 = NIL;
-                                                    SubLObject token_var_10 = NIL;
-                                                    while (NIL == done_var_9) {
-                                                        {
-                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_10);
-                                                            SubLObject valid_11 = makeBoolean(token_var_10 != assertion);
-                                                            if (NIL != valid_11) {
-                                                                spec = gaf_arg(assertion, to_arg);
-                                                                if (NIL == gethash(spec, visited_table, UNPROVIDED)) {
-                                                                    sethash(spec, visited_table, T);
-                                                                    queues.enqueue(spec, pending_queue);
-                                                                }
-                                                            }
-                                                            done_var_9 = makeBoolean(NIL == valid_11);
-                                                        }
-                                                    } 
-                                                }
-                                            } finally {
-                                                {
-                                                    SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
-                                                    try {
-                                                        bind($is_thread_performing_cleanupP$, T);
-                                                        if (NIL != final_index_iterator) {
-                                                            destroy_final_index_iterator(final_index_iterator);
-                                                        }
-                                                    } finally {
-                                                        rebind($is_thread_performing_cleanupP$, _prev_bind_0);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    done_var = makeBoolean(NIL == valid);
-                                }
-                            } 
-                        }
-                    }
-                }
-            }
-            return values(next_item, state, NIL);
-        }
     }
 
     public static SubLObject iterator_transitive_next(final SubLObject state) {
@@ -1691,32 +994,32 @@ public final class kb_iterators extends SubLTranslatedFile implements V12 {
     }
 
     public static SubLObject declare_kb_iterators_file() {
-        declareFunction("new_gaf_arg_index_iterator", "NEW-GAF-ARG-INDEX-ITERATOR", 2, 2, false);
-        declareFunction("new_nart_arg_index_iterator", "NEW-NART-ARG-INDEX-ITERATOR", 2, 1, false);
-        declareFunction("new_predicate_extent_index_iterator", "NEW-PREDICATE-EXTENT-INDEX-ITERATOR", 1, 1, false);
-        declareFunction("new_function_extent_index_iterator", "NEW-FUNCTION-EXTENT-INDEX-ITERATOR", 1, 0, false);
-        declareFunction("new_mt_index_iterator", "NEW-MT-INDEX-ITERATOR", 1, 0, false);
-        declareFunction("new_best_gaf_lookup_index_iterator", "NEW-BEST-GAF-LOOKUP-INDEX-ITERATOR", 1, 2, false);
-        declareFunction("new_genls_iterator", "NEW-GENLS-ITERATOR", 1, 0, false);
-        declareFunction("new_isa_iterator", "NEW-ISA-ITERATOR", 1, 0, false);
-        declareFunction("new_specs_iterator", "NEW-SPECS-ITERATOR", 1, 0, false);
-        declareFunction("make_iterator_specs_state", "MAKE-ITERATOR-SPECS-STATE", 1, 0, false);
-        declareFunction("iterator_specs_done", "ITERATOR-SPECS-DONE", 1, 0, false);
-        declareFunction("iterator_specs_next", "ITERATOR-SPECS-NEXT", 1, 0, false);
-        declareFunction("new_local_instances_iterator", "NEW-LOCAL-INSTANCES-ITERATOR", 1, 0, false);
-        declareFunction("new_instances_iterator", "NEW-INSTANCES-ITERATOR", 1, 0, false);
-        declareFunction("make_iterator_instances_state", "MAKE-ITERATOR-INSTANCES-STATE", 1, 0, false);
-        declareFunction("iterator_instances_done", "ITERATOR-INSTANCES-DONE", 1, 0, false);
-        declareFunction("iterator_instances_next", "ITERATOR-INSTANCES-NEXT", 1, 0, false);
-        declareFunction("new_ontology_iterator", "NEW-ONTOLOGY-ITERATOR", 1, 0, false);
-        declareFunction("make_iterator_ontology_state", "MAKE-ITERATOR-ONTOLOGY-STATE", 1, 0, false);
-        declareFunction("iterator_ontology_done", "ITERATOR-ONTOLOGY-DONE", 1, 0, false);
-        declareFunction("iterator_ontology_next", "ITERATOR-ONTOLOGY-NEXT", 1, 0, false);
-        declareFunction("new_rule_iterator", "NEW-RULE-ITERATOR", 0, 0, false);
-        declareFunction("new_transitive_iterator", "NEW-TRANSITIVE-ITERATOR", 2, 1, false);
-        declareFunction("make_iterator_transitive_state", "MAKE-ITERATOR-TRANSITIVE-STATE", 3, 0, false);
-        declareFunction("iterator_transitive_done", "ITERATOR-TRANSITIVE-DONE", 1, 0, false);
-        declareFunction("iterator_transitive_next", "ITERATOR-TRANSITIVE-NEXT", 1, 0, false);
+        declareFunction(me, "new_gaf_arg_index_iterator", "NEW-GAF-ARG-INDEX-ITERATOR", 2, 2, false);
+        declareFunction(me, "new_nart_arg_index_iterator", "NEW-NART-ARG-INDEX-ITERATOR", 2, 1, false);
+        declareFunction(me, "new_predicate_extent_index_iterator", "NEW-PREDICATE-EXTENT-INDEX-ITERATOR", 1, 1, false);
+        declareFunction(me, "new_function_extent_index_iterator", "NEW-FUNCTION-EXTENT-INDEX-ITERATOR", 1, 0, false);
+        declareFunction(me, "new_mt_index_iterator", "NEW-MT-INDEX-ITERATOR", 1, 0, false);
+        declareFunction(me, "new_best_gaf_lookup_index_iterator", "NEW-BEST-GAF-LOOKUP-INDEX-ITERATOR", 1, 2, false);
+        declareFunction(me, "new_genls_iterator", "NEW-GENLS-ITERATOR", 1, 0, false);
+        declareFunction(me, "new_isa_iterator", "NEW-ISA-ITERATOR", 1, 0, false);
+        declareFunction(me, "new_specs_iterator", "NEW-SPECS-ITERATOR", 1, 0, false);
+        declareFunction(me, "make_iterator_specs_state", "MAKE-ITERATOR-SPECS-STATE", 1, 0, false);
+        declareFunction(me, "iterator_specs_done", "ITERATOR-SPECS-DONE", 1, 0, false);
+        declareFunction(me, "iterator_specs_next", "ITERATOR-SPECS-NEXT", 1, 0, false);
+        declareFunction(me, "new_local_instances_iterator", "NEW-LOCAL-INSTANCES-ITERATOR", 1, 0, false);
+        declareFunction(me, "new_instances_iterator", "NEW-INSTANCES-ITERATOR", 1, 0, false);
+        declareFunction(me, "make_iterator_instances_state", "MAKE-ITERATOR-INSTANCES-STATE", 1, 0, false);
+        declareFunction(me, "iterator_instances_done", "ITERATOR-INSTANCES-DONE", 1, 0, false);
+        declareFunction(me, "iterator_instances_next", "ITERATOR-INSTANCES-NEXT", 1, 0, false);
+        declareFunction(me, "new_ontology_iterator", "NEW-ONTOLOGY-ITERATOR", 1, 0, false);
+        declareFunction(me, "make_iterator_ontology_state", "MAKE-ITERATOR-ONTOLOGY-STATE", 1, 0, false);
+        declareFunction(me, "iterator_ontology_done", "ITERATOR-ONTOLOGY-DONE", 1, 0, false);
+        declareFunction(me, "iterator_ontology_next", "ITERATOR-ONTOLOGY-NEXT", 1, 0, false);
+        declareFunction(me, "new_rule_iterator", "NEW-RULE-ITERATOR", 0, 0, false);
+        declareFunction(me, "new_transitive_iterator", "NEW-TRANSITIVE-ITERATOR", 2, 1, false);
+        declareFunction(me, "make_iterator_transitive_state", "MAKE-ITERATOR-TRANSITIVE-STATE", 3, 0, false);
+        declareFunction(me, "iterator_transitive_done", "ITERATOR-TRANSITIVE-DONE", 1, 0, false);
+        declareFunction(me, "iterator_transitive_next", "ITERATOR-TRANSITIVE-NEXT", 1, 0, false);
         return NIL;
     }
 
@@ -1744,6 +1047,33 @@ public final class kb_iterators extends SubLTranslatedFile implements V12 {
     }
 
     static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
 

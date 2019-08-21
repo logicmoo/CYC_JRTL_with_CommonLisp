@@ -515,7 +515,7 @@ public final class gaf_gathering_master extends SubLTranslatedFile implements V0
         {
             SubLObject min_number_of_phrase_words = $most_positive_fixnum$.getGlobalValue();
             SubLObject sentence = list(pred, $sym53$_ARG1, $sym54$_ARG);
-	    SubLObject phrases = pph_methods_lexicon.all_phrases_for_formula(sentence, paraphrase_mt, UNPROVIDED, UNPROVIDED);
+	    SubLObject phrases = pph_methods_lexicon.all_phrases_for_formula(sentence, paraphrase_mt, UNPROVIDED, UNPROVIDED, UNPROVIDED_SYM);
             SubLObject cdolist_list_var = phrases;
             SubLObject phrase = NIL;
             for (phrase = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , phrase = cdolist_list_var.first()) {

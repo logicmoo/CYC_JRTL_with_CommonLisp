@@ -1,37 +1,6 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl.sksi.data_warehousing;
 
 
-import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
-import static com.cyc.cycjava.cycl.el_utilities.atomic_sentenceP;
-import static com.cyc.cycjava.cycl.el_utilities.el_formula_p;
-import static com.cyc.cycjava.cycl.el_utilities.make_el_formula;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.bind;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.currentBinding;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.rebind;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.plusp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.nreverse;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.current_process;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.arg2;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.multiple_value_list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_listp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.second;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-
-import com.cyc.cycjava.cycl.V12;
 import com.cyc.cycjava.cycl.assertions_high;
 import com.cyc.cycjava.cycl.cycl_utilities;
 import com.cyc.cycjava.cycl.iteration;
@@ -40,6 +9,7 @@ import com.cyc.cycjava.cycl.keyhash_utilities;
 import com.cyc.cycjava.cycl.list_utilities;
 import com.cyc.cycjava.cycl.memoization_state;
 import com.cyc.cycjava.cycl.mt_relevance_macros;
+import com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_cross_editing;
 import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_access_path;
 import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_csql_generation;
 import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_csql_interpretation;
@@ -54,25 +24,53 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_cross_editing.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- * module:      SKSI-CROSS-EDITING
- * source file: /cyc/top/cycl/sksi/data-warehousing/sksi-cross-editing.lisp
- * created:     2019/07/03 17:38:34
- */
-public final class sksi_cross_editing extends SubLTranslatedFile implements V12 {
+
+public final class sksi_cross_editing extends SubLTranslatedFile {
     public static final SubLFile me = new sksi_cross_editing();
+
+    public static final String myName = "com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_cross_editing";
+
+    public static final String myFingerPrint = "01329f4083b886fc365a63c75ad2fcc34ea20771a5a49d56453e5734a6762f0c";
+
+
+
+
+
+
 
 
 
     private static final SubLSymbol $sym4$ATOMIC_SENTENCE_MEMOIZED_ = makeSymbol("ATOMIC-SENTENCE-MEMOIZED?");
 
-    private static final SubLObject $$subKS_Direct = reader_make_constant_shell("subKS-Direct");
+    private static final SubLObject $$subKS_Direct = reader_make_constant_shell(makeString("subKS-Direct"));
+
+
+
+
 
     private static final SubLList $list8 = list(makeSymbol("PHYSICAL-SCHEMA"), makeSymbol("LOGICAL-SCHEMA"));
 
@@ -82,81 +80,8 @@ public final class sksi_cross_editing extends SubLTranslatedFile implements V12 
 
     private static final SubLString $str11$Unsupported_operator__A__ = makeString("Unsupported operator ~A~%");
 
+    private static final SubLObject $$SourceSchemaObjectFn = reader_make_constant_shell(makeString("SourceSchemaObjectFn"));
 
-
-    // Definitions
-    public static final SubLObject sksi_store_complex_logical_sentence_alt(SubLObject logical_sentence, SubLObject sk_source, SubLObject meta_mt) {
-        if (meta_mt == UNPROVIDED) {
-            meta_mt = sksi_kb_accessors.sk_source_mapping_mt(sk_source);
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                SubLObject state = memoization_state.possibly_new_memoization_state();
-                SubLObject local_state = state;
-                {
-                    SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
-                    try {
-                        memoization_state.$memoization_state$.bind(local_state, thread);
-                        {
-                            SubLObject original_memoization_process = NIL;
-                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                {
-                                    SubLObject current_proc = current_process();
-                                    if (NIL == original_memoization_process) {
-                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                    } else {
-                                        if (original_memoization_process != current_proc) {
-                                            Errors.error($str_alt0$Invalid_attempt_to_reuse_memoizat);
-                                        }
-                                    }
-                                }
-                            }
-                            try {
-                                {
-                                    SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(meta_mt);
-                                    {
-                                        SubLObject _prev_bind_0_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                                        SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                                        SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
-                                        try {
-                                            mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
-                                            mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
-                                            mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
-                                            result = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_cross_editing.sksi_store_or_delete_complex_logical_sentence_recursive(logical_sentence, sk_source, $INSERT);
-                                        } finally {
-                                            mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
-                                            mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
-                                            mt_relevance_macros.$mt$.rebind(_prev_bind_0_1, thread);
-                                        }
-                                    }
-                                }
-                            } finally {
-                                {
-                                    SubLObject _prev_bind_0_2 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                    try {
-                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                        if ((NIL != local_state) && (NIL == original_memoization_process)) {
-                                            memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
-                                        }
-                                    } finally {
-                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_2, thread);
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return result;
-            }
-        }
-    }
-
-    // Definitions
     public static SubLObject sksi_store_complex_logical_sentence(final SubLObject logical_sentence, final SubLObject sk_source, SubLObject meta_mt) {
         if (meta_mt == UNPROVIDED) {
             meta_mt = sksi_kb_accessors.sk_source_mapping_mt(sk_source);
@@ -199,77 +124,6 @@ public final class sksi_cross_editing extends SubLTranslatedFile implements V12 
             memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
         }
         return result;
-    }
-
-    public static final SubLObject sksi_delete_complex_logical_sentence_alt(SubLObject logical_sentence, SubLObject sk_source, SubLObject meta_mt) {
-        if (meta_mt == UNPROVIDED) {
-            meta_mt = sksi_kb_accessors.sk_source_mapping_mt(sk_source);
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                SubLObject state = memoization_state.possibly_new_memoization_state();
-                SubLObject local_state = state;
-                {
-                    SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
-                    try {
-                        memoization_state.$memoization_state$.bind(local_state, thread);
-                        {
-                            SubLObject original_memoization_process = NIL;
-                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                {
-                                    SubLObject current_proc = current_process();
-                                    if (NIL == original_memoization_process) {
-                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                    } else {
-                                        if (original_memoization_process != current_proc) {
-                                            Errors.error($str_alt0$Invalid_attempt_to_reuse_memoizat);
-                                        }
-                                    }
-                                }
-                            }
-                            try {
-                                {
-                                    SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(meta_mt);
-                                    {
-                                        SubLObject _prev_bind_0_3 = mt_relevance_macros.$mt$.currentBinding(thread);
-                                        SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                                        SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
-                                        try {
-                                            mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
-                                            mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
-                                            mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
-                                            result = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_cross_editing.sksi_store_or_delete_complex_logical_sentence_recursive(logical_sentence, sk_source, $DELETE);
-                                        } finally {
-                                            mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
-                                            mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
-                                            mt_relevance_macros.$mt$.rebind(_prev_bind_0_3, thread);
-                                        }
-                                    }
-                                }
-                            } finally {
-                                {
-                                    SubLObject _prev_bind_0_4 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                    try {
-                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                        if ((NIL != local_state) && (NIL == original_memoization_process)) {
-                                            memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
-                                        }
-                                    } finally {
-                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_4, thread);
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return result;
-            }
-        }
     }
 
     public static SubLObject sksi_delete_complex_logical_sentence(final SubLObject logical_sentence, final SubLObject sk_source, SubLObject meta_mt) {
@@ -316,52 +170,6 @@ public final class sksi_cross_editing extends SubLTranslatedFile implements V12 
         return result;
     }
 
-    public static final SubLObject sksi_store_or_delete_complex_logical_sentence_recursive_alt(SubLObject sentence, SubLObject sk_source, SubLObject operator) {
-        {
-            SubLObject new_sentence_args = NIL;
-            SubLObject new_sentence = NIL;
-            SubLObject result = NIL;
-            SubLObject failP = NIL;
-            SubLObject args = cycl_utilities.formula_args(sentence, $IGNORE);
-            SubLObject rest = NIL;
-            for (rest = args; !((NIL != failP) || (NIL == rest)); rest = rest.rest()) {
-                {
-                    SubLObject arg = rest.first();
-                    if (NIL != com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_cross_editing.sentence_with_asent_argsP(arg)) {
-                        {
-                            SubLObject new_arg = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_cross_editing.sksi_store_or_delete_complex_logical_sentence_recursive(arg, sk_source, operator);
-                            if (NIL != new_arg) {
-                                new_sentence_args = cons(new_arg, new_sentence_args);
-                            } else {
-                                failP = T;
-                            }
-                        }
-                    } else {
-                        if (NIL != com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_cross_editing.atomic_sentence_memoizedP(arg)) {
-                            {
-                                SubLObject new_arg = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_cross_editing.sksi_find_or_store_or_delete_atomic_sentence(arg, sk_source, operator == $DELETE ? ((SubLObject) ($FIND)) : operator, UNPROVIDED);
-                                if (NIL != new_arg) {
-                                    new_sentence_args = cons(new_arg, new_sentence_args);
-                                } else {
-                                    failP = T;
-                                }
-                            }
-                        } else {
-                            new_sentence_args = cons(arg, new_sentence_args);
-                        }
-                    }
-                }
-            }
-            if (NIL == failP) {
-                new_sentence_args = nreverse(new_sentence_args);
-                new_sentence = make_el_formula(cycl_utilities.formula_operator(sentence), new_sentence_args, UNPROVIDED);
-                result = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_cross_editing.sksi_find_or_store_or_delete_atomic_sentence(new_sentence, sk_source, operator, UNPROVIDED);
-                return result;
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject sksi_store_or_delete_complex_logical_sentence_recursive(final SubLObject sentence, final SubLObject sk_source, final SubLObject operator) {
         SubLObject new_sentence_args = NIL;
         SubLObject new_sentence = NIL;
@@ -402,19 +210,8 @@ public final class sksi_cross_editing extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    public static final SubLObject sentence_with_asent_argsP_alt(SubLObject sentence) {
-        return list_utilities.sublisp_boolean(com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_cross_editing.asent_args_of_sentence(sentence));
-    }
-
     public static SubLObject sentence_with_asent_argsP(final SubLObject sentence) {
         return list_utilities.sublisp_boolean(asent_args_of_sentence(sentence));
-    }
-
-    public static final SubLObject asent_args_of_sentence_alt(SubLObject sentence) {
-        if (NIL != el_formula_p(sentence)) {
-            return keyhash_utilities.fast_intersection(cycl_utilities.sentence_args(sentence, UNPROVIDED), cycl_utilities.expression_gather(sentence, $sym5$ATOMIC_SENTENCE_MEMOIZED_, T, UNPROVIDED, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED);
-        }
-        return NIL;
     }
 
     public static SubLObject asent_args_of_sentence(final SubLObject sentence) {
@@ -424,38 +221,8 @@ public final class sksi_cross_editing extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    public static final SubLObject atomic_sentence_memoizedP_internal_alt(SubLObject sentence) {
-        return atomic_sentenceP(sentence);
-    }
-
     public static SubLObject atomic_sentence_memoizedP_internal(final SubLObject sentence) {
         return atomic_sentenceP(sentence);
-    }
-
-    public static final SubLObject atomic_sentence_memoizedP_alt(SubLObject sentence) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
-                SubLObject caching_state = NIL;
-                if (NIL == v_memoization_state) {
-                    return com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_cross_editing.atomic_sentence_memoizedP_internal(sentence);
-                }
-                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, $sym5$ATOMIC_SENTENCE_MEMOIZED_, UNPROVIDED);
-                if (NIL == caching_state) {
-                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), $sym5$ATOMIC_SENTENCE_MEMOIZED_, ONE_INTEGER, NIL, EQUAL, UNPROVIDED);
-                    memoization_state.memoization_state_put(v_memoization_state, $sym5$ATOMIC_SENTENCE_MEMOIZED_, caching_state);
-                }
-                {
-                    SubLObject results = memoization_state.caching_state_lookup(caching_state, sentence, $kw6$_MEMOIZED_ITEM_NOT_FOUND_);
-                    if (results == $kw6$_MEMOIZED_ITEM_NOT_FOUND_) {
-                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_cross_editing.atomic_sentence_memoizedP_internal(sentence)));
-                        memoization_state.caching_state_put(caching_state, sentence, results, UNPROVIDED);
-                    }
-                    return memoization_state.caching_results(results);
-                }
-            }
-        }
     }
 
     public static SubLObject atomic_sentence_memoizedP(final SubLObject sentence) {
@@ -476,77 +243,6 @@ public final class sksi_cross_editing extends SubLTranslatedFile implements V12 
             memoization_state.caching_state_put(caching_state, sentence, results, UNPROVIDED);
         }
         return memoization_state.caching_results(results);
-    }
-
-    public static final SubLObject sksi_find_or_store_or_delete_atomic_sentence_alt(SubLObject sentence, SubLObject sk_source, SubLObject operator, SubLObject meta_mt) {
-        if (meta_mt == UNPROVIDED) {
-            meta_mt = sksi_kb_accessors.sk_source_mapping_mt(sk_source);
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                SubLObject state = memoization_state.possibly_new_memoization_state();
-                SubLObject local_state = state;
-                {
-                    SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
-                    try {
-                        memoization_state.$memoization_state$.bind(local_state, thread);
-                        {
-                            SubLObject original_memoization_process = NIL;
-                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                {
-                                    SubLObject current_proc = current_process();
-                                    if (NIL == original_memoization_process) {
-                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                    } else {
-                                        if (original_memoization_process != current_proc) {
-                                            Errors.error($str_alt0$Invalid_attempt_to_reuse_memoizat);
-                                        }
-                                    }
-                                }
-                            }
-                            try {
-                                {
-                                    SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(meta_mt);
-                                    {
-                                        SubLObject _prev_bind_0_5 = mt_relevance_macros.$mt$.currentBinding(thread);
-                                        SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                                        SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
-                                        try {
-                                            mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
-                                            mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
-                                            mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
-                                            result = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_cross_editing.sksi_find_or_store_or_delete_atomic_sentence_recursive(sentence, sk_source, operator, meta_mt);
-                                        } finally {
-                                            mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
-                                            mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
-                                            mt_relevance_macros.$mt$.rebind(_prev_bind_0_5, thread);
-                                        }
-                                    }
-                                }
-                            } finally {
-                                {
-                                    SubLObject _prev_bind_0_6 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                    try {
-                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                        if ((NIL != local_state) && (NIL == original_memoization_process)) {
-                                            memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
-                                        }
-                                    } finally {
-                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_6, thread);
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return result;
-            }
-        }
     }
 
     public static SubLObject sksi_find_or_store_or_delete_atomic_sentence(final SubLObject sentence, final SubLObject sk_source, final SubLObject operator, SubLObject meta_mt) {
@@ -593,75 +289,9 @@ public final class sksi_cross_editing extends SubLTranslatedFile implements V12 
         return result;
     }
 
-    public static final SubLObject sksi_find_or_store_or_delete_atomic_sentence_recursive_alt(SubLObject sentence, SubLObject sk_source, SubLObject operator, SubLObject meta_mt) {
-        {
-            SubLObject ps_ls_pairs = sksi_kb_accessors.sk_source_physical_logical_schema_pairs(sk_source);
-            return NIL != ps_ls_pairs ? ((SubLObject) (com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_cross_editing.sksi_find_or_store_or_delete_atomic_sentence_int(sentence, sk_source, ps_ls_pairs, operator, meta_mt))) : com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_cross_editing.sksi_find_or_store_or_delete_atomic_sentence_descend(sentence, sk_source, operator, meta_mt);
-        }
-    }
-
     public static SubLObject sksi_find_or_store_or_delete_atomic_sentence_recursive(final SubLObject sentence, final SubLObject sk_source, final SubLObject operator, final SubLObject meta_mt) {
         final SubLObject ps_ls_pairs = sksi_kb_accessors.sk_source_physical_logical_schema_pairs(sk_source);
         return NIL != ps_ls_pairs ? sksi_find_or_store_or_delete_atomic_sentence_int(sentence, sk_source, ps_ls_pairs, operator, meta_mt) : sksi_find_or_store_or_delete_atomic_sentence_descend(sentence, sk_source, operator, meta_mt);
-    }
-
-    public static final SubLObject sksi_find_or_store_or_delete_atomic_sentence_descend_alt(SubLObject sentence, SubLObject sk_source, SubLObject operator, SubLObject meta_mt) {
-        {
-            SubLObject result = NIL;
-            SubLObject pred_var = $$subKS_Direct;
-            if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(sk_source, ONE_INTEGER, pred_var)) {
-                {
-                    SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(sk_source, ONE_INTEGER, pred_var);
-                    SubLObject done_var = result;
-                    SubLObject token_var = NIL;
-                    while (NIL == done_var) {
-                        {
-                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                            SubLObject valid = makeBoolean(token_var != final_index_spec);
-                            if (NIL != valid) {
-                                {
-                                    SubLObject final_index_iterator = NIL;
-                                    try {
-                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
-                                        {
-                                            SubLObject done_var_7 = result;
-                                            SubLObject token_var_8 = NIL;
-                                            while (NIL == done_var_7) {
-                                                {
-                                                    SubLObject gaf = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_8);
-                                                    SubLObject valid_9 = makeBoolean(token_var_8 != gaf);
-                                                    if (NIL != valid_9) {
-                                                        {
-                                                            SubLObject sub_ks = assertions_high.gaf_arg2(gaf);
-                                                            result = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_cross_editing.sksi_find_or_store_or_delete_atomic_sentence_recursive(sentence, sub_ks, operator, meta_mt);
-                                                        }
-                                                    }
-                                                    done_var_7 = makeBoolean((NIL == valid_9) || (NIL != result));
-                                                }
-                                            } 
-                                        }
-                                    } finally {
-                                        {
-                                            SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
-                                            try {
-                                                bind($is_thread_performing_cleanupP$, T);
-                                                if (NIL != final_index_iterator) {
-                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                }
-                                            } finally {
-                                                rebind($is_thread_performing_cleanupP$, _prev_bind_0);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            done_var = makeBoolean((NIL == valid) || (NIL != result));
-                        }
-                    } 
-                }
-            }
-            return result;
-        }
     }
 
     public static SubLObject sksi_find_or_store_or_delete_atomic_sentence_descend(final SubLObject sentence, final SubLObject sk_source, final SubLObject operator, final SubLObject meta_mt) {
@@ -709,42 +339,6 @@ public final class sksi_cross_editing extends SubLTranslatedFile implements V12 
         return result;
     }
 
-    public static final SubLObject sksi_find_or_store_or_delete_atomic_sentence_int_alt(SubLObject sentence, SubLObject sk_source, SubLObject ps_ls_pairs, SubLObject operator, SubLObject meta_mt) {
-        {
-            SubLObject access_path = sksi_access_path.external_source_access_path(sk_source, UNPROVIDED, UNPROVIDED);
-            SubLObject sentence_template = sksi_data_warehousing_utilities.make_sentence_template(sentence);
-            SubLObject result = NIL;
-            if (NIL == result) {
-                {
-                    SubLObject csome_list_var = ps_ls_pairs;
-                    SubLObject ps_ls_pair = NIL;
-                    for (ps_ls_pair = csome_list_var.first(); !((NIL != result) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , ps_ls_pair = csome_list_var.first()) {
-                        {
-                            SubLObject datum = ps_ls_pair;
-                            SubLObject current = datum;
-                            SubLObject physical_schema = NIL;
-                            SubLObject logical_schema = NIL;
-                            destructuring_bind_must_consp(current, datum, $list_alt10);
-                            physical_schema = current.first();
-                            current = current.rest();
-                            destructuring_bind_must_consp(current, datum, $list_alt10);
-                            logical_schema = current.first();
-                            current = current.rest();
-                            if (NIL == current) {
-                                if (NIL != sksi_data_warehousing_utilities.sksi_template_appropriate_for_schemasP(sentence_template, logical_schema, physical_schema, T)) {
-                                    result = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_cross_editing.sksi_find_or_store_or_delete_atomic_sentence_in_table(sentence, sk_source, access_path, logical_schema, physical_schema, operator, meta_mt);
-                                }
-                            } else {
-                                cdestructuring_bind_error(datum, $list_alt10);
-                            }
-                        }
-                    }
-                }
-            }
-            return result;
-        }
-    }
-
     public static SubLObject sksi_find_or_store_or_delete_atomic_sentence_int(final SubLObject sentence, final SubLObject sk_source, final SubLObject ps_ls_pairs, final SubLObject operator, final SubLObject meta_mt) {
         final SubLObject access_path = sksi_access_path.external_source_access_path(sk_source, UNPROVIDED, UNPROVIDED);
         final SubLObject sentence_template = sksi_data_warehousing_utilities.make_sentence_template(sentence);
@@ -776,129 +370,6 @@ public final class sksi_cross_editing extends SubLTranslatedFile implements V12 
             } 
         }
         return result;
-    }
-
-    public static final SubLObject sksi_find_or_store_or_delete_atomic_sentence_in_table_alt(SubLObject sentence, SubLObject sk_source, SubLObject access_path, SubLObject logical_schema, SubLObject physical_schema, SubLObject operator, SubLObject meta_mt) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                SubLObject mt_var = meta_mt;
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
-                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
-                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
-                        thread.resetMultipleValues();
-                        {
-                            SubLObject raw_tuples = sksi_incremental_edit.sksi_translate_logical_sentence_to_raw_tuples(sentence, logical_schema, physical_schema, meta_mt, sk_source, T);
-                            SubLObject physical_fields = thread.secondMultipleValue();
-                            thread.resetMultipleValues();
-                            if (NIL == result) {
-                                {
-                                    SubLObject csome_list_var = raw_tuples;
-                                    SubLObject raw_tuple_conditions_pair = NIL;
-                                    for (raw_tuple_conditions_pair = csome_list_var.first(); !((NIL != result) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , raw_tuple_conditions_pair = csome_list_var.first()) {
-                                        {
-                                            SubLObject datum = raw_tuple_conditions_pair;
-                                            SubLObject current = datum;
-                                            SubLObject raw_tuple = NIL;
-                                            destructuring_bind_must_consp(current, datum, $list_alt11);
-                                            raw_tuple = current.first();
-                                            current = current.rest();
-                                            {
-                                                SubLObject csql_conditions = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
-                                                destructuring_bind_must_listp(current, datum, $list_alt11);
-                                                current = current.rest();
-                                                if (NIL == current) {
-                                                    {
-                                                        SubLObject pcase_var = operator;
-                                                        if (pcase_var.eql($FIND)) {
-                                                            thread.resetMultipleValues();
-                                                            {
-                                                                SubLObject primary_key_value = sksi_csql_generation.sksi_find_primary_key_value_for_raw_tuple(sk_source, physical_schema, physical_fields, raw_tuple, csql_conditions);
-                                                                SubLObject foundP = thread.secondMultipleValue();
-                                                                thread.resetMultipleValues();
-                                                                if (NIL != foundP) {
-                                                                    result = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_cross_editing.sksi_determine_cycl_for_primary_key(primary_key_value, sk_source, logical_schema);
-                                                                }
-                                                            }
-                                                        } else {
-                                                            if (pcase_var.eql($DELETE)) {
-                                                                {
-                                                                    SubLObject csql = sksi_csql_generation.sksi_determine_csql_for_incremental_edit(sk_source, physical_schema, physical_fields, raw_tuple, $DELETE, csql_conditions);
-                                                                    if (NIL == sksi_csql_utilities.invalid_csql_expressionP(csql)) {
-                                                                        {
-                                                                            SubLObject sql_flavor = sksi_access_path.access_path_sql_flavor(access_path);
-                                                                            SubLObject sql = sksi_csql_interpretation.csql_to_sql(csql, sql_flavor, UNPROVIDED);
-                                                                            if (sql.isString()) {
-                                                                                {
-                                                                                    SubLObject update_result = sksi_sks_interaction.sksi_execute_sql_update(sql, access_path);
-                                                                                    result = plusp(update_result);
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            } else {
-                                                                if (pcase_var.eql($INSERT)) {
-                                                                    thread.resetMultipleValues();
-                                                                    {
-                                                                        SubLObject primary_key_value = sksi_csql_generation.sksi_find_primary_key_value_for_raw_tuple(sk_source, physical_schema, physical_fields, raw_tuple, csql_conditions);
-                                                                        SubLObject foundP = thread.secondMultipleValue();
-                                                                        thread.resetMultipleValues();
-                                                                        if (NIL != foundP) {
-                                                                            result = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_cross_editing.sksi_determine_cycl_for_primary_key(primary_key_value, sk_source, logical_schema);
-                                                                        } else {
-                                                                            {
-                                                                                SubLObject csql = sksi_csql_generation.sksi_determine_csql_for_incremental_edit(sk_source, physical_schema, physical_fields, raw_tuple, $INSERT, csql_conditions);
-                                                                                if (NIL == sksi_csql_utilities.invalid_csql_expressionP(csql)) {
-                                                                                    {
-                                                                                        SubLObject sql_flavor = sksi_access_path.access_path_sql_flavor(access_path);
-                                                                                        SubLObject sql = sksi_csql_interpretation.csql_to_sql(csql, sql_flavor, UNPROVIDED);
-                                                                                        if (sql.isString()) {
-                                                                                            {
-                                                                                                SubLObject update_result = sksi_sks_interaction.sksi_execute_sql_update(sql, access_path);
-                                                                                                if (update_result.isPositive()) {
-                                                                                                    {
-                                                                                                        SubLObject pkey_value = sksi_csql_generation.sksi_find_primary_key_value_for_raw_tuple(sk_source, physical_schema, physical_fields, raw_tuple, csql_conditions);
-                                                                                                        result = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_cross_editing.sksi_determine_cycl_for_primary_key(pkey_value, sk_source, logical_schema);
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                } else {
-                                                                    Errors.cerror($$$continue, $str_alt13$Unsupported_operator__A__, operator);
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                } else {
-                                                    cdestructuring_bind_error(datum, $list_alt11);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return result;
-            }
-        }
     }
 
     public static SubLObject sksi_find_or_store_or_delete_atomic_sentence_in_table(final SubLObject sentence, final SubLObject sk_source, final SubLObject access_path, final SubLObject logical_schema, final SubLObject physical_schema, final SubLObject operator, final SubLObject meta_mt) {
@@ -991,13 +462,6 @@ public final class sksi_cross_editing extends SubLTranslatedFile implements V12 
         return result;
     }
 
-    public static final SubLObject sksi_determine_cycl_for_primary_key_alt(SubLObject pkey_value, SubLObject sk_source, SubLObject logical_schema) {
-        if (NIL != pkey_value) {
-            return make_el_formula($$SourceSchemaObjectFn, list(sksi_kb_accessors.max_genl_ks(sk_source), logical_schema, second(pkey_value.first())), UNPROVIDED);
-        }
-        return NIL;
-    }
-
     public static SubLObject sksi_determine_cycl_for_primary_key(final SubLObject pkey_value, final SubLObject sk_source, final SubLObject logical_schema) {
         if (NIL != pkey_value) {
             return make_el_formula($$SourceSchemaObjectFn, list(sksi_kb_accessors.max_genl_ks(sk_source), logical_schema, second(pkey_value.first())), UNPROVIDED);
@@ -1006,19 +470,19 @@ public final class sksi_cross_editing extends SubLTranslatedFile implements V12 
     }
 
     public static SubLObject declare_sksi_cross_editing_file() {
-        declareFunction("sksi_store_complex_logical_sentence", "SKSI-STORE-COMPLEX-LOGICAL-SENTENCE", 2, 1, false);
-        declareFunction("sksi_delete_complex_logical_sentence", "SKSI-DELETE-COMPLEX-LOGICAL-SENTENCE", 2, 1, false);
-        declareFunction("sksi_store_or_delete_complex_logical_sentence_recursive", "SKSI-STORE-OR-DELETE-COMPLEX-LOGICAL-SENTENCE-RECURSIVE", 3, 0, false);
-        declareFunction("sentence_with_asent_argsP", "SENTENCE-WITH-ASENT-ARGS?", 1, 0, false);
-        declareFunction("asent_args_of_sentence", "ASENT-ARGS-OF-SENTENCE", 1, 0, false);
-        declareFunction("atomic_sentence_memoizedP_internal", "ATOMIC-SENTENCE-MEMOIZED?-INTERNAL", 1, 0, false);
-        declareFunction("atomic_sentence_memoizedP", "ATOMIC-SENTENCE-MEMOIZED?", 1, 0, false);
-        declareFunction("sksi_find_or_store_or_delete_atomic_sentence", "SKSI-FIND-OR-STORE-OR-DELETE-ATOMIC-SENTENCE", 3, 1, false);
-        declareFunction("sksi_find_or_store_or_delete_atomic_sentence_recursive", "SKSI-FIND-OR-STORE-OR-DELETE-ATOMIC-SENTENCE-RECURSIVE", 4, 0, false);
-        declareFunction("sksi_find_or_store_or_delete_atomic_sentence_descend", "SKSI-FIND-OR-STORE-OR-DELETE-ATOMIC-SENTENCE-DESCEND", 4, 0, false);
-        declareFunction("sksi_find_or_store_or_delete_atomic_sentence_int", "SKSI-FIND-OR-STORE-OR-DELETE-ATOMIC-SENTENCE-INT", 5, 0, false);
-        declareFunction("sksi_find_or_store_or_delete_atomic_sentence_in_table", "SKSI-FIND-OR-STORE-OR-DELETE-ATOMIC-SENTENCE-IN-TABLE", 7, 0, false);
-        declareFunction("sksi_determine_cycl_for_primary_key", "SKSI-DETERMINE-CYCL-FOR-PRIMARY-KEY", 3, 0, false);
+        declareFunction(me, "sksi_store_complex_logical_sentence", "SKSI-STORE-COMPLEX-LOGICAL-SENTENCE", 2, 1, false);
+        declareFunction(me, "sksi_delete_complex_logical_sentence", "SKSI-DELETE-COMPLEX-LOGICAL-SENTENCE", 2, 1, false);
+        declareFunction(me, "sksi_store_or_delete_complex_logical_sentence_recursive", "SKSI-STORE-OR-DELETE-COMPLEX-LOGICAL-SENTENCE-RECURSIVE", 3, 0, false);
+        declareFunction(me, "sentence_with_asent_argsP", "SENTENCE-WITH-ASENT-ARGS?", 1, 0, false);
+        declareFunction(me, "asent_args_of_sentence", "ASENT-ARGS-OF-SENTENCE", 1, 0, false);
+        declareFunction(me, "atomic_sentence_memoizedP_internal", "ATOMIC-SENTENCE-MEMOIZED?-INTERNAL", 1, 0, false);
+        declareFunction(me, "atomic_sentence_memoizedP", "ATOMIC-SENTENCE-MEMOIZED?", 1, 0, false);
+        declareFunction(me, "sksi_find_or_store_or_delete_atomic_sentence", "SKSI-FIND-OR-STORE-OR-DELETE-ATOMIC-SENTENCE", 3, 1, false);
+        declareFunction(me, "sksi_find_or_store_or_delete_atomic_sentence_recursive", "SKSI-FIND-OR-STORE-OR-DELETE-ATOMIC-SENTENCE-RECURSIVE", 4, 0, false);
+        declareFunction(me, "sksi_find_or_store_or_delete_atomic_sentence_descend", "SKSI-FIND-OR-STORE-OR-DELETE-ATOMIC-SENTENCE-DESCEND", 4, 0, false);
+        declareFunction(me, "sksi_find_or_store_or_delete_atomic_sentence_int", "SKSI-FIND-OR-STORE-OR-DELETE-ATOMIC-SENTENCE-INT", 5, 0, false);
+        declareFunction(me, "sksi_find_or_store_or_delete_atomic_sentence_in_table", "SKSI-FIND-OR-STORE-OR-DELETE-ATOMIC-SENTENCE-IN-TABLE", 7, 0, false);
+        declareFunction(me, "sksi_determine_cycl_for_primary_key", "SKSI-DETERMINE-CYCL-FOR-PRIMARY-KEY", 3, 0, false);
         return NIL;
     }
 
@@ -1026,22 +490,7 @@ public final class sksi_cross_editing extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    public static final SubLObject setup_sksi_cross_editing_file_alt() {
-        memoization_state.note_memoized_function($sym5$ATOMIC_SENTENCE_MEMOIZED_);
-        return NIL;
-    }
-
     public static SubLObject setup_sksi_cross_editing_file() {
-        if (SubLFiles.USE_V1) {
-            memoization_state.note_memoized_function($sym4$ATOMIC_SENTENCE_MEMOIZED_);
-        }
-        if (SubLFiles.USE_V2) {
-            memoization_state.note_memoized_function($sym5$ATOMIC_SENTENCE_MEMOIZED_);
-        }
-        return NIL;
-    }
-
-    public static SubLObject setup_sksi_cross_editing_file_Previous() {
         memoization_state.note_memoized_function($sym4$ATOMIC_SENTENCE_MEMOIZED_);
         return NIL;
     }
@@ -1062,21 +511,21 @@ public final class sksi_cross_editing extends SubLTranslatedFile implements V12 
     }
 
     static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
-
-    // Internal Constants
-    @LispMethod(comment = "Internal Constants")
-    static private final SubLString $str_alt0$Invalid_attempt_to_reuse_memoizat = makeString("Invalid attempt to reuse memoization state in multiple threads simultaneously.");
-
-    static private final SubLSymbol $sym5$ATOMIC_SENTENCE_MEMOIZED_ = makeSymbol("ATOMIC-SENTENCE-MEMOIZED?");
-
-    public static final SubLSymbol $kw6$_MEMOIZED_ITEM_NOT_FOUND_ = makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
-
-    static private final SubLList $list_alt10 = list(makeSymbol("PHYSICAL-SCHEMA"), makeSymbol("LOGICAL-SCHEMA"));
-
-    static private final SubLList $list_alt11 = list(makeSymbol("RAW-TUPLE"), makeSymbol("&OPTIONAL"), makeSymbol("CSQL-CONDITIONS"));
-
-    static private final SubLString $str_alt13$Unsupported_operator__A__ = makeString("Unsupported operator ~A~%");
 }
 
 /**

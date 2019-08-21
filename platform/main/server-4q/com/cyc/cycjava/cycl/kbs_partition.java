@@ -1,61 +1,8 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.id_index.do_id_index_empty_p;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_id_and_object_validP;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_next_id;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_next_state;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_state_object;
-import static com.cyc.cycjava.cycl.id_index.id_index_count;
-import static com.cyc.cycjava.cycl.id_index.id_index_dense_objects;
-import static com.cyc.cycjava.cycl.id_index.id_index_dense_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_next_id;
-import static com.cyc.cycjava.cycl.id_index.id_index_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_skip_tombstones_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_id_threshold;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_objects;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_tombstone_p;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_index$;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_prediction$;
-import static com.cyc.cycjava.cycl.utilities_macros.$percent_progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_note$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_sofar$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_total$;
-import static com.cyc.cycjava.cycl.utilities_macros.$within_noting_percent_progress$;
-import static com.cyc.cycjava.cycl.utilities_macros.note_percent_progress;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_percent_progress_postamble;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_percent_progress_preamble;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.gethash_without_values;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.plusp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.subtract;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.length;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.current_process;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.get_universal_time;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.stringp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.arg2;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.multiple_value_list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.aref;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-
-import com.cyc.cycjava.cycl.inference.harness.after_adding;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.cycjava.cycl.kbs_partition;
+import com.cyc.cycjava.cycl.utilities_macros;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -63,75 +10,76 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.id_index.*;
+import static com.cyc.cycjava.cycl.kbs_partition.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- * module:      KBS-PARTITION
- * source file: /cyc/top/cycl/kbs-partition.lisp
- * created:     2019/07/03 17:37:50
- */
-public final class kbs_partition extends SubLTranslatedFile implements V12 {
+
+public final class kbs_partition extends SubLTranslatedFile {
     public static final SubLFile me = new kbs_partition();
 
+    public static final String myName = "com.cyc.cycjava.cycl.kbs_partition";
 
+    public static final String myFingerPrint = "45b6e0da4291561310d5842345dfbf672ef17fec62e072e8ceaba3b9193f9a63";
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $kbs_partition$ = makeSymbol("*KBS-PARTITION*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $kbs_splicing_partition$ = makeSymbol("*KBS-SPLICING-PARTITION*");
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $kbs_splicing_assertions$ = makeSymbol("*KBS-SPLICING-ASSERTIONS*");
 
     // Internal Constants
-    @LispMethod(comment = "Internal Constants")
-    static private final SubLList $list0 = list(list(makeKeyword("FUNCTION"), makeSymbol("SCOPE-KBS-FORTS")), list(makeKeyword("FUNCTION"), makeSymbol("SCOPE-KBS-ASSERTIONS")), list(makeKeyword("FUNCTION"), makeSymbol("SCOPE-KBS-DEDUCTIONS")), list(makeKeyword("SCOPE-COMPLETELY-SPECIFIED?"), T));
+    public static final SubLList $list0 = list(list(makeKeyword("FUNCTION"), makeSymbol("SCOPE-KBS-FORTS")), list(makeKeyword("FUNCTION"), makeSymbol("SCOPE-KBS-ASSERTIONS")), list(makeKeyword("FUNCTION"), makeSymbol("SCOPE-KBS-DEDUCTIONS")), list(makeKeyword("SCOPE-COMPLETELY-SPECIFIED?"), T));
 
-    static private final SubLString $$$scoping_KBS_FORTs = makeString("scoping KBS FORTs");
+    public static final SubLString $$$scoping_KBS_FORTs = makeString("scoping KBS FORTs");
 
-    static private final SubLString $$$scoping_KBS_assertions = makeString("scoping KBS assertions");
 
-    static private final SubLString $$$scoping_KBS_deductions = makeString("scoping KBS deductions");
+
+    public static final SubLString $$$scoping_KBS_assertions = makeString("scoping KBS assertions");
+
+
+
+    public static final SubLString $$$scoping_KBS_deductions = makeString("scoping KBS deductions");
 
     private static final SubLString $$$cleaning_KBS_assert_info = makeString("cleaning KBS assert info");
 
-    private static final SubLSymbol VALID_ASSERT_INFO_FORT = makeSymbol("VALID-ASSERT-INFO-FORT");
 
 
+    public static final SubLSymbol VALID_ASSERT_INFO_FORT = makeSymbol("VALID-ASSERT-INFO-FORT");
+
+    private static final SubLObject $$isa = reader_make_constant_shell(makeString("isa"));
 
     private static final SubLList $list10 = list(list(makeKeyword("FUNCTION"), makeSymbol("SCOPE-KBS-SPLICING-ASSERTIONS")));
 
     private static final SubLString $$$scoping_KBS_splicing_assertions = makeString("scoping KBS splicing assertions");
 
     private static final SubLString $$$cdolist = makeString("cdolist");
-
-    public static final SubLObject save_kbs_partition_alt(SubLObject filename) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                {
-                    SubLObject _prev_bind_0 = kb_hl_supports.$unreify_kb_hl_supportsP$.currentBinding(thread);
-                    try {
-                        kb_hl_supports.$unreify_kb_hl_supportsP$.bind(T, thread);
-                        result = partitions.save_partition(filename, $kbs_partition$.getDynamicValue(thread));
-                    } finally {
-                        kb_hl_supports.$unreify_kb_hl_supportsP$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return result;
-            }
-        }
-    }
 
     public static SubLObject save_kbs_partition(final SubLObject filename) {
         final SubLThread thread = SubLProcess.currentSubLThread();
@@ -146,83 +94,8 @@ public final class kbs_partition extends SubLTranslatedFile implements V12 {
         return result;
     }
 
-    public static final SubLObject load_kbs_partition_alt(SubLObject filename) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                {
-                    SubLObject _prev_bind_0 = after_adding.$after_addings_disabledP$.currentBinding(thread);
-                    try {
-                        after_adding.$after_addings_disabledP$.bind(T, thread);
-                        result = partitions.load_partition_clean(filename);
-                    } finally {
-                        after_adding.$after_addings_disabledP$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return result;
-            }
-        }
-    }
-
     public static SubLObject load_kbs_partition(final SubLObject filename) {
         return partitions.load_entire_kb_partition(filename);
-    }
-
-    public static final SubLObject scope_kbs_forts_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject message = $$$scoping_KBS_FORTs;
-                SubLObject total = forts.fort_count();
-                SubLObject sofar = ZERO_INTEGER;
-                {
-                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                    try {
-                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                        $last_percent_progress_prediction$.bind(NIL, thread);
-                        $within_noting_percent_progress$.bind(T, thread);
-                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                        noting_percent_progress_preamble(message);
-                        {
-                            SubLObject cdolist_list_var = forts.do_forts_tables();
-                            SubLObject table_var = NIL;
-                            for (table_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , table_var = cdolist_list_var.first()) {
-                                if (NIL == do_id_index_empty_p(table_var, $SKIP)) {
-                                    {
-                                        SubLObject id = do_id_index_next_id(table_var, T, NIL, NIL);
-                                        SubLObject state_var = do_id_index_next_state(table_var, T, id, NIL);
-                                        SubLObject fort = NIL;
-                                        while (NIL != id) {
-                                            fort = do_id_index_state_object(table_var, $SKIP, id, state_var);
-                                            if (NIL != do_id_index_id_and_object_validP(id, fort, $SKIP)) {
-                                                sofar = add(sofar, ONE_INTEGER);
-                                                note_percent_progress(sofar, total);
-                                                if (NIL != kbs_identification.kbs_fort_p(fort)) {
-                                                    partitions.scope_partition_object_only(fort);
-                                                }
-                                            }
-                                            id = do_id_index_next_id(table_var, T, id, state_var);
-                                            state_var = do_id_index_next_state(table_var, T, id, state_var);
-                                        } 
-                                    }
-                                }
-                            }
-                        }
-                        noting_percent_progress_postamble();
-                    } finally {
-                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject scope_kbs_forts() {
@@ -312,64 +185,13 @@ public final class kbs_partition extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject scope_kbs_assertions_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject idx = assertion_handles.do_assertions_table();
-                SubLObject total = id_index_count(idx);
-                SubLObject sofar = ZERO_INTEGER;
-                SubLTrampolineFile.checkType($$$scoping_KBS_assertions, STRINGP);
-                {
-                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                    try {
-                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                        $last_percent_progress_prediction$.bind(NIL, thread);
-                        $within_noting_percent_progress$.bind(T, thread);
-                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                        noting_percent_progress_preamble($$$scoping_KBS_assertions);
-                        if (NIL == do_id_index_empty_p(idx, $SKIP)) {
-                            {
-                                SubLObject id = do_id_index_next_id(idx, T, NIL, NIL);
-                                SubLObject state_var = do_id_index_next_state(idx, T, id, NIL);
-                                SubLObject assertion = NIL;
-                                while (NIL != id) {
-                                    assertion = do_id_index_state_object(idx, $SKIP, id, state_var);
-                                    if (NIL != do_id_index_id_and_object_validP(id, assertion, $SKIP)) {
-                                        note_percent_progress(sofar, total);
-                                        sofar = add(sofar, ONE_INTEGER);
-                                        if (NIL != kbs_identification.kbs_assertion_p(assertion)) {
-                                            partitions.scope_partition_object_only(assertion);
-                                        }
-                                    }
-                                    id = do_id_index_next_id(idx, T, id, state_var);
-                                    state_var = do_id_index_next_state(idx, T, id, state_var);
-                                } 
-                            }
-                        }
-                        noting_percent_progress_postamble();
-                    } finally {
-                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject scope_kbs_assertions() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject idx = assertion_handles.do_assertions_table();
         final SubLObject mess = $$$scoping_KBS_assertions;
         final SubLObject total = id_index_count(idx);
         SubLObject sofar = ZERO_INTEGER;
-        assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
+        assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
         final SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
         final SubLObject _prev_bind_2 = $last_percent_progress_prediction$.currentBinding(thread);
         final SubLObject _prev_bind_3 = $within_noting_percent_progress$.currentBinding(thread);
@@ -448,64 +270,13 @@ public final class kbs_partition extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject scope_kbs_deductions_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject idx = deduction_handles.do_deductions_table();
-                SubLObject total = id_index_count(idx);
-                SubLObject sofar = ZERO_INTEGER;
-                SubLTrampolineFile.checkType($$$scoping_KBS_deductions, STRINGP);
-                {
-                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                    try {
-                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                        $last_percent_progress_prediction$.bind(NIL, thread);
-                        $within_noting_percent_progress$.bind(T, thread);
-                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                        noting_percent_progress_preamble($$$scoping_KBS_deductions);
-                        if (NIL == do_id_index_empty_p(idx, $SKIP)) {
-                            {
-                                SubLObject id = do_id_index_next_id(idx, T, NIL, NIL);
-                                SubLObject state_var = do_id_index_next_state(idx, T, id, NIL);
-                                SubLObject deduction = NIL;
-                                while (NIL != id) {
-                                    deduction = do_id_index_state_object(idx, $SKIP, id, state_var);
-                                    if (NIL != do_id_index_id_and_object_validP(id, deduction, $SKIP)) {
-                                        note_percent_progress(sofar, total);
-                                        sofar = add(sofar, ONE_INTEGER);
-                                        if (NIL != kbs_identification.kbs_deduction_p(deduction)) {
-                                            partitions.scope_partition_object_only(deduction);
-                                        }
-                                    }
-                                    id = do_id_index_next_id(idx, T, id, state_var);
-                                    state_var = do_id_index_next_state(idx, T, id, state_var);
-                                } 
-                            }
-                        }
-                        noting_percent_progress_postamble();
-                    } finally {
-                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject scope_kbs_deductions() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject idx = deduction_handles.do_deductions_table();
         final SubLObject mess = $$$scoping_KBS_deductions;
         final SubLObject total = id_index_count(idx);
         SubLObject sofar = ZERO_INTEGER;
-        assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
+        assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
         final SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
         final SubLObject _prev_bind_2 = $last_percent_progress_prediction$.currentBinding(thread);
         final SubLObject _prev_bind_3 = $within_noting_percent_progress$.currentBinding(thread);
@@ -584,110 +355,6 @@ public final class kbs_partition extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject clean_kbs_assert_info_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject state = memoization_state.new_memoization_state(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                SubLObject local_state = state;
-                {
-                    SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
-                    try {
-                        memoization_state.$memoization_state$.bind(local_state, thread);
-                        {
-                            SubLObject original_memoization_process = NIL;
-                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                {
-                                    SubLObject current_proc = current_process();
-                                    if (NIL == original_memoization_process) {
-                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                    } else {
-                                        if (original_memoization_process != current_proc) {
-                                            Errors.error($str_alt6$Invalid_attempt_to_reuse_memoizat);
-                                        }
-                                    }
-                                }
-                            }
-                            try {
-                                {
-                                    SubLObject idx = assertion_handles.do_assertions_table();
-                                    SubLObject total = id_index_count(idx);
-                                    SubLObject sofar = ZERO_INTEGER;
-                                    SubLTrampolineFile.checkType($$$cleaning_KBS_assert_info, STRINGP);
-                                    {
-                                        SubLObject _prev_bind_0_1 = $last_percent_progress_index$.currentBinding(thread);
-                                        SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                                        SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                                        SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                                        try {
-                                            $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                                            $last_percent_progress_prediction$.bind(NIL, thread);
-                                            $within_noting_percent_progress$.bind(T, thread);
-                                            $percent_progress_start_time$.bind(get_universal_time(), thread);
-                                            noting_percent_progress_preamble($$$cleaning_KBS_assert_info);
-                                            if (NIL == do_id_index_empty_p(idx, $SKIP)) {
-                                                {
-                                                    SubLObject id = do_id_index_next_id(idx, T, NIL, NIL);
-                                                    SubLObject state_var = do_id_index_next_state(idx, T, id, NIL);
-                                                    SubLObject assertion = NIL;
-                                                    while (NIL != id) {
-                                                        assertion = do_id_index_state_object(idx, $SKIP, id, state_var);
-                                                        if (NIL != do_id_index_id_and_object_validP(id, assertion, $SKIP)) {
-                                                            note_percent_progress(sofar, total);
-                                                            sofar = add(sofar, ONE_INTEGER);
-                                                            if (NIL != assertions_high.asserted_assertionP(assertion)) {
-                                                                {
-                                                                    SubLObject asserted_by = assertions_high.asserted_by(assertion);
-                                                                    if (NIL != com.cyc.cycjava.cycl.kbs_partition.invalid_assert_info_fort(asserted_by)) {
-                                                                        assertions_interface.kb_set_assertion_asserted_by(assertion, NIL);
-                                                                    }
-                                                                }
-                                                                {
-                                                                    SubLObject asserted_why = assertions_high.asserted_why(assertion);
-                                                                    if (NIL != com.cyc.cycjava.cycl.kbs_partition.invalid_assert_info_fort(asserted_why)) {
-                                                                        assertions_interface.kb_set_assertion_asserted_why(assertion, NIL);
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                        id = do_id_index_next_id(idx, T, id, state_var);
-                                                        state_var = do_id_index_next_state(idx, T, id, state_var);
-                                                    } 
-                                                }
-                                            }
-                                            noting_percent_progress_postamble();
-                                        } finally {
-                                            $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                                            $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                                            $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                                            $last_percent_progress_index$.rebind(_prev_bind_0_1, thread);
-                                        }
-                                    }
-                                }
-                            } finally {
-                                {
-                                    SubLObject _prev_bind_0_2 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                    try {
-                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                        if ((NIL != local_state) && (NIL == original_memoization_process)) {
-                                            memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
-                                        }
-                                    } finally {
-                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_2, thread);
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject clean_kbs_assert_info() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject local_state;
@@ -701,7 +368,7 @@ public final class kbs_partition extends SubLTranslatedFile implements V12 {
                 final SubLObject mess = $$$cleaning_KBS_assert_info;
                 final SubLObject total = id_index_count(idx);
                 SubLObject sofar = ZERO_INTEGER;
-                assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
+                assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
                 final SubLObject _prev_bind_0_$12 = $last_percent_progress_index$.currentBinding(thread);
                 final SubLObject _prev_bind_2 = $last_percent_progress_prediction$.currentBinding(thread);
                 final SubLObject _prev_bind_3 = $within_noting_percent_progress$.currentBinding(thread);
@@ -804,46 +471,12 @@ public final class kbs_partition extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject invalid_assert_info_fort_alt(SubLObject obj) {
-        return makeBoolean((NIL != forts.fort_p(obj)) && (NIL == com.cyc.cycjava.cycl.kbs_partition.valid_assert_info_fort(obj)));
-    }
-
     public static SubLObject invalid_assert_info_fort(final SubLObject obj) {
         return makeBoolean((NIL != forts.fort_p(obj)) && (NIL == valid_assert_info_fort(obj)));
     }
 
-    public static final SubLObject valid_assert_info_fort_internal_alt(SubLObject fort) {
-        return plusp(kb_indexing.num_gaf_arg_index(fort, ONE_INTEGER, $$isa, UNPROVIDED));
-    }
-
     public static SubLObject valid_assert_info_fort_internal(final SubLObject fort) {
         return plusp(kb_indexing.num_gaf_arg_index(fort, ONE_INTEGER, $$isa, UNPROVIDED));
-    }
-
-    public static final SubLObject valid_assert_info_fort_alt(SubLObject fort) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
-                SubLObject caching_state = NIL;
-                if (NIL == v_memoization_state) {
-                    return com.cyc.cycjava.cycl.kbs_partition.valid_assert_info_fort_internal(fort);
-                }
-                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, VALID_ASSERT_INFO_FORT, UNPROVIDED);
-                if (NIL == caching_state) {
-                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), VALID_ASSERT_INFO_FORT, ONE_INTEGER, NIL, EQ, UNPROVIDED);
-                    memoization_state.memoization_state_put(v_memoization_state, VALID_ASSERT_INFO_FORT, caching_state);
-                }
-                {
-                    SubLObject results = memoization_state.caching_state_lookup(caching_state, fort, $kw10$_MEMOIZED_ITEM_NOT_FOUND_);
-                    if (results == $kw10$_MEMOIZED_ITEM_NOT_FOUND_) {
-                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.kbs_partition.valid_assert_info_fort_internal(fort)));
-                        memoization_state.caching_state_put(caching_state, fort, results, UNPROVIDED);
-                    }
-                    return memoization_state.caching_results(results);
-                }
-            }
-        }
     }
 
     public static SubLObject valid_assert_info_fort(final SubLObject fort) {
@@ -866,29 +499,9 @@ public final class kbs_partition extends SubLTranslatedFile implements V12 {
         return memoization_state.caching_results(results);
     }
 
-    // Internal Constants
-    @LispMethod(comment = "Internal Constants")
-    static private final SubLList $list_alt0 = list(list(makeKeyword("FUNCTION"), makeSymbol("SCOPE-KBS-FORTS")), list(makeKeyword("FUNCTION"), makeSymbol("SCOPE-KBS-ASSERTIONS")), list(makeKeyword("FUNCTION"), makeSymbol("SCOPE-KBS-DEDUCTIONS")), list(makeKeyword("SCOPE-COMPLETELY-SPECIFIED?"), T));
-
-    public static final SubLObject save_kbs_splicing_partition_alt(SubLObject filename) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return partitions.save_partition(filename, $kbs_splicing_partition$.getDynamicValue(thread));
-        }
-    }
-
     public static SubLObject save_kbs_splicing_partition(final SubLObject filename) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return partitions.save_partition(filename, $kbs_splicing_partition$.getDynamicValue(thread));
-    }
-
-    static private final SubLString $str_alt6$Invalid_attempt_to_reuse_memoizat = makeString("Invalid attempt to reuse memoization state in multiple threads simultaneously.");
-
-    public static final SubLObject add_kbs_splicing_assertion_alt(SubLObject assertion) {
-        if (NIL != assertion_handles.assertion_p(assertion)) {
-            $kbs_splicing_assertions$.setGlobalValue(cons(assertion, $kbs_splicing_assertions$.getGlobalValue()));
-        }
-        return NIL;
     }
 
     public static SubLObject add_kbs_splicing_assertion(final SubLObject assertion) {
@@ -898,60 +511,9 @@ public final class kbs_partition extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLSymbol $kw10$_MEMOIZED_ITEM_NOT_FOUND_ = makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
-
-    public static final SubLObject clear_kbs_splicing_assertions_alt() {
-        $kbs_splicing_assertions$.setGlobalValue(NIL);
-        return NIL;
-    }
-
     public static SubLObject clear_kbs_splicing_assertions() {
         $kbs_splicing_assertions$.setGlobalValue(NIL);
         return NIL;
-    }
-
-    static private final SubLList $list_alt11 = list(list(makeKeyword("FUNCTION"), makeSymbol("SCOPE-KBS-SPLICING-ASSERTIONS")));
-
-    public static final SubLObject scope_kbs_splicing_assertions_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject list_var = $kbs_splicing_assertions$.getGlobalValue();
-                $progress_note$.setDynamicValue($$$scoping_KBS_splicing_assertions, thread);
-                $progress_start_time$.setDynamicValue(get_universal_time(), thread);
-                $progress_total$.setDynamicValue(length(list_var), thread);
-                $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
-                {
-                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                    try {
-                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                        $last_percent_progress_prediction$.bind(NIL, thread);
-                        $within_noting_percent_progress$.bind(T, thread);
-                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                        noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
-                        {
-                            SubLObject csome_list_var = list_var;
-                            SubLObject assertion = NIL;
-                            for (assertion = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , assertion = csome_list_var.first()) {
-                                note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
-                                $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
-                                partitions.scope_partition_assertion(assertion);
-                            }
-                        }
-                        noting_percent_progress_postamble();
-                    } finally {
-                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject scope_kbs_splicing_assertions() {
@@ -1011,42 +573,23 @@ public final class kbs_partition extends SubLTranslatedFile implements V12 {
     }
 
     public static SubLObject declare_kbs_partition_file() {
-        declareFunction("save_kbs_partition", "SAVE-KBS-PARTITION", 1, 0, false);
-        declareFunction("load_kbs_partition", "LOAD-KBS-PARTITION", 1, 0, false);
-        declareFunction("scope_kbs_forts", "SCOPE-KBS-FORTS", 0, 0, false);
-        declareFunction("scope_kbs_assertions", "SCOPE-KBS-ASSERTIONS", 0, 0, false);
-        declareFunction("scope_kbs_deductions", "SCOPE-KBS-DEDUCTIONS", 0, 0, false);
-        declareFunction("clean_kbs_assert_info", "CLEAN-KBS-ASSERT-INFO", 0, 0, false);
-        declareFunction("invalid_assert_info_fort", "INVALID-ASSERT-INFO-FORT", 1, 0, false);
-        declareFunction("valid_assert_info_fort_internal", "VALID-ASSERT-INFO-FORT-INTERNAL", 1, 0, false);
-        declareFunction("valid_assert_info_fort", "VALID-ASSERT-INFO-FORT", 1, 0, false);
-        declareFunction("save_kbs_splicing_partition", "SAVE-KBS-SPLICING-PARTITION", 1, 0, false);
-        declareFunction("add_kbs_splicing_assertion", "ADD-KBS-SPLICING-ASSERTION", 1, 0, false);
-        declareFunction("clear_kbs_splicing_assertions", "CLEAR-KBS-SPLICING-ASSERTIONS", 0, 0, false);
-        declareFunction("scope_kbs_splicing_assertions", "SCOPE-KBS-SPLICING-ASSERTIONS", 0, 0, false);
-        return NIL;
-    }
-
-    public static final SubLObject init_kbs_partition_file_alt() {
-        defparameter("*KBS-PARTITION*", $list_alt0);
-        defparameter("*KBS-SPLICING-PARTITION*", $list_alt11);
-        deflexical("*KBS-SPLICING-ASSERTIONS*", NIL);
+        declareFunction(me, "save_kbs_partition", "SAVE-KBS-PARTITION", 1, 0, false);
+        declareFunction(me, "load_kbs_partition", "LOAD-KBS-PARTITION", 1, 0, false);
+        declareFunction(me, "scope_kbs_forts", "SCOPE-KBS-FORTS", 0, 0, false);
+        declareFunction(me, "scope_kbs_assertions", "SCOPE-KBS-ASSERTIONS", 0, 0, false);
+        declareFunction(me, "scope_kbs_deductions", "SCOPE-KBS-DEDUCTIONS", 0, 0, false);
+        declareFunction(me, "clean_kbs_assert_info", "CLEAN-KBS-ASSERT-INFO", 0, 0, false);
+        declareFunction(me, "invalid_assert_info_fort", "INVALID-ASSERT-INFO-FORT", 1, 0, false);
+        declareFunction(me, "valid_assert_info_fort_internal", "VALID-ASSERT-INFO-FORT-INTERNAL", 1, 0, false);
+        declareFunction(me, "valid_assert_info_fort", "VALID-ASSERT-INFO-FORT", 1, 0, false);
+        declareFunction(me, "save_kbs_splicing_partition", "SAVE-KBS-SPLICING-PARTITION", 1, 0, false);
+        declareFunction(me, "add_kbs_splicing_assertion", "ADD-KBS-SPLICING-ASSERTION", 1, 0, false);
+        declareFunction(me, "clear_kbs_splicing_assertions", "CLEAR-KBS-SPLICING-ASSERTIONS", 0, 0, false);
+        declareFunction(me, "scope_kbs_splicing_assertions", "SCOPE-KBS-SPLICING-ASSERTIONS", 0, 0, false);
         return NIL;
     }
 
     public static SubLObject init_kbs_partition_file() {
-        if (SubLFiles.USE_V1) {
-            defparameter("*KBS-PARTITION*", $list0);
-            defparameter("*KBS-SPLICING-PARTITION*", $list10);
-            deflexical("*KBS-SPLICING-ASSERTIONS*", NIL);
-        }
-        if (SubLFiles.USE_V2) {
-            defparameter("*KBS-SPLICING-PARTITION*", $list_alt11);
-        }
-        return NIL;
-    }
-
-    public static SubLObject init_kbs_partition_file_Previous() {
         defparameter("*KBS-PARTITION*", $list0);
         defparameter("*KBS-SPLICING-PARTITION*", $list10);
         deflexical("*KBS-SPLICING-ASSERTIONS*", NIL);
@@ -1074,6 +617,23 @@ public final class kbs_partition extends SubLTranslatedFile implements V12 {
     }
 
     static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
 

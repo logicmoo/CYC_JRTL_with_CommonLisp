@@ -535,7 +535,7 @@ public final class noun_learner extends SubLTranslatedFile implements V02 {
                 SubLObject tag = assign_tag(noun);
                 SubLObject det = (NIL != linkage.noun_link_word_p(noun)) ? ((SubLObject) (methods.funcall_instance_method_with_0_args(noun, GET_SPECIFIER))) : NIL;
                 SubLObject det_string = (NIL != det) ? ((SubLObject) (methods.funcall_instance_method_with_0_args(det, GET_STRING))) : $str_alt34$;
-                return list(cconcatenate(format_nil.format_nil_a_no_copy(lexification_utilities.singularize_word(string)), new SubLObject[]{ $str_alt35$_, format_nil.format_nil_a_no_copy(tag) }), NIL != verb_string ? ((SubLObject) (cconcatenate(format_nil.format_nil_a_no_copy(verb_string), new SubLObject[]{ $str_alt35$_, format_nil.format_nil_a_no_copy($VB) }))) : $str_alt34$, get_noun_compound(noun), det_string, keyword);
+                return list(cconcatenate(format_nil.format_nil_a_no_copy(lexification_utilities.singularize_word(string, UNPROVIDED_SYM)), new SubLObject[]{ $str_alt35$_, format_nil.format_nil_a_no_copy(tag) }), NIL != verb_string ? ((SubLObject) (cconcatenate(format_nil.format_nil_a_no_copy(verb_string), new SubLObject[]{ $str_alt35$_, format_nil.format_nil_a_no_copy($VB) }))) : $str_alt34$, get_noun_compound(noun), det_string, keyword);
             }
         }
         return NIL;

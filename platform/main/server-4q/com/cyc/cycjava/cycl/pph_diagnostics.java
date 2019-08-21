@@ -2319,20 +2319,7 @@ public final class pph_diagnostics extends SubLTranslatedFile implements V02 {
                                                             try {
                                                                 memoization_state.$memoization_state$.bind(local_state, thread);
                                                                 {
-                                                                    SubLObject original_memoization_process = NIL;
-                                                                    if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                                                        original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                                                        {
-                                                                            SubLObject current_proc = current_process();
-                                                                            if (NIL == original_memoization_process) {
-                                                                                memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                                                            } else {
-                                                                                if (original_memoization_process != current_proc) {
-                                                                                    Errors.error($str_alt141$Invalid_attempt_to_reuse_memoizat);
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
+                                                                    final SubLObject original_memoization_process = memoization_state.aquireMemoStateLock(local_state);
                                                                     try {
                                                                         {
                                                                             SubLObject _prev_bind_0_51 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
@@ -2458,7 +2445,7 @@ public final class pph_diagnostics extends SubLTranslatedFile implements V02 {
                 {
                     SubLObject times = Mapping.mapcar(symbol_function(THIRD), results);
                     SubLObject mean = number_utilities.mean(times);
-                    SubLObject median = number_utilities.median(times, UNPROVIDED);
+                    SubLObject median = number_utilities.median(times, UNPROVIDED, UNPROVIDED_SYM);
                     SubLObject std_dev = number_utilities.standard_deviation(times);
                     SubLObject assertion_count = length(assertions);
                     SubLObject paraphrases_per_second = divide(assertion_count, total_time);
@@ -2901,20 +2888,7 @@ public final class pph_diagnostics extends SubLTranslatedFile implements V02 {
                                                                                                                         try {
                                                                                                                             memoization_state.$memoization_state$.bind(local_state, thread);
                                                                                                                             {
-                                                                                                                                SubLObject original_memoization_process = NIL;
-                                                                                                                                if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                                                                                                                    original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                                                                                                                    {
-                                                                                                                                        SubLObject current_proc = current_process();
-                                                                                                                                        if (NIL == original_memoization_process) {
-                                                                                                                                            memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                                                                                                                        } else {
-                                                                                                                                            if (original_memoization_process != current_proc) {
-                                                                                                                                                Errors.error($str_alt141$Invalid_attempt_to_reuse_memoizat);
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                }
+                                                                                                                                final SubLObject original_memoization_process = memoization_state.aquireMemoStateLock(local_state);
                                                                                                                                 try {
                                                                                                                                     Mapping.mapcar(GENERATE_PHRASE_FOR_JAVA, v_instances);
                                                                                                                                 } finally {

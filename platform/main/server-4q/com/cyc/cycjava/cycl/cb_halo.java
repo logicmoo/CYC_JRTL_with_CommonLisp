@@ -101,7 +101,7 @@ public final class cb_halo extends SubLTranslatedFile implements V02 {
                 html_utilities.html_princ(title);
                 html_utilities.html_markup(html_macros.$html_title_tail$.getGlobalValue());
                 if (NIL != refresh) {
-                    html_utilities.html_refresh(refresh);
+                    html_utilities.html_refresh(refresh, UNPROVIDED_SYM);
                 }
                 html_complete.html_complete_script();
                 html_utilities.html_markup(html_macros.$html_head_tail$.getGlobalValue());
@@ -508,7 +508,7 @@ public final class cb_halo extends SubLTranslatedFile implements V02 {
             html_utilities.html_indent(THREE_INTEGER);
             html_utilities.html_text_input($str_alt22$cb_halo_question_number, UNPROVIDED, UNPROVIDED);
             html_utilities.html_newline(UNPROVIDED);
-            html_script_utilities.html_clear_input_button($str_alt22$cb_halo_question_number, UNPROVIDED);
+            html_script_utilities.html_clear_input_button($str_alt22$cb_halo_question_number, UNPROVIDED, UNPROVIDED_SYM);
             html_utilities.html_indent(TWO_INTEGER);
             html_utilities.html_submit_input($$$Submit, $str_alt24$cb_halo_submit_question_number, UNPROVIDED);
             html_utilities.html_markup(html_macros.$html_blockquote_tail$.getGlobalValue());

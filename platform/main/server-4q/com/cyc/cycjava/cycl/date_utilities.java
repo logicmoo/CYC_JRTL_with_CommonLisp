@@ -1,118 +1,9 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.access_macros.register_external_symbol;
-import static com.cyc.cycjava.cycl.cb_utilities.cb_guess_date;
-import static com.cyc.cycjava.cycl.cb_utilities.cb_guess_term;
-import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
-import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.define_test_case_table_int;
-import static com.cyc.cycjava.cycl.cycl_utilities.containing_subexpressions;
-import static com.cyc.cycjava.cycl.cycl_utilities.cycl_nat_with_functor_p;
-import static com.cyc.cycjava.cycl.cycl_utilities.expression_find_if;
-import static com.cyc.cycjava.cycl.cycl_utilities.expression_transform;
-import static com.cyc.cycjava.cycl.cycl_utilities.formula_arg1;
-import static com.cyc.cycjava.cycl.cycl_utilities.formula_operator;
-import static com.cyc.cycjava.cycl.cycl_utilities.nat_arg1;
-import static com.cyc.cycjava.cycl.cycl_utilities.nat_arg2;
-import static com.cyc.cycjava.cycl.cycl_utilities.nat_functor;
-import static com.cyc.cycjava.cycl.el_utilities.el_binary_formula_p;
-import static com.cyc.cycjava.cycl.el_utilities.el_formula_p;
-import static com.cyc.cycjava.cycl.el_utilities.el_formula_with_any_of_operators_p;
-import static com.cyc.cycjava.cycl.el_utilities.el_formula_with_operator_p;
-import static com.cyc.cycjava.cycl.el_utilities.el_unary_formula_p;
-import static com.cyc.cycjava.cycl.el_utilities.make_binary_formula;
-import static com.cyc.cycjava.cycl.el_utilities.make_unary_formula;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.$catch_error_message_target$;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.declare_defglobal;
-import static com.cyc.cycjava.cycl.subl_promotions.memberP;
-import static com.cyc.cycjava.cycl.subl_promotions.positive_integer_p;
-import static com.cyc.cycjava.cycl.time_parameter_utilities.covering_time_type_p;
-import static com.cyc.cycjava.cycl.time_parameter_utilities.gappy_type_period;
-import static com.cyc.cycjava.cycl.time_parameter_utilities.time_series_duration;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_colon;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_hyphen;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_plus;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.alpha_char_p;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.append;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.nth;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.bind;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.currentBinding;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.rebind;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.eq;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.equal;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.gethash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.make_hash_table;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.sethash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.ceiling;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.divide;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.floor;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.integerDivide;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.minus;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.mod;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.multiply;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.rem;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.round;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.subtract;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.truncate;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.cconcatenate;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.delete;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.delete_duplicates;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.find;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.find_if;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.length;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.position;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.remove_duplicates;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.search;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.boundp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.current_process;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.decode_universal_time;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.encode_universal_time;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.get_universal_time;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.integerp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.arg2;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.multiple_value_list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.values;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeDouble;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_listp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.property_list_member;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cadr;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cddr;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.copy_tree;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.last;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.member;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.second;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.third;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.parse_integer;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.read_from_string_ignoring_errors;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
-import static com.cyc.tool.subl.util.SubLFiles.defconstant;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-
+import com.cyc.cycjava.cycl.date_utilities;
 import com.cyc.cycjava.cycl.inference.harness.inference_worker;
 import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_indexical_referent;
-import com.cyc.cycjava.cycl.quirk.external_interfaces;
 import com.cyc.cycjava.cycl.sbhl.sbhl_time_modules;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
@@ -126,254 +17,177 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.cb_utilities.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
+import static com.cyc.cycjava.cycl.date_utilities.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_colon;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_hyphen;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_plus;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EIGHTEEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EIGHT_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ELEVEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUALP;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIFTEEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOURTEEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.MINUS_ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NINETEEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NINE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SEVENTEEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SEVEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIXTEEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THIRTEEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWELVE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWENTY_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- * module:      DATE-UTILITIES
- * source file: /cyc/top/cycl/date-utilities.lisp
- * created:     2019/07/03 17:37:52
- */
-public final class date_utilities extends SubLTranslatedFile implements V12 {
-    public static final SubLObject define_date_utility_test_cases() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            define_test_case_table_int($sym239$PARSE_DATE_W_OUT_TWO_DIGIT_YEARS, list(new SubLObject[]{ $TEST, symbol_function(EQUAL), $OWNER, $$$daves, $CLASSES, NIL, $KB, $FULL, $WORKING_, T }), $list_alt243);
-            set.set_add($sym239$PARSE_DATE_W_OUT_TWO_DIGIT_YEARS, $date_utility_test_cases$.getDynamicValue(thread));
-            define_test_case_table_int(LEAP_YEAR_P, list(new SubLObject[]{ $TEST, symbol_function(EQ), $OWNER, $$$baxter, $CLASSES, NIL, $KB, $FULL, $WORKING_, T }), $list_alt246);
-            set.set_add(LEAP_YEAR_P, $date_utility_test_cases$.getDynamicValue(thread));
-            define_test_case_table_int(DATE_P, list(new SubLObject[]{ $TEST, symbol_function(EQ), $OWNER, $$$baxter, $CLASSES, NIL, $KB, $FULL, $WORKING_, T }), $list_alt247);
-            set.set_add(DATE_P, $date_utility_test_cases$.getDynamicValue(thread));
-            define_test_case_table_int(TIME_P, list(new SubLObject[]{ $TEST, symbol_function(EQ), $OWNER, $$$baxter, $CLASSES, NIL, $KB, $FULL, $WORKING_, T }), $list_alt248);
-            set.set_add(TIME_P, $date_utility_test_cases$.getDynamicValue(thread));
-            define_test_case_table_int(DATE_PRECISION, list(new SubLObject[]{ $TEST, symbol_function(EQ), $OWNER, $$$baxter, $CLASSES, NIL, $KB, $FULL, $WORKING_, T }), $list_alt250);
-            set.set_add(DATE_PRECISION, $date_utility_test_cases$.getDynamicValue(thread));
-            define_test_case_table_int(EXPLODE_CALENDAR_TIME, list(new SubLObject[]{ $TEST, NIL, $OWNER, $$$baxter, $CLASSES, NIL, $KB, $FULL, $WORKING_, T }), $list_alt252);
-            set.set_add(EXPLODE_CALENDAR_TIME, $date_utility_test_cases$.getDynamicValue(thread));
-            define_test_case_table_int(CYCL_DATE_TO_UNIVERSAL_TIME, list(new SubLObject[]{ $TEST, NIL, $OWNER, $$$baxter, $CLASSES, NIL, $KB, $FULL, $WORKING_, T }), $list_alt254);
-            set.set_add(CYCL_DATE_TO_UNIVERSAL_TIME, $date_utility_test_cases$.getDynamicValue(thread));
-            define_test_case_table_int(MILLISECONDSTRING, list(new SubLObject[]{ $TEST, NIL, $OWNER, $$$baxter, $CLASSES, NIL, $KB, $FULL, $WORKING_, T }), $list_alt256);
-            set.set_add(MILLISECONDSTRING, $date_utility_test_cases$.getDynamicValue(thread));
-            define_test_case_table_int(DATE_REDUCED_TO_START, list(new SubLObject[]{ $TEST, NIL, $OWNER, $$$reed, $CLASSES, NIL, $KB, $FULL, $WORKING_, T }), $list_alt259);
-            set.set_add(DATE_REDUCED_TO_START, $date_utility_test_cases$.getDynamicValue(thread));
-            define_test_case_table_int(DATE_TO_PRECISION, list(new SubLObject[]{ $TEST, NIL, $OWNER, $$$reed, $CLASSES, NIL, $KB, $FULL, $WORKING_, T }), $list_alt261);
-            set.set_add(DATE_TO_PRECISION, $date_utility_test_cases$.getDynamicValue(thread));
-            define_test_case_table_int(NEXT_ITERATED_CYCLIC_INTERVAL_INCLUSIVE, list(new SubLObject[]{ $TEST, NIL, $OWNER, $$$reed, $CLASSES, NIL, $KB, $FULL, $WORKING_, T }), $list_alt263);
-            set.set_add(NEXT_ITERATED_CYCLIC_INTERVAL_INCLUSIVE, $date_utility_test_cases$.getDynamicValue(thread));
-            return $DEFINED;
-        }
-    }
 
-    public static final SubLObject define_date_utility_test_case(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            SubLObject test_case_name = NIL;
-            destructuring_bind_must_consp(current, datum, $list_alt228);
-            test_case_name = current.first();
-            current = current.rest();
-            destructuring_bind_must_consp(current, datum, $list_alt228);
-            {
-                SubLObject temp = current.rest();
-                current = current.first();
-                {
-                    SubLObject allow_other_keys_p = NIL;
-                    SubLObject rest = current;
-                    SubLObject bad = NIL;
-                    SubLObject current_18 = NIL;
-                    for (; NIL != rest;) {
-                        destructuring_bind_must_consp(rest, datum, $list_alt228);
-                        current_18 = rest.first();
-                        rest = rest.rest();
-                        destructuring_bind_must_consp(rest, datum, $list_alt228);
-                        if (NIL == member(current_18, $list_alt229, UNPROVIDED, UNPROVIDED)) {
-                            bad = T;
-                        }
-                        if (current_18 == $ALLOW_OTHER_KEYS) {
-                            allow_other_keys_p = rest.first();
-                        }
-                        rest = rest.rest();
-                    }
-                    if ((NIL != bad) && (NIL == allow_other_keys_p)) {
-                        cdestructuring_bind_error(datum, $list_alt228);
-                    }
-                    {
-                        SubLObject test_tail = property_list_member($TEST, current);
-                        SubLObject test = (NIL != test_tail) ? ((SubLObject) (cadr(test_tail))) : NIL;
-                        SubLObject owner_tail = property_list_member($OWNER, current);
-                        SubLObject owner = (NIL != owner_tail) ? ((SubLObject) (cadr(owner_tail))) : NIL;
-                        SubLObject kb_tail = property_list_member($KB, current);
-                        SubLObject kb = (NIL != kb_tail) ? ((SubLObject) (cadr(kb_tail))) : $FULL;
-                        current = temp;
-                        {
-                            SubLObject tuples = current;
-                            return list(PROGN, listS(DEFINE_TEST_CASE_TABLE, test_case_name, list($TEST, test, $OWNER, owner, $KB, kb), append(tuples, NIL)), listS(SET_ADD, list(QUOTE, test_case_name), $list_alt238));
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private static final SubLObject _constant_263_initializer() {
-        return list(new SubLObject[]{ list(list(reader_make_constant_shell("CalendarSecond"), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("SecondFn"), NINE_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(list(reader_make_constant_shell("CalendarMinute"), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("MinuteFn"), makeInteger(43), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))))), list(list(reader_make_constant_shell("CalendarHour"), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("HourFn"), FOURTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))), list(list(reader_make_constant_shell("CalendarDay"), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("DayFn"), TWO_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))), list(list(reader_make_constant_shell("CalendarMonth"), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("August"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))), list(list(reader_make_constant_shell("CalendarMonth"), list(reader_make_constant_shell("DayFn"), TWENTY_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(1918))))), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(1919)))), list(list(reader_make_constant_shell("CalendarYear"), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("YearFn"), makeInteger(2005))), list(list(list(reader_make_constant_shell("TimeOfWeekFn"), reader_make_constant_shell("Thursday"), reader_make_constant_shell("TimeOfDay-4PM")), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), TWO_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("HourFn"), SIXTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))), list(list(reader_make_constant_shell("Thursday"), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), TWO_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("DayFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))), list(list(list(reader_make_constant_shell("TimeOfYearFn"), reader_make_constant_shell("May"), list(reader_make_constant_shell("TimeOfMonthFn"), list(reader_make_constant_shell("DayOfMonthFn"), TWO_INTEGER), list(reader_make_constant_shell("TimeOfDayFn"), reader_make_constant_shell("TimeOfDay-4PM"), list(reader_make_constant_shell("TimeOfHourFn"), makeInteger(45), list(reader_make_constant_shell("SecondOfMinuteFn"), NINE_INTEGER))))), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), TEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("SecondFn"), NINE_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(45), list(reader_make_constant_shell("HourFn"), SIXTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), TWO_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("May"), list(reader_make_constant_shell("YearFn"), makeInteger(2005)))))))), list(list(list(reader_make_constant_shell("SecondOfMinuteFn"), SEVEN_INTEGER), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("SecondFn"), SEVEN_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(43), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(list(list(reader_make_constant_shell("SecondOfMinuteFn"), NINE_INTEGER), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("SecondFn"), NINE_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(list(list(reader_make_constant_shell("MinuteOfHourFn"), makeInteger(40)), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("MinuteFn"), makeInteger(40), list(reader_make_constant_shell("HourFn"), FOURTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))))), list(list(list(reader_make_constant_shell("MinuteOfHourFn"), makeInteger(45)), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("MinuteFn"), makeInteger(45), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))))), list(list(list(reader_make_constant_shell("HourOfDayFn"), FOURTEEN_INTEGER), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("HourFn"), FOURTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))), list(list(list(reader_make_constant_shell("HourOfDayFn"), TWO_INTEGER), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("HourFn"), TWO_INTEGER, list(reader_make_constant_shell("DayFn"), TWO_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))), list(list(list(reader_make_constant_shell("DayOfMonthFn"), TWO_INTEGER), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), TEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("DayFn"), TWO_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("August"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))), list(list(list(reader_make_constant_shell("DayOfYearFn"), reader_make_constant_shell("November"), TWO_INTEGER), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), TEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("DayFn"), TWO_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("November"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))), list(list(reader_make_constant_shell("November"), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), TEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("November"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))), list(list(reader_make_constant_shell("Wednesday"), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), TEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("DayFn"), FOURTEEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))), list(list(list(reader_make_constant_shell("DayOfMonthFn"), TWO_INTEGER), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("DayFn"), TWO_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))), list(list(list(reader_make_constant_shell("MonthOfYearFn"), FIVE_INTEGER), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("May"), list(reader_make_constant_shell("YearFn"), makeInteger(2005)))), list(list(reader_make_constant_shell("TimeOfDay-4PM"), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("HourFn"), SIXTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))), list(list(reader_make_constant_shell("July"), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2005)))), list(list(reader_make_constant_shell("August"), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("August"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))), list(list(reader_make_constant_shell("TimeOfDay-AM"), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("HourFn"), ZERO_INTEGER, list(reader_make_constant_shell("DayFn"), TWO_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))), list(list(reader_make_constant_shell("TimeOfDay-PM"), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), TWO_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))) });
-    }
-
-    // Internal Constant Initializer Methods
-    @LispMethod(comment = "Internal Constant Initializer Methods")
-    private static final SubLObject _constant_261_initializer() {
-        return list(new SubLObject[]{ list(list(list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), ONE_INTEGER, list(reader_make_constant_shell("HourFn"), THREE_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))))), reader_make_constant_shell("CalendarSecond")), list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), ONE_INTEGER, list(reader_make_constant_shell("HourFn"), THREE_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(list(list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), ONE_INTEGER, list(reader_make_constant_shell("HourFn"), THREE_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))))), reader_make_constant_shell("CalendarMinute")), list(reader_make_constant_shell("MinuteFn"), ONE_INTEGER, list(reader_make_constant_shell("HourFn"), THREE_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))))), list(list(list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), ONE_INTEGER, list(reader_make_constant_shell("HourFn"), THREE_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))))), reader_make_constant_shell("CalendarHour")), list(reader_make_constant_shell("HourFn"), THREE_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))), list(list(list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), ONE_INTEGER, list(reader_make_constant_shell("HourFn"), THREE_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))))), reader_make_constant_shell("CalendarDay")), list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))), list(list(list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), ONE_INTEGER, list(reader_make_constant_shell("HourFn"), THREE_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))))), reader_make_constant_shell("CalendarMonth")), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))), list(list(list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), ONE_INTEGER, list(reader_make_constant_shell("HourFn"), THREE_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))))), reader_make_constant_shell("CalendarYear")), list(reader_make_constant_shell("YearFn"), makeInteger(2004))), list(list(list(reader_make_constant_shell("YearFn"), makeInteger(2004)), reader_make_constant_shell("CalendarYear")), list(reader_make_constant_shell("YearFn"), makeInteger(2004))), list(list(list(reader_make_constant_shell("YearFn"), makeInteger(2004)), reader_make_constant_shell("CalendarMonth")), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))), list(list(list(reader_make_constant_shell("YearFn"), makeInteger(2004)), reader_make_constant_shell("CalendarDay")), list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))), list(list(list(reader_make_constant_shell("YearFn"), makeInteger(2004)), reader_make_constant_shell("CalendarHour")), list(reader_make_constant_shell("HourFn"), ZERO_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))), list(list(list(reader_make_constant_shell("YearFn"), makeInteger(2004)), reader_make_constant_shell("CalendarMinute")), list(reader_make_constant_shell("MinuteFn"), ZERO_INTEGER, list(reader_make_constant_shell("HourFn"), ZERO_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))))), list(list(list(reader_make_constant_shell("YearFn"), makeInteger(2004)), reader_make_constant_shell("CalendarSecond")), list(reader_make_constant_shell("SecondFn"), ZERO_INTEGER, list(reader_make_constant_shell("MinuteFn"), ZERO_INTEGER, list(reader_make_constant_shell("HourFn"), ZERO_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(list(list(reader_make_constant_shell("HourFn"), THREE_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))), reader_make_constant_shell("CalendarMinute")), list(reader_make_constant_shell("MinuteFn"), ZERO_INTEGER, list(reader_make_constant_shell("HourFn"), THREE_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))))) });
-    }
-
-    // defparameter
-    @LispMethod(comment = "defparameter")
-    private static final SubLSymbol $date_utility_test_cases$ = makeSymbol("*DATE-UTILITY-TEST-CASES*");
-
+public final class date_utilities extends SubLTranslatedFile {
     public static final SubLFile me = new date_utilities();
 
+    public static final String myName = "com.cyc.cycjava.cycl.date_utilities";
 
+    public static final String myFingerPrint = "4e265d60571d2377dd65d1a5dd8f1b4c06de9673eb15c80ca7e767eba0bbb5e0";
 
     // deflexical
-    @LispMethod(comment = "A representative sample of the KB constants that date reasoning depends on.\ndeflexical")
     private static final SubLSymbol $date_core_constants$ = makeSymbol("*DATE-CORE-CONSTANTS*");
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $el_date_granularity_order$ = makeSymbol("*EL-DATE-GRANULARITY-ORDER*");
 
     // deflexical
     // The syntactic grammar for formulas enforced by DATE-P.
-    /**
-     * The syntactic grammar for formulas enforced by DATE-P.
-     */
-    @LispMethod(comment = "The syntactic grammar for formulas enforced by DATE-P.\ndeflexical")
     private static final SubLSymbol $date_p_grammar$ = makeSymbol("*DATE-P-GRAMMAR*");
 
     // deflexical
     // The syntactic grammar for formulas enforced by TIME-P.
-    /**
-     * The syntactic grammar for formulas enforced by TIME-P.
-     */
-    @LispMethod(comment = "The syntactic grammar for formulas enforced by TIME-P.\ndeflexical")
     private static final SubLSymbol $time_p_grammar$ = makeSymbol("*TIME-P-GRAMMAR*");
 
     // defconstant
     // The beginning of all time
-    /**
-     * The beginning of all time
-     */
-    @LispMethod(comment = "The beginning of all time\ndefconstant")
     public static final SubLSymbol $beginning_of_time$ = makeSymbol("*BEGINNING-OF-TIME*");
 
     // defconstant
     // The end of all time
-    /**
-     * The end of all time
-     */
-    @LispMethod(comment = "The end of all time\ndefconstant")
     public static final SubLSymbol $end_of_time$ = makeSymbol("*END-OF-TIME*");
 
+
+
     // deflexical
-    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $date_formats_ordered$ = makeSymbol("*DATE-FORMATS-ORDERED*");
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $month_constant_table$ = makeSymbol("*MONTH-CONSTANT-TABLE*");
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $days_of_week$ = makeSymbol("*DAYS-OF-WEEK*");
 
     // deflexical
     // Gregorian Rata Die, i.e. fixed initial day of calendar.
-    /**
-     * Gregorian Rata Die, i.e. fixed initial day of calendar.
-     */
-    @LispMethod(comment = "Gregorian Rata Die, i.e. fixed initial day of calendar.\ndeflexical")
     private static final SubLSymbol $gregorian_rata_die$ = makeSymbol("*GREGORIAN-RATA-DIE*");
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $hours_of_day$ = makeSymbol("*HOURS-OF-DAY*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $duration_denoting_functions_ordered$ = makeSymbol("*DURATION-DENOTING-FUNCTIONS-ORDERED*");
 
     // defconstant
     // Number used to divide universal-dates to get just the year part.
-    /**
-     * Number used to divide universal-dates to get just the year part.
-     */
-    @LispMethod(comment = "Number used to divide universal-dates to get just the year part.\ndefconstant")
     private static final SubLSymbol $u_date_year_div$ = makeSymbol("*U-DATE-YEAR-DIV*");
 
+
+
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $inference_now$ = makeSymbol("*INFERENCE-NOW*");
 
     // defconstant
-    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $start_of_1970$ = makeSymbol("*START-OF-1970*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $parse_to_two_digit_years_in_datesP$ = makeSymbol("*PARSE-TO-TWO-DIGIT-YEARS-IN-DATES?*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $date_patterns$ = makeSymbol("*DATE-PATTERNS*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $date_query_patterns$ = makeSymbol("*DATE-QUERY-PATTERNS*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $day_words$ = makeSymbol("*DAY-WORDS*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $day_word_pairs$ = makeSymbol("*DAY-WORD-PAIRS*");
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $day_name_tokens$ = makeSymbol("*DAY-NAME-TOKENS*");
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $time_zone_tokens$ = makeSymbol("*TIME-ZONE-TOKENS*");
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $common_date_encoding_templates$ = makeSymbol("*COMMON-DATE-ENCODING-TEMPLATES*");
 
     // Internal Constants
-    @LispMethod(comment = "Internal Constants")
-    static private final SubLList $list0 = list(new SubLObject[]{ reader_make_constant_shell("MilliSecondFn"), reader_make_constant_shell("SecondFn"), reader_make_constant_shell("MinuteFn"), reader_make_constant_shell("HourFn"), reader_make_constant_shell("DayFn"), reader_make_constant_shell("MonthFn"), reader_make_constant_shell("YearFn"), reader_make_constant_shell("January"), reader_make_constant_shell("February"), reader_make_constant_shell("March"), reader_make_constant_shell("April"), reader_make_constant_shell("May"), reader_make_constant_shell("June"), reader_make_constant_shell("July"), reader_make_constant_shell("August"), reader_make_constant_shell("September"), reader_make_constant_shell("October"), reader_make_constant_shell("November"), reader_make_constant_shell("December"), reader_make_constant_shell("definingTimeUnit"), reader_make_constant_shell("DaysDuration"), reader_make_constant_shell("MonthsDuration"), reader_make_constant_shell("YearsDuration"), reader_make_constant_shell("CalendarDay"), reader_make_constant_shell("CalendarMonth"), reader_make_constant_shell("CalendarYear") });
+    public static final SubLList $list0 = list(new SubLObject[]{ reader_make_constant_shell(makeString("MilliSecondFn")), reader_make_constant_shell(makeString("SecondFn")), reader_make_constant_shell(makeString("MinuteFn")), reader_make_constant_shell(makeString("HourFn")), reader_make_constant_shell(makeString("DayFn")), reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("YearFn")), reader_make_constant_shell(makeString("January")), reader_make_constant_shell(makeString("February")), reader_make_constant_shell(makeString("March")), reader_make_constant_shell(makeString("April")), reader_make_constant_shell(makeString("May")), reader_make_constant_shell(makeString("June")), reader_make_constant_shell(makeString("July")), reader_make_constant_shell(makeString("August")), reader_make_constant_shell(makeString("September")), reader_make_constant_shell(makeString("October")), reader_make_constant_shell(makeString("November")), reader_make_constant_shell(makeString("December")), reader_make_constant_shell(makeString("definingTimeUnit")), reader_make_constant_shell(makeString("DaysDuration")), reader_make_constant_shell(makeString("MonthsDuration")), reader_make_constant_shell(makeString("YearsDuration")), reader_make_constant_shell(makeString("CalendarDay")), reader_make_constant_shell(makeString("CalendarMonth")), reader_make_constant_shell(makeString("CalendarYear")) });
 
-    static private final SubLSymbol $sym1$VALID_CONSTANT_ = makeSymbol("VALID-CONSTANT?");
+    public static final SubLSymbol $sym1$VALID_CONSTANT_ = makeSymbol("VALID-CONSTANT?");
 
-    private static final SubLList $list2 = list(reader_make_constant_shell("MilliSecondFn"), reader_make_constant_shell("SecondFn"), reader_make_constant_shell("MinuteFn"), reader_make_constant_shell("HourFn"), reader_make_constant_shell("DayFn"), reader_make_constant_shell("MonthFn"), reader_make_constant_shell("YearFn"));
+    private static final SubLList $list2 = list(reader_make_constant_shell(makeString("MilliSecondFn")), reader_make_constant_shell(makeString("SecondFn")), reader_make_constant_shell(makeString("MinuteFn")), reader_make_constant_shell(makeString("HourFn")), reader_make_constant_shell(makeString("DayFn")), reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("YearFn")));
 
+    private static final SubLObject $$MilliSecondFn = reader_make_constant_shell(makeString("MilliSecondFn"));
 
+    private static final SubLObject $$SecondFn = reader_make_constant_shell(makeString("SecondFn"));
 
+    private static final SubLObject $$MinuteFn = reader_make_constant_shell(makeString("MinuteFn"));
 
+    private static final SubLObject $$HourFn = reader_make_constant_shell(makeString("HourFn"));
 
+    private static final SubLObject $$DayFn = reader_make_constant_shell(makeString("DayFn"));
 
+    private static final SubLObject $$MonthFn = reader_make_constant_shell(makeString("MonthFn"));
 
-
-
-
-
-
-
-
+    private static final SubLObject $$YearFn = reader_make_constant_shell(makeString("YearFn"));
 
     private static final SubLList $list10 = list(list(makeSymbol("RESULT-VAR"), makeSymbol("EARLY-VAR"), makeSymbol("LATER-VAR")), makeSymbol("VALIDATOR"), makeSymbol("DIRECT-COMPARATOR"), makeSymbol("SUB-COMPARATOR"));
 
@@ -383,13 +197,29 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol $sym13$SUB_COMPARE = makeUninternedSymbol("SUB-COMPARE");
 
+
+
+
+
+
+
     private static final SubLSymbol EL_FORMULA_ARG2 = makeSymbol("EL-FORMULA-ARG2");
 
-    static private final SubLList $list19 = list(makeKeyword("LT"), makeKeyword("GT"));
+
+
+    public static final SubLList $list19 = list(makeKeyword("LT"), makeKeyword("GT"));
+
+
+
+
 
     private static final SubLSymbol EL_FORMULA_ARG1 = makeSymbol("EL-FORMULA-ARG1");
 
     private static final SubLSymbol POSSIBLY_EL_TIME_MILLISECOND_P = makeSymbol("POSSIBLY-EL-TIME-MILLISECOND-P");
+
+
+
+
 
     private static final SubLSymbol POSSIBLY_EL_TIME_SECOND_P = makeSymbol("POSSIBLY-EL-TIME-SECOND-P");
 
@@ -407,21 +237,27 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str33$unhandled_date_type___S = makeString("unhandled date type: ~S");
 
+
+
+
+
+
+
     private static final SubLSymbol PATTERN_MATCHES_FORMULA_WITHOUT_BINDINGS = makeSymbol("PATTERN-MATCHES-FORMULA-WITHOUT-BINDINGS");
 
-    private static final SubLList $list38 = list(new SubLObject[]{ makeKeyword("OR"), list(reader_make_constant_shell("YearFn"), makeKeyword("INTEGER")), reader_make_constant_shell("TheYear-Indexical"), list(reader_make_constant_shell("MonthFn"), $FORT, list(makeKeyword("AND"), cons(reader_make_constant_shell("YearFn"), makeKeyword("ANYTHING")), list($TEST, makeSymbol("DATE-P-INTERNAL")))), list(reader_make_constant_shell("MonthFn"), $FORT, list(makeKeyword("AND"), reader_make_constant_shell("TheYear-Indexical"), list($TEST, makeSymbol("DATE-P-INTERNAL")))), list(reader_make_constant_shell("DayFn"), list($TEST, makeSymbol("NUMBER-IN-RANGE-P"), ONE_INTEGER, makeInteger(31)), list(makeKeyword("AND"), cons(reader_make_constant_shell("MonthFn"), makeKeyword("ANYTHING")), list($TEST, makeSymbol("DATE-P-INTERNAL")))), list(reader_make_constant_shell("HourFn"), list($TEST, makeSymbol("NUMBER-IN-RANGE-P"), ZERO_INTEGER, makeInteger(23)), list(makeKeyword("AND"), cons(reader_make_constant_shell("DayFn"), makeKeyword("ANYTHING")), list($TEST, makeSymbol("DATE-P-INTERNAL")))), list(reader_make_constant_shell("MinuteFn"), list($TEST, makeSymbol("NUMBER-IN-RANGE-P"), ZERO_INTEGER, makeInteger(59)), list(makeKeyword("AND"), cons(reader_make_constant_shell("HourFn"), makeKeyword("ANYTHING")), list($TEST, makeSymbol("DATE-P-INTERNAL")))), list(reader_make_constant_shell("SecondFn"), list($TEST, makeSymbol("NUMBER-IN-RANGE-P"), ZERO_INTEGER, makeInteger(59)), list(makeKeyword("AND"), cons(reader_make_constant_shell("MinuteFn"), makeKeyword("ANYTHING")), list($TEST, makeSymbol("DATE-P-INTERNAL")))), list(reader_make_constant_shell("MilliSecondFn"), list($TEST, makeSymbol("NUMBER-IN-RANGE-P"), ZERO_INTEGER, makeInteger(999)), list(makeKeyword("AND"), cons(reader_make_constant_shell("SecondFn"), makeKeyword("ANYTHING")), list($TEST, makeSymbol("DATE-P-INTERNAL")))), list(reader_make_constant_shell("DecadeFn"), list($TEST, makeSymbol("NON-NEGATIVE-INTEGER-P"))), list(reader_make_constant_shell("CenturyFn"), makeKeyword("INTEGER")), list(reader_make_constant_shell("QuarterFn"), makeKeyword("INTEGER"), list(makeKeyword("AND"), cons(reader_make_constant_shell("YearFn"), makeKeyword("ANYTHING")), list($TEST, makeSymbol("DATE-P-INTERNAL")))) });
+    private static final SubLList $list38 = list(new SubLObject[]{ makeKeyword("OR"), list(reader_make_constant_shell(makeString("YearFn")), makeKeyword("INTEGER")), reader_make_constant_shell(makeString("TheYear-Indexical")), list(reader_make_constant_shell(makeString("MonthFn")), makeKeyword("FORT"), list(makeKeyword("AND"), cons(reader_make_constant_shell(makeString("YearFn")), makeKeyword("ANYTHING")), list(makeKeyword("TEST"), makeSymbol("DATE-P-INTERNAL")))), list(reader_make_constant_shell(makeString("MonthFn")), makeKeyword("FORT"), list(makeKeyword("AND"), reader_make_constant_shell(makeString("TheYear-Indexical")), list(makeKeyword("TEST"), makeSymbol("DATE-P-INTERNAL")))), list(reader_make_constant_shell(makeString("DayFn")), list(makeKeyword("TEST"), makeSymbol("NUMBER-IN-RANGE-P"), ONE_INTEGER, makeInteger(31)), list(makeKeyword("AND"), cons(reader_make_constant_shell(makeString("MonthFn")), makeKeyword("ANYTHING")), list(makeKeyword("TEST"), makeSymbol("DATE-P-INTERNAL")))), list(reader_make_constant_shell(makeString("HourFn")), list(makeKeyword("TEST"), makeSymbol("NUMBER-IN-RANGE-P"), ZERO_INTEGER, makeInteger(23)), list(makeKeyword("AND"), cons(reader_make_constant_shell(makeString("DayFn")), makeKeyword("ANYTHING")), list(makeKeyword("TEST"), makeSymbol("DATE-P-INTERNAL")))), list(reader_make_constant_shell(makeString("MinuteFn")), list(makeKeyword("TEST"), makeSymbol("NUMBER-IN-RANGE-P"), ZERO_INTEGER, makeInteger(59)), list(makeKeyword("AND"), cons(reader_make_constant_shell(makeString("HourFn")), makeKeyword("ANYTHING")), list(makeKeyword("TEST"), makeSymbol("DATE-P-INTERNAL")))), list(reader_make_constant_shell(makeString("SecondFn")), list(makeKeyword("TEST"), makeSymbol("NUMBER-IN-RANGE-P"), ZERO_INTEGER, makeInteger(59)), list(makeKeyword("AND"), cons(reader_make_constant_shell(makeString("MinuteFn")), makeKeyword("ANYTHING")), list(makeKeyword("TEST"), makeSymbol("DATE-P-INTERNAL")))), list(reader_make_constant_shell(makeString("MilliSecondFn")), list(makeKeyword("TEST"), makeSymbol("NUMBER-IN-RANGE-P"), ZERO_INTEGER, makeInteger(999)), list(makeKeyword("AND"), cons(reader_make_constant_shell(makeString("SecondFn")), makeKeyword("ANYTHING")), list(makeKeyword("TEST"), makeSymbol("DATE-P-INTERNAL")))), list(reader_make_constant_shell(makeString("DecadeFn")), list(makeKeyword("TEST"), makeSymbol("NON-NEGATIVE-INTEGER-P"))), list(reader_make_constant_shell(makeString("CenturyFn")), makeKeyword("INTEGER")), list(reader_make_constant_shell(makeString("QuarterFn")), makeKeyword("INTEGER"), list(makeKeyword("AND"), cons(reader_make_constant_shell(makeString("YearFn")), makeKeyword("ANYTHING")), list(makeKeyword("TEST"), makeSymbol("DATE-P-INTERNAL")))) });
 
-    private static final SubLList $list39 = list(makeKeyword("OR"), list(reader_make_constant_shell("HourFn"), list($TEST, makeSymbol("NUMBER-IN-RANGE-P"), ZERO_INTEGER, makeInteger(23)), list($TEST, makeSymbol("DAY-FOR-TIME-P-P"))), list(reader_make_constant_shell("MinuteFn"), list($TEST, makeSymbol("NUMBER-IN-RANGE-P"), ZERO_INTEGER, makeInteger(59)), list(makeKeyword("AND"), cons(reader_make_constant_shell("HourFn"), makeKeyword("ANYTHING")), list($TEST, makeSymbol("TIME-P-INTERNAL")))), list(reader_make_constant_shell("SecondFn"), list($TEST, makeSymbol("NUMBER-IN-RANGE-P"), ZERO_INTEGER, makeInteger(59)), list(makeKeyword("AND"), cons(reader_make_constant_shell("MinuteFn"), makeKeyword("ANYTHING")), list($TEST, makeSymbol("TIME-P-INTERNAL")))), list(reader_make_constant_shell("MilliSecondFn"), list($TEST, makeSymbol("NUMBER-IN-RANGE-P"), ZERO_INTEGER, makeInteger(999)), list(makeKeyword("AND"), cons(reader_make_constant_shell("SecondFn"), makeKeyword("ANYTHING")), list($TEST, makeSymbol("TIME-P-INTERNAL")))));
+    private static final SubLList $list39 = list(makeKeyword("OR"), list(reader_make_constant_shell(makeString("HourFn")), list(makeKeyword("TEST"), makeSymbol("NUMBER-IN-RANGE-P"), ZERO_INTEGER, makeInteger(23)), list(makeKeyword("TEST"), makeSymbol("DAY-FOR-TIME-P-P"))), list(reader_make_constant_shell(makeString("MinuteFn")), list(makeKeyword("TEST"), makeSymbol("NUMBER-IN-RANGE-P"), ZERO_INTEGER, makeInteger(59)), list(makeKeyword("AND"), cons(reader_make_constant_shell(makeString("HourFn")), makeKeyword("ANYTHING")), list(makeKeyword("TEST"), makeSymbol("TIME-P-INTERNAL")))), list(reader_make_constant_shell(makeString("SecondFn")), list(makeKeyword("TEST"), makeSymbol("NUMBER-IN-RANGE-P"), ZERO_INTEGER, makeInteger(59)), list(makeKeyword("AND"), cons(reader_make_constant_shell(makeString("MinuteFn")), makeKeyword("ANYTHING")), list(makeKeyword("TEST"), makeSymbol("TIME-P-INTERNAL")))), list(reader_make_constant_shell(makeString("MilliSecondFn")), list(makeKeyword("TEST"), makeSymbol("NUMBER-IN-RANGE-P"), ZERO_INTEGER, makeInteger(999)), list(makeKeyword("AND"), cons(reader_make_constant_shell(makeString("SecondFn")), makeKeyword("ANYTHING")), list(makeKeyword("TEST"), makeSymbol("TIME-P-INTERNAL")))));
 
     private static final SubLSymbol $BEGINNING_OF_TIME = makeKeyword("BEGINNING-OF-TIME");
 
     private static final SubLSymbol $END_OF_TIME = makeKeyword("END-OF-TIME");
 
-    private static final SubLObject $$Always_TimeInterval = reader_make_constant_shell("Always-TimeInterval");
+    private static final SubLObject $$Always_TimeInterval = reader_make_constant_shell(makeString("Always-TimeInterval"));
 
+    private static final SubLObject $$TheEmptyTimeInterval = reader_make_constant_shell(makeString("TheEmptyTimeInterval"));
 
-
-    private static final SubLList $list44 = list(reader_make_constant_shell("CalendarSecond"), reader_make_constant_shell("CalendarMinute"), reader_make_constant_shell("CalendarHour"), reader_make_constant_shell("CalendarDay"), reader_make_constant_shell("CalendarMonth"), reader_make_constant_shell("CalendarYear"));
+    private static final SubLList $list44 = list(reader_make_constant_shell(makeString("CalendarSecond")), reader_make_constant_shell(makeString("CalendarMinute")), reader_make_constant_shell(makeString("CalendarHour")), reader_make_constant_shell(makeString("CalendarDay")), reader_make_constant_shell(makeString("CalendarMonth")), reader_make_constant_shell(makeString("CalendarYear")));
 
     private static final SubLList $list45 = list(list(makeSymbol("TIME-TYPE-VAR"), makeSymbol("&KEY"), makeSymbol("DONE?")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
@@ -429,11 +265,21 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol $ALLOW_OTHER_KEYS = makeKeyword("ALLOW-OTHER-KEYS");
 
+
+
+
+
     public static final SubLSymbol $date_units_ordered$ = makeSymbol("*DATE-UNITS-ORDERED*");
 
     private static final SubLList $list51 = list(makeKeyword("CALENDAR"), makeKeyword("QUARTER"), makeKeyword("DECADE"), makeKeyword("CENTURY"));
 
+
+
+
+
     private static final SubLSymbol EXTRACT_DATE_YEAR = makeSymbol("EXTRACT-DATE-YEAR");
+
+
 
     private static final SubLSymbol EXTRACT_DATE_MONTH_NUMBER = makeSymbol("EXTRACT-DATE-MONTH-NUMBER");
 
@@ -449,33 +295,43 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol TIME_P = makeSymbol("TIME-P");
 
+    private static final SubLObject $$CalendarMilliSecond = reader_make_constant_shell(makeString("CalendarMilliSecond"));
 
+    private static final SubLObject $$CalendarSecond = reader_make_constant_shell(makeString("CalendarSecond"));
 
+    private static final SubLObject $$CalendarMinute = reader_make_constant_shell(makeString("CalendarMinute"));
 
+    private static final SubLObject $$CalendarHour = reader_make_constant_shell(makeString("CalendarHour"));
 
+    private static final SubLObject $$CalendarDay = reader_make_constant_shell(makeString("CalendarDay"));
 
+    private static final SubLObject $$CalendarMonth = reader_make_constant_shell(makeString("CalendarMonth"));
 
-
-
-
-
-
-
-
+    private static final SubLObject $$CalendarYear = reader_make_constant_shell(makeString("CalendarYear"));
 
     private static final SubLString $str70$_a_is_not_a_valid_date_ = makeString("~a is not a valid date.");
 
+
+
     private static final SubLString $str72$Can_t_handle_a_date_of__S_yet = makeString("Can't handle a date of ~S yet");
 
+    private static final SubLObject $$QuarterFn = reader_make_constant_shell(makeString("QuarterFn"));
 
+    private static final SubLObject $$DecadeFn = reader_make_constant_shell(makeString("DecadeFn"));
 
-
-
-
+    private static final SubLObject $$CenturyFn = reader_make_constant_shell(makeString("CenturyFn"));
 
     private static final SubLString $str76$_a_is_not_a_valid_time = makeString("~a is not a valid time");
 
-    private static final SubLObject $$TheYear_Indexical = reader_make_constant_shell("TheYear-Indexical");
+
+
+    private static final SubLObject $$TheYear_Indexical = reader_make_constant_shell(makeString("TheYear-Indexical"));
+
+
+
+
+
+
 
     private static final SubLString $str82$Can_t_attach_month__S_to_date__S = makeString("Can't attach month ~S to date ~S");
 
@@ -495,37 +351,39 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str90$Can_t_construct_date_with_century = makeString("Can't construct date with century ~S");
 
+    private static final SubLObject $$YearsDuration = reader_make_constant_shell(makeString("YearsDuration"));
 
+    private static final SubLObject $$MonthsDuration = reader_make_constant_shell(makeString("MonthsDuration"));
 
+    private static final SubLObject $$WeeksDuration = reader_make_constant_shell(makeString("WeeksDuration"));
 
+    private static final SubLObject $$DaysDuration = reader_make_constant_shell(makeString("DaysDuration"));
 
+    private static final SubLObject $$HoursDuration = reader_make_constant_shell(makeString("HoursDuration"));
 
+    private static final SubLObject $$MinutesDuration = reader_make_constant_shell(makeString("MinutesDuration"));
 
+    private static final SubLObject $$SecondsDuration = reader_make_constant_shell(makeString("SecondsDuration"));
 
-
-
-
-
-
-
+    private static final SubLObject $$MillisecondsDuration = reader_make_constant_shell(makeString("MillisecondsDuration"));
 
 
 
     private static final SubLInteger $int$60 = makeInteger(60);
 
+    private static final SubLInteger $int$24 = makeInteger(24);
 
+    private static final SubLObject $$QuartersDuration = reader_make_constant_shell(makeString("QuartersDuration"));
 
-
-
-
+    private static final SubLObject $$DecadesDuration = reader_make_constant_shell(makeString("DecadesDuration"));
 
     private static final SubLInteger $int$120 = makeInteger(120);
 
-
+    private static final SubLObject $$CenturiesDuration = reader_make_constant_shell(makeString("CenturiesDuration"));
 
     private static final SubLInteger $int$1200 = makeInteger(1200);
 
-    private static final SubLList $list107 = list(new SubLObject[]{ reader_make_constant_shell("January"), reader_make_constant_shell("February"), reader_make_constant_shell("March"), reader_make_constant_shell("April"), reader_make_constant_shell("May"), reader_make_constant_shell("June"), reader_make_constant_shell("July"), reader_make_constant_shell("August"), reader_make_constant_shell("September"), reader_make_constant_shell("October"), reader_make_constant_shell("November"), reader_make_constant_shell("December") });
+    private static final SubLList $list107 = list(new SubLObject[]{ reader_make_constant_shell(makeString("January")), reader_make_constant_shell(makeString("February")), reader_make_constant_shell(makeString("March")), reader_make_constant_shell(makeString("April")), reader_make_constant_shell(makeString("May")), reader_make_constant_shell(makeString("June")), reader_make_constant_shell(makeString("July")), reader_make_constant_shell(makeString("August")), reader_make_constant_shell(makeString("September")), reader_make_constant_shell(makeString("October")), reader_make_constant_shell(makeString("November")), reader_make_constant_shell(makeString("December")) });
 
     private static final SubLString $str108$A_KB_dependent_date_specific_func = makeString("A KB-dependent date-specific function was called, but the current Cyc KB does not contain knowledge about dates.");
 
@@ -533,9 +391,9 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol MONTH_TERM_P = makeSymbol("MONTH-TERM-P");
 
+    private static final SubLObject $$MonthOfYearFn = reader_make_constant_shell(makeString("MonthOfYearFn"));
 
-
-    private static final SubLList $list112 = list(reader_make_constant_shell("Sunday"), reader_make_constant_shell("Monday"), reader_make_constant_shell("Tuesday"), reader_make_constant_shell("Wednesday"), reader_make_constant_shell("Thursday"), reader_make_constant_shell("Friday"), reader_make_constant_shell("Saturday"));
+    private static final SubLList $list112 = list(reader_make_constant_shell(makeString("Sunday")), reader_make_constant_shell(makeString("Monday")), reader_make_constant_shell(makeString("Tuesday")), reader_make_constant_shell(makeString("Wednesday")), reader_make_constant_shell(makeString("Thursday")), reader_make_constant_shell(makeString("Friday")), reader_make_constant_shell(makeString("Saturday")));
 
     private static final SubLString $str113$_S_is_not_a_valid_day_of_week_num = makeString("~S is not a valid day-of-week number");
 
@@ -543,7 +401,11 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
 
 
 
-    private static final SubLList $list118 = list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), ONE_INTEGER)));
+
+
+    private static final SubLObject $$DayOfMonthFn = reader_make_constant_shell(makeString("DayOfMonthFn"));
+
+    private static final SubLList $list118 = list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), ONE_INTEGER)));
 
     private static final SubLInteger $int$365 = makeInteger(365);
 
@@ -553,61 +415,63 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLInteger $int$362 = makeInteger(362);
 
-    private static final SubLList $list124 = list(new SubLObject[]{ reader_make_constant_shell("TimeOfDay-MidnightHour"), reader_make_constant_shell("TimeOfDay-1AM"), reader_make_constant_shell("TimeOfDay-2AM"), reader_make_constant_shell("TimeOfDay-3AM"), reader_make_constant_shell("TimeOfDay-4AM"), reader_make_constant_shell("TimeOfDay-5AM"), reader_make_constant_shell("TimeOfDay-6AM"), reader_make_constant_shell("TimeOfDay-7AM"), reader_make_constant_shell("TimeOfDay-8AM"), reader_make_constant_shell("TimeOfDay-9AM"), reader_make_constant_shell("TimeOfDay-10AM"), reader_make_constant_shell("TimeOfDay-11AM"), reader_make_constant_shell("TimeOfDay-NoonHour"), reader_make_constant_shell("TimeOfDay-1PM"), reader_make_constant_shell("TimeOfDay-2PM"), reader_make_constant_shell("TimeOfDay-3PM"), reader_make_constant_shell("TimeOfDay-4PM"), reader_make_constant_shell("TimeOfDay-5PM"), reader_make_constant_shell("TimeOfDay-6PM"), reader_make_constant_shell("TimeOfDay-7PM"), reader_make_constant_shell("TimeOfDay-8PM"), reader_make_constant_shell("TimeOfDay-9PM"), reader_make_constant_shell("TimeOfDay-10PM"), reader_make_constant_shell("TimeOfDay-11PM") });
 
 
+    private static final SubLList $list124 = list(new SubLObject[]{ reader_make_constant_shell(makeString("TimeOfDay-MidnightHour")), reader_make_constant_shell(makeString("TimeOfDay-1AM")), reader_make_constant_shell(makeString("TimeOfDay-2AM")), reader_make_constant_shell(makeString("TimeOfDay-3AM")), reader_make_constant_shell(makeString("TimeOfDay-4AM")), reader_make_constant_shell(makeString("TimeOfDay-5AM")), reader_make_constant_shell(makeString("TimeOfDay-6AM")), reader_make_constant_shell(makeString("TimeOfDay-7AM")), reader_make_constant_shell(makeString("TimeOfDay-8AM")), reader_make_constant_shell(makeString("TimeOfDay-9AM")), reader_make_constant_shell(makeString("TimeOfDay-10AM")), reader_make_constant_shell(makeString("TimeOfDay-11AM")), reader_make_constant_shell(makeString("TimeOfDay-NoonHour")), reader_make_constant_shell(makeString("TimeOfDay-1PM")), reader_make_constant_shell(makeString("TimeOfDay-2PM")), reader_make_constant_shell(makeString("TimeOfDay-3PM")), reader_make_constant_shell(makeString("TimeOfDay-4PM")), reader_make_constant_shell(makeString("TimeOfDay-5PM")), reader_make_constant_shell(makeString("TimeOfDay-6PM")), reader_make_constant_shell(makeString("TimeOfDay-7PM")), reader_make_constant_shell(makeString("TimeOfDay-8PM")), reader_make_constant_shell(makeString("TimeOfDay-9PM")), reader_make_constant_shell(makeString("TimeOfDay-10PM")), reader_make_constant_shell(makeString("TimeOfDay-11PM")) });
+
+    private static final SubLObject $$HourOfDayFn = reader_make_constant_shell(makeString("HourOfDayFn"));
 
     private static final SubLString $str126$Continue_with_nil_hour_of_day_ = makeString("Continue with nil hour of day?");
 
     private static final SubLString $str127$_a_did_not_specify_a_day_ = makeString("~a did not specify a day.");
 
+    private static final SubLObject $$TimeOfDayFn = reader_make_constant_shell(makeString("TimeOfDayFn"));
 
+    private static final SubLObject $$TimeOfHourFn = reader_make_constant_shell(makeString("TimeOfHourFn"));
 
+    private static final SubLObject $$TimeOfMinuteFn = reader_make_constant_shell(makeString("TimeOfMinuteFn"));
 
-
-
-
-
+    private static final SubLObject $$MinuteOfHourFn = reader_make_constant_shell(makeString("MinuteOfHourFn"));
 
     private static final SubLString $str132$Continue_with_nil_minute_of_hour_ = makeString("Continue with nil minute of hour?");
 
     private static final SubLString $str133$_a_did_not_specify_a_hour_ = makeString("~a did not specify a hour.");
 
-
+    private static final SubLObject $$SecondOfMinuteFn = reader_make_constant_shell(makeString("SecondOfMinuteFn"));
 
     private static final SubLString $str135$Continue_with_nil_second_of_minut = makeString("Continue with nil second of minute?");
 
     private static final SubLString $str136$_a_did_not_specify_a_minute_ = makeString("~a did not specify a minute.");
 
-
+    private static final SubLObject $$MillisecondOfSecondFn = reader_make_constant_shell(makeString("MillisecondOfSecondFn"));
 
     private static final SubLString $str138$Continue_with_nil_millisecond_of_ = makeString("Continue with nil millisecond of second?");
 
     private static final SubLString $str139$_a_did_not_specify_a_second_ = makeString("~a did not specify a second.");
 
+    private static final SubLObject $$CalendarWeek = reader_make_constant_shell(makeString("CalendarWeek"));
 
+    private static final SubLObject $$Sunday = reader_make_constant_shell(makeString("Sunday"));
 
+    private static final SubLObject $$January = reader_make_constant_shell(makeString("January"));
 
-
-
-
-
+    private static final SubLObject $$CalendarQuarter = reader_make_constant_shell(makeString("CalendarQuarter"));
 
     private static final SubLInteger $int$59 = makeInteger(59);
 
+    private static final SubLInteger $int$23 = makeInteger(23);
 
+    private static final SubLObject $$Saturday = reader_make_constant_shell(makeString("Saturday"));
 
+    private static final SubLObject $$December = reader_make_constant_shell(makeString("December"));
 
+    private static final SubLObject $$CalendarDecade = reader_make_constant_shell(makeString("CalendarDecade"));
 
-
-
-
-
-
+    private static final SubLObject $$CalendarCentury = reader_make_constant_shell(makeString("CalendarCentury"));
 
     private static final SubLSymbol INFERENCE_DEFINING_TIME_UNIT = makeSymbol("INFERENCE-DEFINING-TIME-UNIT");
 
-
+    private static final SubLObject $$definingTimeUnit = reader_make_constant_shell(makeString("definingTimeUnit"));
 
     private static final SubLSymbol INFERENCE_DEFINING_TIME_UNIT_GET_INTERVAL = makeSymbol("INFERENCE-DEFINING-TIME-UNIT-GET-INTERVAL");
 
@@ -615,9 +479,9 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLInteger $int$999 = makeInteger(999);
 
+    private static final SubLInteger $int$29 = makeInteger(29);
 
-
-    private static final SubLList $list156 = list(reader_make_constant_shell("SecondsDuration"), reader_make_constant_shell("MinutesDuration"), reader_make_constant_shell("HoursDuration"), reader_make_constant_shell("DaysDuration"), reader_make_constant_shell("MonthsDuration"), reader_make_constant_shell("YearsDuration"));
+    private static final SubLList $list156 = list(reader_make_constant_shell(makeString("SecondsDuration")), reader_make_constant_shell(makeString("MinutesDuration")), reader_make_constant_shell(makeString("HoursDuration")), reader_make_constant_shell(makeString("DaysDuration")), reader_make_constant_shell(makeString("MonthsDuration")), reader_make_constant_shell(makeString("YearsDuration")));
 
     private static final SubLSymbol DURATION_P = makeSymbol("DURATION-P");
 
@@ -629,7 +493,7 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol $temporal_indexicals$ = makeSymbol("*TEMPORAL-INDEXICALS*");
 
-    private static final SubLList $list162 = list(reader_make_constant_shell("Now"), reader_make_constant_shell("Now-Indexical"), reader_make_constant_shell("Today-Indexical"), reader_make_constant_shell("Tomorrow-Indexical"), reader_make_constant_shell("Yesterday-Indexical"));
+    private static final SubLList $list162 = list(reader_make_constant_shell(makeString("Now")), reader_make_constant_shell(makeString("Now-Indexical")), reader_make_constant_shell(makeString("Today-Indexical")), reader_make_constant_shell(makeString("Tomorrow-Indexical")), reader_make_constant_shell(makeString("Yesterday-Indexical")));
 
     private static final SubLSymbol TEMPORAL_INDEXICAL_P = makeSymbol("TEMPORAL-INDEXICAL-P");
 
@@ -649,21 +513,25 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLInteger $int$10000 = makeInteger(10000);
 
-    private static final SubLList $list172 = list(reader_make_constant_shell("DaysDuration"), ONE_INTEGER);
+    private static final SubLList $list172 = list(reader_make_constant_shell(makeString("DaysDuration")), ONE_INTEGER);
 
     private static final SubLInteger $int$1970 = makeInteger(1970);
 
-    private static final SubLObject $$TimeOfDay_AM = reader_make_constant_shell("TimeOfDay-AM");
+    private static final SubLObject $$TimeOfDay_AM = reader_make_constant_shell(makeString("TimeOfDay-AM"));
 
-    private static final SubLObject $$TimeOfDay_MidnightHour = reader_make_constant_shell("TimeOfDay-MidnightHour");
+    private static final SubLObject $$TimeOfDay_MidnightHour = reader_make_constant_shell(makeString("TimeOfDay-MidnightHour"));
 
-    private static final SubLObject $$TimeOfDay_PM = reader_make_constant_shell("TimeOfDay-PM");
+    private static final SubLObject $$TimeOfDay_PM = reader_make_constant_shell(makeString("TimeOfDay-PM"));
 
-    private static final SubLObject $$TimeOfDay_NoonHour = reader_make_constant_shell("TimeOfDay-NoonHour");
+    private static final SubLObject $$TimeOfDay_NoonHour = reader_make_constant_shell(makeString("TimeOfDay-NoonHour"));
 
+    private static final SubLObject $$TimeOfYearFn = reader_make_constant_shell(makeString("TimeOfYearFn"));
 
+    private static final SubLObject $$TimeOfMonthFn = reader_make_constant_shell(makeString("TimeOfMonthFn"));
 
+    private static final SubLObject $$DayOfYearFn = reader_make_constant_shell(makeString("DayOfYearFn"));
 
+    private static final SubLObject $$TimeOfWeekFn = reader_make_constant_shell(makeString("TimeOfWeekFn"));
 
 
 
@@ -680,6 +548,8 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
     private static final SubLString $str188$Can_t_support____or____time_inter = makeString("Can't support [) or (] time intervals.");
 
     private static final SubLString $str189$Can_t_support____or____time_inter = makeString("Can't support [) or (] time intervals.~%");
+
+
 
     private static final SubLString $str191$_ = makeString("/");
 
@@ -701,6 +571,12 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLList $list200 = list(makeSymbol("TOKEN-KEY"), makeSymbol("TOKEN-VALUE"));
 
+
+
+
+
+
+
     private static final SubLList $list204 = list(makeString(":"));
 
     private static final SubLString $$$0 = makeString("0");
@@ -715,25 +591,45 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLInteger $int$1900 = makeInteger(1900);
 
-    private static final SubLList $list211 = list(new SubLObject[]{ list($YEAR), list($YEAR, makeKeyword("MONTH-NUM")), list($YEAR, makeKeyword("MONTH-NUM"), makeKeyword("DAY")), list($YEAR, makeKeyword("MONTH-NUM"), makeKeyword("DAY"), $HOUR), list($YEAR, makeKeyword("MONTH-NUM"), makeKeyword("DAY"), $TIME), list($YEAR, makeKeyword("MONTH-NUM"), makeKeyword("DAY"), $TIME, makeKeyword("MILLISECONDS")), list($YEAR, makeKeyword("MONTH-NAME")), list($YEAR, makeKeyword("MONTH-NAME"), makeKeyword("DAY")), list($YEAR, makeKeyword("DAY"), makeKeyword("MONTH-NAME")), list(makeKeyword("MONTH-NAME"), makeKeyword("DAY"), makeKeyword("INDEXICAL-YEAR")), list(makeKeyword("MONTH-NUM"), makeKeyword("DAY"), makeKeyword("INDEXICAL-YEAR")), list(makeKeyword("MONTH-NAME"), $YEAR), list(makeKeyword("MONTH-NUM"), $YEAR), list($TIME, makeKeyword("MONTH-NAME"), makeKeyword("DAY"), $YEAR), list(makeKeyword("MONTH-NAME"), makeKeyword("DAY"), $YEAR), list($TIME, makeKeyword("MONTH-NUM"), makeKeyword("DAY"), $YEAR), list(makeKeyword("MONTH-NUM"), makeKeyword("DAY"), $YEAR), list(makeKeyword("DAY"), makeKeyword("MONTH-NUM"), $YEAR), list($TIME, makeKeyword("DAY"), makeKeyword("MONTH-NAME"), $YEAR), list(makeKeyword("DAY"), makeKeyword("MONTH-NAME"), $YEAR), list(makeKeyword("DAY-NAME"), makeKeyword("DAY"), makeKeyword("MONTH-NAME"), $YEAR, $TIME, makeKeyword("TIME-ZONE")) });
+    private static final SubLList $list211 = list(new SubLObject[]{ list(makeKeyword("YEAR")), list(makeKeyword("YEAR"), makeKeyword("MONTH-NUM")), list(makeKeyword("YEAR"), makeKeyword("MONTH-NUM"), makeKeyword("DAY")), list(makeKeyword("YEAR"), makeKeyword("MONTH-NUM"), makeKeyword("DAY"), makeKeyword("HOUR")), list(makeKeyword("YEAR"), makeKeyword("MONTH-NUM"), makeKeyword("DAY"), makeKeyword("TIME")), list(makeKeyword("YEAR"), makeKeyword("MONTH-NUM"), makeKeyword("DAY"), makeKeyword("TIME"), makeKeyword("MILLISECONDS")), list(makeKeyword("YEAR"), makeKeyword("MONTH-NAME")), list(makeKeyword("YEAR"), makeKeyword("MONTH-NAME"), makeKeyword("DAY")), list(makeKeyword("YEAR"), makeKeyword("DAY"), makeKeyword("MONTH-NAME")), list(makeKeyword("MONTH-NAME"), makeKeyword("DAY"), makeKeyword("INDEXICAL-YEAR")), list(makeKeyword("MONTH-NUM"), makeKeyword("DAY"), makeKeyword("INDEXICAL-YEAR")), list(makeKeyword("MONTH-NAME"), makeKeyword("YEAR")), list(makeKeyword("MONTH-NUM"), makeKeyword("YEAR")), list(makeKeyword("TIME"), makeKeyword("MONTH-NAME"), makeKeyword("DAY"), makeKeyword("YEAR")), list(makeKeyword("MONTH-NAME"), makeKeyword("DAY"), makeKeyword("YEAR")), list(makeKeyword("TIME"), makeKeyword("MONTH-NUM"), makeKeyword("DAY"), makeKeyword("YEAR")), list(makeKeyword("MONTH-NUM"), makeKeyword("DAY"), makeKeyword("YEAR")), list(makeKeyword("DAY"), makeKeyword("MONTH-NUM"), makeKeyword("YEAR")), list(makeKeyword("TIME"), makeKeyword("DAY"), makeKeyword("MONTH-NAME"), makeKeyword("YEAR")), list(makeKeyword("DAY"), makeKeyword("MONTH-NAME"), makeKeyword("YEAR")), list(makeKeyword("DAY-NAME"), makeKeyword("DAY"), makeKeyword("MONTH-NAME"), makeKeyword("YEAR"), makeKeyword("TIME"), makeKeyword("TIME-ZONE")) });
 
-    private static final SubLList $list212 = list(list(makeKeyword("MONTH-NAME"), makeKeyword("DAY"), makeKeyword("UNKNOWN-YEAR")), list(makeKeyword("MONTH-NUM"), makeKeyword("DAY"), makeKeyword("UNKNOWN-YEAR")), list(makeKeyword("MONTH-NAME"), $YEAR, makeKeyword("UNKNOWN-DAY")), list(makeKeyword("MONTH-NAME"), makeKeyword("UNKNOWN-YEAR")));
+    private static final SubLList $list212 = list(list(makeKeyword("MONTH-NAME"), makeKeyword("DAY"), makeKeyword("UNKNOWN-YEAR")), list(makeKeyword("MONTH-NUM"), makeKeyword("DAY"), makeKeyword("UNKNOWN-YEAR")), list(makeKeyword("MONTH-NAME"), makeKeyword("YEAR"), makeKeyword("UNKNOWN-DAY")), list(makeKeyword("MONTH-NAME"), makeKeyword("UNKNOWN-YEAR")));
 
     private static final SubLString $$$of = makeString("of");
 
     private static final SubLString $str214$ = makeString("");
 
+
+
+
+
     private static final SubLSymbol $sym217$_YEAR = makeSymbol("?YEAR");
 
     private static final SubLSymbol $sym218$_DAY = makeSymbol("?DAY");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     private static final SubLSymbol $sym226$YEAR_TOKEN_ = makeSymbol("YEAR-TOKEN?");
 
     private static final SubLSymbol $sym227$DAY_TOKEN_ = makeSymbol("DAY-TOKEN?");
 
-    static private final SubLList $list228 = list(new SubLObject[]{ list(makeString("one"), ONE_INTEGER), list(makeString("two"), TWO_INTEGER), list(makeString("three"), THREE_INTEGER), list(makeString("four"), FOUR_INTEGER), list(makeString("five"), FIVE_INTEGER), list(makeString("six"), SIX_INTEGER), list(makeString("seven"), SEVEN_INTEGER), list(makeString("eight"), EIGHT_INTEGER), list(makeString("nine"), NINE_INTEGER), list(makeString("ten"), TEN_INTEGER), list(makeString("eleven"), ELEVEN_INTEGER), list(makeString("twelve"), TWELVE_INTEGER), list(makeString("thirteen"), THIRTEEN_INTEGER), list(makeString("fourteen"), FOURTEEN_INTEGER), list(makeString("fifteen"), FIFTEEN_INTEGER), list(makeString("sixteen"), SIXTEEN_INTEGER), list(makeString("seventeen"), SEVENTEEN_INTEGER), list(makeString("eighteen"), EIGHTEEN_INTEGER), list(makeString("nineteen"), NINETEEN_INTEGER), list(makeString("twenty"), TWENTY_INTEGER), list(makeString("twenty-one"), makeInteger(21)), list(makeString("twenty-two"), makeInteger(22)), list(makeString("twenty-three"), makeInteger(23)), list(makeString("twenty-four"), makeInteger(24)), list(makeString("twenty-five"), makeInteger(25)), list(makeString("twenty-six"), makeInteger(26)), list(makeString("twenty-seven"), makeInteger(27)), list(makeString("twenty-eight"), makeInteger(28)), list(makeString("twenty-nine"), makeInteger(29)), list(makeString("thirty"), makeInteger(30)), list(makeString("thirty-one"), makeInteger(31)), list(makeString("twenty one"), makeInteger(21)), list(makeString("twenty two"), makeInteger(22)), list(makeString("twenty three"), makeInteger(23)), list(makeString("twenty four"), makeInteger(24)), list(makeString("twenty five"), makeInteger(25)), list(makeString("twenty six"), makeInteger(26)), list(makeString("twenty seven"), makeInteger(27)), list(makeString("twenty eight"), makeInteger(28)), list(makeString("twenty nine"), makeInteger(29)), list(makeString("thirty one"), makeInteger(31)), list(makeString("first"), ONE_INTEGER), list(makeString("second"), TWO_INTEGER), list(makeString("third"), THREE_INTEGER), list(makeString("fourth"), FOUR_INTEGER), list(makeString("fifth"), FIVE_INTEGER), list(makeString("sixth"), SIX_INTEGER), list(makeString("seventh"), SEVEN_INTEGER), list(makeString("eighth"), EIGHT_INTEGER), list(makeString("ninth"), NINE_INTEGER), list(makeString("tenth"), TEN_INTEGER), list(makeString("eleventh"), ELEVEN_INTEGER), list(makeString("twelfth"), TWELVE_INTEGER), list(makeString("thirteenth"), THIRTEEN_INTEGER), list(makeString("fourteenth"), FOURTEEN_INTEGER), list(makeString("fifteenth"), FIFTEEN_INTEGER), list(makeString("sixteenth"), SIXTEEN_INTEGER), list(makeString("seventeenth"), SEVENTEEN_INTEGER), list(makeString("eighteenth"), EIGHTEEN_INTEGER), list(makeString("nineteenth"), NINETEEN_INTEGER), list(makeString("twentieth"), TWENTY_INTEGER), list(makeString("twenty-first"), makeInteger(21)), list(makeString("twenty-second"), makeInteger(22)), list(makeString("twenty-third"), makeInteger(23)), list(makeString("twenty-fourth"), makeInteger(24)), list(makeString("twenty-fifth"), makeInteger(25)), list(makeString("twenty-sixth"), makeInteger(26)), list(makeString("twenty-seventh"), makeInteger(27)), list(makeString("twenty-eighth"), makeInteger(28)), list(makeString("twenty-ninth"), makeInteger(29)), list(makeString("thirtieth"), makeInteger(30)), list(makeString("thirty-first"), makeInteger(31)), list(makeString("twenty first"), makeInteger(21)), list(makeString("twenty second"), makeInteger(22)), list(makeString("twenty third"), makeInteger(23)), list(makeString("twenty fourth"), makeInteger(24)), list(makeString("twenty fifth"), makeInteger(25)), list(makeString("twenty sixth"), makeInteger(26)), list(makeString("twenty seventh"), makeInteger(27)), list(makeString("twenty eighth"), makeInteger(28)), list(makeString("twenty ninth"), makeInteger(29)), list(makeString("thirty first"), makeInteger(31)) });
+    public static final SubLList $list228 = list(new SubLObject[]{ list(makeString("one"), ONE_INTEGER), list(makeString("two"), TWO_INTEGER), list(makeString("three"), THREE_INTEGER), list(makeString("four"), FOUR_INTEGER), list(makeString("five"), FIVE_INTEGER), list(makeString("six"), SIX_INTEGER), list(makeString("seven"), SEVEN_INTEGER), list(makeString("eight"), EIGHT_INTEGER), list(makeString("nine"), NINE_INTEGER), list(makeString("ten"), TEN_INTEGER), list(makeString("eleven"), ELEVEN_INTEGER), list(makeString("twelve"), TWELVE_INTEGER), list(makeString("thirteen"), THIRTEEN_INTEGER), list(makeString("fourteen"), FOURTEEN_INTEGER), list(makeString("fifteen"), FIFTEEN_INTEGER), list(makeString("sixteen"), SIXTEEN_INTEGER), list(makeString("seventeen"), SEVENTEEN_INTEGER), list(makeString("eighteen"), EIGHTEEN_INTEGER), list(makeString("nineteen"), NINETEEN_INTEGER), list(makeString("twenty"), TWENTY_INTEGER), list(makeString("twenty-one"), makeInteger(21)), list(makeString("twenty-two"), makeInteger(22)), list(makeString("twenty-three"), makeInteger(23)), list(makeString("twenty-four"), makeInteger(24)), list(makeString("twenty-five"), makeInteger(25)), list(makeString("twenty-six"), makeInteger(26)), list(makeString("twenty-seven"), makeInteger(27)), list(makeString("twenty-eight"), makeInteger(28)), list(makeString("twenty-nine"), makeInteger(29)), list(makeString("thirty"), makeInteger(30)), list(makeString("thirty-one"), makeInteger(31)), list(makeString("twenty one"), makeInteger(21)), list(makeString("twenty two"), makeInteger(22)), list(makeString("twenty three"), makeInteger(23)), list(makeString("twenty four"), makeInteger(24)), list(makeString("twenty five"), makeInteger(25)), list(makeString("twenty six"), makeInteger(26)), list(makeString("twenty seven"), makeInteger(27)), list(makeString("twenty eight"), makeInteger(28)), list(makeString("twenty nine"), makeInteger(29)), list(makeString("thirty one"), makeInteger(31)), list(makeString("first"), ONE_INTEGER), list(makeString("second"), TWO_INTEGER), list(makeString("third"), THREE_INTEGER), list(makeString("fourth"), FOUR_INTEGER), list(makeString("fifth"), FIVE_INTEGER), list(makeString("sixth"), SIX_INTEGER), list(makeString("seventh"), SEVEN_INTEGER), list(makeString("eighth"), EIGHT_INTEGER), list(makeString("ninth"), NINE_INTEGER), list(makeString("tenth"), TEN_INTEGER), list(makeString("eleventh"), ELEVEN_INTEGER), list(makeString("twelfth"), TWELVE_INTEGER), list(makeString("thirteenth"), THIRTEEN_INTEGER), list(makeString("fourteenth"), FOURTEEN_INTEGER), list(makeString("fifteenth"), FIFTEEN_INTEGER), list(makeString("sixteenth"), SIXTEEN_INTEGER), list(makeString("seventeenth"), SEVENTEEN_INTEGER), list(makeString("eighteenth"), EIGHTEEN_INTEGER), list(makeString("nineteenth"), NINETEEN_INTEGER), list(makeString("twentieth"), TWENTY_INTEGER), list(makeString("twenty-first"), makeInteger(21)), list(makeString("twenty-second"), makeInteger(22)), list(makeString("twenty-third"), makeInteger(23)), list(makeString("twenty-fourth"), makeInteger(24)), list(makeString("twenty-fifth"), makeInteger(25)), list(makeString("twenty-sixth"), makeInteger(26)), list(makeString("twenty-seventh"), makeInteger(27)), list(makeString("twenty-eighth"), makeInteger(28)), list(makeString("twenty-ninth"), makeInteger(29)), list(makeString("thirtieth"), makeInteger(30)), list(makeString("thirty-first"), makeInteger(31)), list(makeString("twenty first"), makeInteger(21)), list(makeString("twenty second"), makeInteger(22)), list(makeString("twenty third"), makeInteger(23)), list(makeString("twenty fourth"), makeInteger(24)), list(makeString("twenty fifth"), makeInteger(25)), list(makeString("twenty sixth"), makeInteger(26)), list(makeString("twenty seventh"), makeInteger(27)), list(makeString("twenty eighth"), makeInteger(28)), list(makeString("twenty ninth"), makeInteger(29)), list(makeString("thirty first"), makeInteger(31)) });
 
-    static private final SubLList $list229 = list(makeSymbol("KEY"), makeSymbol("VALUE"));
+    public static final SubLList $list229 = list(makeSymbol("KEY"), makeSymbol("VALUE"));
+
+
 
     private static final SubLList $list231 = list(makeString("January"), makeString("Jan"));
 
@@ -749,7 +645,7 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLList $list237 = list(makeString("July"), makeString("Jul"));
 
-    static private final SubLList $list238 = list(makeString("August"), makeString("Aug"));
+    public static final SubLList $list238 = list(makeString("August"), makeString("Aug"));
 
     private static final SubLList $list239 = list(makeString("September"), makeString("Sept"), makeString("Sep"));
 
@@ -759,7 +655,7 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLList $list242 = list(makeString("December"), makeString("Dec"));
 
-    static private final SubLList $list243 = list(new SubLObject[]{ makeString("Sunday"), makeString("Sun"), makeString("Monday"), makeString("Mon"), makeString("Tuesday"), makeString("Tue"), makeString("Wednesday"), makeString("Wed"), makeString("Thursday"), makeString("Thu"), makeString("Friday"), makeString("Fri"), makeString("Saturday"), makeString("Sat") });
+    public static final SubLList $list243 = list(new SubLObject[]{ makeString("Sunday"), makeString("Sun"), makeString("Monday"), makeString("Mon"), makeString("Tuesday"), makeString("Tue"), makeString("Wednesday"), makeString("Wed"), makeString("Thursday"), makeString("Thu"), makeString("Friday"), makeString("Fri"), makeString("Saturday"), makeString("Sat") });
 
     private static final SubLList $list244 = list(new SubLObject[]{ makeString("UT"), makeString("GMT"), makeString("EST"), makeString("EDT"), makeString("CST"), makeString("CDT"), makeString("MST"), makeString("MDT"), makeString("PST"), makeString("PDT"), makeString("Z") });
 
@@ -843,7 +739,7 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLList $list284 = list(makeSymbol("&OPTIONAL"), makeSymbol("YEAR"), makeSymbol("MONTH"), makeSymbol("DAY"), makeSymbol("HOUR"), makeSymbol("MINUTE"), makeSymbol("SECOND"), makeSymbol("DECISECOND"));
 
-
+    private static final SubLInteger $int$21 = makeInteger(21);
 
     private static final SubLList $list286 = list(makeString("-"), makeString(" "), makeString(":"), makeString("."), makeString("T"), makeString("t"));
 
@@ -863,47 +759,59 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLList $list294 = list(CHAR_colon);
 
+    private static final SubLObject $$Date = reader_make_constant_shell(makeString("Date"));
 
-
-
+    private static final SubLObject $$laterThan = reader_make_constant_shell(makeString("laterThan"));
 
     private static final SubLSymbol DATE_AFTER = makeSymbol("DATE-AFTER");
 
-    private static final SubLList $list304 = list(list(list(list(reader_make_constant_shell("SecondFn"), makeInteger(59), list(reader_make_constant_shell("MinuteFn"), makeInteger(59), list(reader_make_constant_shell("HourFn"), NINE_INTEGER, list(reader_make_constant_shell("DayFn"), TEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000))))))), list(reader_make_constant_shell("HoursDuration"), makeDouble(2.5))), list(reader_make_constant_shell("SecondFn"), makeInteger(59), list(reader_make_constant_shell("MinuteFn"), makeInteger(29), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), TEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000)))))))));
+
+
+
+
+
+
+
+
+
+
+
+
+    private static final SubLList $list304 = list(list(list(list(reader_make_constant_shell(makeString("SecondFn")), makeInteger(59), list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(59), list(reader_make_constant_shell(makeString("HourFn")), NINE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), TEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2000))))))), list(reader_make_constant_shell(makeString("HoursDuration")), makeDouble(2.5))), list(reader_make_constant_shell(makeString("SecondFn")), makeInteger(59), list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(29), list(reader_make_constant_shell(makeString("HourFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), TEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2000)))))))));
 
     private static final SubLSymbol $sym305$PARSE_DATE_W_OUT_TWO_DIGIT_YEARS = makeSymbol("PARSE-DATE-W/OUT-TWO-DIGIT-YEARS");
 
     private static final SubLList $list306 = list(makeSymbol("DATE-TEST-CASE-TABLES"));
 
-    private static final SubLList $list307 = list(list(list(makeString("December 20")), list(list(reader_make_constant_shell("DayFn"), TWENTY_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), reader_make_constant_shell("TheYear-Indexical"))))), list(list(makeString("12/20")), list(list(reader_make_constant_shell("DayFn"), TWENTY_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), reader_make_constant_shell("TheYear-Indexical"))))), list(list(makeString("12/20/18")), NIL), list(list(makeString("12/20/1918")), list(list(reader_make_constant_shell("DayFn"), TWENTY_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(1918)))))));
+    private static final SubLList $list307 = list(list(list(makeString("December 20")), list(list(reader_make_constant_shell(makeString("DayFn")), TWENTY_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), reader_make_constant_shell(makeString("TheYear-Indexical")))))), list(list(makeString("12/20")), list(list(reader_make_constant_shell(makeString("DayFn")), TWENTY_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), reader_make_constant_shell(makeString("TheYear-Indexical")))))), list(list(makeString("12/20/18")), NIL), list(list(makeString("12/20/1918")), list(list(reader_make_constant_shell(makeString("DayFn")), TWENTY_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(1918)))))));
 
     private static final SubLSymbol LEAP_YEAR_P = makeSymbol("LEAP-YEAR-P");
 
     private static final SubLList $list309 = list(list(list(makeInteger(2000)), T), list(list(makeInteger(1900)), NIL), list(list(makeInteger(2004)), T));
 
-    private static final SubLList $list310 = list(list(list(list(reader_make_constant_shell("YearFn"), makeInteger(2000))), T), list(list(list(reader_make_constant_shell("CenturyFn"), TWENTY_INTEGER)), T));
+    private static final SubLList $list310 = list(list(list(list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2000))), T), list(list(list(reader_make_constant_shell(makeString("CenturyFn")), TWENTY_INTEGER)), T));
 
-    private static final SubLList $list311 = list(list(list(list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000)))))), T), list(list(list(reader_make_constant_shell("YearFn"), makeInteger(2000))), NIL), list(list(list(reader_make_constant_shell("CenturyFn"), TWENTY_INTEGER)), NIL));
+    private static final SubLList $list311 = list(list(list(list(reader_make_constant_shell(makeString("HourFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), makeInteger(23), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2000)))))), T), list(list(list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2000))), NIL), list(list(list(reader_make_constant_shell(makeString("CenturyFn")), TWENTY_INTEGER)), NIL));
 
     private static final SubLSymbol DATE_PRECISION = makeSymbol("DATE-PRECISION");
 
-    private static final SubLList $list313 = list(list(list(list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000)))))), reader_make_constant_shell("CalendarHour")), list(list(list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000))))))), reader_make_constant_shell("CalendarMinute")), list(list(list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000)))))))), reader_make_constant_shell("CalendarSecond")), list(list(list(reader_make_constant_shell("MilliSecondFn"), SIX_INTEGER, list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000))))))))), reader_make_constant_shell("CalendarMilliSecond")));
+    private static final SubLList $list313 = list(list(list(list(reader_make_constant_shell(makeString("HourFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), makeInteger(23), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2000)))))), reader_make_constant_shell(makeString("CalendarHour"))), list(list(list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), makeInteger(23), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2000))))))), reader_make_constant_shell(makeString("CalendarMinute"))), list(list(list(reader_make_constant_shell(makeString("SecondFn")), FIVE_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), makeInteger(23), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2000)))))))), reader_make_constant_shell(makeString("CalendarSecond"))), list(list(list(reader_make_constant_shell(makeString("MilliSecondFn")), SIX_INTEGER, list(reader_make_constant_shell(makeString("SecondFn")), FIVE_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), makeInteger(23), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2000))))))))), reader_make_constant_shell(makeString("CalendarMilliSecond"))));
 
     private static final SubLSymbol EXPLODE_CALENDAR_TIME = makeSymbol("EXPLODE-CALENDAR-TIME");
 
-    private static final SubLList $list315 = list(list(new SubLObject[]{ list(list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000)))))), makeKeyword("CALENDAR"), makeInteger(2000), ONE_INTEGER, makeInteger(23), TWELVE_INTEGER, NIL, NIL, NIL }), list(new SubLObject[]{ list(list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000))))))), makeKeyword("CALENDAR"), makeInteger(2000), ONE_INTEGER, makeInteger(23), TWELVE_INTEGER, makeInteger(42), NIL, NIL }), list(new SubLObject[]{ list(list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000)))))))), makeKeyword("CALENDAR"), makeInteger(2000), ONE_INTEGER, makeInteger(23), TWELVE_INTEGER, makeInteger(42), FIVE_INTEGER, NIL }), list(new SubLObject[]{ list(list(reader_make_constant_shell("MilliSecondFn"), SIX_INTEGER, list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000))))))))), makeKeyword("CALENDAR"), makeInteger(2000), ONE_INTEGER, makeInteger(23), TWELVE_INTEGER, makeInteger(42), FIVE_INTEGER, SIX_INTEGER }));
+    private static final SubLList $list315 = list(list(new SubLObject[]{ list(list(reader_make_constant_shell(makeString("HourFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), makeInteger(23), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2000)))))), makeKeyword("CALENDAR"), makeInteger(2000), ONE_INTEGER, makeInteger(23), TWELVE_INTEGER, NIL, NIL, NIL }), list(new SubLObject[]{ list(list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), makeInteger(23), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2000))))))), makeKeyword("CALENDAR"), makeInteger(2000), ONE_INTEGER, makeInteger(23), TWELVE_INTEGER, makeInteger(42), NIL, NIL }), list(new SubLObject[]{ list(list(reader_make_constant_shell(makeString("SecondFn")), FIVE_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), makeInteger(23), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2000)))))))), makeKeyword("CALENDAR"), makeInteger(2000), ONE_INTEGER, makeInteger(23), TWELVE_INTEGER, makeInteger(42), FIVE_INTEGER, NIL }), list(new SubLObject[]{ list(list(reader_make_constant_shell(makeString("MilliSecondFn")), SIX_INTEGER, list(reader_make_constant_shell(makeString("SecondFn")), FIVE_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), makeInteger(23), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2000))))))))), makeKeyword("CALENDAR"), makeInteger(2000), ONE_INTEGER, makeInteger(23), TWELVE_INTEGER, makeInteger(42), FIVE_INTEGER, SIX_INTEGER }));
 
     private static final SubLSymbol CYCL_DATE_TO_UNIVERSAL_TIME = makeSymbol("CYCL-DATE-TO-UNIVERSAL-TIME");
 
-    private static final SubLList $list317 = list(list(list(list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000)))))), makeInteger("3157639200"), NIL), list(list(list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000))))))), makeInteger("3157641720"), NIL), list(list(list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000)))))))), makeInteger("3157641725"), NIL), list(list(list(reader_make_constant_shell("MilliSecondFn"), SIX_INTEGER, list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000))))))))), makeInteger("3157641725"), SIX_INTEGER));
+    private static final SubLList $list317 = list(list(list(list(reader_make_constant_shell(makeString("HourFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), makeInteger(23), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2000)))))), makeInteger("3157639200"), NIL), list(list(list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), makeInteger(23), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2000))))))), makeInteger("3157641720"), NIL), list(list(list(reader_make_constant_shell(makeString("SecondFn")), FIVE_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), makeInteger(23), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2000)))))))), makeInteger("3157641725"), NIL), list(list(list(reader_make_constant_shell(makeString("MilliSecondFn")), SIX_INTEGER, list(reader_make_constant_shell(makeString("SecondFn")), FIVE_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), makeInteger(23), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2000))))))))), makeInteger("3157641725"), SIX_INTEGER));
 
     private static final SubLSymbol MILLISECONDSTRING = makeSymbol("MILLISECONDSTRING");
 
-    private static final SubLList $list319 = list(list(list(list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000)))))), makeString("12:00:00.000")), list(list(list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000))))))), makeString("12:42:00.000")), list(list(list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000)))))))), makeString("12:42:05.000")), list(list(list(reader_make_constant_shell("MilliSecondFn"), SIX_INTEGER, list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000))))))))), makeString("12:42:05.006")));
+    private static final SubLList $list319 = list(list(list(list(reader_make_constant_shell(makeString("HourFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), makeInteger(23), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2000)))))), makeString("12:00:00.000")), list(list(list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), makeInteger(23), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2000))))))), makeString("12:42:00.000")), list(list(list(reader_make_constant_shell(makeString("SecondFn")), FIVE_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), makeInteger(23), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2000)))))))), makeString("12:42:05.000")), list(list(list(reader_make_constant_shell(makeString("MilliSecondFn")), SIX_INTEGER, list(reader_make_constant_shell(makeString("SecondFn")), FIVE_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), makeInteger(23), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2000))))))))), makeString("12:42:05.006")));
 
     private static final SubLSymbol DATE_REDUCED_TO_START = makeSymbol("DATE-REDUCED-TO-START");
 
-    private static final SubLList $list321 = list(list(list(list(reader_make_constant_shell("YearFn"), makeInteger(2004))), list(reader_make_constant_shell("YearFn"), makeInteger(2004))), list(list(list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))), list(reader_make_constant_shell("YearFn"), makeInteger(2004))), list(list(list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))), list(reader_make_constant_shell("YearFn"), makeInteger(2004))), list(list(list(reader_make_constant_shell("HourFn"), ZERO_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))), list(reader_make_constant_shell("YearFn"), makeInteger(2004))), list(list(list(reader_make_constant_shell("MinuteFn"), ZERO_INTEGER, list(reader_make_constant_shell("HourFn"), ZERO_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))))), list(reader_make_constant_shell("YearFn"), makeInteger(2004))), list(list(list(reader_make_constant_shell("SecondFn"), ZERO_INTEGER, list(reader_make_constant_shell("MinuteFn"), ZERO_INTEGER, list(reader_make_constant_shell("HourFn"), ZERO_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("YearFn"), makeInteger(2004))), list(list(list(reader_make_constant_shell("SecondFn"), ZERO_INTEGER, list(reader_make_constant_shell("MinuteFn"), ONE_INTEGER, list(reader_make_constant_shell("HourFn"), ZERO_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("MinuteFn"), ONE_INTEGER, list(reader_make_constant_shell("HourFn"), ZERO_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))))));
+    private static final SubLList $list321 = list(list(list(list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))), list(list(list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))), list(list(list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))))), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))), list(list(list(reader_make_constant_shell(makeString("HourFn")), ZERO_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))), list(list(list(reader_make_constant_shell(makeString("MinuteFn")), ZERO_INTEGER, list(reader_make_constant_shell(makeString("HourFn")), ZERO_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))))))), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))), list(list(list(reader_make_constant_shell(makeString("SecondFn")), ZERO_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), ZERO_INTEGER, list(reader_make_constant_shell(makeString("HourFn")), ZERO_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))), list(list(list(reader_make_constant_shell(makeString("SecondFn")), ZERO_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("HourFn")), ZERO_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(reader_make_constant_shell(makeString("MinuteFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("HourFn")), ZERO_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))))))));
 
     private static final SubLSymbol DATE_TO_PRECISION = makeSymbol("DATE-TO-PRECISION");
 
@@ -921,27 +829,8 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol DATE_QUERY_P = makeSymbol("DATE-QUERY-P");
 
-    private static final SubLList $list330 = list(list(list(list(reader_make_constant_shell("DayFn"), ELEVEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("August"), list(reader_make_constant_shell("YearFn"), makeSymbol("?YEAR"))))), T), list(list(list(reader_make_constant_shell("DayFn"), ELEVEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("August"), list(reader_make_constant_shell("YearFn"), makeSymbol("?YEAR")))), reader_make_constant_shell("YearFn")), T), list(list(list(reader_make_constant_shell("DayFn"), makeSymbol("?DAY"), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("August"), list(reader_make_constant_shell("YearFn"), makeInteger(2001)))), reader_make_constant_shell("DayFn")), T), list(list(list(reader_make_constant_shell("DayFn"), makeSymbol("?DAY"), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("August"), list(reader_make_constant_shell("YearFn"), makeInteger(2001)))), reader_make_constant_shell("YearFn")), NIL), list(list(list(reader_make_constant_shell("DayFn"), ELEVEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("September"), reader_make_constant_shell("TheYear-Indexical")))), NIL), list(list(list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("September"), list(reader_make_constant_shell("YearFn"), makeInteger(2011)))), NIL), list(list(list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("September"), list(reader_make_constant_shell("YearFn"), ELEVEN_INTEGER))), NIL));
+    private static final SubLList $list330 = list(list(list(list(reader_make_constant_shell(makeString("DayFn")), ELEVEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("August")), list(reader_make_constant_shell(makeString("YearFn")), makeSymbol("?YEAR"))))), T), list(list(list(reader_make_constant_shell(makeString("DayFn")), ELEVEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("August")), list(reader_make_constant_shell(makeString("YearFn")), makeSymbol("?YEAR")))), reader_make_constant_shell(makeString("YearFn"))), T), list(list(list(reader_make_constant_shell(makeString("DayFn")), makeSymbol("?DAY"), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("August")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2001)))), reader_make_constant_shell(makeString("DayFn"))), T), list(list(list(reader_make_constant_shell(makeString("DayFn")), makeSymbol("?DAY"), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("August")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2001)))), reader_make_constant_shell(makeString("YearFn"))), NIL), list(list(list(reader_make_constant_shell(makeString("DayFn")), ELEVEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("September")), reader_make_constant_shell(makeString("TheYear-Indexical"))))), NIL), list(list(list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("September")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2011)))), NIL), list(list(list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("September")), list(reader_make_constant_shell(makeString("YearFn")), ELEVEN_INTEGER))), NIL));
 
-    /**
-     * Determines whether the portion of the KB necessary for date reasoning is loaded.
-     * This is the KB analogue of the #+Cyc-Date feature.
-     */
-    @LispMethod(comment = "Determines whether the portion of the KB necessary for date reasoning is loaded.\r\nThis is the KB analogue of the #+Cyc-Date feature.\nDetermines whether the portion of the KB necessary for date reasoning is loaded.\nThis is the KB analogue of the #+Cyc-Date feature.")
-    public static final SubLObject initialize_date_kb_feature_alt() {
-        if (NIL != list_utilities.every_in_list($sym1$VALID_CONSTANT_, $date_core_constants$.getGlobalValue(), UNPROVIDED)) {
-            kb_control_vars.set_date_kb_loaded();
-        } else {
-            kb_control_vars.unset_date_kb_loaded();
-        }
-        return kb_control_vars.date_kb_loaded_p();
-    }
-
-    /**
-     * Determines whether the portion of the KB necessary for date reasoning is loaded.
-     * This is the KB analogue of the #+Cyc-Date feature.
-     */
-    @LispMethod(comment = "Determines whether the portion of the KB necessary for date reasoning is loaded.\r\nThis is the KB analogue of the #+Cyc-Date feature.\nDetermines whether the portion of the KB necessary for date reasoning is loaded.\nThis is the KB analogue of the #+Cyc-Date feature.")
     public static SubLObject initialize_date_kb_feature() {
         if (NIL != list_utilities.every_in_list($sym1$VALID_CONSTANT_, $date_core_constants$.getGlobalValue(), UNPROVIDED)) {
             kb_control_vars.set_date_kb_loaded();
@@ -1273,142 +1162,30 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return Errors.error($str33$unhandled_date_type___S, date1);
     }
 
-    /**
-     *
-     *
-     * @return booleanp; Whether OBJECT is possibly a cycl date or integer date.
-     */
-    @LispMethod(comment = "@return booleanp; Whether OBJECT is possibly a cycl date or integer date.")
-    public static final SubLObject possibly_hl_date_p_alt(SubLObject v_object) {
-        return makeBoolean((NIL != com.cyc.cycjava.cycl.date_utilities.possibly_date_p(v_object)) || v_object.isInteger());
-    }
-
-    /**
-     *
-     *
-     * @return booleanp; Whether OBJECT is possibly a cycl date or integer date.
-     */
-    @LispMethod(comment = "@return booleanp; Whether OBJECT is possibly a cycl date or integer date.")
     public static SubLObject possibly_hl_date_p(final SubLObject v_object) {
         return makeBoolean((NIL != possibly_date_p(v_object)) || v_object.isInteger());
     }
 
-    /**
-     *
-     *
-     * @return booleanp; Whether OBJECT is possibly a date-p.
-     */
-    @LispMethod(comment = "@return booleanp; Whether OBJECT is possibly a date-p.")
-    public static final SubLObject possibly_date_p_alt(SubLObject v_object) {
-        return el_formula_p(v_object);
-    }
-
-    /**
-     *
-     *
-     * @return booleanp; Whether OBJECT is possibly a date-p.
-     */
-    @LispMethod(comment = "@return booleanp; Whether OBJECT is possibly a date-p.")
     public static SubLObject possibly_date_p(final SubLObject v_object) {
         return el_formula_p(v_object);
     }
 
-    /**
-     *
-     *
-     * @return booleanp; Return T iff OBJECT is a CycL date expression
-     */
-    @LispMethod(comment = "@return booleanp; Return T iff OBJECT is a CycL date expression")
-    public static final SubLObject date_p_alt(SubLObject v_object) {
-        return makeBoolean((NIL != com.cyc.cycjava.cycl.date_utilities.possibly_date_p(v_object)) && (NIL != com.cyc.cycjava.cycl.date_utilities.date_p_internal(v_object)));
-    }
-
-    /**
-     *
-     *
-     * @return booleanp; Return T iff OBJECT is a CycL date expression
-     */
-    @LispMethod(comment = "@return booleanp; Return T iff OBJECT is a CycL date expression")
     public static SubLObject date_p(final SubLObject v_object) {
         return makeBoolean((NIL != possibly_date_p(v_object)) && (NIL != date_p_internal(v_object)));
-    }
-
-    public static final SubLObject possibly_time_p_alt(SubLObject v_object) {
-        return el_formula_p(v_object);
     }
 
     public static SubLObject possibly_time_p(final SubLObject v_object) {
         return el_formula_p(v_object);
     }
 
-    public static final SubLObject time_p_alt(SubLObject v_object) {
-        return makeBoolean((NIL != com.cyc.cycjava.cycl.date_utilities.possibly_time_p(v_object)) && (NIL != com.cyc.cycjava.cycl.date_utilities.time_p_internal(v_object)));
-    }
-
     public static SubLObject time_p(final SubLObject v_object) {
         return makeBoolean((NIL != possibly_time_p(v_object)) && (NIL != time_p_internal(v_object)));
     }
 
-    /**
-     *
-     *
-     * @return booleanp; Return T iff OBJECT is a generalized CycL date expression
-     */
-    @LispMethod(comment = "@return booleanp; Return T iff OBJECT is a generalized CycL date expression")
-    public static final SubLObject generalized_date_p_alt(SubLObject v_object) {
-        return makeBoolean((((NIL != com.cyc.cycjava.cycl.date_utilities.date_p(v_object)) || (NIL != com.cyc.cycjava.cycl.date_utilities.end_of_timeP(v_object))) || (NIL != com.cyc.cycjava.cycl.date_utilities.beginning_of_timeP(v_object))) || (NIL != com.cyc.cycjava.cycl.date_utilities.always_time_intervalP(v_object)));
-    }
-
-    /**
-     *
-     *
-     * @return booleanp; Return T iff OBJECT is a generalized CycL date expression
-     */
-    @LispMethod(comment = "@return booleanp; Return T iff OBJECT is a generalized CycL date expression")
     public static SubLObject generalized_date_p(final SubLObject v_object) {
         return makeBoolean((((NIL != date_p(v_object)) || (NIL != end_of_timeP(v_object))) || (NIL != beginning_of_timeP(v_object))) || (NIL != always_time_intervalP(v_object)));
     }
 
-    /**
-     *
-     *
-     * @return booleanp; Return T iff OBJECT is a CycL date expression with (FUNCTION <EL-VARIABLE-P>) in it somewhere,
-    e.g., (#$DayFn 11 (#$MonthFn #$September (#$YearFn ?YEAR)))
-    if FUNCTION is not provided as an arg2, do a general search over #$DateDenotingFunctions
-     */
-    @LispMethod(comment = "@return booleanp; Return T iff OBJECT is a CycL date expression with (FUNCTION <EL-VARIABLE-P>) in it somewhere,\r\ne.g., (#$DayFn 11 (#$MonthFn #$September (#$YearFn ?YEAR)))\r\nif FUNCTION is not provided as an arg2, do a general search over #$DateDenotingFunctions")
-    public static final SubLObject date_query_p_alt(SubLObject v_object, SubLObject function) {
-        if (function == UNPROVIDED) {
-            function = NIL;
-        }
-        if (NIL != list_utilities.list_of_list_p(v_object)) {
-            return NIL;
-        }
-        {
-            SubLObject ans = NIL;
-            if (NIL == ans) {
-                {
-                    SubLObject csome_list_var = $date_p_grammar$.getGlobalValue().rest();
-                    SubLObject rule = NIL;
-                    for (rule = csome_list_var.first(); !((NIL != ans) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , rule = csome_list_var.first()) {
-                        if (rule.isList() && ((NIL == function) || function.eql(rule.first()))) {
-                            ans = (NIL != list_utilities.tree_find($AND, rule, UNPROVIDED, UNPROVIDED)) ? ((SubLObject) (list_utilities.tree_find(list(rule.first(), $EL_VARIABLE, list($AND, $ANYTHING)), v_object, PATTERN_MATCHES_FORMULA, UNPROVIDED))) : list_utilities.tree_find(list(rule.first(), $EL_VARIABLE), v_object, PATTERN_MATCHES_FORMULA, UNPROVIDED);
-                        }
-                    }
-                }
-            }
-            return list_utilities.sublisp_boolean(ans);
-        }
-    }
-
-    /**
-     *
-     *
-     * @return booleanp; Return T iff OBJECT is a CycL date expression with (FUNCTION <EL-VARIABLE-P>) in it somewhere,
-    e.g., (#$DayFn 11 (#$MonthFn #$September (#$YearFn ?YEAR)))
-    if FUNCTION is not provided as an arg2, do a general search over #$DateDenotingFunctions
-     */
-    @LispMethod(comment = "@return booleanp; Return T iff OBJECT is a CycL date expression with (FUNCTION <EL-VARIABLE-P>) in it somewhere,\r\ne.g., (#$DayFn 11 (#$MonthFn #$September (#$YearFn ?YEAR)))\r\nif FUNCTION is not provided as an arg2, do a general search over #$DateDenotingFunctions")
     public static SubLObject date_query_p(final SubLObject v_object, SubLObject function) {
         if (function == UNPROVIDED) {
             function = NIL;
@@ -1432,120 +1209,30 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return list_utilities.sublisp_boolean(ans);
     }
 
-    public static final SubLObject date_p_internal_alt(SubLObject formula) {
-        return values(formula_pattern_match.formula_matches_pattern(formula, $date_p_grammar$.getGlobalValue()));
-    }
-
     public static SubLObject date_p_internal(final SubLObject formula) {
         return formula_pattern_match.pattern_matches_formula_without_bindings($date_p_grammar$.getGlobalValue(), formula);
     }
 
-    /**
-     *
-     *
-     * @return BOOLEANP; Is OBJECT a day for TIME-P purposes?
-     * @unknown - Can't just use DATE-P, since #$Today-Indexical fails that.
-     */
-    @LispMethod(comment = "@return BOOLEANP; Is OBJECT a day for TIME-P purposes?\r\n@unknown - Can\'t just use DATE-P, since #$Today-Indexical fails that.")
-    public static final SubLObject day_for_time_p_p_alt(SubLObject v_object) {
-        return formula_pattern_match.formula_matches_pattern(v_object, $ANYTHING);
-    }
-
-    /**
-     *
-     *
-     * @return BOOLEANP; Is OBJECT a day for TIME-P purposes?
-     * @unknown - Can't just use DATE-P, since #$Today-Indexical fails that.
-     */
-    @LispMethod(comment = "@return BOOLEANP; Is OBJECT a day for TIME-P purposes?\r\n@unknown - Can\'t just use DATE-P, since #$Today-Indexical fails that.")
     public static SubLObject day_for_time_p_p(final SubLObject v_object) {
         return formula_pattern_match.pattern_matches_formula_without_bindings($ANYTHING, v_object);
-    }
-
-    public static final SubLObject time_p_internal_alt(SubLObject formula) {
-        return values(formula_pattern_match.formula_matches_pattern(formula, $time_p_grammar$.getGlobalValue()));
     }
 
     public static SubLObject time_p_internal(final SubLObject formula) {
         return formula_pattern_match.pattern_matches_formula_without_bindings($time_p_grammar$.getGlobalValue(), formula);
     }
 
-    /**
-     *
-     *
-     * @return booleanp; Returns whether DATE is the beginning of all time.
-     */
-    @LispMethod(comment = "@return booleanp; Returns whether DATE is the beginning of all time.")
-    public static final SubLObject beginning_of_timeP_alt(SubLObject date) {
-        return eq(date, $beginning_of_time$.getGlobalValue());
-    }
-
-    /**
-     *
-     *
-     * @return booleanp; Returns whether DATE is the beginning of all time.
-     */
-    @LispMethod(comment = "@return booleanp; Returns whether DATE is the beginning of all time.")
     public static SubLObject beginning_of_timeP(final SubLObject date) {
         return eq(date, $beginning_of_time$.getGlobalValue());
     }
 
-    /**
-     *
-     *
-     * @return booleanp; Returns whether DATE is the end of all time.
-     */
-    @LispMethod(comment = "@return booleanp; Returns whether DATE is the end of all time.")
-    public static final SubLObject end_of_timeP_alt(SubLObject date) {
-        return eq(date, $end_of_time$.getGlobalValue());
-    }
-
-    /**
-     *
-     *
-     * @return booleanp; Returns whether DATE is the end of all time.
-     */
-    @LispMethod(comment = "@return booleanp; Returns whether DATE is the end of all time.")
     public static SubLObject end_of_timeP(final SubLObject date) {
         return eq(date, $end_of_time$.getGlobalValue());
     }
 
-    /**
-     *
-     *
-     * @return booleanp; Whether INDEX denotes the time interval for all time.
-     */
-    @LispMethod(comment = "@return booleanp; Whether INDEX denotes the time interval for all time.")
-    public static final SubLObject always_time_intervalP_alt(SubLObject index) {
-        return eq(index, $$Always_TimeInterval);
-    }
-
-    /**
-     *
-     *
-     * @return booleanp; Whether INDEX denotes the time interval for all time.
-     */
-    @LispMethod(comment = "@return booleanp; Whether INDEX denotes the time interval for all time.")
     public static SubLObject always_time_intervalP(final SubLObject index) {
         return kb_utilities.kbeq(index, $$Always_TimeInterval);
     }
 
-    /**
-     *
-     *
-     * @return booleanp; Whether INDEX is the empty interval.
-     */
-    @LispMethod(comment = "@return booleanp; Whether INDEX is the empty interval.")
-    public static final SubLObject empty_time_intervalP_alt(SubLObject index) {
-        return eq(index, $$TheEmptyTimeInterval);
-    }
-
-    /**
-     *
-     *
-     * @return booleanp; Whether INDEX is the empty interval.
-     */
-    @LispMethod(comment = "@return booleanp; Whether INDEX is the empty interval.")
     public static SubLObject empty_time_intervalP(final SubLObject index) {
         return kb_utilities.kbeq(index, $$TheEmptyTimeInterval);
     }
@@ -1554,63 +1241,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return subl_promotions.memberP(unit1, member(unit2, $date_units_ordered$.getGlobalValue(), symbol_function(EQ), UNPROVIDED).rest(), symbol_function(EQ), UNPROVIDED);
     }
 
-    /**
-     * Iterator.  Binds TIME-TYPE-VAR to each of the calendar types, from smallest to largest.
-     */
-    @LispMethod(comment = "Iterator.  Binds TIME-TYPE-VAR to each of the calendar types, from smallest to largest.")
-    public static final SubLObject do_time_units_ordered_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            destructuring_bind_must_consp(current, datum, $list_alt13);
-            {
-                SubLObject temp = current.rest();
-                current = current.first();
-                {
-                    SubLObject time_type_var = NIL;
-                    destructuring_bind_must_consp(current, datum, $list_alt13);
-                    time_type_var = current.first();
-                    current = current.rest();
-                    {
-                        SubLObject allow_other_keys_p = NIL;
-                        SubLObject rest = current;
-                        SubLObject bad = NIL;
-                        SubLObject current_1 = NIL;
-                        for (; NIL != rest;) {
-                            destructuring_bind_must_consp(rest, datum, $list_alt13);
-                            current_1 = rest.first();
-                            rest = rest.rest();
-                            destructuring_bind_must_consp(rest, datum, $list_alt13);
-                            if (NIL == member(current_1, $list_alt14, UNPROVIDED, UNPROVIDED)) {
-                                bad = T;
-                            }
-                            if (current_1 == $ALLOW_OTHER_KEYS) {
-                                allow_other_keys_p = rest.first();
-                            }
-                            rest = rest.rest();
-                        }
-                        if ((NIL != bad) && (NIL == allow_other_keys_p)) {
-                            cdestructuring_bind_error(datum, $list_alt13);
-                        }
-                        {
-                            SubLObject doneP_tail = property_list_member($DONE_, current);
-                            SubLObject doneP = (NIL != doneP_tail) ? ((SubLObject) (cadr(doneP_tail))) : NIL;
-                            current = temp;
-                            {
-                                SubLObject body = current;
-                                return listS(CSOME, list(time_type_var, $date_units_ordered$, doneP), append(body, NIL));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Iterator.  Binds TIME-TYPE-VAR to each of the calendar types, from smallest to largest.
-     */
-    @LispMethod(comment = "Iterator.  Binds TIME-TYPE-VAR to each of the calendar types, from smallest to largest.")
     public static SubLObject do_time_units_ordered(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -1648,51 +1278,10 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return listS(CSOME, list(time_type_var, $date_units_ordered$, doneP), append(body, NIL));
     }
 
-    public static final SubLObject date_formatG_alt(SubLObject format1, SubLObject format2) {
-        return memberP(format1, member(format2, $date_formats_ordered$.getGlobalValue(), symbol_function(EQ), UNPROVIDED).rest(), symbol_function(EQ), UNPROVIDED);
-    }
-
     public static SubLObject date_formatG(final SubLObject format1, final SubLObject format2) {
         return subl_promotions.memberP(format1, member(format2, $date_formats_ordered$.getGlobalValue(), symbol_function(EQ), UNPROVIDED).rest(), symbol_function(EQ), UNPROVIDED);
     }
 
-    /**
-     *
-     *
-     * @return integerp; Returns the century argument of DATE.
-     */
-    @LispMethod(comment = "@return integerp; Returns the century argument of DATE.")
-    public static final SubLObject extract_date_century_alt(SubLObject date) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject format = com.cyc.cycjava.cycl.date_utilities.explode_date(date);
-                SubLObject century = thread.secondMultipleValue();
-                SubLObject month = thread.thirdMultipleValue();
-                SubLObject day = thread.fourthMultipleValue();
-                SubLObject hour = thread.fifthMultipleValue();
-                SubLObject minute = thread.sixthMultipleValue();
-                SubLObject second = thread.seventhMultipleValue();
-                thread.resetMultipleValues();
-                {
-                    SubLObject pcase_var = format;
-                    if (pcase_var.eql($CENTURY)) {
-                        return century;
-                    } else {
-                        return NIL;
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return integerp; Returns the century argument of DATE.
-     */
-    @LispMethod(comment = "@return integerp; Returns the century argument of DATE.")
     public static SubLObject extract_date_century(final SubLObject date) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -1711,47 +1300,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     *
-     *
-     * @return integerp; Returns the decade argument of DATE.
-     */
-    @LispMethod(comment = "@return integerp; Returns the decade argument of DATE.")
-    public static final SubLObject extract_date_decade_alt(SubLObject date) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject format = com.cyc.cycjava.cycl.date_utilities.explode_date(date);
-                SubLObject decade = thread.secondMultipleValue();
-                SubLObject month = thread.thirdMultipleValue();
-                SubLObject day = thread.fourthMultipleValue();
-                SubLObject hour = thread.fifthMultipleValue();
-                SubLObject minute = thread.sixthMultipleValue();
-                SubLObject second = thread.seventhMultipleValue();
-                thread.resetMultipleValues();
-                {
-                    SubLObject pcase_var = format;
-                    if (pcase_var.eql($CENTURY)) {
-                        return NIL;
-                    } else {
-                        if (pcase_var.eql($DECADE)) {
-                            return decade;
-                        } else {
-                            return NIL;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return integerp; Returns the decade argument of DATE.
-     */
-    @LispMethod(comment = "@return integerp; Returns the decade argument of DATE.")
     public static SubLObject extract_date_decade(final SubLObject date) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -1773,43 +1321,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     *
-     *
-     * @return integerp; Returns the year argument of DATE.
-     */
-    @LispMethod(comment = "@return integerp; Returns the year argument of DATE.")
-    public static final SubLObject extract_date_year_alt(SubLObject date) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject format = com.cyc.cycjava.cycl.date_utilities.explode_date(date);
-                SubLObject year = thread.secondMultipleValue();
-                SubLObject month = thread.thirdMultipleValue();
-                SubLObject day = thread.fourthMultipleValue();
-                SubLObject hour = thread.fifthMultipleValue();
-                SubLObject minute = thread.sixthMultipleValue();
-                SubLObject second = thread.seventhMultipleValue();
-                thread.resetMultipleValues();
-                {
-                    SubLObject pcase_var = format;
-                    if (pcase_var.eql($DECADE) || pcase_var.eql($CENTURY)) {
-                        return NIL;
-                    } else {
-                        return year;
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return integerp; Returns the year argument of DATE.
-     */
-    @LispMethod(comment = "@return integerp; Returns the year argument of DATE.")
     public static SubLObject extract_date_year(final SubLObject date) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -1828,43 +1339,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return year;
     }
 
-    /**
-     *
-     *
-     * @return month-p; Returns the month argument of DATE.
-     */
-    @LispMethod(comment = "@return month-p; Returns the month argument of DATE.")
-    public static final SubLObject extract_date_month_alt(SubLObject date) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject format = com.cyc.cycjava.cycl.date_utilities.explode_date(date);
-                SubLObject year = thread.secondMultipleValue();
-                SubLObject month = thread.thirdMultipleValue();
-                SubLObject day = thread.fourthMultipleValue();
-                SubLObject hour = thread.fifthMultipleValue();
-                SubLObject minute = thread.sixthMultipleValue();
-                SubLObject second = thread.seventhMultipleValue();
-                thread.resetMultipleValues();
-                {
-                    SubLObject pcase_var = format;
-                    if ((pcase_var.eql($QUARTER) || pcase_var.eql($DECADE)) || pcase_var.eql($CENTURY)) {
-                        return NIL;
-                    } else {
-                        return NIL != numeric_date_utilities.valid_month_number_p(month) ? ((SubLObject) (com.cyc.cycjava.cycl.date_utilities.month_number(month))) : NIL;
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return month-p; Returns the month argument of DATE.
-     */
-    @LispMethod(comment = "@return month-p; Returns the month argument of DATE.")
     public static SubLObject extract_date_month(final SubLObject date) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -1883,36 +1357,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL != numeric_date_utilities.valid_month_number_p(month) ? month_number(month) : NIL;
     }
 
-    /**
-     *
-     *
-     * @return integerp; Returns the number associated with the month argument of DATE.
-     */
-    @LispMethod(comment = "@return integerp; Returns the number associated with the month argument of DATE.")
-    public static final SubLObject extract_date_month_number_alt(SubLObject date) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject format = com.cyc.cycjava.cycl.date_utilities.explode_date(date);
-                SubLObject year = thread.secondMultipleValue();
-                SubLObject month = thread.thirdMultipleValue();
-                SubLObject day = thread.fourthMultipleValue();
-                SubLObject hour = thread.fifthMultipleValue();
-                SubLObject minute = thread.sixthMultipleValue();
-                SubLObject second = thread.seventhMultipleValue();
-                thread.resetMultipleValues();
-                return month;
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return integerp; Returns the number associated with the month argument of DATE.
-     */
-    @LispMethod(comment = "@return integerp; Returns the number associated with the month argument of DATE.")
     public static SubLObject extract_date_month_number(final SubLObject date) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -1927,36 +1371,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return month;
     }
 
-    /**
-     *
-     *
-     * @return integerp; Returns the day argument of DATE.
-     */
-    @LispMethod(comment = "@return integerp; Returns the day argument of DATE.")
-    public static final SubLObject extract_date_day_alt(SubLObject date) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject format = com.cyc.cycjava.cycl.date_utilities.explode_date(date);
-                SubLObject year = thread.secondMultipleValue();
-                SubLObject month = thread.thirdMultipleValue();
-                SubLObject day = thread.fourthMultipleValue();
-                SubLObject hour = thread.fifthMultipleValue();
-                SubLObject minute = thread.sixthMultipleValue();
-                SubLObject second = thread.seventhMultipleValue();
-                thread.resetMultipleValues();
-                return day;
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return integerp; Returns the day argument of DATE.
-     */
-    @LispMethod(comment = "@return integerp; Returns the day argument of DATE.")
     public static SubLObject extract_date_day(final SubLObject date) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -1971,36 +1385,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return day;
     }
 
-    /**
-     *
-     *
-     * @return integerp; Returns the hour argument of DATE.
-     */
-    @LispMethod(comment = "@return integerp; Returns the hour argument of DATE.")
-    public static final SubLObject extract_date_hour_alt(SubLObject date) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject format = com.cyc.cycjava.cycl.date_utilities.explode_date(date);
-                SubLObject year = thread.secondMultipleValue();
-                SubLObject month = thread.thirdMultipleValue();
-                SubLObject day = thread.fourthMultipleValue();
-                SubLObject hour = thread.fifthMultipleValue();
-                SubLObject minute = thread.sixthMultipleValue();
-                SubLObject second = thread.seventhMultipleValue();
-                thread.resetMultipleValues();
-                return hour;
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return integerp; Returns the hour argument of DATE.
-     */
-    @LispMethod(comment = "@return integerp; Returns the hour argument of DATE.")
     public static SubLObject extract_date_hour(final SubLObject date) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -2015,36 +1399,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return hour;
     }
 
-    /**
-     *
-     *
-     * @return integerp; Returns the minute argument of DATE.
-     */
-    @LispMethod(comment = "@return integerp; Returns the minute argument of DATE.")
-    public static final SubLObject extract_date_minute_alt(SubLObject date) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject format = com.cyc.cycjava.cycl.date_utilities.explode_date(date);
-                SubLObject year = thread.secondMultipleValue();
-                SubLObject month = thread.thirdMultipleValue();
-                SubLObject day = thread.fourthMultipleValue();
-                SubLObject hour = thread.fifthMultipleValue();
-                SubLObject minute = thread.sixthMultipleValue();
-                SubLObject second = thread.seventhMultipleValue();
-                thread.resetMultipleValues();
-                return minute;
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return integerp; Returns the minute argument of DATE.
-     */
-    @LispMethod(comment = "@return integerp; Returns the minute argument of DATE.")
     public static SubLObject extract_date_minute(final SubLObject date) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -2059,36 +1413,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return minute;
     }
 
-    /**
-     *
-     *
-     * @return integerp; Returns the seconds argument of DATE.
-     */
-    @LispMethod(comment = "@return integerp; Returns the seconds argument of DATE.")
-    public static final SubLObject extract_date_second_alt(SubLObject date) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject format = com.cyc.cycjava.cycl.date_utilities.explode_date(date);
-                SubLObject year = thread.secondMultipleValue();
-                SubLObject month = thread.thirdMultipleValue();
-                SubLObject day = thread.fourthMultipleValue();
-                SubLObject hour = thread.fifthMultipleValue();
-                SubLObject minute = thread.sixthMultipleValue();
-                SubLObject second = thread.seventhMultipleValue();
-                thread.resetMultipleValues();
-                return second;
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return integerp; Returns the seconds argument of DATE.
-     */
-    @LispMethod(comment = "@return integerp; Returns the seconds argument of DATE.")
     public static SubLObject extract_date_second(final SubLObject date) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -2103,37 +1427,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return second;
     }
 
-    /**
-     *
-     *
-     * @return integerp; Returns the milliseconds argument of DATE.
-     */
-    @LispMethod(comment = "@return integerp; Returns the milliseconds argument of DATE.")
-    public static final SubLObject extract_date_millisecond_alt(SubLObject date) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject format = com.cyc.cycjava.cycl.date_utilities.explode_date(date);
-                SubLObject year = thread.secondMultipleValue();
-                SubLObject month = thread.thirdMultipleValue();
-                SubLObject day = thread.fourthMultipleValue();
-                SubLObject hour = thread.fifthMultipleValue();
-                SubLObject minute = thread.sixthMultipleValue();
-                SubLObject second = thread.seventhMultipleValue();
-                SubLObject millisecond = thread.eighthMultipleValue();
-                thread.resetMultipleValues();
-                return millisecond;
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return integerp; Returns the milliseconds argument of DATE.
-     */
-    @LispMethod(comment = "@return integerp; Returns the milliseconds argument of DATE.")
     public static SubLObject extract_date_millisecond(final SubLObject date) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -2149,48 +1442,9 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return millisecond;
     }
 
-    /**
-     * return a string in the format hh:mm:ss.sss from the TIME-P given.
-     * If none is given, the current second within the day is used.
-     */
-    @LispMethod(comment = "return a string in the format hh:mm:ss.sss from the TIME-P given.\r\nIf none is given, the current second within the day is used.\nreturn a string in the format hh:mm:ss.sss from the TIME-P given.\nIf none is given, the current second within the day is used.")
-    public static final SubLObject millisecondstring_alt(SubLObject time) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(time, TIME_P);
-            thread.resetMultipleValues();
-            {
-                SubLObject time_type = com.cyc.cycjava.cycl.date_utilities.explode_calendar_time(time);
-                SubLObject year = thread.secondMultipleValue();
-                SubLObject month = thread.thirdMultipleValue();
-                SubLObject day = thread.fourthMultipleValue();
-                SubLObject hour = thread.fifthMultipleValue();
-                SubLObject min = thread.sixthMultipleValue();
-                SubLObject sec = thread.seventhMultipleValue();
-                SubLObject millisec = thread.eighthMultipleValue();
-                thread.resetMultipleValues();
-                if (NIL == min) {
-                    min = ZERO_INTEGER;
-                }
-                if (NIL == sec) {
-                    sec = ZERO_INTEGER;
-                }
-                if (NIL == millisec) {
-                    millisec = ZERO_INTEGER;
-                }
-                return numeric_date_utilities.encode_millisecondstring(hour, min, sec, millisec);
-            }
-        }
-    }
-
-    /**
-     * return a string in the format hh:mm:ss.sss from the TIME-P given.
-     * If none is given, the current second within the day is used.
-     */
-    @LispMethod(comment = "return a string in the format hh:mm:ss.sss from the TIME-P given.\r\nIf none is given, the current second within the day is used.\nreturn a string in the format hh:mm:ss.sss from the TIME-P given.\nIf none is given, the current second within the day is used.")
     public static SubLObject millisecondstring(final SubLObject time) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != time_p(time) : "! date_utilities.time_p(time) " + ("date_utilities.time_p(time) " + "CommonSymbols.NIL != date_utilities.time_p(time) ") + time;
+        assert NIL != time_p(time) : "date_utilities.time_p(time) " + "CommonSymbols.NIL != date_utilities.time_p(time) " + time;
         thread.resetMultipleValues();
         final SubLObject time_type = explode_calendar_time(time);
         final SubLObject year = thread.secondMultipleValue();
@@ -2213,53 +1467,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return numeric_date_utilities.encode_millisecondstring(hour, min, sec, millisec);
     }
 
-    /**
-     *
-     *
-     * @return date-argument-p; Returns the TYPE argument of DATE.
-     */
-    @LispMethod(comment = "@return date-argument-p; Returns the TYPE argument of DATE.")
-    public static final SubLObject extract_date_time_type_alt(SubLObject date, SubLObject type) {
-        {
-            SubLObject pcase_var = type;
-            if (pcase_var.eql($$CalendarMilliSecond)) {
-                return com.cyc.cycjava.cycl.date_utilities.extract_date_millisecond(date);
-            } else {
-                if (pcase_var.eql($$CalendarSecond)) {
-                    return com.cyc.cycjava.cycl.date_utilities.extract_date_second(date);
-                } else {
-                    if (pcase_var.eql($$CalendarMinute)) {
-                        return com.cyc.cycjava.cycl.date_utilities.extract_date_minute(date);
-                    } else {
-                        if (pcase_var.eql($$CalendarHour)) {
-                            return com.cyc.cycjava.cycl.date_utilities.extract_date_hour(date);
-                        } else {
-                            if (pcase_var.eql($$CalendarDay)) {
-                                return com.cyc.cycjava.cycl.date_utilities.extract_date_day(date);
-                            } else {
-                                if (pcase_var.eql($$CalendarMonth)) {
-                                    return com.cyc.cycjava.cycl.date_utilities.extract_date_month(date);
-                                } else {
-                                    if (pcase_var.eql($$CalendarYear)) {
-                                        return com.cyc.cycjava.cycl.date_utilities.extract_date_year(date);
-                                    } else {
-                                        return NIL;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return date-argument-p; Returns the TYPE argument of DATE.
-     */
-    @LispMethod(comment = "@return date-argument-p; Returns the TYPE argument of DATE.")
     public static SubLObject extract_date_time_type(final SubLObject date, final SubLObject type) {
         if (type.eql($$CalendarMilliSecond)) {
             return extract_date_millisecond(date);
@@ -2285,38 +1492,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject explode_date_alt(SubLObject date) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (NIL == com.cyc.cycjava.cycl.date_utilities.date_p(date)) {
-                    Errors.error($str_alt38$_a_is_not_a_valid_date_, date);
-                }
-            }
-            {
-                SubLObject pcase_var = com.cyc.cycjava.cycl.date_utilities.date_format(date);
-                if (pcase_var.eql($CALENDAR)) {
-                    return com.cyc.cycjava.cycl.date_utilities.explode_calendar_date(date);
-                } else {
-                    if (pcase_var.eql($QUARTER)) {
-                        return com.cyc.cycjava.cycl.date_utilities.explode_quarter_date(date);
-                    } else {
-                        if (pcase_var.eql($DECADE)) {
-                            return com.cyc.cycjava.cycl.date_utilities.explode_decade_date(date);
-                        } else {
-                            if (pcase_var.eql($CENTURY)) {
-                                return com.cyc.cycjava.cycl.date_utilities.explode_century_date(date);
-                            } else {
-                                Errors.error($str_alt40$Can_t_handle_a_date_of__S_yet, date);
-                            }
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject explode_date(final SubLObject date) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (NIL == date_p(date))) {
@@ -2339,30 +1514,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject date_format_alt(SubLObject date) {
-        {
-            SubLObject pcase_var = date.first();
-            if ((((((pcase_var.eql($$YearFn) || pcase_var.eql($$MonthFn)) || pcase_var.eql($$DayFn)) || pcase_var.eql($$HourFn)) || pcase_var.eql($$MinuteFn)) || pcase_var.eql($$SecondFn)) || pcase_var.eql($$MilliSecondFn)) {
-                return $CALENDAR;
-            } else {
-                if (pcase_var.eql($$QuarterFn)) {
-                    return $QUARTER;
-                } else {
-                    if (pcase_var.eql($$DecadeFn)) {
-                        return $DECADE;
-                    } else {
-                        if (pcase_var.eql($$CenturyFn)) {
-                            return $CENTURY;
-                        } else {
-                            Errors.error($str_alt40$Can_t_handle_a_date_of__S_yet, date);
-                        }
-                    }
-                }
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject date_format(final SubLObject date) {
         final SubLObject pcase_var = date.first();
         if ((((((pcase_var.eql($$YearFn) || pcase_var.eql($$MonthFn)) || pcase_var.eql($$DayFn)) || pcase_var.eql($$HourFn)) || pcase_var.eql($$MinuteFn)) || pcase_var.eql($$SecondFn)) || pcase_var.eql($$MilliSecondFn)) {
@@ -2381,86 +1532,12 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     * returns the time from any date expression that contains a time.
-     */
-    @LispMethod(comment = "returns the time from any date expression that contains a time.")
-    public static final SubLObject explode_calendar_time_alt(SubLObject time) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (NIL == com.cyc.cycjava.cycl.date_utilities.time_p(time)) {
-                    Errors.error($str_alt51$_a_is_not_a_valid_time, time);
-                }
-            }
-            return com.cyc.cycjava.cycl.date_utilities.explode_calendar_date(time);
-        }
-    }
-
-    /**
-     * returns the time from any date expression that contains a time.
-     */
-    @LispMethod(comment = "returns the time from any date expression that contains a time.")
     public static SubLObject explode_calendar_time(final SubLObject time) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (NIL == time_p(time))) {
             Errors.error($str76$_a_is_not_a_valid_time, time);
         }
         return explode_calendar_date(time);
-    }
-
-    public static final SubLObject explode_calendar_date_alt(SubLObject date) {
-        {
-            SubLObject year = NIL;
-            SubLObject month = NIL;
-            SubLObject day = NIL;
-            SubLObject hour = NIL;
-            SubLObject min = NIL;
-            SubLObject sec = NIL;
-            SubLObject millisec = NIL;
-            for (; date.isCons();) {
-                {
-                    SubLObject pcase_var = date.first();
-                    if (pcase_var.eql($$YearFn)) {
-                        year = second(date);
-                        date = NIL;
-                    } else {
-                        if (pcase_var.eql($$MonthFn)) {
-                            month = com.cyc.cycjava.cycl.date_utilities.number_of_month(second(date));
-                            date = third(date);
-                        } else {
-                            if (pcase_var.eql($$DayFn)) {
-                                day = second(date);
-                                date = third(date);
-                            } else {
-                                if (pcase_var.eql($$HourFn)) {
-                                    hour = second(date);
-                                    date = third(date);
-                                } else {
-                                    if (pcase_var.eql($$MinuteFn)) {
-                                        min = second(date);
-                                        date = third(date);
-                                    } else {
-                                        if (pcase_var.eql($$SecondFn)) {
-                                            sec = second(date);
-                                            date = third(date);
-                                        } else {
-                                            if (pcase_var.eql($$MilliSecondFn)) {
-                                                millisec = second(date);
-                                                date = third(date);
-                                            } else {
-                                                Errors.error($str_alt40$Can_t_handle_a_date_of__S_yet, date);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return values($CALENDAR, year, month, day, hour, min, sec, millisec);
-        }
     }
 
     public static SubLObject explode_calendar_date(SubLObject date) {
@@ -2513,30 +1590,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return values($CALENDAR, year, month, day, hour, min, sec, millisec);
     }
 
-    public static final SubLObject explode_quarter_date_alt(SubLObject date) {
-        {
-            SubLObject year = NIL;
-            SubLObject quarter = NIL;
-            for (; date.isCons();) {
-                {
-                    SubLObject pcase_var = date.first();
-                    if (pcase_var.eql($$YearFn)) {
-                        year = second(date);
-                        date = NIL;
-                    } else {
-                        if (pcase_var.eql($$QuarterFn)) {
-                            quarter = second(date);
-                            date = third(date);
-                        } else {
-                            Errors.error($str_alt40$Can_t_handle_a_date_of__S_yet, date);
-                        }
-                    }
-                }
-            }
-            return values($QUARTER, year, quarter);
-        }
-    }
-
     public static SubLObject explode_quarter_date(SubLObject date) {
         SubLObject year = NIL;
         SubLObject quarter = NIL;
@@ -2557,24 +1610,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return values($QUARTER, year, quarter);
     }
 
-    public static final SubLObject explode_decade_date_alt(SubLObject date) {
-        {
-            SubLObject decade = NIL;
-            for (; date.isCons();) {
-                {
-                    SubLObject pcase_var = date.first();
-                    if (pcase_var.eql($$DecadeFn)) {
-                        decade = second(date);
-                        date = NIL;
-                    } else {
-                        Errors.error($str_alt40$Can_t_handle_a_date_of__S_yet, date);
-                    }
-                }
-            }
-            return values($DECADE, decade);
-        }
-    }
-
     public static SubLObject explode_decade_date(SubLObject date) {
         SubLObject decade = NIL;
         while (date.isCons()) {
@@ -2587,24 +1622,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
             }
         } 
         return values($DECADE, decade);
-    }
-
-    public static final SubLObject explode_century_date_alt(SubLObject date) {
-        {
-            SubLObject century = NIL;
-            for (; date.isCons();) {
-                {
-                    SubLObject pcase_var = date.first();
-                    if (pcase_var.eql($$CenturyFn)) {
-                        century = second(date);
-                        date = NIL;
-                    } else {
-                        Errors.error($str_alt40$Can_t_handle_a_date_of__S_yet, date);
-                    }
-                }
-            }
-            return values($CENTURY, century);
-        }
     }
 
     public static SubLObject explode_century_date(SubLObject date) {
@@ -2621,22 +1638,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return values($CENTURY, century);
     }
 
-    /**
-     *
-     *
-     * @return date-p. Constructs a cycl date from the args.
-     */
-    @LispMethod(comment = "@return date-p. Constructs a cycl date from the args.")
-    public static final SubLObject construct_cycl_date_alt(SubLObject second, SubLObject minute, SubLObject hour, SubLObject day, SubLObject month, SubLObject year) {
-        return list($$SecondFn, second, list($$MinuteFn, minute, list($$HourFn, hour, list($$DayFn, day, list($$MonthFn, month, list($$YearFn, year))))));
-    }
-
-    /**
-     *
-     *
-     * @return date-p. Constructs a cycl date from the args.
-     */
-    @LispMethod(comment = "@return date-p. Constructs a cycl date from the args.")
     public static SubLObject construct_cycl_date(final SubLObject second, final SubLObject minute, final SubLObject hour, final SubLObject day, final SubLObject month, final SubLObject year) {
         return list($$SecondFn, second, list($$MinuteFn, minute, list($$HourFn, hour, list($$DayFn, day, list($$MonthFn, month, list($$YearFn, year))))));
     }
@@ -2645,39 +1646,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return list($$MilliSecondFn, millisecond, list($$SecondFn, second, list($$MinuteFn, minute, list($$HourFn, hour, list($$DayFn, day, list($$MonthFn, month, list($$YearFn, year)))))));
     }
 
-    /**
-     * Like @xref construct-cycl-date except some of the arguments (in reverse order) may be NIL.
-     */
-    @LispMethod(comment = "Like @xref construct-cycl-date except some of the arguments (in reverse order) may be NIL.")
-    public static final SubLObject construct_reduced_cycl_date_alt(SubLObject second, SubLObject minute, SubLObject hour, SubLObject day, SubLObject month, SubLObject year) {
-        {
-            SubLObject result = NIL;
-            if (NIL != year) {
-                result = (year == $INDEXICAL_YEAR) ? ((SubLObject) ($$TheYear_Indexical)) : list($$YearFn, year);
-                if (NIL != month) {
-                    result = list($$MonthFn, com.cyc.cycjava.cycl.date_utilities.month_number(month), result);
-                    if (NIL != day) {
-                        result = list($$DayFn, day, result);
-                        if (NIL != hour) {
-                            result = list($$HourFn, hour, result);
-                            if (NIL != minute) {
-                                result = list($$MinuteFn, minute, result);
-                                if (NIL != second) {
-                                    result = list($$SecondFn, second, result);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return result;
-        }
-    }
-
-    /**
-     * Like @xref construct-cycl-date except some of the arguments (in reverse order) may be NIL.
-     */
-    @LispMethod(comment = "Like @xref construct-cycl-date except some of the arguments (in reverse order) may be NIL.")
     public static SubLObject construct_reduced_cycl_date(final SubLObject second, final SubLObject minute, final SubLObject hour, final SubLObject day, final SubLObject month, final SubLObject year) {
         SubLObject result = NIL;
         if (NIL != year) {
@@ -2727,85 +1695,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return result;
     }
 
-    /**
-     * Return a date constructed from DATE with its insignificant start of period components removed.
-     */
-    @LispMethod(comment = "Return a date constructed from DATE with its insignificant start of period components removed.")
-    public static final SubLObject date_reduced_to_start_alt(SubLObject date) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                thread.resetMultipleValues();
-                {
-                    SubLObject type = com.cyc.cycjava.cycl.date_utilities.explode_date(date);
-                    SubLObject year = thread.secondMultipleValue();
-                    SubLObject month = thread.thirdMultipleValue();
-                    SubLObject day = thread.fourthMultipleValue();
-                    SubLObject hour = thread.fifthMultipleValue();
-                    SubLObject minute = thread.sixthMultipleValue();
-                    SubLObject second = thread.seventhMultipleValue();
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject first_significant_calendrand = NIL;
-                        if (NIL == first_significant_calendrand) {
-                            {
-                                SubLObject csome_list_var = $date_units_ordered$.getGlobalValue();
-                                SubLObject calendar_unit = NIL;
-                                for (calendar_unit = csome_list_var.first(); !((NIL != first_significant_calendrand) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , calendar_unit = csome_list_var.first()) {
-                                    {
-                                        SubLObject val = com.cyc.cycjava.cycl.date_utilities.extract_date_time_type(date, calendar_unit);
-                                        if (!((NIL == val) || (NIL != com.cyc.cycjava.cycl.date_utilities.starting_value_for_calendar_unit_p(val, calendar_unit)))) {
-                                            first_significant_calendrand = calendar_unit;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        {
-                            SubLObject pcase_var = first_significant_calendrand;
-                            if (pcase_var.eql($$CalendarYear)) {
-                                second = NIL;
-                                minute = NIL;
-                                hour = NIL;
-                                day = NIL;
-                                month = NIL;
-                            } else {
-                                if (pcase_var.eql($$CalendarMonth)) {
-                                    second = NIL;
-                                    minute = NIL;
-                                    hour = NIL;
-                                    day = NIL;
-                                } else {
-                                    if (pcase_var.eql($$CalendarDay)) {
-                                        second = NIL;
-                                        minute = NIL;
-                                        hour = NIL;
-                                    } else {
-                                        if (pcase_var.eql($$CalendarHour)) {
-                                            second = NIL;
-                                            minute = NIL;
-                                        } else {
-                                            if (pcase_var.eql($$CalendarMinute)) {
-                                                second = NIL;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    result = com.cyc.cycjava.cycl.date_utilities.construct_reduced_cycl_date(second, minute, hour, day, month, year);
-                }
-                return result;
-            }
-        }
-    }
-
-    /**
-     * Return a date constructed from DATE with its insignificant start of period components removed.
-     */
-    @LispMethod(comment = "Return a date constructed from DATE with its insignificant start of period components removed.")
     public static SubLObject date_reduced_to_start(final SubLObject date) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject result = NIL;
@@ -2869,78 +1758,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return result;
     }
 
-    /**
-     * Return a date constructed from DATE with its insignificant end of period components removed.
-     */
-    @LispMethod(comment = "Return a date constructed from DATE with its insignificant end of period components removed.")
-    public static final SubLObject date_reduced_to_end_alt(SubLObject date) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                thread.resetMultipleValues();
-                {
-                    SubLObject type = com.cyc.cycjava.cycl.date_utilities.explode_date(date);
-                    SubLObject year = thread.secondMultipleValue();
-                    SubLObject month = thread.thirdMultipleValue();
-                    SubLObject day = thread.fourthMultipleValue();
-                    SubLObject hour = thread.fifthMultipleValue();
-                    SubLObject minute = thread.sixthMultipleValue();
-                    SubLObject second = thread.seventhMultipleValue();
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject first_significant_calendrand = NIL;
-                        if (NIL == first_significant_calendrand) {
-                            {
-                                SubLObject csome_list_var = $date_units_ordered$.getGlobalValue();
-                                SubLObject calendar_unit = NIL;
-                                for (calendar_unit = csome_list_var.first(); !((NIL != first_significant_calendrand) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , calendar_unit = csome_list_var.first()) {
-                                    {
-                                        SubLObject val = com.cyc.cycjava.cycl.date_utilities.extract_date_time_type(date, calendar_unit);
-                                        if (NIL == com.cyc.cycjava.cycl.date_utilities.ending_value_for_calendar_unit_p(val, calendar_unit, month, year)) {
-                                            first_significant_calendrand = calendar_unit;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        {
-                            SubLObject pcase_var = first_significant_calendrand;
-                            if (pcase_var.eql($$CalendarYear)) {
-                                result = list($$YearFn, year);
-                            } else {
-                                if (pcase_var.eql($$CalendarMonth)) {
-                                    result = list($$MonthFn, com.cyc.cycjava.cycl.date_utilities.month_number(month), list($$YearFn, year));
-                                } else {
-                                    if (pcase_var.eql($$CalendarDay)) {
-                                        result = list($$DayFn, day, list($$MonthFn, com.cyc.cycjava.cycl.date_utilities.month_number(month), list($$YearFn, year)));
-                                    } else {
-                                        if (pcase_var.eql($$CalendarHour)) {
-                                            result = list($$HourFn, hour, list($$DayFn, day, list($$MonthFn, com.cyc.cycjava.cycl.date_utilities.month_number(month), list($$YearFn, year))));
-                                        } else {
-                                            if (pcase_var.eql($$CalendarMinute)) {
-                                                result = list($$MinuteFn, minute, list($$HourFn, hour, list($$DayFn, day, list($$MonthFn, com.cyc.cycjava.cycl.date_utilities.month_number(month), list($$YearFn, year)))));
-                                            } else {
-                                                if (pcase_var.eql($$CalendarSecond)) {
-                                                    result = date;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                return result;
-            }
-        }
-    }
-
-    /**
-     * Return a date constructed from DATE with its insignificant end of period components removed.
-     */
-    @LispMethod(comment = "Return a date constructed from DATE with its insignificant end of period components removed.")
     public static SubLObject date_reduced_to_end(final SubLObject date) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject result = NIL;
@@ -2995,120 +1812,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
 
 
         return result;
-    }
-
-    /**
-     * Return a date constructed from DATE with its insignificant components added as required
-     * to have the given PRECISION.  This function is helpful when using date comparison functions
-     * on dates having differing precisions.
-     */
-    @LispMethod(comment = "Return a date constructed from DATE with its insignificant components added as required\r\nto have the given PRECISION.  This function is helpful when using date comparison functions\r\non dates having differing precisions.\nReturn a date constructed from DATE with its insignificant components added as required\nto have the given PRECISION.  This function is helpful when using date comparison functions\non dates having differing precisions.")
-    public static final SubLObject date_to_precision(SubLObject date, SubLObject precision) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject type = com.cyc.cycjava.cycl.date_utilities.explode_date(date);
-                SubLObject year = thread.secondMultipleValue();
-                SubLObject month = thread.thirdMultipleValue();
-                SubLObject day = thread.fourthMultipleValue();
-                SubLObject hour = thread.fifthMultipleValue();
-                SubLObject minute = thread.sixthMultipleValue();
-                SubLObject second = thread.seventhMultipleValue();
-                thread.resetMultipleValues();
-                {
-                    SubLObject pcase_var = type;
-                    if (pcase_var.eql($DECADE)) {
-                        year = multiply(year, TEN_INTEGER);
-                    } else {
-                        if (pcase_var.eql($CENTURY)) {
-                            year = number_utilities.f_1X(multiply(number_utilities.f_1_(year), $int$100));
-                        }
-                    }
-                }
-                {
-                    SubLObject pcase_var = precision;
-                    if (pcase_var.eql($$CalendarYear)) {
-                        month = NIL;
-                        day = NIL;
-                        hour = NIL;
-                        minute = NIL;
-                        second = NIL;
-                    } else {
-                        if (pcase_var.eql($$CalendarMonth)) {
-                            if (NIL == month) {
-                                month = ONE_INTEGER;
-                            }
-                            day = NIL;
-                            hour = NIL;
-                            minute = NIL;
-                            second = NIL;
-                        } else {
-                            if (pcase_var.eql($$CalendarDay)) {
-                                if (NIL == month) {
-                                    month = ONE_INTEGER;
-                                }
-                                if (NIL == day) {
-                                    day = ONE_INTEGER;
-                                }
-                                hour = NIL;
-                                minute = NIL;
-                                second = NIL;
-                            } else {
-                                if (pcase_var.eql($$CalendarHour)) {
-                                    if (NIL == month) {
-                                        month = ONE_INTEGER;
-                                    }
-                                    if (NIL == day) {
-                                        day = ONE_INTEGER;
-                                    }
-                                    if (NIL == hour) {
-                                        hour = ZERO_INTEGER;
-                                    }
-                                    minute = NIL;
-                                    second = NIL;
-                                } else {
-                                    if (pcase_var.eql($$CalendarMinute)) {
-                                        if (NIL == month) {
-                                            month = ONE_INTEGER;
-                                        }
-                                        if (NIL == day) {
-                                            day = ONE_INTEGER;
-                                        }
-                                        if (NIL == hour) {
-                                            hour = ZERO_INTEGER;
-                                        }
-                                        if (NIL == minute) {
-                                            minute = ZERO_INTEGER;
-                                        }
-                                        second = NIL;
-                                    } else {
-                                        if (pcase_var.eql($$CalendarSecond)) {
-                                            if (NIL == month) {
-                                                month = ONE_INTEGER;
-                                            }
-                                            if (NIL == day) {
-                                                day = ONE_INTEGER;
-                                            }
-                                            if (NIL == hour) {
-                                                hour = ZERO_INTEGER;
-                                            }
-                                            if (NIL == minute) {
-                                                minute = ZERO_INTEGER;
-                                            }
-                                            if (NIL == second) {
-                                                second = ZERO_INTEGER;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                return com.cyc.cycjava.cycl.date_utilities.construct_reduced_cycl_date(second, minute, hour, day, month, year);
-            }
-        }
     }
 
     public static SubLObject date_to_precision(SubLObject date, final SubLObject precision, SubLObject inclusion_type) {
@@ -3243,145 +1946,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
 
 
         return construct_reduced_cycl_date_ms(millisecond, second, minute, hour, day, month, year);
-    }
-
-    public static final SubLObject construct_calendar_date_alt(SubLObject year, SubLObject month, SubLObject day, SubLObject hour, SubLObject min, SubLObject sec, SubLObject millisec) {
-        if (month == UNPROVIDED) {
-            month = NIL;
-        }
-        if (day == UNPROVIDED) {
-            day = NIL;
-        }
-        if (hour == UNPROVIDED) {
-            hour = NIL;
-        }
-        if (min == UNPROVIDED) {
-            min = NIL;
-        }
-        if (sec == UNPROVIDED) {
-            sec = NIL;
-        }
-        if (millisec == UNPROVIDED) {
-            millisec = NIL;
-        }
-        {
-            SubLObject date = (year.isInteger()) ? ((SubLObject) (list($$YearFn, year))) : year;
-            if (NIL != month) {
-                if (NIL != date) {
-                    if (month.isInteger()) {
-                        date = list($$MonthFn, com.cyc.cycjava.cycl.date_utilities.month_number(month), date);
-                    } else {
-                        Errors.error($str_alt55$Can_t_attach_month__S_to_date__S, month, date);
-                    }
-                } else {
-                    if (month.isInteger()) {
-                        Errors.error($str_alt55$Can_t_attach_month__S_to_date__S, month, date);
-                    } else {
-                        date = month;
-                    }
-                }
-            } else {
-                if (NIL != date) {
-                    return date;
-                }
-            }
-            if (NIL != day) {
-                if (NIL != date) {
-                    if (day.isInteger()) {
-                        date = list($$DayFn, day, date);
-                    } else {
-                        Errors.error($str_alt56$Can_t_attach_day__S_to_date__S, day, date);
-                    }
-                } else {
-                    if (day.isInteger()) {
-                        Errors.error($str_alt56$Can_t_attach_day__S_to_date__S, day, date);
-                    } else {
-                        date = day;
-                    }
-                }
-            } else {
-                if (NIL != date) {
-                    return date;
-                }
-            }
-            if (NIL != hour) {
-                if (NIL != date) {
-                    if (hour.isInteger()) {
-                        date = list($$HourFn, hour, date);
-                    } else {
-                        Errors.error($str_alt57$Can_t_attach_hour__S_to_date__S, hour, date);
-                    }
-                } else {
-                    if (hour.isInteger()) {
-                        Errors.error($str_alt57$Can_t_attach_hour__S_to_date__S, hour, date);
-                    } else {
-                        date = hour;
-                    }
-                }
-            } else {
-                if (NIL != date) {
-                    return date;
-                }
-            }
-            if (NIL != min) {
-                if (NIL != date) {
-                    if (min.isInteger()) {
-                        date = list($$MinuteFn, min, date);
-                    } else {
-                        Errors.error($str_alt58$Can_t_attach_minute__S_to_date__S, min, date);
-                    }
-                } else {
-                    if (min.isInteger()) {
-                        Errors.error($str_alt58$Can_t_attach_minute__S_to_date__S, min, date);
-                    } else {
-                        date = min;
-                    }
-                }
-            } else {
-                if (NIL != date) {
-                    return date;
-                }
-            }
-            if (NIL != sec) {
-                if (NIL != date) {
-                    if (sec.isInteger()) {
-                        date = list($$SecondFn, sec, date);
-                    } else {
-                        Errors.error($str_alt59$Can_t_attach_sec__S_to_date__S, sec, date);
-                    }
-                } else {
-                    if (sec.isInteger()) {
-                        Errors.error($str_alt59$Can_t_attach_sec__S_to_date__S, sec, date);
-                    } else {
-                        date = sec;
-                    }
-                }
-            } else {
-                if (NIL != date) {
-                    return date;
-                }
-            }
-            if (NIL != millisec) {
-                if (NIL != date) {
-                    if (millisec.isInteger()) {
-                        date = list($$MilliSecondFn, millisec, date);
-                    } else {
-                        Errors.error($str_alt60$Can_t_attach_millisec__S_to_date_, millisec, date);
-                    }
-                } else {
-                    if (millisec.isInteger()) {
-                        Errors.error($str_alt60$Can_t_attach_millisec__S_to_date_, millisec, date);
-                    } else {
-                        date = millisec;
-                    }
-                }
-            } else {
-                if (NIL != date) {
-                    return date;
-                }
-            }
-            return date;
-        }
     }
 
     public static SubLObject construct_calendar_date(final SubLObject year, SubLObject month, SubLObject day, SubLObject hour, SubLObject min, SubLObject sec, SubLObject millisec) {
@@ -3521,35 +2085,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return date;
     }
 
-    public static final SubLObject construct_quarter_date_alt(SubLObject year, SubLObject quarter) {
-        if (quarter == UNPROVIDED) {
-            quarter = NIL;
-        }
-        {
-            SubLObject date = (year.isInteger()) ? ((SubLObject) (list($$YearFn, year))) : year;
-            if (NIL != quarter) {
-                if (NIL != date) {
-                    if (quarter.isInteger()) {
-                        date = list($$QuarterFn, quarter, date);
-                    } else {
-                        Errors.error($str_alt61$Can_t_attach_quarter__S_to_date__, quarter, date);
-                    }
-                } else {
-                    if (quarter.isInteger()) {
-                        Errors.error($str_alt61$Can_t_attach_quarter__S_to_date__, quarter, date);
-                    } else {
-                        date = quarter;
-                    }
-                }
-            } else {
-                if (NIL != date) {
-                    return date;
-                }
-            }
-            return date;
-        }
-    }
-
     public static SubLObject construct_quarter_date(final SubLObject year, SubLObject quarter) {
         if (quarter == UNPROVIDED) {
             quarter = NIL;
@@ -3577,29 +2112,11 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return date;
     }
 
-    public static final SubLObject construct_decade_date_alt(SubLObject decade) {
-        if (decade.isInteger()) {
-            return list($$DecadeFn, decade);
-        } else {
-            Errors.error($str_alt62$Can_t_construct_date_with_decade_, decade);
-        }
-        return NIL;
-    }
-
     public static SubLObject construct_decade_date(final SubLObject decade) {
         if (decade.isInteger()) {
             return list($$DecadeFn, decade);
         }
         Errors.error($str89$Can_t_construct_date_with_decade_, decade);
-        return NIL;
-    }
-
-    public static final SubLObject construct_century_date_alt(SubLObject century) {
-        if (century.isInteger()) {
-            return list($$CenturyFn, century);
-        } else {
-            Errors.error($str_alt63$Can_t_construct_date_with_century, century);
-        }
         return NIL;
     }
 
@@ -3609,88 +2126,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         }
         Errors.error($str90$Can_t_construct_date_with_century, century);
         return NIL;
-    }
-
-    public static final SubLObject calendar_date_sum(SubLObject unit, SubLObject amount, SubLObject year, SubLObject month, SubLObject day, SubLObject hour, SubLObject min, SubLObject sec) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject pcase_var = unit;
-                if (pcase_var.eql($$YearsDuration)) {
-                    if (NIL != year) {
-                        year = add(year, amount);
-                    }
-                } else {
-                    if (pcase_var.eql($$MonthsDuration)) {
-                        if (NIL != month) {
-                            month = add(month, amount);
-                        }
-                    } else {
-                        if (pcase_var.eql($$WeeksDuration)) {
-                            if (NIL != day) {
-                                day = add(day, multiply(SEVEN_INTEGER, amount));
-                            }
-                        } else {
-                            if (pcase_var.eql($$DaysDuration)) {
-                                if (NIL != day) {
-                                    day = add(day, amount);
-                                }
-                            } else {
-                                if (pcase_var.eql($$HoursDuration)) {
-                                    if (NIL != hour) {
-                                        hour = add(hour, amount);
-                                    }
-                                } else {
-                                    if (pcase_var.eql($$MinutesDuration)) {
-                                        if (NIL != min) {
-                                            min = add(min, amount);
-                                        }
-                                    } else {
-                                        if (pcase_var.eql($$SecondsDuration)) {
-                                            if (NIL != sec) {
-                                                sec = add(sec, amount);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            if (NIL != sec) {
-                if (sec.numL(ZERO_INTEGER)) {
-                    min = add(min, subtract(integerDivide(sec, $int$60), mod(sec, $int$60).numE(ZERO_INTEGER) ? ((SubLObject) (ZERO_INTEGER)) : ONE_INTEGER));
-                } else {
-                    min = add(min, integerDivide(sec, $int$60));
-                }
-                sec = mod(sec, $int$60);
-            }
-            if (NIL != min) {
-                if (min.numL(ZERO_INTEGER)) {
-                    hour = add(hour, subtract(integerDivide(min, $int$60), mod(min, $int$60).numE(ZERO_INTEGER) ? ((SubLObject) (ZERO_INTEGER)) : ONE_INTEGER));
-                } else {
-                    hour = add(hour, integerDivide(min, $int$60));
-                }
-                min = mod(min, $int$60);
-            }
-            if (NIL != hour) {
-                if (hour.numL(ZERO_INTEGER)) {
-                    day = add(day, subtract(integerDivide(hour, $int$24), mod(hour, $int$24).numE(ZERO_INTEGER) ? ((SubLObject) (ZERO_INTEGER)) : ONE_INTEGER));
-                } else {
-                    day = add(day, integerDivide(hour, $int$24));
-                }
-                hour = mod(hour, $int$24);
-            }
-            thread.resetMultipleValues();
-            {
-                SubLObject final_year = numeric_date_utilities.adjust_year_month_day(year, month, day);
-                SubLObject final_month = thread.secondMultipleValue();
-                SubLObject final_day = thread.thirdMultipleValue();
-                thread.resetMultipleValues();
-                return com.cyc.cycjava.cycl.date_utilities.construct_calendar_date(final_year, final_month, final_day, hour, min, sec, UNPROVIDED);
-            }
-        }
     }
 
     public static SubLObject calendar_date_sum(final SubLObject unit, final SubLObject amount, SubLObject year, SubLObject month, SubLObject day, SubLObject hour, SubLObject min, SubLObject sec, SubLObject millisec) {
@@ -3780,32 +2215,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return construct_calendar_date(final_year, final_month, final_day, hour, min, sec, millisec);
     }
 
-    public static final SubLObject quarter_date_sum_alt(SubLObject unit, SubLObject amount, SubLObject year, SubLObject quarter) {
-        {
-            SubLObject pcase_var = unit;
-            if (pcase_var.eql($$YearsDuration)) {
-                if (NIL != year) {
-                    year = add(year, amount);
-                }
-            } else {
-                if (pcase_var.eql($$QuartersDuration)) {
-                    if (NIL != quarter) {
-                        quarter = add(quarter, amount);
-                    }
-                }
-            }
-        }
-        if (NIL != quarter) {
-            if (quarter.numL(ONE_INTEGER)) {
-                year = add(year, subtract(integerDivide(quarter, FOUR_INTEGER), ONE_INTEGER));
-            } else {
-                year = add(year, integerDivide(quarter, FOUR_INTEGER));
-            }
-            quarter = add(mod(subtract(quarter, ONE_INTEGER), FOUR_INTEGER), ONE_INTEGER);
-        }
-        return com.cyc.cycjava.cycl.date_utilities.construct_quarter_date(year, quarter);
-    }
-
     public static SubLObject quarter_date_sum(final SubLObject unit, final SubLObject amount, SubLObject year, SubLObject quarter) {
         if (unit.eql($$YearsDuration)) {
             if (NIL != year) {
@@ -3827,27 +2236,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return construct_quarter_date(year, quarter);
     }
 
-    public static final SubLObject decade_date_sum_alt(SubLObject unit, SubLObject amount, SubLObject decade) {
-        if (NIL == decade) {
-            return NIL;
-        }
-        {
-            SubLObject pcase_var = unit;
-            if (pcase_var.eql($$DecadesDuration)) {
-                decade = add(decade, amount);
-            } else {
-                if (pcase_var.eql($$YearsDuration)) {
-                    decade = add(decade, integerDivide(amount, TEN_INTEGER));
-                } else {
-                    if (pcase_var.eql($$MonthsDuration)) {
-                        decade = add(decade, integerDivide(amount, $int$120));
-                    }
-                }
-            }
-        }
-        return com.cyc.cycjava.cycl.date_utilities.construct_decade_date(decade);
-    }
-
     public static SubLObject decade_date_sum(final SubLObject unit, final SubLObject amount, SubLObject decade) {
         if (NIL == decade) {
             return NIL;
@@ -3864,31 +2252,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
 
 
         return construct_decade_date(decade);
-    }
-
-    public static final SubLObject century_date_sum_alt(SubLObject unit, SubLObject amount, SubLObject century) {
-        if (NIL == century) {
-            return NIL;
-        }
-        {
-            SubLObject pcase_var = unit;
-            if (pcase_var.eql($$CenturiesDuration)) {
-                century = add(century, amount);
-            } else {
-                if (pcase_var.eql($$DecadesDuration)) {
-                    century = add(century, integerDivide(amount, TEN_INTEGER));
-                } else {
-                    if (pcase_var.eql($$YearsDuration)) {
-                        century = add(century, integerDivide(amount, $int$100));
-                    } else {
-                        if (pcase_var.eql($$MonthsDuration)) {
-                            century = add(century, integerDivide(amount, $int$1200));
-                        }
-                    }
-                }
-            }
-        }
-        return com.cyc.cycjava.cycl.date_utilities.construct_century_date(century);
     }
 
     public static SubLObject century_date_sum(final SubLObject unit, final SubLObject amount, SubLObject century) {
@@ -3913,21 +2276,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return construct_century_date(century);
     }
 
-    /**
-     * Return T iff OBJECT is one of the 12 instances of #$GregorianMonthType (like #$July)
-     */
-    @LispMethod(comment = "Return T iff OBJECT is one of the 12 instances of #$GregorianMonthType (like #$July)")
-    public static final SubLObject month_p_alt(SubLObject v_object) {
-        if (NIL == kb_control_vars.date_kb_loaded_p()) {
-            Errors.error($str_alt79$A_KB_dependent_date_specific_func);
-        }
-        return list_utilities.member_eqP(v_object, $month_constant_table$.getGlobalValue());
-    }
-
-    /**
-     * Return T iff OBJECT is one of the 12 instances of #$GregorianMonthType (like #$July)
-     */
-    @LispMethod(comment = "Return T iff OBJECT is one of the 12 instances of #$GregorianMonthType (like #$July)")
     public static SubLObject month_p(final SubLObject v_object) {
         if (NIL == kb_control_vars.date_kb_loaded_p()) {
             Errors.error($str108$A_KB_dependent_date_specific_func);
@@ -3935,55 +2283,16 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return list_utilities.member_eqP(v_object, $month_constant_table$.getGlobalValue());
     }
 
-    /**
-     * Convert a month NUMBER (like 1) into a month (like #$January)
-     */
-    @LispMethod(comment = "Convert a month NUMBER (like 1) into a month (like #$January)")
-    public static final SubLObject month_number_alt(SubLObject number) {
-        SubLTrampolineFile.checkType(number, VALID_MONTH_NUMBER_P);
-        if (NIL == kb_control_vars.date_kb_loaded_p()) {
-            Errors.error($str_alt79$A_KB_dependent_date_specific_func);
-        }
-        return nth(subtract(number, ONE_INTEGER), $month_constant_table$.getGlobalValue());
-    }
-
-    /**
-     * Convert a month NUMBER (like 1) into a month (like #$January)
-     */
-    @LispMethod(comment = "Convert a month NUMBER (like 1) into a month (like #$January)")
     public static SubLObject month_number(final SubLObject number) {
-        assert NIL != numeric_date_utilities.valid_month_number_p(number) : "! numeric_date_utilities.valid_month_number_p(number) " + ("numeric_date_utilities.valid_month_number_p(number) " + "CommonSymbols.NIL != numeric_date_utilities.valid_month_number_p(number) ") + number;
+        assert NIL != numeric_date_utilities.valid_month_number_p(number) : "numeric_date_utilities.valid_month_number_p(number) " + "CommonSymbols.NIL != numeric_date_utilities.valid_month_number_p(number) " + number;
         if (NIL == kb_control_vars.date_kb_loaded_p()) {
             Errors.error($str108$A_KB_dependent_date_specific_func);
         }
         return nth(subtract(number, ONE_INTEGER), $month_constant_table$.getGlobalValue());
     }
 
-    /**
-     * Convert a MONTH (like #$January or (#$MonthOfYearFn 1) into a month number (like 1).
-     */
-    @LispMethod(comment = "Convert a MONTH (like #$January or (#$MonthOfYearFn 1) into a month number (like 1).")
-    public static final SubLObject number_of_month_alt(SubLObject month) {
-        SubLTrampolineFile.checkType(month, MONTH_TERM_P);
-        if (NIL == kb_control_vars.date_kb_loaded_p()) {
-            Errors.error($str_alt79$A_KB_dependent_date_specific_func);
-        }
-        if (NIL != forts.fort_p(month)) {
-            {
-                SubLObject position = position(month, $month_constant_table$.getGlobalValue(), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                return NIL != position ? ((SubLObject) (add(position, ONE_INTEGER))) : NIL;
-            }
-        } else {
-            return second(month);
-        }
-    }
-
-    /**
-     * Convert a MONTH (like #$January or (#$MonthOfYearFn 1) into a month number (like 1).
-     */
-    @LispMethod(comment = "Convert a MONTH (like #$January or (#$MonthOfYearFn 1) into a month number (like 1).")
     public static SubLObject number_of_month(final SubLObject month) {
-        assert NIL != month_term_p(month) : "! date_utilities.month_term_p(month) " + ("date_utilities.month_term_p(month) " + "CommonSymbols.NIL != date_utilities.month_term_p(month) ") + month;
+        assert NIL != month_term_p(month) : "date_utilities.month_term_p(month) " + "CommonSymbols.NIL != date_utilities.month_term_p(month) " + month;
         if (NIL == kb_control_vars.date_kb_loaded_p()) {
             Errors.error($str108$A_KB_dependent_date_specific_func);
         }
@@ -3994,31 +2303,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return second(month);
     }
 
-    /**
-     *
-     *
-     * @return positive-integer-p;  Returns the ordinal for what day of the year DATE entails.
-     * @unknown (day-number '(#$DayFn 1 (#$MonthFn #$January (#$YearFn 2000)))) -> 1
-     * @unknown (day-number '(#$DayFn 15 (#$MonthFn #$March (#$YearFn 2000)))) -> 75
-     */
-    @LispMethod(comment = "@return positive-integer-p;  Returns the ordinal for what day of the year DATE entails.\r\n@unknown (day-number \'(#$DayFn 1 (#$MonthFn #$January (#$YearFn 2000)))) -> 1\r\n@unknown (day-number \'(#$DayFn 15 (#$MonthFn #$March (#$YearFn 2000)))) -> 75")
-    public static final SubLObject day_number_alt(SubLObject date) {
-        {
-            SubLObject month = com.cyc.cycjava.cycl.date_utilities.extract_date_month_number(date);
-            SubLObject year = com.cyc.cycjava.cycl.date_utilities.extract_date_year(date);
-            SubLObject day = com.cyc.cycjava.cycl.date_utilities.extract_date_day(date);
-            return add(numeric_date_utilities.total_days_in_months_preceding(month, year), day);
-        }
-    }
-
-    /**
-     *
-     *
-     * @return positive-integer-p;  Returns the ordinal for what day of the year DATE entails.
-     * @unknown (day-number '(#$DayFn 1 (#$MonthFn #$January (#$YearFn 2000)))) -> 1
-     * @unknown (day-number '(#$DayFn 15 (#$MonthFn #$March (#$YearFn 2000)))) -> 75
-     */
-    @LispMethod(comment = "@return positive-integer-p;  Returns the ordinal for what day of the year DATE entails.\r\n@unknown (day-number \'(#$DayFn 1 (#$MonthFn #$January (#$YearFn 2000)))) -> 1\r\n@unknown (day-number \'(#$DayFn 15 (#$MonthFn #$March (#$YearFn 2000)))) -> 75")
     public static SubLObject day_number(final SubLObject date) {
         final SubLObject month = extract_date_month_number(date);
         final SubLObject year = extract_date_year(date);
@@ -4026,39 +2310,10 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return add(numeric_date_utilities.total_days_in_months_preceding(month, year), day);
     }
 
-    /**
-     * Return t iff is one of the 12 instances of #$GregorianMonthType (like #$July)
-     * or a naut of the form (#$MonthOfYearFn 7).
-     */
-    @LispMethod(comment = "Return t iff is one of the 12 instances of #$GregorianMonthType (like #$July)\r\nor a naut of the form (#$MonthOfYearFn 7).\nReturn t iff is one of the 12 instances of #$GregorianMonthType (like #$July)\nor a naut of the form (#$MonthOfYearFn 7).")
-    public static final SubLObject month_term_p_alt(SubLObject v_object) {
-        return makeBoolean((NIL != com.cyc.cycjava.cycl.date_utilities.month_p(v_object)) || ((NIL != narts_high.naut_p(v_object)) && (v_object.first() == $$MonthOfYearFn)));
-    }
-
-    /**
-     * Return t iff is one of the 12 instances of #$GregorianMonthType (like #$July)
-     * or a naut of the form (#$MonthOfYearFn 7).
-     */
-    @LispMethod(comment = "Return t iff is one of the 12 instances of #$GregorianMonthType (like #$July)\r\nor a naut of the form (#$MonthOfYearFn 7).\nReturn t iff is one of the 12 instances of #$GregorianMonthType (like #$July)\nor a naut of the form (#$MonthOfYearFn 7).")
     public static SubLObject month_term_p(final SubLObject v_object) {
         return makeBoolean((NIL != month_p(v_object)) || ((NIL != narts_high.naut_p(v_object)) && (NIL != kb_utilities.kbeq(v_object.first(), $$MonthOfYearFn))));
     }
 
-    /**
-     * Return T iff OBJECT is one of the 7 instances of #$DayOfWeekType (like #$Tuesday)
-     */
-    @LispMethod(comment = "Return T iff OBJECT is one of the 7 instances of #$DayOfWeekType (like #$Tuesday)")
-    public static final SubLObject day_of_week_p_alt(SubLObject v_object) {
-        if (NIL == kb_control_vars.date_kb_loaded_p()) {
-            Errors.error($str_alt79$A_KB_dependent_date_specific_func);
-        }
-        return memberP(v_object, $days_of_week$.getGlobalValue(), UNPROVIDED, UNPROVIDED);
-    }
-
-    /**
-     * Return T iff OBJECT is one of the 7 instances of #$DayOfWeekType (like #$Tuesday)
-     */
-    @LispMethod(comment = "Return T iff OBJECT is one of the 7 instances of #$DayOfWeekType (like #$Tuesday)")
     public static SubLObject day_of_week_p(final SubLObject v_object) {
         if (NIL == kb_control_vars.date_kb_loaded_p()) {
             Errors.error($str108$A_KB_dependent_date_specific_func);
@@ -4066,29 +2321,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return subl_promotions.memberP(v_object, $days_of_week$.getGlobalValue(), UNPROVIDED, UNPROVIDED);
     }
 
-    /**
-     * Convert a day-of-week NUMBER (like 1) into a day-of-week (like #$Tuesday)
-     */
-    @LispMethod(comment = "Convert a day-of-week NUMBER (like 1) into a day-of-week (like #$Tuesday)")
-    public static final SubLObject day_of_week_number_alt(SubLObject number) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((number.isInteger() && (!number.isNegative())) && number.numL(SEVEN_INTEGER))) {
-                    Errors.error($str_alt84$_S_is_not_a_valid_day_of_week_num, number);
-                }
-            }
-            if (NIL == kb_control_vars.date_kb_loaded_p()) {
-                Errors.error($str_alt79$A_KB_dependent_date_specific_func);
-            }
-            return nth(number, $days_of_week$.getGlobalValue());
-        }
-    }
-
-    /**
-     * Convert a day-of-week NUMBER (like 1) into a day-of-week (like #$Tuesday)
-     */
-    @LispMethod(comment = "Convert a day-of-week NUMBER (like 1) into a day-of-week (like #$Tuesday)")
     public static SubLObject day_of_week_number(final SubLObject number) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (((!number.isInteger()) || number.isNegative()) || (!number.numL(SEVEN_INTEGER)))) {
@@ -4100,103 +2332,21 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return nth(number, $days_of_week$.getGlobalValue());
     }
 
-    /**
-     *
-     *
-     * @return day-of-week-p;  Returns the day following DAY-OF-WEEK.
-     */
-    @LispMethod(comment = "@return day-of-week-p;  Returns the day following DAY-OF-WEEK.")
-    public static final SubLObject following_day_of_week_alt(SubLObject day_of_week) {
-        return com.cyc.cycjava.cycl.date_utilities.day_of_week_number(mod(number_utilities.f_1X(com.cyc.cycjava.cycl.date_utilities.number_of_day_of_week(day_of_week)), SEVEN_INTEGER));
-    }
-
-    /**
-     *
-     *
-     * @return day-of-week-p;  Returns the day following DAY-OF-WEEK.
-     */
-    @LispMethod(comment = "@return day-of-week-p;  Returns the day following DAY-OF-WEEK.")
     public static SubLObject following_day_of_week(final SubLObject day_of_week) {
         return day_of_week_number(mod(number_utilities.f_1X(number_of_day_of_week(day_of_week)), SEVEN_INTEGER));
     }
 
-    /**
-     *
-     *
-     * @return day-of-week-p;  Returns the day prior to DAY-OF-WEEK.
-     */
-    @LispMethod(comment = "@return day-of-week-p;  Returns the day prior to DAY-OF-WEEK.")
-    public static final SubLObject prior_day_of_week_alt(SubLObject day_of_week) {
-        return com.cyc.cycjava.cycl.date_utilities.day_of_week_number(mod(subtract(com.cyc.cycjava.cycl.date_utilities.number_of_day_of_week(day_of_week), ONE_INTEGER), SEVEN_INTEGER));
-    }
-
-    /**
-     *
-     *
-     * @return day-of-week-p;  Returns the day prior to DAY-OF-WEEK.
-     */
-    @LispMethod(comment = "@return day-of-week-p;  Returns the day prior to DAY-OF-WEEK.")
     public static SubLObject prior_day_of_week(final SubLObject day_of_week) {
         return day_of_week_number(mod(subtract(number_of_day_of_week(day_of_week), ONE_INTEGER), SEVEN_INTEGER));
     }
 
-    /**
-     * Convert a DAY-OF-WEEK (like #$Tuesday) into a day-of-week number (like 1).
-     */
-    @LispMethod(comment = "Convert a DAY-OF-WEEK (like #$Tuesday) into a day-of-week number (like 1).")
-    public static final SubLObject number_of_day_of_week_alt(SubLObject day_of_week) {
-        SubLTrampolineFile.checkType(day_of_week, DAY_OF_WEEK_P);
-        return position(day_of_week, $days_of_week$.getGlobalValue(), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-    }
-
-    /**
-     * Convert a DAY-OF-WEEK (like #$Tuesday) into a day-of-week number (like 1).
-     */
-    @LispMethod(comment = "Convert a DAY-OF-WEEK (like #$Tuesday) into a day-of-week number (like 1).")
     public static SubLObject number_of_day_of_week(final SubLObject day_of_week) {
-        assert NIL != day_of_week_p(day_of_week) : "! date_utilities.day_of_week_p(day_of_week) " + ("date_utilities.day_of_week_p(day_of_week) " + "CommonSymbols.NIL != date_utilities.day_of_week_p(day_of_week) ") + day_of_week;
+        assert NIL != day_of_week_p(day_of_week) : "date_utilities.day_of_week_p(day_of_week) " + "CommonSymbols.NIL != date_utilities.day_of_week_p(day_of_week) " + day_of_week;
         return position(day_of_week, $days_of_week$.getGlobalValue(), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
-    /**
-     * Given a CycL DATE (for example, (#$DayFn 18 (#$MonthFn #$June (#$YearFn 2002)))),
-     * return its day-of-week (for example, #$Tuesday)
-     * or NIL if the date doesn't fall within a single day.
-     */
-    @LispMethod(comment = "Given a CycL DATE (for example, (#$DayFn 18 (#$MonthFn #$June (#$YearFn 2002)))),\r\nreturn its day-of-week (for example, #$Tuesday)\r\nor NIL if the date doesn\'t fall within a single day.\nGiven a CycL DATE (for example, (#$DayFn 18 (#$MonthFn #$June (#$YearFn 2002)))),\nreturn its day-of-week (for example, #$Tuesday)\nor NIL if the date doesn\'t fall within a single day.")
-    public static final SubLObject day_of_week_of_date_alt(SubLObject date) {
-        SubLTrampolineFile.checkType(date, DATE_P);
-        {
-            SubLObject pcase_var = com.cyc.cycjava.cycl.date_utilities.date_precision(date);
-            if (((pcase_var.eql($$CalendarDay) || pcase_var.eql($$CalendarHour)) || pcase_var.eql($$CalendarMinute)) || pcase_var.eql($$CalendarSecond)) {
-                {
-                    SubLObject year = com.cyc.cycjava.cycl.date_utilities.extract_date_year(date);
-                    SubLObject century = com.cyc.cycjava.cycl.date_utilities.century_of_year(com.cyc.cycjava.cycl.date_utilities.extract_date_year(date));
-                    SubLObject century_starting_day = com.cyc.cycjava.cycl.date_utilities.get_century_starting_day(century);
-                    SubLObject years_from_century = subtract(year, century);
-                    SubLObject leap_days = com.cyc.cycjava.cycl.date_utilities.leap_years_between(list($$YearFn, century), list($$YearFn, year));
-                    SubLObject day_number = com.cyc.cycjava.cycl.date_utilities.day_number(date);
-                    SubLObject day_number_of_date = NIL;
-                    if (NIL != numeric_date_utilities.leap_year_p(year)) {
-                        leap_days = add(leap_days, MINUS_ONE_INTEGER);
-                    }
-                    day_number_of_date = mod(add(new SubLObject[]{ century_starting_day, years_from_century, leap_days, day_number }), SEVEN_INTEGER);
-                    return com.cyc.cycjava.cycl.date_utilities.day_of_week_number(day_number_of_date);
-                }
-            } else {
-                return NIL;
-            }
-        }
-    }
-
-    /**
-     * Given a CycL DATE (for example, (#$DayFn 18 (#$MonthFn #$June (#$YearFn 2002)))),
-     * return its day-of-week (for example, #$Tuesday)
-     * or NIL if the date doesn't fall within a single day.
-     */
-    @LispMethod(comment = "Given a CycL DATE (for example, (#$DayFn 18 (#$MonthFn #$June (#$YearFn 2002)))),\r\nreturn its day-of-week (for example, #$Tuesday)\r\nor NIL if the date doesn\'t fall within a single day.\nGiven a CycL DATE (for example, (#$DayFn 18 (#$MonthFn #$June (#$YearFn 2002)))),\nreturn its day-of-week (for example, #$Tuesday)\nor NIL if the date doesn\'t fall within a single day.")
     public static SubLObject day_of_week_of_date(final SubLObject date) {
-        assert NIL != date_p(date) : "! date_utilities.date_p(date) " + ("date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) ") + date;
+        assert NIL != date_p(date) : "date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) " + date;
         final SubLObject pcase_var = date_precision(date);
         if ((((!pcase_var.eql($$CalendarDay)) && (!pcase_var.eql($$CalendarHour))) && (!pcase_var.eql($$CalendarMinute))) && (!pcase_var.eql($$CalendarSecond))) {
             return NIL;
@@ -4218,38 +2368,9 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return day_of_week_number(day_number_of_date);
     }
 
-    /**
-     * Returns the first date strictly before DATE which is a day
-     * of the week of type DAY-OF-WEEK.
-     */
-    @LispMethod(comment = "Returns the first date strictly before DATE which is a day\r\nof the week of type DAY-OF-WEEK.\nReturns the first date strictly before DATE which is a day\nof the week of type DAY-OF-WEEK.")
-    public static final SubLObject day_of_week_prior_to_date_alt(SubLObject day_of_week, SubLObject date) {
-        SubLTrampolineFile.checkType(day_of_week, DAY_OF_WEEK_P);
-        SubLTrampolineFile.checkType(date, DATE_P);
-        {
-            SubLObject date_day = com.cyc.cycjava.cycl.date_utilities.day_of_date(date);
-            SubLObject date_day_of_week = com.cyc.cycjava.cycl.date_utilities.day_of_week_of_date(date);
-            if (!((NIL != com.cyc.cycjava.cycl.date_utilities.date_p(date_day)) && (NIL != com.cyc.cycjava.cycl.date_utilities.day_of_week_p(date_day_of_week)))) {
-                return NIL;
-            }
-            {
-                SubLObject date_dow_number = com.cyc.cycjava.cycl.date_utilities.number_of_day_of_week(date_day_of_week);
-                SubLObject dow_number = com.cyc.cycjava.cycl.date_utilities.number_of_day_of_week(day_of_week);
-                SubLObject difference = mod(subtract(date_dow_number, dow_number), SEVEN_INTEGER);
-                SubLObject shift = (difference.isZero()) ? ((SubLObject) (SEVEN_INTEGER)) : difference;
-                return com.cyc.cycjava.cycl.date_utilities.date_before(date_day, list($$DaysDuration, shift));
-            }
-        }
-    }
-
-    /**
-     * Returns the first date strictly before DATE which is a day
-     * of the week of type DAY-OF-WEEK.
-     */
-    @LispMethod(comment = "Returns the first date strictly before DATE which is a day\r\nof the week of type DAY-OF-WEEK.\nReturns the first date strictly before DATE which is a day\nof the week of type DAY-OF-WEEK.")
     public static SubLObject day_of_week_prior_to_date(final SubLObject day_of_week, final SubLObject date) {
-        assert NIL != day_of_week_p(day_of_week) : "! date_utilities.day_of_week_p(day_of_week) " + ("date_utilities.day_of_week_p(day_of_week) " + "CommonSymbols.NIL != date_utilities.day_of_week_p(day_of_week) ") + day_of_week;
-        assert NIL != date_p(date) : "! date_utilities.date_p(date) " + ("date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) ") + date;
+        assert NIL != day_of_week_p(day_of_week) : "date_utilities.day_of_week_p(day_of_week) " + "CommonSymbols.NIL != date_utilities.day_of_week_p(day_of_week) " + day_of_week;
+        assert NIL != date_p(date) : "date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) " + date;
         final SubLObject date_day = day_of_date(date);
         final SubLObject date_day_of_week = day_of_week_of_date(date);
         if ((NIL == date_p(date_day)) || (NIL == day_of_week_p(date_day_of_week))) {
@@ -4262,41 +2383,9 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return date_before(date_day, list($$DaysDuration, shift));
     }
 
-    /**
-     * Returns the first date no later than DATE which is a day of
-     * the week of type DAY-OF-WEEK.
-     */
-    @LispMethod(comment = "Returns the first date no later than DATE which is a day of\r\nthe week of type DAY-OF-WEEK.\nReturns the first date no later than DATE which is a day of\nthe week of type DAY-OF-WEEK.")
-    public static final SubLObject day_of_week_prior_to_date_inclusive_alt(SubLObject day_of_week, SubLObject date) {
-        SubLTrampolineFile.checkType(day_of_week, DAY_OF_WEEK_P);
-        SubLTrampolineFile.checkType(date, DATE_P);
-        {
-            SubLObject date_day = com.cyc.cycjava.cycl.date_utilities.day_of_date(date);
-            SubLObject date_day_of_week = com.cyc.cycjava.cycl.date_utilities.day_of_week_of_date(date);
-            if (!((NIL != com.cyc.cycjava.cycl.date_utilities.date_p(date_day)) && (NIL != com.cyc.cycjava.cycl.date_utilities.day_of_week_p(date_day_of_week)))) {
-                return NIL;
-            }
-            {
-                SubLObject date_dow_number = com.cyc.cycjava.cycl.date_utilities.number_of_day_of_week(date_day_of_week);
-                SubLObject dow_number = com.cyc.cycjava.cycl.date_utilities.number_of_day_of_week(day_of_week);
-                SubLObject difference = mod(subtract(date_dow_number, dow_number), SEVEN_INTEGER);
-                if (difference.isZero()) {
-                    return com.cyc.cycjava.cycl.date_utilities.day_of_date(date);
-                } else {
-                    return com.cyc.cycjava.cycl.date_utilities.date_before(date_day, list($$DaysDuration, difference));
-                }
-            }
-        }
-    }
-
-    /**
-     * Returns the first date no later than DATE which is a day of
-     * the week of type DAY-OF-WEEK.
-     */
-    @LispMethod(comment = "Returns the first date no later than DATE which is a day of\r\nthe week of type DAY-OF-WEEK.\nReturns the first date no later than DATE which is a day of\nthe week of type DAY-OF-WEEK.")
     public static SubLObject day_of_week_prior_to_date_inclusive(final SubLObject day_of_week, final SubLObject date) {
-        assert NIL != day_of_week_p(day_of_week) : "! date_utilities.day_of_week_p(day_of_week) " + ("date_utilities.day_of_week_p(day_of_week) " + "CommonSymbols.NIL != date_utilities.day_of_week_p(day_of_week) ") + day_of_week;
-        assert NIL != date_p(date) : "! date_utilities.date_p(date) " + ("date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) ") + date;
+        assert NIL != day_of_week_p(day_of_week) : "date_utilities.day_of_week_p(day_of_week) " + "CommonSymbols.NIL != date_utilities.day_of_week_p(day_of_week) " + day_of_week;
+        assert NIL != date_p(date) : "date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) " + date;
         final SubLObject date_day = day_of_date(date);
         final SubLObject date_day_of_week = day_of_week_of_date(date);
         if ((NIL == date_p(date_day)) || (NIL == day_of_week_p(date_day_of_week))) {
@@ -4311,38 +2400,9 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return date_before(date_day, list($$DaysDuration, difference));
     }
 
-    /**
-     * Returns the first date strictly after DATE which is a day
-     * of the week of type DAY-OF-WEEK.
-     */
-    @LispMethod(comment = "Returns the first date strictly after DATE which is a day\r\nof the week of type DAY-OF-WEEK.\nReturns the first date strictly after DATE which is a day\nof the week of type DAY-OF-WEEK.")
-    public static final SubLObject day_of_week_after_date_alt(SubLObject day_of_week, SubLObject date) {
-        SubLTrampolineFile.checkType(day_of_week, DAY_OF_WEEK_P);
-        SubLTrampolineFile.checkType(date, DATE_P);
-        {
-            SubLObject date_day = com.cyc.cycjava.cycl.date_utilities.day_of_date(date);
-            SubLObject date_day_of_week = com.cyc.cycjava.cycl.date_utilities.day_of_week_of_date(date);
-            if (!((NIL != com.cyc.cycjava.cycl.date_utilities.date_p(date_day)) && (NIL != com.cyc.cycjava.cycl.date_utilities.day_of_week_p(date_day_of_week)))) {
-                return NIL;
-            }
-            {
-                SubLObject date_dow_number = com.cyc.cycjava.cycl.date_utilities.number_of_day_of_week(date_day_of_week);
-                SubLObject dow_number = com.cyc.cycjava.cycl.date_utilities.number_of_day_of_week(day_of_week);
-                SubLObject difference = mod(subtract(dow_number, date_dow_number), SEVEN_INTEGER);
-                SubLObject shift = (difference.isZero()) ? ((SubLObject) (SEVEN_INTEGER)) : difference;
-                return com.cyc.cycjava.cycl.date_utilities.date_after(date_day, list($$DaysDuration, shift));
-            }
-        }
-    }
-
-    /**
-     * Returns the first date strictly after DATE which is a day
-     * of the week of type DAY-OF-WEEK.
-     */
-    @LispMethod(comment = "Returns the first date strictly after DATE which is a day\r\nof the week of type DAY-OF-WEEK.\nReturns the first date strictly after DATE which is a day\nof the week of type DAY-OF-WEEK.")
     public static SubLObject day_of_week_after_date(final SubLObject day_of_week, final SubLObject date) {
-        assert NIL != day_of_week_p(day_of_week) : "! date_utilities.day_of_week_p(day_of_week) " + ("date_utilities.day_of_week_p(day_of_week) " + "CommonSymbols.NIL != date_utilities.day_of_week_p(day_of_week) ") + day_of_week;
-        assert NIL != date_p(date) : "! date_utilities.date_p(date) " + ("date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) ") + date;
+        assert NIL != day_of_week_p(day_of_week) : "date_utilities.day_of_week_p(day_of_week) " + "CommonSymbols.NIL != date_utilities.day_of_week_p(day_of_week) " + day_of_week;
+        assert NIL != date_p(date) : "date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) " + date;
         final SubLObject date_day = day_of_date(date);
         final SubLObject date_day_of_week = day_of_week_of_date(date);
         if ((NIL == date_p(date_day)) || (NIL == day_of_week_p(date_day_of_week))) {
@@ -4355,41 +2415,9 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return date_after(date_day, list($$DaysDuration, shift));
     }
 
-    /**
-     * Returns the first date no earlier than DATE which is a day
-     * of the week of type DAY-OF-WEEK.
-     */
-    @LispMethod(comment = "Returns the first date no earlier than DATE which is a day\r\nof the week of type DAY-OF-WEEK.\nReturns the first date no earlier than DATE which is a day\nof the week of type DAY-OF-WEEK.")
-    public static final SubLObject day_of_week_after_date_inclusive_alt(SubLObject day_of_week, SubLObject date) {
-        SubLTrampolineFile.checkType(day_of_week, DAY_OF_WEEK_P);
-        SubLTrampolineFile.checkType(date, DATE_P);
-        {
-            SubLObject date_day = com.cyc.cycjava.cycl.date_utilities.day_of_date(date);
-            SubLObject date_day_of_week = com.cyc.cycjava.cycl.date_utilities.day_of_week_of_date(date);
-            if (!((NIL != com.cyc.cycjava.cycl.date_utilities.date_p(date_day)) && (NIL != com.cyc.cycjava.cycl.date_utilities.day_of_week_p(date_day_of_week)))) {
-                return NIL;
-            }
-            {
-                SubLObject date_dow_number = com.cyc.cycjava.cycl.date_utilities.number_of_day_of_week(date_day_of_week);
-                SubLObject dow_number = com.cyc.cycjava.cycl.date_utilities.number_of_day_of_week(day_of_week);
-                SubLObject difference = mod(subtract(dow_number, date_dow_number), SEVEN_INTEGER);
-                if (difference.isZero()) {
-                    return com.cyc.cycjava.cycl.date_utilities.day_of_date(date);
-                } else {
-                    return com.cyc.cycjava.cycl.date_utilities.date_after(date_day, list($$DaysDuration, difference));
-                }
-            }
-        }
-    }
-
-    /**
-     * Returns the first date no earlier than DATE which is a day
-     * of the week of type DAY-OF-WEEK.
-     */
-    @LispMethod(comment = "Returns the first date no earlier than DATE which is a day\r\nof the week of type DAY-OF-WEEK.\nReturns the first date no earlier than DATE which is a day\nof the week of type DAY-OF-WEEK.")
     public static SubLObject day_of_week_after_date_inclusive(final SubLObject day_of_week, final SubLObject date) {
-        assert NIL != day_of_week_p(day_of_week) : "! date_utilities.day_of_week_p(day_of_week) " + ("date_utilities.day_of_week_p(day_of_week) " + "CommonSymbols.NIL != date_utilities.day_of_week_p(day_of_week) ") + day_of_week;
-        assert NIL != date_p(date) : "! date_utilities.date_p(date) " + ("date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) ") + date;
+        assert NIL != day_of_week_p(day_of_week) : "date_utilities.day_of_week_p(day_of_week) " + "CommonSymbols.NIL != date_utilities.day_of_week_p(day_of_week) " + day_of_week;
+        assert NIL != date_p(date) : "date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) " + date;
         final SubLObject date_day = day_of_date(date);
         final SubLObject date_day_of_week = day_of_week_of_date(date);
         if ((NIL == date_p(date_day)) || (NIL == day_of_week_p(date_day_of_week))) {
@@ -4404,37 +2432,9 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return date_after(date_day, list($$DaysDuration, difference));
     }
 
-    public static final SubLObject century_of_year_alt(SubLObject year) {
-        SubLTrampolineFile.checkType(year, INTEGERP);
-        return multiply(integerDivide(year, $int$100), $int$100);
-    }
-
     public static SubLObject century_of_year(final SubLObject year) {
-        assert NIL != integerp(year) : "! integerp(year) " + ("Types.integerp(year) " + "CommonSymbols.NIL != Types.integerp(year) ") + year;
+        assert NIL != integerp(year) : "Types.integerp(year) " + "CommonSymbols.NIL != Types.integerp(year) " + year;
         return multiply(integerDivide(year, $int$100), $int$100);
-    }
-
-    public static final SubLObject get_century_starting_day_alt(SubLObject century) {
-        {
-            SubLObject century_type = mod(integerDivide(century, $int$100), FOUR_INTEGER);
-            SubLObject pcase_var = century_type;
-            if (pcase_var.eql(ZERO_INTEGER)) {
-                return FIVE_INTEGER;
-            } else {
-                if (pcase_var.eql(ONE_INTEGER)) {
-                    return FOUR_INTEGER;
-                } else {
-                    if (pcase_var.eql(TWO_INTEGER)) {
-                        return TWO_INTEGER;
-                    } else {
-                        if (pcase_var.eql(THREE_INTEGER)) {
-                            return ZERO_INTEGER;
-                        }
-                    }
-                }
-            }
-        }
-        return NIL;
     }
 
     public static SubLObject get_century_starting_day(final SubLObject century) {
@@ -4455,21 +2455,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     * Return T iff OBJECT is term of the form (#$DayOfMonthFn N), where is N is the day of the month.
-     */
-    @LispMethod(comment = "Return T iff OBJECT is term of the form (#$DayOfMonthFn N), where is N is the day of the month.")
-    public static final SubLObject day_of_month_term_p_alt(SubLObject v_object) {
-        if (NIL == kb_control_vars.date_kb_loaded_p()) {
-            Errors.error($str_alt79$A_KB_dependent_date_specific_func);
-        }
-        return makeBoolean((NIL != narts_high.naut_p(v_object)) && (v_object.first() == $$DayOfMonthFn));
-    }
-
-    /**
-     * Return T iff OBJECT is term of the form (#$DayOfMonthFn N), where is N is the day of the month.
-     */
-    @LispMethod(comment = "Return T iff OBJECT is term of the form (#$DayOfMonthFn N), where is N is the day of the month.")
     public static SubLObject day_of_month_term_p(final SubLObject v_object) {
         if (NIL == kb_control_vars.date_kb_loaded_p()) {
             Errors.error($str108$A_KB_dependent_date_specific_func);
@@ -4477,36 +2462,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return makeBoolean((NIL != narts_high.naut_p(v_object)) && (NIL != kb_utilities.kbeq(v_object.first(), $$DayOfMonthFn)));
     }
 
-    /**
-     *
-     *
-     * @return integerp; Number of days from DATE since gregorian rata die.
-     */
-    @LispMethod(comment = "@return integerp; Number of days from DATE since gregorian rata die.")
-    public static final SubLObject days_since_rata_die_alt(SubLObject date) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject type = com.cyc.cycjava.cycl.date_utilities.explode_date(date);
-                SubLObject year = thread.secondMultipleValue();
-                SubLObject month = thread.thirdMultipleValue();
-                SubLObject day = thread.fourthMultipleValue();
-                SubLObject hour = thread.fifthMultipleValue();
-                SubLObject min = thread.sixthMultipleValue();
-                SubLObject sec = thread.seventhMultipleValue();
-                thread.resetMultipleValues();
-                return add(new SubLObject[]{ multiply($int$365, number_utilities.f_1_(year)), integerDivide(number_utilities.f_1_(year), FOUR_INTEGER), minus(integerDivide(number_utilities.f_1_(year), $int$100)), integerDivide(number_utilities.f_1_(year), $int$400), integerDivide(subtract(multiply($int$367, month), $int$362), TWELVE_INTEGER), com.cyc.cycjava.cycl.date_utilities.adjust_thirty_day_february(month, year), day });
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return integerp; Number of days from DATE since gregorian rata die.
-     */
-    @LispMethod(comment = "@return integerp; Number of days from DATE since gregorian rata die.")
     public static SubLObject days_since_rata_die(final SubLObject date) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -4521,18 +2476,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return add(new SubLObject[]{ multiply($int$365, number_utilities.f_1_(year)), integerDivide(number_utilities.f_1_(year), FOUR_INTEGER), minus(integerDivide(number_utilities.f_1_(year), $int$100)), integerDivide(number_utilities.f_1_(year), $int$400), integerDivide(subtract(multiply($int$367, month), $int$362), TWELVE_INTEGER), adjust_thirty_day_february(month, year), day });
     }
 
-    public static final SubLObject adjust_thirty_day_february_alt(SubLObject month, SubLObject year) {
-        if (month.numLE(TWO_INTEGER)) {
-            return ZERO_INTEGER;
-        } else {
-            if (NIL != numeric_date_utilities.leap_year_p(year)) {
-                return MINUS_ONE_INTEGER;
-            } else {
-                return $int$_2;
-            }
-        }
-    }
-
     public static SubLObject adjust_thirty_day_february(final SubLObject month, final SubLObject year) {
         if (month.numLE(TWO_INTEGER)) {
             return ZERO_INTEGER;
@@ -4543,41 +2486,10 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return $int$_2;
     }
 
-    /**
-     *
-     *
-     * @return booleanp; Whether OBJECT is a cycl hour specification. @xref  *hours-of-day*.
-     */
-    @LispMethod(comment = "@return booleanp; Whether OBJECT is a cycl hour specification. @xref  *hours-of-day*.")
-    public static final SubLObject hour_of_day_p_alt(SubLObject v_object) {
-        return memberP(v_object, $hours_of_day$.getGlobalValue(), UNPROVIDED, UNPROVIDED);
-    }
-
-    /**
-     *
-     *
-     * @return booleanp; Whether OBJECT is a cycl hour specification. @xref  *hours-of-day*.
-     */
-    @LispMethod(comment = "@return booleanp; Whether OBJECT is a cycl hour specification. @xref  *hours-of-day*.")
     public static SubLObject hour_of_day_p(final SubLObject v_object) {
         return subl_promotions.memberP(v_object, $hours_of_day$.getGlobalValue(), UNPROVIDED, UNPROVIDED);
     }
 
-    /**
-     * Return T iff OBJECT is term of the form (#$HourOfDayFn N), where is N is the hour of the day in the range [0 ... 23].
-     */
-    @LispMethod(comment = "Return T iff OBJECT is term of the form (#$HourOfDayFn N), where is N is the hour of the day in the range [0 ... 23].")
-    public static final SubLObject hour_of_day_term_p_alt(SubLObject v_object) {
-        if (NIL == kb_control_vars.date_kb_loaded_p()) {
-            Errors.error($str_alt79$A_KB_dependent_date_specific_func);
-        }
-        return makeBoolean((NIL != narts_high.naut_p(v_object)) && (v_object.first() == $$HourOfDayFn));
-    }
-
-    /**
-     * Return T iff OBJECT is term of the form (#$HourOfDayFn N), where is N is the hour of the day in the range [0 ... 23].
-     */
-    @LispMethod(comment = "Return T iff OBJECT is term of the form (#$HourOfDayFn N), where is N is the hour of the day in the range [0 ... 23].")
     public static SubLObject hour_of_day_term_p(final SubLObject v_object) {
         if (NIL == kb_control_vars.date_kb_loaded_p()) {
             Errors.error($str108$A_KB_dependent_date_specific_func);
@@ -4585,35 +2497,8 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return makeBoolean((NIL != narts_high.naut_p(v_object)) && (NIL != kb_utilities.kbeq(v_object.first(), $$HourOfDayFn)));
     }
 
-    /**
-     *
-     *
-     * @return hour-of-day-p;  The cycl hour of DATE.
-     * @unknown (hour-of-day-of-date '(#$HourFn 12 ...) -> #$TimeOfDay-NoonHour
-     */
-    @LispMethod(comment = "@return hour-of-day-p;  The cycl hour of DATE.\r\n@unknown (hour-of-day-of-date \'(#$HourFn 12 ...) -> #$TimeOfDay-NoonHour")
-    public static final SubLObject hour_of_day_of_date_alt(SubLObject date) {
-        SubLTrampolineFile.checkType(date, DATE_P);
-        {
-            SubLObject hour = com.cyc.cycjava.cycl.date_utilities.extract_date_hour(date);
-            if (NIL != hour) {
-                return nth(hour, $hours_of_day$.getGlobalValue());
-            } else {
-                Errors.cerror($str_alt97$Continue_with_nil_hour_of_day_, $str_alt98$_a_did_not_specify_a_day_, date);
-            }
-        }
-        return NIL;
-    }
-
-    /**
-     *
-     *
-     * @return hour-of-day-p;  The cycl hour of DATE.
-     * @unknown (hour-of-day-of-date '(#$HourFn 12 ...) -> #$TimeOfDay-NoonHour
-     */
-    @LispMethod(comment = "@return hour-of-day-p;  The cycl hour of DATE.\r\n@unknown (hour-of-day-of-date \'(#$HourFn 12 ...) -> #$TimeOfDay-NoonHour")
     public static SubLObject hour_of_day_of_date(final SubLObject date) {
-        assert NIL != date_p(date) : "! date_utilities.date_p(date) " + ("date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) ") + date;
+        assert NIL != date_p(date) : "date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) " + date;
         final SubLObject hour = extract_date_hour(date);
         if (NIL != hour) {
             return nth(hour, $hours_of_day$.getGlobalValue());
@@ -4622,22 +2507,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     *
-     *
-     * @return non-negative-integer-p;  HOUR-OF-DAY's ordinal number, wrt @xref *hours-of-day*.
-     */
-    @LispMethod(comment = "@return non-negative-integer-p;  HOUR-OF-DAY\'s ordinal number, wrt @xref *hours-of-day*.")
-    public static final SubLObject number_of_hour_of_day_alt(SubLObject hour_of_day) {
-        return position(hour_of_day, $hours_of_day$.getGlobalValue(), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-    }
-
-    /**
-     *
-     *
-     * @return non-negative-integer-p;  HOUR-OF-DAY's ordinal number, wrt @xref *hours-of-day*.
-     */
-    @LispMethod(comment = "@return non-negative-integer-p;  HOUR-OF-DAY\'s ordinal number, wrt @xref *hours-of-day*.")
     public static SubLObject number_of_hour_of_day(final SubLObject hour_of_day) {
         return position(hour_of_day, $hours_of_day$.getGlobalValue(), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
@@ -4659,21 +2528,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     * Return T iff OBJECT is term of the form (#$MinuteOfHourFn N), where is N is the minute of the hour in the range [0 ... 59].
-     */
-    @LispMethod(comment = "Return T iff OBJECT is term of the form (#$MinuteOfHourFn N), where is N is the minute of the hour in the range [0 ... 59].")
-    public static final SubLObject minute_of_hour_term_p_alt(SubLObject v_object) {
-        if (NIL == kb_control_vars.date_kb_loaded_p()) {
-            Errors.error($str_alt79$A_KB_dependent_date_specific_func);
-        }
-        return makeBoolean((NIL != narts_high.naut_p(v_object)) && (v_object.first() == $$MinuteOfHourFn));
-    }
-
-    /**
-     * Return T iff OBJECT is term of the form (#$MinuteOfHourFn N), where is N is the minute of the hour in the range [0 ... 59].
-     */
-    @LispMethod(comment = "Return T iff OBJECT is term of the form (#$MinuteOfHourFn N), where is N is the minute of the hour in the range [0 ... 59].")
     public static SubLObject minute_of_hour_term_p(final SubLObject v_object) {
         if (NIL == kb_control_vars.date_kb_loaded_p()) {
             Errors.error($str108$A_KB_dependent_date_specific_func);
@@ -4682,7 +2536,7 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
     }
 
     public static SubLObject minute_of_hour_of_date(final SubLObject date) {
-        assert NIL != date_p(date) : "! date_utilities.date_p(date) " + ("date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) ") + date;
+        assert NIL != date_p(date) : "date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) " + date;
         final SubLObject minute = extract_date_minute(date);
         if (NIL != minute) {
             return make_unary_formula($$MinuteOfHourFn, minute);
@@ -4691,21 +2545,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     * Return T iff OBJECT is term of the form (#$SecondOfMinuteFn N), where is N is the second of the minute in the range [0 ... 59].
-     */
-    @LispMethod(comment = "Return T iff OBJECT is term of the form (#$SecondOfMinuteFn N), where is N is the second of the minute in the range [0 ... 59].")
-    public static final SubLObject second_of_minute_term_p_alt(SubLObject v_object) {
-        if (NIL == kb_control_vars.date_kb_loaded_p()) {
-            Errors.error($str_alt79$A_KB_dependent_date_specific_func);
-        }
-        return makeBoolean((NIL != narts_high.naut_p(v_object)) && (v_object.first() == $$SecondOfMinuteFn));
-    }
-
-    /**
-     * Return T iff OBJECT is term of the form (#$SecondOfMinuteFn N), where is N is the second of the minute in the range [0 ... 59].
-     */
-    @LispMethod(comment = "Return T iff OBJECT is term of the form (#$SecondOfMinuteFn N), where is N is the second of the minute in the range [0 ... 59].")
     public static SubLObject second_of_minute_term_p(final SubLObject v_object) {
         if (NIL == kb_control_vars.date_kb_loaded_p()) {
             Errors.error($str108$A_KB_dependent_date_specific_func);
@@ -4714,7 +2553,7 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
     }
 
     public static SubLObject second_of_minute_of_date(final SubLObject date) {
-        assert NIL != date_p(date) : "! date_utilities.date_p(date) " + ("date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) ") + date;
+        assert NIL != date_p(date) : "date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) " + date;
         final SubLObject second = extract_date_second(date);
         if (NIL != second) {
             return make_unary_formula($$SecondOfMinuteFn, second);
@@ -4731,43 +2570,13 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
     }
 
     public static SubLObject millisecond_of_second_of_date(final SubLObject date) {
-        assert NIL != date_p(date) : "! date_utilities.date_p(date) " + ("date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) ") + date;
+        assert NIL != date_p(date) : "date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) " + date;
         final SubLObject millisecond = extract_date_millisecond(date);
         if (NIL != millisecond) {
             return make_unary_formula($$MillisecondOfSecondFn, millisecond);
         }
         Errors.cerror($str138$Continue_with_nil_millisecond_of_, $str139$_a_did_not_specify_a_second_, date);
         return NIL;
-    }
-
-    public static final SubLObject starting_value_for_calendar_unit_p_alt(SubLObject val, SubLObject type) {
-        if (NIL == val) {
-            return T;
-        }
-        {
-            SubLObject pcase_var = type;
-            if ((pcase_var.eql($$CalendarSecond) || pcase_var.eql($$CalendarMinute)) || pcase_var.eql($$CalendarHour)) {
-                return eq(val, ZERO_INTEGER);
-            } else {
-                if (pcase_var.eql($$CalendarDay)) {
-                    return eq(val, ONE_INTEGER);
-                } else {
-                    if (pcase_var.eql($$CalendarWeek)) {
-                        return eq(val, $$Sunday);
-                    } else {
-                        if (pcase_var.eql($$CalendarMonth)) {
-                            return eq(val, $$January);
-                        } else {
-                            if (pcase_var.eql($$CalendarQuarter)) {
-                                return eq(val, ONE_INTEGER);
-                            } else {
-                                return NIL;
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
 
     public static SubLObject starting_value_for_calendar_unit_p(final SubLObject val, final SubLObject type) {
@@ -4832,46 +2641,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
             } 
         }
         return makeBoolean(NIL == failP);
-    }
-
-    public static final SubLObject ending_value_for_calendar_unit_p_alt(SubLObject val, SubLObject type, SubLObject month, SubLObject year) {
-        if (month == UNPROVIDED) {
-            month = NIL;
-        }
-        if (year == UNPROVIDED) {
-            year = NIL;
-        }
-        if (NIL == val) {
-            return T;
-        }
-        {
-            SubLObject pcase_var = type;
-            if (pcase_var.eql($$CalendarSecond) || pcase_var.eql($$CalendarMinute)) {
-                return eq(val, $int$59);
-            } else {
-                if (pcase_var.eql($$CalendarHour)) {
-                    return eq(val, $int$23);
-                } else {
-                    if (pcase_var.eql($$CalendarDay)) {
-                        return eq(val, numeric_date_utilities.days_in_month_number(month, year));
-                    } else {
-                        if (pcase_var.eql($$CalendarWeek)) {
-                            return eq(val, $$Saturday);
-                        } else {
-                            if (pcase_var.eql($$CalendarMonth)) {
-                                return eq(val, $$December);
-                            } else {
-                                if (pcase_var.eql($$CalendarQuarter)) {
-                                    return eq(val, FOUR_INTEGER);
-                                } else {
-                                    return NIL;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
 
     public static SubLObject ending_value_for_calendar_unit_p(final SubLObject val, final SubLObject type, SubLObject month, SubLObject year) {
@@ -4962,39 +2731,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return makeBoolean(NIL == failP);
     }
 
-    public static final SubLObject truncate_date_to_format_alt(SubLObject date, SubLObject new_format) {
-        {
-            SubLObject old_format = com.cyc.cycjava.cycl.date_utilities.date_format(date);
-            if (old_format == new_format) {
-                return date;
-            } else {
-                if (NIL != com.cyc.cycjava.cycl.date_utilities.date_formatG(old_format, new_format)) {
-                    return NIL;
-                } else {
-                    {
-                        SubLObject pcase_var = new_format;
-                        if (pcase_var.eql($CENTURY)) {
-                            return com.cyc.cycjava.cycl.date_utilities.century_of_date(date);
-                        } else {
-                            if (pcase_var.eql($DECADE)) {
-                                return com.cyc.cycjava.cycl.date_utilities.decade_of_date(date);
-                            } else {
-                                if (pcase_var.eql($QUARTER)) {
-                                    return com.cyc.cycjava.cycl.date_utilities.quarter_of_date(date);
-                                } else {
-                                    if (pcase_var.eql($CALENDAR)) {
-                                        return NIL;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject truncate_date_to_format(final SubLObject date, final SubLObject new_format) {
         final SubLObject old_format = date_format(date);
         if (old_format.eql(new_format)) {
@@ -5016,79 +2752,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
             return NIL;
         }
         return NIL;
-    }
-
-    public static final SubLObject date_precision_alt(SubLObject date) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == kb_control_vars.date_kb_loaded_p()) {
-                Errors.error($str_alt79$A_KB_dependent_date_specific_func);
-            }
-            thread.resetMultipleValues();
-            {
-                SubLObject format = com.cyc.cycjava.cycl.date_utilities.explode_date(date);
-                SubLObject year = thread.secondMultipleValue();
-                SubLObject month = thread.thirdMultipleValue();
-                SubLObject day = thread.fourthMultipleValue();
-                SubLObject hour = thread.fifthMultipleValue();
-                SubLObject min = thread.sixthMultipleValue();
-                SubLObject sec = thread.seventhMultipleValue();
-                SubLObject millisec = thread.eighthMultipleValue();
-                thread.resetMultipleValues();
-                {
-                    SubLObject pcase_var = format;
-                    if (pcase_var.eql($CALENDAR)) {
-                        if (NIL != millisec) {
-                            return $$CalendarMilliSecond;
-                        }
-                        if (NIL != sec) {
-                            return $$CalendarSecond;
-                        }
-                        if (NIL != min) {
-                            return $$CalendarMinute;
-                        }
-                        if (NIL != hour) {
-                            return $$CalendarHour;
-                        }
-                        if (NIL != day) {
-                            return $$CalendarDay;
-                        }
-                        if (NIL != month) {
-                            return $$CalendarMonth;
-                        }
-                        if (NIL != year) {
-                            return $$CalendarYear;
-                        }
-                        return NIL;
-                    } else {
-                        if (pcase_var.eql($QUARTER)) {
-                            if (NIL != month) {
-                                return $$CalendarQuarter;
-                            }
-                            if (NIL != year) {
-                                return $$CalendarYear;
-                            }
-                            return NIL;
-                        } else {
-                            if (pcase_var.eql($DECADE)) {
-                                if (NIL != year) {
-                                    return $$CalendarDecade;
-                                }
-                                return NIL;
-                            } else {
-                                if (pcase_var.eql($CENTURY)) {
-                                    if (NIL != year) {
-                                        return $$CalendarCentury;
-                                    }
-                                    return NIL;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject date_precision(final SubLObject date) {
@@ -5236,13 +2899,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
 
     }
 
-    public static final SubLObject defining_time_unit_alt(SubLObject calendar_interval) {
-        if (NIL == kb_control_vars.date_kb_loaded_p()) {
-            Errors.error($str_alt79$A_KB_dependent_date_specific_func);
-        }
-        return NIL != forts.valid_fortP(calendar_interval) ? ((SubLObject) (com.cyc.cycjava.cycl.date_utilities.inference_defining_time_unit(calendar_interval))) : NIL;
-    }
-
     public static SubLObject defining_time_unit(final SubLObject calendar_interval) {
         if (NIL == kb_control_vars.date_kb_loaded_p()) {
             Errors.error($str108$A_KB_dependent_date_specific_func);
@@ -5257,38 +2913,8 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL != forts.valid_fortP(time_unit) ? inference_defining_time_unit_get_interval(time_unit) : NIL;
     }
 
-    public static final SubLObject inference_defining_time_unit_internal_alt(SubLObject interval) {
-        return kb_mapping_utilities.fpred_value_in_any_mt(interval, $$definingTimeUnit, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject inference_defining_time_unit_internal(final SubLObject interval) {
         return kb_mapping_utilities.fpred_value_in_any_mt(interval, $$definingTimeUnit, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-    }
-
-    public static final SubLObject inference_defining_time_unit_alt(SubLObject interval) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
-                SubLObject caching_state = NIL;
-                if (NIL == v_memoization_state) {
-                    return com.cyc.cycjava.cycl.date_utilities.inference_defining_time_unit_internal(interval);
-                }
-                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, INFERENCE_DEFINING_TIME_UNIT, UNPROVIDED);
-                if (NIL == caching_state) {
-                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), INFERENCE_DEFINING_TIME_UNIT, ONE_INTEGER, NIL, EQ, UNPROVIDED);
-                    memoization_state.memoization_state_put(v_memoization_state, INFERENCE_DEFINING_TIME_UNIT, caching_state);
-                }
-                {
-                    SubLObject results = memoization_state.caching_state_lookup(caching_state, interval, $kw113$_MEMOIZED_ITEM_NOT_FOUND_);
-                    if (results == $kw113$_MEMOIZED_ITEM_NOT_FOUND_) {
-                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.date_utilities.inference_defining_time_unit_internal(interval)));
-                        memoization_state.caching_state_put(caching_state, interval, results, UNPROVIDED);
-                    }
-                    return memoization_state.caching_results(results);
-                }
-            }
-        }
     }
 
     public static SubLObject inference_defining_time_unit(final SubLObject interval) {
@@ -5335,62 +2961,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return memoization_state.caching_results(results);
     }
 
-    /**
-     * Converts TIME to units appropriate for adding or subtracting from DATE,
-     * which are units at least as large as DATE's precision, but no larger than
-     * years.
-     */
-    @LispMethod(comment = "Converts TIME to units appropriate for adding or subtracting from DATE,\r\nwhich are units at least as large as DATE\'s precision, but no larger than\r\nyears.\nConverts TIME to units appropriate for adding or subtracting from DATE,\nwhich are units at least as large as DATE\'s precision, but no larger than\nyears.")
-    public static final SubLObject convert_time_to_date_precision_alt(SubLObject date, SubLObject time) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == kb_control_vars.date_kb_loaded_p()) {
-                Errors.error($str_alt79$A_KB_dependent_date_specific_func);
-            }
-            thread.resetMultipleValues();
-            {
-                SubLObject unit = com.cyc.cycjava.cycl.date_utilities.explode_time(time);
-                SubLObject amount = thread.secondMultipleValue();
-                thread.resetMultipleValues();
-                {
-                    SubLObject precision = com.cyc.cycjava.cycl.date_utilities.date_precision(date);
-                    SubLObject result = NIL;
-                    if (NIL == precision) {
-                        relation_evaluation.throw_unevaluatable();
-                    }
-                    {
-                        SubLObject target_unit = com.cyc.cycjava.cycl.date_utilities.defining_time_unit(precision);
-                        if (NIL == quantities.comparable_units(unit, target_unit)) {
-                            relation_evaluation.throw_unevaluatable();
-                        }
-                        if (NIL != quantities.smaller_unit_than($$YearsDuration, unit)) {
-                            {
-                                SubLObject years = quantities.convert_to_units($$YearsDuration, unit, amount, UNPROVIDED);
-                                result = quantities.make_interval($$YearsDuration, floor(years, UNPROVIDED), UNPROVIDED);
-                            }
-                        } else {
-                            if (NIL != quantities.smaller_unit_than(unit, target_unit)) {
-                                {
-                                    SubLObject converted = quantities.convert_to_units(target_unit, unit, amount, UNPROVIDED);
-                                    result = quantities.make_interval(target_unit, ceiling(converted, UNPROVIDED), UNPROVIDED);
-                                }
-                            } else {
-                                result = time;
-                            }
-                        }
-                    }
-                    return result;
-                }
-            }
-        }
-    }
-
-    /**
-     * Converts TIME to units appropriate for adding or subtracting from DATE,
-     * which are units at least as large as DATE's precision, but no larger than
-     * years.
-     */
-    @LispMethod(comment = "Converts TIME to units appropriate for adding or subtracting from DATE,\r\nwhich are units at least as large as DATE\'s precision, but no larger than\r\nyears.\nConverts TIME to units appropriate for adding or subtracting from DATE,\nwhich are units at least as large as DATE\'s precision, but no larger than\nyears.")
     public static SubLObject convert_time_to_date_precision(final SubLObject date, final SubLObject time) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL == kb_control_vars.date_kb_loaded_p()) {
@@ -5465,83 +3035,18 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL != narts_high.naut_p(day) ? make_binary_formula($$HourFn, hour, day) : NIL;
     }
 
-    /**
-     *
-     *
-     * @return NAUT-P or NIL; The #$CalendarDay containing DATE. NIL if none or unknown.
-    Removes the hour, minute, second from DATE.
-     */
-    @LispMethod(comment = "@return NAUT-P or NIL; The #$CalendarDay containing DATE. NIL if none or unknown.\r\nRemoves the hour, minute, second from DATE.")
-    public static final SubLObject day_of_date_alt(SubLObject date) {
-        {
-            SubLObject day = com.cyc.cycjava.cycl.date_utilities.extract_date_day(date);
-            SubLObject month = (NIL != positive_integer_p(day)) ? ((SubLObject) (com.cyc.cycjava.cycl.date_utilities.month_of_date(date))) : NIL;
-            return NIL != narts_high.naut_p(month) ? ((SubLObject) (make_binary_formula($$DayFn, day, month))) : NIL;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return NAUT-P or NIL; The #$CalendarDay containing DATE. NIL if none or unknown.
-    Removes the hour, minute, second from DATE.
-     */
-    @LispMethod(comment = "@return NAUT-P or NIL; The #$CalendarDay containing DATE. NIL if none or unknown.\r\nRemoves the hour, minute, second from DATE.")
     public static SubLObject day_of_date(final SubLObject date) {
         final SubLObject day = (NIL != date_p(date)) ? extract_date_day(date) : NIL;
         final SubLObject month = (NIL != subl_promotions.positive_integer_p(day)) ? month_of_date(date) : NIL;
         return NIL != narts_high.naut_p(month) ? make_binary_formula($$DayFn, day, month) : NIL;
     }
 
-    /**
-     *
-     *
-     * @return NAUT-P or NIL; The #$CalendarMonth containing DATE. NIL if none or unknown.
-    Removes the hour, minute, second from DATE.
-     */
-    @LispMethod(comment = "@return NAUT-P or NIL; The #$CalendarMonth containing DATE. NIL if none or unknown.\r\nRemoves the hour, minute, second from DATE.")
-    public static final SubLObject month_of_date_alt(SubLObject date) {
-        {
-            SubLObject month = com.cyc.cycjava.cycl.date_utilities.extract_date_month(date);
-            SubLObject year = (NIL != forts.fort_p(month)) ? ((SubLObject) (com.cyc.cycjava.cycl.date_utilities.year_of_date(date))) : NIL;
-            return NIL != narts_high.naut_p(year) ? ((SubLObject) (make_binary_formula($$MonthFn, month, year))) : NIL;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return NAUT-P or NIL; The #$CalendarMonth containing DATE. NIL if none or unknown.
-    Removes the hour, minute, second from DATE.
-     */
-    @LispMethod(comment = "@return NAUT-P or NIL; The #$CalendarMonth containing DATE. NIL if none or unknown.\r\nRemoves the hour, minute, second from DATE.")
     public static SubLObject month_of_date(final SubLObject date) {
         final SubLObject month = (NIL != date_p(date)) ? extract_date_month(date) : NIL;
         final SubLObject year = (NIL != forts.fort_p(month)) ? year_of_date(date) : NIL;
         return NIL != narts_high.naut_p(year) ? make_binary_formula($$MonthFn, month, year) : NIL;
     }
 
-    /**
-     *
-     *
-     * @return integerp; Returns the quarter of DATE.
-     */
-    @LispMethod(comment = "@return integerp; Returns the quarter of DATE.")
-    public static final SubLObject quarter_of_date_alt(SubLObject date) {
-        {
-            SubLObject month = com.cyc.cycjava.cycl.date_utilities.extract_date_month(date);
-            SubLObject quarter = (NIL != forts.fort_p(month)) ? ((SubLObject) (com.cyc.cycjava.cycl.date_utilities.quarter_of_month(month))) : NIL;
-            SubLObject year = (quarter.isInteger()) ? ((SubLObject) (com.cyc.cycjava.cycl.date_utilities.year_of_date(date))) : NIL;
-            return NIL != narts_high.naut_p(year) ? ((SubLObject) (make_binary_formula($$QuarterFn, quarter, year))) : NIL;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return integerp; Returns the quarter of DATE.
-     */
-    @LispMethod(comment = "@return integerp; Returns the quarter of DATE.")
     public static SubLObject quarter_of_date(final SubLObject date) {
         final SubLObject month = (NIL != date_p(date)) ? extract_date_month(date) : NIL;
         final SubLObject quarter = (NIL != forts.fort_p(month)) ? quarter_of_month(month) : NIL;
@@ -5549,67 +3054,15 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL != narts_high.naut_p(year) ? make_binary_formula($$QuarterFn, quarter, year) : NIL;
     }
 
-    public static final SubLObject quarter_of_month_alt(SubLObject month) {
-        return number_utilities.f_1X(integerDivide(com.cyc.cycjava.cycl.date_utilities.number_of_month(month), FOUR_INTEGER));
-    }
-
     public static SubLObject quarter_of_month(final SubLObject month) {
         return number_utilities.f_1X(integerDivide(number_of_month(month), FOUR_INTEGER));
     }
 
-    /**
-     *
-     *
-     * @return NAUT-P or NIL; The #$CalendarYear containing DATE. NIL if none or unknown.
-    Removes the hour, minute, second from DATE.
-     */
-    @LispMethod(comment = "@return NAUT-P or NIL; The #$CalendarYear containing DATE. NIL if none or unknown.\r\nRemoves the hour, minute, second from DATE.")
-    public static final SubLObject year_of_date_alt(SubLObject date) {
-        {
-            SubLObject year = com.cyc.cycjava.cycl.date_utilities.extract_date_year(date);
-            return year.isInteger() ? ((SubLObject) (make_unary_formula($$YearFn, year))) : NIL;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return NAUT-P or NIL; The #$CalendarYear containing DATE. NIL if none or unknown.
-    Removes the hour, minute, second from DATE.
-     */
-    @LispMethod(comment = "@return NAUT-P or NIL; The #$CalendarYear containing DATE. NIL if none or unknown.\r\nRemoves the hour, minute, second from DATE.")
     public static SubLObject year_of_date(final SubLObject date) {
         final SubLObject year = (NIL != date_p(date)) ? extract_date_year(date) : NIL;
         return year.isInteger() ? make_unary_formula($$YearFn, year) : NIL;
     }
 
-    /**
-     *
-     *
-     * @return NAUT-P or NIL; The #$CalendarDecade containing DATE. NIL if none or unknown.
-     */
-    @LispMethod(comment = "@return NAUT-P or NIL; The #$CalendarDecade containing DATE. NIL if none or unknown.")
-    public static final SubLObject decade_of_date_alt(SubLObject date) {
-        {
-            SubLObject decade = com.cyc.cycjava.cycl.date_utilities.extract_date_decade(date);
-            if (!decade.isInteger()) {
-                {
-                    SubLObject year = com.cyc.cycjava.cycl.date_utilities.extract_date_year(date);
-                    if (year.isInteger()) {
-                        decade = integerDivide(year, TEN_INTEGER);
-                    }
-                }
-            }
-            return decade.isInteger() ? ((SubLObject) (make_unary_formula($$DecadeFn, decade))) : NIL;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return NAUT-P or NIL; The #$CalendarDecade containing DATE. NIL if none or unknown.
-     */
-    @LispMethod(comment = "@return NAUT-P or NIL; The #$CalendarDecade containing DATE. NIL if none or unknown.")
     public static SubLObject decade_of_date(final SubLObject date) {
         SubLObject decade = extract_date_decade(date);
         if (!decade.isInteger()) {
@@ -5621,50 +3074,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return decade.isInteger() ? make_unary_formula($$DecadeFn, decade) : NIL;
     }
 
-    /**
-     *
-     *
-     * @return NAUT-P or NIL; The #$CalendarCentury containing DATE. NIL if none or unknown.
-     */
-    @LispMethod(comment = "@return NAUT-P or NIL; The #$CalendarCentury containing DATE. NIL if none or unknown.")
-    public static final SubLObject century_of_date_alt(SubLObject date) {
-        {
-            SubLObject century = com.cyc.cycjava.cycl.date_utilities.extract_date_century(date);
-            if (!century.isInteger()) {
-                {
-                    SubLObject one_indexed_year = com.cyc.cycjava.cycl.date_utilities.extract_date_year(date);
-                    if (one_indexed_year.isInteger()) {
-                        {
-                            SubLObject zero_indexed_year = number_utilities.f_1_(one_indexed_year);
-                            SubLObject zero_indexed_century = integerDivide(zero_indexed_year, $int$100);
-                            SubLObject one_indexed_century = number_utilities.f_1X(zero_indexed_century);
-                            century = one_indexed_century;
-                        }
-                    }
-                }
-            }
-            if (!century.isInteger()) {
-                {
-                    SubLObject decade = com.cyc.cycjava.cycl.date_utilities.extract_date_decade(date);
-                    if (decade.isInteger() && (!mod(decade, TEN_INTEGER).isZero())) {
-                        {
-                            SubLObject zero_indexed_century = integerDivide(decade, TEN_INTEGER);
-                            SubLObject one_indexed_century = number_utilities.f_1X(zero_indexed_century);
-                            century = one_indexed_century;
-                        }
-                    }
-                }
-            }
-            return century.isInteger() ? ((SubLObject) (make_unary_formula($$CenturyFn, century))) : NIL;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return NAUT-P or NIL; The #$CalendarCentury containing DATE. NIL if none or unknown.
-     */
-    @LispMethod(comment = "@return NAUT-P or NIL; The #$CalendarCentury containing DATE. NIL if none or unknown.")
     public static SubLObject century_of_date(final SubLObject date) {
         SubLObject century = extract_date_century(date);
         if (!century.isInteger()) {
@@ -5685,114 +3094,18 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return century.isInteger() ? make_unary_formula($$CenturyFn, century) : NIL;
     }
 
-    /**
-     *
-     *
-     * @return booleanp.  Returns whether DATE1 occurs at the same time as or before DATE2.
-     */
-    @LispMethod(comment = "@return booleanp.  Returns whether DATE1 occurs at the same time as or before DATE2.")
-    public static final SubLObject dateLE_alt(SubLObject date1, SubLObject date2) {
-        return makeBoolean((NIL != com.cyc.cycjava.cycl.date_utilities.dateE(date1, date2)) || (NIL != com.cyc.cycjava.cycl.date_utilities.dateL(date1, date2)));
-    }
-
-    /**
-     *
-     *
-     * @return booleanp.  Returns whether DATE1 occurs at the same time as or before DATE2.
-     */
-    @LispMethod(comment = "@return booleanp.  Returns whether DATE1 occurs at the same time as or before DATE2.")
     public static SubLObject dateLE(final SubLObject date1, final SubLObject date2) {
         return makeBoolean((NIL != dateE(date1, date2)) || (NIL != dateL(date1, date2)));
     }
 
-    /**
-     *
-     *
-     * @return booleanp.  Returns whether DATE1 occurs at the same time as or after DATE2.
-     */
-    @LispMethod(comment = "@return booleanp.  Returns whether DATE1 occurs at the same time as or after DATE2.")
-    public static final SubLObject dateGE_alt(SubLObject date1, SubLObject date2) {
-        return com.cyc.cycjava.cycl.date_utilities.dateLE(date2, date1);
-    }
-
-    /**
-     *
-     *
-     * @return booleanp.  Returns whether DATE1 occurs at the same time as or after DATE2.
-     */
-    @LispMethod(comment = "@return booleanp.  Returns whether DATE1 occurs at the same time as or after DATE2.")
     public static SubLObject dateGE(final SubLObject date1, final SubLObject date2) {
         return dateLE(date2, date1);
     }
 
-    /**
-     *
-     *
-     * @return booleanp.  Returns whether DATE1 occurs at the same time as DATE2.
-     */
-    @LispMethod(comment = "@return booleanp.  Returns whether DATE1 occurs at the same time as DATE2.")
-    public static final SubLObject dateE_alt(SubLObject date1, SubLObject date2) {
-        return equal(date1, date2);
-    }
-
-    /**
-     *
-     *
-     * @return booleanp.  Returns whether DATE1 occurs at the same time as DATE2.
-     */
-    @LispMethod(comment = "@return booleanp.  Returns whether DATE1 occurs at the same time as DATE2.")
     public static SubLObject dateE(final SubLObject date1, final SubLObject date2) {
         return equal(date1, date2);
     }
 
-    /**
-     *
-     *
-     * @return booleanp.  Returns whether DATE1 occurs before DATE2.
-     */
-    @LispMethod(comment = "@return booleanp.  Returns whether DATE1 occurs before DATE2.")
-    public static final SubLObject dateL_alt(SubLObject date1, SubLObject date2) {
-        if (NIL != com.cyc.cycjava.cycl.date_utilities.beginning_of_timeP(date2)) {
-            return NIL;
-        } else {
-            if (NIL != com.cyc.cycjava.cycl.date_utilities.beginning_of_timeP(date1)) {
-                return T;
-            } else {
-                if (NIL != com.cyc.cycjava.cycl.date_utilities.end_of_timeP(date1)) {
-                    return NIL;
-                } else {
-                    if (NIL != com.cyc.cycjava.cycl.date_utilities.end_of_timeP(date2)) {
-                        return T;
-                    } else {
-                        if ((NIL == com.cyc.cycjava.cycl.date_utilities.date_p(date1)) || (NIL == com.cyc.cycjava.cycl.date_utilities.date_p(date2))) {
-                            return NIL;
-                        } else {
-                            {
-                                SubLObject format1 = com.cyc.cycjava.cycl.date_utilities.date_format(date1);
-                                SubLObject format2 = com.cyc.cycjava.cycl.date_utilities.date_format(date2);
-                                if (format1 == format2) {
-                                    return com.cyc.cycjava.cycl.date_utilities.dateL_int(date1, date2);
-                                } else {
-                                    if (NIL != com.cyc.cycjava.cycl.date_utilities.date_formatG(format1, format2)) {
-                                        return com.cyc.cycjava.cycl.date_utilities.dateL_int(date1, com.cyc.cycjava.cycl.date_utilities.truncate_date_to_format(date2, format1));
-                                    } else {
-                                        return com.cyc.cycjava.cycl.date_utilities.dateL_int(com.cyc.cycjava.cycl.date_utilities.truncate_date_to_format(date1, format2), date2);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return booleanp.  Returns whether DATE1 occurs before DATE2.
-     */
-    @LispMethod(comment = "@return booleanp.  Returns whether DATE1 occurs before DATE2.")
     public static SubLObject dateL(final SubLObject date1, final SubLObject date2) {
         if (NIL != beginning_of_timeP(date2)) {
             return NIL;
@@ -5826,97 +3139,8 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return dateL_int(truncate_date_to_format(date1, format2), date2);
     }
 
-    /**
-     *
-     *
-     * @return booleanp.  Returns whether DATE! occurs after DATE2.
-     */
-    @LispMethod(comment = "@return booleanp.  Returns whether DATE! occurs after DATE2.")
-    public static final SubLObject dateG_alt(SubLObject date1, SubLObject date2) {
-        return com.cyc.cycjava.cycl.date_utilities.dateL(date2, date1);
-    }
-
-    /**
-     *
-     *
-     * @return booleanp.  Returns whether DATE! occurs after DATE2.
-     */
-    @LispMethod(comment = "@return booleanp.  Returns whether DATE! occurs after DATE2.")
     public static SubLObject dateG(final SubLObject date1, final SubLObject date2) {
         return dateL(date2, date1);
-    }
-
-    public static final SubLObject dateL_int_alt(SubLObject date1, SubLObject date2) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject format1 = com.cyc.cycjava.cycl.date_utilities.explode_date(date1);
-                SubLObject year1 = thread.secondMultipleValue();
-                SubLObject month1 = thread.thirdMultipleValue();
-                SubLObject day1 = thread.fourthMultipleValue();
-                SubLObject hour1 = thread.fifthMultipleValue();
-                SubLObject min1 = thread.sixthMultipleValue();
-                SubLObject sec1 = thread.seventhMultipleValue();
-                thread.resetMultipleValues();
-                thread.resetMultipleValues();
-                {
-                    SubLObject format2 = com.cyc.cycjava.cycl.date_utilities.explode_date(date2);
-                    SubLObject year2 = thread.secondMultipleValue();
-                    SubLObject month2 = thread.thirdMultipleValue();
-                    SubLObject day2 = thread.fourthMultipleValue();
-                    SubLObject hour2 = thread.fifthMultipleValue();
-                    SubLObject min2 = thread.sixthMultipleValue();
-                    SubLObject sec2 = thread.seventhMultipleValue();
-                    thread.resetMultipleValues();
-                    if ((year1.isInteger() && year2.isInteger()) && year1.numL(year2)) {
-                        return T;
-                    } else {
-                        if (year1 != year2) {
-                            return NIL;
-                        } else {
-                            if ((month1.isInteger() && month2.isInteger()) && month1.numL(month2)) {
-                                return T;
-                            } else {
-                                if (month1 != month2) {
-                                    return NIL;
-                                } else {
-                                    if ((day1.isInteger() && day2.isInteger()) && day1.numL(day2)) {
-                                        return T;
-                                    } else {
-                                        if (day1 != day2) {
-                                            return NIL;
-                                        } else {
-                                            if ((hour1.isInteger() && hour2.isInteger()) && hour1.numL(hour2)) {
-                                                return T;
-                                            } else {
-                                                if (hour1 != hour2) {
-                                                    return NIL;
-                                                } else {
-                                                    if ((min1.isInteger() && min2.isInteger()) && min1.numL(min2)) {
-                                                        return T;
-                                                    } else {
-                                                        if (min1 != min2) {
-                                                            return NIL;
-                                                        } else {
-                                                            if ((sec1.isInteger() && sec2.isInteger()) && sec1.numL(sec2)) {
-                                                                return T;
-                                                            } else {
-                                                                return NIL;
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
 
     public static SubLObject dateL_int(final SubLObject date1, final SubLObject date2) {
@@ -5983,91 +3207,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     *
-     *
-     * @return date-p. Returns the first second of DATE.
-     */
-    @LispMethod(comment = "@return date-p. Returns the first second of DATE.")
-    public static final SubLObject cycl_date_initial_second_alt(SubLObject date) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (NIL == com.cyc.cycjava.cycl.date_utilities.date_p(date)) {
-                    Errors.error($str_alt114$_a_is_not_a_valid_cycl_date_, date);
-                }
-            }
-            {
-                SubLObject second = ZERO_INTEGER;
-                SubLObject minute = ZERO_INTEGER;
-                SubLObject hour = ZERO_INTEGER;
-                SubLObject day = ONE_INTEGER;
-                SubLObject month = ONE_INTEGER;
-                SubLObject year = NIL;
-                while (date.isCons()) {
-                    {
-                        SubLObject function = date.first();
-                        SubLObject pcase_var = function;
-                        if (pcase_var.eql($$SecondFn)) {
-                            second = second(date);
-                            date = third(date);
-                        } else {
-                            if (pcase_var.eql($$MinuteFn)) {
-                                minute = second(date);
-                                date = third(date);
-                            } else {
-                                if (pcase_var.eql($$HourFn)) {
-                                    hour = second(date);
-                                    date = third(date);
-                                } else {
-                                    if (pcase_var.eql($$DayFn)) {
-                                        day = second(date);
-                                        date = third(date);
-                                    } else {
-                                        if (pcase_var.eql($$MonthFn)) {
-                                            month = com.cyc.cycjava.cycl.date_utilities.number_of_month(second(date));
-                                            date = third(date);
-                                        } else {
-                                            if (pcase_var.eql($$QuarterFn)) {
-                                                month = subtract(multiply(second(date), THREE_INTEGER), TWO_INTEGER);
-                                                date = third(date);
-                                            } else {
-                                                if (pcase_var.eql($$YearFn)) {
-                                                    year = second(date);
-                                                    date = NIL;
-                                                } else {
-                                                    if (pcase_var.eql($$DecadeFn)) {
-                                                        year = multiply(second(date), TEN_INTEGER);
-                                                        date = NIL;
-                                                    } else {
-                                                        if (pcase_var.eql($$CenturyFn)) {
-                                                            year = number_utilities.f_1X(multiply(number_utilities.f_1_(second(date)), $int$100));
-                                                            date = NIL;
-                                                        } else {
-                                                            return NIL;
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } 
-                month = com.cyc.cycjava.cycl.date_utilities.month_number(month);
-                return com.cyc.cycjava.cycl.date_utilities.construct_cycl_date(second, minute, hour, day, month, year);
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return date-p. Returns the first second of DATE.
-     */
-    @LispMethod(comment = "@return date-p. Returns the first second of DATE.")
     public static SubLObject cycl_date_initial_second(SubLObject date) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (NIL == date_p(date))) {
@@ -6138,90 +3277,8 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return construct_cycl_date(second, minute, hour, day, month, year);
     }
 
-    /**
-     *
-     *
-     * @return date-p. Returns the last second of DATE.
-     */
-    @LispMethod(comment = "@return date-p. Returns the last second of DATE.")
-    public static final SubLObject cycl_date_final_second_alt(SubLObject date) {
-        SubLTrampolineFile.checkType(date, DATE_P);
-        {
-            SubLObject destructable_date = date;
-            SubLObject second = $int$59;
-            SubLObject minute = $int$59;
-            SubLObject hour = $int$23;
-            SubLObject day = NIL;
-            SubLObject month = TWELVE_INTEGER;
-            SubLObject year = NIL;
-            while (destructable_date.isCons()) {
-                {
-                    SubLObject function = destructable_date.first();
-                    SubLObject pcase_var = function;
-                    if (pcase_var.eql($$SecondFn)) {
-                        second = second(destructable_date);
-                        destructable_date = third(destructable_date);
-                    } else {
-                        if (pcase_var.eql($$MinuteFn)) {
-                            minute = second(destructable_date);
-                            destructable_date = third(destructable_date);
-                        } else {
-                            if (pcase_var.eql($$HourFn)) {
-                                hour = second(destructable_date);
-                                destructable_date = third(destructable_date);
-                            } else {
-                                if (pcase_var.eql($$DayFn)) {
-                                    day = second(destructable_date);
-                                    destructable_date = third(destructable_date);
-                                } else {
-                                    if (pcase_var.eql($$MonthFn)) {
-                                        month = com.cyc.cycjava.cycl.date_utilities.number_of_month(second(destructable_date));
-                                        destructable_date = third(destructable_date);
-                                    } else {
-                                        if (pcase_var.eql($$QuarterFn)) {
-                                            month = multiply(second(destructable_date), THREE_INTEGER);
-                                            destructable_date = third(destructable_date);
-                                        } else {
-                                            if (pcase_var.eql($$YearFn)) {
-                                                year = second(destructable_date);
-                                                destructable_date = NIL;
-                                            } else {
-                                                if (pcase_var.eql($$DecadeFn)) {
-                                                    year = add(multiply(second(destructable_date), TEN_INTEGER), NINE_INTEGER);
-                                                    destructable_date = NIL;
-                                                } else {
-                                                    if (pcase_var.eql($$CenturyFn)) {
-                                                        year = multiply(second(destructable_date), $int$100);
-                                                        destructable_date = NIL;
-                                                    } else {
-                                                        return NIL;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            } 
-            if (NIL == day) {
-                day = (month.numE(TWO_INTEGER) && (NIL != numeric_date_utilities.leap_year_p(year))) ? ((SubLObject) ($int$29)) : numeric_date_utilities.usual_days_in_month_number(month);
-            }
-            month = com.cyc.cycjava.cycl.date_utilities.month_number(month);
-            return com.cyc.cycjava.cycl.date_utilities.construct_cycl_date(second, minute, hour, day, month, year);
-        }
-    }
-
-    /**
-     *
-     *
-     * @return date-p. Returns the last second of DATE.
-     */
-    @LispMethod(comment = "@return date-p. Returns the last second of DATE.")
     public static SubLObject cycl_date_final_second(final SubLObject date) {
-        assert NIL != date_p(date) : "! date_utilities.date_p(date) " + ("date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) ") + date;
+        assert NIL != date_p(date) : "date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) " + date;
         SubLObject destructable_date = date;
         SubLObject millisec = $int$999;
         SubLObject second = $int$59;
@@ -6291,28 +3348,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return construct_cycl_date(second, minute, hour, day, month, year);
     }
 
-    /**
-     *
-     *
-     * @return 0 BOOLEANP; Non-NIL iff we can prove that DATE1 subsumes DATE2.
-     * @return 1 BOOLEANP; Non-NIL iff we're confident of the first value.
-     */
-    @LispMethod(comment = "@return 0 BOOLEANP; Non-NIL iff we can prove that DATE1 subsumes DATE2.\r\n@return 1 BOOLEANP; Non-NIL iff we\'re confident of the first value.")
-    public static final SubLObject date_subsumes_alt(SubLObject date1, SubLObject date2) {
-        {
-            SubLObject validP = makeBoolean((NIL != com.cyc.cycjava.cycl.date_utilities.date_p(date1)) && (NIL != com.cyc.cycjava.cycl.date_utilities.date_p(date2)));
-            SubLObject subsumesP = makeBoolean(((NIL != validP) && (NIL != com.cyc.cycjava.cycl.date_utilities.dateLE(com.cyc.cycjava.cycl.date_utilities.cycl_date_initial_second(date1), com.cyc.cycjava.cycl.date_utilities.cycl_date_initial_second(date2)))) && (NIL != com.cyc.cycjava.cycl.date_utilities.dateLE(com.cyc.cycjava.cycl.date_utilities.cycl_date_final_second(date2), com.cyc.cycjava.cycl.date_utilities.cycl_date_final_second(date1))));
-            return values(subsumesP, validP);
-        }
-    }
-
-    /**
-     *
-     *
-     * @return 0 BOOLEANP; Non-NIL iff we can prove that DATE1 subsumes DATE2.
-     * @return 1 BOOLEANP; Non-NIL iff we're confident of the first value.
-     */
-    @LispMethod(comment = "@return 0 BOOLEANP; Non-NIL iff we can prove that DATE1 subsumes DATE2.\r\n@return 1 BOOLEANP; Non-NIL iff we\'re confident of the first value.")
     public static SubLObject date_subsumes(final SubLObject date1, final SubLObject date2) {
         final SubLObject validP = makeBoolean((NIL != date_p(date1)) && (NIL != date_p(date2)));
         final SubLObject subsumesP = makeBoolean(((NIL != validP) && (NIL != dateLE(cycl_date_initial_second(date1), cycl_date_initial_second(date2)))) && (NIL != dateLE(cycl_date_final_second(date2), cycl_date_final_second(date1))));
@@ -6390,7 +3425,7 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
     }
 
     public static SubLObject cycl_date_final_millisecond(final SubLObject date) {
-        assert NIL != date_p(date) : "! date_utilities.date_p(date) " + ("date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) ") + date;
+        assert NIL != date_p(date) : "date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) " + date;
         SubLObject destructable_date = date;
         SubLObject millisecond = $int$999;
         SubLObject second = $int$59;
@@ -6460,23 +3495,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return construct_cycl_date_ms(millisecond, second, minute, hour, day, month, year);
     }
 
-    public static final SubLObject explode_time_alt(SubLObject time) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject unit = quantities.explode_interval(time);
-                SubLObject min = thread.secondMultipleValue();
-                SubLObject max = thread.thirdMultipleValue();
-                thread.resetMultipleValues();
-                if (!min.numE(max)) {
-                    relation_evaluation.throw_unevaluatable();
-                }
-                return values(unit, min);
-            }
-        }
-    }
-
     public static SubLObject explode_time(final SubLObject time) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -6523,53 +3541,10 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return nth(subtract(fn_index, ONE_INTEGER), $duration_denoting_functions_ordered$.getDynamicValue(thread));
     }
 
-    public static final SubLObject date_after_alt(SubLObject date, SubLObject time) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(date, DATE_P);
-            SubLTrampolineFile.checkType(time, DURATION_P);
-            time = com.cyc.cycjava.cycl.date_utilities.convert_time_to_date_precision(date, time);
-            thread.resetMultipleValues();
-            {
-                SubLObject format = com.cyc.cycjava.cycl.date_utilities.explode_date(date);
-                SubLObject year = thread.secondMultipleValue();
-                SubLObject month = thread.thirdMultipleValue();
-                SubLObject day = thread.fourthMultipleValue();
-                SubLObject hour = thread.fifthMultipleValue();
-                SubLObject min = thread.sixthMultipleValue();
-                SubLObject sec = thread.seventhMultipleValue();
-                thread.resetMultipleValues();
-                thread.resetMultipleValues();
-                {
-                    SubLObject unit = com.cyc.cycjava.cycl.date_utilities.explode_time(time);
-                    SubLObject amount = thread.secondMultipleValue();
-                    thread.resetMultipleValues();
-                    if (format == $CALENDAR) {
-                        return com.cyc.cycjava.cycl.date_utilities.calendar_date_sum(unit, amount, year, month, day, hour, min, sec);
-                    } else {
-                        if (format == $QUARTER) {
-                            return com.cyc.cycjava.cycl.date_utilities.quarter_date_sum(unit, amount, year, month);
-                        } else {
-                            if (format == $DECADE) {
-                                return com.cyc.cycjava.cycl.date_utilities.decade_date_sum(unit, amount, year);
-                            } else {
-                                if (format == $CENTURY) {
-                                    return com.cyc.cycjava.cycl.date_utilities.century_date_sum(unit, amount, year);
-                                } else {
-                                    return NIL;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     public static SubLObject date_after(final SubLObject date, SubLObject time) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != date_p(date) : "! date_utilities.date_p(date) " + ("date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) ") + date;
-        assert NIL != time_parameter_utilities.duration_p(time) : "! time_parameter_utilities.duration_p(time) " + ("time_parameter_utilities.duration_p(time) " + "CommonSymbols.NIL != time_parameter_utilities.duration_p(time) ") + time;
+        assert NIL != date_p(date) : "date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) " + date;
+        assert NIL != time_parameter_utilities.duration_p(time) : "time_parameter_utilities.duration_p(time) " + "CommonSymbols.NIL != time_parameter_utilities.duration_p(time) " + time;
         time = convert_time_to_date_precision(date, time);
         thread.resetMultipleValues();
         final SubLObject format = explode_date(date);
@@ -6602,8 +3577,8 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
 
     public static SubLObject date_after_precise(final SubLObject date, final SubLObject time) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != date_p(date) : "! date_utilities.date_p(date) " + ("date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) ") + date;
-        assert NIL != time_parameter_utilities.duration_p(time) : "! time_parameter_utilities.duration_p(time) " + ("time_parameter_utilities.duration_p(time) " + "CommonSymbols.NIL != time_parameter_utilities.duration_p(time) ") + time;
+        assert NIL != date_p(date) : "date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) " + date;
+        assert NIL != time_parameter_utilities.duration_p(time) : "time_parameter_utilities.duration_p(time) " + "CommonSymbols.NIL != time_parameter_utilities.duration_p(time) " + time;
         thread.resetMultipleValues();
         final SubLObject format = explode_date(extend_date_to_time_precision(time_interval_utilities.succeeding_cycl_date(date), time));
         final SubLObject year = thread.secondMultipleValue();
@@ -6635,8 +3610,8 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
 
     public static SubLObject date_after_duration_start_precise(final SubLObject date, final SubLObject time) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != date_p(date) : "! date_utilities.date_p(date) " + ("date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) ") + date;
-        assert NIL != time_parameter_utilities.duration_p(time) : "! time_parameter_utilities.duration_p(time) " + ("time_parameter_utilities.duration_p(time) " + "CommonSymbols.NIL != time_parameter_utilities.duration_p(time) ") + time;
+        assert NIL != date_p(date) : "date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) " + date;
+        assert NIL != time_parameter_utilities.duration_p(time) : "time_parameter_utilities.duration_p(time) " + "CommonSymbols.NIL != time_parameter_utilities.duration_p(time) " + time;
         thread.resetMultipleValues();
         final SubLObject format = explode_date(extend_date_to_time_precision(date, time));
         final SubLObject year = thread.secondMultipleValue();
@@ -6666,65 +3641,10 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     *
-     *
-     * @return date-p; The date which is TIME duration before DATE.
-     */
-    @LispMethod(comment = "@return date-p; The date which is TIME duration before DATE.")
-    public static final SubLObject date_before_alt(SubLObject date, SubLObject time) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(date, DATE_P);
-            SubLTrampolineFile.checkType(time, DURATION_P);
-            time = com.cyc.cycjava.cycl.date_utilities.convert_time_to_date_precision(date, time);
-            thread.resetMultipleValues();
-            {
-                SubLObject format = com.cyc.cycjava.cycl.date_utilities.explode_date(date);
-                SubLObject year = thread.secondMultipleValue();
-                SubLObject month = thread.thirdMultipleValue();
-                SubLObject day = thread.fourthMultipleValue();
-                SubLObject hour = thread.fifthMultipleValue();
-                SubLObject min = thread.sixthMultipleValue();
-                SubLObject sec = thread.seventhMultipleValue();
-                thread.resetMultipleValues();
-                thread.resetMultipleValues();
-                {
-                    SubLObject unit = com.cyc.cycjava.cycl.date_utilities.explode_time(time);
-                    SubLObject amount = thread.secondMultipleValue();
-                    thread.resetMultipleValues();
-                    if (format == $CALENDAR) {
-                        return com.cyc.cycjava.cycl.date_utilities.calendar_date_sum(unit, minus(amount), year, month, day, hour, min, sec);
-                    } else {
-                        if (format == $QUARTER) {
-                            return com.cyc.cycjava.cycl.date_utilities.quarter_date_sum(unit, minus(amount), year, month);
-                        } else {
-                            if (format == $DECADE) {
-                                return com.cyc.cycjava.cycl.date_utilities.decade_date_sum(unit, minus(amount), year);
-                            } else {
-                                if (format == $CENTURY) {
-                                    return com.cyc.cycjava.cycl.date_utilities.century_date_sum(unit, minus(amount), year);
-                                } else {
-                                    return NIL;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return date-p; The date which is TIME duration before DATE.
-     */
-    @LispMethod(comment = "@return date-p; The date which is TIME duration before DATE.")
     public static SubLObject date_before(final SubLObject date, SubLObject time) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != date_p(date) : "! date_utilities.date_p(date) " + ("date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) ") + date;
-        assert NIL != time_parameter_utilities.duration_p(time) : "! time_parameter_utilities.duration_p(time) " + ("time_parameter_utilities.duration_p(time) " + "CommonSymbols.NIL != time_parameter_utilities.duration_p(time) ") + time;
+        assert NIL != date_p(date) : "date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) " + date;
+        assert NIL != time_parameter_utilities.duration_p(time) : "time_parameter_utilities.duration_p(time) " + "CommonSymbols.NIL != time_parameter_utilities.duration_p(time) " + time;
         time = convert_time_to_date_precision(date, time);
         thread.resetMultipleValues();
         final SubLObject format = explode_date(date);
@@ -6757,8 +3677,8 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
 
     public static SubLObject date_before_precise(final SubLObject date, final SubLObject time) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != date_p(date) : "! date_utilities.date_p(date) " + ("date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) ") + date;
-        assert NIL != time_parameter_utilities.duration_p(time) : "! time_parameter_utilities.duration_p(time) " + ("time_parameter_utilities.duration_p(time) " + "CommonSymbols.NIL != time_parameter_utilities.duration_p(time) ") + time;
+        assert NIL != date_p(date) : "date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) " + date;
+        assert NIL != time_parameter_utilities.duration_p(time) : "time_parameter_utilities.duration_p(time) " + "CommonSymbols.NIL != time_parameter_utilities.duration_p(time) " + time;
         thread.resetMultipleValues();
         final SubLObject format = explode_date(extend_date_to_time_precision(date, time));
         final SubLObject year = thread.secondMultipleValue();
@@ -6784,30 +3704,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         }
         if (format == $CENTURY) {
             return century_date_sum(unit, minus(amount), year);
-        }
-        return NIL;
-    }
-
-    public static final SubLObject convert_time_quant_to_seconds_alt(SubLObject time_quant) {
-        {
-            SubLObject operator = formula_operator(time_quant);
-            SubLObject duration = formula_arg1(time_quant, UNPROVIDED);
-            SubLObject pcase_var = operator;
-            if (pcase_var.eql($$SecondsDuration)) {
-                return duration;
-            } else {
-                if (pcase_var.eql($$MinutesDuration)) {
-                    return multiply(duration, numeric_date_utilities.$seconds_in_a_minute$.getGlobalValue());
-                } else {
-                    if (pcase_var.eql($$HoursDuration)) {
-                        return multiply(duration, numeric_date_utilities.$seconds_in_an_hour$.getGlobalValue());
-                    } else {
-                        if (pcase_var.eql($$DaysDuration)) {
-                            return multiply(duration, numeric_date_utilities.$seconds_in_a_day$.getGlobalValue());
-                        }
-                    }
-                }
-            }
         }
         return NIL;
     }
@@ -6905,63 +3801,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     * Internal function for @see cyc-time-elapsed. @return nat-p. Returns the difference in time
-     * between the beginning of DATE-1 and the beginning of DATE-2. The duration is as specific
-     * (e.g. SecondsDuration, HoursDuration) as the most of specific of DATE-1 and DATE-2.
-     */
-    @LispMethod(comment = "Internal function for @see cyc-time-elapsed. @return nat-p. Returns the difference in time\r\nbetween the beginning of DATE-1 and the beginning of DATE-2. The duration is as specific\r\n(e.g. SecondsDuration, HoursDuration) as the most of specific of DATE-1 and DATE-2.\nInternal function for @see cyc-time-elapsed. @return nat-p. Returns the difference in time\nbetween the beginning of DATE-1 and the beginning of DATE-2. The duration is as specific\n(e.g. SecondsDuration, HoursDuration) as the most of specific of DATE-1 and DATE-2.")
-    public static final SubLObject time_elapsed_alt(SubLObject date_1, SubLObject date_2, SubLObject precision) {
-        if (precision == UNPROVIDED) {
-            precision = NIL;
-        }
-        {
-            SubLObject result = NIL;
-            if (NIL == precision) {
-                precision = com.cyc.cycjava.cycl.date_utilities.time_elapsed_precision(date_1, date_2);
-            }
-            {
-                SubLObject pcase_var = precision;
-                if (pcase_var.eql($$DecadesDuration)) {
-                    result = com.cyc.cycjava.cycl.date_utilities.years_elapsed(date_1, date_2, precision, TEN_INTEGER);
-                } else {
-                    if (pcase_var.eql($$YearsDuration)) {
-                        result = com.cyc.cycjava.cycl.date_utilities.years_elapsed(date_1, date_2, precision, UNPROVIDED);
-                    } else {
-                        if (pcase_var.eql($$QuartersDuration)) {
-                            result = com.cyc.cycjava.cycl.date_utilities.months_elapsed(date_1, date_2, precision, THREE_INTEGER);
-                        } else {
-                            if (pcase_var.eql($$MonthsDuration)) {
-                                result = com.cyc.cycjava.cycl.date_utilities.months_elapsed(date_1, date_2, precision, UNPROVIDED);
-                            } else {
-                                {
-                                    SubLObject begin_date_1 = com.cyc.cycjava.cycl.date_utilities.cycl_date_initial_second(date_1);
-                                    SubLObject begin_date_2 = com.cyc.cycjava.cycl.date_utilities.cycl_date_initial_second(date_2);
-                                    if (begin_date_1.equal(begin_date_2)) {
-                                        result = list(precision, ZERO_INTEGER);
-                                    } else {
-                                        if (NIL != com.cyc.cycjava.cycl.date_utilities.dateL(begin_date_1, begin_date_2)) {
-                                            result = com.cyc.cycjava.cycl.date_utilities.time_elapsed_difference(begin_date_1, begin_date_2, precision);
-                                        } else {
-                                            result = com.cyc.cycjava.cycl.date_utilities.time_elapsed_difference(begin_date_2, begin_date_1, precision);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return result;
-        }
-    }
-
-    /**
-     * Internal function for @see cyc-time-elapsed. @return nat-p. Returns the difference in time
-     * between the beginning of DATE-1 and the beginning of DATE-2. The duration is as specific
-     * (e.g. SecondsDuration, HoursDuration) as the most of specific of DATE-1 and DATE-2.
-     */
-    @LispMethod(comment = "Internal function for @see cyc-time-elapsed. @return nat-p. Returns the difference in time\r\nbetween the beginning of DATE-1 and the beginning of DATE-2. The duration is as specific\r\n(e.g. SecondsDuration, HoursDuration) as the most of specific of DATE-1 and DATE-2.\nInternal function for @see cyc-time-elapsed. @return nat-p. Returns the difference in time\nbetween the beginning of DATE-1 and the beginning of DATE-2. The duration is as specific\n(e.g. SecondsDuration, HoursDuration) as the most of specific of DATE-1 and DATE-2.")
     public static SubLObject time_elapsed(final SubLObject date_1, final SubLObject date_2, SubLObject precision) {
         if (precision == UNPROVIDED) {
             precision = NIL;
@@ -7001,47 +3840,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return result;
     }
 
-    /**
-     * Returns the precision of the most precise of DATE-1 and DATE-2.
-     */
-    @LispMethod(comment = "Returns the precision of the most precise of DATE-1 and DATE-2.")
-    public static final SubLObject time_elapsed_precision_alt(SubLObject date_1, SubLObject date_2) {
-        {
-            SubLObject date_1_precision = com.cyc.cycjava.cycl.date_utilities.date_precision(date_1);
-            SubLObject date_2_precision = com.cyc.cycjava.cycl.date_utilities.date_precision(date_2);
-            if ((date_1_precision == $$CalendarSecond) || (date_2_precision == $$CalendarSecond)) {
-                return $$SecondsDuration;
-            }
-            if ((date_1_precision == $$CalendarMinute) || (date_2_precision == $$CalendarMinute)) {
-                return $$MinutesDuration;
-            }
-            if ((date_1_precision == $$CalendarHour) || (date_2_precision == $$CalendarHour)) {
-                return $$HoursDuration;
-            }
-            if ((date_1_precision == $$CalendarDay) || (date_2_precision == $$CalendarDay)) {
-                return $$DaysDuration;
-            }
-            if ((date_1_precision == $$CalendarMonth) || (date_2_precision == $$CalendarMonth)) {
-                return $$MonthsDuration;
-            }
-            if ((date_1_precision == $$CalendarQuarter) || (date_2_precision == $$CalendarQuarter)) {
-                return $$QuartersDuration;
-            }
-            if ((date_1_precision == $$CalendarYear) || (date_2_precision == $$CalendarYear)) {
-                return $$YearsDuration;
-            }
-            if ((date_1_precision == $$CalendarDecade) || (date_2_precision == $$CalendarDecade)) {
-                return $$DecadesDuration;
-            }
-        }
-        Errors.error($str_alt117$Could_not_determine_precision_for, date_1, date_2);
-        return NIL;
-    }
-
-    /**
-     * Returns the precision of the most precise of DATE-1 and DATE-2.
-     */
-    @LispMethod(comment = "Returns the precision of the most precise of DATE-1 and DATE-2.")
     public static SubLObject time_elapsed_precision(final SubLObject date_1, final SubLObject date_2) {
         final SubLObject date_1_precision = date_precision(date_1);
         final SubLObject date_2_precision = date_precision(date_2);
@@ -7076,45 +3874,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     * Date A is before date B
-     */
-    @LispMethod(comment = "Date A is before date B")
-    public static final SubLObject time_elapsed_difference_alt(SubLObject date_a, SubLObject date_b, SubLObject precision) {
-        {
-            SubLObject duration = NIL;
-            SubLObject pcase_var = precision;
-            if (pcase_var.eql($$YearsDuration)) {
-                duration = com.cyc.cycjava.cycl.date_utilities.years_difference(date_a, date_b);
-            } else {
-                if (pcase_var.eql($$MonthsDuration)) {
-                    duration = com.cyc.cycjava.cycl.date_utilities.months_difference(date_a, date_b);
-                } else {
-                    if (pcase_var.eql($$DaysDuration)) {
-                        duration = com.cyc.cycjava.cycl.date_utilities.days_difference(date_a, date_b);
-                    } else {
-                        if (pcase_var.eql($$HoursDuration)) {
-                            duration = com.cyc.cycjava.cycl.date_utilities.hours_difference(date_a, date_b);
-                        } else {
-                            if (pcase_var.eql($$MinutesDuration)) {
-                                duration = com.cyc.cycjava.cycl.date_utilities.minutes_difference(date_a, date_b);
-                            } else {
-                                if (pcase_var.eql($$SecondsDuration)) {
-                                    duration = com.cyc.cycjava.cycl.date_utilities.seconds_difference(date_a, date_b);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return list(precision, duration);
-        }
-    }
-
-    /**
-     * Date A is before date B
-     */
-    @LispMethod(comment = "Date A is before date B")
     public static SubLObject time_elapsed_difference(final SubLObject date_a, final SubLObject date_b, final SubLObject precision) {
         SubLObject duration = NIL;
         if (precision.eql($$YearsDuration)) {
@@ -7150,48 +3909,24 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject years_difference_alt(SubLObject date_a, SubLObject date_b) {
-        return subtract(com.cyc.cycjava.cycl.date_utilities.extract_date_year(date_b), com.cyc.cycjava.cycl.date_utilities.extract_date_year(date_a));
-    }
-
     public static SubLObject years_difference(final SubLObject date_a, final SubLObject date_b) {
         return subtract(extract_date_year(date_b), extract_date_year(date_a));
-    }
-
-    public static final SubLObject months_difference_alt(SubLObject date_a, SubLObject date_b) {
-        return add(multiply(TWELVE_INTEGER, com.cyc.cycjava.cycl.date_utilities.years_difference(date_a, date_b)), subtract(com.cyc.cycjava.cycl.date_utilities.extract_date_month_number(date_b), com.cyc.cycjava.cycl.date_utilities.extract_date_month_number(date_a)));
     }
 
     public static SubLObject months_difference(final SubLObject date_a, final SubLObject date_b) {
         return add(multiply(TWELVE_INTEGER, years_difference(date_a, date_b)), subtract(extract_date_month_number(date_b), extract_date_month_number(date_a)));
     }
 
-    public static final SubLObject days_difference_alt(SubLObject date_a, SubLObject date_b) {
-        return subtract(com.cyc.cycjava.cycl.date_utilities.days_since_rata_die(date_b), com.cyc.cycjava.cycl.date_utilities.days_since_rata_die(date_a));
-    }
-
     public static SubLObject days_difference(final SubLObject date_a, final SubLObject date_b) {
         return subtract(days_since_rata_die(date_b), days_since_rata_die(date_a));
-    }
-
-    public static final SubLObject hours_difference_alt(SubLObject date_a, SubLObject date_b) {
-        return add(multiply($int$24, com.cyc.cycjava.cycl.date_utilities.days_difference(date_a, date_b)), subtract(com.cyc.cycjava.cycl.date_utilities.extract_date_hour(date_b), com.cyc.cycjava.cycl.date_utilities.extract_date_hour(date_a)));
     }
 
     public static SubLObject hours_difference(final SubLObject date_a, final SubLObject date_b) {
         return add(multiply($int$24, days_difference(date_a, date_b)), subtract(extract_date_hour(date_b), extract_date_hour(date_a)));
     }
 
-    public static final SubLObject minutes_difference_alt(SubLObject date_a, SubLObject date_b) {
-        return add(multiply($int$60, com.cyc.cycjava.cycl.date_utilities.hours_difference(date_a, date_b)), subtract(com.cyc.cycjava.cycl.date_utilities.extract_date_minute(date_b), com.cyc.cycjava.cycl.date_utilities.extract_date_minute(date_a)));
-    }
-
     public static SubLObject minutes_difference(final SubLObject date_a, final SubLObject date_b) {
         return add(multiply($int$60, hours_difference(date_a, date_b)), subtract(extract_date_minute(date_b), extract_date_minute(date_a)));
-    }
-
-    public static final SubLObject seconds_difference_alt(SubLObject date_a, SubLObject date_b) {
-        return add(multiply($int$60, com.cyc.cycjava.cycl.date_utilities.minutes_difference(date_a, date_b)), subtract(com.cyc.cycjava.cycl.date_utilities.extract_date_second(date_b), com.cyc.cycjava.cycl.date_utilities.extract_date_second(date_a)));
     }
 
     public static SubLObject seconds_difference(final SubLObject date_a, final SubLObject date_b) {
@@ -7200,30 +3935,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
 
     public static SubLObject milliseconds_difference(final SubLObject date_a, final SubLObject date_b) {
         return add(multiply($int$1000, seconds_difference(date_a, date_b)), subtract(extract_date_millisecond(date_b), extract_date_millisecond(date_a)));
-    }
-
-    public static final SubLObject leap_years_between_alt(SubLObject date_a, SubLObject date_b) {
-        {
-            SubLObject year_a = com.cyc.cycjava.cycl.date_utilities.extract_date_year(date_a);
-            SubLObject year_b = com.cyc.cycjava.cycl.date_utilities.extract_date_year(date_b);
-            SubLObject month_a = com.cyc.cycjava.cycl.date_utilities.extract_date_month_number(date_a);
-            SubLObject cent_a = truncate(year_a, $int$100);
-            SubLObject cent_b = truncate(year_b, $int$100);
-            SubLObject leap_years = com.cyc.cycjava.cycl.date_utilities.naive_leap_years_between(year_a, year_b);
-            if (year_a.numE(year_b)) {
-                return ZERO_INTEGER;
-            }
-            if ((NIL != numeric_date_utilities.leap_year_p(year_a)) && ((!month_a.isNumber()) || month_a.numL(THREE_INTEGER))) {
-                leap_years = add(leap_years, ONE_INTEGER);
-            }
-            if (cent_b.numG(cent_a)) {
-                {
-                    SubLObject leap_centuries = com.cyc.cycjava.cycl.date_utilities.naive_leap_years_between(cent_a, cent_b);
-                    leap_years = subtract(leap_years, subtract(subtract(cent_b, cent_a), leap_centuries));
-                }
-            }
-            return leap_years;
-        }
     }
 
     public static SubLObject leap_years_between(final SubLObject date_a, final SubLObject date_b) {
@@ -7246,44 +3957,11 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return leap_years;
     }
 
-    public static final SubLObject naive_leap_years_between_alt(SubLObject year_a, SubLObject year_b) {
-        {
-            SubLObject leap_days = floor(add(subtract(year_b, year_a), mod(year_a, FOUR_INTEGER)), FOUR_INTEGER);
-            return leap_days;
-        }
-    }
-
     public static SubLObject naive_leap_years_between(final SubLObject year_a, final SubLObject year_b) {
         final SubLObject leap_days = floor(add(subtract(year_b, year_a), mod(year_a, FOUR_INTEGER)), FOUR_INTEGER);
         return leap_days;
     }
 
-    /**
-     * Returns the years elapsed between DATE-1 DATE-2, in either years or decades. MULTIPLIER will be 10 when PRECISION indicates decades.
-     */
-    @LispMethod(comment = "Returns the years elapsed between DATE-1 DATE-2, in either years or decades. MULTIPLIER will be 10 when PRECISION indicates decades.")
-    public static final SubLObject years_elapsed_alt(SubLObject date_1, SubLObject date_2, SubLObject precision, SubLObject multiplier) {
-        if (multiplier == UNPROVIDED) {
-            multiplier = ONE_INTEGER;
-        }
-        {
-            SubLObject udate_1 = com.cyc.cycjava.cycl.date_utilities.extended_universal_date_for_date_initial_second(date_1);
-            SubLObject udate_2 = com.cyc.cycjava.cycl.date_utilities.extended_universal_date_for_date_initial_second(date_2);
-            SubLObject divisor = multiply($u_date_year_div$.getGlobalValue(), multiplier);
-            SubLObject duration = NIL;
-            if (udate_1.numL(udate_2)) {
-                duration = subtract(integerDivide(udate_2, divisor), integerDivide(udate_1, divisor));
-            } else {
-                duration = subtract(integerDivide(udate_1, divisor), integerDivide(udate_2, divisor));
-            }
-            return list(precision, duration);
-        }
-    }
-
-    /**
-     * Returns the years elapsed between DATE-1 DATE-2, in either years or decades. MULTIPLIER will be 10 when PRECISION indicates decades.
-     */
-    @LispMethod(comment = "Returns the years elapsed between DATE-1 DATE-2, in either years or decades. MULTIPLIER will be 10 when PRECISION indicates decades.")
     public static SubLObject years_elapsed(final SubLObject date_1, final SubLObject date_2, final SubLObject precision, SubLObject multiplier) {
         if (multiplier == UNPROVIDED) {
             multiplier = ONE_INTEGER;
@@ -7300,54 +3978,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return list(precision, duration);
     }
 
-    /**
-     * Returns the months elapsed between DATE-1 DATE-2, in either months or quarters. DIVISOR will be 3 when PRECISION indicates quarters.
-     */
-    @LispMethod(comment = "Returns the months elapsed between DATE-1 DATE-2, in either months or quarters. DIVISOR will be 3 when PRECISION indicates quarters.")
-    public static final SubLObject months_elapsed_alt(SubLObject date_1, SubLObject date_2, SubLObject precision, SubLObject divisor) {
-        if (divisor == UNPROVIDED) {
-            divisor = ONE_INTEGER;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject udate_1 = com.cyc.cycjava.cycl.date_utilities.extended_universal_date_for_date_initial_second(date_1);
-                SubLObject udate_2 = com.cyc.cycjava.cycl.date_utilities.extended_universal_date_for_date_initial_second(date_2);
-                SubLObject duration = NIL;
-                thread.resetMultipleValues();
-                {
-                    SubLObject sec_1 = numeric_date_utilities.decode_extended_universal_date(udate_1);
-                    SubLObject min_1 = thread.secondMultipleValue();
-                    SubLObject hour_1 = thread.thirdMultipleValue();
-                    SubLObject day_1 = thread.fourthMultipleValue();
-                    SubLObject month_1 = thread.fifthMultipleValue();
-                    SubLObject year_1 = thread.sixthMultipleValue();
-                    thread.resetMultipleValues();
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject sec_2 = numeric_date_utilities.decode_extended_universal_date(udate_2);
-                        SubLObject min_2 = thread.secondMultipleValue();
-                        SubLObject hour_2 = thread.thirdMultipleValue();
-                        SubLObject day_2 = thread.fourthMultipleValue();
-                        SubLObject month_2 = thread.fifthMultipleValue();
-                        SubLObject year_2 = thread.sixthMultipleValue();
-                        thread.resetMultipleValues();
-                        if (udate_1.numL(udate_2)) {
-                            duration = integerDivide(add(multiply(TWELVE_INTEGER, subtract(year_2, year_1)), subtract(month_2, month_1)), divisor);
-                        } else {
-                            duration = integerDivide(add(multiply(TWELVE_INTEGER, subtract(year_1, year_2)), subtract(month_1, month_2)), divisor);
-                        }
-                    }
-                }
-                return list(precision, duration);
-            }
-        }
-    }
-
-    /**
-     * Returns the months elapsed between DATE-1 DATE-2, in either months or quarters. DIVISOR will be 3 when PRECISION indicates quarters.
-     */
-    @LispMethod(comment = "Returns the months elapsed between DATE-1 DATE-2, in either months or quarters. DIVISOR will be 3 when PRECISION indicates quarters.")
     public static SubLObject months_elapsed(final SubLObject date_1, final SubLObject date_2, final SubLObject precision, SubLObject divisor) {
         if (divisor == UNPROVIDED) {
             divisor = ONE_INTEGER;
@@ -7380,38 +4010,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return list(precision, duration);
     }
 
-    /**
-     *
-     *
-     * @unknown returns the absolute value of the difference in days
-     */
-    @LispMethod(comment = "@unknown returns the absolute value of the difference in days")
-    public static final SubLObject days_between_universal_dates_alt(SubLObject universal_date_1, SubLObject universal_date_2) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject cycl_date_1 = com.cyc.cycjava.cycl.date_utilities.universal_date_to_cycl_date(universal_date_1);
-                SubLObject cycl_date_2 = com.cyc.cycjava.cycl.date_utilities.universal_date_to_cycl_date(universal_date_2);
-                SubLObject cycl_days_elapsed = com.cyc.cycjava.cycl.date_utilities.time_elapsed(cycl_date_1, cycl_date_2, UNPROVIDED);
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == el_formula_with_operator_p(cycl_days_elapsed, $$DaysDuration)) {
-                        Errors.error($str_alt119$Expected_a___DaysDuration_nat__go, cycl_days_elapsed);
-                    }
-                }
-                {
-                    SubLObject days_elapsed = nat_arg1(cycl_days_elapsed, UNPROVIDED);
-                    return days_elapsed;
-                }
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @unknown returns the absolute value of the difference in days
-     */
-    @LispMethod(comment = "@unknown returns the absolute value of the difference in days")
     public static SubLObject days_between_universal_dates(final SubLObject universal_date_1, final SubLObject universal_date_2) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject cycl_date_1 = universal_date_to_cycl_date(universal_date_1);
@@ -7424,42 +4022,10 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return days_elapsed;
     }
 
-    public static final SubLObject temporal_indexical_p_alt(SubLObject obj) {
-        return memberP(obj, $temporal_indexicals$.getGlobalValue(), UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject temporal_indexical_p(final SubLObject obj) {
         return subl_promotions.memberP(obj, $temporal_indexicals$.getGlobalValue(), UNPROVIDED, UNPROVIDED);
     }
 
-    /**
-     *
-     *
-     * @return booleanp; Whether OBJ contains a temporal indexical.
-     */
-    @LispMethod(comment = "@return booleanp; Whether OBJ contains a temporal indexical.")
-    public static final SubLObject contains_indexicalP_alt(SubLObject obj) {
-        if (NIL != nart_handles.nart_p(obj)) {
-            return com.cyc.cycjava.cycl.date_utilities.contains_indexicalP(narts_high.nart_el_formula(obj));
-        } else {
-            if (obj.isAtom()) {
-                return com.cyc.cycjava.cycl.date_utilities.temporal_indexical_p(obj);
-            } else {
-                if (obj.isList()) {
-                    return expression_find_if(TEMPORAL_INDEXICAL_P, obj, UNPROVIDED, UNPROVIDED);
-                } else {
-                    return NIL;
-                }
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return booleanp; Whether OBJ contains a temporal indexical.
-     */
-    @LispMethod(comment = "@return booleanp; Whether OBJ contains a temporal indexical.")
     public static SubLObject contains_indexicalP(final SubLObject obj) {
         if (NIL != nart_handles.nart_p(obj)) {
             return contains_indexicalP(narts_high.nart_el_formula(obj));
@@ -7473,37 +4039,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     *
-     *
-     * @return cycl-time-index-p; The index among INDICES that begins first.
-     */
-    @LispMethod(comment = "@return cycl-time-index-p; The index among INDICES that begins first.")
-    public static final SubLObject first_among_time_indexes_alt(SubLObject indices) {
-        {
-            SubLObject indexical_store = com.cyc.cycjava.cycl.date_utilities.bind_and_store_indexicals(indices);
-            SubLObject result = indices.first();
-            SubLObject cdolist_list_var = indices.rest();
-            SubLObject index = NIL;
-            for (index = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , index = cdolist_list_var.first()) {
-                {
-                    SubLObject index_time = (NIL != com.cyc.cycjava.cycl.date_utilities.contains_indexicalP(index)) ? ((SubLObject) (gethash(index, indexical_store, UNPROVIDED))) : index;
-                    SubLObject result_time = (NIL != com.cyc.cycjava.cycl.date_utilities.contains_indexicalP(result)) ? ((SubLObject) (gethash(result, indexical_store, UNPROVIDED))) : result;
-                    if (NIL != com.cyc.cycjava.cycl.date_utilities.dateL(index_time, result_time)) {
-                        result = index;
-                    }
-                }
-            }
-            return result;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return cycl-time-index-p; The index among INDICES that begins first.
-     */
-    @LispMethod(comment = "@return cycl-time-index-p; The index among INDICES that begins first.")
     public static SubLObject first_among_time_indexes(final SubLObject indices) {
         final SubLObject indexical_store = bind_and_store_indexicals(indices);
         SubLObject result = indices.first();
@@ -7522,37 +4057,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return result;
     }
 
-    /**
-     *
-     *
-     * @return cycl-time-index-p; The index among INDICES that ends last.
-     */
-    @LispMethod(comment = "@return cycl-time-index-p; The index among INDICES that ends last.")
-    public static final SubLObject last_among_time_indexes_alt(SubLObject indices) {
-        {
-            SubLObject indexical_store = com.cyc.cycjava.cycl.date_utilities.bind_and_store_indexicals(indices);
-            SubLObject result = indices.first();
-            SubLObject cdolist_list_var = indices.rest();
-            SubLObject index = NIL;
-            for (index = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , index = cdolist_list_var.first()) {
-                {
-                    SubLObject index_time = (NIL != com.cyc.cycjava.cycl.date_utilities.contains_indexicalP(index)) ? ((SubLObject) (gethash(index, indexical_store, UNPROVIDED))) : index;
-                    SubLObject result_time = (NIL != com.cyc.cycjava.cycl.date_utilities.contains_indexicalP(result)) ? ((SubLObject) (gethash(result, indexical_store, UNPROVIDED))) : result;
-                    if (NIL != com.cyc.cycjava.cycl.date_utilities.dateL(result_time, index_time)) {
-                        result = index;
-                    }
-                }
-            }
-            return result;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return cycl-time-index-p; The index among INDICES that ends last.
-     */
-    @LispMethod(comment = "@return cycl-time-index-p; The index among INDICES that ends last.")
     public static SubLObject last_among_time_indexes(final SubLObject indices) {
         final SubLObject indexical_store = bind_and_store_indexicals(indices);
         SubLObject result = indices.first();
@@ -7571,31 +4075,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return result;
     }
 
-    /**
-     *
-     *
-     * @return hash-table-p; Returns a store of indexicals mapped to their current values.
-     */
-    @LispMethod(comment = "@return hash-table-p; Returns a store of indexicals mapped to their current values.")
-    public static final SubLObject bind_and_store_indexicals_alt(SubLObject times) {
-        {
-            SubLObject indexicals = remove_duplicates(list_utilities.tree_gather(times, TEMPORAL_INDEXICAL_P, UNPROVIDED, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            SubLObject store = make_hash_table(ZERO_INTEGER, EQ, UNPROVIDED);
-            SubLObject cdolist_list_var = indexicals;
-            SubLObject indexical = NIL;
-            for (indexical = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , indexical = cdolist_list_var.first()) {
-                sethash(indexical, store, removal_modules_indexical_referent.temporal_indexical_expand(indexical));
-            }
-            return store;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return hash-table-p; Returns a store of indexicals mapped to their current values.
-     */
-    @LispMethod(comment = "@return hash-table-p; Returns a store of indexicals mapped to their current values.")
     public static SubLObject bind_and_store_indexicals(final SubLObject times) {
         final SubLObject indexicals = remove_duplicates(list_utilities.tree_gather(times, TEMPORAL_INDEXICAL_P, UNPROVIDED, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         final SubLObject store = make_hash_table(ZERO_INTEGER, EQ, UNPROVIDED);
@@ -7610,35 +4089,16 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return store;
     }
 
-    public static final SubLObject possibly_bind_temporal_indexical_in_object_alt(SubLObject obj) {
-        return NIL != com.cyc.cycjava.cycl.date_utilities.contains_indexicalP(obj) ? ((SubLObject) (com.cyc.cycjava.cycl.date_utilities.bind_temporal_indexical_in_object(obj))) : obj;
-    }
-
     public static SubLObject possibly_bind_temporal_indexical_in_object(final SubLObject obj) {
         return NIL != contains_indexicalP(obj) ? bind_temporal_indexical_in_object(obj) : obj;
-    }
-
-    public static final SubLObject bind_temporal_indexical_in_object_alt(SubLObject obj) {
-        return expression_transform(obj, TEMPORAL_INDEXICAL_P, TEMPORAL_INDEXICAL_EXPAND, UNPROVIDED, UNPROVIDED);
     }
 
     public static SubLObject bind_temporal_indexical_in_object(final SubLObject obj) {
         return cycl_utilities.expression_transform(obj, TEMPORAL_INDEXICAL_P, TEMPORAL_INDEXICAL_EXPAND, UNPROVIDED, UNPROVIDED);
     }
 
-    public static final SubLObject bind_temporal_indexicals_in_hlmt_list_alt(SubLObject hlmts) {
-        return Mapping.mapcar(BIND_TEMPORAL_INDEXICAL_IN_OBJECT, hlmts);
-    }
-
     public static SubLObject bind_temporal_indexicals_in_hlmt_list(final SubLObject hlmts) {
         return Mapping.mapcar(BIND_TEMPORAL_INDEXICAL_IN_OBJECT, hlmts);
-    }
-
-    public static final SubLObject inference_now_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return $inference_now$.getDynamicValue(thread);
-        }
     }
 
     public static SubLObject inference_now() {
@@ -7646,25 +4106,9 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return $inference_now$.getDynamicValue(thread);
     }
 
-    public static final SubLObject get_inference_now_alt() {
-        {
-            SubLObject inference_now = inference_worker.currently_active_problem_store_creation_time();
-            return NIL != inference_now ? ((SubLObject) (inference_now)) : get_universal_time();
-        }
-    }
-
     public static SubLObject get_inference_now() {
         final SubLObject inference_now = inference_worker.currently_active_problem_store_creation_time();
         return NIL != inference_now ? inference_now : get_universal_time();
-    }
-
-    public static final SubLObject with_cpu_now_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            SubLObject body = current;
-            return listS(CLET, $list_alt126, append(body, NIL));
-        }
     }
 
     public static SubLObject with_cpu_now(final SubLObject macroform, final SubLObject environment) {
@@ -7674,15 +4118,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return listS(CLET, $list166, append(body, NIL));
     }
 
-    public static final SubLObject with_inference_now_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            SubLObject body = current;
-            return listS(CLET, $list_alt127, append(body, NIL));
-        }
-    }
-
     public static SubLObject with_inference_now(final SubLObject macroform, final SubLObject environment) {
         final SubLObject datum = macroform.rest();
         final SubLObject body;
@@ -7690,39 +4125,11 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return listS(CLET, $list167, append(body, NIL));
     }
 
-    public static final SubLObject possibly_with_inference_now_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            SubLObject body = current;
-            return listS(CLET, $list_alt128, append(body, NIL));
-        }
-    }
-
     public static SubLObject possibly_with_inference_now(final SubLObject macroform, final SubLObject environment) {
         final SubLObject datum = macroform.rest();
         final SubLObject body;
         final SubLObject current = body = datum;
         return listS(CLET, $list168, append(body, NIL));
-    }
-
-    public static final SubLObject indexical_now_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject now = NIL;
-                {
-                    SubLObject _prev_bind_0 = $inference_now$.currentBinding(thread);
-                    try {
-                        $inference_now$.bind(NIL != $inference_now$.getDynamicValue(thread) ? ((SubLObject) ($inference_now$.getDynamicValue(thread))) : com.cyc.cycjava.cycl.date_utilities.get_inference_now(), thread);
-                        now = com.cyc.cycjava.cycl.date_utilities.universal_time_to_cycl_date(com.cyc.cycjava.cycl.date_utilities.inference_now());
-                    } finally {
-                        $inference_now$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return now;
-            }
-        }
     }
 
     public static SubLObject indexical_now() {
@@ -7751,61 +4158,22 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return construct_cycl_date_ms(milli, sec, min, hour, day, month, year);
     }
 
-    public static final SubLObject indexical_today_alt() {
-        return com.cyc.cycjava.cycl.date_utilities.universal_date_to_cycl_date(numeric_date_utilities.get_universal_date(UNPROVIDED, UNPROVIDED));
-    }
-
     public static SubLObject indexical_today() {
         return universal_date_to_cycl_date(numeric_date_utilities.get_universal_date(UNPROVIDED, UNPROVIDED));
-    }
-
-    public static final SubLObject indexical_tomorrow_alt() {
-        return date_defns.cyc_date_after(com.cyc.cycjava.cycl.date_utilities.indexical_today(), $list_alt129);
     }
 
     public static SubLObject indexical_tomorrow() {
         return date_defns.cyc_date_after(indexical_today(), $list172);
     }
 
-    public static final SubLObject indexical_yesterday_alt() {
-        return date_defns.cyc_date_before(com.cyc.cycjava.cycl.date_utilities.indexical_today(), $list_alt129);
-    }
-
     public static SubLObject indexical_yesterday() {
         return date_defns.cyc_date_before(indexical_today(), $list172);
-    }
-
-    public static final SubLObject indexical_seconds_since_1970_alt() {
-        return subtract(get_universal_time(), $start_of_1970$.getGlobalValue());
     }
 
     public static SubLObject indexical_seconds_since_1970() {
         return subtract(get_universal_time(), $start_of_1970$.getGlobalValue());
     }
 
-    /**
-     *
-     *
-     * @return the instance of INTERVAL-TYPE that subsumes #$Now, if there is one that we can identify.
-     * @unknown -- as of 2007 -- (current-interval-of-type #$CalendarYear) -> (#$YearFn 2007)
-     */
-    @LispMethod(comment = "@return the instance of INTERVAL-TYPE that subsumes #$Now, if there is one that we can identify.\r\n@unknown -- as of 2007 -- (current-interval-of-type #$CalendarYear) -> (#$YearFn 2007)")
-    public static final SubLObject current_time_interval_of_type_alt(SubLObject interval_type) {
-        {
-            SubLObject period = (NIL != covering_time_type_p(interval_type)) ? ((SubLObject) (time_series_duration(interval_type))) : gappy_type_period(interval_type);
-            SubLObject next_one = (NIL != period) ? ((SubLObject) (com.cyc.cycjava.cycl.date_utilities.next_iterated_cyclic_interval_inclusive(interval_type, UNPROVIDED))) : NIL;
-            SubLObject most_recently_started_interval = (NIL != next_one) ? ((SubLObject) (com.cyc.cycjava.cycl.date_utilities.date_before(next_one, period))) : NIL;
-            return (NIL != most_recently_started_interval) && (NIL != com.cyc.cycjava.cycl.date_utilities.date_subsumes(most_recently_started_interval, com.cyc.cycjava.cycl.date_utilities.indexical_now())) ? ((SubLObject) (most_recently_started_interval)) : NIL;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return the instance of INTERVAL-TYPE that subsumes #$Now, if there is one that we can identify.
-     * @unknown -- as of 2007 -- (current-interval-of-type #$CalendarYear) -> (#$YearFn 2007)
-     */
-    @LispMethod(comment = "@return the instance of INTERVAL-TYPE that subsumes #$Now, if there is one that we can identify.\r\n@unknown -- as of 2007 -- (current-interval-of-type #$CalendarYear) -> (#$YearFn 2007)")
     public static SubLObject current_time_interval_of_type(final SubLObject interval_type) {
         final SubLObject period = (NIL != time_parameter_utilities.covering_time_type_p(interval_type)) ? time_parameter_utilities.time_series_duration(interval_type) : time_parameter_utilities.gappy_type_period(interval_type);
         final SubLObject next_one = (NIL != period) ? next_iterated_cyclic_interval_inclusive(interval_type, UNPROVIDED) : NIL;
@@ -7813,242 +4181,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return (NIL != most_recently_started_interval) && (NIL != date_subsumes(most_recently_started_interval, indexical_now())) ? most_recently_started_interval : NIL;
     }
 
-    /**
-     * Gets the next value of an iterated cyclic interval (e.g. next $#Thursday) inclusive.  The
-     * implementation forms the cyclic date components from the CYCLIC-INTERVAL-TYPE-ON-CALENDAR-SCALE,
-     * then forms a trial next date for comparision, starting with the most significant component.
-     * If the comparison fails, then the appropriate component of the date is incremented.  Comparisons
-     * are performed on less significant components as required.
-     */
-    @LispMethod(comment = "Gets the next value of an iterated cyclic interval (e.g. next $#Thursday) inclusive.  The\r\nimplementation forms the cyclic date components from the CYCLIC-INTERVAL-TYPE-ON-CALENDAR-SCALE,\r\nthen forms a trial next date for comparision, starting with the most significant component.\r\nIf the comparison fails, then the appropriate component of the date is incremented.  Comparisons\r\nare performed on less significant components as required.\nGets the next value of an iterated cyclic interval (e.g. next $#Thursday) inclusive.  The\nimplementation forms the cyclic date components from the CYCLIC-INTERVAL-TYPE-ON-CALENDAR-SCALE,\nthen forms a trial next date for comparision, starting with the most significant component.\nIf the comparison fails, then the appropriate component of the date is incremented.  Comparisons\nare performed on less significant components as required.")
-    public static final SubLObject next_iterated_cyclic_interval_inclusive_alt(SubLObject cyclic_interval_type_on_calendar_scale, SubLObject date_start) {
-        if (date_start == UNPROVIDED) {
-            date_start = com.cyc.cycjava.cycl.date_utilities.indexical_now();
-        }
-        {
-            SubLObject year_start = com.cyc.cycjava.cycl.date_utilities.extract_date_year(date_start);
-            SubLObject month_start = com.cyc.cycjava.cycl.date_utilities.extract_date_month(date_start);
-            SubLObject day_start = com.cyc.cycjava.cycl.date_utilities.extract_date_day(date_start);
-            SubLObject hour_start = com.cyc.cycjava.cycl.date_utilities.extract_date_hour(date_start);
-            SubLObject minute_start = com.cyc.cycjava.cycl.date_utilities.extract_date_minute(date_start);
-            SubLObject second_start = com.cyc.cycjava.cycl.date_utilities.extract_date_second(date_start);
-            SubLObject temp_cyclic = cyclic_interval_type_on_calendar_scale;
-            SubLObject year_cyclic = NIL;
-            SubLObject month_cyclic = NIL;
-            SubLObject weekday_cyclic = NIL;
-            SubLObject day_cyclic = NIL;
-            SubLObject hour_cyclic = NIL;
-            SubLObject minute_cyclic = NIL;
-            SubLObject second_cyclic = NIL;
-            SubLObject year_next = year_start;
-            SubLObject month_next = NIL;
-            SubLObject day_next = NIL;
-            SubLObject hour_next = NIL;
-            SubLObject minute_next = NIL;
-            SubLObject second_next = NIL;
-            SubLObject precision = NIL;
-            SubLObject pcase_var = temp_cyclic;
-            if (pcase_var.eql($$CalendarSecond)) {
-                return com.cyc.cycjava.cycl.date_utilities.date_to_precision(com.cyc.cycjava.cycl.date_utilities.calendar_date_sum($$SecondsDuration, ONE_INTEGER, year_start, com.cyc.cycjava.cycl.date_utilities.number_of_month(month_start), day_start, hour_start, minute_start, second_start), temp_cyclic);
-            } else {
-                if (pcase_var.eql($$CalendarMinute)) {
-                    return com.cyc.cycjava.cycl.date_utilities.date_to_precision(com.cyc.cycjava.cycl.date_utilities.calendar_date_sum($$MinutesDuration, ONE_INTEGER, year_start, com.cyc.cycjava.cycl.date_utilities.number_of_month(month_start), day_start, hour_start, minute_start, ZERO_INTEGER), temp_cyclic);
-                } else {
-                    if (pcase_var.eql($$CalendarHour)) {
-                        return com.cyc.cycjava.cycl.date_utilities.date_to_precision(com.cyc.cycjava.cycl.date_utilities.calendar_date_sum($$HoursDuration, ONE_INTEGER, year_start, com.cyc.cycjava.cycl.date_utilities.number_of_month(month_start), day_start, hour_start, ZERO_INTEGER, ZERO_INTEGER), temp_cyclic);
-                    } else {
-                        if (pcase_var.eql($$CalendarDay)) {
-                            return com.cyc.cycjava.cycl.date_utilities.date_to_precision(com.cyc.cycjava.cycl.date_utilities.calendar_date_sum($$DaysDuration, ONE_INTEGER, year_start, com.cyc.cycjava.cycl.date_utilities.number_of_month(month_start), day_start, ZERO_INTEGER, ZERO_INTEGER, ZERO_INTEGER), temp_cyclic);
-                        } else {
-                            if (pcase_var.eql($$CalendarWeek)) {
-                                temp_cyclic = $$Sunday;
-                                precision = $$CalendarDay;
-                            } else {
-                                if (pcase_var.eql($$CalendarMonth)) {
-                                    return com.cyc.cycjava.cycl.date_utilities.date_to_precision(com.cyc.cycjava.cycl.date_utilities.calendar_date_sum($$MonthsDuration, ONE_INTEGER, year_start, com.cyc.cycjava.cycl.date_utilities.number_of_month(month_start), ONE_INTEGER, ZERO_INTEGER, ZERO_INTEGER, ZERO_INTEGER), temp_cyclic);
-                                } else {
-                                    if (pcase_var.eql($$CalendarYear)) {
-                                        return com.cyc.cycjava.cycl.date_utilities.date_to_precision(com.cyc.cycjava.cycl.date_utilities.calendar_date_sum($$YearsDuration, ONE_INTEGER, year_start, ONE_INTEGER, ONE_INTEGER, ZERO_INTEGER, ZERO_INTEGER, ZERO_INTEGER), temp_cyclic);
-                                    } else {
-                                        if (pcase_var.eql($$TimeOfDay_AM)) {
-                                            temp_cyclic = $$TimeOfDay_MidnightHour;
-                                            precision = $$CalendarHour;
-                                        } else {
-                                            if (pcase_var.eql($$TimeOfDay_PM)) {
-                                                temp_cyclic = $$TimeOfDay_NoonHour;
-                                                precision = $$CalendarHour;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            if ((NIL != cycl_grammar.cycl_nat_p(temp_cyclic)) && (nat_functor(temp_cyclic) == $$TimeOfYearFn)) {
-                month_cyclic = nat_arg1(temp_cyclic, UNPROVIDED);
-                temp_cyclic = nat_arg2(temp_cyclic, UNPROVIDED);
-            } else {
-                if (NIL != com.cyc.cycjava.cycl.date_utilities.month_p(temp_cyclic)) {
-                    month_cyclic = temp_cyclic;
-                    temp_cyclic = NIL;
-                } else {
-                    if (NIL != com.cyc.cycjava.cycl.date_utilities.month_term_p(temp_cyclic)) {
-                        month_cyclic = com.cyc.cycjava.cycl.date_utilities.month_number(com.cyc.cycjava.cycl.date_utilities.number_of_month(temp_cyclic));
-                        temp_cyclic = NIL;
-                    }
-                }
-            }
-            if ((NIL != cycl_grammar.cycl_nat_p(temp_cyclic)) && (nat_functor(temp_cyclic) == $$TimeOfMonthFn)) {
-                day_cyclic = nat_arg1(temp_cyclic, UNPROVIDED);
-                temp_cyclic = nat_arg2(temp_cyclic, UNPROVIDED);
-            } else {
-                if (NIL != com.cyc.cycjava.cycl.date_utilities.day_of_month_term_p(temp_cyclic)) {
-                    day_cyclic = temp_cyclic;
-                    temp_cyclic = NIL;
-                } else {
-                    if (NIL != cycl_nat_with_functor_p(temp_cyclic, $$DayOfYearFn)) {
-                        month_cyclic = nat_arg1(temp_cyclic, UNPROVIDED);
-                        day_cyclic = nat_arg2(temp_cyclic, UNPROVIDED);
-                        temp_cyclic = NIL;
-                    } else {
-                        if (NIL != cycl_nat_with_functor_p(temp_cyclic, $$DayOfMonthFn)) {
-                            day_cyclic = nat_arg1(temp_cyclic, UNPROVIDED);
-                            temp_cyclic = NIL;
-                        }
-                    }
-                }
-            }
-            if ((NIL != day_cyclic) && (NIL != cycl_grammar.cycl_nat_p(day_cyclic))) {
-                day_cyclic = nat_arg1(day_cyclic, UNPROVIDED);
-            }
-            if (NIL != com.cyc.cycjava.cycl.date_utilities.day_of_week_p(temp_cyclic)) {
-                weekday_cyclic = temp_cyclic;
-                temp_cyclic = NIL;
-            } else {
-                if ((NIL != cycl_grammar.cycl_nat_p(temp_cyclic)) && (nat_functor(temp_cyclic) == $$TimeOfWeekFn)) {
-                    weekday_cyclic = nat_arg1(temp_cyclic, UNPROVIDED);
-                    temp_cyclic = nat_arg2(temp_cyclic, UNPROVIDED);
-                }
-            }
-            if ((NIL != cycl_grammar.cycl_nat_p(temp_cyclic)) && (nat_functor(temp_cyclic) == $$TimeOfDayFn)) {
-                hour_cyclic = nat_arg1(temp_cyclic, UNPROVIDED);
-                temp_cyclic = nat_arg2(temp_cyclic, UNPROVIDED);
-            } else {
-                if (NIL != com.cyc.cycjava.cycl.date_utilities.hour_of_day_term_p(temp_cyclic)) {
-                    hour_cyclic = nat_arg1(temp_cyclic, UNPROVIDED);
-                    temp_cyclic = NIL;
-                } else {
-                    if (NIL != com.cyc.cycjava.cycl.date_utilities.hour_of_day_p(temp_cyclic)) {
-                        hour_cyclic = com.cyc.cycjava.cycl.date_utilities.number_of_hour_of_day(temp_cyclic);
-                        temp_cyclic = NIL;
-                    }
-                }
-            }
-            if ((NIL != hour_cyclic) && (NIL != cycl_grammar.cycl_nat_p(hour_cyclic))) {
-                hour_cyclic = nat_arg1(hour_cyclic, UNPROVIDED);
-            } else {
-                if (NIL != com.cyc.cycjava.cycl.date_utilities.hour_of_day_p(hour_cyclic)) {
-                    hour_cyclic = com.cyc.cycjava.cycl.date_utilities.number_of_hour_of_day(hour_cyclic);
-                }
-            }
-            if ((NIL != cycl_grammar.cycl_nat_p(temp_cyclic)) && (nat_functor(temp_cyclic) == $$TimeOfHourFn)) {
-                minute_cyclic = nat_arg1(temp_cyclic, UNPROVIDED);
-                temp_cyclic = nat_arg2(temp_cyclic, UNPROVIDED);
-            } else {
-                if (NIL != com.cyc.cycjava.cycl.date_utilities.minute_of_hour_term_p(temp_cyclic)) {
-                    minute_cyclic = nat_arg1(temp_cyclic, UNPROVIDED);
-                    temp_cyclic = NIL;
-                }
-            }
-            if ((NIL != minute_cyclic) && (NIL != cycl_grammar.cycl_nat_p(minute_cyclic))) {
-                minute_cyclic = nat_arg1(minute_cyclic, UNPROVIDED);
-            }
-            if (NIL != com.cyc.cycjava.cycl.date_utilities.second_of_minute_term_p(temp_cyclic)) {
-                second_cyclic = nat_arg1(temp_cyclic, UNPROVIDED);
-                temp_cyclic = NIL;
-            }
-            if (NIL != temp_cyclic) {
-                return NIL;
-            }
-            if (NIL == precision) {
-                precision = (NIL != second_cyclic) ? ((SubLObject) ($$CalendarSecond)) : NIL != minute_cyclic ? ((SubLObject) ($$CalendarMinute)) : NIL != hour_cyclic ? ((SubLObject) ($$CalendarHour)) : (NIL != day_cyclic) || (NIL != weekday_cyclic) ? ((SubLObject) ($$CalendarDay)) : NIL != month_cyclic ? ((SubLObject) ($$CalendarMonth)) : $$CalendarYear;
-            }
-            if (NIL == second_cyclic) {
-                second_cyclic = ZERO_INTEGER;
-                if (NIL == minute_cyclic) {
-                    minute_cyclic = ZERO_INTEGER;
-                    if (NIL == hour_cyclic) {
-                        hour_cyclic = ZERO_INTEGER;
-                        if (!((NIL != day_cyclic) || (NIL != weekday_cyclic))) {
-                            day_cyclic = ONE_INTEGER;
-                            if (!((NIL != month_cyclic) || (NIL != weekday_cyclic))) {
-                                month_cyclic = $$January;
-                            }
-                        }
-                    }
-                }
-            }
-            year_next = (NIL != year_cyclic) ? ((SubLObject) (year_cyclic)) : year_start;
-            month_next = (NIL != month_cyclic) ? ((SubLObject) (month_cyclic)) : month_start;
-            day_next = (NIL != day_cyclic) ? ((SubLObject) (day_cyclic)) : day_start;
-            hour_next = (NIL != hour_cyclic) ? ((SubLObject) (hour_cyclic)) : hour_start;
-            minute_next = (NIL != minute_cyclic) ? ((SubLObject) (minute_cyclic)) : minute_start;
-            second_next = (NIL != second_cyclic) ? ((SubLObject) (second_cyclic)) : second_start;
-            {
-                SubLObject date_trial = NIL;
-                SubLObject date = NIL;
-                date_trial = com.cyc.cycjava.cycl.date_utilities.next_iterated_cyclic_interval_inclusive_helper(NIL, year_next, month_next, day_next, hour_next, minute_next, second_next, weekday_cyclic);
-                if (NIL != com.cyc.cycjava.cycl.date_utilities.dateL(date_start, date_trial)) {
-                    date = date_trial;
-                }
-                if ((NIL == date) && (NIL != month_cyclic)) {
-                    date_trial = com.cyc.cycjava.cycl.date_utilities.next_iterated_cyclic_interval_inclusive_helper($$YearsDuration, year_next, month_next, day_next, hour_next, minute_next, second_next, weekday_cyclic);
-                    if (NIL != com.cyc.cycjava.cycl.date_utilities.dateL(date_start, date_trial)) {
-                        date = date_trial;
-                    }
-                }
-                if ((NIL == date) && (NIL != day_cyclic)) {
-                    date_trial = com.cyc.cycjava.cycl.date_utilities.next_iterated_cyclic_interval_inclusive_helper($$MonthsDuration, year_next, month_next, day_next, hour_next, minute_next, second_next, weekday_cyclic);
-                    if (NIL != com.cyc.cycjava.cycl.date_utilities.dateL(date_start, date_trial)) {
-                        date = date_trial;
-                    }
-                }
-                if ((NIL == date) && (NIL != hour_cyclic)) {
-                    date_trial = com.cyc.cycjava.cycl.date_utilities.next_iterated_cyclic_interval_inclusive_helper($$DaysDuration, year_next, month_next, day_next, hour_next, minute_next, second_next, weekday_cyclic);
-                    if (NIL != com.cyc.cycjava.cycl.date_utilities.dateL(date_start, date_trial)) {
-                        date = date_trial;
-                    }
-                }
-                if ((NIL == date) && (NIL != minute_cyclic)) {
-                    date_trial = com.cyc.cycjava.cycl.date_utilities.next_iterated_cyclic_interval_inclusive_helper($$HoursDuration, year_next, month_next, day_next, hour_next, minute_next, second_next, weekday_cyclic);
-                    if (NIL != com.cyc.cycjava.cycl.date_utilities.dateL(date_start, date_trial)) {
-                        date = date_trial;
-                    }
-                }
-                if ((NIL == date) && (NIL != second_cyclic)) {
-                    date_trial = com.cyc.cycjava.cycl.date_utilities.next_iterated_cyclic_interval_inclusive_helper($$MinutesDuration, year_next, month_next, day_next, hour_next, minute_next, second_next, weekday_cyclic);
-                    if (NIL != com.cyc.cycjava.cycl.date_utilities.dateL(date_start, date_trial)) {
-                        date = date_trial;
-                    }
-                }
-                if (NIL != date) {
-                    return com.cyc.cycjava.cycl.date_utilities.date_to_precision(date, precision);
-                }
-            }
-        }
-        return NIL;
-    }
-
-    /**
-     * Gets the next value of an iterated cyclic interval (e.g. next $#Thursday) inclusive.  The
-     * implementation forms the cyclic date components from the CYCLIC-INTERVAL-TYPE-ON-CALENDAR-SCALE,
-     * then forms a trial next date for comparision, starting with the most significant component.
-     * If the comparison fails, then the appropriate component of the date is incremented.  Comparisons
-     * are performed on less significant components as required.
-     */
-    @LispMethod(comment = "Gets the next value of an iterated cyclic interval (e.g. next $#Thursday) inclusive.  The\r\nimplementation forms the cyclic date components from the CYCLIC-INTERVAL-TYPE-ON-CALENDAR-SCALE,\r\nthen forms a trial next date for comparision, starting with the most significant component.\r\nIf the comparison fails, then the appropriate component of the date is incremented.  Comparisons\r\nare performed on less significant components as required.\nGets the next value of an iterated cyclic interval (e.g. next $#Thursday) inclusive.  The\nimplementation forms the cyclic date components from the CYCLIC-INTERVAL-TYPE-ON-CALENDAR-SCALE,\nthen forms a trial next date for comparision, starting with the most significant component.\nIf the comparison fails, then the appropriate component of the date is incremented.  Comparisons\nare performed on less significant components as required.")
     public static SubLObject next_iterated_cyclic_interval_inclusive(final SubLObject cyclic_interval_type_on_calendar_scale, SubLObject date_start) {
         if (date_start == UNPROVIDED) {
             date_start = indexical_now();
@@ -8259,31 +4391,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject next_iterated_cyclic_interval_inclusive_helper_alt(SubLObject duration_type, SubLObject year_next, SubLObject month_next, SubLObject day_next, SubLObject hour_next, SubLObject minute_next, SubLObject second_next, SubLObject weekday_cyclic) {
-        if (NIL == duration_type) {
-            {
-                SubLObject date_next = com.cyc.cycjava.cycl.date_utilities.construct_cycl_date(second_next, minute_next, hour_next, day_next, month_next, year_next);
-                if (NIL == weekday_cyclic) {
-                    return date_next;
-                }
-                {
-                    SubLObject weekday_next = com.cyc.cycjava.cycl.date_utilities.day_of_week_after_date_inclusive(weekday_cyclic, date_next);
-                    return com.cyc.cycjava.cycl.date_utilities.construct_cycl_date(com.cyc.cycjava.cycl.date_utilities.extract_date_second(date_next), com.cyc.cycjava.cycl.date_utilities.extract_date_minute(date_next), com.cyc.cycjava.cycl.date_utilities.extract_date_hour(date_next), com.cyc.cycjava.cycl.date_utilities.extract_date_day(weekday_next), com.cyc.cycjava.cycl.date_utilities.extract_date_month(weekday_next), com.cyc.cycjava.cycl.date_utilities.extract_date_year(weekday_next));
-                }
-            }
-        }
-        {
-            SubLObject date_next = com.cyc.cycjava.cycl.date_utilities.calendar_date_sum(duration_type, ONE_INTEGER, year_next, com.cyc.cycjava.cycl.date_utilities.number_of_month(month_next), day_next, hour_next, minute_next, second_next);
-            if (NIL == weekday_cyclic) {
-                return date_next;
-            }
-            {
-                SubLObject weekday_next = com.cyc.cycjava.cycl.date_utilities.day_of_week_after_date_inclusive(weekday_cyclic, date_next);
-                return com.cyc.cycjava.cycl.date_utilities.construct_cycl_date(com.cyc.cycjava.cycl.date_utilities.extract_date_second(date_next), com.cyc.cycjava.cycl.date_utilities.extract_date_minute(date_next), com.cyc.cycjava.cycl.date_utilities.extract_date_hour(date_next), com.cyc.cycjava.cycl.date_utilities.extract_date_day(weekday_next), com.cyc.cycjava.cycl.date_utilities.extract_date_month(weekday_next), com.cyc.cycjava.cycl.date_utilities.extract_date_year(weekday_next));
-            }
-        }
-    }
-
     public static SubLObject next_iterated_cyclic_interval_inclusive_helper(final SubLObject duration_type, final SubLObject year_next, final SubLObject month_next, final SubLObject day_next, final SubLObject hour_next, final SubLObject minute_next, final SubLObject second_next, final SubLObject weekday_cyclic) {
         if (NIL == duration_type) {
             final SubLObject date_next = construct_cycl_date(second_next, minute_next, hour_next, day_next, month_next, year_next);
@@ -8302,41 +4409,9 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         }
     }
 
-    /**
-     * convert UNIVERSAL-TIME into a CycL #$Date expression
-     */
-    @LispMethod(comment = "convert UNIVERSAL-TIME into a CycL #$Date expression")
-    public static final SubLObject universal_time_to_cycl_date_alt(SubLObject universal_time) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(universal_time, UNIVERSAL_TIME_P);
-            if (NIL == kb_control_vars.date_kb_loaded_p()) {
-                Errors.error($str_alt79$A_KB_dependent_date_specific_func);
-            }
-            thread.resetMultipleValues();
-            {
-                SubLObject second = decode_universal_time(universal_time, UNPROVIDED);
-                SubLObject minute = thread.secondMultipleValue();
-                SubLObject hour = thread.thirdMultipleValue();
-                SubLObject day = thread.fourthMultipleValue();
-                SubLObject month = thread.fifthMultipleValue();
-                SubLObject year = thread.sixthMultipleValue();
-                thread.resetMultipleValues();
-                {
-                    SubLObject date = list($$SecondFn, second, list($$MinuteFn, minute, list($$HourFn, hour, list($$DayFn, day, list($$MonthFn, com.cyc.cycjava.cycl.date_utilities.month_number(month), list($$YearFn, year))))));
-                    return copy_tree(date);
-                }
-            }
-        }
-    }
-
-    /**
-     * convert UNIVERSAL-TIME into a CycL #$Date expression
-     */
-    @LispMethod(comment = "convert UNIVERSAL-TIME into a CycL #$Date expression")
     public static SubLObject universal_time_to_cycl_date(final SubLObject universal_time) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != numeric_date_utilities.universal_time_p(universal_time) : "! numeric_date_utilities.universal_time_p(universal_time) " + ("numeric_date_utilities.universal_time_p(universal_time) " + "CommonSymbols.NIL != numeric_date_utilities.universal_time_p(universal_time) ") + universal_time;
+        assert NIL != numeric_date_utilities.universal_time_p(universal_time) : "numeric_date_utilities.universal_time_p(universal_time) " + "CommonSymbols.NIL != numeric_date_utilities.universal_time_p(universal_time) " + universal_time;
         if (NIL == kb_control_vars.date_kb_loaded_p()) {
             Errors.error($str108$A_KB_dependent_date_specific_func);
         }
@@ -8352,38 +4427,9 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return copy_tree(date);
     }
 
-    /**
-     * convert UNIVERSAL-DATE into a CycL #$Date expression
-     */
-    @LispMethod(comment = "convert UNIVERSAL-DATE into a CycL #$Date expression")
-    public static final SubLObject universal_date_to_cycl_date_alt(SubLObject universal_date) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(universal_date, UNIVERSAL_DATE_P);
-            if (NIL == kb_control_vars.date_kb_loaded_p()) {
-                Errors.error($str_alt79$A_KB_dependent_date_specific_func);
-            }
-            thread.resetMultipleValues();
-            {
-                SubLObject day = numeric_date_utilities.decode_universal_date(universal_date);
-                SubLObject month = thread.secondMultipleValue();
-                SubLObject year = thread.thirdMultipleValue();
-                thread.resetMultipleValues();
-                {
-                    SubLObject date = list($$DayFn, day, list($$MonthFn, com.cyc.cycjava.cycl.date_utilities.month_number(month), list($$YearFn, year)));
-                    return copy_tree(date);
-                }
-            }
-        }
-    }
-
-    /**
-     * convert UNIVERSAL-DATE into a CycL #$Date expression
-     */
-    @LispMethod(comment = "convert UNIVERSAL-DATE into a CycL #$Date expression")
     public static SubLObject universal_date_to_cycl_date(final SubLObject universal_date) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != numeric_date_utilities.universal_date_p(universal_date) : "! numeric_date_utilities.universal_date_p(universal_date) " + ("numeric_date_utilities.universal_date_p(universal_date) " + "CommonSymbols.NIL != numeric_date_utilities.universal_date_p(universal_date) ") + universal_date;
+        assert NIL != numeric_date_utilities.universal_date_p(universal_date) : "numeric_date_utilities.universal_date_p(universal_date) " + "CommonSymbols.NIL != numeric_date_utilities.universal_date_p(universal_date) " + universal_date;
         if (NIL == kb_control_vars.date_kb_loaded_p()) {
             Errors.error($str108$A_KB_dependent_date_specific_func);
         }
@@ -8396,37 +4442,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return copy_tree(date);
     }
 
-    /**
-     * convert EXTENDED-UNIVERSAL-DATE to a CycL #$Date expression
-     */
-    @LispMethod(comment = "convert EXTENDED-UNIVERSAL-DATE to a CycL #$Date expression")
-    public static final SubLObject extended_universal_date_to_cycl_date_alt(SubLObject extended_universal_date) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == kb_control_vars.date_kb_loaded_p()) {
-                Errors.error($str_alt79$A_KB_dependent_date_specific_func);
-            }
-            thread.resetMultipleValues();
-            {
-                SubLObject second = numeric_date_utilities.decode_extended_universal_date(extended_universal_date);
-                SubLObject minute = thread.secondMultipleValue();
-                SubLObject hour = thread.thirdMultipleValue();
-                SubLObject day = thread.fourthMultipleValue();
-                SubLObject month = thread.fifthMultipleValue();
-                SubLObject year = thread.sixthMultipleValue();
-                thread.resetMultipleValues();
-                {
-                    SubLObject date = list($$SecondFn, second, list($$MinuteFn, minute, list($$HourFn, hour, list($$DayFn, day, list($$MonthFn, com.cyc.cycjava.cycl.date_utilities.month_number(month), list($$YearFn, year))))));
-                    return copy_tree(date);
-                }
-            }
-        }
-    }
-
-    /**
-     * convert EXTENDED-UNIVERSAL-DATE to a CycL #$Date expression
-     */
-    @LispMethod(comment = "convert EXTENDED-UNIVERSAL-DATE to a CycL #$Date expression")
     public static SubLObject extended_universal_date_to_cycl_date(final SubLObject extended_universal_date) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL == kb_control_vars.date_kb_loaded_p()) {
@@ -8444,58 +4459,11 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return copy_tree(date);
     }
 
-    /**
-     * convert CycL DATE expression into a universal-date integer
-     */
-    @LispMethod(comment = "convert CycL DATE expression into a universal-date integer")
-    public static final SubLObject cycl_date_to_universal_date_alt(SubLObject date) {
-        if (NIL == kb_control_vars.date_kb_loaded_p()) {
-            Errors.error($str_alt79$A_KB_dependent_date_specific_func);
-        }
-        SubLTrampolineFile.checkType(date, DATE_P);
-        {
-            SubLObject day = ONE_INTEGER;
-            SubLObject month = ONE_INTEGER;
-            SubLObject year = NIL;
-            while (date.isCons()) {
-                {
-                    SubLObject function = date.first();
-                    SubLObject pcase_var = function;
-                    if ((pcase_var.eql($$SecondFn) || pcase_var.eql($$MinuteFn)) || pcase_var.eql($$HourFn)) {
-                        date = third(date);
-                    } else {
-                        if (pcase_var.eql($$DayFn)) {
-                            day = second(date);
-                            date = third(date);
-                        } else {
-                            if (pcase_var.eql($$MonthFn)) {
-                                month = com.cyc.cycjava.cycl.date_utilities.number_of_month(second(date));
-                                date = third(date);
-                            } else {
-                                if (pcase_var.eql($$YearFn)) {
-                                    year = second(date);
-                                    date = NIL;
-                                } else {
-                                    return NIL;
-                                }
-                            }
-                        }
-                    }
-                }
-            } 
-            return numeric_date_utilities.encode_universal_date(day, month, year);
-        }
-    }
-
-    /**
-     * convert CycL DATE expression into a universal-date integer
-     */
-    @LispMethod(comment = "convert CycL DATE expression into a universal-date integer")
     public static SubLObject cycl_date_to_universal_date(SubLObject date) {
         if (NIL == kb_control_vars.date_kb_loaded_p()) {
             Errors.error($str108$A_KB_dependent_date_specific_func);
         }
-        assert NIL != date_p(date) : "! date_utilities.date_p(date) " + ("date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) ") + date;
+        assert NIL != date_p(date) : "date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) " + date;
         SubLObject day = ONE_INTEGER;
         SubLObject month = ONE_INTEGER;
         SubLObject year = NIL;
@@ -8525,84 +4493,11 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return numeric_date_utilities.encode_universal_date(day, month, year);
     }
 
-    /**
-     * convert CycL DATE expression into a universal-time integer
-     *
-     * @return 0 UNIVERSAL-TIME-P.
-     * @return 1 INTEGERP; the milliseconds, which aren't included in universal times.
-     */
-    @LispMethod(comment = "convert CycL DATE expression into a universal-time integer\r\n\r\n@return 0 UNIVERSAL-TIME-P.\r\n@return 1 INTEGERP; the milliseconds, which aren\'t included in universal times.")
-    public static final SubLObject cycl_date_to_universal_time_alt(SubLObject date) {
-        if (NIL == kb_control_vars.date_kb_loaded_p()) {
-            Errors.error($str_alt79$A_KB_dependent_date_specific_func);
-        }
-        SubLTrampolineFile.checkType(date, DATE_P);
-        {
-            SubLObject second = ZERO_INTEGER;
-            SubLObject minute = ZERO_INTEGER;
-            SubLObject hour = ZERO_INTEGER;
-            SubLObject day = ONE_INTEGER;
-            SubLObject month = ONE_INTEGER;
-            SubLObject millisecond = NIL;
-            SubLObject year = NIL;
-            while (date.isCons()) {
-                {
-                    SubLObject function = date.first();
-                    SubLObject pcase_var = function;
-                    if (pcase_var.eql($$MilliSecondFn)) {
-                        millisecond = second(date);
-                        date = third(date);
-                    } else {
-                        if (pcase_var.eql($$SecondFn)) {
-                            second = second(date);
-                            date = third(date);
-                        } else {
-                            if (pcase_var.eql($$MinuteFn)) {
-                                minute = second(date);
-                                date = third(date);
-                            } else {
-                                if (pcase_var.eql($$HourFn)) {
-                                    hour = second(date);
-                                    date = third(date);
-                                } else {
-                                    if (pcase_var.eql($$DayFn)) {
-                                        day = second(date);
-                                        date = third(date);
-                                    } else {
-                                        if (pcase_var.eql($$MonthFn)) {
-                                            month = com.cyc.cycjava.cycl.date_utilities.number_of_month(second(date));
-                                            date = third(date);
-                                        } else {
-                                            if (pcase_var.eql($$YearFn)) {
-                                                year = second(date);
-                                                date = NIL;
-                                            } else {
-                                                return NIL;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            } 
-            return values(encode_universal_time(second, minute, hour, day, month, year, UNPROVIDED), millisecond);
-        }
-    }
-
-    /**
-     * convert CycL DATE expression into a universal-time integer
-     *
-     * @return 0 UNIVERSAL-TIME-P.
-     * @return 1 INTEGERP; the milliseconds, which aren't included in universal times.
-     */
-    @LispMethod(comment = "convert CycL DATE expression into a universal-time integer\r\n\r\n@return 0 UNIVERSAL-TIME-P.\r\n@return 1 INTEGERP; the milliseconds, which aren\'t included in universal times.")
     public static SubLObject cycl_date_to_universal_time(SubLObject date) {
         if (NIL == kb_control_vars.date_kb_loaded_p()) {
             Errors.error($str108$A_KB_dependent_date_specific_func);
         }
-        assert NIL != date_p(date) : "! date_utilities.date_p(date) " + ("date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) ") + date;
+        assert NIL != date_p(date) : "date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) " + date;
         SubLObject second = ZERO_INTEGER;
         SubLObject minute = ZERO_INTEGER;
         SubLObject hour = ZERO_INTEGER;
@@ -8652,30 +4547,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return values(encode_universal_time(second, minute, hour, day, month, year, UNPROVIDED), millisecond);
     }
 
-    /**
-     * throws away the most significant information and returns only the universal second
-     */
-    @LispMethod(comment = "throws away the most significant information and returns only the universal second")
-    public static final SubLObject cycl_date_to_universal_second_alt(SubLObject date) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject universal_time = com.cyc.cycjava.cycl.date_utilities.cycl_date_to_universal_time(date);
-                thread.resetMultipleValues();
-                {
-                    SubLObject universal_date = numeric_date_utilities.universal_date_and_second_from_time(universal_time);
-                    SubLObject universal_second = thread.secondMultipleValue();
-                    thread.resetMultipleValues();
-                    return universal_second;
-                }
-            }
-        }
-    }
-
-    /**
-     * throws away the most significant information and returns only the universal second
-     */
-    @LispMethod(comment = "throws away the most significant information and returns only the universal second")
     public static SubLObject cycl_date_to_universal_second(final SubLObject date) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject universal_time = cycl_date_to_universal_time(date);
@@ -8686,73 +4557,8 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return universal_second;
     }
 
-    public static final SubLObject extended_universal_date_for_date_initial_second_alt(SubLObject date) {
-        SubLTrampolineFile.checkType(date, DATE_P);
-        {
-            SubLObject second = ZERO_INTEGER;
-            SubLObject minute = ZERO_INTEGER;
-            SubLObject hour = ZERO_INTEGER;
-            SubLObject day = ONE_INTEGER;
-            SubLObject month = ONE_INTEGER;
-            SubLObject year = NIL;
-            while (date.isCons()) {
-                {
-                    SubLObject function = date.first();
-                    SubLObject pcase_var = function;
-                    if (pcase_var.eql($$SecondFn)) {
-                        second = second(date);
-                        date = third(date);
-                    } else {
-                        if (pcase_var.eql($$MinuteFn)) {
-                            minute = second(date);
-                            date = third(date);
-                        } else {
-                            if (pcase_var.eql($$HourFn)) {
-                                hour = second(date);
-                                date = third(date);
-                            } else {
-                                if (pcase_var.eql($$DayFn)) {
-                                    day = second(date);
-                                    date = third(date);
-                                } else {
-                                    if (pcase_var.eql($$MonthFn)) {
-                                        month = com.cyc.cycjava.cycl.date_utilities.number_of_month(second(date));
-                                        date = third(date);
-                                    } else {
-                                        if (pcase_var.eql($$QuarterFn)) {
-                                            month = subtract(multiply(second(date), THREE_INTEGER), TWO_INTEGER);
-                                            date = third(date);
-                                        } else {
-                                            if (pcase_var.eql($$YearFn)) {
-                                                year = second(date);
-                                                date = NIL;
-                                            } else {
-                                                if (pcase_var.eql($$DecadeFn)) {
-                                                    year = multiply(second(date), TEN_INTEGER);
-                                                    date = NIL;
-                                                } else {
-                                                    if (pcase_var.eql($$CenturyFn)) {
-                                                        year = number_utilities.f_1X(multiply(number_utilities.f_1_(second(date)), $int$100));
-                                                        date = NIL;
-                                                    } else {
-                                                        return NIL;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            } 
-            return numeric_date_utilities.encode_extended_universal_date(second, minute, hour, day, month, year);
-        }
-    }
-
     public static SubLObject extended_universal_date_for_date_initial_second(SubLObject date) {
-        assert NIL != date_p(date) : "! date_utilities.date_p(date) " + ("date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) ") + date;
+        assert NIL != date_p(date) : "date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) " + date;
         SubLObject second = ZERO_INTEGER;
         SubLObject minute = ZERO_INTEGER;
         SubLObject hour = ZERO_INTEGER;
@@ -8815,136 +4621,9 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return numeric_date_utilities.encode_extended_universal_date(second, minute, hour, day, month, year);
     }
 
-    public static final SubLObject extended_universal_date_for_date_final_second_alt(SubLObject date) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(date, DATE_P);
-            {
-                SubLObject second = NIL;
-                SubLObject hour = NIL;
-                SubLObject minute = NIL;
-                SubLObject day = NIL;
-                SubLObject month = NIL;
-                SubLObject year = NIL;
-                while (date.isCons()) {
-                    {
-                        SubLObject function = date.first();
-                        SubLObject pcase_var = function;
-                        if (pcase_var.eql($$SecondFn)) {
-                            second = second(date);
-                            date = third(date);
-                        } else {
-                            if (pcase_var.eql($$MinuteFn)) {
-                                minute = second(date);
-                                date = third(date);
-                            } else {
-                                if (pcase_var.eql($$HourFn)) {
-                                    hour = second(date);
-                                    date = third(date);
-                                } else {
-                                    if (pcase_var.eql($$DayFn)) {
-                                        day = second(date);
-                                        date = third(date);
-                                    } else {
-                                        if (pcase_var.eql($$MonthFn)) {
-                                            month = com.cyc.cycjava.cycl.date_utilities.number_of_month(second(date));
-                                            date = third(date);
-                                        } else {
-                                            if (pcase_var.eql($$QuarterFn)) {
-                                                month = multiply(second(date), THREE_INTEGER);
-                                                date = third(date);
-                                            } else {
-                                                if (pcase_var.eql($$YearFn)) {
-                                                    year = second(date);
-                                                    date = NIL;
-                                                } else {
-                                                    if (pcase_var.eql($$DecadeFn)) {
-                                                        year = add(multiply(second(date), TEN_INTEGER), NINE_INTEGER);
-                                                        date = NIL;
-                                                    } else {
-                                                        if (pcase_var.eql($$CenturyFn)) {
-                                                            year = multiply(second(date), $int$100);
-                                                            date = NIL;
-                                                        } else {
-                                                            return NIL;
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } 
-                if (NIL != second) {
-                    second = add(second, ONE_INTEGER);
-                } else {
-                    if (NIL != minute) {
-                        minute = add(minute, ONE_INTEGER);
-                    } else {
-                        if (NIL != hour) {
-                            hour = add(hour, ONE_INTEGER);
-                        } else {
-                            if (NIL != day) {
-                                day = add(day, ONE_INTEGER);
-                            } else {
-                                if (NIL != month) {
-                                    month = add(month, ONE_INTEGER);
-                                } else {
-                                    if (NIL != year) {
-                                        year = add(year, ONE_INTEGER);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                thread.resetMultipleValues();
-                {
-                    SubLObject new_year = numeric_date_utilities.adjust_year_month_day_hour_min_sec(year, month, day, hour, minute, second);
-                    SubLObject new_month = thread.secondMultipleValue();
-                    SubLObject new_day = thread.thirdMultipleValue();
-                    SubLObject new_hour = thread.fourthMultipleValue();
-                    SubLObject new_minute = thread.fifthMultipleValue();
-                    SubLObject new_second = thread.sixthMultipleValue();
-                    thread.resetMultipleValues();
-                    if (NIL == new_month) {
-                        new_month = ONE_INTEGER;
-                    }
-                    if (NIL == new_day) {
-                        new_day = ONE_INTEGER;
-                    }
-                    if (NIL == new_hour) {
-                        new_hour = ZERO_INTEGER;
-                    }
-                    if (NIL == new_minute) {
-                        new_minute = ZERO_INTEGER;
-                    }
-                    if (NIL == new_second) {
-                        new_second = ZERO_INTEGER;
-                    }
-                    new_second = subtract(new_second, ONE_INTEGER);
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject final_year = numeric_date_utilities.adjust_year_month_day_hour_min_sec(new_year, new_month, new_day, new_hour, new_minute, new_second);
-                        SubLObject final_month = thread.secondMultipleValue();
-                        SubLObject final_day = thread.thirdMultipleValue();
-                        SubLObject final_hour = thread.fourthMultipleValue();
-                        SubLObject final_minute = thread.fifthMultipleValue();
-                        SubLObject final_second = thread.sixthMultipleValue();
-                        thread.resetMultipleValues();
-                        return numeric_date_utilities.encode_extended_universal_date(final_second, final_minute, final_hour, final_day, final_month, final_year);
-                    }
-                }
-            }
-        }
-    }
-
     public static SubLObject extended_universal_date_for_date_final_second(SubLObject date) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != date_p(date) : "! date_utilities.date_p(date) " + ("date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) ") + date;
+        assert NIL != date_p(date) : "date_utilities.date_p(date) " + "CommonSymbols.NIL != date_utilities.date_p(date) " + date;
         SubLObject second = NIL;
         SubLObject hour = NIL;
         SubLObject minute = NIL;
@@ -9062,48 +4741,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return numeric_date_utilities.encode_extended_universal_date(final_second, final_minute, final_hour, final_day, final_month, final_year);
     }
 
-    public static final SubLObject temporal_object_from_string_alt(SubLObject string) {
-        {
-            SubLObject result = NIL;
-            result = cb_guess_term(string, NIL);
-            if (NIL != com.cyc.cycjava.cycl.date_utilities.meets_time_object_constraintP(result, UNPROVIDED)) {
-                return result;
-            }
-            result = com.cyc.cycjava.cycl.date_utilities.construct_cycl_date_from_date_range_string(string);
-            if (NIL != com.cyc.cycjava.cycl.date_utilities.meets_time_object_constraintP(result, UNPROVIDED)) {
-                return result;
-            }
-            {
-                SubLObject ignore_errors_tag = NIL;
-                try {
-                    {
-                        SubLObject _prev_bind_0 = currentBinding(Errors.$error_handler$);
-                        try {
-                            bind(Errors.$error_handler$, symbol_function(IGNORE_ERRORS_HANDLER));
-                            try {
-                                result = com.cyc.cycjava.cycl.date_utilities.guess_datetime_string(string);
-                            } catch (Throwable catch_var) {
-                                Errors.handleThrowable(catch_var, NIL);
-                            }
-                        } finally {
-                            rebind(Errors.$error_handler$, _prev_bind_0);
-                        }
-                    }
-                } catch (Throwable ccatch_env_var) {
-                    ignore_errors_tag = Errors.handleThrowable(ccatch_env_var, $IGNORE_ERRORS_TARGET);
-                }
-            }
-            if (NIL != com.cyc.cycjava.cycl.date_utilities.meets_time_object_constraintP(result, UNPROVIDED)) {
-                return result;
-            }
-            result = com.cyc.cycjava.cycl.date_utilities.parse_unambiguous_date_from_string(string);
-            if (NIL != com.cyc.cycjava.cycl.date_utilities.meets_time_object_constraintP(result, UNPROVIDED)) {
-                return result;
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject temporal_object_from_string(final SubLObject string) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject result = NIL;
@@ -9144,31 +4781,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     *
-     *
-     * @param STRICT-INTERVAL-DEFINITION?
-     * 		boolean; should only instances of #$TimeInterval be accepted?
-     */
-    @LispMethod(comment = "@param STRICT-INTERVAL-DEFINITION?\r\n\t\tboolean; should only instances of #$TimeInterval be accepted?")
-    public static final SubLObject meets_time_object_constraintP_alt(SubLObject v_object, SubLObject strict_interval_definitionP) {
-        if (strict_interval_definitionP == UNPROVIDED) {
-            strict_interval_definitionP = T;
-        }
-        if (NIL != strict_interval_definitionP) {
-            return hlmt.time_intervalP(v_object);
-        } else {
-            return hlmt.temporal_objectP(v_object);
-        }
-    }
-
-    /**
-     *
-     *
-     * @param STRICT-INTERVAL-DEFINITION?
-     * 		boolean; should only instances of #$TimeInterval be accepted?
-     */
-    @LispMethod(comment = "@param STRICT-INTERVAL-DEFINITION?\r\n\t\tboolean; should only instances of #$TimeInterval be accepted?")
     public static SubLObject meets_time_object_constraintP(final SubLObject v_object, SubLObject strict_interval_definitionP) {
         if (strict_interval_definitionP == UNPROVIDED) {
             strict_interval_definitionP = T;
@@ -9177,33 +4789,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
             return hlmt.time_intervalP(v_object);
         }
         return hlmt.temporal_objectP(v_object);
-    }
-
-    public static final SubLObject construct_cycl_date_from_date_range_string_alt(SubLObject string) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                if (NIL != com.cyc.cycjava.cycl.date_utilities.string_specifies_date_range_p(string)) {
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject begin_str = com.cyc.cycjava.cycl.date_utilities.unpack_date_range_string(string);
-                        SubLObject end_str = thread.secondMultipleValue();
-                        SubLObject begin_inclusiveP = thread.thirdMultipleValue();
-                        SubLObject end_inclusiveP = thread.fourthMultipleValue();
-                        thread.resetMultipleValues();
-                        {
-                            SubLObject begin = cb_guess_date(begin_str);
-                            SubLObject end = cb_guess_date(end_str);
-                            if ((NIL != hlmt.time_intervalP(begin)) && (NIL != hlmt.time_intervalP(end))) {
-                                result = com.cyc.cycjava.cycl.date_utilities.construct_date_from_to(begin, end, begin_inclusiveP, end_inclusiveP);
-                            }
-                        }
-                    }
-                }
-                return result;
-            }
-        }
     }
 
     public static SubLObject construct_cycl_date_from_date_range_string(final SubLObject string) {
@@ -9225,41 +4810,10 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return result;
     }
 
-    public static final SubLObject string_specifies_date_range_p_alt(SubLObject string) {
-        return makeBoolean((NIL != string_utilities.starts_with(string, $str_alt145$from_)) && (NIL != string_utilities.substringP($str_alt146$_to_, string, UNPROVIDED, UNPROVIDED, UNPROVIDED)));
-    }
-
     public static SubLObject string_specifies_date_range_p(final SubLObject string) {
         return makeBoolean((NIL != string_utilities.starts_with(string, $$$from_)) && (NIL != string_utilities.substringP($$$_to_, string, UNPROVIDED, UNPROVIDED, UNPROVIDED)));
     }
 
-    /**
-     *
-     *
-     * @param STRING
-     * 		: string-specifies-date-range-p
-     */
-    @LispMethod(comment = "@param STRING\r\n\t\t: string-specifies-date-range-p")
-    public static final SubLObject unpack_date_range_string_alt(SubLObject string) {
-        {
-            SubLObject from_pos = FIVE_INTEGER;
-            SubLObject to_pos = search($str_alt146$_to_, string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            SubLObject to_str_length = FOUR_INTEGER;
-            SubLObject begin_str = string_utilities.substring(string, from_pos, to_pos);
-            SubLObject end_str = string_utilities.substring(string, add(to_pos, to_str_length), UNPROVIDED);
-            SubLObject begin_inclusiveP = T;
-            SubLObject end_inclusiveP = T;
-            return values(begin_str, end_str, begin_inclusiveP, end_inclusiveP);
-        }
-    }
-
-    /**
-     *
-     *
-     * @param STRING
-     * 		: string-specifies-date-range-p
-     */
-    @LispMethod(comment = "@param STRING\r\n\t\t: string-specifies-date-range-p")
     public static SubLObject unpack_date_range_string(final SubLObject string) {
         final SubLObject from_pos = FIVE_INTEGER;
         final SubLObject to_pos = search($$$_to_, string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -9269,23 +4823,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         final SubLObject begin_inclusiveP = T;
         final SubLObject end_inclusiveP = T;
         return values(begin_str, end_str, begin_inclusiveP, end_inclusiveP);
-    }
-
-    public static final SubLObject construct_date_from_to_alt(SubLObject begin, SubLObject end, SubLObject begin_inclusiveP, SubLObject end_inclusiveP) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (begin_inclusiveP != end_inclusiveP) {
-                    Errors.error($str_alt147$Can_t_support____or____time_inter);
-                }
-            }
-            if ((NIL != begin_inclusiveP) && (NIL != end_inclusiveP)) {
-                return hlmt_relevance.date_from_to(begin, end);
-            } else {
-                Errors.error($str_alt148$Can_t_support____or____time_inter);
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject construct_date_from_to(final SubLObject begin, final SubLObject end, final SubLObject begin_inclusiveP, final SubLObject end_inclusiveP) {
@@ -9300,54 +4837,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     *
-     *
-     * @return list; a list of CycL interpretations of STRING as a date
-     */
-    @LispMethod(comment = "@return list; a list of CycL interpretations of STRING as a date")
-    public static final SubLObject parse_date_from_string_alt(SubLObject string) {
-        {
-            SubLObject result = com.cyc.cycjava.cycl.date_utilities.parse_date_from_string_fast(string, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            if (NIL != result) {
-                return result;
-            }
-        }
-        if (NIL == find_if(DIGIT_CHAR_P, string, UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
-            {
-                SubLObject tokens = string_utilities.string_tokenize(string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                SubLObject pass = list_utilities.singletonP(tokens);
-                if (NIL == pass) {
-                    {
-                        SubLObject csome_list_var = tokens;
-                        SubLObject token = NIL;
-                        for (token = csome_list_var.first(); !((NIL != pass) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , token = csome_list_var.first()) {
-                            pass = integerp(numeral_parser.string_to_interval(token));
-                        }
-                    }
-                }
-                if (NIL == pass) {
-                    return NIL;
-                }
-            }
-        }
-        if (NIL != kb_control_vars.rkf_kb_loaded_p()) {
-            {
-                SubLObject rkf_parse = com.cyc.cycjava.cycl.date_utilities.possibly_filter_two_digit_years(rkf_text_processors.rkf_parse_date_unambiguously_from_string(string));
-                if (NIL != rkf_parse) {
-                    return list(rkf_parse);
-                }
-            }
-        }
-        return NIL;
-    }
-
-    /**
-     *
-     *
-     * @return list; a list of CycL interpretations of STRING as a date
-     */
-    @LispMethod(comment = "@return list; a list of CycL interpretations of STRING as a date")
     public static SubLObject parse_date_from_string(final SubLObject string) {
         final SubLObject result = parse_date_from_string_fast(string, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         if (NIL != result) {
@@ -9375,26 +4864,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject possibly_filter_two_digit_years_alt(SubLObject date_cycl) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != $parse_to_two_digit_years_in_datesP$.getDynamicValue(thread)) {
-                return date_cycl;
-            }
-            {
-                SubLObject year_exprs = containing_subexpressions($$YearFn, date_cycl);
-                SubLObject cdolist_list_var = year_exprs;
-                SubLObject year_expr = NIL;
-                for (year_expr = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , year_expr = cdolist_list_var.first()) {
-                    if (formula_arg1(year_expr, UNPROVIDED).numL($int$100)) {
-                        return NIL;
-                    }
-                }
-                return date_cycl;
-            }
-        }
-    }
-
     public static SubLObject possibly_filter_two_digit_years(final SubLObject date_cycl) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != $parse_to_two_digit_years_in_datesP$.getDynamicValue(thread)) {
@@ -9414,25 +4883,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return date_cycl;
     }
 
-    public static final SubLObject parse_date_wXout_two_digit_years_alt(SubLObject string) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                {
-                    SubLObject _prev_bind_0 = $parse_to_two_digit_years_in_datesP$.currentBinding(thread);
-                    try {
-                        $parse_to_two_digit_years_in_datesP$.bind(NIL, thread);
-                        result = com.cyc.cycjava.cycl.date_utilities.parse_date_from_string(string);
-                    } finally {
-                        $parse_to_two_digit_years_in_datesP$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return result;
-            }
-        }
-    }
-
     public static SubLObject parse_date_wXout_two_digit_years(final SubLObject string) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject result = NIL;
@@ -9446,24 +4896,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return result;
     }
 
-    /**
-     * Returns a CycL interpretation of STRING as a date, iff it can be parsed unambiguously.
-     */
-    @LispMethod(comment = "Returns a CycL interpretation of STRING as a date, iff it can be parsed unambiguously.")
-    public static final SubLObject parse_unambiguous_date_from_string_alt(SubLObject string) {
-        {
-            SubLObject parses = com.cyc.cycjava.cycl.date_utilities.parse_date_from_string(string);
-            if (NIL != list_utilities.singletonP(parses)) {
-                return parses.first();
-            }
-        }
-        return NIL;
-    }
-
-    /**
-     * Returns a CycL interpretation of STRING as a date, iff it can be parsed unambiguously.
-     */
-    @LispMethod(comment = "Returns a CycL interpretation of STRING as a date, iff it can be parsed unambiguously.")
     public static SubLObject parse_unambiguous_date_from_string(final SubLObject string) {
         final SubLObject parses = parse_date_from_string(string);
         if (NIL != list_utilities.singletonP(parses)) {
@@ -9472,68 +4904,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     * Assuming that STRING is a string of the form
-     * <date> or <date> <time> or <time> <date> as specified
-     * above in the grammar for dates, returns a CycL version
-     * of the date specified by STRING, or NIL if unable to parse.
-     */
-    @LispMethod(comment = "Assuming that STRING is a string of the form\r\n<date> or <date> <time> or <time> <date> as specified\r\nabove in the grammar for dates, returns a CycL version\r\nof the date specified by STRING, or NIL if unable to parse.\nAssuming that STRING is a string of the form\n<date> or <date> <time> or <time> <date> as specified\nabove in the grammar for dates, returns a CycL version\nof the date specified by STRING, or NIL if unable to parse.")
-    public static final SubLObject guess_datetime_string_alt(SubLObject string) {
-        if (((NIL != string_utilities.substringP($str_alt150$_, string, UNPROVIDED, UNPROVIDED, UNPROVIDED)) || (NIL != string_utilities.substringP($str_alt151$_, string, UNPROVIDED, UNPROVIDED, UNPROVIDED))) || (NIL != string_utilities.substringP($str_alt152$_, string, UNPROVIDED, UNPROVIDED, UNPROVIDED))) {
-            {
-                SubLObject tokens = string_utilities.string_tokenize(string, $list_alt153, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                if (NIL != com.cyc.cycjava.cycl.date_utilities.date_time_tokensP(tokens)) {
-                    {
-                        SubLObject time_string = last(tokens, UNPROVIDED).first();
-                        SubLObject time_tokens = string_utilities.string_tokenize(time_string, $list_alt154, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        SubLObject date_tokens = list_utilities.remove_last(tokens);
-                        return com.cyc.cycjava.cycl.date_utilities.construct_date_and_time_from_tokens(date_tokens, time_tokens);
-                    }
-                } else {
-                    if (NIL != com.cyc.cycjava.cycl.date_utilities.time_date_tokensP(tokens)) {
-                        {
-                            SubLObject time_string = tokens.first();
-                            SubLObject time_tokens = string_utilities.string_tokenize(time_string, $list_alt154, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                            SubLObject date_tokens = tokens.rest();
-                            return com.cyc.cycjava.cycl.date_utilities.construct_date_and_time_from_tokens(date_tokens, time_tokens);
-                        }
-                    } else {
-                        {
-                            SubLObject datum = com.cyc.cycjava.cycl.date_utilities.explode_date_from_tokens(tokens, T, UNPROVIDED).first();
-                            SubLObject current = datum;
-                            SubLObject day = NIL;
-                            SubLObject month = NIL;
-                            SubLObject year = NIL;
-                            destructuring_bind_must_consp(current, datum, $list_alt155);
-                            day = current.first();
-                            current = current.rest();
-                            destructuring_bind_must_consp(current, datum, $list_alt155);
-                            month = current.first();
-                            current = current.rest();
-                            destructuring_bind_must_consp(current, datum, $list_alt155);
-                            year = current.first();
-                            current = current.rest();
-                            if (NIL == current) {
-                                return com.cyc.cycjava.cycl.date_utilities.construct_reduced_cycl_date(NIL, NIL, NIL, day, month, year);
-                            } else {
-                                cdestructuring_bind_error(datum, $list_alt155);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return NIL;
-    }
-
-    /**
-     * Assuming that STRING is a string of the form
-     * <date> or <date> <time> or <time> <date> as specified
-     * above in the grammar for dates, returns a CycL version
-     * of the date specified by STRING, or NIL if unable to parse.
-     */
-    @LispMethod(comment = "Assuming that STRING is a string of the form\r\n<date> or <date> <time> or <time> <date> as specified\r\nabove in the grammar for dates, returns a CycL version\r\nof the date specified by STRING, or NIL if unable to parse.\nAssuming that STRING is a string of the form\n<date> or <date> <time> or <time> <date> as specified\nabove in the grammar for dates, returns a CycL version\nof the date specified by STRING, or NIL if unable to parse.")
     public static SubLObject guess_datetime_string(final SubLObject string) {
         if (((NIL != string_utilities.substringP($str191$_, string, UNPROVIDED, UNPROVIDED, UNPROVIDED)) || (NIL != string_utilities.substringP($str192$_, string, UNPROVIDED, UNPROVIDED, UNPROVIDED))) || (NIL != string_utilities.substringP($str193$_, string, UNPROVIDED, UNPROVIDED, UNPROVIDED))) {
             final SubLObject tokens = string_utilities.string_tokenize(string, $list194, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -9571,41 +4941,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject construct_date_and_time_from_tokens_alt(SubLObject date_tokens, SubLObject time_tokens) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject datum = com.cyc.cycjava.cycl.date_utilities.explode_date_from_tokens(date_tokens, T, UNPROVIDED).first();
-                SubLObject current = datum;
-                SubLObject day = NIL;
-                SubLObject month = NIL;
-                SubLObject year = NIL;
-                destructuring_bind_must_consp(current, datum, $list_alt155);
-                day = current.first();
-                current = current.rest();
-                destructuring_bind_must_consp(current, datum, $list_alt155);
-                month = current.first();
-                current = current.rest();
-                destructuring_bind_must_consp(current, datum, $list_alt155);
-                year = current.first();
-                current = current.rest();
-                if (NIL == current) {
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject second = com.cyc.cycjava.cycl.date_utilities.explode_time_from_tokens(time_tokens);
-                        SubLObject minute = thread.secondMultipleValue();
-                        SubLObject hour = thread.thirdMultipleValue();
-                        thread.resetMultipleValues();
-                        return com.cyc.cycjava.cycl.date_utilities.construct_reduced_cycl_date(second, minute, hour, day, month, year);
-                    }
-                } else {
-                    cdestructuring_bind_error(datum, $list_alt155);
-                }
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject construct_date_and_time_from_tokens(final SubLObject date_tokens, final SubLObject time_tokens) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject current;
@@ -9634,30 +4969,10 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject date_time_tokensP_alt(SubLObject tokens) {
-        if (NIL != list_utilities.lengthGE(tokens, TWO_INTEGER, UNPROVIDED)) {
-            {
-                SubLObject last_token = last(tokens, UNPROVIDED).first();
-                return string_utilities.substringP($str_alt156$_, last_token, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject date_time_tokensP(final SubLObject tokens) {
         if (NIL != list_utilities.lengthGE(tokens, TWO_INTEGER, UNPROVIDED)) {
             final SubLObject last_token = last(tokens, UNPROVIDED).first();
             return string_utilities.substringP($str197$_, last_token, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-        }
-        return NIL;
-    }
-
-    public static final SubLObject time_date_tokensP_alt(SubLObject tokens) {
-        if (NIL != list_utilities.lengthGE(tokens, TWO_INTEGER, UNPROVIDED)) {
-            {
-                SubLObject first_token = tokens.first();
-                return string_utilities.substringP($str_alt156$_, first_token, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            }
         }
         return NIL;
     }
@@ -9670,98 +4985,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     *
-     *
-     * @return list; a list of intereprations of STRING as a date
-     */
-    @LispMethod(comment = "@return list; a list of intereprations of STRING as a date")
-    public static final SubLObject parse_date_from_string_fast_alt(SubLObject string, SubLObject one_answerP, SubLObject dont_guess_from_two_digit_yearsP, SubLObject for_queryP) {
-        if (one_answerP == UNPROVIDED) {
-            one_answerP = NIL;
-        }
-        if (dont_guess_from_two_digit_yearsP == UNPROVIDED) {
-            dont_guess_from_two_digit_yearsP = NIL;
-        }
-        if (for_queryP == UNPROVIDED) {
-            for_queryP = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject tokens = string_utilities.string_tokenize(string, $list_alt157, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                SubLObject date_numbers = com.cyc.cycjava.cycl.date_utilities.explode_date_from_tokens(tokens, one_answerP, for_queryP);
-                SubLObject second = NIL;
-                SubLObject minute = NIL;
-                SubLObject hour = NIL;
-                SubLObject result = NIL;
-                if ((NIL == date_numbers) && (NIL != list_utilities.lengthE(tokens, FOUR_INTEGER, UNPROVIDED))) {
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject second_2 = com.cyc.cycjava.cycl.date_utilities.explode_time_from_tokens(string_utilities.string_tokenize(tokens.first(), $list_alt158, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED));
-                        SubLObject minute_3 = thread.secondMultipleValue();
-                        SubLObject hour_4 = thread.thirdMultipleValue();
-                        thread.resetMultipleValues();
-                        second = second_2;
-                        minute = minute_3;
-                        hour = hour_4;
-                    }
-                    if (NIL != hour) {
-                        date_numbers = com.cyc.cycjava.cycl.date_utilities.explode_date_from_tokens(tokens.rest(), one_answerP, for_queryP);
-                    }
-                }
-                {
-                    SubLObject cdolist_list_var = date_numbers;
-                    SubLObject one_answer = NIL;
-                    for (one_answer = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , one_answer = cdolist_list_var.first()) {
-                        {
-                            SubLObject datum = one_answer;
-                            SubLObject current = datum;
-                            SubLObject day = NIL;
-                            SubLObject month = NIL;
-                            SubLObject year = NIL;
-                            destructuring_bind_must_consp(current, datum, $list_alt155);
-                            day = current.first();
-                            current = current.rest();
-                            destructuring_bind_must_consp(current, datum, $list_alt155);
-                            month = current.first();
-                            current = current.rest();
-                            destructuring_bind_must_consp(current, datum, $list_alt155);
-                            year = current.first();
-                            current = current.rest();
-                            if (NIL == current) {
-                                {
-                                    SubLObject date_cycl = com.cyc.cycjava.cycl.date_utilities.construct_reduced_cycl_date(second, minute, hour, day, month, year);
-                                    if (NIL != com.cyc.cycjava.cycl.date_utilities.number_should_be_interpreted_as_a_dateP(day, month, year, string)) {
-                                        result = cons(date_cycl, result);
-                                        if (NIL == dont_guess_from_two_digit_yearsP) {
-                                            {
-                                                SubLObject cdolist_list_var_5 = com.cyc.cycjava.cycl.date_utilities.construct_possible_more_likely_dates(date_cycl, for_queryP);
-                                                SubLObject date = NIL;
-                                                for (date = cdolist_list_var_5.first(); NIL != cdolist_list_var_5; cdolist_list_var_5 = cdolist_list_var_5.rest() , date = cdolist_list_var_5.first()) {
-                                                    result = cons(date, result);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            } else {
-                                cdestructuring_bind_error(datum, $list_alt155);
-                            }
-                        }
-                    }
-                }
-                return result;
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return list; a list of intereprations of STRING as a date
-     */
-    @LispMethod(comment = "@return list; a list of intereprations of STRING as a date")
     public static SubLObject parse_date_from_string_fast(final SubLObject string, SubLObject one_answerP, SubLObject dont_guess_from_two_digit_yearsP, SubLObject for_queryP) {
         if (one_answerP == UNPROVIDED) {
             one_answerP = NIL;
@@ -9886,29 +5109,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return delete_duplicates(result, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
-    /**
-     * we don't want to parse '12.3' as a date, since it's probably just a number
-     */
-    @LispMethod(comment = "we don\'t want to parse \'12.3\' as a date, since it\'s probably just a number")
-    public static final SubLObject number_should_be_interpreted_as_a_dateP_alt(SubLObject day, SubLObject month, SubLObject year, SubLObject string) {
-        if (NIL != list_utilities.find_if_not(VALID_NUMBER_STRING_CHAR, string, UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
-            return T;
-        } else {
-            if (NIL != day) {
-                return T;
-            } else {
-                if (year.numGE($int$1800) && year.numLE($int$2200)) {
-                    return T;
-                }
-                return NIL;
-            }
-        }
-    }
-
-    /**
-     * we don't want to parse '12.3' as a date, since it's probably just a number
-     */
-    @LispMethod(comment = "we don\'t want to parse \'12.3\' as a date, since it\'s probably just a number")
     public static SubLObject number_should_be_interpreted_as_a_dateP(final SubLObject day, final SubLObject month, final SubLObject year, final SubLObject string) {
         if (NIL != day) {
             return T;
@@ -9918,19 +5118,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         }
         if (NIL != list_utilities.find_if_not(VALID_NUMBER_STRING_CHAR, string, UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
             return T;
-        }
-        return NIL;
-    }
-
-    public static final SubLObject two_digit_yearP_alt(SubLObject date, SubLObject query_okP) {
-        if (query_okP == UNPROVIDED) {
-            query_okP = NIL;
-        }
-        if (!((NIL != query_okP) && (NIL != com.cyc.cycjava.cycl.date_utilities.date_query_p(date, UNPROVIDED)))) {
-            {
-                SubLObject date_year = com.cyc.cycjava.cycl.date_utilities.extract_date_year(date);
-                return makeBoolean(date_year.isInteger() && $int$100.numG(date_year));
-            }
         }
         return NIL;
     }
@@ -9946,47 +5133,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     * if someone entered '03' as the year, try constructing dates closer to the present
-     */
-    @LispMethod(comment = "if someone entered \'03\' as the year, try constructing dates closer to the present")
-    public static final SubLObject construct_possible_more_likely_dates_alt(SubLObject date_cycl, SubLObject query_okP) {
-        if (query_okP == UNPROVIDED) {
-            query_okP = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != com.cyc.cycjava.cycl.date_utilities.two_digit_yearP(date_cycl, query_okP)) {
-                thread.resetMultipleValues();
-                {
-                    SubLObject format = com.cyc.cycjava.cycl.date_utilities.explode_date(date_cycl);
-                    SubLObject year = thread.secondMultipleValue();
-                    SubLObject month = thread.thirdMultipleValue();
-                    SubLObject day = thread.fourthMultipleValue();
-                    SubLObject hour = thread.fifthMultipleValue();
-                    SubLObject minute = thread.sixthMultipleValue();
-                    SubLObject second = thread.seventhMultipleValue();
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject v_2000_date = com.cyc.cycjava.cycl.date_utilities.calendar_date_sum($$YearsDuration, $int$2000, year, month, day, hour, minute, second);
-                        SubLObject today = com.cyc.cycjava.cycl.date_utilities.universal_date_to_cycl_date(numeric_date_utilities.today());
-                        SubLObject result = NIL;
-                        result = cons(v_2000_date, result);
-                        if (NIL != com.cyc.cycjava.cycl.date_utilities.dateL(today, v_2000_date)) {
-                            result = cons(com.cyc.cycjava.cycl.date_utilities.calendar_date_sum($$YearsDuration, $int$1900, year, month, day, hour, minute, second), result);
-                        }
-                        return result;
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
-    /**
-     * if someone entered '03' as the year, try constructing dates closer to the present
-     */
-    @LispMethod(comment = "if someone entered \'03\' as the year, try constructing dates closer to the present")
     public static SubLObject construct_possible_more_likely_dates(final SubLObject date_cycl, SubLObject query_okP) {
         if (query_okP == UNPROVIDED) {
             query_okP = NIL;
@@ -10015,65 +5161,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     *
-     *
-     * @param TOKENS
-     * 		list; a list of string, corresponding to the contentful parts of a date
-     * 		e.g. '("December" "12" "1253") from December 12, 1253
-     * @return list; a list of (day month year) lists, where day, month, and year are all integers
-     */
-    @LispMethod(comment = "@param TOKENS\r\n\t\tlist; a list of string, corresponding to the contentful parts of a date\r\n\t\te.g. \'(\"December\" \"12\" \"1253\") from December 12, 1253\r\n@return list; a list of (day month year) lists, where day, month, and year are all integers")
-    public static final SubLObject explode_date_from_tokens_alt(SubLObject tokens, SubLObject one_answerP, SubLObject probable_queryP) {
-        if (one_answerP == UNPROVIDED) {
-            one_answerP = T;
-        }
-        if (probable_queryP == UNPROVIDED) {
-            probable_queryP = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject doneP = NIL;
-                SubLObject result = NIL;
-                SubLObject final_answer = NIL;
-                if (NIL == doneP) {
-                    {
-                        SubLObject csome_list_var = list(NIL != probable_queryP ? ((SubLObject) ($date_query_patterns$.getDynamicValue(thread))) : NIL, $date_patterns$.getDynamicValue(thread));
-                        SubLObject pattern_cluster = NIL;
-                        for (pattern_cluster = csome_list_var.first(); !((NIL != doneP) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , pattern_cluster = csome_list_var.first()) {
-                            if (NIL == doneP) {
-                                {
-                                    SubLObject csome_list_var_6 = pattern_cluster;
-                                    SubLObject pattern = NIL;
-                                    for (pattern = csome_list_var_6.first(); !((NIL != doneP) || (NIL == csome_list_var_6)); csome_list_var_6 = csome_list_var_6.rest() , pattern = csome_list_var_6.first()) {
-                                        result = com.cyc.cycjava.cycl.date_utilities.tokens_match_date_pattern(delete($$$of, tokens, EQUAL, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), pattern);
-                                        if (result.isList() && (NIL != third(result))) {
-                                            final_answer = cons(result, final_answer);
-                                            if (NIL != one_answerP) {
-                                                doneP = T;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                return final_answer;
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @param TOKENS
-     * 		list; a list of string, corresponding to the contentful parts of a date
-     * 		e.g. '("December" "12" "1253") from December 12, 1253
-     * @return list; a list of (day month year) lists, where day, month, and year are all integers
-     */
-    @LispMethod(comment = "@param TOKENS\r\n\t\tlist; a list of string, corresponding to the contentful parts of a date\r\n\t\te.g. \'(\"December\" \"12\" \"1253\") from December 12, 1253\r\n@return list; a list of (day month year) lists, where day, month, and year are all integers")
     public static SubLObject explode_date_from_tokens(final SubLObject tokens, SubLObject one_answerP, SubLObject probable_queryP) {
         if (one_answerP == UNPROVIDED) {
             one_answerP = T;
@@ -10120,113 +5207,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
             } 
         }
         return values(final_answer, other_tokens_lists);
-    }
-
-    public static final SubLObject tokens_match_date_pattern_alt(SubLObject tokens, SubLObject pattern) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject day = NIL;
-                SubLObject month = NIL;
-                SubLObject year = NIL;
-                SubLObject failP = NIL;
-                if (((length(tokens).numGE(length(pattern)) || (NIL != member($UNKNOWN_YEAR, pattern, UNPROVIDED, UNPROVIDED))) || (NIL != member($INDEXICAL_YEAR, pattern, UNPROVIDED, UNPROVIDED))) || (NIL != member($UNKNOWN_DAY, pattern, UNPROVIDED, UNPROVIDED))) {
-                    {
-                        SubLObject state = memoization_state.possibly_new_memoization_state();
-                        SubLObject local_state = state;
-                        {
-                            SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
-                            try {
-                                memoization_state.$memoization_state$.bind(local_state, thread);
-                                {
-                                    SubLObject original_memoization_process = NIL;
-                                    if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                        original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                        {
-                                            SubLObject current_proc = current_process();
-                                            if (NIL == original_memoization_process) {
-                                                memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                            } else {
-                                                if (original_memoization_process != current_proc) {
-                                                    Errors.error($str_alt169$Invalid_attempt_to_reuse_memoizat);
-                                                }
-                                            }
-                                        }
-                                    }
-                                    try {
-                                        if (NIL == failP) {
-                                            {
-                                                SubLObject token = NIL;
-                                                SubLObject token_7 = NIL;
-                                                SubLObject pattern_item = NIL;
-                                                SubLObject pattern_item_8 = NIL;
-                                                for (token = tokens, token_7 = token.first(), pattern_item = pattern, pattern_item_8 = pattern_item.first(); !((NIL != failP) || ((NIL == pattern_item) && (NIL == token))); token = token.rest() , token_7 = token.first() , pattern_item = pattern_item.rest() , pattern_item_8 = pattern_item.first()) {
-                                                    if ((NIL == token_7) && (pattern_item_8 == $INDEXICAL_YEAR)) {
-                                                        year = $INDEXICAL_YEAR;
-                                                    } else {
-                                                        if ((NIL == token_7) && (pattern_item_8 == $UNKNOWN_YEAR)) {
-                                                            year = $sym170$_YEAR;
-                                                        } else {
-                                                            if ((NIL == token_7) && (pattern_item_8 == $UNKNOWN_DAY)) {
-                                                                day = $sym171$_DAY;
-                                                            } else {
-                                                                if (!token_7.isString()) {
-                                                                    failP = T;
-                                                                } else {
-                                                                    if ((pattern_item_8 == $YEAR) && (NIL != com.cyc.cycjava.cycl.date_utilities.year_tokenP(token_7, UNPROVIDED))) {
-                                                                        year = com.cyc.cycjava.cycl.date_utilities.year_tokenP(token_7, UNPROVIDED);
-                                                                    } else {
-                                                                        if ((pattern_item_8 == $MONTH) && (NIL != com.cyc.cycjava.cycl.date_utilities.month_tokenP(token_7))) {
-                                                                            month = com.cyc.cycjava.cycl.date_utilities.month_tokenP(token_7);
-                                                                        } else {
-                                                                            if ((pattern_item_8 == $MONTH_NAME) && (NIL != com.cyc.cycjava.cycl.date_utilities.month_name_tokenP(token_7))) {
-                                                                                month = com.cyc.cycjava.cycl.date_utilities.month_name_tokenP(token_7);
-                                                                            } else {
-                                                                                if ((pattern_item_8 == $MONTH_NUM) && (NIL != com.cyc.cycjava.cycl.date_utilities.month_number_tokenP(token_7))) {
-                                                                                    month = com.cyc.cycjava.cycl.date_utilities.month_number_tokenP(token_7);
-                                                                                } else {
-                                                                                    if ((pattern_item_8 == $DAY) && (NIL != com.cyc.cycjava.cycl.date_utilities.day_tokenP(token_7))) {
-                                                                                        day = com.cyc.cycjava.cycl.date_utilities.day_tokenP(token_7);
-                                                                                    } else {
-                                                                                        failP = T;
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    } finally {
-                                        {
-                                            SubLObject _prev_bind_0_9 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                            try {
-                                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                                if ((NIL != local_state) && (NIL == original_memoization_process)) {
-                                                    memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
-                                                }
-                                            } finally {
-                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_9, thread);
-                                            }
-                                        }
-                                    }
-                                }
-                            } finally {
-                                memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                    if ((((NIL == failP) && (((NIL != cycl_grammar.el_variable_p(year)) || (year == $INDEXICAL_YEAR)) || (NIL != numeric_date_utilities.valid_year_number_p(year)))) && ((NIL == month) || (NIL != numeric_date_utilities.valid_month_number_p(month)))) && (((NIL == day) || (NIL != cycl_grammar.el_variable_p(day))) || (NIL != numeric_date_utilities.valid_day_for_month_p(day, month, year)))) {
-                        return list(day, month, year);
-                    }
-                }
-                return list(NIL, NIL, NIL);
-            }
-        }
     }
 
     public static SubLObject tokens_match_date_pattern(final SubLObject tokens, final SubLObject pattern) {
@@ -10338,28 +5318,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return values(list(NIL, NIL, NIL), NIL);
     }
 
-    // Internal Constants
-    @LispMethod(comment = "Internal Constants")
-    static private final SubLList $list_alt0 = list(new SubLObject[]{ reader_make_constant_shell("SecondFn"), reader_make_constant_shell("MinuteFn"), reader_make_constant_shell("HourFn"), reader_make_constant_shell("DayFn"), reader_make_constant_shell("MonthFn"), reader_make_constant_shell("YearFn"), reader_make_constant_shell("January"), reader_make_constant_shell("February"), reader_make_constant_shell("March"), reader_make_constant_shell("April"), reader_make_constant_shell("May"), reader_make_constant_shell("June"), reader_make_constant_shell("July"), reader_make_constant_shell("August"), reader_make_constant_shell("September"), reader_make_constant_shell("October"), reader_make_constant_shell("November"), reader_make_constant_shell("December"), reader_make_constant_shell("definingTimeUnit"), reader_make_constant_shell("DaysDuration"), reader_make_constant_shell("MonthsDuration"), reader_make_constant_shell("YearsDuration"), reader_make_constant_shell("CalendarDay"), reader_make_constant_shell("CalendarMonth"), reader_make_constant_shell("CalendarYear") });
-
-    private static final SubLSymbol PATTERN_MATCHES_FORMULA = makeSymbol("PATTERN-MATCHES-FORMULA");
-
-    static private final SubLList $list_alt6 = list(new SubLObject[]{ makeKeyword("OR"), list(reader_make_constant_shell("YearFn"), makeKeyword("INTEGER")), reader_make_constant_shell("TheYear-Indexical"), list(reader_make_constant_shell("MonthFn"), $FORT, list(makeKeyword("AND"), cons(reader_make_constant_shell("YearFn"), makeKeyword("ANYTHING")), list($TEST, makeSymbol("DATE-P-INTERNAL")))), list(reader_make_constant_shell("MonthFn"), $FORT, list(makeKeyword("AND"), reader_make_constant_shell("TheYear-Indexical"), list($TEST, makeSymbol("DATE-P-INTERNAL")))), list(reader_make_constant_shell("DayFn"), makeKeyword("INTEGER"), list(makeKeyword("AND"), cons(reader_make_constant_shell("MonthFn"), makeKeyword("ANYTHING")), list($TEST, makeSymbol("DATE-P-INTERNAL")))), list(reader_make_constant_shell("HourFn"), makeKeyword("INTEGER"), list(makeKeyword("AND"), cons(reader_make_constant_shell("DayFn"), makeKeyword("ANYTHING")), list($TEST, makeSymbol("DATE-P-INTERNAL")))), list(reader_make_constant_shell("MinuteFn"), makeKeyword("INTEGER"), list(makeKeyword("AND"), cons(reader_make_constant_shell("HourFn"), makeKeyword("ANYTHING")), list($TEST, makeSymbol("DATE-P-INTERNAL")))), list(reader_make_constant_shell("SecondFn"), makeKeyword("INTEGER"), list(makeKeyword("AND"), cons(reader_make_constant_shell("MinuteFn"), makeKeyword("ANYTHING")), list($TEST, makeSymbol("DATE-P-INTERNAL")))), list(reader_make_constant_shell("MilliSecondFn"), makeKeyword("INTEGER"), list(makeKeyword("AND"), cons(reader_make_constant_shell("SecondFn"), makeKeyword("ANYTHING")), list($TEST, makeSymbol("DATE-P-INTERNAL")))), list(reader_make_constant_shell("DecadeFn"), makeKeyword("INTEGER")), list(reader_make_constant_shell("CenturyFn"), makeKeyword("INTEGER")), list(reader_make_constant_shell("QuarterFn"), makeKeyword("INTEGER"), list(makeKeyword("AND"), cons(reader_make_constant_shell("YearFn"), makeKeyword("ANYTHING")), list($TEST, makeSymbol("DATE-P-INTERNAL")))) });
-
-    public static final SubLObject year_tokenP_internal_alt(SubLObject obj, SubLObject allow_two_digit_yearsP) {
-        if (allow_two_digit_yearsP == UNPROVIDED) {
-            allow_two_digit_yearsP = $parse_to_two_digit_years_in_datesP$.getDynamicValue();
-        }
-        if (NIL != allow_two_digit_yearsP) {
-            return string_utilities.string_to_integer(obj);
-        } else {
-            if (NIL != list_utilities.lengthE(obj, FOUR_INTEGER, UNPROVIDED)) {
-                return string_utilities.string_to_integer(obj);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject year_tokenP_internal(final SubLObject obj, SubLObject allow_two_digit_yearsP) {
         if (allow_two_digit_yearsP == UNPROVIDED) {
             allow_two_digit_yearsP = $parse_to_two_digit_years_in_datesP$.getDynamicValue();
@@ -10371,54 +5329,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
             return string_utilities.string_to_integer(obj);
         }
         return NIL;
-    }
-
-    public static final SubLObject year_tokenP_alt(SubLObject obj, SubLObject allow_two_digit_yearsP) {
-        if (allow_two_digit_yearsP == UNPROVIDED) {
-            allow_two_digit_yearsP = $parse_to_two_digit_years_in_datesP$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
-                SubLObject caching_state = NIL;
-                if (NIL == v_memoization_state) {
-                    return com.cyc.cycjava.cycl.date_utilities.year_tokenP_internal(obj, allow_two_digit_yearsP);
-                }
-                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, $sym177$YEAR_TOKEN_, UNPROVIDED);
-                if (NIL == caching_state) {
-                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), $sym177$YEAR_TOKEN_, TWO_INTEGER, NIL, EQUAL, UNPROVIDED);
-                    memoization_state.memoization_state_put(v_memoization_state, $sym177$YEAR_TOKEN_, caching_state);
-                }
-                {
-                    SubLObject sxhash = memoization_state.sxhash_calc_2(obj, allow_two_digit_yearsP);
-                    SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
-                    if (collisions != $kw113$_MEMOIZED_ITEM_NOT_FOUND_) {
-                        {
-                            SubLObject cdolist_list_var = collisions;
-                            SubLObject collision = NIL;
-                            for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
-                                {
-                                    SubLObject cached_args = collision.first();
-                                    SubLObject results2 = second(collision);
-                                    if (obj.equal(cached_args.first())) {
-                                        cached_args = cached_args.rest();
-                                        if (((NIL != cached_args) && (NIL == cached_args.rest())) && allow_two_digit_yearsP.equal(cached_args.first())) {
-                                            return memoization_state.caching_results(results2);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    {
-                        SubLObject results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.date_utilities.year_tokenP_internal(obj, allow_two_digit_yearsP)));
-                        memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(obj, allow_two_digit_yearsP));
-                        return memoization_state.caching_results(results);
-                    }
-                }
-            }
-        }
     }
 
     public static SubLObject year_tokenP(final SubLObject obj, SubLObject allow_two_digit_yearsP) {
@@ -10460,48 +5370,9 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return memoization_state.caching_results(results3);
     }
 
-    static private final SubLList $list_alt7 = list(makeKeyword("OR"), list(reader_make_constant_shell("HourFn"), makeKeyword("INTEGER"), list($TEST, makeSymbol("DAY-FOR-TIME-P-P"))), list(reader_make_constant_shell("MinuteFn"), makeKeyword("INTEGER"), list(makeKeyword("AND"), cons(reader_make_constant_shell("HourFn"), makeKeyword("ANYTHING")), list($TEST, makeSymbol("TIME-P-INTERNAL")))), list(reader_make_constant_shell("SecondFn"), makeKeyword("INTEGER"), list(makeKeyword("AND"), cons(reader_make_constant_shell("MinuteFn"), makeKeyword("ANYTHING")), list($TEST, makeSymbol("TIME-P-INTERNAL")))), list(reader_make_constant_shell("MilliSecondFn"), makeKeyword("INTEGER"), list(makeKeyword("AND"), cons(reader_make_constant_shell("SecondFn"), makeKeyword("ANYTHING")), list($TEST, makeSymbol("TIME-P-INTERNAL")))));
-
-    static private final SubLList $list_alt12 = list(reader_make_constant_shell("CalendarSecond"), reader_make_constant_shell("CalendarMinute"), reader_make_constant_shell("CalendarHour"), reader_make_constant_shell("CalendarDay"), reader_make_constant_shell("CalendarMonth"), reader_make_constant_shell("CalendarYear"));
-
-    public static final SubLObject day_tokenP_internal_alt(SubLObject obj) {
-        {
-            SubLObject number_tokenP = com.cyc.cycjava.cycl.date_utilities.day_number_tokenP(obj);
-            return NIL != number_tokenP ? ((SubLObject) (number_tokenP)) : com.cyc.cycjava.cycl.date_utilities.day_words_tokenP(obj);
-        }
-    }
-
     public static SubLObject day_tokenP_internal(final SubLObject obj) {
         final SubLObject number_tokenP = day_number_tokenP(obj);
         return NIL != number_tokenP ? number_tokenP : day_words_tokenP(obj);
-    }
-
-    static private final SubLList $list_alt13 = list(list(makeSymbol("TIME-TYPE-VAR"), makeSymbol("&KEY"), makeSymbol("DONE?")), makeSymbol("&BODY"), makeSymbol("BODY"));
-
-    public static final SubLObject day_tokenP_alt(SubLObject obj) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
-                SubLObject caching_state = NIL;
-                if (NIL == v_memoization_state) {
-                    return com.cyc.cycjava.cycl.date_utilities.day_tokenP_internal(obj);
-                }
-                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, $sym178$DAY_TOKEN_, UNPROVIDED);
-                if (NIL == caching_state) {
-                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), $sym178$DAY_TOKEN_, ONE_INTEGER, NIL, EQUAL, UNPROVIDED);
-                    memoization_state.memoization_state_put(v_memoization_state, $sym178$DAY_TOKEN_, caching_state);
-                }
-                {
-                    SubLObject results = memoization_state.caching_state_lookup(caching_state, obj, $kw113$_MEMOIZED_ITEM_NOT_FOUND_);
-                    if (results == $kw113$_MEMOIZED_ITEM_NOT_FOUND_) {
-                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.date_utilities.day_tokenP_internal(obj)));
-                        memoization_state.caching_state_put(caching_state, obj, results, UNPROVIDED);
-                    }
-                    return memoization_state.caching_results(results);
-                }
-            }
-        }
     }
 
     public static SubLObject day_tokenP(final SubLObject obj) {
@@ -10524,28 +5395,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return memoization_state.caching_results(results);
     }
 
-    static private final SubLList $list_alt14 = list(makeKeyword("DONE?"));
-
-    static private final SubLList $list_alt19 = list(makeKeyword("CALENDAR"), makeKeyword("QUARTER"), makeKeyword("DECADE"), makeKeyword("CENTURY"));
-
-    /**
-     * DAY means the number of the day (e.g. 1-31)
-     */
-    @LispMethod(comment = "DAY means the number of the day (e.g. 1-31)")
-    public static final SubLObject day_words_tokenP_alt(SubLObject obj) {
-        if (NIL != string_utilities.english_ordinal_number_string_p(obj)) {
-            return com.cyc.cycjava.cycl.date_utilities.day_number_tokenP(string_utilities.english_ordinal_string_to_cardinal_string(obj));
-        }
-        if (NIL != string_utilities.alphanumeric_stringP(obj)) {
-            return com.cyc.cycjava.cycl.date_utilities.day_word_token_value(obj);
-        }
-        return NIL;
-    }
-
-    /**
-     * DAY means the number of the day (e.g. 1-31)
-     */
-    @LispMethod(comment = "DAY means the number of the day (e.g. 1-31)")
     public static SubLObject day_words_tokenP(final SubLObject obj) {
         if (NIL != string_utilities.english_ordinal_number_string_p(obj)) {
             return day_number_tokenP(string_utilities.english_ordinal_string_to_cardinal_string(obj));
@@ -10556,65 +5405,12 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     * the most obvious way to do this would be to use a number parser, like STRING-TO-INTERVAL, but for the limited set of numbers that
-     * can appear as days in dates, this is substantially faster
-     */
-    @LispMethod(comment = "the most obvious way to do this would be to use a number parser, like STRING-TO-INTERVAL, but for the limited set of numbers that\r\ncan appear as days in dates, this is substantially faster\nthe most obvious way to do this would be to use a number parser, like STRING-TO-INTERVAL, but for the limited set of numbers that\ncan appear as days in dates, this is substantially faster")
-    public static final SubLObject day_word_token_value_alt(SubLObject string) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (!$day_words$.getDynamicValue(thread).isHashtable()) {
-                com.cyc.cycjava.cycl.date_utilities.fill_day_words();
-            }
-            return gethash(string, $day_words$.getDynamicValue(thread), UNPROVIDED);
-        }
-    }
-
-    /**
-     * the most obvious way to do this would be to use a number parser, like STRING-TO-INTERVAL, but for the limited set of numbers that
-     * can appear as days in dates, this is substantially faster
-     */
-    @LispMethod(comment = "the most obvious way to do this would be to use a number parser, like STRING-TO-INTERVAL, but for the limited set of numbers that\r\ncan appear as days in dates, this is substantially faster\nthe most obvious way to do this would be to use a number parser, like STRING-TO-INTERVAL, but for the limited set of numbers that\ncan appear as days in dates, this is substantially faster")
     public static SubLObject day_word_token_value(final SubLObject string) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (!$day_words$.getDynamicValue(thread).isHashtable()) {
             fill_day_words();
         }
         return gethash(string, $day_words$.getDynamicValue(thread), UNPROVIDED);
-    }
-
-    static private final SubLString $str_alt38$_a_is_not_a_valid_date_ = makeString("~a is not a valid date.");
-
-    public static final SubLObject fill_day_words_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            $day_words$.setDynamicValue(make_hash_table($int$100, EQUALP, UNPROVIDED), thread);
-            {
-                SubLObject cdolist_list_var = $day_word_pairs$.getDynamicValue(thread);
-                SubLObject string_number_pair = NIL;
-                for (string_number_pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , string_number_pair = cdolist_list_var.first()) {
-                    {
-                        SubLObject datum = string_number_pair;
-                        SubLObject current = datum;
-                        SubLObject key = NIL;
-                        SubLObject value = NIL;
-                        destructuring_bind_must_consp(current, datum, $list_alt180);
-                        key = current.first();
-                        current = current.rest();
-                        destructuring_bind_must_consp(current, datum, $list_alt180);
-                        value = current.first();
-                        current = current.rest();
-                        if (NIL == current) {
-                            sethash(key, $day_words$.getDynamicValue(thread), value);
-                        } else {
-                            cdestructuring_bind_error(datum, $list_alt180);
-                        }
-                    }
-                }
-            }
-            return $day_words$.getDynamicValue(thread);
-        }
     }
 
     public static SubLObject fill_day_words() {
@@ -10645,21 +5441,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return $day_words$.getDynamicValue(thread);
     }
 
-    static private final SubLString $str_alt40$Can_t_handle_a_date_of__S_yet = makeString("Can't handle a date of ~S yet");
-
-    public static final SubLObject day_number_tokenP_alt(SubLObject obj) {
-        if ((NIL != string_utilities.digit_stringP(obj)) && (NIL != string_utilities.string_to_integer(obj))) {
-            obj = string_utilities.string_to_integer(obj);
-        }
-        if (!obj.isInteger()) {
-            return NIL;
-        }
-        if ($int$32.numG(obj) && ZERO_INTEGER.numL(obj)) {
-            return obj;
-        }
-        return NIL;
-    }
-
     public static SubLObject day_number_tokenP(SubLObject obj) {
         if ((NIL != string_utilities.digit_stringP(obj)) && (NIL != string_utilities.string_to_integer(obj))) {
             obj = string_utilities.string_to_integer(obj);
@@ -10673,92 +5454,11 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    static private final SubLString $str_alt51$_a_is_not_a_valid_time = makeString("~a is not a valid time");
-
-    static private final SubLString $str_alt55$Can_t_attach_month__S_to_date__S = makeString("Can't attach month ~S to date ~S");
-
-    static private final SubLString $str_alt56$Can_t_attach_day__S_to_date__S = makeString("Can't attach day ~S to date ~S");
-
-    public static final SubLObject month_tokenP_alt(SubLObject obj) {
-        {
-            SubLObject name_tokenP = com.cyc.cycjava.cycl.date_utilities.month_name_tokenP(obj);
-            return NIL != name_tokenP ? ((SubLObject) (name_tokenP)) : com.cyc.cycjava.cycl.date_utilities.month_number_tokenP(obj);
-        }
-    }
-
     public static SubLObject month_tokenP(final SubLObject obj) {
         final SubLObject name_tokenP = month_name_tokenP(obj);
         return NIL != name_tokenP ? name_tokenP : month_number_tokenP(obj);
     }
 
-    static private final SubLString $str_alt57$Can_t_attach_hour__S_to_date__S = makeString("Can't attach hour ~S to date ~S");
-
-    static private final SubLString $str_alt58$Can_t_attach_minute__S_to_date__S = makeString("Can't attach minute ~S to date ~S");
-
-    /**
-     *
-     *
-     * @unknown pull these all from the KB, so it can be language-dependent
-     */
-    @LispMethod(comment = "@unknown pull these all from the KB, so it can be language-dependent")
-    public static final SubLObject month_name_tokenP_alt(SubLObject obj) {
-        if (NIL != member(obj, $list_alt182, EQUALP, UNPROVIDED)) {
-            return ONE_INTEGER;
-        } else {
-            if (NIL != member(obj, $list_alt183, EQUALP, UNPROVIDED)) {
-                return TWO_INTEGER;
-            } else {
-                if (NIL != member(obj, $list_alt184, EQUALP, UNPROVIDED)) {
-                    return THREE_INTEGER;
-                } else {
-                    if (NIL != member(obj, $list_alt185, EQUALP, UNPROVIDED)) {
-                        return FOUR_INTEGER;
-                    } else {
-                        if (NIL != member(obj, $list_alt186, EQUALP, UNPROVIDED)) {
-                            return FIVE_INTEGER;
-                        } else {
-                            if (NIL != member(obj, $list_alt187, EQUALP, UNPROVIDED)) {
-                                return SIX_INTEGER;
-                            } else {
-                                if (NIL != member(obj, $list_alt188, EQUALP, UNPROVIDED)) {
-                                    return SEVEN_INTEGER;
-                                } else {
-                                    if (NIL != member(obj, $list_alt189, EQUALP, UNPROVIDED)) {
-                                        return EIGHT_INTEGER;
-                                    } else {
-                                        if (NIL != member(obj, $list_alt190, EQUALP, UNPROVIDED)) {
-                                            return NINE_INTEGER;
-                                        } else {
-                                            if (NIL != member(obj, $list_alt191, EQUALP, UNPROVIDED)) {
-                                                return TEN_INTEGER;
-                                            } else {
-                                                if (NIL != member(obj, $list_alt192, EQUALP, UNPROVIDED)) {
-                                                    return ELEVEN_INTEGER;
-                                                } else {
-                                                    if (NIL != member(obj, $list_alt193, EQUALP, UNPROVIDED)) {
-                                                        return TWELVE_INTEGER;
-                                                    } else {
-                                                        return NIL;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @unknown pull these all from the KB, so it can be language-dependent
-     */
-    @LispMethod(comment = "@unknown pull these all from the KB, so it can be language-dependent")
     public static SubLObject month_name_tokenP(final SubLObject obj) {
         if (NIL != member(obj, $list231, EQUALP, UNPROVIDED)) {
             return ONE_INTEGER;
@@ -10799,16 +5499,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    static private final SubLString $str_alt59$Can_t_attach_sec__S_to_date__S = makeString("Can't attach sec ~S to date ~S");
-
-    static private final SubLString $str_alt60$Can_t_attach_millisec__S_to_date_ = makeString("Can't attach millisec ~S to date ~S");
-
-    static private final SubLString $str_alt61$Can_t_attach_quarter__S_to_date__ = makeString("Can't attach quarter ~S to date ~S");
-
-    static private final SubLString $str_alt62$Can_t_construct_date_with_decade_ = makeString("Can't construct date with decade ~S");
-
-    static private final SubLString $str_alt63$Can_t_construct_date_with_century = makeString("Can't construct date with century ~S");
-
     public static SubLObject day_name_tokenP(final SubLObject obj) {
         return member(obj, $day_name_tokens$.getGlobalValue(), symbol_function(EQUALP), UNPROVIDED);
     }
@@ -10829,19 +5519,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return makeBoolean((NIL != member(obj, $time_zone_tokens$.getGlobalValue(), symbol_function(EQUALP), UNPROVIDED)) || (obj.isString() && ((((NIL != alpha_char_p(string_utilities.first_char(obj))) && (NIL != list_utilities.lengthE(obj, ONE_INTEGER, UNPROVIDED))) || ((NIL != list_utilities.lengthE(obj, FOUR_INTEGER, UNPROVIDED)) && (NIL == list_utilities.find_if_not(DIGIT_CHAR_P, obj, UNPROVIDED, UNPROVIDED, UNPROVIDED)))) || (((NIL != list_utilities.lengthE(obj, FIVE_INTEGER, UNPROVIDED)) && (NIL == list_utilities.find_if_not(DIGIT_CHAR_P, obj, symbol_function(IDENTITY), ONE_INTEGER, UNPROVIDED))) && (NIL != member(string_utilities.first_char(obj), $list245, UNPROVIDED, UNPROVIDED))))));
     }
 
-    static private final SubLList $list_alt78 = list(new SubLObject[]{ reader_make_constant_shell("January"), reader_make_constant_shell("February"), reader_make_constant_shell("March"), reader_make_constant_shell("April"), reader_make_constant_shell("May"), reader_make_constant_shell("June"), reader_make_constant_shell("July"), reader_make_constant_shell("August"), reader_make_constant_shell("September"), reader_make_constant_shell("October"), reader_make_constant_shell("November"), reader_make_constant_shell("December") });
-
-    public static final SubLObject month_number_tokenP_internal_alt(SubLObject obj) {
-        if ((NIL != string_utilities.digit_stringP(obj)) && (NIL != string_utilities.string_to_integer(obj))) {
-            obj = string_utilities.string_to_integer(obj);
-        }
-        if ((obj.isInteger() && ZERO_INTEGER.numL(obj)) && THIRTEEN_INTEGER.numG(obj)) {
-            return obj;
-        } else {
-            return NIL;
-        }
-    }
-
     public static SubLObject month_number_tokenP_internal(SubLObject obj) {
         if ((NIL != string_utilities.digit_stringP(obj)) && (NIL != string_utilities.string_to_integer(obj))) {
             obj = string_utilities.string_to_integer(obj);
@@ -10850,34 +5527,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
             return obj;
         }
         return NIL;
-    }
-
-    static private final SubLString $str_alt79$A_KB_dependent_date_specific_func = makeString("A KB-dependent date-specific function was called, but the current Cyc KB does not contain knowledge about dates.");
-
-    public static final SubLObject month_number_tokenP_alt(SubLObject obj) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
-                SubLObject caching_state = NIL;
-                if (NIL == v_memoization_state) {
-                    return com.cyc.cycjava.cycl.date_utilities.month_number_tokenP_internal(obj);
-                }
-                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, $sym194$MONTH_NUMBER_TOKEN_, UNPROVIDED);
-                if (NIL == caching_state) {
-                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), $sym194$MONTH_NUMBER_TOKEN_, ONE_INTEGER, NIL, EQUAL, UNPROVIDED);
-                    memoization_state.memoization_state_put(v_memoization_state, $sym194$MONTH_NUMBER_TOKEN_, caching_state);
-                }
-                {
-                    SubLObject results = memoization_state.caching_state_lookup(caching_state, obj, $kw113$_MEMOIZED_ITEM_NOT_FOUND_);
-                    if (results == $kw113$_MEMOIZED_ITEM_NOT_FOUND_) {
-                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.date_utilities.month_number_tokenP_internal(obj)));
-                        memoization_state.caching_state_put(caching_state, obj, results, UNPROVIDED);
-                    }
-                    return memoization_state.caching_results(results);
-                }
-            }
-        }
     }
 
     public static SubLObject month_number_tokenP(final SubLObject obj) {
@@ -10900,59 +5549,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return memoization_state.caching_results(results);
     }
 
-    static private final SubLList $list_alt83 = list(reader_make_constant_shell("Sunday"), reader_make_constant_shell("Monday"), reader_make_constant_shell("Tuesday"), reader_make_constant_shell("Wednesday"), reader_make_constant_shell("Thursday"), reader_make_constant_shell("Friday"), reader_make_constant_shell("Saturday"));
-
-    static private final SubLString $str_alt84$_S_is_not_a_valid_day_of_week_num = makeString("~S is not a valid day-of-week number");
-
-    static private final SubLList $list_alt89 = list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), ONE_INTEGER)));
-
-    /**
-     *
-     *
-     * @return 0 nil or valid-second-number-p
-     * @return 1 nil or valid-minute-number-p
-     * @return 2 nil or valid-hour-number-p
-     */
-    @LispMethod(comment = "@return 0 nil or valid-second-number-p\r\n@return 1 nil or valid-minute-number-p\r\n@return 2 nil or valid-hour-number-p")
-    public static final SubLObject explode_time_from_tokens_alt(SubLObject tokens) {
-        {
-            SubLObject second = NIL;
-            SubLObject minute = NIL;
-            SubLObject hour = NIL;
-            SubLObject integer_tokens = Mapping.mapcar(STRING_TO_INTEGER, tokens);
-            SubLObject pcase_var = length(tokens);
-            if (pcase_var.eql(TWO_INTEGER)) {
-                {
-                    SubLObject datum_evaluated_var = integer_tokens;
-                    hour = datum_evaluated_var.first();
-                    minute = cadr(datum_evaluated_var);
-                }
-            } else {
-                if (pcase_var.eql(THREE_INTEGER)) {
-                    {
-                        SubLObject datum_evaluated_var = integer_tokens;
-                        hour = datum_evaluated_var.first();
-                        minute = cadr(datum_evaluated_var);
-                        second = cddr(datum_evaluated_var).first();
-                    }
-                }
-            }
-            if (((NIL != numeric_date_utilities.valid_hour_number_p(hour)) && (NIL != numeric_date_utilities.valid_minute_number_p(minute))) && ((NIL == second) || (NIL != numeric_date_utilities.valid_second_number_p(second)))) {
-                return values(second, minute, hour);
-            } else {
-                return values(NIL, NIL, NIL);
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return 0 nil or valid-second-number-p
-     * @return 1 nil or valid-minute-number-p
-     * @return 2 nil or valid-hour-number-p
-     */
-    @LispMethod(comment = "@return 0 nil or valid-second-number-p\r\n@return 1 nil or valid-minute-number-p\r\n@return 2 nil or valid-hour-number-p")
     public static SubLObject explode_time_from_tokens(final SubLObject tokens) {
         SubLObject second = NIL;
         SubLObject minute = NIL;
@@ -10975,104 +5571,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
             return values(second, minute, hour);
         }
         return values(NIL, NIL, NIL);
-    }
-
-    static private final SubLList $list_alt95 = list(new SubLObject[]{ reader_make_constant_shell("TimeOfDay-MidnightHour"), reader_make_constant_shell("TimeOfDay-1AM"), reader_make_constant_shell("TimeOfDay-2AM"), reader_make_constant_shell("TimeOfDay-3AM"), reader_make_constant_shell("TimeOfDay-4AM"), reader_make_constant_shell("TimeOfDay-5AM"), reader_make_constant_shell("TimeOfDay-6AM"), reader_make_constant_shell("TimeOfDay-7AM"), reader_make_constant_shell("TimeOfDay-8AM"), reader_make_constant_shell("TimeOfDay-9AM"), reader_make_constant_shell("TimeOfDay-10AM"), reader_make_constant_shell("TimeOfDay-11AM"), reader_make_constant_shell("TimeOfDay-NoonHour"), reader_make_constant_shell("TimeOfDay-1PM"), reader_make_constant_shell("TimeOfDay-2PM"), reader_make_constant_shell("TimeOfDay-3PM"), reader_make_constant_shell("TimeOfDay-4PM"), reader_make_constant_shell("TimeOfDay-5PM"), reader_make_constant_shell("TimeOfDay-6PM"), reader_make_constant_shell("TimeOfDay-7PM"), reader_make_constant_shell("TimeOfDay-8PM"), reader_make_constant_shell("TimeOfDay-9PM"), reader_make_constant_shell("TimeOfDay-10PM"), reader_make_constant_shell("TimeOfDay-11PM") });
-
-    public static final SubLObject cyc_date_encode_string_internal_alt(SubLObject template, SubLObject date) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject date_string = NIL;
-                SubLObject ignore_errors_tag = NIL;
-                try {
-                    {
-                        SubLObject _prev_bind_0 = Errors.$error_handler$.currentBinding(thread);
-                        try {
-                            Errors.$error_handler$.bind(symbol_function(IGNORE_ERRORS_HANDLER), thread);
-                            try {
-                                thread.resetMultipleValues();
-                                {
-                                    SubLObject format = com.cyc.cycjava.cycl.date_utilities.explode_date(date);
-                                    SubLObject year = thread.secondMultipleValue();
-                                    SubLObject month = thread.thirdMultipleValue();
-                                    SubLObject day = thread.fourthMultipleValue();
-                                    SubLObject hour = thread.fifthMultipleValue();
-                                    SubLObject min = thread.sixthMultipleValue();
-                                    SubLObject sec = thread.seventhMultipleValue();
-                                    SubLObject millisec = thread.eighthMultipleValue();
-                                    thread.resetMultipleValues();
-                                    if ($str_alt196$XML_datetime.equal(template)) {
-                                        date_string = format(NIL, $str_alt197$_D__2__0D__2__0DT_2__0D__2__0D__2, new SubLObject[]{ year, month, day, hour, min, sec });
-                                    } else {
-                                        if ($str_alt198$MySQL_datetime.equal(template)) {
-                                            date_string = format(NIL, $str_alt199$_D__2__0D__2__0D__2__0D__2__0D__2, new SubLObject[]{ year, NIL != month ? ((SubLObject) (month)) : ONE_INTEGER, NIL != day ? ((SubLObject) (day)) : ONE_INTEGER, NIL != hour ? ((SubLObject) (hour)) : ZERO_INTEGER, NIL != min ? ((SubLObject) (min)) : ZERO_INTEGER, NIL != sec ? ((SubLObject) (sec)) : ZERO_INTEGER });
-                                        } else {
-                                            if ($$$YYYYMMDD.equal(template)) {
-                                                date_string = format(NIL, $str_alt201$_D_2__0D_2__0D, new SubLObject[]{ year, month, day });
-                                            } else {
-                                                if ($$$HHMMSS.equal(template)) {
-                                                    date_string = format(NIL, $str_alt203$_2__0D_2__0D_2__0D, new SubLObject[]{ hour, min, sec });
-                                                } else {
-                                                    if ($str_alt204$HH_MM_SS.equal(template)) {
-                                                        date_string = format(NIL, $str_alt205$_2__0D__2__0D__2__0D, new SubLObject[]{ hour, min, sec });
-                                                    } else {
-                                                        if ($$$YYYYMMDDHHMM.equal(template)) {
-                                                            if (NIL != year) {
-                                                                if (((NIL == hour) && (NIL == min)) && (NIL == sec)) {
-                                                                    hour = ZERO_INTEGER;
-                                                                    min = ZERO_INTEGER;
-                                                                    sec = ZERO_INTEGER;
-                                                                }
-                                                                date_string = format(NIL, $str_alt207$_4__0D_2__0D_2__0D_2__0D_2__0D, new SubLObject[]{ year, month, day, hour, min });
-                                                            }
-                                                        } else {
-                                                            if (($str_alt208$YYYY_MM_DD_HH_MM_SS.equal(template) || $str_alt209$YYYY_MM_DDTHH_MM_SS.equalp(template)) || $$$YYYYMMDDHHMMSS.equal(template)) {
-                                                                if (NIL != year) {
-                                                                    if (((NIL == hour) && (NIL == min)) && (NIL == sec)) {
-                                                                        hour = ZERO_INTEGER;
-                                                                        min = ZERO_INTEGER;
-                                                                        sec = ZERO_INTEGER;
-                                                                    }
-                                                                    if ($str_alt208$YYYY_MM_DD_HH_MM_SS.equal(template)) {
-                                                                        date_string = format(NIL, $str_alt199$_D__2__0D__2__0D__2__0D__2__0D__2, new SubLObject[]{ year, month, day, hour, min, sec });
-                                                                    } else {
-                                                                        if ($str_alt209$YYYY_MM_DDTHH_MM_SS.equalp(template)) {
-                                                                            date_string = format(NIL, $str_alt211$_D__2__0D__2__0DT_2__0D__2__0D__2, new SubLObject[]{ year, month, day, hour, min, sec });
-                                                                        } else {
-                                                                            if ($$$YYYYMMDDHHMMSS.equal(template)) {
-                                                                                date_string = format(NIL, $str_alt212$_4__0D_2__0D_2__0D_2__0D_2__0D_2_, new SubLObject[]{ year, month, day, hour, min, sec });
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            } else {
-                                                                if ($str_alt213$YYYY_MM_DD.equal(template)) {
-                                                                    date_string = format(NIL, $str_alt214$_D__2__0D__2__0D, new SubLObject[]{ year, month, day });
-                                                                } else {
-                                                                    date_string = numeric_date_utilities.encode_datetime_string_from_template(millisec, sec, min, hour, day, month, year, template);
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            } catch (Throwable catch_var) {
-                                Errors.handleThrowable(catch_var, NIL);
-                            }
-                        } finally {
-                            Errors.$error_handler$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                } catch (Throwable ccatch_env_var) {
-                    ignore_errors_tag = Errors.handleThrowable(ccatch_env_var, $IGNORE_ERRORS_TARGET);
-                }
-                return date_string;
-            }
-        }
     }
 
     public static SubLObject cyc_date_encode_string_internal(final SubLObject template, final SubLObject date) {
@@ -11174,247 +5672,8 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return date_string;
     }
 
-    static private final SubLString $str_alt97$Continue_with_nil_hour_of_day_ = makeString("Continue with nil hour of day?");
-
-    static private final SubLString $str_alt98$_a_did_not_specify_a_day_ = makeString("~a did not specify a day.");
-
-    public static final SubLSymbol $kw113$_MEMOIZED_ITEM_NOT_FOUND_ = makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
-
-    static private final SubLString $str_alt114$_a_is_not_a_valid_cycl_date_ = makeString("~a is not a valid cycl date.");
-
-    static private final SubLString $str_alt117$Could_not_determine_precision_for = makeString("Could not determine precision for ~a or ~a.~%");
-
-    static private final SubLString $str_alt119$Expected_a___DaysDuration_nat__go = makeString("Expected a #$DaysDuration nat, got ~s");
-
-    static private final SubLList $list_alt121 = list(reader_make_constant_shell("Now"), reader_make_constant_shell("Now-Indexical"), reader_make_constant_shell("Today-Indexical"), reader_make_constant_shell("Tomorrow-Indexical"), reader_make_constant_shell("Yesterday-Indexical"));
-
-    static private final SubLList $list_alt126 = list(list(makeSymbol("*INFERENCE-NOW*"), list(makeSymbol("GET-UNIVERSAL-TIME"))));
-
-    static private final SubLList $list_alt127 = list(list(makeSymbol("*INFERENCE-NOW*"), list(makeSymbol("GET-INFERENCE-NOW"))));
-
-    static private final SubLList $list_alt128 = list(list(makeSymbol("*INFERENCE-NOW*"), list(makeSymbol("FIRST-OF"), makeSymbol("*INFERENCE-NOW*"), list(makeSymbol("GET-INFERENCE-NOW")))));
-
-    static private final SubLList $list_alt129 = list(reader_make_constant_shell("DaysDuration"), ONE_INTEGER);
-
-    static private final SubLString $str_alt145$from_ = makeString("from ");
-
-    static private final SubLString $str_alt146$_to_ = makeString(" to ");
-
-    static private final SubLString $str_alt147$Can_t_support____or____time_inter = makeString("Can't support [) or (] time intervals.");
-
-    static private final SubLString $str_alt148$Can_t_support____or____time_inter = makeString("Can't support [) or (] time intervals.~%");
-
-    static private final SubLString $str_alt150$_ = makeString("/");
-
-    static private final SubLString $str_alt151$_ = makeString("-");
-
-    static private final SubLString $str_alt152$_ = makeString(".");
-
-    static private final SubLList $list_alt153 = list(makeString("."), makeString("-"), makeString("/"), makeString(" "));
-
-    static private final SubLList $list_alt154 = list(makeString(":"), makeString(" "));
-
-    static private final SubLList $list_alt155 = list(makeSymbol("DAY"), makeSymbol("MONTH"), makeSymbol("YEAR"));
-
-    static private final SubLString $str_alt156$_ = makeString(":");
-
-    static private final SubLList $list_alt157 = list(makeString(" , "), makeString("-"), makeString("/"), makeString(" "), makeString(", "), makeString(","), makeString(". "), makeString("."));
-
-    static private final SubLList $list_alt158 = list(makeString(":"));
-
-    static private final SubLList $list_alt164 = list(new SubLObject[]{ list($YEAR), list($YEAR, makeKeyword("MONTH-NAME"), makeKeyword("DAY")), list($YEAR, makeKeyword("MONTH-NUM"), makeKeyword("DAY")), list($YEAR, makeKeyword("MONTH-NAME")), list($YEAR, makeKeyword("MONTH-NUM")), list($YEAR, makeKeyword("DAY"), makeKeyword("MONTH-NAME")), list(makeKeyword("MONTH-NAME"), makeKeyword("DAY"), makeKeyword("INDEXICAL-YEAR")), list(makeKeyword("MONTH-NUM"), makeKeyword("DAY"), makeKeyword("INDEXICAL-YEAR")), list(makeKeyword("MONTH-NAME"), $YEAR), list(makeKeyword("MONTH-NUM"), $YEAR), list(makeKeyword("MONTH-NAME"), makeKeyword("DAY"), $YEAR), list(makeKeyword("MONTH-NUM"), makeKeyword("DAY"), $YEAR), list(makeKeyword("DAY"), makeKeyword("MONTH-NUM"), $YEAR), list(makeKeyword("DAY"), makeKeyword("MONTH-NAME"), $YEAR) });
-
     public static SubLObject common_date_encoding_templates() {
         return $common_date_encoding_templates$.getGlobalValue();
-    }
-
-    public static final SubLObject cyc_date_decode_string_internal_alt(SubLObject template, SubLObject date_string) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject date = NIL;
-                SubLObject ignore_errors_tag = NIL;
-                try {
-                    {
-                        SubLObject _prev_bind_0 = Errors.$error_handler$.currentBinding(thread);
-                        try {
-                            Errors.$error_handler$.bind(symbol_function(IGNORE_ERRORS_HANDLER), thread);
-                            try {
-                                if ($str_alt196$XML_datetime.equal(template)) {
-                                    {
-                                        SubLObject year = parse_integer(date_string, ZERO_INTEGER, FOUR_INTEGER, UNPROVIDED, UNPROVIDED);
-                                        SubLObject month = parse_integer(date_string, FIVE_INTEGER, SEVEN_INTEGER, UNPROVIDED, UNPROVIDED);
-                                        SubLObject day = parse_integer(date_string, EIGHT_INTEGER, TEN_INTEGER, UNPROVIDED, UNPROVIDED);
-                                        SubLObject hour = parse_integer(date_string, ELEVEN_INTEGER, THIRTEEN_INTEGER, UNPROVIDED, UNPROVIDED);
-                                        SubLObject minute = parse_integer(date_string, FOURTEEN_INTEGER, SIXTEEN_INTEGER, UNPROVIDED, UNPROVIDED);
-                                        SubLObject second = parse_integer(date_string, SEVENTEEN_INTEGER, NINETEEN_INTEGER, UNPROVIDED, UNPROVIDED);
-                                        date = com.cyc.cycjava.cycl.date_utilities.construct_calendar_date(year, month, day, hour, minute, second, UNPROVIDED);
-                                    }
-                                } else {
-                                    if ($str_alt198$MySQL_datetime.equal(template)) {
-                                        {
-                                            SubLObject tokens = string_utilities.string_tokenize(date_string, $list_alt215, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                            SubLObject datum = tokens;
-                                            SubLObject current = datum;
-                                            SubLObject year = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
-                                            destructuring_bind_must_listp(current, datum, $list_alt216);
-                                            current = current.rest();
-                                            {
-                                                SubLObject month = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
-                                                destructuring_bind_must_listp(current, datum, $list_alt216);
-                                                current = current.rest();
-                                                {
-                                                    SubLObject day = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
-                                                    destructuring_bind_must_listp(current, datum, $list_alt216);
-                                                    current = current.rest();
-                                                    {
-                                                        SubLObject hour = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
-                                                        destructuring_bind_must_listp(current, datum, $list_alt216);
-                                                        current = current.rest();
-                                                        {
-                                                            SubLObject minute = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
-                                                            destructuring_bind_must_listp(current, datum, $list_alt216);
-                                                            current = current.rest();
-                                                            {
-                                                                SubLObject second = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
-                                                                destructuring_bind_must_listp(current, datum, $list_alt216);
-                                                                current = current.rest();
-                                                                {
-                                                                    SubLObject decisecond = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
-                                                                    destructuring_bind_must_listp(current, datum, $list_alt216);
-                                                                    current = current.rest();
-                                                                    if (NIL == current) {
-                                                                        year = (year.isString()) ? ((SubLObject) (string_utilities.string_to_integer(year))) : NIL;
-                                                                        month = (month.isString()) ? ((SubLObject) (string_utilities.string_to_integer(month))) : NIL;
-                                                                        day = (day.isString()) ? ((SubLObject) (string_utilities.string_to_integer(day))) : NIL;
-                                                                        hour = (hour.isString()) ? ((SubLObject) (string_utilities.string_to_integer(hour))) : NIL;
-                                                                        minute = (minute.isString()) ? ((SubLObject) (string_utilities.string_to_integer(minute))) : NIL;
-                                                                        second = (second.isString()) ? ((SubLObject) (string_utilities.string_to_integer(second))) : NIL;
-                                                                        date = com.cyc.cycjava.cycl.date_utilities.construct_calendar_date(year, month, day, hour, minute, second, UNPROVIDED);
-                                                                    } else {
-                                                                        cdestructuring_bind_error(datum, $list_alt216);
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    } else {
-                                        if ($$$YYYYMMDDHHMMSS.equal(template)) {
-                                            {
-                                                SubLObject year = parse_integer(date_string, ZERO_INTEGER, FOUR_INTEGER, UNPROVIDED, UNPROVIDED);
-                                                SubLObject month = parse_integer(date_string, FOUR_INTEGER, SIX_INTEGER, UNPROVIDED, UNPROVIDED);
-                                                SubLObject day = parse_integer(date_string, SIX_INTEGER, EIGHT_INTEGER, UNPROVIDED, UNPROVIDED);
-                                                SubLObject hour = parse_integer(date_string, EIGHT_INTEGER, TEN_INTEGER, UNPROVIDED, UNPROVIDED);
-                                                SubLObject minute = parse_integer(date_string, TEN_INTEGER, TWELVE_INTEGER, UNPROVIDED, UNPROVIDED);
-                                                SubLObject second = parse_integer(date_string, TWELVE_INTEGER, FOURTEEN_INTEGER, UNPROVIDED, UNPROVIDED);
-                                                date = com.cyc.cycjava.cycl.date_utilities.construct_calendar_date(year, month, day, hour, minute, second, UNPROVIDED);
-                                            }
-                                        } else {
-                                            if ($$$YYYYMMDDHHMM.equal(template)) {
-                                                {
-                                                    SubLObject year = parse_integer(date_string, ZERO_INTEGER, FOUR_INTEGER, UNPROVIDED, UNPROVIDED);
-                                                    SubLObject month = parse_integer(date_string, FOUR_INTEGER, SIX_INTEGER, UNPROVIDED, UNPROVIDED);
-                                                    SubLObject day = parse_integer(date_string, SIX_INTEGER, EIGHT_INTEGER, UNPROVIDED, UNPROVIDED);
-                                                    SubLObject hour = parse_integer(date_string, EIGHT_INTEGER, TEN_INTEGER, UNPROVIDED, UNPROVIDED);
-                                                    SubLObject minute = parse_integer(date_string, TEN_INTEGER, TWELVE_INTEGER, UNPROVIDED, UNPROVIDED);
-                                                    date = com.cyc.cycjava.cycl.date_utilities.construct_calendar_date(year, month, day, hour, minute, UNPROVIDED, UNPROVIDED);
-                                                }
-                                            } else {
-                                                if ($$$YYYYMMDD.equal(template)) {
-                                                    {
-                                                        SubLObject year = parse_integer(date_string, ZERO_INTEGER, FOUR_INTEGER, UNPROVIDED, UNPROVIDED);
-                                                        SubLObject month = parse_integer(date_string, FOUR_INTEGER, SIX_INTEGER, UNPROVIDED, UNPROVIDED);
-                                                        SubLObject day = parse_integer(date_string, SIX_INTEGER, EIGHT_INTEGER, UNPROVIDED, UNPROVIDED);
-                                                        date = com.cyc.cycjava.cycl.date_utilities.construct_calendar_date(year, month, day, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                    }
-                                                } else {
-                                                    if (($str_alt208$YYYY_MM_DD_HH_MM_SS.equal(template) || $str_alt209$YYYY_MM_DDTHH_MM_SS.equalp(template)) || $str_alt213$YYYY_MM_DD.equal(template)) {
-                                                        {
-                                                            SubLObject tokens = string_utilities.string_tokenize(date_string, $list_alt217, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                            SubLObject datum = tokens;
-                                                            SubLObject current = datum;
-                                                            SubLObject year = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
-                                                            destructuring_bind_must_listp(current, datum, $list_alt216);
-                                                            current = current.rest();
-                                                            {
-                                                                SubLObject month = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
-                                                                destructuring_bind_must_listp(current, datum, $list_alt216);
-                                                                current = current.rest();
-                                                                {
-                                                                    SubLObject day = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
-                                                                    destructuring_bind_must_listp(current, datum, $list_alt216);
-                                                                    current = current.rest();
-                                                                    {
-                                                                        SubLObject hour = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
-                                                                        destructuring_bind_must_listp(current, datum, $list_alt216);
-                                                                        current = current.rest();
-                                                                        {
-                                                                            SubLObject minute = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
-                                                                            destructuring_bind_must_listp(current, datum, $list_alt216);
-                                                                            current = current.rest();
-                                                                            {
-                                                                                SubLObject second = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
-                                                                                destructuring_bind_must_listp(current, datum, $list_alt216);
-                                                                                current = current.rest();
-                                                                                {
-                                                                                    SubLObject decisecond = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
-                                                                                    destructuring_bind_must_listp(current, datum, $list_alt216);
-                                                                                    current = current.rest();
-                                                                                    if (NIL == current) {
-                                                                                        year = (year.isString()) ? ((SubLObject) (string_utilities.string_to_integer(year))) : NIL;
-                                                                                        month = (month.isString()) ? ((SubLObject) (string_utilities.string_to_integer(month))) : NIL;
-                                                                                        day = (day.isString()) ? ((SubLObject) (string_utilities.string_to_integer(day))) : NIL;
-                                                                                        hour = (hour.isString()) ? ((SubLObject) (string_utilities.string_to_integer(hour))) : NIL;
-                                                                                        minute = (minute.isString()) ? ((SubLObject) (string_utilities.string_to_integer(minute))) : NIL;
-                                                                                        second = (second.isString()) ? ((SubLObject) (string_utilities.string_to_integer(second))) : NIL;
-                                                                                        if (NIL != year) {
-                                                                                            date = com.cyc.cycjava.cycl.date_utilities.construct_calendar_date(year, month, day, hour, minute, second, UNPROVIDED);
-                                                                                        }
-                                                                                    } else {
-                                                                                        cdestructuring_bind_error(datum, $list_alt216);
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    } else {
-                                                        thread.resetMultipleValues();
-                                                        {
-                                                            SubLObject milliseconds = numeric_date_utilities.decode_datetime_string_from_template(date_string, template);
-                                                            SubLObject seconds = thread.secondMultipleValue();
-                                                            SubLObject minutes = thread.thirdMultipleValue();
-                                                            SubLObject hours = thread.fourthMultipleValue();
-                                                            SubLObject day = thread.fifthMultipleValue();
-                                                            SubLObject month = thread.sixthMultipleValue();
-                                                            SubLObject year = thread.seventhMultipleValue();
-                                                            thread.resetMultipleValues();
-                                                            date = com.cyc.cycjava.cycl.date_utilities.construct_calendar_date(year, month, day, hours, minutes, seconds, milliseconds);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            } catch (Throwable catch_var) {
-                                Errors.handleThrowable(catch_var, NIL);
-                            }
-                        } finally {
-                            Errors.$error_handler$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                } catch (Throwable ccatch_env_var) {
-                    ignore_errors_tag = Errors.handleThrowable(ccatch_env_var, $IGNORE_ERRORS_TARGET);
-                }
-                return date;
-            }
-        }
     }
 
     public static SubLObject cyc_date_decode_string_internal(final SubLObject template, final SubLObject date_string) {
@@ -11601,179 +5860,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return date;
     }
 
-    static private final SubLList $list_alt165 = list(list(makeKeyword("MONTH-NAME"), makeKeyword("DAY"), makeKeyword("UNKNOWN-YEAR")), list(makeKeyword("MONTH-NUM"), makeKeyword("DAY"), makeKeyword("UNKNOWN-YEAR")), list(makeKeyword("MONTH-NAME"), $YEAR, makeKeyword("UNKNOWN-DAY")), list(makeKeyword("MONTH-NAME"), makeKeyword("UNKNOWN-YEAR")));
-
-    static private final SubLString $str_alt169$Invalid_attempt_to_reuse_memoizat = makeString("Invalid attempt to reuse memoization state in multiple threads simultaneously.");
-
-    static private final SubLSymbol $sym170$_YEAR = makeSymbol("?YEAR");
-
-    static private final SubLSymbol $sym171$_DAY = makeSymbol("?DAY");
-
-    static private final SubLSymbol $sym177$YEAR_TOKEN_ = makeSymbol("YEAR-TOKEN?");
-
-    static private final SubLSymbol $sym178$DAY_TOKEN_ = makeSymbol("DAY-TOKEN?");
-
-    static private final SubLList $list_alt179 = list(new SubLObject[]{ list(makeString("one"), ONE_INTEGER), list(makeString("two"), TWO_INTEGER), list(makeString("three"), THREE_INTEGER), list(makeString("four"), FOUR_INTEGER), list(makeString("five"), FIVE_INTEGER), list(makeString("six"), SIX_INTEGER), list(makeString("seven"), SEVEN_INTEGER), list(makeString("eight"), EIGHT_INTEGER), list(makeString("nine"), NINE_INTEGER), list(makeString("ten"), TEN_INTEGER), list(makeString("eleven"), ELEVEN_INTEGER), list(makeString("twelve"), TWELVE_INTEGER), list(makeString("thirteen"), THIRTEEN_INTEGER), list(makeString("fourteen"), FOURTEEN_INTEGER), list(makeString("fifteen"), FIFTEEN_INTEGER), list(makeString("sixteen"), SIXTEEN_INTEGER), list(makeString("seventeen"), SEVENTEEN_INTEGER), list(makeString("eighteen"), EIGHTEEN_INTEGER), list(makeString("nineteen"), NINETEEN_INTEGER), list(makeString("twenty"), TWENTY_INTEGER), list(makeString("twenty-one"), makeInteger(21)), list(makeString("twenty-two"), makeInteger(22)), list(makeString("twenty-three"), makeInteger(23)), list(makeString("twenty-four"), makeInteger(24)), list(makeString("twenty-five"), makeInteger(25)), list(makeString("twenty-six"), makeInteger(26)), list(makeString("twenty-seven"), makeInteger(27)), list(makeString("twenty-eight"), makeInteger(28)), list(makeString("twenty-nine"), makeInteger(29)), list(makeString("thirty"), makeInteger(30)), list(makeString("thirty-one"), makeInteger(31)), list(makeString("twenty one"), makeInteger(21)), list(makeString("twenty two"), makeInteger(22)), list(makeString("twenty three"), makeInteger(23)), list(makeString("twenty four"), makeInteger(24)), list(makeString("twenty five"), makeInteger(25)), list(makeString("twenty six"), makeInteger(26)), list(makeString("twenty seven"), makeInteger(27)), list(makeString("twenty eight"), makeInteger(28)), list(makeString("twenty nine"), makeInteger(29)), list(makeString("thirty one"), makeInteger(31)), list(makeString("first"), ONE_INTEGER), list(makeString("second"), TWO_INTEGER), list(makeString("third"), THREE_INTEGER), list(makeString("fourth"), FOUR_INTEGER), list(makeString("fifth"), FIVE_INTEGER), list(makeString("sixth"), SIX_INTEGER), list(makeString("seventh"), SEVEN_INTEGER), list(makeString("eighth"), EIGHT_INTEGER), list(makeString("ninth"), NINE_INTEGER), list(makeString("tenth"), TEN_INTEGER), list(makeString("eleventh"), ELEVEN_INTEGER), list(makeString("twelfth"), TWELVE_INTEGER), list(makeString("thirteenth"), THIRTEEN_INTEGER), list(makeString("fourteenth"), FOURTEEN_INTEGER), list(makeString("fifteenth"), FIFTEEN_INTEGER), list(makeString("sixteenth"), SIXTEEN_INTEGER), list(makeString("seventeenth"), SEVENTEEN_INTEGER), list(makeString("eighteenth"), EIGHTEEN_INTEGER), list(makeString("nineteenth"), NINETEEN_INTEGER), list(makeString("twentieth"), TWENTY_INTEGER), list(makeString("twenty-first"), makeInteger(21)), list(makeString("twenty-second"), makeInteger(22)), list(makeString("twenty-third"), makeInteger(23)), list(makeString("twenty-fourth"), makeInteger(24)), list(makeString("twenty-fifth"), makeInteger(25)), list(makeString("twenty-sixth"), makeInteger(26)), list(makeString("twenty-seventh"), makeInteger(27)), list(makeString("twenty-eighth"), makeInteger(28)), list(makeString("twenty-ninth"), makeInteger(29)), list(makeString("thirtieth"), makeInteger(30)), list(makeString("thirty-first"), makeInteger(31)), list(makeString("twenty first"), makeInteger(21)), list(makeString("twenty second"), makeInteger(22)), list(makeString("twenty third"), makeInteger(23)), list(makeString("twenty fourth"), makeInteger(24)), list(makeString("twenty fifth"), makeInteger(25)), list(makeString("twenty sixth"), makeInteger(26)), list(makeString("twenty seventh"), makeInteger(27)), list(makeString("twenty eighth"), makeInteger(28)), list(makeString("twenty ninth"), makeInteger(29)), list(makeString("thirty first"), makeInteger(31)) });
-
-    static private final SubLList $list_alt180 = list(makeSymbol("KEY"), makeSymbol("VALUE"));
-
-    static private final SubLList $list_alt182 = list(makeString("January"), makeString("Jan"));
-
-    static private final SubLList $list_alt183 = list(makeString("February"), makeString("Feb"));
-
-    static private final SubLList $list_alt184 = list(makeString("March"), makeString("mar"));
-
-    static private final SubLList $list_alt185 = list(makeString("April"), makeString("Apr"));
-
-    static private final SubLList $list_alt186 = list(makeString("May"));
-
-    static private final SubLList $list_alt187 = list(makeString("June"), makeString("Jun"));
-
-    static private final SubLList $list_alt188 = list(makeString("July"), makeString("Jul"));
-
-    static private final SubLList $list_alt189 = list(makeString("August"), makeString("Aug"));
-
-    static private final SubLList $list_alt190 = list(makeString("September"), makeString("Sept"), makeString("Sep"));
-
-    static private final SubLList $list_alt191 = list(makeString("October"), makeString("Oct"));
-
-    static private final SubLList $list_alt192 = list(makeString("November"), makeString("Nov"));
-
-    static private final SubLList $list_alt193 = list(makeString("December"), makeString("Dec"));
-
-    static private final SubLSymbol $sym194$MONTH_NUMBER_TOKEN_ = makeSymbol("MONTH-NUMBER-TOKEN?");
-
-    static private final SubLString $str_alt196$XML_datetime = makeString("XML-datetime");
-
-    static private final SubLString $str_alt197$_D__2__0D__2__0DT_2__0D__2__0D__2 = makeString("~D-~2,'0D-~2,'0DT~2,'0D:~2,'0D:~2,'0DZ");
-
-    static private final SubLString $str_alt198$MySQL_datetime = makeString("MySQL-datetime");
-
-    static private final SubLString $str_alt199$_D__2__0D__2__0D__2__0D__2__0D__2 = makeString("~D-~2,'0D-~2,'0D ~2,'0D:~2,'0D:~2,'0D");
-
-    static private final SubLString $str_alt201$_D_2__0D_2__0D = makeString("~D~2,'0D~2,'0D");
-
-    static private final SubLString $str_alt203$_2__0D_2__0D_2__0D = makeString("~2,'0D~2,'0D~2,'0D");
-
-    static private final SubLString $str_alt204$HH_MM_SS = makeString("HH:MM:SS");
-
-    static private final SubLString $str_alt205$_2__0D__2__0D__2__0D = makeString("~2,'0D:~2,'0D:~2,'0D");
-
-    static private final SubLString $str_alt207$_4__0D_2__0D_2__0D_2__0D_2__0D = makeString("~4,'0D~2,'0D~2,'0D~2,'0D~2,'0D");
-
-    static private final SubLString $str_alt208$YYYY_MM_DD_HH_MM_SS = makeString("YYYY-MM-DD HH:MM:SS");
-
-    static private final SubLString $str_alt209$YYYY_MM_DDTHH_MM_SS = makeString("YYYY-MM-DDTHH:MM:SS");
-
-    static private final SubLString $str_alt211$_D__2__0D__2__0DT_2__0D__2__0D__2 = makeString("~D-~2,'0D-~2,'0DT~2,'0D:~2,'0D:~2,'0D");
-
-    static private final SubLString $str_alt212$_4__0D_2__0D_2__0D_2__0D_2__0D_2_ = makeString("~4,'0D~2,'0D~2,'0D~2,'0D~2,'0D~2,'0D");
-
-    static private final SubLString $str_alt213$YYYY_MM_DD = makeString("YYYY-MM-DD");
-
-    static private final SubLString $str_alt214$_D__2__0D__2__0D = makeString("~D-~2,'0D-~2,'0D");
-
-    static private final SubLList $list_alt215 = list(makeString("-"), makeString(" "), makeString(":"), makeString("."));
-
-    static private final SubLList $list_alt216 = list(makeSymbol("&OPTIONAL"), makeSymbol("YEAR"), makeSymbol("MONTH"), makeSymbol("DAY"), makeSymbol("HOUR"), makeSymbol("MINUTE"), makeSymbol("SECOND"), makeSymbol("DECISECOND"));
-
-    static private final SubLList $list_alt217 = list(makeString("-"), makeString(" "), makeString(":"), makeString("."), makeString("T"), makeString("t"));
-
-    static private final SubLString $str_alt219$YYYY_MM_DD_HH_MM_SS_S = makeString("YYYY-MM-DD HH:MM:SS.S");
-
-    static private final SubLString $str_alt221$H_MM_SS = makeString("H:MM:SS");
-
-    static private final SubLString $str_alt222$_D__2__0D__2__0D = makeString("~D:~2,'0D:~2,'0D");
-
-    static private final SubLString $str_alt224$_2__0D_2__0D = makeString("~2,'0D~2,'0D");
-
-    static private final SubLString $str_alt225$_cont = makeString(":cont");
-
-    static private final SubLString $str_alt226$The_template__A_is_not_currently_ = makeString("The template ~A is not currently handled.");
-
-    static private final SubLList $list_alt227 = list(CHAR_colon);
-
-    static private final SubLList $list_alt228 = list(makeSymbol("TEST-CASE-NAME"), list(makeSymbol("&KEY"), makeSymbol("TEST"), makeSymbol("OWNER"), list(makeSymbol("KB"), $FULL)), makeSymbol("&BODY"), makeSymbol("TUPLES"));
-
-    static private final SubLList $list_alt229 = list($TEST, makeKeyword("OWNER"), makeKeyword("KB"));
-
-    private static final SubLSymbol DEFINE_TEST_CASE_TABLE = makeSymbol("DEFINE-TEST-CASE-TABLE");
-
-    static private final SubLList $list_alt238 = list(makeSymbol("*DATE-UTILITY-TEST-CASES*"));
-
-    static private final SubLSymbol $sym239$PARSE_DATE_W_OUT_TWO_DIGIT_YEARS = makeSymbol("PARSE-DATE-W/OUT-TWO-DIGIT-YEARS");
-
-    static private final SubLString $$$daves = makeString("daves");
-
-    static private final SubLList $list_alt243 = list(list(list(makeString("December 20")), list(list(reader_make_constant_shell("DayFn"), TWENTY_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), reader_make_constant_shell("TheYear-Indexical"))))), list(list(makeString("12/20")), list(list(reader_make_constant_shell("DayFn"), TWENTY_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), reader_make_constant_shell("TheYear-Indexical"))))), list(list(makeString("12/20/18")), NIL), list(list(makeString("12/20/1918")), list(list(reader_make_constant_shell("DayFn"), TWENTY_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(1918)))))));
-
-    static private final SubLString $$$baxter = makeString("baxter");
-
-    static private final SubLList $list_alt246 = list(list(list(makeInteger(2000)), T), list(list(makeInteger(1900)), NIL), list(list(makeInteger(2004)), T));
-
-    static private final SubLList $list_alt247 = list(list(list(list(reader_make_constant_shell("YearFn"), makeInteger(2000))), T), list(list(list(reader_make_constant_shell("CenturyFn"), TWENTY_INTEGER)), T));
-
-    static private final SubLList $list_alt248 = list(list(list(list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000)))))), T), list(list(list(reader_make_constant_shell("YearFn"), makeInteger(2000))), NIL), list(list(list(reader_make_constant_shell("CenturyFn"), TWENTY_INTEGER)), NIL));
-
-    static private final SubLList $list_alt250 = list(list(list(list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000)))))), reader_make_constant_shell("CalendarHour")), list(list(list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000))))))), reader_make_constant_shell("CalendarMinute")), list(list(list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000)))))))), reader_make_constant_shell("CalendarSecond")), list(list(list(reader_make_constant_shell("MilliSecondFn"), SIX_INTEGER, list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000))))))))), reader_make_constant_shell("CalendarMilliSecond")));
-
-    static private final SubLList $list_alt252 = list(list(new SubLObject[]{ list(list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000)))))), makeKeyword("CALENDAR"), makeInteger(2000), ONE_INTEGER, makeInteger(23), TWELVE_INTEGER, NIL, NIL, NIL }), list(new SubLObject[]{ list(list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000))))))), makeKeyword("CALENDAR"), makeInteger(2000), ONE_INTEGER, makeInteger(23), TWELVE_INTEGER, makeInteger(42), NIL, NIL }), list(new SubLObject[]{ list(list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000)))))))), makeKeyword("CALENDAR"), makeInteger(2000), ONE_INTEGER, makeInteger(23), TWELVE_INTEGER, makeInteger(42), FIVE_INTEGER, NIL }), list(new SubLObject[]{ list(list(reader_make_constant_shell("MilliSecondFn"), SIX_INTEGER, list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000))))))))), makeKeyword("CALENDAR"), makeInteger(2000), ONE_INTEGER, makeInteger(23), TWELVE_INTEGER, makeInteger(42), FIVE_INTEGER, SIX_INTEGER }));
-
-    public static final SubLObject cyc_date_from_string_internal_alt(SubLObject date_string) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject date = com.cyc.cycjava.cycl.date_utilities.parse_date_from_string(date_string);
-                if (NIL == date) {
-                    {
-                        SubLObject error = NIL;
-                        SubLObject universal_date = NIL;
-                        try {
-                            {
-                                SubLObject _prev_bind_0 = Errors.$error_handler$.currentBinding(thread);
-                                try {
-                                    Errors.$error_handler$.bind(CATCH_ERROR_MESSAGE_HANDLER, thread);
-                                    try {
-                                        universal_date = external_interfaces.parse_date(date_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                    } catch (Throwable catch_var) {
-                                        Errors.handleThrowable(catch_var, NIL);
-                                    }
-                                } finally {
-                                    Errors.$error_handler$.rebind(_prev_bind_0, thread);
-                                }
-                            }
-                        } catch (Throwable ccatch_env_var) {
-                            error = Errors.handleThrowable(ccatch_env_var, $catch_error_message_target$.getGlobalValue());
-                        }
-                        if (universal_date.isInteger()) {
-                            thread.resetMultipleValues();
-                            {
-                                SubLObject second = numeric_date_utilities.decode_extended_universal_date(universal_date);
-                                SubLObject minute = thread.secondMultipleValue();
-                                SubLObject hour = thread.thirdMultipleValue();
-                                SubLObject day = thread.fourthMultipleValue();
-                                SubLObject month = thread.fifthMultipleValue();
-                                SubLObject year = thread.sixthMultipleValue();
-                                thread.resetMultipleValues();
-                                if (ZERO_INTEGER.numE(add(second, minute, hour))) {
-                                    second = NIL;
-                                    minute = NIL;
-                                    hour = NIL;
-                                }
-                                date = com.cyc.cycjava.cycl.date_utilities.construct_reduced_cycl_date(second, minute, hour, day, month, year);
-                            }
-                        }
-                    }
-                }
-                if (NIL != date) {
-                    return date;
-                } else {
-                    return date_defns.cyc_date_decode_string($str_alt219$YYYY_MM_DD_HH_MM_SS_S, date_string);
-                }
-            }
-        }
-    }
-
     public static SubLObject cyc_date_from_string_internal(final SubLObject date_string) {
         SubLObject dates = parse_date_from_string(date_string);
         if (NIL != dates) {
@@ -11797,61 +5883,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
             } 
         }
         return dates;
-    }
-
-    public static final SubLObject cyc_time_elapsed_encode_string_internal_alt(SubLObject template, SubLObject time_quant) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject elapsed_seconds = com.cyc.cycjava.cycl.date_utilities.convert_time_quant_to_seconds(time_quant);
-                SubLObject seconds = NIL;
-                SubLObject minutes = NIL;
-                SubLObject hours = NIL;
-                SubLObject elapsed_days = NIL;
-                SubLObject time_string = NIL;
-                if (NIL != string_utilities.substringP($$$D, template, UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject seconds_10 = numeric_date_utilities.decode_elapsed_seconds(elapsed_seconds);
-                        SubLObject minutes_11 = thread.secondMultipleValue();
-                        SubLObject hours_12 = thread.thirdMultipleValue();
-                        SubLObject elapsed_days_13 = thread.fourthMultipleValue();
-                        thread.resetMultipleValues();
-                        seconds = seconds_10;
-                        minutes = minutes_11;
-                        hours = hours_12;
-                        elapsed_days = elapsed_days_13;
-                    }
-                } else {
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject seconds_14 = numeric_date_utilities.decode_elapsed_seconds_without_days(elapsed_seconds);
-                        SubLObject minutes_15 = thread.secondMultipleValue();
-                        SubLObject hours_16 = thread.thirdMultipleValue();
-                        SubLObject elapsed_days_17 = thread.fourthMultipleValue();
-                        thread.resetMultipleValues();
-                        seconds = seconds_14;
-                        minutes = minutes_15;
-                        hours = hours_16;
-                        elapsed_days = elapsed_days_17;
-                    }
-                }
-                if ($str_alt221$H_MM_SS.equal(template)) {
-                    time_string = format(NIL, $str_alt222$_D__2__0D__2__0D, new SubLObject[]{ hours, minutes, truncate(seconds, UNPROVIDED) });
-                } else {
-                    if ($$$HHMMSS.equal(template)) {
-                        time_string = format(NIL, $str_alt203$_2__0D_2__0D_2__0D, new SubLObject[]{ hours, minutes, seconds });
-                    } else {
-                        if ($$$HHMM.equal(template)) {
-                            time_string = format(NIL, $str_alt224$_2__0D_2__0D, hours, minutes);
-                        } else {
-                            Errors.cerror($str_alt225$_cont, $str_alt226$The_template__A_is_not_currently_, template);
-                        }
-                    }
-                }
-                return time_string;
-            }
-        }
     }
 
     public static SubLObject cyc_time_elapsed_encode_string_internal(final SubLObject template, final SubLObject time_quant) {
@@ -11901,46 +5932,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return time_string;
     }
 
-    static private final SubLList $list_alt254 = list(list(list(list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000)))))), makeInteger("3157639200"), NIL), list(list(list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000))))))), makeInteger("3157641720"), NIL), list(list(list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000)))))))), makeInteger("3157641725"), NIL), list(list(list(reader_make_constant_shell("MilliSecondFn"), SIX_INTEGER, list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000))))))))), makeInteger("3157641725"), SIX_INTEGER));
-
-    public static final SubLObject cyc_time_elapsed_decode_string_internal_alt(SubLObject template, SubLObject time_string) {
-        {
-            SubLObject time_quant = NIL;
-            if ($str_alt221$H_MM_SS.equal(template)) {
-                {
-                    SubLObject hmmss = Mapping.mapcar(STRING_TO_INTEGER, string_utilities.string_tokenize(time_string, $list_alt227, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED));
-                    SubLObject hours = hmmss.first();
-                    SubLObject minutes = second(hmmss);
-                    SubLObject seconds = third(hmmss);
-                    SubLObject elapsed_seconds = numeric_date_utilities.encode_elapsed_seconds(seconds, minutes, hours, UNPROVIDED);
-                    time_quant = make_unary_formula($$SecondsDuration, elapsed_seconds);
-                }
-            } else {
-                if ($$$HHMMSS.equal(template)) {
-                    {
-                        SubLObject hours = parse_integer(time_string, ZERO_INTEGER, TWO_INTEGER, UNPROVIDED, UNPROVIDED);
-                        SubLObject minutes = parse_integer(time_string, TWO_INTEGER, FOUR_INTEGER, UNPROVIDED, UNPROVIDED);
-                        SubLObject seconds = parse_integer(time_string, FOUR_INTEGER, SIX_INTEGER, UNPROVIDED, UNPROVIDED);
-                        SubLObject elapsed_seconds = numeric_date_utilities.encode_elapsed_seconds(seconds, minutes, hours, UNPROVIDED);
-                        time_quant = make_unary_formula($$SecondsDuration, elapsed_seconds);
-                    }
-                } else {
-                    if ($$$HHMM.equal(template)) {
-                        {
-                            SubLObject hours = parse_integer(time_string, ZERO_INTEGER, TWO_INTEGER, UNPROVIDED, UNPROVIDED);
-                            SubLObject minutes = parse_integer(time_string, TWO_INTEGER, FOUR_INTEGER, UNPROVIDED, UNPROVIDED);
-                            SubLObject elapsed_seconds = numeric_date_utilities.encode_elapsed_seconds(ZERO_INTEGER, minutes, hours, UNPROVIDED);
-                            time_quant = make_unary_formula($$SecondsDuration, elapsed_seconds);
-                        }
-                    } else {
-                        Errors.cerror($str_alt225$_cont, $str_alt226$The_template__A_is_not_currently_, template);
-                    }
-                }
-            }
-            return time_quant;
-        }
-    }
-
     public static SubLObject cyc_time_elapsed_decode_string_internal(final SubLObject template, final SubLObject time_string) {
         SubLObject time_quant = NIL;
         if ($str288$H_MM_SS.equal(template)) {
@@ -11970,8 +5961,6 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
 
         return time_quant;
     }
-
-    static private final SubLList $list_alt256 = list(list(list(list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000)))))), makeString("12:00:00.000")), list(list(list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000))))))), makeString("12:42:00.000")), list(list(list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000)))))))), makeString("12:42:05.000")), list(list(list(reader_make_constant_shell("MilliSecondFn"), SIX_INTEGER, list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), makeInteger(23), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2000))))))))), makeString("12:42:05.006")));
 
     public static SubLObject later_than(SubLObject late_date, SubLObject early_date) {
         final SubLThread thread = SubLProcess.currentSubLThread();
@@ -12003,815 +5992,270 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return values(NIL, T);
     }
 
-    static private final SubLString $$$reed = makeString("reed");
-
-    static private final SubLList $list_alt259 = list(list(list(list(reader_make_constant_shell("YearFn"), makeInteger(2004))), list(reader_make_constant_shell("YearFn"), makeInteger(2004))), list(list(list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))), list(reader_make_constant_shell("YearFn"), makeInteger(2004))), list(list(list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))), list(reader_make_constant_shell("YearFn"), makeInteger(2004))), list(list(list(reader_make_constant_shell("HourFn"), ZERO_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))), list(reader_make_constant_shell("YearFn"), makeInteger(2004))), list(list(list(reader_make_constant_shell("MinuteFn"), ZERO_INTEGER, list(reader_make_constant_shell("HourFn"), ZERO_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))))), list(reader_make_constant_shell("YearFn"), makeInteger(2004))), list(list(list(reader_make_constant_shell("SecondFn"), ZERO_INTEGER, list(reader_make_constant_shell("MinuteFn"), ZERO_INTEGER, list(reader_make_constant_shell("HourFn"), ZERO_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("YearFn"), makeInteger(2004))), list(list(list(reader_make_constant_shell("SecondFn"), ZERO_INTEGER, list(reader_make_constant_shell("MinuteFn"), ONE_INTEGER, list(reader_make_constant_shell("HourFn"), ZERO_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("MinuteFn"), ONE_INTEGER, list(reader_make_constant_shell("HourFn"), ZERO_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))))));
-
-    public static final SubLObject declare_date_utilities_file_alt() {
-        declareFunction("initialize_date_kb_feature", "INITIALIZE-DATE-KB-FEATURE", 0, 0, false);
-        declareFunction("possibly_hl_date_p", "POSSIBLY-HL-DATE-P", 1, 0, false);
-        declareFunction("possibly_date_p", "POSSIBLY-DATE-P", 1, 0, false);
-        declareFunction("date_p", "DATE-P", 1, 0, false);
-        declareFunction("possibly_time_p", "POSSIBLY-TIME-P", 1, 0, false);
-        declareFunction("time_p", "TIME-P", 1, 0, false);
-        declareFunction("generalized_date_p", "GENERALIZED-DATE-P", 1, 0, false);
-        declareFunction("date_query_p", "DATE-QUERY-P", 1, 1, false);
-        declareFunction("date_p_internal", "DATE-P-INTERNAL", 1, 0, false);
-        new com.cyc.cycjava.cycl.date_utilities.$date_p_internal$UnaryFunction();
-        declareFunction("day_for_time_p_p", "DAY-FOR-TIME-P-P", 1, 0, false);
-        declareFunction("time_p_internal", "TIME-P-INTERNAL", 1, 0, false);
-        declareFunction("beginning_of_timeP", "BEGINNING-OF-TIME?", 1, 0, false);
-        declareFunction("end_of_timeP", "END-OF-TIME?", 1, 0, false);
-        declareFunction("always_time_intervalP", "ALWAYS-TIME-INTERVAL?", 1, 0, false);
-        declareFunction("empty_time_intervalP", "EMPTY-TIME-INTERVAL?", 1, 0, false);
-        declareMacro("do_time_units_ordered", "DO-TIME-UNITS-ORDERED");
-        declareFunction("date_formatG", "DATE-FORMAT>", 2, 0, false);
-        declareFunction("extract_date_century", "EXTRACT-DATE-CENTURY", 1, 0, false);
-        declareFunction("extract_date_decade", "EXTRACT-DATE-DECADE", 1, 0, false);
-        declareFunction("extract_date_year", "EXTRACT-DATE-YEAR", 1, 0, false);
-        declareFunction("extract_date_month", "EXTRACT-DATE-MONTH", 1, 0, false);
-        declareFunction("extract_date_month_number", "EXTRACT-DATE-MONTH-NUMBER", 1, 0, false);
-        declareFunction("extract_date_day", "EXTRACT-DATE-DAY", 1, 0, false);
-        declareFunction("extract_date_hour", "EXTRACT-DATE-HOUR", 1, 0, false);
-        declareFunction("extract_date_minute", "EXTRACT-DATE-MINUTE", 1, 0, false);
-        declareFunction("extract_date_second", "EXTRACT-DATE-SECOND", 1, 0, false);
-        declareFunction("extract_date_millisecond", "EXTRACT-DATE-MILLISECOND", 1, 0, false);
-        declareFunction("millisecondstring", "MILLISECONDSTRING", 1, 0, false);
-        declareFunction("extract_date_time_type", "EXTRACT-DATE-TIME-TYPE", 2, 0, false);
-        declareFunction("explode_date", "EXPLODE-DATE", 1, 0, false);
-        declareFunction("date_format", "DATE-FORMAT", 1, 0, false);
-        declareFunction("explode_calendar_time", "EXPLODE-CALENDAR-TIME", 1, 0, false);
-        declareFunction("explode_calendar_date", "EXPLODE-CALENDAR-DATE", 1, 0, false);
-        declareFunction("explode_quarter_date", "EXPLODE-QUARTER-DATE", 1, 0, false);
-        declareFunction("explode_decade_date", "EXPLODE-DECADE-DATE", 1, 0, false);
-        declareFunction("explode_century_date", "EXPLODE-CENTURY-DATE", 1, 0, false);
-        declareFunction("construct_cycl_date", "CONSTRUCT-CYCL-DATE", 6, 0, false);
-        declareFunction("construct_reduced_cycl_date", "CONSTRUCT-REDUCED-CYCL-DATE", 6, 0, false);
-        declareFunction("date_reduced_to_start", "DATE-REDUCED-TO-START", 1, 0, false);
-        declareFunction("date_reduced_to_end", "DATE-REDUCED-TO-END", 1, 0, false);
-        declareFunction("date_to_precision", "DATE-TO-PRECISION", 2, 0, false);
-        declareFunction("construct_calendar_date", "CONSTRUCT-CALENDAR-DATE", 1, 6, false);
-        declareFunction("construct_quarter_date", "CONSTRUCT-QUARTER-DATE", 1, 1, false);
-        declareFunction("construct_decade_date", "CONSTRUCT-DECADE-DATE", 1, 0, false);
-        declareFunction("construct_century_date", "CONSTRUCT-CENTURY-DATE", 1, 0, false);
-        declareFunction("calendar_date_sum", "CALENDAR-DATE-SUM", 8, 0, false);
-        declareFunction("quarter_date_sum", "QUARTER-DATE-SUM", 4, 0, false);
-        declareFunction("decade_date_sum", "DECADE-DATE-SUM", 3, 0, false);
-        declareFunction("century_date_sum", "CENTURY-DATE-SUM", 3, 0, false);
-        declareFunction("month_p", "MONTH-P", 1, 0, false);
-        declareFunction("month_number", "MONTH-NUMBER", 1, 0, false);
-        declareFunction("number_of_month", "NUMBER-OF-MONTH", 1, 0, false);
-        declareFunction("day_number", "DAY-NUMBER", 1, 0, false);
-        declareFunction("month_term_p", "MONTH-TERM-P", 1, 0, false);
-        declareFunction("day_of_week_p", "DAY-OF-WEEK-P", 1, 0, false);
-        declareFunction("day_of_week_number", "DAY-OF-WEEK-NUMBER", 1, 0, false);
-        declareFunction("following_day_of_week", "FOLLOWING-DAY-OF-WEEK", 1, 0, false);
-        declareFunction("prior_day_of_week", "PRIOR-DAY-OF-WEEK", 1, 0, false);
-        declareFunction("number_of_day_of_week", "NUMBER-OF-DAY-OF-WEEK", 1, 0, false);
-        declareFunction("day_of_week_of_date", "DAY-OF-WEEK-OF-DATE", 1, 0, false);
-        declareFunction("day_of_week_prior_to_date", "DAY-OF-WEEK-PRIOR-TO-DATE", 2, 0, false);
-        declareFunction("day_of_week_prior_to_date_inclusive", "DAY-OF-WEEK-PRIOR-TO-DATE-INCLUSIVE", 2, 0, false);
-        declareFunction("day_of_week_after_date", "DAY-OF-WEEK-AFTER-DATE", 2, 0, false);
-        declareFunction("day_of_week_after_date_inclusive", "DAY-OF-WEEK-AFTER-DATE-INCLUSIVE", 2, 0, false);
-        declareFunction("century_of_year", "CENTURY-OF-YEAR", 1, 0, false);
-        declareFunction("get_century_starting_day", "GET-CENTURY-STARTING-DAY", 1, 0, false);
-        declareFunction("day_of_month_term_p", "DAY-OF-MONTH-TERM-P", 1, 0, false);
-        declareFunction("days_since_rata_die", "DAYS-SINCE-RATA-DIE", 1, 0, false);
-        declareFunction("adjust_thirty_day_february", "ADJUST-THIRTY-DAY-FEBRUARY", 2, 0, false);
-        declareFunction("hour_of_day_p", "HOUR-OF-DAY-P", 1, 0, false);
-        declareFunction("hour_of_day_term_p", "HOUR-OF-DAY-TERM-P", 1, 0, false);
-        declareFunction("hour_of_day_of_date", "HOUR-OF-DAY-OF-DATE", 1, 0, false);
-        declareFunction("number_of_hour_of_day", "NUMBER-OF-HOUR-OF-DAY", 1, 0, false);
-        declareFunction("minute_of_hour_term_p", "MINUTE-OF-HOUR-TERM-P", 1, 0, false);
-        declareFunction("second_of_minute_term_p", "SECOND-OF-MINUTE-TERM-P", 1, 0, false);
-        declareFunction("starting_value_for_calendar_unit_p", "STARTING-VALUE-FOR-CALENDAR-UNIT-P", 2, 0, false);
-        declareFunction("ending_value_for_calendar_unit_p", "ENDING-VALUE-FOR-CALENDAR-UNIT-P", 2, 2, false);
-        declareFunction("truncate_date_to_format", "TRUNCATE-DATE-TO-FORMAT", 2, 0, false);
-        declareFunction("date_precision", "DATE-PRECISION", 1, 0, false);
-        declareFunction("defining_time_unit", "DEFINING-TIME-UNIT", 1, 0, false);
-        declareFunction("inference_defining_time_unit_internal", "INFERENCE-DEFINING-TIME-UNIT-INTERNAL", 1, 0, false);
-        declareFunction("inference_defining_time_unit", "INFERENCE-DEFINING-TIME-UNIT", 1, 0, false);
-        declareFunction("convert_time_to_date_precision", "CONVERT-TIME-TO-DATE-PRECISION", 2, 0, false);
-        declareFunction("day_of_date", "DAY-OF-DATE", 1, 0, false);
-        declareFunction("month_of_date", "MONTH-OF-DATE", 1, 0, false);
-        declareFunction("quarter_of_date", "QUARTER-OF-DATE", 1, 0, false);
-        declareFunction("quarter_of_month", "QUARTER-OF-MONTH", 1, 0, false);
-        declareFunction("year_of_date", "YEAR-OF-DATE", 1, 0, false);
-        declareFunction("decade_of_date", "DECADE-OF-DATE", 1, 0, false);
-        declareFunction("century_of_date", "CENTURY-OF-DATE", 1, 0, false);
-        declareFunction("dateLE", "DATE<=", 2, 0, false);
-        declareFunction("dateGE", "DATE>=", 2, 0, false);
-        declareFunction("dateE", "DATE=", 2, 0, false);
-        declareFunction("dateL", "DATE<", 2, 0, false);
-        declareFunction("dateG", "DATE>", 2, 0, false);
-        declareFunction("dateL_int", "DATE<-INT", 2, 0, false);
-        declareFunction("cycl_date_initial_second", "CYCL-DATE-INITIAL-SECOND", 1, 0, false);
-        declareFunction("cycl_date_final_second", "CYCL-DATE-FINAL-SECOND", 1, 0, false);
-        declareFunction("date_subsumes", "DATE-SUBSUMES", 2, 0, false);
-        declareFunction("explode_time", "EXPLODE-TIME", 1, 0, false);
-        declareFunction("date_after", "DATE-AFTER", 2, 0, false);
-        declareFunction("date_before", "DATE-BEFORE", 2, 0, false);
-        declareFunction("convert_time_quant_to_seconds", "CONVERT-TIME-QUANT-TO-SECONDS", 1, 0, false);
-        declareFunction("time_elapsed", "TIME-ELAPSED", 2, 1, false);
-        declareFunction("time_elapsed_precision", "TIME-ELAPSED-PRECISION", 2, 0, false);
-        declareFunction("time_elapsed_difference", "TIME-ELAPSED-DIFFERENCE", 3, 0, false);
-        declareFunction("years_difference", "YEARS-DIFFERENCE", 2, 0, false);
-        declareFunction("months_difference", "MONTHS-DIFFERENCE", 2, 0, false);
-        declareFunction("days_difference", "DAYS-DIFFERENCE", 2, 0, false);
-        declareFunction("hours_difference", "HOURS-DIFFERENCE", 2, 0, false);
-        declareFunction("minutes_difference", "MINUTES-DIFFERENCE", 2, 0, false);
-        declareFunction("seconds_difference", "SECONDS-DIFFERENCE", 2, 0, false);
-        declareFunction("leap_years_between", "LEAP-YEARS-BETWEEN", 2, 0, false);
-        declareFunction("naive_leap_years_between", "NAIVE-LEAP-YEARS-BETWEEN", 2, 0, false);
-        declareFunction("years_elapsed", "YEARS-ELAPSED", 3, 1, false);
-        declareFunction("months_elapsed", "MONTHS-ELAPSED", 3, 1, false);
-        declareFunction("days_between_universal_dates", "DAYS-BETWEEN-UNIVERSAL-DATES", 2, 0, false);
-        declareFunction("temporal_indexical_p", "TEMPORAL-INDEXICAL-P", 1, 0, false);
-        new com.cyc.cycjava.cycl.date_utilities.$temporal_indexical_p$UnaryFunction();
-        declareFunction("contains_indexicalP", "CONTAINS-INDEXICAL?", 1, 0, false);
-        declareFunction("first_among_time_indexes", "FIRST-AMONG-TIME-INDEXES", 1, 0, false);
-        declareFunction("last_among_time_indexes", "LAST-AMONG-TIME-INDEXES", 1, 0, false);
-        declareFunction("bind_and_store_indexicals", "BIND-AND-STORE-INDEXICALS", 1, 0, false);
-        declareFunction("possibly_bind_temporal_indexical_in_object", "POSSIBLY-BIND-TEMPORAL-INDEXICAL-IN-OBJECT", 1, 0, false);
-        declareFunction("bind_temporal_indexical_in_object", "BIND-TEMPORAL-INDEXICAL-IN-OBJECT", 1, 0, false);
-        declareFunction("bind_temporal_indexicals_in_hlmt_list", "BIND-TEMPORAL-INDEXICALS-IN-HLMT-LIST", 1, 0, false);
-        declareFunction("inference_now", "INFERENCE-NOW", 0, 0, false);
-        declareFunction("get_inference_now", "GET-INFERENCE-NOW", 0, 0, false);
-        declareMacro("with_cpu_now", "WITH-CPU-NOW");
-        declareMacro("with_inference_now", "WITH-INFERENCE-NOW");
-        declareMacro("possibly_with_inference_now", "POSSIBLY-WITH-INFERENCE-NOW");
-        declareFunction("indexical_now", "INDEXICAL-NOW", 0, 0, false);
-        new com.cyc.cycjava.cycl.date_utilities.$indexical_now$ZeroArityFunction();
-        declareFunction("indexical_today", "INDEXICAL-TODAY", 0, 0, false);
-        declareFunction("indexical_tomorrow", "INDEXICAL-TOMORROW", 0, 0, false);
-        declareFunction("indexical_yesterday", "INDEXICAL-YESTERDAY", 0, 0, false);
-        declareFunction("indexical_seconds_since_1970", "INDEXICAL-SECONDS-SINCE-1970", 0, 0, false);
-        declareFunction("current_time_interval_of_type", "CURRENT-TIME-INTERVAL-OF-TYPE", 1, 0, false);
-        declareFunction("next_iterated_cyclic_interval_inclusive", "NEXT-ITERATED-CYCLIC-INTERVAL-INCLUSIVE", 1, 1, false);
-        declareFunction("next_iterated_cyclic_interval_inclusive_helper", "NEXT-ITERATED-CYCLIC-INTERVAL-INCLUSIVE-HELPER", 8, 0, false);
-        declareFunction("universal_time_to_cycl_date", "UNIVERSAL-TIME-TO-CYCL-DATE", 1, 0, false);
-        declareFunction("universal_date_to_cycl_date", "UNIVERSAL-DATE-TO-CYCL-DATE", 1, 0, false);
-        declareFunction("extended_universal_date_to_cycl_date", "EXTENDED-UNIVERSAL-DATE-TO-CYCL-DATE", 1, 0, false);
-        declareFunction("cycl_date_to_universal_date", "CYCL-DATE-TO-UNIVERSAL-DATE", 1, 0, false);
-        declareFunction("cycl_date_to_universal_time", "CYCL-DATE-TO-UNIVERSAL-TIME", 1, 0, false);
-        declareFunction("cycl_date_to_universal_second", "CYCL-DATE-TO-UNIVERSAL-SECOND", 1, 0, false);
-        declareFunction("extended_universal_date_for_date_initial_second", "EXTENDED-UNIVERSAL-DATE-FOR-DATE-INITIAL-SECOND", 1, 0, false);
-        declareFunction("extended_universal_date_for_date_final_second", "EXTENDED-UNIVERSAL-DATE-FOR-DATE-FINAL-SECOND", 1, 0, false);
-        declareFunction("temporal_object_from_string", "TEMPORAL-OBJECT-FROM-STRING", 1, 0, false);
-        declareFunction("meets_time_object_constraintP", "MEETS-TIME-OBJECT-CONSTRAINT?", 1, 1, false);
-        declareFunction("construct_cycl_date_from_date_range_string", "CONSTRUCT-CYCL-DATE-FROM-DATE-RANGE-STRING", 1, 0, false);
-        declareFunction("string_specifies_date_range_p", "STRING-SPECIFIES-DATE-RANGE-P", 1, 0, false);
-        declareFunction("unpack_date_range_string", "UNPACK-DATE-RANGE-STRING", 1, 0, false);
-        declareFunction("construct_date_from_to", "CONSTRUCT-DATE-FROM-TO", 4, 0, false);
-        declareFunction("parse_date_from_string", "PARSE-DATE-FROM-STRING", 1, 0, false);
-        declareFunction("possibly_filter_two_digit_years", "POSSIBLY-FILTER-TWO-DIGIT-YEARS", 1, 0, false);
-        declareFunction("parse_date_wXout_two_digit_years", "PARSE-DATE-W/OUT-TWO-DIGIT-YEARS", 1, 0, false);
-        declareFunction("parse_unambiguous_date_from_string", "PARSE-UNAMBIGUOUS-DATE-FROM-STRING", 1, 0, false);
-        declareFunction("guess_datetime_string", "GUESS-DATETIME-STRING", 1, 0, false);
-        declareFunction("construct_date_and_time_from_tokens", "CONSTRUCT-DATE-AND-TIME-FROM-TOKENS", 2, 0, false);
-        declareFunction("date_time_tokensP", "DATE-TIME-TOKENS?", 1, 0, false);
-        declareFunction("time_date_tokensP", "TIME-DATE-TOKENS?", 1, 0, false);
-        declareFunction("parse_date_from_string_fast", "PARSE-DATE-FROM-STRING-FAST", 1, 3, false);
-        declareFunction("number_should_be_interpreted_as_a_dateP", "NUMBER-SHOULD-BE-INTERPRETED-AS-A-DATE?", 4, 0, false);
-        declareFunction("two_digit_yearP", "TWO-DIGIT-YEAR?", 1, 1, false);
-        declareFunction("construct_possible_more_likely_dates", "CONSTRUCT-POSSIBLE-MORE-LIKELY-DATES", 1, 1, false);
-        declareFunction("explode_date_from_tokens", "EXPLODE-DATE-FROM-TOKENS", 1, 2, false);
-        declareFunction("tokens_match_date_pattern", "TOKENS-MATCH-DATE-PATTERN", 2, 0, false);
-        declareFunction("year_tokenP_internal", "YEAR-TOKEN?-INTERNAL", 1, 1, false);
-        declareFunction("year_tokenP", "YEAR-TOKEN?", 1, 1, false);
-        declareFunction("day_tokenP_internal", "DAY-TOKEN?-INTERNAL", 1, 0, false);
-        declareFunction("day_tokenP", "DAY-TOKEN?", 1, 0, false);
-        declareFunction("day_words_tokenP", "DAY-WORDS-TOKEN?", 1, 0, false);
-        declareFunction("day_word_token_value", "DAY-WORD-TOKEN-VALUE", 1, 0, false);
-        declareFunction("fill_day_words", "FILL-DAY-WORDS", 0, 0, false);
-        declareFunction("day_number_tokenP", "DAY-NUMBER-TOKEN?", 1, 0, false);
-        declareFunction("month_tokenP", "MONTH-TOKEN?", 1, 0, false);
-        declareFunction("month_name_tokenP", "MONTH-NAME-TOKEN?", 1, 0, false);
-        declareFunction("month_number_tokenP_internal", "MONTH-NUMBER-TOKEN?-INTERNAL", 1, 0, false);
-        declareFunction("month_number_tokenP", "MONTH-NUMBER-TOKEN?", 1, 0, false);
-        declareFunction("explode_time_from_tokens", "EXPLODE-TIME-FROM-TOKENS", 1, 0, false);
-        declareFunction("cyc_date_encode_string_internal", "CYC-DATE-ENCODE-STRING-INTERNAL", 2, 0, false);
-        declareFunction("cyc_date_decode_string_internal", "CYC-DATE-DECODE-STRING-INTERNAL", 2, 0, false);
-        declareFunction("cyc_date_from_string_internal", "CYC-DATE-FROM-STRING-INTERNAL", 1, 0, false);
-        declareFunction("cyc_time_elapsed_encode_string_internal", "CYC-TIME-ELAPSED-ENCODE-STRING-INTERNAL", 2, 0, false);
-        declareFunction("cyc_time_elapsed_decode_string_internal", "CYC-TIME-ELAPSED-DECODE-STRING-INTERNAL", 2, 0, false);
-        declareMacro("define_date_utility_test_case", "DEFINE-DATE-UTILITY-TEST-CASE");
-        declareFunction("define_date_utility_test_cases", "DEFINE-DATE-UTILITY-TEST-CASES", 0, 0, false);
-        return NIL;
-    }
-
     public static SubLObject declare_date_utilities_file() {
-        if (SubLFiles.USE_V1) {
-            declareFunction("initialize_date_kb_feature", "INITIALIZE-DATE-KB-FEATURE", 0, 0, false);
-            declareFunction("possibly_simple_el_date_p", "POSSIBLY-SIMPLE-EL-DATE-P", 1, 0, false);
-            declareFunction("possibly_el_time_millisecond_p", "POSSIBLY-EL-TIME-MILLISECOND-P", 1, 0, false);
-            declareFunction("possibly_el_time_second_p", "POSSIBLY-EL-TIME-SECOND-P", 1, 0, false);
-            declareFunction("possibly_el_time_minute_p", "POSSIBLY-EL-TIME-MINUTE-P", 1, 0, false);
-            declareFunction("possibly_el_time_hour_p", "POSSIBLY-EL-TIME-HOUR-P", 1, 0, false);
-            declareFunction("possibly_el_date_day_p", "POSSIBLY-EL-DATE-DAY-P", 1, 0, false);
-            declareFunction("possibly_el_date_month_p", "POSSIBLY-EL-DATE-MONTH-P", 1, 0, false);
-            declareFunction("possibly_el_date_year_p", "POSSIBLY-EL-DATE-YEAR-P", 1, 0, false);
-            declareFunction("simple_el_date_p", "SIMPLE-EL-DATE-P", 1, 0, false);
-            declareFunction("el_time_millisecond_p", "EL-TIME-MILLISECOND-P", 1, 0, false);
-            declareFunction("el_time_second_p", "EL-TIME-SECOND-P", 1, 0, false);
-            declareFunction("el_time_minute_p", "EL-TIME-MINUTE-P", 1, 0, false);
-            declareFunction("el_time_hour_p", "EL-TIME-HOUR-P", 1, 0, false);
-            declareFunction("el_date_day_p", "EL-DATE-DAY-P", 1, 0, false);
-            declareFunction("el_date_month_p", "EL-DATE-MONTH-P", 1, 0, false);
-            declareFunction("el_date_year_p", "EL-DATE-YEAR-P", 1, 0, false);
-            declareMacro("el_date_time_compare_guts", "EL-DATE-TIME-COMPARE-GUTS");
-            declareFunction("el_millisecond_compare", "EL-MILLISECOND-COMPARE", 2, 0, false);
-            declareFunction("el_second_compare", "EL-SECOND-COMPARE", 2, 0, false);
-            declareFunction("el_minute_compare", "EL-MINUTE-COMPARE", 2, 0, false);
-            declareFunction("el_hour_compare", "EL-HOUR-COMPARE", 2, 0, false);
-            declareFunction("el_day_compare", "EL-DAY-COMPARE", 2, 0, false);
-            declareFunction("el_month_compare", "EL-MONTH-COMPARE", 2, 0, false);
-            declareFunction("el_year_compare", "EL-YEAR-COMPARE", 2, 0, false);
-            declareFunction("number_compare", "NUMBER-COMPARE", 2, 0, false);
-            declareFunction("month_compare", "MONTH-COMPARE", 2, 0, false);
-            declareFunction("fast_date_L", "FAST-DATE-<", 2, 0, false);
-            declareFunction("fast_date_LE", "FAST-DATE-<=", 2, 0, false);
-            declareFunction("fast_date_compare", "FAST-DATE-COMPARE", 2, 0, false);
-            declareFunction("el_date_granularity_compare", "EL-DATE-GRANULARITY-COMPARE", 2, 0, false);
-            declareFunction("fast_comparable_date_compare", "FAST-COMPARABLE-DATE-COMPARE", 2, 0, false);
-            declareFunction("possibly_hl_date_p", "POSSIBLY-HL-DATE-P", 1, 0, false);
-            declareFunction("possibly_date_p", "POSSIBLY-DATE-P", 1, 0, false);
-            declareFunction("date_p", "DATE-P", 1, 0, false);
-            declareFunction("possibly_time_p", "POSSIBLY-TIME-P", 1, 0, false);
-            declareFunction("time_p", "TIME-P", 1, 0, false);
-            declareFunction("generalized_date_p", "GENERALIZED-DATE-P", 1, 0, false);
-            declareFunction("date_query_p", "DATE-QUERY-P", 1, 1, false);
-            declareFunction("date_p_internal", "DATE-P-INTERNAL", 1, 0, false);
-            new date_utilities.$date_p_internal$UnaryFunction();
-            declareFunction("day_for_time_p_p", "DAY-FOR-TIME-P-P", 1, 0, false);
-            declareFunction("time_p_internal", "TIME-P-INTERNAL", 1, 0, false);
-            declareFunction("beginning_of_timeP", "BEGINNING-OF-TIME?", 1, 0, false);
-            declareFunction("end_of_timeP", "END-OF-TIME?", 1, 0, false);
-            declareFunction("always_time_intervalP", "ALWAYS-TIME-INTERVAL?", 1, 0, false);
-            declareFunction("empty_time_intervalP", "EMPTY-TIME-INTERVAL?", 1, 0, false);
-            declareFunction("date_unitG", "DATE-UNIT>", 2, 0, false);
-            declareMacro("do_time_units_ordered", "DO-TIME-UNITS-ORDERED");
-            declareFunction("date_formatG", "DATE-FORMAT>", 2, 0, false);
-            declareFunction("extract_date_century", "EXTRACT-DATE-CENTURY", 1, 0, false);
-            declareFunction("extract_date_decade", "EXTRACT-DATE-DECADE", 1, 0, false);
-            declareFunction("extract_date_year", "EXTRACT-DATE-YEAR", 1, 0, false);
-            declareFunction("extract_date_month", "EXTRACT-DATE-MONTH", 1, 0, false);
-            declareFunction("extract_date_month_number", "EXTRACT-DATE-MONTH-NUMBER", 1, 0, false);
-            declareFunction("extract_date_day", "EXTRACT-DATE-DAY", 1, 0, false);
-            declareFunction("extract_date_hour", "EXTRACT-DATE-HOUR", 1, 0, false);
-            declareFunction("extract_date_minute", "EXTRACT-DATE-MINUTE", 1, 0, false);
-            declareFunction("extract_date_second", "EXTRACT-DATE-SECOND", 1, 0, false);
-            declareFunction("extract_date_millisecond", "EXTRACT-DATE-MILLISECOND", 1, 0, false);
-            declareFunction("millisecondstring", "MILLISECONDSTRING", 1, 0, false);
-            declareFunction("extract_date_time_type", "EXTRACT-DATE-TIME-TYPE", 2, 0, false);
-            declareFunction("explode_date", "EXPLODE-DATE", 1, 0, false);
-            declareFunction("date_format", "DATE-FORMAT", 1, 0, false);
-            declareFunction("explode_calendar_time", "EXPLODE-CALENDAR-TIME", 1, 0, false);
-            declareFunction("explode_calendar_date", "EXPLODE-CALENDAR-DATE", 1, 0, false);
-            declareFunction("explode_quarter_date", "EXPLODE-QUARTER-DATE", 1, 0, false);
-            declareFunction("explode_decade_date", "EXPLODE-DECADE-DATE", 1, 0, false);
-            declareFunction("explode_century_date", "EXPLODE-CENTURY-DATE", 1, 0, false);
-            declareFunction("construct_cycl_date", "CONSTRUCT-CYCL-DATE", 6, 0, false);
-            declareFunction("construct_cycl_date_ms", "CONSTRUCT-CYCL-DATE-MS", 7, 0, false);
-            declareFunction("construct_reduced_cycl_date", "CONSTRUCT-REDUCED-CYCL-DATE", 6, 0, false);
-            declareFunction("construct_reduced_cycl_date_ms", "CONSTRUCT-REDUCED-CYCL-DATE-MS", 7, 0, false);
-            declareFunction("date_reduced_to_start", "DATE-REDUCED-TO-START", 1, 0, false);
-            declareFunction("date_reduced_to_end", "DATE-REDUCED-TO-END", 1, 0, false);
-            declareFunction("date_to_precision", "DATE-TO-PRECISION", 2, 1, false);
-            declareFunction("construct_calendar_date", "CONSTRUCT-CALENDAR-DATE", 1, 6, false);
-            declareFunction("construct_quarter_date", "CONSTRUCT-QUARTER-DATE", 1, 1, false);
-            declareFunction("construct_decade_date", "CONSTRUCT-DECADE-DATE", 1, 0, false);
-            declareFunction("construct_century_date", "CONSTRUCT-CENTURY-DATE", 1, 0, false);
-            declareFunction("calendar_date_sum", "CALENDAR-DATE-SUM", 9, 0, false);
-            declareFunction("quarter_date_sum", "QUARTER-DATE-SUM", 4, 0, false);
-            declareFunction("decade_date_sum", "DECADE-DATE-SUM", 3, 0, false);
-            declareFunction("century_date_sum", "CENTURY-DATE-SUM", 3, 0, false);
-            declareFunction("month_p", "MONTH-P", 1, 0, false);
-            declareFunction("month_number", "MONTH-NUMBER", 1, 0, false);
-            declareFunction("number_of_month", "NUMBER-OF-MONTH", 1, 0, false);
-            declareFunction("day_number", "DAY-NUMBER", 1, 0, false);
-            declareFunction("month_term_p", "MONTH-TERM-P", 1, 0, false);
-            declareFunction("day_of_week_p", "DAY-OF-WEEK-P", 1, 0, false);
-            declareFunction("day_of_week_number", "DAY-OF-WEEK-NUMBER", 1, 0, false);
-            declareFunction("following_day_of_week", "FOLLOWING-DAY-OF-WEEK", 1, 0, false);
-            declareFunction("prior_day_of_week", "PRIOR-DAY-OF-WEEK", 1, 0, false);
-            declareFunction("number_of_day_of_week", "NUMBER-OF-DAY-OF-WEEK", 1, 0, false);
-            declareFunction("day_of_week_of_date", "DAY-OF-WEEK-OF-DATE", 1, 0, false);
-            declareFunction("day_of_week_prior_to_date", "DAY-OF-WEEK-PRIOR-TO-DATE", 2, 0, false);
-            declareFunction("day_of_week_prior_to_date_inclusive", "DAY-OF-WEEK-PRIOR-TO-DATE-INCLUSIVE", 2, 0, false);
-            declareFunction("day_of_week_after_date", "DAY-OF-WEEK-AFTER-DATE", 2, 0, false);
-            declareFunction("day_of_week_after_date_inclusive", "DAY-OF-WEEK-AFTER-DATE-INCLUSIVE", 2, 0, false);
-            declareFunction("century_of_year", "CENTURY-OF-YEAR", 1, 0, false);
-            declareFunction("get_century_starting_day", "GET-CENTURY-STARTING-DAY", 1, 0, false);
-            declareFunction("day_of_month_term_p", "DAY-OF-MONTH-TERM-P", 1, 0, false);
-            declareFunction("days_since_rata_die", "DAYS-SINCE-RATA-DIE", 1, 0, false);
-            declareFunction("adjust_thirty_day_february", "ADJUST-THIRTY-DAY-FEBRUARY", 2, 0, false);
-            declareFunction("hour_of_day_p", "HOUR-OF-DAY-P", 1, 0, false);
-            declareFunction("hour_of_day_term_p", "HOUR-OF-DAY-TERM-P", 1, 0, false);
-            declareFunction("hour_of_day_of_date", "HOUR-OF-DAY-OF-DATE", 1, 0, false);
-            declareFunction("number_of_hour_of_day", "NUMBER-OF-HOUR-OF-DAY", 1, 0, false);
-            declareFunction("time_of_day_of_date", "TIME-OF-DAY-OF-DATE", 1, 0, false);
-            declareFunction("minute_of_hour_term_p", "MINUTE-OF-HOUR-TERM-P", 1, 0, false);
-            declareFunction("minute_of_hour_of_date", "MINUTE-OF-HOUR-OF-DATE", 1, 0, false);
-            declareFunction("second_of_minute_term_p", "SECOND-OF-MINUTE-TERM-P", 1, 0, false);
-            declareFunction("second_of_minute_of_date", "SECOND-OF-MINUTE-OF-DATE", 1, 0, false);
-            declareFunction("millisecond_of_second_term_p", "MILLISECOND-OF-SECOND-TERM-P", 1, 0, false);
-            declareFunction("millisecond_of_second_of_date", "MILLISECOND-OF-SECOND-OF-DATE", 1, 0, false);
-            declareFunction("starting_value_for_calendar_unit_p", "STARTING-VALUE-FOR-CALENDAR-UNIT-P", 2, 0, false);
-            declareFunction("starting_numerical_value_for_calendar_unit_p", "STARTING-NUMERICAL-VALUE-FOR-CALENDAR-UNIT-P", 2, 0, false);
-            declareFunction("starting_numerical_values_for_calendar_unit_p", "STARTING-NUMERICAL-VALUES-FOR-CALENDAR-UNIT-P", 2, 0, false);
-            declareFunction("ending_value_for_calendar_unit_p", "ENDING-VALUE-FOR-CALENDAR-UNIT-P", 2, 2, false);
-            declareFunction("ending_numerical_value_for_calendar_unit_p", "ENDING-NUMERICAL-VALUE-FOR-CALENDAR-UNIT-P", 2, 2, false);
-            declareFunction("ending_numerical_values_for_calendar_unit_p", "ENDING-NUMERICAL-VALUES-FOR-CALENDAR-UNIT-P", 2, 2, false);
-            declareFunction("truncate_date_to_format", "TRUNCATE-DATE-TO-FORMAT", 2, 0, false);
-            declareFunction("date_precision", "DATE-PRECISION", 1, 0, false);
-            declareFunction("reduce_date_start", "REDUCE-DATE-START", 1, 0, false);
-            declareFunction("reduce_date_end", "REDUCE-DATE-END", 1, 0, false);
-            declareFunction("defining_time_unit", "DEFINING-TIME-UNIT", 1, 0, false);
-            declareFunction("defining_time_unit_get_interval", "DEFINING-TIME-UNIT-GET-INTERVAL", 1, 0, false);
-            declareFunction("inference_defining_time_unit_internal", "INFERENCE-DEFINING-TIME-UNIT-INTERNAL", 1, 0, false);
-            declareFunction("inference_defining_time_unit", "INFERENCE-DEFINING-TIME-UNIT", 1, 0, false);
-            declareFunction("inference_defining_time_unit_get_interval_internal", "INFERENCE-DEFINING-TIME-UNIT-GET-INTERVAL-INTERNAL", 1, 0, false);
-            declareFunction("inference_defining_time_unit_get_interval", "INFERENCE-DEFINING-TIME-UNIT-GET-INTERVAL", 1, 0, false);
-            declareFunction("convert_time_to_date_precision", "CONVERT-TIME-TO-DATE-PRECISION", 2, 0, false);
-            declareFunction("extend_date_to_time_precision", "EXTEND-DATE-TO-TIME-PRECISION", 2, 0, false);
-            declareFunction("minute_of_date", "MINUTE-OF-DATE", 1, 0, false);
-            declareFunction("hour_of_date", "HOUR-OF-DATE", 1, 0, false);
-            declareFunction("day_of_date", "DAY-OF-DATE", 1, 0, false);
-            declareFunction("month_of_date", "MONTH-OF-DATE", 1, 0, false);
-            declareFunction("quarter_of_date", "QUARTER-OF-DATE", 1, 0, false);
-            declareFunction("quarter_of_month", "QUARTER-OF-MONTH", 1, 0, false);
-            declareFunction("year_of_date", "YEAR-OF-DATE", 1, 0, false);
-            declareFunction("decade_of_date", "DECADE-OF-DATE", 1, 0, false);
-            declareFunction("century_of_date", "CENTURY-OF-DATE", 1, 0, false);
-            declareFunction("dateLE", "DATE<=", 2, 0, false);
-            declareFunction("dateGE", "DATE>=", 2, 0, false);
-            declareFunction("dateE", "DATE=", 2, 0, false);
-            declareFunction("dateL", "DATE<", 2, 0, false);
-            declareFunction("dateG", "DATE>", 2, 0, false);
-            declareFunction("dateL_int", "DATE<-INT", 2, 0, false);
-            declareFunction("cycl_date_initial_second", "CYCL-DATE-INITIAL-SECOND", 1, 0, false);
-            declareFunction("cycl_date_final_second", "CYCL-DATE-FINAL-SECOND", 1, 0, false);
-            declareFunction("date_subsumes", "DATE-SUBSUMES", 2, 0, false);
-            declareFunction("cycl_date_initial_millisecond", "CYCL-DATE-INITIAL-MILLISECOND", 1, 0, false);
-            declareFunction("cycl_date_final_millisecond", "CYCL-DATE-FINAL-MILLISECOND", 1, 0, false);
-            declareFunction("explode_time", "EXPLODE-TIME", 1, 0, false);
-            declareFunction("explode_time_force_integer_amount", "EXPLODE-TIME-FORCE-INTEGER-AMOUNT", 1, 0, false);
-            declareFunction("next_smallest_duration_function", "NEXT-SMALLEST-DURATION-FUNCTION", 1, 0, false);
-            declareFunction("date_after", "DATE-AFTER", 2, 0, false);
-            declareFunction("date_after_precise", "DATE-AFTER-PRECISE", 2, 0, false);
-            declareFunction("date_after_duration_start_precise", "DATE-AFTER-DURATION-START-PRECISE", 2, 0, false);
-            declareFunction("date_before", "DATE-BEFORE", 2, 0, false);
-            declareFunction("date_before_precise", "DATE-BEFORE-PRECISE", 2, 0, false);
-            declareFunction("convert_time_quant_to_seconds", "CONVERT-TIME-QUANT-TO-SECONDS", 1, 0, false);
-            declareFunction("convert_time_quant_to_minutes", "CONVERT-TIME-QUANT-TO-MINUTES", 1, 0, false);
-            declareFunction("convert_time_quant_to_hours", "CONVERT-TIME-QUANT-TO-HOURS", 1, 0, false);
-            declareFunction("convert_time_quant_to_days", "CONVERT-TIME-QUANT-TO-DAYS", 1, 0, false);
-            declareFunction("convert_time_quant_to_months", "CONVERT-TIME-QUANT-TO-MONTHS", 1, 0, false);
-            declareFunction("convert_time_quant_to_years", "CONVERT-TIME-QUANT-TO-YEARS", 1, 0, false);
-            declareFunction("time_elapsed", "TIME-ELAPSED", 2, 1, false);
-            declareFunction("time_elapsed_precision", "TIME-ELAPSED-PRECISION", 2, 0, false);
-            declareFunction("time_elapsed_difference", "TIME-ELAPSED-DIFFERENCE", 3, 0, false);
-            declareFunction("years_difference", "YEARS-DIFFERENCE", 2, 0, false);
-            declareFunction("months_difference", "MONTHS-DIFFERENCE", 2, 0, false);
-            declareFunction("days_difference", "DAYS-DIFFERENCE", 2, 0, false);
-            declareFunction("hours_difference", "HOURS-DIFFERENCE", 2, 0, false);
-            declareFunction("minutes_difference", "MINUTES-DIFFERENCE", 2, 0, false);
-            declareFunction("seconds_difference", "SECONDS-DIFFERENCE", 2, 0, false);
-            declareFunction("milliseconds_difference", "MILLISECONDS-DIFFERENCE", 2, 0, false);
-            declareFunction("leap_years_between", "LEAP-YEARS-BETWEEN", 2, 0, false);
-            declareFunction("naive_leap_years_between", "NAIVE-LEAP-YEARS-BETWEEN", 2, 0, false);
-            declareFunction("years_elapsed", "YEARS-ELAPSED", 3, 1, false);
-            declareFunction("months_elapsed", "MONTHS-ELAPSED", 3, 1, false);
-            declareFunction("days_between_universal_dates", "DAYS-BETWEEN-UNIVERSAL-DATES", 2, 0, false);
-            declareFunction("temporal_indexical_p", "TEMPORAL-INDEXICAL-P", 1, 0, false);
-            new date_utilities.$temporal_indexical_p$UnaryFunction();
-            declareFunction("contains_indexicalP", "CONTAINS-INDEXICAL?", 1, 0, false);
-            declareFunction("first_among_time_indexes", "FIRST-AMONG-TIME-INDEXES", 1, 0, false);
-            declareFunction("last_among_time_indexes", "LAST-AMONG-TIME-INDEXES", 1, 0, false);
-            declareFunction("bind_and_store_indexicals", "BIND-AND-STORE-INDEXICALS", 1, 0, false);
-            declareFunction("possibly_bind_temporal_indexical_in_object", "POSSIBLY-BIND-TEMPORAL-INDEXICAL-IN-OBJECT", 1, 0, false);
-            declareFunction("bind_temporal_indexical_in_object", "BIND-TEMPORAL-INDEXICAL-IN-OBJECT", 1, 0, false);
-            declareFunction("bind_temporal_indexicals_in_hlmt_list", "BIND-TEMPORAL-INDEXICALS-IN-HLMT-LIST", 1, 0, false);
-            declareFunction("inference_now", "INFERENCE-NOW", 0, 0, false);
-            declareFunction("get_inference_now", "GET-INFERENCE-NOW", 0, 0, false);
-            declareMacro("with_cpu_now", "WITH-CPU-NOW");
-            declareMacro("with_inference_now", "WITH-INFERENCE-NOW");
-            declareMacro("possibly_with_inference_now", "POSSIBLY-WITH-INFERENCE-NOW");
-            declareFunction("indexical_now", "INDEXICAL-NOW", 0, 0, false);
-            new date_utilities.$indexical_now$ZeroArityFunction();
-            declareFunction("indexical_now_precise", "INDEXICAL-NOW-PRECISE", 0, 0, false);
-            declareFunction("indexical_today", "INDEXICAL-TODAY", 0, 0, false);
-            declareFunction("indexical_tomorrow", "INDEXICAL-TOMORROW", 0, 0, false);
-            declareFunction("indexical_yesterday", "INDEXICAL-YESTERDAY", 0, 0, false);
-            declareFunction("indexical_seconds_since_1970", "INDEXICAL-SECONDS-SINCE-1970", 0, 0, false);
-            declareFunction("current_time_interval_of_type", "CURRENT-TIME-INTERVAL-OF-TYPE", 1, 0, false);
-            declareFunction("next_iterated_cyclic_interval_inclusive", "NEXT-ITERATED-CYCLIC-INTERVAL-INCLUSIVE", 1, 1, false);
-            declareFunction("next_iterated_cyclic_interval_inclusive_helper", "NEXT-ITERATED-CYCLIC-INTERVAL-INCLUSIVE-HELPER", 8, 0, false);
-            declareFunction("universal_time_to_cycl_date", "UNIVERSAL-TIME-TO-CYCL-DATE", 1, 0, false);
-            declareFunction("universal_date_to_cycl_date", "UNIVERSAL-DATE-TO-CYCL-DATE", 1, 0, false);
-            declareFunction("extended_universal_date_to_cycl_date", "EXTENDED-UNIVERSAL-DATE-TO-CYCL-DATE", 1, 0, false);
-            declareFunction("cycl_date_to_universal_date", "CYCL-DATE-TO-UNIVERSAL-DATE", 1, 0, false);
-            declareFunction("cycl_date_to_universal_time", "CYCL-DATE-TO-UNIVERSAL-TIME", 1, 0, false);
-            declareFunction("cycl_date_to_universal_second", "CYCL-DATE-TO-UNIVERSAL-SECOND", 1, 0, false);
-            declareFunction("extended_universal_date_for_date_initial_second", "EXTENDED-UNIVERSAL-DATE-FOR-DATE-INITIAL-SECOND", 1, 0, false);
-            declareFunction("extended_universal_date_for_date_final_second", "EXTENDED-UNIVERSAL-DATE-FOR-DATE-FINAL-SECOND", 1, 0, false);
-            declareFunction("temporal_object_from_string", "TEMPORAL-OBJECT-FROM-STRING", 1, 0, false);
-            declareFunction("meets_time_object_constraintP", "MEETS-TIME-OBJECT-CONSTRAINT?", 1, 1, false);
-            declareFunction("construct_cycl_date_from_date_range_string", "CONSTRUCT-CYCL-DATE-FROM-DATE-RANGE-STRING", 1, 0, false);
-            declareFunction("string_specifies_date_range_p", "STRING-SPECIFIES-DATE-RANGE-P", 1, 0, false);
-            declareFunction("unpack_date_range_string", "UNPACK-DATE-RANGE-STRING", 1, 0, false);
-            declareFunction("construct_date_from_to", "CONSTRUCT-DATE-FROM-TO", 4, 0, false);
-            declareFunction("parse_date_from_string", "PARSE-DATE-FROM-STRING", 1, 0, false);
-            declareFunction("possibly_filter_two_digit_years", "POSSIBLY-FILTER-TWO-DIGIT-YEARS", 1, 0, false);
-            declareFunction("parse_date_wXout_two_digit_years", "PARSE-DATE-W/OUT-TWO-DIGIT-YEARS", 1, 0, false);
-            declareFunction("parse_unambiguous_date_from_string", "PARSE-UNAMBIGUOUS-DATE-FROM-STRING", 1, 0, false);
-            declareFunction("guess_datetime_string", "GUESS-DATETIME-STRING", 1, 0, false);
-            declareFunction("construct_date_and_time_from_tokens", "CONSTRUCT-DATE-AND-TIME-FROM-TOKENS", 2, 0, false);
-            declareFunction("date_time_tokensP", "DATE-TIME-TOKENS?", 1, 0, false);
-            declareFunction("time_date_tokensP", "TIME-DATE-TOKENS?", 1, 0, false);
-            declareFunction("parse_date_from_string_fast", "PARSE-DATE-FROM-STRING-FAST", 1, 3, false);
-            declareFunction("number_should_be_interpreted_as_a_dateP", "NUMBER-SHOULD-BE-INTERPRETED-AS-A-DATE?", 4, 0, false);
-            declareFunction("two_digit_yearP", "TWO-DIGIT-YEAR?", 1, 1, false);
-            declareFunction("construct_possible_more_likely_dates", "CONSTRUCT-POSSIBLE-MORE-LIKELY-DATES", 1, 1, false);
-            declareFunction("explode_date_from_tokens", "EXPLODE-DATE-FROM-TOKENS", 1, 2, false);
-            declareFunction("tokens_match_date_pattern", "TOKENS-MATCH-DATE-PATTERN", 2, 0, false);
-            declareFunction("year_tokenP_internal", "YEAR-TOKEN?-INTERNAL", 1, 1, false);
-            declareFunction("year_tokenP", "YEAR-TOKEN?", 1, 1, false);
-            declareFunction("day_tokenP_internal", "DAY-TOKEN?-INTERNAL", 1, 0, false);
-            declareFunction("day_tokenP", "DAY-TOKEN?", 1, 0, false);
-            declareFunction("day_words_tokenP", "DAY-WORDS-TOKEN?", 1, 0, false);
-            declareFunction("day_word_token_value", "DAY-WORD-TOKEN-VALUE", 1, 0, false);
-            declareFunction("fill_day_words", "FILL-DAY-WORDS", 0, 0, false);
-            declareFunction("day_number_tokenP", "DAY-NUMBER-TOKEN?", 1, 0, false);
-            declareFunction("month_tokenP", "MONTH-TOKEN?", 1, 0, false);
-            declareFunction("month_name_tokenP", "MONTH-NAME-TOKEN?", 1, 0, false);
-            declareFunction("day_name_tokenP", "DAY-NAME-TOKEN?", 1, 0, false);
-            declareFunction("hour_tokenP", "HOUR-TOKEN?", 1, 0, false);
-            declareFunction("time_tokenP", "TIME-TOKEN?", 1, 0, false);
-            declareFunction("milliseconds_tokenP", "MILLISECONDS-TOKEN?", 1, 0, false);
-            declareFunction("time_zone_tokenP", "TIME-ZONE-TOKEN?", 1, 0, false);
-            declareFunction("month_number_tokenP_internal", "MONTH-NUMBER-TOKEN?-INTERNAL", 1, 0, false);
-            declareFunction("month_number_tokenP", "MONTH-NUMBER-TOKEN?", 1, 0, false);
-            declareFunction("explode_time_from_tokens", "EXPLODE-TIME-FROM-TOKENS", 1, 0, false);
-            declareFunction("cyc_date_encode_string_internal", "CYC-DATE-ENCODE-STRING-INTERNAL", 2, 0, false);
-            declareFunction("common_date_encoding_templates", "COMMON-DATE-ENCODING-TEMPLATES", 0, 0, false);
-            declareFunction("cyc_date_decode_string_internal", "CYC-DATE-DECODE-STRING-INTERNAL", 2, 0, false);
-            declareFunction("cyc_date_from_string_internal", "CYC-DATE-FROM-STRING-INTERNAL", 1, 0, false);
-            declareFunction("cyc_time_elapsed_encode_string_internal", "CYC-TIME-ELAPSED-ENCODE-STRING-INTERNAL", 2, 0, false);
-            declareFunction("cyc_time_elapsed_decode_string_internal", "CYC-TIME-ELAPSED-DECODE-STRING-INTERNAL", 2, 0, false);
-            declareFunction("later_than", "LATER-THAN", 2, 0, false);
-        }
-        if (SubLFiles.USE_V2) {
-            declareFunction("date_to_precision", "DATE-TO-PRECISION", 2, 0, false);
-            declareFunction("calendar_date_sum", "CALENDAR-DATE-SUM", 8, 0, false);
-            declareMacro("define_date_utility_test_case", "DEFINE-DATE-UTILITY-TEST-CASE");
-            declareFunction("define_date_utility_test_cases", "DEFINE-DATE-UTILITY-TEST-CASES", 0, 0, false);
-        }
-        return NIL;
-    }
-
-    public static SubLObject declare_date_utilities_file_Previous() {
-        declareFunction("initialize_date_kb_feature", "INITIALIZE-DATE-KB-FEATURE", 0, 0, false);
-        declareFunction("possibly_simple_el_date_p", "POSSIBLY-SIMPLE-EL-DATE-P", 1, 0, false);
-        declareFunction("possibly_el_time_millisecond_p", "POSSIBLY-EL-TIME-MILLISECOND-P", 1, 0, false);
-        declareFunction("possibly_el_time_second_p", "POSSIBLY-EL-TIME-SECOND-P", 1, 0, false);
-        declareFunction("possibly_el_time_minute_p", "POSSIBLY-EL-TIME-MINUTE-P", 1, 0, false);
-        declareFunction("possibly_el_time_hour_p", "POSSIBLY-EL-TIME-HOUR-P", 1, 0, false);
-        declareFunction("possibly_el_date_day_p", "POSSIBLY-EL-DATE-DAY-P", 1, 0, false);
-        declareFunction("possibly_el_date_month_p", "POSSIBLY-EL-DATE-MONTH-P", 1, 0, false);
-        declareFunction("possibly_el_date_year_p", "POSSIBLY-EL-DATE-YEAR-P", 1, 0, false);
-        declareFunction("simple_el_date_p", "SIMPLE-EL-DATE-P", 1, 0, false);
-        declareFunction("el_time_millisecond_p", "EL-TIME-MILLISECOND-P", 1, 0, false);
-        declareFunction("el_time_second_p", "EL-TIME-SECOND-P", 1, 0, false);
-        declareFunction("el_time_minute_p", "EL-TIME-MINUTE-P", 1, 0, false);
-        declareFunction("el_time_hour_p", "EL-TIME-HOUR-P", 1, 0, false);
-        declareFunction("el_date_day_p", "EL-DATE-DAY-P", 1, 0, false);
-        declareFunction("el_date_month_p", "EL-DATE-MONTH-P", 1, 0, false);
-        declareFunction("el_date_year_p", "EL-DATE-YEAR-P", 1, 0, false);
-        declareMacro("el_date_time_compare_guts", "EL-DATE-TIME-COMPARE-GUTS");
-        declareFunction("el_millisecond_compare", "EL-MILLISECOND-COMPARE", 2, 0, false);
-        declareFunction("el_second_compare", "EL-SECOND-COMPARE", 2, 0, false);
-        declareFunction("el_minute_compare", "EL-MINUTE-COMPARE", 2, 0, false);
-        declareFunction("el_hour_compare", "EL-HOUR-COMPARE", 2, 0, false);
-        declareFunction("el_day_compare", "EL-DAY-COMPARE", 2, 0, false);
-        declareFunction("el_month_compare", "EL-MONTH-COMPARE", 2, 0, false);
-        declareFunction("el_year_compare", "EL-YEAR-COMPARE", 2, 0, false);
-        declareFunction("number_compare", "NUMBER-COMPARE", 2, 0, false);
-        declareFunction("month_compare", "MONTH-COMPARE", 2, 0, false);
-        declareFunction("fast_date_L", "FAST-DATE-<", 2, 0, false);
-        declareFunction("fast_date_LE", "FAST-DATE-<=", 2, 0, false);
-        declareFunction("fast_date_compare", "FAST-DATE-COMPARE", 2, 0, false);
-        declareFunction("el_date_granularity_compare", "EL-DATE-GRANULARITY-COMPARE", 2, 0, false);
-        declareFunction("fast_comparable_date_compare", "FAST-COMPARABLE-DATE-COMPARE", 2, 0, false);
-        declareFunction("possibly_hl_date_p", "POSSIBLY-HL-DATE-P", 1, 0, false);
-        declareFunction("possibly_date_p", "POSSIBLY-DATE-P", 1, 0, false);
-        declareFunction("date_p", "DATE-P", 1, 0, false);
-        declareFunction("possibly_time_p", "POSSIBLY-TIME-P", 1, 0, false);
-        declareFunction("time_p", "TIME-P", 1, 0, false);
-        declareFunction("generalized_date_p", "GENERALIZED-DATE-P", 1, 0, false);
-        declareFunction("date_query_p", "DATE-QUERY-P", 1, 1, false);
-        declareFunction("date_p_internal", "DATE-P-INTERNAL", 1, 0, false);
+        declareFunction(me, "initialize_date_kb_feature", "INITIALIZE-DATE-KB-FEATURE", 0, 0, false);
+        declareFunction(me, "possibly_simple_el_date_p", "POSSIBLY-SIMPLE-EL-DATE-P", 1, 0, false);
+        declareFunction(me, "possibly_el_time_millisecond_p", "POSSIBLY-EL-TIME-MILLISECOND-P", 1, 0, false);
+        declareFunction(me, "possibly_el_time_second_p", "POSSIBLY-EL-TIME-SECOND-P", 1, 0, false);
+        declareFunction(me, "possibly_el_time_minute_p", "POSSIBLY-EL-TIME-MINUTE-P", 1, 0, false);
+        declareFunction(me, "possibly_el_time_hour_p", "POSSIBLY-EL-TIME-HOUR-P", 1, 0, false);
+        declareFunction(me, "possibly_el_date_day_p", "POSSIBLY-EL-DATE-DAY-P", 1, 0, false);
+        declareFunction(me, "possibly_el_date_month_p", "POSSIBLY-EL-DATE-MONTH-P", 1, 0, false);
+        declareFunction(me, "possibly_el_date_year_p", "POSSIBLY-EL-DATE-YEAR-P", 1, 0, false);
+        declareFunction(me, "simple_el_date_p", "SIMPLE-EL-DATE-P", 1, 0, false);
+        declareFunction(me, "el_time_millisecond_p", "EL-TIME-MILLISECOND-P", 1, 0, false);
+        declareFunction(me, "el_time_second_p", "EL-TIME-SECOND-P", 1, 0, false);
+        declareFunction(me, "el_time_minute_p", "EL-TIME-MINUTE-P", 1, 0, false);
+        declareFunction(me, "el_time_hour_p", "EL-TIME-HOUR-P", 1, 0, false);
+        declareFunction(me, "el_date_day_p", "EL-DATE-DAY-P", 1, 0, false);
+        declareFunction(me, "el_date_month_p", "EL-DATE-MONTH-P", 1, 0, false);
+        declareFunction(me, "el_date_year_p", "EL-DATE-YEAR-P", 1, 0, false);
+        declareMacro(me, "el_date_time_compare_guts", "EL-DATE-TIME-COMPARE-GUTS");
+        declareFunction(me, "el_millisecond_compare", "EL-MILLISECOND-COMPARE", 2, 0, false);
+        declareFunction(me, "el_second_compare", "EL-SECOND-COMPARE", 2, 0, false);
+        declareFunction(me, "el_minute_compare", "EL-MINUTE-COMPARE", 2, 0, false);
+        declareFunction(me, "el_hour_compare", "EL-HOUR-COMPARE", 2, 0, false);
+        declareFunction(me, "el_day_compare", "EL-DAY-COMPARE", 2, 0, false);
+        declareFunction(me, "el_month_compare", "EL-MONTH-COMPARE", 2, 0, false);
+        declareFunction(me, "el_year_compare", "EL-YEAR-COMPARE", 2, 0, false);
+        declareFunction(me, "number_compare", "NUMBER-COMPARE", 2, 0, false);
+        declareFunction(me, "month_compare", "MONTH-COMPARE", 2, 0, false);
+        declareFunction(me, "fast_date_L", "FAST-DATE-<", 2, 0, false);
+        declareFunction(me, "fast_date_LE", "FAST-DATE-<=", 2, 0, false);
+        declareFunction(me, "fast_date_compare", "FAST-DATE-COMPARE", 2, 0, false);
+        declareFunction(me, "el_date_granularity_compare", "EL-DATE-GRANULARITY-COMPARE", 2, 0, false);
+        declareFunction(me, "fast_comparable_date_compare", "FAST-COMPARABLE-DATE-COMPARE", 2, 0, false);
+        declareFunction(me, "possibly_hl_date_p", "POSSIBLY-HL-DATE-P", 1, 0, false);
+        declareFunction(me, "possibly_date_p", "POSSIBLY-DATE-P", 1, 0, false);
+        declareFunction(me, "date_p", "DATE-P", 1, 0, false);
+        declareFunction(me, "possibly_time_p", "POSSIBLY-TIME-P", 1, 0, false);
+        declareFunction(me, "time_p", "TIME-P", 1, 0, false);
+        declareFunction(me, "generalized_date_p", "GENERALIZED-DATE-P", 1, 0, false);
+        declareFunction(me, "date_query_p", "DATE-QUERY-P", 1, 1, false);
+        declareFunction(me, "date_p_internal", "DATE-P-INTERNAL", 1, 0, false);
         new date_utilities.$date_p_internal$UnaryFunction();
-        declareFunction("day_for_time_p_p", "DAY-FOR-TIME-P-P", 1, 0, false);
-        declareFunction("time_p_internal", "TIME-P-INTERNAL", 1, 0, false);
-        declareFunction("beginning_of_timeP", "BEGINNING-OF-TIME?", 1, 0, false);
-        declareFunction("end_of_timeP", "END-OF-TIME?", 1, 0, false);
-        declareFunction("always_time_intervalP", "ALWAYS-TIME-INTERVAL?", 1, 0, false);
-        declareFunction("empty_time_intervalP", "EMPTY-TIME-INTERVAL?", 1, 0, false);
-        declareFunction("date_unitG", "DATE-UNIT>", 2, 0, false);
-        declareMacro("do_time_units_ordered", "DO-TIME-UNITS-ORDERED");
-        declareFunction("date_formatG", "DATE-FORMAT>", 2, 0, false);
-        declareFunction("extract_date_century", "EXTRACT-DATE-CENTURY", 1, 0, false);
-        declareFunction("extract_date_decade", "EXTRACT-DATE-DECADE", 1, 0, false);
-        declareFunction("extract_date_year", "EXTRACT-DATE-YEAR", 1, 0, false);
-        declareFunction("extract_date_month", "EXTRACT-DATE-MONTH", 1, 0, false);
-        declareFunction("extract_date_month_number", "EXTRACT-DATE-MONTH-NUMBER", 1, 0, false);
-        declareFunction("extract_date_day", "EXTRACT-DATE-DAY", 1, 0, false);
-        declareFunction("extract_date_hour", "EXTRACT-DATE-HOUR", 1, 0, false);
-        declareFunction("extract_date_minute", "EXTRACT-DATE-MINUTE", 1, 0, false);
-        declareFunction("extract_date_second", "EXTRACT-DATE-SECOND", 1, 0, false);
-        declareFunction("extract_date_millisecond", "EXTRACT-DATE-MILLISECOND", 1, 0, false);
-        declareFunction("millisecondstring", "MILLISECONDSTRING", 1, 0, false);
-        declareFunction("extract_date_time_type", "EXTRACT-DATE-TIME-TYPE", 2, 0, false);
-        declareFunction("explode_date", "EXPLODE-DATE", 1, 0, false);
-        declareFunction("date_format", "DATE-FORMAT", 1, 0, false);
-        declareFunction("explode_calendar_time", "EXPLODE-CALENDAR-TIME", 1, 0, false);
-        declareFunction("explode_calendar_date", "EXPLODE-CALENDAR-DATE", 1, 0, false);
-        declareFunction("explode_quarter_date", "EXPLODE-QUARTER-DATE", 1, 0, false);
-        declareFunction("explode_decade_date", "EXPLODE-DECADE-DATE", 1, 0, false);
-        declareFunction("explode_century_date", "EXPLODE-CENTURY-DATE", 1, 0, false);
-        declareFunction("construct_cycl_date", "CONSTRUCT-CYCL-DATE", 6, 0, false);
-        declareFunction("construct_cycl_date_ms", "CONSTRUCT-CYCL-DATE-MS", 7, 0, false);
-        declareFunction("construct_reduced_cycl_date", "CONSTRUCT-REDUCED-CYCL-DATE", 6, 0, false);
-        declareFunction("construct_reduced_cycl_date_ms", "CONSTRUCT-REDUCED-CYCL-DATE-MS", 7, 0, false);
-        declareFunction("date_reduced_to_start", "DATE-REDUCED-TO-START", 1, 0, false);
-        declareFunction("date_reduced_to_end", "DATE-REDUCED-TO-END", 1, 0, false);
-        declareFunction("date_to_precision", "DATE-TO-PRECISION", 2, 1, false);
-        declareFunction("construct_calendar_date", "CONSTRUCT-CALENDAR-DATE", 1, 6, false);
-        declareFunction("construct_quarter_date", "CONSTRUCT-QUARTER-DATE", 1, 1, false);
-        declareFunction("construct_decade_date", "CONSTRUCT-DECADE-DATE", 1, 0, false);
-        declareFunction("construct_century_date", "CONSTRUCT-CENTURY-DATE", 1, 0, false);
-        declareFunction("calendar_date_sum", "CALENDAR-DATE-SUM", 9, 0, false);
-        declareFunction("quarter_date_sum", "QUARTER-DATE-SUM", 4, 0, false);
-        declareFunction("decade_date_sum", "DECADE-DATE-SUM", 3, 0, false);
-        declareFunction("century_date_sum", "CENTURY-DATE-SUM", 3, 0, false);
-        declareFunction("month_p", "MONTH-P", 1, 0, false);
-        declareFunction("month_number", "MONTH-NUMBER", 1, 0, false);
-        declareFunction("number_of_month", "NUMBER-OF-MONTH", 1, 0, false);
-        declareFunction("day_number", "DAY-NUMBER", 1, 0, false);
-        declareFunction("month_term_p", "MONTH-TERM-P", 1, 0, false);
-        declareFunction("day_of_week_p", "DAY-OF-WEEK-P", 1, 0, false);
-        declareFunction("day_of_week_number", "DAY-OF-WEEK-NUMBER", 1, 0, false);
-        declareFunction("following_day_of_week", "FOLLOWING-DAY-OF-WEEK", 1, 0, false);
-        declareFunction("prior_day_of_week", "PRIOR-DAY-OF-WEEK", 1, 0, false);
-        declareFunction("number_of_day_of_week", "NUMBER-OF-DAY-OF-WEEK", 1, 0, false);
-        declareFunction("day_of_week_of_date", "DAY-OF-WEEK-OF-DATE", 1, 0, false);
-        declareFunction("day_of_week_prior_to_date", "DAY-OF-WEEK-PRIOR-TO-DATE", 2, 0, false);
-        declareFunction("day_of_week_prior_to_date_inclusive", "DAY-OF-WEEK-PRIOR-TO-DATE-INCLUSIVE", 2, 0, false);
-        declareFunction("day_of_week_after_date", "DAY-OF-WEEK-AFTER-DATE", 2, 0, false);
-        declareFunction("day_of_week_after_date_inclusive", "DAY-OF-WEEK-AFTER-DATE-INCLUSIVE", 2, 0, false);
-        declareFunction("century_of_year", "CENTURY-OF-YEAR", 1, 0, false);
-        declareFunction("get_century_starting_day", "GET-CENTURY-STARTING-DAY", 1, 0, false);
-        declareFunction("day_of_month_term_p", "DAY-OF-MONTH-TERM-P", 1, 0, false);
-        declareFunction("days_since_rata_die", "DAYS-SINCE-RATA-DIE", 1, 0, false);
-        declareFunction("adjust_thirty_day_february", "ADJUST-THIRTY-DAY-FEBRUARY", 2, 0, false);
-        declareFunction("hour_of_day_p", "HOUR-OF-DAY-P", 1, 0, false);
-        declareFunction("hour_of_day_term_p", "HOUR-OF-DAY-TERM-P", 1, 0, false);
-        declareFunction("hour_of_day_of_date", "HOUR-OF-DAY-OF-DATE", 1, 0, false);
-        declareFunction("number_of_hour_of_day", "NUMBER-OF-HOUR-OF-DAY", 1, 0, false);
-        declareFunction("time_of_day_of_date", "TIME-OF-DAY-OF-DATE", 1, 0, false);
-        declareFunction("minute_of_hour_term_p", "MINUTE-OF-HOUR-TERM-P", 1, 0, false);
-        declareFunction("minute_of_hour_of_date", "MINUTE-OF-HOUR-OF-DATE", 1, 0, false);
-        declareFunction("second_of_minute_term_p", "SECOND-OF-MINUTE-TERM-P", 1, 0, false);
-        declareFunction("second_of_minute_of_date", "SECOND-OF-MINUTE-OF-DATE", 1, 0, false);
-        declareFunction("millisecond_of_second_term_p", "MILLISECOND-OF-SECOND-TERM-P", 1, 0, false);
-        declareFunction("millisecond_of_second_of_date", "MILLISECOND-OF-SECOND-OF-DATE", 1, 0, false);
-        declareFunction("starting_value_for_calendar_unit_p", "STARTING-VALUE-FOR-CALENDAR-UNIT-P", 2, 0, false);
-        declareFunction("starting_numerical_value_for_calendar_unit_p", "STARTING-NUMERICAL-VALUE-FOR-CALENDAR-UNIT-P", 2, 0, false);
-        declareFunction("starting_numerical_values_for_calendar_unit_p", "STARTING-NUMERICAL-VALUES-FOR-CALENDAR-UNIT-P", 2, 0, false);
-        declareFunction("ending_value_for_calendar_unit_p", "ENDING-VALUE-FOR-CALENDAR-UNIT-P", 2, 2, false);
-        declareFunction("ending_numerical_value_for_calendar_unit_p", "ENDING-NUMERICAL-VALUE-FOR-CALENDAR-UNIT-P", 2, 2, false);
-        declareFunction("ending_numerical_values_for_calendar_unit_p", "ENDING-NUMERICAL-VALUES-FOR-CALENDAR-UNIT-P", 2, 2, false);
-        declareFunction("truncate_date_to_format", "TRUNCATE-DATE-TO-FORMAT", 2, 0, false);
-        declareFunction("date_precision", "DATE-PRECISION", 1, 0, false);
-        declareFunction("reduce_date_start", "REDUCE-DATE-START", 1, 0, false);
-        declareFunction("reduce_date_end", "REDUCE-DATE-END", 1, 0, false);
-        declareFunction("defining_time_unit", "DEFINING-TIME-UNIT", 1, 0, false);
-        declareFunction("defining_time_unit_get_interval", "DEFINING-TIME-UNIT-GET-INTERVAL", 1, 0, false);
-        declareFunction("inference_defining_time_unit_internal", "INFERENCE-DEFINING-TIME-UNIT-INTERNAL", 1, 0, false);
-        declareFunction("inference_defining_time_unit", "INFERENCE-DEFINING-TIME-UNIT", 1, 0, false);
-        declareFunction("inference_defining_time_unit_get_interval_internal", "INFERENCE-DEFINING-TIME-UNIT-GET-INTERVAL-INTERNAL", 1, 0, false);
-        declareFunction("inference_defining_time_unit_get_interval", "INFERENCE-DEFINING-TIME-UNIT-GET-INTERVAL", 1, 0, false);
-        declareFunction("convert_time_to_date_precision", "CONVERT-TIME-TO-DATE-PRECISION", 2, 0, false);
-        declareFunction("extend_date_to_time_precision", "EXTEND-DATE-TO-TIME-PRECISION", 2, 0, false);
-        declareFunction("minute_of_date", "MINUTE-OF-DATE", 1, 0, false);
-        declareFunction("hour_of_date", "HOUR-OF-DATE", 1, 0, false);
-        declareFunction("day_of_date", "DAY-OF-DATE", 1, 0, false);
-        declareFunction("month_of_date", "MONTH-OF-DATE", 1, 0, false);
-        declareFunction("quarter_of_date", "QUARTER-OF-DATE", 1, 0, false);
-        declareFunction("quarter_of_month", "QUARTER-OF-MONTH", 1, 0, false);
-        declareFunction("year_of_date", "YEAR-OF-DATE", 1, 0, false);
-        declareFunction("decade_of_date", "DECADE-OF-DATE", 1, 0, false);
-        declareFunction("century_of_date", "CENTURY-OF-DATE", 1, 0, false);
-        declareFunction("dateLE", "DATE<=", 2, 0, false);
-        declareFunction("dateGE", "DATE>=", 2, 0, false);
-        declareFunction("dateE", "DATE=", 2, 0, false);
-        declareFunction("dateL", "DATE<", 2, 0, false);
-        declareFunction("dateG", "DATE>", 2, 0, false);
-        declareFunction("dateL_int", "DATE<-INT", 2, 0, false);
-        declareFunction("cycl_date_initial_second", "CYCL-DATE-INITIAL-SECOND", 1, 0, false);
-        declareFunction("cycl_date_final_second", "CYCL-DATE-FINAL-SECOND", 1, 0, false);
-        declareFunction("date_subsumes", "DATE-SUBSUMES", 2, 0, false);
-        declareFunction("cycl_date_initial_millisecond", "CYCL-DATE-INITIAL-MILLISECOND", 1, 0, false);
-        declareFunction("cycl_date_final_millisecond", "CYCL-DATE-FINAL-MILLISECOND", 1, 0, false);
-        declareFunction("explode_time", "EXPLODE-TIME", 1, 0, false);
-        declareFunction("explode_time_force_integer_amount", "EXPLODE-TIME-FORCE-INTEGER-AMOUNT", 1, 0, false);
-        declareFunction("next_smallest_duration_function", "NEXT-SMALLEST-DURATION-FUNCTION", 1, 0, false);
-        declareFunction("date_after", "DATE-AFTER", 2, 0, false);
-        declareFunction("date_after_precise", "DATE-AFTER-PRECISE", 2, 0, false);
-        declareFunction("date_after_duration_start_precise", "DATE-AFTER-DURATION-START-PRECISE", 2, 0, false);
-        declareFunction("date_before", "DATE-BEFORE", 2, 0, false);
-        declareFunction("date_before_precise", "DATE-BEFORE-PRECISE", 2, 0, false);
-        declareFunction("convert_time_quant_to_seconds", "CONVERT-TIME-QUANT-TO-SECONDS", 1, 0, false);
-        declareFunction("convert_time_quant_to_minutes", "CONVERT-TIME-QUANT-TO-MINUTES", 1, 0, false);
-        declareFunction("convert_time_quant_to_hours", "CONVERT-TIME-QUANT-TO-HOURS", 1, 0, false);
-        declareFunction("convert_time_quant_to_days", "CONVERT-TIME-QUANT-TO-DAYS", 1, 0, false);
-        declareFunction("convert_time_quant_to_months", "CONVERT-TIME-QUANT-TO-MONTHS", 1, 0, false);
-        declareFunction("convert_time_quant_to_years", "CONVERT-TIME-QUANT-TO-YEARS", 1, 0, false);
-        declareFunction("time_elapsed", "TIME-ELAPSED", 2, 1, false);
-        declareFunction("time_elapsed_precision", "TIME-ELAPSED-PRECISION", 2, 0, false);
-        declareFunction("time_elapsed_difference", "TIME-ELAPSED-DIFFERENCE", 3, 0, false);
-        declareFunction("years_difference", "YEARS-DIFFERENCE", 2, 0, false);
-        declareFunction("months_difference", "MONTHS-DIFFERENCE", 2, 0, false);
-        declareFunction("days_difference", "DAYS-DIFFERENCE", 2, 0, false);
-        declareFunction("hours_difference", "HOURS-DIFFERENCE", 2, 0, false);
-        declareFunction("minutes_difference", "MINUTES-DIFFERENCE", 2, 0, false);
-        declareFunction("seconds_difference", "SECONDS-DIFFERENCE", 2, 0, false);
-        declareFunction("milliseconds_difference", "MILLISECONDS-DIFFERENCE", 2, 0, false);
-        declareFunction("leap_years_between", "LEAP-YEARS-BETWEEN", 2, 0, false);
-        declareFunction("naive_leap_years_between", "NAIVE-LEAP-YEARS-BETWEEN", 2, 0, false);
-        declareFunction("years_elapsed", "YEARS-ELAPSED", 3, 1, false);
-        declareFunction("months_elapsed", "MONTHS-ELAPSED", 3, 1, false);
-        declareFunction("days_between_universal_dates", "DAYS-BETWEEN-UNIVERSAL-DATES", 2, 0, false);
-        declareFunction("temporal_indexical_p", "TEMPORAL-INDEXICAL-P", 1, 0, false);
+        declareFunction(me, "day_for_time_p_p", "DAY-FOR-TIME-P-P", 1, 0, false);
+        declareFunction(me, "time_p_internal", "TIME-P-INTERNAL", 1, 0, false);
+        declareFunction(me, "beginning_of_timeP", "BEGINNING-OF-TIME?", 1, 0, false);
+        declareFunction(me, "end_of_timeP", "END-OF-TIME?", 1, 0, false);
+        declareFunction(me, "always_time_intervalP", "ALWAYS-TIME-INTERVAL?", 1, 0, false);
+        declareFunction(me, "empty_time_intervalP", "EMPTY-TIME-INTERVAL?", 1, 0, false);
+        declareFunction(me, "date_unitG", "DATE-UNIT>", 2, 0, false);
+        declareMacro(me, "do_time_units_ordered", "DO-TIME-UNITS-ORDERED");
+        declareFunction(me, "date_formatG", "DATE-FORMAT>", 2, 0, false);
+        declareFunction(me, "extract_date_century", "EXTRACT-DATE-CENTURY", 1, 0, false);
+        declareFunction(me, "extract_date_decade", "EXTRACT-DATE-DECADE", 1, 0, false);
+        declareFunction(me, "extract_date_year", "EXTRACT-DATE-YEAR", 1, 0, false);
+        declareFunction(me, "extract_date_month", "EXTRACT-DATE-MONTH", 1, 0, false);
+        declareFunction(me, "extract_date_month_number", "EXTRACT-DATE-MONTH-NUMBER", 1, 0, false);
+        declareFunction(me, "extract_date_day", "EXTRACT-DATE-DAY", 1, 0, false);
+        declareFunction(me, "extract_date_hour", "EXTRACT-DATE-HOUR", 1, 0, false);
+        declareFunction(me, "extract_date_minute", "EXTRACT-DATE-MINUTE", 1, 0, false);
+        declareFunction(me, "extract_date_second", "EXTRACT-DATE-SECOND", 1, 0, false);
+        declareFunction(me, "extract_date_millisecond", "EXTRACT-DATE-MILLISECOND", 1, 0, false);
+        declareFunction(me, "millisecondstring", "MILLISECONDSTRING", 1, 0, false);
+        declareFunction(me, "extract_date_time_type", "EXTRACT-DATE-TIME-TYPE", 2, 0, false);
+        declareFunction(me, "explode_date", "EXPLODE-DATE", 1, 0, false);
+        declareFunction(me, "date_format", "DATE-FORMAT", 1, 0, false);
+        declareFunction(me, "explode_calendar_time", "EXPLODE-CALENDAR-TIME", 1, 0, false);
+        declareFunction(me, "explode_calendar_date", "EXPLODE-CALENDAR-DATE", 1, 0, false);
+        declareFunction(me, "explode_quarter_date", "EXPLODE-QUARTER-DATE", 1, 0, false);
+        declareFunction(me, "explode_decade_date", "EXPLODE-DECADE-DATE", 1, 0, false);
+        declareFunction(me, "explode_century_date", "EXPLODE-CENTURY-DATE", 1, 0, false);
+        declareFunction(me, "construct_cycl_date", "CONSTRUCT-CYCL-DATE", 6, 0, false);
+        declareFunction(me, "construct_cycl_date_ms", "CONSTRUCT-CYCL-DATE-MS", 7, 0, false);
+        declareFunction(me, "construct_reduced_cycl_date", "CONSTRUCT-REDUCED-CYCL-DATE", 6, 0, false);
+        declareFunction(me, "construct_reduced_cycl_date_ms", "CONSTRUCT-REDUCED-CYCL-DATE-MS", 7, 0, false);
+        declareFunction(me, "date_reduced_to_start", "DATE-REDUCED-TO-START", 1, 0, false);
+        declareFunction(me, "date_reduced_to_end", "DATE-REDUCED-TO-END", 1, 0, false);
+        declareFunction(me, "date_to_precision", "DATE-TO-PRECISION", 2, 1, false);
+        declareFunction(me, "construct_calendar_date", "CONSTRUCT-CALENDAR-DATE", 1, 6, false);
+        declareFunction(me, "construct_quarter_date", "CONSTRUCT-QUARTER-DATE", 1, 1, false);
+        declareFunction(me, "construct_decade_date", "CONSTRUCT-DECADE-DATE", 1, 0, false);
+        declareFunction(me, "construct_century_date", "CONSTRUCT-CENTURY-DATE", 1, 0, false);
+        declareFunction(me, "calendar_date_sum", "CALENDAR-DATE-SUM", 9, 0, false);
+        declareFunction(me, "quarter_date_sum", "QUARTER-DATE-SUM", 4, 0, false);
+        declareFunction(me, "decade_date_sum", "DECADE-DATE-SUM", 3, 0, false);
+        declareFunction(me, "century_date_sum", "CENTURY-DATE-SUM", 3, 0, false);
+        declareFunction(me, "month_p", "MONTH-P", 1, 0, false);
+        declareFunction(me, "month_number", "MONTH-NUMBER", 1, 0, false);
+        declareFunction(me, "number_of_month", "NUMBER-OF-MONTH", 1, 0, false);
+        declareFunction(me, "day_number", "DAY-NUMBER", 1, 0, false);
+        declareFunction(me, "month_term_p", "MONTH-TERM-P", 1, 0, false);
+        declareFunction(me, "day_of_week_p", "DAY-OF-WEEK-P", 1, 0, false);
+        declareFunction(me, "day_of_week_number", "DAY-OF-WEEK-NUMBER", 1, 0, false);
+        declareFunction(me, "following_day_of_week", "FOLLOWING-DAY-OF-WEEK", 1, 0, false);
+        declareFunction(me, "prior_day_of_week", "PRIOR-DAY-OF-WEEK", 1, 0, false);
+        declareFunction(me, "number_of_day_of_week", "NUMBER-OF-DAY-OF-WEEK", 1, 0, false);
+        declareFunction(me, "day_of_week_of_date", "DAY-OF-WEEK-OF-DATE", 1, 0, false);
+        declareFunction(me, "day_of_week_prior_to_date", "DAY-OF-WEEK-PRIOR-TO-DATE", 2, 0, false);
+        declareFunction(me, "day_of_week_prior_to_date_inclusive", "DAY-OF-WEEK-PRIOR-TO-DATE-INCLUSIVE", 2, 0, false);
+        declareFunction(me, "day_of_week_after_date", "DAY-OF-WEEK-AFTER-DATE", 2, 0, false);
+        declareFunction(me, "day_of_week_after_date_inclusive", "DAY-OF-WEEK-AFTER-DATE-INCLUSIVE", 2, 0, false);
+        declareFunction(me, "century_of_year", "CENTURY-OF-YEAR", 1, 0, false);
+        declareFunction(me, "get_century_starting_day", "GET-CENTURY-STARTING-DAY", 1, 0, false);
+        declareFunction(me, "day_of_month_term_p", "DAY-OF-MONTH-TERM-P", 1, 0, false);
+        declareFunction(me, "days_since_rata_die", "DAYS-SINCE-RATA-DIE", 1, 0, false);
+        declareFunction(me, "adjust_thirty_day_february", "ADJUST-THIRTY-DAY-FEBRUARY", 2, 0, false);
+        declareFunction(me, "hour_of_day_p", "HOUR-OF-DAY-P", 1, 0, false);
+        declareFunction(me, "hour_of_day_term_p", "HOUR-OF-DAY-TERM-P", 1, 0, false);
+        declareFunction(me, "hour_of_day_of_date", "HOUR-OF-DAY-OF-DATE", 1, 0, false);
+        declareFunction(me, "number_of_hour_of_day", "NUMBER-OF-HOUR-OF-DAY", 1, 0, false);
+        declareFunction(me, "time_of_day_of_date", "TIME-OF-DAY-OF-DATE", 1, 0, false);
+        declareFunction(me, "minute_of_hour_term_p", "MINUTE-OF-HOUR-TERM-P", 1, 0, false);
+        declareFunction(me, "minute_of_hour_of_date", "MINUTE-OF-HOUR-OF-DATE", 1, 0, false);
+        declareFunction(me, "second_of_minute_term_p", "SECOND-OF-MINUTE-TERM-P", 1, 0, false);
+        declareFunction(me, "second_of_minute_of_date", "SECOND-OF-MINUTE-OF-DATE", 1, 0, false);
+        declareFunction(me, "millisecond_of_second_term_p", "MILLISECOND-OF-SECOND-TERM-P", 1, 0, false);
+        declareFunction(me, "millisecond_of_second_of_date", "MILLISECOND-OF-SECOND-OF-DATE", 1, 0, false);
+        declareFunction(me, "starting_value_for_calendar_unit_p", "STARTING-VALUE-FOR-CALENDAR-UNIT-P", 2, 0, false);
+        declareFunction(me, "starting_numerical_value_for_calendar_unit_p", "STARTING-NUMERICAL-VALUE-FOR-CALENDAR-UNIT-P", 2, 0, false);
+        declareFunction(me, "starting_numerical_values_for_calendar_unit_p", "STARTING-NUMERICAL-VALUES-FOR-CALENDAR-UNIT-P", 2, 0, false);
+        declareFunction(me, "ending_value_for_calendar_unit_p", "ENDING-VALUE-FOR-CALENDAR-UNIT-P", 2, 2, false);
+        declareFunction(me, "ending_numerical_value_for_calendar_unit_p", "ENDING-NUMERICAL-VALUE-FOR-CALENDAR-UNIT-P", 2, 2, false);
+        declareFunction(me, "ending_numerical_values_for_calendar_unit_p", "ENDING-NUMERICAL-VALUES-FOR-CALENDAR-UNIT-P", 2, 2, false);
+        declareFunction(me, "truncate_date_to_format", "TRUNCATE-DATE-TO-FORMAT", 2, 0, false);
+        declareFunction(me, "date_precision", "DATE-PRECISION", 1, 0, false);
+        declareFunction(me, "reduce_date_start", "REDUCE-DATE-START", 1, 0, false);
+        declareFunction(me, "reduce_date_end", "REDUCE-DATE-END", 1, 0, false);
+        declareFunction(me, "defining_time_unit", "DEFINING-TIME-UNIT", 1, 0, false);
+        declareFunction(me, "defining_time_unit_get_interval", "DEFINING-TIME-UNIT-GET-INTERVAL", 1, 0, false);
+        declareFunction(me, "inference_defining_time_unit_internal", "INFERENCE-DEFINING-TIME-UNIT-INTERNAL", 1, 0, false);
+        declareFunction(me, "inference_defining_time_unit", "INFERENCE-DEFINING-TIME-UNIT", 1, 0, false);
+        declareFunction(me, "inference_defining_time_unit_get_interval_internal", "INFERENCE-DEFINING-TIME-UNIT-GET-INTERVAL-INTERNAL", 1, 0, false);
+        declareFunction(me, "inference_defining_time_unit_get_interval", "INFERENCE-DEFINING-TIME-UNIT-GET-INTERVAL", 1, 0, false);
+        declareFunction(me, "convert_time_to_date_precision", "CONVERT-TIME-TO-DATE-PRECISION", 2, 0, false);
+        declareFunction(me, "extend_date_to_time_precision", "EXTEND-DATE-TO-TIME-PRECISION", 2, 0, false);
+        declareFunction(me, "minute_of_date", "MINUTE-OF-DATE", 1, 0, false);
+        declareFunction(me, "hour_of_date", "HOUR-OF-DATE", 1, 0, false);
+        declareFunction(me, "day_of_date", "DAY-OF-DATE", 1, 0, false);
+        declareFunction(me, "month_of_date", "MONTH-OF-DATE", 1, 0, false);
+        declareFunction(me, "quarter_of_date", "QUARTER-OF-DATE", 1, 0, false);
+        declareFunction(me, "quarter_of_month", "QUARTER-OF-MONTH", 1, 0, false);
+        declareFunction(me, "year_of_date", "YEAR-OF-DATE", 1, 0, false);
+        declareFunction(me, "decade_of_date", "DECADE-OF-DATE", 1, 0, false);
+        declareFunction(me, "century_of_date", "CENTURY-OF-DATE", 1, 0, false);
+        declareFunction(me, "dateLE", "DATE<=", 2, 0, false);
+        declareFunction(me, "dateGE", "DATE>=", 2, 0, false);
+        declareFunction(me, "dateE", "DATE=", 2, 0, false);
+        declareFunction(me, "dateL", "DATE<", 2, 0, false);
+        declareFunction(me, "dateG", "DATE>", 2, 0, false);
+        declareFunction(me, "dateL_int", "DATE<-INT", 2, 0, false);
+        declareFunction(me, "cycl_date_initial_second", "CYCL-DATE-INITIAL-SECOND", 1, 0, false);
+        declareFunction(me, "cycl_date_final_second", "CYCL-DATE-FINAL-SECOND", 1, 0, false);
+        declareFunction(me, "date_subsumes", "DATE-SUBSUMES", 2, 0, false);
+        declareFunction(me, "cycl_date_initial_millisecond", "CYCL-DATE-INITIAL-MILLISECOND", 1, 0, false);
+        declareFunction(me, "cycl_date_final_millisecond", "CYCL-DATE-FINAL-MILLISECOND", 1, 0, false);
+        declareFunction(me, "explode_time", "EXPLODE-TIME", 1, 0, false);
+        declareFunction(me, "explode_time_force_integer_amount", "EXPLODE-TIME-FORCE-INTEGER-AMOUNT", 1, 0, false);
+        declareFunction(me, "next_smallest_duration_function", "NEXT-SMALLEST-DURATION-FUNCTION", 1, 0, false);
+        declareFunction(me, "date_after", "DATE-AFTER", 2, 0, false);
+        declareFunction(me, "date_after_precise", "DATE-AFTER-PRECISE", 2, 0, false);
+        declareFunction(me, "date_after_duration_start_precise", "DATE-AFTER-DURATION-START-PRECISE", 2, 0, false);
+        declareFunction(me, "date_before", "DATE-BEFORE", 2, 0, false);
+        declareFunction(me, "date_before_precise", "DATE-BEFORE-PRECISE", 2, 0, false);
+        declareFunction(me, "convert_time_quant_to_seconds", "CONVERT-TIME-QUANT-TO-SECONDS", 1, 0, false);
+        declareFunction(me, "convert_time_quant_to_minutes", "CONVERT-TIME-QUANT-TO-MINUTES", 1, 0, false);
+        declareFunction(me, "convert_time_quant_to_hours", "CONVERT-TIME-QUANT-TO-HOURS", 1, 0, false);
+        declareFunction(me, "convert_time_quant_to_days", "CONVERT-TIME-QUANT-TO-DAYS", 1, 0, false);
+        declareFunction(me, "convert_time_quant_to_months", "CONVERT-TIME-QUANT-TO-MONTHS", 1, 0, false);
+        declareFunction(me, "convert_time_quant_to_years", "CONVERT-TIME-QUANT-TO-YEARS", 1, 0, false);
+        declareFunction(me, "time_elapsed", "TIME-ELAPSED", 2, 1, false);
+        declareFunction(me, "time_elapsed_precision", "TIME-ELAPSED-PRECISION", 2, 0, false);
+        declareFunction(me, "time_elapsed_difference", "TIME-ELAPSED-DIFFERENCE", 3, 0, false);
+        declareFunction(me, "years_difference", "YEARS-DIFFERENCE", 2, 0, false);
+        declareFunction(me, "months_difference", "MONTHS-DIFFERENCE", 2, 0, false);
+        declareFunction(me, "days_difference", "DAYS-DIFFERENCE", 2, 0, false);
+        declareFunction(me, "hours_difference", "HOURS-DIFFERENCE", 2, 0, false);
+        declareFunction(me, "minutes_difference", "MINUTES-DIFFERENCE", 2, 0, false);
+        declareFunction(me, "seconds_difference", "SECONDS-DIFFERENCE", 2, 0, false);
+        declareFunction(me, "milliseconds_difference", "MILLISECONDS-DIFFERENCE", 2, 0, false);
+        declareFunction(me, "leap_years_between", "LEAP-YEARS-BETWEEN", 2, 0, false);
+        declareFunction(me, "naive_leap_years_between", "NAIVE-LEAP-YEARS-BETWEEN", 2, 0, false);
+        declareFunction(me, "years_elapsed", "YEARS-ELAPSED", 3, 1, false);
+        declareFunction(me, "months_elapsed", "MONTHS-ELAPSED", 3, 1, false);
+        declareFunction(me, "days_between_universal_dates", "DAYS-BETWEEN-UNIVERSAL-DATES", 2, 0, false);
+        declareFunction(me, "temporal_indexical_p", "TEMPORAL-INDEXICAL-P", 1, 0, false);
         new date_utilities.$temporal_indexical_p$UnaryFunction();
-        declareFunction("contains_indexicalP", "CONTAINS-INDEXICAL?", 1, 0, false);
-        declareFunction("first_among_time_indexes", "FIRST-AMONG-TIME-INDEXES", 1, 0, false);
-        declareFunction("last_among_time_indexes", "LAST-AMONG-TIME-INDEXES", 1, 0, false);
-        declareFunction("bind_and_store_indexicals", "BIND-AND-STORE-INDEXICALS", 1, 0, false);
-        declareFunction("possibly_bind_temporal_indexical_in_object", "POSSIBLY-BIND-TEMPORAL-INDEXICAL-IN-OBJECT", 1, 0, false);
-        declareFunction("bind_temporal_indexical_in_object", "BIND-TEMPORAL-INDEXICAL-IN-OBJECT", 1, 0, false);
-        declareFunction("bind_temporal_indexicals_in_hlmt_list", "BIND-TEMPORAL-INDEXICALS-IN-HLMT-LIST", 1, 0, false);
-        declareFunction("inference_now", "INFERENCE-NOW", 0, 0, false);
-        declareFunction("get_inference_now", "GET-INFERENCE-NOW", 0, 0, false);
-        declareMacro("with_cpu_now", "WITH-CPU-NOW");
-        declareMacro("with_inference_now", "WITH-INFERENCE-NOW");
-        declareMacro("possibly_with_inference_now", "POSSIBLY-WITH-INFERENCE-NOW");
-        declareFunction("indexical_now", "INDEXICAL-NOW", 0, 0, false);
+        declareFunction(me, "contains_indexicalP", "CONTAINS-INDEXICAL?", 1, 0, false);
+        declareFunction(me, "first_among_time_indexes", "FIRST-AMONG-TIME-INDEXES", 1, 0, false);
+        declareFunction(me, "last_among_time_indexes", "LAST-AMONG-TIME-INDEXES", 1, 0, false);
+        declareFunction(me, "bind_and_store_indexicals", "BIND-AND-STORE-INDEXICALS", 1, 0, false);
+        declareFunction(me, "possibly_bind_temporal_indexical_in_object", "POSSIBLY-BIND-TEMPORAL-INDEXICAL-IN-OBJECT", 1, 0, false);
+        declareFunction(me, "bind_temporal_indexical_in_object", "BIND-TEMPORAL-INDEXICAL-IN-OBJECT", 1, 0, false);
+        declareFunction(me, "bind_temporal_indexicals_in_hlmt_list", "BIND-TEMPORAL-INDEXICALS-IN-HLMT-LIST", 1, 0, false);
+        declareFunction(me, "inference_now", "INFERENCE-NOW", 0, 0, false);
+        declareFunction(me, "get_inference_now", "GET-INFERENCE-NOW", 0, 0, false);
+        declareMacro(me, "with_cpu_now", "WITH-CPU-NOW");
+        declareMacro(me, "with_inference_now", "WITH-INFERENCE-NOW");
+        declareMacro(me, "possibly_with_inference_now", "POSSIBLY-WITH-INFERENCE-NOW");
+        declareFunction(me, "indexical_now", "INDEXICAL-NOW", 0, 0, false);
         new date_utilities.$indexical_now$ZeroArityFunction();
-        declareFunction("indexical_now_precise", "INDEXICAL-NOW-PRECISE", 0, 0, false);
-        declareFunction("indexical_today", "INDEXICAL-TODAY", 0, 0, false);
-        declareFunction("indexical_tomorrow", "INDEXICAL-TOMORROW", 0, 0, false);
-        declareFunction("indexical_yesterday", "INDEXICAL-YESTERDAY", 0, 0, false);
-        declareFunction("indexical_seconds_since_1970", "INDEXICAL-SECONDS-SINCE-1970", 0, 0, false);
-        declareFunction("current_time_interval_of_type", "CURRENT-TIME-INTERVAL-OF-TYPE", 1, 0, false);
-        declareFunction("next_iterated_cyclic_interval_inclusive", "NEXT-ITERATED-CYCLIC-INTERVAL-INCLUSIVE", 1, 1, false);
-        declareFunction("next_iterated_cyclic_interval_inclusive_helper", "NEXT-ITERATED-CYCLIC-INTERVAL-INCLUSIVE-HELPER", 8, 0, false);
-        declareFunction("universal_time_to_cycl_date", "UNIVERSAL-TIME-TO-CYCL-DATE", 1, 0, false);
-        declareFunction("universal_date_to_cycl_date", "UNIVERSAL-DATE-TO-CYCL-DATE", 1, 0, false);
-        declareFunction("extended_universal_date_to_cycl_date", "EXTENDED-UNIVERSAL-DATE-TO-CYCL-DATE", 1, 0, false);
-        declareFunction("cycl_date_to_universal_date", "CYCL-DATE-TO-UNIVERSAL-DATE", 1, 0, false);
-        declareFunction("cycl_date_to_universal_time", "CYCL-DATE-TO-UNIVERSAL-TIME", 1, 0, false);
-        declareFunction("cycl_date_to_universal_second", "CYCL-DATE-TO-UNIVERSAL-SECOND", 1, 0, false);
-        declareFunction("extended_universal_date_for_date_initial_second", "EXTENDED-UNIVERSAL-DATE-FOR-DATE-INITIAL-SECOND", 1, 0, false);
-        declareFunction("extended_universal_date_for_date_final_second", "EXTENDED-UNIVERSAL-DATE-FOR-DATE-FINAL-SECOND", 1, 0, false);
-        declareFunction("temporal_object_from_string", "TEMPORAL-OBJECT-FROM-STRING", 1, 0, false);
-        declareFunction("meets_time_object_constraintP", "MEETS-TIME-OBJECT-CONSTRAINT?", 1, 1, false);
-        declareFunction("construct_cycl_date_from_date_range_string", "CONSTRUCT-CYCL-DATE-FROM-DATE-RANGE-STRING", 1, 0, false);
-        declareFunction("string_specifies_date_range_p", "STRING-SPECIFIES-DATE-RANGE-P", 1, 0, false);
-        declareFunction("unpack_date_range_string", "UNPACK-DATE-RANGE-STRING", 1, 0, false);
-        declareFunction("construct_date_from_to", "CONSTRUCT-DATE-FROM-TO", 4, 0, false);
-        declareFunction("parse_date_from_string", "PARSE-DATE-FROM-STRING", 1, 0, false);
-        declareFunction("possibly_filter_two_digit_years", "POSSIBLY-FILTER-TWO-DIGIT-YEARS", 1, 0, false);
-        declareFunction("parse_date_wXout_two_digit_years", "PARSE-DATE-W/OUT-TWO-DIGIT-YEARS", 1, 0, false);
-        declareFunction("parse_unambiguous_date_from_string", "PARSE-UNAMBIGUOUS-DATE-FROM-STRING", 1, 0, false);
-        declareFunction("guess_datetime_string", "GUESS-DATETIME-STRING", 1, 0, false);
-        declareFunction("construct_date_and_time_from_tokens", "CONSTRUCT-DATE-AND-TIME-FROM-TOKENS", 2, 0, false);
-        declareFunction("date_time_tokensP", "DATE-TIME-TOKENS?", 1, 0, false);
-        declareFunction("time_date_tokensP", "TIME-DATE-TOKENS?", 1, 0, false);
-        declareFunction("parse_date_from_string_fast", "PARSE-DATE-FROM-STRING-FAST", 1, 3, false);
-        declareFunction("number_should_be_interpreted_as_a_dateP", "NUMBER-SHOULD-BE-INTERPRETED-AS-A-DATE?", 4, 0, false);
-        declareFunction("two_digit_yearP", "TWO-DIGIT-YEAR?", 1, 1, false);
-        declareFunction("construct_possible_more_likely_dates", "CONSTRUCT-POSSIBLE-MORE-LIKELY-DATES", 1, 1, false);
-        declareFunction("explode_date_from_tokens", "EXPLODE-DATE-FROM-TOKENS", 1, 2, false);
-        declareFunction("tokens_match_date_pattern", "TOKENS-MATCH-DATE-PATTERN", 2, 0, false);
-        declareFunction("year_tokenP_internal", "YEAR-TOKEN?-INTERNAL", 1, 1, false);
-        declareFunction("year_tokenP", "YEAR-TOKEN?", 1, 1, false);
-        declareFunction("day_tokenP_internal", "DAY-TOKEN?-INTERNAL", 1, 0, false);
-        declareFunction("day_tokenP", "DAY-TOKEN?", 1, 0, false);
-        declareFunction("day_words_tokenP", "DAY-WORDS-TOKEN?", 1, 0, false);
-        declareFunction("day_word_token_value", "DAY-WORD-TOKEN-VALUE", 1, 0, false);
-        declareFunction("fill_day_words", "FILL-DAY-WORDS", 0, 0, false);
-        declareFunction("day_number_tokenP", "DAY-NUMBER-TOKEN?", 1, 0, false);
-        declareFunction("month_tokenP", "MONTH-TOKEN?", 1, 0, false);
-        declareFunction("month_name_tokenP", "MONTH-NAME-TOKEN?", 1, 0, false);
-        declareFunction("day_name_tokenP", "DAY-NAME-TOKEN?", 1, 0, false);
-        declareFunction("hour_tokenP", "HOUR-TOKEN?", 1, 0, false);
-        declareFunction("time_tokenP", "TIME-TOKEN?", 1, 0, false);
-        declareFunction("milliseconds_tokenP", "MILLISECONDS-TOKEN?", 1, 0, false);
-        declareFunction("time_zone_tokenP", "TIME-ZONE-TOKEN?", 1, 0, false);
-        declareFunction("month_number_tokenP_internal", "MONTH-NUMBER-TOKEN?-INTERNAL", 1, 0, false);
-        declareFunction("month_number_tokenP", "MONTH-NUMBER-TOKEN?", 1, 0, false);
-        declareFunction("explode_time_from_tokens", "EXPLODE-TIME-FROM-TOKENS", 1, 0, false);
-        declareFunction("cyc_date_encode_string_internal", "CYC-DATE-ENCODE-STRING-INTERNAL", 2, 0, false);
-        declareFunction("common_date_encoding_templates", "COMMON-DATE-ENCODING-TEMPLATES", 0, 0, false);
-        declareFunction("cyc_date_decode_string_internal", "CYC-DATE-DECODE-STRING-INTERNAL", 2, 0, false);
-        declareFunction("cyc_date_from_string_internal", "CYC-DATE-FROM-STRING-INTERNAL", 1, 0, false);
-        declareFunction("cyc_time_elapsed_encode_string_internal", "CYC-TIME-ELAPSED-ENCODE-STRING-INTERNAL", 2, 0, false);
-        declareFunction("cyc_time_elapsed_decode_string_internal", "CYC-TIME-ELAPSED-DECODE-STRING-INTERNAL", 2, 0, false);
-        declareFunction("later_than", "LATER-THAN", 2, 0, false);
-        return NIL;
-    }
-
-    public static final SubLObject $list_alt261 = com.cyc.cycjava.cycl.date_utilities._constant_261_initializer();
-
-    public static final SubLObject $list_alt263 = com.cyc.cycjava.cycl.date_utilities._constant_263_initializer();
-
-    private static final SubLSymbol $DEFINED = makeKeyword("DEFINED");
-
-    public static final SubLObject init_date_utilities_file_alt() {
-        deflexical("*DATE-CORE-CONSTANTS*", $list_alt0);
-        deflexical("*DATE-P-GRAMMAR*", $list_alt6);
-        deflexical("*TIME-P-GRAMMAR*", $list_alt7);
-        defconstant("*BEGINNING-OF-TIME*", $BEGINNING_OF_TIME);
-        defconstant("*END-OF-TIME*", $END_OF_TIME);
-        deflexical("*DATE-UNITS-ORDERED*", $list_alt12);
-        deflexical("*DATE-FORMATS-ORDERED*", $list_alt19);
-        deflexical("*MONTH-CONSTANT-TABLE*", $list_alt78);
-        deflexical("*DAYS-OF-WEEK*", $list_alt83);
-        deflexical("*GREGORIAN-RATA-DIE*", $list_alt89);
-        deflexical("*HOURS-OF-DAY*", $list_alt95);
-        defconstant("*U-DATE-YEAR-DIV*", $int$10000000000);
-        deflexical("*TEMPORAL-INDEXICALS*", NIL != boundp($temporal_indexicals$) ? ((SubLObject) ($temporal_indexicals$.getGlobalValue())) : $list_alt121);
-        defparameter("*INFERENCE-NOW*", NIL);
-        defconstant("*START-OF-1970*", encode_universal_time(ZERO_INTEGER, ZERO_INTEGER, ZERO_INTEGER, ONE_INTEGER, ONE_INTEGER, $int$1970, UNPROVIDED));
-        defparameter("*PARSE-TO-TWO-DIGIT-YEARS-IN-DATES?*", T);
-        defparameter("*DATE-PATTERNS*", $list_alt164);
-        defparameter("*DATE-QUERY-PATTERNS*", $list_alt165);
-        defparameter("*DAY-WORDS*", NIL);
-        defparameter("*DAY-WORD-PAIRS*", $list_alt179);
-        defparameter("*DATE-UTILITY-TEST-CASES*", set.new_set(UNPROVIDED, UNPROVIDED));
+        declareFunction(me, "indexical_now_precise", "INDEXICAL-NOW-PRECISE", 0, 0, false);
+        declareFunction(me, "indexical_today", "INDEXICAL-TODAY", 0, 0, false);
+        declareFunction(me, "indexical_tomorrow", "INDEXICAL-TOMORROW", 0, 0, false);
+        declareFunction(me, "indexical_yesterday", "INDEXICAL-YESTERDAY", 0, 0, false);
+        declareFunction(me, "indexical_seconds_since_1970", "INDEXICAL-SECONDS-SINCE-1970", 0, 0, false);
+        declareFunction(me, "current_time_interval_of_type", "CURRENT-TIME-INTERVAL-OF-TYPE", 1, 0, false);
+        declareFunction(me, "next_iterated_cyclic_interval_inclusive", "NEXT-ITERATED-CYCLIC-INTERVAL-INCLUSIVE", 1, 1, false);
+        declareFunction(me, "next_iterated_cyclic_interval_inclusive_helper", "NEXT-ITERATED-CYCLIC-INTERVAL-INCLUSIVE-HELPER", 8, 0, false);
+        declareFunction(me, "universal_time_to_cycl_date", "UNIVERSAL-TIME-TO-CYCL-DATE", 1, 0, false);
+        declareFunction(me, "universal_date_to_cycl_date", "UNIVERSAL-DATE-TO-CYCL-DATE", 1, 0, false);
+        declareFunction(me, "extended_universal_date_to_cycl_date", "EXTENDED-UNIVERSAL-DATE-TO-CYCL-DATE", 1, 0, false);
+        declareFunction(me, "cycl_date_to_universal_date", "CYCL-DATE-TO-UNIVERSAL-DATE", 1, 0, false);
+        declareFunction(me, "cycl_date_to_universal_time", "CYCL-DATE-TO-UNIVERSAL-TIME", 1, 0, false);
+        declareFunction(me, "cycl_date_to_universal_second", "CYCL-DATE-TO-UNIVERSAL-SECOND", 1, 0, false);
+        declareFunction(me, "extended_universal_date_for_date_initial_second", "EXTENDED-UNIVERSAL-DATE-FOR-DATE-INITIAL-SECOND", 1, 0, false);
+        declareFunction(me, "extended_universal_date_for_date_final_second", "EXTENDED-UNIVERSAL-DATE-FOR-DATE-FINAL-SECOND", 1, 0, false);
+        declareFunction(me, "temporal_object_from_string", "TEMPORAL-OBJECT-FROM-STRING", 1, 0, false);
+        declareFunction(me, "meets_time_object_constraintP", "MEETS-TIME-OBJECT-CONSTRAINT?", 1, 1, false);
+        declareFunction(me, "construct_cycl_date_from_date_range_string", "CONSTRUCT-CYCL-DATE-FROM-DATE-RANGE-STRING", 1, 0, false);
+        declareFunction(me, "string_specifies_date_range_p", "STRING-SPECIFIES-DATE-RANGE-P", 1, 0, false);
+        declareFunction(me, "unpack_date_range_string", "UNPACK-DATE-RANGE-STRING", 1, 0, false);
+        declareFunction(me, "construct_date_from_to", "CONSTRUCT-DATE-FROM-TO", 4, 0, false);
+        declareFunction(me, "parse_date_from_string", "PARSE-DATE-FROM-STRING", 1, 0, false);
+        declareFunction(me, "possibly_filter_two_digit_years", "POSSIBLY-FILTER-TWO-DIGIT-YEARS", 1, 0, false);
+        declareFunction(me, "parse_date_wXout_two_digit_years", "PARSE-DATE-W/OUT-TWO-DIGIT-YEARS", 1, 0, false);
+        declareFunction(me, "parse_unambiguous_date_from_string", "PARSE-UNAMBIGUOUS-DATE-FROM-STRING", 1, 0, false);
+        declareFunction(me, "guess_datetime_string", "GUESS-DATETIME-STRING", 1, 0, false);
+        declareFunction(me, "construct_date_and_time_from_tokens", "CONSTRUCT-DATE-AND-TIME-FROM-TOKENS", 2, 0, false);
+        declareFunction(me, "date_time_tokensP", "DATE-TIME-TOKENS?", 1, 0, false);
+        declareFunction(me, "time_date_tokensP", "TIME-DATE-TOKENS?", 1, 0, false);
+        declareFunction(me, "parse_date_from_string_fast", "PARSE-DATE-FROM-STRING-FAST", 1, 3, false);
+        declareFunction(me, "number_should_be_interpreted_as_a_dateP", "NUMBER-SHOULD-BE-INTERPRETED-AS-A-DATE?", 4, 0, false);
+        declareFunction(me, "two_digit_yearP", "TWO-DIGIT-YEAR?", 1, 1, false);
+        declareFunction(me, "construct_possible_more_likely_dates", "CONSTRUCT-POSSIBLE-MORE-LIKELY-DATES", 1, 1, false);
+        declareFunction(me, "explode_date_from_tokens", "EXPLODE-DATE-FROM-TOKENS", 1, 2, false);
+        declareFunction(me, "tokens_match_date_pattern", "TOKENS-MATCH-DATE-PATTERN", 2, 0, false);
+        declareFunction(me, "year_tokenP_internal", "YEAR-TOKEN?-INTERNAL", 1, 1, false);
+        declareFunction(me, "year_tokenP", "YEAR-TOKEN?", 1, 1, false);
+        declareFunction(me, "day_tokenP_internal", "DAY-TOKEN?-INTERNAL", 1, 0, false);
+        declareFunction(me, "day_tokenP", "DAY-TOKEN?", 1, 0, false);
+        declareFunction(me, "day_words_tokenP", "DAY-WORDS-TOKEN?", 1, 0, false);
+        declareFunction(me, "day_word_token_value", "DAY-WORD-TOKEN-VALUE", 1, 0, false);
+        declareFunction(me, "fill_day_words", "FILL-DAY-WORDS", 0, 0, false);
+        declareFunction(me, "day_number_tokenP", "DAY-NUMBER-TOKEN?", 1, 0, false);
+        declareFunction(me, "month_tokenP", "MONTH-TOKEN?", 1, 0, false);
+        declareFunction(me, "month_name_tokenP", "MONTH-NAME-TOKEN?", 1, 0, false);
+        declareFunction(me, "day_name_tokenP", "DAY-NAME-TOKEN?", 1, 0, false);
+        declareFunction(me, "hour_tokenP", "HOUR-TOKEN?", 1, 0, false);
+        declareFunction(me, "time_tokenP", "TIME-TOKEN?", 1, 0, false);
+        declareFunction(me, "milliseconds_tokenP", "MILLISECONDS-TOKEN?", 1, 0, false);
+        declareFunction(me, "time_zone_tokenP", "TIME-ZONE-TOKEN?", 1, 0, false);
+        declareFunction(me, "month_number_tokenP_internal", "MONTH-NUMBER-TOKEN?-INTERNAL", 1, 0, false);
+        declareFunction(me, "month_number_tokenP", "MONTH-NUMBER-TOKEN?", 1, 0, false);
+        declareFunction(me, "explode_time_from_tokens", "EXPLODE-TIME-FROM-TOKENS", 1, 0, false);
+        declareFunction(me, "cyc_date_encode_string_internal", "CYC-DATE-ENCODE-STRING-INTERNAL", 2, 0, false);
+        declareFunction(me, "common_date_encoding_templates", "COMMON-DATE-ENCODING-TEMPLATES", 0, 0, false);
+        declareFunction(me, "cyc_date_decode_string_internal", "CYC-DATE-DECODE-STRING-INTERNAL", 2, 0, false);
+        declareFunction(me, "cyc_date_from_string_internal", "CYC-DATE-FROM-STRING-INTERNAL", 1, 0, false);
+        declareFunction(me, "cyc_time_elapsed_encode_string_internal", "CYC-TIME-ELAPSED-ENCODE-STRING-INTERNAL", 2, 0, false);
+        declareFunction(me, "cyc_time_elapsed_decode_string_internal", "CYC-TIME-ELAPSED-DECODE-STRING-INTERNAL", 2, 0, false);
+        declareFunction(me, "later_than", "LATER-THAN", 2, 0, false);
         return NIL;
     }
 
     public static SubLObject init_date_utilities_file() {
-        if (SubLFiles.USE_V1) {
-            deflexical("*DATE-CORE-CONSTANTS*", $list0);
-            deflexical("*EL-DATE-GRANULARITY-ORDER*", $list2);
-            deflexical("*DATE-P-GRAMMAR*", $list38);
-            deflexical("*TIME-P-GRAMMAR*", $list39);
-            defconstant("*BEGINNING-OF-TIME*", $BEGINNING_OF_TIME);
-            defconstant("*END-OF-TIME*", $END_OF_TIME);
-            deflexical("*DATE-UNITS-ORDERED*", $list44);
-            deflexical("*DATE-FORMATS-ORDERED*", $list51);
-            deflexical("*MONTH-CONSTANT-TABLE*", $list107);
-            deflexical("*DAYS-OF-WEEK*", $list112);
-            deflexical("*GREGORIAN-RATA-DIE*", $list118);
-            deflexical("*HOURS-OF-DAY*", $list124);
-            defparameter("*DURATION-DENOTING-FUNCTIONS-ORDERED*", $list156);
-            defconstant("*U-DATE-YEAR-DIV*", $int$10000000000);
-            deflexical("*TEMPORAL-INDEXICALS*", SubLTrampolineFile.maybeDefault($temporal_indexicals$, $temporal_indexicals$, $list162));
-            defparameter("*INFERENCE-NOW*", NIL);
-            defconstant("*START-OF-1970*", encode_universal_time(ZERO_INTEGER, ZERO_INTEGER, ZERO_INTEGER, ONE_INTEGER, ONE_INTEGER, $int$1970, UNPROVIDED));
-            defparameter("*PARSE-TO-TWO-DIGIT-YEARS-IN-DATES?*", T);
-            defparameter("*DATE-PATTERNS*", $list211);
-            defparameter("*DATE-QUERY-PATTERNS*", $list212);
-            defparameter("*DAY-WORDS*", NIL);
-            defparameter("*DAY-WORD-PAIRS*", $list228);
-            deflexical("*DAY-NAME-TOKENS*", $list243);
-            deflexical("*TIME-ZONE-TOKENS*", $list244);
-            deflexical("*COMMON-DATE-ENCODING-TEMPLATES*", $list282);
-        }
-        if (SubLFiles.USE_V2) {
-            deflexical("*DATE-P-GRAMMAR*", $list_alt6);
-            deflexical("*TIME-P-GRAMMAR*", $list_alt7);
-            deflexical("*DATE-UNITS-ORDERED*", $list_alt12);
-            deflexical("*DATE-FORMATS-ORDERED*", $list_alt19);
-            deflexical("*MONTH-CONSTANT-TABLE*", $list_alt78);
-            deflexical("*DAYS-OF-WEEK*", $list_alt83);
-            deflexical("*GREGORIAN-RATA-DIE*", $list_alt89);
-            deflexical("*HOURS-OF-DAY*", $list_alt95);
-            deflexical("*TEMPORAL-INDEXICALS*", NIL != boundp($temporal_indexicals$) ? ((SubLObject) ($temporal_indexicals$.getGlobalValue())) : $list_alt121);
-            defparameter("*DATE-PATTERNS*", $list_alt164);
-            defparameter("*DATE-QUERY-PATTERNS*", $list_alt165);
-            defparameter("*DAY-WORD-PAIRS*", $list_alt179);
-            defparameter("*DATE-UTILITY-TEST-CASES*", set.new_set(UNPROVIDED, UNPROVIDED));
-        }
-        return NIL;
-    }
-
-    public static SubLObject init_date_utilities_file_Previous() {
         deflexical("*DATE-CORE-CONSTANTS*", $list0);
         deflexical("*EL-DATE-GRANULARITY-ORDER*", $list2);
         deflexical("*DATE-P-GRAMMAR*", $list38);
@@ -12840,61 +6284,7 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject setup_date_utilities_file_alt() {
-        register_external_symbol(EXTRACT_DATE_YEAR);
-        register_external_symbol(EXTRACT_DATE_MONTH_NUMBER);
-        register_external_symbol(EXTRACT_DATE_DAY);
-        register_external_symbol(EXTRACT_DATE_HOUR);
-        register_external_symbol(EXTRACT_DATE_MINUTE);
-        register_external_symbol(EXTRACT_DATE_SECOND);
-        register_external_symbol(EXTRACT_DATE_MILLISECOND);
-        memoization_state.note_memoized_function(INFERENCE_DEFINING_TIME_UNIT);
-        declare_defglobal($temporal_indexicals$);
-        memoization_state.note_memoized_function($sym177$YEAR_TOKEN_);
-        memoization_state.note_memoized_function($sym178$DAY_TOKEN_);
-        memoization_state.note_memoized_function($sym194$MONTH_NUMBER_TOKEN_);
-        return NIL;
-    }
-
     public static SubLObject setup_date_utilities_file() {
-        if (SubLFiles.USE_V1) {
-            register_external_symbol(EXTRACT_DATE_YEAR);
-            register_external_symbol(EXTRACT_DATE_MONTH_NUMBER);
-            register_external_symbol(EXTRACT_DATE_DAY);
-            register_external_symbol(EXTRACT_DATE_HOUR);
-            register_external_symbol(EXTRACT_DATE_MINUTE);
-            register_external_symbol(EXTRACT_DATE_SECOND);
-            register_external_symbol(EXTRACT_DATE_MILLISECOND);
-            memoization_state.note_memoized_function(INFERENCE_DEFINING_TIME_UNIT);
-            memoization_state.note_memoized_function(INFERENCE_DEFINING_TIME_UNIT_GET_INTERVAL);
-            declare_defglobal($temporal_indexicals$);
-            memoization_state.note_memoized_function($sym226$YEAR_TOKEN_);
-            memoization_state.note_memoized_function($sym227$DAY_TOKEN_);
-            memoization_state.note_memoized_function($sym246$MONTH_NUMBER_TOKEN_);
-            define_test_case_table_int(DATE_AFTER, list(new SubLObject[]{ $TEST, EQUAL, $OWNER, NIL, $CLASSES, NIL, $KB, $FULL, $WORKING_, T }), $list304);
-            define_test_case_table_int($sym305$PARSE_DATE_W_OUT_TWO_DIGIT_YEARS, list(new SubLObject[]{ $TEST, symbol_function(EQUAL), $OWNER, NIL, $CLASSES, $list306, $KB, $FULL, $WORKING_, T }), $list307);
-            define_test_case_table_int(LEAP_YEAR_P, list(new SubLObject[]{ $TEST, symbol_function(EQ), $OWNER, NIL, $CLASSES, $list306, $KB, $FULL, $WORKING_, T }), $list309);
-            define_test_case_table_int(DATE_P, list(new SubLObject[]{ $TEST, symbol_function(EQ), $OWNER, NIL, $CLASSES, $list306, $KB, $FULL, $WORKING_, T }), $list310);
-            define_test_case_table_int(TIME_P, list(new SubLObject[]{ $TEST, symbol_function(EQ), $OWNER, NIL, $CLASSES, $list306, $KB, $FULL, $WORKING_, T }), $list311);
-            define_test_case_table_int(DATE_PRECISION, list(new SubLObject[]{ $TEST, symbol_function(EQ), $OWNER, NIL, $CLASSES, $list306, $KB, $FULL, $WORKING_, T }), $list313);
-            define_test_case_table_int(EXPLODE_CALENDAR_TIME, list(new SubLObject[]{ $TEST, NIL, $OWNER, NIL, $CLASSES, $list306, $KB, $FULL, $WORKING_, T }), $list315);
-            define_test_case_table_int(CYCL_DATE_TO_UNIVERSAL_TIME, list(new SubLObject[]{ $TEST, NIL, $OWNER, NIL, $CLASSES, $list306, $KB, $FULL, $WORKING_, T }), $list317);
-            define_test_case_table_int(MILLISECONDSTRING, list(new SubLObject[]{ $TEST, NIL, $OWNER, NIL, $CLASSES, $list306, $KB, $FULL, $WORKING_, T }), $list319);
-            define_test_case_table_int(DATE_REDUCED_TO_START, list(new SubLObject[]{ $TEST, NIL, $OWNER, NIL, $CLASSES, $list306, $KB, $FULL, $WORKING_, T }), $list321);
-            define_test_case_table_int(DATE_TO_PRECISION, list(new SubLObject[]{ $TEST, NIL, $OWNER, NIL, $CLASSES, $list306, $KB, $FULL, $WORKING_, T }), $list323);
-            define_test_case_table_int(NEXT_ITERATED_CYCLIC_INTERVAL_INCLUSIVE, list(new SubLObject[]{ $TEST, NIL, $OWNER, NIL, $CLASSES, $list306, $KB, $FULL, $WORKING_, T }), $list325);
-            define_test_case_table_int(PARSE_DATE_FROM_STRING_FAST, list(new SubLObject[]{ $TEST, $sym327$FAST_SUPERSET_EQUAL_, $OWNER, NIL, $CLASSES, $list306, $KB, $FULL, $WORKING_, T }), $list328);
-            define_test_case_table_int(DATE_QUERY_P, list(new SubLObject[]{ $TEST, NIL, $OWNER, NIL, $CLASSES, $list306, $KB, $FULL, $WORKING_, T }), $list330);
-        }
-        if (SubLFiles.USE_V2) {
-            memoization_state.note_memoized_function($sym177$YEAR_TOKEN_);
-            memoization_state.note_memoized_function($sym178$DAY_TOKEN_);
-            memoization_state.note_memoized_function($sym194$MONTH_NUMBER_TOKEN_);
-        }
-        return NIL;
-    }
-
-    public static SubLObject setup_date_utilities_file_Previous() {
         register_external_symbol(EXTRACT_DATE_YEAR);
         register_external_symbol(EXTRACT_DATE_MONTH_NUMBER);
         register_external_symbol(EXTRACT_DATE_DAY);
@@ -12926,15 +6316,15 @@ public final class date_utilities extends SubLTranslatedFile implements V12 {
     }
 
     private static SubLObject _constant_323_initializer() {
-        return list(new SubLObject[]{ list(list(list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), ONE_INTEGER, list(reader_make_constant_shell("HourFn"), THREE_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))))), reader_make_constant_shell("CalendarSecond")), list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), ONE_INTEGER, list(reader_make_constant_shell("HourFn"), THREE_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(list(list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), ONE_INTEGER, list(reader_make_constant_shell("HourFn"), THREE_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))))), reader_make_constant_shell("CalendarMinute")), list(reader_make_constant_shell("MinuteFn"), ONE_INTEGER, list(reader_make_constant_shell("HourFn"), THREE_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))))), list(list(list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), ONE_INTEGER, list(reader_make_constant_shell("HourFn"), THREE_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))))), reader_make_constant_shell("CalendarHour")), list(reader_make_constant_shell("HourFn"), THREE_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))), list(list(list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), ONE_INTEGER, list(reader_make_constant_shell("HourFn"), THREE_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))))), reader_make_constant_shell("CalendarDay")), list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))), list(list(list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), ONE_INTEGER, list(reader_make_constant_shell("HourFn"), THREE_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))))), reader_make_constant_shell("CalendarMonth")), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))), list(list(list(reader_make_constant_shell("SecondFn"), FIVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), ONE_INTEGER, list(reader_make_constant_shell("HourFn"), THREE_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))))), reader_make_constant_shell("CalendarYear")), list(reader_make_constant_shell("YearFn"), makeInteger(2004))), list(list(list(reader_make_constant_shell("YearFn"), makeInteger(2004)), reader_make_constant_shell("CalendarYear")), list(reader_make_constant_shell("YearFn"), makeInteger(2004))), list(list(list(reader_make_constant_shell("YearFn"), makeInteger(2004)), reader_make_constant_shell("CalendarMonth")), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))), list(list(list(reader_make_constant_shell("YearFn"), makeInteger(2004)), reader_make_constant_shell("CalendarDay")), list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))), list(list(list(reader_make_constant_shell("YearFn"), makeInteger(2004)), reader_make_constant_shell("CalendarHour")), list(reader_make_constant_shell("HourFn"), ZERO_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))), list(list(list(reader_make_constant_shell("YearFn"), makeInteger(2004)), reader_make_constant_shell("CalendarMinute")), list(reader_make_constant_shell("MinuteFn"), ZERO_INTEGER, list(reader_make_constant_shell("HourFn"), ZERO_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))))), list(list(list(reader_make_constant_shell("YearFn"), makeInteger(2004)), reader_make_constant_shell("CalendarSecond")), list(reader_make_constant_shell("SecondFn"), ZERO_INTEGER, list(reader_make_constant_shell("MinuteFn"), ZERO_INTEGER, list(reader_make_constant_shell("HourFn"), ZERO_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(list(list(reader_make_constant_shell("HourFn"), THREE_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))), reader_make_constant_shell("CalendarMinute")), list(reader_make_constant_shell("MinuteFn"), ZERO_INTEGER, list(reader_make_constant_shell("HourFn"), THREE_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))))) });
+        return list(new SubLObject[]{ list(list(list(reader_make_constant_shell(makeString("SecondFn")), FIVE_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("HourFn")), THREE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))))))), reader_make_constant_shell(makeString("CalendarSecond"))), list(reader_make_constant_shell(makeString("SecondFn")), FIVE_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("HourFn")), THREE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(list(list(reader_make_constant_shell(makeString("SecondFn")), FIVE_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("HourFn")), THREE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))))))), reader_make_constant_shell(makeString("CalendarMinute"))), list(reader_make_constant_shell(makeString("MinuteFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("HourFn")), THREE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))))))), list(list(list(reader_make_constant_shell(makeString("SecondFn")), FIVE_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("HourFn")), THREE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))))))), reader_make_constant_shell(makeString("CalendarHour"))), list(reader_make_constant_shell(makeString("HourFn")), THREE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))), list(list(list(reader_make_constant_shell(makeString("SecondFn")), FIVE_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("HourFn")), THREE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))))))), reader_make_constant_shell(makeString("CalendarDay"))), list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))))), list(list(list(reader_make_constant_shell(makeString("SecondFn")), FIVE_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("HourFn")), THREE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))))))), reader_make_constant_shell(makeString("CalendarMonth"))), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))), list(list(list(reader_make_constant_shell(makeString("SecondFn")), FIVE_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("HourFn")), THREE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))))))), reader_make_constant_shell(makeString("CalendarYear"))), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))), list(list(list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)), reader_make_constant_shell(makeString("CalendarYear"))), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))), list(list(list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)), reader_make_constant_shell(makeString("CalendarMonth"))), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))), list(list(list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)), reader_make_constant_shell(makeString("CalendarDay"))), list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))))), list(list(list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)), reader_make_constant_shell(makeString("CalendarHour"))), list(reader_make_constant_shell(makeString("HourFn")), ZERO_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))), list(list(list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)), reader_make_constant_shell(makeString("CalendarMinute"))), list(reader_make_constant_shell(makeString("MinuteFn")), ZERO_INTEGER, list(reader_make_constant_shell(makeString("HourFn")), ZERO_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))))))), list(list(list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)), reader_make_constant_shell(makeString("CalendarSecond"))), list(reader_make_constant_shell(makeString("SecondFn")), ZERO_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), ZERO_INTEGER, list(reader_make_constant_shell(makeString("HourFn")), ZERO_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(list(list(reader_make_constant_shell(makeString("HourFn")), THREE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))))), reader_make_constant_shell(makeString("CalendarMinute"))), list(reader_make_constant_shell(makeString("MinuteFn")), ZERO_INTEGER, list(reader_make_constant_shell(makeString("HourFn")), THREE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))))))) });
     }
 
     private static SubLObject _constant_325_initializer() {
-        return list(new SubLObject[]{ list(list(reader_make_constant_shell("CalendarSecond"), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("SecondFn"), NINE_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(list(reader_make_constant_shell("CalendarMinute"), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("MinuteFn"), makeInteger(43), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))))), list(list(reader_make_constant_shell("CalendarHour"), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("HourFn"), FOURTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))), list(list(reader_make_constant_shell("CalendarDay"), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("DayFn"), TWO_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))), list(list(reader_make_constant_shell("CalendarMonth"), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("August"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))), list(list(reader_make_constant_shell("CalendarMonth"), list(reader_make_constant_shell("DayFn"), TWENTY_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(1918))))), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(1919)))), list(list(reader_make_constant_shell("CalendarYear"), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("YearFn"), makeInteger(2005))), list(list(list(reader_make_constant_shell("TimeOfWeekFn"), reader_make_constant_shell("Thursday"), reader_make_constant_shell("TimeOfDay-4PM")), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), TWO_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("HourFn"), SIXTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))), list(list(reader_make_constant_shell("Thursday"), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), TWO_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("DayFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))), list(list(list(reader_make_constant_shell("TimeOfYearFn"), reader_make_constant_shell("May"), list(reader_make_constant_shell("TimeOfMonthFn"), list(reader_make_constant_shell("DayOfMonthFn"), TWO_INTEGER), list(reader_make_constant_shell("TimeOfDayFn"), reader_make_constant_shell("TimeOfDay-4PM"), list(reader_make_constant_shell("TimeOfHourFn"), makeInteger(45), list(reader_make_constant_shell("SecondOfMinuteFn"), NINE_INTEGER))))), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), TEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("SecondFn"), NINE_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(45), list(reader_make_constant_shell("HourFn"), SIXTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), TWO_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("May"), list(reader_make_constant_shell("YearFn"), makeInteger(2005)))))))), list(list(list(reader_make_constant_shell("SecondOfMinuteFn"), SEVEN_INTEGER), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("SecondFn"), SEVEN_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(43), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(list(list(reader_make_constant_shell("SecondOfMinuteFn"), NINE_INTEGER), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("SecondFn"), NINE_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(list(list(reader_make_constant_shell("MinuteOfHourFn"), makeInteger(40)), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("MinuteFn"), makeInteger(40), list(reader_make_constant_shell("HourFn"), FOURTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))))), list(list(list(reader_make_constant_shell("MinuteOfHourFn"), makeInteger(45)), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("MinuteFn"), makeInteger(45), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))))), list(list(list(reader_make_constant_shell("HourOfDayFn"), FOURTEEN_INTEGER), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("HourFn"), FOURTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))), list(list(list(reader_make_constant_shell("HourOfDayFn"), TWO_INTEGER), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("HourFn"), TWO_INTEGER, list(reader_make_constant_shell("DayFn"), TWO_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))), list(list(list(reader_make_constant_shell("DayOfMonthFn"), TWO_INTEGER), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), TEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("DayFn"), TWO_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("August"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))), list(list(list(reader_make_constant_shell("DayOfYearFn"), reader_make_constant_shell("November"), TWO_INTEGER), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), TEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("DayFn"), TWO_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("November"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))), list(list(reader_make_constant_shell("November"), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), TEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("November"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))), list(list(reader_make_constant_shell("Wednesday"), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), TEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("DayFn"), FOURTEEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))), list(list(list(reader_make_constant_shell("DayOfMonthFn"), TWO_INTEGER), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("DayFn"), TWO_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004))))), list(list(list(reader_make_constant_shell("MonthOfYearFn"), FIVE_INTEGER), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("May"), list(reader_make_constant_shell("YearFn"), makeInteger(2005)))), list(list(reader_make_constant_shell("TimeOfDay-4PM"), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("HourFn"), SIXTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))), list(list(reader_make_constant_shell("July"), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2005)))), list(list(reader_make_constant_shell("August"), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("August"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))), list(list(reader_make_constant_shell("TimeOfDay-AM"), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("HourFn"), ZERO_INTEGER, list(reader_make_constant_shell("DayFn"), TWO_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))), list(list(reader_make_constant_shell("TimeOfDay-PM"), list(reader_make_constant_shell("SecondFn"), EIGHT_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(42), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))))), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), TWO_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2004)))))) });
+        return list(new SubLObject[]{ list(list(reader_make_constant_shell(makeString("CalendarSecond")), list(reader_make_constant_shell(makeString("SecondFn")), EIGHT_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(reader_make_constant_shell(makeString("SecondFn")), NINE_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(list(reader_make_constant_shell(makeString("CalendarMinute")), list(reader_make_constant_shell(makeString("SecondFn")), EIGHT_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(43), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))))))), list(list(reader_make_constant_shell(makeString("CalendarHour")), list(reader_make_constant_shell(makeString("SecondFn")), EIGHT_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(reader_make_constant_shell(makeString("HourFn")), FOURTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))), list(list(reader_make_constant_shell(makeString("CalendarDay")), list(reader_make_constant_shell(makeString("SecondFn")), EIGHT_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(reader_make_constant_shell(makeString("DayFn")), TWO_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))))), list(list(reader_make_constant_shell(makeString("CalendarMonth")), list(reader_make_constant_shell(makeString("SecondFn")), EIGHT_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("August")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))), list(list(reader_make_constant_shell(makeString("CalendarMonth")), list(reader_make_constant_shell(makeString("DayFn")), TWENTY_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(1918))))), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(1919)))), list(list(reader_make_constant_shell(makeString("CalendarYear")), list(reader_make_constant_shell(makeString("SecondFn")), EIGHT_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2005))), list(list(list(reader_make_constant_shell(makeString("TimeOfWeekFn")), reader_make_constant_shell(makeString("Thursday")), reader_make_constant_shell(makeString("TimeOfDay-4PM"))), list(reader_make_constant_shell(makeString("SecondFn")), EIGHT_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), TWO_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(reader_make_constant_shell(makeString("HourFn")), SIXTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), EIGHT_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))), list(list(reader_make_constant_shell(makeString("Thursday")), list(reader_make_constant_shell(makeString("SecondFn")), EIGHT_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), TWO_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(reader_make_constant_shell(makeString("DayFn")), EIGHT_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))))), list(list(list(reader_make_constant_shell(makeString("TimeOfYearFn")), reader_make_constant_shell(makeString("May")), list(reader_make_constant_shell(makeString("TimeOfMonthFn")), list(reader_make_constant_shell(makeString("DayOfMonthFn")), TWO_INTEGER), list(reader_make_constant_shell(makeString("TimeOfDayFn")), reader_make_constant_shell(makeString("TimeOfDay-4PM")), list(reader_make_constant_shell(makeString("TimeOfHourFn")), makeInteger(45), list(reader_make_constant_shell(makeString("SecondOfMinuteFn")), NINE_INTEGER))))), list(reader_make_constant_shell(makeString("SecondFn")), EIGHT_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), TEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(reader_make_constant_shell(makeString("SecondFn")), NINE_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(45), list(reader_make_constant_shell(makeString("HourFn")), SIXTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), TWO_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("May")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2005)))))))), list(list(list(reader_make_constant_shell(makeString("SecondOfMinuteFn")), SEVEN_INTEGER), list(reader_make_constant_shell(makeString("SecondFn")), EIGHT_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(reader_make_constant_shell(makeString("SecondFn")), SEVEN_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(43), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(list(list(reader_make_constant_shell(makeString("SecondOfMinuteFn")), NINE_INTEGER), list(reader_make_constant_shell(makeString("SecondFn")), EIGHT_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(reader_make_constant_shell(makeString("SecondFn")), NINE_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(list(list(reader_make_constant_shell(makeString("MinuteOfHourFn")), makeInteger(40)), list(reader_make_constant_shell(makeString("SecondFn")), EIGHT_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(40), list(reader_make_constant_shell(makeString("HourFn")), FOURTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))))))), list(list(list(reader_make_constant_shell(makeString("MinuteOfHourFn")), makeInteger(45)), list(reader_make_constant_shell(makeString("SecondFn")), EIGHT_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(45), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))))))), list(list(list(reader_make_constant_shell(makeString("HourOfDayFn")), FOURTEEN_INTEGER), list(reader_make_constant_shell(makeString("SecondFn")), EIGHT_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(reader_make_constant_shell(makeString("HourFn")), FOURTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))), list(list(list(reader_make_constant_shell(makeString("HourOfDayFn")), TWO_INTEGER), list(reader_make_constant_shell(makeString("SecondFn")), EIGHT_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(reader_make_constant_shell(makeString("HourFn")), TWO_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), TWO_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))), list(list(list(reader_make_constant_shell(makeString("DayOfMonthFn")), TWO_INTEGER), list(reader_make_constant_shell(makeString("SecondFn")), EIGHT_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), TEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(reader_make_constant_shell(makeString("DayFn")), TWO_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("August")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))))), list(list(list(reader_make_constant_shell(makeString("DayOfYearFn")), reader_make_constant_shell(makeString("November")), TWO_INTEGER), list(reader_make_constant_shell(makeString("SecondFn")), EIGHT_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), TEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(reader_make_constant_shell(makeString("DayFn")), TWO_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("November")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))))), list(list(reader_make_constant_shell(makeString("November")), list(reader_make_constant_shell(makeString("SecondFn")), EIGHT_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), TEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("November")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))), list(list(reader_make_constant_shell(makeString("Wednesday")), list(reader_make_constant_shell(makeString("SecondFn")), EIGHT_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), TEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(reader_make_constant_shell(makeString("DayFn")), FOURTEEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))))), list(list(list(reader_make_constant_shell(makeString("DayOfMonthFn")), TWO_INTEGER), list(reader_make_constant_shell(makeString("SecondFn")), EIGHT_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(reader_make_constant_shell(makeString("DayFn")), TWO_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004))))), list(list(list(reader_make_constant_shell(makeString("MonthOfYearFn")), FIVE_INTEGER), list(reader_make_constant_shell(makeString("SecondFn")), EIGHT_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("May")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2005)))), list(list(reader_make_constant_shell(makeString("TimeOfDay-4PM")), list(reader_make_constant_shell(makeString("SecondFn")), EIGHT_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(reader_make_constant_shell(makeString("HourFn")), SIXTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))), list(list(reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("SecondFn")), EIGHT_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2005)))), list(list(reader_make_constant_shell(makeString("August")), list(reader_make_constant_shell(makeString("SecondFn")), EIGHT_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("August")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))), list(list(reader_make_constant_shell(makeString("TimeOfDay-AM")), list(reader_make_constant_shell(makeString("SecondFn")), EIGHT_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(reader_make_constant_shell(makeString("HourFn")), ZERO_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), TWO_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))), list(list(reader_make_constant_shell(makeString("TimeOfDay-PM")), list(reader_make_constant_shell(makeString("SecondFn")), EIGHT_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(42), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))))), list(reader_make_constant_shell(makeString("HourFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), TWO_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2004)))))) });
     }
 
     private static SubLObject _constant_328_initializer() {
-        return list(new SubLObject[]{ list(list(makeString("2006-01-05 17:12:12.12")), list(list(reader_make_constant_shell("MilliSecondFn"), makeInteger(120), list(reader_make_constant_shell("SecondFn"), TWELVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), TWELVE_INTEGER, list(reader_make_constant_shell("HourFn"), SEVENTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), FIVE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2006)))))))))), list(list(makeString("2006-01-05 17:12:12")), list(list(reader_make_constant_shell("SecondFn"), TWELVE_INTEGER, list(reader_make_constant_shell("MinuteFn"), TWELVE_INTEGER, list(reader_make_constant_shell("HourFn"), SEVENTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), FIVE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2006))))))))), list(list(makeString("2006-01-05 17:12")), list(list(reader_make_constant_shell("MinuteFn"), TWELVE_INTEGER, list(reader_make_constant_shell("HourFn"), SEVENTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), FIVE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2006)))))))), list(list(makeString("2006-01-05 17")), list(list(reader_make_constant_shell("HourFn"), SEVENTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), FIVE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2006))))))), list(list(makeString("2006-01-05")), list(list(reader_make_constant_shell("DayFn"), FIVE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2006)))))), list(list(makeString("2006-01")), list(list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("January"), list(reader_make_constant_shell("YearFn"), makeInteger(2006))))), list(list(makeString("2006")), list(list(reader_make_constant_shell("YearFn"), makeInteger(2006)))), list(list(makeString("2009-09-30")), list(list(reader_make_constant_shell("DayFn"), makeInteger(30), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("September"), list(reader_make_constant_shell("YearFn"), makeInteger(2009)))))), list(list(makeString("09/09/2008")), list(list(reader_make_constant_shell("DayFn"), NINE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("September"), list(reader_make_constant_shell("YearFn"), makeInteger(2008)))))), list(list(makeString("2003-07-15 17:10:20")), list(list(reader_make_constant_shell("SecondFn"), TWENTY_INTEGER, list(reader_make_constant_shell("MinuteFn"), TEN_INTEGER, list(reader_make_constant_shell("HourFn"), SEVENTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), FIFTEEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("July"), list(reader_make_constant_shell("YearFn"), makeInteger(2003))))))))), list(list(makeString("04/1960")), list(list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("April"), list(reader_make_constant_shell("YearFn"), makeInteger(1960))))), list(list(makeString("1960")), list(list(reader_make_constant_shell("YearFn"), makeInteger(1960)))), list(list(makeString("12-15-2003")), list(list(reader_make_constant_shell("DayFn"), FIFTEEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(2003)))))), list(list(makeString("12:34:56, 12-15-2003")), list(list(reader_make_constant_shell("SecondFn"), makeInteger(56), list(reader_make_constant_shell("MinuteFn"), makeInteger(34), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), FIFTEEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(2003))))))))), list(list(makeString("12:34, 12-15-2003")), list(list(reader_make_constant_shell("MinuteFn"), makeInteger(34), list(reader_make_constant_shell("HourFn"), TWELVE_INTEGER, list(reader_make_constant_shell("DayFn"), FIFTEEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(2003)))))))), list(list(makeString("15-12-2003")), list(list(reader_make_constant_shell("DayFn"), FIFTEEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(2003)))))), list(list(makeString("2003-12-15")), list(list(reader_make_constant_shell("DayFn"), FIFTEEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(2003)))))), list(list(makeString("12.15.2003")), list(list(reader_make_constant_shell("DayFn"), FIFTEEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(2003)))))), list(list(makeString("15.12.2003")), list(list(reader_make_constant_shell("DayFn"), FIFTEEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(2003)))))), list(list(makeString("2005-06-07"), T), list(list(reader_make_constant_shell("DayFn"), SEVEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("June"), list(reader_make_constant_shell("YearFn"), makeInteger(2005)))))), list(list(makeString("12-3-2003"), T), list(list(reader_make_constant_shell("DayFn"), THREE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(2003)))))), list(list(makeString("12-3-2003"), NIL), list(list(reader_make_constant_shell("DayFn"), THREE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(2003)))), list(reader_make_constant_shell("DayFn"), TWELVE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("March"), list(reader_make_constant_shell("YearFn"), makeInteger(2003)))))), list(list(makeString("12/15/2003")), list(list(reader_make_constant_shell("DayFn"), FIFTEEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(2003)))))), list(list(makeString("12-3-25"), NIL), list(list(reader_make_constant_shell("DayFn"), makeInteger(25), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("March"), list(reader_make_constant_shell("YearFn"), makeInteger(2012)))), list(reader_make_constant_shell("DayFn"), makeInteger(25), list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("March"), list(reader_make_constant_shell("YearFn"), TWELVE_INTEGER))), list(reader_make_constant_shell("DayFn"), THREE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(2025)))), list(reader_make_constant_shell("DayFn"), THREE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(1925)))), list(reader_make_constant_shell("DayFn"), THREE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(25)))), list(reader_make_constant_shell("DayFn"), TWELVE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("March"), list(reader_make_constant_shell("YearFn"), makeInteger(2025)))), list(reader_make_constant_shell("DayFn"), TWELVE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("March"), list(reader_make_constant_shell("YearFn"), makeInteger(1925)))), list(reader_make_constant_shell("DayFn"), TWELVE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("March"), list(reader_make_constant_shell("YearFn"), makeInteger(25)))))), list(list(makeString("12-3-01"), NIL), list(list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("March"), list(reader_make_constant_shell("YearFn"), makeInteger(2012)))), list(reader_make_constant_shell("DayFn"), THREE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(2001)))), list(reader_make_constant_shell("DayFn"), TWELVE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("March"), list(reader_make_constant_shell("YearFn"), makeInteger(2001)))))), list(list(makeString("12-3-01"), NIL, T), list(list(reader_make_constant_shell("DayFn"), ONE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("March"), list(reader_make_constant_shell("YearFn"), TWELVE_INTEGER))), list(reader_make_constant_shell("DayFn"), THREE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), ONE_INTEGER))), list(reader_make_constant_shell("DayFn"), TWELVE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("March"), list(reader_make_constant_shell("YearFn"), ONE_INTEGER))))), list(list(makeString("11:01:22, December 2, 2003")), list(list(reader_make_constant_shell("SecondFn"), makeInteger(22), list(reader_make_constant_shell("MinuteFn"), ONE_INTEGER, list(reader_make_constant_shell("HourFn"), ELEVEN_INTEGER, list(reader_make_constant_shell("DayFn"), TWO_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(2003))))))))), list(list(makeString("11:01:22, 2 December, 2003")), list(list(reader_make_constant_shell("SecondFn"), makeInteger(22), list(reader_make_constant_shell("MinuteFn"), ONE_INTEGER, list(reader_make_constant_shell("HourFn"), ELEVEN_INTEGER, list(reader_make_constant_shell("DayFn"), TWO_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(2003))))))))), list(list(makeString("December, 2003")), list(list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(2003))))), list(list(makeString("December 2003")), list(list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(2003))))), list(list(makeString("Dec-15-2003")), list(list(reader_make_constant_shell("DayFn"), FIFTEEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(2003)))))), list(list(makeString("Dec. 15th, 2003")), list(list(reader_make_constant_shell("DayFn"), FIFTEEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(2003)))))), list(list(makeString("December 15, 2003")), list(list(reader_make_constant_shell("DayFn"), FIFTEEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(2003)))))), list(list(makeString("15 December, 2003")), list(list(reader_make_constant_shell("DayFn"), FIFTEEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(2003)))))), list(list(makeString("15 December 2003")), list(list(reader_make_constant_shell("DayFn"), FIFTEEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(2003)))))), list(list(makeString("15th December 2003")), list(list(reader_make_constant_shell("DayFn"), FIFTEEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(2003)))))), list(list(makeString("15-Dec-2003")), list(list(reader_make_constant_shell("DayFn"), FIFTEEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), list(reader_make_constant_shell("YearFn"), makeInteger(2003)))))), list(list(makeString("Thu,  5 Aug 2010 13:53:00 -0500")), list(list(reader_make_constant_shell("SecondFn"), ZERO_INTEGER, list(reader_make_constant_shell("MinuteFn"), makeInteger(53), list(reader_make_constant_shell("HourFn"), THIRTEEN_INTEGER, list(reader_make_constant_shell("DayFn"), FIVE_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("August"), list(reader_make_constant_shell("YearFn"), makeInteger(2010))))))))), list(list(makeString("December 15")), list(list(reader_make_constant_shell("DayFn"), FIFTEEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), reader_make_constant_shell("TheYear-Indexical"))))), list(list(makeString("12/15")), list(list(reader_make_constant_shell("DayFn"), FIFTEEN_INTEGER, list(reader_make_constant_shell("MonthFn"), reader_make_constant_shell("December"), reader_make_constant_shell("TheYear-Indexical"))))) });
+        return list(new SubLObject[]{ list(list(makeString("2006-01-05 17:12:12.12")), list(list(reader_make_constant_shell(makeString("MilliSecondFn")), makeInteger(120), list(reader_make_constant_shell(makeString("SecondFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("HourFn")), SEVENTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), FIVE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2006)))))))))), list(list(makeString("2006-01-05 17:12:12")), list(list(reader_make_constant_shell(makeString("SecondFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("HourFn")), SEVENTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), FIVE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2006))))))))), list(list(makeString("2006-01-05 17:12")), list(list(reader_make_constant_shell(makeString("MinuteFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("HourFn")), SEVENTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), FIVE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2006)))))))), list(list(makeString("2006-01-05 17")), list(list(reader_make_constant_shell(makeString("HourFn")), SEVENTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), FIVE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2006))))))), list(list(makeString("2006-01-05")), list(list(reader_make_constant_shell(makeString("DayFn")), FIVE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2006)))))), list(list(makeString("2006-01")), list(list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("January")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2006))))), list(list(makeString("2006")), list(list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2006)))), list(list(makeString("2009-09-30")), list(list(reader_make_constant_shell(makeString("DayFn")), makeInteger(30), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("September")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2009)))))), list(list(makeString("09/09/2008")), list(list(reader_make_constant_shell(makeString("DayFn")), NINE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("September")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2008)))))), list(list(makeString("2003-07-15 17:10:20")), list(list(reader_make_constant_shell(makeString("SecondFn")), TWENTY_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), TEN_INTEGER, list(reader_make_constant_shell(makeString("HourFn")), SEVENTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), FIFTEEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("July")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2003))))))))), list(list(makeString("04/1960")), list(list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("April")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(1960))))), list(list(makeString("1960")), list(list(reader_make_constant_shell(makeString("YearFn")), makeInteger(1960)))), list(list(makeString("12-15-2003")), list(list(reader_make_constant_shell(makeString("DayFn")), FIFTEEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2003)))))), list(list(makeString("12:34:56, 12-15-2003")), list(list(reader_make_constant_shell(makeString("SecondFn")), makeInteger(56), list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(34), list(reader_make_constant_shell(makeString("HourFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), FIFTEEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2003))))))))), list(list(makeString("12:34, 12-15-2003")), list(list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(34), list(reader_make_constant_shell(makeString("HourFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), FIFTEEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2003)))))))), list(list(makeString("15-12-2003")), list(list(reader_make_constant_shell(makeString("DayFn")), FIFTEEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2003)))))), list(list(makeString("2003-12-15")), list(list(reader_make_constant_shell(makeString("DayFn")), FIFTEEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2003)))))), list(list(makeString("12.15.2003")), list(list(reader_make_constant_shell(makeString("DayFn")), FIFTEEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2003)))))), list(list(makeString("15.12.2003")), list(list(reader_make_constant_shell(makeString("DayFn")), FIFTEEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2003)))))), list(list(makeString("2005-06-07"), T), list(list(reader_make_constant_shell(makeString("DayFn")), SEVEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("June")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2005)))))), list(list(makeString("12-3-2003"), T), list(list(reader_make_constant_shell(makeString("DayFn")), THREE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2003)))))), list(list(makeString("12-3-2003"), NIL), list(list(reader_make_constant_shell(makeString("DayFn")), THREE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2003)))), list(reader_make_constant_shell(makeString("DayFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("March")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2003)))))), list(list(makeString("12/15/2003")), list(list(reader_make_constant_shell(makeString("DayFn")), FIFTEEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2003)))))), list(list(makeString("12-3-25"), NIL), list(list(reader_make_constant_shell(makeString("DayFn")), makeInteger(25), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("March")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2012)))), list(reader_make_constant_shell(makeString("DayFn")), makeInteger(25), list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("March")), list(reader_make_constant_shell(makeString("YearFn")), TWELVE_INTEGER))), list(reader_make_constant_shell(makeString("DayFn")), THREE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2025)))), list(reader_make_constant_shell(makeString("DayFn")), THREE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(1925)))), list(reader_make_constant_shell(makeString("DayFn")), THREE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(25)))), list(reader_make_constant_shell(makeString("DayFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("March")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2025)))), list(reader_make_constant_shell(makeString("DayFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("March")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(1925)))), list(reader_make_constant_shell(makeString("DayFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("March")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(25)))))), list(list(makeString("12-3-01"), NIL), list(list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("March")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2012)))), list(reader_make_constant_shell(makeString("DayFn")), THREE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2001)))), list(reader_make_constant_shell(makeString("DayFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("March")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2001)))))), list(list(makeString("12-3-01"), NIL, T), list(list(reader_make_constant_shell(makeString("DayFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("March")), list(reader_make_constant_shell(makeString("YearFn")), TWELVE_INTEGER))), list(reader_make_constant_shell(makeString("DayFn")), THREE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), list(reader_make_constant_shell(makeString("YearFn")), ONE_INTEGER))), list(reader_make_constant_shell(makeString("DayFn")), TWELVE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("March")), list(reader_make_constant_shell(makeString("YearFn")), ONE_INTEGER))))), list(list(makeString("11:01:22, December 2, 2003")), list(list(reader_make_constant_shell(makeString("SecondFn")), makeInteger(22), list(reader_make_constant_shell(makeString("MinuteFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("HourFn")), ELEVEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), TWO_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2003))))))))), list(list(makeString("11:01:22, 2 December, 2003")), list(list(reader_make_constant_shell(makeString("SecondFn")), makeInteger(22), list(reader_make_constant_shell(makeString("MinuteFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("HourFn")), ELEVEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), TWO_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2003))))))))), list(list(makeString("December, 2003")), list(list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2003))))), list(list(makeString("December 2003")), list(list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2003))))), list(list(makeString("Dec-15-2003")), list(list(reader_make_constant_shell(makeString("DayFn")), FIFTEEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2003)))))), list(list(makeString("Dec. 15th, 2003")), list(list(reader_make_constant_shell(makeString("DayFn")), FIFTEEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2003)))))), list(list(makeString("December 15, 2003")), list(list(reader_make_constant_shell(makeString("DayFn")), FIFTEEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2003)))))), list(list(makeString("15 December, 2003")), list(list(reader_make_constant_shell(makeString("DayFn")), FIFTEEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2003)))))), list(list(makeString("15 December 2003")), list(list(reader_make_constant_shell(makeString("DayFn")), FIFTEEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2003)))))), list(list(makeString("15th December 2003")), list(list(reader_make_constant_shell(makeString("DayFn")), FIFTEEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2003)))))), list(list(makeString("15-Dec-2003")), list(list(reader_make_constant_shell(makeString("DayFn")), FIFTEEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2003)))))), list(list(makeString("Thu,  5 Aug 2010 13:53:00 -0500")), list(list(reader_make_constant_shell(makeString("SecondFn")), ZERO_INTEGER, list(reader_make_constant_shell(makeString("MinuteFn")), makeInteger(53), list(reader_make_constant_shell(makeString("HourFn")), THIRTEEN_INTEGER, list(reader_make_constant_shell(makeString("DayFn")), FIVE_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("August")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(2010))))))))), list(list(makeString("December 15")), list(list(reader_make_constant_shell(makeString("DayFn")), FIFTEEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), reader_make_constant_shell(makeString("TheYear-Indexical")))))), list(list(makeString("12/15")), list(list(reader_make_constant_shell(makeString("DayFn")), FIFTEEN_INTEGER, list(reader_make_constant_shell(makeString("MonthFn")), reader_make_constant_shell(makeString("December")), reader_make_constant_shell(makeString("TheYear-Indexical")))))) });
     }
 
     @Override

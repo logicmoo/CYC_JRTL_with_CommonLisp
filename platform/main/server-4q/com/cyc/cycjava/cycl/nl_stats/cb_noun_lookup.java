@@ -193,7 +193,7 @@ public final class cb_noun_lookup extends SubLTranslatedFile implements V02 {
 						    html_utilities.html_markup(html_macros.$html_strong_tail$.getGlobalValue());
 						    html_utilities.html_princ($str_alt14$_Get_KB_meanings_and_Noun_Learner);
 						    html_utilities.html_newline(UNPROVIDED);
-						    html_script_utilities.html_clear_input_button($$$noun, UNPROVIDED);
+						    html_script_utilities.html_clear_input_button($$$noun, UNPROVIDED, UNPROVIDED_SYM);
 						    html_utilities.html_text_input($$$noun, $str_alt16$, $int$40);
 						    html_utilities.html_princ($str_alt18$__Number_of_conjectures__max__20_);
 						    html_utilities.html_text_input($$$conjectures, $$$5, THREE_INTEGER);
@@ -203,7 +203,7 @@ public final class cb_noun_lookup extends SubLTranslatedFile implements V02 {
 						    html_utilities.html_markup(html_macros.$html_strong_tail$.getGlobalValue());
 						    html_utilities.html_princ($str_alt22$_Get_the_inferred_typical_subject);
 						    html_utilities.html_newline(UNPROVIDED);
-						    html_script_utilities.html_clear_input_button($$$verb, UNPROVIDED);
+						    html_script_utilities.html_clear_input_button($$$verb, UNPROVIDED, UNPROVIDED_SYM);
 						    html_utilities.html_text_input($$$verb, $str_alt16$, TWENTY_INTEGER);
 						    html_utilities.html_newline(UNPROVIDED);
 						    html_utilities.html_newline(UNPROVIDED);

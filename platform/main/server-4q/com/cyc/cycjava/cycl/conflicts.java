@@ -1,41 +1,8 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
-import static com.cyc.cycjava.cycl.control_vars.$conflicts_from_invalid_deductions$;
-import static com.cyc.cycjava.cycl.control_vars.$ignore_conflictsP$;
-import static com.cyc.cycjava.cycl.control_vars.$ignore_non_definitional_conflictsP$;
-import static com.cyc.cycjava.cycl.control_vars.$inference_debugP$;
-import static com.cyc.cycjava.cycl.control_vars.$suppress_conflict_noticesP$;
-import static com.cyc.cycjava.cycl.control_vars.kb_loaded;
-import static com.cyc.cycjava.cycl.el_utilities.el_formula_with_any_of_operators_p;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.declare_defglobal;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.append;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.bind;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.currentBinding;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.rebind;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.sublisp_throw;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.boundp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.consp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.close;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-
+import com.cyc.cycjava.cycl.conflicts;
+import com.cyc.cycjava.cycl.control_vars;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
@@ -45,78 +12,102 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
+import static com.cyc.cycjava.cycl.conflicts.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- * module:      CONFLICTS
- * source file: /cyc/top/cycl/conflicts.lisp
- * created:     2019/07/03 17:37:36
- */
-public final class conflicts extends SubLTranslatedFile implements V12 {
+
+public final class conflicts extends SubLTranslatedFile {
     public static final SubLFile me = new conflicts();
 
+    public static final String myName = "com.cyc.cycjava.cycl.conflicts";
 
+    public static final String myFingerPrint = "8d6e4a134aa340adec83243ae8e7e09aa85beb01e4380cab6875213bfe95aaf5";
 
     // defparameter
-    @LispMethod(comment = "Contains a list of inconsistent support sets.\r\nEach support set is a list of supports.\r\nEach support satisfies support-p.\ndefparameter\nContains a list of inconsistent support sets.\nEach support set is a list of supports.\nEach support satisfies support-p.")
     private static final SubLSymbol $inconsistent_support_sets$ = makeSymbol("*INCONSISTENT-SUPPORT-SETS*");
+
+
+
+
+
+
 
     public static final SubLSymbol $current_conflicts$ = makeSymbol("*CURRENT-CONFLICTS*");
 
     public static final SubLSymbol $mt_conflicts$ = makeSymbol("*MT-CONFLICTS*");
 
-    static private final SubLString $str4$Unable_to_open__S = makeString("Unable to open ~S");
 
-    static private final SubLString $str5$_______Mode__LISP__Package__CYC__ = makeString(";; -*- Mode: LISP; Package: CYC; Syntax: ANSI-Common-Lisp -*-");
 
-    static private final SubLString $str6$____ = makeString("~%;;");
+    public static final SubLString $str4$Unable_to_open__S = makeString("Unable to open ~S");
 
-    static private final SubLString $str7$______A = makeString("~%;; ~A");
+    public static final SubLString $str5$_______Mode__LISP__Package__CYC__ = makeString(";; -*- Mode: LISP; Package: CYC; Syntax: ANSI-Common-Lisp -*-");
 
-    static private final SubLString $str8$_____SBHL_Utilities_conflicts_for = makeString("~%;; SBHL Utilities conflicts for CycL version ~A from KB ~S.~S");
+    public static final SubLString $str6$____ = makeString("~%;;");
 
-    static private final SubLString $str9$_____This_file_is_automatically_g = makeString("~%;; This file is automatically generated at dump time!");
+    public static final SubLString $str7$______A = makeString("~%;; ~A");
 
-    static private final SubLString $str10$_____See_CONFLICTS_LISP_for_detai = makeString("~%;; See CONFLICTS.LISP for details.");
+    public static final SubLString $str8$_____SBHL_Utilities_conflicts_for = makeString("~%;; SBHL Utilities conflicts for CycL version ~A from KB ~S.~S");
 
-    static private final SubLString $str11$_________________________________ = makeString("~%;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;");
+    public static final SubLString $str9$_____This_file_is_automatically_g = makeString("~%;; This file is automatically generated at dump time!");
 
-    static private final SubLString $str12$___S = makeString("~%~S");
+    public static final SubLString $str10$_____See_CONFLICTS_LISP_for_detai = makeString("~%;; See CONFLICTS.LISP for details.");
+
+    public static final SubLString $str11$_________________________________ = makeString("~%;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;");
+
+    public static final SubLString $str12$___S = makeString("~%~S");
 
     private static final SubLString $str13$Aborting_due_to_conflict____S = makeString("Aborting due to conflict:~%~S");
 
+
+
     private static final SubLString $str15$deduction_conflict___s__a__a = makeString("deduction conflict: ~s ~a ~a");
+
+
 
     private static final SubLString $str17$_S_is_semantically_invalid_in__S = makeString("~S is semantically invalid in ~S");
 
+
+
+
+
+
+
     private static final SubLString $str21$leave_the_kb_inconsistent_for_now = makeString("leave the kb inconsistent for now and resolve the conflict later");
 
-    private static final SubLList $list22 = list(reader_make_constant_shell("isa"), reader_make_constant_shell("genls"));
+    private static final SubLList $list22 = list(reader_make_constant_shell(makeString("isa")), reader_make_constant_shell(makeString("genls")));
 
-    static private final SubLList $list24 = list(makeSymbol("FUNCTION"), makeSymbol("CONFLICT-HANDLER"));
 
-    static private final SubLList $list26 = list(list(makeSymbol("*CONFLICTS-FROM-INVALID-DEDUCTIONS*"), T), list(makeSymbol("*IGNORE-WARNS?*"), T), list(makeSymbol("*ENFORCE-LITERAL-WFF-IDIOSYNCRASIES?*"), NIL), list(makeSymbol("*RECORD-INCONSISTENT-SUPPORT-SETS*"), T));
 
-    public static final SubLObject inconsistent_support_sets_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return $inconsistent_support_sets$.getDynamicValue(thread);
-        }
-    }
+    public static final SubLList $list24 = list(makeSymbol("FUNCTION"), makeSymbol("CONFLICT-HANDLER"));
+
+
+
+    public static final SubLList $list26 = list(list(makeSymbol("*CONFLICTS-FROM-INVALID-DEDUCTIONS*"), T), list(makeSymbol("*IGNORE-WARNS?*"), T), list(makeSymbol("*ENFORCE-LITERAL-WFF-IDIOSYNCRASIES?*"), NIL), list(makeSymbol("*RECORD-INCONSISTENT-SUPPORT-SETS*"), T));
 
     public static SubLObject inconsistent_support_sets() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return $inconsistent_support_sets$.getDynamicValue(thread);
-    }
-
-    public static final SubLObject clear_inconsistent_support_sets_alt() {
-        $inconsistent_support_sets$.setDynamicValue(NIL);
-        return NIL;
     }
 
     public static SubLObject clear_inconsistent_support_sets() {
@@ -124,67 +115,11 @@ public final class conflicts extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject add_inconsistent_support_set_alt(SubLObject supports) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(supports, CONSP);
-            $inconsistent_support_sets$.setDynamicValue(cons(supports, $inconsistent_support_sets$.getDynamicValue(thread)), thread);
-            return supports;
-        }
-    }
-
     public static SubLObject add_inconsistent_support_set(final SubLObject supports) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != consp(supports) : "! consp(supports) " + ("Types.consp(supports) " + "CommonSymbols.NIL != Types.consp(supports) ") + supports;
+        assert NIL != consp(supports) : "Types.consp(supports) " + "CommonSymbols.NIL != Types.consp(supports) " + supports;
         $inconsistent_support_sets$.setDynamicValue(cons(supports, $inconsistent_support_sets$.getDynamicValue(thread)), thread);
         return supports;
-    }
-
-    public static final SubLObject write_current_conflicts_alt(SubLObject output_filename) {
-        {
-            SubLObject stream = NIL;
-            try {
-                stream = compatibility.open_text(output_filename, $OUTPUT, NIL);
-                if (!stream.isStream()) {
-                    Errors.error($str_alt4$Unable_to_open__S, output_filename);
-                }
-                {
-                    SubLObject s = stream;
-                    format(s, $str_alt5$_______Mode__LISP__Package__CYC__);
-                    format(s, $str_alt6$____);
-                    format(s, $str_alt7$______A, misc_utilities.copyright_notice());
-                    format(s, $str_alt6$____);
-                    format(s, $str_alt7$______A, output_filename);
-                    format(s, $str_alt7$______A, numeric_date_utilities.timestring(UNPROVIDED));
-                    format(s, $str_alt6$____);
-                    format(s, $str_alt8$_____SBHL_Utilities_conflicts_for, new SubLObject[]{ system_info.cyc_revision_string(), kb_loaded(), operation_communication.kb_op_number() });
-                    format(s, $str_alt6$____);
-                    format(s, $str_alt9$_____This_file_is_automatically_g);
-                    format(s, $str_alt10$_____See_CONFLICTS_LISP_for_detai);
-                    format(s, $str_alt11$_________________________________);
-                    {
-                        SubLObject cdolist_list_var = $current_conflicts$.getGlobalValue();
-                        SubLObject conflict = NIL;
-                        for (conflict = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , conflict = cdolist_list_var.first()) {
-                            format(s, $str_alt12$___S, conflict);
-                        }
-                    }
-                }
-            } finally {
-                {
-                    SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
-                    try {
-                        bind($is_thread_performing_cleanupP$, T);
-                        if (stream.isStream()) {
-                            close(stream, UNPROVIDED);
-                        }
-                    } finally {
-                        rebind($is_thread_performing_cleanupP$, _prev_bind_0);
-                    }
-                }
-            }
-        }
-        return NIL;
     }
 
     public static SubLObject write_current_conflicts(final SubLObject output_filename) {
@@ -231,17 +166,6 @@ public final class conflicts extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject conflict_abort_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != $inference_debugP$.getDynamicValue(thread)) {
-                Errors.cerror($str_alt17$Throw__conflict_tag, $str_alt18$Aborting_due_to_conflict____S, com.cyc.cycjava.cycl.conflicts.inconsistent_support_sets());
-            }
-            sublisp_throw($CONFLICT, NIL);
-            return NIL;
-        }
-    }
-
     public static SubLObject conflict_abort() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != $inference_debugP$.getDynamicValue(thread)) {
@@ -261,31 +185,9 @@ public final class conflicts extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject conflict_handler_alt() {
-        com.cyc.cycjava.cycl.conflicts.conflict_abort();
-        return NIL;
-    }
-
     public static SubLObject conflict_handler() {
         conflict_abort();
         return NIL;
-    }
-
-    public static final SubLObject handle_invalid_deduction_conflict_alt(SubLObject gaf, SubLObject truth, SubLObject mt) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != $conflicts_from_invalid_deductions$.getDynamicValue(thread)) {
-                if (NIL == $ignore_conflictsP$.getDynamicValue(thread)) {
-                    if (NIL == $suppress_conflict_noticesP$.getDynamicValue(thread)) {
-                        Errors.warn($str_alt20$deduction_conflict___s__a__a, gaf, truth, mt);
-                        com.cyc.cycjava.cycl.conflicts.conflict_notify($str_alt20$deduction_conflict___s__a__a, gaf, truth, mt, UNPROVIDED);
-                    }
-                }
-            } else {
-                backward_results.note_inference_rejected(list($INVALID_LITERAL, $str_alt22$_S_is_semantically_invalid_in__S, gaf, mt));
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject handle_invalid_deduction_conflict(final SubLObject gaf, final SubLObject truth, final SubLObject mt) {
@@ -301,39 +203,6 @@ public final class conflicts extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     * Indicate to the user that a conflict has occured with GAF in MT.
-     */
-    @LispMethod(comment = "Indicate to the user that a conflict has occured with GAF in MT.")
-    public static final SubLObject conflict_notify_alt(SubLObject format_string, SubLObject gaf, SubLObject truth, SubLObject mt, SubLObject aux) {
-        if (aux == UNPROVIDED) {
-            aux = NIL;
-        }
-        if (NIL != agenda.within_agenda()) {
-            {
-                SubLObject pcase_var = agenda.agenda_error_mode();
-                if (pcase_var.eql($IGNORE)) {
-                    Errors.warn(format_string, new SubLObject[]{ gaf, truth, mt, aux });
-                } else {
-                    if (pcase_var.eql($HALT)) {
-                        Errors.error(format_string, new SubLObject[]{ gaf, truth, mt, aux });
-                    } else {
-                        if (pcase_var.eql($DEBUG)) {
-                            Errors.cerror($str_alt16$leave_the_kb_inconsistent_for_now, format_string, new SubLObject[]{ gaf, truth, mt, aux });
-                        }
-                    }
-                }
-            }
-        } else {
-            Errors.cerror($str_alt16$leave_the_kb_inconsistent_for_now, format_string, new SubLObject[]{ gaf, truth, mt, aux });
-        }
-        return NIL;
-    }
-
-    /**
-     * Indicate to the user that a conflict has occured with GAF in MT.
-     */
-    @LispMethod(comment = "Indicate to the user that a conflict has occured with GAF in MT.")
     public static SubLObject conflict_notify(final SubLObject format_string, final SubLObject gaf, final SubLObject truth, final SubLObject mt, SubLObject aux) {
         if (aux == UNPROVIDED) {
             aux = NIL;
@@ -366,27 +235,8 @@ public final class conflicts extends SubLTranslatedFile implements V12 {
         return Errors.cerror($str21$leave_the_kb_inconsistent_for_now, format_string, new SubLObject[]{ gaf, truth, mt, aux });
     }
 
-    static private final SubLString $str_alt4$Unable_to_open__S = makeString("Unable to open ~S");
-
-    static private final SubLString $str_alt5$_______Mode__LISP__Package__CYC__ = makeString(";; -*- Mode: LISP; Package: CYC; Syntax: ANSI-Common-Lisp -*-");
-
-    static private final SubLString $str_alt6$____ = makeString("~%;;");
-
-    static private final SubLString $str_alt7$______A = makeString("~%;; ~A");
-
     public static SubLObject non_definitional_asentP(final SubLObject asent) {
         return makeBoolean(NIL == el_formula_with_any_of_operators_p(asent, $list22));
-    }
-
-    static private final SubLString $str_alt8$_____SBHL_Utilities_conflicts_for = makeString("~%;; SBHL Utilities conflicts for CycL version ~A from KB ~S.~S");
-
-    public static final SubLObject with_conflicts_from_invalid_deductions_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            SubLObject body = current;
-            return list(WITH_ERROR_HANDLER, $list_alt24, listS(CLET, $list_alt26, append(body, NIL)));
-        }
     }
 
     public static SubLObject with_conflicts_from_invalid_deductions(final SubLObject macroform, final SubLObject environment) {
@@ -396,64 +246,22 @@ public final class conflicts extends SubLTranslatedFile implements V12 {
         return list(WITH_ERROR_HANDLER, $list24, listS(CLET, $list26, append(body, NIL)));
     }
 
-    static private final SubLString $str_alt9$_____This_file_is_automatically_g = makeString("~%;; This file is automatically generated at dump time!");
-
-    static private final SubLString $str_alt10$_____See_CONFLICTS_LISP_for_detai = makeString("~%;; See CONFLICTS.LISP for details.");
-
-    static private final SubLString $str_alt11$_________________________________ = makeString("~%;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;");
-
     public static SubLObject declare_conflicts_file() {
-        declareFunction("inconsistent_support_sets", "INCONSISTENT-SUPPORT-SETS", 0, 0, false);
-        declareFunction("clear_inconsistent_support_sets", "CLEAR-INCONSISTENT-SUPPORT-SETS", 0, 0, false);
-        declareFunction("add_inconsistent_support_set", "ADD-INCONSISTENT-SUPPORT-SET", 1, 0, false);
-        declareFunction("write_current_conflicts", "WRITE-CURRENT-CONFLICTS", 1, 0, false);
-        declareFunction("conflict_abort", "CONFLICT-ABORT", 0, 0, false);
-        declareFunction("conflict_handler", "CONFLICT-HANDLER", 0, 0, false);
-        declareFunction("handle_invalid_deduction_conflict", "HANDLE-INVALID-DEDUCTION-CONFLICT", 3, 0, false);
-        declareFunction("conflict_notify", "CONFLICT-NOTIFY", 4, 1, false);
-        declareFunction("conflict_notify_int", "CONFLICT-NOTIFY-INT", 5, 0, false);
-        declareFunction("non_definitional_asentP", "NON-DEFINITIONAL-ASENT?", 1, 0, false);
-        declareMacro("with_conflicts_from_invalid_deductions", "WITH-CONFLICTS-FROM-INVALID-DEDUCTIONS");
-        return NIL;
-    }
-
-    static private final SubLString $str_alt12$___S = makeString("~%~S");
-
-    static private final SubLString $str_alt16$leave_the_kb_inconsistent_for_now = makeString("leave the kb inconsistent for now and resolve the conflict later");
-
-    static private final SubLString $str_alt17$Throw__conflict_tag = makeString("Throw :conflict tag");
-
-    static private final SubLString $str_alt18$Aborting_due_to_conflict____S = makeString("Aborting due to conflict:~%~S");
-
-    static private final SubLString $str_alt20$deduction_conflict___s__a__a = makeString("deduction conflict: ~s ~a ~a");
-
-    static private final SubLString $str_alt22$_S_is_semantically_invalid_in__S = makeString("~S is semantically invalid in ~S");
-
-    static private final SubLList $list_alt24 = list(makeSymbol("FUNCTION"), makeSymbol("CONFLICT-HANDLER"));
-
-    static private final SubLList $list_alt26 = list(list(makeSymbol("*CONFLICTS-FROM-INVALID-DEDUCTIONS*"), T), list(makeSymbol("*IGNORE-WARNS?*"), T), list(makeSymbol("*ENFORCE-LITERAL-WFF-IDIOSYNCRASIES?*"), NIL), list(makeSymbol("*RECORD-INCONSISTENT-SUPPORT-SETS*"), T));
-
-    public static final SubLObject init_conflicts_file_alt() {
-        defparameter("*INCONSISTENT-SUPPORT-SETS*", NIL);
-        deflexical("*CURRENT-CONFLICTS*", NIL != boundp($current_conflicts$) ? ((SubLObject) ($current_conflicts$.getGlobalValue())) : NIL);
-        deflexical("*MT-CONFLICTS*", NIL != boundp($mt_conflicts$) ? ((SubLObject) ($mt_conflicts$.getGlobalValue())) : NIL);
+        declareFunction(me, "inconsistent_support_sets", "INCONSISTENT-SUPPORT-SETS", 0, 0, false);
+        declareFunction(me, "clear_inconsistent_support_sets", "CLEAR-INCONSISTENT-SUPPORT-SETS", 0, 0, false);
+        declareFunction(me, "add_inconsistent_support_set", "ADD-INCONSISTENT-SUPPORT-SET", 1, 0, false);
+        declareFunction(me, "write_current_conflicts", "WRITE-CURRENT-CONFLICTS", 1, 0, false);
+        declareFunction(me, "conflict_abort", "CONFLICT-ABORT", 0, 0, false);
+        declareFunction(me, "conflict_handler", "CONFLICT-HANDLER", 0, 0, false);
+        declareFunction(me, "handle_invalid_deduction_conflict", "HANDLE-INVALID-DEDUCTION-CONFLICT", 3, 0, false);
+        declareFunction(me, "conflict_notify", "CONFLICT-NOTIFY", 4, 1, false);
+        declareFunction(me, "conflict_notify_int", "CONFLICT-NOTIFY-INT", 5, 0, false);
+        declareFunction(me, "non_definitional_asentP", "NON-DEFINITIONAL-ASENT?", 1, 0, false);
+        declareMacro(me, "with_conflicts_from_invalid_deductions", "WITH-CONFLICTS-FROM-INVALID-DEDUCTIONS");
         return NIL;
     }
 
     public static SubLObject init_conflicts_file() {
-        if (SubLFiles.USE_V1) {
-            defparameter("*INCONSISTENT-SUPPORT-SETS*", NIL);
-            deflexical("*CURRENT-CONFLICTS*", SubLTrampolineFile.maybeDefault($current_conflicts$, $current_conflicts$, NIL));
-            deflexical("*MT-CONFLICTS*", SubLTrampolineFile.maybeDefault($mt_conflicts$, $mt_conflicts$, NIL));
-        }
-        if (SubLFiles.USE_V2) {
-            deflexical("*CURRENT-CONFLICTS*", NIL != boundp($current_conflicts$) ? ((SubLObject) ($current_conflicts$.getGlobalValue())) : NIL);
-            deflexical("*MT-CONFLICTS*", NIL != boundp($mt_conflicts$) ? ((SubLObject) ($mt_conflicts$.getGlobalValue())) : NIL);
-        }
-        return NIL;
-    }
-
-    public static SubLObject init_conflicts_file_Previous() {
         defparameter("*INCONSISTENT-SUPPORT-SETS*", NIL);
         deflexical("*CURRENT-CONFLICTS*", SubLTrampolineFile.maybeDefault($current_conflicts$, $current_conflicts$, NIL));
         deflexical("*MT-CONFLICTS*", SubLTrampolineFile.maybeDefault($mt_conflicts$, $mt_conflicts$, NIL));
@@ -482,6 +290,37 @@ public final class conflicts extends SubLTranslatedFile implements V12 {
     }
 
     static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
 

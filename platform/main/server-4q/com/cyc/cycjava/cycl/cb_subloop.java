@@ -101,7 +101,7 @@ public final class cb_subloop extends SubLTranslatedFile implements V02 {
                         html_utilities.html_markup(html_macros.$html_strong_tail$.getGlobalValue());
                         html_utilities.html_text_input($str_alt3$object_name, $str_alt4$, $cb_object_name_input_width$.getGlobalValue());
                         html_utilities.html_indent(ONE_INTEGER);
-                        html_script_utilities.html_clear_input_button($str_alt3$object_name, $$$Clear_Object_Name);
+                        html_script_utilities.html_clear_input_button($str_alt3$object_name, $$$Clear_Object_Name, UNPROVIDED_SYM);
                         html_utilities.html_newline(TWO_INTEGER);
                         html_utilities.html_submit_input($$$Display_Object, UNPROVIDED, UNPROVIDED);
                         html_macros.embed_form_field_code(html_macros.$html_form_field_uniquifier_code$.getDynamicValue(thread));
@@ -155,11 +155,11 @@ public final class cb_subloop extends SubLTranslatedFile implements V02 {
                         html_utilities.html_markup(html_macros.$html_strong_tail$.getGlobalValue());
                         html_utilities.html_text_input($str_alt8$object_name_for_method_form, $str_alt4$, $cb_object_name_input_width$.getGlobalValue());
                         html_utilities.html_indent(ONE_INTEGER);
-                        html_script_utilities.html_clear_input_button($str_alt8$object_name_for_method_form, $$$Clear_Object_Name);
+                        html_script_utilities.html_clear_input_button($str_alt8$object_name_for_method_form, $$$Clear_Object_Name, UNPROVIDED_SYM);
                         html_utilities.html_newline(TWO_INTEGER);
                         html_utilities.html_text_input($str_alt9$method_name, $str_alt4$, $cb_method_name_input_width$.getGlobalValue());
                         html_utilities.html_indent(ONE_INTEGER);
-                        html_script_utilities.html_clear_input_button($str_alt9$method_name, $$$Clear_Method_Name);
+                        html_script_utilities.html_clear_input_button($str_alt9$method_name, $$$Clear_Method_Name, UNPROVIDED_SYM);
                         html_utilities.html_newline(TWO_INTEGER);
                         html_utilities.html_submit_input($$$Display_Method_Details, UNPROVIDED, UNPROVIDED);
                         html_macros.embed_form_field_code(html_macros.$html_form_field_uniquifier_code$.getDynamicValue(thread));

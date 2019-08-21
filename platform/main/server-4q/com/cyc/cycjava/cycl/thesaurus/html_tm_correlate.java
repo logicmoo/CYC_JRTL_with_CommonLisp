@@ -1885,7 +1885,7 @@ public final class html_tm_correlate extends SubLTranslatedFile implements V02 {
                                                         html_macros.$html_safe_print$.bind(T, thread);
                                                         html_utilities.html_text_input($str_alt108$cyc_concept, $str_alt6$, $int$50);
                                                         html_utilities.html_br();
-                                                        html_complete.html_complete_button($str_alt108$cyc_concept, $$$Complete, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                        html_complete.html_complete_button($str_alt108$cyc_concept, $$$Complete, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED_SYM);
                                                     } finally {
                                                         html_macros.$html_safe_print$.rebind(_prev_bind_0_63, thread);
                                                     }

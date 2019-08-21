@@ -1576,7 +1576,7 @@ public final class textual_entailments extends SubLTranslatedFile implements V02
             final SubLThread thread = SubLProcess.currentSubLThread();
             {
                 SubLObject content_model_mt_name = get_cntxt_name_from_sentence(sentence, UNPROVIDED);
-                SubLObject content_model_mt = ke.ke_create_now(constants_high.suggest_constant_name(content_model_mt_name, $str_alt58$CyclifierContentModelMt_, UNPROVIDED, UNPROVIDED, UNPROVIDED), UNPROVIDED);
+                SubLObject content_model_mt = ke.ke_create_now(constants_high.suggest_constant_name(content_model_mt_name, $str_alt58$CyclifierContentModelMt_, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED_SYM), UNPROVIDED);
                 {
                     SubLObject _prev_bind_0 = kb_control_vars.$forward_inference_allowed_rules$.currentBinding(thread);
                     try {
@@ -1685,7 +1685,7 @@ public final class textual_entailments extends SubLTranslatedFile implements V02
                 }
                 {
                     SubLObject collector_mt_name = get_cntxt_name_from_sentence(sentence, UNPROVIDED);
-                    SubLObject collector_mt = ke.ke_create_now(constants_high.suggest_constant_name(collector_mt_name, $str_alt68$CyclificationCollectorMt_, UNPROVIDED, UNPROVIDED, UNPROVIDED), UNPROVIDED);
+                    SubLObject collector_mt = ke.ke_create_now(constants_high.suggest_constant_name(collector_mt_name, $str_alt68$CyclificationCollectorMt_, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED_SYM), UNPROVIDED);
                     SubLObject previous_result_mt = NIL;
                     Errors.warn($str_alt69$_S_distinct_parse_results_were_fo, how_many);
                     rkf_assertion_utilities.rkf_assert_now(listS($$isa, collector_mt, $list_alt70), $$UniversalVocabularyMt);
@@ -2216,7 +2216,7 @@ public final class textual_entailments extends SubLTranslatedFile implements V02
             SubLObject return_mt = NIL;
             SubLObject interp_mt_name = get_cntxt_name_from_sentence(sentence, UNPROVIDED);
             SubLObject num_name = write_to_string(number, EMPTY_SUBL_OBJECT_ARRAY);
-            SubLObject interp_mt = ke.ke_create_now(constants_high.suggest_constant_name(interp_mt_name, $str_alt115$CyclifierInterpMt_, cconcatenate($str_alt116$_Parse, num_name), UNPROVIDED, UNPROVIDED), UNPROVIDED);
+            SubLObject interp_mt = ke.ke_create_now(constants_high.suggest_constant_name(interp_mt_name, $str_alt115$CyclifierInterpMt_, cconcatenate($str_alt116$_Parse, num_name), UNPROVIDED, UNPROVIDED, UNPROVIDED_SYM), UNPROVIDED);
             return_mt = interp_mt;
             ke.ke_assert_now(listS($$isa, interp_mt, $list_alt117), $$UniversalVocabularyMt, UNPROVIDED, UNPROVIDED);
             return return_mt;
@@ -2747,20 +2747,7 @@ public final class textual_entailments extends SubLTranslatedFile implements V02
                     try {
                         memoization_state.$memoization_state$.bind(local_state, thread);
                         {
-                            SubLObject original_memoization_process = NIL;
-                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                {
-                                    SubLObject current_proc = current_process();
-                                    if (NIL == original_memoization_process) {
-                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                    } else {
-                                        if (original_memoization_process != current_proc) {
-                                            Errors.error($str_alt184$Invalid_attempt_to_reuse_memoizat);
-                                        }
-                                    }
-                                }
-                            }
+                            SubLObject original_memoization_process = memoization_state.aquireMemoStateLock(local_state);
                             try {
                                 {
                                     SubLObject background_text = ask_utilities.query_variable($sym185$_TEXT, listS($$backgroundTextForTEP, ti_problem_cycl, $list_alt187), $$InferencePSC, UNPROVIDED).first();
@@ -3769,20 +3756,7 @@ public final class textual_entailments extends SubLTranslatedFile implements V02
                                                         try {
                                                             memoization_state.$memoization_state$.bind(local_state, thread);
                                                             {
-                                                                SubLObject original_memoization_process = NIL;
-                                                                if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                                                    original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                                                    {
-                                                                        SubLObject current_proc = current_process();
-                                                                        if (NIL == original_memoization_process) {
-                                                                            memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                                                        } else {
-                                                                            if (original_memoization_process != current_proc) {
-                                                                                Errors.error($str_alt184$Invalid_attempt_to_reuse_memoizat);
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
+                                                                final SubLObject original_memoization_process = memoization_state.aquireMemoStateLock(local_state);
                                                                 try {
                                                                     {
                                                                         SubLObject _prev_bind_0_88 = $tip_log_filename$.currentBinding(thread);

@@ -1,111 +1,12 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.assertion_handles.assertion_p;
-import static com.cyc.cycjava.cycl.assertions_high.asserted_assertionP;
-import static com.cyc.cycjava.cycl.assertions_high.assertion_arguments;
-import static com.cyc.cycjava.cycl.assertions_high.assertion_mt;
-import static com.cyc.cycjava.cycl.assertions_high.assertion_strength;
-import static com.cyc.cycjava.cycl.assertions_high.assertion_truth;
-import static com.cyc.cycjava.cycl.assertions_high.deduced_assertionP;
-import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
-import static com.cyc.cycjava.cycl.cycl_utilities.expression_find;
-import static com.cyc.cycjava.cycl.el_utilities.make_binary_formula;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_empty_p;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_id_and_object_validP;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_next_id;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_next_state;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_state_object;
-import static com.cyc.cycjava.cycl.id_index.id_index_count;
-import static com.cyc.cycjava.cycl.id_index.id_index_dense_objects;
-import static com.cyc.cycjava.cycl.id_index.id_index_dense_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_next_id;
-import static com.cyc.cycjava.cycl.id_index.id_index_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_skip_tombstones_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_id_threshold;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_objects;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_tombstone_p;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.$catch_error_message_target$;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.$with_timeout_nesting_depth$;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.$within_with_timeout$;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.declare_defglobal;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.with_timeout_make_tag;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.with_timeout_start_timer;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.with_timeout_stop_timer;
-import static com.cyc.cycjava.cycl.tva_cache.ensure_tva_cache_created;
-import static com.cyc.cycjava.cycl.tva_cache.tva_cache_get_values;
-import static com.cyc.cycjava.cycl.utilities_macros.$is_noting_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_index$;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_prediction$;
-import static com.cyc.cycjava.cycl.utilities_macros.$percent_progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_elapsed_seconds_for_notification$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_last_pacification_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_note$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_notification_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_pacifications_since_last_nl$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_sofar$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_total$;
-import static com.cyc.cycjava.cycl.utilities_macros.$silent_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$suppress_all_progress_faster_than_seconds$;
-import static com.cyc.cycjava.cycl.utilities_macros.$within_noting_percent_progress$;
-import static com.cyc.cycjava.cycl.utilities_macros.note_percent_progress;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_percent_progress_postamble;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_percent_progress_preamble;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_progress_postamble;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_progress_preamble;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.bind;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.currentBinding;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.rebind;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval.eval;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.gethash_without_values;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.subtract;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.cconcatenate;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.delete;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.find;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.find_if;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.length;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.nreverse;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.boundp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.get_universal_time;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.stringp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.arg2;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.multiple_value_list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.resetMultipleValues;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.aref;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.member;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.nset_difference;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.nunion;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.print;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.force_output;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-
 import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_transitivity;
+import com.cyc.cycjava.cycl.kbs_add_redundant;
 import com.cyc.cycjava.cycl.sbhl.sbhl_cache;
 import com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars;
+import com.cyc.cycjava.cycl.subl_macro_promotions;
+import com.cyc.cycjava.cycl.utilities_macros;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
@@ -116,59 +17,91 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.id_index.*;
+import static com.cyc.cycjava.cycl.kbs_add_redundant.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWENTY_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- * module:      KBS-ADD-REDUNDANT
- * source file: /cyc/top/cycl/kbs-add-redundant.lisp
- * created:     2019/07/03 17:37:50
- */
-public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
+
+public final class kbs_add_redundant extends SubLTranslatedFile {
     public static final SubLFile me = new kbs_add_redundant();
 
+    public static final String myName = "com.cyc.cycjava.cycl.kbs_add_redundant";
 
+    public static final String myFingerPrint = "8782fbf57599ba0e8ee00b50b9716d0796b2acd7bae8f9948820c39a112efc3f";
 
     // defparameter
     // Definitions
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $kbs_add_redundant_verboseP$ = makeSymbol("*KBS-ADD-REDUNDANT-VERBOSE?*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $kbs_add_redundant_definitional_info_backwardP$ = makeSymbol("*KBS-ADD-REDUNDANT-DEFINITIONAL-INFO-BACKWARD?*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $defining_predicates_info$ = makeSymbol("*DEFINING-PREDICATES-INFO*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $arg2_defining_predicates_info$ = makeSymbol("*ARG2-DEFINING-PREDICATES-INFO*");
+
+
 
     // defparameter
     /**
      * When non-nil, an upper bound on the allowable size limit for an entire cycle
      * set to be included when computing minimal implied KBS values for splicing.
      */
-    @LispMethod(comment = "When non-nil, an upper bound on the allowable size limit for an entire cycle\r\nset to be included when computing minimal implied KBS values for splicing.\ndefparameter\nWhen non-nil, an upper bound on the allowable size limit for an entire cycle\nset to be included when computing minimal implied KBS values for splicing.")
     public static final SubLSymbol $kbs_cycle_size_threshold$ = makeSymbol("*KBS-CYCLE-SIZE-THRESHOLD*");
 
-    // defparameter
-    @LispMethod(comment = "defparameter")
-    private static final SubLSymbol $get_broader_mt_support_stack$ = makeSymbol("*GET-BROADER-MT-SUPPORT-STACK*");
+
 
     // defparameter
-    @LispMethod(comment = "defparameter")
+    private static final SubLSymbol $get_broader_mt_support_stack$ = makeSymbol("*GET-BROADER-MT-SUPPORT-STACK*");
+
+
+
+    // defparameter
     private static final SubLSymbol $kbs_additional_redundant_asserted_arguments$ = makeSymbol("*KBS-ADDITIONAL-REDUNDANT-ASSERTED-ARGUMENTS*");
 
     // Internal Constants
-    @LispMethod(comment = "Internal Constants")
-    static private final SubLString $str0$Computing_additional_redundant_de = makeString("Computing additional redundant definitional info");
+    public static final SubLString $str0$Computing_additional_redundant_de = makeString("Computing additional redundant definitional info");
 
     private static final SubLString $$$cdolist = makeString("cdolist");
 
@@ -184,17 +117,29 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
 
     private static final SubLList $list7 = list(makeSymbol("SENTENCE"), makeSymbol("MT"));
 
-    private static final SubLSymbol $append_stack_traces_to_error_messagesP$ = makeSymbol("*APPEND-STACK-TRACES-TO-ERROR-MESSAGES?*");
+    private static final SubLSymbol $sym8$_APPEND_STACK_TRACES_TO_ERROR_MESSAGES__ = makeSymbol("*APPEND-STACK-TRACES-TO-ERROR-MESSAGES?*");
 
-    static private final SubLList $list9 = list(makeSymbol("CSETQ"), makeSymbol("*APPEND-STACK-TRACES-TO-ERROR-MESSAGES?*"), NIL);
+    public static final SubLList $list9 = list(makeSymbol("CSETQ"), makeSymbol("*APPEND-STACK-TRACES-TO-ERROR-MESSAGES?*"), NIL);
+
+
+
+
 
     private static final SubLString $str12$_A = makeString("~A");
 
     private static final SubLString $$$Turning_backward_GAFs_forward = makeString("Turning backward GAFs forward");
 
-    private static final SubLList $list18 = list(new SubLObject[]{ list(reader_make_constant_shell("isa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("quotedIsa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("genls"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), T), list(reader_make_constant_shell("arg1Isa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg1Genl"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg2Isa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg2Genl"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg3Isa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg3Genl"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg4Isa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg4Genl"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg5Isa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg5Genl"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg6Isa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg6Genl"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("argsIsa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("argsQuotedIsa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("argsGenl"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("resultIsa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("resultGenl"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("genlPreds"), makeSymbol("ALL-GENL-PREDS"), makeSymbol("GENL-PRED?"), makeSymbol("MIN-PREDICATES"), T), list(reader_make_constant_shell("genlInverse"), makeSymbol("ALL-GENL-PREDS"), makeSymbol("GENL-PRED?"), makeSymbol("MIN-PREDICATES"), NIL), list(reader_make_constant_shell("genlMt"), makeSymbol("ALL-GENL-MTS"), makeSymbol("GENL-MT?"), makeSymbol("MIN-MTS"), T), list(reader_make_constant_shell("arg1QuotedIsa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg2QuotedIsa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg3QuotedIsa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg4QuotedIsa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg5QuotedIsa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg6QuotedIsa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL) });
 
-    static private final SubLList $list19 = list(list(reader_make_constant_shell("geographicalSubRegions"), makeSymbol("ALL-GEOGRAPHICAL-SUPER-REGIONS"), makeSymbol("GEOGRAPHICAL-SUPER-REGION?"), NIL, T));
+
+
+
+
+
+
+
+    private static final SubLList $list18 = list(new SubLObject[]{ list(reader_make_constant_shell(makeString("isa")), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell(makeString("quotedIsa")), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell(makeString("genls")), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), T), list(reader_make_constant_shell(makeString("arg1Isa")), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell(makeString("arg1Genl")), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell(makeString("arg2Isa")), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell(makeString("arg2Genl")), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell(makeString("arg3Isa")), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell(makeString("arg3Genl")), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell(makeString("arg4Isa")), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell(makeString("arg4Genl")), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell(makeString("arg5Isa")), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell(makeString("arg5Genl")), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell(makeString("arg6Isa")), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell(makeString("arg6Genl")), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell(makeString("argsIsa")), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell(makeString("argsQuotedIsa")), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell(makeString("argsGenl")), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell(makeString("resultIsa")), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell(makeString("resultGenl")), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell(makeString("genlPreds")), makeSymbol("ALL-GENL-PREDS"), makeSymbol("GENL-PRED?"), makeSymbol("MIN-PREDICATES"), T), list(reader_make_constant_shell(makeString("genlInverse")), makeSymbol("ALL-GENL-PREDS"), makeSymbol("GENL-PRED?"), makeSymbol("MIN-PREDICATES"), NIL), list(reader_make_constant_shell(makeString("genlMt")), makeSymbol("ALL-GENL-MTS"), makeSymbol("GENL-MT?"), makeSymbol("MIN-MTS"), T), list(reader_make_constant_shell(makeString("arg1QuotedIsa")), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell(makeString("arg2QuotedIsa")), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell(makeString("arg3QuotedIsa")), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell(makeString("arg4QuotedIsa")), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell(makeString("arg5QuotedIsa")), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell(makeString("arg6QuotedIsa")), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL) });
+
+    public static final SubLList $list19 = list(list(reader_make_constant_shell(makeString("geographicalSubRegions")), makeSymbol("ALL-GEOGRAPHICAL-SUPER-REGIONS"), makeSymbol("GEOGRAPHICAL-SUPER-REGION?"), NIL, T));
 
     private static final SubLSymbol CACHED_KBS_ADDITIONAL_REDUNDANT_DEFINITIONAL_INFO = makeSymbol("CACHED-KBS-ADDITIONAL-REDUNDANT-DEFINITIONAL-INFO");
 
@@ -206,13 +151,17 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
 
 
 
+    private static final SubLObject $$EverythingPSC = reader_make_constant_shell(makeString("EverythingPSC"));
 
+
+
+    private static final SubLObject $$isa = reader_make_constant_shell(makeString("isa"));
 
     private static final SubLList $list28 = list(makeSymbol("ADD-MT"), makeSymbol("ADD-VALUE"));
 
+    private static final SubLObject $$Individual = reader_make_constant_shell(makeString("Individual"));
 
-
-
+    private static final SubLObject $$UniversalVocabularyMt = reader_make_constant_shell(makeString("UniversalVocabularyMt"));
 
     private static final SubLString $str31$__Additions__ = makeString("~%Additions :");
 
@@ -222,6 +171,8 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str34$__Cycle___S__S__S = makeString("~%Cycle: ~S ~S ~S");
 
+
+
     private static final SubLSymbol MIN_PREDICATES = makeSymbol("MIN-PREDICATES");
 
     private static final SubLSymbol MIN_MTS = makeSymbol("MIN-MTS");
@@ -230,7 +181,9 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
 
 
 
+    private static final SubLObject $$quotedIsa = reader_make_constant_shell(makeString("quotedIsa"));
 
+    private static final SubLObject $$genls = reader_make_constant_shell(makeString("genls"));
 
     private static final SubLSymbol $kbs_broader_term_gafs$ = makeSymbol("*KBS-BROADER-TERM-GAFS*");
 
@@ -246,15 +199,21 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str48$Computing___broaderTerm_additions = makeString("Computing #$broaderTerm additions");
 
-    private static final SubLObject $$broaderTerm_NonTaxonomic = reader_make_constant_shell("broaderTerm-NonTaxonomic");
+    private static final SubLObject $$broaderTerm_NonTaxonomic = reader_make_constant_shell(makeString("broaderTerm-NonTaxonomic"));
 
 
+
+    private static final SubLObject $$InferencePSC = reader_make_constant_shell(makeString("InferencePSC"));
 
     private static final SubLList $list52 = cons(makeSymbol("BROADER-TERM"), makeSymbol("SUPPORTS"));
+
+
 
     private static final SubLSymbol SUPPORT_STRENGTH = makeSymbol("SUPPORT-STRENGTH");
 
 
+
+    private static final SubLObject $$broaderTerm = reader_make_constant_shell(makeString("broaderTerm"));
 
     private static final SubLSymbol BROADER_TERM_PREDS = makeSymbol("BROADER-TERM-PREDS");
 
@@ -266,6 +225,8 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
 
     private static final SubLList $list61 = list(makeSymbol("SENTENCE"), makeSymbol("MT"), makeSymbol("STRENGTH"));
 
+
+
     private static final SubLString $str63$Computing_additional_redundant_as = makeString("Computing additional redundant asserted arguments");
 
     private static final SubLSymbol KBS_DEDUCTION_P = makeSymbol("KBS-DEDUCTION-P");
@@ -274,37 +235,7 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str66$_additional_redundant_asserted_ar = makeString(" additional redundant asserted arguments");
 
-
-
-    public static final SubLObject compute_and_add_kbs_additional_redundant_definitional_info_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject sbhl_ms_resource = sbhl_marking_vars.new_sbhl_marking_space_resource(TEN_INTEGER);
-                {
-                    SubLObject _prev_bind_0 = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.currentBinding(thread);
-                    try {
-                        sbhl_marking_vars.$resourced_sbhl_marking_spaces$.bind(sbhl_ms_resource, thread);
-                        sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.bind(T, thread);
-                        sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.bind(sbhl_marking_vars.determine_marking_space_limit(sbhl_marking_vars.$resourced_sbhl_marking_spaces$.getDynamicValue(thread)), thread);
-                        kbs_partition.clear_kbs_splicing_assertions();
-                        {
-                            SubLObject count = com.cyc.cycjava.cycl.kbs_add_redundant.compute_kbs_additional_redundant_definitional_info();
-                            com.cyc.cycjava.cycl.kbs_add_redundant.add_kbs_additional_redundant_definitional_info(count);
-                        }
-                        sbhl_ms_resource = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.getDynamicValue(thread);
-                    } finally {
-                        sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.rebind(_prev_bind_2, thread);
-                        sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.rebind(_prev_bind_1, thread);
-                        sbhl_marking_vars.$resourced_sbhl_marking_spaces$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
+    private static final SubLObject $$geographicalSubRegions = reader_make_constant_shell(makeString("geographicalSubRegions"));
 
     public static SubLObject compute_and_add_kbs_additional_redundant_definitional_info() {
         final SubLThread thread = SubLProcess.currentSubLThread();
@@ -339,43 +270,10 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject compute_and_add_kbs_broader_term_gafs_alt() {
-        com.cyc.cycjava.cycl.kbs_add_redundant.compute_kbs_broader_term_gafs();
-        com.cyc.cycjava.cycl.kbs_add_redundant.add_kbs_broader_term_gafs();
-        return NIL;
-    }
-
     public static SubLObject compute_and_add_kbs_broader_term_gafs() {
         compute_kbs_broader_term_gafs();
         add_kbs_broader_term_gafs();
         return NIL;
-    }
-
-    public static final SubLObject compute_and_add_kbs_additional_redundant_asserted_arguments_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject sbhl_ms_resource = sbhl_marking_vars.new_sbhl_marking_space_resource(TEN_INTEGER);
-                {
-                    SubLObject _prev_bind_0 = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.currentBinding(thread);
-                    try {
-                        sbhl_marking_vars.$resourced_sbhl_marking_spaces$.bind(sbhl_ms_resource, thread);
-                        sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.bind(T, thread);
-                        sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.bind(sbhl_marking_vars.determine_marking_space_limit(sbhl_marking_vars.$resourced_sbhl_marking_spaces$.getDynamicValue(thread)), thread);
-                        com.cyc.cycjava.cycl.kbs_add_redundant.compute_kbs_additional_redundant_asserted_arguments();
-                        com.cyc.cycjava.cycl.kbs_add_redundant.add_kbs_additional_redundant_asserted_arguments();
-                        sbhl_ms_resource = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.getDynamicValue(thread);
-                    } finally {
-                        sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.rebind(_prev_bind_2, thread);
-                        sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.rebind(_prev_bind_1, thread);
-                        sbhl_marking_vars.$resourced_sbhl_marking_spaces$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject compute_and_add_kbs_additional_redundant_asserted_arguments() {
@@ -408,56 +306,6 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
             sbhl_marking_vars.$resourced_sbhl_marking_spaces$.rebind(_prev_bind_0, thread);
         }
         return NIL;
-    }
-
-    public static final SubLObject compute_kbs_additional_redundant_definitional_info_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            com.cyc.cycjava.cycl.kbs_add_redundant.clear_cached_kbs_additional_redundant_definitional_info();
-            {
-                SubLObject v_forts = kbs_identification.kbs_forts();
-                SubLObject total = ZERO_INTEGER;
-                SubLObject list_var = v_forts;
-                $progress_note$.setDynamicValue($str_alt0$Computing_additional_redundant_de, thread);
-                $progress_start_time$.setDynamicValue(get_universal_time(), thread);
-                $progress_total$.setDynamicValue(length(list_var), thread);
-                $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
-                {
-                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                    try {
-                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                        $last_percent_progress_prediction$.bind(NIL, thread);
-                        $within_noting_percent_progress$.bind(T, thread);
-                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                        noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
-                        {
-                            SubLObject csome_list_var = list_var;
-                            SubLObject fort = NIL;
-                            for (fort = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , fort = csome_list_var.first()) {
-                                note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
-                                $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
-                                {
-                                    SubLObject additions = com.cyc.cycjava.cycl.kbs_add_redundant.cached_kbs_additional_redundant_definitional_info(fort);
-                                    if (NIL != additions) {
-                                        total = add(total, length(additions));
-                                    }
-                                }
-                            }
-                        }
-                        noting_percent_progress_postamble();
-                    } finally {
-                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return total;
-            }
-        }
     }
 
     public static SubLObject compute_kbs_additional_redundant_definitional_info() {
@@ -522,53 +370,6 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
         return total;
     }
 
-    public static final SubLObject add_kbs_additional_redundant_definitional_info_alt(SubLObject total_assertion_count) {
-        if (total_assertion_count == UNPROVIDED) {
-            total_assertion_count = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_forts = kbs_identification.kbs_forts();
-                SubLObject message = (total_assertion_count.isInteger()) ? ((SubLObject) (cconcatenate($str_alt1$Adding_, new SubLObject[]{ format_nil.format_nil_a_no_copy(total_assertion_count), $str_alt2$_additional_redundant_definitiona, format_nil.format_nil_a_no_copy(length(v_forts)), $str_alt3$_FORTs }))) : cconcatenate($str_alt4$Adding_additional_redundant_defin, new SubLObject[]{ format_nil.format_nil_a_no_copy(length(v_forts)), $str_alt3$_FORTs });
-                SubLObject list_var = v_forts;
-                $progress_note$.setDynamicValue(message, thread);
-                $progress_start_time$.setDynamicValue(get_universal_time(), thread);
-                $progress_total$.setDynamicValue(length(list_var), thread);
-                $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
-                {
-                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                    try {
-                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                        $last_percent_progress_prediction$.bind(NIL, thread);
-                        $within_noting_percent_progress$.bind(T, thread);
-                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                        noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
-                        {
-                            SubLObject csome_list_var = list_var;
-                            SubLObject fort = NIL;
-                            for (fort = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , fort = csome_list_var.first()) {
-                                note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
-                                $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
-                                com.cyc.cycjava.cycl.kbs_add_redundant.add_kbs_additional_redundant_definitional_info_for_fort(fort);
-                            }
-                        }
-                        noting_percent_progress_postamble();
-                    } finally {
-                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject add_kbs_additional_redundant_definitional_info(SubLObject total_assertion_count) {
         if (total_assertion_count == UNPROVIDED) {
             total_assertion_count = NIL;
@@ -630,57 +431,6 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject add_kbs_additional_redundant_definitional_info_for_fort_alt(SubLObject fort) {
-        {
-            SubLObject additions = com.cyc.cycjava.cycl.kbs_add_redundant.cached_kbs_additional_redundant_definitional_info(fort);
-            SubLObject cdolist_list_var = additions;
-            SubLObject addition = NIL;
-            for (addition = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , addition = cdolist_list_var.first()) {
-                {
-                    SubLObject datum = addition;
-                    SubLObject current = datum;
-                    SubLObject sentence = NIL;
-                    SubLObject mt = NIL;
-                    destructuring_bind_must_consp(current, datum, $list_alt5);
-                    sentence = current.first();
-                    current = current.rest();
-                    destructuring_bind_must_consp(current, datum, $list_alt5);
-                    mt = current.first();
-                    current = current.rest();
-                    if (NIL == current) {
-                        {
-                            SubLObject message_var = NIL;
-                            try {
-                                {
-                                    SubLObject _prev_bind_0 = currentBinding(Errors.$error_handler$);
-                                    try {
-                                        bind(Errors.$error_handler$, CATCH_ERROR_MESSAGE_HANDLER);
-                                        try {
-                                            cyc_kernel.cyc_assert_wff(sentence, mt, UNPROVIDED);
-                                            kbs_partition.add_kbs_splicing_assertion(czer_meta.find_assertion_cycl(sentence, mt));
-                                        } catch (Throwable catch_var) {
-                                            Errors.handleThrowable(catch_var, NIL);
-                                        }
-                                    } finally {
-                                        rebind(Errors.$error_handler$, _prev_bind_0);
-                                    }
-                                }
-                            } catch (Throwable ccatch_env_var) {
-                                message_var = Errors.handleThrowable(ccatch_env_var, $catch_error_message_target$.getGlobalValue());
-                            }
-                            if (message_var.isString()) {
-                                Errors.warn($str_alt7$_A, message_var);
-                            }
-                        }
-                    } else {
-                        cdestructuring_bind_error(datum, $list_alt5);
-                    }
-                }
-            }
-            return length(additions);
-        }
-    }
-
     public static SubLObject add_kbs_additional_redundant_definitional_info_for_fort(final SubLObject fort) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject additions = cached_kbs_additional_redundant_definitional_info(fort);
@@ -701,7 +451,7 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
             current = current.rest();
             if (NIL == current) {
                 SubLObject message_var = NIL;
-                final SubLObject was_appendingP = eval($append_stack_traces_to_error_messagesP$);
+                final SubLObject was_appendingP = eval($sym8$_APPEND_STACK_TRACES_TO_ERROR_MESSAGES__);
                 eval($list9);
                 try {
                     try {
@@ -728,7 +478,7 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
                     try {
                         $is_thread_performing_cleanupP$.bind(T, thread);
                         final SubLObject _values = getValuesAsVector();
-                        eval(list(CSETQ, $append_stack_traces_to_error_messagesP$, was_appendingP));
+                        eval(list(CSETQ, $sym8$_APPEND_STACK_TRACES_TO_ERROR_MESSAGES__, was_appendingP));
                         restoreValuesFromVector(_values);
                     } finally {
                         $is_thread_performing_cleanupP$.rebind(_prev_bind_2, thread);
@@ -759,7 +509,7 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
         final SubLObject mess = $$$Turning_backward_GAFs_forward;
         final SubLObject total_$5 = id_index_count(idx);
         SubLObject sofar = ZERO_INTEGER;
-        assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
+        assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
         final SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
         final SubLObject _prev_bind_2 = $last_percent_progress_prediction$.currentBinding(thread);
         final SubLObject _prev_bind_3 = $within_noting_percent_progress$.currentBinding(thread);
@@ -950,16 +700,6 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
         return total;
     }
 
-    public static final SubLObject clear_cached_kbs_additional_redundant_definitional_info_alt() {
-        {
-            SubLObject cs = $cached_kbs_additional_redundant_definitional_info_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject clear_cached_kbs_additional_redundant_definitional_info() {
         final SubLObject cs = $cached_kbs_additional_redundant_definitional_info_caching_state$.getGlobalValue();
         if (NIL != cs) {
@@ -968,37 +708,12 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject remove_cached_kbs_additional_redundant_definitional_info_alt(SubLObject fort) {
-        return memoization_state.caching_state_remove_function_results_with_args($cached_kbs_additional_redundant_definitional_info_caching_state$.getGlobalValue(), list(fort), UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject remove_cached_kbs_additional_redundant_definitional_info(final SubLObject fort) {
         return memoization_state.caching_state_remove_function_results_with_args($cached_kbs_additional_redundant_definitional_info_caching_state$.getGlobalValue(), list(fort), UNPROVIDED, UNPROVIDED);
     }
 
-    public static final SubLObject cached_kbs_additional_redundant_definitional_info_internal_alt(SubLObject fort) {
-        return com.cyc.cycjava.cycl.kbs_add_redundant.kbs_additional_redundant_definitional_info(fort);
-    }
-
     public static SubLObject cached_kbs_additional_redundant_definitional_info_internal(final SubLObject fort) {
         return kbs_additional_redundant_definitional_info(fort);
-    }
-
-    public static final SubLObject cached_kbs_additional_redundant_definitional_info_alt(SubLObject fort) {
-        {
-            SubLObject caching_state = $cached_kbs_additional_redundant_definitional_info_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(CACHED_KBS_ADDITIONAL_REDUNDANT_DEFINITIONAL_INFO, $cached_kbs_additional_redundant_definitional_info_caching_state$, NIL, EQ, ONE_INTEGER, $int$2000);
-            }
-            {
-                SubLObject results = memoization_state.caching_state_lookup(caching_state, fort, $kw13$_MEMOIZED_ITEM_NOT_FOUND_);
-                if (results == $kw13$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.kbs_add_redundant.cached_kbs_additional_redundant_definitional_info_internal(fort)));
-                    memoization_state.caching_state_put(caching_state, fort, results, UNPROVIDED);
-                }
-                return memoization_state.caching_results(results);
-            }
-        }
     }
 
     public static SubLObject cached_kbs_additional_redundant_definitional_info(final SubLObject fort) {
@@ -1012,249 +727,6 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
             memoization_state.caching_state_put(caching_state, fort, results, UNPROVIDED);
         }
         return memoization_state.caching_results(results);
-    }
-
-    public static final SubLObject kbs_additional_redundant_definitional_info_alt(SubLObject fort) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != term.skolem_constantP(fort)) {
-                return NIL;
-            }
-            {
-                SubLObject additions = NIL;
-                SubLObject has_isa_assertionP = NIL;
-                {
-                    SubLObject cdolist_list_var = $defining_predicates_info$.getDynamicValue(thread);
-                    SubLObject pred_info = NIL;
-                    for (pred_info = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pred_info = cdolist_list_var.first()) {
-                        {
-                            SubLObject datum = pred_info;
-                            SubLObject current = datum;
-                            SubLObject pred = NIL;
-                            SubLObject all_func = NIL;
-                            SubLObject test_func = NIL;
-                            SubLObject min_func = NIL;
-                            SubLObject reflexive = NIL;
-                            destructuring_bind_must_consp(current, datum, $list_alt14);
-                            pred = current.first();
-                            current = current.rest();
-                            destructuring_bind_must_consp(current, datum, $list_alt14);
-                            all_func = current.first();
-                            current = current.rest();
-                            destructuring_bind_must_consp(current, datum, $list_alt14);
-                            test_func = current.first();
-                            current = current.rest();
-                            destructuring_bind_must_consp(current, datum, $list_alt14);
-                            min_func = current.first();
-                            current = current.rest();
-                            destructuring_bind_must_consp(current, datum, $list_alt14);
-                            reflexive = current.first();
-                            current = current.rest();
-                            if (NIL == current) {
-                                {
-                                    SubLObject fort_types = NIL;
-                                    {
-                                        SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                                        SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                                        try {
-                                            mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                                            mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                                            fort_types = fort_types_interface.fort_types(fort, UNPROVIDED);
-                                        } finally {
-                                            mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                                            mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                                        }
-                                    }
-                                    if (kb_indexing.num_gaf_arg_index(fort, ONE_INTEGER, pred, UNPROVIDED).numG(ZERO_INTEGER)) {
-                                        {
-                                            SubLObject mts = kb_indexing.key_gaf_arg_index(fort, ONE_INTEGER, pred);
-                                            {
-                                                SubLObject cdolist_list_var_1 = mts;
-                                                SubLObject mt = NIL;
-                                                for (mt = cdolist_list_var_1.first(); NIL != cdolist_list_var_1; cdolist_list_var_1 = cdolist_list_var_1.rest() , mt = cdolist_list_var_1.first()) {
-                                                    {
-                                                        SubLObject true_values = kb_mapping_utilities.pred_values_in_mt(fort, pred, mt, ONE_INTEGER, TWO_INTEGER, $TRUE);
-                                                        SubLObject additional_value_mt_pairs = com.cyc.cycjava.cycl.kbs_add_redundant.kbs_splicing_value_mt_pairs(fort, mt, true_values, pred, all_func, test_func, min_func, reflexive);
-                                                        if (((NIL == has_isa_assertionP) && (pred == $$isa)) && (NIL != true_values)) {
-                                                            if (NIL == has_isa_assertionP) {
-                                                                {
-                                                                    SubLObject csome_list_var = true_values;
-                                                                    SubLObject true_value = NIL;
-                                                                    for (true_value = csome_list_var.first(); !((NIL != has_isa_assertionP) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , true_value = csome_list_var.first()) {
-                                                                        if (NIL != kbs_identification.kbs_fort_p(true_value)) {
-                                                                            has_isa_assertionP = T;
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                        if (NIL != additional_value_mt_pairs) {
-                                                            {
-                                                                SubLObject cdolist_list_var_2 = additional_value_mt_pairs;
-                                                                SubLObject additional_value_mt_pair = NIL;
-                                                                for (additional_value_mt_pair = cdolist_list_var_2.first(); NIL != cdolist_list_var_2; cdolist_list_var_2 = cdolist_list_var_2.rest() , additional_value_mt_pair = cdolist_list_var_2.first()) {
-                                                                    {
-                                                                        SubLObject datum_3 = additional_value_mt_pair;
-                                                                        SubLObject current_4 = datum_3;
-                                                                        SubLObject add_mt = NIL;
-                                                                        SubLObject add_value = NIL;
-                                                                        destructuring_bind_must_consp(current_4, datum_3, $list_alt19);
-                                                                        add_mt = current_4.first();
-                                                                        current_4 = current_4.rest();
-                                                                        destructuring_bind_must_consp(current_4, datum_3, $list_alt19);
-                                                                        add_value = current_4.first();
-                                                                        current_4 = current_4.rest();
-                                                                        if (NIL == current_4) {
-                                                                            if (NIL == list_utilities.member_eqP(add_value, fort_types)) {
-                                                                                {
-                                                                                    SubLObject addition = com.cyc.cycjava.cycl.kbs_add_redundant.kbs_make_redundant_addition(pred, fort, add_value, add_mt);
-                                                                                    SubLObject var = addition;
-                                                                                    if (NIL != var) {
-                                                                                        additions = cons(var, additions);
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        } else {
-                                                                            cdestructuring_bind_error(datum_3, $list_alt19);
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            if ((NIL == additions) && (NIL == has_isa_assertionP)) {
-                                                if (NIL == fort_types) {
-                                                    fort_types = list($$Individual);
-                                                }
-                                                {
-                                                    SubLObject cdolist_list_var_5 = fort_types;
-                                                    SubLObject fort_type = NIL;
-                                                    for (fort_type = cdolist_list_var_5.first(); NIL != cdolist_list_var_5; cdolist_list_var_5 = cdolist_list_var_5.rest() , fort_type = cdolist_list_var_5.first()) {
-                                                        additions = cons(com.cyc.cycjava.cycl.kbs_add_redundant.kbs_make_redundant_addition_forced($$isa, fort, fort_type, $$UniversalVocabularyMt), additions);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            } else {
-                                cdestructuring_bind_error(datum, $list_alt14);
-                            }
-                        }
-                    }
-                }
-                {
-                    SubLObject cdolist_list_var = $arg2_defining_predicates_info$.getDynamicValue(thread);
-                    SubLObject pred_info = NIL;
-                    for (pred_info = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pred_info = cdolist_list_var.first()) {
-                        {
-                            SubLObject datum = pred_info;
-                            SubLObject current = datum;
-                            SubLObject pred = NIL;
-                            SubLObject all_func = NIL;
-                            SubLObject test_func = NIL;
-                            SubLObject min_func = NIL;
-                            SubLObject reflexive = NIL;
-                            destructuring_bind_must_consp(current, datum, $list_alt14);
-                            pred = current.first();
-                            current = current.rest();
-                            destructuring_bind_must_consp(current, datum, $list_alt14);
-                            all_func = current.first();
-                            current = current.rest();
-                            destructuring_bind_must_consp(current, datum, $list_alt14);
-                            test_func = current.first();
-                            current = current.rest();
-                            destructuring_bind_must_consp(current, datum, $list_alt14);
-                            min_func = current.first();
-                            current = current.rest();
-                            destructuring_bind_must_consp(current, datum, $list_alt14);
-                            reflexive = current.first();
-                            current = current.rest();
-                            if (NIL == current) {
-                                if (kb_indexing.num_gaf_arg_index(fort, TWO_INTEGER, pred, UNPROVIDED).numG(ZERO_INTEGER)) {
-                                    {
-                                        SubLObject mts = kb_indexing.key_gaf_arg_index(fort, TWO_INTEGER, pred);
-                                        SubLObject cdolist_list_var_6 = mts;
-                                        SubLObject mt = NIL;
-                                        for (mt = cdolist_list_var_6.first(); NIL != cdolist_list_var_6; cdolist_list_var_6 = cdolist_list_var_6.rest() , mt = cdolist_list_var_6.first()) {
-                                            {
-                                                SubLObject true_values = kb_mapping_utilities.pred_values_in_mt(fort, pred, mt, TWO_INTEGER, ONE_INTEGER, $TRUE);
-                                                SubLObject additional_value_mt_pairs = com.cyc.cycjava.cycl.kbs_add_redundant.kbs_splicing_value_mt_pairs(fort, mt, true_values, pred, all_func, test_func, min_func, reflexive);
-                                                if (NIL != additional_value_mt_pairs) {
-                                                    {
-                                                        SubLObject cdolist_list_var_7 = additional_value_mt_pairs;
-                                                        SubLObject additional_value_mt_pair = NIL;
-                                                        for (additional_value_mt_pair = cdolist_list_var_7.first(); NIL != cdolist_list_var_7; cdolist_list_var_7 = cdolist_list_var_7.rest() , additional_value_mt_pair = cdolist_list_var_7.first()) {
-                                                            {
-                                                                SubLObject datum_8 = additional_value_mt_pair;
-                                                                SubLObject current_9 = datum_8;
-                                                                SubLObject add_mt = NIL;
-                                                                SubLObject add_value = NIL;
-                                                                destructuring_bind_must_consp(current_9, datum_8, $list_alt19);
-                                                                add_mt = current_9.first();
-                                                                current_9 = current_9.rest();
-                                                                destructuring_bind_must_consp(current_9, datum_8, $list_alt19);
-                                                                add_value = current_9.first();
-                                                                current_9 = current_9.rest();
-                                                                if (NIL == current_9) {
-                                                                    {
-                                                                        SubLObject addition = com.cyc.cycjava.cycl.kbs_add_redundant.kbs_make_redundant_addition(pred, add_value, fort, add_mt);
-                                                                        SubLObject var = addition;
-                                                                        if (NIL != var) {
-                                                                            additions = cons(var, additions);
-                                                                        }
-                                                                    }
-                                                                } else {
-                                                                    cdestructuring_bind_error(datum_8, $list_alt19);
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            } else {
-                                cdestructuring_bind_error(datum, $list_alt14);
-                            }
-                        }
-                    }
-                }
-                if (NIL != additions) {
-                    additions = nreverse(additions);
-                    if (NIL != $kbs_add_redundant_verboseP$.getDynamicValue(thread)) {
-                        format(T, $str_alt22$__Additions__);
-                        {
-                            SubLObject cdolist_list_var = additions;
-                            SubLObject addition = NIL;
-                            for (addition = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , addition = cdolist_list_var.first()) {
-                                {
-                                    SubLObject datum = addition;
-                                    SubLObject current = datum;
-                                    SubLObject sentence = NIL;
-                                    SubLObject mt = NIL;
-                                    destructuring_bind_must_consp(current, datum, $list_alt5);
-                                    sentence = current.first();
-                                    current = current.rest();
-                                    destructuring_bind_must_consp(current, datum, $list_alt5);
-                                    mt = current.first();
-                                    current = current.rest();
-                                    if (NIL == current) {
-                                        format(T, $str_alt23$_____S_in__S, sentence, mt);
-                                    } else {
-                                        cdestructuring_bind_error(datum, $list_alt5);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                return additions;
-            }
-        }
     }
 
     public static SubLObject kbs_additional_redundant_definitional_info(final SubLObject fort) {
@@ -1479,41 +951,6 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
         return additions;
     }
 
-    public static final SubLObject kbs_splicing_value_mt_pairs_alt(SubLObject fort, SubLObject mt, SubLObject given_values, SubLObject pred, SubLObject all_func, SubLObject test_func, SubLObject min_func, SubLObject reflexive) {
-        if (NIL != kbs_identification.kbs_fort_p(mt)) {
-            {
-                SubLObject do_splicingP = NIL;
-                if (NIL == do_splicingP) {
-                    {
-                        SubLObject csome_list_var = given_values;
-                        SubLObject given_value = NIL;
-                        for (given_value = csome_list_var.first(); !((NIL != do_splicingP) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , given_value = csome_list_var.first()) {
-                            if (NIL != kbs_identification.compute_non_kbs_assertion_p(kb_indexing.find_gaf(list(pred, fort, given_value), mt))) {
-                                do_splicingP = T;
-                            }
-                        }
-                    }
-                }
-                if (NIL == do_splicingP) {
-                    return NIL;
-                }
-            }
-            {
-                SubLObject minimal_values = com.cyc.cycjava.cycl.kbs_add_redundant.minimal_implied_kbs_values_in_mt(fort, mt, given_values, pred, all_func, test_func, min_func, reflexive);
-                SubLObject additional_values = nset_difference(minimal_values, given_values, UNPROVIDED, UNPROVIDED);
-                SubLObject additional_value_mt_pairs = NIL;
-                SubLObject cdolist_list_var = additional_values;
-                SubLObject additional_value = NIL;
-                for (additional_value = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , additional_value = cdolist_list_var.first()) {
-                    additional_value_mt_pairs = cons(list(mt, additional_value), additional_value_mt_pairs);
-                }
-                return additional_value_mt_pairs;
-            }
-        } else {
-            return NIL;
-        }
-    }
-
     public static SubLObject kbs_splicing_value_mt_pairs(final SubLObject fort, final SubLObject mt, final SubLObject given_values, final SubLObject pred, final SubLObject all_func, final SubLObject test_func, final SubLObject min_func, final SubLObject reflexive) {
         if (NIL == kbs_identification.kbs_fort_p(mt)) {
             return NIL;
@@ -1546,60 +983,6 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
             additional_value = cdolist_list_var.first();
         } 
         return additional_value_mt_pairs;
-    }
-
-    public static final SubLObject minimal_implied_kbs_values_in_mt_alt(SubLObject fort, SubLObject mt, SubLObject given_values, SubLObject pred, SubLObject all_func, SubLObject test_func, SubLObject min_func, SubLObject reflexive) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject full_values = NIL;
-                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(mt);
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
-                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
-                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
-                        {
-                            SubLObject cdolist_list_var = given_values;
-                            SubLObject value = NIL;
-                            for (value = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , value = cdolist_list_var.first()) {
-                                full_values = nunion(full_values, NIL != forts.fort_p(value) ? ((SubLObject) (funcall(all_func, value))) : NIL, UNPROVIDED, UNPROVIDED);
-                            }
-                            full_values = list_utilities.delete_if_not(symbol_function(KBS_FORT_P), full_values, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                            full_values = com.cyc.cycjava.cycl.kbs_add_redundant.remove_definitionally_restricted_values(full_values, pred);
-                            {
-                                SubLObject cycle_set = NIL;
-                                if (NIL != reflexive) {
-                                    full_values = delete(fort, full_values, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                    cycle_set = com.cyc.cycjava.cycl.kbs_add_redundant.kbs_cycle_set(fort, full_values, test_func);
-                                    if (NIL != cycle_set) {
-                                        if (NIL != $kbs_add_redundant_verboseP$.getDynamicValue(thread)) {
-                                            Errors.warn($str_alt25$__Cycle___S__S__S, test_func, fort, cycle_set);
-                                        }
-                                        full_values = nset_difference(full_values, cycle_set, UNPROVIDED, UNPROVIDED);
-                                    }
-                                }
-                                full_values = (NIL != min_func) ? ((SubLObject) (min_func == MIN_COLS ? ((SubLObject) (genls.min_cols(full_values, UNPROVIDED, UNPROVIDED))) : min_func == MIN_PREDICATES ? ((SubLObject) (genl_predicates.min_predicates(full_values, UNPROVIDED, UNPROVIDED))) : min_func == MIN_MTS ? ((SubLObject) (genl_mts.min_mts(full_values, UNPROVIDED))) : funcall(min_func, full_values))) : list_utilities.delete_subsumed_items(full_values, test_func, UNPROVIDED);
-                                if ((NIL != cycle_set) && ((NIL == $kbs_cycle_size_threshold$.getDynamicValue(thread)) || length(cycle_set).numLE($kbs_cycle_size_threshold$.getDynamicValue(thread)))) {
-                                    full_values = nunion(cycle_set, full_values, UNPROVIDED, UNPROVIDED);
-                                    if (NIL != $kbs_add_redundant_verboseP$.getDynamicValue(thread)) {
-                                        Errors.warn($str_alt29$__Given___S__Minimal___S, given_values, full_values);
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return full_values;
-            }
-        }
     }
 
     public static SubLObject minimal_implied_kbs_values_in_mt(final SubLObject fort, final SubLObject mt, final SubLObject given_values, final SubLObject pred, final SubLObject all_func, final SubLObject test_func, final SubLObject min_func, final SubLObject reflexive) {
@@ -1649,24 +1032,6 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
         return full_values;
     }
 
-    public static final SubLObject remove_definitionally_restricted_values_alt(SubLObject full_values, SubLObject pred) {
-        {
-            SubLObject predicate_predicate_sets = kbs_identification.kbs_predicate_definitional_predicate_sets(pred);
-            SubLObject result = NIL;
-            SubLObject cdolist_list_var = full_values;
-            SubLObject value = NIL;
-            for (value = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , value = cdolist_list_var.first()) {
-                {
-                    SubLObject arg2_predicate_set = kbs_identification.kbs_definitional_constant_predicate_sets(value);
-                    if ((NIL == arg2_predicate_set) || (NIL != subl_promotions.memberP(arg2_predicate_set, predicate_predicate_sets, UNPROVIDED, UNPROVIDED))) {
-                        result = cons(value, result);
-                    }
-                }
-            }
-            return result;
-        }
-    }
-
     public static SubLObject remove_definitionally_restricted_values(final SubLObject full_values, final SubLObject pred) {
         final SubLObject predicate_predicate_sets = kbs_identification.kbs_predicate_definitional_predicate_sets(pred);
         SubLObject result = NIL;
@@ -1684,23 +1049,8 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
         return result;
     }
 
-    public static final SubLObject kbs_cycle_set_alt(SubLObject fort, SubLObject full_values, SubLObject test_func) {
-        SubLTrampolineFile.checkType(fort, FORT_P);
-        {
-            SubLObject cycle_set = NIL;
-            SubLObject cdolist_list_var = full_values;
-            SubLObject v_term = NIL;
-            for (v_term = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_term = cdolist_list_var.first()) {
-                if ((NIL != forts.fort_p(v_term)) && (NIL != funcall(test_func, v_term, fort))) {
-                    cycle_set = cons(v_term, cycle_set);
-                }
-            }
-            return cycle_set;
-        }
-    }
-
     public static SubLObject kbs_cycle_set(final SubLObject fort, final SubLObject full_values, final SubLObject test_func) {
-        assert NIL != forts.fort_p(fort) : "! forts.fort_p(fort) " + ("forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) ") + fort;
+        assert NIL != forts.fort_p(fort) : "forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) " + fort;
         SubLObject cycle_set = NIL;
         SubLObject cdolist_list_var = full_values;
         SubLObject v_term = NIL;
@@ -1713,30 +1063,6 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
             v_term = cdolist_list_var.first();
         } 
         return cycle_set;
-    }
-
-    public static final SubLObject kbs_make_redundant_addition_alt(SubLObject predicate, SubLObject arg1, SubLObject arg2, SubLObject mt) {
-        {
-            SubLObject pcase_var = predicate;
-            if (pcase_var.eql($$isa)) {
-                if (NIL != sbhl_cache.valid_cached_fort_type_p(arg2)) {
-                    return NIL;
-                }
-            } else {
-                if (pcase_var.eql($$quotedIsa)) {
-                    if (NIL != at_defns.quiet_quoted_defns_admitP(arg2, arg1, mt)) {
-                        return NIL;
-                    }
-                } else {
-                    if (pcase_var.eql($$genls)) {
-                        if (NIL != sbhl_cache.valid_cached_genl_p(arg2)) {
-                            return NIL;
-                        }
-                    }
-                }
-            }
-        }
-        return com.cyc.cycjava.cycl.kbs_add_redundant.kbs_make_redundant_addition_forced(predicate, arg1, arg2, mt);
     }
 
     public static SubLObject kbs_make_redundant_addition(final SubLObject predicate, final SubLObject arg1, final SubLObject arg2, final SubLObject mt) {
@@ -1758,102 +1084,12 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
         return kbs_make_redundant_addition_forced(predicate, arg1, arg2, mt);
     }
 
-    public static final SubLObject kbs_make_redundant_addition_forced_alt(SubLObject predicate, SubLObject arg1, SubLObject arg2, SubLObject mt) {
-        return list(make_binary_formula(predicate, arg1, arg2), mt);
-    }
-
     public static SubLObject kbs_make_redundant_addition_forced(final SubLObject predicate, final SubLObject arg1, final SubLObject arg2, final SubLObject mt) {
         return list(make_binary_formula(predicate, arg1, arg2), mt);
     }
 
-    public static final SubLObject kbs_broader_term_gafs_alt() {
-        return $kbs_broader_term_gafs$.getGlobalValue();
-    }
-
     public static SubLObject kbs_broader_term_gafs() {
         return $kbs_broader_term_gafs$.getGlobalValue();
-    }
-
-    public static final SubLObject compute_kbs_broader_term_gafs_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            $kbs_broader_term_gafs$.setGlobalValue(NIL);
-            {
-                SubLObject message = $str_alt34$Computing___broaderTerm_additions;
-                SubLObject total = forts.fort_count();
-                SubLObject sofar = ZERO_INTEGER;
-                {
-                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                    try {
-                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                        $last_percent_progress_prediction$.bind(NIL, thread);
-                        $within_noting_percent_progress$.bind(T, thread);
-                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                        noting_percent_progress_preamble(message);
-                        {
-                            SubLObject cdolist_list_var = forts.do_forts_tables();
-                            SubLObject table_var = NIL;
-                            for (table_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , table_var = cdolist_list_var.first()) {
-                                if (NIL == do_id_index_empty_p(table_var, $SKIP)) {
-                                    {
-                                        SubLObject id = do_id_index_next_id(table_var, T, NIL, NIL);
-                                        SubLObject state_var = do_id_index_next_state(table_var, T, id, NIL);
-                                        SubLObject fort = NIL;
-                                        while (NIL != id) {
-                                            fort = do_id_index_state_object(table_var, $SKIP, id, state_var);
-                                            if (NIL != do_id_index_id_and_object_validP(id, fort, $SKIP)) {
-                                                sofar = add(sofar, ONE_INTEGER);
-                                                note_percent_progress(sofar, total);
-                                                if ((NIL == kbs_identification.kbs_forts()) || (NIL != kbs_identification.kbs_fort_p(fort))) {
-                                                    {
-                                                        SubLObject items_var = com.cyc.cycjava.cycl.kbs_add_redundant.compute_kbs_broader_terms_for_fort(fort);
-                                                        if (items_var.isVector()) {
-                                                            {
-                                                                SubLObject vector_var = com.cyc.cycjava.cycl.kbs_add_redundant.compute_kbs_broader_terms_for_fort(fort);
-                                                                SubLObject backwardP_var = NIL;
-                                                                SubLObject length = length(vector_var);
-                                                                SubLObject v_iteration = NIL;
-                                                                for (v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = add(v_iteration, ONE_INTEGER)) {
-                                                                    {
-                                                                        SubLObject element_num = (NIL != backwardP_var) ? ((SubLObject) (subtract(length, v_iteration, ONE_INTEGER))) : v_iteration;
-                                                                        SubLObject item = aref(vector_var, element_num);
-                                                                        $kbs_broader_term_gafs$.setGlobalValue(cons(item, $kbs_broader_term_gafs$.getGlobalValue()));
-                                                                    }
-                                                                }
-                                                            }
-                                                        } else {
-                                                            {
-                                                                SubLObject cdolist_list_var_10 = com.cyc.cycjava.cycl.kbs_add_redundant.compute_kbs_broader_terms_for_fort(fort);
-                                                                SubLObject item = NIL;
-                                                                for (item = cdolist_list_var_10.first(); NIL != cdolist_list_var_10; cdolist_list_var_10 = cdolist_list_var_10.rest() , item = cdolist_list_var_10.first()) {
-                                                                    $kbs_broader_term_gafs$.setGlobalValue(cons(item, $kbs_broader_term_gafs$.getGlobalValue()));
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            id = do_id_index_next_id(table_var, T, id, state_var);
-                                            state_var = do_id_index_next_state(table_var, T, id, state_var);
-                                        } 
-                                    }
-                                }
-                            }
-                        }
-                        noting_percent_progress_postamble();
-                    } finally {
-                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return length($kbs_broader_term_gafs$.getGlobalValue());
-        }
     }
 
     public static SubLObject compute_kbs_broader_term_gafs() {
@@ -2071,53 +1307,6 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
         return accumulation.accumulation_size(accumulator);
     }
 
-    public static final SubLObject compute_kbs_broader_terms_for_fort_alt(SubLObject fort) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject ans = NIL;
-                ensure_tva_cache_created($$broaderTerm_NonTaxonomic, ONE_INTEGER);
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_ANY_MT, thread);
-                        mt_relevance_macros.$mt$.bind($$InferencePSC, thread);
-                        {
-                            SubLObject cdolist_list_var = tva_cache_get_values(fort, $$broaderTerm_NonTaxonomic, ONE_INTEGER, T);
-                            SubLObject cons = NIL;
-                            for (cons = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , cons = cdolist_list_var.first()) {
-                                {
-                                    SubLObject datum = cons;
-                                    SubLObject current = datum;
-                                    SubLObject broader_term = NIL;
-                                    SubLObject supports = NIL;
-                                    destructuring_bind_must_consp(current, datum, $list_alt39);
-                                    broader_term = current.first();
-                                    current = current.rest();
-                                    supports = current;
-                                    if (((NIL == kbs_identification.kbs_forts()) || (NIL != kbs_identification.kbs_fort_p(broader_term))) && (!fort.eql(broader_term))) {
-                                        {
-                                            SubLObject strength = (NIL != find($DEFAULT, supports, symbol_function(EQL), symbol_function(SUPPORT_STRENGTH), UNPROVIDED, UNPROVIDED)) ? ((SubLObject) ($DEFAULT)) : $MONOTONIC;
-                                            SubLObject mt = com.cyc.cycjava.cycl.kbs_add_redundant.get_broader_term_mt(supports, fort);
-                                            if (NIL != hlmt.hlmt_p(mt)) {
-                                                ans = cons(list(make_binary_formula($$broaderTerm, fort, broader_term), mt, strength), ans);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return ans;
-            }
-        }
-    }
-
     public static SubLObject compute_kbs_broader_terms_for_fort(final SubLObject fort) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject ans = NIL;
@@ -2155,40 +1344,6 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
         return ans;
     }
 
-    /**
-     *
-     *
-     * @return HLMT-P or NIL; An mt into which a #$broaderTerm assertion supported by SUPPORTS can
-    reasonably be asserted.
-     * @unknown For performance reasons, we don't do the ideal thing, which would be to get the max floor mts
-    like forward inference does.
-     */
-    @LispMethod(comment = "@return HLMT-P or NIL; An mt into which a #$broaderTerm assertion supported by SUPPORTS can\r\nreasonably be asserted.\r\n@unknown For performance reasons, we don\'t do the ideal thing, which would be to get the max floor mts\r\nlike forward inference does.")
-    public static final SubLObject get_broader_term_mt_alt(SubLObject supports, SubLObject focal_term) {
-        {
-            SubLObject mt = NIL;
-            if (NIL == mt) {
-                {
-                    SubLObject csome_list_var = supports;
-                    SubLObject support = NIL;
-                    for (support = csome_list_var.first(); !((NIL != mt) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , support = csome_list_var.first()) {
-                        mt = com.cyc.cycjava.cycl.kbs_add_redundant.get_broader_term_mt_from_support(support, focal_term);
-                    }
-                }
-            }
-            return mt;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return HLMT-P or NIL; An mt into which a #$broaderTerm assertion supported by SUPPORTS can
-    reasonably be asserted.
-     * @unknown For performance reasons, we don't do the ideal thing, which would be to get the max floor mts
-    like forward inference does.
-     */
-    @LispMethod(comment = "@return HLMT-P or NIL; An mt into which a #$broaderTerm assertion supported by SUPPORTS can\r\nreasonably be asserted.\r\n@unknown For performance reasons, we don\'t do the ideal thing, which would be to get the max floor mts\r\nlike forward inference does.")
     public static SubLObject get_broader_term_mt(final SubLObject supports, final SubLObject focal_term) {
         SubLObject mt = NIL;
         if (NIL == mt) {
@@ -2198,37 +1353,6 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
             }
         }
         return mt;
-    }
-
-    public static final SubLObject get_broader_term_mt_from_support_alt(SubLObject support, SubLObject focal_term) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != member(support, $get_broader_mt_support_stack$.getDynamicValue(thread), symbol_function(EQUAL), UNPROVIDED)) {
-                return NIL;
-            } else {
-                if (NIL != assertion_p(support)) {
-                    return NIL != expression_find(focal_term, support, T, UNPROVIDED, UNPROVIDED) ? ((SubLObject) (arguments.support_mt(support))) : NIL;
-                } else {
-                    if (NIL != arguments.hl_support_p(support)) {
-                        {
-                            SubLObject mt = NIL;
-                            {
-                                SubLObject _prev_bind_0 = $get_broader_mt_support_stack$.currentBinding(thread);
-                                try {
-                                    $get_broader_mt_support_stack$.bind(cons(support, $get_broader_mt_support_stack$.getDynamicValue(thread)), thread);
-                                    mt = com.cyc.cycjava.cycl.kbs_add_redundant.get_broader_term_mt(hl_supports.hl_justify(support), focal_term);
-                                } finally {
-                                    $get_broader_mt_support_stack$.rebind(_prev_bind_0, thread);
-                                }
-                            }
-                            return mt;
-                        }
-                    } else {
-                        return NIL;
-                    }
-                }
-            }
-        }
     }
 
     public static SubLObject get_broader_term_mt_from_support(final SubLObject support, final SubLObject focal_term) {
@@ -2253,32 +1377,6 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    // Internal Constants
-    @LispMethod(comment = "Internal Constants")
-    static private final SubLString $str_alt0$Computing_additional_redundant_de = makeString("Computing additional redundant definitional info");
-
-    static private final SubLString $str_alt1$Adding_ = makeString("Adding ");
-
-    static private final SubLString $str_alt2$_additional_redundant_definitiona = makeString(" additional redundant definitional info assertions for ");
-
-    static private final SubLString $str_alt3$_FORTs = makeString(" FORTs");
-
-    static private final SubLString $str_alt4$Adding_additional_redundant_defin = makeString("Adding additional redundant definitional info for ");
-
-    static private final SubLList $list_alt5 = list(makeSymbol("SENTENCE"), makeSymbol("MT"));
-
-    static private final SubLString $str_alt7$_A = makeString("~A");
-
-    public static final SubLObject clear_broader_term_preds_alt() {
-        {
-            SubLObject cs = $broader_term_preds_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject clear_broader_term_preds() {
         final SubLObject cs = $broader_term_preds_caching_state$.getGlobalValue();
         if (NIL != cs) {
@@ -2287,36 +1385,8 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    static private final SubLList $list_alt8 = list(new SubLObject[]{ list(reader_make_constant_shell("isa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("quotedIsa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("genls"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), T), list(reader_make_constant_shell("arg1Isa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg1Genl"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg2Isa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg2Genl"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg3Isa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg3Genl"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg4Isa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg4Genl"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg5Isa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg5Genl"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg6Isa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg6Genl"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("argsIsa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("argsQuotedIsa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("argsGenl"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("resultIsa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("resultGenl"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("genlPreds"), makeSymbol("ALL-GENL-PREDS"), makeSymbol("GENL-PRED?"), makeSymbol("MIN-PREDICATES"), T), list(reader_make_constant_shell("genlInverse"), makeSymbol("ALL-GENL-PREDS"), makeSymbol("GENL-PRED?"), makeSymbol("MIN-PREDICATES"), NIL), list(reader_make_constant_shell("genlMt"), makeSymbol("ALL-GENL-MTS"), makeSymbol("GENL-MT?"), makeSymbol("MIN-MTS"), T), list(reader_make_constant_shell("arg1QuotedIsa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg2QuotedIsa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg3QuotedIsa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg4QuotedIsa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg5QuotedIsa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL), list(reader_make_constant_shell("arg6QuotedIsa"), makeSymbol("ALL-GENLS"), makeSymbol("GENL?"), makeSymbol("MIN-COLS"), NIL) });
-
-    public static final SubLObject remove_broader_term_preds_alt() {
-        return memoization_state.caching_state_remove_function_results_with_args($broader_term_preds_caching_state$.getGlobalValue(), list(EMPTY_SUBL_OBJECT_ARRAY), UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject remove_broader_term_preds() {
         return memoization_state.caching_state_remove_function_results_with_args($broader_term_preds_caching_state$.getGlobalValue(), list(EMPTY_SUBL_OBJECT_ARRAY), UNPROVIDED, UNPROVIDED);
-    }
-
-    public static final SubLObject broader_term_preds_internal_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject ans = NIL;
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                        ans = genl_predicates.all_spec_predicates_and_inverses($$broaderTerm_NonTaxonomic, UNPROVIDED, UNPROVIDED);
-                    } finally {
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return ans;
-            }
-        }
     }
 
     public static SubLObject broader_term_preds_internal() {
@@ -2335,23 +1405,6 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
         return ans;
     }
 
-    public static final SubLObject broader_term_preds_alt() {
-        {
-            SubLObject caching_state = $broader_term_preds_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(BROADER_TERM_PREDS, $broader_term_preds_caching_state$, NIL, EQL, ZERO_INTEGER, ZERO_INTEGER);
-            }
-            {
-                SubLObject results = memoization_state.caching_state_get_zero_arg_results(caching_state, UNPROVIDED);
-                if (results == $kw13$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.kbs_add_redundant.broader_term_preds_internal()));
-                    memoization_state.caching_state_set_zero_arg_results(caching_state, results, UNPROVIDED);
-                }
-                return memoization_state.caching_results(results);
-            }
-        }
-    }
-
     public static SubLObject broader_term_preds() {
         SubLObject caching_state = $broader_term_preds_caching_state$.getGlobalValue();
         if (NIL == caching_state) {
@@ -2363,102 +1416,6 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
             memoization_state.caching_state_set_zero_arg_results(caching_state, results, UNPROVIDED);
         }
         return memoization_state.caching_results(results);
-    }
-
-    public static final SubLObject add_kbs_broader_term_gafs_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject additions = com.cyc.cycjava.cycl.kbs_add_redundant.kbs_broader_term_gafs();
-                SubLObject message = cconcatenate($str_alt1$Adding_, new SubLObject[]{ format_nil.format_nil_a_no_copy(length(additions)), $str_alt46$___broaderTerm_assertions });
-                {
-                    SubLObject _prev_bind_0 = kb_control_vars.$forward_inference_enabledP$.currentBinding(thread);
-                    try {
-                        kb_control_vars.$forward_inference_enabledP$.bind(NIL, thread);
-                        {
-                            SubLObject list_var = additions;
-                            $progress_note$.setDynamicValue(message, thread);
-                            $progress_start_time$.setDynamicValue(get_universal_time(), thread);
-                            $progress_total$.setDynamicValue(length(list_var), thread);
-                            $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
-                            {
-                                SubLObject _prev_bind_0_11 = $last_percent_progress_index$.currentBinding(thread);
-                                SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                                SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                                SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                                try {
-                                    $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                                    $last_percent_progress_prediction$.bind(NIL, thread);
-                                    $within_noting_percent_progress$.bind(T, thread);
-                                    $percent_progress_start_time$.bind(get_universal_time(), thread);
-                                    noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
-                                    {
-                                        SubLObject csome_list_var = list_var;
-                                        SubLObject addition = NIL;
-                                        for (addition = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , addition = csome_list_var.first()) {
-                                            note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
-                                            $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
-                                            {
-                                                SubLObject datum = addition;
-                                                SubLObject current = datum;
-                                                SubLObject sentence = NIL;
-                                                SubLObject mt = NIL;
-                                                SubLObject strength = NIL;
-                                                destructuring_bind_must_consp(current, datum, $list_alt47);
-                                                sentence = current.first();
-                                                current = current.rest();
-                                                destructuring_bind_must_consp(current, datum, $list_alt47);
-                                                mt = current.first();
-                                                current = current.rest();
-                                                destructuring_bind_must_consp(current, datum, $list_alt47);
-                                                strength = current.first();
-                                                current = current.rest();
-                                                if (NIL == current) {
-                                                    {
-                                                        SubLObject message_var = NIL;
-                                                        try {
-                                                            {
-                                                                SubLObject _prev_bind_0_12 = Errors.$error_handler$.currentBinding(thread);
-                                                                try {
-                                                                    Errors.$error_handler$.bind(CATCH_ERROR_MESSAGE_HANDLER, thread);
-                                                                    try {
-                                                                        cyc_kernel.cyc_assert_wff(sentence, mt, list($STRENGTH, strength));
-                                                                    } catch (Throwable catch_var) {
-                                                                        Errors.handleThrowable(catch_var, NIL);
-                                                                    }
-                                                                } finally {
-                                                                    Errors.$error_handler$.rebind(_prev_bind_0_12, thread);
-                                                                }
-                                                            }
-                                                        } catch (Throwable ccatch_env_var) {
-                                                            message_var = Errors.handleThrowable(ccatch_env_var, $catch_error_message_target$.getGlobalValue());
-                                                        }
-                                                        if (message_var.isString()) {
-                                                            Errors.warn($str_alt7$_A, message_var);
-                                                        }
-                                                    }
-                                                } else {
-                                                    cdestructuring_bind_error(datum, $list_alt47);
-                                                }
-                                            }
-                                        }
-                                    }
-                                    noting_percent_progress_postamble();
-                                } finally {
-                                    $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                                    $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                                    $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                                    $last_percent_progress_index$.rebind(_prev_bind_0_11, thread);
-                                }
-                            }
-                        }
-                    } finally {
-                        kb_control_vars.$forward_inference_enabledP$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return length(additions);
-            }
-        }
     }
 
     public static SubLObject add_kbs_broader_term_gafs() {
@@ -2519,18 +1476,6 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
         return length(additions);
     }
 
-    static private final SubLList $list_alt9 = list(list(reader_make_constant_shell("geographicalSubRegions"), makeSymbol("ALL-GEOGRAPHICAL-SUPER-REGIONS"), makeSymbol("GEOGRAPHICAL-SUPER-REGION?"), NIL, T));
-
-    public static final SubLSymbol $kw13$_MEMOIZED_ITEM_NOT_FOUND_ = makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
-
-    static private final SubLList $list_alt14 = list(makeSymbol("PRED"), makeSymbol("ALL-FUNC"), makeSymbol("TEST-FUNC"), makeSymbol("MIN-FUNC"), makeSymbol("REFLEXIVE"));
-
-    static private final SubLList $list_alt19 = list(makeSymbol("ADD-MT"), makeSymbol("ADD-VALUE"));
-
-    static private final SubLString $str_alt22$__Additions__ = makeString("~%Additions :");
-
-    static private final SubLString $str_alt23$_____S_in__S = makeString("~%  ~S in ~S");
-
     public static SubLObject add_some_kbs_broader_term_gafs(final SubLObject iterator) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject count = ZERO_INTEGER;
@@ -2578,24 +1523,6 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
         return count;
     }
 
-    static private final SubLString $str_alt25$__Cycle___S__S__S = makeString("~%Cycle: ~S ~S ~S");
-
-    static private final SubLString $str_alt29$__Given___S__Minimal___S = makeString("~%Given: ~S~%Minimal: ~S");
-
-    static private final SubLString $str_alt34$Computing___broaderTerm_additions = makeString("Computing #$broaderTerm additions");
-
-    static private final SubLList $list_alt39 = cons(makeSymbol("BROADER-TERM"), makeSymbol("SUPPORTS"));
-
-    static private final SubLString $str_alt46$___broaderTerm_assertions = makeString(" #$broaderTerm assertions");
-
-    static private final SubLList $list_alt47 = list(makeSymbol("SENTENCE"), makeSymbol("MT"), makeSymbol("STRENGTH"));
-
-    static private final SubLString $str_alt49$Computing_additional_redundant_as = makeString("Computing additional redundant asserted arguments");
-
-    static private final SubLString $str_alt51$__Addition__ = makeString("~%Addition :");
-
-    static private final SubLString $str_alt52$_additional_redundant_asserted_ar = makeString(" additional redundant asserted arguments");
-
     public static SubLObject add_kbs_broader_term_gaf(final SubLObject addition) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject _prev_bind_0 = kb_control_vars.$forward_inference_enabledP$.currentBinding(thread);
@@ -2615,7 +1542,7 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
             current = current.rest();
             if (NIL == current) {
                 SubLObject message_var = NIL;
-                final SubLObject was_appendingP = eval($append_stack_traces_to_error_messagesP$);
+                final SubLObject was_appendingP = eval($sym8$_APPEND_STACK_TRACES_TO_ERROR_MESSAGES__);
                 eval($list9);
                 try {
                     try {
@@ -2641,7 +1568,7 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
                     try {
                         $is_thread_performing_cleanupP$.bind(T, thread);
                         final SubLObject _values = getValuesAsVector();
-                        eval(list(CSETQ, $append_stack_traces_to_error_messagesP$, was_appendingP));
+                        eval(list(CSETQ, $sym8$_APPEND_STACK_TRACES_TO_ERROR_MESSAGES__, was_appendingP));
                         restoreValuesFromVector(_values);
                     } finally {
                         $is_thread_performing_cleanupP$.rebind(_prev_bind_0_$37, thread);
@@ -2659,71 +1586,9 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
         return addition;
     }
 
-    public static final SubLObject kbs_additional_redundant_asserted_arguments_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return $kbs_additional_redundant_asserted_arguments$.getDynamicValue(thread);
-        }
-    }
-
     public static SubLObject kbs_additional_redundant_asserted_arguments() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return $kbs_additional_redundant_asserted_arguments$.getDynamicValue(thread);
-    }
-
-    public static final SubLObject compute_kbs_additional_redundant_asserted_arguments_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            $kbs_additional_redundant_asserted_arguments$.setDynamicValue(NIL, thread);
-            {
-                SubLObject assertions = keyhash_utilities.keyhash_element_list(kbs_identification.kbs_assertion_table());
-                SubLObject list_var = assertions;
-                $progress_note$.setDynamicValue($str_alt49$Computing_additional_redundant_as, thread);
-                $progress_start_time$.setDynamicValue(get_universal_time(), thread);
-                $progress_total$.setDynamicValue(length(list_var), thread);
-                $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
-                {
-                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                    try {
-                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                        $last_percent_progress_prediction$.bind(NIL, thread);
-                        $within_noting_percent_progress$.bind(T, thread);
-                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                        noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
-                        {
-                            SubLObject csome_list_var = list_var;
-                            SubLObject assertion = NIL;
-                            for (assertion = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , assertion = csome_list_var.first()) {
-                                note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
-                                $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
-                                if ((NIL == asserted_assertionP(assertion)) && (NIL != deduced_assertionP(assertion))) {
-                                    {
-                                        SubLObject v_arguments = assertion_arguments(assertion);
-                                        if (NIL == find_if(symbol_function(KBS_DEDUCTION_P), v_arguments, UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
-                                            if (NIL != $kbs_add_redundant_verboseP$.getDynamicValue(thread)) {
-                                                format(T, $str_alt51$__Addition__);
-                                                format(T, $str_alt23$_____S_in__S, fi.assertion_hl_formula(assertion, UNPROVIDED), assertion_mt(assertion));
-                                            }
-                                            $kbs_additional_redundant_asserted_arguments$.setDynamicValue(cons(assertion, $kbs_additional_redundant_asserted_arguments$.getDynamicValue(thread)), thread);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        noting_percent_progress_postamble();
-                    } finally {
-                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return length($kbs_additional_redundant_asserted_arguments$.getDynamicValue(thread));
-        }
     }
 
     public static SubLObject compute_kbs_additional_redundant_asserted_arguments() {
@@ -2793,74 +1658,6 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
         return length($kbs_additional_redundant_asserted_arguments$.getDynamicValue(thread));
     }
 
-    public static final SubLObject add_kbs_additional_redundant_asserted_arguments_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject assertions = com.cyc.cycjava.cycl.kbs_add_redundant.kbs_additional_redundant_asserted_arguments();
-                SubLObject message = cconcatenate($str_alt1$Adding_, new SubLObject[]{ format_nil.format_nil_a_no_copy(length(assertions)), $str_alt52$_additional_redundant_asserted_ar });
-                SubLObject list_var = assertions;
-                $progress_note$.setDynamicValue(message, thread);
-                $progress_start_time$.setDynamicValue(get_universal_time(), thread);
-                $progress_total$.setDynamicValue(length(list_var), thread);
-                $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
-                {
-                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                    try {
-                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                        $last_percent_progress_prediction$.bind(NIL, thread);
-                        $within_noting_percent_progress$.bind(T, thread);
-                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                        noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
-                        {
-                            SubLObject csome_list_var = list_var;
-                            SubLObject assertion = NIL;
-                            for (assertion = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , assertion = csome_list_var.first()) {
-                                note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
-                                $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
-                                {
-                                    SubLObject truth = assertion_truth(assertion);
-                                    SubLObject strength = assertion_strength(assertion);
-                                    SubLObject message_var = NIL;
-                                    try {
-                                        {
-                                            SubLObject _prev_bind_0_13 = Errors.$error_handler$.currentBinding(thread);
-                                            try {
-                                                Errors.$error_handler$.bind(CATCH_ERROR_MESSAGE_HANDLER, thread);
-                                                try {
-                                                    hl_modifiers.kb_create_asserted_argument(assertion, truth, strength);
-                                                } catch (Throwable catch_var) {
-                                                    Errors.handleThrowable(catch_var, NIL);
-                                                }
-                                            } finally {
-                                                Errors.$error_handler$.rebind(_prev_bind_0_13, thread);
-                                            }
-                                        }
-                                    } catch (Throwable ccatch_env_var) {
-                                        message_var = Errors.handleThrowable(ccatch_env_var, $catch_error_message_target$.getGlobalValue());
-                                    }
-                                    if (message_var.isString()) {
-                                        Errors.warn($str_alt7$_A, message_var);
-                                    }
-                                }
-                            }
-                        }
-                        noting_percent_progress_postamble();
-                    } finally {
-                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject add_kbs_additional_redundant_asserted_arguments() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject assertions = kbs_additional_redundant_asserted_arguments();
@@ -2892,7 +1689,7 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
                     final SubLObject truth = assertions_high.assertion_truth(assertion);
                     final SubLObject strength = assertions_high.assertion_strength(assertion);
                     SubLObject message_var = NIL;
-                    final SubLObject was_appendingP = eval($append_stack_traces_to_error_messagesP$);
+                    final SubLObject was_appendingP = eval($sym8$_APPEND_STACK_TRACES_TO_ERROR_MESSAGES__);
                     eval($list9);
                     try {
                         try {
@@ -2918,7 +1715,7 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
                         try {
                             $is_thread_performing_cleanupP$.bind(T, thread);
                             final SubLObject _values = getValuesAsVector();
-                            eval(list(CSETQ, $append_stack_traces_to_error_messagesP$, was_appendingP));
+                            eval(list(CSETQ, $sym8$_APPEND_STACK_TRACES_TO_ERROR_MESSAGES__, was_appendingP));
                             restoreValuesFromVector(_values);
                         } finally {
                             $is_thread_performing_cleanupP$.rebind(_prev_bind_0_$40, thread);
@@ -2956,32 +1753,6 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject all_geographical_super_regions_alt(SubLObject fort, SubLObject mt) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject ans = NIL;
-                SubLObject mt_var = mt;
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.possibly_in_mt_determine_function(mt_var), thread);
-                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.possibly_in_mt_determine_mt(mt_var), thread);
-                        ans = removal_modules_transitivity.inference_transitivity_gather_arg1($$geographicalSubRegions, fort);
-                    } finally {
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return ans;
-            }
-        }
-    }
-
     public static SubLObject all_geographical_super_regions(final SubLObject fort, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -3002,13 +1773,6 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
         return ans;
     }
 
-    public static final SubLObject geographical_super_regionP_alt(SubLObject sub_region, SubLObject super_region, SubLObject mt) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        return removal_modules_transitivity.inference_transitivity_check($$geographicalSubRegions, super_region, sub_region, mt, UNPROVIDED);
-    }
-
     public static SubLObject geographical_super_regionP(final SubLObject sub_region, final SubLObject super_region, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -3017,83 +1781,49 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
     }
 
     public static SubLObject declare_kbs_add_redundant_file() {
-        declareFunction("compute_and_add_kbs_additional_redundant_definitional_info", "COMPUTE-AND-ADD-KBS-ADDITIONAL-REDUNDANT-DEFINITIONAL-INFO", 0, 0, false);
-        declareFunction("compute_and_add_kbs_broader_term_gafs", "COMPUTE-AND-ADD-KBS-BROADER-TERM-GAFS", 0, 0, false);
-        declareFunction("compute_and_add_kbs_additional_redundant_asserted_arguments", "COMPUTE-AND-ADD-KBS-ADDITIONAL-REDUNDANT-ASSERTED-ARGUMENTS", 0, 0, false);
-        declareFunction("compute_kbs_additional_redundant_definitional_info", "COMPUTE-KBS-ADDITIONAL-REDUNDANT-DEFINITIONAL-INFO", 0, 0, false);
-        declareFunction("add_kbs_additional_redundant_definitional_info", "ADD-KBS-ADDITIONAL-REDUNDANT-DEFINITIONAL-INFO", 0, 1, false);
-        declareFunction("add_kbs_additional_redundant_definitional_info_for_fort", "ADD-KBS-ADDITIONAL-REDUNDANT-DEFINITIONAL-INFO-FOR-FORT", 1, 0, false);
-        declareFunction("kbs_reassert_redundant_definitional_info_forward", "KBS-REASSERT-REDUNDANT-DEFINITIONAL-INFO-FORWARD", 0, 2, false);
-        declareFunction("clear_cached_kbs_additional_redundant_definitional_info", "CLEAR-CACHED-KBS-ADDITIONAL-REDUNDANT-DEFINITIONAL-INFO", 0, 0, false);
-        declareFunction("remove_cached_kbs_additional_redundant_definitional_info", "REMOVE-CACHED-KBS-ADDITIONAL-REDUNDANT-DEFINITIONAL-INFO", 1, 0, false);
-        declareFunction("cached_kbs_additional_redundant_definitional_info_internal", "CACHED-KBS-ADDITIONAL-REDUNDANT-DEFINITIONAL-INFO-INTERNAL", 1, 0, false);
-        declareFunction("cached_kbs_additional_redundant_definitional_info", "CACHED-KBS-ADDITIONAL-REDUNDANT-DEFINITIONAL-INFO", 1, 0, false);
-        declareFunction("kbs_additional_redundant_definitional_info", "KBS-ADDITIONAL-REDUNDANT-DEFINITIONAL-INFO", 1, 0, false);
-        declareFunction("kbs_splicing_value_mt_pairs", "KBS-SPLICING-VALUE-MT-PAIRS", 8, 0, false);
-        declareFunction("minimal_implied_kbs_values_in_mt", "MINIMAL-IMPLIED-KBS-VALUES-IN-MT", 8, 0, false);
-        declareFunction("remove_definitionally_restricted_values", "REMOVE-DEFINITIONALLY-RESTRICTED-VALUES", 2, 0, false);
-        declareFunction("kbs_cycle_set", "KBS-CYCLE-SET", 3, 0, false);
-        declareFunction("kbs_make_redundant_addition", "KBS-MAKE-REDUNDANT-ADDITION", 4, 0, false);
-        declareFunction("kbs_make_redundant_addition_forced", "KBS-MAKE-REDUNDANT-ADDITION-FORCED", 4, 0, false);
-        declareFunction("kbs_broader_term_gafs", "KBS-BROADER-TERM-GAFS", 0, 0, false);
-        declareFunction("compute_kbs_broader_term_gafs", "COMPUTE-KBS-BROADER-TERM-GAFS", 0, 0, false);
-        declareFunction("compute_some_kbs_broader_term_gafs", "COMPUTE-SOME-KBS-BROADER-TERM-GAFS", 2, 0, false);
-        declareFunction("kbs_broader_term_candidate_forts", "KBS-BROADER-TERM-CANDIDATE-FORTS", 0, 0, false);
-        declareFunction("kbs_broader_term_candidate_fortP", "KBS-BROADER-TERM-CANDIDATE-FORT?", 1, 0, false);
-        declareFunction("compute_specified_kbs_broader_term_gafs", "COMPUTE-SPECIFIED-KBS-BROADER-TERM-GAFS", 2, 0, false);
-        declareFunction("compute_kbs_broader_terms_for_fort", "COMPUTE-KBS-BROADER-TERMS-FOR-FORT", 1, 0, false);
-        declareFunction("get_broader_term_mt", "GET-BROADER-TERM-MT", 2, 0, false);
-        declareFunction("get_broader_term_mt_from_support", "GET-BROADER-TERM-MT-FROM-SUPPORT", 2, 0, false);
-        declareFunction("clear_broader_term_preds", "CLEAR-BROADER-TERM-PREDS", 0, 0, false);
-        declareFunction("remove_broader_term_preds", "REMOVE-BROADER-TERM-PREDS", 0, 0, false);
-        declareFunction("broader_term_preds_internal", "BROADER-TERM-PREDS-INTERNAL", 0, 0, false);
-        declareFunction("broader_term_preds", "BROADER-TERM-PREDS", 0, 0, false);
-        declareFunction("add_kbs_broader_term_gafs", "ADD-KBS-BROADER-TERM-GAFS", 0, 0, false);
-        declareFunction("add_some_kbs_broader_term_gafs", "ADD-SOME-KBS-BROADER-TERM-GAFS", 1, 0, false);
-        declareFunction("add_kbs_broader_term_gaf", "ADD-KBS-BROADER-TERM-GAF", 1, 0, false);
-        declareFunction("kbs_additional_redundant_asserted_arguments", "KBS-ADDITIONAL-REDUNDANT-ASSERTED-ARGUMENTS", 0, 0, false);
-        declareFunction("compute_kbs_additional_redundant_asserted_arguments", "COMPUTE-KBS-ADDITIONAL-REDUNDANT-ASSERTED-ARGUMENTS", 0, 0, false);
-        declareFunction("add_kbs_additional_redundant_asserted_arguments", "ADD-KBS-ADDITIONAL-REDUNDANT-ASSERTED-ARGUMENTS", 0, 0, false);
-        declareFunction("all_geographical_super_regions", "ALL-GEOGRAPHICAL-SUPER-REGIONS", 1, 1, false);
-        declareFunction("geographical_super_regionP", "GEOGRAPHICAL-SUPER-REGION?", 2, 1, false);
-        return NIL;
-    }
-
-    public static final SubLObject init_kbs_add_redundant_file_alt() {
-        defparameter("*KBS-ADD-REDUNDANT-VERBOSE?*", NIL);
-        defparameter("*DEFINING-PREDICATES-INFO*", $list_alt8);
-        defparameter("*ARG2-DEFINING-PREDICATES-INFO*", $list_alt9);
-        deflexical("*CACHED-KBS-ADDITIONAL-REDUNDANT-DEFINITIONAL-INFO-CACHING-STATE*", NIL);
-        defparameter("*KBS-CYCLE-SIZE-THRESHOLD*", TWENTY_INTEGER);
-        deflexical("*KBS-BROADER-TERM-GAFS*", NIL != boundp($kbs_broader_term_gafs$) ? ((SubLObject) ($kbs_broader_term_gafs$.getGlobalValue())) : NIL);
-        defparameter("*GET-BROADER-MT-SUPPORT-STACK*", NIL);
-        deflexical("*BROADER-TERM-PREDS-CACHING-STATE*", NIL);
-        defparameter("*KBS-ADDITIONAL-REDUNDANT-ASSERTED-ARGUMENTS*", NIL);
+        declareFunction(me, "compute_and_add_kbs_additional_redundant_definitional_info", "COMPUTE-AND-ADD-KBS-ADDITIONAL-REDUNDANT-DEFINITIONAL-INFO", 0, 0, false);
+        declareFunction(me, "compute_and_add_kbs_broader_term_gafs", "COMPUTE-AND-ADD-KBS-BROADER-TERM-GAFS", 0, 0, false);
+        declareFunction(me, "compute_and_add_kbs_additional_redundant_asserted_arguments", "COMPUTE-AND-ADD-KBS-ADDITIONAL-REDUNDANT-ASSERTED-ARGUMENTS", 0, 0, false);
+        declareFunction(me, "compute_kbs_additional_redundant_definitional_info", "COMPUTE-KBS-ADDITIONAL-REDUNDANT-DEFINITIONAL-INFO", 0, 0, false);
+        declareFunction(me, "add_kbs_additional_redundant_definitional_info", "ADD-KBS-ADDITIONAL-REDUNDANT-DEFINITIONAL-INFO", 0, 1, false);
+        declareFunction(me, "add_kbs_additional_redundant_definitional_info_for_fort", "ADD-KBS-ADDITIONAL-REDUNDANT-DEFINITIONAL-INFO-FOR-FORT", 1, 0, false);
+        declareFunction(me, "kbs_reassert_redundant_definitional_info_forward", "KBS-REASSERT-REDUNDANT-DEFINITIONAL-INFO-FORWARD", 0, 2, false);
+        declareFunction(me, "clear_cached_kbs_additional_redundant_definitional_info", "CLEAR-CACHED-KBS-ADDITIONAL-REDUNDANT-DEFINITIONAL-INFO", 0, 0, false);
+        declareFunction(me, "remove_cached_kbs_additional_redundant_definitional_info", "REMOVE-CACHED-KBS-ADDITIONAL-REDUNDANT-DEFINITIONAL-INFO", 1, 0, false);
+        declareFunction(me, "cached_kbs_additional_redundant_definitional_info_internal", "CACHED-KBS-ADDITIONAL-REDUNDANT-DEFINITIONAL-INFO-INTERNAL", 1, 0, false);
+        declareFunction(me, "cached_kbs_additional_redundant_definitional_info", "CACHED-KBS-ADDITIONAL-REDUNDANT-DEFINITIONAL-INFO", 1, 0, false);
+        declareFunction(me, "kbs_additional_redundant_definitional_info", "KBS-ADDITIONAL-REDUNDANT-DEFINITIONAL-INFO", 1, 0, false);
+        declareFunction(me, "kbs_splicing_value_mt_pairs", "KBS-SPLICING-VALUE-MT-PAIRS", 8, 0, false);
+        declareFunction(me, "minimal_implied_kbs_values_in_mt", "MINIMAL-IMPLIED-KBS-VALUES-IN-MT", 8, 0, false);
+        declareFunction(me, "remove_definitionally_restricted_values", "REMOVE-DEFINITIONALLY-RESTRICTED-VALUES", 2, 0, false);
+        declareFunction(me, "kbs_cycle_set", "KBS-CYCLE-SET", 3, 0, false);
+        declareFunction(me, "kbs_make_redundant_addition", "KBS-MAKE-REDUNDANT-ADDITION", 4, 0, false);
+        declareFunction(me, "kbs_make_redundant_addition_forced", "KBS-MAKE-REDUNDANT-ADDITION-FORCED", 4, 0, false);
+        declareFunction(me, "kbs_broader_term_gafs", "KBS-BROADER-TERM-GAFS", 0, 0, false);
+        declareFunction(me, "compute_kbs_broader_term_gafs", "COMPUTE-KBS-BROADER-TERM-GAFS", 0, 0, false);
+        declareFunction(me, "compute_some_kbs_broader_term_gafs", "COMPUTE-SOME-KBS-BROADER-TERM-GAFS", 2, 0, false);
+        declareFunction(me, "kbs_broader_term_candidate_forts", "KBS-BROADER-TERM-CANDIDATE-FORTS", 0, 0, false);
+        declareFunction(me, "kbs_broader_term_candidate_fortP", "KBS-BROADER-TERM-CANDIDATE-FORT?", 1, 0, false);
+        declareFunction(me, "compute_specified_kbs_broader_term_gafs", "COMPUTE-SPECIFIED-KBS-BROADER-TERM-GAFS", 2, 0, false);
+        declareFunction(me, "compute_kbs_broader_terms_for_fort", "COMPUTE-KBS-BROADER-TERMS-FOR-FORT", 1, 0, false);
+        declareFunction(me, "get_broader_term_mt", "GET-BROADER-TERM-MT", 2, 0, false);
+        declareFunction(me, "get_broader_term_mt_from_support", "GET-BROADER-TERM-MT-FROM-SUPPORT", 2, 0, false);
+        declareFunction(me, "clear_broader_term_preds", "CLEAR-BROADER-TERM-PREDS", 0, 0, false);
+        declareFunction(me, "remove_broader_term_preds", "REMOVE-BROADER-TERM-PREDS", 0, 0, false);
+        declareFunction(me, "broader_term_preds_internal", "BROADER-TERM-PREDS-INTERNAL", 0, 0, false);
+        declareFunction(me, "broader_term_preds", "BROADER-TERM-PREDS", 0, 0, false);
+        declareFunction(me, "add_kbs_broader_term_gafs", "ADD-KBS-BROADER-TERM-GAFS", 0, 0, false);
+        declareFunction(me, "add_some_kbs_broader_term_gafs", "ADD-SOME-KBS-BROADER-TERM-GAFS", 1, 0, false);
+        declareFunction(me, "add_kbs_broader_term_gaf", "ADD-KBS-BROADER-TERM-GAF", 1, 0, false);
+        declareFunction(me, "kbs_additional_redundant_asserted_arguments", "KBS-ADDITIONAL-REDUNDANT-ASSERTED-ARGUMENTS", 0, 0, false);
+        declareFunction(me, "compute_kbs_additional_redundant_asserted_arguments", "COMPUTE-KBS-ADDITIONAL-REDUNDANT-ASSERTED-ARGUMENTS", 0, 0, false);
+        declareFunction(me, "add_kbs_additional_redundant_asserted_arguments", "ADD-KBS-ADDITIONAL-REDUNDANT-ASSERTED-ARGUMENTS", 0, 0, false);
+        declareFunction(me, "all_geographical_super_regions", "ALL-GEOGRAPHICAL-SUPER-REGIONS", 1, 1, false);
+        declareFunction(me, "geographical_super_regionP", "GEOGRAPHICAL-SUPER-REGION?", 2, 1, false);
         return NIL;
     }
 
     public static SubLObject init_kbs_add_redundant_file() {
-        if (SubLFiles.USE_V1) {
-            defparameter("*KBS-ADD-REDUNDANT-VERBOSE?*", NIL);
-            defparameter("*KBS-ADD-REDUNDANT-DEFINITIONAL-INFO-BACKWARD?*", NIL);
-            defparameter("*DEFINING-PREDICATES-INFO*", $list18);
-            defparameter("*ARG2-DEFINING-PREDICATES-INFO*", $list19);
-            deflexical("*CACHED-KBS-ADDITIONAL-REDUNDANT-DEFINITIONAL-INFO-CACHING-STATE*", NIL);
-            defparameter("*KBS-CYCLE-SIZE-THRESHOLD*", TWENTY_INTEGER);
-            deflexical("*KBS-BROADER-TERM-GAFS*", SubLTrampolineFile.maybeDefault($kbs_broader_term_gafs$, $kbs_broader_term_gafs$, NIL));
-            defparameter("*GET-BROADER-MT-SUPPORT-STACK*", NIL);
-            deflexical("*BROADER-TERM-PREDS-CACHING-STATE*", NIL);
-            defparameter("*KBS-ADDITIONAL-REDUNDANT-ASSERTED-ARGUMENTS*", NIL);
-        }
-        if (SubLFiles.USE_V2) {
-            defparameter("*DEFINING-PREDICATES-INFO*", $list_alt8);
-            defparameter("*ARG2-DEFINING-PREDICATES-INFO*", $list_alt9);
-            deflexical("*KBS-BROADER-TERM-GAFS*", NIL != boundp($kbs_broader_term_gafs$) ? ((SubLObject) ($kbs_broader_term_gafs$.getGlobalValue())) : NIL);
-        }
-        return NIL;
-    }
-
-    public static SubLObject init_kbs_add_redundant_file_Previous() {
         defparameter("*KBS-ADD-REDUNDANT-VERBOSE?*", NIL);
         defparameter("*KBS-ADD-REDUNDANT-DEFINITIONAL-INFO-BACKWARD?*", NIL);
         defparameter("*DEFINING-PREDICATES-INFO*", $list18);
@@ -3130,6 +1860,85 @@ public final class kbs_add_redundant extends SubLTranslatedFile implements V12 {
     }
 
     static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
 

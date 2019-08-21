@@ -8528,7 +8528,7 @@ public final class tm_internals extends SubLTranslatedFile implements V02 {
                         try {
                             at_vars.$at_check_arg_formatP$.bind(NIL, thread);
                             {
-                                SubLObject count = operation_communication.load_transcript_file(transcript_utilities.read_transcript(), NIL, $NONE, transcript_utilities.read_transcript_position(), UNPROVIDED);
+                                SubLObject count = operation_communication.load_transcript_file(transcript_utilities.read_transcript(), NIL, $NONE, transcript_utilities.read_transcript_position(), UNPROVIDED, UNPROVIDED_SYM);
                                 operation_communication.set_total_remote_operations_run(add(operation_communication.total_remote_operations_run(), count));
                                 transcript_utilities.set_read_transcript_position(transcript_length);
                             }

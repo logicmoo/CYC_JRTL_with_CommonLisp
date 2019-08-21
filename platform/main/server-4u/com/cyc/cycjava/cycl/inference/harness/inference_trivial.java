@@ -733,20 +733,7 @@ public final class inference_trivial extends SubLTranslatedFile implements V12 {
                                                                                                         try {
                                                                                                             memoization_state.$memoization_state$.bind(local_state, thread);
                                                                                                             {
-                                                                                                                SubLObject original_memoization_process = NIL;
-                                                                                                                if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                                                                                                    original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                                                                                                    {
-                                                                                                                        SubLObject current_proc = current_process();
-                                                                                                                        if (NIL == original_memoization_process) {
-                                                                                                                            memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                                                                                                        } else {
-                                                                                                                            if (original_memoization_process != current_proc) {
-                                                                                                                                Errors.error($str_alt15$Invalid_attempt_to_reuse_memoizat);
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
+                                                                                                                final SubLObject original_memoization_process = memoization_state.aquireMemoStateLock(local_state);
                                                                                                                 try {
                                                                                                                     {
                                                                                                                         SubLObject _prev_bind_0_13 = $removal_cost_cutoff$.currentBinding(thread);
@@ -821,20 +808,7 @@ public final class inference_trivial extends SubLTranslatedFile implements V12 {
                                                                         try {
                                                                             memoization_state.$memoization_state$.bind(local_state, thread);
                                                                             {
-                                                                                SubLObject original_memoization_process = NIL;
-                                                                                if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                                                                    original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                                                                    {
-                                                                                        SubLObject current_proc = current_process();
-                                                                                        if (NIL == original_memoization_process) {
-                                                                                            memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                                                                        } else {
-                                                                                            if (original_memoization_process != current_proc) {
-                                                                                                Errors.error($str_alt15$Invalid_attempt_to_reuse_memoizat);
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
+                                                                                final SubLObject original_memoization_process = memoization_state.aquireMemoStateLock(local_state);
                                                                                 try {
                                                                                     {
                                                                                         SubLObject _prev_bind_0_20 = $removal_cost_cutoff$.currentBinding(thread);
@@ -909,20 +883,7 @@ public final class inference_trivial extends SubLTranslatedFile implements V12 {
                                                                                                                         try {
                                                                                                                             memoization_state.$memoization_state$.bind(local_state, thread);
                                                                                                                             {
-                                                                                                                                SubLObject original_memoization_process = NIL;
-                                                                                                                                if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                                                                                                                    original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                                                                                                                    {
-                                                                                                                                        SubLObject current_proc = current_process();
-                                                                                                                                        if (NIL == original_memoization_process) {
-                                                                                                                                            memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                                                                                                                        } else {
-                                                                                                                                            if (original_memoization_process != current_proc) {
-                                                                                                                                                Errors.error($str_alt15$Invalid_attempt_to_reuse_memoizat);
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                }
+                                                                                                                                final SubLObject original_memoization_process = memoization_state.aquireMemoStateLock(local_state);
                                                                                                                                 try {
                                                                                                                                     {
                                                                                                                                         SubLObject _prev_bind_0_29 = $removal_cost_cutoff$.currentBinding(thread);
@@ -997,20 +958,7 @@ public final class inference_trivial extends SubLTranslatedFile implements V12 {
                                                                                         try {
                                                                                             memoization_state.$memoization_state$.bind(local_state, thread);
                                                                                             {
-                                                                                                SubLObject original_memoization_process = NIL;
-                                                                                                if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                                                                                    original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                                                                                    {
-                                                                                                        SubLObject current_proc = current_process();
-                                                                                                        if (NIL == original_memoization_process) {
-                                                                                                            memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                                                                                        } else {
-                                                                                                            if (original_memoization_process != current_proc) {
-                                                                                                                Errors.error($str_alt15$Invalid_attempt_to_reuse_memoizat);
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
+                                                                                                final SubLObject original_memoization_process = memoization_state.aquireMemoStateLock(local_state);
                                                                                                 try {
                                                                                                     {
                                                                                                         SubLObject _prev_bind_0_36 = $removal_cost_cutoff$.currentBinding(thread);

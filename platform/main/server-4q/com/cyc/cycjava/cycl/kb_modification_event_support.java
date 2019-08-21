@@ -1,141 +1,86 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.cfasl.cfasl_decode;
-import static com.cyc.cycjava.cycl.cfasl.cfasl_encode_externalized;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.append;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.sleep;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.property_list_member;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cadr;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.intersection;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.member;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.union;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-
+import com.cyc.cycjava.cycl.kb_modification_event_support;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
+import static com.cyc.cycjava.cycl.cfasl.*;
+import static com.cyc.cycjava.cycl.kb_modification_event_support.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- * module:      KB-MODIFICATION-EVENT-SUPPORT
- * source file: /cyc/top/cycl/kb-modification-event-support.lisp
- * created:     2019/07/03 17:37:21
- */
-public final class kb_modification_event_support extends SubLTranslatedFile implements V12 {
+
+public final class kb_modification_event_support extends SubLTranslatedFile {
     public static final SubLFile me = new kb_modification_event_support();
 
+    public static final String myName = "com.cyc.cycjava.cycl.kb_modification_event_support";
 
+    public static final String myFingerPrint = "13d200fd48262d1a1c8458d2888b1e7d6787257725bb919915bc18545cfcfd69";
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $kb_modification_event_property_classes$ = makeSymbol("*KB-MODIFICATION-EVENT-PROPERTY-CLASSES*");
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $kb_modification_event_class_properties$ = makeSymbol("*KB-MODIFICATION-EVENT-CLASS-PROPERTIES*");
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $cash_stable_description_retry_limit$ = makeSymbol("*CASH-STABLE-DESCRIPTION-RETRY-LIMIT*");
 
     // Internal Constants
-    @LispMethod(comment = "Internal Constants")
-    static private final SubLList $list0 = list(list(makeSymbol("CLASS-KEY"), makeSymbol("&KEY"), makeSymbol("PARENT"), makeSymbol("DOCSTRING"), makeSymbol("HIERARCHY"), makeSymbol("GENERATED-BY"), makeSymbol("PROPERTIES")), makeSymbol("&BODY"), makeSymbol("BODY"));
+    public static final SubLList $list0 = list(list(makeSymbol("CLASS-KEY"), makeSymbol("&KEY"), makeSymbol("PARENT"), makeSymbol("DOCSTRING"), makeSymbol("HIERARCHY"), makeSymbol("GENERATED-BY"), makeSymbol("PROPERTIES")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
-    static private final SubLList $list1 = list(makeKeyword("PARENT"), makeKeyword("DOCSTRING"), makeKeyword("HIERARCHY"), makeKeyword("GENERATED-BY"), makeKeyword("PROPERTIES"));
+    public static final SubLList $list1 = list(makeKeyword("PARENT"), makeKeyword("DOCSTRING"), makeKeyword("HIERARCHY"), makeKeyword("GENERATED-BY"), makeKeyword("PROPERTIES"));
 
     private static final SubLSymbol $ALLOW_OTHER_KEYS = makeKeyword("ALLOW-OTHER-KEYS");
 
-    private static final SubLSymbol DECLARE_EVENT_CLASS = makeSymbol("DECLARE-EVENT-CLASS");
 
-    private static final SubLSymbol NOTE_KB_MODIFICATION_EVENT_CLASS_PROPERTIES = makeSymbol("NOTE-KB-MODIFICATION-EVENT-CLASS-PROPERTIES");
 
-    static private final SubLList $list12 = list(list(makeSymbol("CLASS"), makeSymbol("PROPERTIES")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
-    static private final SubLList $list14 = list(makeSymbol("*KB-MODIFICATION-EVENT-CLASS-PROPERTIES*"));
 
-    static private final SubLString $str17$Could_not_properly_unpack_the_eve = makeString("Could not properly unpack the event description: ~A");
 
-    // Definitions
-    public static final SubLObject declare_kbmod_event_class_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            destructuring_bind_must_consp(current, datum, $list_alt0);
-            {
-                SubLObject temp = current.rest();
-                current = current.first();
-                {
-                    SubLObject class_key = NIL;
-                    destructuring_bind_must_consp(current, datum, $list_alt0);
-                    class_key = current.first();
-                    current = current.rest();
-                    {
-                        SubLObject allow_other_keys_p = NIL;
-                        SubLObject rest = current;
-                        SubLObject bad = NIL;
-                        SubLObject current_1 = NIL;
-                        for (; NIL != rest;) {
-                            destructuring_bind_must_consp(rest, datum, $list_alt0);
-                            current_1 = rest.first();
-                            rest = rest.rest();
-                            destructuring_bind_must_consp(rest, datum, $list_alt0);
-                            if (NIL == member(current_1, $list_alt1, UNPROVIDED, UNPROVIDED)) {
-                                bad = T;
-                            }
-                            if (current_1 == $ALLOW_OTHER_KEYS) {
-                                allow_other_keys_p = rest.first();
-                            }
-                            rest = rest.rest();
-                        }
-                        if ((NIL != bad) && (NIL == allow_other_keys_p)) {
-                            cdestructuring_bind_error(datum, $list_alt0);
-                        }
-                        {
-                            SubLObject parent_tail = property_list_member($PARENT, current);
-                            SubLObject parent = (NIL != parent_tail) ? ((SubLObject) (cadr(parent_tail))) : NIL;
-                            SubLObject docstring_tail = property_list_member($DOCSTRING, current);
-                            SubLObject docstring = (NIL != docstring_tail) ? ((SubLObject) (cadr(docstring_tail))) : NIL;
-                            SubLObject hierarchy_tail = property_list_member($HIERARCHY, current);
-                            SubLObject hierarchy = (NIL != hierarchy_tail) ? ((SubLObject) (cadr(hierarchy_tail))) : NIL;
-                            SubLObject generated_by_tail = property_list_member($GENERATED_BY, current);
-                            SubLObject generated_by = (NIL != generated_by_tail) ? ((SubLObject) (cadr(generated_by_tail))) : NIL;
-                            SubLObject properties_tail = property_list_member($PROPERTIES, current);
-                            SubLObject v_properties = (NIL != properties_tail) ? ((SubLObject) (cadr(properties_tail))) : NIL;
-                            current = temp;
-                            {
-                                SubLObject body = current;
-                                return list(PROGN, listS(DECLARE_EVENT_CLASS, list(class_key, $PARENT, parent, $DOCSTRING, docstring, $HIERARCHY, hierarchy), append(body, NIL)), list(NOTE_KB_MODIFICATION_EVENT_CLASS_PROPERTIES, class_key, list(QUOTE, v_properties)));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
 
-    // Definitions
+
+
+
+
+
+
+    public static final SubLSymbol DECLARE_EVENT_CLASS = makeSymbol("DECLARE-EVENT-CLASS");
+
+    public static final SubLSymbol NOTE_KB_MODIFICATION_EVENT_CLASS_PROPERTIES = makeSymbol("NOTE-KB-MODIFICATION-EVENT-CLASS-PROPERTIES");
+
+
+
+    public static final SubLList $list12 = list(list(makeSymbol("CLASS"), makeSymbol("PROPERTIES")), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+
+
+    public static final SubLList $list14 = list(makeSymbol("*KB-MODIFICATION-EVENT-CLASS-PROPERTIES*"));
+
+
+
+
+
+    public static final SubLString $str17$Could_not_properly_unpack_the_eve = makeString("Could not properly unpack the event description: ~A");
+
     public static SubLObject declare_kbmod_event_class(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -181,38 +126,6 @@ public final class kb_modification_event_support extends SubLTranslatedFile impl
         return list(PROGN, listS(DECLARE_EVENT_CLASS, list(class_key, $PARENT, parent, $DOCSTRING, docstring, $HIERARCHY, hierarchy), append(body, NIL)), list(NOTE_KB_MODIFICATION_EVENT_CLASS_PROPERTIES, class_key, list(QUOTE, v_properties)));
     }
 
-    public static final SubLObject do_all_event_class_properties_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            destructuring_bind_must_consp(current, datum, $list_alt12);
-            {
-                SubLObject temp = current.rest();
-                current = current.first();
-                {
-                    SubLObject v_class = NIL;
-                    SubLObject v_properties = NIL;
-                    destructuring_bind_must_consp(current, datum, $list_alt12);
-                    v_class = current.first();
-                    current = current.rest();
-                    destructuring_bind_must_consp(current, datum, $list_alt12);
-                    v_properties = current.first();
-                    current = current.rest();
-                    if (NIL == current) {
-                        current = temp;
-                        {
-                            SubLObject body = current;
-                            return listS(DO_DICTIONARY, listS(v_class, v_properties, $list_alt14), append(body, NIL));
-                        }
-                    } else {
-                        cdestructuring_bind_error(datum, $list_alt12);
-                    }
-                }
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject do_all_event_class_properties(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -236,20 +149,6 @@ public final class kb_modification_event_support extends SubLTranslatedFile impl
         return NIL;
     }
 
-    public static final SubLObject note_kb_modification_event_class_properties_alt(SubLObject v_class, SubLObject v_properties) {
-        if (NIL != v_properties) {
-            dictionary.dictionary_enter($kb_modification_event_class_properties$.getGlobalValue(), v_class, v_properties);
-            {
-                SubLObject cdolist_list_var = v_properties;
-                SubLObject property = NIL;
-                for (property = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , property = cdolist_list_var.first()) {
-                    dictionary_utilities.dictionary_push($kb_modification_event_property_classes$.getGlobalValue(), property, v_class);
-                }
-            }
-        }
-        return v_class;
-    }
-
     public static SubLObject note_kb_modification_event_class_properties(final SubLObject v_class, final SubLObject v_properties) {
         if (NIL != v_properties) {
             dictionary.dictionary_enter($kb_modification_event_class_properties$.getGlobalValue(), v_class, v_properties);
@@ -265,27 +164,8 @@ public final class kb_modification_event_support extends SubLTranslatedFile impl
         return v_class;
     }
 
-    public static final SubLObject kb_modification_event_class_has_propertyP_alt(SubLObject v_class, SubLObject property) {
-        return subl_promotions.memberP(property, dictionary.dictionary_lookup($kb_modification_event_class_properties$.getGlobalValue(), v_class, UNPROVIDED), UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject kb_modification_event_class_has_propertyP(final SubLObject v_class, final SubLObject property) {
         return subl_promotions.memberP(property, dictionary.dictionary_lookup($kb_modification_event_class_properties$.getGlobalValue(), v_class, UNPROVIDED), UNPROVIDED, UNPROVIDED);
-    }
-
-    public static final SubLObject get_kb_modification_event_classes_with_property_alt(SubLObject property) {
-        {
-            SubLObject pcase_var = property;
-            if (pcase_var.eql($ALL)) {
-                return com.cyc.cycjava.cycl.kb_modification_event_support.all_kb_modification_event_classes();
-            } else {
-                if (pcase_var.eql($NONE)) {
-                    return NIL;
-                } else {
-                    return dictionary.dictionary_lookup($kb_modification_event_property_classes$.getGlobalValue(), property, UNPROVIDED);
-                }
-            }
-        }
     }
 
     public static SubLObject get_kb_modification_event_classes_with_property(final SubLObject property) {
@@ -296,21 +176,6 @@ public final class kb_modification_event_support extends SubLTranslatedFile impl
             return NIL;
         }
         return dictionary.dictionary_lookup($kb_modification_event_property_classes$.getGlobalValue(), property, UNPROVIDED);
-    }
-
-    public static final SubLObject get_kb_modification_event_classes_with_some_properties_alt(SubLObject v_properties) {
-        {
-            SubLObject result = NIL;
-            SubLObject cdolist_list_var = v_properties;
-            SubLObject property = NIL;
-            for (property = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , property = cdolist_list_var.first()) {
-                {
-                    SubLObject applies = com.cyc.cycjava.cycl.kb_modification_event_support.get_kb_modification_event_classes_with_property(property);
-                    result = union(result, applies, UNPROVIDED, UNPROVIDED);
-                }
-            }
-            return result;
-        }
     }
 
     public static SubLObject get_kb_modification_event_classes_with_some_properties(final SubLObject v_properties) {
@@ -325,26 +190,6 @@ public final class kb_modification_event_support extends SubLTranslatedFile impl
             property = cdolist_list_var.first();
         } 
         return result;
-    }
-
-    public static final SubLObject get_kb_modification_event_classes_with_all_properties_alt(SubLObject v_properties) {
-        {
-            SubLObject result = NIL;
-            SubLObject list_var = NIL;
-            SubLObject property = NIL;
-            SubLObject counter = NIL;
-            for (list_var = v_properties, property = list_var.first(), counter = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , property = list_var.first() , counter = add(ONE_INTEGER, counter)) {
-                {
-                    SubLObject applies = com.cyc.cycjava.cycl.kb_modification_event_support.get_kb_modification_event_classes_with_property(property);
-                    if (counter.isZero()) {
-                        result = applies;
-                    } else {
-                        result = intersection(result, applies, UNPROVIDED, UNPROVIDED);
-                    }
-                }
-            }
-            return result;
-        }
     }
 
     public static SubLObject get_kb_modification_event_classes_with_all_properties(final SubLObject v_properties) {
@@ -365,72 +210,24 @@ public final class kb_modification_event_support extends SubLTranslatedFile impl
         return result;
     }
 
-    public static final SubLObject valid_kb_modification_event_class_p_alt(SubLObject v_class) {
-        return list_utilities.sublisp_boolean(dictionary.dictionary_lookup($kb_modification_event_class_properties$.getGlobalValue(), v_class, UNPROVIDED));
-    }
-
     public static SubLObject valid_kb_modification_event_class_p(final SubLObject v_class) {
         return list_utilities.sublisp_boolean(dictionary.dictionary_lookup($kb_modification_event_class_properties$.getGlobalValue(), v_class, UNPROVIDED));
-    }
-
-    public static final SubLObject valid_kb_modification_event_property_p_alt(SubLObject property) {
-        return makeBoolean(((property == $ALL) || (property == $NONE)) || (NIL != list_utilities.sublisp_boolean(dictionary.dictionary_lookup($kb_modification_event_property_classes$.getGlobalValue(), property, UNPROVIDED))));
     }
 
     public static SubLObject valid_kb_modification_event_property_p(final SubLObject property) {
         return makeBoolean(((property == $ALL) || (property == $NONE)) || (NIL != list_utilities.sublisp_boolean(dictionary.dictionary_lookup($kb_modification_event_property_classes$.getGlobalValue(), property, UNPROVIDED))));
     }
 
-    public static final SubLObject all_kb_modification_event_classes_alt() {
-        return dictionary.dictionary_keys($kb_modification_event_class_properties$.getGlobalValue());
-    }
-
     public static SubLObject all_kb_modification_event_classes() {
         return dictionary.dictionary_keys($kb_modification_event_class_properties$.getGlobalValue());
-    }
-
-    public static final SubLObject all_kb_modification_event_properties_alt() {
-        return dictionary.dictionary_keys($kb_modification_event_property_classes$.getGlobalValue());
     }
 
     public static SubLObject all_kb_modification_event_properties() {
         return dictionary.dictionary_keys($kb_modification_event_property_classes$.getGlobalValue());
     }
 
-    /**
-     *
-     *
-     * @unknown this might be good and it might not be
-     */
-    @LispMethod(comment = "@unknown this might be good and it might not be")
-    public static final SubLObject get_stable_description_alt(SubLObject v_object) {
-        return cfasl_encode_externalized(v_object);
-    }
-
-    /**
-     *
-     *
-     * @unknown this might be good and it might not be
-     */
-    @LispMethod(comment = "@unknown this might be good and it might not be")
     public static SubLObject get_stable_description(final SubLObject v_object) {
         return cfasl_encode_externalized(v_object);
-    }
-
-    public static final SubLObject cash_stable_description_alt(SubLObject description) {
-        {
-            SubLObject interpretation = cfasl_decode(description);
-            SubLObject counter = ZERO_INTEGER;
-            while (NIL != list_utilities.tree_find(cfasl_kb_methods.cfasl_invalid_nart(), interpretation, UNPROVIDED, UNPROVIDED)) {
-                counter = add(counter, ONE_INTEGER);
-                if (counter.numG($cash_stable_description_retry_limit$.getGlobalValue())) {
-                    Errors.error($str_alt17$Could_not_properly_unpack_the_eve, description);
-                }
-                sleep(ONE_INTEGER);
-                interpretation = cfasl_decode(description);
-            } 
-            return interpretation;
-        }
     }
 
     public static SubLObject cash_stable_description(final SubLObject description) {
@@ -448,19 +245,19 @@ public final class kb_modification_event_support extends SubLTranslatedFile impl
     }
 
     public static SubLObject declare_kb_modification_event_support_file() {
-        declareMacro("declare_kbmod_event_class", "DECLARE-KBMOD-EVENT-CLASS");
-        declareMacro("do_all_event_class_properties", "DO-ALL-EVENT-CLASS-PROPERTIES");
-        declareFunction("note_kb_modification_event_class_properties", "NOTE-KB-MODIFICATION-EVENT-CLASS-PROPERTIES", 2, 0, false);
-        declareFunction("kb_modification_event_class_has_propertyP", "KB-MODIFICATION-EVENT-CLASS-HAS-PROPERTY?", 2, 0, false);
-        declareFunction("get_kb_modification_event_classes_with_property", "GET-KB-MODIFICATION-EVENT-CLASSES-WITH-PROPERTY", 1, 0, false);
-        declareFunction("get_kb_modification_event_classes_with_some_properties", "GET-KB-MODIFICATION-EVENT-CLASSES-WITH-SOME-PROPERTIES", 1, 0, false);
-        declareFunction("get_kb_modification_event_classes_with_all_properties", "GET-KB-MODIFICATION-EVENT-CLASSES-WITH-ALL-PROPERTIES", 1, 0, false);
-        declareFunction("valid_kb_modification_event_class_p", "VALID-KB-MODIFICATION-EVENT-CLASS-P", 1, 0, false);
-        declareFunction("valid_kb_modification_event_property_p", "VALID-KB-MODIFICATION-EVENT-PROPERTY-P", 1, 0, false);
-        declareFunction("all_kb_modification_event_classes", "ALL-KB-MODIFICATION-EVENT-CLASSES", 0, 0, false);
-        declareFunction("all_kb_modification_event_properties", "ALL-KB-MODIFICATION-EVENT-PROPERTIES", 0, 0, false);
-        declareFunction("get_stable_description", "GET-STABLE-DESCRIPTION", 1, 0, false);
-        declareFunction("cash_stable_description", "CASH-STABLE-DESCRIPTION", 1, 0, false);
+        declareMacro(me, "declare_kbmod_event_class", "DECLARE-KBMOD-EVENT-CLASS");
+        declareMacro(me, "do_all_event_class_properties", "DO-ALL-EVENT-CLASS-PROPERTIES");
+        declareFunction(me, "note_kb_modification_event_class_properties", "NOTE-KB-MODIFICATION-EVENT-CLASS-PROPERTIES", 2, 0, false);
+        declareFunction(me, "kb_modification_event_class_has_propertyP", "KB-MODIFICATION-EVENT-CLASS-HAS-PROPERTY?", 2, 0, false);
+        declareFunction(me, "get_kb_modification_event_classes_with_property", "GET-KB-MODIFICATION-EVENT-CLASSES-WITH-PROPERTY", 1, 0, false);
+        declareFunction(me, "get_kb_modification_event_classes_with_some_properties", "GET-KB-MODIFICATION-EVENT-CLASSES-WITH-SOME-PROPERTIES", 1, 0, false);
+        declareFunction(me, "get_kb_modification_event_classes_with_all_properties", "GET-KB-MODIFICATION-EVENT-CLASSES-WITH-ALL-PROPERTIES", 1, 0, false);
+        declareFunction(me, "valid_kb_modification_event_class_p", "VALID-KB-MODIFICATION-EVENT-CLASS-P", 1, 0, false);
+        declareFunction(me, "valid_kb_modification_event_property_p", "VALID-KB-MODIFICATION-EVENT-PROPERTY-P", 1, 0, false);
+        declareFunction(me, "all_kb_modification_event_classes", "ALL-KB-MODIFICATION-EVENT-CLASSES", 0, 0, false);
+        declareFunction(me, "all_kb_modification_event_properties", "ALL-KB-MODIFICATION-EVENT-PROPERTIES", 0, 0, false);
+        declareFunction(me, "get_stable_description", "GET-STABLE-DESCRIPTION", 1, 0, false);
+        declareFunction(me, "cash_stable_description", "CASH-STABLE-DESCRIPTION", 1, 0, false);
         return NIL;
     }
 
@@ -491,19 +288,29 @@ public final class kb_modification_event_support extends SubLTranslatedFile impl
     }
 
     static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
-
-    // Internal Constants
-    @LispMethod(comment = "Internal Constants")
-    static private final SubLList $list_alt0 = list(list(makeSymbol("CLASS-KEY"), makeSymbol("&KEY"), makeSymbol("PARENT"), makeSymbol("DOCSTRING"), makeSymbol("HIERARCHY"), makeSymbol("GENERATED-BY"), makeSymbol("PROPERTIES")), makeSymbol("&BODY"), makeSymbol("BODY"));
-
-    static private final SubLList $list_alt1 = list(makeKeyword("PARENT"), makeKeyword("DOCSTRING"), makeKeyword("HIERARCHY"), makeKeyword("GENERATED-BY"), makeKeyword("PROPERTIES"));
-
-    static private final SubLList $list_alt12 = list(list(makeSymbol("CLASS"), makeSymbol("PROPERTIES")), makeSymbol("&BODY"), makeSymbol("BODY"));
-
-    static private final SubLList $list_alt14 = list(makeSymbol("*KB-MODIFICATION-EVENT-CLASS-PROPERTIES*"));
-
-    static private final SubLString $str_alt17$Could_not_properly_unpack_the_eve = makeString("Could not properly unpack the event description: ~A");
 }
 
 /**

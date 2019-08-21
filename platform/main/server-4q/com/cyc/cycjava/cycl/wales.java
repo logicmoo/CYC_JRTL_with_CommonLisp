@@ -313,7 +313,7 @@ public final class wales extends SubLTranslatedFile implements V02 {
                                                         html_utilities.html_markup(html_macros.$html_bold_tail$.getGlobalValue());
                                                         html_utilities.html_tab(THREE_INTEGER);
                                                         html_utilities.html_terpri(UNPROVIDED);
-                                                        html_complete.html_complete_button($str_alt39$c10_handle_wales_gen, $str_alt40$C_, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                        html_complete.html_complete_button($str_alt39$c10_handle_wales_gen, $str_alt40$C_, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED_SYM);
                                                         html_utilities.html_text_input($str_alt39$c10_handle_wales_gen, NIL != $c10_wales_gen_col$.getDynamicValue(thread) ? ((SubLObject) (cb_utilities.cb_string_for_fort($c10_wales_gen_col$.getDynamicValue(thread)))) : NIL, $int$40);
                                                         html_utilities.html_indent(ONE_INTEGER);
                                                         html_utilities.html_submit_input($$$Add_Info, UNPROVIDED, UNPROVIDED);
@@ -323,7 +323,7 @@ public final class wales extends SubLTranslatedFile implements V02 {
                                                         html_utilities.html_princ($str_alt35$Choose_Mt__);
                                                         html_utilities.html_markup(html_macros.$html_bold_tail$.getGlobalValue());
                                                         html_utilities.html_terpri(UNPROVIDED);
-                                                        html_complete.html_complete_button($str_alt36$choose_mt, $str_alt40$C_, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                        html_complete.html_complete_button($str_alt36$choose_mt, $str_alt40$C_, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED_SYM);
                                                         html_utilities.html_text_input($str_alt36$choose_mt, cb_utilities.cb_string_for_fort($c10_wales_gen_mt$.getDynamicValue(thread)), $int$40);
                                                         html_macros.embed_form_field_code(html_macros.$html_form_field_uniquifier_code$.getDynamicValue(thread));
                                                     } finally {
@@ -1395,7 +1395,7 @@ public final class wales extends SubLTranslatedFile implements V02 {
                                                     html_utilities.html_markup(TWO_INTEGER);
                                                     html_utilities.html_char(CHAR_greater, UNPROVIDED);
                                                     html_utilities.html_terpri(UNPROVIDED);
-                                                    html_complete.html_complete_button($str_alt80$name_string, $str_alt40$C_, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                    html_complete.html_complete_button($str_alt80$name_string, $str_alt40$C_, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED_SYM);
                                                     html_utilities.html_text_input($str_alt80$name_string, NIL, $int$35);
                                                     html_utilities.html_terpri(TWO_INTEGER);
                                                     html_utilities.html_reset_input($$$Reset);
@@ -3132,7 +3132,7 @@ public final class wales extends SubLTranslatedFile implements V02 {
                                 html_utilities.html_markup(html_macros.$html_bold_tail$.getGlobalValue());
                             }
                             html_utilities.html_terpri(UNPROVIDED);
-                            html_complete.html_complete_button(denot_input_field, $str_alt40$C_, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                            html_complete.html_complete_button(denot_input_field, $str_alt40$C_, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED_SYM);
                             html_utilities.html_text_input(denot_input_field, default_denot, $int$25);
                             html_utilities.html_tab(UNPROVIDED);
                             html_utilities.html_glyph($NBSP, TWO_INTEGER);
@@ -3401,7 +3401,7 @@ public final class wales extends SubLTranslatedFile implements V02 {
                                     }
                                     html_utilities.html_terpri(UNPROVIDED);
                                     denot_input_field = format(NIL, $str_alt252$_denotation_WS_S, next);
-                                    html_complete.html_complete_button(denot_input_field, $str_alt40$C_, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                    html_complete.html_complete_button(denot_input_field, $str_alt40$C_, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED_SYM);
                                     html_utilities.html_text_input(denot_input_field, $str_alt135$, $int$25);
                                     html_utilities.html_tab(UNPROVIDED);
                                     html_utilities.html_glyph($NBSP, TWO_INTEGER);
@@ -3475,7 +3475,7 @@ public final class wales extends SubLTranslatedFile implements V02 {
                                         }
                                         html_utilities.html_terpri(UNPROVIDED);
                                         denot_input_field = format(NIL, $str_alt252$_denotation_WS_S, next);
-                                        html_complete.html_complete_button(denot_input_field, $str_alt40$C_, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                        html_complete.html_complete_button(denot_input_field, $str_alt40$C_, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED_SYM);
                                         html_utilities.html_text_input(denot_input_field, $str_alt135$, $int$25);
                                     }
                                     html_utilities.html_tab(UNPROVIDED);

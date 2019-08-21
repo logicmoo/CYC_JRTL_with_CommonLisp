@@ -1,132 +1,9 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.constant_handles.constant_p;
-import static com.cyc.cycjava.cycl.constant_handles.do_constants_table;
-import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
-import static com.cyc.cycjava.cycl.control_vars.kb_loaded;
-import static com.cyc.cycjava.cycl.el_utilities.kappa_predicate_arity;
-import static com.cyc.cycjava.cycl.el_utilities.kappa_predicate_formal_args;
-import static com.cyc.cycjava.cycl.el_utilities.kappa_predicate_p;
-import static com.cyc.cycjava.cycl.el_utilities.kappa_predicate_query;
-import static com.cyc.cycjava.cycl.el_utilities.make_binary_formula;
-import static com.cyc.cycjava.cycl.el_utilities.make_unary_formula;
-import static com.cyc.cycjava.cycl.format_nil.force_format;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_empty_p;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_id_and_object_validP;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_next_id;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_next_state;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_state_object;
-import static com.cyc.cycjava.cycl.id_index.id_index_count;
-import static com.cyc.cycjava.cycl.id_index.id_index_dense_objects;
-import static com.cyc.cycjava.cycl.id_index.id_index_dense_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_next_id;
-import static com.cyc.cycjava.cycl.id_index.id_index_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_skip_tombstones_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_id_threshold;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_objects;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_tombstone_p;
-import static com.cyc.cycjava.cycl.keyhash.getkeyhash;
-import static com.cyc.cycjava.cycl.keyhash.keyhash_count;
-import static com.cyc.cycjava.cycl.keyhash.keyhash_p;
-import static com.cyc.cycjava.cycl.keyhash.remkeyhash;
-import static com.cyc.cycjava.cycl.keyhash.setkeyhash;
-import static com.cyc.cycjava.cycl.memoization_state.$memoization_state$;
-import static com.cyc.cycjava.cycl.memoization_state.memoization_state_get_current_process_internal;
-import static com.cyc.cycjava.cycl.memoization_state.memoization_state_lock;
-import static com.cyc.cycjava.cycl.memoization_state.memoization_state_set_current_process_internal;
-import static com.cyc.cycjava.cycl.memoization_state.new_memoization_state;
-import static com.cyc.cycjava.cycl.nart_handles.do_narts_table;
-import static com.cyc.cycjava.cycl.nart_handles.nart_p;
-import static com.cyc.cycjava.cycl.narts_high.nart_el_formula;
-import static com.cyc.cycjava.cycl.narts_high.nart_hl_formula;
-import static com.cyc.cycjava.cycl.utilities_macros.$is_noting_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_index$;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_prediction$;
-import static com.cyc.cycjava.cycl.utilities_macros.$percent_progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_elapsed_seconds_for_notification$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_last_pacification_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_note$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_notification_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_pacifications_since_last_nl$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_sofar$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_total$;
-import static com.cyc.cycjava.cycl.utilities_macros.$silent_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$suppress_all_progress_faster_than_seconds$;
-import static com.cyc.cycjava.cycl.utilities_macros.$within_noting_percent_progress$;
-import static com.cyc.cycjava.cycl.utilities_macros.note_percent_progress;
-import static com.cyc.cycjava.cycl.utilities_macros.note_progress;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_percent_progress_postamble;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_percent_progress_preamble;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_progress_postamble;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_progress_preamble;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.bind;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.currentBinding;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.rebind;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.getEntryKey;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.getEntrySetIterator;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.getEntryValue;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.gethash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.gethash_without_values;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.hash_table_count;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.iteratorHasNext;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.iteratorNextEntry;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.make_hash_table;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.releaseEntrySetIterator;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.remhash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.sethash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.numG;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.subtract;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.cconcatenate;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.length;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.nreverse;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.position;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.remove_if;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.current_process;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.get_universal_time;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.stringp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.arg2;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.multiple_value_list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.resetMultipleValues;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.values;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.aref;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.member;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.second;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.terpri;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-import static com.cyc.tool.subl.util.SubLFiles.defvar;
-
-import java.util.Iterator;
-import java.util.Map;
-
 import com.cyc.cycjava.cycl.inference.ask_utilities;
 import com.cyc.cycjava.cycl.inference.harness.inference_utilities;
+import com.cyc.cycjava.cycl.kbs_identification;
 import com.cyc.cycjava.cycl.sbhl.sbhl_graphs;
 import com.cyc.cycjava.cycl.sbhl.sbhl_link_methods;
 import com.cyc.cycjava.cycl.sbhl.sbhl_link_vars;
@@ -138,6 +15,7 @@ import com.cyc.cycjava.cycl.sbhl.sbhl_module_utilities;
 import com.cyc.cycjava.cycl.sbhl.sbhl_module_vars;
 import com.cyc.cycjava.cycl.sbhl.sbhl_paranoia;
 import com.cyc.cycjava.cycl.sbhl.sbhl_search_vars;
+import com.cyc.cycjava.cycl.utilities_macros;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
@@ -149,32 +27,64 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLBoolean;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
+import java.util.Iterator;
+import java.util.Map;
+
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.id_index.*;
+import static com.cyc.cycjava.cycl.kbs_identification.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIFTEEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- * module:      KBS-IDENTIFICATION
- * source file: /cyc/top/cycl/kbs-identification.lisp
- * created:     2019/07/03 17:37:50
- */
-public final class kbs_identification extends SubLTranslatedFile implements V12 {
-    static private final SubLString $str_alt33$ = makeString("");
-
+public final class kbs_identification extends SubLTranslatedFile {
     public static final SubLFile me = new kbs_identification();
 
+    public static final String myName = "com.cyc.cycjava.cycl.kbs_identification";
 
+    public static final String myFingerPrint = "8a0f9c03d910b8b988851c59b3cd6859ab9f0a69684f917cbfc0442dd9906689";
 
     // defvar
     // Definitions
-    /**
-     * A list of all KBS constants (inclusions minus omissions).
-     */
-    @LispMethod(comment = "A list of all KBS constants (inclusions minus omissions).\ndefvar")
     private static final SubLSymbol $kbs_raw_constants$ = makeSymbol("*KBS-RAW-CONSTANTS*");
 
     // defvar
@@ -182,7 +92,6 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
      * A hash table mapping terms to the relevant element of :collection justifying
      * their inclusion.
      */
-    @LispMethod(comment = "A hash table mapping terms to the relevant element of :collection justifying\r\ntheir inclusion.\ndefvar\nA hash table mapping terms to the relevant element of :collection justifying\ntheir inclusion.")
     private static final SubLSymbol $kbs_raw_constants_table$ = makeSymbol("*KBS-RAW-CONSTANTS-TABLE*");
 
     // defvar
@@ -190,7 +99,6 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
      * A hash table mapping terms to the relevant elements of :collection and
      * :omission-collections justifying their omission.
      */
-    @LispMethod(comment = "A hash table mapping terms to the relevant elements of :collection and\r\n:omission-collections justifying their omission.\ndefvar\nA hash table mapping terms to the relevant elements of :collection and\n:omission-collections justifying their omission.")
     private static final SubLSymbol $kbs_raw_constants_omission_table$ = makeSymbol("*KBS-RAW-CONSTANTS-OMISSION-TABLE*");
 
     // defvar
@@ -198,31 +106,26 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
      * A hash table mapping terms to the :definitional-predicate-set restricting
      * their appearance.
      */
-    @LispMethod(comment = "A hash table mapping terms to the :definitional-predicate-set restricting\r\ntheir appearance.\ndefvar\nA hash table mapping terms to the :definitional-predicate-set restricting\ntheir appearance.")
     private static final SubLSymbol $kbs_definitional_constant_table$ = makeSymbol("*KBS-DEFINITIONAL-CONSTANT-TABLE*");
 
+
+
     // defvar
-    @LispMethod(comment = "defvar")
     private static final SubLSymbol $kbs_skolems$ = makeSymbol("*KBS-SKOLEMS*");
 
     // defvar
-    @LispMethod(comment = "defvar")
     private static final SubLSymbol $kbs_constants$ = makeSymbol("*KBS-CONSTANTS*");
 
     // defvar
-    @LispMethod(comment = "defvar")
     private static final SubLSymbol $kbs_constant_table$ = makeSymbol("*KBS-CONSTANT-TABLE*");
 
     // defvar
-    @LispMethod(comment = "defvar")
     private static final SubLSymbol $kbs_narts$ = makeSymbol("*KBS-NARTS*");
 
     // defvar
-    @LispMethod(comment = "defvar")
     private static final SubLSymbol $kbs_forts$ = makeSymbol("*KBS-FORTS*");
 
     // defvar
-    @LispMethod(comment = "defvar")
     private static final SubLSymbol $kbs_fort_table$ = makeSymbol("*KBS-FORT-TABLE*");
 
     // defvar
@@ -231,62 +134,75 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
      * predicate set may be used multiple times in a KBS definition, but *only* in
      * adjacent sections.
      */
-    @LispMethod(comment = "A list of kbs predicate sets ordered by the section order. @note that a\r\npredicate set may be used multiple times in a KBS definition, but *only* in\r\nadjacent sections.\ndefvar\nA list of kbs predicate sets ordered by the section order. @note that a\npredicate set may be used multiple times in a KBS definition, but *only* in\nadjacent sections.")
     private static final SubLSymbol $kbs_ordered_definitional_predicate_sets$ = makeSymbol("*KBS-ORDERED-DEFINITIONAL-PREDICATE-SETS*");
 
     // defvar
-    @LispMethod(comment = "defvar")
     private static final SubLSymbol $kbs_definitional_predicate_table$ = makeSymbol("*KBS-DEFINITIONAL-PREDICATE-TABLE*");
 
     // defvar
-    @LispMethod(comment = "defvar")
     private static final SubLSymbol $kbs_definitional_rule_table$ = makeSymbol("*KBS-DEFINITIONAL-RULE-TABLE*");
 
     // defvar
-    @LispMethod(comment = "defvar")
     private static final SubLSymbol $kbs_assertion_table$ = makeSymbol("*KBS-ASSERTION-TABLE*");
 
     // defvar
-    @LispMethod(comment = "defvar")
     private static final SubLSymbol $kbs_deduction_table$ = makeSymbol("*KBS-DEDUCTION-TABLE*");
 
     // defvar
-    @LispMethod(comment = "defvar")
     private static final SubLSymbol $kbs_fort_state_validP$ = makeSymbol("*KBS-FORT-STATE-VALID?*");
 
     // defvar
-    @LispMethod(comment = "defvar")
     private static final SubLSymbol $kbs_state_validP$ = makeSymbol("*KBS-STATE-VALID?*");
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     public static final SubLSymbol $default_kbs_kappa_query_settings$ = makeSymbol("*DEFAULT-KBS-KAPPA-QUERY-SETTINGS*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $kbs_kappa_query_settings$ = makeSymbol("*KBS-KAPPA-QUERY-SETTINGS*");
 
 
 
+    private static final SubLObject $$quotedIsa = reader_make_constant_shell(makeString("quotedIsa"));
+
+    private static final SubLObject $$InferencePSC = reader_make_constant_shell(makeString("InferencePSC"));
+
+    public static final SubLString $str3$Even_though_explicitly_included_v = makeString("Even though explicitly included via:");
+
+    private static final SubLObject $$isa = reader_make_constant_shell(makeString("isa"));
+
+    public static final SubLString $str5$The_constant_is_also_excluded_bec = makeString("The constant is also excluded because:");
+
+    private static final SubLObject $$not = reader_make_constant_shell(makeString("not"));
+
+    public static final SubLSymbol NON_KBS_RAW_CONSTANT_P = makeSymbol("NON-KBS-RAW-CONSTANT-P");
 
 
-    static private final SubLString $str3$Even_though_explicitly_included_v = makeString("Even though explicitly included via:");
+
+    private static final SubLObject $$EverythingPSC = reader_make_constant_shell(makeString("EverythingPSC"));
 
 
 
-    static private final SubLString $str5$The_constant_is_also_excluded_bec = makeString("The constant is also excluded because:");
 
 
 
-    private static final SubLSymbol NON_KBS_RAW_CONSTANT_P = makeSymbol("NON-KBS-RAW-CONSTANT-P");
 
 
 
-    static private final SubLString $str16$_A_is_not_a__A = makeString("~A is not a ~A");
 
-    static private final SubLString $$$continue_anyway = makeString("continue anyway");
 
-    static private final SubLString $str21$_A_is_not_a_valid__sbhl_type_erro = makeString("~A is not a valid *sbhl-type-error-action* value");
+
+
+    public static final SubLString $str16$_A_is_not_a__A = makeString("~A is not a ~A");
+
+
+
+
+
+    public static final SubLString $$$continue_anyway = makeString("continue anyway");
+
+
+
+    public static final SubLString $str21$_A_is_not_a_valid__sbhl_type_erro = makeString("~A is not a valid *sbhl-type-error-action* value");
 
     private static final SubLString $str22$_A_is_neither_SET_P_nor_LISTP_ = makeString("~A is neither SET-P nor LISTP.");
 
@@ -296,15 +212,23 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
 
     private static final SubLString $str25$Node__a_does_not_pass_sbhl_type_t = makeString("Node ~a does not pass sbhl-type-test ~a~%");
 
+
+
     private static final SubLString $$$mapping_Cyc_constants = makeString("mapping Cyc constants");
+
+
+
+
+
+    private static final SubLObject $$CycLConstant = reader_make_constant_shell(makeString("CycLConstant"));
 
 
 
     private static final SubLString $str32$Overriding_constant__A_omission__ = makeString("Overriding constant ~A omission (~S) due to #$kbsProfileRetainTerm");
 
+    private static final SubLObject $$kbsProfileRetainTerm = reader_make_constant_shell(makeString("kbsProfileRetainTerm"));
 
-
-
+    private static final SubLObject $$kbsProfileRemoveFORT = reader_make_constant_shell(makeString("kbsProfileRemoveFORT"));
 
     private static final SubLString $str35$___S_constants_included_via_the_c = makeString("~&~S constants included via the collections : ~S~%");
 
@@ -330,17 +254,17 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
 
     private static final SubLSymbol KBS_KBQ_QUERY_SET_TERMS = makeSymbol("KBS-KBQ-QUERY-SET-TERMS");
 
-
+    private static final SubLObject $$TheSetOf = reader_make_constant_shell(makeString("TheSetOf"));
 
     private static final SubLSymbol $sym48$_Q = makeSymbol("?Q");
 
-
+    private static final SubLObject $$thereExists = reader_make_constant_shell(makeString("thereExists"));
 
     private static final SubLSymbol $sym50$_T = makeSymbol("?T");
 
+    private static final SubLObject $$and = reader_make_constant_shell(makeString("and"));
 
-
-    private static final SubLList $list52 = list(list(reader_make_constant_shell("testQuery"), makeSymbol("?T"), makeSymbol("?Q")));
+    private static final SubLList $list52 = list(list(reader_make_constant_shell(makeString("testQuery")), makeSymbol("?T"), makeSymbol("?Q")));
 
     private static final SubLInteger $int$300 = makeInteger(300);
 
@@ -350,7 +274,7 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
 
     private static final SubLString $str56$compute_kbs_skolems_requirements_ = makeString("compute-kbs-skolems requirements not met.");
 
-
+    private static final SubLObject $$SkolemFunction = reader_make_constant_shell(makeString("SkolemFunction"));
 
     private static final SubLString $$$Computing_KBS_skolems = makeString("Computing KBS skolems");
 
@@ -362,23 +286,23 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
 
     private static final SubLString $$$akb = makeString("akb");
 
-    private static final SubLObject $$TKBTerm_Proprietary = reader_make_constant_shell("TKBTerm-Proprietary");
+    private static final SubLObject $$TKBTerm_Proprietary = reader_make_constant_shell(makeString("TKBTerm-Proprietary"));
 
-
+    private static final SubLObject $$ProprietaryTerm = reader_make_constant_shell(makeString("ProprietaryTerm"));
 
     private static final SubLString $$$cyfi = makeString("cyfi");
 
-    private static final SubLObject $$Cy_FiProprietaryTerm = reader_make_constant_shell("Cy-FiProprietaryTerm");
+    private static final SubLObject $$Cy_FiProprietaryTerm = reader_make_constant_shell(makeString("Cy-FiProprietaryTerm"));
 
+    private static final SubLObject $$ResearchCycConstant = reader_make_constant_shell(makeString("ResearchCycConstant"));
 
+    private static final SubLObject $$ScaffoldingConstant = reader_make_constant_shell(makeString("ScaffoldingConstant"));
 
+    private static final SubLObject $$TerroristAgent = reader_make_constant_shell(makeString("TerroristAgent"));
 
+    private static final SubLObject $$TerroristAct = reader_make_constant_shell(makeString("TerroristAct"));
 
-
-
-
-
-
+    private static final SubLObject $$HostileSocialAction = reader_make_constant_shell(makeString("HostileSocialAction"));
 
     private static final SubLString $$$research = makeString("research");
 
@@ -392,13 +316,19 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
 
     private static final SubLString $str77$Also__the_following_GAFs_will_be_ = makeString("Also, the following GAFs will be spliced in:");
 
+
+
     private static final SubLSymbol NON_KBS_FORT_P = makeSymbol("NON-KBS-FORT-P");
 
     private static final SubLString $str80$The_term_contains_terms_not_in_th = makeString("The term contains terms not in the KB subset:");
 
     private static final SubLSymbol KBS_DEFINITIONAL_FORT_P = makeSymbol("KBS-DEFINITIONAL-FORT-P");
 
+
+
     private static final SubLSymbol KBS_DEFINITIONAL_FORT_PREDICATE_SETS = makeSymbol("KBS-DEFINITIONAL-FORT-PREDICATE-SETS");
+
+
 
     private static final SubLSymbol $sym85$KBS_DEFINITIONAL_PREDICATE_SET_ = makeSymbol("KBS-DEFINITIONAL-PREDICATE-SET<");
 
@@ -458,6 +388,8 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
 
     private static final SubLString $str113$POST_KBS_FORTS__Unmark_NARTs_that = makeString("POST-KBS-FORTS: Unmark NARTs that have HL assertions as arguments");
 
+
+
     private static final SubLString $str115$__Unmarking_NART__A_with_formula_ = makeString("~&Unmarking NART ~A with formula ~A ....~%");
 
     private static final SubLString $str116$__No_NARTs_had_to_be_unmarked___ = makeString("~&No NARTs had to be unmarked.~%");
@@ -510,58 +442,20 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
 
     private static final SubLString $str140$No_valid_KBS_available_ = makeString("No valid KBS available!");
 
+
+
+
+
     private static final SubLString $str143$do_broad_mt_index = makeString("do-broad-mt-index");
 
-    /**
-     * Return a list of all raw constants in the KB subset
-     */
-    @LispMethod(comment = "Return a list of all raw constants in the KB subset")
-    public static final SubLObject kbs_raw_constants_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return $kbs_raw_constants$.getDynamicValue(thread);
-        }
-    }
-
-    /**
-     * Return a list of all raw constants in the KB subset
-     */
-    @LispMethod(comment = "Return a list of all raw constants in the KB subset")
     public static SubLObject kbs_raw_constants() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return $kbs_raw_constants$.getDynamicValue(thread);
     }
 
-    public static final SubLObject kbs_raw_constant_p_alt(SubLObject constant) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return makeBoolean((NIL != constant_p(constant)) && (NIL != gethash(constant, $kbs_raw_constants_table$.getDynamicValue(thread), UNPROVIDED)));
-        }
-    }
-
     public static SubLObject kbs_raw_constant_p(final SubLObject constant) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return makeBoolean((NIL != constant_p(constant)) && (NIL != gethash(constant, $kbs_raw_constants_table$.getDynamicValue(thread), UNPROVIDED)));
-    }
-
-    public static final SubLObject why_kbs_raw_constantP_alt(SubLObject constant) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                if (NIL != com.cyc.cycjava.cycl.kbs_identification.kbs_raw_constant_p(constant)) {
-                    {
-                        SubLObject inclusion_cols = gethash(constant, $kbs_raw_constants_table$.getDynamicValue(thread), UNPROVIDED);
-                        SubLObject cdolist_list_var = inclusion_cols;
-                        SubLObject inclusion_col = NIL;
-                        for (inclusion_col = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , inclusion_col = cdolist_list_var.first()) {
-                            result = cons(arguments.make_hl_support($ISA, make_binary_formula($$quotedIsa, constant, inclusion_col), $$InferencePSC, UNPROVIDED), result);
-                        }
-                    }
-                }
-                return nreverse(result);
-            }
-        }
     }
 
     public static SubLObject why_kbs_raw_constantP(final SubLObject constant) {
@@ -581,66 +475,8 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return nreverse(result);
     }
 
-    public static final SubLObject non_kbs_raw_constant_p_alt(SubLObject constant) {
-        return makeBoolean((NIL != constant_p(constant)) && (NIL == com.cyc.cycjava.cycl.kbs_identification.kbs_raw_constant_p(constant)));
-    }
-
     public static SubLObject non_kbs_raw_constant_p(final SubLObject constant) {
         return makeBoolean((NIL != constant_p(constant)) && (NIL == kbs_raw_constant_p(constant)));
-    }
-
-    public static final SubLObject why_non_kbs_raw_constantP_alt(SubLObject constant) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject supports = NIL;
-                if (NIL != com.cyc.cycjava.cycl.kbs_identification.non_kbs_raw_constant_p(constant)) {
-                    {
-                        SubLObject inclusion_exclusion_cols_list = gethash(constant, $kbs_raw_constants_omission_table$.getDynamicValue(thread), UNPROVIDED);
-                        SubLObject cdolist_list_var = inclusion_exclusion_cols_list;
-                        SubLObject inclusion_exclusion_cols = NIL;
-                        for (inclusion_exclusion_cols = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , inclusion_exclusion_cols = cdolist_list_var.first()) {
-                            {
-                                SubLObject inclusion_cols = inclusion_exclusion_cols.first();
-                                SubLObject exclusion_cols = second(inclusion_exclusion_cols);
-                                supports = cons($str_alt3$Even_though_explicitly_included_v, supports);
-                                {
-                                    SubLObject cdolist_list_var_1 = inclusion_cols;
-                                    SubLObject inclusion_col = NIL;
-                                    for (inclusion_col = cdolist_list_var_1.first(); NIL != cdolist_list_var_1; cdolist_list_var_1 = cdolist_list_var_1.rest() , inclusion_col = cdolist_list_var_1.first()) {
-                                        supports = cons(arguments.make_hl_support($ISA, make_binary_formula($$isa, constant, inclusion_col), $$InferencePSC, UNPROVIDED), supports);
-                                    }
-                                }
-                                supports = cons($str_alt5$The_constant_is_also_excluded_bec, supports);
-                                {
-                                    SubLObject cdolist_list_var_2 = exclusion_cols;
-                                    SubLObject exclusion_col = NIL;
-                                    for (exclusion_col = cdolist_list_var_2.first(); NIL != cdolist_list_var_2; cdolist_list_var_2 = cdolist_list_var_2.rest() , exclusion_col = cdolist_list_var_2.first()) {
-                                        supports = cons(arguments.make_hl_support($ISA, make_binary_formula($$isa, constant, exclusion_col), $$InferencePSC, UNPROVIDED), supports);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                if (NIL == supports) {
-                    {
-                        SubLObject cdolist_list_var = kbs_utilities.get_kbs_sections();
-                        SubLObject kbs_section = NIL;
-                        for (kbs_section = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , kbs_section = cdolist_list_var.first()) {
-                            {
-                                SubLObject cdolist_list_var_3 = kbs_utilities.get_kbs_section_collections(kbs_section);
-                                SubLObject inclusion_col = NIL;
-                                for (inclusion_col = cdolist_list_var_3.first(); NIL != cdolist_list_var_3; cdolist_list_var_3 = cdolist_list_var_3.rest() , inclusion_col = cdolist_list_var_3.first()) {
-                                    supports = cons(arguments.make_hl_support($ISA, make_unary_formula($$not, make_binary_formula($$isa, constant, inclusion_col)), UNPROVIDED, UNPROVIDED), supports);
-                                }
-                            }
-                        }
-                    }
-                }
-                return nreverse(supports);
-            }
-        }
     }
 
     public static SubLObject why_non_kbs_raw_constantP(final SubLObject constant) {
@@ -696,16 +532,6 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return nreverse(supports);
     }
 
-    public static final SubLObject kbs_raw_constant_omitted_p_alt(SubLObject v_term) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != $kbs_raw_constants_omission_table$.getDynamicValue(thread)) {
-                return gethash(v_term, $kbs_raw_constants_omission_table$.getDynamicValue(thread), UNPROVIDED);
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject kbs_raw_constant_omitted_p(final SubLObject v_term) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != $kbs_raw_constants_omission_table$.getDynamicValue(thread)) {
@@ -714,74 +540,12 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    public static final SubLObject kbs_raw_el_formula_p_alt(SubLObject formula) {
-        return makeBoolean(NIL == com.cyc.cycjava.cycl.kbs_identification.non_kbs_raw_el_formula_p(formula));
-    }
-
     public static SubLObject kbs_raw_el_formula_p(final SubLObject formula) {
         return makeBoolean(NIL == non_kbs_raw_el_formula_p(formula));
     }
 
-    public static final SubLObject non_kbs_raw_el_formula_p_alt(SubLObject formula) {
-        return list_utilities.tree_find_if(symbol_function(NON_KBS_RAW_CONSTANT_P), formula, UNPROVIDED);
-    }
-
     public static SubLObject non_kbs_raw_el_formula_p(final SubLObject formula) {
         return list_utilities.tree_find_if(symbol_function(NON_KBS_RAW_CONSTANT_P), formula, UNPROVIDED);
-    }
-
-    public static final SubLObject reset_kbs_raw_constant_tables_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                try {
-                    mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                    mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                    {
-                        SubLObject inclusion_size = ZERO_INTEGER;
-                        SubLObject omission_size = ZERO_INTEGER;
-                        SubLObject cdolist_list_var = kbs_utilities.get_kbs_sections();
-                        SubLObject kbs_section = NIL;
-                        for (kbs_section = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , kbs_section = cdolist_list_var.first()) {
-                            {
-                                SubLObject collections = kbs_utilities.get_kbs_section_collections(kbs_section);
-                                SubLObject omission_predicate = kbs_utilities.get_kbs_section_omission_predicate(kbs_section);
-                                SubLObject omission_collections = kbs_utilities.get_kbs_section_omission_collections(kbs_section);
-                                {
-                                    SubLObject cdolist_list_var_4 = collections;
-                                    SubLObject collection = NIL;
-                                    for (collection = cdolist_list_var_4.first(); NIL != cdolist_list_var_4; cdolist_list_var_4 = cdolist_list_var_4.rest() , collection = cdolist_list_var_4.first()) {
-                                        inclusion_size = add(inclusion_size, cardinality_estimates.instance_cardinality(collection));
-                                        inclusion_size = add(inclusion_size, cardinality_estimates.quoted_instance_cardinality(collection));
-                                    }
-                                }
-                                if (NIL != fort_types_interface.predicateP(omission_predicate)) {
-                                    omission_size = add(omission_size, kb_indexing.num_predicate_extent_index(omission_predicate, UNPROVIDED));
-                                }
-                                {
-                                    SubLObject cdolist_list_var_5 = omission_collections;
-                                    SubLObject omission_collection = NIL;
-                                    for (omission_collection = cdolist_list_var_5.first(); NIL != cdolist_list_var_5; cdolist_list_var_5 = cdolist_list_var_5.rest() , omission_collection = cdolist_list_var_5.first()) {
-                                        omission_size = add(omission_size, cardinality_estimates.instance_cardinality(omission_collection));
-                                        omission_size = add(omission_size, cardinality_estimates.quoted_instance_cardinality(omission_collection));
-                                    }
-                                }
-                            }
-                        }
-                        $kbs_raw_constants_table$.setDynamicValue(make_hash_table(inclusion_size, symbol_function(EQ), UNPROVIDED), thread);
-                        $kbs_definitional_constant_table$.setDynamicValue(make_hash_table(inclusion_size, symbol_function(EQ), UNPROVIDED), thread);
-                        $kbs_raw_constants_omission_table$.setDynamicValue(make_hash_table(omission_size, symbol_function(EQ), UNPROVIDED), thread);
-                        $kbs_raw_constants$.setDynamicValue(NIL, thread);
-                    }
-                } finally {
-                    mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                    mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject reset_kbs_raw_constant_tables() {
@@ -833,1089 +597,6 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
             mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
         }
         return NIL;
-    }
-
-    public static final SubLObject compute_kbs_raw_constants_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            com.cyc.cycjava.cycl.kbs_identification.reset_kbs_raw_constant_tables();
-            {
-                SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                try {
-                    mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                    mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                    {
-                        SubLObject cdolist_list_var = kbs_utilities.get_kbs_sections();
-                        SubLObject kbs_section = NIL;
-                        for (kbs_section = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , kbs_section = cdolist_list_var.first()) {
-                            {
-                                SubLObject inclusion_collections = kbs_utilities.get_kbs_section_collections(kbs_section);
-                                SubLObject omission_collections = kbs_utilities.get_kbs_section_omission_collections(kbs_section);
-                                SubLObject omission_predicate = kbs_utilities.get_kbs_section_omission_predicate(kbs_section);
-                                SubLObject definitional_predicate_set = kbs_utilities.get_kbs_section_definitional_predicate_set(kbs_section);
-                                SubLObject inclusion_constants_hash = make_hash_table($int$1000, symbol_function(EQ), UNPROVIDED);
-                                SubLObject omission_constants_hash = make_hash_table($int$1000, symbol_function(EQ), UNPROVIDED);
-                                SubLObject inclusion_count = ZERO_INTEGER;
-                                SubLObject omission_count = ZERO_INTEGER;
-                                if (NIL != list_utilities.non_empty_list_p(inclusion_collections)) {
-                                    {
-                                        SubLObject cdolist_list_var_6 = inclusion_collections;
-                                        SubLObject inclusion_collection = NIL;
-                                        for (inclusion_collection = cdolist_list_var_6.first(); NIL != cdolist_list_var_6; cdolist_list_var_6 = cdolist_list_var_6.rest() , inclusion_collection = cdolist_list_var_6.first()) {
-                                            {
-                                                SubLObject node_var = inclusion_collection;
-                                                {
-                                                    SubLObject _prev_bind_0_7 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                    SubLObject _prev_bind_1_8 = sbhl_marking_vars.$sbhl_gather_space$.currentBinding(thread);
-                                                    try {
-                                                        sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module($$isa), thread);
-                                                        sbhl_marking_vars.$sbhl_gather_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
-                                                        {
-                                                            SubLObject node_var_9 = node_var;
-                                                            SubLObject deck_type = (false) ? ((SubLObject) ($QUEUE)) : $STACK;
-                                                            SubLObject recur_deck = deck.create_deck(deck_type);
-                                                            {
-                                                                SubLObject _prev_bind_0_10 = sbhl_marking_vars.$sbhl_space$.currentBinding(thread);
-                                                                try {
-                                                                    sbhl_marking_vars.$sbhl_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
-                                                                    {
-                                                                        SubLObject tv_var = NIL;
-                                                                        {
-                                                                            SubLObject _prev_bind_0_11 = sbhl_search_vars.$sbhl_tv$.currentBinding(thread);
-                                                                            SubLObject _prev_bind_1_12 = sbhl_search_vars.$relevant_sbhl_tv_function$.currentBinding(thread);
-                                                                            try {
-                                                                                sbhl_search_vars.$sbhl_tv$.bind(NIL != tv_var ? ((SubLObject) (tv_var)) : sbhl_search_vars.get_sbhl_true_tv(), thread);
-                                                                                sbhl_search_vars.$relevant_sbhl_tv_function$.bind(NIL != tv_var ? ((SubLObject) (RELEVANT_SBHL_TV_IS_GENERAL_TV)) : sbhl_search_vars.$relevant_sbhl_tv_function$.getDynamicValue(thread), thread);
-                                                                                if (NIL != tv_var) {
-                                                                                    if (NIL != sbhl_paranoia.sbhl_object_type_checking_p()) {
-                                                                                        if (NIL == sbhl_search_vars.sbhl_true_tv_p(tv_var)) {
-                                                                                            {
-                                                                                                SubLObject pcase_var = sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread);
-                                                                                                if (pcase_var.eql($ERROR)) {
-                                                                                                    sbhl_paranoia.sbhl_error(ONE_INTEGER, $str_alt16$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                                } else {
-                                                                                                    if (pcase_var.eql($CERROR)) {
-                                                                                                        sbhl_paranoia.sbhl_cerror(ONE_INTEGER, $$$continue_anyway, $str_alt16$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                                    } else {
-                                                                                                        if (pcase_var.eql($WARN)) {
-                                                                                                            Errors.warn($str_alt16$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
-                                                                                                        } else {
-                                                                                                            Errors.warn($str_alt21$_A_is_not_a_valid__sbhl_type_erro, sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread));
-                                                                                                            Errors.cerror($$$continue_anyway, $str_alt16$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                                {
-                                                                                    SubLObject _prev_bind_0_13 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
-                                                                                    SubLObject _prev_bind_1_14 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
-                                                                                    SubLObject _prev_bind_2 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
-                                                                                    SubLObject _prev_bind_3 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                                    SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                                                    try {
-                                                                                        sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)), thread);
-                                                                                        sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
-                                                                                        sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
-                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
-                                                                                        sbhl_module_vars.$sbhl_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)), thread);
-                                                                                        if ((NIL != sbhl_paranoia.suspend_sbhl_type_checkingP()) || (NIL != sbhl_module_utilities.apply_sbhl_module_type_test(node_var, sbhl_module_vars.get_sbhl_module(UNPROVIDED)))) {
-                                                                                            {
-                                                                                                SubLObject _prev_bind_0_15 = sbhl_search_vars.$sbhl_search_direction$.currentBinding(thread);
-                                                                                                SubLObject _prev_bind_1_16 = sbhl_link_vars.$sbhl_link_direction$.currentBinding(thread);
-                                                                                                SubLObject _prev_bind_2_17 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                                                try {
-                                                                                                    sbhl_search_vars.$sbhl_search_direction$.bind(sbhl_search_vars.get_sbhl_backward_search_direction(), thread);
-                                                                                                    sbhl_link_vars.$sbhl_link_direction$.bind(sbhl_module_utilities.sbhl_search_direction_to_link_direction(sbhl_search_vars.get_sbhl_backward_search_direction(), sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
-                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
-                                                                                                    sbhl_marking_utilities.sbhl_mark_node_marked(node_var_9, UNPROVIDED);
-                                                                                                    while (NIL != node_var_9) {
-                                                                                                        {
-                                                                                                            SubLObject tt_node_var = node_var_9;
-                                                                                                            SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_vars.get_sbhl_module($$isa));
-                                                                                                            SubLObject cdolist_list_var_18 = accessible_modules;
-                                                                                                            SubLObject module_var = NIL;
-                                                                                                            for (module_var = cdolist_list_var_18.first(); NIL != cdolist_list_var_18; cdolist_list_var_18 = cdolist_list_var_18.rest() , module_var = cdolist_list_var_18.first()) {
-                                                                                                                {
-                                                                                                                    SubLObject _prev_bind_0_19 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                                                                                    SubLObject _prev_bind_1_20 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                                                                    try {
-                                                                                                                        sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
-                                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
-                                                                                                                        {
-                                                                                                                            SubLObject node = function_terms.naut_to_nart(tt_node_var);
-                                                                                                                            if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
-                                                                                                                                {
-                                                                                                                                    SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                                    if (NIL != d_link) {
-                                                                                                                                        {
-                                                                                                                                            SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                                            if (NIL != mt_links) {
-                                                                                                                                                {
-                                                                                                                                                    SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
-                                                                                                                                                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                                                                                                                                                        thread.resetMultipleValues();
-                                                                                                                                                        {
-                                                                                                                                                            SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                                                                                                            SubLObject tv_links = thread.secondMultipleValue();
-                                                                                                                                                            thread.resetMultipleValues();
-                                                                                                                                                            if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                                                                                {
-                                                                                                                                                                    SubLObject _prev_bind_0_21 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                                                                                    try {
-                                                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                                                                        {
-                                                                                                                                                                            SubLObject iteration_state_22 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
-                                                                                                                                                                            while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_22)) {
-                                                                                                                                                                                thread.resetMultipleValues();
-                                                                                                                                                                                {
-                                                                                                                                                                                    SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_22);
-                                                                                                                                                                                    SubLObject link_nodes = thread.secondMultipleValue();
-                                                                                                                                                                                    thread.resetMultipleValues();
-                                                                                                                                                                                    if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                                                                        {
-                                                                                                                                                                                            SubLObject _prev_bind_0_23 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                                                                            try {
-                                                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                                                                                {
-                                                                                                                                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                                                                                    SubLObject cdolist_list_var_24 = new_list;
-                                                                                                                                                                                                    SubLObject constant = NIL;
-                                                                                                                                                                                                    for (constant = cdolist_list_var_24.first(); NIL != cdolist_list_var_24; cdolist_list_var_24 = cdolist_list_var_24.rest() , constant = cdolist_list_var_24.first()) {
-                                                                                                                                                                                                        if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(constant, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
-                                                                                                                                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(constant, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                                                                                                                                                                                            if (NIL != forts.fort_p(constant)) {
-                                                                                                                                                                                                                if (NIL != constant_p(constant)) {
-                                                                                                                                                                                                                    hash_table_utilities.pushnew_hash(constant, inclusion_collection, inclusion_constants_hash, UNPROVIDED);
-                                                                                                                                                                                                                }
-                                                                                                                                                                                                            }
-                                                                                                                                                                                                        }
-                                                                                                                                                                                                    }
-                                                                                                                                                                                                }
-                                                                                                                                                                                            } finally {
-                                                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_23, thread);
-                                                                                                                                                                                            }
-                                                                                                                                                                                        }
-                                                                                                                                                                                    }
-                                                                                                                                                                                    iteration_state_22 = dictionary_contents.do_dictionary_contents_next(iteration_state_22);
-                                                                                                                                                                                }
-                                                                                                                                                                            } 
-                                                                                                                                                                            dictionary_contents.do_dictionary_contents_finalize(iteration_state_22);
-                                                                                                                                                                        }
-                                                                                                                                                                    } finally {
-                                                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_21, thread);
-                                                                                                                                                                    }
-                                                                                                                                                                }
-                                                                                                                                                            }
-                                                                                                                                                            iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                                                                                                                        }
-                                                                                                                                                    } 
-                                                                                                                                                    dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    } else {
-                                                                                                                                        sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt22$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                                if (NIL != sbhl_macros.do_sbhl_non_fort_linksP(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED))) {
-                                                                                                                                    {
-                                                                                                                                        SubLObject csome_list_var = sbhl_link_methods.non_fort_instance_table_lookup(node);
-                                                                                                                                        SubLObject instance_tuple = NIL;
-                                                                                                                                        for (instance_tuple = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , instance_tuple = csome_list_var.first()) {
-                                                                                                                                            {
-                                                                                                                                                SubLObject datum = instance_tuple;
-                                                                                                                                                SubLObject current = datum;
-                                                                                                                                                SubLObject link_node = NIL;
-                                                                                                                                                SubLObject mt = NIL;
-                                                                                                                                                SubLObject tv = NIL;
-                                                                                                                                                destructuring_bind_must_consp(current, datum, $list_alt23);
-                                                                                                                                                link_node = current.first();
-                                                                                                                                                current = current.rest();
-                                                                                                                                                destructuring_bind_must_consp(current, datum, $list_alt23);
-                                                                                                                                                mt = current.first();
-                                                                                                                                                current = current.rest();
-                                                                                                                                                destructuring_bind_must_consp(current, datum, $list_alt23);
-                                                                                                                                                tv = current.first();
-                                                                                                                                                current = current.rest();
-                                                                                                                                                if (NIL == current) {
-                                                                                                                                                    if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                                                                        {
-                                                                                                                                                            SubLObject _prev_bind_0_25 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                                                                            try {
-                                                                                                                                                                sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                                                                if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                                                    {
-                                                                                                                                                                        SubLObject _prev_bind_0_26 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                                                        try {
-                                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                                                            {
-                                                                                                                                                                                SubLObject link_nodes = list(link_node);
-                                                                                                                                                                                SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                                                                SubLObject cdolist_list_var_27 = new_list;
-                                                                                                                                                                                SubLObject constant = NIL;
-                                                                                                                                                                                for (constant = cdolist_list_var_27.first(); NIL != cdolist_list_var_27; cdolist_list_var_27 = cdolist_list_var_27.rest() , constant = cdolist_list_var_27.first()) {
-                                                                                                                                                                                    if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(constant, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
-                                                                                                                                                                                        sbhl_marking_utilities.sbhl_mark_node_marked(constant, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                                                                                                                                                                        if (NIL != forts.fort_p(constant)) {
-                                                                                                                                                                                            if (NIL != constant_p(constant)) {
-                                                                                                                                                                                                hash_table_utilities.pushnew_hash(constant, inclusion_collection, inclusion_constants_hash, UNPROVIDED);
-                                                                                                                                                                                            }
-                                                                                                                                                                                        }
-                                                                                                                                                                                    }
-                                                                                                                                                                                }
-                                                                                                                                                                            }
-                                                                                                                                                                        } finally {
-                                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_26, thread);
-                                                                                                                                                                        }
-                                                                                                                                                                    }
-                                                                                                                                                                }
-                                                                                                                                                            } finally {
-                                                                                                                                                                sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_25, thread);
-                                                                                                                                                            }
-                                                                                                                                                        }
-                                                                                                                                                    }
-                                                                                                                                                } else {
-                                                                                                                                                    cdestructuring_bind_error(datum, $list_alt23);
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            } else {
-                                                                                                                                if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
-                                                                                                                                    {
-                                                                                                                                        SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                                        SubLObject cdolist_list_var_28 = new_list;
-                                                                                                                                        SubLObject generating_fn = NIL;
-                                                                                                                                        for (generating_fn = cdolist_list_var_28.first(); NIL != cdolist_list_var_28; cdolist_list_var_28 = cdolist_list_var_28.rest() , generating_fn = cdolist_list_var_28.first()) {
-                                                                                                                                            {
-                                                                                                                                                SubLObject _prev_bind_0_29 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
-                                                                                                                                                try {
-                                                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
-                                                                                                                                                    {
-                                                                                                                                                        SubLObject link_nodes = funcall(generating_fn, node);
-                                                                                                                                                        SubLObject new_list_30 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                                        SubLObject cdolist_list_var_31 = new_list_30;
-                                                                                                                                                        SubLObject constant = NIL;
-                                                                                                                                                        for (constant = cdolist_list_var_31.first(); NIL != cdolist_list_var_31; cdolist_list_var_31 = cdolist_list_var_31.rest() , constant = cdolist_list_var_31.first()) {
-                                                                                                                                                            if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(constant, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
-                                                                                                                                                                sbhl_marking_utilities.sbhl_mark_node_marked(constant, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                                                                                                                                                if (NIL != forts.fort_p(constant)) {
-                                                                                                                                                                    if (NIL != constant_p(constant)) {
-                                                                                                                                                                        hash_table_utilities.pushnew_hash(constant, inclusion_collection, inclusion_constants_hash, UNPROVIDED);
-                                                                                                                                                                    }
-                                                                                                                                                                }
-                                                                                                                                                            }
-                                                                                                                                                        }
-                                                                                                                                                    }
-                                                                                                                                                } finally {
-                                                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_29, thread);
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    } finally {
-                                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_20, thread);
-                                                                                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_19, thread);
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                        {
-                                                                                                            SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)));
-                                                                                                            SubLObject cdolist_list_var_32 = accessible_modules;
-                                                                                                            SubLObject module_var = NIL;
-                                                                                                            for (module_var = cdolist_list_var_32.first(); NIL != cdolist_list_var_32; cdolist_list_var_32 = cdolist_list_var_32.rest() , module_var = cdolist_list_var_32.first()) {
-                                                                                                                {
-                                                                                                                    SubLObject _prev_bind_0_33 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                                                                                    SubLObject _prev_bind_1_34 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                                                                    try {
-                                                                                                                        sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
-                                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
-                                                                                                                        {
-                                                                                                                            SubLObject node = function_terms.naut_to_nart(node_var_9);
-                                                                                                                            if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
-                                                                                                                                {
-                                                                                                                                    SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                                    if (NIL != d_link) {
-                                                                                                                                        {
-                                                                                                                                            SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_link_vars.get_sbhl_link_direction(), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                                            if (NIL != mt_links) {
-                                                                                                                                                {
-                                                                                                                                                    SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
-                                                                                                                                                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                                                                                                                                                        thread.resetMultipleValues();
-                                                                                                                                                        {
-                                                                                                                                                            SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                                                                                                            SubLObject tv_links = thread.secondMultipleValue();
-                                                                                                                                                            thread.resetMultipleValues();
-                                                                                                                                                            if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                                                                                {
-                                                                                                                                                                    SubLObject _prev_bind_0_35 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                                                                                    try {
-                                                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                                                                        {
-                                                                                                                                                                            SubLObject iteration_state_36 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
-                                                                                                                                                                            while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_36)) {
-                                                                                                                                                                                thread.resetMultipleValues();
-                                                                                                                                                                                {
-                                                                                                                                                                                    SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_36);
-                                                                                                                                                                                    SubLObject link_nodes = thread.secondMultipleValue();
-                                                                                                                                                                                    thread.resetMultipleValues();
-                                                                                                                                                                                    if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                                                                        {
-                                                                                                                                                                                            SubLObject _prev_bind_0_37 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                                                                            try {
-                                                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                                                                                {
-                                                                                                                                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                                                                                    SubLObject cdolist_list_var_38 = new_list;
-                                                                                                                                                                                                    SubLObject node_vars_link_node = NIL;
-                                                                                                                                                                                                    for (node_vars_link_node = cdolist_list_var_38.first(); NIL != cdolist_list_var_38; cdolist_list_var_38 = cdolist_list_var_38.rest() , node_vars_link_node = cdolist_list_var_38.first()) {
-                                                                                                                                                                                                        if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
-                                                                                                                                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
-                                                                                                                                                                                                            deck.deck_push(node_vars_link_node, recur_deck);
-                                                                                                                                                                                                        }
-                                                                                                                                                                                                    }
-                                                                                                                                                                                                }
-                                                                                                                                                                                            } finally {
-                                                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_37, thread);
-                                                                                                                                                                                            }
-                                                                                                                                                                                        }
-                                                                                                                                                                                    }
-                                                                                                                                                                                    iteration_state_36 = dictionary_contents.do_dictionary_contents_next(iteration_state_36);
-                                                                                                                                                                                }
-                                                                                                                                                                            } 
-                                                                                                                                                                            dictionary_contents.do_dictionary_contents_finalize(iteration_state_36);
-                                                                                                                                                                        }
-                                                                                                                                                                    } finally {
-                                                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_35, thread);
-                                                                                                                                                                    }
-                                                                                                                                                                }
-                                                                                                                                                            }
-                                                                                                                                                            iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                                                                                                                        }
-                                                                                                                                                    } 
-                                                                                                                                                    dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    } else {
-                                                                                                                                        sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt22$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            } else {
-                                                                                                                                if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
-                                                                                                                                    {
-                                                                                                                                        SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                                        SubLObject cdolist_list_var_39 = new_list;
-                                                                                                                                        SubLObject generating_fn = NIL;
-                                                                                                                                        for (generating_fn = cdolist_list_var_39.first(); NIL != cdolist_list_var_39; cdolist_list_var_39 = cdolist_list_var_39.rest() , generating_fn = cdolist_list_var_39.first()) {
-                                                                                                                                            {
-                                                                                                                                                SubLObject _prev_bind_0_40 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
-                                                                                                                                                try {
-                                                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
-                                                                                                                                                    {
-                                                                                                                                                        SubLObject link_nodes = funcall(generating_fn, node);
-                                                                                                                                                        SubLObject new_list_41 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                                        SubLObject cdolist_list_var_42 = new_list_41;
-                                                                                                                                                        SubLObject node_vars_link_node = NIL;
-                                                                                                                                                        for (node_vars_link_node = cdolist_list_var_42.first(); NIL != cdolist_list_var_42; cdolist_list_var_42 = cdolist_list_var_42.rest() , node_vars_link_node = cdolist_list_var_42.first()) {
-                                                                                                                                                            if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
-                                                                                                                                                                sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
-                                                                                                                                                                deck.deck_push(node_vars_link_node, recur_deck);
-                                                                                                                                                            }
-                                                                                                                                                        }
-                                                                                                                                                    }
-                                                                                                                                                } finally {
-                                                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_40, thread);
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    } finally {
-                                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_34, thread);
-                                                                                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_33, thread);
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                        node_var_9 = deck.deck_pop(recur_deck);
-                                                                                                    } 
-                                                                                                } finally {
-                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_2_17, thread);
-                                                                                                    sbhl_link_vars.$sbhl_link_direction$.rebind(_prev_bind_1_16, thread);
-                                                                                                    sbhl_search_vars.$sbhl_search_direction$.rebind(_prev_bind_0_15, thread);
-                                                                                                }
-                                                                                            }
-                                                                                        } else {
-                                                                                            sbhl_paranoia.sbhl_warn(TWO_INTEGER, $str_alt24$Node__a_does_not_pass_sbhl_type_t, node_var, sbhl_module_utilities.get_sbhl_type_test(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                        }
-                                                                                    } finally {
-                                                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
-                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3, thread);
-                                                                                        sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2, thread);
-                                                                                        sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1_14, thread);
-                                                                                        sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0_13, thread);
-                                                                                    }
-                                                                                }
-                                                                            } finally {
-                                                                                sbhl_search_vars.$relevant_sbhl_tv_function$.rebind(_prev_bind_1_12, thread);
-                                                                                sbhl_search_vars.$sbhl_tv$.rebind(_prev_bind_0_11, thread);
-                                                                            }
-                                                                        }
-                                                                        sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_space$.getDynamicValue(thread));
-                                                                    }
-                                                                } finally {
-                                                                    sbhl_marking_vars.$sbhl_space$.rebind(_prev_bind_0_10, thread);
-                                                                }
-                                                            }
-                                                            sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                                        }
-                                                    } finally {
-                                                        sbhl_marking_vars.$sbhl_gather_space$.rebind(_prev_bind_1_8, thread);
-                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_7, thread);
-                                                    }
-                                                }
-                                            }
-                                            {
-                                                SubLObject cdolist_list_var_43 = kbs_utilities.all_quoted_instances_enhanced(inclusion_collection, NIL);
-                                                SubLObject constant = NIL;
-                                                for (constant = cdolist_list_var_43.first(); NIL != cdolist_list_var_43; cdolist_list_var_43 = cdolist_list_var_43.rest() , constant = cdolist_list_var_43.first()) {
-                                                    if (NIL != constant_p(constant)) {
-                                                        hash_table_utilities.pushnew_hash(constant, inclusion_collection, inclusion_constants_hash, UNPROVIDED);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    {
-                                        SubLObject idx = do_constants_table();
-                                        SubLObject total = id_index_count(idx);
-                                        SubLObject sofar = ZERO_INTEGER;
-                                        SubLTrampolineFile.checkType($$$mapping_Cyc_constants, STRINGP);
-                                        {
-                                            SubLObject _prev_bind_0_44 = $last_percent_progress_index$.currentBinding(thread);
-                                            SubLObject _prev_bind_1_45 = $last_percent_progress_prediction$.currentBinding(thread);
-                                            SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                                            SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                                            try {
-                                                $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                                                $last_percent_progress_prediction$.bind(NIL, thread);
-                                                $within_noting_percent_progress$.bind(T, thread);
-                                                $percent_progress_start_time$.bind(get_universal_time(), thread);
-                                                noting_percent_progress_preamble($$$mapping_Cyc_constants);
-                                                if (NIL == do_id_index_empty_p(idx, $SKIP)) {
-                                                    {
-                                                        SubLObject id = do_id_index_next_id(idx, T, NIL, NIL);
-                                                        SubLObject state_var = do_id_index_next_state(idx, T, id, NIL);
-                                                        SubLObject constant = NIL;
-                                                        while (NIL != id) {
-                                                            constant = do_id_index_state_object(idx, $SKIP, id, state_var);
-                                                            if (NIL != do_id_index_id_and_object_validP(id, constant, $SKIP)) {
-                                                                note_percent_progress(sofar, total);
-                                                                sofar = add(sofar, ONE_INTEGER);
-                                                                hash_table_utilities.pushnew_hash(constant, $$CycLConstant, inclusion_constants_hash, UNPROVIDED);
-                                                            }
-                                                            id = do_id_index_next_id(idx, T, id, state_var);
-                                                            state_var = do_id_index_next_state(idx, T, id, state_var);
-                                                        } 
-                                                    }
-                                                }
-                                                noting_percent_progress_postamble();
-                                            } finally {
-                                                $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                                                $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                                                $last_percent_progress_prediction$.rebind(_prev_bind_1_45, thread);
-                                                $last_percent_progress_index$.rebind(_prev_bind_0_44, thread);
-                                            }
-                                        }
-                                    }
-                                }
-                                {
-                                    SubLObject cdolist_list_var_46 = omission_collections;
-                                    SubLObject omission_collection = NIL;
-                                    for (omission_collection = cdolist_list_var_46.first(); NIL != cdolist_list_var_46; cdolist_list_var_46 = cdolist_list_var_46.rest() , omission_collection = cdolist_list_var_46.first()) {
-                                        {
-                                            SubLObject node_var = omission_collection;
-                                            {
-                                                SubLObject _prev_bind_0_47 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                SubLObject _prev_bind_1_48 = sbhl_marking_vars.$sbhl_gather_space$.currentBinding(thread);
-                                                try {
-                                                    sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module($$isa), thread);
-                                                    sbhl_marking_vars.$sbhl_gather_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
-                                                    {
-                                                        SubLObject node_var_49 = node_var;
-                                                        SubLObject deck_type = (false) ? ((SubLObject) ($QUEUE)) : $STACK;
-                                                        SubLObject recur_deck = deck.create_deck(deck_type);
-                                                        {
-                                                            SubLObject _prev_bind_0_50 = sbhl_marking_vars.$sbhl_space$.currentBinding(thread);
-                                                            try {
-                                                                sbhl_marking_vars.$sbhl_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
-                                                                {
-                                                                    SubLObject tv_var = NIL;
-                                                                    {
-                                                                        SubLObject _prev_bind_0_51 = sbhl_search_vars.$sbhl_tv$.currentBinding(thread);
-                                                                        SubLObject _prev_bind_1_52 = sbhl_search_vars.$relevant_sbhl_tv_function$.currentBinding(thread);
-                                                                        try {
-                                                                            sbhl_search_vars.$sbhl_tv$.bind(NIL != tv_var ? ((SubLObject) (tv_var)) : sbhl_search_vars.get_sbhl_true_tv(), thread);
-                                                                            sbhl_search_vars.$relevant_sbhl_tv_function$.bind(NIL != tv_var ? ((SubLObject) (RELEVANT_SBHL_TV_IS_GENERAL_TV)) : sbhl_search_vars.$relevant_sbhl_tv_function$.getDynamicValue(thread), thread);
-                                                                            if (NIL != tv_var) {
-                                                                                if (NIL != sbhl_paranoia.sbhl_object_type_checking_p()) {
-                                                                                    if (NIL == sbhl_search_vars.sbhl_true_tv_p(tv_var)) {
-                                                                                        {
-                                                                                            SubLObject pcase_var = sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread);
-                                                                                            if (pcase_var.eql($ERROR)) {
-                                                                                                sbhl_paranoia.sbhl_error(ONE_INTEGER, $str_alt16$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                            } else {
-                                                                                                if (pcase_var.eql($CERROR)) {
-                                                                                                    sbhl_paranoia.sbhl_cerror(ONE_INTEGER, $$$continue_anyway, $str_alt16$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                                } else {
-                                                                                                    if (pcase_var.eql($WARN)) {
-                                                                                                        Errors.warn($str_alt16$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
-                                                                                                    } else {
-                                                                                                        Errors.warn($str_alt21$_A_is_not_a_valid__sbhl_type_erro, sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread));
-                                                                                                        Errors.cerror($$$continue_anyway, $str_alt16$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                            {
-                                                                                SubLObject _prev_bind_0_53 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
-                                                                                SubLObject _prev_bind_1_54 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
-                                                                                SubLObject _prev_bind_2 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
-                                                                                SubLObject _prev_bind_3 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                                SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                                                try {
-                                                                                    sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)), thread);
-                                                                                    sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
-                                                                                    sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
-                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
-                                                                                    sbhl_module_vars.$sbhl_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)), thread);
-                                                                                    if ((NIL != sbhl_paranoia.suspend_sbhl_type_checkingP()) || (NIL != sbhl_module_utilities.apply_sbhl_module_type_test(node_var, sbhl_module_vars.get_sbhl_module(UNPROVIDED)))) {
-                                                                                        {
-                                                                                            SubLObject _prev_bind_0_55 = sbhl_search_vars.$sbhl_search_direction$.currentBinding(thread);
-                                                                                            SubLObject _prev_bind_1_56 = sbhl_link_vars.$sbhl_link_direction$.currentBinding(thread);
-                                                                                            SubLObject _prev_bind_2_57 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                                            try {
-                                                                                                sbhl_search_vars.$sbhl_search_direction$.bind(sbhl_search_vars.get_sbhl_backward_search_direction(), thread);
-                                                                                                sbhl_link_vars.$sbhl_link_direction$.bind(sbhl_module_utilities.sbhl_search_direction_to_link_direction(sbhl_search_vars.get_sbhl_backward_search_direction(), sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
-                                                                                                sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
-                                                                                                sbhl_marking_utilities.sbhl_mark_node_marked(node_var_49, UNPROVIDED);
-                                                                                                while (NIL != node_var_49) {
-                                                                                                    {
-                                                                                                        SubLObject tt_node_var = node_var_49;
-                                                                                                        SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_vars.get_sbhl_module($$isa));
-                                                                                                        SubLObject cdolist_list_var_58 = accessible_modules;
-                                                                                                        SubLObject module_var = NIL;
-                                                                                                        for (module_var = cdolist_list_var_58.first(); NIL != cdolist_list_var_58; cdolist_list_var_58 = cdolist_list_var_58.rest() , module_var = cdolist_list_var_58.first()) {
-                                                                                                            {
-                                                                                                                SubLObject _prev_bind_0_59 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                                                                                SubLObject _prev_bind_1_60 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                                                                try {
-                                                                                                                    sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
-                                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
-                                                                                                                    {
-                                                                                                                        SubLObject node = function_terms.naut_to_nart(tt_node_var);
-                                                                                                                        if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
-                                                                                                                            {
-                                                                                                                                SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                                if (NIL != d_link) {
-                                                                                                                                    {
-                                                                                                                                        SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                                        if (NIL != mt_links) {
-                                                                                                                                            {
-                                                                                                                                                SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
-                                                                                                                                                while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                                                                                                                                                    thread.resetMultipleValues();
-                                                                                                                                                    {
-                                                                                                                                                        SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                                                                                                        SubLObject tv_links = thread.secondMultipleValue();
-                                                                                                                                                        thread.resetMultipleValues();
-                                                                                                                                                        if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                                                                            {
-                                                                                                                                                                SubLObject _prev_bind_0_61 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                                                                                try {
-                                                                                                                                                                    sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                                                                    {
-                                                                                                                                                                        SubLObject iteration_state_62 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
-                                                                                                                                                                        while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_62)) {
-                                                                                                                                                                            thread.resetMultipleValues();
-                                                                                                                                                                            {
-                                                                                                                                                                                SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_62);
-                                                                                                                                                                                SubLObject link_nodes = thread.secondMultipleValue();
-                                                                                                                                                                                thread.resetMultipleValues();
-                                                                                                                                                                                if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                                                                    {
-                                                                                                                                                                                        SubLObject _prev_bind_0_63 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                                                                        try {
-                                                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                                                                            {
-                                                                                                                                                                                                SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                                                                                SubLObject cdolist_list_var_64 = new_list;
-                                                                                                                                                                                                SubLObject constant = NIL;
-                                                                                                                                                                                                for (constant = cdolist_list_var_64.first(); NIL != cdolist_list_var_64; cdolist_list_var_64 = cdolist_list_var_64.rest() , constant = cdolist_list_var_64.first()) {
-                                                                                                                                                                                                    if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(constant, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
-                                                                                                                                                                                                        sbhl_marking_utilities.sbhl_mark_node_marked(constant, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                                                                                                                                                                                        if (NIL != forts.fort_p(constant)) {
-                                                                                                                                                                                                            if (NIL != constant_p(constant)) {
-                                                                                                                                                                                                                hash_table_utilities.pushnew_hash(constant, omission_collection, omission_constants_hash, UNPROVIDED);
-                                                                                                                                                                                                            }
-                                                                                                                                                                                                        }
-                                                                                                                                                                                                    }
-                                                                                                                                                                                                }
-                                                                                                                                                                                            }
-                                                                                                                                                                                        } finally {
-                                                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_63, thread);
-                                                                                                                                                                                        }
-                                                                                                                                                                                    }
-                                                                                                                                                                                }
-                                                                                                                                                                                iteration_state_62 = dictionary_contents.do_dictionary_contents_next(iteration_state_62);
-                                                                                                                                                                            }
-                                                                                                                                                                        } 
-                                                                                                                                                                        dictionary_contents.do_dictionary_contents_finalize(iteration_state_62);
-                                                                                                                                                                    }
-                                                                                                                                                                } finally {
-                                                                                                                                                                    sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_61, thread);
-                                                                                                                                                                }
-                                                                                                                                                            }
-                                                                                                                                                        }
-                                                                                                                                                        iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                                                                                                                    }
-                                                                                                                                                } 
-                                                                                                                                                dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                } else {
-                                                                                                                                    sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt22$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                            if (NIL != sbhl_macros.do_sbhl_non_fort_linksP(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED))) {
-                                                                                                                                {
-                                                                                                                                    SubLObject csome_list_var = sbhl_link_methods.non_fort_instance_table_lookup(node);
-                                                                                                                                    SubLObject instance_tuple = NIL;
-                                                                                                                                    for (instance_tuple = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , instance_tuple = csome_list_var.first()) {
-                                                                                                                                        {
-                                                                                                                                            SubLObject datum = instance_tuple;
-                                                                                                                                            SubLObject current = datum;
-                                                                                                                                            SubLObject link_node = NIL;
-                                                                                                                                            SubLObject mt = NIL;
-                                                                                                                                            SubLObject tv = NIL;
-                                                                                                                                            destructuring_bind_must_consp(current, datum, $list_alt23);
-                                                                                                                                            link_node = current.first();
-                                                                                                                                            current = current.rest();
-                                                                                                                                            destructuring_bind_must_consp(current, datum, $list_alt23);
-                                                                                                                                            mt = current.first();
-                                                                                                                                            current = current.rest();
-                                                                                                                                            destructuring_bind_must_consp(current, datum, $list_alt23);
-                                                                                                                                            tv = current.first();
-                                                                                                                                            current = current.rest();
-                                                                                                                                            if (NIL == current) {
-                                                                                                                                                if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                                                                    {
-                                                                                                                                                        SubLObject _prev_bind_0_65 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                                                                        try {
-                                                                                                                                                            sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                                                            if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                                                {
-                                                                                                                                                                    SubLObject _prev_bind_0_66 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                                                    try {
-                                                                                                                                                                        sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                                                        {
-                                                                                                                                                                            SubLObject link_nodes = list(link_node);
-                                                                                                                                                                            SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                                                            SubLObject cdolist_list_var_67 = new_list;
-                                                                                                                                                                            SubLObject constant = NIL;
-                                                                                                                                                                            for (constant = cdolist_list_var_67.first(); NIL != cdolist_list_var_67; cdolist_list_var_67 = cdolist_list_var_67.rest() , constant = cdolist_list_var_67.first()) {
-                                                                                                                                                                                if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(constant, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
-                                                                                                                                                                                    sbhl_marking_utilities.sbhl_mark_node_marked(constant, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                                                                                                                                                                    if (NIL != forts.fort_p(constant)) {
-                                                                                                                                                                                        if (NIL != constant_p(constant)) {
-                                                                                                                                                                                            hash_table_utilities.pushnew_hash(constant, omission_collection, omission_constants_hash, UNPROVIDED);
-                                                                                                                                                                                        }
-                                                                                                                                                                                    }
-                                                                                                                                                                                }
-                                                                                                                                                                            }
-                                                                                                                                                                        }
-                                                                                                                                                                    } finally {
-                                                                                                                                                                        sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_66, thread);
-                                                                                                                                                                    }
-                                                                                                                                                                }
-                                                                                                                                                            }
-                                                                                                                                                        } finally {
-                                                                                                                                                            sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_65, thread);
-                                                                                                                                                        }
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            } else {
-                                                                                                                                                cdestructuring_bind_error(datum, $list_alt23);
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        } else {
-                                                                                                                            if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
-                                                                                                                                {
-                                                                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                                    SubLObject cdolist_list_var_68 = new_list;
-                                                                                                                                    SubLObject generating_fn = NIL;
-                                                                                                                                    for (generating_fn = cdolist_list_var_68.first(); NIL != cdolist_list_var_68; cdolist_list_var_68 = cdolist_list_var_68.rest() , generating_fn = cdolist_list_var_68.first()) {
-                                                                                                                                        {
-                                                                                                                                            SubLObject _prev_bind_0_69 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
-                                                                                                                                            try {
-                                                                                                                                                sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
-                                                                                                                                                {
-                                                                                                                                                    SubLObject link_nodes = funcall(generating_fn, node);
-                                                                                                                                                    SubLObject new_list_70 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                                    SubLObject cdolist_list_var_71 = new_list_70;
-                                                                                                                                                    SubLObject constant = NIL;
-                                                                                                                                                    for (constant = cdolist_list_var_71.first(); NIL != cdolist_list_var_71; cdolist_list_var_71 = cdolist_list_var_71.rest() , constant = cdolist_list_var_71.first()) {
-                                                                                                                                                        if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(constant, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
-                                                                                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(constant, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                                                                                                                                            if (NIL != forts.fort_p(constant)) {
-                                                                                                                                                                if (NIL != constant_p(constant)) {
-                                                                                                                                                                    hash_table_utilities.pushnew_hash(constant, omission_collection, omission_constants_hash, UNPROVIDED);
-                                                                                                                                                                }
-                                                                                                                                                            }
-                                                                                                                                                        }
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            } finally {
-                                                                                                                                                sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_69, thread);
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                } finally {
-                                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_60, thread);
-                                                                                                                    sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_59, thread);
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                    {
-                                                                                                        SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)));
-                                                                                                        SubLObject cdolist_list_var_72 = accessible_modules;
-                                                                                                        SubLObject module_var = NIL;
-                                                                                                        for (module_var = cdolist_list_var_72.first(); NIL != cdolist_list_var_72; cdolist_list_var_72 = cdolist_list_var_72.rest() , module_var = cdolist_list_var_72.first()) {
-                                                                                                            {
-                                                                                                                SubLObject _prev_bind_0_73 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                                                                                SubLObject _prev_bind_1_74 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                                                                try {
-                                                                                                                    sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
-                                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
-                                                                                                                    {
-                                                                                                                        SubLObject node = function_terms.naut_to_nart(node_var_49);
-                                                                                                                        if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
-                                                                                                                            {
-                                                                                                                                SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                                if (NIL != d_link) {
-                                                                                                                                    {
-                                                                                                                                        SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_link_vars.get_sbhl_link_direction(), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                                        if (NIL != mt_links) {
-                                                                                                                                            {
-                                                                                                                                                SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
-                                                                                                                                                while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                                                                                                                                                    thread.resetMultipleValues();
-                                                                                                                                                    {
-                                                                                                                                                        SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                                                                                                        SubLObject tv_links = thread.secondMultipleValue();
-                                                                                                                                                        thread.resetMultipleValues();
-                                                                                                                                                        if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                                                                            {
-                                                                                                                                                                SubLObject _prev_bind_0_75 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                                                                                try {
-                                                                                                                                                                    sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                                                                    {
-                                                                                                                                                                        SubLObject iteration_state_76 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
-                                                                                                                                                                        while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_76)) {
-                                                                                                                                                                            thread.resetMultipleValues();
-                                                                                                                                                                            {
-                                                                                                                                                                                SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_76);
-                                                                                                                                                                                SubLObject link_nodes = thread.secondMultipleValue();
-                                                                                                                                                                                thread.resetMultipleValues();
-                                                                                                                                                                                if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                                                                    {
-                                                                                                                                                                                        SubLObject _prev_bind_0_77 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                                                                        try {
-                                                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                                                                            {
-                                                                                                                                                                                                SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                                                                                SubLObject cdolist_list_var_78 = new_list;
-                                                                                                                                                                                                SubLObject node_vars_link_node = NIL;
-                                                                                                                                                                                                for (node_vars_link_node = cdolist_list_var_78.first(); NIL != cdolist_list_var_78; cdolist_list_var_78 = cdolist_list_var_78.rest() , node_vars_link_node = cdolist_list_var_78.first()) {
-                                                                                                                                                                                                    if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
-                                                                                                                                                                                                        sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
-                                                                                                                                                                                                        deck.deck_push(node_vars_link_node, recur_deck);
-                                                                                                                                                                                                    }
-                                                                                                                                                                                                }
-                                                                                                                                                                                            }
-                                                                                                                                                                                        } finally {
-                                                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_77, thread);
-                                                                                                                                                                                        }
-                                                                                                                                                                                    }
-                                                                                                                                                                                }
-                                                                                                                                                                                iteration_state_76 = dictionary_contents.do_dictionary_contents_next(iteration_state_76);
-                                                                                                                                                                            }
-                                                                                                                                                                        } 
-                                                                                                                                                                        dictionary_contents.do_dictionary_contents_finalize(iteration_state_76);
-                                                                                                                                                                    }
-                                                                                                                                                                } finally {
-                                                                                                                                                                    sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_75, thread);
-                                                                                                                                                                }
-                                                                                                                                                            }
-                                                                                                                                                        }
-                                                                                                                                                        iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                                                                                                                    }
-                                                                                                                                                } 
-                                                                                                                                                dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                } else {
-                                                                                                                                    sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt22$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        } else {
-                                                                                                                            if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
-                                                                                                                                {
-                                                                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                                    SubLObject cdolist_list_var_79 = new_list;
-                                                                                                                                    SubLObject generating_fn = NIL;
-                                                                                                                                    for (generating_fn = cdolist_list_var_79.first(); NIL != cdolist_list_var_79; cdolist_list_var_79 = cdolist_list_var_79.rest() , generating_fn = cdolist_list_var_79.first()) {
-                                                                                                                                        {
-                                                                                                                                            SubLObject _prev_bind_0_80 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
-                                                                                                                                            try {
-                                                                                                                                                sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
-                                                                                                                                                {
-                                                                                                                                                    SubLObject link_nodes = funcall(generating_fn, node);
-                                                                                                                                                    SubLObject new_list_81 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                                    SubLObject cdolist_list_var_82 = new_list_81;
-                                                                                                                                                    SubLObject node_vars_link_node = NIL;
-                                                                                                                                                    for (node_vars_link_node = cdolist_list_var_82.first(); NIL != cdolist_list_var_82; cdolist_list_var_82 = cdolist_list_var_82.rest() , node_vars_link_node = cdolist_list_var_82.first()) {
-                                                                                                                                                        if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
-                                                                                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
-                                                                                                                                                            deck.deck_push(node_vars_link_node, recur_deck);
-                                                                                                                                                        }
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            } finally {
-                                                                                                                                                sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_80, thread);
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                } finally {
-                                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_74, thread);
-                                                                                                                    sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_73, thread);
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                    node_var_49 = deck.deck_pop(recur_deck);
-                                                                                                } 
-                                                                                            } finally {
-                                                                                                sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_2_57, thread);
-                                                                                                sbhl_link_vars.$sbhl_link_direction$.rebind(_prev_bind_1_56, thread);
-                                                                                                sbhl_search_vars.$sbhl_search_direction$.rebind(_prev_bind_0_55, thread);
-                                                                                            }
-                                                                                        }
-                                                                                    } else {
-                                                                                        sbhl_paranoia.sbhl_warn(TWO_INTEGER, $str_alt24$Node__a_does_not_pass_sbhl_type_t, node_var, sbhl_module_utilities.get_sbhl_type_test(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                    }
-                                                                                } finally {
-                                                                                    sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
-                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3, thread);
-                                                                                    sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2, thread);
-                                                                                    sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1_54, thread);
-                                                                                    sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0_53, thread);
-                                                                                }
-                                                                            }
-                                                                        } finally {
-                                                                            sbhl_search_vars.$relevant_sbhl_tv_function$.rebind(_prev_bind_1_52, thread);
-                                                                            sbhl_search_vars.$sbhl_tv$.rebind(_prev_bind_0_51, thread);
-                                                                        }
-                                                                    }
-                                                                    sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_space$.getDynamicValue(thread));
-                                                                }
-                                                            } finally {
-                                                                sbhl_marking_vars.$sbhl_space$.rebind(_prev_bind_0_50, thread);
-                                                            }
-                                                        }
-                                                        sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                                    }
-                                                } finally {
-                                                    sbhl_marking_vars.$sbhl_gather_space$.rebind(_prev_bind_1_48, thread);
-                                                    sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_47, thread);
-                                                }
-                                            }
-                                        }
-                                        {
-                                            SubLObject cdolist_list_var_83 = kbs_utilities.all_quoted_instances_enhanced(omission_collection, NIL);
-                                            SubLObject constant = NIL;
-                                            for (constant = cdolist_list_var_83.first(); NIL != cdolist_list_var_83; cdolist_list_var_83 = cdolist_list_var_83.rest() , constant = cdolist_list_var_83.first()) {
-                                                if (NIL != constant_p(constant)) {
-                                                    hash_table_utilities.pushnew_hash(constant, omission_collection, omission_constants_hash, UNPROVIDED);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                if (NIL != fort_types_interface.predicateP(omission_predicate)) {
-                                    {
-                                        SubLObject pred_var = omission_predicate;
-                                        if (NIL != kb_mapping_macros.do_predicate_extent_index_key_validator(pred_var)) {
-                                            {
-                                                SubLObject iterator_var = kb_mapping_macros.new_predicate_extent_final_index_spec_iterator(pred_var);
-                                                SubLObject done_var = NIL;
-                                                SubLObject token_var = NIL;
-                                                while (NIL == done_var) {
-                                                    {
-                                                        SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                        SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                        if (NIL != valid) {
-                                                            {
-                                                                SubLObject final_index_iterator = NIL;
-                                                                try {
-                                                                    final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
-                                                                    {
-                                                                        SubLObject done_var_84 = NIL;
-                                                                        SubLObject token_var_85 = NIL;
-                                                                        while (NIL == done_var_84) {
-                                                                            {
-                                                                                SubLObject ass = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_85);
-                                                                                SubLObject valid_86 = makeBoolean(token_var_85 != ass);
-                                                                                if (NIL != valid_86) {
-                                                                                    {
-                                                                                        SubLObject constant = assertions_high.gaf_arg1(ass);
-                                                                                        if (NIL != constant_p(constant)) {
-                                                                                            hash_table_utilities.pushnew_hash(constant, omission_predicate, omission_constants_hash, UNPROVIDED);
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                                done_var_84 = makeBoolean(NIL == valid_86);
-                                                                            }
-                                                                        } 
-                                                                    }
-                                                                } finally {
-                                                                    {
-                                                                        SubLObject _prev_bind_0_87 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                        try {
-                                                                            $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                            if (NIL != final_index_iterator) {
-                                                                                kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                            }
-                                                                        } finally {
-                                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_87, thread);
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                        done_var = makeBoolean(NIL == valid);
-                                                    }
-                                                } 
-                                            }
-                                        }
-                                    }
-                                }
-                                {
-                                    SubLObject constant = NIL;
-                                    SubLObject inclusion_reason = NIL;
-                                    {
-                                        final Iterator cdohash_iterator = getEntrySetIterator(inclusion_constants_hash);
-                                        try {
-                                            while (iteratorHasNext(cdohash_iterator)) {
-                                                final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
-                                                constant = getEntryKey(cdohash_entry);
-                                                inclusion_reason = getEntryValue(cdohash_entry);
-                                                {
-                                                    SubLObject exclusion_reason = gethash(constant, omission_constants_hash, UNPROVIDED);
-                                                    if (NIL != exclusion_reason) {
-                                                        if (!((NIL != gethash(constant, $kbs_raw_constants_table$.getDynamicValue(thread), UNPROVIDED)) || (NIL != gethash(constant, $kbs_raw_constants_omission_table$.getDynamicValue(thread), UNPROVIDED)))) {
-                                                            hash_table_utilities.pushnew_hash(constant, list(inclusion_reason, exclusion_reason), $kbs_raw_constants_omission_table$.getDynamicValue(thread), UNPROVIDED);
-                                                            remhash(constant, $kbs_raw_constants_table$.getDynamicValue(thread));
-                                                        }
-                                                        omission_count = add(omission_count, ONE_INTEGER);
-                                                    } else {
-                                                        if ((NIL != definitional_predicate_set) && (NIL == gethash(constant, $kbs_raw_constants_table$.getDynamicValue(thread), UNPROVIDED))) {
-                                                            sethash(constant, $kbs_definitional_constant_table$.getDynamicValue(thread), definitional_predicate_set);
-                                                        }
-                                                        {
-                                                            SubLObject cdolist_list_var_88 = inclusion_reason;
-                                                            SubLObject inclusion_reason_col = NIL;
-                                                            for (inclusion_reason_col = cdolist_list_var_88.first(); NIL != cdolist_list_var_88; cdolist_list_var_88 = cdolist_list_var_88.rest() , inclusion_reason_col = cdolist_list_var_88.first()) {
-                                                                hash_table_utilities.pushnew_hash(constant, inclusion_reason_col, $kbs_raw_constants_table$.getDynamicValue(thread), UNPROVIDED);
-                                                            }
-                                                        }
-                                                        inclusion_count = add(inclusion_count, ONE_INTEGER);
-                                                    }
-                                                }
-                                            } 
-                                        } finally {
-                                            releaseEntrySetIterator(cdohash_iterator);
-                                        }
-                                    }
-                                }
-                                format(T, $str_alt30$___S_constants_included_via_the_c, inclusion_count, inclusion_collections);
-                                if ((NIL != omission_collections) || (NIL != omission_predicate)) {
-                                    format(T, $str_alt31$___S_constants_omitted_via_the__A, new SubLObject[]{ omission_count, NIL != omission_collections ? ((SubLObject) ($str_alt32$collections_)) : $str_alt33$, NIL != omission_predicate ? ((SubLObject) ($str_alt34$_predicate_)) : $str_alt33$, NIL != omission_collections ? ((SubLObject) (omission_collections)) : $str_alt33$, NIL != omission_predicate ? ((SubLObject) (omission_predicate)) : $str_alt33$ });
-                                }
-                            }
-                        }
-                    }
-                } finally {
-                    mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                    mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                }
-            }
-            format(T, $str_alt35$___S_total_constants_included___, hash_table_count($kbs_raw_constants_table$.getDynamicValue(thread)));
-            format(T, $str_alt36$___S_total_constants_omitted___, hash_table_count($kbs_raw_constants_omission_table$.getDynamicValue(thread)));
-            {
-                SubLObject cdohash_table = $kbs_raw_constants_table$.getDynamicValue(thread);
-                SubLObject constant = NIL;
-                SubLObject v = NIL;
-                {
-                    final Iterator cdohash_iterator = getEntrySetIterator(cdohash_table);
-                    try {
-                        while (iteratorHasNext(cdohash_iterator)) {
-                            final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
-                            constant = getEntryKey(cdohash_entry);
-                            v = getEntryValue(cdohash_entry);
-                            if (NIL == gethash(constant, $kbs_raw_constants_omission_table$.getDynamicValue(thread), UNPROVIDED)) {
-                                $kbs_raw_constants$.setDynamicValue(cons(constant, $kbs_raw_constants$.getDynamicValue(thread)), thread);
-                            }
-                        } 
-                    } finally {
-                        releaseEntrySetIterator(cdohash_iterator);
-                    }
-                }
-            }
-            format(T, $str_alt37$____S_total_raw_KBS_constants_ide, length($kbs_raw_constants$.getDynamicValue(thread)));
-            return $kbs_raw_constants$.getDynamicValue(thread);
-        }
     }
 
     public static SubLObject compute_kbs_raw_constants() {
@@ -2492,7 +1173,7 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
                             final SubLObject mess = $$$mapping_Cyc_constants;
                             final SubLObject total = id_index_count(idx);
                             SubLObject sofar = ZERO_INTEGER;
-                            assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
+                            assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
                             final SubLObject _prev_bind_0_$24 = $last_percent_progress_index$.currentBinding(thread);
                             final SubLObject _prev_bind_1_$14 = $last_percent_progress_prediction$.currentBinding(thread);
                             final SubLObject _prev_bind_6 = $within_noting_percent_progress$.currentBinding(thread);
@@ -3261,161 +1942,14 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return memoization_state.caching_results(results);
     }
 
-    /**
-     * Return a list of all skolems in the KB subset
-     */
-    @LispMethod(comment = "Return a list of all skolems in the KB subset")
-    public static final SubLObject kbs_skolems_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return $kbs_skolems$.getDynamicValue(thread);
-        }
-    }
-
-    /**
-     * Return a list of all skolems in the KB subset
-     */
-    @LispMethod(comment = "Return a list of all skolems in the KB subset")
     public static SubLObject kbs_skolems() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return $kbs_skolems$.getDynamicValue(thread);
-    }/**
-     * Return a list of all skolems in the KB subset
-     */
-
-
-    /**
-     * unused
-     */
-    @LispMethod(comment = "unused")
-    public static final SubLObject kbs_skolem_p_alt(SubLObject v_object) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return subl_promotions.memberP(v_object, $kbs_skolems$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED);
-        }
     }
 
-    /**
-     * unused
-     */
-    @LispMethod(comment = "unused")
     public static SubLObject kbs_skolem_p(final SubLObject v_object) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return subl_promotions.memberP(v_object, $kbs_skolems$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED);
-    }/**
-     * unused
-     */
-
-
-    public static final SubLObject compute_kbs_skolems_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != kbs_utilities.$skip_compute_kbs_skolemsP$.getDynamicValue(thread)) {
-                $kbs_skolems$.setDynamicValue(NIL, thread);
-            } else {
-                {
-                    SubLObject state = new_memoization_state(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    SubLObject local_state = state;
-                    {
-                        SubLObject _prev_bind_0 = $memoization_state$.currentBinding(thread);
-                        try {
-                            $memoization_state$.bind(local_state, thread);
-                            {
-                                SubLObject original_memoization_process = NIL;
-                                if ((NIL != local_state) && (NIL == memoization_state_lock(local_state))) {
-                                    original_memoization_process = memoization_state_get_current_process_internal(local_state);
-                                    {
-                                        SubLObject current_proc = current_process();
-                                        if (NIL == original_memoization_process) {
-                                            memoization_state_set_current_process_internal(local_state, current_proc);
-                                        } else {
-                                            if (original_memoization_process != current_proc) {
-                                                Errors.error($str_alt38$Invalid_attempt_to_reuse_memoizat);
-                                            }
-                                        }
-                                    }
-                                }
-                                try {
-                                    if (!((((NIL != $kbs_raw_constants$.getDynamicValue(thread)) && $kbs_raw_constants_table$.getDynamicValue(thread).isHashtable()) && $kbs_raw_constants_omission_table$.getDynamicValue(thread).isHashtable()) && $kbs_definitional_constant_table$.getDynamicValue(thread).isHashtable())) {
-                                        Errors.cerror($$$Continue, $str_alt40$compute_kbs_skolems_requirements_);
-                                    }
-                                } finally {
-                                    {
-                                        SubLObject _prev_bind_0_89 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                        try {
-                                            $is_thread_performing_cleanupP$.bind(T, thread);
-                                            {
-                                                SubLObject all_skolems = NIL;
-                                                SubLObject kbs_skolems = NIL;
-                                                {
-                                                    SubLObject _prev_bind_0_90 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                                                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                                                    try {
-                                                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                                                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                                                        all_skolems = isa.all_fort_instances($$SkolemFunction, UNPROVIDED, UNPROVIDED);
-                                                    } finally {
-                                                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                                                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0_90, thread);
-                                                    }
-                                                }
-                                                {
-                                                    SubLObject list_var = all_skolems;
-                                                    $progress_note$.setDynamicValue($$$Computing_KBS_skolems, thread);
-                                                    $progress_start_time$.setDynamicValue(get_universal_time(), thread);
-                                                    $progress_total$.setDynamicValue(length(list_var), thread);
-                                                    $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
-                                                    {
-                                                        SubLObject _prev_bind_0_91 = $last_percent_progress_index$.currentBinding(thread);
-                                                        SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                                                        SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                                                        SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                                                        try {
-                                                            $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                                                            $last_percent_progress_prediction$.bind(NIL, thread);
-                                                            $within_noting_percent_progress$.bind(T, thread);
-                                                            $percent_progress_start_time$.bind(get_universal_time(), thread);
-                                                            noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
-                                                            {
-                                                                SubLObject csome_list_var = list_var;
-                                                                SubLObject skolem = NIL;
-                                                                for (skolem = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , skolem = csome_list_var.first()) {
-                                                                    note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
-                                                                    $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
-                                                                    if (NIL != com.cyc.cycjava.cycl.kbs_identification.compute_kbs_skolem_p(skolem)) {
-                                                                        kbs_skolems = cons(skolem, kbs_skolems);
-                                                                    }
-                                                                }
-                                                            }
-                                                            noting_percent_progress_postamble();
-                                                        } finally {
-                                                            $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                                                            $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                                                            $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                                                            $last_percent_progress_index$.rebind(_prev_bind_0_91, thread);
-                                                        }
-                                                    }
-                                                }
-                                                $kbs_skolems$.setDynamicValue(kbs_skolems, thread);
-                                            }
-                                            format(T, $str_alt43$____S_total_KBS_skolems_identifie, length($kbs_skolems$.getDynamicValue(thread)));
-                                            if ((NIL != local_state) && (NIL == original_memoization_process)) {
-                                                memoization_state_set_current_process_internal(local_state, NIL);
-                                            }
-                                        } finally {
-                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_89, thread);
-                                        }
-                                    }
-                                }
-                            }
-                        } finally {
-                            $memoization_state$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject compute_kbs_skolems() {
@@ -3514,45 +2048,6 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    public static final SubLObject compute_kbs_skolem_p_alt(SubLObject skolem) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                if (NIL != constant_p(skolem)) {
-                    {
-                        SubLObject defining_assertions = skolems.skolem_defn_assertions_robust(skolem, UNPROVIDED);
-                        if (NIL != defining_assertions) {
-                            {
-                                SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                                SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                                try {
-                                    mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                                    mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                                    {
-                                        SubLObject non_kbs = NIL;
-                                        SubLObject rest = NIL;
-                                        for (rest = defining_assertions; !((NIL != non_kbs) || (NIL == rest)); rest = rest.rest()) {
-                                            {
-                                                SubLObject assertion = rest.first();
-                                                non_kbs = makeBoolean(NIL == com.cyc.cycjava.cycl.kbs_identification.compute_kbs_skolem_assertion_p(skolem, assertion));
-                                            }
-                                        }
-                                        result = makeBoolean(NIL == non_kbs);
-                                    }
-                                } finally {
-                                    mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                                    mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                                }
-                            }
-                        }
-                    }
-                }
-                return result;
-            }
-        }
-    }
-
     public static SubLObject compute_kbs_skolem_p(final SubLObject skolem) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject result = NIL;
@@ -3580,25 +2075,6 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return result;
     }
 
-    public static final SubLObject compute_kbs_skolem_assertion_p_alt(SubLObject skolem, SubLObject assertion) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != list_utilities.tree_find_if(symbol_function(KBS_SKOLEM_ASSERTION_FAST_FAIL_CONSTANT_P), assertions_high.assertion_cons(assertion), UNPROVIDED)) {
-                return NIL;
-            }
-            thread.resetMultipleValues();
-            {
-                SubLObject el_formula = uncanonicalizer.assertion_el_formula_memoized(assertion);
-                SubLObject el_mt = thread.secondMultipleValue();
-                thread.resetMultipleValues();
-                if ((((NIL == el_formula) || (NIL != list_utilities.tree_find(skolem, el_formula, UNPROVIDED, UNPROVIDED))) || (NIL != com.cyc.cycjava.cycl.kbs_identification.non_kbs_raw_el_formula_p(el_mt))) || (NIL != com.cyc.cycjava.cycl.kbs_identification.non_kbs_raw_el_formula_p(el_formula))) {
-                    return NIL;
-                }
-            }
-            return T;
-        }
-    }
-
     public static SubLObject compute_kbs_skolem_assertion_p(final SubLObject skolem, final SubLObject assertion) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != list_utilities.tree_find_if(symbol_function(KBS_SKOLEM_ASSERTION_FAST_FAIL_CONSTANT_P), assertions_high.assertion_cons(assertion), UNPROVIDED)) {
@@ -3614,56 +2090,13 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return T;
     }
 
-    /**
-     * Return T iff OBJECT is a constant that couldn't possibly be allowed
-     * in the formula for a skolem function expression in the KB Subset
-     */
-    @LispMethod(comment = "Return T iff OBJECT is a constant that couldn\'t possibly be allowed\r\nin the formula for a skolem function expression in the KB Subset\nReturn T iff OBJECT is a constant that couldn\'t possibly be allowed\nin the formula for a skolem function expression in the KB Subset")
-    public static final SubLObject kbs_skolem_assertion_fast_fail_constant_p_alt(SubLObject v_object) {
-        return makeBoolean((NIL != constant_p(v_object)) && (!((NIL != com.cyc.cycjava.cycl.kbs_identification.kbs_raw_constant_p(v_object)) || (NIL != fort_types_interface.skolem_function_p(v_object)))));
-    }
-
-    /**
-     * Return T iff OBJECT is a constant that couldn't possibly be allowed
-     * in the formula for a skolem function expression in the KB Subset
-     */
-    @LispMethod(comment = "Return T iff OBJECT is a constant that couldn\'t possibly be allowed\r\nin the formula for a skolem function expression in the KB Subset\nReturn T iff OBJECT is a constant that couldn\'t possibly be allowed\nin the formula for a skolem function expression in the KB Subset")
     public static SubLObject kbs_skolem_assertion_fast_fail_constant_p(final SubLObject v_object) {
         return makeBoolean(((NIL != constant_p(v_object)) && (NIL == kbs_raw_constant_p(v_object))) && (NIL == fort_types_interface.skolem_function_p(v_object)));
-    }/**
-     * Return T iff OBJECT is a constant that couldn't possibly be allowed
-     * in the formula for a skolem function expression in the KB Subset
-     */
-
-
-    /**
-     * Return a list of all constants in the KB subset
-     */
-    @LispMethod(comment = "Return a list of all constants in the KB subset")
-    public static final SubLObject kbs_constants_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return $kbs_constants$.getDynamicValue(thread);
-        }
     }
 
-    /**
-     * Return a list of all constants in the KB subset
-     */
-    @LispMethod(comment = "Return a list of all constants in the KB subset")
     public static SubLObject kbs_constants() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return $kbs_constants$.getDynamicValue(thread);
-    }/**
-     * Return a list of all constants in the KB subset
-     */
-
-
-    public static final SubLObject kbs_constant_p_alt(SubLObject constant) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return getkeyhash(constant, $kbs_constant_table$.getDynamicValue(thread));
-        }
     }
 
     public static SubLObject kbs_constant_p(final SubLObject constant) {
@@ -3671,23 +2104,8 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return keyhash.getkeyhash(constant, $kbs_constant_table$.getDynamicValue(thread));
     }
 
-    public static final SubLObject non_kbs_constant_p_alt(SubLObject constant) {
-        return makeBoolean((NIL != constant_p(constant)) && (NIL == com.cyc.cycjava.cycl.kbs_identification.kbs_constant_p(constant)));
-    }
-
     public static SubLObject non_kbs_constant_p(final SubLObject constant) {
         return makeBoolean((NIL != constant_p(constant)) && (NIL == kbs_constant_p(constant)));
-    }
-
-    public static final SubLObject initialize_kbs_constant_table_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject kbs_constants = com.cyc.cycjava.cycl.kbs_identification.kbs_constants();
-                $kbs_constant_table$.setDynamicValue(keyhash_utilities.keyhash_list_elements(kbs_constants, symbol_function(EQ), UNPROVIDED), thread);
-                return keyhash_count($kbs_constant_table$.getDynamicValue(thread));
-            }
-        }
     }
 
     public static SubLObject initialize_kbs_constant_table() {
@@ -3695,19 +2113,6 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         final SubLObject kbs_constants = kbs_constants();
         $kbs_constant_table$.setDynamicValue(keyhash_utilities.keyhash_list_elements(kbs_constants, symbol_function(EQ), UNPROVIDED), thread);
         return keyhash.keyhash_count($kbs_constant_table$.getDynamicValue(thread));
-    }
-
-    public static final SubLObject compute_kbs_constants_alt() {
-        com.cyc.cycjava.cycl.kbs_identification.compute_kbs_raw_constants();
-        com.cyc.cycjava.cycl.kbs_identification.compute_kbs_skolems();
-        {
-            SubLObject tiny_constants = core.all_core_constants();
-            SubLObject kbs_raw_constants = com.cyc.cycjava.cycl.kbs_identification.kbs_raw_constants();
-            SubLObject kbs_skolems = com.cyc.cycjava.cycl.kbs_identification.kbs_skolems();
-            $kbs_constants$.setDynamicValue(list_utilities.remove_duplicate_forts(cconcatenate(tiny_constants, new SubLObject[]{ kbs_raw_constants, kbs_skolems })));
-            com.cyc.cycjava.cycl.kbs_identification.initialize_kbs_constant_table();
-            return NIL;
-        }
     }
 
     public static SubLObject compute_kbs_constants() {
@@ -3721,97 +2126,17 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    /**
-     * Return a list of all NARTs in the KB subset
-     */
-    @LispMethod(comment = "Return a list of all NARTs in the KB subset")
-    public static final SubLObject kbs_narts_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return $kbs_narts$.getDynamicValue(thread);
-        }
-    }
-
-    /**
-     * Return a list of all NARTs in the KB subset
-     */
-    @LispMethod(comment = "Return a list of all NARTs in the KB subset")
     public static SubLObject kbs_narts() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return $kbs_narts$.getDynamicValue(thread);
-    }/**
-     * Return a list of all NARTs in the KB subset
-     */
-
-
-    public static final SubLObject kbs_nart_p_alt(SubLObject nart) {
-        return makeBoolean((NIL != com.cyc.cycjava.cycl.kbs_identification.kbs_nart_formula_p(nart_el_formula(nart))) && (NIL != (NIL != Strings.stringE($$$akb, kbs_utilities.get_kbs_name(), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(((!((NIL != kbs_utilities.quoted_isa_enhanced_in_any_mtP(nart, $$TKBTerm_Proprietary)) || (NIL != isa.isa_in_any_mtP(nart, $$TKBTerm_Proprietary)))) || (NIL != kbs_utilities.quoted_isa_enhanced_in_any_mtP(nart, $$ProprietaryTerm))) || (NIL != isa.isa_in_any_mtP(nart, $$ProprietaryTerm))))) : NIL != Strings.stringE($$$cyfi, kbs_utilities.get_kbs_name(), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(((((((((((NIL != kbs_utilities.quoted_isa_enhanced_in_any_mtP(nart, $$Cy_FiProprietaryTerm)) || (NIL != isa.isa_in_any_mtP(nart, $$Cy_FiProprietaryTerm))) || (!((((NIL != kbs_utilities.quoted_isa_enhanced_in_any_mtP(nart, $$ResearchCycConstant)) || (NIL != isa.isa_in_any_mtP(nart, $$ResearchCycConstant))) || (NIL != kbs_utilities.quoted_isa_enhanced_in_any_mtP(nart, $$ScaffoldingConstant))) || (NIL != isa.isa_in_any_mtP(nart, $$ScaffoldingConstant))))) || (NIL != kbs_utilities.quoted_isa_enhanced_in_any_mtP(nart, $$ProprietaryTerm))) || (NIL != isa.isa_in_any_mtP(nart, $$ProprietaryTerm))) || (NIL != kbs_utilities.quoted_isa_enhanced_in_any_mtP(nart, $$TerroristAgent))) || (NIL != isa.isa_in_any_mtP(nart, $$TerroristAgent))) || (NIL != kbs_utilities.quoted_isa_enhanced_in_any_mtP(nart, $$TerroristAct))) || (NIL != isa.isa_in_any_mtP(nart, $$TerroristAct))) || (NIL != kbs_utilities.quoted_isa_enhanced_in_any_mtP(nart, $$HostileSocialAction))) || (NIL != isa.isa_in_any_mtP(nart, $$HostileSocialAction))))) : NIL != Strings.stringE($$$research, kbs_utilities.get_kbs_name(), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(!((((((((NIL != kbs_utilities.quoted_isa_enhanced_in_any_mtP(nart, $$ProprietaryTerm)) || (NIL != isa.isa_in_any_mtP(nart, $$ProprietaryTerm))) || (NIL != kbs_utilities.quoted_isa_enhanced_in_any_mtP(nart, $$TerroristAgent))) || (NIL != isa.isa_in_any_mtP(nart, $$TerroristAgent))) || (NIL != kbs_utilities.quoted_isa_enhanced_in_any_mtP(nart, $$TerroristAct))) || (NIL != isa.isa_in_any_mtP(nart, $$TerroristAct))) || (NIL != kbs_utilities.quoted_isa_enhanced_in_any_mtP(nart, $$HostileSocialAction))) || (NIL != isa.isa_in_any_mtP(nart, $$HostileSocialAction)))))) : T)));
     }
 
     public static SubLObject kbs_nart_p(final SubLObject nart) {
         return makeBoolean(((NIL != kbs_nart_formula_p(narts_high.nart_el_formula(nart))) && (NIL == list_utilities.member_equalP(nart, kbs_utilities.get_kbs_section_omission_terms(kbs_utilities.get_kbs_sections().first())))) && (NIL != (NIL != Strings.stringE($$$akb, kbs_utilities.get_kbs_name(), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED) ? makeBoolean((((NIL == kbs_utilities.quoted_isa_enhanced_in_any_mtP(nart, $$TKBTerm_Proprietary)) && (NIL == isa.isa_in_any_mtP(nart, $$TKBTerm_Proprietary))) || (NIL != kbs_utilities.quoted_isa_enhanced_in_any_mtP(nart, $$ProprietaryTerm))) || (NIL != isa.isa_in_any_mtP(nart, $$ProprietaryTerm))) : NIL != Strings.stringE($$$cyfi, kbs_utilities.get_kbs_name(), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED) ? makeBoolean(((((((((((NIL != kbs_utilities.quoted_isa_enhanced_in_any_mtP(nart, $$Cy_FiProprietaryTerm)) || (NIL != isa.isa_in_any_mtP(nart, $$Cy_FiProprietaryTerm))) || ((((NIL == kbs_utilities.quoted_isa_enhanced_in_any_mtP(nart, $$ResearchCycConstant)) && (NIL == isa.isa_in_any_mtP(nart, $$ResearchCycConstant))) && (NIL == kbs_utilities.quoted_isa_enhanced_in_any_mtP(nart, $$ScaffoldingConstant))) && (NIL == isa.isa_in_any_mtP(nart, $$ScaffoldingConstant)))) || (NIL != kbs_utilities.quoted_isa_enhanced_in_any_mtP(nart, $$ProprietaryTerm))) || (NIL != isa.isa_in_any_mtP(nart, $$ProprietaryTerm))) || (NIL != kbs_utilities.quoted_isa_enhanced_in_any_mtP(nart, $$TerroristAgent))) || (NIL != isa.isa_in_any_mtP(nart, $$TerroristAgent))) || (NIL != kbs_utilities.quoted_isa_enhanced_in_any_mtP(nart, $$TerroristAct))) || (NIL != isa.isa_in_any_mtP(nart, $$TerroristAct))) || (NIL != kbs_utilities.quoted_isa_enhanced_in_any_mtP(nart, $$HostileSocialAction))) || (NIL != isa.isa_in_any_mtP(nart, $$HostileSocialAction))) : NIL != Strings.stringE($$$research, kbs_utilities.get_kbs_name(), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED) ? makeBoolean((((((((NIL == kbs_utilities.quoted_isa_enhanced_in_any_mtP(nart, $$ProprietaryTerm)) && (NIL == isa.isa_in_any_mtP(nart, $$ProprietaryTerm))) && (NIL == kbs_utilities.quoted_isa_enhanced_in_any_mtP(nart, $$TerroristAgent))) && (NIL == isa.isa_in_any_mtP(nart, $$TerroristAgent))) && (NIL == kbs_utilities.quoted_isa_enhanced_in_any_mtP(nart, $$TerroristAct))) && (NIL == isa.isa_in_any_mtP(nart, $$TerroristAct))) && (NIL == kbs_utilities.quoted_isa_enhanced_in_any_mtP(nart, $$HostileSocialAction))) && (NIL == isa.isa_in_any_mtP(nart, $$HostileSocialAction))) : T)));
     }
 
-    public static final SubLObject kbs_nart_formula_p_alt(SubLObject nart_formula) {
-        return makeBoolean(nart_formula.isCons() && (NIL == list_utilities.tree_find_if(symbol_function(NON_KBS_CONSTANT_P), nart_formula, UNPROVIDED)));
-    }
-
     public static SubLObject kbs_nart_formula_p(final SubLObject nart_formula) {
         return makeBoolean(nart_formula.isCons() && (NIL == list_utilities.tree_find_if(symbol_function(NON_KBS_CONSTANT_P), nart_formula, UNPROVIDED)));
-    }
-
-    public static final SubLObject compute_kbs_narts_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject narts = NIL;
-                SubLObject idx = do_narts_table();
-                SubLObject total = id_index_count(idx);
-                SubLObject sofar = ZERO_INTEGER;
-                SubLTrampolineFile.checkType($$$Computing_KBS_NARTs, STRINGP);
-                {
-                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                    try {
-                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                        $last_percent_progress_prediction$.bind(NIL, thread);
-                        $within_noting_percent_progress$.bind(T, thread);
-                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                        noting_percent_progress_preamble($$$Computing_KBS_NARTs);
-                        if (NIL == do_id_index_empty_p(idx, $SKIP)) {
-                            {
-                                SubLObject id = do_id_index_next_id(idx, T, NIL, NIL);
-                                SubLObject state_var = do_id_index_next_state(idx, T, id, NIL);
-                                SubLObject nart = NIL;
-                                while (NIL != id) {
-                                    nart = do_id_index_state_object(idx, $SKIP, id, state_var);
-                                    if (NIL != do_id_index_id_and_object_validP(id, nart, $SKIP)) {
-                                        note_percent_progress(sofar, total);
-                                        sofar = add(sofar, ONE_INTEGER);
-                                        if (NIL != com.cyc.cycjava.cycl.kbs_identification.kbs_nart_p(nart)) {
-                                            narts = cons(nart, narts);
-                                        }
-                                    }
-                                    id = do_id_index_next_id(idx, T, id, state_var);
-                                    state_var = do_id_index_next_state(idx, T, id, state_var);
-                                } 
-                            }
-                        }
-                        noting_percent_progress_postamble();
-                    } finally {
-                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                $kbs_narts$.setDynamicValue(narts, thread);
-            }
-            format(T, $str_alt58$____S_total_KBS_NARTs_identified_, length($kbs_narts$.getDynamicValue(thread)));
-            return NIL;
-        }
     }
 
     public static SubLObject compute_kbs_narts() {
@@ -3821,7 +2146,7 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         final SubLObject mess = $$$Computing_KBS_narts;
         final SubLObject total = id_index_count(idx);
         SubLObject sofar = ZERO_INTEGER;
-        assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
+        assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
         final SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
         final SubLObject _prev_bind_2 = $last_percent_progress_prediction$.currentBinding(thread);
         final SubLObject _prev_bind_3 = $within_noting_percent_progress$.currentBinding(thread);
@@ -3899,86 +2224,14 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    /**
-     * Return a list of all FORTs in the KB subset
-     */
-    @LispMethod(comment = "Return a list of all FORTs in the KB subset")
-    public static final SubLObject kbs_forts_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return $kbs_forts$.getDynamicValue(thread);
-        }
-    }
-
-    /**
-     * Return a list of all FORTs in the KB subset
-     */
-    @LispMethod(comment = "Return a list of all FORTs in the KB subset")
     public static SubLObject kbs_forts() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return $kbs_forts$.getDynamicValue(thread);
-    }/**
-     * Return a list of all FORTs in the KB subset
-     */
-
-
-    /**
-     * Return T iff FORT is a fort is in the KB subset
-     */
-    @LispMethod(comment = "Return T iff FORT is a fort is in the KB subset")
-    public static final SubLObject kbs_fort_p_alt(SubLObject fort) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return getkeyhash(fort, $kbs_fort_table$.getDynamicValue(thread));
-        }
     }
 
-    /**
-     * Return T iff FORT is a fort is in the KB subset
-     */
-    @LispMethod(comment = "Return T iff FORT is a fort is in the KB subset")
     public static SubLObject kbs_fort_p(final SubLObject fort) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return keyhash.getkeyhash(fort, $kbs_fort_table$.getDynamicValue(thread));
-    }/**
-     * Return T iff FORT is a fort is in the KB subset
-     */
-
-
-    public static final SubLObject why_kbs_fortP_alt(SubLObject fort) {
-        {
-            SubLObject supports = NIL;
-            if (NIL != constant_p(fort)) {
-                {
-                    SubLObject cdolist_list_var = com.cyc.cycjava.cycl.kbs_identification.why_kbs_raw_constantP(fort);
-                    SubLObject support = NIL;
-                    for (support = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , support = cdolist_list_var.first()) {
-                        supports = cons(support, supports);
-                    }
-                }
-            } else {
-                supports = cons($str_alt59$All_KB_subset_requirements_met_, supports);
-            }
-            {
-                SubLObject splicing_gafs = kbs_add_redundant.kbs_additional_redundant_definitional_info(fort);
-                if (NIL != splicing_gafs) {
-                    supports = cons($str_alt33$, supports);
-                    supports = cons($str_alt60$Also__the_following_GAFs_will_be_, supports);
-                    {
-                        SubLObject cdolist_list_var = splicing_gafs;
-                        SubLObject splicing_gaf = NIL;
-                        for (splicing_gaf = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , splicing_gaf = cdolist_list_var.first()) {
-                            {
-                                SubLObject formula = splicing_gaf.first();
-                                SubLObject mt = second(splicing_gaf);
-                                supports = cons(arguments.make_hl_support($OPAQUE, formula, mt, UNPROVIDED), supports);
-                            }
-                        }
-                    }
-                }
-            }
-            return nreverse(supports);
-        }
     }
 
     public static SubLObject why_kbs_fortP(final SubLObject fort) {
@@ -4013,44 +2266,8 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return nreverse(supports);
     }
 
-    /**
-     * Return T iff FORT is a fort that is not in the KB subset
-     */
-    @LispMethod(comment = "Return T iff FORT is a fort that is not in the KB subset")
-    public static final SubLObject non_kbs_fort_p_alt(SubLObject fort) {
-        return makeBoolean((NIL != forts.fort_p(fort)) && (NIL == com.cyc.cycjava.cycl.kbs_identification.kbs_fort_p(fort)));
-    }
-
-    /**
-     * Return T iff FORT is a fort that is not in the KB subset
-     */
-    @LispMethod(comment = "Return T iff FORT is a fort that is not in the KB subset")
     public static SubLObject non_kbs_fort_p(final SubLObject fort) {
         return makeBoolean((NIL != forts.fort_p(fort)) && (NIL == kbs_fort_p(fort)));
-    }/**
-     * Return T iff FORT is a fort that is not in the KB subset
-     */
-
-
-    public static final SubLObject why_non_kbs_fortP_alt(SubLObject fort) {
-        if (NIL != constant_p(fort)) {
-            return com.cyc.cycjava.cycl.kbs_identification.why_non_kbs_raw_constantP(fort);
-        } else {
-            {
-                SubLObject fort_el_formula = forts.fort_el_formula(fort);
-                SubLObject fort_non_forts = list_utilities.remove_duplicate_forts(list_utilities.tree_find_all_if(NON_KBS_FORT_P, fort_el_formula, UNPROVIDED));
-                SubLObject supports = NIL;
-                supports = cons($str_alt63$The_term_contains_terms_not_in_th, supports);
-                {
-                    SubLObject cdolist_list_var = fort_non_forts;
-                    SubLObject fort_non_fort = NIL;
-                    for (fort_non_fort = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , fort_non_fort = cdolist_list_var.first()) {
-                        supports = cons(fort_non_fort, supports);
-                    }
-                }
-                return nreverse(supports);
-            }
-        }
     }
 
     public static SubLObject why_non_kbs_fortP(final SubLObject fort) {
@@ -4072,18 +2289,6 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return nreverse(supports);
     }
 
-    public static final SubLObject kbs_definitional_fort_p_alt(SubLObject fort) {
-        if (NIL != constant_p(fort)) {
-            return com.cyc.cycjava.cycl.kbs_identification.kbs_definitional_constant_p(fort);
-        } else {
-            if (NIL != nart_p(fort)) {
-                return list_utilities.tree_find_if(KBS_DEFINITIONAL_FORT_P, nart_el_formula(fort), UNPROVIDED);
-            } else {
-                return NIL;
-            }
-        }
-    }
-
     public static SubLObject kbs_definitional_fort_p(final SubLObject fort) {
         if (NIL != constant_p(fort)) {
             return kbs_definitional_constant_p(fort);
@@ -4094,23 +2299,8 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    public static final SubLObject non_kbs_definitional_fort_p_alt(SubLObject fort) {
-        return makeBoolean(NIL == com.cyc.cycjava.cycl.kbs_identification.kbs_definitional_fort_p(fort));
-    }
-
     public static SubLObject non_kbs_definitional_fort_p(final SubLObject fort) {
         return makeBoolean(NIL == kbs_definitional_fort_p(fort));
-    }
-
-    public static final SubLObject initialize_kbs_fort_table_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject kbs_forts = com.cyc.cycjava.cycl.kbs_identification.kbs_forts();
-                $kbs_fort_table$.setDynamicValue(keyhash_utilities.keyhash_list_elements(kbs_forts, symbol_function(EQ), UNPROVIDED), thread);
-                return keyhash_count($kbs_fort_table$.getDynamicValue(thread));
-            }
-        }
     }
 
     public static SubLObject initialize_kbs_fort_table() {
@@ -4120,95 +2310,9 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return keyhash.keyhash_count($kbs_fort_table$.getDynamicValue(thread));
     }
 
-    /**
-     * Remove FORT from the KB subset.
-     */
-    @LispMethod(comment = "Remove FORT from the KB subset.")
-    public static final SubLObject unmark_kbs_fort_alt(SubLObject fort) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return remkeyhash(fort, $kbs_fort_table$.getDynamicValue(thread));
-        }
-    }
-
-    /**
-     * Remove FORT from the KB subset.
-     */
-    @LispMethod(comment = "Remove FORT from the KB subset.")
     public static SubLObject unmark_kbs_fort(final SubLObject fort) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return keyhash.remkeyhash(fort, $kbs_fort_table$.getDynamicValue(thread));
-    }/**
-     * Remove FORT from the KB subset.
-     */
-
-
-    public static final SubLObject unmark_kbs_fort_and_dependents_alt(SubLObject fort) {
-        {
-            SubLObject assertion_count = ZERO_INTEGER;
-            SubLObject fort_count = ZERO_INTEGER;
-            if (NIL != com.cyc.cycjava.cycl.kbs_identification.kbs_fort_p(fort)) {
-                com.cyc.cycjava.cycl.kbs_identification.unmark_kbs_fort(fort);
-                fort_count = add(fort_count, ONE_INTEGER);
-                if (NIL != kb_mapping_macros.do_term_index_key_validator(fort, NIL)) {
-                    {
-                        SubLObject iterator_var = kb_mapping_macros.new_term_final_index_spec_iterator(fort, NIL);
-                        SubLObject done_var = NIL;
-                        SubLObject token_var = NIL;
-                        while (NIL == done_var) {
-                            {
-                                SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                if (NIL != valid) {
-                                    {
-                                        SubLObject final_index_iterator = NIL;
-                                        try {
-                                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, NIL, NIL, NIL);
-                                            {
-                                                SubLObject done_var_92 = NIL;
-                                                SubLObject token_var_93 = NIL;
-                                                while (NIL == done_var_92) {
-                                                    {
-                                                        SubLObject a = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_93);
-                                                        SubLObject valid_94 = makeBoolean(token_var_93 != a);
-                                                        if (NIL != valid_94) {
-                                                            if (NIL != kb_mapping_macros.do_term_index_assertion_match_p(a, final_index_spec)) {
-                                                                if (NIL != function_terms.tou_assertionP(a)) {
-                                                                    com.cyc.cycjava.cycl.kbs_identification.unmark_kbs_fort_and_dependents(assertions_high.gaf_arg1(a));
-                                                                }
-                                                                if (NIL != com.cyc.cycjava.cycl.kbs_identification.kbs_assertion_p(a)) {
-                                                                    com.cyc.cycjava.cycl.kbs_identification.unmark_kbs_assertion(a);
-                                                                    assertion_count = add(assertion_count, ONE_INTEGER);
-                                                                }
-                                                            }
-                                                        }
-                                                        done_var_92 = makeBoolean(NIL == valid_94);
-                                                    }
-                                                } 
-                                            }
-                                        } finally {
-                                            {
-                                                SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
-                                                try {
-                                                    bind($is_thread_performing_cleanupP$, T);
-                                                    if (NIL != final_index_iterator) {
-                                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                    }
-                                                } finally {
-                                                    rebind($is_thread_performing_cleanupP$, _prev_bind_0);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                done_var = makeBoolean(NIL == valid);
-                            }
-                        } 
-                    }
-                }
-            }
-            return values(fort_count, assertion_count);
-        }
     }
 
     public static SubLObject unmark_kbs_fort_and_dependents(final SubLObject fort) {
@@ -4265,17 +2369,6 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return values(fort_count, assertion_count);
     }
 
-    public static final SubLObject compute_kbs_forts_alt() {
-        com.cyc.cycjava.cycl.kbs_identification.compute_kbs_narts();
-        {
-            SubLObject kbs_constants = com.cyc.cycjava.cycl.kbs_identification.kbs_constants();
-            SubLObject kbs_narts = com.cyc.cycjava.cycl.kbs_identification.kbs_narts();
-            $kbs_forts$.setDynamicValue(cconcatenate(kbs_constants, kbs_narts));
-        }
-        com.cyc.cycjava.cycl.kbs_identification.initialize_kbs_fort_table();
-        return NIL;
-    }
-
     public static SubLObject compute_kbs_forts() {
         compute_kbs_narts();
         final SubLObject kbs_constants = kbs_constants();
@@ -4285,35 +2378,12 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    public static final SubLObject kbs_definitional_constant_predicate_sets_alt(SubLObject constant) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != constant_p(constant)) {
-                return gethash(constant, $kbs_definitional_constant_table$.getDynamicValue(thread), UNPROVIDED);
-            } else {
-                return NIL;
-            }
-        }
-    }
-
     public static SubLObject kbs_definitional_constant_predicate_sets(final SubLObject constant) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != constant_p(constant)) {
             return gethash(constant, $kbs_definitional_constant_table$.getDynamicValue(thread), UNPROVIDED);
         }
         return NIL;
-    }
-
-    public static final SubLObject kbs_definitional_fort_predicate_sets_alt(SubLObject fort) {
-        if (NIL != constant_p(fort)) {
-            return com.cyc.cycjava.cycl.kbs_identification.kbs_definitional_constant_predicate_sets(fort);
-        } else {
-            if (NIL != nart_p(fort)) {
-                return list_utilities.remove_duplicate_forts(remove_if(symbol_function(NULL), Mapping.mapcar(KBS_DEFINITIONAL_FORT_PREDICATE_SETS, nart_hl_formula(fort)), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED));
-            } else {
-                return NIL;
-            }
-        }
     }
 
     public static SubLObject kbs_definitional_fort_predicate_sets(final SubLObject fort) {
@@ -4326,36 +2396,12 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    public static final SubLObject kbs_definitional_constant_p_alt(SubLObject constant) {
-        return list_utilities.sublisp_boolean(com.cyc.cycjava.cycl.kbs_identification.kbs_definitional_constant_predicate_sets(constant));
-    }
-
     public static SubLObject kbs_definitional_constant_p(final SubLObject constant) {
         return list_utilities.sublisp_boolean(kbs_definitional_constant_predicate_sets(constant));
     }
 
-    public static final SubLObject non_kbs_definitional_constant_p_alt(SubLObject constant) {
-        return makeBoolean((NIL != constant_p(constant)) && (NIL == com.cyc.cycjava.cycl.kbs_identification.kbs_definitional_constant_predicate_sets(constant)));
-    }
-
     public static SubLObject non_kbs_definitional_constant_p(final SubLObject constant) {
         return makeBoolean((NIL != constant_p(constant)) && (NIL == kbs_definitional_constant_predicate_sets(constant)));
-    }
-
-    public static final SubLObject tree_gather_relevant_kbs_definitional_predicate_sets_alt(SubLObject tree) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if ($kbs_definitional_constant_table$.getDynamicValue(thread).isHashtable()) {
-                {
-                    SubLObject tree_forts = list_utilities.fast_delete_duplicates(list_utilities.tree_gather(tree, FORT_P, UNPROVIDED, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    SubLObject predicate_sets_list = remove_if(symbol_function(NULL), Mapping.mapcar(KBS_DEFINITIONAL_FORT_PREDICATE_SETS, tree_forts), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    SubLObject relevant_predicate_sets = list_utilities.fast_delete_duplicates(list_utilities.tree_gather(predicate_sets_list, FORT_P, UNPROVIDED, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    SubLObject sorted_relevant_predicate_sets = Sort.sort(relevant_predicate_sets, $sym68$KBS_DEFINITIONAL_PREDICATE_SET_, UNPROVIDED);
-                    return sorted_relevant_predicate_sets;
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject tree_gather_relevant_kbs_definitional_predicate_sets(final SubLObject tree) {
@@ -4370,43 +2416,16 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    public static final SubLObject kbs_definitional_predicate_set_p_alt(SubLObject v_object) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return subl_promotions.memberP(v_object, $kbs_ordered_definitional_predicate_sets$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED);
-        }
-    }
-
     public static SubLObject kbs_definitional_predicate_set_p(final SubLObject v_object) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return subl_promotions.memberP(v_object, $kbs_ordered_definitional_predicate_sets$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED);
     }
 
-    public static final SubLObject kbs_definitional_predicate_setL_alt(SubLObject predicate_set1, SubLObject predicate_set2) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(predicate_set1, KBS_DEFINITIONAL_PREDICATE_SET_P);
-            SubLTrampolineFile.checkType(predicate_set2, KBS_DEFINITIONAL_PREDICATE_SET_P);
-            return numG(position(predicate_set1, $kbs_ordered_definitional_predicate_sets$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), position(predicate_set2, $kbs_ordered_definitional_predicate_sets$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED));
-        }
-    }
-
     public static SubLObject kbs_definitional_predicate_setL(final SubLObject predicate_set1, final SubLObject predicate_set2) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != kbs_definitional_predicate_set_p(predicate_set1) : "! kbs_identification.kbs_definitional_predicate_set_p(predicate_set1) " + ("kbs_identification.kbs_definitional_predicate_set_p(predicate_set1) " + "CommonSymbols.NIL != kbs_identification.kbs_definitional_predicate_set_p(predicate_set1) ") + predicate_set1;
-        assert NIL != kbs_definitional_predicate_set_p(predicate_set2) : "! kbs_identification.kbs_definitional_predicate_set_p(predicate_set2) " + ("kbs_identification.kbs_definitional_predicate_set_p(predicate_set2) " + "CommonSymbols.NIL != kbs_identification.kbs_definitional_predicate_set_p(predicate_set2) ") + predicate_set2;
+        assert NIL != kbs_definitional_predicate_set_p(predicate_set1) : "kbs_identification.kbs_definitional_predicate_set_p(predicate_set1) " + "CommonSymbols.NIL != kbs_identification.kbs_definitional_predicate_set_p(predicate_set1) " + predicate_set1;
+        assert NIL != kbs_definitional_predicate_set_p(predicate_set2) : "kbs_identification.kbs_definitional_predicate_set_p(predicate_set2) " + "CommonSymbols.NIL != kbs_identification.kbs_definitional_predicate_set_p(predicate_set2) " + predicate_set2;
         return numG(position(predicate_set1, $kbs_ordered_definitional_predicate_sets$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), position(predicate_set2, $kbs_ordered_definitional_predicate_sets$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED));
-    }
-
-    public static final SubLObject kbs_predicate_definitional_predicate_sets_alt(SubLObject predicate) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != fort_types_interface.predicate_p(predicate)) {
-                return gethash(predicate, $kbs_definitional_predicate_table$.getDynamicValue(thread), UNPROVIDED);
-            } else {
-                return NIL;
-            }
-        }
     }
 
     public static SubLObject kbs_predicate_definitional_predicate_sets(final SubLObject predicate) {
@@ -4417,23 +2436,9 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    public static final SubLObject all_kbs_definitional_predicates_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return hash_table_utilities.hash_table_keys($kbs_definitional_predicate_table$.getDynamicValue(thread));
-        }
-    }
-
     public static SubLObject all_kbs_definitional_predicates() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return hash_table_utilities.hash_table_keys($kbs_definitional_predicate_table$.getDynamicValue(thread));
-    }
-
-    public static final SubLObject kbs_definitional_predicate_p_alt(SubLObject v_object) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return list_utilities.sublisp_boolean(gethash_without_values(v_object, $kbs_definitional_predicate_table$.getDynamicValue(thread), NIL));
-        }
     }
 
     public static SubLObject kbs_definitional_predicate_p(final SubLObject v_object) {
@@ -4441,61 +2446,9 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return list_utilities.sublisp_boolean(gethash_without_values(v_object, $kbs_definitional_predicate_table$.getDynamicValue(thread), NIL));
     }
 
-    public static final SubLObject clear_kbs_definitional_predicate_table_alt() {
-        $kbs_definitional_predicate_table$.setDynamicValue(make_hash_table($int$1000, symbol_function(EQUAL), UNPROVIDED));
-        return NIL;
-    }
-
     public static SubLObject clear_kbs_definitional_predicate_table() {
         $kbs_definitional_predicate_table$.setDynamicValue(make_hash_table($int$1000, symbol_function(EQUAL), UNPROVIDED));
         return NIL;
-    }
-
-    public static final SubLObject initialize_kbs_definitional_predicate_table_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            com.cyc.cycjava.cycl.kbs_identification.clear_kbs_definitional_predicate_table();
-            {
-                SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                try {
-                    mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                    mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                    {
-                        SubLObject cdolist_list_var = kbs_utilities.get_kbs_sections();
-                        SubLObject kbs_section = NIL;
-                        for (kbs_section = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , kbs_section = cdolist_list_var.first()) {
-                            {
-                                SubLObject definitional_predicate_set = kbs_utilities.get_kbs_section_definitional_predicate_set(kbs_section);
-                                if (NIL != definitional_predicate_set) {
-                                    {
-                                        SubLObject item_var = definitional_predicate_set;
-                                        if (NIL == member(item_var, $kbs_ordered_definitional_predicate_sets$.getDynamicValue(thread), symbol_function(EQL), symbol_function(IDENTITY))) {
-                                            $kbs_ordered_definitional_predicate_sets$.setDynamicValue(cons(item_var, $kbs_ordered_definitional_predicate_sets$.getDynamicValue(thread)), thread);
-                                        }
-                                    }
-                                    {
-                                        SubLObject cdolist_list_var_95 = kbs_utilities.all_quoted_instances_enhanced(definitional_predicate_set, UNPROVIDED);
-                                        SubLObject definitional_predicate = NIL;
-                                        for (definitional_predicate = cdolist_list_var_95.first(); NIL != cdolist_list_var_95; cdolist_list_var_95 = cdolist_list_var_95.rest() , definitional_predicate = cdolist_list_var_95.first()) {
-                                            {
-                                                SubLObject old_value = gethash(definitional_predicate, $kbs_definitional_predicate_table$.getDynamicValue(thread), UNPROVIDED);
-                                                SubLObject new_value = cons(definitional_predicate_set, old_value);
-                                                sethash(definitional_predicate, $kbs_definitional_predicate_table$.getDynamicValue(thread), new_value);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } finally {
-                    mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                    mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                }
-            }
-            return hash_table_count($kbs_definitional_predicate_table$.getDynamicValue(thread));
-        }
     }
 
     public static SubLObject initialize_kbs_definitional_predicate_table() {
@@ -4537,21 +2490,9 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return hash_table_count($kbs_definitional_predicate_table$.getDynamicValue(thread));
     }
 
-    public static final SubLObject compute_kbs_definitional_predicates_alt() {
-        com.cyc.cycjava.cycl.kbs_identification.initialize_kbs_definitional_predicate_table();
-        return NIL;
-    }
-
     public static SubLObject compute_kbs_definitional_predicates() {
         initialize_kbs_definitional_predicate_table();
         return NIL;
-    }
-
-    public static final SubLObject kbs_rule_definitional_predicate_sets_alt(SubLObject rule) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return gethash(rule, $kbs_definitional_rule_table$.getDynamicValue(thread), UNPROVIDED);
-        }
     }
 
     public static SubLObject kbs_rule_definitional_predicate_sets(final SubLObject rule) {
@@ -4559,101 +2500,9 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return gethash(rule, $kbs_definitional_rule_table$.getDynamicValue(thread), UNPROVIDED);
     }
 
-    public static final SubLObject clear_kbs_definitional_rule_table_alt() {
-        $kbs_definitional_rule_table$.setDynamicValue(make_hash_table($int$1000, symbol_function(EQ), UNPROVIDED));
-        return NIL;
-    }
-
     public static SubLObject clear_kbs_definitional_rule_table() {
         $kbs_definitional_rule_table$.setDynamicValue(make_hash_table($int$1000, symbol_function(EQ), UNPROVIDED));
         return NIL;
-    }
-
-    public static final SubLObject initialize_kbs_definitional_rule_table_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            com.cyc.cycjava.cycl.kbs_identification.clear_kbs_definitional_rule_table();
-            {
-                SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                try {
-                    mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                    mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                    {
-                        SubLObject cdolist_list_var = kbs_utilities.get_kbs_sections();
-                        SubLObject kbs_section = NIL;
-                        for (kbs_section = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , kbs_section = cdolist_list_var.first()) {
-                            {
-                                SubLObject definitional_predicate_set = kbs_utilities.get_kbs_section_definitional_predicate_set(kbs_section);
-                                SubLObject definitional_rule_predicate = kbs_utilities.get_kbs_section_definitional_rule_predicate(kbs_section);
-                                if (NIL != definitional_rule_predicate) {
-                                    {
-                                        SubLObject pred_var = definitional_rule_predicate;
-                                        if (NIL != kb_mapping_macros.do_predicate_extent_index_key_validator(pred_var)) {
-                                            {
-                                                SubLObject iterator_var = kb_mapping_macros.new_predicate_extent_final_index_spec_iterator(pred_var);
-                                                SubLObject done_var = NIL;
-                                                SubLObject token_var = NIL;
-                                                while (NIL == done_var) {
-                                                    {
-                                                        SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                        SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                        if (NIL != valid) {
-                                                            {
-                                                                SubLObject final_index_iterator = NIL;
-                                                                try {
-                                                                    final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
-                                                                    {
-                                                                        SubLObject done_var_96 = NIL;
-                                                                        SubLObject token_var_97 = NIL;
-                                                                        while (NIL == done_var_96) {
-                                                                            {
-                                                                                SubLObject definitional_rule = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_97);
-                                                                                SubLObject valid_98 = makeBoolean(token_var_97 != definitional_rule);
-                                                                                if (NIL != valid_98) {
-                                                                                    {
-                                                                                        SubLObject rule_assertion = assertions_high.gaf_arg1(definitional_rule);
-                                                                                        SubLObject old_value = gethash(rule_assertion, $kbs_definitional_rule_table$.getDynamicValue(thread), UNPROVIDED);
-                                                                                        SubLObject new_value = cons(definitional_predicate_set, old_value);
-                                                                                        sethash(rule_assertion, $kbs_definitional_rule_table$.getDynamicValue(thread), new_value);
-                                                                                    }
-                                                                                }
-                                                                                done_var_96 = makeBoolean(NIL == valid_98);
-                                                                            }
-                                                                        } 
-                                                                    }
-                                                                } finally {
-                                                                    {
-                                                                        SubLObject _prev_bind_0_99 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                        try {
-                                                                            $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                            if (NIL != final_index_iterator) {
-                                                                                kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                            }
-                                                                        } finally {
-                                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_99, thread);
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                        done_var = makeBoolean(NIL == valid);
-                                                    }
-                                                } 
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } finally {
-                    mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                    mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                }
-            }
-            return hash_table_count($kbs_definitional_rule_table$.getDynamicValue(thread));
-        }
     }
 
     public static SubLObject initialize_kbs_definitional_rule_table() {
@@ -4755,68 +2604,19 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return hash_table_count($kbs_definitional_rule_table$.getDynamicValue(thread));
     }
 
-    public static final SubLObject compute_kbs_definitional_rules_alt() {
-        com.cyc.cycjava.cycl.kbs_identification.initialize_kbs_definitional_rule_table();
-        return NIL;
-    }
-
     public static SubLObject compute_kbs_definitional_rules() {
         initialize_kbs_definitional_rule_table();
         return NIL;
     }
 
-    /**
-     * Return a keyhash of all assertions in the KB subset
-     */
-    @LispMethod(comment = "Return a keyhash of all assertions in the KB subset")
-    public static final SubLObject kbs_assertion_table_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return $kbs_assertion_table$.getDynamicValue(thread);
-        }
-    }
-
-    /**
-     * Return a keyhash of all assertions in the KB subset
-     */
-    @LispMethod(comment = "Return a keyhash of all assertions in the KB subset")
     public static SubLObject kbs_assertion_table() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return $kbs_assertion_table$.getDynamicValue(thread);
-    }/**
-     * Return a keyhash of all assertions in the KB subset
-     */
-
-
-    /**
-     * Cached version of COMPUTE-KBS-ASSERTION-P
-     */
-    @LispMethod(comment = "Cached version of COMPUTE-KBS-ASSERTION-P")
-    public static final SubLObject kbs_assertion_p_alt(SubLObject assertion) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return getkeyhash(assertion, $kbs_assertion_table$.getDynamicValue(thread));
-        }
     }
 
-    /**
-     * Cached version of COMPUTE-KBS-ASSERTION-P
-     */
-    @LispMethod(comment = "Cached version of COMPUTE-KBS-ASSERTION-P")
     public static SubLObject kbs_assertion_p(final SubLObject assertion) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return keyhash.getkeyhash(assertion, $kbs_assertion_table$.getDynamicValue(thread));
-    }/**
-     * Cached version of COMPUTE-KBS-ASSERTION-P
-     */
-
-
-    public static final SubLObject why_kbs_assertionP_alt(SubLObject assertion) {
-        {
-            SubLObject supports = NIL;
-            supports = cons($str_alt59$All_KB_subset_requirements_met_, supports);
-            return nreverse(supports);
-        }
     }
 
     public static SubLObject why_kbs_assertionP(final SubLObject assertion) {
@@ -4825,108 +2625,8 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return nreverse(supports);
     }
 
-    /**
-     * Cached version of COMPUTE-NON-KBS-ASSERTION-P
-     */
-    @LispMethod(comment = "Cached version of COMPUTE-NON-KBS-ASSERTION-P")
-    public static final SubLObject non_kbs_assertion_p_alt(SubLObject assertion) {
-        return makeBoolean((NIL != assertion_handles.assertion_p(assertion)) && (NIL == com.cyc.cycjava.cycl.kbs_identification.kbs_assertion_p(assertion)));
-    }
-
-    /**
-     * Cached version of COMPUTE-NON-KBS-ASSERTION-P
-     */
-    @LispMethod(comment = "Cached version of COMPUTE-NON-KBS-ASSERTION-P")
     public static SubLObject non_kbs_assertion_p(final SubLObject assertion) {
         return makeBoolean((NIL != assertion_handles.assertion_p(assertion)) && (NIL == kbs_assertion_p(assertion)));
-    }/**
-     * Cached version of COMPUTE-NON-KBS-ASSERTION-P
-     */
-
-
-    public static final SubLObject why_non_kbs_assertionP_alt(SubLObject assertion) {
-        if (NIL != assertion_handles.assertion_p(assertion)) {
-            {
-                SubLObject mt = assertions_high.assertion_mt(assertion);
-                SubLObject cnf = assertions_high.assertion_cnf(assertion);
-                SubLObject supports = NIL;
-                if (NIL != com.cyc.cycjava.cycl.kbs_identification.non_kbs_fort_p(mt)) {
-                    supports = cons($str_alt70$The_assertion_s_microtheory_is_no, supports);
-                    {
-                        SubLObject cdolist_list_var = com.cyc.cycjava.cycl.kbs_identification.why_non_kbs_fortP(mt);
-                        SubLObject support = NIL;
-                        for (support = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , support = cdolist_list_var.first()) {
-                            supports = cons(support, supports);
-                        }
-                    }
-                } else {
-                    {
-                        SubLObject non_kbs_forts_in_cnf = list_utilities.remove_duplicate_forts(list_utilities.tree_find_all_if(symbol_function(NON_KBS_FORT_P), cnf, UNPROVIDED));
-                        if (NIL != non_kbs_forts_in_cnf) {
-                            supports = cons($str_alt71$The_assertion_s_formula_contains_, supports);
-                            {
-                                SubLObject cdolist_list_var = non_kbs_forts_in_cnf;
-                                SubLObject non_kbs_fort = NIL;
-                                for (non_kbs_fort = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , non_kbs_fort = cdolist_list_var.first()) {
-                                    {
-                                        SubLObject cdolist_list_var_100 = com.cyc.cycjava.cycl.kbs_identification.why_non_kbs_fortP(non_kbs_fort);
-                                        SubLObject support = NIL;
-                                        for (support = cdolist_list_var_100.first(); NIL != cdolist_list_var_100; cdolist_list_var_100 = cdolist_list_var_100.rest() , support = cdolist_list_var_100.first()) {
-                                            supports = cons(support, supports);
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            if (NIL != assertions_high.gaf_assertionP(assertion)) {
-                                {
-                                    SubLObject predicate = assertions_high.gaf_predicate(assertion);
-                                    SubLObject predicate_predicate_sets = com.cyc.cycjava.cycl.kbs_identification.kbs_predicate_definitional_predicate_sets(predicate);
-                                    SubLObject assertion_predicate_sets = com.cyc.cycjava.cycl.kbs_identification.tree_gather_relevant_kbs_definitional_predicate_sets(cnf);
-                                    if (NIL == list_utilities.fast_subsetP(assertion_predicate_sets, predicate_predicate_sets, UNPROVIDED)) {
-                                        supports = cons($str_alt72$The_assertion_is_definitional_bec, supports);
-                                        if (NIL != predicate_predicate_sets) {
-                                            supports = cons($str_alt73$__The_predicate_is_definitional_, supports);
-                                            {
-                                                SubLObject cdolist_list_var = predicate_predicate_sets;
-                                                SubLObject predicate_predicate_set = NIL;
-                                                for (predicate_predicate_set = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , predicate_predicate_set = cdolist_list_var.first()) {
-                                                    supports = cons(arguments.make_hl_support($ISA, make_binary_formula($$isa, predicate, predicate_predicate_set), UNPROVIDED, UNPROVIDED), supports);
-                                                }
-                                            }
-                                        } else {
-                                            supports = cons($str_alt74$__The_predicate_is_not_definition, supports);
-                                        }
-                                        supports = cons($str_alt75$__But_the_assertion_contains_defi, supports);
-                                        {
-                                            SubLObject cdolist_list_var = assertion_predicate_sets;
-                                            SubLObject assertion_predicate_set = NIL;
-                                            for (assertion_predicate_set = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , assertion_predicate_set = cdolist_list_var.first()) {
-                                                supports = cons(assertion_predicate_set, supports);
-                                            }
-                                        }
-                                    }
-                                }
-                            } else {
-                                {
-                                    SubLObject assertion_predicate_sets = com.cyc.cycjava.cycl.kbs_identification.tree_gather_relevant_kbs_definitional_predicate_sets(cnf);
-                                    supports = cons($str_alt76$The_assertion_is_a_rule_containin, supports);
-                                    {
-                                        SubLObject cdolist_list_var = assertion_predicate_sets;
-                                        SubLObject assertion_predicate_set = NIL;
-                                        for (assertion_predicate_set = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , assertion_predicate_set = cdolist_list_var.first()) {
-                                            supports = cons(assertion_predicate_set, supports);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                return nreverse(supports);
-            }
-        }
-        return NIL;
     }
 
     public static SubLObject why_non_kbs_assertionP(final SubLObject assertion) {
@@ -5016,15 +2716,6 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    public static final SubLObject initialize_kbs_assertion_table_alt(SubLObject kbs_assertions) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            $kbs_assertion_table$.setDynamicValue(NIL, thread);
-            $kbs_assertion_table$.setDynamicValue(keyhash_utilities.keyhash_list_elements(kbs_assertions, symbol_function(EQ), UNPROVIDED), thread);
-            return keyhash_count($kbs_assertion_table$.getDynamicValue(thread));
-        }
-    }
-
     public static SubLObject initialize_kbs_assertion_table(final SubLObject kbs_assertions) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         $kbs_assertion_table$.setDynamicValue(NIL, thread);
@@ -5032,103 +2723,14 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return keyhash.keyhash_count($kbs_assertion_table$.getDynamicValue(thread));
     }
 
-    /**
-     * Remove ASSERTION from the KB subset.
-     */
-    @LispMethod(comment = "Remove ASSERTION from the KB subset.")
-    public static final SubLObject mark_kbs_assertion_alt(SubLObject assertion) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return setkeyhash(assertion, $kbs_assertion_table$.getDynamicValue(thread));
-        }
-    }
-
-    /**
-     * Remove ASSERTION from the KB subset.
-     */
-    @LispMethod(comment = "Remove ASSERTION from the KB subset.")
     public static SubLObject mark_kbs_assertion(final SubLObject assertion) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return keyhash.setkeyhash(assertion, $kbs_assertion_table$.getDynamicValue(thread));
-    }/**
-     * Remove ASSERTION from the KB subset.
-     */
-
-
-    /**
-     * Remove ASSERTION from the KB subset.
-     */
-    @LispMethod(comment = "Remove ASSERTION from the KB subset.")
-    public static final SubLObject unmark_kbs_assertion_alt(SubLObject assertion) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return remkeyhash(assertion, $kbs_assertion_table$.getDynamicValue(thread));
-        }
     }
 
-    /**
-     * Remove ASSERTION from the KB subset.
-     */
-    @LispMethod(comment = "Remove ASSERTION from the KB subset.")
     public static SubLObject unmark_kbs_assertion(final SubLObject assertion) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return keyhash.remkeyhash(assertion, $kbs_assertion_table$.getDynamicValue(thread));
-    }/**
-     * Remove ASSERTION from the KB subset.
-     */
-
-
-    public static final SubLObject compute_kbs_assertions_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject assertions = NIL;
-                SubLObject idx = assertion_handles.do_assertions_table();
-                SubLObject total = id_index_count(idx);
-                SubLObject sofar = ZERO_INTEGER;
-                SubLTrampolineFile.checkType($$$Computing_KBS_assertions, STRINGP);
-                {
-                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                    try {
-                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                        $last_percent_progress_prediction$.bind(NIL, thread);
-                        $within_noting_percent_progress$.bind(T, thread);
-                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                        noting_percent_progress_preamble($$$Computing_KBS_assertions);
-                        if (NIL == do_id_index_empty_p(idx, $SKIP)) {
-                            {
-                                SubLObject id = do_id_index_next_id(idx, T, NIL, NIL);
-                                SubLObject state_var = do_id_index_next_state(idx, T, id, NIL);
-                                SubLObject assertion = NIL;
-                                while (NIL != id) {
-                                    assertion = do_id_index_state_object(idx, $SKIP, id, state_var);
-                                    if (NIL != do_id_index_id_and_object_validP(id, assertion, $SKIP)) {
-                                        note_percent_progress(sofar, total);
-                                        sofar = add(sofar, ONE_INTEGER);
-                                        if (NIL != com.cyc.cycjava.cycl.kbs_identification.compute_kbs_assertion_p(assertion)) {
-                                            assertions = cons(assertion, assertions);
-                                        }
-                                    }
-                                    id = do_id_index_next_id(idx, T, id, state_var);
-                                    state_var = do_id_index_next_state(idx, T, id, state_var);
-                                } 
-                            }
-                        }
-                        noting_percent_progress_postamble();
-                    } finally {
-                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                com.cyc.cycjava.cycl.kbs_identification.initialize_kbs_assertion_table(assertions);
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject compute_kbs_assertions() {
@@ -5138,7 +2740,7 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         final SubLObject mess = $$$Computing_KBS_assertions;
         final SubLObject total = id_index_count(idx);
         SubLObject sofar = ZERO_INTEGER;
-        assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
+        assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
         final SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
         final SubLObject _prev_bind_2 = $last_percent_progress_prediction$.currentBinding(thread);
         final SubLObject _prev_bind_3 = $within_noting_percent_progress$.currentBinding(thread);
@@ -5218,26 +2820,6 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    /**
-     * Return T iff ASSERTION is an assertion in the KB subset
-     */
-    @LispMethod(comment = "Return T iff ASSERTION is an assertion in the KB subset")
-    public static final SubLObject compute_kbs_assertion_p_alt(SubLObject assertion) {
-        {
-            SubLObject v_answer = NIL;
-            if (NIL != assertion_handles.assertion_p(assertion)) {
-                if (!((NIL != com.cyc.cycjava.cycl.kbs_identification.kbs_assertion_references_excluded_termsP(assertion)) || (NIL != com.cyc.cycjava.cycl.kbs_identification.kbs_definitionally_restricted_assertionP(assertion)))) {
-                    v_answer = T;
-                }
-            }
-            return v_answer;
-        }
-    }
-
-    /**
-     * Return T iff ASSERTION is an assertion in the KB subset
-     */
-    @LispMethod(comment = "Return T iff ASSERTION is an assertion in the KB subset")
     public static SubLObject compute_kbs_assertion_p(final SubLObject assertion) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject v_answer = NIL;
@@ -5262,101 +2844,18 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
             mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
         }
         return v_answer;
-    }/**
-     * Return T iff ASSERTION is an assertion in the KB subset
-     */
-
-
-    /**
-     * Return T iff ASSERTION is not an assertion in the KB subset
-     */
-    @LispMethod(comment = "Return T iff ASSERTION is not an assertion in the KB subset")
-    public static final SubLObject compute_non_kbs_assertion_p_alt(SubLObject assertion) {
-        return makeBoolean((NIL != assertion_handles.assertion_p(assertion)) && (NIL == com.cyc.cycjava.cycl.kbs_identification.compute_kbs_assertion_p(assertion)));
     }
 
-    /**
-     * Return T iff ASSERTION is not an assertion in the KB subset
-     */
-    @LispMethod(comment = "Return T iff ASSERTION is not an assertion in the KB subset")
     public static SubLObject compute_non_kbs_assertion_p(final SubLObject assertion) {
         return makeBoolean((NIL != assertion_handles.assertion_p(assertion)) && (NIL == compute_kbs_assertion_p(assertion)));
-    }/**
-     * Return T iff ASSERTION is not an assertion in the KB subset
-     */
-
-
-    /**
-     * Return T iff ASSERTION is rejected from KB subset inclusion
-     * due to terms that are not part of the subset at all.
-     */
-    @LispMethod(comment = "Return T iff ASSERTION is rejected from KB subset inclusion\r\ndue to terms that are not part of the subset at all.\nReturn T iff ASSERTION is rejected from KB subset inclusion\ndue to terms that are not part of the subset at all.")
-    public static final SubLObject kbs_assertion_references_excluded_termsP_alt(SubLObject assertion) {
-        {
-            SubLObject mt = assertions_high.assertion_mt(assertion);
-            SubLObject cnf = assertions_high.assertion_cnf(assertion);
-            return makeBoolean((((NIL != com.cyc.cycjava.cycl.kbs_identification.non_kbs_fort_p(mt)) || (NIL != list_utilities.tree_find_if(symbol_function(NON_KBS_FORT_P), cnf, UNPROVIDED))) || (NIL != (NIL != forts.fort_p(mt) ? ((SubLObject) (com.cyc.cycjava.cycl.kbs_identification.non_kbs_fort_p(mt))) : list_utilities.tree_find_if(symbol_function(NON_KBS_FORT_P), mt, UNPROVIDED)))) || (NIL != list_utilities.tree_find_if(symbol_function(COMPUTE_NON_KBS_ASSERTION_P), cnf, UNPROVIDED)));
-        }
     }
 
-    /**
-     * Return T iff ASSERTION is rejected from KB subset inclusion
-     * due to terms that are not part of the subset at all.
-     */
-    @LispMethod(comment = "Return T iff ASSERTION is rejected from KB subset inclusion\r\ndue to terms that are not part of the subset at all.\nReturn T iff ASSERTION is rejected from KB subset inclusion\ndue to terms that are not part of the subset at all.")
     public static SubLObject kbs_assertion_references_excluded_termsP(final SubLObject assertion) {
         final SubLObject mt = assertions_high.assertion_mt(assertion);
         final SubLObject cnf = assertions_high.assertion_cnf(assertion);
         return makeBoolean((((NIL != non_kbs_fort_p(mt)) || (NIL != list_utilities.tree_find_if(symbol_function(NON_KBS_FORT_P), cnf, UNPROVIDED))) || (NIL != (NIL != forts.fort_p(mt) ? non_kbs_fort_p(mt) : list_utilities.tree_find_if(symbol_function(NON_KBS_FORT_P), mt, UNPROVIDED)))) || (NIL != list_utilities.tree_find_if(symbol_function(COMPUTE_NON_KBS_ASSERTION_P), cnf, UNPROVIDED)));
-    }/**
-     * Return T iff ASSERTION is rejected from KB subset inclusion
-     * due to terms that are not part of the subset at all.
-     */
-
-
-    /**
-     * Return T iff ASSERTION is rejected from KB subset inclusion
-     * due to mentioning a definitional constant in something other than a
-     * GAF involving a definitional predicate.
-     */
-    @LispMethod(comment = "Return T iff ASSERTION is rejected from KB subset inclusion\r\ndue to mentioning a definitional constant in something other than a\r\nGAF involving a definitional predicate.\nReturn T iff ASSERTION is rejected from KB subset inclusion\ndue to mentioning a definitional constant in something other than a\nGAF involving a definitional predicate.")
-    public static final SubLObject kbs_definitionally_restricted_assertionP_alt(SubLObject assertion) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != hash_table_utilities.hash_table_empty_p($kbs_definitional_constant_table$.getDynamicValue(thread))) {
-                return NIL;
-            }
-            {
-                SubLObject mt = assertions_high.assertion_mt(assertion);
-                SubLObject cnf = assertions_high.assertion_cnf(assertion);
-                if (NIL != list_utilities.tree_find_if(KBS_DEFINITIONAL_FORT_P, cnf, UNPROVIDED)) {
-                    {
-                        SubLObject assertion_predicate_sets = com.cyc.cycjava.cycl.kbs_identification.tree_gather_relevant_kbs_definitional_predicate_sets(cnf);
-                        if (NIL != assertions_high.rule_assertionP(assertion)) {
-                            {
-                                SubLObject rule_predicate_sets = com.cyc.cycjava.cycl.kbs_identification.kbs_rule_definitional_predicate_sets(assertion);
-                                return makeBoolean(NIL == list_utilities.fast_subsetP(assertion_predicate_sets, rule_predicate_sets, UNPROVIDED));
-                            }
-                        } else {
-                            {
-                                SubLObject predicate = assertions_high.gaf_predicate(assertion);
-                                SubLObject predicate_predicate_sets = com.cyc.cycjava.cycl.kbs_identification.kbs_predicate_definitional_predicate_sets(predicate);
-                                return makeBoolean(NIL == list_utilities.fast_subsetP(assertion_predicate_sets, predicate_predicate_sets, UNPROVIDED));
-                            }
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
     }
 
-    /**
-     * Return T iff ASSERTION is rejected from KB subset inclusion
-     * due to mentioning a definitional constant in something other than a
-     * GAF involving a definitional predicate.
-     */
-    @LispMethod(comment = "Return T iff ASSERTION is rejected from KB subset inclusion\r\ndue to mentioning a definitional constant in something other than a\r\nGAF involving a definitional predicate.\nReturn T iff ASSERTION is rejected from KB subset inclusion\ndue to mentioning a definitional constant in something other than a\nGAF involving a definitional predicate.")
     public static SubLObject kbs_definitionally_restricted_assertionP(final SubLObject assertion) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != hash_table_utilities.hash_table_empty_p($kbs_definitional_constant_table$.getDynamicValue(thread))) {
@@ -5375,62 +2874,15 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         final SubLObject predicate = assertions_high.gaf_predicate(assertion);
         final SubLObject predicate_predicate_sets = kbs_predicate_definitional_predicate_sets(predicate);
         return makeBoolean(NIL == list_utilities.fast_subsetP(assertion_predicate_sets, predicate_predicate_sets, UNPROVIDED));
-    }/**
-     * Return T iff ASSERTION is rejected from KB subset inclusion
-     * due to mentioning a definitional constant in something other than a
-     * GAF involving a definitional predicate.
-     */
-
-
-    /**
-     * Cached version of COMPUTE-KBS-DEDUCTION-P
-     */
-    @LispMethod(comment = "Cached version of COMPUTE-KBS-DEDUCTION-P")
-    public static final SubLObject kbs_deduction_p_alt(SubLObject deduction) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return getkeyhash(deduction, $kbs_deduction_table$.getDynamicValue(thread));
-        }
     }
 
-    /**
-     * Cached version of COMPUTE-KBS-DEDUCTION-P
-     */
-    @LispMethod(comment = "Cached version of COMPUTE-KBS-DEDUCTION-P")
     public static SubLObject kbs_deduction_p(final SubLObject deduction) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return keyhash.getkeyhash(deduction, $kbs_deduction_table$.getDynamicValue(thread));
-    }/**
-     * Cached version of COMPUTE-KBS-DEDUCTION-P
-     */
-
-
-    /**
-     * Cached version of COMPUTE-NON-KBS-DEDUCTION-P
-     */
-    @LispMethod(comment = "Cached version of COMPUTE-NON-KBS-DEDUCTION-P")
-    public static final SubLObject non_kbs_deduction_p_alt(SubLObject deduction) {
-        return makeBoolean((NIL != deduction_handles.deduction_p(deduction)) && (NIL == com.cyc.cycjava.cycl.kbs_identification.kbs_deduction_p(deduction)));
     }
 
-    /**
-     * Cached version of COMPUTE-NON-KBS-DEDUCTION-P
-     */
-    @LispMethod(comment = "Cached version of COMPUTE-NON-KBS-DEDUCTION-P")
     public static SubLObject non_kbs_deduction_p(final SubLObject deduction) {
         return makeBoolean((NIL != deduction_handles.deduction_p(deduction)) && (NIL == kbs_deduction_p(deduction)));
-    }/**
-     * Cached version of COMPUTE-NON-KBS-DEDUCTION-P
-     */
-
-
-    public static final SubLObject initialize_kbs_deduction_table_alt(SubLObject kbs_deductions) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            $kbs_deduction_table$.setDynamicValue(NIL, thread);
-            $kbs_deduction_table$.setDynamicValue(keyhash_utilities.keyhash_list_elements(kbs_deductions, symbol_function(EQ), UNPROVIDED), thread);
-            return keyhash_count($kbs_deduction_table$.getDynamicValue(thread));
-        }
     }
 
     public static SubLObject initialize_kbs_deduction_table(final SubLObject kbs_deductions) {
@@ -5438,58 +2890,6 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         $kbs_deduction_table$.setDynamicValue(NIL, thread);
         $kbs_deduction_table$.setDynamicValue(keyhash_utilities.keyhash_list_elements(kbs_deductions, symbol_function(EQ), UNPROVIDED), thread);
         return keyhash.keyhash_count($kbs_deduction_table$.getDynamicValue(thread));
-    }
-
-    public static final SubLObject compute_kbs_deductions_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject deductions = NIL;
-                SubLObject list_var = keyhash_utilities.keyhash_element_list(com.cyc.cycjava.cycl.kbs_identification.kbs_assertion_table());
-                $progress_note$.setDynamicValue($$$Computing_KBS_deductions, thread);
-                $progress_start_time$.setDynamicValue(get_universal_time(), thread);
-                $progress_total$.setDynamicValue(length(list_var), thread);
-                $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
-                {
-                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                    try {
-                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                        $last_percent_progress_prediction$.bind(NIL, thread);
-                        $within_noting_percent_progress$.bind(T, thread);
-                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                        noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
-                        {
-                            SubLObject csome_list_var = list_var;
-                            SubLObject assertion = NIL;
-                            for (assertion = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , assertion = csome_list_var.first()) {
-                                note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
-                                $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
-                                {
-                                    SubLObject cdolist_list_var = assertions_high.assertion_arguments(assertion);
-                                    SubLObject argument = NIL;
-                                    for (argument = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , argument = cdolist_list_var.first()) {
-                                        if (NIL != com.cyc.cycjava.cycl.kbs_identification.compute_kbs_deduction_p(argument)) {
-                                            deductions = cons(argument, deductions);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        noting_percent_progress_postamble();
-                    } finally {
-                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                com.cyc.cycjava.cycl.kbs_identification.initialize_kbs_deduction_table(deductions);
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject compute_kbs_deductions() {
@@ -5559,36 +2959,6 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    /**
-     * Determines if the given DEDUCTION is in the KB subset.
-     */
-    @LispMethod(comment = "Determines if the given DEDUCTION is in the KB subset.")
-    public static final SubLObject compute_kbs_deduction_p_alt(SubLObject deduction) {
-        {
-            SubLObject v_answer = NIL;
-            if (NIL != deduction_handles.deduction_p(deduction)) {
-                if (NIL != com.cyc.cycjava.cycl.kbs_identification.kbs_assertion_p(deductions_high.deduction_assertion(deduction))) {
-                    {
-                        SubLObject invalidP = NIL;
-                        SubLObject rest = NIL;
-                        for (rest = deductions_high.deduction_supports(deduction); !((NIL != invalidP) || (NIL == rest)); rest = rest.rest()) {
-                            {
-                                SubLObject support = rest.first();
-                                invalidP = makeBoolean(NIL == com.cyc.cycjava.cycl.kbs_identification.compute_kbs_support_p(support));
-                            }
-                        }
-                        v_answer = makeBoolean(NIL == invalidP);
-                    }
-                }
-            }
-            return v_answer;
-        }
-    }
-
-    /**
-     * Determines if the given DEDUCTION is in the KB subset.
-     */
-    @LispMethod(comment = "Determines if the given DEDUCTION is in the KB subset.")
     public static SubLObject compute_kbs_deduction_p(final SubLObject deduction) {
         SubLObject v_answer = NIL;
         if ((NIL != deduction_handles.deduction_p(deduction)) && (NIL != kbs_assertion_p(deductions_high.deduction_supported_object(deduction)))) {
@@ -5601,40 +2971,8 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
             v_answer = makeBoolean(NIL == invalidP);
         }
         return v_answer;
-    }/**
-     * Determines if the given DEDUCTION is in the KB subset.
-     */
-
-
-    /**
-     * Determines if the given SUPPORT is in the KB subset.
-     */
-    @LispMethod(comment = "Determines if the given SUPPORT is in the KB subset.")
-    public static final SubLObject compute_kbs_support_p_alt(SubLObject support) {
-        if (NIL != arguments.support_p(support)) {
-            if (NIL != assertion_handles.assertion_p(support)) {
-                return com.cyc.cycjava.cycl.kbs_identification.kbs_assertion_p(support);
-            } else {
-                {
-                    SubLObject mt = arguments.support_mt(support);
-                    if (!((NIL != com.cyc.cycjava.cycl.kbs_identification.non_kbs_fort_p(mt)) || (NIL != com.cyc.cycjava.cycl.kbs_identification.kbs_raw_constant_omitted_p(mt)))) {
-                        {
-                            SubLObject formula = arguments.support_formula(support);
-                            if (!((NIL != list_utilities.tree_find_if(symbol_function(NON_KBS_FORT_P), formula, UNPROVIDED)) || (NIL != list_utilities.tree_find_if(symbol_function(KBS_RAW_CONSTANT_OMITTED_P), formula, UNPROVIDED)))) {
-                                return T;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return NIL;
     }
 
-    /**
-     * Determines if the given SUPPORT is in the KB subset.
-     */
-    @LispMethod(comment = "Determines if the given SUPPORT is in the KB subset.")
     public static SubLObject compute_kbs_support_p(final SubLObject support) {
         if (NIL != arguments.support_p(support)) {
             if (NIL != assertion_handles.assertion_p(support)) {
@@ -5649,21 +2987,11 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
             }
         }
         return NIL;
-    }/**
-     * Determines if the given SUPPORT is in the KB subset.
-     */
-
+    }
 
     public static SubLObject kbs_fort_state_validP() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return $kbs_fort_state_validP$.getDynamicValue(thread);
-    }
-
-    public static final SubLObject kbs_state_validP_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return $kbs_state_validP$.getDynamicValue(thread);
-        }
     }
 
     public static SubLObject kbs_state_validP() {
@@ -5671,104 +2999,6 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return $kbs_state_validP$.getDynamicValue(thread);
     }
 
-    /**
-     * Possibly destructively modify the KB in preparation for a KB subset.  Currently supports the :preremoved-assertions indicator (in any circle of a kbs definition)
-     */
-    @LispMethod(comment = "Possibly destructively modify the KB in preparation for a KB subset.  Currently supports the :preremoved-assertions indicator (in any circle of a kbs definition)")
-    public static final SubLObject prepare_kbs_kb_destructive_alt(SubLObject skip_functionsP) {
-        if (skip_functionsP == UNPROVIDED) {
-            skip_functionsP = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject preremoved_assertion_identifying_unary_predicates = kbs_utilities.get_kbs_preremoved_assertions();
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                        {
-                            SubLObject cdolist_list_var = preremoved_assertion_identifying_unary_predicates;
-                            SubLObject preremoved_assertion_identifying_unary_predicate = NIL;
-                            for (preremoved_assertion_identifying_unary_predicate = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , preremoved_assertion_identifying_unary_predicate = cdolist_list_var.first()) {
-                                {
-                                    SubLObject pred_var = preremoved_assertion_identifying_unary_predicate;
-                                    if (NIL != kb_mapping_macros.do_predicate_extent_index_key_validator(pred_var)) {
-                                        {
-                                            SubLObject iterator_var = kb_mapping_macros.new_predicate_extent_final_index_spec_iterator(pred_var);
-                                            SubLObject done_var = NIL;
-                                            SubLObject token_var = NIL;
-                                            while (NIL == done_var) {
-                                                {
-                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                    if (NIL != valid) {
-                                                        {
-                                                            SubLObject final_index_iterator = NIL;
-                                                            try {
-                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
-                                                                {
-                                                                    SubLObject done_var_101 = NIL;
-                                                                    SubLObject token_var_102 = NIL;
-                                                                    while (NIL == done_var_101) {
-                                                                        {
-                                                                            SubLObject meta_a = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_102);
-                                                                            SubLObject valid_103 = makeBoolean(token_var_102 != meta_a);
-                                                                            if (NIL != valid_103) {
-                                                                                {
-                                                                                    SubLObject a = assertions_high.gaf_arg1(meta_a);
-                                                                                    if (NIL != assertion_handles.assertion_p(a)) {
-                                                                                        Errors.warn($str_alt81$Killing__A_assertion_for_KB_subse, preremoved_assertion_identifying_unary_predicate, a);
-                                                                                        cyc_kernel.cyc_unassert(canon_tl.assertion_tl_ist_formula(a), assertions_high.assertion_mt(a));
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                            done_var_101 = makeBoolean(NIL == valid_103);
-                                                                        }
-                                                                    } 
-                                                                }
-                                                            } finally {
-                                                                {
-                                                                    SubLObject _prev_bind_0_104 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                    try {
-                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                        if (NIL != final_index_iterator) {
-                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                        }
-                                                                    } finally {
-                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_104, thread);
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    done_var = makeBoolean(NIL == valid);
-                                                }
-                                            } 
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            if (NIL == skip_functionsP) {
-                com.cyc.cycjava.cycl.kbs_identification.do_prerun_kbs_fns();
-            }
-            return NIL;
-        }
-    }
-
-    /**
-     * Possibly destructively modify the KB in preparation for a KB subset.  Currently supports the :preremoved-assertions indicator (in any circle of a kbs definition)
-     */
-    @LispMethod(comment = "Possibly destructively modify the KB in preparation for a KB subset.  Currently supports the :preremoved-assertions indicator (in any circle of a kbs definition)")
     public static SubLObject prepare_kbs_kb_destructive(SubLObject skip_functionsP) {
         if (skip_functionsP == UNPROVIDED) {
             skip_functionsP = NIL;
@@ -5988,20 +3218,6 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return a;
     }
 
-    public static final SubLObject do_prerun_kbs_fns_alt() {
-        {
-            SubLObject cdolist_list_var = kbs_utilities.get_kbs_prerun_fns();
-            SubLObject prerun_fn = NIL;
-            for (prerun_fn = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , prerun_fn = cdolist_list_var.first()) {
-                if (prerun_fn.isFunctionSpec()) {
-                    force_format(T, $str_alt82$prerun__Calling__A__, prerun_fn, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    funcall(prerun_fn);
-                }
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject do_prerun_kbs_fns() {
         SubLObject cdolist_list_var = kbs_utilities.get_kbs_prerun_fns();
         SubLObject prerun_fn = NIL;
@@ -6017,16 +3233,6 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    public static final SubLObject identify_kbs_forts_and_assertions_alt() {
-        com.cyc.cycjava.cycl.kbs_identification.clear_kbs_state();
-        com.cyc.cycjava.cycl.kbs_identification.prepare_kbs_kb_destructive(T);
-        com.cyc.cycjava.cycl.kbs_identification.identify_kbs_forts();
-        com.cyc.cycjava.cycl.kbs_identification.identify_kbs_assertions();
-        com.cyc.cycjava.cycl.kbs_identification.identify_kbs_deductions();
-        $kbs_state_validP$.setDynamicValue(T);
-        return NIL;
-    }
-
     public static SubLObject identify_kbs_forts_and_assertions() {
         clear_kbs_state();
         prepare_kbs_kb_destructive(T);
@@ -6037,44 +3243,6 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    /**
-     * Identify the forts in a KB subset based on the given COLLECTION and OMISSION-PREDICATE
-     */
-    @LispMethod(comment = "Identify the forts in a KB subset based on the given COLLECTION and OMISSION-PREDICATE")
-    public static final SubLObject identify_kbs_forts_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            com.cyc.cycjava.cycl.kbs_identification.clear_kbs_state();
-            {
-                SubLObject sbhl_ms_resource = sbhl_marking_vars.new_sbhl_marking_space_resource(TEN_INTEGER);
-                {
-                    SubLObject _prev_bind_0 = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.currentBinding(thread);
-                    try {
-                        sbhl_marking_vars.$resourced_sbhl_marking_spaces$.bind(sbhl_ms_resource, thread);
-                        sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.bind(T, thread);
-                        sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.bind(sbhl_marking_vars.determine_marking_space_limit(sbhl_marking_vars.$resourced_sbhl_marking_spaces$.getDynamicValue(thread)), thread);
-                        com.cyc.cycjava.cycl.kbs_identification.compute_kbs_constants();
-                        com.cyc.cycjava.cycl.kbs_identification.compute_kbs_forts();
-                        com.cyc.cycjava.cycl.kbs_identification.compute_kbs_definitional_predicates();
-                        com.cyc.cycjava.cycl.kbs_identification.compute_kbs_definitional_rules();
-                        sbhl_ms_resource = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.getDynamicValue(thread);
-                    } finally {
-                        sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.rebind(_prev_bind_2, thread);
-                        sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.rebind(_prev_bind_1, thread);
-                        sbhl_marking_vars.$resourced_sbhl_marking_spaces$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
-    /**
-     * Identify the forts in a KB subset based on the given COLLECTION and OMISSION-PREDICATE
-     */
-    @LispMethod(comment = "Identify the forts in a KB subset based on the given COLLECTION and OMISSION-PREDICATE")
     public static SubLObject identify_kbs_forts() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         clear_kbs_state();
@@ -6111,20 +3279,6 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    public static final SubLObject do_post_identify_kbs_forts_fns_alt() {
-        {
-            SubLObject cdolist_list_var = kbs_utilities.get_kbs_post_identify_forts_fns();
-            SubLObject post_identify_forts_fn = NIL;
-            for (post_identify_forts_fn = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , post_identify_forts_fn = cdolist_list_var.first()) {
-                if (post_identify_forts_fn.isFunctionSpec()) {
-                    force_format(T, $str_alt83$post_kbs_forts__Calling__A___, post_identify_forts_fn, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    funcall(post_identify_forts_fn);
-                }
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject do_post_identify_kbs_forts_fns() {
         SubLObject cdolist_list_var = kbs_utilities.get_kbs_post_identify_forts_fns();
         SubLObject post_identify_forts_fn = NIL;
@@ -6148,7 +3302,7 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         final SubLObject mess = $str113$POST_KBS_FORTS__Unmark_NARTs_that;
         final SubLObject total = id_index_count(idx);
         SubLObject sofar = ZERO_INTEGER;
-        assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
+        assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
         final SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
         final SubLObject _prev_bind_2 = $last_percent_progress_prediction$.currentBinding(thread);
         final SubLObject _prev_bind_3 = $within_noting_percent_progress$.currentBinding(thread);
@@ -6236,42 +3390,6 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    /**
-     * Identify the assertions in a KB subset, under the assumption
-     * that IDENTIFY-KBS-FORTS has been completed.
-     */
-    @LispMethod(comment = "Identify the assertions in a KB subset, under the assumption\r\nthat IDENTIFY-KBS-FORTS has been completed.\nIdentify the assertions in a KB subset, under the assumption\nthat IDENTIFY-KBS-FORTS has been completed.")
-    public static final SubLObject identify_kbs_assertions_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject sbhl_ms_resource = sbhl_marking_vars.new_sbhl_marking_space_resource(TEN_INTEGER);
-                {
-                    SubLObject _prev_bind_0 = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.currentBinding(thread);
-                    try {
-                        sbhl_marking_vars.$resourced_sbhl_marking_spaces$.bind(sbhl_ms_resource, thread);
-                        sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.bind(T, thread);
-                        sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.bind(sbhl_marking_vars.determine_marking_space_limit(sbhl_marking_vars.$resourced_sbhl_marking_spaces$.getDynamicValue(thread)), thread);
-                        com.cyc.cycjava.cycl.kbs_identification.compute_kbs_assertions();
-                        sbhl_ms_resource = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.getDynamicValue(thread);
-                    } finally {
-                        sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.rebind(_prev_bind_2, thread);
-                        sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.rebind(_prev_bind_1, thread);
-                        sbhl_marking_vars.$resourced_sbhl_marking_spaces$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
-    /**
-     * Identify the assertions in a KB subset, under the assumption
-     * that IDENTIFY-KBS-FORTS has been completed.
-     */
-    @LispMethod(comment = "Identify the assertions in a KB subset, under the assumption\r\nthat IDENTIFY-KBS-FORTS has been completed.\nIdentify the assertions in a KB subset, under the assumption\nthat IDENTIFY-KBS-FORTS has been completed.")
     public static SubLObject identify_kbs_assertions() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject sbhl_ms_resource = sbhl_marking_vars.new_sbhl_marking_space_resource(TEN_INTEGER);
@@ -6303,28 +3421,6 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    /**
-     * Possibly modify the *kbs-assertion-table*.  The functions called can assume *kbs-assertions* still contains a list of the assertions indexed in the *kbs-assertion-table*.
-     */
-    @LispMethod(comment = "Possibly modify the *kbs-assertion-table*.  The functions called can assume *kbs-assertions* still contains a list of the assertions indexed in the *kbs-assertion-table*.")
-    public static final SubLObject do_post_identify_kbs_assertions_fns_alt() {
-        {
-            SubLObject cdolist_list_var = kbs_utilities.get_kbs_post_identify_assertions_fns();
-            SubLObject post_identify_assertions_fn = NIL;
-            for (post_identify_assertions_fn = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , post_identify_assertions_fn = cdolist_list_var.first()) {
-                if (post_identify_assertions_fn.isFunctionSpec()) {
-                    force_format(T, $str_alt84$post_kbs_assertions__Calling__A__, post_identify_assertions_fn, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    funcall(post_identify_assertions_fn);
-                }
-            }
-        }
-        return NIL;
-    }
-
-    /**
-     * Possibly modify the *kbs-assertion-table*.  The functions called can assume *kbs-assertions* still contains a list of the assertions indexed in the *kbs-assertion-table*.
-     */
-    @LispMethod(comment = "Possibly modify the *kbs-assertion-table*.  The functions called can assume *kbs-assertions* still contains a list of the assertions indexed in the *kbs-assertion-table*.")
     public static SubLObject do_post_identify_kbs_assertions_fns() {
         SubLObject cdolist_list_var = kbs_utilities.get_kbs_post_identify_assertions_fns();
         SubLObject post_identify_assertions_fn = NIL;
@@ -6340,42 +3436,6 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    /**
-     * Identify the deductions in a KB subset, under the assumption
-     * that IDENTIFY-KBS-ASSERTIONS has been completed.
-     */
-    @LispMethod(comment = "Identify the deductions in a KB subset, under the assumption\r\nthat IDENTIFY-KBS-ASSERTIONS has been completed.\nIdentify the deductions in a KB subset, under the assumption\nthat IDENTIFY-KBS-ASSERTIONS has been completed.")
-    public static final SubLObject identify_kbs_deductions_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject sbhl_ms_resource = sbhl_marking_vars.new_sbhl_marking_space_resource(TEN_INTEGER);
-                {
-                    SubLObject _prev_bind_0 = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.currentBinding(thread);
-                    try {
-                        sbhl_marking_vars.$resourced_sbhl_marking_spaces$.bind(sbhl_ms_resource, thread);
-                        sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.bind(T, thread);
-                        sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.bind(sbhl_marking_vars.determine_marking_space_limit(sbhl_marking_vars.$resourced_sbhl_marking_spaces$.getDynamicValue(thread)), thread);
-                        com.cyc.cycjava.cycl.kbs_identification.compute_kbs_deductions();
-                        sbhl_ms_resource = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.getDynamicValue(thread);
-                    } finally {
-                        sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.rebind(_prev_bind_2, thread);
-                        sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.rebind(_prev_bind_1, thread);
-                        sbhl_marking_vars.$resourced_sbhl_marking_spaces$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
-    /**
-     * Identify the deductions in a KB subset, under the assumption
-     * that IDENTIFY-KBS-ASSERTIONS has been completed.
-     */
-    @LispMethod(comment = "Identify the deductions in a KB subset, under the assumption\r\nthat IDENTIFY-KBS-ASSERTIONS has been completed.\nIdentify the deductions in a KB subset, under the assumption\nthat IDENTIFY-KBS-ASSERTIONS has been completed.")
     public static SubLObject identify_kbs_deductions() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject sbhl_ms_resource = sbhl_marking_vars.new_sbhl_marking_space_resource(TEN_INTEGER);
@@ -6407,32 +3467,6 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    /**
-     * Completely reset the KBS state
-     */
-    @LispMethod(comment = "Completely reset the KBS state")
-    public static final SubLObject clear_kbs_state_alt() {
-        $kbs_state_validP$.setDynamicValue(NIL);
-        $kbs_raw_constants$.setDynamicValue(NIL);
-        $kbs_raw_constants_table$.setDynamicValue(NIL);
-        $kbs_raw_constants_omission_table$.setDynamicValue(NIL);
-        $kbs_skolems$.setDynamicValue(NIL);
-        $kbs_constants$.setDynamicValue(NIL);
-        $kbs_constant_table$.setDynamicValue(NIL);
-        $kbs_narts$.setDynamicValue(NIL);
-        $kbs_forts$.setDynamicValue(NIL);
-        $kbs_fort_table$.setDynamicValue(NIL);
-        $kbs_definitional_constant_table$.setDynamicValue(NIL);
-        $kbs_definitional_predicate_table$.setDynamicValue(NIL);
-        $kbs_assertion_table$.setDynamicValue(NIL);
-        $kbs_deduction_table$.setDynamicValue(NIL);
-        return NIL;
-    }
-
-    /**
-     * Completely reset the KBS state
-     */
-    @LispMethod(comment = "Completely reset the KBS state")
     public static SubLObject clear_kbs_state() {
         $kbs_fort_state_validP$.setDynamicValue(NIL);
         $kbs_state_validP$.setDynamicValue(NIL);
@@ -6450,52 +3484,6 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         $kbs_assertion_table$.setDynamicValue(NIL);
         $kbs_deduction_table$.setDynamicValue(NIL);
         return NIL;
-    }
-
-    public static final SubLObject why_kbs_state_invalidP_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == $kbs_raw_constants$.getDynamicValue(thread)) {
-                Errors.warn($str_alt85$_kbs_raw_constants__is_null_);
-            }
-            if (!$kbs_raw_constants_table$.getDynamicValue(thread).isHashtable()) {
-                Errors.warn($str_alt86$_kbs_raw_constants_table__is_null);
-            }
-            if (!$kbs_raw_constants_omission_table$.getDynamicValue(thread).isHashtable()) {
-                Errors.warn($str_alt87$_kbs_raw_constants_omission_table);
-            }
-            if (NIL == $kbs_skolems$.getDynamicValue(thread)) {
-                Errors.warn($str_alt88$_kbs_skolems__is_null_);
-            }
-            if (NIL == $kbs_constants$.getDynamicValue(thread)) {
-                Errors.warn($str_alt89$_kbs_constants__is_null_);
-            }
-            if (NIL == keyhash_p($kbs_constant_table$.getDynamicValue(thread))) {
-                Errors.warn($str_alt90$_kbs_constant_table__is_null_);
-            }
-            if (NIL == $kbs_narts$.getDynamicValue(thread)) {
-                Errors.warn($str_alt91$_kbs_narts__is_null_);
-            }
-            if (NIL == $kbs_forts$.getDynamicValue(thread)) {
-                Errors.warn($str_alt92$_kbs_forts__is_null_);
-            }
-            if (NIL == keyhash_p($kbs_fort_table$.getDynamicValue(thread))) {
-                Errors.warn($str_alt93$_kbs_fort_table__is_null_);
-            }
-            if (!$kbs_definitional_constant_table$.getDynamicValue(thread).isHashtable()) {
-                Errors.warn($str_alt94$_kbs_definitional_constant_table_);
-            }
-            if (!$kbs_definitional_predicate_table$.getDynamicValue(thread).isHashtable()) {
-                Errors.warn($str_alt95$_kbs_definitional_predicate_table);
-            }
-            if (NIL == keyhash_p($kbs_assertion_table$.getDynamicValue(thread))) {
-                Errors.warn($str_alt96$_kbs_assertion_table__is_null_);
-            }
-            if (NIL == keyhash_p($kbs_deduction_table$.getDynamicValue(thread))) {
-                Errors.warn($str_alt97$_kbs_deduction_table__is_null_);
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject why_kbs_state_invalidP() {
@@ -6542,31 +3530,6 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    public static final SubLObject kbs_statistics_alt(SubLObject stream) {
-        if (stream == UNPROVIDED) {
-            stream = StreamsLow.$standard_output$.getDynamicValue();
-        }
-        {
-            SubLObject fort_count = com.cyc.cycjava.cycl.kbs_identification.kbs_fort_count();
-            SubLObject constant_count = com.cyc.cycjava.cycl.kbs_identification.kbs_constant_count();
-            SubLObject nart_count = com.cyc.cycjava.cycl.kbs_identification.kbs_nart_count();
-            SubLObject assertion_count = com.cyc.cycjava.cycl.kbs_identification.kbs_assertion_count();
-            SubLObject deduction_count = com.cyc.cycjava.cycl.kbs_identification.kbs_deduction_count();
-            SubLObject definitional_constant_count = com.cyc.cycjava.cycl.kbs_identification.kbs_definitional_constant_count();
-            format(stream, $str_alt98$______KB__S_KBS_statistics__, kb_loaded());
-            format(stream, $str_alt99$__FORTs___________7___D__, fort_count);
-            format(stream, $str_alt100$___Constants______7___D__, constant_count);
-            if (definitional_constant_count.isPositive()) {
-                format(stream, $str_alt101$_____def_only_____7___D__, definitional_constant_count);
-            }
-            format(stream, $str_alt102$___NARTs__________7___D__, nart_count);
-            format(stream, $str_alt103$__Assertions______7___D__, assertion_count);
-            format(stream, $str_alt104$__Deductions______7___D__, deduction_count);
-            terpri(stream);
-        }
-        return NIL;
-    }
-
     public static SubLObject kbs_statistics(SubLObject stream) {
         if (stream == UNPROVIDED) {
             stream = StreamsLow.$standard_output$.getDynamicValue();
@@ -6590,34 +3553,12 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    public static final SubLObject kbs_fort_count_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != $kbs_fort_table$.getDynamicValue(thread)) {
-                return keyhash_count($kbs_fort_table$.getDynamicValue(thread));
-            } else {
-                return ZERO_INTEGER;
-            }
-        }
-    }
-
     public static SubLObject kbs_fort_count() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != $kbs_fort_table$.getDynamicValue(thread)) {
             return keyhash.keyhash_count($kbs_fort_table$.getDynamicValue(thread));
         }
         return ZERO_INTEGER;
-    }
-
-    public static final SubLObject kbs_constant_count_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != $kbs_constant_table$.getDynamicValue(thread)) {
-                return keyhash_count($kbs_constant_table$.getDynamicValue(thread));
-            } else {
-                return ZERO_INTEGER;
-            }
-        }
     }
 
     public static SubLObject kbs_constant_count() {
@@ -6628,23 +3569,8 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return ZERO_INTEGER;
     }
 
-    public static final SubLObject kbs_nart_count_alt() {
-        return subtract(com.cyc.cycjava.cycl.kbs_identification.kbs_fort_count(), com.cyc.cycjava.cycl.kbs_identification.kbs_constant_count());
-    }
-
     public static SubLObject kbs_nart_count() {
         return subtract(kbs_fort_count(), kbs_constant_count());
-    }
-
-    public static final SubLObject kbs_definitional_constant_count_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != $kbs_definitional_constant_table$.getDynamicValue(thread)) {
-                return hash_table_count($kbs_definitional_constant_table$.getDynamicValue(thread));
-            } else {
-                return ZERO_INTEGER;
-            }
-        }
     }
 
     public static SubLObject kbs_definitional_constant_count() {
@@ -6655,34 +3581,12 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return ZERO_INTEGER;
     }
 
-    public static final SubLObject kbs_assertion_count_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != $kbs_assertion_table$.getDynamicValue(thread)) {
-                return keyhash_count($kbs_assertion_table$.getDynamicValue(thread));
-            } else {
-                return ZERO_INTEGER;
-            }
-        }
-    }
-
     public static SubLObject kbs_assertion_count() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != $kbs_assertion_table$.getDynamicValue(thread)) {
             return keyhash.keyhash_count($kbs_assertion_table$.getDynamicValue(thread));
         }
         return ZERO_INTEGER;
-    }
-
-    public static final SubLObject kbs_deduction_count_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != $kbs_deduction_table$.getDynamicValue(thread)) {
-                return keyhash_count($kbs_deduction_table$.getDynamicValue(thread));
-            } else {
-                return ZERO_INTEGER;
-            }
-        }
     }
 
     public static SubLObject kbs_deduction_count() {
@@ -6693,145 +3597,12 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return ZERO_INTEGER;
     }
 
-    /**
-     * Returns the number of assertions of type TYPE in MT of the present KB subset.
-     *
-     * @param MT;
-     * 		microtheory whose assertions are to be counted
-     * @param TYPE;
-     * 		the type of assertions that must be considered.  It can be one
-     * 		of these values: :GAF, :RULE, NIL.  If it is NIL, it considers both GAFs
-     * 		and rules.
-     * @return COUNT non-negative-integer-p.
-     */
-    @LispMethod(comment = "Returns the number of assertions of type TYPE in MT of the present KB subset.\r\n\r\n@param MT;\r\n\t\tmicrotheory whose assertions are to be counted\r\n@param TYPE;\r\n\t\tthe type of assertions that must be considered.  It can be one\r\n\t\tof these values: :GAF, :RULE, NIL.  If it is NIL, it considers both GAFs\r\n\t\tand rules.\r\n@return COUNT non-negative-integer-p.")
-    public static final SubLObject count_all_kbs_assertions_in_mt_alt(SubLObject mt, SubLObject type) {
-        if (type == UNPROVIDED) {
-            type = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(mt, $sym105$ISA_MT_);
-            if (NIL == com.cyc.cycjava.cycl.kbs_identification.kbs_state_validP()) {
-                Errors.warn($str_alt106$No_valid_KBS_available_);
-                return NIL;
-            }
-            {
-                SubLObject count = ZERO_INTEGER;
-                SubLObject pcase_var = kb_mapping_macros.do_mt_contents_method(function_terms.naut_to_nart(mt));
-                if (pcase_var.eql($MT)) {
-                    if (NIL != kb_mapping_macros.do_mt_index_key_validator(function_terms.naut_to_nart(mt), type)) {
-                        {
-                            SubLObject final_index_spec = kb_mapping_macros.mt_final_index_spec(function_terms.naut_to_nart(mt));
-                            SubLObject final_index_iterator = NIL;
-                            try {
-                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, type, NIL, NIL);
-                                {
-                                    SubLObject done_var = NIL;
-                                    SubLObject token_var = NIL;
-                                    while (NIL == done_var) {
-                                        {
-                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var);
-                                            SubLObject valid = makeBoolean(token_var != assertion);
-                                            if (NIL != valid) {
-                                                if (NIL != com.cyc.cycjava.cycl.kbs_identification.kbs_assertion_p(assertion)) {
-                                                    count = add(count, ONE_INTEGER);
-                                                }
-                                            }
-                                            done_var = makeBoolean(NIL == valid);
-                                        }
-                                    } 
-                                }
-                            } finally {
-                                {
-                                    SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                    try {
-                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                        if (NIL != final_index_iterator) {
-                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                        }
-                                    } finally {
-                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    if (pcase_var.eql($BROAD_MT)) {
-                        if (NIL != kb_mapping_macros.do_broad_mt_index_key_validator(function_terms.naut_to_nart(mt), type)) {
-                            {
-                                SubLObject idx = assertion_handles.do_assertions_table();
-                                SubLObject total = id_index_count(idx);
-                                SubLObject sofar = ZERO_INTEGER;
-                                SubLTrampolineFile.checkType($str_alt109$do_broad_mt_index, STRINGP);
-                                {
-                                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                                    try {
-                                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                                        $last_percent_progress_prediction$.bind(NIL, thread);
-                                        $within_noting_percent_progress$.bind(T, thread);
-                                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                                        noting_percent_progress_preamble($str_alt109$do_broad_mt_index);
-                                        if (NIL == do_id_index_empty_p(idx, $SKIP)) {
-                                            {
-                                                SubLObject id = do_id_index_next_id(idx, T, NIL, NIL);
-                                                SubLObject state_var = do_id_index_next_state(idx, T, id, NIL);
-                                                SubLObject assertion = NIL;
-                                                while (NIL != id) {
-                                                    assertion = do_id_index_state_object(idx, $SKIP, id, state_var);
-                                                    if (NIL != do_id_index_id_and_object_validP(id, assertion, $SKIP)) {
-                                                        note_percent_progress(sofar, total);
-                                                        sofar = add(sofar, ONE_INTEGER);
-                                                        if (NIL != kb_mapping_macros.do_broad_mt_index_match_p(assertion, function_terms.naut_to_nart(mt), type, NIL)) {
-                                                            if (NIL != com.cyc.cycjava.cycl.kbs_identification.kbs_assertion_p(assertion)) {
-                                                                count = add(count, ONE_INTEGER);
-                                                            }
-                                                        }
-                                                    }
-                                                    id = do_id_index_next_id(idx, T, id, state_var);
-                                                    state_var = do_id_index_next_state(idx, T, id, state_var);
-                                                } 
-                                            }
-                                        }
-                                        noting_percent_progress_postamble();
-                                    } finally {
-                                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                return count;
-            }
-        }
-    }
-
-    /**
-     * Returns the number of assertions of type TYPE in MT of the present KB subset.
-     *
-     * @param MT;
-     * 		microtheory whose assertions are to be counted
-     * @param TYPE;
-     * 		the type of assertions that must be considered.  It can be one
-     * 		of these values: :GAF, :RULE, NIL.  If it is NIL, it considers both GAFs
-     * 		and rules.
-     * @return COUNT non-negative-integer-p.
-     */
-    @LispMethod(comment = "Returns the number of assertions of type TYPE in MT of the present KB subset.\r\n\r\n@param MT;\r\n\t\tmicrotheory whose assertions are to be counted\r\n@param TYPE;\r\n\t\tthe type of assertions that must be considered.  It can be one\r\n\t\tof these values: :GAF, :RULE, NIL.  If it is NIL, it considers both GAFs\r\n\t\tand rules.\r\n@return COUNT non-negative-integer-p.")
     public static SubLObject count_all_kbs_assertions_in_mt(final SubLObject mt, SubLObject type) {
         if (type == UNPROVIDED) {
             type = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != fort_types_interface.isa_mtP(mt, UNPROVIDED) : "! fort_types_interface.isa_mtP(mt, .UNPROVIDED) " + ("fort_types_interface.isa_mtP(mt, CommonSymbols.UNPROVIDED) " + "CommonSymbols.NIL != fort_types_interface.isa_mtP(mt, CommonSymbols.UNPROVIDED) ") + mt;
+        assert NIL != fort_types_interface.isa_mtP(mt, UNPROVIDED) : "fort_types_interface.isa_mtP(mt, CommonSymbols.UNPROVIDED) " + "CommonSymbols.NIL != fort_types_interface.isa_mtP(mt, CommonSymbols.UNPROVIDED) " + mt;
         if (NIL == kbs_state_validP()) {
             Errors.warn($str140$No_valid_KBS_available_);
             return NIL;
@@ -6874,7 +3645,7 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
                 final SubLObject mess = $str143$do_broad_mt_index;
                 final SubLObject total = id_index_count(idx);
                 SubLObject sofar = ZERO_INTEGER;
-                assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
+                assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
                 final SubLObject _prev_bind_2 = $last_percent_progress_index$.currentBinding(thread);
                 final SubLObject _prev_bind_3 = $last_percent_progress_prediction$.currentBinding(thread);
                 final SubLObject _prev_bind_4 = $within_noting_percent_progress$.currentBinding(thread);
@@ -6956,155 +3727,107 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
     }
 
     public static SubLObject declare_kbs_identification_file() {
-        declareFunction("kbs_raw_constants", "KBS-RAW-CONSTANTS", 0, 0, false);
-        declareFunction("kbs_raw_constant_p", "KBS-RAW-CONSTANT-P", 1, 0, false);
-        declareFunction("why_kbs_raw_constantP", "WHY-KBS-RAW-CONSTANT?", 1, 0, false);
-        declareFunction("non_kbs_raw_constant_p", "NON-KBS-RAW-CONSTANT-P", 1, 0, false);
-        declareFunction("why_non_kbs_raw_constantP", "WHY-NON-KBS-RAW-CONSTANT?", 1, 0, false);
-        declareFunction("kbs_raw_constant_omitted_p", "KBS-RAW-CONSTANT-OMITTED-P", 1, 0, false);
-        declareFunction("kbs_raw_el_formula_p", "KBS-RAW-EL-FORMULA-P", 1, 0, false);
-        declareFunction("non_kbs_raw_el_formula_p", "NON-KBS-RAW-EL-FORMULA-P", 1, 0, false);
-        declareFunction("reset_kbs_raw_constant_tables", "RESET-KBS-RAW-CONSTANT-TABLES", 0, 0, false);
-        declareFunction("compute_kbs_raw_constants", "COMPUTE-KBS-RAW-CONSTANTS", 0, 0, false);
-        declareFunction("clear_kbs_kbq_query_set_terms", "CLEAR-KBS-KBQ-QUERY-SET-TERMS", 0, 0, false);
-        declareFunction("remove_kbs_kbq_query_set_terms", "REMOVE-KBS-KBQ-QUERY-SET-TERMS", 1, 0, false);
-        declareFunction("kbs_kbq_query_set_terms_internal", "KBS-KBQ-QUERY-SET-TERMS-INTERNAL", 1, 0, false);
-        declareFunction("kbs_kbq_query_set_terms", "KBS-KBQ-QUERY-SET-TERMS", 1, 0, false);
-        declareFunction("kbs_skolems", "KBS-SKOLEMS", 0, 0, false);
-        declareFunction("kbs_skolem_p", "KBS-SKOLEM-P", 1, 0, false);
-        declareFunction("compute_kbs_skolems", "COMPUTE-KBS-SKOLEMS", 0, 0, false);
-        declareFunction("compute_kbs_skolem_p", "COMPUTE-KBS-SKOLEM-P", 1, 0, false);
-        declareFunction("compute_kbs_skolem_assertion_p", "COMPUTE-KBS-SKOLEM-ASSERTION-P", 2, 0, false);
-        declareFunction("kbs_skolem_assertion_fast_fail_constant_p", "KBS-SKOLEM-ASSERTION-FAST-FAIL-CONSTANT-P", 1, 0, false);
-        declareFunction("kbs_constants", "KBS-CONSTANTS", 0, 0, false);
-        declareFunction("kbs_constant_p", "KBS-CONSTANT-P", 1, 0, false);
-        declareFunction("non_kbs_constant_p", "NON-KBS-CONSTANT-P", 1, 0, false);
-        declareFunction("initialize_kbs_constant_table", "INITIALIZE-KBS-CONSTANT-TABLE", 0, 0, false);
-        declareFunction("compute_kbs_constants", "COMPUTE-KBS-CONSTANTS", 0, 0, false);
-        declareFunction("kbs_narts", "KBS-NARTS", 0, 0, false);
-        declareFunction("kbs_nart_p", "KBS-NART-P", 1, 0, false);
-        declareFunction("kbs_nart_formula_p", "KBS-NART-FORMULA-P", 1, 0, false);
-        declareFunction("compute_kbs_narts", "COMPUTE-KBS-NARTS", 0, 0, false);
-        declareFunction("kbs_forts", "KBS-FORTS", 0, 0, false);
-        declareFunction("kbs_fort_p", "KBS-FORT-P", 1, 0, false);
-        declareFunction("why_kbs_fortP", "WHY-KBS-FORT?", 1, 0, false);
-        declareFunction("non_kbs_fort_p", "NON-KBS-FORT-P", 1, 0, false);
-        declareFunction("why_non_kbs_fortP", "WHY-NON-KBS-FORT?", 1, 0, false);
-        declareFunction("kbs_definitional_fort_p", "KBS-DEFINITIONAL-FORT-P", 1, 0, false);
-        declareFunction("non_kbs_definitional_fort_p", "NON-KBS-DEFINITIONAL-FORT-P", 1, 0, false);
-        declareFunction("initialize_kbs_fort_table", "INITIALIZE-KBS-FORT-TABLE", 0, 0, false);
-        declareFunction("unmark_kbs_fort", "UNMARK-KBS-FORT", 1, 0, false);
-        declareFunction("unmark_kbs_fort_and_dependents", "UNMARK-KBS-FORT-AND-DEPENDENTS", 1, 0, false);
-        declareFunction("compute_kbs_forts", "COMPUTE-KBS-FORTS", 0, 0, false);
-        declareFunction("kbs_definitional_constant_predicate_sets", "KBS-DEFINITIONAL-CONSTANT-PREDICATE-SETS", 1, 0, false);
-        declareFunction("kbs_definitional_fort_predicate_sets", "KBS-DEFINITIONAL-FORT-PREDICATE-SETS", 1, 0, false);
-        declareFunction("kbs_definitional_constant_p", "KBS-DEFINITIONAL-CONSTANT-P", 1, 0, false);
-        declareFunction("non_kbs_definitional_constant_p", "NON-KBS-DEFINITIONAL-CONSTANT-P", 1, 0, false);
-        declareFunction("tree_gather_relevant_kbs_definitional_predicate_sets", "TREE-GATHER-RELEVANT-KBS-DEFINITIONAL-PREDICATE-SETS", 1, 0, false);
-        declareFunction("kbs_definitional_predicate_set_p", "KBS-DEFINITIONAL-PREDICATE-SET-P", 1, 0, false);
-        declareFunction("kbs_definitional_predicate_setL", "KBS-DEFINITIONAL-PREDICATE-SET<", 2, 0, false);
-        declareFunction("kbs_predicate_definitional_predicate_sets", "KBS-PREDICATE-DEFINITIONAL-PREDICATE-SETS", 1, 0, false);
-        declareFunction("all_kbs_definitional_predicates", "ALL-KBS-DEFINITIONAL-PREDICATES", 0, 0, false);
-        declareFunction("kbs_definitional_predicate_p", "KBS-DEFINITIONAL-PREDICATE-P", 1, 0, false);
-        declareFunction("clear_kbs_definitional_predicate_table", "CLEAR-KBS-DEFINITIONAL-PREDICATE-TABLE", 0, 0, false);
-        declareFunction("initialize_kbs_definitional_predicate_table", "INITIALIZE-KBS-DEFINITIONAL-PREDICATE-TABLE", 0, 0, false);
-        declareFunction("compute_kbs_definitional_predicates", "COMPUTE-KBS-DEFINITIONAL-PREDICATES", 0, 0, false);
-        declareFunction("kbs_rule_definitional_predicate_sets", "KBS-RULE-DEFINITIONAL-PREDICATE-SETS", 1, 0, false);
-        declareFunction("clear_kbs_definitional_rule_table", "CLEAR-KBS-DEFINITIONAL-RULE-TABLE", 0, 0, false);
-        declareFunction("initialize_kbs_definitional_rule_table", "INITIALIZE-KBS-DEFINITIONAL-RULE-TABLE", 0, 0, false);
-        declareFunction("compute_kbs_definitional_rules", "COMPUTE-KBS-DEFINITIONAL-RULES", 0, 0, false);
-        declareFunction("kbs_assertion_table", "KBS-ASSERTION-TABLE", 0, 0, false);
-        declareFunction("kbs_assertion_p", "KBS-ASSERTION-P", 1, 0, false);
-        declareFunction("why_kbs_assertionP", "WHY-KBS-ASSERTION?", 1, 0, false);
-        declareFunction("non_kbs_assertion_p", "NON-KBS-ASSERTION-P", 1, 0, false);
-        declareFunction("why_non_kbs_assertionP", "WHY-NON-KBS-ASSERTION?", 1, 0, false);
-        declareFunction("initialize_kbs_assertion_table", "INITIALIZE-KBS-ASSERTION-TABLE", 1, 0, false);
-        declareFunction("mark_kbs_assertion", "MARK-KBS-ASSERTION", 1, 0, false);
-        declareFunction("unmark_kbs_assertion", "UNMARK-KBS-ASSERTION", 1, 0, false);
-        declareFunction("compute_kbs_assertions", "COMPUTE-KBS-ASSERTIONS", 0, 0, false);
-        declareFunction("compute_kbs_assertion_p", "COMPUTE-KBS-ASSERTION-P", 1, 0, false);
-        declareFunction("compute_non_kbs_assertion_p", "COMPUTE-NON-KBS-ASSERTION-P", 1, 0, false);
-        declareFunction("kbs_assertion_references_excluded_termsP", "KBS-ASSERTION-REFERENCES-EXCLUDED-TERMS?", 1, 0, false);
-        declareFunction("kbs_definitionally_restricted_assertionP", "KBS-DEFINITIONALLY-RESTRICTED-ASSERTION?", 1, 0, false);
-        declareFunction("kbs_deduction_p", "KBS-DEDUCTION-P", 1, 0, false);
-        declareFunction("non_kbs_deduction_p", "NON-KBS-DEDUCTION-P", 1, 0, false);
-        declareFunction("initialize_kbs_deduction_table", "INITIALIZE-KBS-DEDUCTION-TABLE", 1, 0, false);
-        declareFunction("compute_kbs_deductions", "COMPUTE-KBS-DEDUCTIONS", 0, 0, false);
-        declareFunction("compute_kbs_deduction_p", "COMPUTE-KBS-DEDUCTION-P", 1, 0, false);
-        declareFunction("compute_kbs_support_p", "COMPUTE-KBS-SUPPORT-P", 1, 0, false);
-        declareFunction("kbs_fort_state_validP", "KBS-FORT-STATE-VALID?", 0, 0, false);
-        declareFunction("kbs_state_validP", "KBS-STATE-VALID?", 0, 0, false);
-        declareFunction("prepare_kbs_kb_destructive", "PREPARE-KBS-KB-DESTRUCTIVE", 0, 1, false);
-        declareFunction("kbs_get_kappa_specified_assertions", "KBS-GET-KAPPA-SPECIFIED-ASSERTIONS", 1, 0, false);
-        declareFunction("kbs_handle_preremoved_assertion", "KBS-HANDLE-PREREMOVED-ASSERTION", 1, 1, false);
-        declareFunction("do_prerun_kbs_fns", "DO-PRERUN-KBS-FNS", 0, 0, false);
-        declareFunction("identify_kbs_forts_and_assertions", "IDENTIFY-KBS-FORTS-AND-ASSERTIONS", 0, 0, false);
-        declareFunction("identify_kbs_forts", "IDENTIFY-KBS-FORTS", 0, 0, false);
-        declareFunction("do_post_identify_kbs_forts_fns", "DO-POST-IDENTIFY-KBS-FORTS-FNS", 0, 0, false);
-        declareFunction("perform_limitation_motivated_post_identify_cleanups", "PERFORM-LIMITATION-MOTIVATED-POST-IDENTIFY-CLEANUPS", 0, 0, false);
-        declareFunction("identify_kbs_assertions", "IDENTIFY-KBS-ASSERTIONS", 0, 0, false);
-        declareFunction("do_post_identify_kbs_assertions_fns", "DO-POST-IDENTIFY-KBS-ASSERTIONS-FNS", 0, 0, false);
-        declareFunction("identify_kbs_deductions", "IDENTIFY-KBS-DEDUCTIONS", 0, 0, false);
-        declareFunction("clear_kbs_state", "CLEAR-KBS-STATE", 0, 0, false);
-        declareFunction("why_kbs_state_invalidP", "WHY-KBS-STATE-INVALID?", 0, 0, false);
-        declareFunction("kbs_statistics", "KBS-STATISTICS", 0, 1, false);
-        declareFunction("kbs_fort_count", "KBS-FORT-COUNT", 0, 0, false);
-        declareFunction("kbs_constant_count", "KBS-CONSTANT-COUNT", 0, 0, false);
-        declareFunction("kbs_nart_count", "KBS-NART-COUNT", 0, 0, false);
-        declareFunction("kbs_definitional_constant_count", "KBS-DEFINITIONAL-CONSTANT-COUNT", 0, 0, false);
-        declareFunction("kbs_assertion_count", "KBS-ASSERTION-COUNT", 0, 0, false);
-        declareFunction("kbs_deduction_count", "KBS-DEDUCTION-COUNT", 0, 0, false);
-        declareFunction("count_all_kbs_assertions_in_mt", "COUNT-ALL-KBS-ASSERTIONS-IN-MT", 1, 1, false);
+        declareFunction(me, "kbs_raw_constants", "KBS-RAW-CONSTANTS", 0, 0, false);
+        declareFunction(me, "kbs_raw_constant_p", "KBS-RAW-CONSTANT-P", 1, 0, false);
+        declareFunction(me, "why_kbs_raw_constantP", "WHY-KBS-RAW-CONSTANT?", 1, 0, false);
+        declareFunction(me, "non_kbs_raw_constant_p", "NON-KBS-RAW-CONSTANT-P", 1, 0, false);
+        declareFunction(me, "why_non_kbs_raw_constantP", "WHY-NON-KBS-RAW-CONSTANT?", 1, 0, false);
+        declareFunction(me, "kbs_raw_constant_omitted_p", "KBS-RAW-CONSTANT-OMITTED-P", 1, 0, false);
+        declareFunction(me, "kbs_raw_el_formula_p", "KBS-RAW-EL-FORMULA-P", 1, 0, false);
+        declareFunction(me, "non_kbs_raw_el_formula_p", "NON-KBS-RAW-EL-FORMULA-P", 1, 0, false);
+        declareFunction(me, "reset_kbs_raw_constant_tables", "RESET-KBS-RAW-CONSTANT-TABLES", 0, 0, false);
+        declareFunction(me, "compute_kbs_raw_constants", "COMPUTE-KBS-RAW-CONSTANTS", 0, 0, false);
+        declareFunction(me, "clear_kbs_kbq_query_set_terms", "CLEAR-KBS-KBQ-QUERY-SET-TERMS", 0, 0, false);
+        declareFunction(me, "remove_kbs_kbq_query_set_terms", "REMOVE-KBS-KBQ-QUERY-SET-TERMS", 1, 0, false);
+        declareFunction(me, "kbs_kbq_query_set_terms_internal", "KBS-KBQ-QUERY-SET-TERMS-INTERNAL", 1, 0, false);
+        declareFunction(me, "kbs_kbq_query_set_terms", "KBS-KBQ-QUERY-SET-TERMS", 1, 0, false);
+        declareFunction(me, "kbs_skolems", "KBS-SKOLEMS", 0, 0, false);
+        declareFunction(me, "kbs_skolem_p", "KBS-SKOLEM-P", 1, 0, false);
+        declareFunction(me, "compute_kbs_skolems", "COMPUTE-KBS-SKOLEMS", 0, 0, false);
+        declareFunction(me, "compute_kbs_skolem_p", "COMPUTE-KBS-SKOLEM-P", 1, 0, false);
+        declareFunction(me, "compute_kbs_skolem_assertion_p", "COMPUTE-KBS-SKOLEM-ASSERTION-P", 2, 0, false);
+        declareFunction(me, "kbs_skolem_assertion_fast_fail_constant_p", "KBS-SKOLEM-ASSERTION-FAST-FAIL-CONSTANT-P", 1, 0, false);
+        declareFunction(me, "kbs_constants", "KBS-CONSTANTS", 0, 0, false);
+        declareFunction(me, "kbs_constant_p", "KBS-CONSTANT-P", 1, 0, false);
+        declareFunction(me, "non_kbs_constant_p", "NON-KBS-CONSTANT-P", 1, 0, false);
+        declareFunction(me, "initialize_kbs_constant_table", "INITIALIZE-KBS-CONSTANT-TABLE", 0, 0, false);
+        declareFunction(me, "compute_kbs_constants", "COMPUTE-KBS-CONSTANTS", 0, 0, false);
+        declareFunction(me, "kbs_narts", "KBS-NARTS", 0, 0, false);
+        declareFunction(me, "kbs_nart_p", "KBS-NART-P", 1, 0, false);
+        declareFunction(me, "kbs_nart_formula_p", "KBS-NART-FORMULA-P", 1, 0, false);
+        declareFunction(me, "compute_kbs_narts", "COMPUTE-KBS-NARTS", 0, 0, false);
+        declareFunction(me, "kbs_forts", "KBS-FORTS", 0, 0, false);
+        declareFunction(me, "kbs_fort_p", "KBS-FORT-P", 1, 0, false);
+        declareFunction(me, "why_kbs_fortP", "WHY-KBS-FORT?", 1, 0, false);
+        declareFunction(me, "non_kbs_fort_p", "NON-KBS-FORT-P", 1, 0, false);
+        declareFunction(me, "why_non_kbs_fortP", "WHY-NON-KBS-FORT?", 1, 0, false);
+        declareFunction(me, "kbs_definitional_fort_p", "KBS-DEFINITIONAL-FORT-P", 1, 0, false);
+        declareFunction(me, "non_kbs_definitional_fort_p", "NON-KBS-DEFINITIONAL-FORT-P", 1, 0, false);
+        declareFunction(me, "initialize_kbs_fort_table", "INITIALIZE-KBS-FORT-TABLE", 0, 0, false);
+        declareFunction(me, "unmark_kbs_fort", "UNMARK-KBS-FORT", 1, 0, false);
+        declareFunction(me, "unmark_kbs_fort_and_dependents", "UNMARK-KBS-FORT-AND-DEPENDENTS", 1, 0, false);
+        declareFunction(me, "compute_kbs_forts", "COMPUTE-KBS-FORTS", 0, 0, false);
+        declareFunction(me, "kbs_definitional_constant_predicate_sets", "KBS-DEFINITIONAL-CONSTANT-PREDICATE-SETS", 1, 0, false);
+        declareFunction(me, "kbs_definitional_fort_predicate_sets", "KBS-DEFINITIONAL-FORT-PREDICATE-SETS", 1, 0, false);
+        declareFunction(me, "kbs_definitional_constant_p", "KBS-DEFINITIONAL-CONSTANT-P", 1, 0, false);
+        declareFunction(me, "non_kbs_definitional_constant_p", "NON-KBS-DEFINITIONAL-CONSTANT-P", 1, 0, false);
+        declareFunction(me, "tree_gather_relevant_kbs_definitional_predicate_sets", "TREE-GATHER-RELEVANT-KBS-DEFINITIONAL-PREDICATE-SETS", 1, 0, false);
+        declareFunction(me, "kbs_definitional_predicate_set_p", "KBS-DEFINITIONAL-PREDICATE-SET-P", 1, 0, false);
+        declareFunction(me, "kbs_definitional_predicate_setL", "KBS-DEFINITIONAL-PREDICATE-SET<", 2, 0, false);
+        declareFunction(me, "kbs_predicate_definitional_predicate_sets", "KBS-PREDICATE-DEFINITIONAL-PREDICATE-SETS", 1, 0, false);
+        declareFunction(me, "all_kbs_definitional_predicates", "ALL-KBS-DEFINITIONAL-PREDICATES", 0, 0, false);
+        declareFunction(me, "kbs_definitional_predicate_p", "KBS-DEFINITIONAL-PREDICATE-P", 1, 0, false);
+        declareFunction(me, "clear_kbs_definitional_predicate_table", "CLEAR-KBS-DEFINITIONAL-PREDICATE-TABLE", 0, 0, false);
+        declareFunction(me, "initialize_kbs_definitional_predicate_table", "INITIALIZE-KBS-DEFINITIONAL-PREDICATE-TABLE", 0, 0, false);
+        declareFunction(me, "compute_kbs_definitional_predicates", "COMPUTE-KBS-DEFINITIONAL-PREDICATES", 0, 0, false);
+        declareFunction(me, "kbs_rule_definitional_predicate_sets", "KBS-RULE-DEFINITIONAL-PREDICATE-SETS", 1, 0, false);
+        declareFunction(me, "clear_kbs_definitional_rule_table", "CLEAR-KBS-DEFINITIONAL-RULE-TABLE", 0, 0, false);
+        declareFunction(me, "initialize_kbs_definitional_rule_table", "INITIALIZE-KBS-DEFINITIONAL-RULE-TABLE", 0, 0, false);
+        declareFunction(me, "compute_kbs_definitional_rules", "COMPUTE-KBS-DEFINITIONAL-RULES", 0, 0, false);
+        declareFunction(me, "kbs_assertion_table", "KBS-ASSERTION-TABLE", 0, 0, false);
+        declareFunction(me, "kbs_assertion_p", "KBS-ASSERTION-P", 1, 0, false);
+        declareFunction(me, "why_kbs_assertionP", "WHY-KBS-ASSERTION?", 1, 0, false);
+        declareFunction(me, "non_kbs_assertion_p", "NON-KBS-ASSERTION-P", 1, 0, false);
+        declareFunction(me, "why_non_kbs_assertionP", "WHY-NON-KBS-ASSERTION?", 1, 0, false);
+        declareFunction(me, "initialize_kbs_assertion_table", "INITIALIZE-KBS-ASSERTION-TABLE", 1, 0, false);
+        declareFunction(me, "mark_kbs_assertion", "MARK-KBS-ASSERTION", 1, 0, false);
+        declareFunction(me, "unmark_kbs_assertion", "UNMARK-KBS-ASSERTION", 1, 0, false);
+        declareFunction(me, "compute_kbs_assertions", "COMPUTE-KBS-ASSERTIONS", 0, 0, false);
+        declareFunction(me, "compute_kbs_assertion_p", "COMPUTE-KBS-ASSERTION-P", 1, 0, false);
+        declareFunction(me, "compute_non_kbs_assertion_p", "COMPUTE-NON-KBS-ASSERTION-P", 1, 0, false);
+        declareFunction(me, "kbs_assertion_references_excluded_termsP", "KBS-ASSERTION-REFERENCES-EXCLUDED-TERMS?", 1, 0, false);
+        declareFunction(me, "kbs_definitionally_restricted_assertionP", "KBS-DEFINITIONALLY-RESTRICTED-ASSERTION?", 1, 0, false);
+        declareFunction(me, "kbs_deduction_p", "KBS-DEDUCTION-P", 1, 0, false);
+        declareFunction(me, "non_kbs_deduction_p", "NON-KBS-DEDUCTION-P", 1, 0, false);
+        declareFunction(me, "initialize_kbs_deduction_table", "INITIALIZE-KBS-DEDUCTION-TABLE", 1, 0, false);
+        declareFunction(me, "compute_kbs_deductions", "COMPUTE-KBS-DEDUCTIONS", 0, 0, false);
+        declareFunction(me, "compute_kbs_deduction_p", "COMPUTE-KBS-DEDUCTION-P", 1, 0, false);
+        declareFunction(me, "compute_kbs_support_p", "COMPUTE-KBS-SUPPORT-P", 1, 0, false);
+        declareFunction(me, "kbs_fort_state_validP", "KBS-FORT-STATE-VALID?", 0, 0, false);
+        declareFunction(me, "kbs_state_validP", "KBS-STATE-VALID?", 0, 0, false);
+        declareFunction(me, "prepare_kbs_kb_destructive", "PREPARE-KBS-KB-DESTRUCTIVE", 0, 1, false);
+        declareFunction(me, "kbs_get_kappa_specified_assertions", "KBS-GET-KAPPA-SPECIFIED-ASSERTIONS", 1, 0, false);
+        declareFunction(me, "kbs_handle_preremoved_assertion", "KBS-HANDLE-PREREMOVED-ASSERTION", 1, 1, false);
+        declareFunction(me, "do_prerun_kbs_fns", "DO-PRERUN-KBS-FNS", 0, 0, false);
+        declareFunction(me, "identify_kbs_forts_and_assertions", "IDENTIFY-KBS-FORTS-AND-ASSERTIONS", 0, 0, false);
+        declareFunction(me, "identify_kbs_forts", "IDENTIFY-KBS-FORTS", 0, 0, false);
+        declareFunction(me, "do_post_identify_kbs_forts_fns", "DO-POST-IDENTIFY-KBS-FORTS-FNS", 0, 0, false);
+        declareFunction(me, "perform_limitation_motivated_post_identify_cleanups", "PERFORM-LIMITATION-MOTIVATED-POST-IDENTIFY-CLEANUPS", 0, 0, false);
+        declareFunction(me, "identify_kbs_assertions", "IDENTIFY-KBS-ASSERTIONS", 0, 0, false);
+        declareFunction(me, "do_post_identify_kbs_assertions_fns", "DO-POST-IDENTIFY-KBS-ASSERTIONS-FNS", 0, 0, false);
+        declareFunction(me, "identify_kbs_deductions", "IDENTIFY-KBS-DEDUCTIONS", 0, 0, false);
+        declareFunction(me, "clear_kbs_state", "CLEAR-KBS-STATE", 0, 0, false);
+        declareFunction(me, "why_kbs_state_invalidP", "WHY-KBS-STATE-INVALID?", 0, 0, false);
+        declareFunction(me, "kbs_statistics", "KBS-STATISTICS", 0, 1, false);
+        declareFunction(me, "kbs_fort_count", "KBS-FORT-COUNT", 0, 0, false);
+        declareFunction(me, "kbs_constant_count", "KBS-CONSTANT-COUNT", 0, 0, false);
+        declareFunction(me, "kbs_nart_count", "KBS-NART-COUNT", 0, 0, false);
+        declareFunction(me, "kbs_definitional_constant_count", "KBS-DEFINITIONAL-CONSTANT-COUNT", 0, 0, false);
+        declareFunction(me, "kbs_assertion_count", "KBS-ASSERTION-COUNT", 0, 0, false);
+        declareFunction(me, "kbs_deduction_count", "KBS-DEDUCTION-COUNT", 0, 0, false);
+        declareFunction(me, "count_all_kbs_assertions_in_mt", "COUNT-ALL-KBS-ASSERTIONS-IN-MT", 1, 1, false);
         return NIL;
     }
-
-    static private final SubLString $str_alt3$Even_though_explicitly_included_v = makeString("Even though explicitly included via:");
-
-    static private final SubLString $str_alt5$The_constant_is_also_excluded_bec = makeString("The constant is also excluded because:");
-
-    static private final SubLString $str_alt16$_A_is_not_a__A = makeString("~A is not a ~A");
-
-    static private final SubLString $str_alt21$_A_is_not_a_valid__sbhl_type_erro = makeString("~A is not a valid *sbhl-type-error-action* value");
-
-    static private final SubLString $str_alt22$attempting_to_bind_direction_link = makeString("attempting to bind direction link variable, to NIL. macro body not executed.");
-
-    static private final SubLList $list_alt23 = list(makeUninternedSymbol("LINK-NODE"), makeUninternedSymbol("MT"), makeUninternedSymbol("TV"));
-
-    static private final SubLString $str_alt24$Node__a_does_not_pass_sbhl_type_t = makeString("Node ~a does not pass sbhl-type-test ~a~%");
-
-    static private final SubLString $str_alt30$___S_constants_included_via_the_c = makeString("~&~S constants included via the collections : ~S~%");
-
-    static private final SubLString $str_alt31$___S_constants_omitted_via_the__A = makeString("~&~S constants omitted via the ~A ~A: ~A ~A~%");
-
-    static private final SubLString $str_alt32$collections_ = makeString("collections ");
-
-    static private final SubLString $str_alt34$_predicate_ = makeString("/predicate ");
-
-    static private final SubLString $str_alt35$___S_total_constants_included___ = makeString("~&~S total constants included.~%");
-
-    static private final SubLString $str_alt36$___S_total_constants_omitted___ = makeString("~&~S total constants omitted.~%");
-
-    static private final SubLString $str_alt37$____S_total_raw_KBS_constants_ide = makeString(" ~&~S total raw KBS constants identified.~%");
-
-    static private final SubLString $str_alt38$Invalid_attempt_to_reuse_memoizat = makeString("Invalid attempt to reuse memoization state in multiple threads simultaneously.");
-
-    static private final SubLString $str_alt40$compute_kbs_skolems_requirements_ = makeString("compute-kbs-skolems requirements not met.");
-
-    static private final SubLString $str_alt43$____S_total_KBS_skolems_identifie = makeString(" ~&~S total KBS skolems identified.");
-
-    static private final SubLString $$$Computing_KBS_NARTs = makeString("Computing KBS NARTs");
-
-    static private final SubLString $str_alt58$____S_total_KBS_NARTs_identified_ = makeString(" ~&~S total KBS NARTs identified.~%");
-
-    static private final SubLString $str_alt59$All_KB_subset_requirements_met_ = makeString("All KB subset requirements met.");
-
-    static private final SubLString $str_alt60$Also__the_following_GAFs_will_be_ = makeString("Also, the following GAFs will be spliced in:");
-
-    static private final SubLString $str_alt63$The_term_contains_terms_not_in_th = makeString("The term contains terms not in the KB subset:");
-
-    static private final SubLSymbol $sym68$KBS_DEFINITIONAL_PREDICATE_SET_ = makeSymbol("KBS-DEFINITIONAL-PREDICATE-SET<");
-
-    static private final SubLString $str_alt70$The_assertion_s_microtheory_is_no = makeString("The assertion's microtheory is not in the KB subset:");
 
     public static SubLObject init_kbs_identification_file() {
         defvar("*KBS-RAW-CONSTANTS*", NIL);
@@ -7130,18 +3853,6 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    static private final SubLString $str_alt71$The_assertion_s_formula_contains_ = makeString("The assertion's formula contains FORTs not in the KB subset:");
-
-    static private final SubLString $str_alt72$The_assertion_is_definitional_bec = makeString("The assertion is definitional because:");
-
-    static private final SubLString $str_alt73$__The_predicate_is_definitional_ = makeString("- The predicate is definitional:");
-
-    static private final SubLString $str_alt74$__The_predicate_is_not_definition = makeString("- The predicate is not definitional.");
-
-    static private final SubLString $str_alt75$__But_the_assertion_contains_defi = makeString("- But the assertion contains definitional terms for the KBS sections with the predicate sets:");
-
-    static private final SubLString $str_alt76$The_assertion_is_a_rule_containin = makeString("The assertion is a rule containing definitional FORTs:");
-
     public static SubLObject setup_kbs_identification_file() {
         memoization_state.note_globally_cached_function(KBS_KBQ_QUERY_SET_TERMS);
         return NIL;
@@ -7151,8 +3862,6 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
     public void declareFunctions() {
         declare_kbs_identification_file();
     }
-
-    static private final SubLString $str_alt81$Killing__A_assertion_for_KB_subse = makeString("Killing ~A assertion for KB subset: ~A~%");
 
     @Override
     public void initializeVariables() {
@@ -7164,60 +3873,173 @@ public final class kbs_identification extends SubLTranslatedFile implements V12 
         setup_kbs_identification_file();
     }
 
-    static private final SubLString $str_alt82$prerun__Calling__A__ = makeString("prerun: Calling ~A~%");
-
     static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
-
-    static private final SubLString $str_alt83$post_kbs_forts__Calling__A___ = makeString("post-kbs-forts: Calling ~A.~%");
-
-    static private final SubLString $str_alt84$post_kbs_assertions__Calling__A__ = makeString("post-kbs-assertions: Calling ~A~%");
-
-    static private final SubLString $str_alt85$_kbs_raw_constants__is_null_ = makeString("*kbs-raw-constants* is null.");
-
-    static private final SubLString $str_alt86$_kbs_raw_constants_table__is_null = makeString("*kbs-raw-constants-table* is null.");
-
-    static private final SubLString $str_alt87$_kbs_raw_constants_omission_table = makeString("*kbs-raw-constants-omission-table* is null.");
-
-    static private final SubLString $str_alt88$_kbs_skolems__is_null_ = makeString("*kbs-skolems* is null.");
-
-    static private final SubLString $str_alt89$_kbs_constants__is_null_ = makeString("*kbs-constants* is null.");
-
-    static private final SubLString $str_alt90$_kbs_constant_table__is_null_ = makeString("*kbs-constant-table* is null.");
-
-    static private final SubLString $str_alt91$_kbs_narts__is_null_ = makeString("*kbs-narts* is null.");
-
-    static private final SubLString $str_alt92$_kbs_forts__is_null_ = makeString("*kbs-forts* is null.");
-
-    static private final SubLString $str_alt93$_kbs_fort_table__is_null_ = makeString("*kbs-fort-table* is null.");
-
-    static private final SubLString $str_alt94$_kbs_definitional_constant_table_ = makeString("*kbs-definitional-constant-table* is null.");
-
-    static private final SubLString $str_alt95$_kbs_definitional_predicate_table = makeString("*kbs-definitional-predicate-table* is null.");
-
-    static private final SubLString $str_alt96$_kbs_assertion_table__is_null_ = makeString("*kbs-assertion-table* is null.");
-
-    static private final SubLString $str_alt97$_kbs_deduction_table__is_null_ = makeString("*kbs-deduction-table* is null.");
-
-    static private final SubLString $str_alt98$______KB__S_KBS_statistics__ = makeString("~&;;; KB ~S KBS statistics~%");
-
-    static private final SubLString $str_alt99$__FORTs___________7___D__ = makeString("~&FORTs        : ~7,' D~%");
-
-    static private final SubLString $str_alt100$___Constants______7___D__ = makeString("~& Constants   : ~7,' D~%");
-
-    static private final SubLString $str_alt101$_____def_only_____7___D__ = makeString("~&  (def only) : ~7,' D~%");
-
-    static private final SubLString $str_alt102$___NARTs__________7___D__ = makeString("~& NARTs       : ~7,' D~%");
-
-    static private final SubLString $str_alt103$__Assertions______7___D__ = makeString("~&Assertions   : ~7,' D~%");
-
-    static private final SubLString $str_alt104$__Deductions______7___D__ = makeString("~&Deductions   : ~7,' D~%");
-
-    static private final SubLSymbol $sym105$ISA_MT_ = makeSymbol("ISA-MT?");
-
-    static private final SubLString $str_alt106$No_valid_KBS_available_ = makeString("No valid KBS available!");
-
-    static private final SubLString $str_alt109$do_broad_mt_index = makeString("do-broad-mt-index");
 }
 
 /**

@@ -9,6 +9,7 @@ import org.logicmoo.system.BeanShellCntrl;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -101,8 +102,11 @@ public abstract class SubLTrampolineFile
 	}
 
 	public static void enforceType(SubLObject obj, SubLSymbol predicate) {
-		if (SubLNil.NIL == UnaryFunction.makeInstance(predicate).processItem(obj))
-			Errors.error(SubLObjectFactory.makeString("Got invalid type for object: " + obj + "." + " Wanted type: " + predicate + " Actual type: " + obj.toTypeName()));
+		if (SubLNil.NIL == UnaryFunction.makeInstance(predicate).processItem(obj)) {
+			if (!SubLMain.BOOTY_HACKZ)
+				Errors.error(SubLObjectFactory.makeString("Got invalid type for object: " + obj + "." + " Wanted type: " + predicate + " Actual type: " + obj.toTypeName()));
+		}
+
 	}
 
 	public static BinaryFunction extractBinaryFunc(SubLObject func) {

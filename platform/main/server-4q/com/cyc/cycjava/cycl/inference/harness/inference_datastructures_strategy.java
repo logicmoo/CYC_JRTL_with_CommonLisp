@@ -4004,7 +4004,7 @@ public final class inference_datastructures_strategy extends SubLTranslatedFile 
 
 	public static SubLObject strategy_dispatch_funcall_0_alt(SubLObject func, SubLObject strategy) {
 		{
-			SubLObject pcase_var = func;
+			SubLObject pcase_var = func; 
 			if (pcase_var.eql(BALANCED_STRATEGY_DEFAULT_SELECT_BEST_STRATEGEM)) {
 				return inference_balanced_tactician_execution.balanced_strategy_default_select_best_strategem(strategy);
 			} else {

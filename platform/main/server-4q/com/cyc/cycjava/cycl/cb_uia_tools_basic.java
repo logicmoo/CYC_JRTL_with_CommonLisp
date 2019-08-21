@@ -601,7 +601,7 @@ public final class cb_uia_tools_basic extends SubLTranslatedFile implements V02 
         if (NIL != fort_types_interface.predicate_in_any_mtP(topic)) {
             return NIL;
         } else
-            if (NIL == lexicon_utilities.lexifications_for_term(topic, NIL, ONE_INTEGER)) {
+            if (NIL == lexicon_utilities.lexifications_for_term(topic, NIL, ONE_INTEGER, UNPROVIDED_SYM)) {
                 return NIL;
             } else {
                 return T;
@@ -1659,7 +1659,7 @@ public final class cb_uia_tools_basic extends SubLTranslatedFile implements V02 
                                     if (NIL != $cb_uiat_thinking_progress_refresh_rate$.getDynamicValue(thread)) {
                                         html_utilities.html_markup(html_macros.$html_head_head$.getGlobalValue());
                                         html_macros.html_head_content_type();
-                                        html_utilities.html_refresh($cb_uiat_thinking_progress_refresh_rate$.getDynamicValue(thread));
+                                        html_utilities.html_refresh($cb_uiat_thinking_progress_refresh_rate$.getDynamicValue(thread), UNPROVIDED_SYM);
                                         html_utilities.html_markup(html_macros.$html_head_tail$.getGlobalValue());
                                         html_utilities.html_source_readability_terpri(UNPROVIDED);
                                     }

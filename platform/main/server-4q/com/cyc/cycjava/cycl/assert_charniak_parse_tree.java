@@ -51,7 +51,7 @@ public final class assert_charniak_parse_tree extends SubLTranslatedFile impleme
         }
         SubLTrampolineFile.checkType(sentence, STRING_OR_UNICODE_NAUT_P);
         {
-            SubLObject subl_sentence = (NIL != unicode_nauts.unicode_naut_p(sentence)) ? ((SubLObject) (unicode_strings.display_to_subl_string(cycl_utilities.nat_arg1(sentence, UNPROVIDED), UNPROVIDED, UNPROVIDED))) : sentence;
+            SubLObject subl_sentence = (NIL != unicode_nauts.unicode_naut_p(sentence, UNPROVIDED_SYM)) ? ((SubLObject) (unicode_strings.display_to_subl_string(cycl_utilities.nat_arg1(sentence, UNPROVIDED), UNPROVIDED, UNPROVIDED))) : sentence;
             SubLObject charniak_parse = parser.charniak_parse(subl_sentence, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
             return assert_charniak_parse_tree(charniak_parse, tokenization);
         }

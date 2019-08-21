@@ -110,20 +110,7 @@ public final class cb_fact_sheets extends SubLTranslatedFile implements V02 {
                     try {
                         memoization_state.$memoization_state$.bind(local_state, thread);
                         {
-                            SubLObject original_memoization_process = NIL;
-                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                {
-                                    SubLObject current_proc = current_process();
-                                    if (NIL == original_memoization_process) {
-                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                    } else {
-                                        if (original_memoization_process != current_proc) {
-                                            Errors.error($str_alt5$Invalid_attempt_to_reuse_memoizat);
-                                        }
-                                    }
-                                }
-                            }
+                            SubLObject original_memoization_process = memoization_state.aquireMemoStateLock(local_state);
                             try {
                                 {
                                     SubLObject cdolist_list_var = $cb_fact_sheet_verbosities$.getGlobalValue();
@@ -809,11 +796,11 @@ public final class cb_fact_sheets extends SubLTranslatedFile implements V02 {
     }
 
     public static final SubLObject cb_fact_sheet_enqueue_update_task(SubLObject task) {
-        return process_utilities.ipc_enqueue(task, $cb_fact_sheet_update_queue$.getGlobalValue());
+        return process_utilities.ipc_enqueue(task, $cb_fact_sheet_update_queue$.getGlobalValue(), UNPROVIDED_SYM);
     }
 
     public static final SubLObject cb_fact_sheet_dequeue_update_task() {
-        return process_utilities.ipc_dequeue($cb_fact_sheet_update_queue$.getGlobalValue());
+        return process_utilities.ipc_dequeue($cb_fact_sheet_update_queue$.getGlobalValue(), UNPROVIDED_SYM);
     }
 
     public static final SubLObject cb_fact_sheet_queue_contents() {
@@ -869,7 +856,7 @@ public final class cb_fact_sheets extends SubLTranslatedFile implements V02 {
             html_macros.html_head_content_type();
             cb_parameters.cb_head_shortcut_icon();
             html_utilities.html_meta_robot_instructions(cb_parameters.$cb_permit_robots_to_indexP$.getDynamicValue(thread), cb_parameters.$cb_permit_robots_to_followP$.getDynamicValue(thread));
-            html_utilities.html_refresh(FIVE_INTEGER);
+            html_utilities.html_refresh(FIVE_INTEGER, UNPROVIDED_SYM);
             html_utilities.html_markup(html_macros.$html_head_tail$.getGlobalValue());
             html_utilities.html_source_readability_terpri(UNPROVIDED);
             html_print_cb_fact_sheet_update_queue_contents();

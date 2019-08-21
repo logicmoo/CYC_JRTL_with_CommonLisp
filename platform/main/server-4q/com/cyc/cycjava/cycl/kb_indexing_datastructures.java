@@ -1,91 +1,8 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.access_macros.register_external_symbol;
-import static com.cyc.cycjava.cycl.access_macros.register_macro_helper;
-import static com.cyc.cycjava.cycl.constant_handles.constant_p;
-import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
-import static com.cyc.cycjava.cycl.constant_handles.valid_constantP;
-import static com.cyc.cycjava.cycl.control_vars.kb_loaded;
-import static com.cyc.cycjava.cycl.set.clear_set;
-import static com.cyc.cycjava.cycl.set.new_set;
-import static com.cyc.cycjava.cycl.set.set_add;
-import static com.cyc.cycjava.cycl.set.set_element_list;
-import static com.cyc.cycjava.cycl.set.set_memberP;
-import static com.cyc.cycjava.cycl.set.set_p;
-import static com.cyc.cycjava.cycl.set.set_remove;
-import static com.cyc.cycjava.cycl.set.set_size;
-import static com.cyc.cycjava.cycl.set_utilities.set_arbitrary_element;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.$catch_error_message_target$;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.declare_defglobal;
-import static com.cyc.cycjava.cycl.subl_promotions.memberP;
-import static com.cyc.cycjava.cycl.utilities_macros.register_cyc_api_function;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.append;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.make_list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.nconc;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.nth;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.rplaca;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.rplacd;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.set_nth;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.apply;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.clrhash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.gethash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.gethash_without_values;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.hash_table_count;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.make_hash_table;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.remhash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.sethash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.ceiling;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.integerDivide;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.minus;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.multiply;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.numGE;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.round;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.subtract;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.copy_seq;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.elt;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.length;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.nreverse;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.reverse;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.boundp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.consp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.values;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.aref;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.make_vector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.set_aref;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeDouble;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_listp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.property_list_member;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cadr;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.copy_list;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.fourth;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.member;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.second;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.third;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.bq_cons;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-
-import org.logicmoo.system.BeanShellCntrl;
-
+import com.cyc.cycjava.cycl.kb_indexing_datastructures;
+import com.cyc.cycjava.cycl.subl_macro_promotions;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
@@ -96,61 +13,59 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
+import org.logicmoo.system.BeanShellCntrl;
+
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.kb_indexing_datastructures.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.MINUS_ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- * module:      KB-INDEXING-DATASTRUCTURES
- * source file: /cyc/top/cycl/kb-indexing-datastructures.lisp
- * created:     2019/07/03 17:37:23
- */
-public final class kb_indexing_datastructures extends SubLTranslatedFile implements V12 {
-    public static final SubLObject intermediate_index_dictionary_set(SubLObject intermediate_index, SubLObject key, SubLObject value) {
-        SubLTrampolineFile.checkType(value, SUBINDEX_P);
-        return dictionary.dictionary_enter(intermediate_index_dictionary(intermediate_index), key, value);
-    }
-
-    public static final SubLObject intermediate_index_dictionary_delete_key(SubLObject intermediate_index, SubLObject key) {
-        return dictionary.dictionary_remove(intermediate_index_dictionary(intermediate_index), key);
-    }
-
-    /**
-     * assumes INTERMEDIATE-INDEX is dictionary-style
-     */
-    @LispMethod(comment = "assumes INTERMEDIATE-INDEX is dictionary-style")
-    public static final SubLObject intermediate_index_dictionary(SubLObject intermediate_index) {
-        return intermediate_index.rest();
-    }
-
-    /**
-     * returns the set datastructure in FINAL-INDEX.
-     * Currently a final index _is_ a set, so this is the identity function.
-     */
-    @LispMethod(comment = "returns the set datastructure in FINAL-INDEX.\r\nCurrently a final index _is_ a set, so this is the identity function.\nreturns the set datastructure in FINAL-INDEX.\nCurrently a final index _is_ a set, so this is the identity function.")
-    public static final SubLObject final_index_set(SubLObject final_index) {
-        return final_index;
-    }
-
-    public static final SubLObject do_final_index_valid_index_p(SubLObject v_object) {
-        return makeBoolean(NIL != v_object);
-    }
-
+public final class kb_indexing_datastructures extends SubLTranslatedFile {
     public static final SubLFile me = new kb_indexing_datastructures();
+
+    public static final String myName = "com.cyc.cycjava.cycl.kb_indexing_datastructures";
+
+    public static final String myFingerPrint = "e8f08cd71b799a01c1c993fee3c39f69d7eed19f87ee6b582ea29ae21b0b6838";
 
 
 
     // deflexical
     // The estimated percentage of assertions that have meta-assertions
-    /**
-     * The estimated percentage of assertions that have meta-assertions
-     */
-    @LispMethod(comment = "The estimated percentage of assertions that have meta-assertions\ndeflexical")
     private static final SubLSymbol $meta_assertion_frequency$ = makeSymbol("*META-ASSERTION-FREQUENCY*");
 
     // deflexical
@@ -158,38 +73,50 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
      * Constants which are part of the syntax and which therefore are not fully
      * indexed.
      */
-    @LispMethod(comment = "Constants which are part of the syntax and which therefore are not fully\r\nindexed.\ndeflexical\nConstants which are part of the syntax and which therefore are not fully\nindexed.")
     private static final SubLSymbol $unindexed_syntax_constants$ = makeSymbol("*UNINDEXED-SYNTAX-CONSTANTS*");
 
+
+
+
+
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $current_complex_index_keys_in_orderP$ = makeSymbol("*CURRENT-COMPLEX-INDEX-KEYS-IN-ORDER?*");
 
-    // defparameter
-    @LispMethod(comment = "defparameter")
-    public static final SubLSymbol $ordered_final_index_resource$ = makeSymbol("*ORDERED-FINAL-INDEX-RESOURCE*");
+
+
+
 
     // defparameter
-    @LispMethod(comment = "defparameter")
+    public static final SubLSymbol $ordered_final_index_resource$ = makeSymbol("*ORDERED-FINAL-INDEX-RESOURCE*");
+
+
+
+    // defparameter
     public static final SubLSymbol $recent_final_topn_indices$ = makeSymbol("*RECENT-FINAL-TOPN-INDICES*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $with_final_topn_index_tracking$ = makeSymbol("*WITH-FINAL-TOPN-INDEX-TRACKING*");
 
     // Internal Constants
-    @LispMethod(comment = "Internal Constants")
     public static final SubLSymbol $assertion_indexing_store$ = makeSymbol("*ASSERTION-INDEXING-STORE*");
 
     private static final SubLFloat $float$0_05 = makeDouble(0.05);
 
-    static private final SubLList $list3 = list(list(makeSymbol("ASSERTION-VAR"), makeSymbol("&KEY"), makeSymbol("DONE"), makeSymbol("PROGRESS-MESSAGE")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
-    private static final SubLList $list4 = list($DONE, makeKeyword("PROGRESS-MESSAGE"));
+
+    public static final SubLList $list3 = list(list(makeSymbol("ASSERTION-VAR"), makeSymbol("&KEY"), makeSymbol("DONE"), makeSymbol("PROGRESS-MESSAGE")), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+    private static final SubLList $list4 = list(makeKeyword("DONE"), makeKeyword("PROGRESS-MESSAGE"));
 
     private static final SubLSymbol $ALLOW_OTHER_KEYS = makeKeyword("ALLOW-OTHER-KEYS");
 
+
+
+
+
     private static final SubLSymbol $sym8$PROGRESS_MESSAGE_VAR = makeUninternedSymbol("PROGRESS-MESSAGE-VAR");
+
+
 
     private static final SubLSymbol DO_ASSERTIONS_WITH_META_ASSERTIONS = makeSymbol("DO-ASSERTIONS-WITH-META-ASSERTIONS");
 
@@ -201,23 +128,37 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
 
     private static final SubLList $list14 = list(ZERO_INTEGER);
 
+
+
+
+
+
+
+
+
     private static final SubLList $list19 = list(makeSymbol("NEW-ASSERTIONS-WITH-META-ASSERTIONS-ITERATOR"));
 
     private static final SubLSymbol NEW_ASSERTIONS_WITH_META_ASSERTIONS_ITERATOR = makeSymbol("NEW-ASSERTIONS-WITH-META-ASSERTIONS-ITERATOR");
 
-    private static final SubLList $list21 = list(reader_make_constant_shell("implies"), reader_make_constant_shell("and"), reader_make_constant_shell("or"), reader_make_constant_shell("not"));
+    private static final SubLList $list21 = list(reader_make_constant_shell(makeString("implies")), reader_make_constant_shell(makeString("and")), reader_make_constant_shell(makeString("or")), reader_make_constant_shell(makeString("not")));
+
+
 
     private static final SubLList $list23 = list(makeSymbol("OBJECT"));
 
     private static final SubLString $str24$Returns_T_iff_OBJECT_is_an_indexe = makeString("Returns T iff OBJECT is an indexed CycL term, e.g. a fort or assertion.");
 
-    static private final SubLList $list25 = list(makeSymbol("BOOLEANP"));
+    public static final SubLList $list25 = list(makeSymbol("BOOLEANP"));
 
     private static final SubLList $list26 = list(list(makeSymbol("VAR"), makeSymbol("&OPTIONAL"), list(makeSymbol("MESSAGE"), makeString("mapping Cyc indexed terms"))), makeSymbol("&BODY"), makeSymbol("BODY"));
 
     private static final SubLString $$$mapping_Cyc_indexed_terms = makeString("mapping Cyc indexed terms");
 
+
+
     private static final SubLSymbol DO_FORTS = makeSymbol("DO-FORTS");
+
+
 
     private static final SubLString $str31$_A__forts_ = makeString("~A (forts)");
 
@@ -263,9 +204,11 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
 
     private static final SubLList $list52 = list(list(makeSymbol("KEY-VAR"), makeSymbol("SUBINDEX-VAR"), makeSymbol("INTERMEDIATE-INDEX"), makeSymbol("&KEY"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
-    private static final SubLList $list53 = list($DONE);
+    private static final SubLList $list53 = list(makeKeyword("DONE"));
 
     private static final SubLSymbol $sym54$INDEX = makeUninternedSymbol("INDEX");
+
+
 
     private static final SubLSymbol DO_INTERMEDIATE_INDEX_VALID_INDEX_P = makeSymbol("DO-INTERMEDIATE-INDEX-VALID-INDEX-P");
 
@@ -285,7 +228,11 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
 
     private static final SubLSymbol $sym64$KEY_SET = makeUninternedSymbol("KEY-SET");
 
+
+
     private static final SubLSymbol SEGREGATE_INDEX_CHANGES_AND_PRISTINES = makeSymbol("SEGREGATE-INDEX-CHANGES-AND-PRISTINES");
+
+
 
     private static final SubLSymbol INTERMEDIATE_INDEX_LOOKUP = makeSymbol("INTERMEDIATE-INDEX-LOOKUP");
 
@@ -311,6 +258,10 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
 
     private static final SubLSymbol $sym79$INDEX = makeUninternedSymbol("INDEX");
 
+
+
+
+
     private static final SubLSymbol FINAL_UNIFIED_INDEX_P = makeSymbol("FINAL-UNIFIED-INDEX-P");
 
     private static final SubLSymbol DO_FINAL_UNIFIED_INDEX_INTERNAL = makeSymbol("DO-FINAL-UNIFIED-INDEX-INTERNAL");
@@ -322,6 +273,8 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
     private static final SubLSymbol FINAL_TOPN_INDEX_P = makeSymbol("FINAL-TOPN-INDEX-P");
 
     private static final SubLSymbol DO_FINAL_TOPN_INDEX_INTERNAL = makeSymbol("DO-FINAL-TOPN-INDEX-INTERNAL");
+
+
 
     private static final SubLList $list89 = list(makeSymbol("FINAL-INDEX-P"));
 
@@ -337,17 +290,23 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
 
     private static final SubLList $list95 = list(list(makeSymbol("LEAF-VAR"), makeSymbol("FINAL-UNIFIED-INDEX"), makeSymbol("&KEY"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
+
+
     private static final SubLSymbol FINAL_UNIFIED_INDEX_SET = makeSymbol("FINAL-UNIFIED-INDEX-SET");
 
     private static final SubLSymbol $sym98$LEAF_ITEMS = makeUninternedSymbol("LEAF-ITEMS");
 
     private static final SubLSymbol SET_ELEMENT_LIST = makeSymbol("SET-ELEMENT-LIST");
 
+
+
     private static final SubLSymbol SORT_ASSERTIONS = makeSymbol("SORT-ASSERTIONS");
 
     private static final SubLSymbol DO_FINAL_UNIFIED_INDEX = makeSymbol("DO-FINAL-UNIFIED-INDEX");
 
     public static final SubLSymbol $final_sharded_index_shard_size$ = makeSymbol("*FINAL-SHARDED-INDEX-SHARD-SIZE*");
+
+
 
     private static final SubLList $list105 = list(makeSymbol("KEY"), makeSymbol("SHARD"));
 
@@ -359,6 +318,8 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
 
     private static final SubLSymbol FINAL_SHARDED_INDEX_SHARD_MAP = makeSymbol("FINAL-SHARDED-INDEX-SHARD-MAP");
 
+
+
     private static final SubLSymbol $sym111$SHARD_KEY_LIST = makeUninternedSymbol("SHARD-KEY-LIST");
 
     private static final SubLSymbol $sym112$KEY = makeUninternedSymbol("KEY");
@@ -367,13 +328,19 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
 
     private static final SubLSymbol $sym114$SHARD_CONTENTS = makeUninternedSymbol("SHARD-CONTENTS");
 
+
+
     private static final SubLSymbol MAP_KEYS = makeSymbol("MAP-KEYS");
 
-    private static final SubLList $list117 = list(list(QUOTE, makeSymbol("<")));
+    private static final SubLList $list117 = list(list(makeSymbol("QUOTE"), makeSymbol("<")));
 
     private static final SubLSymbol MAP_GET = makeSymbol("MAP-GET");
 
     private static final SubLSymbol ORDERED_FINAL_SHARDED_INDEX_EXTRACT_CONTENTS = makeSymbol("ORDERED-FINAL-SHARDED-INDEX-EXTRACT-CONTENTS");
+
+
+
+
 
     private static final SubLSymbol $sym122$POSSIBLE_ASSERTION_ = makeSymbol("POSSIBLE-ASSERTION<");
 
@@ -384,6 +351,10 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
     private static final SubLSymbol INDEXING_LEAF_SUID = makeSymbol("INDEXING-LEAF-SUID");
 
     private static final SubLString $str126$Implementation_error__shard_count = makeString("Implementation error: shard count of ~A does not match keys length of ~A.");
+
+
+
+
 
     private static final SubLString $str129$Shard_count_of__A_does_not_match_ = makeString("Shard count of ~A does not match keys length of ~A.");
 
@@ -407,9 +378,13 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
 
     private static final SubLList $list139 = list(list(makeSymbol("*WITH-FINAL-TOPN-INDEX-TRACKING*")));
 
+
+
     private static final SubLString $str141$__Creating_empty_TOP_N_index__A_o = makeString("~&Creating empty TOP-N index ~A on ~A.~%");
 
     private static final SubLString $str142$Upgrading_index__A_on__A___A_item = makeString("Upgrading index ~A on ~A (~A items) to TOP-N index.~%");
+
+
 
     private static final SubLString $str144$Final_Top_N_index_iterator_for__A = makeString("Final Top-N index iterator for ~A requested.~%");
 
@@ -437,38 +412,10 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
 
     static final boolean assertionsDisabledSynth = true;
 
-    // Definitions
-    /**
-     * sets up all tables needed for the KB indexing
-     *
-     * @param estimated-size;
-     * 		estimated # of constants
-     */
-    @LispMethod(comment = "sets up all tables needed for the KB indexing\r\n\r\n@param estimated-size;\r\n\t\testimated # of constants")
-    public static final SubLObject setup_indexing_tables_alt(SubLObject estimated_size) {
-        {
-            SubLObject estimated_assertion_count = multiply(TEN_INTEGER, estimated_size);
-            assertion_indexing_store_initialize(estimated_assertion_count);
-        }
-        return NIL;
-    }
-
-    // Definitions
-    /**
-     * sets up all tables needed for the KB indexing
-     *
-     * @param estimated-size;
-     * 		estimated # of constants
-     */
-    @LispMethod(comment = "sets up all tables needed for the KB indexing\r\n\r\n@param estimated-size;\r\n\t\testimated # of constants")
     public static SubLObject setup_indexing_tables(final SubLObject estimated_size) {
         final SubLObject estimated_assertion_count = multiply(TEN_INTEGER, estimated_size);
         assertion_indexing_store_initialize(estimated_assertion_count);
         return NIL;
-    }
-
-    public static final SubLObject assertion_indexing_store_alt() {
-        return $assertion_indexing_store$.getGlobalValue();
     }
 
     public static SubLObject assertion_indexing_store() {
@@ -479,29 +426,9 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return hash_table_count($assertion_indexing_store$.getGlobalValue());
     }
 
-    public static final SubLObject assertion_indexing_store_reset_alt(SubLObject store) {
-        $assertion_indexing_store$.setGlobalValue(store);
-        return store;
-    }
-
     public static SubLObject assertion_indexing_store_reset(final SubLObject store) {
         $assertion_indexing_store$.setGlobalValue(store);
         return store;
-    }
-
-    public static final SubLObject assertion_indexing_store_initial_size_alt(SubLObject estimated_assertion_count) {
-        if (estimated_assertion_count == UNPROVIDED) {
-            estimated_assertion_count = NIL;
-        }
-        if (NIL != estimated_assertion_count) {
-            return round(multiply(estimated_assertion_count, $meta_assertion_frequency$.getGlobalValue()), UNPROVIDED);
-        } else {
-            if (NIL != kb_loaded()) {
-                return round(multiply(assertion_handles.assertion_count(), $meta_assertion_frequency$.getGlobalValue()), UNPROVIDED);
-            } else {
-                return $int$64;
-            }
-        }
     }
 
     public static SubLObject assertion_indexing_store_initial_size(SubLObject estimated_assertion_count) {
@@ -515,17 +442,6 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
             return round(multiply(assertion_handles.assertion_count(), $meta_assertion_frequency$.getGlobalValue()), UNPROVIDED);
         }
         return $int$64;
-    }
-
-    public static final SubLObject assertion_indexing_store_initialize_alt(SubLObject estimated_assertion_count) {
-        if (estimated_assertion_count == UNPROVIDED) {
-            estimated_assertion_count = NIL;
-        }
-        {
-            SubLObject initial_size = assertion_indexing_store_initial_size(estimated_assertion_count);
-            assertion_indexing_store_reset(make_hash_table(initial_size, symbol_function(EQ), UNPROVIDED));
-        }
-        return $assertion_indexing_store$.getGlobalValue();
     }
 
     public static SubLObject assertion_indexing_store_initialize(SubLObject estimated_assertion_count) {
@@ -545,29 +461,13 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return clrhash($assertion_indexing_store$.getGlobalValue());
     }
 
-    public static final SubLObject assertion_indexing_store_get_alt(SubLObject assertion) {
-        return values(gethash(assertion, $assertion_indexing_store$.getGlobalValue(), new_simple_index()));
-    }
-
     public static SubLObject assertion_indexing_store_get(final SubLObject assertion) {
         return gethash_without_values(assertion, $assertion_indexing_store$.getGlobalValue(), new_simple_index());
-    }
-
-    public static final SubLObject assertion_indexing_store_remove_alt(SubLObject assertion) {
-        return remhash(assertion, $assertion_indexing_store$.getGlobalValue());
     }
 
     public static SubLObject assertion_indexing_store_remove(final SubLObject assertion) {
         BeanShellCntrl.removeThis(((AbstractSubLStruct) (assertion)));
         return remhash(assertion, $assertion_indexing_store$.getGlobalValue());
-    }
-
-    public static final SubLObject assertion_indexing_store_set_alt(SubLObject assertion, SubLObject index) {
-        if (index == new_simple_index()) {
-            return assertion_indexing_store_remove(assertion);
-        } else {
-            return sethash(assertion, $assertion_indexing_store$.getGlobalValue(), index);
-        }
     }
 
     public static SubLObject assertion_indexing_store_set(final SubLObject assertion, final SubLObject index) {
@@ -637,86 +537,22 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return iteration.new_hash_table_keys_iterator(hashTable);
     }
 
-    public static final SubLObject unindexed_syntax_constants_alt() {
-        return $unindexed_syntax_constants$.getGlobalValue();
-    }
-
     public static SubLObject unindexed_syntax_constants() {
         return $unindexed_syntax_constants$.getGlobalValue();
     }
 
-    /**
-     * Return T iff OBJECT is a constants which is part of the syntax and therefore not fully indexed.
-     */
-    @LispMethod(comment = "Return T iff OBJECT is a constants which is part of the syntax and therefore not fully indexed.")
-    public static final SubLObject unindexed_syntax_constant_p_alt(SubLObject v_object) {
-        return list_utilities.member_eqP(v_object, $unindexed_syntax_constants$.getGlobalValue());
-    }
-
-    /**
-     * Return T iff OBJECT is a constants which is part of the syntax and therefore not fully indexed.
-     */
-    @LispMethod(comment = "Return T iff OBJECT is a constants which is part of the syntax and therefore not fully indexed.")
     public static SubLObject unindexed_syntax_constant_p(final SubLObject v_object) {
         return subl_promotions.memberP(v_object, $unindexed_syntax_constants$.getGlobalValue(), UNPROVIDED, UNPROVIDED);
     }
 
-    /**
-     * Returns T iff OBJECT is an indexed CycL term, e.g. a fort or assertion.
-     */
-    @LispMethod(comment = "Returns T iff OBJECT is an indexed CycL term, e.g. a fort or assertion.")
-    public static final SubLObject indexed_term_p_alt(SubLObject v_object) {
-        return makeBoolean((NIL != cycl_utilities.reified_term_p(v_object)) || (NIL != indexed_unrepresented_term_p(v_object)));
-    }
-
-    /**
-     * Returns T iff OBJECT is an indexed CycL term, e.g. a fort or assertion.
-     */
-    @LispMethod(comment = "Returns T iff OBJECT is an indexed CycL term, e.g. a fort or assertion.")
     public static SubLObject indexed_term_p(final SubLObject v_object) {
         return makeBoolean((NIL != cycl_utilities.reified_term_p(v_object)) || (NIL != indexed_unrepresented_term_p(v_object)));
     }
 
-    /**
-     * Returns T iff OBJECT is an indexed unrepresented CycL term, e.g., a string or number.
-     */
-    @LispMethod(comment = "Returns T iff OBJECT is an indexed unrepresented CycL term, e.g., a string or number.")
-    public static final SubLObject indexed_unrepresented_term_p_alt(SubLObject v_object) {
-        return cycl_grammar.cycl_unrepresented_term_p(v_object);
-    }
-
-    /**
-     * Returns T iff OBJECT is an indexed unrepresented CycL term, e.g., a string or number.
-     */
-    @LispMethod(comment = "Returns T iff OBJECT is an indexed unrepresented CycL term, e.g., a string or number.")
     public static SubLObject indexed_unrepresented_term_p(final SubLObject v_object) {
         return cycl_grammar.cycl_unrepresented_term_p(v_object);
     }
 
-    /**
-     * Returns T iff OBJECT is a valid indexed CycL term, i.e. a fort or an assertion.
-     */
-    @LispMethod(comment = "Returns T iff OBJECT is a valid indexed CycL term, i.e. a fort or an assertion.")
-    public static final SubLObject valid_indexed_termP_alt(SubLObject v_object) {
-        if (NIL != forts.fort_p(v_object)) {
-            return forts.valid_fortP(v_object);
-        } else {
-            if (NIL != assertion_handles.assertion_p(v_object)) {
-                return assertion_handles.valid_assertionP(v_object, UNPROVIDED);
-            } else {
-                if (NIL != indexed_unrepresented_term_p(v_object)) {
-                    return T;
-                } else {
-                    return NIL;
-                }
-            }
-        }
-    }
-
-    /**
-     * Returns T iff OBJECT is a valid indexed CycL term, i.e. a fort or an assertion.
-     */
-    @LispMethod(comment = "Returns T iff OBJECT is a valid indexed CycL term, i.e. a fort or an assertion.")
     public static SubLObject valid_indexed_termP(final SubLObject v_object) {
         if (NIL != forts.fort_p(v_object)) {
             return forts.valid_fortP(v_object);
@@ -730,32 +566,6 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return NIL;
     }
 
-    /**
-     * Returns T iff OBJECT is a valid indexed CycL term, i.e. a fort or an assertion.
-     * Performs more robust checking than @xref VALID-INDEXED-TERM?
-     */
-    @LispMethod(comment = "Returns T iff OBJECT is a valid indexed CycL term, i.e. a fort or an assertion.\r\nPerforms more robust checking than @xref VALID-INDEXED-TERM?\nReturns T iff OBJECT is a valid indexed CycL term, i.e. a fort or an assertion.\nPerforms more robust checking than @xref VALID-INDEXED-TERM?")
-    public static final SubLObject valid_indexed_term_robustP_alt(SubLObject v_object) {
-        if (NIL != forts.fort_p(v_object)) {
-            return forts.valid_fort_robustP(v_object);
-        } else {
-            if (NIL != assertion_handles.assertion_p(v_object)) {
-                return assertions_low.valid_assertion_robustP(v_object);
-            } else {
-                if (NIL != indexed_unrepresented_term_p(v_object)) {
-                    return T;
-                } else {
-                    return NIL;
-                }
-            }
-        }
-    }
-
-    /**
-     * Returns T iff OBJECT is a valid indexed CycL term, i.e. a fort or an assertion.
-     * Performs more robust checking than @xref VALID-INDEXED-TERM?
-     */
-    @LispMethod(comment = "Returns T iff OBJECT is a valid indexed CycL term, i.e. a fort or an assertion.\r\nPerforms more robust checking than @xref VALID-INDEXED-TERM?\nReturns T iff OBJECT is a valid indexed CycL term, i.e. a fort or an assertion.\nPerforms more robust checking than @xref VALID-INDEXED-TERM?")
     public static SubLObject valid_indexed_term_robustP(final SubLObject v_object) {
         if (NIL != forts.fort_p(v_object)) {
             return forts.valid_fort_robustP(v_object);
@@ -769,133 +579,26 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return NIL;
     }
 
-    /**
-     * Returns T iff OBJECT is an invalid indexed CycL term, i.e. a fort or an assertion.
-     */
-    @LispMethod(comment = "Returns T iff OBJECT is an invalid indexed CycL term, i.e. a fort or an assertion.")
-    public static final SubLObject invalid_indexed_termP_alt(SubLObject v_object) {
-        return makeBoolean((NIL != indexed_term_p(v_object)) && (NIL == valid_indexed_termP(v_object)));
-    }
-
-    /**
-     * Returns T iff OBJECT is an invalid indexed CycL term, i.e. a fort or an assertion.
-     */
-    @LispMethod(comment = "Returns T iff OBJECT is an invalid indexed CycL term, i.e. a fort or an assertion.")
     public static SubLObject invalid_indexed_termP(final SubLObject v_object) {
         return makeBoolean((NIL != indexed_term_p(v_object)) && (NIL == valid_indexed_termP(v_object)));
     }
 
-    /**
-     * Returns T iff OBJECT is an invalid indexed CycL term, i.e. a fort or an assertion.
-     * Performs more robust checking than @xref INVALID-INDEXED-TERM?
-     */
-    @LispMethod(comment = "Returns T iff OBJECT is an invalid indexed CycL term, i.e. a fort or an assertion.\r\nPerforms more robust checking than @xref INVALID-INDEXED-TERM?\nReturns T iff OBJECT is an invalid indexed CycL term, i.e. a fort or an assertion.\nPerforms more robust checking than @xref INVALID-INDEXED-TERM?")
-    public static final SubLObject invalid_indexed_term_robustP_alt(SubLObject v_object) {
-        return makeBoolean((NIL != indexed_term_p(v_object)) && (NIL == valid_indexed_term_robustP(v_object)));
-    }
-
-    /**
-     * Returns T iff OBJECT is an invalid indexed CycL term, i.e. a fort or an assertion.
-     * Performs more robust checking than @xref INVALID-INDEXED-TERM?
-     */
-    @LispMethod(comment = "Returns T iff OBJECT is an invalid indexed CycL term, i.e. a fort or an assertion.\r\nPerforms more robust checking than @xref INVALID-INDEXED-TERM?\nReturns T iff OBJECT is an invalid indexed CycL term, i.e. a fort or an assertion.\nPerforms more robust checking than @xref INVALID-INDEXED-TERM?")
     public static SubLObject invalid_indexed_term_robustP(final SubLObject v_object) {
         return makeBoolean((NIL != indexed_term_p(v_object)) && (NIL == valid_indexed_term_robustP(v_object)));
     }
 
-    /**
-     * Returns T iff OBJECT is sort of indexed; i.e., a fort, assertion, or hlmt.
-     */
-    @LispMethod(comment = "Returns T iff OBJECT is sort of indexed; i.e., a fort, assertion, or hlmt.")
-    public static final SubLObject sort_of_indexed_term_p_alt(SubLObject v_object) {
-        return makeBoolean((NIL != indexed_term_p(v_object)) || (NIL != hlmt.hlmt_p(v_object)));
-    }
-
-    /**
-     * Returns T iff OBJECT is sort of indexed; i.e., a fort, assertion, or hlmt.
-     */
-    @LispMethod(comment = "Returns T iff OBJECT is sort of indexed; i.e., a fort, assertion, or hlmt.")
     public static SubLObject sort_of_indexed_term_p(final SubLObject v_object) {
         return makeBoolean((NIL != indexed_term_p(v_object)) || (NIL != hlmt.hlmt_p(v_object)));
     }
 
-    /**
-     * Return T iff OBJECT is the type which will be indexed in the other index, if necessary.
-     */
-    @LispMethod(comment = "Return T iff OBJECT is the type which will be indexed in the other index, if necessary.")
-    public static final SubLObject fully_indexed_term_p_alt(SubLObject v_object) {
-        return makeBoolean((NIL != indexed_term_p(v_object)) && (NIL == unindexed_syntax_constant_p(v_object)));
-    }
-
-    /**
-     * Return T iff OBJECT is the type which will be indexed in the other index, if necessary.
-     */
-    @LispMethod(comment = "Return T iff OBJECT is the type which will be indexed in the other index, if necessary.")
     public static SubLObject fully_indexed_term_p(final SubLObject v_object) {
         return makeBoolean((NIL != indexed_term_p(v_object)) && (NIL == unindexed_syntax_constant_p(v_object)));
     }
 
-    /**
-     * Return T iff OBJECT is the type which will be indexed in the other index, if necessary, and is valid.
-     */
-    @LispMethod(comment = "Return T iff OBJECT is the type which will be indexed in the other index, if necessary, and is valid.")
-    public static final SubLObject valid_fully_indexed_term_p_alt(SubLObject v_object) {
-        return makeBoolean((NIL != valid_indexed_termP(v_object)) && (NIL == unindexed_syntax_constant_p(v_object)));
-    }
-
-    /**
-     * Return T iff OBJECT is the type which will be indexed in the other index, if necessary, and is valid.
-     */
-    @LispMethod(comment = "Return T iff OBJECT is the type which will be indexed in the other index, if necessary, and is valid.")
     public static SubLObject valid_fully_indexed_term_p(final SubLObject v_object) {
         return makeBoolean((NIL != valid_indexed_termP(v_object)) && (NIL == unindexed_syntax_constant_p(v_object)));
     }
 
-    /**
-     * Iterate over all indexed terms, executing BODY within the scope of VAR.
-     * VAR is bound to the indexed term.
-     * MESSAGE is a progress message string.
-     */
-    @LispMethod(comment = "Iterate over all indexed terms, executing BODY within the scope of VAR.\r\nVAR is bound to the indexed term.\r\nMESSAGE is a progress message string.\nIterate over all indexed terms, executing BODY within the scope of VAR.\nVAR is bound to the indexed term.\nMESSAGE is a progress message string.")
-    public static final SubLObject do_indexed_terms_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            destructuring_bind_must_consp(current, datum, $list_alt8);
-            {
-                SubLObject temp = current.rest();
-                current = current.first();
-                {
-                    SubLObject var = NIL;
-                    destructuring_bind_must_consp(current, datum, $list_alt8);
-                    var = current.first();
-                    current = current.rest();
-                    {
-                        SubLObject message = (current.isCons()) ? ((SubLObject) (current.first())) : $$$mapping_Cyc_indexed_terms;
-                        destructuring_bind_must_listp(current, datum, $list_alt8);
-                        current = current.rest();
-                        if (NIL == current) {
-                            current = temp;
-                            {
-                                SubLObject body = current;
-                                return list(PROGN, listS(DO_FORTS, list(var, message), append(body, NIL)), listS(DO_ASSERTIONS, list(var, message), append(body, NIL)), listS(DO_KB_UNREPRESENTED_TERMS, list(var, $PROGRESS_MESSAGE, message), append(body, NIL)));
-                            }
-                        } else {
-                            cdestructuring_bind_error(datum, $list_alt8);
-                        }
-                    }
-                }
-            }
-        }
-        return NIL;
-    }
-
-    /**
-     * Iterate over all indexed terms, executing BODY within the scope of VAR.
-     * VAR is bound to the indexed term.
-     * MESSAGE is a progress message string.
-     */
-    @LispMethod(comment = "Iterate over all indexed terms, executing BODY within the scope of VAR.\r\nVAR is bound to the indexed term.\r\nMESSAGE is a progress message string.\nIterate over all indexed terms, executing BODY within the scope of VAR.\nVAR is bound to the indexed term.\nMESSAGE is a progress message string.")
     public static SubLObject do_indexed_terms(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -918,24 +621,8 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return NIL;
     }
 
-    public static final SubLObject index_p_alt(SubLObject v_object) {
-        return makeBoolean((NIL != simple_index_p(v_object)) || (NIL != complex_index_p(v_object)));
-    }
-
     public static SubLObject index_p(final SubLObject v_object) {
         return makeBoolean((NIL != simple_index_p(v_object)) || (NIL != complex_index_p(v_object)));
-    }
-
-    public static final SubLObject index_installed_p_alt(SubLObject v_object) {
-        if (NIL != simple_index_p(v_object)) {
-            return simple_index_installed_p(v_object);
-        } else {
-            if (NIL != complex_index_p(v_object)) {
-                return complex_index_installed_p(v_object);
-            } else {
-                return NIL;
-            }
-        }
     }
 
     public static SubLObject index_installed_p(final SubLObject v_object) {
@@ -948,18 +635,6 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return NIL;
     }
 
-    public static final SubLObject index_not_hosed_p_alt(SubLObject v_object) {
-        if (NIL != simple_index_p(v_object)) {
-            return simple_index_not_hosed_p(v_object);
-        } else {
-            if (NIL != complex_index_p(v_object)) {
-                return complex_index_not_hosed_p(v_object);
-            } else {
-                return NIL;
-            }
-        }
-    }
-
     public static SubLObject index_not_hosed_p(final SubLObject v_object) {
         if (NIL != simple_index_p(v_object)) {
             return simple_index_not_hosed_p(v_object);
@@ -970,27 +645,11 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return NIL;
     }
 
-    public static final SubLObject index_leaves_alt(SubLObject index) {
-        if (NIL != simple_index_p(index)) {
-            return simple_index_leaves(index);
-        } else {
-            return complex_index_leaves(index);
-        }
-    }
-
     public static SubLObject index_leaves(final SubLObject index) {
         if (NIL != simple_index_p(index)) {
             return simple_index_leaves(index);
         }
         return complex_index_leaves(index);
-    }
-
-    public static final SubLObject index_leaf_count_alt(SubLObject index) {
-        if (NIL != simple_index_p(index)) {
-            return simple_index_leaf_count(index);
-        } else {
-            return complex_index_leaf_count(index);
-        }
     }
 
     public static SubLObject index_leaf_count(final SubLObject index) {
@@ -1000,45 +659,6 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return complex_index_leaf_count(index);
     }
 
-    /**
-     *
-     *
-     * @return index-p
-     */
-    @LispMethod(comment = "@return index-p")
-    public static final SubLObject term_index_alt(SubLObject v_term) {
-        if (NIL != constant_p(v_term)) {
-            if (NIL != valid_constantP(v_term, UNPROVIDED)) {
-                return constants_low.constant_index(v_term);
-            }
-        } else {
-            if (NIL != nart_handles.nart_p(v_term)) {
-                if (NIL != nart_handles.valid_nartP(v_term, UNPROVIDED)) {
-                    return narts_low.nart_index(v_term);
-                }
-            } else {
-                if (NIL != assertion_handles.assertion_p(v_term)) {
-                    return assertions_low.assertion_index(v_term);
-                } else {
-                    if (NIL != indexed_unrepresented_term_p(v_term)) {
-                        return unrepresented_terms.unrepresented_term_index(v_term);
-                    } else {
-                        if (NIL != auxiliary_indexing.auxiliary_index_p(v_term)) {
-                            return auxiliary_indexing.get_auxiliary_index(v_term);
-                        }
-                    }
-                }
-            }
-        }
-        return NIL;
-    }
-
-    /**
-     *
-     *
-     * @return index-p
-     */
-    @LispMethod(comment = "@return index-p")
     public static SubLObject term_index(final SubLObject v_term) {
         if (NIL != constant_p(v_term)) {
             if (NIL != valid_constantP(v_term, UNPROVIDED)) {
@@ -1089,46 +709,6 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return T;
     }
 
-    /**
-     * Primitively replaces TERM's index with INDEX.
-     *
-     * @param INDEX
-    index-p
-     * 		
-     */
-    @LispMethod(comment = "Primitively replaces TERM\'s index with INDEX.\r\n\r\n@param INDEX\nindex-p")
-    public static final SubLObject reset_term_index_alt(SubLObject v_term, SubLObject index) {
-        if (NIL != forts.fort_p(v_term)) {
-            forts.reset_fort_index(v_term, index);
-        } else {
-            if (NIL != hlmt.hlmt_p(v_term)) {
-            } else {
-                if (NIL != assertion_handles.assertion_p(v_term)) {
-                    assertions_low.reset_assertion_index(v_term, index);
-                } else {
-                    if (NIL != indexed_unrepresented_term_p(v_term)) {
-                        unrepresented_terms.reset_unrepresented_term_index(v_term, index, T);
-                    } else {
-                        if (NIL != auxiliary_indexing.auxiliary_index_p(v_term)) {
-                            auxiliary_indexing.reset_auxiliary_index(v_term, index);
-                        } else {
-                            Errors.error($str_alt15$_S_is_not_indexed, v_term);
-                        }
-                    }
-                }
-            }
-        }
-        return v_term;
-    }
-
-    /**
-     * Primitively replaces TERM's index with INDEX.
-     *
-     * @param INDEX
-    		index-p
-     * 		
-     */
-    @LispMethod(comment = "Primitively replaces TERM\'s index with INDEX.\r\n\r\n@param INDEX\n\t\tindex-p")
     public static SubLObject reset_term_index(final SubLObject v_term, final SubLObject index) {
         if (NIL != forts.fort_p(v_term)) {
             forts.reset_fort_index(v_term, index);
@@ -1152,28 +732,6 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return v_term;
     }
 
-    public static final SubLObject clear_term_index_alt(SubLObject v_term) {
-        if (NIL != forts.fort_p(v_term)) {
-            forts.clear_fort_index(v_term);
-        } else {
-            if (NIL != hlmt.hlmt_p(v_term)) {
-            } else {
-                if (NIL != assertion_handles.assertion_p(v_term)) {
-                    assertions_low.clear_assertion_index(v_term);
-                } else {
-                    if (NIL != indexed_unrepresented_term_p(v_term)) {
-                        unrepresented_terms.clear_unrepresented_term_index(v_term);
-                    } else {
-                        if (NIL != auxiliary_indexing.auxiliary_index_p(v_term)) {
-                            auxiliary_indexing.clear_auxiliary_index(v_term);
-                        }
-                    }
-                }
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject clear_term_index(final SubLObject v_term) {
         if (NIL != forts.fort_p(v_term)) {
             forts.clear_fort_index(v_term);
@@ -1195,25 +753,6 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return NIL;
     }
 
-    /**
-     * Frees all resources consumed by INDEX
-     */
-    @LispMethod(comment = "Frees all resources consumed by INDEX")
-    public static final SubLObject free_index_alt(SubLObject index) {
-        if (NIL != simple_index_p(index)) {
-            return free_simple_index(index);
-        } else {
-            if (NIL != complex_index_p(index)) {
-                return free_complex_index(index);
-            }
-        }
-        return NIL;
-    }
-
-    /**
-     * Frees all resources consumed by INDEX
-     */
-    @LispMethod(comment = "Frees all resources consumed by INDEX")
     public static SubLObject free_index(final SubLObject index) {
         if (NIL != simple_index_p(index)) {
             return free_simple_index(index);
@@ -1224,164 +763,61 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return NIL;
     }
 
-    /**
-     * Frees all resources consumed by the index for TERM
-     */
-    @LispMethod(comment = "Frees all resources consumed by the index for TERM")
-    public static final SubLObject free_term_index_alt(SubLObject v_term) {
-        free_index(term_index(v_term));
-        reset_term_index(v_term, new_simple_index());
-        return v_term;
-    }
-
-    /**
-     * Frees all resources consumed by the index for TERM
-     */
-    @LispMethod(comment = "Frees all resources consumed by the index for TERM")
     public static SubLObject free_term_index(final SubLObject v_term) {
         free_index(term_index(v_term));
         reset_term_index(v_term, new_simple_index());
         return v_term;
     }
 
-    /**
-     * Return T iff OBJECT is a simple index.
-     */
-    @LispMethod(comment = "Return T iff OBJECT is a simple index.")
-    public static final SubLObject simple_index_p_alt(SubLObject v_object) {
-        return makeBoolean(v_object.isList() && (NIL == complex_index_p(v_object)));
-    }
-
-    /**
-     * Return T iff OBJECT is a simple index.
-     */
-    @LispMethod(comment = "Return T iff OBJECT is a simple index.")
     public static SubLObject simple_index_p(final SubLObject v_object) {
         return makeBoolean(v_object.isList() && (NIL == complex_index_p(v_object)));
-    }
-
-    public static final SubLObject simple_index_installed_p_alt(SubLObject v_object) {
-        return simple_index_p(v_object);
     }
 
     public static SubLObject simple_index_installed_p(final SubLObject v_object) {
         return simple_index_p(v_object);
     }
 
-    public static final SubLObject simple_index_not_hosed_p_alt(SubLObject v_object) {
-        return makeBoolean((NIL != simple_index_p(v_object)) && (NIL != list_utilities.every_in_list(symbol_function(INDEXING_LEAF_INSTALLED_P), v_object, UNPROVIDED)));
-    }
-
     public static SubLObject simple_index_not_hosed_p(final SubLObject v_object) {
         return makeBoolean((NIL != simple_index_p(v_object)) && (NIL != list_utilities.every_in_list(symbol_function(INDEXING_LEAF_INSTALLED_P), v_object, UNPROVIDED)));
-    }
-
-    public static final SubLObject simple_indexed_term_p_alt(SubLObject v_term) {
-        return simple_index_p(term_index(v_term));
     }
 
     public static SubLObject simple_indexed_term_p(final SubLObject v_term) {
         return simple_index_p(term_index(v_term));
     }
 
-    /**
-     * Returns a new empty simple index.
-     */
-    @LispMethod(comment = "Returns a new empty simple index.")
-    public static final SubLObject new_simple_index_alt() {
-        return NIL;
-    }
-
-    /**
-     * Returns a new empty simple index.
-     */
-    @LispMethod(comment = "Returns a new empty simple index.")
     public static SubLObject new_simple_index() {
         return NIL;
-    }
-
-    public static final SubLObject simple_index_leaves_alt(SubLObject simple_index) {
-        return simple_index;
     }
 
     public static SubLObject simple_index_leaves(final SubLObject simple_index) {
         return simple_index;
     }
 
-    public static final SubLObject simple_index_leaf_count_alt(SubLObject simple_index) {
-        return length(simple_index);
-    }
-
     public static SubLObject simple_index_leaf_count(final SubLObject simple_index) {
         return length(simple_index);
-    }
-
-    public static final SubLObject simple_index_memberP_alt(SubLObject simple_index, SubLObject leaf) {
-        return memberP(leaf, simple_index, UNPROVIDED, UNPROVIDED);
     }
 
     public static SubLObject simple_index_memberP(final SubLObject simple_index, final SubLObject leaf) {
         return subl_promotions.memberP(leaf, simple_index, UNPROVIDED, UNPROVIDED);
     }
 
-    public static final SubLObject simple_num_index_alt(SubLObject v_term) {
-        SubLTrampolineFile.checkType(v_term, SIMPLE_INDEXED_TERM_P);
-        return length(term_index(v_term));
-    }
-
     public static SubLObject simple_num_index(final SubLObject v_term) {
-        assert NIL != simple_indexed_term_p(v_term) : "! kb_indexing_datastructures.simple_indexed_term_p(v_term) " + ("kb_indexing_datastructures.simple_indexed_term_p(v_term) " + "CommonSymbols.NIL != kb_indexing_datastructures.simple_indexed_term_p(v_term) ") + v_term;
+        assert NIL != simple_indexed_term_p(v_term) : "kb_indexing_datastructures.simple_indexed_term_p(v_term) " + "CommonSymbols.NIL != kb_indexing_datastructures.simple_indexed_term_p(v_term) " + v_term;
         return simple_index_leaf_count(term_index(v_term));
     }
 
-    /**
-     *
-     *
-     * @return listp; the list of all assertions referencing TERM.
-     * @unknown result is NOT destructible!
-     */
-    @LispMethod(comment = "@return listp; the list of all assertions referencing TERM.\r\n@unknown result is NOT destructible!")
-    public static final SubLObject simple_term_assertion_list_alt(SubLObject v_term) {
-        SubLTrampolineFile.checkType(v_term, SIMPLE_INDEXED_TERM_P);
-        return term_index(v_term);
-    }
-
-    /**
-     *
-     *
-     * @return listp; the list of all assertions referencing TERM.
-     * @unknown result is NOT destructible!
-     */
-    @LispMethod(comment = "@return listp; the list of all assertions referencing TERM.\r\n@unknown result is NOT destructible!")
     public static SubLObject simple_term_assertion_list(final SubLObject v_term) {
-        assert NIL != simple_indexed_term_p(v_term) : "! kb_indexing_datastructures.simple_indexed_term_p(v_term) " + ("kb_indexing_datastructures.simple_indexed_term_p(v_term) " + "CommonSymbols.NIL != kb_indexing_datastructures.simple_indexed_term_p(v_term) ") + v_term;
+        assert NIL != simple_indexed_term_p(v_term) : "kb_indexing_datastructures.simple_indexed_term_p(v_term) " + "CommonSymbols.NIL != kb_indexing_datastructures.simple_indexed_term_p(v_term) " + v_term;
         return simple_index_leaves(term_index(v_term));
-    }
-
-    public static final SubLObject do_simple_index_term_assertion_list_alt(SubLObject v_term) {
-        return simple_term_assertion_list(v_term);
     }
 
     public static SubLObject do_simple_index_term_assertion_list(final SubLObject v_term) {
         return simple_term_assertion_list(v_term);
     }
 
-    public static final SubLObject reset_term_simple_index_alt(SubLObject v_term, SubLObject simple_index) {
-        SubLTrampolineFile.checkType(simple_index, SIMPLE_INDEX_P);
-        return reset_term_index(v_term, simple_index);
-    }
-
     public static SubLObject reset_term_simple_index(final SubLObject v_term, final SubLObject simple_index) {
-        assert NIL != simple_index_p(simple_index) : "! kb_indexing_datastructures.simple_index_p(simple_index) " + ("kb_indexing_datastructures.simple_index_p(simple_index) " + "CommonSymbols.NIL != kb_indexing_datastructures.simple_index_p(simple_index) ") + simple_index;
+        assert NIL != simple_index_p(simple_index) : "kb_indexing_datastructures.simple_index_p(simple_index) " + "CommonSymbols.NIL != kb_indexing_datastructures.simple_index_p(simple_index) " + simple_index;
         return reset_term_index(v_term, simple_index);
-    }
-
-    public static final SubLObject simple_index_insert_alt(SubLObject simple_index, SubLObject leaf) {
-        if (NIL != simple_index_memberP(simple_index, leaf)) {
-            return simple_index;
-        } else {
-            return cons(leaf, simple_index);
-        }
     }
 
     public static SubLObject simple_index_insert(final SubLObject simple_index, final SubLObject leaf) {
@@ -1391,14 +827,6 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return cons(leaf, simple_index);
     }
 
-    public static final SubLObject simple_index_delete_alt(SubLObject simple_index, SubLObject leaf) {
-        if (NIL != simple_index_memberP(simple_index, leaf)) {
-            return list_utilities.delete_first(leaf, simple_index, UNPROVIDED);
-        } else {
-            return simple_index;
-        }
-    }
-
     public static SubLObject simple_index_delete(final SubLObject simple_index, final SubLObject leaf) {
         if (NIL != simple_index_memberP(simple_index, leaf)) {
             return list_utilities.delete_first(leaf, simple_index, UNPROVIDED);
@@ -1406,18 +834,6 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return simple_index;
     }
 
-    /**
-     * Frees all resources consumed by SIMPLE-INDEX
-     */
-    @LispMethod(comment = "Frees all resources consumed by SIMPLE-INDEX")
-    public static final SubLObject free_simple_index_alt(SubLObject simple_index) {
-        return simple_index;
-    }
-
-    /**
-     * Frees all resources consumed by SIMPLE-INDEX
-     */
-    @LispMethod(comment = "Frees all resources consumed by SIMPLE-INDEX")
     public static SubLObject free_simple_index(final SubLObject simple_index) {
         return simple_index;
     }
@@ -1468,120 +884,43 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return consp($current_complex_index_keys$.getDynamicValue(thread));
     }
 
-    public static final SubLObject complex_index_p_alt(SubLObject v_object) {
-        return subindex_p(v_object);
-    }
-
     public static SubLObject complex_index_p(final SubLObject v_object) {
         return subindex_p(v_object);
-    }
-
-    public static final SubLObject complex_index_installed_p_alt(SubLObject v_object) {
-        return subindex_installed_p(v_object);
     }
 
     public static SubLObject complex_index_installed_p(final SubLObject v_object) {
         return subindex_installed_p(v_object);
     }
 
-    public static final SubLObject complex_index_not_hosed_p_alt(SubLObject v_object) {
-        return subindex_not_hosed_p(v_object);
-    }
-
     public static SubLObject complex_index_not_hosed_p(final SubLObject v_object) {
         return subindex_not_hosed_p(v_object);
-    }
-
-    public static final SubLObject complex_indexed_term_p_alt(SubLObject v_term) {
-        return complex_index_p(term_index(v_term));
     }
 
     public static SubLObject complex_indexed_term_p(final SubLObject v_term) {
         return complex_index_p(term_index(v_term));
     }
 
-    public static final SubLObject complex_index_leaves_alt(SubLObject complex_index) {
-        return subindex_leaves(complex_index);
-    }
-
     public static SubLObject complex_index_leaves(final SubLObject complex_index) {
         return subindex_leaves(complex_index);
-    }
-
-    public static final SubLObject complex_index_leaf_count_alt(SubLObject complex_index) {
-        return subindex_leaf_count(complex_index);
     }
 
     public static SubLObject complex_index_leaf_count(final SubLObject complex_index) {
         return subindex_leaf_count(complex_index);
     }
 
-    /**
-     *
-     *
-     * @return nil or subindex-p or indexing-leaf-p
-     */
-    @LispMethod(comment = "@return nil or subindex-p or indexing-leaf-p")
-    public static final SubLObject complex_index_lookup_alt(SubLObject complex_index, SubLObject key) {
-        return subindex_lookup(complex_index, key);
-    }
-
-    /**
-     *
-     *
-     * @return nil or subindex-p or indexing-leaf-p
-     */
-    @LispMethod(comment = "@return nil or subindex-p or indexing-leaf-p")
     public static SubLObject complex_index_lookup(final SubLObject complex_index, final SubLObject key) {
         return subindex_lookup(complex_index, key);
     }
 
-    /**
-     *
-     *
-     * @return nil or subindex-p
-     */
-    @LispMethod(comment = "@return nil or subindex-p")
-    public static final SubLObject term_complex_index_lookup_alt(SubLObject v_term, SubLObject key) {
-        {
-            SubLObject index = term_index(v_term);
-            if (NIL == index) {
-                return NIL;
-            }
-            SubLTrampolineFile.checkType(index, COMPLEX_INDEX_P);
-            return complex_index_lookup(index, key);
-        }
-    }
-
-    /**
-     *
-     *
-     * @return nil or subindex-p
-     */
-    @LispMethod(comment = "@return nil or subindex-p")
     public static SubLObject term_complex_index_lookup(final SubLObject v_term, final SubLObject key) {
         final SubLObject index = term_index(v_term);
         if (NIL == index) {
             return NIL;
         }
-        assert NIL != complex_index_p(index) : "! kb_indexing_datastructures.complex_index_p(index) " + ("kb_indexing_datastructures.complex_index_p(index) " + "CommonSymbols.NIL != kb_indexing_datastructures.complex_index_p(index) ") + index;
+        assert NIL != complex_index_p(index) : "kb_indexing_datastructures.complex_index_p(index) " + "CommonSymbols.NIL != kb_indexing_datastructures.complex_index_p(index) " + index;
         return complex_index_lookup(index, key);
     }
 
-    /**
-     * Initializes a complex index for TERM.  Clobbers any existing
-     * indexing for TERM.
-     */
-    @LispMethod(comment = "Initializes a complex index for TERM.  Clobbers any existing\r\nindexing for TERM.\nInitializes a complex index for TERM.  Clobbers any existing\nindexing for TERM.")
-    public static final SubLObject initialize_term_complex_index_alt(SubLObject v_term) {
-        return initialize_term_subindex(v_term);
-    }
-
-    /**
-     * Initializes a complex index for TERM.  Clobbers any existing
-     * indexing for TERM.
-     */
-    @LispMethod(comment = "Initializes a complex index for TERM.  Clobbers any existing\r\nindexing for TERM.\nInitializes a complex index for TERM.  Clobbers any existing\nindexing for TERM.")
     public static SubLObject initialize_term_complex_index(final SubLObject v_term) {
         return initialize_term_subindex(v_term);
     }
@@ -1600,27 +939,6 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         }
     }
 
-    public static final SubLObject term_complex_index_set_alt(SubLObject v_term, SubLObject key, SubLObject value) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL == value) || (NIL != subindex_p(value)))) {
-                    Errors.error($str_alt22$_s_is_not_a_SUBINDEX_P, value);
-                }
-            }
-            {
-                SubLObject index = term_index(v_term);
-                if (NIL != value) {
-                    SubLTrampolineFile.checkType(index, INTERMEDIATE_INDEX_P);
-                }
-                if (NIL != index) {
-                    intermediate_index_set(index, key, value);
-                }
-            }
-            return value;
-        }
-    }
-
     public static SubLObject term_complex_index_set(final SubLObject v_term, final SubLObject key, final SubLObject value) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (NIL != value)) && (NIL == subindex_p(value))) {
@@ -1636,24 +954,6 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return value;
     }
 
-    /**
-     * Delete any mapping from KEY to a subindex in the complex index for TERM
-     */
-    @LispMethod(comment = "Delete any mapping from KEY to a subindex in the complex index for TERM")
-    public static final SubLObject term_complex_index_delete_key_alt(SubLObject v_term, SubLObject key) {
-        {
-            SubLObject index = term_index(v_term);
-            if (NIL != index) {
-                intermediate_index_delete_key(index, key);
-            }
-        }
-        return v_term;
-    }
-
-    /**
-     * Delete any mapping from KEY to a subindex in the complex index for TERM
-     */
-    @LispMethod(comment = "Delete any mapping from KEY to a subindex in the complex index for TERM")
     public static SubLObject term_complex_index_delete_key(final SubLObject v_term, final SubLObject key) {
         final SubLObject index = term_index(v_term);
         if (NIL != index) {
@@ -1686,40 +986,12 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return v_term;
     }
 
-    /**
-     * Frees all resources consumed by COMPLEX-INDEX
-     */
-    @LispMethod(comment = "Frees all resources consumed by COMPLEX-INDEX")
-    public static final SubLObject free_complex_index_alt(SubLObject complex_index) {
-        return free_subindex(complex_index);
-    }
-
-    /**
-     * Frees all resources consumed by COMPLEX-INDEX
-     */
-    @LispMethod(comment = "Frees all resources consumed by COMPLEX-INDEX")
     public static SubLObject free_complex_index(final SubLObject complex_index) {
         return free_subindex(complex_index);
     }
 
-    public static final SubLObject subindex_p_alt(SubLObject v_object) {
-        return makeBoolean((NIL != intermediate_index_p(v_object)) || (NIL != final_index_p(v_object)));
-    }
-
     public static SubLObject subindex_p(final SubLObject v_object) {
         return makeBoolean((NIL != intermediate_index_p(v_object)) || (NIL != final_index_p(v_object)));
-    }
-
-    public static final SubLObject subindex_installed_p_alt(SubLObject v_object) {
-        if (NIL != intermediate_index_p(v_object)) {
-            return intermediate_index_installed_p(v_object);
-        } else {
-            if (NIL != final_index_p(v_object)) {
-                return final_index_installed_p(v_object);
-            } else {
-                return NIL;
-            }
-        }
     }
 
     public static SubLObject subindex_installed_p(final SubLObject v_object) {
@@ -1732,18 +1004,6 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return NIL;
     }
 
-    public static final SubLObject subindex_not_hosed_p_alt(SubLObject v_object) {
-        if (NIL != intermediate_index_p(v_object)) {
-            return intermediate_index_not_hosed_p(v_object);
-        } else {
-            if (NIL != final_index_p(v_object)) {
-                return final_index_not_hosed_p(v_object);
-            } else {
-                return NIL;
-            }
-        }
-    }
-
     public static SubLObject subindex_not_hosed_p(final SubLObject v_object) {
         if (NIL != intermediate_index_p(v_object)) {
             return intermediate_index_not_hosed_p(v_object);
@@ -1754,30 +1014,6 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return NIL;
     }
 
-    /**
-     *
-     *
-     * @return nil or subindex-p or indexing-leaf-p
-     */
-    @LispMethod(comment = "@return nil or subindex-p or indexing-leaf-p")
-    public static final SubLObject subindex_lookup_alt(SubLObject subindex, SubLObject key) {
-        if (NIL != intermediate_index_p(subindex)) {
-            return intermediate_index_lookup(subindex, key);
-        } else {
-            if (NIL != final_index_memberP(subindex, key)) {
-                return key;
-            } else {
-                return NIL;
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return nil or subindex-p or indexing-leaf-p
-     */
-    @LispMethod(comment = "@return nil or subindex-p or indexing-leaf-p")
     public static SubLObject subindex_lookup(final SubLObject subindex, final SubLObject key) {
         if (NIL != intermediate_index_p(subindex)) {
             return intermediate_index_lookup(subindex, key);
@@ -1788,22 +1024,6 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return NIL;
     }
 
-    /**
-     * gathers up all leaves under SUBINDEX
-     */
-    @LispMethod(comment = "gathers up all leaves under SUBINDEX")
-    public static final SubLObject subindex_leaves_alt(SubLObject subindex) {
-        if (NIL != intermediate_index_p(subindex)) {
-            return intermediate_index_leaves(subindex);
-        } else {
-            return final_index_leaves(subindex);
-        }
-    }
-
-    /**
-     * gathers up all leaves under SUBINDEX
-     */
-    @LispMethod(comment = "gathers up all leaves under SUBINDEX")
     public static SubLObject subindex_leaves(final SubLObject subindex) {
         if (NIL != intermediate_index_p(subindex)) {
             return intermediate_index_leaves(subindex);
@@ -1811,26 +1031,6 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return final_index_leaves(subindex);
     }
 
-    /**
-     *
-     *
-     * @return integerp; the number of indexing leaves anywhere below SUBINDEX
-     */
-    @LispMethod(comment = "@return integerp; the number of indexing leaves anywhere below SUBINDEX")
-    public static final SubLObject subindex_leaf_count_alt(SubLObject subindex) {
-        if (NIL != intermediate_index_p(subindex)) {
-            return intermediate_index_leaf_count(subindex);
-        } else {
-            return final_index_leaf_count(subindex);
-        }
-    }
-
-    /**
-     *
-     *
-     * @return integerp; the number of indexing leaves anywhere below SUBINDEX
-     */
-    @LispMethod(comment = "@return integerp; the number of indexing leaves anywhere below SUBINDEX")
     public static SubLObject subindex_leaf_count(final SubLObject subindex) {
         if (NIL != intermediate_index_p(subindex)) {
             return intermediate_index_leaf_count(subindex);
@@ -1838,43 +1038,10 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return final_index_leaf_count(subindex);
     }
 
-    /**
-     * Initializes a subindex for TERM.  Clobbers any existing
-     * indexing for TERM.
-     */
-    @LispMethod(comment = "Initializes a subindex for TERM.  Clobbers any existing\r\nindexing for TERM.\nInitializes a subindex for TERM.  Clobbers any existing\nindexing for TERM.")
-    public static final SubLObject initialize_term_subindex_alt(SubLObject v_term) {
-        return initialize_term_intermediate_index(v_term);
-    }
-
-    /**
-     * Initializes a subindex for TERM.  Clobbers any existing
-     * indexing for TERM.
-     */
-    @LispMethod(comment = "Initializes a subindex for TERM.  Clobbers any existing\r\nindexing for TERM.\nInitializes a subindex for TERM.  Clobbers any existing\nindexing for TERM.")
     public static SubLObject initialize_term_subindex(final SubLObject v_term) {
         return initialize_term_intermediate_index(v_term);
     }
 
-    /**
-     * Frees all resources consumed by SUBINDEX
-     */
-    @LispMethod(comment = "Frees all resources consumed by SUBINDEX")
-    public static final SubLObject free_subindex_alt(SubLObject subindex) {
-        if (NIL != intermediate_index_p(subindex)) {
-            return free_intermediate_index(subindex);
-        } else {
-            if (NIL != final_index_p(subindex)) {
-                return free_final_index(subindex);
-            }
-        }
-        return NIL;
-    }
-
-    /**
-     * Frees all resources consumed by SUBINDEX
-     */
-    @LispMethod(comment = "Frees all resources consumed by SUBINDEX")
     public static SubLObject free_subindex(final SubLObject subindex) {
         if (NIL != intermediate_index_p(subindex)) {
             return free_intermediate_index(subindex);
@@ -1902,20 +1069,8 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return Errors.error($str51$Dont_know_how_to_merge_sub_index_, subindex_base, subindex_augment);
     }
 
-    public static final SubLObject intermediate_index_p_alt(SubLObject v_object) {
-        return makeBoolean((v_object.isCons() && v_object.first().isInteger()) && (NIL != dictionary.dictionary_p(v_object.rest())));
-    }
-
     public static SubLObject intermediate_index_p(final SubLObject v_object) {
         return makeBoolean((v_object.isCons() && v_object.first().isInteger()) && (NIL != map_utilities.map_p(v_object.rest())));
-    }
-
-    public static final SubLObject intermediate_index_installed_p_alt(SubLObject v_object) {
-        if (NIL == intermediate_index_p(v_object)) {
-            return NIL;
-        } else {
-            return T;
-        }
     }
 
     public static SubLObject intermediate_index_installed_p(final SubLObject v_object) {
@@ -1925,23 +1080,11 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return T;
     }
 
-    public static final SubLObject intermediate_index_not_hosed_p_alt(SubLObject v_object) {
-        if (NIL == intermediate_index_p(v_object)) {
-            return NIL;
-        } else {
-            return T;
-        }
-    }
-
     public static SubLObject intermediate_index_not_hosed_p(final SubLObject v_object) {
         if (NIL == intermediate_index_p(v_object)) {
             return NIL;
         }
         return T;
-    }
-
-    public static final SubLObject new_intermediate_index_alt(SubLObject test_function) {
-        return cons(ZERO_INTEGER, dictionary.new_dictionary(test_function, UNPROVIDED));
     }
 
     public static SubLObject new_intermediate_index(final SubLObject test_function) {
@@ -1953,72 +1096,6 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return cons(intermediate_index_leaf_count(intermediate_index), dictionary.new_dictionary(index_test, UNPROVIDED));
     }
 
-    /**
-     * This is robust against being passed NIL for the intermediate index
-     */
-    @LispMethod(comment = "This is robust against being passed NIL for the intermediate index")
-    public static final SubLObject do_intermediate_index_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            destructuring_bind_must_consp(current, datum, $list_alt24);
-            {
-                SubLObject temp = current.rest();
-                current = current.first();
-                {
-                    SubLObject key_var = NIL;
-                    SubLObject subindex_var = NIL;
-                    SubLObject intermediate_index = NIL;
-                    destructuring_bind_must_consp(current, datum, $list_alt24);
-                    key_var = current.first();
-                    current = current.rest();
-                    destructuring_bind_must_consp(current, datum, $list_alt24);
-                    subindex_var = current.first();
-                    current = current.rest();
-                    destructuring_bind_must_consp(current, datum, $list_alt24);
-                    intermediate_index = current.first();
-                    current = current.rest();
-                    {
-                        SubLObject allow_other_keys_p = NIL;
-                        SubLObject rest = current;
-                        SubLObject bad = NIL;
-                        SubLObject current_1 = NIL;
-                        for (; NIL != rest;) {
-                            destructuring_bind_must_consp(rest, datum, $list_alt24);
-                            current_1 = rest.first();
-                            rest = rest.rest();
-                            destructuring_bind_must_consp(rest, datum, $list_alt24);
-                            if (NIL == member(current_1, $list_alt25, UNPROVIDED, UNPROVIDED)) {
-                                bad = T;
-                            }
-                            if (current_1 == $ALLOW_OTHER_KEYS) {
-                                allow_other_keys_p = rest.first();
-                            }
-                            rest = rest.rest();
-                        }
-                        if ((NIL != bad) && (NIL == allow_other_keys_p)) {
-                            cdestructuring_bind_error(datum, $list_alt24);
-                        }
-                        {
-                            SubLObject done_tail = property_list_member($DONE, current);
-                            SubLObject done = (NIL != done_tail) ? ((SubLObject) (cadr(done_tail))) : NIL;
-                            current = temp;
-                            {
-                                SubLObject body = current;
-                                SubLObject index = $sym28$INDEX;
-                                return list(CLET, list(list(index, intermediate_index)), list(PWHEN, list(DO_INTERMEDIATE_INDEX_VALID_INDEX_P, index), listS(DO_DICTIONARY, list(key_var, subindex_var, list(INTERMEDIATE_INDEX_DICTIONARY, index), done), append(body, NIL))));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * This is robust against being passed NIL for the intermediate index
-     */
-    @LispMethod(comment = "This is robust against being passed NIL for the intermediate index")
     public static SubLObject do_intermediate_index(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -2063,10 +1140,6 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         current = body = temp;
         final SubLObject index = $sym54$INDEX;
         return list(CLET, list(list(index, intermediate_index)), list(PWHEN, list(DO_INTERMEDIATE_INDEX_VALID_INDEX_P, index), listS(DO_MAP, list(key_var, subindex_var, list(INTERMEDIATE_INDEX_MAP, index), $DONE, done), append(body, NIL))));
-    }
-
-    public static final SubLObject do_intermediate_index_valid_index_p_alt(SubLObject v_object) {
-        return makeBoolean(NIL != v_object);
     }
 
     public static SubLObject do_intermediate_index_valid_index_p(final SubLObject v_object) {
@@ -2158,125 +1231,25 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return values(key_set, unchanged_index);
     }
 
-    /**
-     *
-     *
-     * @return nil or subindex-p
-     */
-    @LispMethod(comment = "@return nil or subindex-p")
-    public static final SubLObject intermediate_index_lookup_alt(SubLObject intermediate_index, SubLObject key) {
-        SubLTrampolineFile.checkType(intermediate_index, INTERMEDIATE_INDEX_P);
-        {
-            SubLObject dict = intermediate_index_dictionary(intermediate_index);
-            return dictionary.dictionary_lookup_without_values(dict, key, UNPROVIDED);
-        }
-    }
-
-    /**
-     *
-     *
-     * @return nil or subindex-p
-     */
-    @LispMethod(comment = "@return nil or subindex-p")
     public static SubLObject intermediate_index_lookup(final SubLObject intermediate_index, final SubLObject key) {
-        assert NIL != intermediate_index_p(intermediate_index) : "! kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + ("kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + "CommonSymbols.NIL != kb_indexing_datastructures.intermediate_index_p(intermediate_index) ") + intermediate_index;
+        assert NIL != intermediate_index_p(intermediate_index) : "kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + "CommonSymbols.NIL != kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + intermediate_index;
         final SubLObject map = intermediate_index_map(intermediate_index);
         return map_utilities.map_get_without_values(map, key, UNPROVIDED);
     }
 
-    /**
-     *
-     *
-     * @return listp; a list of keys for INTERMEDIATE-INDEX
-     */
-    @LispMethod(comment = "@return listp; a list of keys for INTERMEDIATE-INDEX")
-    public static final SubLObject intermediate_index_keys_alt(SubLObject intermediate_index) {
-        SubLTrampolineFile.checkType(intermediate_index, INTERMEDIATE_INDEX_P);
-        return dictionary.dictionary_keys(intermediate_index_dictionary(intermediate_index));
-    }
-
-    /**
-     *
-     *
-     * @return listp; a list of keys for INTERMEDIATE-INDEX
-     */
-    @LispMethod(comment = "@return listp; a list of keys for INTERMEDIATE-INDEX")
     public static SubLObject intermediate_index_keys(final SubLObject intermediate_index) {
-        assert NIL != intermediate_index_p(intermediate_index) : "! kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + ("kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + "CommonSymbols.NIL != kb_indexing_datastructures.intermediate_index_p(intermediate_index) ") + intermediate_index;
+        assert NIL != intermediate_index_p(intermediate_index) : "kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + "CommonSymbols.NIL != kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + intermediate_index;
         return map_utilities.map_keys(intermediate_index_map(intermediate_index));
     }
 
-    /**
-     *
-     *
-     * @return integerp; the number of indexing leaves anywhere below INTERMEDIATE-INDEX
-     */
-    @LispMethod(comment = "@return integerp; the number of indexing leaves anywhere below INTERMEDIATE-INDEX")
-    public static final SubLObject intermediate_index_leaf_count_alt(SubLObject intermediate_index) {
-        SubLTrampolineFile.checkType(intermediate_index, INTERMEDIATE_INDEX_P);
-        return intermediate_index.first();
-    }
-
-    /**
-     *
-     *
-     * @return integerp; the number of indexing leaves anywhere below INTERMEDIATE-INDEX
-     */
-    @LispMethod(comment = "@return integerp; the number of indexing leaves anywhere below INTERMEDIATE-INDEX")
     public static SubLObject intermediate_index_leaf_count(final SubLObject intermediate_index) {
-        assert NIL != intermediate_index_p(intermediate_index) : "! kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + ("kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + "CommonSymbols.NIL != kb_indexing_datastructures.intermediate_index_p(intermediate_index) ") + intermediate_index;
+        assert NIL != intermediate_index_p(intermediate_index) : "kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + "CommonSymbols.NIL != kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + intermediate_index;
         return intermediate_index.first();
     }
 
-    /**
-     *
-     *
-     * @unknown result is destructible
-     */
-    @LispMethod(comment = "@unknown result is destructible")
-    public static final SubLObject intermediate_index_leaves_alt(SubLObject intermediate_index) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(intermediate_index, INTERMEDIATE_INDEX_P);
-            {
-                SubLObject leaves = NIL;
-                SubLObject index = intermediate_index;
-                if (NIL != do_intermediate_index_valid_index_p(index)) {
-                    {
-                        SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(intermediate_index_dictionary(index)));
-                        while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                            thread.resetMultipleValues();
-                            {
-                                SubLObject key = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                SubLObject subindex = thread.secondMultipleValue();
-                                thread.resetMultipleValues();
-                                {
-                                    SubLObject cdolist_list_var = subindex_leaves(subindex);
-                                    SubLObject leaf = NIL;
-                                    for (leaf = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , leaf = cdolist_list_var.first()) {
-                                        leaves = cons(leaf, leaves);
-                                    }
-                                }
-                                iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                            }
-                        } 
-                        dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                    }
-                }
-                return nreverse(leaves);
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @unknown result is destructible
-     */
-    @LispMethod(comment = "@unknown result is destructible")
     public static SubLObject intermediate_index_leaves(final SubLObject intermediate_index) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != intermediate_index_p(intermediate_index) : "! kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + ("kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + "CommonSymbols.NIL != kb_indexing_datastructures.intermediate_index_p(intermediate_index) ") + intermediate_index;
+        assert NIL != intermediate_index_p(intermediate_index) : "kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + "CommonSymbols.NIL != kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + intermediate_index;
         SubLObject leaves = NIL;
         if (NIL != do_intermediate_index_valid_index_p(intermediate_index)) {
             final SubLObject iterator = map_utilities.new_map_iterator(intermediate_index_map(intermediate_index));
@@ -2315,22 +1288,8 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return nreverse(leaves);
     }
 
-    /**
-     * does not reset the counts
-     */
-    @LispMethod(comment = "does not reset the counts")
-    public static final SubLObject intermediate_index_set_alt(SubLObject intermediate_index, SubLObject key, SubLObject value) {
-        SubLTrampolineFile.checkType(value, SUBINDEX_P);
-        intermediate_index_dictionary_set(intermediate_index, key, value);
-        return intermediate_index;
-    }
-
-    /**
-     * does not reset the counts
-     */
-    @LispMethod(comment = "does not reset the counts")
     public static SubLObject intermediate_index_set(final SubLObject intermediate_index, final SubLObject key, final SubLObject value) {
-        assert NIL != subindex_p(value) : "! kb_indexing_datastructures.subindex_p(value) " + ("kb_indexing_datastructures.subindex_p(value) " + "CommonSymbols.NIL != kb_indexing_datastructures.subindex_p(value) ") + value;
+        assert NIL != subindex_p(value) : "kb_indexing_datastructures.subindex_p(value) " + "CommonSymbols.NIL != kb_indexing_datastructures.subindex_p(value) " + value;
         intermediate_index_map_set(intermediate_index, key, value);
         return intermediate_index;
     }
@@ -2362,88 +1321,11 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return makeBoolean((NIL != use_final_topn_indicesP()) && $final_topn_index_cutoff_size$.getGlobalValue().numL(add(final_index_leaf_count(subindex_base), final_index_leaf_count(subindex_augment))));
     }
 
-    public static final SubLFloat $float$0_015 = makeDouble(0.015);
-
-    static private final SubLList $list_alt3 = list(reader_make_constant_shell("implies"), reader_make_constant_shell("and"), reader_make_constant_shell("or"), reader_make_constant_shell("not"));
-
-    /**
-     *
-     *
-     * @return boolean; whether it actually inserted (nil if it was already there)
-     */
-    @LispMethod(comment = "@return boolean; whether it actually inserted (nil if it was already there)")
-    public static final SubLObject intermediate_index_insert_alt(SubLObject intermediate_index, SubLObject keys, SubLObject leaf) {
-        SubLTrampolineFile.checkType(intermediate_index, INTERMEDIATE_INDEX_P);
-        return intermediate_index_insert_int(intermediate_index, keys, leaf, NIL);
-    }
-
-    /**
-     *
-     *
-     * @return boolean; whether it actually inserted (nil if it was already there)
-     */
-    @LispMethod(comment = "@return boolean; whether it actually inserted (nil if it was already there)")
     public static SubLObject intermediate_index_insert(final SubLObject intermediate_index, final SubLObject keys, final SubLObject leaf) {
-        assert NIL != intermediate_index_p(intermediate_index) : "! kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + ("kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + "CommonSymbols.NIL != kb_indexing_datastructures.intermediate_index_p(intermediate_index) ") + intermediate_index;
+        assert NIL != intermediate_index_p(intermediate_index) : "kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + "CommonSymbols.NIL != kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + intermediate_index;
         return intermediate_index_insert_int(intermediate_index, keys, leaf, NIL);
     }
 
-    static private final SubLList $list_alt5 = list(makeSymbol("OBJECT"));
-
-    static private final SubLString $str_alt6$Returns_T_iff_OBJECT_is_an_indexe = makeString("Returns T iff OBJECT is an indexed CycL term, e.g. a fort or assertion.");
-
-    static private final SubLList $list_alt7 = list(makeSymbol("BOOLEANP"));
-
-    static private final SubLList $list_alt8 = list(list(makeSymbol("VAR"), makeSymbol("&OPTIONAL"), list(makeSymbol("MESSAGE"), makeString("mapping Cyc indexed terms"))), makeSymbol("&BODY"), makeSymbol("BODY"));
-
-    /**
-     * Insert LEAF at KEYS, having already gone down the keys in KEY-HISTORY
-     */
-    @LispMethod(comment = "Insert LEAF at KEYS, having already gone down the keys in KEY-HISTORY")
-    public static final SubLObject intermediate_index_insert_int_alt(SubLObject intermediate_index, SubLObject keys, SubLObject leaf, SubLObject key_history) {
-        {
-            SubLObject datum = keys;
-            SubLObject current = datum;
-            SubLObject key = NIL;
-            SubLObject rest_keys = NIL;
-            destructuring_bind_must_consp(current, datum, $list_alt36);
-            key = current.first();
-            current = current.rest();
-            rest_keys = current;
-            if (NIL != rest_keys) {
-                {
-                    SubLObject new_key_history = nconc(key_history, list(key));
-                    SubLObject subindex = intermediate_index_lookup_or_create_intermediate(intermediate_index, key, new_key_history);
-                    if (NIL != intermediate_index_insert_int(subindex, rest_keys, leaf, new_key_history)) {
-                        intermediate_index_leaf_count_inc(intermediate_index, ONE_INTEGER);
-                        return T;
-                    }
-                }
-            } else {
-                {
-                    SubLObject subindex = intermediate_index_lookup_or_create_final(intermediate_index, key);
-                    SubLTrampolineFile.checkType(subindex, FINAL_INDEX_P);
-                    {
-                        SubLObject old_count = final_index_leaf_count(subindex);
-                        final_index_insert(subindex, leaf);
-                        {
-                            SubLObject new_count = final_index_leaf_count(subindex);
-                            if (!old_count.numE(new_count)) {
-                                intermediate_index_leaf_count_inc(intermediate_index, ONE_INTEGER);
-                                return T;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return NIL;
-    }
-
-    /**
-     * Insert LEAF at KEYS, having already gone down the keys in KEY-HISTORY
-     */
-    @LispMethod(comment = "Insert LEAF at KEYS, having already gone down the keys in KEY-HISTORY")
     public static SubLObject intermediate_index_insert_int(final SubLObject intermediate_index, final SubLObject keys, final SubLObject leaf, final SubLObject key_history) {
         SubLObject key = NIL;
         SubLObject rest_keys = NIL;
@@ -2476,71 +1358,8 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return NIL;
     }
 
-    static private final SubLString $str_alt15$_S_is_not_indexed = makeString("~S is not indexed");
-
-    static private final SubLString $str_alt22$_s_is_not_a_SUBINDEX_P = makeString("~s is not a SUBINDEX-P");
-
-    static private final SubLList $list_alt24 = list(list(makeSymbol("KEY-VAR"), makeSymbol("SUBINDEX-VAR"), makeSymbol("INTERMEDIATE-INDEX"), makeSymbol("&KEY"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
-
-    static private final SubLList $list_alt25 = list($DONE);
-
-    /**
-     *
-     *
-     * @return boolean; whether it actually deleted (nil if it was already gone)
-     */
-    @LispMethod(comment = "@return boolean; whether it actually deleted (nil if it was already gone)")
-    public static final SubLObject intermediate_index_delete_alt(SubLObject intermediate_index, SubLObject keys, SubLObject leaf) {
-        SubLTrampolineFile.checkType(intermediate_index, INTERMEDIATE_INDEX_P);
-        {
-            SubLObject datum = keys;
-            SubLObject current = datum;
-            SubLObject key = NIL;
-            SubLObject rest_keys = NIL;
-            destructuring_bind_must_consp(current, datum, $list_alt36);
-            key = current.first();
-            current = current.rest();
-            rest_keys = current;
-            {
-                SubLObject result = NIL;
-                SubLObject subindex = intermediate_index_lookup(intermediate_index, key);
-                if (NIL != subindex) {
-                    if (NIL != rest_keys) {
-                        result = intermediate_index_delete(subindex, rest_keys, leaf);
-                        if (NIL != result) {
-                            intermediate_index_leaf_count_inc(intermediate_index, MINUS_ONE_INTEGER);
-                        }
-                    } else {
-                        SubLTrampolineFile.checkType(subindex, FINAL_INDEX_P);
-                        {
-                            SubLObject old_count = final_index_leaf_count(subindex);
-                            final_index_delete(subindex, leaf);
-                            {
-                                SubLObject new_count = final_index_leaf_count(subindex);
-                                if (!old_count.numE(new_count)) {
-                                    intermediate_index_leaf_count_inc(intermediate_index, MINUS_ONE_INTEGER);
-                                    result = T;
-                                }
-                            }
-                        }
-                    }
-                    if (ZERO_INTEGER.numE(subindex_leaf_count(subindex))) {
-                        intermediate_index_delete_key(intermediate_index, key);
-                    }
-                }
-                return result;
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return boolean; whether it actually deleted (nil if it was already gone)
-     */
-    @LispMethod(comment = "@return boolean; whether it actually deleted (nil if it was already gone)")
     public static SubLObject intermediate_index_delete(final SubLObject intermediate_index, final SubLObject keys, final SubLObject leaf) {
-        assert NIL != intermediate_index_p(intermediate_index) : "! kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + ("kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + "CommonSymbols.NIL != kb_indexing_datastructures.intermediate_index_p(intermediate_index) ") + intermediate_index;
+        assert NIL != intermediate_index_p(intermediate_index) : "kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + "CommonSymbols.NIL != kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + intermediate_index;
         SubLObject key = NIL;
         SubLObject rest_keys = NIL;
         destructuring_bind_must_consp(keys, keys, $list73);
@@ -2556,7 +1375,7 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
                     intermediate_index_leaf_count_inc(intermediate_index, MINUS_ONE_INTEGER);
                 }
             } else {
-                assert NIL != final_index_p(subindex) : "! kb_indexing_datastructures.final_index_p(subindex) " + ("kb_indexing_datastructures.final_index_p(subindex) " + "CommonSymbols.NIL != kb_indexing_datastructures.final_index_p(subindex) ") + subindex;
+                assert NIL != final_index_p(subindex) : "kb_indexing_datastructures.final_index_p(subindex) " + "CommonSymbols.NIL != kb_indexing_datastructures.final_index_p(subindex) " + subindex;
                 final SubLObject old_count = final_index_leaf_count(subindex);
                 final_index_delete(subindex, leaf);
                 final SubLObject new_count = final_index_leaf_count(subindex);
@@ -2573,35 +1392,6 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return result;
     }
 
-    static private final SubLSymbol $sym28$INDEX = makeUninternedSymbol("INDEX");
-
-    private static final SubLSymbol INTERMEDIATE_INDEX_DICTIONARY = makeSymbol("INTERMEDIATE-INDEX-DICTIONARY");
-
-    static private final SubLList $list_alt36 = cons(makeSymbol("KEY"), makeSymbol("REST-KEYS"));
-
-    static private final SubLList $list_alt38 = list(list(makeSymbol("LEAF-VAR"), makeSymbol("FINAL-INDEX"), makeSymbol("&KEY"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
-
-    static private final SubLSymbol $sym39$INDEX = makeUninternedSymbol("INDEX");
-
-    private static final SubLSymbol DO_FINAL_INDEX_VALID_INDEX_P = makeSymbol("DO-FINAL-INDEX-VALID-INDEX-P");
-
-    private static final SubLSymbol FINAL_INDEX_SET = makeSymbol("FINAL-INDEX-SET");
-
-    private static final SubLSymbol DO_FINAL_INDEX = makeSymbol("DO-FINAL-INDEX");
-
-    /**
-     * Delete any mapping from KEY to a subindex in INTERMEDIATE-INDEX.
-     */
-    @LispMethod(comment = "Delete any mapping from KEY to a subindex in INTERMEDIATE-INDEX.")
-    public static final SubLObject intermediate_index_delete_key_alt(SubLObject intermediate_index, SubLObject key) {
-        intermediate_index_dictionary_delete_key(intermediate_index, key);
-        return intermediate_index;
-    }
-
-    /**
-     * Delete any mapping from KEY to a subindex in INTERMEDIATE-INDEX.
-     */
-    @LispMethod(comment = "Delete any mapping from KEY to a subindex in INTERMEDIATE-INDEX.")
     public static SubLObject intermediate_index_delete_key(final SubLObject intermediate_index, final SubLObject key) {
         intermediate_index_map_delete_key(intermediate_index, key);
         return intermediate_index;
@@ -2660,55 +1450,16 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return base;
     }
 
-    /**
-     * Initializes a top-level intermediate index for TERM.
-     * Clobbers any existing indexing for TERM.
-     */
-    @LispMethod(comment = "Initializes a top-level intermediate index for TERM.\r\nClobbers any existing indexing for TERM.\nInitializes a top-level intermediate index for TERM.\nClobbers any existing indexing for TERM.")
-    public static final SubLObject initialize_term_intermediate_index_alt(SubLObject v_term) {
-        return reset_term_index(v_term, new_intermediate_index(symbol_function(EQ)));
-    }
-
-    /**
-     * Initializes a top-level intermediate index for TERM.
-     * Clobbers any existing indexing for TERM.
-     */
-    @LispMethod(comment = "Initializes a top-level intermediate index for TERM.\r\nClobbers any existing indexing for TERM.\nInitializes a top-level intermediate index for TERM.\nClobbers any existing indexing for TERM.")
     public static SubLObject initialize_term_intermediate_index(final SubLObject v_term) {
         return reset_term_index(v_term, new_intermediate_index(symbol_function(EQ)));
     }
 
-    /**
-     * Frees all resources consumed by INTERMEDIATE-INDEX
-     */
-    @LispMethod(comment = "Frees all resources consumed by INTERMEDIATE-INDEX")
-    public static final SubLObject free_intermediate_index_alt(SubLObject intermediate_index) {
-        return dictionary.clear_dictionary(intermediate_index_dictionary(intermediate_index));
-    }
-
-    /**
-     * Frees all resources consumed by INTERMEDIATE-INDEX
-     */
-    @LispMethod(comment = "Frees all resources consumed by INTERMEDIATE-INDEX")
     public static SubLObject free_intermediate_index(final SubLObject intermediate_index) {
         return map_utilities.map_remove_all(intermediate_index_map(intermediate_index));
     }
 
-    public static final SubLObject intermediate_index_leaf_count_reset_alt(SubLObject intermediate_index, SubLObject new_count) {
-        return rplaca(intermediate_index, new_count);
-    }
-
     public static SubLObject intermediate_index_leaf_count_reset(final SubLObject intermediate_index, final SubLObject new_count) {
         return rplaca(intermediate_index, new_count);
-    }
-
-    public static final SubLObject intermediate_index_leaf_count_inc_alt(SubLObject intermediate_index, SubLObject delta) {
-        {
-            SubLObject old_count = intermediate_index_leaf_count(intermediate_index);
-            SubLObject new_count = add(old_count, delta);
-            intermediate_index_leaf_count_reset(intermediate_index, new_count);
-        }
-        return intermediate_index;
     }
 
     public static SubLObject intermediate_index_leaf_count_inc(final SubLObject intermediate_index, final SubLObject delta) {
@@ -2718,34 +1469,8 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return intermediate_index;
     }
 
-    /**
-     * Having already gone down the keys in KEY-HISTORY, look up KEY in INTERMEDIATE-INDEX.
-     * If not found, create a new intermediate index for KEY, with an equality test determined from KEY-HISTORY.
-     */
-    @LispMethod(comment = "Having already gone down the keys in KEY-HISTORY, look up KEY in INTERMEDIATE-INDEX.\r\nIf not found, create a new intermediate index for KEY, with an equality test determined from KEY-HISTORY.\nHaving already gone down the keys in KEY-HISTORY, look up KEY in INTERMEDIATE-INDEX.\nIf not found, create a new intermediate index for KEY, with an equality test determined from KEY-HISTORY.")
-    public static final SubLObject intermediate_index_lookup_or_create_intermediate_alt(SubLObject intermediate_index, SubLObject key, SubLObject key_history) {
-        SubLTrampolineFile.checkType(intermediate_index, INTERMEDIATE_INDEX_P);
-        {
-            SubLObject subindex = intermediate_index_lookup(intermediate_index, key);
-            if (NIL != subindex) {
-                return subindex;
-            }
-        }
-        {
-            SubLObject equality_test = kb_indexing_declarations.index_equality_test_for_keys(key_history);
-            SubLObject subindex = new_intermediate_index(equality_test);
-            intermediate_index_set(intermediate_index, key, subindex);
-            return subindex;
-        }
-    }
-
-    /**
-     * Having already gone down the keys in KEY-HISTORY, look up KEY in INTERMEDIATE-INDEX.
-     * If not found, create a new intermediate index for KEY, with an equality test determined from KEY-HISTORY.
-     */
-    @LispMethod(comment = "Having already gone down the keys in KEY-HISTORY, look up KEY in INTERMEDIATE-INDEX.\r\nIf not found, create a new intermediate index for KEY, with an equality test determined from KEY-HISTORY.\nHaving already gone down the keys in KEY-HISTORY, look up KEY in INTERMEDIATE-INDEX.\nIf not found, create a new intermediate index for KEY, with an equality test determined from KEY-HISTORY.")
     public static SubLObject intermediate_index_lookup_or_create_intermediate(final SubLObject intermediate_index, final SubLObject key, final SubLObject key_history) {
-        assert NIL != intermediate_index_p(intermediate_index) : "! kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + ("kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + "CommonSymbols.NIL != kb_indexing_datastructures.intermediate_index_p(intermediate_index) ") + intermediate_index;
+        assert NIL != intermediate_index_p(intermediate_index) : "kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + "CommonSymbols.NIL != kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + intermediate_index;
         final SubLObject subindex = intermediate_index_lookup(intermediate_index, key);
         if (NIL != subindex) {
             return subindex;
@@ -2756,23 +1481,8 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return subindex2;
     }
 
-    public static final SubLObject intermediate_index_lookup_or_create_final_alt(SubLObject intermediate_index, SubLObject key) {
-        SubLTrampolineFile.checkType(intermediate_index, INTERMEDIATE_INDEX_P);
-        {
-            SubLObject subindex = intermediate_index_lookup(intermediate_index, key);
-            if (NIL != subindex) {
-                return subindex;
-            }
-        }
-        {
-            SubLObject subindex = new_final_index();
-            intermediate_index_set(intermediate_index, key, subindex);
-            return subindex;
-        }
-    }
-
     public static SubLObject intermediate_index_lookup_or_create_final(final SubLObject intermediate_index, final SubLObject key) {
-        assert NIL != intermediate_index_p(intermediate_index) : "! kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + ("kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + "CommonSymbols.NIL != kb_indexing_datastructures.intermediate_index_p(intermediate_index) ") + intermediate_index;
+        assert NIL != intermediate_index_p(intermediate_index) : "kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + "CommonSymbols.NIL != kb_indexing_datastructures.intermediate_index_p(intermediate_index) " + intermediate_index;
         SubLObject subindex = intermediate_index_lookup(intermediate_index, key);
         if (NIL != subindex) {
             return subindex;
@@ -2787,7 +1497,7 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
     }
 
     public static SubLObject intermediate_index_map_set(final SubLObject intermediate_index, final SubLObject key, final SubLObject value) {
-        assert NIL != subindex_p(value) : "! kb_indexing_datastructures.subindex_p(value) " + ("kb_indexing_datastructures.subindex_p(value) " + "CommonSymbols.NIL != kb_indexing_datastructures.subindex_p(value) ") + value;
+        assert NIL != subindex_p(value) : "kb_indexing_datastructures.subindex_p(value) " + "CommonSymbols.NIL != kb_indexing_datastructures.subindex_p(value) " + value;
         return map_utilities.map_put(intermediate_index_map(intermediate_index), key, value);
     }
 
@@ -2799,23 +1509,11 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return map_utilities.map_touch(intermediate_index_map(intermediate_index), key);
     }
 
-    public static final SubLObject final_index_p_alt(SubLObject v_object) {
-        return set_p(v_object);
-    }
-
     public static SubLObject final_index_p(final SubLObject v_object) {
         return makeBoolean(((NIL != final_unified_index_p(v_object)) || (NIL != final_sharded_index_p(v_object))) || (NIL != final_topn_index_p(v_object)));
     }
 
-    public static final SubLObject final_index_installed_p_alt(SubLObject v_object) {
-        return final_index_p(v_object);
-    }
-
     public static SubLObject final_index_installed_p(final SubLObject v_object) {
-        return final_index_p(v_object);
-    }
-
-    public static final SubLObject final_index_not_hosed_p_alt(SubLObject v_object) {
         return final_index_p(v_object);
     }
 
@@ -2823,76 +1521,10 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return final_index_p(v_object);
     }
 
-    public static final SubLObject new_final_index_alt() {
-        return new_set(EQ, UNPROVIDED);
-    }
-
     public static SubLObject new_final_index() {
         return new_final_unified_index();
     }
 
-    /**
-     * This is robust against being passed NIL for the final index
-     */
-    @LispMethod(comment = "This is robust against being passed NIL for the final index")
-    public static final SubLObject do_final_index_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            destructuring_bind_must_consp(current, datum, $list_alt38);
-            {
-                SubLObject temp = current.rest();
-                current = current.first();
-                {
-                    SubLObject leaf_var = NIL;
-                    SubLObject final_index = NIL;
-                    destructuring_bind_must_consp(current, datum, $list_alt38);
-                    leaf_var = current.first();
-                    current = current.rest();
-                    destructuring_bind_must_consp(current, datum, $list_alt38);
-                    final_index = current.first();
-                    current = current.rest();
-                    {
-                        SubLObject allow_other_keys_p = NIL;
-                        SubLObject rest = current;
-                        SubLObject bad = NIL;
-                        SubLObject current_2 = NIL;
-                        for (; NIL != rest;) {
-                            destructuring_bind_must_consp(rest, datum, $list_alt38);
-                            current_2 = rest.first();
-                            rest = rest.rest();
-                            destructuring_bind_must_consp(rest, datum, $list_alt38);
-                            if (NIL == member(current_2, $list_alt25, UNPROVIDED, UNPROVIDED)) {
-                                bad = T;
-                            }
-                            if (current_2 == $ALLOW_OTHER_KEYS) {
-                                allow_other_keys_p = rest.first();
-                            }
-                            rest = rest.rest();
-                        }
-                        if ((NIL != bad) && (NIL == allow_other_keys_p)) {
-                            cdestructuring_bind_error(datum, $list_alt38);
-                        }
-                        {
-                            SubLObject done_tail = property_list_member($DONE, current);
-                            SubLObject done = (NIL != done_tail) ? ((SubLObject) (cadr(done_tail))) : NIL;
-                            current = temp;
-                            {
-                                SubLObject body = current;
-                                SubLObject index = $sym39$INDEX;
-                                return list(CLET, list(list(index, final_index)), list(PWHEN, list(DO_FINAL_INDEX_VALID_INDEX_P, index), listS(DO_SET, list(leaf_var, list(FINAL_INDEX_SET, index), $DONE, done), append(body, NIL))));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * This is robust against being passed NIL for the final index
-     */
-    @LispMethod(comment = "This is robust against being passed NIL for the final index")
     public static SubLObject do_final_index(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -2977,22 +1609,6 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return list(CLET, list(list(index, final_index)), list(CLET, $list91, list(PCOND, list(list(NULL, index)), list(list(FINAL_UNIFIED_INDEX_P, index), listS(DO_ORDERED_FINAL_UNIFIED_INDEX_INTERNAL, list(leaf_var, index, $DONE, done), append(body, NIL))), list(list(FINAL_SHARDED_INDEX_P, index), listS(DO_ORDERED_FINAL_SHARDED_INDEX_INTERNAL, list(leaf_var, index, $DONE, done), append(body, NIL))), list(list(FINAL_TOPN_INDEX_P, index), listS(DO_ORDERED_FINAL_TOPN_INDEX_INTERNAL, list(leaf_var, index, $DONE, done), append(body, NIL))), list(T, listS(ENFORCE_TYPE, index, $list89)))));
     }
 
-    /**
-     *
-     *
-     * @return integerp; the number of indexing leaves in FINAL-INDEX
-     */
-    @LispMethod(comment = "@return integerp; the number of indexing leaves in FINAL-INDEX")
-    public static final SubLObject final_index_leaf_count_alt(SubLObject final_index) {
-        return set_size(final_index_set(final_index));
-    }
-
-    /**
-     *
-     *
-     * @return integerp; the number of indexing leaves in FINAL-INDEX
-     */
-    @LispMethod(comment = "@return integerp; the number of indexing leaves in FINAL-INDEX")
     public static SubLObject final_index_leaf_count(final SubLObject final_index) {
         if (NIL != final_unified_index_p(final_index)) {
             return final_unified_index_leaf_count(final_index);
@@ -3007,24 +1623,6 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return NIL;
     }
 
-    /**
-     *
-     *
-     * @return listp
-     * @unknown result is NOT destructible!
-     */
-    @LispMethod(comment = "@return listp\r\n@unknown result is NOT destructible!")
-    public static final SubLObject final_index_leaves_alt(SubLObject final_index) {
-        return set_element_list(final_index_set(final_index));
-    }
-
-    /**
-     *
-     *
-     * @return listp
-     * @unknown result is NOT destructible!
-     */
-    @LispMethod(comment = "@return listp\r\n@unknown result is NOT destructible!")
     public static SubLObject final_index_leaves(final SubLObject final_index) {
         if (NIL != final_unified_index_p(final_index)) {
             return final_unified_index_leaves(final_index);
@@ -3037,10 +1635,6 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         }
         SubLTrampolineFile.enforceType(final_index, FINAL_INDEX_P);
         return NIL;
-    }
-
-    public static final SubLObject final_index_memberP_alt(SubLObject final_index, SubLObject leaf) {
-        return set_memberP(leaf, final_index_set(final_index));
     }
 
     public static SubLObject final_index_memberP(final SubLObject final_index, final SubLObject leaf) {
@@ -3057,24 +1651,6 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return NIL;
     }
 
-    /**
-     *
-     *
-     * @return indexing-leaf-p; an arbitrary leaf from FINAL-INDEX,
-    or NIL if FINAL-INDEX has no leaves.
-     */
-    @LispMethod(comment = "@return indexing-leaf-p; an arbitrary leaf from FINAL-INDEX,\r\nor NIL if FINAL-INDEX has no leaves.")
-    public static final SubLObject final_index_arbitrary_leaf_alt(SubLObject final_index) {
-        return set_arbitrary_element(final_index_set(final_index));
-    }
-
-    /**
-     *
-     *
-     * @return indexing-leaf-p; an arbitrary leaf from FINAL-INDEX,
-    or NIL if FINAL-INDEX has no leaves.
-     */
-    @LispMethod(comment = "@return indexing-leaf-p; an arbitrary leaf from FINAL-INDEX,\r\nor NIL if FINAL-INDEX has no leaves.")
     public static SubLObject final_index_arbitrary_leaf(final SubLObject final_index) {
         if (NIL != final_unified_index_p(final_index)) {
             return final_unified_index_arbitrary_leaf(final_index);
@@ -3087,21 +1663,6 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         }
         SubLTrampolineFile.enforceType(final_index, FINAL_INDEX_P);
         return NIL;
-    }
-
-    public static final SubLObject final_index_leaves_reset_alt(SubLObject final_index, SubLObject new_leaves) {
-        {
-            SubLObject v_set = final_index_set(final_index);
-            clear_set(v_set);
-            {
-                SubLObject cdolist_list_var = new_leaves;
-                SubLObject leaf = NIL;
-                for (leaf = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , leaf = cdolist_list_var.first()) {
-                    set_add(leaf, v_set);
-                }
-            }
-        }
-        return final_index;
     }
 
     public static SubLObject final_index_leaves_reset(final SubLObject final_index, final SubLObject new_leaves) {
@@ -3118,19 +1679,6 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return NIL;
     }
 
-    /**
-     * Is not required to check for membership before insertion
-     */
-    @LispMethod(comment = "Is not required to check for membership before insertion")
-    public static final SubLObject final_index_insert_alt(SubLObject final_index, SubLObject leaf) {
-        set_add(leaf, final_index_set(final_index));
-        return final_index;
-    }
-
-    /**
-     * Is not required to check for membership before insertion
-     */
-    @LispMethod(comment = "Is not required to check for membership before insertion")
     public static SubLObject final_index_insert(final SubLObject final_index, final SubLObject leaf) {
         if (NIL != final_unified_index_p(final_index)) {
             return final_unified_index_insert(final_index, leaf);
@@ -3145,19 +1693,6 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return NIL;
     }
 
-    /**
-     * Is not required to check for multiple elements to delete
-     */
-    @LispMethod(comment = "Is not required to check for multiple elements to delete")
-    public static final SubLObject final_index_delete_alt(SubLObject final_index, SubLObject leaf) {
-        set_remove(leaf, final_index_set(final_index));
-        return final_index;
-    }
-
-    /**
-     * Is not required to check for multiple elements to delete
-     */
-    @LispMethod(comment = "Is not required to check for multiple elements to delete")
     public static SubLObject final_index_delete(final SubLObject final_index, final SubLObject leaf) {
         if (NIL != final_unified_index_p(final_index)) {
             return final_unified_index_delete(final_index, leaf);
@@ -3186,18 +1721,6 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return NIL;
     }
 
-    /**
-     * Frees all resources consumed by FINAL-INDEX
-     */
-    @LispMethod(comment = "Frees all resources consumed by FINAL-INDEX")
-    public static final SubLObject free_final_index_alt(SubLObject final_index) {
-        return final_index;
-    }
-
-    /**
-     * Frees all resources consumed by FINAL-INDEX
-     */
-    @LispMethod(comment = "Frees all resources consumed by FINAL-INDEX")
     public static SubLObject free_final_index(final SubLObject final_index) {
         return final_index;
     }
@@ -4243,38 +2766,12 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return final_topn_index;
     }
 
-    /**
-     *
-     *
-     * @return boolean; t iff OBJECT is a possible leaf for indexing
-     * @unknown NIL can never be an indexing-leaf
-     */
-    @LispMethod(comment = "@return boolean; t iff OBJECT is a possible leaf for indexing\r\n@unknown NIL can never be an indexing-leaf")
-    public static final SubLObject indexing_leaf_p_alt(SubLObject v_object) {
-        return assertion_handles.assertion_p(v_object);
-    }
-
-    /**
-     *
-     *
-     * @return boolean; t iff OBJECT is a possible leaf for indexing
-     * @unknown NIL can never be an indexing-leaf
-     */
-    @LispMethod(comment = "@return boolean; t iff OBJECT is a possible leaf for indexing\r\n@unknown NIL can never be an indexing-leaf")
     public static SubLObject indexing_leaf_p(final SubLObject v_object) {
         return assertion_handles.assertion_p(v_object);
     }
 
-    public static final SubLObject indexing_leaf_installed_p_alt(SubLObject v_object) {
-        return assertions_high.valid_assertion(v_object, NIL);
-    }
-
     public static SubLObject indexing_leaf_installed_p(final SubLObject v_object) {
         return assertions_high.valid_assertion(v_object, NIL);
-    }
-
-    public static final SubLObject indexing_leaf_not_hosed_p_alt(SubLObject v_object) {
-        return assertions_high.valid_assertion(v_object, T);
     }
 
     public static SubLObject indexing_leaf_not_hosed_p(final SubLObject v_object) {
@@ -4409,614 +2906,234 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return base;
     }
 
-    public static final SubLObject declare_kb_indexing_datastructures_file_alt() {
-        declareFunction("setup_indexing_tables", "SETUP-INDEXING-TABLES", 1, 0, false);
-        declareFunction("assertion_indexing_store", "ASSERTION-INDEXING-STORE", 0, 0, false);
-        declareFunction("assertion_indexing_store_reset", "ASSERTION-INDEXING-STORE-RESET", 1, 0, false);
-        declareFunction("assertion_indexing_store_initial_size", "ASSERTION-INDEXING-STORE-INITIAL-SIZE", 0, 1, false);
-        declareFunction("assertion_indexing_store_initialize", "ASSERTION-INDEXING-STORE-INITIALIZE", 0, 1, false);
-        declareFunction("assertion_indexing_store_get", "ASSERTION-INDEXING-STORE-GET", 1, 0, false);
-        declareFunction("assertion_indexing_store_remove", "ASSERTION-INDEXING-STORE-REMOVE", 1, 0, false);
-        declareFunction("assertion_indexing_store_set", "ASSERTION-INDEXING-STORE-SET", 2, 0, false);
-        declareFunction("unindexed_syntax_constants", "UNINDEXED-SYNTAX-CONSTANTS", 0, 0, false);
-        declareFunction("unindexed_syntax_constant_p", "UNINDEXED-SYNTAX-CONSTANT-P", 1, 0, false);
-        declareFunction("indexed_term_p", "INDEXED-TERM-P", 1, 0, false);
-        new com.cyc.cycjava.cycl.kb_indexing_datastructures.$indexed_term_p$UnaryFunction();
-        declareFunction("indexed_unrepresented_term_p", "INDEXED-UNREPRESENTED-TERM-P", 1, 0, false);
-        declareFunction("valid_indexed_termP", "VALID-INDEXED-TERM?", 1, 0, false);
-        declareFunction("valid_indexed_term_robustP", "VALID-INDEXED-TERM-ROBUST?", 1, 0, false);
-        declareFunction("invalid_indexed_termP", "INVALID-INDEXED-TERM?", 1, 0, false);
-        new com.cyc.cycjava.cycl.kb_indexing_datastructures.$invalid_indexed_termP$UnaryFunction();
-        declareFunction("invalid_indexed_term_robustP", "INVALID-INDEXED-TERM-ROBUST?", 1, 0, false);
-        declareFunction("sort_of_indexed_term_p", "SORT-OF-INDEXED-TERM-P", 1, 0, false);
-        declareFunction("fully_indexed_term_p", "FULLY-INDEXED-TERM-P", 1, 0, false);
-        new com.cyc.cycjava.cycl.kb_indexing_datastructures.$fully_indexed_term_p$UnaryFunction();
-        declareFunction("valid_fully_indexed_term_p", "VALID-FULLY-INDEXED-TERM-P", 1, 0, false);
-        declareMacro("do_indexed_terms", "DO-INDEXED-TERMS");
-        declareFunction("index_p", "INDEX-P", 1, 0, false);
-        declareFunction("index_installed_p", "INDEX-INSTALLED-P", 1, 0, false);
-        declareFunction("index_not_hosed_p", "INDEX-NOT-HOSED-P", 1, 0, false);
-        declareFunction("index_leaves", "INDEX-LEAVES", 1, 0, false);
-        declareFunction("index_leaf_count", "INDEX-LEAF-COUNT", 1, 0, false);
-        declareFunction("term_index", "TERM-INDEX", 1, 0, false);
-        declareFunction("reset_term_index", "RESET-TERM-INDEX", 2, 0, false);
-        declareFunction("clear_term_index", "CLEAR-TERM-INDEX", 1, 0, false);
-        declareFunction("free_index", "FREE-INDEX", 1, 0, false);
-        declareFunction("free_term_index", "FREE-TERM-INDEX", 1, 0, false);
-        declareFunction("simple_index_p", "SIMPLE-INDEX-P", 1, 0, false);
-        declareFunction("simple_index_installed_p", "SIMPLE-INDEX-INSTALLED-P", 1, 0, false);
-        declareFunction("simple_index_not_hosed_p", "SIMPLE-INDEX-NOT-HOSED-P", 1, 0, false);
-        declareFunction("simple_indexed_term_p", "SIMPLE-INDEXED-TERM-P", 1, 0, false);
-        declareFunction("new_simple_index", "NEW-SIMPLE-INDEX", 0, 0, false);
-        declareFunction("simple_index_leaves", "SIMPLE-INDEX-LEAVES", 1, 0, false);
-        declareFunction("simple_index_leaf_count", "SIMPLE-INDEX-LEAF-COUNT", 1, 0, false);
-        declareFunction("simple_index_memberP", "SIMPLE-INDEX-MEMBER?", 2, 0, false);
-        declareFunction("simple_num_index", "SIMPLE-NUM-INDEX", 1, 0, false);
-        declareFunction("simple_term_assertion_list", "SIMPLE-TERM-ASSERTION-LIST", 1, 0, false);
-        declareFunction("do_simple_index_term_assertion_list", "DO-SIMPLE-INDEX-TERM-ASSERTION-LIST", 1, 0, false);
-        declareFunction("reset_term_simple_index", "RESET-TERM-SIMPLE-INDEX", 2, 0, false);
-        declareFunction("simple_index_insert", "SIMPLE-INDEX-INSERT", 2, 0, false);
-        declareFunction("simple_index_delete", "SIMPLE-INDEX-DELETE", 2, 0, false);
-        declareFunction("free_simple_index", "FREE-SIMPLE-INDEX", 1, 0, false);
-        declareFunction("complex_index_p", "COMPLEX-INDEX-P", 1, 0, false);
-        declareFunction("complex_index_installed_p", "COMPLEX-INDEX-INSTALLED-P", 1, 0, false);
-        declareFunction("complex_index_not_hosed_p", "COMPLEX-INDEX-NOT-HOSED-P", 1, 0, false);
-        declareFunction("complex_indexed_term_p", "COMPLEX-INDEXED-TERM-P", 1, 0, false);
-        declareFunction("complex_index_leaves", "COMPLEX-INDEX-LEAVES", 1, 0, false);
-        declareFunction("complex_index_leaf_count", "COMPLEX-INDEX-LEAF-COUNT", 1, 0, false);
-        declareFunction("complex_index_lookup", "COMPLEX-INDEX-LOOKUP", 2, 0, false);
-        declareFunction("term_complex_index_lookup", "TERM-COMPLEX-INDEX-LOOKUP", 2, 0, false);
-        declareFunction("initialize_term_complex_index", "INITIALIZE-TERM-COMPLEX-INDEX", 1, 0, false);
-        declareFunction("term_complex_index_set", "TERM-COMPLEX-INDEX-SET", 3, 0, false);
-        declareFunction("term_complex_index_delete_key", "TERM-COMPLEX-INDEX-DELETE-KEY", 2, 0, false);
-        declareFunction("free_complex_index", "FREE-COMPLEX-INDEX", 1, 0, false);
-        declareFunction("subindex_p", "SUBINDEX-P", 1, 0, false);
-        declareFunction("subindex_installed_p", "SUBINDEX-INSTALLED-P", 1, 0, false);
-        declareFunction("subindex_not_hosed_p", "SUBINDEX-NOT-HOSED-P", 1, 0, false);
-        declareFunction("subindex_lookup", "SUBINDEX-LOOKUP", 2, 0, false);
-        declareFunction("subindex_leaves", "SUBINDEX-LEAVES", 1, 0, false);
-        declareFunction("subindex_leaf_count", "SUBINDEX-LEAF-COUNT", 1, 0, false);
-        declareFunction("initialize_term_subindex", "INITIALIZE-TERM-SUBINDEX", 1, 0, false);
-        declareFunction("free_subindex", "FREE-SUBINDEX", 1, 0, false);
-        declareFunction("intermediate_index_p", "INTERMEDIATE-INDEX-P", 1, 0, false);
-        declareFunction("intermediate_index_installed_p", "INTERMEDIATE-INDEX-INSTALLED-P", 1, 0, false);
-        declareFunction("intermediate_index_not_hosed_p", "INTERMEDIATE-INDEX-NOT-HOSED-P", 1, 0, false);
-        declareFunction("new_intermediate_index", "NEW-INTERMEDIATE-INDEX", 1, 0, false);
-        declareMacro("do_intermediate_index", "DO-INTERMEDIATE-INDEX");
-        declareFunction("do_intermediate_index_valid_index_p", "DO-INTERMEDIATE-INDEX-VALID-INDEX-P", 1, 0, false);
-        declareFunction("intermediate_index_lookup", "INTERMEDIATE-INDEX-LOOKUP", 2, 0, false);
-        declareFunction("intermediate_index_keys", "INTERMEDIATE-INDEX-KEYS", 1, 0, false);
-        declareFunction("intermediate_index_leaf_count", "INTERMEDIATE-INDEX-LEAF-COUNT", 1, 0, false);
-        declareFunction("intermediate_index_leaves", "INTERMEDIATE-INDEX-LEAVES", 1, 0, false);
-        declareFunction("intermediate_index_set", "INTERMEDIATE-INDEX-SET", 3, 0, false);
-        declareFunction("intermediate_index_insert", "INTERMEDIATE-INDEX-INSERT", 3, 0, false);
-        declareFunction("intermediate_index_insert_int", "INTERMEDIATE-INDEX-INSERT-INT", 4, 0, false);
-        declareFunction("intermediate_index_delete", "INTERMEDIATE-INDEX-DELETE", 3, 0, false);
-        declareFunction("intermediate_index_delete_key", "INTERMEDIATE-INDEX-DELETE-KEY", 2, 0, false);
-        declareFunction("initialize_term_intermediate_index", "INITIALIZE-TERM-INTERMEDIATE-INDEX", 1, 0, false);
-        declareFunction("free_intermediate_index", "FREE-INTERMEDIATE-INDEX", 1, 0, false);
-        declareFunction("intermediate_index_leaf_count_reset", "INTERMEDIATE-INDEX-LEAF-COUNT-RESET", 2, 0, false);
-        declareFunction("intermediate_index_leaf_count_inc", "INTERMEDIATE-INDEX-LEAF-COUNT-INC", 2, 0, false);
-        declareFunction("intermediate_index_lookup_or_create_intermediate", "INTERMEDIATE-INDEX-LOOKUP-OR-CREATE-INTERMEDIATE", 3, 0, false);
-        declareFunction("intermediate_index_lookup_or_create_final", "INTERMEDIATE-INDEX-LOOKUP-OR-CREATE-FINAL", 2, 0, false);
-        declareFunction("intermediate_index_dictionary", "INTERMEDIATE-INDEX-DICTIONARY", 1, 0, false);
-        declareFunction("intermediate_index_dictionary_set", "INTERMEDIATE-INDEX-DICTIONARY-SET", 3, 0, false);
-        declareFunction("intermediate_index_dictionary_delete_key", "INTERMEDIATE-INDEX-DICTIONARY-DELETE-KEY", 2, 0, false);
-        declareFunction("final_index_p", "FINAL-INDEX-P", 1, 0, false);
-        declareFunction("final_index_installed_p", "FINAL-INDEX-INSTALLED-P", 1, 0, false);
-        declareFunction("final_index_not_hosed_p", "FINAL-INDEX-NOT-HOSED-P", 1, 0, false);
-        declareFunction("new_final_index", "NEW-FINAL-INDEX", 0, 0, false);
-        declareMacro("do_final_index", "DO-FINAL-INDEX");
-        declareFunction("do_final_index_valid_index_p", "DO-FINAL-INDEX-VALID-INDEX-P", 1, 0, false);
-        declareFunction("final_index_leaf_count", "FINAL-INDEX-LEAF-COUNT", 1, 0, false);
-        declareFunction("final_index_leaves", "FINAL-INDEX-LEAVES", 1, 0, false);
-        declareFunction("final_index_memberP", "FINAL-INDEX-MEMBER?", 2, 0, false);
-        declareFunction("final_index_arbitrary_leaf", "FINAL-INDEX-ARBITRARY-LEAF", 1, 0, false);
-        declareFunction("final_index_leaves_reset", "FINAL-INDEX-LEAVES-RESET", 2, 0, false);
-        declareFunction("final_index_insert", "FINAL-INDEX-INSERT", 2, 0, false);
-        declareFunction("final_index_delete", "FINAL-INDEX-DELETE", 2, 0, false);
-        declareFunction("free_final_index", "FREE-FINAL-INDEX", 1, 0, false);
-        declareFunction("final_index_set", "FINAL-INDEX-SET", 1, 0, false);
-        declareFunction("indexing_leaf_p", "INDEXING-LEAF-P", 1, 0, false);
-        declareFunction("indexing_leaf_installed_p", "INDEXING-LEAF-INSTALLED-P", 1, 0, false);
-        declareFunction("indexing_leaf_not_hosed_p", "INDEXING-LEAF-NOT-HOSED-P", 1, 0, false);
-        return NIL;
-    }
-
     public static SubLObject declare_kb_indexing_datastructures_file() {
-        if (SubLFiles.USE_V1) {
-            declareFunction("setup_indexing_tables", "SETUP-INDEXING-TABLES", 1, 0, false);
-            declareFunction("assertion_indexing_store", "ASSERTION-INDEXING-STORE", 0, 0, false);
-            declareFunction("assertions_with_meta_assertions_count", "ASSERTIONS-WITH-META-ASSERTIONS-COUNT", 0, 0, false);
-            declareFunction("assertion_indexing_store_reset", "ASSERTION-INDEXING-STORE-RESET", 1, 0, false);
-            declareFunction("assertion_indexing_store_initial_size", "ASSERTION-INDEXING-STORE-INITIAL-SIZE", 0, 1, false);
-            declareFunction("assertion_indexing_store_initialize", "ASSERTION-INDEXING-STORE-INITIALIZE", 0, 1, false);
-            declareFunction("clear_assertion_indexing", "CLEAR-ASSERTION-INDEXING", 0, 0, false);
-            declareFunction("clear_assertion_indexing_store", "CLEAR-ASSERTION-INDEXING-STORE", 0, 0, false);
-            declareFunction("assertion_indexing_store_get", "ASSERTION-INDEXING-STORE-GET", 1, 0, false);
-            declareFunction("assertion_indexing_store_remove", "ASSERTION-INDEXING-STORE-REMOVE", 1, 0, false);
-            declareFunction("assertion_indexing_store_set", "ASSERTION-INDEXING-STORE-SET", 2, 0, false);
-            declareMacro("do_assertions_with_meta_assertions", "DO-ASSERTIONS-WITH-META-ASSERTIONS");
-            declareFunction("new_assertions_with_meta_assertions_iterator", "NEW-ASSERTIONS-WITH-META-ASSERTIONS-ITERATOR", 0, 0, false);
-            declareFunction("unindexed_syntax_constants", "UNINDEXED-SYNTAX-CONSTANTS", 0, 0, false);
-            declareFunction("unindexed_syntax_constant_p", "UNINDEXED-SYNTAX-CONSTANT-P", 1, 0, false);
-            declareFunction("indexed_term_p", "INDEXED-TERM-P", 1, 0, false);
-            new kb_indexing_datastructures.$indexed_term_p$UnaryFunction();
-            declareFunction("indexed_unrepresented_term_p", "INDEXED-UNREPRESENTED-TERM-P", 1, 0, false);
-            declareFunction("valid_indexed_termP", "VALID-INDEXED-TERM?", 1, 0, false);
-            declareFunction("valid_indexed_term_robustP", "VALID-INDEXED-TERM-ROBUST?", 1, 0, false);
-            declareFunction("invalid_indexed_termP", "INVALID-INDEXED-TERM?", 1, 0, false);
-            new kb_indexing_datastructures.$invalid_indexed_termP$UnaryFunction();
-            declareFunction("invalid_indexed_term_robustP", "INVALID-INDEXED-TERM-ROBUST?", 1, 0, false);
-            declareFunction("sort_of_indexed_term_p", "SORT-OF-INDEXED-TERM-P", 1, 0, false);
-            declareFunction("fully_indexed_term_p", "FULLY-INDEXED-TERM-P", 1, 0, false);
-            new kb_indexing_datastructures.$fully_indexed_term_p$UnaryFunction();
-            declareFunction("valid_fully_indexed_term_p", "VALID-FULLY-INDEXED-TERM-P", 1, 0, false);
-            declareMacro("do_indexed_terms", "DO-INDEXED-TERMS");
-            declareFunction("index_p", "INDEX-P", 1, 0, false);
-            declareFunction("index_installed_p", "INDEX-INSTALLED-P", 1, 0, false);
-            declareFunction("index_not_hosed_p", "INDEX-NOT-HOSED-P", 1, 0, false);
-            declareFunction("index_leaves", "INDEX-LEAVES", 1, 0, false);
-            declareFunction("index_leaf_count", "INDEX-LEAF-COUNT", 1, 0, false);
-            declareFunction("term_index", "TERM-INDEX", 1, 0, false);
-            declareFunction("term_index_swapped_inP", "TERM-INDEX-SWAPPED-IN?", 1, 0, false);
-            declareFunction("reset_term_index", "RESET-TERM-INDEX", 2, 0, false);
-            declareFunction("clear_term_index", "CLEAR-TERM-INDEX", 1, 0, false);
-            declareFunction("free_index", "FREE-INDEX", 1, 0, false);
-            declareFunction("free_term_index", "FREE-TERM-INDEX", 1, 0, false);
-            declareFunction("simple_index_p", "SIMPLE-INDEX-P", 1, 0, false);
-            declareFunction("simple_index_installed_p", "SIMPLE-INDEX-INSTALLED-P", 1, 0, false);
-            declareFunction("simple_index_not_hosed_p", "SIMPLE-INDEX-NOT-HOSED-P", 1, 0, false);
-            declareFunction("simple_indexed_term_p", "SIMPLE-INDEXED-TERM-P", 1, 0, false);
-            declareFunction("new_simple_index", "NEW-SIMPLE-INDEX", 0, 0, false);
-            declareFunction("simple_index_leaves", "SIMPLE-INDEX-LEAVES", 1, 0, false);
-            declareFunction("simple_index_leaf_count", "SIMPLE-INDEX-LEAF-COUNT", 1, 0, false);
-            declareFunction("simple_index_memberP", "SIMPLE-INDEX-MEMBER?", 2, 0, false);
-            declareFunction("simple_num_index", "SIMPLE-NUM-INDEX", 1, 0, false);
-            declareFunction("simple_term_assertion_list", "SIMPLE-TERM-ASSERTION-LIST", 1, 0, false);
-            declareFunction("do_simple_index_term_assertion_list", "DO-SIMPLE-INDEX-TERM-ASSERTION-LIST", 1, 0, false);
-            declareFunction("reset_term_simple_index", "RESET-TERM-SIMPLE-INDEX", 2, 0, false);
-            declareFunction("simple_index_insert", "SIMPLE-INDEX-INSERT", 2, 0, false);
-            declareFunction("simple_index_delete", "SIMPLE-INDEX-DELETE", 2, 0, false);
-            declareFunction("free_simple_index", "FREE-SIMPLE-INDEX", 1, 0, false);
-            declareMacro("with_current_complex_index_path", "WITH-CURRENT-COMPLEX-INDEX-PATH");
-            declareFunction("current_complex_index_keys", "CURRENT-COMPLEX-INDEX-KEYS", 0, 0, false);
-            declareFunction("copy_current_complex_index_keys", "COPY-CURRENT-COMPLEX-INDEX-KEYS", 0, 0, false);
-            declareFunction("current_complex_index_term", "CURRENT-COMPLEX-INDEX-TERM", 0, 0, false);
-            declareFunction("complex_index_keys_defined_p", "COMPLEX-INDEX-KEYS-DEFINED-P", 0, 0, false);
-            declareFunction("complex_index_p", "COMPLEX-INDEX-P", 1, 0, false);
-            declareFunction("complex_index_installed_p", "COMPLEX-INDEX-INSTALLED-P", 1, 0, false);
-            declareFunction("complex_index_not_hosed_p", "COMPLEX-INDEX-NOT-HOSED-P", 1, 0, false);
-            declareFunction("complex_indexed_term_p", "COMPLEX-INDEXED-TERM-P", 1, 0, false);
-            declareFunction("complex_index_leaves", "COMPLEX-INDEX-LEAVES", 1, 0, false);
-            declareFunction("complex_index_leaf_count", "COMPLEX-INDEX-LEAF-COUNT", 1, 0, false);
-            declareFunction("complex_index_lookup", "COMPLEX-INDEX-LOOKUP", 2, 0, false);
-            declareFunction("term_complex_index_lookup", "TERM-COMPLEX-INDEX-LOOKUP", 2, 0, false);
-            declareFunction("initialize_term_complex_index", "INITIALIZE-TERM-COMPLEX-INDEX", 1, 0, false);
-            declareFunction("merge_complex_indices", "MERGE-COMPLEX-INDICES", 2, 0, false);
-            declareFunction("term_complex_index_set", "TERM-COMPLEX-INDEX-SET", 3, 0, false);
-            declareFunction("term_complex_index_delete_key", "TERM-COMPLEX-INDEX-DELETE-KEY", 2, 0, false);
-            declareFunction("reserve_final_topn_index_for_term", "RESERVE-FINAL-TOPN-INDEX-FOR-TERM", 2, 0, false);
-            declareFunction("free_complex_index", "FREE-COMPLEX-INDEX", 1, 0, false);
-            declareFunction("subindex_p", "SUBINDEX-P", 1, 0, false);
-            declareFunction("subindex_installed_p", "SUBINDEX-INSTALLED-P", 1, 0, false);
-            declareFunction("subindex_not_hosed_p", "SUBINDEX-NOT-HOSED-P", 1, 0, false);
-            declareFunction("subindex_lookup", "SUBINDEX-LOOKUP", 2, 0, false);
-            declareFunction("subindex_leaves", "SUBINDEX-LEAVES", 1, 0, false);
-            declareFunction("subindex_leaf_count", "SUBINDEX-LEAF-COUNT", 1, 0, false);
-            declareFunction("initialize_term_subindex", "INITIALIZE-TERM-SUBINDEX", 1, 0, false);
-            declareFunction("free_subindex", "FREE-SUBINDEX", 1, 0, false);
-            declareFunction("merge_sub_indices", "MERGE-SUB-INDICES", 2, 0, false);
-            declareFunction("intermediate_index_p", "INTERMEDIATE-INDEX-P", 1, 0, false);
-            declareFunction("intermediate_index_installed_p", "INTERMEDIATE-INDEX-INSTALLED-P", 1, 0, false);
-            declareFunction("intermediate_index_not_hosed_p", "INTERMEDIATE-INDEX-NOT-HOSED-P", 1, 0, false);
-            declareFunction("new_intermediate_index", "NEW-INTERMEDIATE-INDEX", 1, 0, false);
-            declareFunction("clone_intermediate_index", "CLONE-INTERMEDIATE-INDEX", 1, 0, false);
-            declareMacro("do_intermediate_index", "DO-INTERMEDIATE-INDEX");
-            declareFunction("do_intermediate_index_valid_index_p", "DO-INTERMEDIATE-INDEX-VALID-INDEX-P", 1, 0, false);
-            declareMacro("capture_changed_index_entry_hints", "CAPTURE-CHANGED-INDEX-ENTRY-HINTS");
-            declareMacro("do_changed_intermediate_index", "DO-CHANGED-INTERMEDIATE-INDEX");
-            declareFunction("segregate_index_changes_and_pristines", "SEGREGATE-INDEX-CHANGES-AND-PRISTINES", 1, 0, false);
-            declareFunction("intermediate_index_lookup", "INTERMEDIATE-INDEX-LOOKUP", 2, 0, false);
-            declareFunction("intermediate_index_keys", "INTERMEDIATE-INDEX-KEYS", 1, 0, false);
-            declareFunction("intermediate_index_leaf_count", "INTERMEDIATE-INDEX-LEAF-COUNT", 1, 0, false);
-            declareFunction("intermediate_index_leaves", "INTERMEDIATE-INDEX-LEAVES", 1, 0, false);
-            declareFunction("intermediate_index_set", "INTERMEDIATE-INDEX-SET", 3, 0, false);
-            declareFunction("intermediate_index_replace_map", "INTERMEDIATE-INDEX-REPLACE-MAP", 2, 0, false);
-            declareFunction("intermediate_index_touch", "INTERMEDIATE-INDEX-TOUCH", 2, 0, false);
-            declareFunction("use_final_topn_indicesP", "USE-FINAL-TOPN-INDICES?", 0, 0, false);
-            declareFunction("upgrade_final_indexP", "UPGRADE-FINAL-INDEX?", 1, 0, false);
-            declareFunction("upgrade_combined_indices_to_final_indexP", "UPGRADE-COMBINED-INDICES-TO-FINAL-INDEX?", 2, 0, false);
-            declareFunction("intermediate_index_insert", "INTERMEDIATE-INDEX-INSERT", 3, 0, false);
-            declareFunction("intermediate_index_insert_int", "INTERMEDIATE-INDEX-INSERT-INT", 4, 0, false);
-            declareFunction("intermediate_index_delete", "INTERMEDIATE-INDEX-DELETE", 3, 0, false);
-            declareFunction("intermediate_index_delete_key", "INTERMEDIATE-INDEX-DELETE-KEY", 2, 0, false);
-            declareFunction("merge_intermediate_indices", "MERGE-INTERMEDIATE-INDICES", 2, 0, false);
-            declareFunction("initialize_term_intermediate_index", "INITIALIZE-TERM-INTERMEDIATE-INDEX", 1, 0, false);
-            declareFunction("free_intermediate_index", "FREE-INTERMEDIATE-INDEX", 1, 0, false);
-            declareFunction("intermediate_index_leaf_count_reset", "INTERMEDIATE-INDEX-LEAF-COUNT-RESET", 2, 0, false);
-            declareFunction("intermediate_index_leaf_count_inc", "INTERMEDIATE-INDEX-LEAF-COUNT-INC", 2, 0, false);
-            declareFunction("intermediate_index_lookup_or_create_intermediate", "INTERMEDIATE-INDEX-LOOKUP-OR-CREATE-INTERMEDIATE", 3, 0, false);
-            declareFunction("intermediate_index_lookup_or_create_final", "INTERMEDIATE-INDEX-LOOKUP-OR-CREATE-FINAL", 2, 0, false);
-            declareFunction("intermediate_index_map", "INTERMEDIATE-INDEX-MAP", 1, 0, false);
-            declareFunction("intermediate_index_map_set", "INTERMEDIATE-INDEX-MAP-SET", 3, 0, false);
-            declareFunction("intermediate_index_map_delete_key", "INTERMEDIATE-INDEX-MAP-DELETE-KEY", 2, 0, false);
-            declareFunction("intermediate_index_map_touch", "INTERMEDIATE-INDEX-MAP-TOUCH", 2, 0, false);
-            declareFunction("final_index_p", "FINAL-INDEX-P", 1, 0, false);
-            declareFunction("final_index_installed_p", "FINAL-INDEX-INSTALLED-P", 1, 0, false);
-            declareFunction("final_index_not_hosed_p", "FINAL-INDEX-NOT-HOSED-P", 1, 0, false);
-            declareFunction("new_final_index", "NEW-FINAL-INDEX", 0, 0, false);
-            declareMacro("do_final_index", "DO-FINAL-INDEX");
-            declareMacro("do_ordered_final_index", "DO-ORDERED-FINAL-INDEX");
-            declareFunction("final_index_leaf_count", "FINAL-INDEX-LEAF-COUNT", 1, 0, false);
-            declareFunction("final_index_leaves", "FINAL-INDEX-LEAVES", 1, 0, false);
-            declareFunction("final_index_memberP", "FINAL-INDEX-MEMBER?", 2, 0, false);
-            declareFunction("final_index_arbitrary_leaf", "FINAL-INDEX-ARBITRARY-LEAF", 1, 0, false);
-            declareFunction("final_index_leaves_reset", "FINAL-INDEX-LEAVES-RESET", 2, 0, false);
-            declareFunction("final_index_insert", "FINAL-INDEX-INSERT", 2, 0, false);
-            declareFunction("final_index_delete", "FINAL-INDEX-DELETE", 2, 0, false);
-            declareFunction("new_final_index_base_iterator", "NEW-FINAL-INDEX-BASE-ITERATOR", 1, 0, false);
-            declareFunction("free_final_index", "FREE-FINAL-INDEX", 1, 0, false);
-            declareFunction("final_unified_index_p", "FINAL-UNIFIED-INDEX-P", 1, 0, false);
-            declareFunction("final_unified_index_installed_p", "FINAL-UNIFIED-INDEX-INSTALLED-P", 1, 0, false);
-            declareFunction("final_unified_index_not_hosed_p", "FINAL-UNIFIED-INDEX-NOT-HOSED-P", 1, 0, false);
-            declareFunction("new_final_unified_index", "NEW-FINAL-UNIFIED-INDEX", 0, 0, false);
-            declareMacro("do_final_unified_index_internal", "DO-FINAL-UNIFIED-INDEX-INTERNAL");
-            declareMacro("do_ordered_final_unified_index_internal", "DO-ORDERED-FINAL-UNIFIED-INDEX-INTERNAL");
-            declareFunction("final_unified_index_leaf_count", "FINAL-UNIFIED-INDEX-LEAF-COUNT", 1, 0, false);
-            declareFunction("final_unified_index_leaves", "FINAL-UNIFIED-INDEX-LEAVES", 1, 0, false);
-            declareFunction("final_unified_index_memberP", "FINAL-UNIFIED-INDEX-MEMBER?", 2, 0, false);
-            declareFunction("final_unified_index_arbitrary_leaf", "FINAL-UNIFIED-INDEX-ARBITRARY-LEAF", 1, 0, false);
-            declareFunction("final_unified_index_leaves_reset", "FINAL-UNIFIED-INDEX-LEAVES-RESET", 2, 0, false);
-            declareFunction("final_unified_index_insert", "FINAL-UNIFIED-INDEX-INSERT", 2, 0, false);
-            declareFunction("final_unified_index_delete", "FINAL-UNIFIED-INDEX-DELETE", 2, 0, false);
-            declareFunction("final_unified_index_is_shardableP", "FINAL-UNIFIED-INDEX-IS-SHARDABLE?", 1, 0, false);
-            declareFunction("new_final_unified_index_iterator", "NEW-FINAL-UNIFIED-INDEX-ITERATOR", 1, 0, false);
-            declareFunction("free_final_unified_index", "FREE-FINAL-UNIFIED-INDEX", 1, 0, false);
-            declareFunction("final_unified_index_set", "FINAL-UNIFIED-INDEX-SET", 1, 0, false);
-            declareFunction("final_index_set_is_shardableP", "FINAL-INDEX-SET-IS-SHARDABLE?", 1, 0, false);
-            declareFunction("new_final_sharded_index", "NEW-FINAL-SHARDED-INDEX", 3, 0, false);
-            declareFunction("finshard_index_leaf_count", "FINSHARD-INDEX-LEAF-COUNT", 1, 0, false);
-            declareFunction("set_finshard_index_leaf_count", "SET-FINSHARD-INDEX-LEAF-COUNT", 2, 0, false);
-            declareFunction("finshard_index_keys", "FINSHARD-INDEX-KEYS", 1, 0, false);
-            declareFunction("set_finshard_index_keys", "SET-FINSHARD-INDEX-KEYS", 2, 0, false);
-            declareFunction("finshard_index_map", "FINSHARD-INDEX-MAP", 1, 0, false);
-            declareFunction("set_finshard_index_map", "SET-FINSHARD-INDEX-MAP", 2, 0, false);
-            declareFunction("final_sharded_index_p", "FINAL-SHARDED-INDEX-P", 1, 0, false);
-            declareFunction("final_sharded_index_empty_p", "FINAL-SHARDED-INDEX-EMPTY-P", 1, 0, false);
-            declareFunction("final_sharded_index_leaf_count", "FINAL-SHARDED-INDEX-LEAF-COUNT", 1, 0, false);
-            declareFunction("final_sharded_index_leaves", "FINAL-SHARDED-INDEX-LEAVES", 1, 0, false);
-            declareFunction("final_sharded_index_memberP", "FINAL-SHARDED-INDEX-MEMBER?", 2, 0, false);
-            declareFunction("finshard_index_find_shard", "FINSHARD-INDEX-FIND-SHARD", 2, 0, false);
-            declareFunction("finshard_index_find_shard_key_index", "FINSHARD-INDEX-FIND-SHARD-KEY-INDEX", 2, 0, false);
-            declareFunction("final_sharded_index_arbitrary_leaf", "FINAL-SHARDED-INDEX-ARBITRARY-LEAF", 1, 0, false);
-            declareMacro("do_final_sharded_index_internal", "DO-FINAL-SHARDED-INDEX-INTERNAL");
-            declareMacro("do_ordered_final_sharded_index_internal", "DO-ORDERED-FINAL-SHARDED-INDEX-INTERNAL");
-            declareFunction("final_sharded_index_shard_map", "FINAL-SHARDED-INDEX-SHARD-MAP", 1, 0, false);
-            declareFunction("ordered_final_sharded_index_extract_contents", "ORDERED-FINAL-SHARDED-INDEX-EXTRACT-CONTENTS", 2, 0, false);
-            declareFunction("possible_assertionL", "POSSIBLE-ASSERTION<", 2, 0, false);
-            declareFunction("increment_finshard_index_leaf_count", "INCREMENT-FINSHARD-INDEX-LEAF-COUNT", 1, 1, false);
-            declareFunction("decrement_finshard_index_leaf_count", "DECREMENT-FINSHARD-INDEX-LEAF-COUNT", 1, 1, false);
-            declareFunction("append_finshard_index_keys", "APPEND-FINSHARD-INDEX-KEYS", 2, 0, false);
-            declareFunction("final_sharded_index_leaves_reset", "FINAL-SHARDED-INDEX-LEAVES-RESET", 2, 0, false);
-            declareFunction("final_sharded_index_insert", "FINAL-SHARDED-INDEX-INSERT", 2, 0, false);
-            declareFunction("final_sharded_index_insert_internal", "FINAL-SHARDED-INDEX-INSERT-INTERNAL", 2, 0, false);
-            declareFunction("final_sharded_index_insert_into_shard", "FINAL-SHARDED-INDEX-INSERT-INTO-SHARD", 3, 0, false);
-            declareFunction("final_sharded_index_delete", "FINAL-SHARDED-INDEX-DELETE", 2, 0, false);
-            declareFunction("reshard_final_sharded_index", "RESHARD-FINAL-SHARDED-INDEX", 1, 0, false);
-            declareFunction("convert_final_simple_index_to_sharded_index", "CONVERT-FINAL-SIMPLE-INDEX-TO-SHARDED-INDEX", 1, 0, false);
-            declareFunction("create_final_sharded_index", "CREATE-FINAL-SHARDED-INDEX", 1, 0, false);
-            declareFunction("ncreate_final_sharded_index", "NCREATE-FINAL-SHARDED-INDEX", 1, 0, false);
-            declareFunction("reorganize_modified_final_sharded_index", "REORGANIZE-MODIFIED-FINAL-SHARDED-INDEX", 1, 0, false);
-            declareFunction("final_sharded_index_to_fvector_backed_sharded_index", "FINAL-SHARDED-INDEX-TO-FVECTOR-BACKED-SHARDED-INDEX", 3, 0, false);
-            declareFunction("update_fvector_backed_final_sharded_index", "UPDATE-FVECTOR-BACKED-FINAL-SHARDED-INDEX", 3, 0, false);
-            declareFunction("validate_final_sharded_index", "VALIDATE-FINAL-SHARDED-INDEX", 1, 0, false);
-            declareFunction("new_final_sharded_index_iterator", "NEW-FINAL-SHARDED-INDEX-ITERATOR", 1, 0, false);
-            declareFunction("free_final_sharded_index", "FREE-FINAL-SHARDED-INDEX", 1, 0, false);
-            declareFunction("final_sharded_index_set", "FINAL-SHARDED-INDEX-SET", 1, 0, false);
-            declareMacro("with_final_topn_index_tracking", "WITH-FINAL-TOPN-INDEX-TRACKING");
-            declareMacro("without_final_topn_index_tracking", "WITHOUT-FINAL-TOPN-INDEX-TRACKING");
-            declareFunction("possibly_note_new_final_topn_index", "POSSIBLY-NOTE-NEW-FINAL-TOPN-INDEX", 2, 0, false);
-            declareFunction("final_topn_index_p", "FINAL-TOPN-INDEX-P", 1, 0, false);
-            declareFunction("final_topn_index_count", "FINAL-TOPN-INDEX-COUNT", 1, 0, false);
-            declareFunction("set_final_topn_index_count", "SET-FINAL-TOPN-INDEX-COUNT", 2, 0, false);
-            declareFunction("inc_final_topn_index_count", "INC-FINAL-TOPN-INDEX-COUNT", 1, 1, false);
-            declareFunction("dec_final_topn_index_count", "DEC-FINAL-TOPN-INDEX-COUNT", 1, 1, false);
-            declareFunction("final_topn_index_term", "FINAL-TOPN-INDEX-TERM", 1, 0, false);
-            declareFunction("final_topn_index_key_path", "FINAL-TOPN-INDEX-KEY-PATH", 1, 0, false);
-            declareFunction("final_topn_index_installed_p", "FINAL-TOPN-INDEX-INSTALLED-P", 1, 0, false);
-            declareFunction("final_topn_index_not_hosed_p", "FINAL-TOPN-INDEX-NOT-HOSED-P", 1, 0, false);
-            declareFunction("new_final_topn_index", "NEW-FINAL-TOPN-INDEX", 2, 1, false);
-            declareFunction("upgrade_final_index", "UPGRADE-FINAL-INDEX", 1, 0, false);
-            declareFunction("new_final_topn_index_iterator", "NEW-FINAL-TOPN-INDEX-ITERATOR", 1, 0, false);
-            declareFunction("final_topn_index_iterator_build_filter_args", "FINAL-TOPN-INDEX-ITERATOR-BUILD-FILTER-ARGS", 1, 0, false);
-            declareFunction("assertion_matches_final_topn_indexkey_pathP", "ASSERTION-MATCHES-FINAL-TOPN-INDEXKEY-PATH?", 3, 0, false);
-            declareFunction("new_ordered_final_topn_index_iterator", "NEW-ORDERED-FINAL-TOPN-INDEX-ITERATOR", 1, 0, false);
-            declareMacro("do_final_topn_index_internal", "DO-FINAL-TOPN-INDEX-INTERNAL");
-            declareMacro("do_ordered_final_topn_index_internal", "DO-ORDERED-FINAL-TOPN-INDEX-INTERNAL");
-            declareFunction("final_topn_index_leaf_count", "FINAL-TOPN-INDEX-LEAF-COUNT", 1, 0, false);
-            declareFunction("final_topn_index_leaves", "FINAL-TOPN-INDEX-LEAVES", 1, 0, false);
-            declareFunction("final_topn_index_memberP", "FINAL-TOPN-INDEX-MEMBER?", 2, 0, false);
-            declareFunction("final_topn_index_arbitrary_leaf", "FINAL-TOPN-INDEX-ARBITRARY-LEAF", 1, 0, false);
-            declareFunction("final_topn_index_leaves_reset", "FINAL-TOPN-INDEX-LEAVES-RESET", 2, 0, false);
-            declareFunction("final_topn_index_insert", "FINAL-TOPN-INDEX-INSERT", 2, 0, false);
-            declareFunction("final_topn_index_delete", "FINAL-TOPN-INDEX-DELETE", 2, 0, false);
-            declareFunction("free_final_topn_index", "FREE-FINAL-TOPN-INDEX", 1, 0, false);
-            declareFunction("indexing_leaf_p", "INDEXING-LEAF-P", 1, 0, false);
-            declareFunction("indexing_leaf_installed_p", "INDEXING-LEAF-INSTALLED-P", 1, 0, false);
-            declareFunction("indexing_leaf_not_hosed_p", "INDEXING-LEAF-NOT-HOSED-P", 1, 0, false);
-            declareFunction("indexing_leaf_suid", "INDEXING-LEAF-SUID", 1, 0, false);
-            declareFunction("merge_final_indices", "MERGE-FINAL-INDICES", 2, 0, false);
-            declareFunction("merge_final_indices_internal", "MERGE-FINAL-INDICES-INTERNAL", 2, 0, false);
-        }
-        if (SubLFiles.USE_V2) {
-            declareFunction("intermediate_index_dictionary", "INTERMEDIATE-INDEX-DICTIONARY", 1, 0, false);
-            declareFunction("intermediate_index_dictionary_set", "INTERMEDIATE-INDEX-DICTIONARY-SET", 3, 0, false);
-            declareFunction("intermediate_index_dictionary_delete_key", "INTERMEDIATE-INDEX-DICTIONARY-DELETE-KEY", 2, 0, false);
-            declareFunction("do_final_index_valid_index_p", "DO-FINAL-INDEX-VALID-INDEX-P", 1, 0, false);
-            declareFunction("final_index_set", "FINAL-INDEX-SET", 1, 0, false);
-        }
-        return NIL;
-    }
-
-    public static SubLObject declare_kb_indexing_datastructures_file_Previous() {
-        declareFunction("setup_indexing_tables", "SETUP-INDEXING-TABLES", 1, 0, false);
-        declareFunction("assertion_indexing_store", "ASSERTION-INDEXING-STORE", 0, 0, false);
-        declareFunction("assertions_with_meta_assertions_count", "ASSERTIONS-WITH-META-ASSERTIONS-COUNT", 0, 0, false);
-        declareFunction("assertion_indexing_store_reset", "ASSERTION-INDEXING-STORE-RESET", 1, 0, false);
-        declareFunction("assertion_indexing_store_initial_size", "ASSERTION-INDEXING-STORE-INITIAL-SIZE", 0, 1, false);
-        declareFunction("assertion_indexing_store_initialize", "ASSERTION-INDEXING-STORE-INITIALIZE", 0, 1, false);
-        declareFunction("clear_assertion_indexing", "CLEAR-ASSERTION-INDEXING", 0, 0, false);
-        declareFunction("clear_assertion_indexing_store", "CLEAR-ASSERTION-INDEXING-STORE", 0, 0, false);
-        declareFunction("assertion_indexing_store_get", "ASSERTION-INDEXING-STORE-GET", 1, 0, false);
-        declareFunction("assertion_indexing_store_remove", "ASSERTION-INDEXING-STORE-REMOVE", 1, 0, false);
-        declareFunction("assertion_indexing_store_set", "ASSERTION-INDEXING-STORE-SET", 2, 0, false);
-        declareMacro("do_assertions_with_meta_assertions", "DO-ASSERTIONS-WITH-META-ASSERTIONS");
-        declareFunction("new_assertions_with_meta_assertions_iterator", "NEW-ASSERTIONS-WITH-META-ASSERTIONS-ITERATOR", 0, 0, false);
-        declareFunction("unindexed_syntax_constants", "UNINDEXED-SYNTAX-CONSTANTS", 0, 0, false);
-        declareFunction("unindexed_syntax_constant_p", "UNINDEXED-SYNTAX-CONSTANT-P", 1, 0, false);
-        declareFunction("indexed_term_p", "INDEXED-TERM-P", 1, 0, false);
+        declareFunction(me, "setup_indexing_tables", "SETUP-INDEXING-TABLES", 1, 0, false);
+        declareFunction(me, "assertion_indexing_store", "ASSERTION-INDEXING-STORE", 0, 0, false);
+        declareFunction(me, "assertions_with_meta_assertions_count", "ASSERTIONS-WITH-META-ASSERTIONS-COUNT", 0, 0, false);
+        declareFunction(me, "assertion_indexing_store_reset", "ASSERTION-INDEXING-STORE-RESET", 1, 0, false);
+        declareFunction(me, "assertion_indexing_store_initial_size", "ASSERTION-INDEXING-STORE-INITIAL-SIZE", 0, 1, false);
+        declareFunction(me, "assertion_indexing_store_initialize", "ASSERTION-INDEXING-STORE-INITIALIZE", 0, 1, false);
+        declareFunction(me, "clear_assertion_indexing", "CLEAR-ASSERTION-INDEXING", 0, 0, false);
+        declareFunction(me, "clear_assertion_indexing_store", "CLEAR-ASSERTION-INDEXING-STORE", 0, 0, false);
+        declareFunction(me, "assertion_indexing_store_get", "ASSERTION-INDEXING-STORE-GET", 1, 0, false);
+        declareFunction(me, "assertion_indexing_store_remove", "ASSERTION-INDEXING-STORE-REMOVE", 1, 0, false);
+        declareFunction(me, "assertion_indexing_store_set", "ASSERTION-INDEXING-STORE-SET", 2, 0, false);
+        declareMacro(me, "do_assertions_with_meta_assertions", "DO-ASSERTIONS-WITH-META-ASSERTIONS");
+        declareFunction(me, "new_assertions_with_meta_assertions_iterator", "NEW-ASSERTIONS-WITH-META-ASSERTIONS-ITERATOR", 0, 0, false);
+        declareFunction(me, "unindexed_syntax_constants", "UNINDEXED-SYNTAX-CONSTANTS", 0, 0, false);
+        declareFunction(me, "unindexed_syntax_constant_p", "UNINDEXED-SYNTAX-CONSTANT-P", 1, 0, false);
+        declareFunction(me, "indexed_term_p", "INDEXED-TERM-P", 1, 0, false);
         new kb_indexing_datastructures.$indexed_term_p$UnaryFunction();
-        declareFunction("indexed_unrepresented_term_p", "INDEXED-UNREPRESENTED-TERM-P", 1, 0, false);
-        declareFunction("valid_indexed_termP", "VALID-INDEXED-TERM?", 1, 0, false);
-        declareFunction("valid_indexed_term_robustP", "VALID-INDEXED-TERM-ROBUST?", 1, 0, false);
-        declareFunction("invalid_indexed_termP", "INVALID-INDEXED-TERM?", 1, 0, false);
+        declareFunction(me, "indexed_unrepresented_term_p", "INDEXED-UNREPRESENTED-TERM-P", 1, 0, false);
+        declareFunction(me, "valid_indexed_termP", "VALID-INDEXED-TERM?", 1, 0, false);
+        declareFunction(me, "valid_indexed_term_robustP", "VALID-INDEXED-TERM-ROBUST?", 1, 0, false);
+        declareFunction(me, "invalid_indexed_termP", "INVALID-INDEXED-TERM?", 1, 0, false);
         new kb_indexing_datastructures.$invalid_indexed_termP$UnaryFunction();
-        declareFunction("invalid_indexed_term_robustP", "INVALID-INDEXED-TERM-ROBUST?", 1, 0, false);
-        declareFunction("sort_of_indexed_term_p", "SORT-OF-INDEXED-TERM-P", 1, 0, false);
-        declareFunction("fully_indexed_term_p", "FULLY-INDEXED-TERM-P", 1, 0, false);
+        declareFunction(me, "invalid_indexed_term_robustP", "INVALID-INDEXED-TERM-ROBUST?", 1, 0, false);
+        declareFunction(me, "sort_of_indexed_term_p", "SORT-OF-INDEXED-TERM-P", 1, 0, false);
+        declareFunction(me, "fully_indexed_term_p", "FULLY-INDEXED-TERM-P", 1, 0, false);
         new kb_indexing_datastructures.$fully_indexed_term_p$UnaryFunction();
-        declareFunction("valid_fully_indexed_term_p", "VALID-FULLY-INDEXED-TERM-P", 1, 0, false);
-        declareMacro("do_indexed_terms", "DO-INDEXED-TERMS");
-        declareFunction("index_p", "INDEX-P", 1, 0, false);
-        declareFunction("index_installed_p", "INDEX-INSTALLED-P", 1, 0, false);
-        declareFunction("index_not_hosed_p", "INDEX-NOT-HOSED-P", 1, 0, false);
-        declareFunction("index_leaves", "INDEX-LEAVES", 1, 0, false);
-        declareFunction("index_leaf_count", "INDEX-LEAF-COUNT", 1, 0, false);
-        declareFunction("term_index", "TERM-INDEX", 1, 0, false);
-        declareFunction("term_index_swapped_inP", "TERM-INDEX-SWAPPED-IN?", 1, 0, false);
-        declareFunction("reset_term_index", "RESET-TERM-INDEX", 2, 0, false);
-        declareFunction("clear_term_index", "CLEAR-TERM-INDEX", 1, 0, false);
-        declareFunction("free_index", "FREE-INDEX", 1, 0, false);
-        declareFunction("free_term_index", "FREE-TERM-INDEX", 1, 0, false);
-        declareFunction("simple_index_p", "SIMPLE-INDEX-P", 1, 0, false);
-        declareFunction("simple_index_installed_p", "SIMPLE-INDEX-INSTALLED-P", 1, 0, false);
-        declareFunction("simple_index_not_hosed_p", "SIMPLE-INDEX-NOT-HOSED-P", 1, 0, false);
-        declareFunction("simple_indexed_term_p", "SIMPLE-INDEXED-TERM-P", 1, 0, false);
-        declareFunction("new_simple_index", "NEW-SIMPLE-INDEX", 0, 0, false);
-        declareFunction("simple_index_leaves", "SIMPLE-INDEX-LEAVES", 1, 0, false);
-        declareFunction("simple_index_leaf_count", "SIMPLE-INDEX-LEAF-COUNT", 1, 0, false);
-        declareFunction("simple_index_memberP", "SIMPLE-INDEX-MEMBER?", 2, 0, false);
-        declareFunction("simple_num_index", "SIMPLE-NUM-INDEX", 1, 0, false);
-        declareFunction("simple_term_assertion_list", "SIMPLE-TERM-ASSERTION-LIST", 1, 0, false);
-        declareFunction("do_simple_index_term_assertion_list", "DO-SIMPLE-INDEX-TERM-ASSERTION-LIST", 1, 0, false);
-        declareFunction("reset_term_simple_index", "RESET-TERM-SIMPLE-INDEX", 2, 0, false);
-        declareFunction("simple_index_insert", "SIMPLE-INDEX-INSERT", 2, 0, false);
-        declareFunction("simple_index_delete", "SIMPLE-INDEX-DELETE", 2, 0, false);
-        declareFunction("free_simple_index", "FREE-SIMPLE-INDEX", 1, 0, false);
-        declareMacro("with_current_complex_index_path", "WITH-CURRENT-COMPLEX-INDEX-PATH");
-        declareFunction("current_complex_index_keys", "CURRENT-COMPLEX-INDEX-KEYS", 0, 0, false);
-        declareFunction("copy_current_complex_index_keys", "COPY-CURRENT-COMPLEX-INDEX-KEYS", 0, 0, false);
-        declareFunction("current_complex_index_term", "CURRENT-COMPLEX-INDEX-TERM", 0, 0, false);
-        declareFunction("complex_index_keys_defined_p", "COMPLEX-INDEX-KEYS-DEFINED-P", 0, 0, false);
-        declareFunction("complex_index_p", "COMPLEX-INDEX-P", 1, 0, false);
-        declareFunction("complex_index_installed_p", "COMPLEX-INDEX-INSTALLED-P", 1, 0, false);
-        declareFunction("complex_index_not_hosed_p", "COMPLEX-INDEX-NOT-HOSED-P", 1, 0, false);
-        declareFunction("complex_indexed_term_p", "COMPLEX-INDEXED-TERM-P", 1, 0, false);
-        declareFunction("complex_index_leaves", "COMPLEX-INDEX-LEAVES", 1, 0, false);
-        declareFunction("complex_index_leaf_count", "COMPLEX-INDEX-LEAF-COUNT", 1, 0, false);
-        declareFunction("complex_index_lookup", "COMPLEX-INDEX-LOOKUP", 2, 0, false);
-        declareFunction("term_complex_index_lookup", "TERM-COMPLEX-INDEX-LOOKUP", 2, 0, false);
-        declareFunction("initialize_term_complex_index", "INITIALIZE-TERM-COMPLEX-INDEX", 1, 0, false);
-        declareFunction("merge_complex_indices", "MERGE-COMPLEX-INDICES", 2, 0, false);
-        declareFunction("term_complex_index_set", "TERM-COMPLEX-INDEX-SET", 3, 0, false);
-        declareFunction("term_complex_index_delete_key", "TERM-COMPLEX-INDEX-DELETE-KEY", 2, 0, false);
-        declareFunction("reserve_final_topn_index_for_term", "RESERVE-FINAL-TOPN-INDEX-FOR-TERM", 2, 0, false);
-        declareFunction("free_complex_index", "FREE-COMPLEX-INDEX", 1, 0, false);
-        declareFunction("subindex_p", "SUBINDEX-P", 1, 0, false);
-        declareFunction("subindex_installed_p", "SUBINDEX-INSTALLED-P", 1, 0, false);
-        declareFunction("subindex_not_hosed_p", "SUBINDEX-NOT-HOSED-P", 1, 0, false);
-        declareFunction("subindex_lookup", "SUBINDEX-LOOKUP", 2, 0, false);
-        declareFunction("subindex_leaves", "SUBINDEX-LEAVES", 1, 0, false);
-        declareFunction("subindex_leaf_count", "SUBINDEX-LEAF-COUNT", 1, 0, false);
-        declareFunction("initialize_term_subindex", "INITIALIZE-TERM-SUBINDEX", 1, 0, false);
-        declareFunction("free_subindex", "FREE-SUBINDEX", 1, 0, false);
-        declareFunction("merge_sub_indices", "MERGE-SUB-INDICES", 2, 0, false);
-        declareFunction("intermediate_index_p", "INTERMEDIATE-INDEX-P", 1, 0, false);
-        declareFunction("intermediate_index_installed_p", "INTERMEDIATE-INDEX-INSTALLED-P", 1, 0, false);
-        declareFunction("intermediate_index_not_hosed_p", "INTERMEDIATE-INDEX-NOT-HOSED-P", 1, 0, false);
-        declareFunction("new_intermediate_index", "NEW-INTERMEDIATE-INDEX", 1, 0, false);
-        declareFunction("clone_intermediate_index", "CLONE-INTERMEDIATE-INDEX", 1, 0, false);
-        declareMacro("do_intermediate_index", "DO-INTERMEDIATE-INDEX");
-        declareFunction("do_intermediate_index_valid_index_p", "DO-INTERMEDIATE-INDEX-VALID-INDEX-P", 1, 0, false);
-        declareMacro("capture_changed_index_entry_hints", "CAPTURE-CHANGED-INDEX-ENTRY-HINTS");
-        declareMacro("do_changed_intermediate_index", "DO-CHANGED-INTERMEDIATE-INDEX");
-        declareFunction("segregate_index_changes_and_pristines", "SEGREGATE-INDEX-CHANGES-AND-PRISTINES", 1, 0, false);
-        declareFunction("intermediate_index_lookup", "INTERMEDIATE-INDEX-LOOKUP", 2, 0, false);
-        declareFunction("intermediate_index_keys", "INTERMEDIATE-INDEX-KEYS", 1, 0, false);
-        declareFunction("intermediate_index_leaf_count", "INTERMEDIATE-INDEX-LEAF-COUNT", 1, 0, false);
-        declareFunction("intermediate_index_leaves", "INTERMEDIATE-INDEX-LEAVES", 1, 0, false);
-        declareFunction("intermediate_index_set", "INTERMEDIATE-INDEX-SET", 3, 0, false);
-        declareFunction("intermediate_index_replace_map", "INTERMEDIATE-INDEX-REPLACE-MAP", 2, 0, false);
-        declareFunction("intermediate_index_touch", "INTERMEDIATE-INDEX-TOUCH", 2, 0, false);
-        declareFunction("use_final_topn_indicesP", "USE-FINAL-TOPN-INDICES?", 0, 0, false);
-        declareFunction("upgrade_final_indexP", "UPGRADE-FINAL-INDEX?", 1, 0, false);
-        declareFunction("upgrade_combined_indices_to_final_indexP", "UPGRADE-COMBINED-INDICES-TO-FINAL-INDEX?", 2, 0, false);
-        declareFunction("intermediate_index_insert", "INTERMEDIATE-INDEX-INSERT", 3, 0, false);
-        declareFunction("intermediate_index_insert_int", "INTERMEDIATE-INDEX-INSERT-INT", 4, 0, false);
-        declareFunction("intermediate_index_delete", "INTERMEDIATE-INDEX-DELETE", 3, 0, false);
-        declareFunction("intermediate_index_delete_key", "INTERMEDIATE-INDEX-DELETE-KEY", 2, 0, false);
-        declareFunction("merge_intermediate_indices", "MERGE-INTERMEDIATE-INDICES", 2, 0, false);
-        declareFunction("initialize_term_intermediate_index", "INITIALIZE-TERM-INTERMEDIATE-INDEX", 1, 0, false);
-        declareFunction("free_intermediate_index", "FREE-INTERMEDIATE-INDEX", 1, 0, false);
-        declareFunction("intermediate_index_leaf_count_reset", "INTERMEDIATE-INDEX-LEAF-COUNT-RESET", 2, 0, false);
-        declareFunction("intermediate_index_leaf_count_inc", "INTERMEDIATE-INDEX-LEAF-COUNT-INC", 2, 0, false);
-        declareFunction("intermediate_index_lookup_or_create_intermediate", "INTERMEDIATE-INDEX-LOOKUP-OR-CREATE-INTERMEDIATE", 3, 0, false);
-        declareFunction("intermediate_index_lookup_or_create_final", "INTERMEDIATE-INDEX-LOOKUP-OR-CREATE-FINAL", 2, 0, false);
-        declareFunction("intermediate_index_map", "INTERMEDIATE-INDEX-MAP", 1, 0, false);
-        declareFunction("intermediate_index_map_set", "INTERMEDIATE-INDEX-MAP-SET", 3, 0, false);
-        declareFunction("intermediate_index_map_delete_key", "INTERMEDIATE-INDEX-MAP-DELETE-KEY", 2, 0, false);
-        declareFunction("intermediate_index_map_touch", "INTERMEDIATE-INDEX-MAP-TOUCH", 2, 0, false);
-        declareFunction("final_index_p", "FINAL-INDEX-P", 1, 0, false);
-        declareFunction("final_index_installed_p", "FINAL-INDEX-INSTALLED-P", 1, 0, false);
-        declareFunction("final_index_not_hosed_p", "FINAL-INDEX-NOT-HOSED-P", 1, 0, false);
-        declareFunction("new_final_index", "NEW-FINAL-INDEX", 0, 0, false);
-        declareMacro("do_final_index", "DO-FINAL-INDEX");
-        declareMacro("do_ordered_final_index", "DO-ORDERED-FINAL-INDEX");
-        declareFunction("final_index_leaf_count", "FINAL-INDEX-LEAF-COUNT", 1, 0, false);
-        declareFunction("final_index_leaves", "FINAL-INDEX-LEAVES", 1, 0, false);
-        declareFunction("final_index_memberP", "FINAL-INDEX-MEMBER?", 2, 0, false);
-        declareFunction("final_index_arbitrary_leaf", "FINAL-INDEX-ARBITRARY-LEAF", 1, 0, false);
-        declareFunction("final_index_leaves_reset", "FINAL-INDEX-LEAVES-RESET", 2, 0, false);
-        declareFunction("final_index_insert", "FINAL-INDEX-INSERT", 2, 0, false);
-        declareFunction("final_index_delete", "FINAL-INDEX-DELETE", 2, 0, false);
-        declareFunction("new_final_index_base_iterator", "NEW-FINAL-INDEX-BASE-ITERATOR", 1, 0, false);
-        declareFunction("free_final_index", "FREE-FINAL-INDEX", 1, 0, false);
-        declareFunction("final_unified_index_p", "FINAL-UNIFIED-INDEX-P", 1, 0, false);
-        declareFunction("final_unified_index_installed_p", "FINAL-UNIFIED-INDEX-INSTALLED-P", 1, 0, false);
-        declareFunction("final_unified_index_not_hosed_p", "FINAL-UNIFIED-INDEX-NOT-HOSED-P", 1, 0, false);
-        declareFunction("new_final_unified_index", "NEW-FINAL-UNIFIED-INDEX", 0, 0, false);
-        declareMacro("do_final_unified_index_internal", "DO-FINAL-UNIFIED-INDEX-INTERNAL");
-        declareMacro("do_ordered_final_unified_index_internal", "DO-ORDERED-FINAL-UNIFIED-INDEX-INTERNAL");
-        declareFunction("final_unified_index_leaf_count", "FINAL-UNIFIED-INDEX-LEAF-COUNT", 1, 0, false);
-        declareFunction("final_unified_index_leaves", "FINAL-UNIFIED-INDEX-LEAVES", 1, 0, false);
-        declareFunction("final_unified_index_memberP", "FINAL-UNIFIED-INDEX-MEMBER?", 2, 0, false);
-        declareFunction("final_unified_index_arbitrary_leaf", "FINAL-UNIFIED-INDEX-ARBITRARY-LEAF", 1, 0, false);
-        declareFunction("final_unified_index_leaves_reset", "FINAL-UNIFIED-INDEX-LEAVES-RESET", 2, 0, false);
-        declareFunction("final_unified_index_insert", "FINAL-UNIFIED-INDEX-INSERT", 2, 0, false);
-        declareFunction("final_unified_index_delete", "FINAL-UNIFIED-INDEX-DELETE", 2, 0, false);
-        declareFunction("final_unified_index_is_shardableP", "FINAL-UNIFIED-INDEX-IS-SHARDABLE?", 1, 0, false);
-        declareFunction("new_final_unified_index_iterator", "NEW-FINAL-UNIFIED-INDEX-ITERATOR", 1, 0, false);
-        declareFunction("free_final_unified_index", "FREE-FINAL-UNIFIED-INDEX", 1, 0, false);
-        declareFunction("final_unified_index_set", "FINAL-UNIFIED-INDEX-SET", 1, 0, false);
-        declareFunction("final_index_set_is_shardableP", "FINAL-INDEX-SET-IS-SHARDABLE?", 1, 0, false);
-        declareFunction("new_final_sharded_index", "NEW-FINAL-SHARDED-INDEX", 3, 0, false);
-        declareFunction("finshard_index_leaf_count", "FINSHARD-INDEX-LEAF-COUNT", 1, 0, false);
-        declareFunction("set_finshard_index_leaf_count", "SET-FINSHARD-INDEX-LEAF-COUNT", 2, 0, false);
-        declareFunction("finshard_index_keys", "FINSHARD-INDEX-KEYS", 1, 0, false);
-        declareFunction("set_finshard_index_keys", "SET-FINSHARD-INDEX-KEYS", 2, 0, false);
-        declareFunction("finshard_index_map", "FINSHARD-INDEX-MAP", 1, 0, false);
-        declareFunction("set_finshard_index_map", "SET-FINSHARD-INDEX-MAP", 2, 0, false);
-        declareFunction("final_sharded_index_p", "FINAL-SHARDED-INDEX-P", 1, 0, false);
-        declareFunction("final_sharded_index_empty_p", "FINAL-SHARDED-INDEX-EMPTY-P", 1, 0, false);
-        declareFunction("final_sharded_index_leaf_count", "FINAL-SHARDED-INDEX-LEAF-COUNT", 1, 0, false);
-        declareFunction("final_sharded_index_leaves", "FINAL-SHARDED-INDEX-LEAVES", 1, 0, false);
-        declareFunction("final_sharded_index_memberP", "FINAL-SHARDED-INDEX-MEMBER?", 2, 0, false);
-        declareFunction("finshard_index_find_shard", "FINSHARD-INDEX-FIND-SHARD", 2, 0, false);
-        declareFunction("finshard_index_find_shard_key_index", "FINSHARD-INDEX-FIND-SHARD-KEY-INDEX", 2, 0, false);
-        declareFunction("final_sharded_index_arbitrary_leaf", "FINAL-SHARDED-INDEX-ARBITRARY-LEAF", 1, 0, false);
-        declareMacro("do_final_sharded_index_internal", "DO-FINAL-SHARDED-INDEX-INTERNAL");
-        declareMacro("do_ordered_final_sharded_index_internal", "DO-ORDERED-FINAL-SHARDED-INDEX-INTERNAL");
-        declareFunction("final_sharded_index_shard_map", "FINAL-SHARDED-INDEX-SHARD-MAP", 1, 0, false);
-        declareFunction("ordered_final_sharded_index_extract_contents", "ORDERED-FINAL-SHARDED-INDEX-EXTRACT-CONTENTS", 2, 0, false);
-        declareFunction("possible_assertionL", "POSSIBLE-ASSERTION<", 2, 0, false);
-        declareFunction("increment_finshard_index_leaf_count", "INCREMENT-FINSHARD-INDEX-LEAF-COUNT", 1, 1, false);
-        declareFunction("decrement_finshard_index_leaf_count", "DECREMENT-FINSHARD-INDEX-LEAF-COUNT", 1, 1, false);
-        declareFunction("append_finshard_index_keys", "APPEND-FINSHARD-INDEX-KEYS", 2, 0, false);
-        declareFunction("final_sharded_index_leaves_reset", "FINAL-SHARDED-INDEX-LEAVES-RESET", 2, 0, false);
-        declareFunction("final_sharded_index_insert", "FINAL-SHARDED-INDEX-INSERT", 2, 0, false);
-        declareFunction("final_sharded_index_insert_internal", "FINAL-SHARDED-INDEX-INSERT-INTERNAL", 2, 0, false);
-        declareFunction("final_sharded_index_insert_into_shard", "FINAL-SHARDED-INDEX-INSERT-INTO-SHARD", 3, 0, false);
-        declareFunction("final_sharded_index_delete", "FINAL-SHARDED-INDEX-DELETE", 2, 0, false);
-        declareFunction("reshard_final_sharded_index", "RESHARD-FINAL-SHARDED-INDEX", 1, 0, false);
-        declareFunction("convert_final_simple_index_to_sharded_index", "CONVERT-FINAL-SIMPLE-INDEX-TO-SHARDED-INDEX", 1, 0, false);
-        declareFunction("create_final_sharded_index", "CREATE-FINAL-SHARDED-INDEX", 1, 0, false);
-        declareFunction("ncreate_final_sharded_index", "NCREATE-FINAL-SHARDED-INDEX", 1, 0, false);
-        declareFunction("reorganize_modified_final_sharded_index", "REORGANIZE-MODIFIED-FINAL-SHARDED-INDEX", 1, 0, false);
-        declareFunction("final_sharded_index_to_fvector_backed_sharded_index", "FINAL-SHARDED-INDEX-TO-FVECTOR-BACKED-SHARDED-INDEX", 3, 0, false);
-        declareFunction("update_fvector_backed_final_sharded_index", "UPDATE-FVECTOR-BACKED-FINAL-SHARDED-INDEX", 3, 0, false);
-        declareFunction("validate_final_sharded_index", "VALIDATE-FINAL-SHARDED-INDEX", 1, 0, false);
-        declareFunction("new_final_sharded_index_iterator", "NEW-FINAL-SHARDED-INDEX-ITERATOR", 1, 0, false);
-        declareFunction("free_final_sharded_index", "FREE-FINAL-SHARDED-INDEX", 1, 0, false);
-        declareFunction("final_sharded_index_set", "FINAL-SHARDED-INDEX-SET", 1, 0, false);
-        declareMacro("with_final_topn_index_tracking", "WITH-FINAL-TOPN-INDEX-TRACKING");
-        declareMacro("without_final_topn_index_tracking", "WITHOUT-FINAL-TOPN-INDEX-TRACKING");
-        declareFunction("possibly_note_new_final_topn_index", "POSSIBLY-NOTE-NEW-FINAL-TOPN-INDEX", 2, 0, false);
-        declareFunction("final_topn_index_p", "FINAL-TOPN-INDEX-P", 1, 0, false);
-        declareFunction("final_topn_index_count", "FINAL-TOPN-INDEX-COUNT", 1, 0, false);
-        declareFunction("set_final_topn_index_count", "SET-FINAL-TOPN-INDEX-COUNT", 2, 0, false);
-        declareFunction("inc_final_topn_index_count", "INC-FINAL-TOPN-INDEX-COUNT", 1, 1, false);
-        declareFunction("dec_final_topn_index_count", "DEC-FINAL-TOPN-INDEX-COUNT", 1, 1, false);
-        declareFunction("final_topn_index_term", "FINAL-TOPN-INDEX-TERM", 1, 0, false);
-        declareFunction("final_topn_index_key_path", "FINAL-TOPN-INDEX-KEY-PATH", 1, 0, false);
-        declareFunction("final_topn_index_installed_p", "FINAL-TOPN-INDEX-INSTALLED-P", 1, 0, false);
-        declareFunction("final_topn_index_not_hosed_p", "FINAL-TOPN-INDEX-NOT-HOSED-P", 1, 0, false);
-        declareFunction("new_final_topn_index", "NEW-FINAL-TOPN-INDEX", 2, 1, false);
-        declareFunction("upgrade_final_index", "UPGRADE-FINAL-INDEX", 1, 0, false);
-        declareFunction("new_final_topn_index_iterator", "NEW-FINAL-TOPN-INDEX-ITERATOR", 1, 0, false);
-        declareFunction("final_topn_index_iterator_build_filter_args", "FINAL-TOPN-INDEX-ITERATOR-BUILD-FILTER-ARGS", 1, 0, false);
-        declareFunction("assertion_matches_final_topn_indexkey_pathP", "ASSERTION-MATCHES-FINAL-TOPN-INDEXKEY-PATH?", 3, 0, false);
-        declareFunction("new_ordered_final_topn_index_iterator", "NEW-ORDERED-FINAL-TOPN-INDEX-ITERATOR", 1, 0, false);
-        declareMacro("do_final_topn_index_internal", "DO-FINAL-TOPN-INDEX-INTERNAL");
-        declareMacro("do_ordered_final_topn_index_internal", "DO-ORDERED-FINAL-TOPN-INDEX-INTERNAL");
-        declareFunction("final_topn_index_leaf_count", "FINAL-TOPN-INDEX-LEAF-COUNT", 1, 0, false);
-        declareFunction("final_topn_index_leaves", "FINAL-TOPN-INDEX-LEAVES", 1, 0, false);
-        declareFunction("final_topn_index_memberP", "FINAL-TOPN-INDEX-MEMBER?", 2, 0, false);
-        declareFunction("final_topn_index_arbitrary_leaf", "FINAL-TOPN-INDEX-ARBITRARY-LEAF", 1, 0, false);
-        declareFunction("final_topn_index_leaves_reset", "FINAL-TOPN-INDEX-LEAVES-RESET", 2, 0, false);
-        declareFunction("final_topn_index_insert", "FINAL-TOPN-INDEX-INSERT", 2, 0, false);
-        declareFunction("final_topn_index_delete", "FINAL-TOPN-INDEX-DELETE", 2, 0, false);
-        declareFunction("free_final_topn_index", "FREE-FINAL-TOPN-INDEX", 1, 0, false);
-        declareFunction("indexing_leaf_p", "INDEXING-LEAF-P", 1, 0, false);
-        declareFunction("indexing_leaf_installed_p", "INDEXING-LEAF-INSTALLED-P", 1, 0, false);
-        declareFunction("indexing_leaf_not_hosed_p", "INDEXING-LEAF-NOT-HOSED-P", 1, 0, false);
-        declareFunction("indexing_leaf_suid", "INDEXING-LEAF-SUID", 1, 0, false);
-        declareFunction("merge_final_indices", "MERGE-FINAL-INDICES", 2, 0, false);
-        declareFunction("merge_final_indices_internal", "MERGE-FINAL-INDICES-INTERNAL", 2, 0, false);
-        return NIL;
-    }
-
-    public static final SubLObject init_kb_indexing_datastructures_file_alt() {
-        deflexical("*ASSERTION-INDEXING-STORE*", NIL != boundp($assertion_indexing_store$) ? ((SubLObject) ($assertion_indexing_store$.getGlobalValue())) : NIL);
-        deflexical("*META-ASSERTION-FREQUENCY*", $float$0_015);
-        deflexical("*UNINDEXED-SYNTAX-CONSTANTS*", $list_alt3);
+        declareFunction(me, "valid_fully_indexed_term_p", "VALID-FULLY-INDEXED-TERM-P", 1, 0, false);
+        declareMacro(me, "do_indexed_terms", "DO-INDEXED-TERMS");
+        declareFunction(me, "index_p", "INDEX-P", 1, 0, false);
+        declareFunction(me, "index_installed_p", "INDEX-INSTALLED-P", 1, 0, false);
+        declareFunction(me, "index_not_hosed_p", "INDEX-NOT-HOSED-P", 1, 0, false);
+        declareFunction(me, "index_leaves", "INDEX-LEAVES", 1, 0, false);
+        declareFunction(me, "index_leaf_count", "INDEX-LEAF-COUNT", 1, 0, false);
+        declareFunction(me, "term_index", "TERM-INDEX", 1, 0, false);
+        declareFunction(me, "term_index_swapped_inP", "TERM-INDEX-SWAPPED-IN?", 1, 0, false);
+        declareFunction(me, "reset_term_index", "RESET-TERM-INDEX", 2, 0, false);
+        declareFunction(me, "clear_term_index", "CLEAR-TERM-INDEX", 1, 0, false);
+        declareFunction(me, "free_index", "FREE-INDEX", 1, 0, false);
+        declareFunction(me, "free_term_index", "FREE-TERM-INDEX", 1, 0, false);
+        declareFunction(me, "simple_index_p", "SIMPLE-INDEX-P", 1, 0, false);
+        declareFunction(me, "simple_index_installed_p", "SIMPLE-INDEX-INSTALLED-P", 1, 0, false);
+        declareFunction(me, "simple_index_not_hosed_p", "SIMPLE-INDEX-NOT-HOSED-P", 1, 0, false);
+        declareFunction(me, "simple_indexed_term_p", "SIMPLE-INDEXED-TERM-P", 1, 0, false);
+        declareFunction(me, "new_simple_index", "NEW-SIMPLE-INDEX", 0, 0, false);
+        declareFunction(me, "simple_index_leaves", "SIMPLE-INDEX-LEAVES", 1, 0, false);
+        declareFunction(me, "simple_index_leaf_count", "SIMPLE-INDEX-LEAF-COUNT", 1, 0, false);
+        declareFunction(me, "simple_index_memberP", "SIMPLE-INDEX-MEMBER?", 2, 0, false);
+        declareFunction(me, "simple_num_index", "SIMPLE-NUM-INDEX", 1, 0, false);
+        declareFunction(me, "simple_term_assertion_list", "SIMPLE-TERM-ASSERTION-LIST", 1, 0, false);
+        declareFunction(me, "do_simple_index_term_assertion_list", "DO-SIMPLE-INDEX-TERM-ASSERTION-LIST", 1, 0, false);
+        declareFunction(me, "reset_term_simple_index", "RESET-TERM-SIMPLE-INDEX", 2, 0, false);
+        declareFunction(me, "simple_index_insert", "SIMPLE-INDEX-INSERT", 2, 0, false);
+        declareFunction(me, "simple_index_delete", "SIMPLE-INDEX-DELETE", 2, 0, false);
+        declareFunction(me, "free_simple_index", "FREE-SIMPLE-INDEX", 1, 0, false);
+        declareMacro(me, "with_current_complex_index_path", "WITH-CURRENT-COMPLEX-INDEX-PATH");
+        declareFunction(me, "current_complex_index_keys", "CURRENT-COMPLEX-INDEX-KEYS", 0, 0, false);
+        declareFunction(me, "copy_current_complex_index_keys", "COPY-CURRENT-COMPLEX-INDEX-KEYS", 0, 0, false);
+        declareFunction(me, "current_complex_index_term", "CURRENT-COMPLEX-INDEX-TERM", 0, 0, false);
+        declareFunction(me, "complex_index_keys_defined_p", "COMPLEX-INDEX-KEYS-DEFINED-P", 0, 0, false);
+        declareFunction(me, "complex_index_p", "COMPLEX-INDEX-P", 1, 0, false);
+        declareFunction(me, "complex_index_installed_p", "COMPLEX-INDEX-INSTALLED-P", 1, 0, false);
+        declareFunction(me, "complex_index_not_hosed_p", "COMPLEX-INDEX-NOT-HOSED-P", 1, 0, false);
+        declareFunction(me, "complex_indexed_term_p", "COMPLEX-INDEXED-TERM-P", 1, 0, false);
+        declareFunction(me, "complex_index_leaves", "COMPLEX-INDEX-LEAVES", 1, 0, false);
+        declareFunction(me, "complex_index_leaf_count", "COMPLEX-INDEX-LEAF-COUNT", 1, 0, false);
+        declareFunction(me, "complex_index_lookup", "COMPLEX-INDEX-LOOKUP", 2, 0, false);
+        declareFunction(me, "term_complex_index_lookup", "TERM-COMPLEX-INDEX-LOOKUP", 2, 0, false);
+        declareFunction(me, "initialize_term_complex_index", "INITIALIZE-TERM-COMPLEX-INDEX", 1, 0, false);
+        declareFunction(me, "merge_complex_indices", "MERGE-COMPLEX-INDICES", 2, 0, false);
+        declareFunction(me, "term_complex_index_set", "TERM-COMPLEX-INDEX-SET", 3, 0, false);
+        declareFunction(me, "term_complex_index_delete_key", "TERM-COMPLEX-INDEX-DELETE-KEY", 2, 0, false);
+        declareFunction(me, "reserve_final_topn_index_for_term", "RESERVE-FINAL-TOPN-INDEX-FOR-TERM", 2, 0, false);
+        declareFunction(me, "free_complex_index", "FREE-COMPLEX-INDEX", 1, 0, false);
+        declareFunction(me, "subindex_p", "SUBINDEX-P", 1, 0, false);
+        declareFunction(me, "subindex_installed_p", "SUBINDEX-INSTALLED-P", 1, 0, false);
+        declareFunction(me, "subindex_not_hosed_p", "SUBINDEX-NOT-HOSED-P", 1, 0, false);
+        declareFunction(me, "subindex_lookup", "SUBINDEX-LOOKUP", 2, 0, false);
+        declareFunction(me, "subindex_leaves", "SUBINDEX-LEAVES", 1, 0, false);
+        declareFunction(me, "subindex_leaf_count", "SUBINDEX-LEAF-COUNT", 1, 0, false);
+        declareFunction(me, "initialize_term_subindex", "INITIALIZE-TERM-SUBINDEX", 1, 0, false);
+        declareFunction(me, "free_subindex", "FREE-SUBINDEX", 1, 0, false);
+        declareFunction(me, "merge_sub_indices", "MERGE-SUB-INDICES", 2, 0, false);
+        declareFunction(me, "intermediate_index_p", "INTERMEDIATE-INDEX-P", 1, 0, false);
+        declareFunction(me, "intermediate_index_installed_p", "INTERMEDIATE-INDEX-INSTALLED-P", 1, 0, false);
+        declareFunction(me, "intermediate_index_not_hosed_p", "INTERMEDIATE-INDEX-NOT-HOSED-P", 1, 0, false);
+        declareFunction(me, "new_intermediate_index", "NEW-INTERMEDIATE-INDEX", 1, 0, false);
+        declareFunction(me, "clone_intermediate_index", "CLONE-INTERMEDIATE-INDEX", 1, 0, false);
+        declareMacro(me, "do_intermediate_index", "DO-INTERMEDIATE-INDEX");
+        declareFunction(me, "do_intermediate_index_valid_index_p", "DO-INTERMEDIATE-INDEX-VALID-INDEX-P", 1, 0, false);
+        declareMacro(me, "capture_changed_index_entry_hints", "CAPTURE-CHANGED-INDEX-ENTRY-HINTS");
+        declareMacro(me, "do_changed_intermediate_index", "DO-CHANGED-INTERMEDIATE-INDEX");
+        declareFunction(me, "segregate_index_changes_and_pristines", "SEGREGATE-INDEX-CHANGES-AND-PRISTINES", 1, 0, false);
+        declareFunction(me, "intermediate_index_lookup", "INTERMEDIATE-INDEX-LOOKUP", 2, 0, false);
+        declareFunction(me, "intermediate_index_keys", "INTERMEDIATE-INDEX-KEYS", 1, 0, false);
+        declareFunction(me, "intermediate_index_leaf_count", "INTERMEDIATE-INDEX-LEAF-COUNT", 1, 0, false);
+        declareFunction(me, "intermediate_index_leaves", "INTERMEDIATE-INDEX-LEAVES", 1, 0, false);
+        declareFunction(me, "intermediate_index_set", "INTERMEDIATE-INDEX-SET", 3, 0, false);
+        declareFunction(me, "intermediate_index_replace_map", "INTERMEDIATE-INDEX-REPLACE-MAP", 2, 0, false);
+        declareFunction(me, "intermediate_index_touch", "INTERMEDIATE-INDEX-TOUCH", 2, 0, false);
+        declareFunction(me, "use_final_topn_indicesP", "USE-FINAL-TOPN-INDICES?", 0, 0, false);
+        declareFunction(me, "upgrade_final_indexP", "UPGRADE-FINAL-INDEX?", 1, 0, false);
+        declareFunction(me, "upgrade_combined_indices_to_final_indexP", "UPGRADE-COMBINED-INDICES-TO-FINAL-INDEX?", 2, 0, false);
+        declareFunction(me, "intermediate_index_insert", "INTERMEDIATE-INDEX-INSERT", 3, 0, false);
+        declareFunction(me, "intermediate_index_insert_int", "INTERMEDIATE-INDEX-INSERT-INT", 4, 0, false);
+        declareFunction(me, "intermediate_index_delete", "INTERMEDIATE-INDEX-DELETE", 3, 0, false);
+        declareFunction(me, "intermediate_index_delete_key", "INTERMEDIATE-INDEX-DELETE-KEY", 2, 0, false);
+        declareFunction(me, "merge_intermediate_indices", "MERGE-INTERMEDIATE-INDICES", 2, 0, false);
+        declareFunction(me, "initialize_term_intermediate_index", "INITIALIZE-TERM-INTERMEDIATE-INDEX", 1, 0, false);
+        declareFunction(me, "free_intermediate_index", "FREE-INTERMEDIATE-INDEX", 1, 0, false);
+        declareFunction(me, "intermediate_index_leaf_count_reset", "INTERMEDIATE-INDEX-LEAF-COUNT-RESET", 2, 0, false);
+        declareFunction(me, "intermediate_index_leaf_count_inc", "INTERMEDIATE-INDEX-LEAF-COUNT-INC", 2, 0, false);
+        declareFunction(me, "intermediate_index_lookup_or_create_intermediate", "INTERMEDIATE-INDEX-LOOKUP-OR-CREATE-INTERMEDIATE", 3, 0, false);
+        declareFunction(me, "intermediate_index_lookup_or_create_final", "INTERMEDIATE-INDEX-LOOKUP-OR-CREATE-FINAL", 2, 0, false);
+        declareFunction(me, "intermediate_index_map", "INTERMEDIATE-INDEX-MAP", 1, 0, false);
+        declareFunction(me, "intermediate_index_map_set", "INTERMEDIATE-INDEX-MAP-SET", 3, 0, false);
+        declareFunction(me, "intermediate_index_map_delete_key", "INTERMEDIATE-INDEX-MAP-DELETE-KEY", 2, 0, false);
+        declareFunction(me, "intermediate_index_map_touch", "INTERMEDIATE-INDEX-MAP-TOUCH", 2, 0, false);
+        declareFunction(me, "final_index_p", "FINAL-INDEX-P", 1, 0, false);
+        declareFunction(me, "final_index_installed_p", "FINAL-INDEX-INSTALLED-P", 1, 0, false);
+        declareFunction(me, "final_index_not_hosed_p", "FINAL-INDEX-NOT-HOSED-P", 1, 0, false);
+        declareFunction(me, "new_final_index", "NEW-FINAL-INDEX", 0, 0, false);
+        declareMacro(me, "do_final_index", "DO-FINAL-INDEX");
+        declareMacro(me, "do_ordered_final_index", "DO-ORDERED-FINAL-INDEX");
+        declareFunction(me, "final_index_leaf_count", "FINAL-INDEX-LEAF-COUNT", 1, 0, false);
+        declareFunction(me, "final_index_leaves", "FINAL-INDEX-LEAVES", 1, 0, false);
+        declareFunction(me, "final_index_memberP", "FINAL-INDEX-MEMBER?", 2, 0, false);
+        declareFunction(me, "final_index_arbitrary_leaf", "FINAL-INDEX-ARBITRARY-LEAF", 1, 0, false);
+        declareFunction(me, "final_index_leaves_reset", "FINAL-INDEX-LEAVES-RESET", 2, 0, false);
+        declareFunction(me, "final_index_insert", "FINAL-INDEX-INSERT", 2, 0, false);
+        declareFunction(me, "final_index_delete", "FINAL-INDEX-DELETE", 2, 0, false);
+        declareFunction(me, "new_final_index_base_iterator", "NEW-FINAL-INDEX-BASE-ITERATOR", 1, 0, false);
+        declareFunction(me, "free_final_index", "FREE-FINAL-INDEX", 1, 0, false);
+        declareFunction(me, "final_unified_index_p", "FINAL-UNIFIED-INDEX-P", 1, 0, false);
+        declareFunction(me, "final_unified_index_installed_p", "FINAL-UNIFIED-INDEX-INSTALLED-P", 1, 0, false);
+        declareFunction(me, "final_unified_index_not_hosed_p", "FINAL-UNIFIED-INDEX-NOT-HOSED-P", 1, 0, false);
+        declareFunction(me, "new_final_unified_index", "NEW-FINAL-UNIFIED-INDEX", 0, 0, false);
+        declareMacro(me, "do_final_unified_index_internal", "DO-FINAL-UNIFIED-INDEX-INTERNAL");
+        declareMacro(me, "do_ordered_final_unified_index_internal", "DO-ORDERED-FINAL-UNIFIED-INDEX-INTERNAL");
+        declareFunction(me, "final_unified_index_leaf_count", "FINAL-UNIFIED-INDEX-LEAF-COUNT", 1, 0, false);
+        declareFunction(me, "final_unified_index_leaves", "FINAL-UNIFIED-INDEX-LEAVES", 1, 0, false);
+        declareFunction(me, "final_unified_index_memberP", "FINAL-UNIFIED-INDEX-MEMBER?", 2, 0, false);
+        declareFunction(me, "final_unified_index_arbitrary_leaf", "FINAL-UNIFIED-INDEX-ARBITRARY-LEAF", 1, 0, false);
+        declareFunction(me, "final_unified_index_leaves_reset", "FINAL-UNIFIED-INDEX-LEAVES-RESET", 2, 0, false);
+        declareFunction(me, "final_unified_index_insert", "FINAL-UNIFIED-INDEX-INSERT", 2, 0, false);
+        declareFunction(me, "final_unified_index_delete", "FINAL-UNIFIED-INDEX-DELETE", 2, 0, false);
+        declareFunction(me, "final_unified_index_is_shardableP", "FINAL-UNIFIED-INDEX-IS-SHARDABLE?", 1, 0, false);
+        declareFunction(me, "new_final_unified_index_iterator", "NEW-FINAL-UNIFIED-INDEX-ITERATOR", 1, 0, false);
+        declareFunction(me, "free_final_unified_index", "FREE-FINAL-UNIFIED-INDEX", 1, 0, false);
+        declareFunction(me, "final_unified_index_set", "FINAL-UNIFIED-INDEX-SET", 1, 0, false);
+        declareFunction(me, "final_index_set_is_shardableP", "FINAL-INDEX-SET-IS-SHARDABLE?", 1, 0, false);
+        declareFunction(me, "new_final_sharded_index", "NEW-FINAL-SHARDED-INDEX", 3, 0, false);
+        declareFunction(me, "finshard_index_leaf_count", "FINSHARD-INDEX-LEAF-COUNT", 1, 0, false);
+        declareFunction(me, "set_finshard_index_leaf_count", "SET-FINSHARD-INDEX-LEAF-COUNT", 2, 0, false);
+        declareFunction(me, "finshard_index_keys", "FINSHARD-INDEX-KEYS", 1, 0, false);
+        declareFunction(me, "set_finshard_index_keys", "SET-FINSHARD-INDEX-KEYS", 2, 0, false);
+        declareFunction(me, "finshard_index_map", "FINSHARD-INDEX-MAP", 1, 0, false);
+        declareFunction(me, "set_finshard_index_map", "SET-FINSHARD-INDEX-MAP", 2, 0, false);
+        declareFunction(me, "final_sharded_index_p", "FINAL-SHARDED-INDEX-P", 1, 0, false);
+        declareFunction(me, "final_sharded_index_empty_p", "FINAL-SHARDED-INDEX-EMPTY-P", 1, 0, false);
+        declareFunction(me, "final_sharded_index_leaf_count", "FINAL-SHARDED-INDEX-LEAF-COUNT", 1, 0, false);
+        declareFunction(me, "final_sharded_index_leaves", "FINAL-SHARDED-INDEX-LEAVES", 1, 0, false);
+        declareFunction(me, "final_sharded_index_memberP", "FINAL-SHARDED-INDEX-MEMBER?", 2, 0, false);
+        declareFunction(me, "finshard_index_find_shard", "FINSHARD-INDEX-FIND-SHARD", 2, 0, false);
+        declareFunction(me, "finshard_index_find_shard_key_index", "FINSHARD-INDEX-FIND-SHARD-KEY-INDEX", 2, 0, false);
+        declareFunction(me, "final_sharded_index_arbitrary_leaf", "FINAL-SHARDED-INDEX-ARBITRARY-LEAF", 1, 0, false);
+        declareMacro(me, "do_final_sharded_index_internal", "DO-FINAL-SHARDED-INDEX-INTERNAL");
+        declareMacro(me, "do_ordered_final_sharded_index_internal", "DO-ORDERED-FINAL-SHARDED-INDEX-INTERNAL");
+        declareFunction(me, "final_sharded_index_shard_map", "FINAL-SHARDED-INDEX-SHARD-MAP", 1, 0, false);
+        declareFunction(me, "ordered_final_sharded_index_extract_contents", "ORDERED-FINAL-SHARDED-INDEX-EXTRACT-CONTENTS", 2, 0, false);
+        declareFunction(me, "possible_assertionL", "POSSIBLE-ASSERTION<", 2, 0, false);
+        declareFunction(me, "increment_finshard_index_leaf_count", "INCREMENT-FINSHARD-INDEX-LEAF-COUNT", 1, 1, false);
+        declareFunction(me, "decrement_finshard_index_leaf_count", "DECREMENT-FINSHARD-INDEX-LEAF-COUNT", 1, 1, false);
+        declareFunction(me, "append_finshard_index_keys", "APPEND-FINSHARD-INDEX-KEYS", 2, 0, false);
+        declareFunction(me, "final_sharded_index_leaves_reset", "FINAL-SHARDED-INDEX-LEAVES-RESET", 2, 0, false);
+        declareFunction(me, "final_sharded_index_insert", "FINAL-SHARDED-INDEX-INSERT", 2, 0, false);
+        declareFunction(me, "final_sharded_index_insert_internal", "FINAL-SHARDED-INDEX-INSERT-INTERNAL", 2, 0, false);
+        declareFunction(me, "final_sharded_index_insert_into_shard", "FINAL-SHARDED-INDEX-INSERT-INTO-SHARD", 3, 0, false);
+        declareFunction(me, "final_sharded_index_delete", "FINAL-SHARDED-INDEX-DELETE", 2, 0, false);
+        declareFunction(me, "reshard_final_sharded_index", "RESHARD-FINAL-SHARDED-INDEX", 1, 0, false);
+        declareFunction(me, "convert_final_simple_index_to_sharded_index", "CONVERT-FINAL-SIMPLE-INDEX-TO-SHARDED-INDEX", 1, 0, false);
+        declareFunction(me, "create_final_sharded_index", "CREATE-FINAL-SHARDED-INDEX", 1, 0, false);
+        declareFunction(me, "ncreate_final_sharded_index", "NCREATE-FINAL-SHARDED-INDEX", 1, 0, false);
+        declareFunction(me, "reorganize_modified_final_sharded_index", "REORGANIZE-MODIFIED-FINAL-SHARDED-INDEX", 1, 0, false);
+        declareFunction(me, "final_sharded_index_to_fvector_backed_sharded_index", "FINAL-SHARDED-INDEX-TO-FVECTOR-BACKED-SHARDED-INDEX", 3, 0, false);
+        declareFunction(me, "update_fvector_backed_final_sharded_index", "UPDATE-FVECTOR-BACKED-FINAL-SHARDED-INDEX", 3, 0, false);
+        declareFunction(me, "validate_final_sharded_index", "VALIDATE-FINAL-SHARDED-INDEX", 1, 0, false);
+        declareFunction(me, "new_final_sharded_index_iterator", "NEW-FINAL-SHARDED-INDEX-ITERATOR", 1, 0, false);
+        declareFunction(me, "free_final_sharded_index", "FREE-FINAL-SHARDED-INDEX", 1, 0, false);
+        declareFunction(me, "final_sharded_index_set", "FINAL-SHARDED-INDEX-SET", 1, 0, false);
+        declareMacro(me, "with_final_topn_index_tracking", "WITH-FINAL-TOPN-INDEX-TRACKING");
+        declareMacro(me, "without_final_topn_index_tracking", "WITHOUT-FINAL-TOPN-INDEX-TRACKING");
+        declareFunction(me, "possibly_note_new_final_topn_index", "POSSIBLY-NOTE-NEW-FINAL-TOPN-INDEX", 2, 0, false);
+        declareFunction(me, "final_topn_index_p", "FINAL-TOPN-INDEX-P", 1, 0, false);
+        declareFunction(me, "final_topn_index_count", "FINAL-TOPN-INDEX-COUNT", 1, 0, false);
+        declareFunction(me, "set_final_topn_index_count", "SET-FINAL-TOPN-INDEX-COUNT", 2, 0, false);
+        declareFunction(me, "inc_final_topn_index_count", "INC-FINAL-TOPN-INDEX-COUNT", 1, 1, false);
+        declareFunction(me, "dec_final_topn_index_count", "DEC-FINAL-TOPN-INDEX-COUNT", 1, 1, false);
+        declareFunction(me, "final_topn_index_term", "FINAL-TOPN-INDEX-TERM", 1, 0, false);
+        declareFunction(me, "final_topn_index_key_path", "FINAL-TOPN-INDEX-KEY-PATH", 1, 0, false);
+        declareFunction(me, "final_topn_index_installed_p", "FINAL-TOPN-INDEX-INSTALLED-P", 1, 0, false);
+        declareFunction(me, "final_topn_index_not_hosed_p", "FINAL-TOPN-INDEX-NOT-HOSED-P", 1, 0, false);
+        declareFunction(me, "new_final_topn_index", "NEW-FINAL-TOPN-INDEX", 2, 1, false);
+        declareFunction(me, "upgrade_final_index", "UPGRADE-FINAL-INDEX", 1, 0, false);
+        declareFunction(me, "new_final_topn_index_iterator", "NEW-FINAL-TOPN-INDEX-ITERATOR", 1, 0, false);
+        declareFunction(me, "final_topn_index_iterator_build_filter_args", "FINAL-TOPN-INDEX-ITERATOR-BUILD-FILTER-ARGS", 1, 0, false);
+        declareFunction(me, "assertion_matches_final_topn_indexkey_pathP", "ASSERTION-MATCHES-FINAL-TOPN-INDEXKEY-PATH?", 3, 0, false);
+        declareFunction(me, "new_ordered_final_topn_index_iterator", "NEW-ORDERED-FINAL-TOPN-INDEX-ITERATOR", 1, 0, false);
+        declareMacro(me, "do_final_topn_index_internal", "DO-FINAL-TOPN-INDEX-INTERNAL");
+        declareMacro(me, "do_ordered_final_topn_index_internal", "DO-ORDERED-FINAL-TOPN-INDEX-INTERNAL");
+        declareFunction(me, "final_topn_index_leaf_count", "FINAL-TOPN-INDEX-LEAF-COUNT", 1, 0, false);
+        declareFunction(me, "final_topn_index_leaves", "FINAL-TOPN-INDEX-LEAVES", 1, 0, false);
+        declareFunction(me, "final_topn_index_memberP", "FINAL-TOPN-INDEX-MEMBER?", 2, 0, false);
+        declareFunction(me, "final_topn_index_arbitrary_leaf", "FINAL-TOPN-INDEX-ARBITRARY-LEAF", 1, 0, false);
+        declareFunction(me, "final_topn_index_leaves_reset", "FINAL-TOPN-INDEX-LEAVES-RESET", 2, 0, false);
+        declareFunction(me, "final_topn_index_insert", "FINAL-TOPN-INDEX-INSERT", 2, 0, false);
+        declareFunction(me, "final_topn_index_delete", "FINAL-TOPN-INDEX-DELETE", 2, 0, false);
+        declareFunction(me, "free_final_topn_index", "FREE-FINAL-TOPN-INDEX", 1, 0, false);
+        declareFunction(me, "indexing_leaf_p", "INDEXING-LEAF-P", 1, 0, false);
+        declareFunction(me, "indexing_leaf_installed_p", "INDEXING-LEAF-INSTALLED-P", 1, 0, false);
+        declareFunction(me, "indexing_leaf_not_hosed_p", "INDEXING-LEAF-NOT-HOSED-P", 1, 0, false);
+        declareFunction(me, "indexing_leaf_suid", "INDEXING-LEAF-SUID", 1, 0, false);
+        declareFunction(me, "merge_final_indices", "MERGE-FINAL-INDICES", 2, 0, false);
+        declareFunction(me, "merge_final_indices_internal", "MERGE-FINAL-INDICES-INTERNAL", 2, 0, false);
         return NIL;
     }
 
     public static SubLObject init_kb_indexing_datastructures_file() {
-        if (SubLFiles.USE_V1) {
-            deflexical("*ASSERTION-INDEXING-STORE*", NIL != boundp($assertion_indexing_store$) ? $assertion_indexing_store$.getGlobalValue() : NIL);
-            deflexical("*META-ASSERTION-FREQUENCY*", $float$0_05);
-            deflexical("*UNINDEXED-SYNTAX-CONSTANTS*", $list21);
-            defparameter("*CURRENT-COMPLEX-INDEX-TERM*", NIL);
-            defparameter("*CURRENT-COMPLEX-INDEX-KEYS*", NIL);
-            defparameter("*CURRENT-COMPLEX-INDEX-KEYS-IN-ORDER?*", T);
-            defparameter("*CHANGED-INDEX-ENTRY-HINTS*", NIL);
-            deflexical("*FINAL-TOPN-INDEX-CUTOFF-SIZE*", NIL);
-            defparameter("*ORDERED-FINAL-INDEX-RESOURCE*", NIL);
-            deflexical("*FINAL-SHARDED-INDEX-SHARD-SIZE*", NIL != boundp($final_sharded_index_shard_size$) ? $final_sharded_index_shard_size$.getGlobalValue() : $int$1000);
-            defparameter("*RECENT-FINAL-TOPN-INDICES*", NIL);
-            defparameter("*WITH-FINAL-TOPN-INDEX-TRACKING*", NIL);
-        }
-        if (SubLFiles.USE_V2) {
-            deflexical("*ASSERTION-INDEXING-STORE*", NIL != boundp($assertion_indexing_store$) ? ((SubLObject) ($assertion_indexing_store$.getGlobalValue())) : NIL);
-            deflexical("*META-ASSERTION-FREQUENCY*", $float$0_015);
-            deflexical("*UNINDEXED-SYNTAX-CONSTANTS*", $list_alt3);
-        }
-        return NIL;
-    }
-
-    public static SubLObject init_kb_indexing_datastructures_file_Previous() {
         deflexical("*ASSERTION-INDEXING-STORE*", NIL != boundp($assertion_indexing_store$) ? $assertion_indexing_store$.getGlobalValue() : NIL);
         deflexical("*META-ASSERTION-FREQUENCY*", $float$0_05);
         deflexical("*UNINDEXED-SYNTAX-CONSTANTS*", $list21);
@@ -5032,43 +3149,7 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
         return NIL;
     }
 
-    public static final SubLObject setup_kb_indexing_datastructures_file_alt() {
-        declare_defglobal($assertion_indexing_store$);
-        register_cyc_api_function(INDEXED_TERM_P, $list_alt5, $str_alt6$Returns_T_iff_OBJECT_is_an_indexe, NIL, $list_alt7);
-        register_macro_helper(DO_SIMPLE_INDEX_TERM_ASSERTION_LIST, DO_SIMPLE_INDEX);
-        register_macro_helper(DO_INTERMEDIATE_INDEX_VALID_INDEX_P, DO_INTERMEDIATE_INDEX);
-        register_macro_helper(INTERMEDIATE_INDEX_DICTIONARY, DO_INTERMEDIATE_INDEX);
-        register_macro_helper(DO_FINAL_INDEX_VALID_INDEX_P, DO_FINAL_INDEX);
-        register_macro_helper(FINAL_INDEX_SET, DO_FINAL_INDEX);
-        return NIL;
-    }
-
     public static SubLObject setup_kb_indexing_datastructures_file() {
-        if (SubLFiles.USE_V1) {
-            declare_defglobal($assertion_indexing_store$);
-            register_macro_helper(NEW_ASSERTIONS_WITH_META_ASSERTIONS_ITERATOR, DO_ASSERTIONS_WITH_META_ASSERTIONS);
-            register_cyc_api_function(INDEXED_TERM_P, $list23, $str24$Returns_T_iff_OBJECT_is_an_indexe, NIL, $list25);
-            register_macro_helper(DO_SIMPLE_INDEX_TERM_ASSERTION_LIST, DO_SIMPLE_INDEX);
-            register_macro_helper(DO_INTERMEDIATE_INDEX_VALID_INDEX_P, DO_INTERMEDIATE_INDEX);
-            register_macro_helper(SEGREGATE_INDEX_CHANGES_AND_PRISTINES, DO_CHANGED_INTERMEDIATE_INDEX);
-            register_external_symbol($final_topn_index_cutoff_size$);
-            register_macro_helper(INTERMEDIATE_INDEX_MAP, DO_INTERMEDIATE_INDEX);
-            register_macro_helper(FINAL_UNIFIED_INDEX_SET, DO_FINAL_UNIFIED_INDEX);
-            declare_defglobal($final_sharded_index_shard_size$);
-            register_macro_helper(FINAL_SHARDED_INDEX_SHARD_MAP, DO_FINAL_SHARDED_INDEX_INTERNAL);
-            register_macro_helper(ORDERED_FINAL_SHARDED_INDEX_EXTRACT_CONTENTS, DO_FINAL_SHARDED_INDEX_INTERNAL);
-            register_macro_helper(FINAL_SHARDED_INDEX_SET, DO_FINAL_SHARDED_INDEX);
-        }
-        if (SubLFiles.USE_V2) {
-            register_cyc_api_function(INDEXED_TERM_P, $list_alt5, $str_alt6$Returns_T_iff_OBJECT_is_an_indexe, NIL, $list_alt7);
-            register_macro_helper(INTERMEDIATE_INDEX_DICTIONARY, DO_INTERMEDIATE_INDEX);
-            register_macro_helper(DO_FINAL_INDEX_VALID_INDEX_P, DO_FINAL_INDEX);
-            register_macro_helper(FINAL_INDEX_SET, DO_FINAL_INDEX);
-        }
-        return NIL;
-    }
-
-    public static SubLObject setup_kb_indexing_datastructures_file_Previous() {
         declare_defglobal($assertion_indexing_store$);
         register_macro_helper(NEW_ASSERTIONS_WITH_META_ASSERTIONS_ITERATOR, DO_ASSERTIONS_WITH_META_ASSERTIONS);
         register_cyc_api_function(INDEXED_TERM_P, $list23, $str24$Returns_T_iff_OBJECT_is_an_indexe, NIL, $list25);
@@ -5101,6 +3182,175 @@ public final class kb_indexing_datastructures extends SubLTranslatedFile impleme
     }
 
     static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     public static final class $indexed_term_p$UnaryFunction extends UnaryFunction {

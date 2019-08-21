@@ -1,73 +1,9 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.cb_parameters.$cb_permit_robots_to_followP$;
-import static com.cyc.cycjava.cycl.cb_parameters.$cb_permit_robots_to_indexP$;
-import static com.cyc.cycjava.cycl.cb_parameters.$cb_show_enhanced_tables$;
-import static com.cyc.cycjava.cycl.cb_parameters.cb_head_shortcut_icon;
-import static com.cyc.cycjava.cycl.cb_parameters.cyc_cgi_url_int;
-import static com.cyc.cycjava.cycl.cb_utilities.cb_error;
-import static com.cyc.cycjava.cycl.cb_utilities.cb_form;
-import static com.cyc.cycjava.cycl.cb_utilities.cb_fort_identifier;
-import static com.cyc.cycjava.cycl.cb_utilities.cb_frame_name;
-import static com.cyc.cycjava.cycl.cb_utilities.cb_guess_fort;
-import static com.cyc.cycjava.cycl.cb_utilities.cb_help_preamble;
-import static com.cyc.cycjava.cycl.cb_utilities.cb_link;
-import static com.cyc.cycjava.cycl.cb_utilities.cb_show_term;
-import static com.cyc.cycjava.cycl.cb_utilities.declare_cb_tool;
-import static com.cyc.cycjava.cycl.cb_utilities.setup_cb_link_method;
-import static com.cyc.cycjava.cycl.control_vars.$cb_applicable_relations_one_per_lineP$;
-import static com.cyc.cycjava.cycl.control_vars.$cb_paraphrase_applicable_relationsP$;
-import static com.cyc.cycjava.cycl.control_vars.$cb_skolem_applicable_relationsP$;
-import static com.cyc.cycjava.cycl.cyc_file_dependencies.$cb_help_definitions$;
-import static com.cyc.cycjava.cycl.html_utilities.html_char;
-import static com.cyc.cycjava.cycl.html_utilities.html_color;
-import static com.cyc.cycjava.cycl.html_utilities.html_copyright_notice;
-import static com.cyc.cycjava.cycl.html_utilities.html_flush;
-import static com.cyc.cycjava.cycl.html_utilities.html_hidden_input;
-import static com.cyc.cycjava.cycl.html_utilities.html_hr;
-import static com.cyc.cycjava.cycl.html_utilities.html_indent;
-import static com.cyc.cycjava.cycl.html_utilities.html_markup;
-import static com.cyc.cycjava.cycl.html_utilities.html_meta_robot_instructions;
-import static com.cyc.cycjava.cycl.html_utilities.html_newline;
-import static com.cyc.cycjava.cycl.html_utilities.html_princ;
-import static com.cyc.cycjava.cycl.html_utilities.html_princ_strong;
-import static com.cyc.cycjava.cycl.html_utilities.html_reset_input;
-import static com.cyc.cycjava.cycl.html_utilities.html_simple_attribute;
-import static com.cyc.cycjava.cycl.html_utilities.html_source_readability_terpri;
-import static com.cyc.cycjava.cycl.html_utilities.html_submit_input;
-import static com.cyc.cycjava.cycl.html_utilities.html_terpri;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.sethash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.cconcatenate;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.nreverse;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.remove_duplicates;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.arg2;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.multiple_value_list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.resetMultipleValues;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.member;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.nunion;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-
+import com.cyc.cycjava.cycl.cb_applicable_relations;
+import com.cyc.cycjava.cycl.cb_parameters;
+import com.cyc.cycjava.cycl.control_vars;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
@@ -75,40 +11,78 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
+import static com.cyc.cycjava.cycl.cb_applicable_relations.*;
+import static com.cyc.cycjava.cycl.cb_parameters.*;
+import static com.cyc.cycjava.cycl.cb_utilities.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.html_utilities.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- * module:      CB-APPLICABLE-RELATIONS
- * source file: /cyc/top/cycl/cb-applicable-relations.lisp
- * created:     2019/07/03 17:38:06
- */
-public final class cb_applicable_relations extends SubLTranslatedFile implements V12 {
+
+public final class cb_applicable_relations extends SubLTranslatedFile {
     public static final SubLFile me = new cb_applicable_relations();
 
+    public static final String myName = "com.cyc.cycjava.cycl.cb_applicable_relations";
+
+    public static final String myFingerPrint = "a4d421045f97ebd2a10d9fb8f4f3c7b2c7421673f5d3ff7c09edcf0381b4af18";
 
 
-    @LispMethod(comment = "Internal Constants")
-    // Internal Constants
+
     private static final SubLSymbol $CB_APPLICABLE_RELATIONS = makeKeyword("CB-APPLICABLE-RELATIONS");
 
-    static private final SubLString $str1$cb_applicable_relations_html = makeString("cb-applicable-relations.html");
+    public static final SubLString $str1$cb_applicable_relations_html = makeString("cb-applicable-relations.html");
 
-    static private final SubLString $str2$Unable_to_determine_a_term_from__ = makeString("Unable to determine a term from ~S");
+    public static final SubLString $str2$Unable_to_determine_a_term_from__ = makeString("Unable to determine a term from ~S");
 
-    static private final SubLString $$$Applicable_Relations = makeString("Applicable Relations");
+    public static final SubLString $$$Applicable_Relations = makeString("Applicable Relations");
 
     private static final SubLString $str4$__DOCTYPE_html_PUBLIC_____W3C__DT = makeString("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
 
     private static final SubLString $str5$_meta_http_equiv__X_UA_Compatible = makeString("<meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\" >");
 
+
+
+
+
     private static final SubLSymbol $SAM_AUTOCOMPLETE_CSS = makeKeyword("SAM-AUTOCOMPLETE-CSS");
+
+
 
     private static final SubLString $str10$yui_skin_sam = makeString("yui-skin-sam");
 
@@ -126,7 +100,7 @@ public final class cb_applicable_relations extends SubLTranslatedFile implements
 
     private static final SubLList $list17 = list(makeSymbol("ARG"), makeSymbol("RELATIONS"));
 
-
+    private static final SubLObject $$SkolemFunction = reader_make_constant_shell(makeString("SkolemFunction"));
 
     private static final SubLString $str19$_dddddd = makeString("#dddddd");
 
@@ -136,11 +110,15 @@ public final class cb_applicable_relations extends SubLTranslatedFile implements
 
 
 
+    private static final SubLObject $$InferencePSC = reader_make_constant_shell(makeString("InferencePSC"));
+
     private static final SubLSymbol $NART_ARG_FUNCTION = makeKeyword("NART-ARG-FUNCTION");
 
 
 
+    private static final SubLObject $$EverythingPSC = reader_make_constant_shell(makeString("EverythingPSC"));
 
+    private static final SubLObject $$NLGenerationFunction = reader_make_constant_shell(makeString("NLGenerationFunction"));
 
     private static final SubLSymbol $IGNORE_ERRORS_TARGET = makeKeyword("IGNORE-ERRORS-TARGET");
 
@@ -148,19 +126,33 @@ public final class cb_applicable_relations extends SubLTranslatedFile implements
 
     private static final SubLSymbol CB_APPLICABLE_RELATIONS = makeSymbol("CB-APPLICABLE-RELATIONS");
 
+
+
+
+
     private static final SubLString $str33$cb_applicable_relations__A = makeString("cb-applicable-relations&~A");
+
+
 
     private static final SubLSymbol CB_LINK_APPLICABLE_RELATIONS = makeSymbol("CB-LINK-APPLICABLE-RELATIONS");
 
 
 
+    private static final SubLObject $$CycLReifiableDenotationalTerm = reader_make_constant_shell(makeString("CycLReifiableDenotationalTerm"));
+
     private static final SubLSymbol $sym38$_ = makeSymbol("<");
 
     private static final SubLSymbol SPEC_CARDINALITY = makeSymbol("SPEC-CARDINALITY");
 
+
+
+
+
     private static final SubLString $str42$_GAF_Suggestor_ = makeString("[GAF Suggestor]");
 
     private static final SubLString $str43$cb_gaf_suggestor = makeString("cb-gaf-suggestor");
+
+
 
     private static final SubLSymbol CB_LINK_GAF_SUGGESTOR = makeSymbol("CB-LINK-GAF-SUGGESTOR");
 
@@ -176,13 +168,25 @@ public final class cb_applicable_relations extends SubLTranslatedFile implements
 
     private static final SubLString $$$Clear = makeString("Clear");
 
+
+
     private static final SubLString $$$term = makeString("term");
+
+
 
     private static final SubLString $$$Term_ = makeString("Term ");
 
+
+
     private static final SubLString $$$Complete = makeString("Complete");
 
+
+
     private static final SubLSymbol CB_GAF_SUGGESTOR = makeSymbol("CB-GAF-SUGGESTOR");
+
+
+
+
 
     private static final SubLString $$$GAF_Suggestions = makeString("GAF Suggestions");
 
@@ -192,341 +196,28 @@ public final class cb_applicable_relations extends SubLTranslatedFile implements
 
     private static final SubLString $str65$_Query_ = makeString("[Query]");
 
+
+
+
+
     private static final SubLString $str68$_Assert_ = makeString("[Assert]");
 
     private static final SubLSymbol CB_HANDLE_GAF_SUGGESTOR = makeSymbol("CB-HANDLE-GAF-SUGGESTOR");
 
 
 
+
+
+    private static final SubLObject $$Individual = reader_make_constant_shell(makeString("Individual"));
+
     private static final SubLSymbol CB_SUGGEST_GAFS_FOR_TERMS = makeSymbol("CB-SUGGEST-GAFS-FOR-TERMS");
+
+
+
+
 
     private static final SubLSymbol $cb_suggest_gafs_for_terms_caching_state$ = makeSymbol("*CB-SUGGEST-GAFS-FOR-TERMS-CACHING-STATE*");
 
-    // Definitions
-    /**
-     * Display all the relations in the KB which can apply to the given fort.
-     */
-    @LispMethod(comment = "Display all the relations in the KB which can apply to the given fort.")
-    public static final SubLObject cb_applicable_relations_alt(SubLObject args) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject fort = cb_guess_fort(args, UNPROVIDED);
-                if (NIL == forts.fort_p(fort)) {
-                    return cb_error($str_alt2$Unable_to_determine_a_term_from__, args, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                }
-                {
-                    SubLObject v_applicable_relations = com.cyc.cycjava.cycl.cb_applicable_relations.old_applicable_relations(fort);
-                    SubLObject temp_relations = NIL;
-                    SubLObject first_lineP = T;
-                    SubLObject title_var = $$$Applicable_Relations;
-                    {
-                        SubLObject _prev_bind_0 = html_macros.$html_id_space_id_generator$.currentBinding(thread);
-                        try {
-                            html_macros.$html_id_space_id_generator$.bind(NIL != integer_sequence_generator.integer_sequence_generator_p(html_macros.$html_id_space_id_generator$.getDynamicValue(thread)) ? ((SubLObject) (html_macros.$html_id_space_id_generator$.getDynamicValue(thread))) : integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED), thread);
-                            html_markup(html_macros.$html_html_head$.getGlobalValue());
-                            html_markup(html_macros.$html_head_head$.getGlobalValue());
-                            html_macros.html_head_content_type();
-                            cb_head_shortcut_icon();
-                            html_meta_robot_instructions($cb_permit_robots_to_indexP$.getDynamicValue(thread), $cb_permit_robots_to_followP$.getDynamicValue(thread));
-                            if (NIL != title_var) {
-                                html_source_readability_terpri(UNPROVIDED);
-                                html_markup(html_macros.$html_title_head$.getGlobalValue());
-                                html_princ(title_var);
-                                html_markup(html_macros.$html_title_tail$.getGlobalValue());
-                            }
-                            html_markup(html_macros.$html_head_tail$.getGlobalValue());
-                            html_source_readability_terpri(UNPROVIDED);
-                            {
-                                SubLObject _prev_bind_0_1 = html_macros.$html_inside_bodyP$.currentBinding(thread);
-                                try {
-                                    html_macros.$html_inside_bodyP$.bind(T, thread);
-                                    html_markup(html_macros.$html_body_head$.getGlobalValue());
-                                    if (NIL != html_macros.$html_default_bgcolor$.getDynamicValue(thread)) {
-                                        html_markup(html_macros.$html_body_bgcolor$.getGlobalValue());
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                        html_markup(html_color(html_macros.$html_default_bgcolor$.getDynamicValue(thread)));
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                    }
-                                    if (true) {
-                                        html_markup(html_macros.$html_body_class$.getGlobalValue());
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                        html_markup($str_alt6$yui_skin_sam);
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                    }
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_2 = html_macros.$html_safe_print$.currentBinding(thread);
-                                        try {
-                                            html_macros.$html_safe_print$.bind(T, thread);
-                                            if (NIL != title_var) {
-                                                html_markup(html_macros.$html_heading_head$.getGlobalValue());
-                                                html_markup(TWO_INTEGER);
-                                                html_char(CHAR_greater, UNPROVIDED);
-                                                html_princ(title_var);
-                                                html_markup(html_macros.$html_heading_tail$.getGlobalValue());
-                                                html_markup(TWO_INTEGER);
-                                                html_char(CHAR_greater, UNPROVIDED);
-                                            }
-                                            html_markup(html_macros.$html_form_head$.getGlobalValue());
-                                            html_markup(html_macros.$html_form_action$.getGlobalValue());
-                                            html_char(CHAR_quotation, UNPROVIDED);
-                                            html_markup(system_parameters.$cyc_cgi_program$.getDynamicValue(thread));
-                                            html_char(CHAR_quotation, UNPROVIDED);
-                                            html_char(CHAR_greater, UNPROVIDED);
-                                            {
-                                                SubLObject _prev_bind_0_3 = html_macros.$html_safe_print$.currentBinding(thread);
-                                                SubLObject _prev_bind_1 = html_macros.$within_html_form$.currentBinding(thread);
-                                                SubLObject _prev_bind_2 = html_macros.$html_form_field_uniquifier_code$.currentBinding(thread);
-                                                try {
-                                                    html_macros.$html_safe_print$.bind(T, thread);
-                                                    html_macros.$within_html_form$.bind(T, thread);
-                                                    html_macros.$html_form_field_uniquifier_code$.bind(html_macros.next_html_form_field_uniquifier_code(), thread);
-                                                    cb_help_preamble($CB_APPLICABLE_RELATIONS, UNPROVIDED, UNPROVIDED);
-                                                    html_markup(html_macros.$html_strong_head$.getGlobalValue());
-                                                    html_princ($str_alt7$Relations_which_apply_to_);
-                                                    cb_form(fort, UNPROVIDED, UNPROVIDED);
-                                                    html_princ($str_alt8$___);
-                                                    html_markup(html_macros.$html_strong_tail$.getGlobalValue());
-                                                    html_hr(UNPROVIDED, UNPROVIDED);
-                                                    {
-                                                        SubLObject cdolist_list_var = v_applicable_relations;
-                                                        SubLObject info = NIL;
-                                                        for (info = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , info = cdolist_list_var.first()) {
-                                                            {
-                                                                SubLObject datum = info;
-                                                                SubLObject current = datum;
-                                                                SubLObject arg = NIL;
-                                                                SubLObject relations = NIL;
-                                                                destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                arg = current.first();
-                                                                current = current.rest();
-                                                                destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                relations = current.first();
-                                                                current = current.rest();
-                                                                if (NIL == current) {
-                                                                    relations = kb_utilities.sort_terms(remove_duplicates(relations, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), NIL, NIL, T, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                    if (NIL == $cb_skolem_applicable_relationsP$.getDynamicValue(thread)) {
-                                                                        {
-                                                                            SubLObject cdolist_list_var_4 = relations;
-                                                                            SubLObject relation = NIL;
-                                                                            for (relation = cdolist_list_var_4.first(); NIL != cdolist_list_var_4; cdolist_list_var_4 = cdolist_list_var_4.rest() , relation = cdolist_list_var_4.first()) {
-                                                                                if (NIL == isa.isaP(relation, $$SkolemFunction, UNPROVIDED, UNPROVIDED)) {
-                                                                                    {
-                                                                                        SubLObject item_var = relation;
-                                                                                        if (NIL == member(item_var, temp_relations, symbol_function(EQL), symbol_function(IDENTITY))) {
-                                                                                            temp_relations = cons(item_var, temp_relations);
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                        relations = nreverse(temp_relations);
-                                                                    }
-                                                                    if (NIL != $cb_applicable_relations_one_per_lineP$.getDynamicValue(thread)) {
-                                                                        html_newline(UNPROVIDED);
-                                                                        cb_browser.cb_c_gaf_arg_header(arg);
-                                                                        html_markup(html_macros.$html_table_head$.getGlobalValue());
-                                                                        if (true) {
-                                                                            html_markup(html_macros.$html_table_border$.getGlobalValue());
-                                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                                            html_markup(ZERO_INTEGER);
-                                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                                        }
-                                                                        if (true) {
-                                                                            html_markup(html_macros.$html_table_cellpadding$.getGlobalValue());
-                                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                                            html_markup(FIVE_INTEGER);
-                                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                                        }
-                                                                        if (true) {
-                                                                            html_markup(html_macros.$html_table_cellspacing$.getGlobalValue());
-                                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                                            html_markup(ZERO_INTEGER);
-                                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                                        }
-                                                                        html_char(CHAR_greater, UNPROVIDED);
-                                                                        {
-                                                                            SubLObject _prev_bind_0_5 = html_macros.$html_safe_print$.currentBinding(thread);
-                                                                            try {
-                                                                                html_macros.$html_safe_print$.bind(T, thread);
-                                                                                {
-                                                                                    SubLObject bgcolor = NIL;
-                                                                                    if (NIL == $cb_show_enhanced_tables$.getDynamicValue(thread)) {
-                                                                                        bgcolor = html_macros.$html_color_lightest_grey$.getDynamicValue(thread);
-                                                                                    }
-                                                                                    {
-                                                                                        SubLObject color_toggle = NIL;
-                                                                                        SubLObject list_var = NIL;
-                                                                                        SubLObject relation = NIL;
-                                                                                        SubLObject ignore_me = NIL;
-                                                                                        for (list_var = relations, relation = list_var.first(), ignore_me = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , relation = list_var.first() , ignore_me = add(ONE_INTEGER, ignore_me)) {
-                                                                                            if (NIL != $cb_show_enhanced_tables$.getDynamicValue(thread)) {
-                                                                                                if (NIL != color_toggle) {
-                                                                                                    color_toggle = NIL;
-                                                                                                } else {
-                                                                                                    color_toggle = T;
-                                                                                                }
-                                                                                                bgcolor = (NIL != color_toggle) ? ((SubLObject) ($str_alt11$_dddddd)) : html_macros.$html_color_lightest_grey$.getDynamicValue(thread);
-                                                                                            }
-                                                                                            if (NIL != fort_types_interface.predicate_in_any_mtP(relation)) {
-                                                                                                cb_adornments.handle_specific_adornment($GAF_ARG_PREDICATE, LITERAL_QUERY_NORMAL, $MAIN, fort, arg, relation, $$InferencePSC);
-                                                                                            } else {
-                                                                                                if (NIL != fort_types_interface.function_in_any_mtP(relation)) {
-                                                                                                    cb_adornments.handle_specific_adornment($NART_ARG_FUNCTION, LITERAL_QUERY_NORMAL, $MAIN, fort, arg, relation, $$InferencePSC);
-                                                                                                }
-                                                                                            }
-                                                                                            html_markup(html_macros.$html_table_row_head$.getGlobalValue());
-                                                                                            if (NIL != bgcolor) {
-                                                                                                html_markup(html_macros.$html_table_row_bgcolor$.getGlobalValue());
-                                                                                                html_char(CHAR_quotation, UNPROVIDED);
-                                                                                                html_markup(bgcolor);
-                                                                                                html_char(CHAR_quotation, UNPROVIDED);
-                                                                                            }
-                                                                                            html_char(CHAR_greater, UNPROVIDED);
-                                                                                            {
-                                                                                                SubLObject _prev_bind_0_6 = html_macros.$html_safe_print$.currentBinding(thread);
-                                                                                                try {
-                                                                                                    html_macros.$html_safe_print$.bind(T, thread);
-                                                                                                    html_markup(html_macros.$html_table_data_head$.getGlobalValue());
-                                                                                                    html_char(CHAR_greater, UNPROVIDED);
-                                                                                                    {
-                                                                                                        SubLObject _prev_bind_0_7 = html_macros.$html_safe_print$.currentBinding(thread);
-                                                                                                        try {
-                                                                                                            html_macros.$html_safe_print$.bind(T, thread);
-                                                                                                            cb_form(relation, UNPROVIDED, UNPROVIDED);
-                                                                                                            if (NIL != $cb_paraphrase_applicable_relationsP$.getDynamicValue(thread)) {
-                                                                                                                html_newline(UNPROVIDED);
-                                                                                                                html_indent(FOUR_INTEGER);
-                                                                                                                {
-                                                                                                                    SubLObject _prev_bind_0_8 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                                                                                                                    SubLObject _prev_bind_1_9 = mt_relevance_macros.$mt$.currentBinding(thread);
-                                                                                                                    try {
-                                                                                                                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                                                                                                                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                                                                                                                        if (((NIL == isa.isaP(relation, $$SkolemFunction, UNPROVIDED, UNPROVIDED)) && (NIL == isa.isaP(relation, $$NLGenerationFunction, UNPROVIDED, UNPROVIDED))) && ((NIL != fort_types_interface.predicateP(relation)) || (NIL != fort_types_interface.functionP(relation)))) {
-                                                                                                                            {
-                                                                                                                                SubLObject dummy_formula = pph_utilities.pph_dummy_formula(relation, T);
-                                                                                                                                list_utilities.nreplace_nth(arg, fort, dummy_formula);
-                                                                                                                                {
-                                                                                                                                    SubLObject ignore_errors_tag = NIL;
-                                                                                                                                    try {
-                                                                                                                                        {
-                                                                                                                                            SubLObject _prev_bind_0_10 = Errors.$error_handler$.currentBinding(thread);
-                                                                                                                                            try {
-                                                                                                                                                Errors.$error_handler$.bind(symbol_function(IGNORE_ERRORS_HANDLER), thread);
-                                                                                                                                                try {
-                                                                                                                                                    html_princ(pph_main.generate_phrase(dummy_formula, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED));
-                                                                                                                                                } catch (Throwable catch_var) {
-                                                                                                                                                    Errors.handleThrowable(catch_var, NIL);
-                                                                                                                                                }
-                                                                                                                                            } finally {
-                                                                                                                                                Errors.$error_handler$.rebind(_prev_bind_0_10, thread);
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    } catch (Throwable ccatch_env_var) {
-                                                                                                                                        ignore_errors_tag = Errors.handleThrowable(ccatch_env_var, $IGNORE_ERRORS_TARGET);
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    } finally {
-                                                                                                                        mt_relevance_macros.$mt$.rebind(_prev_bind_1_9, thread);
-                                                                                                                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0_8, thread);
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        } finally {
-                                                                                                            html_macros.$html_safe_print$.rebind(_prev_bind_0_7, thread);
-                                                                                                        }
-                                                                                                    }
-                                                                                                    html_markup(html_macros.$html_table_data_tail$.getGlobalValue());
-                                                                                                } finally {
-                                                                                                    html_macros.$html_safe_print$.rebind(_prev_bind_0_6, thread);
-                                                                                                }
-                                                                                            }
-                                                                                            html_markup(html_macros.$html_table_row_tail$.getGlobalValue());
-                                                                                            html_source_readability_terpri(UNPROVIDED);
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            } finally {
-                                                                                html_macros.$html_safe_print$.rebind(_prev_bind_0_5, thread);
-                                                                            }
-                                                                        }
-                                                                        html_markup(html_macros.$html_table_tail$.getGlobalValue());
-                                                                    } else {
-                                                                        if (NIL != first_lineP) {
-                                                                            first_lineP = NIL;
-                                                                        } else {
-                                                                            html_newline(UNPROVIDED);
-                                                                            html_hr(UNPROVIDED, UNPROVIDED);
-                                                                        }
-                                                                        cb_browser.cb_c_gaf_arg_header(arg);
-                                                                        html_newline(UNPROVIDED);
-                                                                        {
-                                                                            SubLObject cdolist_list_var_11 = relations;
-                                                                            SubLObject relation = NIL;
-                                                                            for (relation = cdolist_list_var_11.first(); NIL != cdolist_list_var_11; cdolist_list_var_11 = cdolist_list_var_11.rest() , relation = cdolist_list_var_11.first()) {
-                                                                                if (NIL != fort_types_interface.predicate_in_any_mtP(relation)) {
-                                                                                    cb_adornments.handle_specific_adornment($GAF_ARG_PREDICATE, LITERAL_QUERY_NORMAL, $MAIN, fort, arg, relation, $$InferencePSC);
-                                                                                } else {
-                                                                                    if (NIL != fort_types_interface.function_in_any_mtP(relation)) {
-                                                                                        cb_adornments.handle_specific_adornment($NART_ARG_FUNCTION, LITERAL_QUERY_NORMAL, $MAIN, fort, arg, relation, $$InferencePSC);
-                                                                                    }
-                                                                                }
-                                                                                html_markup(html_macros.$html_no_break_head$.getGlobalValue());
-                                                                                cb_form(relation, UNPROVIDED, UNPROVIDED);
-                                                                                html_markup(html_macros.$html_no_break_tail$.getGlobalValue());
-                                                                                html_indent(TWO_INTEGER);
-                                                                                html_terpri(UNPROVIDED);
-                                                                                html_indent(TWO_INTEGER);
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                } else {
-                                                                    cdestructuring_bind_error(datum, $list_alt9);
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    html_macros.embed_form_field_code(html_macros.$html_form_field_uniquifier_code$.getDynamicValue(thread));
-                                                } finally {
-                                                    html_macros.$html_form_field_uniquifier_code$.rebind(_prev_bind_2, thread);
-                                                    html_macros.$within_html_form$.rebind(_prev_bind_1, thread);
-                                                    html_macros.$html_safe_print$.rebind(_prev_bind_0_3, thread);
-                                                }
-                                            }
-                                            html_markup(html_macros.$html_form_tail$.getGlobalValue());
-                                            html_source_readability_terpri(UNPROVIDED);
-                                            html_copyright_notice();
-                                        } finally {
-                                            html_macros.$html_safe_print$.rebind(_prev_bind_0_2, thread);
-                                        }
-                                    }
-                                    html_markup(html_macros.$html_body_tail$.getGlobalValue());
-                                    html_source_readability_terpri(UNPROVIDED);
-                                } finally {
-                                    html_macros.$html_inside_bodyP$.rebind(_prev_bind_0_1, thread);
-                                }
-                            }
-                            html_markup(html_macros.$html_html_tail$.getGlobalValue());
-                            html_source_readability_terpri(UNPROVIDED);
-                        } finally {
-                            html_macros.$html_id_space_id_generator$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
-    // Definitions
-    /**
-     * Display all the relations in the KB which can apply to the given fort.
-     */
-    @LispMethod(comment = "Display all the relations in the KB which can apply to the given fort.")
     public static SubLObject cb_applicable_relations(final SubLObject args) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject fort = cb_guess_fort(args, UNPROVIDED);
@@ -845,45 +536,6 @@ public final class cb_applicable_relations extends SubLTranslatedFile implements
         return NIL;
     }
 
-    public static final SubLObject cb_link_applicable_relations_alt(SubLObject fort, SubLObject linktext) {
-        if (linktext == UNPROVIDED) {
-            linktext = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == linktext) {
-                linktext = $$$Applicable_Relations;
-            }
-            {
-                SubLObject frame_name_var = cb_frame_name($CONTENT);
-                html_markup(html_macros.$html_anchor_head$.getGlobalValue());
-                html_markup(html_macros.$html_anchor_href$.getGlobalValue());
-                html_char(CHAR_quotation, UNPROVIDED);
-                cyc_cgi_url_int();
-                format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt24$cb_applicable_relations__A, cb_fort_identifier(fort));
-                html_char(CHAR_quotation, UNPROVIDED);
-                if (NIL != frame_name_var) {
-                    html_markup(html_macros.$html_anchor_target$.getGlobalValue());
-                    html_char(CHAR_quotation, UNPROVIDED);
-                    html_markup(frame_name_var);
-                    html_char(CHAR_quotation, UNPROVIDED);
-                }
-                html_char(CHAR_greater, UNPROVIDED);
-                {
-                    SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
-                    try {
-                        html_macros.$html_safe_print$.bind(T, thread);
-                        html_princ(linktext);
-                    } finally {
-                        html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                html_markup(html_macros.$html_anchor_tail$.getGlobalValue());
-            }
-            return fort;
-        }
-    }
-
     public static SubLObject cb_link_applicable_relations(final SubLObject fort, SubLObject linktext) {
         if (linktext == UNPROVIDED) {
             linktext = NIL;
@@ -917,187 +569,9 @@ public final class cb_applicable_relations extends SubLTranslatedFile implements
         return fort;
     }
 
-    public static final SubLObject old_applicable_relations_alt(SubLObject fort) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(fort, FORT_P);
-            {
-                SubLObject v_answer = NIL;
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                        {
-                            SubLObject collectionP = fort_types_interface.collectionP(fort);
-                            SubLObject defn_isas = genls.all_genls($$CycLReifiableDenotationalTerm, NIL, UNPROVIDED);
-                            SubLObject all_isas = isa.all_isa(fort, NIL, UNPROVIDED);
-                            all_isas = nunion(all_isas, defn_isas, UNPROVIDED, UNPROVIDED);
-                            all_isas = Sort.sort(all_isas, symbol_function($sym29$_), symbol_function(SPEC_CARDINALITY));
-                            {
-                                SubLObject cdolist_list_var = czer_vars.$arg_positions$.getGlobalValue();
-                                SubLObject arg = NIL;
-                                for (arg = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , arg = cdolist_list_var.first()) {
-                                    {
-                                        SubLObject arg_isa_pred = kb_accessors.arg_isa_pred(arg, UNPROVIDED, UNPROVIDED);
-                                        SubLObject arg_preds = NIL;
-                                        SubLObject cdolist_list_var_12 = all_isas;
-                                        SubLObject v_isa = NIL;
-                                        for (v_isa = cdolist_list_var_12.first(); NIL != cdolist_list_var_12; cdolist_list_var_12 = cdolist_list_var_12.rest() , v_isa = cdolist_list_var_12.first()) {
-                                            {
-                                                SubLObject candidate_preds = kb_mapping_utilities.pred_values(v_isa, arg_isa_pred, TWO_INTEGER, ONE_INTEGER, UNPROVIDED);
-                                                SubLObject cdolist_list_var_13 = candidate_preds;
-                                                SubLObject candidate_pred = NIL;
-                                                for (candidate_pred = cdolist_list_var_13.first(); NIL != cdolist_list_var_13; cdolist_list_var_13 = cdolist_list_var_13.rest() , candidate_pred = cdolist_list_var_13.first()) {
-                                                    {
-                                                        SubLObject arg_constraints_violatedP = NIL;
-                                                        if (kb_indexing.num_gaf_arg_index(candidate_pred, ONE_INTEGER, arg_isa_pred, UNPROVIDED).numG(ONE_INTEGER)) {
-                                                            {
-                                                                SubLObject collection = NIL;
-                                                                SubLObject pred_var = arg_isa_pred;
-                                                                if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(candidate_pred, ONE_INTEGER, pred_var)) {
-                                                                    {
-                                                                        SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(candidate_pred, ONE_INTEGER, pred_var);
-                                                                        SubLObject done_var = arg_constraints_violatedP;
-                                                                        SubLObject token_var = NIL;
-                                                                        while (NIL == done_var) {
-                                                                            {
-                                                                                SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                                                SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                                                if (NIL != valid) {
-                                                                                    {
-                                                                                        SubLObject final_index_iterator = NIL;
-                                                                                        try {
-                                                                                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
-                                                                                            {
-                                                                                                SubLObject done_var_14 = arg_constraints_violatedP;
-                                                                                                SubLObject token_var_15 = NIL;
-                                                                                                while (NIL == done_var_14) {
-                                                                                                    {
-                                                                                                        SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_15);
-                                                                                                        SubLObject valid_16 = makeBoolean(token_var_15 != assertion);
-                                                                                                        if (NIL != valid_16) {
-                                                                                                            collection = assertions_high.gaf_arg(assertion, TWO_INTEGER);
-                                                                                                            if (collection != v_isa) {
-                                                                                                                arg_constraints_violatedP = makeBoolean(NIL == isa.isaP(fort, collection, NIL, UNPROVIDED));
-                                                                                                            }
-                                                                                                        }
-                                                                                                        done_var_14 = makeBoolean((NIL == valid_16) || (NIL != arg_constraints_violatedP));
-                                                                                                    }
-                                                                                                } 
-                                                                                            }
-                                                                                        } finally {
-                                                                                            {
-                                                                                                SubLObject _prev_bind_0_17 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                                try {
-                                                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                                    if (NIL != final_index_iterator) {
-                                                                                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                                                    }
-                                                                                                } finally {
-                                                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_17, thread);
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                                done_var = makeBoolean((NIL == valid) || (NIL != arg_constraints_violatedP));
-                                                                            }
-                                                                        } 
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                        if (NIL == arg_constraints_violatedP) {
-                                                            {
-                                                                SubLObject arg_genl_pred = kb_accessors.arg_genl_pred(arg, UNPROVIDED, UNPROVIDED);
-                                                                if (kb_indexing.num_gaf_arg_index(candidate_pred, ONE_INTEGER, arg_genl_pred, UNPROVIDED).numG(ZERO_INTEGER)) {
-                                                                    arg_constraints_violatedP = makeBoolean(NIL == collectionP);
-                                                                    {
-                                                                        SubLObject collection = NIL;
-                                                                        SubLObject pred_var = arg_genl_pred;
-                                                                        if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(candidate_pred, ONE_INTEGER, pred_var)) {
-                                                                            {
-                                                                                SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(candidate_pred, ONE_INTEGER, pred_var);
-                                                                                SubLObject done_var = arg_constraints_violatedP;
-                                                                                SubLObject token_var = NIL;
-                                                                                while (NIL == done_var) {
-                                                                                    {
-                                                                                        SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                                                        SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                                                        if (NIL != valid) {
-                                                                                            {
-                                                                                                SubLObject final_index_iterator = NIL;
-                                                                                                try {
-                                                                                                    final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
-                                                                                                    {
-                                                                                                        SubLObject done_var_18 = arg_constraints_violatedP;
-                                                                                                        SubLObject token_var_19 = NIL;
-                                                                                                        while (NIL == done_var_18) {
-                                                                                                            {
-                                                                                                                SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_19);
-                                                                                                                SubLObject valid_20 = makeBoolean(token_var_19 != assertion);
-                                                                                                                if (NIL != valid_20) {
-                                                                                                                    collection = assertions_high.gaf_arg(assertion, TWO_INTEGER);
-                                                                                                                    arg_constraints_violatedP = makeBoolean(NIL == genls.genlsP(fort, collection, NIL, UNPROVIDED));
-                                                                                                                }
-                                                                                                                done_var_18 = makeBoolean((NIL == valid_20) || (NIL != arg_constraints_violatedP));
-                                                                                                            }
-                                                                                                        } 
-                                                                                                    }
-                                                                                                } finally {
-                                                                                                    {
-                                                                                                        SubLObject _prev_bind_0_21 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                                        try {
-                                                                                                            $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                                            if (NIL != final_index_iterator) {
-                                                                                                                kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                                                            }
-                                                                                                        } finally {
-                                                                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_21, thread);
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                        done_var = makeBoolean((NIL == valid) || (NIL != arg_constraints_violatedP));
-                                                                                    }
-                                                                                } 
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                        if (NIL == arg_constraints_violatedP) {
-                                                            arg_preds = cons(candidate_pred, arg_preds);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        if (NIL != arg_preds) {
-                                            arg_preds = nreverse(arg_preds);
-                                            v_answer = cons(list(arg, arg_preds), v_answer);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return nreverse(v_answer);
-            }
-        }
-    }
-
     public static SubLObject old_applicable_relations(final SubLObject fort) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != forts.fort_p(fort) : "! forts.fort_p(fort) " + ("forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) ") + fort;
+        assert NIL != forts.fort_p(fort) : "forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) " + fort;
         SubLObject v_answer = NIL;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
         final SubLObject _prev_bind_2 = mt_relevance_macros.$mt$.currentBinding(thread);
@@ -1240,45 +714,6 @@ public final class cb_applicable_relations extends SubLTranslatedFile implements
         return nreverse(v_answer);
     }
 
-    public static final SubLObject cb_link_gaf_suggestor_alt(SubLObject linktext) {
-        if (linktext == UNPROVIDED) {
-            linktext = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == linktext) {
-                linktext = $str_alt33$_GAF_Suggestor_;
-            }
-            {
-                SubLObject frame_name_var = cb_frame_name($MAIN);
-                html_markup(html_macros.$html_anchor_head$.getGlobalValue());
-                html_markup(html_macros.$html_anchor_href$.getGlobalValue());
-                html_char(CHAR_quotation, UNPROVIDED);
-                cyc_cgi_url_int();
-                html_princ($str_alt34$cb_gaf_suggestor);
-                html_char(CHAR_quotation, UNPROVIDED);
-                if (NIL != frame_name_var) {
-                    html_markup(html_macros.$html_anchor_target$.getGlobalValue());
-                    html_char(CHAR_quotation, UNPROVIDED);
-                    html_markup(frame_name_var);
-                    html_char(CHAR_quotation, UNPROVIDED);
-                }
-                html_char(CHAR_greater, UNPROVIDED);
-                {
-                    SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
-                    try {
-                        html_macros.$html_safe_print$.bind(T, thread);
-                        html_princ(linktext);
-                    } finally {
-                        html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                html_markup(html_macros.$html_anchor_tail$.getGlobalValue());
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject cb_link_gaf_suggestor(SubLObject linktext) {
         if (linktext == UNPROVIDED) {
             linktext = NIL;
@@ -1312,149 +747,6 @@ public final class cb_applicable_relations extends SubLTranslatedFile implements
         return NIL;
     }
 
-    /**
-     * Display all the relations in the KB which can apply to the given fort.
-     */
-    @LispMethod(comment = "Display all the relations in the KB which can apply to the given fort.")
-    public static final SubLObject cb_gaf_suggestor_alt(SubLObject args) {
-        if (args == UNPROVIDED) {
-            args = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject title_var = $$$GAF_Suggestor;
-                {
-                    SubLObject _prev_bind_0 = html_macros.$html_id_space_id_generator$.currentBinding(thread);
-                    try {
-                        html_macros.$html_id_space_id_generator$.bind(NIL != integer_sequence_generator.integer_sequence_generator_p(html_macros.$html_id_space_id_generator$.getDynamicValue(thread)) ? ((SubLObject) (html_macros.$html_id_space_id_generator$.getDynamicValue(thread))) : integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED), thread);
-                        html_markup(html_macros.$html_html_head$.getGlobalValue());
-                        html_markup(html_macros.$html_head_head$.getGlobalValue());
-                        html_macros.html_head_content_type();
-                        cb_head_shortcut_icon();
-                        html_meta_robot_instructions($cb_permit_robots_to_indexP$.getDynamicValue(thread), $cb_permit_robots_to_followP$.getDynamicValue(thread));
-                        if (NIL != title_var) {
-                            html_source_readability_terpri(UNPROVIDED);
-                            html_markup(html_macros.$html_title_head$.getGlobalValue());
-                            html_princ(title_var);
-                            html_markup(html_macros.$html_title_tail$.getGlobalValue());
-                        }
-                        html_complete.html_complete_script();
-                        html_complete.html_autocomplete_css();
-                        html_complete.html_autocomplete_scripts();
-                        html_markup(html_macros.$html_head_tail$.getGlobalValue());
-                        html_source_readability_terpri(UNPROVIDED);
-                        {
-                            SubLObject _prev_bind_0_22 = html_macros.$html_inside_bodyP$.currentBinding(thread);
-                            try {
-                                html_macros.$html_inside_bodyP$.bind(T, thread);
-                                html_markup(html_macros.$html_body_head$.getGlobalValue());
-                                if (NIL != html_macros.$html_default_bgcolor$.getDynamicValue(thread)) {
-                                    html_markup(html_macros.$html_body_bgcolor$.getGlobalValue());
-                                    html_char(CHAR_quotation, UNPROVIDED);
-                                    html_markup(html_color(html_macros.$html_default_bgcolor$.getDynamicValue(thread)));
-                                    html_char(CHAR_quotation, UNPROVIDED);
-                                }
-                                if (true) {
-                                    html_markup(html_macros.$html_body_class$.getGlobalValue());
-                                    html_char(CHAR_quotation, UNPROVIDED);
-                                    html_markup($str_alt6$yui_skin_sam);
-                                    html_char(CHAR_quotation, UNPROVIDED);
-                                }
-                                html_char(CHAR_greater, UNPROVIDED);
-                                {
-                                    SubLObject _prev_bind_0_23 = html_macros.$html_safe_print$.currentBinding(thread);
-                                    try {
-                                        html_macros.$html_safe_print$.bind(T, thread);
-                                        if (NIL != title_var) {
-                                            html_markup(html_macros.$html_heading_head$.getGlobalValue());
-                                            html_markup(TWO_INTEGER);
-                                            html_char(CHAR_greater, UNPROVIDED);
-                                            html_princ(title_var);
-                                            html_markup(html_macros.$html_heading_tail$.getGlobalValue());
-                                            html_markup(TWO_INTEGER);
-                                            html_char(CHAR_greater, UNPROVIDED);
-                                        }
-                                        {
-                                            SubLObject frame_name_var = cb_frame_name(NIL);
-                                            html_markup(html_macros.$html_form_head$.getGlobalValue());
-                                            html_markup(html_macros.$html_form_action$.getGlobalValue());
-                                            html_char(CHAR_quotation, UNPROVIDED);
-                                            html_markup(system_parameters.$cyc_cgi_program$.getDynamicValue(thread));
-                                            html_char(CHAR_quotation, UNPROVIDED);
-                                            if (NIL != html_macros.$html_form_method_post$.getGlobalValue()) {
-                                                html_markup(html_macros.$html_form_method$.getGlobalValue());
-                                                html_char(CHAR_quotation, UNPROVIDED);
-                                                html_markup(html_macros.$html_form_method_post$.getGlobalValue());
-                                                html_char(CHAR_quotation, UNPROVIDED);
-                                            }
-                                            if (NIL != frame_name_var) {
-                                                html_markup(html_macros.$html_form_target$.getGlobalValue());
-                                                html_char(CHAR_quotation, UNPROVIDED);
-                                                html_markup(frame_name_var);
-                                                html_char(CHAR_quotation, UNPROVIDED);
-                                            }
-                                            html_char(CHAR_greater, UNPROVIDED);
-                                            {
-                                                SubLObject _prev_bind_0_24 = html_macros.$html_safe_print$.currentBinding(thread);
-                                                SubLObject _prev_bind_1 = html_macros.$within_html_form$.currentBinding(thread);
-                                                SubLObject _prev_bind_2 = html_macros.$html_form_field_uniquifier_code$.currentBinding(thread);
-                                                try {
-                                                    html_macros.$html_safe_print$.bind(T, thread);
-                                                    html_macros.$within_html_form$.bind(T, thread);
-                                                    html_macros.$html_form_field_uniquifier_code$.bind(html_macros.next_html_form_field_uniquifier_code(), thread);
-                                                    html_hidden_input($str_alt38$cb_handle_gaf_suggestor, T, UNPROVIDED);
-                                                    cb_help_preamble($CB_GAF_SUGGESTOR, UNPROVIDED, UNPROVIDED);
-                                                    html_submit_input($$$Suggest_GAFs, UNPROVIDED, UNPROVIDED);
-                                                    html_indent(THREE_INTEGER);
-                                                    html_reset_input($$$Clear);
-                                                    html_newline(UNPROVIDED);
-                                                    {
-                                                        SubLObject i = NIL;
-                                                        for (i = ZERO_INTEGER; i.numL(TWO_INTEGER); i = add(i, ONE_INTEGER)) {
-                                                            {
-                                                                SubLObject options = list($INPUT_NAME, cconcatenate($$$term, format_nil.format_nil_a_no_copy(i)), $PRETTY_NAME, cconcatenate($str_alt45$Term_, format_nil.format_nil_s_no_copy(i)), $COMPLETE_LABEL, $$$Complete, $HEIGHT, ONE_INTEGER);
-                                                                html_newline(UNPROVIDED);
-                                                                cb_form_widgets.cb_el_term_input_section(NIL, options);
-                                                            }
-                                                        }
-                                                    }
-                                                    html_macros.embed_form_field_code(html_macros.$html_form_field_uniquifier_code$.getDynamicValue(thread));
-                                                } finally {
-                                                    html_macros.$html_form_field_uniquifier_code$.rebind(_prev_bind_2, thread);
-                                                    html_macros.$within_html_form$.rebind(_prev_bind_1, thread);
-                                                    html_macros.$html_safe_print$.rebind(_prev_bind_0_24, thread);
-                                                }
-                                            }
-                                            html_markup(html_macros.$html_form_tail$.getGlobalValue());
-                                        }
-                                        html_source_readability_terpri(UNPROVIDED);
-                                        html_copyright_notice();
-                                    } finally {
-                                        html_macros.$html_safe_print$.rebind(_prev_bind_0_23, thread);
-                                    }
-                                }
-                                html_markup(html_macros.$html_body_tail$.getGlobalValue());
-                                html_source_readability_terpri(UNPROVIDED);
-                            } finally {
-                                html_macros.$html_inside_bodyP$.rebind(_prev_bind_0_22, thread);
-                            }
-                        }
-                        html_markup(html_macros.$html_html_tail$.getGlobalValue());
-                        html_source_readability_terpri(UNPROVIDED);
-                    } finally {
-                        html_macros.$html_id_space_id_generator$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
-    /**
-     * Display all the relations in the KB which can apply to the given fort.
-     */
-    @LispMethod(comment = "Display all the relations in the KB which can apply to the given fort.")
     public static SubLObject cb_gaf_suggestor(SubLObject args) {
         if (args == UNPROVIDED) {
             args = NIL;
@@ -1610,175 +902,6 @@ public final class cb_applicable_relations extends SubLTranslatedFile implements
             html_macros.$html_id_space_id_generator$.rebind(_prev_bind_0, thread);
         }
         return NIL;
-    }/**
-     * Display all the relations in the KB which can apply to the given fort.
-     */
-
-
-    public static final SubLObject cb_handle_gaf_suggestor_alt(SubLObject args) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject terms = NIL;
-                SubLObject i = NIL;
-                for (i = ZERO_INTEGER; i.numL(TWO_INTEGER); i = add(i, ONE_INTEGER)) {
-                    {
-                        SubLObject options = list($INPUT_NAME, cconcatenate($$$term, format_nil.format_nil_a_no_copy(i)), $REQUIRED_, T, $AUTO_CYCLIFY, T);
-                        thread.resetMultipleValues();
-                        {
-                            SubLObject v_term = cb_form_widgets.cb_extract_el_term_input(args, options);
-                            SubLObject error = thread.secondMultipleValue();
-                            SubLObject input_string = thread.thirdMultipleValue();
-                            thread.resetMultipleValues();
-                            if (NIL != error) {
-                                return cb_form_widgets.cb_el_term_error(error, input_string, UNPROVIDED);
-                            }
-                            terms = cons(v_term, terms);
-                        }
-                    }
-                }
-                terms = nreverse(terms);
-                {
-                    SubLObject iterator = com.cyc.cycjava.cycl.cb_applicable_relations.cb_new_suggested_gafs_for_terms_iterator(terms);
-                    SubLObject title_var = $$$GAF_Suggestions;
-                    {
-                        SubLObject _prev_bind_0 = html_macros.$html_id_space_id_generator$.currentBinding(thread);
-                        try {
-                            html_macros.$html_id_space_id_generator$.bind(NIL != integer_sequence_generator.integer_sequence_generator_p(html_macros.$html_id_space_id_generator$.getDynamicValue(thread)) ? ((SubLObject) (html_macros.$html_id_space_id_generator$.getDynamicValue(thread))) : integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED), thread);
-                            html_markup(html_macros.$html_html_head$.getGlobalValue());
-                            html_markup(html_macros.$html_head_head$.getGlobalValue());
-                            html_macros.html_head_content_type();
-                            cb_head_shortcut_icon();
-                            html_meta_robot_instructions($cb_permit_robots_to_indexP$.getDynamicValue(thread), $cb_permit_robots_to_followP$.getDynamicValue(thread));
-                            if (NIL != title_var) {
-                                html_source_readability_terpri(UNPROVIDED);
-                                html_markup(html_macros.$html_title_head$.getGlobalValue());
-                                html_princ(title_var);
-                                html_markup(html_macros.$html_title_tail$.getGlobalValue());
-                            }
-                            html_markup(html_macros.$html_head_tail$.getGlobalValue());
-                            html_source_readability_terpri(UNPROVIDED);
-                            {
-                                SubLObject _prev_bind_0_25 = html_macros.$html_inside_bodyP$.currentBinding(thread);
-                                try {
-                                    html_macros.$html_inside_bodyP$.bind(T, thread);
-                                    html_markup(html_macros.$html_body_head$.getGlobalValue());
-                                    if (NIL != html_macros.$html_default_bgcolor$.getDynamicValue(thread)) {
-                                        html_markup(html_macros.$html_body_bgcolor$.getGlobalValue());
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                        html_markup(html_color(html_macros.$html_default_bgcolor$.getDynamicValue(thread)));
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                    }
-                                    if (true) {
-                                        html_markup(html_macros.$html_body_class$.getGlobalValue());
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                        html_markup($str_alt6$yui_skin_sam);
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                    }
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_26 = html_macros.$html_safe_print$.currentBinding(thread);
-                                        try {
-                                            html_macros.$html_safe_print$.bind(T, thread);
-                                            if (NIL != title_var) {
-                                                html_markup(html_macros.$html_heading_head$.getGlobalValue());
-                                                html_markup(TWO_INTEGER);
-                                                html_char(CHAR_greater, UNPROVIDED);
-                                                html_princ(title_var);
-                                                html_markup(html_macros.$html_heading_tail$.getGlobalValue());
-                                                html_markup(TWO_INTEGER);
-                                                html_char(CHAR_greater, UNPROVIDED);
-                                            }
-                                            html_markup(html_macros.$html_div_head$.getGlobalValue());
-                                            html_char(CHAR_greater, UNPROVIDED);
-                                            {
-                                                SubLObject _prev_bind_0_27 = html_macros.$html_safe_print$.currentBinding(thread);
-                                                try {
-                                                    html_macros.$html_safe_print$.bind(T, thread);
-                                                    html_markup(html_macros.$html_form_head$.getGlobalValue());
-                                                    html_markup(html_macros.$html_form_action$.getGlobalValue());
-                                                    html_char(CHAR_quotation, UNPROVIDED);
-                                                    html_markup(system_parameters.$cyc_cgi_program$.getDynamicValue(thread));
-                                                    html_char(CHAR_quotation, UNPROVIDED);
-                                                    html_char(CHAR_greater, UNPROVIDED);
-                                                    {
-                                                        SubLObject _prev_bind_0_28 = html_macros.$html_safe_print$.currentBinding(thread);
-                                                        SubLObject _prev_bind_1 = html_macros.$within_html_form$.currentBinding(thread);
-                                                        SubLObject _prev_bind_2 = html_macros.$html_form_field_uniquifier_code$.currentBinding(thread);
-                                                        try {
-                                                            html_macros.$html_safe_print$.bind(T, thread);
-                                                            html_macros.$within_html_form$.bind(T, thread);
-                                                            html_macros.$html_form_field_uniquifier_code$.bind(html_macros.next_html_form_field_uniquifier_code(), thread);
-                                                            cb_help_preamble($CB_GAF_SUGGESTOR, UNPROVIDED, UNPROVIDED);
-                                                            html_newline(TWO_INTEGER);
-                                                            html_princ_strong($str_alt55$Terms__);
-                                                            {
-                                                                SubLObject cdolist_list_var = terms;
-                                                                SubLObject v_term = NIL;
-                                                                for (v_term = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_term = cdolist_list_var.first()) {
-                                                                    html_indent(TWO_INTEGER);
-                                                                    cb_form(v_term, UNPROVIDED, UNPROVIDED);
-                                                                }
-                                                            }
-                                                            html_newline(UNPROVIDED);
-                                                            html_flush();
-                                                            {
-                                                                SubLObject done_var = NIL;
-                                                                while (NIL == done_var) {
-                                                                    thread.resetMultipleValues();
-                                                                    {
-                                                                        SubLObject gaf = iteration.iteration_next(iterator);
-                                                                        SubLObject valid = thread.secondMultipleValue();
-                                                                        thread.resetMultipleValues();
-                                                                        if (NIL != valid) {
-                                                                            html_newline(UNPROVIDED);
-                                                                            cb_link($SENTENCE_QUERY_SIMILAR, gaf, $str_alt57$_Query_, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                            html_indent(UNPROVIDED);
-                                                                            cb_link($ASSERT_FORMULA, gaf, $UNSPECIFIED, $str_alt60$_Assert_, UNPROVIDED, UNPROVIDED);
-                                                                            html_indent(UNPROVIDED);
-                                                                            html_indent(TWO_INTEGER);
-                                                                            cb_form(gaf, ZERO_INTEGER, NIL);
-                                                                            html_flush();
-                                                                        }
-                                                                        done_var = makeBoolean(NIL == valid);
-                                                                    }
-                                                                } 
-                                                            }
-                                                            html_macros.embed_form_field_code(html_macros.$html_form_field_uniquifier_code$.getDynamicValue(thread));
-                                                        } finally {
-                                                            html_macros.$html_form_field_uniquifier_code$.rebind(_prev_bind_2, thread);
-                                                            html_macros.$within_html_form$.rebind(_prev_bind_1, thread);
-                                                            html_macros.$html_safe_print$.rebind(_prev_bind_0_28, thread);
-                                                        }
-                                                    }
-                                                    html_markup(html_macros.$html_form_tail$.getGlobalValue());
-                                                } finally {
-                                                    html_macros.$html_safe_print$.rebind(_prev_bind_0_27, thread);
-                                                }
-                                            }
-                                            html_markup(html_macros.$html_div_tail$.getGlobalValue());
-                                            html_source_readability_terpri(UNPROVIDED);
-                                            html_copyright_notice();
-                                        } finally {
-                                            html_macros.$html_safe_print$.rebind(_prev_bind_0_26, thread);
-                                        }
-                                    }
-                                    html_markup(html_macros.$html_body_tail$.getGlobalValue());
-                                    html_source_readability_terpri(UNPROVIDED);
-                                } finally {
-                                    html_macros.$html_inside_bodyP$.rebind(_prev_bind_0_25, thread);
-                                }
-                            }
-                            html_markup(html_macros.$html_html_tail$.getGlobalValue());
-                            html_source_readability_terpri(UNPROVIDED);
-                        } finally {
-                            html_macros.$html_id_space_id_generator$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject cb_handle_gaf_suggestor(final SubLObject args) {
@@ -1969,22 +1092,8 @@ public final class cb_applicable_relations extends SubLTranslatedFile implements
         return NIL;
     }
 
-    public static final SubLObject cb_new_suggested_gafs_for_terms_iterator_alt(SubLObject terms) {
-        return applicable_relations.new_suggested_gafs_for_terms_iterator(terms, $$EverythingPSC, list($USAGE_THRESHOLD, THREE_INTEGER, $ISA_HORIZON, $$Individual));
-    }
-
     public static SubLObject cb_new_suggested_gafs_for_terms_iterator(final SubLObject terms) {
         return applicable_relations.new_suggested_gafs_for_terms_iterator(terms, $$EverythingPSC, list($USAGE_THRESHOLD, THREE_INTEGER, $ISA_HORIZON, $$Individual));
-    }
-
-    public static final SubLObject clear_cb_suggest_gafs_for_terms_alt() {
-        {
-            SubLObject cs = $cb_suggest_gafs_for_terms_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
-        }
-        return NIL;
     }
 
     public static SubLObject clear_cb_suggest_gafs_for_terms() {
@@ -1995,37 +1104,12 @@ public final class cb_applicable_relations extends SubLTranslatedFile implements
         return NIL;
     }
 
-    public static final SubLObject remove_cb_suggest_gafs_for_terms_alt(SubLObject terms) {
-        return memoization_state.caching_state_remove_function_results_with_args($cb_suggest_gafs_for_terms_caching_state$.getGlobalValue(), list(terms), UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject remove_cb_suggest_gafs_for_terms(final SubLObject terms) {
         return memoization_state.caching_state_remove_function_results_with_args($cb_suggest_gafs_for_terms_caching_state$.getGlobalValue(), list(terms), UNPROVIDED, UNPROVIDED);
     }
 
-    public static final SubLObject cb_suggest_gafs_for_terms_internal_alt(SubLObject terms) {
-        return applicable_relations.suggest_gafs_for_terms(terms, $$EverythingPSC, list($MAX_NUMBER, $int$100, $USAGE_THRESHOLD, TEN_INTEGER, $ISA_HORIZON, $$Individual));
-    }
-
     public static SubLObject cb_suggest_gafs_for_terms_internal(final SubLObject terms) {
         return applicable_relations.suggest_gafs_for_terms(terms, $$EverythingPSC, list($MAX_NUMBER, $int$100, $USAGE_THRESHOLD, TEN_INTEGER, $ISA_HORIZON, $$Individual));
-    }
-
-    public static final SubLObject cb_suggest_gafs_for_terms_alt(SubLObject terms) {
-        {
-            SubLObject caching_state = $cb_suggest_gafs_for_terms_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(CB_SUGGEST_GAFS_FOR_TERMS, $cb_suggest_gafs_for_terms_caching_state$, TEN_INTEGER, EQUAL, ONE_INTEGER, ZERO_INTEGER);
-            }
-            {
-                SubLObject results = memoization_state.caching_state_lookup(caching_state, terms, $kw69$_MEMOIZED_ITEM_NOT_FOUND_);
-                if (results == $kw69$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.cb_applicable_relations.cb_suggest_gafs_for_terms_internal(terms)));
-                    memoization_state.caching_state_put(caching_state, terms, results, UNPROVIDED);
-                }
-                return memoization_state.caching_results(results);
-            }
-        }
     }
 
     public static SubLObject cb_suggest_gafs_for_terms(final SubLObject terms) {
@@ -2042,17 +1126,17 @@ public final class cb_applicable_relations extends SubLTranslatedFile implements
     }
 
     public static SubLObject declare_cb_applicable_relations_file() {
-        declareFunction("cb_applicable_relations", "CB-APPLICABLE-RELATIONS", 1, 0, false);
-        declareFunction("cb_link_applicable_relations", "CB-LINK-APPLICABLE-RELATIONS", 1, 1, false);
-        declareFunction("old_applicable_relations", "OLD-APPLICABLE-RELATIONS", 1, 0, false);
-        declareFunction("cb_link_gaf_suggestor", "CB-LINK-GAF-SUGGESTOR", 0, 1, false);
-        declareFunction("cb_gaf_suggestor", "CB-GAF-SUGGESTOR", 0, 1, false);
-        declareFunction("cb_handle_gaf_suggestor", "CB-HANDLE-GAF-SUGGESTOR", 1, 0, false);
-        declareFunction("cb_new_suggested_gafs_for_terms_iterator", "CB-NEW-SUGGESTED-GAFS-FOR-TERMS-ITERATOR", 1, 0, false);
-        declareFunction("clear_cb_suggest_gafs_for_terms", "CLEAR-CB-SUGGEST-GAFS-FOR-TERMS", 0, 0, false);
-        declareFunction("remove_cb_suggest_gafs_for_terms", "REMOVE-CB-SUGGEST-GAFS-FOR-TERMS", 1, 0, false);
-        declareFunction("cb_suggest_gafs_for_terms_internal", "CB-SUGGEST-GAFS-FOR-TERMS-INTERNAL", 1, 0, false);
-        declareFunction("cb_suggest_gafs_for_terms", "CB-SUGGEST-GAFS-FOR-TERMS", 1, 0, false);
+        declareFunction(me, "cb_applicable_relations", "CB-APPLICABLE-RELATIONS", 1, 0, false);
+        declareFunction(me, "cb_link_applicable_relations", "CB-LINK-APPLICABLE-RELATIONS", 1, 1, false);
+        declareFunction(me, "old_applicable_relations", "OLD-APPLICABLE-RELATIONS", 1, 0, false);
+        declareFunction(me, "cb_link_gaf_suggestor", "CB-LINK-GAF-SUGGESTOR", 0, 1, false);
+        declareFunction(me, "cb_gaf_suggestor", "CB-GAF-SUGGESTOR", 0, 1, false);
+        declareFunction(me, "cb_handle_gaf_suggestor", "CB-HANDLE-GAF-SUGGESTOR", 1, 0, false);
+        declareFunction(me, "cb_new_suggested_gafs_for_terms_iterator", "CB-NEW-SUGGESTED-GAFS-FOR-TERMS-ITERATOR", 1, 0, false);
+        declareFunction(me, "clear_cb_suggest_gafs_for_terms", "CLEAR-CB-SUGGEST-GAFS-FOR-TERMS", 0, 0, false);
+        declareFunction(me, "remove_cb_suggest_gafs_for_terms", "REMOVE-CB-SUGGEST-GAFS-FOR-TERMS", 1, 0, false);
+        declareFunction(me, "cb_suggest_gafs_for_terms_internal", "CB-SUGGEST-GAFS-FOR-TERMS-INTERNAL", 1, 0, false);
+        declareFunction(me, "cb_suggest_gafs_for_terms", "CB-SUGGEST-GAFS-FOR-TERMS", 1, 0, false);
         return NIL;
     }
 
@@ -2061,38 +1145,7 @@ public final class cb_applicable_relations extends SubLTranslatedFile implements
         return NIL;
     }
 
-    public static final SubLObject setup_cb_applicable_relations_file_alt() {
-        sethash($CB_APPLICABLE_RELATIONS, $cb_help_definitions$.getGlobalValue(), list($str_alt1$cb_applicable_relations_html, NIL));
-        html_macros.note_html_handler_function(CB_APPLICABLE_RELATIONS);
-        setup_cb_link_method($APPLICABLE_RELATIONS, CB_LINK_APPLICABLE_RELATIONS, TWO_INTEGER);
-        setup_cb_link_method($GAF_SUGGESTOR, CB_LINK_GAF_SUGGESTOR, ONE_INTEGER);
-        html_macros.note_html_handler_function(CB_GAF_SUGGESTOR);
-        declare_cb_tool($GAF_SUGGESTOR, $$$GAF_Suggestor, $str_alt50$GAF_S, $str_alt51$Suggest_possible_GAFs_for_a_set_o);
-        html_macros.note_html_handler_function(CB_HANDLE_GAF_SUGGESTOR);
-        memoization_state.note_globally_cached_function(CB_SUGGEST_GAFS_FOR_TERMS);
-        return NIL;
-    }
-
     public static SubLObject setup_cb_applicable_relations_file() {
-        if (SubLFiles.USE_V1) {
-            sethash($CB_APPLICABLE_RELATIONS, cyc_file_dependencies.$cb_help_definitions$.getGlobalValue(), list($str1$cb_applicable_relations_html, NIL));
-            html_macros.note_cgi_handler_function(CB_APPLICABLE_RELATIONS, $HTML_HANDLER);
-            setup_cb_link_method($APPLICABLE_RELATIONS, CB_LINK_APPLICABLE_RELATIONS, TWO_INTEGER);
-            setup_cb_link_method($GAF_SUGGESTOR, CB_LINK_GAF_SUGGESTOR, ONE_INTEGER);
-            html_macros.note_cgi_handler_function(CB_GAF_SUGGESTOR, $HTML_HANDLER);
-            html_macros.note_cgi_handler_function(CB_HANDLE_GAF_SUGGESTOR, $HTML_HANDLER);
-            memoization_state.note_globally_cached_function(CB_SUGGEST_GAFS_FOR_TERMS);
-        }
-        if (SubLFiles.USE_V2) {
-            html_macros.note_html_handler_function(CB_APPLICABLE_RELATIONS);
-            html_macros.note_html_handler_function(CB_GAF_SUGGESTOR);
-            declare_cb_tool($GAF_SUGGESTOR, $$$GAF_Suggestor, $str_alt50$GAF_S, $str_alt51$Suggest_possible_GAFs_for_a_set_o);
-            html_macros.note_html_handler_function(CB_HANDLE_GAF_SUGGESTOR);
-        }
-        return NIL;
-    }
-
-    public static SubLObject setup_cb_applicable_relations_file_Previous() {
         sethash($CB_APPLICABLE_RELATIONS, cyc_file_dependencies.$cb_help_definitions$.getGlobalValue(), list($str1$cb_applicable_relations_html, NIL));
         html_macros.note_cgi_handler_function(CB_APPLICABLE_RELATIONS, $HTML_HANDLER);
         setup_cb_link_method($APPLICABLE_RELATIONS, CB_LINK_APPLICABLE_RELATIONS, TWO_INTEGER);
@@ -2119,47 +1172,86 @@ public final class cb_applicable_relations extends SubLTranslatedFile implements
     }
 
     static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
-
-    static private final SubLString $str_alt1$cb_applicable_relations_html = makeString("cb-applicable-relations.html");
-
-    static private final SubLString $str_alt2$Unable_to_determine_a_term_from__ = makeString("Unable to determine a term from ~S");
-
-    static private final SubLString $str_alt5$text_javascript = makeString("text/javascript");
-
-    static private final SubLString $str_alt6$yui_skin_sam = makeString("yui-skin-sam");
-
-    static private final SubLString $str_alt7$Relations_which_apply_to_ = makeString("Relations which apply to ");
-
-    static private final SubLString $str_alt8$___ = makeString(" : ");
-
-    static private final SubLList $list_alt9 = list(makeSymbol("ARG"), makeSymbol("RELATIONS"));
-
-    static private final SubLString $str_alt11$_dddddd = makeString("#dddddd");
-
-    static private final SubLString $str_alt24$cb_applicable_relations__A = makeString("cb-applicable-relations&~A");
-
-    static private final SubLSymbol $sym29$_ = makeSymbol("<");
-
-    static private final SubLString $str_alt33$_GAF_Suggestor_ = makeString("[GAF Suggestor]");
-
-    static private final SubLString $str_alt34$cb_gaf_suggestor = makeString("cb-gaf-suggestor");
-
-    static private final SubLString $str_alt38$cb_handle_gaf_suggestor = makeString("cb-handle-gaf-suggestor");
-
-    static private final SubLString $str_alt45$Term_ = makeString("Term ");
-
-    static private final SubLString $str_alt50$GAF_S = makeString("GAF-S");
-
-    static private final SubLString $str_alt51$Suggest_possible_GAFs_for_a_set_o = makeString("Suggest possible GAFs for a set of terms");
-
-    static private final SubLString $str_alt55$Terms__ = makeString("Terms :");
-
-    static private final SubLString $str_alt57$_Query_ = makeString("[Query]");
-
-    static private final SubLString $str_alt60$_Assert_ = makeString("[Assert]");
-
-    public static final SubLSymbol $kw69$_MEMOIZED_ITEM_NOT_FOUND_ = makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
 }
 
 /**

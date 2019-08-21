@@ -1,63 +1,7 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.access_macros.register_macro_helper;
-import static com.cyc.cycjava.cycl.utilities_macros.unquoted_symbol_in_tree_p;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.append;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.nth;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.rplacd;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.bind;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.currentBinding;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.rebind;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.gethash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.subtract;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages.intern;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.cconcatenate;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.length;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.nreverse;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.position;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.reverse;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.fboundp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.make_symbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_name;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.sublisp_true;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.values;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.aref;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.make_vector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.set_aref;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.assoc;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cadr;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cddr;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.copy_list;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.copy_tree;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.member;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.second;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.bq_cons;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
-import static com.cyc.tool.subl.util.SubLFiles.defconstant;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-import static com.cyc.tool.subl.util.SubLFiles.defvar;
-
+import com.cyc.cycjava.cycl.methods;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
@@ -66,242 +10,303 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- * module:      METHODS
- * source file: /cyc/top/cycl/methods.lisp
- * created:     2019/07/03 17:37:08
- */
-public final class methods extends SubLTranslatedFile implements V12 {
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.methods.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ELEVEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+
+public final class methods extends SubLTranslatedFile {
     public static final SubLFile me = new methods();
 
+    public static final String myName = "com.cyc.cycjava.cycl.methods";
 
+    public static final String myFingerPrint = "53b4844d01e9bbdde0a4bed450d7ab9f07ccfc3b82f667dfec297e43a712783c";
 
     // defvar
-    @LispMethod(comment = "defvar")
-    // Definitions
     public static final SubLSymbol $methods_insert_trace_code_p$ = makeSymbol("*METHODS-INSERT-TRACE-CODE-P*");
 
+
+
     // defconstant
-    @LispMethod(comment = "defconstant")
     private static final SubLSymbol $methods_tracing_format_strings_vector_size$ = makeSymbol("*METHODS-TRACING-FORMAT-STRINGS-VECTOR-SIZE*");
 
     // defvar
-    @LispMethod(comment = "defvar")
     private static final SubLSymbol $methods_tracing_format_strings$ = makeSymbol("*METHODS-TRACING-FORMAT-STRINGS*");
 
+
+
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $methods_protection_levels$ = makeSymbol("*METHODS-PROTECTION-LEVELS*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $methods_scope_levels$ = makeSymbol("*METHODS-SCOPE-LEVELS*");
 
     // defconstant
     // Enumerated values of type METHOD-LISTENER-TYPE.
-    /**
-     * Enumerated values of type METHOD-LISTENER-TYPE.
-     */
-    @LispMethod(comment = "Enumerated values of type METHOD-LISTENER-TYPE.\ndefconstant")
     private static final SubLSymbol $valid_method_listener_types$ = makeSymbol("*VALID-METHOD-LISTENER-TYPES*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $methods_scope_special_forms$ = makeSymbol("*METHODS-SCOPE-SPECIAL-FORMS*");
 
-
+    // defparameter
+    public static final SubLSymbol $report_default_method_callsP$ = makeSymbol("*REPORT-DEFAULT-METHOD-CALLS?*");
 
     // Internal Constants
-    @LispMethod(comment = "Internal Constants")
-    static private final SubLString $str0$__S__S__ = makeString("(~S ~S)(");
+    public static final SubLString $str0$__S__S__ = makeString("(~S ~S)(");
 
-    static private final SubLString $str1$_S = makeString("~S");
+    public static final SubLString $str1$_S = makeString("~S");
 
-    static private final SubLString $str2$__S = makeString(" ~S");
+    public static final SubLString $str2$__S = makeString(" ~S");
 
-    static private final SubLString $str3$_ = makeString(")");
+    public static final SubLString $str3$_ = makeString(")");
 
-    static private final SubLString $str4$_S___enter__ = makeString("~S: <enter> ");
+    public static final SubLString $str4$_S___enter__ = makeString("~S: <enter> ");
 
-    static private final SubLString $str5$_S___exit____S__S______S = makeString("~S: <exit> (~S ~S) -> ~S");
+    public static final SubLString $str5$_S___exit____S__S______S = makeString("~S: <exit> (~S ~S) -> ~S");
 
-    static private final SubLString $$$__ = makeString("  ");
+    public static final SubLString $$$__ = makeString("  ");
 
-    static private final SubLSymbol $sym7$_OPTIONAL = makeSymbol("&OPTIONAL");
+    public static final SubLSymbol $sym7$_OPTIONAL = makeSymbol("&OPTIONAL");
+
+
 
     public static final SubLSymbol $methods_block_tracing$ = makeSymbol("*METHODS-BLOCK-TRACING*");
 
-    static private final SubLList $list12 = list(makeSymbol("CSETQ"), makeSymbol("*METHODS-BLOCK-TRACING*"), T);
 
-    static private final SubLList $list13 = list(makeSymbol("TERPRI"), makeSymbol("*STANDARD-OUTPUT*"));
 
-    static private final SubLList $list14 = list(makeSymbol("METHODS-TRACING-TAB"), makeSymbol("*STANDARD-OUTPUT*"), makeSymbol("*METHODS-TRACE-DEPTH*"));
+
+
+    public static final SubLList $list12 = list(makeSymbol("CSETQ"), makeSymbol("*METHODS-BLOCK-TRACING*"), T);
+
+    public static final SubLList $list13 = list(makeSymbol("TERPRI"), makeSymbol("*STANDARD-OUTPUT*"));
+
+    public static final SubLList $list14 = list(makeSymbol("METHODS-TRACING-TAB"), makeSymbol("*STANDARD-OUTPUT*"), makeSymbol("*METHODS-TRACE-DEPTH*"));
+
+
 
     public static final SubLSymbol $standard_output$ = makeSymbol("*STANDARD-OUTPUT*");
 
     public static final SubLSymbol $methods_trace_depth$ = makeSymbol("*METHODS-TRACE-DEPTH*");
 
-    static private final SubLList $list19 = list(list(makeSymbol("CSETQ"), makeSymbol("*METHODS-BLOCK-TRACING*"), NIL));
 
-    static private final SubLList $list20 = list(list(makeSymbol("CINC"), makeSymbol("*METHODS-TRACE-DEPTH*")));
 
-    static private final SubLList $list21 = list(makeSymbol("METHOD-NAME"), makeSymbol("INSTANCE"), makeSymbol("ARGS"));
+    public static final SubLList $list19 = list(list(makeSymbol("CSETQ"), makeSymbol("*METHODS-BLOCK-TRACING*"), NIL));
 
-    static private final SubLList $list22 = list(makeSymbol("CDEC"), makeSymbol("*METHODS-TRACE-DEPTH*"));
+    public static final SubLList $list20 = list(list(makeSymbol("CINC"), makeSymbol("*METHODS-TRACE-DEPTH*")));
 
-    static private final SubLList $list23 = list(makeSymbol("METHOD-NAME"), makeSymbol("INSTANCE"), makeSymbol("RESULT"));
+    public static final SubLList $list21 = list(makeSymbol("METHOD-NAME"), makeSymbol("INSTANCE"), makeSymbol("ARGS"));
 
-    static private final SubLList $list24 = list(makeKeyword("PRIVATE"), makeKeyword("PROTECTED"), makeKeyword("PUBLIC"));
+    public static final SubLList $list22 = list(makeSymbol("CDEC"), makeSymbol("*METHODS-TRACE-DEPTH*"));
 
-    static private final SubLList $list25 = list(makeKeyword("FILE-SCOPE"), makeKeyword("SYSTEM-SCOPE"), makeKeyword("GLOBAL-SCOPE"));
+    public static final SubLList $list23 = list(makeSymbol("METHOD-NAME"), makeSymbol("INSTANCE"), makeSymbol("RESULT"));
 
-    static private final SubLList $list26 = list(makeKeyword("BEFORE-LISTENERS"), makeKeyword("AFTER-LISTENERS"));
+    public static final SubLList $list24 = list(makeKeyword("PRIVATE"), makeKeyword("PROTECTED"), makeKeyword("PUBLIC"));
 
-    private static final SubLSymbol METHOD_LISTENER_TYPE = makeSymbol("METHOD-LISTENER-TYPE");
+    public static final SubLList $list25 = list(makeKeyword("FILE-SCOPE"), makeKeyword("SYSTEM-SCOPE"), makeKeyword("GLOBAL-SCOPE"));
 
-    static private final SubLString $str28$_S___S_is_not_a_member_of_the__S_ = makeString("~S: ~S is not a member of the ~S enumeration.");
+    public static final SubLList $list26 = list(makeKeyword("BEFORE-LISTENERS"), makeKeyword("AFTER-LISTENERS"));
 
-    private static final SubLSymbol ENCODE_METHOD_LISTENER_TYPE = makeSymbol("ENCODE-METHOD-LISTENER-TYPE");
+    public static final SubLSymbol METHOD_LISTENER_TYPE = makeSymbol("METHOD-LISTENER-TYPE");
 
-    static private final SubLString $str30$_S___S_is_not_a_valid_encoding_of = makeString("~S: ~S is not a valid encoding of the ~S enumeration.");
+    public static final SubLString $str28$_S___S_is_not_a_member_of_the__S_ = makeString("~S: ~S is not a member of the ~S enumeration.");
 
-    private static final SubLSymbol DECODE_METHOD_LISTENER_TYPE = makeSymbol("DECODE-METHOD-LISTENER-TYPE");
+    public static final SubLSymbol ENCODE_METHOD_LISTENER_TYPE = makeSymbol("ENCODE-METHOD-LISTENER-TYPE");
 
-    static private final SubLString $str32$_S___S_was_expected_to_be_a_membe = makeString("~S: ~S was expected to be a member of the enumeration ~S.");
+    public static final SubLString $str30$_S___S_is_not_a_valid_encoding_of = makeString("~S: ~S is not a valid encoding of the ~S enumeration.");
 
-    private static final SubLSymbol METHOD_LISTENER_TYPE_P = makeSymbol("METHOD-LISTENER-TYPE-P");
+    public static final SubLSymbol DECODE_METHOD_LISTENER_TYPE = makeSymbol("DECODE-METHOD-LISTENER-TYPE");
 
-    static private final SubLList $list34 = list(makeSymbol("DEFINE-PRIVATE"), makeSymbol("DEFINE-PROTECTED"), makeSymbol("DEFINE-PUBLIC"));
+    public static final SubLString $str32$_S___S_was_expected_to_be_a_membe = makeString("~S: ~S was expected to be a member of the enumeration ~S.");
+
+    public static final SubLSymbol METHOD_LISTENER_TYPE_P = makeSymbol("METHOD-LISTENER-TYPE-P");
+
+    public static final SubLList $list34 = list(makeSymbol("DEFINE-PRIVATE"), makeSymbol("DEFINE-PROTECTED"), makeSymbol("DEFINE-PUBLIC"));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     private static final SubLSymbol $NO_MEMBER_VARIABLES = makeKeyword("NO-MEMBER-VARIABLES");
 
-    static private final SubLString $str48$_ = makeString("-");
 
-    static private final SubLString $str49$_METHOD = makeString("-METHOD");
 
-    static private final SubLString $str50$_S___S_is_not_a_valid_method_spec = makeString("~S: ~S is not a valid method specification.~%~\n     A valid method specification matches the pattern (<method name> <class name> . <method properties>).");
 
-    static private final SubLString $str51$_S___S_is_not_a_valid_method_name = makeString("~S: ~S is not a valid method name.  Only a non-null symbol is a valid method name.");
 
-    static private final SubLString $str52$_S__While_defining_method__S___S_ = makeString("~S: While defining method ~S, ~S is not a valid class name.  Only a non-null symbol is a valid class name.");
 
-    static private final SubLList $list53 = list(makeSymbol("METHOD-SPEC"), makeSymbol("LAMBDA-LIST"), makeSymbol("&BODY"), makeSymbol("BODY"));
 
-    static private final SubLList $list55 = listS(makeSymbol("METHOD-NAME"), makeSymbol("CLASS-NAME"), makeSymbol("METHOD-PROPERTIES"));
 
-    private static final SubLSymbol METHODS_INCORPORATE_INSTANCE_METHOD = makeSymbol("METHODS-INCORPORATE-INSTANCE-METHOD");
 
-    private static final SubLSymbol SUBLOOP_REGISTER_INSTANCE_METHOD = makeSymbol("SUBLOOP-REGISTER-INSTANCE-METHOD");
 
-    public static final SubLSymbol $report_default_method_callsP$ = makeSymbol("*REPORT-DEFAULT-METHOD-CALLS?*");
 
-    static private final SubLString $str61$Default_method_call__a_on_class__ = makeString("Default method call ~a on class ~a");
+    public static final SubLString $str48$_ = makeString("-");
 
-    static private final SubLString $str62$DEF_INSTANCE_METHOD___S_is_not_th = makeString("DEF-INSTANCE-METHOD: ~S is not the name of a class.");
+    public static final SubLString $str49$_METHOD = makeString("-METHOD");
 
-    private static final SubLSymbol METHODS_INCORPORATE_CLASS_METHOD = makeSymbol("METHODS-INCORPORATE-CLASS-METHOD");
+    public static final SubLString $str50$_S___S_is_not_a_valid_method_spec = makeString("~S: ~S is not a valid method specification.~%~\n     A valid method specification matches the pattern (<method name> <class name> . <method properties>).");
 
-    private static final SubLSymbol SUBLOOP_REGISTER_CLASS_METHOD = makeSymbol("SUBLOOP-REGISTER-CLASS-METHOD");
+    public static final SubLString $str51$_S___S_is_not_a_valid_method_name = makeString("~S: ~S is not a valid method name.  Only a non-null symbol is a valid method name.");
 
-    static private final SubLString $str66$DEF_CLASS_METHOD___S_is_not_the_n = makeString("DEF-CLASS-METHOD: ~S is not the name of a class.");
+    public static final SubLString $str52$_S__While_defining_method__S___S_ = makeString("~S: While defining method ~S, ~S is not a valid class name.  Only a non-null symbol is a valid class name.");
 
-    static private final SubLString $str67$FUNCALL_CLASS_METHOD___S_is_not_a = makeString("FUNCALL-CLASS-METHOD: ~S is not a defined class.");
+    public static final SubLList $list53 = list(makeSymbol("METHOD-SPEC"), makeSymbol("LAMBDA-LIST"), makeSymbol("&BODY"), makeSymbol("BODY"));
 
-    static private final SubLString $str68$FUNCALL_CLASS_METHOD___S_is_not_a = makeString("FUNCALL-CLASS-METHOD: ~S is not a method of class ~S.");
 
-    static private final SubLString $str69$FUNCALL_CLASS_SUPER_METHOD___S_is = makeString("FUNCALL-CLASS-SUPER-METHOD: ~S is not a defined class.");
 
-    static private final SubLString $str70$FUNCALL_CLASS_SUPER_METHOD___S_is = makeString("FUNCALL-CLASS-SUPER-METHOD: ~S is not a method of class ~S.");
+    public static final SubLList $list55 = listS(makeSymbol("METHOD-NAME"), makeSymbol("CLASS-NAME"), makeSymbol("METHOD-PROPERTIES"));
+
+    public static final SubLSymbol METHODS_INCORPORATE_INSTANCE_METHOD = makeSymbol("METHODS-INCORPORATE-INSTANCE-METHOD");
+
+    public static final SubLSymbol SUBLOOP_REGISTER_INSTANCE_METHOD = makeSymbol("SUBLOOP-REGISTER-INSTANCE-METHOD");
+
+
+
+    public static final SubLSymbol $sym59$_REPORT_DEFAULT_METHOD_CALLS__ = makeSymbol("*REPORT-DEFAULT-METHOD-CALLS?*");
+
+
+
+    public static final SubLString $str61$Default_method_call__a_on_class__ = makeString("Default method call ~a on class ~a");
+
+    public static final SubLString $str62$DEF_INSTANCE_METHOD___S_is_not_th = makeString("DEF-INSTANCE-METHOD: ~S is not the name of a class.");
+
+
+
+    public static final SubLSymbol METHODS_INCORPORATE_CLASS_METHOD = makeSymbol("METHODS-INCORPORATE-CLASS-METHOD");
+
+    public static final SubLSymbol SUBLOOP_REGISTER_CLASS_METHOD = makeSymbol("SUBLOOP-REGISTER-CLASS-METHOD");
+
+    public static final SubLString $str66$DEF_CLASS_METHOD___S_is_not_the_n = makeString("DEF-CLASS-METHOD: ~S is not the name of a class.");
+
+    public static final SubLString $str67$FUNCALL_CLASS_METHOD___S_is_not_a = makeString("FUNCALL-CLASS-METHOD: ~S is not a defined class.");
+
+    public static final SubLString $str68$FUNCALL_CLASS_METHOD___S_is_not_a = makeString("FUNCALL-CLASS-METHOD: ~S is not a method of class ~S.");
+
+    public static final SubLString $str69$FUNCALL_CLASS_SUPER_METHOD___S_is = makeString("FUNCALL-CLASS-SUPER-METHOD: ~S is not a defined class.");
+
+    public static final SubLString $str70$FUNCALL_CLASS_SUPER_METHOD___S_is = makeString("FUNCALL-CLASS-SUPER-METHOD: ~S is not a method of class ~S.");
 
     private static final SubLSymbol $TARGET_NOT_A_CLASS = makeKeyword("TARGET-NOT-A-CLASS");
 
     private static final SubLSymbol $INVALID_METHOD_NAME = makeKeyword("INVALID-METHOD-NAME");
 
+
+
     private static final SubLSymbol $ACCESS_LEVEL_CONFLICT = makeKeyword("ACCESS-LEVEL-CONFLICT");
 
-    static private final SubLString $str76$__FUNCALL_INSTANCE_METHOD__either = makeString("~%FUNCALL-INSTANCE-METHOD: either instance ~S or method ~S are invalid.");
 
-    static private final SubLString $str77$__FUNCALL_CLASS_OR_INSTANCE_METHO = makeString("~%FUNCALL-CLASS-OR-INSTANCE-METHOD: Method ~S is invalid.");
 
-    static private final SubLString $str78$FUNCALL_CLASS_OR_INSTANCE_METHOD_ = makeString("FUNCALL-CLASS-OR-INSTANCE-METHOD: ~S is not a valid class.");
+    public static final SubLString $str76$__FUNCALL_INSTANCE_METHOD__either = makeString("~%FUNCALL-INSTANCE-METHOD: either instance ~S or method ~S are invalid.");
+
+    public static final SubLString $str77$__FUNCALL_CLASS_OR_INSTANCE_METHO = makeString("~%FUNCALL-CLASS-OR-INSTANCE-METHOD: Method ~S is invalid.");
+
+    public static final SubLString $str78$FUNCALL_CLASS_OR_INSTANCE_METHOD_ = makeString("FUNCALL-CLASS-OR-INSTANCE-METHOD: ~S is not a valid class.");
 
     private static final SubLSymbol $TARGET_NOT_AN_INSTANCE = makeKeyword("TARGET-NOT-AN-INSTANCE");
 
-    static private final SubLString $str80$RESOLVE_METHOD___S_is_not_a_defin = makeString("RESOLVE-METHOD: ~S is not a defined class.");
+    public static final SubLString $str80$RESOLVE_METHOD___S_is_not_a_defin = makeString("RESOLVE-METHOD: ~S is not a defined class.");
 
-    static private final SubLString $str81$RESOLVE_METHOD___S_is_not_a_defin = makeString("RESOLVE-METHOD: ~S is not a defined method of class ~S.");
+    public static final SubLString $str81$RESOLVE_METHOD___S_is_not_a_defin = makeString("RESOLVE-METHOD: ~S is not a defined method of class ~S.");
 
-    static private final SubLList $list82 = list(list(makeSymbol("METHOD-NAME"), makeSymbol("CLASS-NAME")));
+    public static final SubLList $list82 = list(list(makeSymbol("METHOD-NAME"), makeSymbol("CLASS-NAME")));
 
-    static private final SubLList $list83 = list(list(makeSymbol("METHOD-NAME"), makeSymbol("CLASS-NAME")), makeSymbol("CLASS-OR-INSTANCE"), makeSymbol("&REST"), makeSymbol("ARGS"));
+    public static final SubLList $list83 = list(list(makeSymbol("METHOD-NAME"), makeSymbol("CLASS-NAME")), makeSymbol("CLASS-OR-INSTANCE"), makeSymbol("&REST"), makeSymbol("ARGS"));
 
-    private static final SubLSymbol FUNCALL_INSTANCE_SUPER_METHOD = makeSymbol("FUNCALL-INSTANCE-SUPER-METHOD");
 
-    private static final SubLSymbol INLINE_SUPER_METHOD = makeSymbol("INLINE-SUPER-METHOD");
 
-    static private final SubLList $list92 = list(makeSymbol("CSETQ"), makeSymbol("CSETF"));
+    public static final SubLSymbol FUNCALL_INSTANCE_SUPER_METHOD = makeSymbol("FUNCALL-INSTANCE-SUPER-METHOD");
 
-    static private final SubLList $list94 = list(makeSymbol("CINC"), makeSymbol("CDEC"));
 
-    static private final SubLList $list95 = list(makeSymbol("CPUSH"), makeSymbol("CPUSHNEW"));
 
-    private static final SubLSymbol THROW = makeSymbol("THROW");
 
-    static private final SubLString $str99$OUTER_CATCH_FOR_ = makeString("OUTER-CATCH-FOR-");
 
-    static private final SubLString $$$METHOD = makeString("METHOD");
 
-    static private final SubLString $str101$CATCH_VAR_FOR_ = makeString("CATCH-VAR-FOR-");
 
-    static private final SubLString $str102$LISTED_ARGS = makeString("LISTED-ARGS");
+    public static final SubLSymbol INLINE_SUPER_METHOD = makeSymbol("INLINE-SUPER-METHOD");
 
-    static private final SubLList $list104 = list(NIL);
 
-    private static final SubLSymbol METHOD_LISTENERS_INVOKE_BEFORE_LISTENERS = makeSymbol("METHOD-LISTENERS-INVOKE-BEFORE-LISTENERS");
 
-    private static final SubLSymbol METHOD_LISTENERS_INVOKE_AFTER_LISTENERS = makeSymbol("METHOD-LISTENERS-INVOKE-AFTER-LISTENERS");
 
-    static private final SubLList $list109 = list(list(makeSymbol("IGNORE"), makeSymbol("SELF")));
 
-    static private final SubLList $list112 = list(makeSymbol("PWHEN"), list(makeSymbol("INSTANCE-P"), makeSymbol("SELF")), list(makeSymbol("CSETQ"), makeSymbol("SELF"), list(makeSymbol("INSTANCE-CLASS"), makeSymbol("SELF"))));
+    public static final SubLList $list92 = list(makeSymbol("CSETQ"), makeSymbol("CSETF"));
 
-    public static final SubLObject methods_generate_format_string_for_tracing_alt(SubLObject args) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject arg_count = length(args);
-                SubLObject existing_string = NIL;
-                if (arg_count.numL($methods_tracing_format_strings_vector_size$.getGlobalValue())) {
-                    existing_string = aref($methods_tracing_format_strings$.getDynamicValue(thread), arg_count);
-                    if (NIL != existing_string) {
-                        return existing_string;
-                    }
-                }
-                existing_string = $str_alt0$__S__S__;
-                if (arg_count.numG(ZERO_INTEGER)) {
-                    existing_string = cconcatenate(existing_string, $str_alt1$_S);
-                    if (arg_count.numG(ONE_INTEGER)) {
-                        {
-                            SubLObject cdotimes_end_var = subtract(arg_count, ONE_INTEGER);
-                            SubLObject i = NIL;
-                            for (i = ZERO_INTEGER; i.numL(cdotimes_end_var); i = add(i, ONE_INTEGER)) {
-                                existing_string = cconcatenate(existing_string, $str_alt2$__S);
-                            }
-                        }
-                    }
-                }
-                existing_string = cconcatenate(existing_string, $str_alt3$_);
-                if (arg_count.numL($methods_tracing_format_strings_vector_size$.getGlobalValue())) {
-                    set_aref($methods_tracing_format_strings$.getDynamicValue(thread), arg_count, existing_string);
-                }
-                return existing_string;
-            }
-        }
-    }
+
+
+    public static final SubLList $list94 = list(makeSymbol("CINC"), makeSymbol("CDEC"));
+
+    public static final SubLList $list95 = list(makeSymbol("CPUSH"), makeSymbol("CPUSHNEW"));
+
+
+
+    public static final SubLSymbol THROW = makeSymbol("THROW");
+
+
+
+    public static final SubLString $str99$OUTER_CATCH_FOR_ = makeString("OUTER-CATCH-FOR-");
+
+    public static final SubLString $$$METHOD = makeString("METHOD");
+
+    public static final SubLString $str101$CATCH_VAR_FOR_ = makeString("CATCH-VAR-FOR-");
+
+    public static final SubLString $str102$LISTED_ARGS = makeString("LISTED-ARGS");
+
+
+
+    public static final SubLList $list104 = list(NIL);
+
+
+
+    public static final SubLSymbol METHOD_LISTENERS_INVOKE_BEFORE_LISTENERS = makeSymbol("METHOD-LISTENERS-INVOKE-BEFORE-LISTENERS");
+
+    public static final SubLSymbol METHOD_LISTENERS_INVOKE_AFTER_LISTENERS = makeSymbol("METHOD-LISTENERS-INVOKE-AFTER-LISTENERS");
+
+
+
+    public static final SubLList $list109 = list(list(makeSymbol("IGNORE"), makeSymbol("SELF")));
+
+
+
+
+
+    public static final SubLList $list112 = list(makeSymbol("PWHEN"), list(makeSymbol("INSTANCE-P"), makeSymbol("SELF")), list(makeSymbol("CSETQ"), makeSymbol("SELF"), list(makeSymbol("INSTANCE-CLASS"), makeSymbol("SELF"))));
 
     public static SubLObject methods_generate_format_string_for_tracing(final SubLObject args) {
         final SubLThread thread = SubLProcess.currentSubLThread();
@@ -331,34 +336,13 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return existing_string;
     }
 
-    public static final SubLObject methods_generate_method_enter_format_string_alt(SubLObject args) {
-        {
-            SubLObject format_string = com.cyc.cycjava.cycl.methods.methods_generate_format_string_for_tracing(args);
-            return cconcatenate($str_alt4$_S___enter__, format_string);
-        }
-    }
-
     public static SubLObject methods_generate_method_enter_format_string(final SubLObject args) {
         final SubLObject format_string = methods_generate_format_string_for_tracing(args);
         return cconcatenate($str4$_S___enter__, format_string);
     }
 
-    public static final SubLObject methods_generate_method_exit_format_string_alt() {
-        return $str_alt5$_S___exit____S__S______S;
-    }
-
     public static SubLObject methods_generate_method_exit_format_string() {
         return $str5$_S___exit____S__S______S;
-    }
-
-    public static final SubLObject methods_tracing_tab_alt(SubLObject stream, SubLObject depth) {
-        {
-            SubLObject i = NIL;
-            for (i = ZERO_INTEGER; i.numL(depth); i = add(i, ONE_INTEGER)) {
-                format(stream, $str_alt6$__);
-            }
-        }
-        return depth;
     }
 
     public static SubLObject methods_tracing_tab(final SubLObject stream, final SubLObject depth) {
@@ -367,27 +351,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             format(stream, $$$__);
         }
         return depth;
-    }
-
-    public static final SubLObject methods_filter_option_words_from_lambda_list_alt(SubLObject lambda_list) {
-        {
-            SubLObject vars = NIL;
-            SubLObject cdolist_list_var = lambda_list;
-            SubLObject param = NIL;
-            for (param = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , param = cdolist_list_var.first()) {
-                if (param == $sym7$_OPTIONAL) {
-                } else {
-                    if (param.isSymbol()) {
-                        vars = cons(param, vars);
-                    } else {
-                        if (param.isCons() && param.first().isSymbol()) {
-                            vars = cons(param.first(), vars);
-                        }
-                    }
-                }
-            }
-            return nreverse(vars);
-        }
     }
 
     public static SubLObject methods_filter_option_words_from_lambda_list(final SubLObject lambda_list) {
@@ -411,50 +374,10 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return nreverse(vars);
     }
 
-    public static final SubLObject expand_methods_insert_tracing_enter_code_alt(SubLObject method_name, SubLObject instance, SubLObject args) {
-        {
-            SubLObject filtered_args = com.cyc.cycjava.cycl.methods.methods_filter_option_words_from_lambda_list(args);
-            SubLObject enter_string = com.cyc.cycjava.cycl.methods.methods_generate_method_enter_format_string(filtered_args);
-            return listS(PUNLESS, $methods_block_tracing$, listS(CUNWIND_PROTECT, list(PROGN, $list_alt12, $list_alt13, $list_alt14, listS(FORMAT, new SubLObject[]{ $standard_output$, enter_string, $methods_trace_depth$, list(QUOTE, method_name), instance, append(filtered_args, NIL) })), $list_alt19), $list_alt20);
-        }
-    }
-
     public static SubLObject expand_methods_insert_tracing_enter_code(final SubLObject method_name, final SubLObject instance, final SubLObject args) {
         final SubLObject filtered_args = methods_filter_option_words_from_lambda_list(args);
         final SubLObject enter_string = methods_generate_method_enter_format_string(filtered_args);
         return listS(PUNLESS, $methods_block_tracing$, listS(CUNWIND_PROTECT, list(PROGN, $list12, $list13, $list14, listS(FORMAT, new SubLObject[]{ $standard_output$, enter_string, $methods_trace_depth$, list(QUOTE, method_name), instance, append(filtered_args, NIL) })), $list19), $list20);
-    }
-
-    public static final SubLObject methods_insert_tracing_enter_code_alt(SubLObject macroform, SubLObject environment) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject datum = macroform.rest();
-                SubLObject current = datum;
-                SubLObject method_name = NIL;
-                SubLObject instance = NIL;
-                SubLObject args = NIL;
-                destructuring_bind_must_consp(current, datum, $list_alt21);
-                method_name = current.first();
-                current = current.rest();
-                destructuring_bind_must_consp(current, datum, $list_alt21);
-                instance = current.first();
-                current = current.rest();
-                destructuring_bind_must_consp(current, datum, $list_alt21);
-                args = current.first();
-                current = current.rest();
-                if (NIL == current) {
-                    if (NIL != $methods_insert_trace_code_p$.getDynamicValue(thread)) {
-                        return com.cyc.cycjava.cycl.methods.expand_methods_insert_tracing_enter_code(method_name, instance, args);
-                    } else {
-                        return list(PROGN);
-                    }
-                } else {
-                    cdestructuring_bind_error(datum, $list_alt21);
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject methods_insert_tracing_enter_code(final SubLObject macroform, final SubLObject environment) {
@@ -483,48 +406,9 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return list(PROGN);
     }
 
-    public static final SubLObject expand_methods_insert_tracing_exit_code_alt(SubLObject method_name, SubLObject instance, SubLObject result) {
-        {
-            SubLObject exit_string = com.cyc.cycjava.cycl.methods.methods_generate_method_exit_format_string();
-            return list(PUNLESS, $methods_block_tracing$, $list_alt22, listS(CUNWIND_PROTECT, list(PROGN, $list_alt12, $list_alt13, $list_alt14, list(FORMAT, $standard_output$, exit_string, $methods_trace_depth$, list(QUOTE, method_name), instance, result)), $list_alt19));
-        }
-    }
-
     public static SubLObject expand_methods_insert_tracing_exit_code(final SubLObject method_name, final SubLObject instance, final SubLObject result) {
         final SubLObject exit_string = methods_generate_method_exit_format_string();
         return list(PUNLESS, $methods_block_tracing$, $list22, listS(CUNWIND_PROTECT, list(PROGN, $list12, $list13, $list14, list(FORMAT, $standard_output$, exit_string, $methods_trace_depth$, list(QUOTE, method_name), instance, result)), $list19));
-    }
-
-    public static final SubLObject methods_insert_tracing_exit_code_alt(SubLObject macroform, SubLObject environment) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject datum = macroform.rest();
-                SubLObject current = datum;
-                SubLObject method_name = NIL;
-                SubLObject instance = NIL;
-                SubLObject result = NIL;
-                destructuring_bind_must_consp(current, datum, $list_alt23);
-                method_name = current.first();
-                current = current.rest();
-                destructuring_bind_must_consp(current, datum, $list_alt23);
-                instance = current.first();
-                current = current.rest();
-                destructuring_bind_must_consp(current, datum, $list_alt23);
-                result = current.first();
-                current = current.rest();
-                if (NIL == current) {
-                    if (NIL != $methods_insert_trace_code_p$.getDynamicValue(thread)) {
-                        return com.cyc.cycjava.cycl.methods.expand_methods_insert_tracing_exit_code(method_name, instance, result);
-                    } else {
-                        return list(PROGN);
-                    }
-                } else {
-                    cdestructuring_bind_error(datum, $list_alt23);
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject methods_insert_tracing_exit_code(final SubLObject macroform, final SubLObject environment) {
@@ -553,23 +437,9 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return list(PROGN);
     }
 
-    public static final SubLObject methods_protection_level_p_alt(SubLObject v_object) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return NIL != member(v_object, $methods_protection_levels$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED) ? ((SubLObject) (T)) : NIL;
-        }
-    }
-
     public static SubLObject methods_protection_level_p(final SubLObject v_object) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return NIL != member(v_object, $methods_protection_levels$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED) ? T : NIL;
-    }
-
-    public static final SubLObject methods_scope_level_p_alt(SubLObject v_object) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return NIL != member(v_object, $methods_scope_levels$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED) ? ((SubLObject) (T)) : NIL;
-        }
     }
 
     public static SubLObject methods_scope_level_p(final SubLObject v_object) {
@@ -577,61 +447,14 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return NIL != member(v_object, $methods_scope_levels$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED) ? T : NIL;
     }
 
-    /**
-     * Returns a list of all valid members of the METHOD-LISTENER-TYPE enumeration.
-     */
-    @LispMethod(comment = "Returns a list of all valid members of the METHOD-LISTENER-TYPE enumeration.")
-    public static final SubLObject valid_method_listener_types_alt() {
-        return $valid_method_listener_types$.getGlobalValue();
-    }
-
-    /**
-     * Returns a list of all valid members of the METHOD-LISTENER-TYPE enumeration.
-     */
-    @LispMethod(comment = "Returns a list of all valid members of the METHOD-LISTENER-TYPE enumeration.")
     public static SubLObject valid_method_listener_types() {
         return $valid_method_listener_types$.getGlobalValue();
     }
 
-    /**
-     * Return T iff OBJECT is a member of the METHOD-LISTENER-TYPE enumeration.
-     */
-    @LispMethod(comment = "Return T iff OBJECT is a member of the METHOD-LISTENER-TYPE enumeration.")
-    public static final SubLObject method_listener_type_p_alt(SubLObject v_object) {
-        return NIL != member(v_object, $valid_method_listener_types$.getGlobalValue(), UNPROVIDED, UNPROVIDED) ? ((SubLObject) (T)) : NIL;
-    }
-
-    /**
-     * Return T iff OBJECT is a member of the METHOD-LISTENER-TYPE enumeration.
-     */
-    @LispMethod(comment = "Return T iff OBJECT is a member of the METHOD-LISTENER-TYPE enumeration.")
     public static SubLObject method_listener_type_p(final SubLObject v_object) {
         return NIL != member(v_object, $valid_method_listener_types$.getGlobalValue(), UNPROVIDED, UNPROVIDED) ? T : NIL;
     }
 
-    /**
-     * Maps a member of the METHOD-LISTENER-TYPE enumeration to an integer encoding.
-     */
-    @LispMethod(comment = "Maps a member of the METHOD-LISTENER-TYPE enumeration to an integer encoding.")
-    public static final SubLObject encode_method_listener_type_alt(SubLObject value) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject pos = position(value, $valid_method_listener_types$.getGlobalValue(), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == pos) {
-                        Errors.error($str_alt28$_S___S_is_not_a_member_of_the__S_, ENCODE_METHOD_LISTENER_TYPE, value, METHOD_LISTENER_TYPE);
-                    }
-                }
-                return pos;
-            }
-        }
-    }
-
-    /**
-     * Maps a member of the METHOD-LISTENER-TYPE enumeration to an integer encoding.
-     */
-    @LispMethod(comment = "Maps a member of the METHOD-LISTENER-TYPE enumeration to an integer encoding.")
     public static SubLObject encode_method_listener_type(final SubLObject value) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject pos = position(value, $valid_method_listener_types$.getGlobalValue(), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -641,29 +464,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return pos;
     }
 
-    /**
-     * Maps an encoded value to a member of the METHOD-LISTENER-TYPE enumeration.
-     */
-    @LispMethod(comment = "Maps an encoded value to a member of the METHOD-LISTENER-TYPE enumeration.")
-    public static final SubLObject decode_method_listener_type_alt(SubLObject value) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject element = nth(value, $valid_method_listener_types$.getGlobalValue());
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == element) {
-                        Errors.error($str_alt30$_S___S_is_not_a_valid_encoding_of, DECODE_METHOD_LISTENER_TYPE, value, METHOD_LISTENER_TYPE);
-                    }
-                }
-                return element;
-            }
-        }
-    }
-
-    /**
-     * Maps an encoded value to a member of the METHOD-LISTENER-TYPE enumeration.
-     */
-    @LispMethod(comment = "Maps an encoded value to a member of the METHOD-LISTENER-TYPE enumeration.")
     public static SubLObject decode_method_listener_type(final SubLObject value) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject element = nth(value, $valid_method_listener_types$.getGlobalValue());
@@ -673,44 +473,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return element;
     }
 
-    /**
-     * Provides a LESSP predicate for members of the METHOD-LISTENER-TYPE enumeration.
-     */
-    @LispMethod(comment = "Provides a LESSP predicate for members of the METHOD-LISTENER-TYPE enumeration.")
-    public static final SubLObject method_listener_type_less_p_alt(SubLObject value1, SubLObject value2) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (NIL == com.cyc.cycjava.cycl.methods.method_listener_type_p(value1)) {
-                    Errors.error($str_alt32$_S___S_was_expected_to_be_a_membe, METHOD_LISTENER_TYPE_P, value1, METHOD_LISTENER_TYPE);
-                }
-            }
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (NIL == com.cyc.cycjava.cycl.methods.method_listener_type_p(value2)) {
-                    Errors.error($str_alt32$_S___S_was_expected_to_be_a_membe, METHOD_LISTENER_TYPE_P, value2, METHOD_LISTENER_TYPE);
-                }
-            }
-            {
-                SubLObject cdolist_list_var = $valid_method_listener_types$.getGlobalValue();
-                SubLObject value = NIL;
-                for (value = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , value = cdolist_list_var.first()) {
-                    if (value == value1) {
-                        return makeBoolean(value != value2);
-                    } else {
-                        if (value == value2) {
-                            return NIL;
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
-    /**
-     * Provides a LESSP predicate for members of the METHOD-LISTENER-TYPE enumeration.
-     */
-    @LispMethod(comment = "Provides a LESSP predicate for members of the METHOD-LISTENER-TYPE enumeration.")
     public static SubLObject method_listener_type_less_p(final SubLObject value1, final SubLObject value2) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (NIL == method_listener_type_p(value1))) {
@@ -735,44 +497,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     * Provides a GREATERP predicate for members of the METHOD-LISTENER-TYPE enumeration.
-     */
-    @LispMethod(comment = "Provides a GREATERP predicate for members of the METHOD-LISTENER-TYPE enumeration.")
-    public static final SubLObject method_listener_type_greater_p_alt(SubLObject value1, SubLObject value2) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (NIL == com.cyc.cycjava.cycl.methods.method_listener_type_p(value1)) {
-                    Errors.error($str_alt32$_S___S_was_expected_to_be_a_membe, METHOD_LISTENER_TYPE_P, value1, METHOD_LISTENER_TYPE);
-                }
-            }
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (NIL == com.cyc.cycjava.cycl.methods.method_listener_type_p(value2)) {
-                    Errors.error($str_alt32$_S___S_was_expected_to_be_a_membe, METHOD_LISTENER_TYPE_P, value2, METHOD_LISTENER_TYPE);
-                }
-            }
-            {
-                SubLObject cdolist_list_var = $valid_method_listener_types$.getGlobalValue();
-                SubLObject value = NIL;
-                for (value = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , value = cdolist_list_var.first()) {
-                    if (value == value2) {
-                        return makeBoolean(value != value1);
-                    } else {
-                        if (value == value1) {
-                            return NIL;
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
-    /**
-     * Provides a GREATERP predicate for members of the METHOD-LISTENER-TYPE enumeration.
-     */
-    @LispMethod(comment = "Provides a GREATERP predicate for members of the METHOD-LISTENER-TYPE enumeration.")
     public static SubLObject method_listener_type_greater_p(final SubLObject value1, final SubLObject value2) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (NIL == method_listener_type_p(value1))) {
@@ -797,26 +521,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject methods_special_form_given_scope_level_alt(SubLObject scope_level) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject scopes = $methods_scope_levels$.getDynamicValue(thread);
-                SubLObject specials = $methods_scope_special_forms$.getDynamicValue(thread);
-                SubLObject scope = NIL;
-                while ((NIL != scopes) && (NIL != specials)) {
-                    scope = scopes.first();
-                    if (scope == scope_level) {
-                        return specials.first();
-                    }
-                    scopes = scopes.rest();
-                    specials = specials.rest();
-                } 
-                return NIL;
-            }
-        }
-    }
-
     public static SubLObject methods_special_form_given_scope_level(final SubLObject scope_level) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject scopes = $methods_scope_levels$.getDynamicValue(thread);
@@ -833,19 +537,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject method_assoc_alt(SubLObject method_name, SubLObject method_list) {
-        {
-            SubLObject cdolist_list_var = method_list;
-            SubLObject method = NIL;
-            for (method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , method = cdolist_list_var.first()) {
-                if (subloop_structures.method_name(method) == method_name) {
-                    return method;
-                }
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject method_assoc(final SubLObject method_name, final SubLObject method_list) {
         SubLObject cdolist_list_var = method_list;
         SubLObject method = NIL;
@@ -858,23 +549,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             method = cdolist_list_var.first();
         } 
         return NIL;
-    }
-
-    public static final SubLObject method_shadowed_assoc_alt(SubLObject method_name, SubLObject method_list) {
-        {
-            SubLObject count = ZERO_INTEGER;
-            SubLObject cdolist_list_var = method_list;
-            SubLObject method = NIL;
-            for (method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , method = cdolist_list_var.first()) {
-                if (subloop_structures.method_name(method) == method_name) {
-                    if (count.numE(ONE_INTEGER)) {
-                        return method;
-                    }
-                    count = add(count, ONE_INTEGER);
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject method_shadowed_assoc(final SubLObject method_name, final SubLObject method_list) {
@@ -895,19 +569,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject method_class_assoc_alt(SubLObject method_name, SubLObject class_name, SubLObject method_list) {
-        {
-            SubLObject cdolist_list_var = method_list;
-            SubLObject method = NIL;
-            for (method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , method = cdolist_list_var.first()) {
-                if ((subloop_structures.method_name(method) == method_name) && (subloop_structures.method_class_name(method) == class_name)) {
-                    return method;
-                }
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject method_class_assoc(final SubLObject method_name, final SubLObject class_name, final SubLObject method_list) {
         SubLObject cdolist_list_var = method_list;
         SubLObject method = NIL;
@@ -920,23 +581,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             method = cdolist_list_var.first();
         } 
         return NIL;
-    }
-
-    public static final SubLObject method_class_shadowed_assoc_alt(SubLObject method_name, SubLObject class_name, SubLObject method_list) {
-        {
-            SubLObject count = ZERO_INTEGER;
-            SubLObject cdolist_list_var = method_list;
-            SubLObject method = NIL;
-            for (method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , method = cdolist_list_var.first()) {
-                if ((subloop_structures.method_name(method) == method_name) && (subloop_structures.method_class_name(method) == class_name)) {
-                    if (count.numE(ONE_INTEGER)) {
-                        return method;
-                    }
-                    count = add(count, ONE_INTEGER);
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject method_class_shadowed_assoc(final SubLObject method_name, final SubLObject class_name, final SubLObject method_list) {
@@ -957,23 +601,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject methods_protection_level_of_method_decl_alt(SubLObject v_properties) {
-        if (v_properties.isCons()) {
-            if (NIL != member($PRIVATE, v_properties, UNPROVIDED, UNPROVIDED)) {
-                return $PRIVATE;
-            }
-            if (NIL != member($PROTECTED, v_properties, UNPROVIDED, UNPROVIDED)) {
-                return $PROTECTED;
-            }
-            if (NIL != member($PUBLIC, v_properties, UNPROVIDED, UNPROVIDED)) {
-                return $PUBLIC;
-            }
-            return NIL;
-        } else {
-            return NIL;
-        }
-    }
-
     public static SubLObject methods_protection_level_of_method_decl(final SubLObject v_properties) {
         if (!v_properties.isCons()) {
             return NIL;
@@ -988,23 +615,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return $PUBLIC;
         }
         return NIL;
-    }
-
-    public static final SubLObject methods_scope_level_of_method_decl_alt(SubLObject v_properties) {
-        if (v_properties.isCons()) {
-            if (NIL != member($FILE_SCOPE, v_properties, UNPROVIDED, UNPROVIDED)) {
-                return $FILE_SCOPE;
-            }
-            if (NIL != member($SYSTEM_SCOPE, v_properties, UNPROVIDED, UNPROVIDED)) {
-                return $SYSTEM_SCOPE;
-            }
-            if (NIL != member($GLOBAL_SCOPE, v_properties, UNPROVIDED, UNPROVIDED)) {
-                return $GLOBAL_SCOPE;
-            }
-            return NIL;
-        } else {
-            return NIL;
-        }
     }
 
     public static SubLObject methods_scope_level_of_method_decl(final SubLObject v_properties) {
@@ -1023,23 +633,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject methods_update_type_of_method_decl_alt(SubLObject v_properties) {
-        if (v_properties.isCons()) {
-            if (NIL != member($AUTO_UPDATE, v_properties, UNPROVIDED, UNPROVIDED)) {
-                return $AUTO_UPDATE;
-            }
-            if (NIL != member($NO_MEMBER_VARIABLES, v_properties, UNPROVIDED, UNPROVIDED)) {
-                return $NO_MEMBER_VARIABLES;
-            }
-            if (NIL != member($READ_ONLY, v_properties, UNPROVIDED, UNPROVIDED)) {
-                return $READ_ONLY;
-            }
-            return NIL;
-        } else {
-            return NIL;
-        }
-    }
-
     public static SubLObject methods_update_type_of_method_decl(final SubLObject v_properties) {
         if (!v_properties.isCons()) {
             return NIL;
@@ -1056,74 +649,16 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject methods_before_listeners_p_alt(SubLObject v_properties) {
-        return makeBoolean(v_properties.isCons() && (NIL != member($BEFORE_LISTENERS, v_properties, UNPROVIDED, UNPROVIDED)));
-    }
-
     public static SubLObject methods_before_listeners_p(final SubLObject v_properties) {
         return makeBoolean(v_properties.isCons() && (NIL != member($BEFORE_LISTENERS, v_properties, UNPROVIDED, UNPROVIDED)));
-    }
-
-    public static final SubLObject methods_after_listeners_p_alt(SubLObject v_properties) {
-        return makeBoolean(v_properties.isCons() && (NIL != member($AFTER_LISTENERS, v_properties, UNPROVIDED, UNPROVIDED)));
     }
 
     public static SubLObject methods_after_listeners_p(final SubLObject v_properties) {
         return makeBoolean(v_properties.isCons() && (NIL != member($AFTER_LISTENERS, v_properties, UNPROVIDED, UNPROVIDED)));
     }
 
-    public static final SubLObject method_instantiate_template_p_alt(SubLObject v_properties) {
-        return NIL != member($INSTANTIATE_TEMPLATE, v_properties, UNPROVIDED, UNPROVIDED) ? ((SubLObject) (T)) : NIL;
-    }
-
     public static SubLObject method_instantiate_template_p(final SubLObject v_properties) {
         return NIL != member($INSTANTIATE_TEMPLATE, v_properties, UNPROVIDED, UNPROVIDED) ? T : NIL;
-    }
-
-    public static final SubLObject new_method_alt(SubLObject new_name, SubLObject new_class_name, SubLObject new_lambda_list) {
-        {
-            SubLObject new_method = subloop_structures.make_method(UNPROVIDED);
-            SubLObject method = new_method;
-            SubLObject name = subloop_structures.method_name(method);
-            SubLObject class_name = subloop_structures.method_class_name(method);
-            SubLObject lambda_list = subloop_structures.method_lambda_list(method);
-            SubLObject body = subloop_structures.method_body(method);
-            SubLObject protection = subloop_structures.method_protection(method);
-            SubLObject scope = subloop_structures.method_scope(method);
-            SubLObject update_type = subloop_structures.method_update_type(method);
-            SubLObject function_name = subloop_structures.method_function_name(method);
-            SubLObject function_def = subloop_structures.method_function_def(method);
-            try {
-                name = new_name;
-                class_name = new_class_name;
-                lambda_list = copy_tree(new_lambda_list);
-                body = NIL;
-                protection = $PUBLIC;
-                scope = $GLOBAL_SCOPE;
-                update_type = $DEFAULT;
-                function_name = intern(cconcatenate(symbol_name(class_name), new SubLObject[]{ $str_alt48$_, symbol_name(new_name), $str_alt49$_METHOD }), UNPROVIDED);
-                function_def = NIL;
-            } finally {
-                {
-                    SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
-                    try {
-                        bind($is_thread_performing_cleanupP$, T);
-                        subloop_structures._csetf_method_name(method, name);
-                        subloop_structures._csetf_method_class_name(method, class_name);
-                        subloop_structures._csetf_method_lambda_list(method, lambda_list);
-                        subloop_structures._csetf_method_body(method, body);
-                        subloop_structures._csetf_method_protection(method, protection);
-                        subloop_structures._csetf_method_scope(method, scope);
-                        subloop_structures._csetf_method_update_type(method, update_type);
-                        subloop_structures._csetf_method_function_name(method, function_name);
-                        subloop_structures._csetf_method_function_def(method, function_def);
-                    } finally {
-                        rebind($is_thread_performing_cleanupP$, _prev_bind_0);
-                    }
-                }
-            }
-            return new_method;
-        }
     }
 
     public static SubLObject new_method(final SubLObject new_name, final SubLObject new_class_name, final SubLObject new_lambda_list) {
@@ -1170,48 +705,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return new_method;
     }
 
-    public static final SubLObject methods_intern_method_alt(SubLObject new_name, SubLObject new_class_name, SubLObject new_lambda_list, SubLObject v_properties, SubLObject table) {
-        {
-            SubLObject new_protection_level = com.cyc.cycjava.cycl.methods.methods_protection_level_of_method_decl(v_properties);
-            SubLObject new_scope_level = com.cyc.cycjava.cycl.methods.methods_scope_level_of_method_decl(v_properties);
-            SubLObject new_update_type = com.cyc.cycjava.cycl.methods.methods_update_type_of_method_decl(v_properties);
-            SubLObject new_instantiate_template_p = com.cyc.cycjava.cycl.methods.method_instantiate_template_p(v_properties);
-            {
-                SubLObject cdolist_list_var = table;
-                SubLObject method = NIL;
-                for (method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , method = cdolist_list_var.first()) {
-                    {
-                        SubLObject method_1 = method;
-                        SubLObject name = subloop_structures.method_name(method_1);
-                        SubLObject class_name = subloop_structures.method_class_name(method_1);
-                        if ((new_name == name) && (new_class_name == class_name)) {
-                            subloop_structures._csetf_method_lambda_list(method, new_lambda_list);
-                            if (NIL != new_protection_level) {
-                                subloop_structures._csetf_method_protection(method, new_protection_level);
-                            }
-                            if (NIL != new_scope_level) {
-                                subloop_structures._csetf_method_scope(method, new_scope_level);
-                            }
-                            if (NIL != new_update_type) {
-                                subloop_structures._csetf_method_update_type(method, new_update_type);
-                            }
-                            subloop_structures._csetf_method_instantiate_template(method, new_instantiate_template_p);
-                            return values(table, method);
-                        }
-                    }
-                }
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.new_method(new_name, new_class_name, new_lambda_list);
-                subloop_structures._csetf_method_protection(method, NIL != new_protection_level ? ((SubLObject) (new_protection_level)) : $PUBLIC);
-                subloop_structures._csetf_method_scope(method, NIL != new_scope_level ? ((SubLObject) (new_scope_level)) : $GLOBAL_SCOPE);
-                subloop_structures._csetf_method_update_type(method, NIL != new_update_type ? ((SubLObject) (new_update_type)) : $DEFAULT);
-                subloop_structures._csetf_method_instantiate_template(method, new_instantiate_template_p);
-                return values(cons(method, table), method);
-            }
-        }
-    }
-
     public static SubLObject methods_intern_method(final SubLObject new_name, final SubLObject new_class_name, final SubLObject new_lambda_list, final SubLObject v_properties, final SubLObject table) {
         final SubLObject new_protection_level = methods_protection_level_of_method_decl(v_properties);
         final SubLObject new_scope_level = methods_scope_level_of_method_decl(v_properties);
@@ -1249,23 +742,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(cons(method2, table), method2);
     }
 
-    public static final SubLObject method_set_function_definition_alt(SubLObject method_name, SubLObject class_name, SubLObject function_definition, SubLObject v_methods) {
-        {
-            SubLObject method = com.cyc.cycjava.cycl.methods.method_class_assoc(method_name, class_name, v_methods);
-            if (NIL != method) {
-                {
-                    SubLObject function_name = (function_definition.isCons() && function_definition.rest().isCons()) ? ((SubLObject) (cadr(function_definition))) : NIL;
-                    if (NIL != function_name) {
-                        subloop_structures._csetf_method_function_name(method, function_name);
-                    }
-                    subloop_structures._csetf_method_function_def(method, function_definition);
-                }
-                return method;
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject method_set_function_definition(final SubLObject method_name, final SubLObject class_name, final SubLObject function_definition, final SubLObject v_methods) {
         final SubLObject method = method_class_assoc(method_name, class_name, v_methods);
         if (NIL != method) {
@@ -1277,38 +753,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return method;
         }
         return NIL;
-    }
-
-    public static final SubLObject methods_check_method_spec_alt(SubLObject defining_form, SubLObject method_spec) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!method_spec.isCons()) {
-                    Errors.error($str_alt50$_S___S_is_not_a_valid_method_spec, defining_form, method_spec);
-                }
-            }
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != method_spec.first()) && method_spec.first().isSymbol())) {
-                    Errors.error($str_alt51$_S___S_is_not_a_valid_method_name, defining_form, method_spec.first());
-                }
-            }
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!method_spec.rest().isCons()) {
-                    Errors.error($str_alt50$_S___S_is_not_a_valid_method_spec, defining_form, method_spec);
-                }
-            }
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != cadr(method_spec)) && cadr(method_spec).isSymbol())) {
-                    Errors.error($str_alt52$_S__While_defining_method__S___S_, defining_form, method_spec.first(), cadr(method_spec));
-                }
-            }
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!cddr(method_spec).isList()) {
-                    Errors.error($str_alt50$_S___S_is_not_a_valid_method_spec, defining_form, method_spec);
-                }
-            }
-            return T;
-        }
     }
 
     public static SubLObject methods_check_method_spec(final SubLObject defining_form, final SubLObject method_spec) {
@@ -1329,45 +773,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             Errors.error($str50$_S___S_is_not_a_valid_method_spec, defining_form, method_spec);
         }
         return T;
-    }
-
-    public static final SubLObject def_instance_method_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            SubLObject method_spec = NIL;
-            SubLObject lambda_list = NIL;
-            destructuring_bind_must_consp(current, datum, $list_alt53);
-            method_spec = current.first();
-            current = current.rest();
-            destructuring_bind_must_consp(current, datum, $list_alt53);
-            lambda_list = current.first();
-            current = current.rest();
-            {
-                SubLObject body = current;
-                com.cyc.cycjava.cycl.methods.methods_check_method_spec(DEF_INSTANCE_METHOD, method_spec);
-                {
-                    SubLObject datum_2 = method_spec;
-                    SubLObject current_3 = datum_2;
-                    SubLObject method_name = NIL;
-                    SubLObject class_name = NIL;
-                    SubLObject method_properties = NIL;
-                    destructuring_bind_must_consp(current_3, datum_2, $list_alt55);
-                    method_name = current_3.first();
-                    current_3 = current_3.rest();
-                    destructuring_bind_must_consp(current_3, datum_2, $list_alt55);
-                    class_name = current_3.first();
-                    current_3 = current_3.rest();
-                    method_properties = current_3;
-                    com.cyc.cycjava.cycl.methods.methods_incorporate_instance_method(method_name, class_name, method_properties, lambda_list, body);
-                    {
-                        SubLObject method_def = com.cyc.cycjava.cycl.methods.methods_retrieve_instance_method_definition(method_name, class_name);
-                        SubLObject function_name = cadr(method_def);
-                        return list(PROGN, list(METHODS_INCORPORATE_INSTANCE_METHOD, list(QUOTE, method_name), list(QUOTE, class_name), list(QUOTE, method_properties), list(QUOTE, lambda_list), list(QUOTE, body)), append(list(method_def.first(), function_name), cddr(method_def)), list(SUBLOOP_REGISTER_INSTANCE_METHOD, list(QUOTE, class_name), list(QUOTE, method_name), list(QUOTE, function_name)));
-                    }
-                }
-            }
-        }
     }
 
     public static SubLObject def_instance_method(final SubLObject macroform, final SubLObject environment) {
@@ -1400,17 +805,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return list(PROGN, list(METHODS_INCORPORATE_INSTANCE_METHOD, list(QUOTE, method_name), list(QUOTE, class_name), list(QUOTE, method_properties), list(QUOTE, lambda_list), list(QUOTE, body)), append(list(method_def.first(), function_name), cddr(method_def)), list(SUBLOOP_REGISTER_INSTANCE_METHOD, list(QUOTE, class_name), list(QUOTE, method_name), list(QUOTE, function_name)));
     }
 
-    public static final SubLObject subloop_register_instance_method_alt(SubLObject class_name, SubLObject method_name, SubLObject function_name) {
-        {
-            SubLObject v_class = classes.classes_retrieve_class(class_name);
-            SubLObject v_class_4 = v_class;
-            SubLObject instance_method_decls = subloop_structures.class_instance_method_decls(v_class_4);
-            SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, instance_method_decls);
-            subloop_structures._csetf_method_function_name(method, function_name);
-        }
-        return NIL;
-    }
-
     public static SubLObject subloop_register_instance_method(final SubLObject class_name, final SubLObject method_name, final SubLObject function_name) {
         final SubLObject v_class_$4;
         final SubLObject v_class = v_class_$4 = classes.classes_retrieve_class(class_name);
@@ -1418,25 +812,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         final SubLObject method = method_assoc(method_name, instance_method_decls);
         subloop_structures._csetf_method_function_name(method, function_name);
         return NIL;
-    }
-
-    public static final SubLObject def_default_instance_method_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            SubLObject method_spec = NIL;
-            SubLObject lambda_list = NIL;
-            destructuring_bind_must_consp(current, datum, $list_alt53);
-            method_spec = current.first();
-            current = current.rest();
-            destructuring_bind_must_consp(current, datum, $list_alt53);
-            lambda_list = current.first();
-            current = current.rest();
-            {
-                SubLObject body = current;
-                return listS(DEF_INSTANCE_METHOD, method_spec, lambda_list, body.first(), list(PWHEN, $report_default_method_callsP$, list(WARN, $str_alt61$Default_method_call__a_on_class__, list(QUOTE, method_spec.first()), list(QUOTE, second(method_spec)))), append(body.rest(), NIL));
-            }
-        }
     }
 
     public static SubLObject def_default_instance_method(final SubLObject macroform, final SubLObject environment) {
@@ -1451,25 +826,7 @@ public final class methods extends SubLTranslatedFile implements V12 {
         lambda_list = current.first();
         final SubLObject body;
         current = body = current.rest();
-        return listS(DEF_INSTANCE_METHOD, method_spec, lambda_list, body.first(), list(PWHEN, $report_default_method_callsP$, list(WARN, $str61$Default_method_call__a_on_class__, list(QUOTE, method_spec.first()), list(QUOTE, second(method_spec)))), append(body.rest(), NIL));
-    }
-
-    public static final SubLObject methods_retrieve_instance_method_definition_alt(SubLObject method_name, SubLObject class_name) {
-        {
-            SubLObject v_class = classes.classes_retrieve_class(class_name);
-            SubLObject result = NIL;
-            if (NIL != subloop_structures.class_p(v_class)) {
-                {
-                    SubLObject v_class_5 = v_class;
-                    SubLObject instance_method_decls = subloop_structures.class_instance_method_decls(v_class_5);
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, instance_method_decls);
-                    if (NIL != method) {
-                        result = subloop_structures.method_function_def(method);
-                    }
-                }
-            }
-            return result;
-        }
+        return listS(DEF_INSTANCE_METHOD, method_spec, lambda_list, body.first(), list(PWHEN, $sym59$_REPORT_DEFAULT_METHOD_CALLS__, list(WARN, $str61$Default_method_call__a_on_class__, list(QUOTE, method_spec.first()), list(QUOTE, second(method_spec)))), append(body.rest(), NIL));
     }
 
     public static SubLObject methods_retrieve_instance_method_definition(final SubLObject method_name, final SubLObject class_name) {
@@ -1486,25 +843,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return result;
     }
 
-    public static final SubLObject methods_incorporate_instance_method_alt(SubLObject method_name, SubLObject class_name, SubLObject method_properties, SubLObject lambda_list, SubLObject body) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = classes.classes_retrieve_class(class_name);
-                SubLObject result = NIL;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt62$DEF_INSTANCE_METHOD___S_is_not_th, class_name);
-                    }
-                }
-                if (NIL != com.cyc.cycjava.cycl.methods.methods_update_instance_method_decl(method_name, class_name, method_properties, lambda_list, body)) {
-                    result = com.cyc.cycjava.cycl.methods.methods_compile_method_access_alists(class_name);
-                }
-                return result;
-            }
-        }
-    }
-
     public static SubLObject methods_incorporate_instance_method(final SubLObject method_name, final SubLObject class_name, final SubLObject method_properties, final SubLObject lambda_list, final SubLObject body) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_class = classes.classes_retrieve_class(class_name);
@@ -1516,44 +854,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             result = methods_compile_method_access_alists(class_name);
         }
         return result;
-    }
-
-    public static final SubLObject methods_update_instance_method_decl_alt(SubLObject method_name, SubLObject class_name, SubLObject method_properties, SubLObject lambda_list, SubLObject body) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = classes.classes_retrieve_class(class_name);
-                if (NIL != subloop_structures.class_p(v_class)) {
-                    {
-                        SubLObject v_class_6 = v_class;
-                        SubLObject instance_method_decls = subloop_structures.class_instance_method_decls(v_class_6);
-                        try {
-                            thread.resetMultipleValues();
-                            {
-                                SubLObject new_decls = com.cyc.cycjava.cycl.methods.methods_intern_method(method_name, class_name, lambda_list, method_properties, instance_method_decls);
-                                SubLObject method = thread.secondMultipleValue();
-                                thread.resetMultipleValues();
-                                instance_method_decls = new_decls;
-                                subloop_structures._csetf_method_body(method, body);
-                                com.cyc.cycjava.cycl.methods.methods_generate_instance_function_definition(method, method_properties, body);
-                            }
-                        } finally {
-                            {
-                                SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                try {
-                                    $is_thread_performing_cleanupP$.bind(T, thread);
-                                    subloop_structures._csetf_class_instance_method_decls(v_class_6, instance_method_decls);
-                                } finally {
-                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                                }
-                            }
-                        }
-                    }
-                    return method_name;
-                }
-                return NIL;
-            }
-        }
     }
 
     public static SubLObject methods_update_instance_method_decl(final SubLObject method_name, final SubLObject class_name, final SubLObject method_properties, final SubLObject lambda_list, final SubLObject body) {
@@ -1586,45 +886,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject def_class_method_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            SubLObject method_spec = NIL;
-            SubLObject lambda_list = NIL;
-            destructuring_bind_must_consp(current, datum, $list_alt53);
-            method_spec = current.first();
-            current = current.rest();
-            destructuring_bind_must_consp(current, datum, $list_alt53);
-            lambda_list = current.first();
-            current = current.rest();
-            {
-                SubLObject body = current;
-                com.cyc.cycjava.cycl.methods.methods_check_method_spec(DEF_CLASS_METHOD, method_spec);
-                {
-                    SubLObject datum_7 = method_spec;
-                    SubLObject current_8 = datum_7;
-                    SubLObject method_name = NIL;
-                    SubLObject class_name = NIL;
-                    SubLObject method_properties = NIL;
-                    destructuring_bind_must_consp(current_8, datum_7, $list_alt55);
-                    method_name = current_8.first();
-                    current_8 = current_8.rest();
-                    destructuring_bind_must_consp(current_8, datum_7, $list_alt55);
-                    class_name = current_8.first();
-                    current_8 = current_8.rest();
-                    method_properties = current_8;
-                    com.cyc.cycjava.cycl.methods.methods_incorporate_class_method(method_name, class_name, method_properties, lambda_list, body);
-                    {
-                        SubLObject method_def = com.cyc.cycjava.cycl.methods.methods_retrieve_class_method_definition(method_name, class_name);
-                        SubLObject function_name = cadr(method_def);
-                        return list(PROGN, list(METHODS_INCORPORATE_CLASS_METHOD, list(QUOTE, method_name), list(QUOTE, class_name), list(QUOTE, method_properties), list(QUOTE, lambda_list), list(QUOTE, body)), append(list(method_def.first(), function_name), cddr(method_def)), list(SUBLOOP_REGISTER_CLASS_METHOD, list(QUOTE, class_name), list(QUOTE, method_name), list(QUOTE, function_name)));
-                    }
-                }
-            }
-        }
-    }
-
     public static SubLObject def_class_method(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -1655,17 +916,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return list(PROGN, list(METHODS_INCORPORATE_CLASS_METHOD, list(QUOTE, method_name), list(QUOTE, class_name), list(QUOTE, method_properties), list(QUOTE, lambda_list), list(QUOTE, body)), append(list(method_def.first(), function_name), cddr(method_def)), list(SUBLOOP_REGISTER_CLASS_METHOD, list(QUOTE, class_name), list(QUOTE, method_name), list(QUOTE, function_name)));
     }
 
-    public static final SubLObject subloop_register_class_method_alt(SubLObject class_name, SubLObject method_name, SubLObject function_name) {
-        {
-            SubLObject v_class = classes.classes_retrieve_class(class_name);
-            SubLObject v_class_9 = v_class;
-            SubLObject class_method_decls = subloop_structures.class_class_method_decls(v_class_9);
-            SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, class_method_decls);
-            subloop_structures._csetf_method_function_name(method, function_name);
-        }
-        return NIL;
-    }
-
     public static SubLObject subloop_register_class_method(final SubLObject class_name, final SubLObject method_name, final SubLObject function_name) {
         final SubLObject v_class_$9;
         final SubLObject v_class = v_class_$9 = classes.classes_retrieve_class(class_name);
@@ -1673,23 +923,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         final SubLObject method = method_assoc(method_name, class_method_decls);
         subloop_structures._csetf_method_function_name(method, function_name);
         return NIL;
-    }
-
-    public static final SubLObject methods_retrieve_class_method_definition_alt(SubLObject method_name, SubLObject class_name) {
-        {
-            SubLObject v_class = classes.classes_retrieve_class(class_name);
-            if (NIL != subloop_structures.class_p(v_class)) {
-                {
-                    SubLObject v_class_10 = v_class;
-                    SubLObject class_method_decls = subloop_structures.class_class_method_decls(v_class_10);
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, class_method_decls);
-                    if (NIL != method) {
-                        return subloop_structures.method_function_def(method);
-                    }
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject methods_retrieve_class_method_definition(final SubLObject method_name, final SubLObject class_name) {
@@ -1705,25 +938,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject methods_incorporate_class_method_alt(SubLObject method_name, SubLObject class_name, SubLObject method_properties, SubLObject lambda_list, SubLObject body) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = classes.classes_retrieve_class(class_name);
-                SubLObject result = NIL;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt66$DEF_CLASS_METHOD___S_is_not_the_n, class_name);
-                    }
-                }
-                if (NIL != com.cyc.cycjava.cycl.methods.methods_update_class_method_decl(method_name, class_name, method_properties, lambda_list, body)) {
-                    result = com.cyc.cycjava.cycl.methods.methods_compile_method_access_alists(class_name);
-                }
-                return result;
-            }
-        }
-    }
-
     public static SubLObject methods_incorporate_class_method(final SubLObject method_name, final SubLObject class_name, final SubLObject method_properties, final SubLObject lambda_list, final SubLObject body) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_class = classes.classes_retrieve_class(class_name);
@@ -1735,44 +949,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             result = methods_compile_method_access_alists(class_name);
         }
         return result;
-    }
-
-    public static final SubLObject methods_update_class_method_decl_alt(SubLObject method_name, SubLObject class_name, SubLObject method_properties, SubLObject lambda_list, SubLObject body) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = classes.classes_retrieve_class(class_name);
-                if (NIL != subloop_structures.class_p(v_class)) {
-                    {
-                        SubLObject v_class_11 = v_class;
-                        SubLObject class_method_decls = subloop_structures.class_class_method_decls(v_class_11);
-                        try {
-                            thread.resetMultipleValues();
-                            {
-                                SubLObject new_decls = com.cyc.cycjava.cycl.methods.methods_intern_method(method_name, class_name, lambda_list, method_properties, class_method_decls);
-                                SubLObject method = thread.secondMultipleValue();
-                                thread.resetMultipleValues();
-                                class_method_decls = new_decls;
-                                subloop_structures._csetf_method_body(method, body);
-                                com.cyc.cycjava.cycl.methods.methods_generate_instance_function_definition(method, method_properties, body);
-                            }
-                        } finally {
-                            {
-                                SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                try {
-                                    $is_thread_performing_cleanupP$.bind(T, thread);
-                                    subloop_structures._csetf_class_class_method_decls(v_class_11, class_method_decls);
-                                } finally {
-                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                                }
-                            }
-                        }
-                    }
-                    return method_name;
-                }
-                return NIL;
-            }
-        }
     }
 
     public static SubLObject methods_update_class_method_decl(final SubLObject method_name, final SubLObject class_name, final SubLObject method_properties, final SubLObject lambda_list, final SubLObject body) {
@@ -1805,33 +981,16 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject methods_method_name_given_method_decl_alt(SubLObject method_decl) {
-        return method_decl.first();
-    }
-
     public static SubLObject methods_method_name_given_method_decl(final SubLObject method_decl) {
         return method_decl.first();
-    }
-
-    public static final SubLObject methods_function_name_given_method_decl_alt(SubLObject method_decl) {
-        return cadr(method_decl);
     }
 
     public static SubLObject methods_function_name_given_method_decl(final SubLObject method_decl) {
         return cadr(method_decl);
     }
 
-    public static final SubLObject methods_function_def_given_method_decl_alt(SubLObject method_decl) {
-        return cddr(method_decl);
-    }
-
     public static SubLObject methods_function_def_given_method_decl(final SubLObject method_decl) {
         return cddr(method_decl);
-    }
-
-    public static final SubLObject methods_set_function_def_of_method_decl_alt(SubLObject method_decl, SubLObject function_def) {
-        rplacd(method_decl.rest(), copy_tree(function_def));
-        return function_def;
     }
 
     public static SubLObject methods_set_function_def_of_method_decl(final SubLObject method_decl, final SubLObject function_def) {
@@ -1839,32 +998,12 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return function_def;
     }
 
-    public static final SubLObject methods_add_method_decl_alt(SubLObject method_decl, SubLObject method_dcls) {
-        return cons(method_decl, method_dcls);
-    }
-
     public static SubLObject methods_add_method_decl(final SubLObject method_decl, final SubLObject method_dcls) {
         return cons(method_decl, method_dcls);
     }
 
-    public static final SubLObject methods_retrieve_method_decl_alt(SubLObject method_name, SubLObject method_decls) {
-        return assoc(method_name, method_decls, UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject methods_retrieve_method_decl(final SubLObject method_name, final SubLObject method_decls) {
         return assoc(method_name, method_decls, UNPROVIDED, UNPROVIDED);
-    }
-
-    public static final SubLObject methods_compile_method_access_alists_alt(SubLObject class_name_or_class) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : class_name_or_class;
-            if (NIL != subloop_structures.class_p(v_class)) {
-                com.cyc.cycjava.cycl.methods.methods_compile_class_method_access_alist(v_class);
-                com.cyc.cycjava.cycl.methods.methods_compile_instance_method_access_alist(v_class);
-                return v_class;
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject methods_compile_method_access_alists(final SubLObject class_name_or_class) {
@@ -1875,59 +1014,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return v_class;
         }
         return NIL;
-    }
-
-    public static final SubLObject methods_compile_class_method_access_alist_upwards_alt(SubLObject class_name_or_class, SubLObject recompile_parent) {
-        if (recompile_parent == UNPROVIDED) {
-            recompile_parent = NIL;
-        }
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : class_name_or_class;
-            if (NIL != subloop_structures.class_p(v_class)) {
-                {
-                    SubLObject super_class_compiled_class_method_access_alist = NIL;
-                    SubLObject v_class_12 = v_class;
-                    SubLObject parent = subloop_structures.class_parent(v_class_12);
-                    SubLObject class_method_decls = subloop_structures.class_class_method_decls(v_class_12);
-                    SubLObject compiled_class_method_access_alist = subloop_structures.class_compiled_class_method_access_alist(v_class_12);
-                    try {
-                        if (NIL != parent) {
-                            {
-                                SubLObject parent_class = classes.classes_retrieve_class(parent);
-                                if (NIL != parent_class) {
-                                    if (NIL != recompile_parent) {
-                                        com.cyc.cycjava.cycl.methods.methods_compile_class_method_access_alist_upwards(parent_class, recompile_parent);
-                                    }
-                                    super_class_compiled_class_method_access_alist = subloop_structures.class_compiled_class_method_access_alist(parent_class);
-                                }
-                            }
-                        }
-                        compiled_class_method_access_alist = super_class_compiled_class_method_access_alist;
-                        {
-                            SubLObject cdolist_list_var = class_method_decls;
-                            SubLObject method = NIL;
-                            for (method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , method = cdolist_list_var.first()) {
-                                compiled_class_method_access_alist = cons(method, compiled_class_method_access_alist);
-                            }
-                        }
-                    } finally {
-                        {
-                            SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
-                            try {
-                                bind($is_thread_performing_cleanupP$, T);
-                                subloop_structures._csetf_class_parent(v_class_12, parent);
-                                subloop_structures._csetf_class_class_method_decls(v_class_12, class_method_decls);
-                                subloop_structures._csetf_class_compiled_class_method_access_alist(v_class_12, compiled_class_method_access_alist);
-                            } finally {
-                                rebind($is_thread_performing_cleanupP$, _prev_bind_0);
-                            }
-                        }
-                    }
-                }
-                return v_class;
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject methods_compile_class_method_access_alist_upwards(final SubLObject class_name_or_class, SubLObject recompile_parent) {
@@ -1978,28 +1064,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject methods_compile_class_method_access_alist_alt(SubLObject class_name_or_class) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : class_name_or_class;
-            if (NIL != subloop_structures.class_p(v_class)) {
-                {
-                    SubLObject v_class_13 = v_class;
-                    SubLObject subclasses = subloop_structures.class_subclasses(v_class_13);
-                    com.cyc.cycjava.cycl.methods.methods_compile_class_method_access_alist_upwards(class_name_or_class, NIL);
-                    {
-                        SubLObject cdolist_list_var = subclasses;
-                        SubLObject subclass = NIL;
-                        for (subclass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , subclass = cdolist_list_var.first()) {
-                            com.cyc.cycjava.cycl.methods.methods_compile_class_method_access_alist(subclass);
-                        }
-                    }
-                }
-                return v_class;
-            }
-            return v_class;
-        }
-    }
-
     public static SubLObject methods_compile_class_method_access_alist(final SubLObject class_name_or_class) {
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : class_name_or_class;
         if (NIL != subloop_structures.class_p(v_class)) {
@@ -2017,62 +1081,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return v_class;
         }
         return v_class;
-    }
-
-    public static final SubLObject methods_compile_instance_method_access_alist_upwards_alt(SubLObject class_name_or_class, SubLObject recompile_parent) {
-        if (recompile_parent == UNPROVIDED) {
-            recompile_parent = NIL;
-        }
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : class_name_or_class;
-            if (NIL != subloop_structures.class_p(v_class)) {
-                {
-                    SubLObject super_class_compiled_instance_method_access_alist = NIL;
-                    SubLObject v_class_14 = v_class;
-                    SubLObject parent = subloop_structures.class_parent(v_class_14);
-                    SubLObject instance_method_decls = subloop_structures.class_instance_method_decls(v_class_14);
-                    SubLObject compiled_instance_method_access_alist = subloop_structures.class_compiled_instance_method_access_alist(v_class_14);
-                    SubLObject tablified_instance_methods = subloop_structures.class_tablified_instance_methods(v_class_14);
-                    try {
-                        if (NIL != parent) {
-                            {
-                                SubLObject parent_class = classes.classes_retrieve_class(parent);
-                                if (NIL != parent_class) {
-                                    if (NIL != recompile_parent) {
-                                        com.cyc.cycjava.cycl.methods.methods_compile_instance_method_access_alist_upwards(parent_class, recompile_parent);
-                                    }
-                                    super_class_compiled_instance_method_access_alist = subloop_structures.class_compiled_instance_method_access_alist(parent_class);
-                                }
-                            }
-                        }
-                        compiled_instance_method_access_alist = super_class_compiled_instance_method_access_alist;
-                        {
-                            SubLObject cdolist_list_var = instance_method_decls;
-                            SubLObject method = NIL;
-                            for (method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , method = cdolist_list_var.first()) {
-                                compiled_instance_method_access_alist = cons(method, compiled_instance_method_access_alist);
-                            }
-                        }
-                        tablified_instance_methods = subloop_structures.tablify_method_list(compiled_instance_method_access_alist);
-                    } finally {
-                        {
-                            SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
-                            try {
-                                bind($is_thread_performing_cleanupP$, T);
-                                subloop_structures._csetf_class_parent(v_class_14, parent);
-                                subloop_structures._csetf_class_instance_method_decls(v_class_14, instance_method_decls);
-                                subloop_structures._csetf_class_compiled_instance_method_access_alist(v_class_14, compiled_instance_method_access_alist);
-                                subloop_structures._csetf_class_tablified_instance_methods(v_class_14, tablified_instance_methods);
-                            } finally {
-                                rebind($is_thread_performing_cleanupP$, _prev_bind_0);
-                            }
-                        }
-                    }
-                }
-                return v_class;
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject methods_compile_instance_method_access_alist_upwards(final SubLObject class_name_or_class, SubLObject recompile_parent) {
@@ -2126,28 +1134,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject methods_compile_instance_method_access_alist_alt(SubLObject class_name_or_class) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : class_name_or_class;
-            if (NIL != subloop_structures.class_p(v_class)) {
-                {
-                    SubLObject v_class_15 = v_class;
-                    SubLObject subclasses = subloop_structures.class_subclasses(v_class_15);
-                    com.cyc.cycjava.cycl.methods.methods_compile_instance_method_access_alist_upwards(class_name_or_class, NIL);
-                    {
-                        SubLObject cdolist_list_var = subclasses;
-                        SubLObject subclass = NIL;
-                        for (subclass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , subclass = cdolist_list_var.first()) {
-                            com.cyc.cycjava.cycl.methods.methods_compile_instance_method_access_alist(subclass);
-                        }
-                    }
-                }
-                return v_class;
-            }
-            return v_class;
-        }
-    }
-
     public static SubLObject methods_compile_instance_method_access_alist(final SubLObject class_name_or_class) {
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : class_name_or_class;
         if (NIL != subloop_structures.class_p(v_class)) {
@@ -2165,39 +1151,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return v_class;
         }
         return v_class;
-    }
-
-    public static final SubLObject funcall_class_method_with_0_args_alt(SubLObject class_name_or_class, SubLObject method_name) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt67$FUNCALL_CLASS_METHOD___S_is_not_a, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt68$FUNCALL_CLASS_METHOD___S_is_not_a, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), v_class);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_method_with_0_args(final SubLObject class_name_or_class, final SubLObject method_name) {
@@ -2219,39 +1172,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall(subloop_structures.method_function_name(method), v_class);
     }
 
-    public static final SubLObject funcall_class_method_with_1_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt67$FUNCALL_CLASS_METHOD___S_is_not_a, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt68$FUNCALL_CLASS_METHOD___S_is_not_a, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), v_class, arg0);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_method_with_1_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
@@ -2269,39 +1189,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
         }
         return funcall(subloop_structures.method_function_name(method), v_class, arg0);
-    }
-
-    public static final SubLObject funcall_class_method_with_2_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt67$FUNCALL_CLASS_METHOD___S_is_not_a, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt68$FUNCALL_CLASS_METHOD___S_is_not_a, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), v_class, arg0, arg1);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_method_with_2_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1) {
@@ -2323,39 +1210,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall(subloop_structures.method_function_name(method), v_class, arg0, arg1);
     }
 
-    public static final SubLObject funcall_class_method_with_3_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt67$FUNCALL_CLASS_METHOD___S_is_not_a, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt68$FUNCALL_CLASS_METHOD___S_is_not_a, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), v_class, arg0, arg1, arg2);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_method_with_3_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
@@ -2373,39 +1227,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
         }
         return funcall(subloop_structures.method_function_name(method), v_class, arg0, arg1, arg2);
-    }
-
-    public static final SubLObject funcall_class_method_with_4_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt67$FUNCALL_CLASS_METHOD___S_is_not_a, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt68$FUNCALL_CLASS_METHOD___S_is_not_a, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), v_class, arg0, arg1, arg2, arg3);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_method_with_4_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3) {
@@ -2427,39 +1248,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall(subloop_structures.method_function_name(method), v_class, arg0, arg1, arg2, arg3);
     }
 
-    public static final SubLObject funcall_class_method_with_5_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt67$FUNCALL_CLASS_METHOD___S_is_not_a, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt68$FUNCALL_CLASS_METHOD___S_is_not_a, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), v_class, arg0, arg1, arg2, arg3, arg4);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_method_with_5_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
@@ -2477,39 +1265,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
         }
         return funcall(subloop_structures.method_function_name(method), v_class, arg0, arg1, arg2, arg3, arg4);
-    }
-
-    public static final SubLObject funcall_class_method_with_6_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt67$FUNCALL_CLASS_METHOD___S_is_not_a, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt68$FUNCALL_CLASS_METHOD___S_is_not_a, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5 });
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_method_with_6_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5) {
@@ -2531,39 +1286,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5 });
     }
 
-    public static final SubLObject funcall_class_method_with_7_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt67$FUNCALL_CLASS_METHOD___S_is_not_a, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt68$FUNCALL_CLASS_METHOD___S_is_not_a, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_method_with_7_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
@@ -2581,39 +1303,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
         }
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
-    }
-
-    public static final SubLObject funcall_class_method_with_8_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt67$FUNCALL_CLASS_METHOD___S_is_not_a, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt68$FUNCALL_CLASS_METHOD___S_is_not_a, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_method_with_8_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7) {
@@ -2635,39 +1324,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
     }
 
-    public static final SubLObject funcall_class_method_with_9_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt67$FUNCALL_CLASS_METHOD___S_is_not_a, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt68$FUNCALL_CLASS_METHOD___S_is_not_a, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_method_with_9_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
@@ -2685,39 +1341,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
         }
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
-    }
-
-    public static final SubLObject funcall_class_method_with_10_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt67$FUNCALL_CLASS_METHOD___S_is_not_a, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt68$FUNCALL_CLASS_METHOD___S_is_not_a, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_method_with_10_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9) {
@@ -2739,39 +1362,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
     }
 
-    public static final SubLObject funcall_class_method_with_11_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt67$FUNCALL_CLASS_METHOD___S_is_not_a, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt68$FUNCALL_CLASS_METHOD___S_is_not_a, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 });
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_method_with_11_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
@@ -2789,39 +1379,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
         }
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 });
-    }
-
-    public static final SubLObject funcall_class_method_with_12_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt67$FUNCALL_CLASS_METHOD___S_is_not_a, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt68$FUNCALL_CLASS_METHOD___S_is_not_a, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11 });
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_method_with_12_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11) {
@@ -2843,39 +1400,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11 });
     }
 
-    public static final SubLObject funcall_class_method_with_13_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt67$FUNCALL_CLASS_METHOD___S_is_not_a, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt68$FUNCALL_CLASS_METHOD___S_is_not_a, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12 });
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_method_with_13_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
@@ -2893,39 +1417,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
         }
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12 });
-    }
-
-    public static final SubLObject funcall_class_method_with_14_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt67$FUNCALL_CLASS_METHOD___S_is_not_a, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt68$FUNCALL_CLASS_METHOD___S_is_not_a, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13 });
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_method_with_14_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13) {
@@ -2947,39 +1438,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13 });
     }
 
-    public static final SubLObject funcall_class_method_with_15_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt67$FUNCALL_CLASS_METHOD___S_is_not_a, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt68$FUNCALL_CLASS_METHOD___S_is_not_a, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14 });
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_method_with_15_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
@@ -2997,39 +1455,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
         }
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14 });
-    }
-
-    public static final SubLObject funcall_class_method_with_16_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt67$FUNCALL_CLASS_METHOD___S_is_not_a, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt68$FUNCALL_CLASS_METHOD___S_is_not_a, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15 });
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_method_with_16_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15) {
@@ -3051,39 +1476,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15 });
     }
 
-    public static final SubLObject funcall_class_method_with_17_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt67$FUNCALL_CLASS_METHOD___S_is_not_a, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt68$FUNCALL_CLASS_METHOD___S_is_not_a, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 });
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_method_with_17_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
@@ -3101,39 +1493,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
         }
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 });
-    }
-
-    public static final SubLObject funcall_class_method_with_18_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt67$FUNCALL_CLASS_METHOD___S_is_not_a, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt68$FUNCALL_CLASS_METHOD___S_is_not_a, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17 });
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_method_with_18_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17) {
@@ -3155,39 +1514,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17 });
     }
 
-    public static final SubLObject funcall_class_method_with_19_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17, SubLObject arg18) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt67$FUNCALL_CLASS_METHOD___S_is_not_a, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt68$FUNCALL_CLASS_METHOD___S_is_not_a, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18 });
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_method_with_19_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17, final SubLObject arg18) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
@@ -3205,39 +1531,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
         }
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18 });
-    }
-
-    public static final SubLObject funcall_class_method_with_20_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17, SubLObject arg18, SubLObject arg19) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt67$FUNCALL_CLASS_METHOD___S_is_not_a, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt68$FUNCALL_CLASS_METHOD___S_is_not_a, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19 });
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_method_with_20_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17, final SubLObject arg18, final SubLObject arg19) {
@@ -3259,39 +1552,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19 });
     }
 
-    public static final SubLObject funcall_class_super_method_with_0_args_alt(SubLObject class_name_or_class, SubLObject method_name) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt69$FUNCALL_CLASS_SUPER_METHOD___S_is, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt70$FUNCALL_CLASS_SUPER_METHOD___S_is, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_super_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), v_class);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_super_method_with_0_args(final SubLObject class_name_or_class, final SubLObject method_name) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
@@ -3309,39 +1569,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
         }
         return funcall(subloop_structures.method_function_name(method), v_class);
-    }
-
-    public static final SubLObject funcall_class_super_method_with_1_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt69$FUNCALL_CLASS_SUPER_METHOD___S_is, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt70$FUNCALL_CLASS_SUPER_METHOD___S_is, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_super_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), v_class, arg0);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_super_method_with_1_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0) {
@@ -3363,39 +1590,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall(subloop_structures.method_function_name(method), v_class, arg0);
     }
 
-    public static final SubLObject funcall_class_super_method_with_2_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt69$FUNCALL_CLASS_SUPER_METHOD___S_is, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt70$FUNCALL_CLASS_SUPER_METHOD___S_is, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_super_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), v_class, arg0, arg1);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_super_method_with_2_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
@@ -3413,39 +1607,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
         }
         return funcall(subloop_structures.method_function_name(method), v_class, arg0, arg1);
-    }
-
-    public static final SubLObject funcall_class_super_method_with_3_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt69$FUNCALL_CLASS_SUPER_METHOD___S_is, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt70$FUNCALL_CLASS_SUPER_METHOD___S_is, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_super_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), v_class, arg0, arg1, arg2);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_super_method_with_3_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2) {
@@ -3467,39 +1628,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall(subloop_structures.method_function_name(method), v_class, arg0, arg1, arg2);
     }
 
-    public static final SubLObject funcall_class_super_method_with_4_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt69$FUNCALL_CLASS_SUPER_METHOD___S_is, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt70$FUNCALL_CLASS_SUPER_METHOD___S_is, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_super_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), v_class, arg0, arg1, arg2, arg3);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_super_method_with_4_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
@@ -3517,39 +1645,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
         }
         return funcall(subloop_structures.method_function_name(method), v_class, arg0, arg1, arg2, arg3);
-    }
-
-    public static final SubLObject funcall_class_super_method_with_5_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt69$FUNCALL_CLASS_SUPER_METHOD___S_is, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt70$FUNCALL_CLASS_SUPER_METHOD___S_is, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_super_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), v_class, arg0, arg1, arg2, arg3, arg4);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_super_method_with_5_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4) {
@@ -3571,39 +1666,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall(subloop_structures.method_function_name(method), v_class, arg0, arg1, arg2, arg3, arg4);
     }
 
-    public static final SubLObject funcall_class_super_method_with_6_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt69$FUNCALL_CLASS_SUPER_METHOD___S_is, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt70$FUNCALL_CLASS_SUPER_METHOD___S_is, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_super_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5 });
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_super_method_with_6_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
@@ -3621,39 +1683,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
         }
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5 });
-    }
-
-    public static final SubLObject funcall_class_super_method_with_7_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt69$FUNCALL_CLASS_SUPER_METHOD___S_is, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt70$FUNCALL_CLASS_SUPER_METHOD___S_is, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_super_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_super_method_with_7_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6) {
@@ -3675,39 +1704,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
     }
 
-    public static final SubLObject funcall_class_super_method_with_8_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt69$FUNCALL_CLASS_SUPER_METHOD___S_is, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt70$FUNCALL_CLASS_SUPER_METHOD___S_is, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_super_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_super_method_with_8_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
@@ -3725,39 +1721,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
         }
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
-    }
-
-    public static final SubLObject funcall_class_super_method_with_9_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt69$FUNCALL_CLASS_SUPER_METHOD___S_is, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt70$FUNCALL_CLASS_SUPER_METHOD___S_is, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_super_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_super_method_with_9_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8) {
@@ -3779,39 +1742,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
     }
 
-    public static final SubLObject funcall_class_super_method_with_10_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt69$FUNCALL_CLASS_SUPER_METHOD___S_is, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt70$FUNCALL_CLASS_SUPER_METHOD___S_is, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_super_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_super_method_with_10_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
@@ -3829,39 +1759,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
         }
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
-    }
-
-    public static final SubLObject funcall_class_super_method_with_11_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt69$FUNCALL_CLASS_SUPER_METHOD___S_is, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt70$FUNCALL_CLASS_SUPER_METHOD___S_is, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_super_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 });
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_super_method_with_11_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10) {
@@ -3883,39 +1780,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 });
     }
 
-    public static final SubLObject funcall_class_super_method_with_12_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt69$FUNCALL_CLASS_SUPER_METHOD___S_is, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt70$FUNCALL_CLASS_SUPER_METHOD___S_is, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_super_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11 });
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_super_method_with_12_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
@@ -3933,39 +1797,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
         }
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11 });
-    }
-
-    public static final SubLObject funcall_class_super_method_with_13_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt69$FUNCALL_CLASS_SUPER_METHOD___S_is, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt70$FUNCALL_CLASS_SUPER_METHOD___S_is, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_super_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12 });
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_super_method_with_13_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12) {
@@ -3987,39 +1818,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12 });
     }
 
-    public static final SubLObject funcall_class_super_method_with_14_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt69$FUNCALL_CLASS_SUPER_METHOD___S_is, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt70$FUNCALL_CLASS_SUPER_METHOD___S_is, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_super_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13 });
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_super_method_with_14_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
@@ -4037,39 +1835,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
         }
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13 });
-    }
-
-    public static final SubLObject funcall_class_super_method_with_15_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt69$FUNCALL_CLASS_SUPER_METHOD___S_is, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt70$FUNCALL_CLASS_SUPER_METHOD___S_is, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_super_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14 });
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_super_method_with_15_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14) {
@@ -4091,39 +1856,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14 });
     }
 
-    public static final SubLObject funcall_class_super_method_with_16_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt69$FUNCALL_CLASS_SUPER_METHOD___S_is, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt70$FUNCALL_CLASS_SUPER_METHOD___S_is, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_super_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15 });
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_super_method_with_16_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
@@ -4141,39 +1873,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
         }
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15 });
-    }
-
-    public static final SubLObject funcall_class_super_method_with_17_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt69$FUNCALL_CLASS_SUPER_METHOD___S_is, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt70$FUNCALL_CLASS_SUPER_METHOD___S_is, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_super_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 });
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_super_method_with_17_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16) {
@@ -4195,39 +1894,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 });
     }
 
-    public static final SubLObject funcall_class_super_method_with_18_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt69$FUNCALL_CLASS_SUPER_METHOD___S_is, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt70$FUNCALL_CLASS_SUPER_METHOD___S_is, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_super_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17 });
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_super_method_with_18_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
@@ -4245,39 +1911,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
         }
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17 });
-    }
-
-    public static final SubLObject funcall_class_super_method_with_19_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17, SubLObject arg18) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt69$FUNCALL_CLASS_SUPER_METHOD___S_is, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt70$FUNCALL_CLASS_SUPER_METHOD___S_is, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_super_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18 });
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_super_method_with_19_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17, final SubLObject arg18) {
@@ -4299,39 +1932,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18 });
     }
 
-    public static final SubLObject funcall_class_super_method_with_20_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17, SubLObject arg18, SubLObject arg19) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == subloop_structures.class_p(v_class)) {
-                        Errors.error($str_alt69$FUNCALL_CLASS_SUPER_METHOD___S_is, class_name_or_class);
-                    }
-                }
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!((NIL != method_name) && method_name.isSymbol())) {
-                        Errors.error($str_alt70$FUNCALL_CLASS_SUPER_METHOD___S_is, method_name, subloop_structures.class_name(v_class));
-                    }
-                }
-                {
-                    SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_super_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19 });
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_super_method_with_20_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17, final SubLObject arg18, final SubLObject arg19) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
@@ -4349,34 +1949,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
         }
         return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19 });
-    }
-
-    public static final SubLObject safe_funcall_class_method_with_0_args_alt(SubLObject class_name_or_class, SubLObject method_name) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, v_class), NIL);
-                }
-            }
-        }
     }
 
     public static SubLObject safe_funcall_class_method_with_0_args(final SubLObject class_name_or_class, final SubLObject method_name) {
@@ -4401,34 +1973,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, v_class), NIL);
     }
 
-    public static final SubLObject safe_funcall_class_method_with_1_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, v_class, arg0), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_method_with_1_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0) {
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
         if (NIL == subloop_structures.class_p(v_class)) {
@@ -4449,34 +1993,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, v_class, arg0), NIL);
-    }
-
-    public static final SubLObject safe_funcall_class_method_with_2_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, v_class, arg0, arg1), NIL);
-                }
-            }
-        }
     }
 
     public static SubLObject safe_funcall_class_method_with_2_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1) {
@@ -4501,34 +2017,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, v_class, arg0, arg1), NIL);
     }
 
-    public static final SubLObject safe_funcall_class_method_with_3_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, v_class, arg0, arg1, arg2), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_method_with_3_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2) {
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
         if (NIL == subloop_structures.class_p(v_class)) {
@@ -4549,34 +2037,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, v_class, arg0, arg1, arg2), NIL);
-    }
-
-    public static final SubLObject safe_funcall_class_method_with_4_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, v_class, arg0, arg1, arg2, arg3), NIL);
-                }
-            }
-        }
     }
 
     public static SubLObject safe_funcall_class_method_with_4_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3) {
@@ -4601,34 +2061,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, v_class, arg0, arg1, arg2, arg3), NIL);
     }
 
-    public static final SubLObject safe_funcall_class_method_with_5_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, v_class, arg0, arg1, arg2, arg3, arg4), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_method_with_5_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4) {
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
         if (NIL == subloop_structures.class_p(v_class)) {
@@ -4649,34 +2081,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, v_class, arg0, arg1, arg2, arg3, arg4), NIL);
-    }
-
-    public static final SubLObject safe_funcall_class_method_with_6_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5 }), NIL);
-                }
-            }
-        }
     }
 
     public static SubLObject safe_funcall_class_method_with_6_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5) {
@@ -4701,34 +2105,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_class_method_with_7_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6 }), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_method_with_7_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6) {
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
         if (NIL == subloop_structures.class_p(v_class)) {
@@ -4749,34 +2125,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_class_method_with_8_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 }), NIL);
-                }
-            }
-        }
     }
 
     public static SubLObject safe_funcall_class_method_with_8_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7) {
@@ -4801,34 +2149,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_class_method_with_9_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 }), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_method_with_9_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8) {
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
         if (NIL == subloop_structures.class_p(v_class)) {
@@ -4849,34 +2169,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_class_method_with_10_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 }), NIL);
-                }
-            }
-        }
     }
 
     public static SubLObject safe_funcall_class_method_with_10_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9) {
@@ -4901,34 +2193,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_class_method_with_11_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 }), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_method_with_11_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10) {
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
         if (NIL == subloop_structures.class_p(v_class)) {
@@ -4949,34 +2213,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_class_method_with_12_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11 }), NIL);
-                }
-            }
-        }
     }
 
     public static SubLObject safe_funcall_class_method_with_12_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11) {
@@ -5001,34 +2237,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_class_method_with_13_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12 }), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_method_with_13_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12) {
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
         if (NIL == subloop_structures.class_p(v_class)) {
@@ -5049,34 +2257,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_class_method_with_14_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13 }), NIL);
-                }
-            }
-        }
     }
 
     public static SubLObject safe_funcall_class_method_with_14_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13) {
@@ -5101,34 +2281,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_class_method_with_15_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14 }), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_method_with_15_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14) {
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
         if (NIL == subloop_structures.class_p(v_class)) {
@@ -5149,34 +2301,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_class_method_with_16_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15 }), NIL);
-                }
-            }
-        }
     }
 
     public static SubLObject safe_funcall_class_method_with_16_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15) {
@@ -5201,34 +2325,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_class_method_with_17_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 }), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_method_with_17_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16) {
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
         if (NIL == subloop_structures.class_p(v_class)) {
@@ -5249,34 +2345,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_class_method_with_18_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17 }), NIL);
-                }
-            }
-        }
     }
 
     public static SubLObject safe_funcall_class_method_with_18_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17) {
@@ -5301,34 +2369,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_class_method_with_19_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17, SubLObject arg18) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18 }), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_method_with_19_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17, final SubLObject arg18) {
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
         if (NIL == subloop_structures.class_p(v_class)) {
@@ -5349,34 +2389,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_class_method_with_20_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17, SubLObject arg18, SubLObject arg19) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19 }), NIL);
-                }
-            }
-        }
     }
 
     public static SubLObject safe_funcall_class_method_with_20_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17, final SubLObject arg18, final SubLObject arg19) {
@@ -5401,34 +2413,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_class_super_method_with_0_args_alt(SubLObject class_name_or_class, SubLObject method_name) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, v_class), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_super_method_with_0_args(final SubLObject class_name_or_class, final SubLObject method_name) {
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
         if (NIL == subloop_structures.class_p(v_class)) {
@@ -5449,34 +2433,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, v_class), NIL);
-    }
-
-    public static final SubLObject safe_funcall_class_super_method_with_1_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, v_class, arg0), NIL);
-                }
-            }
-        }
     }
 
     public static SubLObject safe_funcall_class_super_method_with_1_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0) {
@@ -5501,34 +2457,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, v_class, arg0), NIL);
     }
 
-    public static final SubLObject safe_funcall_class_super_method_with_2_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, v_class, arg0, arg1), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_super_method_with_2_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1) {
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
         if (NIL == subloop_structures.class_p(v_class)) {
@@ -5549,34 +2477,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, v_class, arg0, arg1), NIL);
-    }
-
-    public static final SubLObject safe_funcall_class_super_method_with_3_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, v_class, arg0, arg1, arg2), NIL);
-                }
-            }
-        }
     }
 
     public static SubLObject safe_funcall_class_super_method_with_3_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2) {
@@ -5601,34 +2501,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, v_class, arg0, arg1, arg2), NIL);
     }
 
-    public static final SubLObject safe_funcall_class_super_method_with_4_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, v_class, arg0, arg1, arg2, arg3), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_super_method_with_4_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3) {
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
         if (NIL == subloop_structures.class_p(v_class)) {
@@ -5649,34 +2521,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, v_class, arg0, arg1, arg2, arg3), NIL);
-    }
-
-    public static final SubLObject safe_funcall_class_super_method_with_5_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, v_class, arg0, arg1, arg2, arg3, arg4), NIL);
-                }
-            }
-        }
     }
 
     public static SubLObject safe_funcall_class_super_method_with_5_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4) {
@@ -5701,34 +2545,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, v_class, arg0, arg1, arg2, arg3, arg4), NIL);
     }
 
-    public static final SubLObject safe_funcall_class_super_method_with_6_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5 }), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_super_method_with_6_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5) {
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
         if (NIL == subloop_structures.class_p(v_class)) {
@@ -5749,34 +2565,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_class_super_method_with_7_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6 }), NIL);
-                }
-            }
-        }
     }
 
     public static SubLObject safe_funcall_class_super_method_with_7_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6) {
@@ -5801,34 +2589,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_class_super_method_with_8_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 }), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_super_method_with_8_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7) {
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
         if (NIL == subloop_structures.class_p(v_class)) {
@@ -5849,34 +2609,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_class_super_method_with_9_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 }), NIL);
-                }
-            }
-        }
     }
 
     public static SubLObject safe_funcall_class_super_method_with_9_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8) {
@@ -5901,34 +2633,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_class_super_method_with_10_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 }), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_super_method_with_10_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9) {
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
         if (NIL == subloop_structures.class_p(v_class)) {
@@ -5949,34 +2653,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_class_super_method_with_11_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 }), NIL);
-                }
-            }
-        }
     }
 
     public static SubLObject safe_funcall_class_super_method_with_11_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10) {
@@ -6001,34 +2677,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_class_super_method_with_12_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11 }), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_super_method_with_12_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11) {
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
         if (NIL == subloop_structures.class_p(v_class)) {
@@ -6049,34 +2697,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_class_super_method_with_13_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12 }), NIL);
-                }
-            }
-        }
     }
 
     public static SubLObject safe_funcall_class_super_method_with_13_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12) {
@@ -6101,34 +2721,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_class_super_method_with_14_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13 }), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_super_method_with_14_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13) {
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
         if (NIL == subloop_structures.class_p(v_class)) {
@@ -6149,34 +2741,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_class_super_method_with_15_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14 }), NIL);
-                }
-            }
-        }
     }
 
     public static SubLObject safe_funcall_class_super_method_with_15_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14) {
@@ -6201,34 +2765,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_class_super_method_with_16_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15 }), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_super_method_with_16_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15) {
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
         if (NIL == subloop_structures.class_p(v_class)) {
@@ -6249,34 +2785,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_class_super_method_with_17_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 }), NIL);
-                }
-            }
-        }
     }
 
     public static SubLObject safe_funcall_class_super_method_with_17_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16) {
@@ -6301,34 +2809,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_class_super_method_with_18_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17 }), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_super_method_with_18_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17) {
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
         if (NIL == subloop_structures.class_p(v_class)) {
@@ -6349,34 +2829,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_class_super_method_with_19_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17, SubLObject arg18) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18 }), NIL);
-                }
-            }
-        }
     }
 
     public static SubLObject safe_funcall_class_super_method_with_19_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17, final SubLObject arg18) {
@@ -6401,34 +2853,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_class_super_method_with_20_args_alt(SubLObject class_name_or_class, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17, SubLObject arg18, SubLObject arg19) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : NIL != subloop_structures.instance_p(class_name_or_class) ? ((SubLObject) (subloop_structures.instance_class(class_name_or_class))) : class_name_or_class;
-            if (NIL == subloop_structures.class_p(v_class)) {
-                return values(NIL, $TARGET_NOT_A_CLASS);
-            }
-            if (!((NIL != method_name) && method_name.isSymbol())) {
-                return values(NIL, $INVALID_METHOD_NAME);
-            }
-            {
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                if (NIL == method) {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19 }), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_super_method_with_20_args(final SubLObject class_name_or_class, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17, final SubLObject arg18, final SubLObject arg19) {
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : NIL != subloop_structures.instance_p(class_name_or_class) ? subloop_structures.instance_class(class_name_or_class) : class_name_or_class;
         if (NIL == subloop_structures.class_p(v_class)) {
@@ -6451,31 +2875,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19 }), NIL);
     }
 
-    public static final SubLObject funcall_instance_method_with_0_args_alt(SubLObject instance, SubLObject method_name) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), instance);
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_method_with_0_args(v_class, method_name);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_instance_method_with_0_args(final SubLObject instance, final SubLObject method_name) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == subloop_structures.instance_p(instance)) || (!method_name.isSymbol()))) {
@@ -6490,31 +2889,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return funcall(subloop_structures.method_function_name(method), instance);
         }
         return funcall_class_method_with_0_args(v_class, method_name);
-    }
-
-    public static final SubLObject funcall_instance_method_with_1_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), instance, arg0);
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_method_with_1_args(v_class, method_name, arg0);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_instance_method_with_1_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0) {
@@ -6533,31 +2907,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall_class_method_with_1_args(v_class, method_name, arg0);
     }
 
-    public static final SubLObject funcall_instance_method_with_2_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), instance, arg0, arg1);
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_method_with_2_args(v_class, method_name, arg0, arg1);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_instance_method_with_2_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == subloop_structures.instance_p(instance)) || (!method_name.isSymbol()))) {
@@ -6572,31 +2921,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return funcall(subloop_structures.method_function_name(method), instance, arg0, arg1);
         }
         return funcall_class_method_with_2_args(v_class, method_name, arg0, arg1);
-    }
-
-    public static final SubLObject funcall_instance_method_with_3_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), instance, arg0, arg1, arg2);
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_method_with_3_args(v_class, method_name, arg0, arg1, arg2);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_instance_method_with_3_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2) {
@@ -6615,31 +2939,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall_class_method_with_3_args(v_class, method_name, arg0, arg1, arg2);
     }
 
-    public static final SubLObject funcall_instance_method_with_4_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), instance, arg0, arg1, arg2, arg3);
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_method_with_4_args(v_class, method_name, arg0, arg1, arg2, arg3);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_instance_method_with_4_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == subloop_structures.instance_p(instance)) || (!method_name.isSymbol()))) {
@@ -6654,31 +2953,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return funcall(subloop_structures.method_function_name(method), instance, arg0, arg1, arg2, arg3);
         }
         return funcall_class_method_with_4_args(v_class, method_name, arg0, arg1, arg2, arg3);
-    }
-
-    public static final SubLObject funcall_instance_method_with_5_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), instance, arg0, arg1, arg2, arg3, arg4);
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_method_with_5_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_instance_method_with_5_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4) {
@@ -6697,31 +2971,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall_class_method_with_5_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4);
     }
 
-    public static final SubLObject funcall_instance_method_with_6_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_method_with_6_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_instance_method_with_6_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == subloop_structures.instance_p(instance)) || (!method_name.isSymbol()))) {
@@ -6736,31 +2985,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5 });
         }
         return funcall_class_method_with_6_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5);
-    }
-
-    public static final SubLObject funcall_instance_method_with_7_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_method_with_7_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_instance_method_with_7_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6) {
@@ -6779,31 +3003,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall_class_method_with_7_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6);
     }
 
-    public static final SubLObject funcall_instance_method_with_8_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_method_with_8_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_instance_method_with_8_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == subloop_structures.instance_p(instance)) || (!method_name.isSymbol()))) {
@@ -6818,31 +3017,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
         }
         return funcall_class_method_with_8_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
-    }
-
-    public static final SubLObject funcall_instance_method_with_9_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_method_with_9_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_instance_method_with_9_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8) {
@@ -6861,31 +3035,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall_class_method_with_9_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
     }
 
-    public static final SubLObject funcall_instance_method_with_10_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_method_with_10_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_instance_method_with_10_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == subloop_structures.instance_p(instance)) || (!method_name.isSymbol()))) {
@@ -6900,31 +3049,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
         }
         return funcall_class_method_with_10_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
-    }
-
-    public static final SubLObject funcall_instance_method_with_11_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_method_with_11_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_instance_method_with_11_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10) {
@@ -6943,31 +3067,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall_class_method_with_11_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
     }
 
-    public static final SubLObject funcall_instance_method_with_12_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_method_with_12_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_instance_method_with_12_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == subloop_structures.instance_p(instance)) || (!method_name.isSymbol()))) {
@@ -6982,31 +3081,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11 });
         }
         return funcall_class_method_with_12_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
-    }
-
-    public static final SubLObject funcall_instance_method_with_13_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_method_with_13_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_instance_method_with_13_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12) {
@@ -7025,31 +3099,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall_class_method_with_13_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
     }
 
-    public static final SubLObject funcall_instance_method_with_14_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_method_with_14_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_instance_method_with_14_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == subloop_structures.instance_p(instance)) || (!method_name.isSymbol()))) {
@@ -7064,31 +3113,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13 });
         }
         return funcall_class_method_with_14_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
-    }
-
-    public static final SubLObject funcall_instance_method_with_15_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_method_with_15_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_instance_method_with_15_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14) {
@@ -7107,31 +3131,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall_class_method_with_15_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
     }
 
-    public static final SubLObject funcall_instance_method_with_16_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_method_with_16_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_instance_method_with_16_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == subloop_structures.instance_p(instance)) || (!method_name.isSymbol()))) {
@@ -7146,31 +3145,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15 });
         }
         return funcall_class_method_with_16_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
-    }
-
-    public static final SubLObject funcall_instance_method_with_17_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_method_with_17_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_instance_method_with_17_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16) {
@@ -7189,31 +3163,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall_class_method_with_17_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
     }
 
-    public static final SubLObject funcall_instance_method_with_18_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_method_with_18_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_instance_method_with_18_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == subloop_structures.instance_p(instance)) || (!method_name.isSymbol()))) {
@@ -7228,31 +3177,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17 });
         }
         return funcall_class_method_with_18_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17);
-    }
-
-    public static final SubLObject funcall_instance_method_with_19_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17, SubLObject arg18) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_method_with_19_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_instance_method_with_19_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17, final SubLObject arg18) {
@@ -7271,31 +3195,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall_class_method_with_19_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18);
     }
 
-    public static final SubLObject funcall_instance_method_with_20_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17, SubLObject arg18, SubLObject arg19) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_method_with_20_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_instance_method_with_20_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17, final SubLObject arg18, final SubLObject arg19) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == subloop_structures.instance_p(instance)) || (!method_name.isSymbol()))) {
@@ -7310,31 +3209,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19 });
         }
         return funcall_class_method_with_20_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19);
-    }
-
-    public static final SubLObject funcall_instance_super_method_with_0_args_alt(SubLObject instance, SubLObject method_name) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), instance);
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_super_method_with_0_args(v_class, method_name);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_instance_super_method_with_0_args(final SubLObject instance, final SubLObject method_name) {
@@ -7353,31 +3227,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall_class_super_method_with_0_args(v_class, method_name);
     }
 
-    public static final SubLObject funcall_instance_super_method_with_1_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), instance, arg0);
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_super_method_with_1_args(v_class, method_name, arg0);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_instance_super_method_with_1_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == subloop_structures.instance_p(instance)) || (!method_name.isSymbol()))) {
@@ -7392,31 +3241,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return funcall(subloop_structures.method_function_name(method), instance, arg0);
         }
         return funcall_class_super_method_with_1_args(v_class, method_name, arg0);
-    }
-
-    public static final SubLObject funcall_instance_super_method_with_2_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), instance, arg0, arg1);
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_super_method_with_2_args(v_class, method_name, arg0, arg1);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_instance_super_method_with_2_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1) {
@@ -7435,31 +3259,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall_class_super_method_with_2_args(v_class, method_name, arg0, arg1);
     }
 
-    public static final SubLObject funcall_instance_super_method_with_3_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), instance, arg0, arg1, arg2);
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_super_method_with_3_args(v_class, method_name, arg0, arg1, arg2);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_instance_super_method_with_3_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == subloop_structures.instance_p(instance)) || (!method_name.isSymbol()))) {
@@ -7474,31 +3273,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return funcall(subloop_structures.method_function_name(method), instance, arg0, arg1, arg2);
         }
         return funcall_class_super_method_with_3_args(v_class, method_name, arg0, arg1, arg2);
-    }
-
-    public static final SubLObject funcall_instance_super_method_with_4_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), instance, arg0, arg1, arg2, arg3);
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_super_method_with_4_args(v_class, method_name, arg0, arg1, arg2, arg3);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_instance_super_method_with_4_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3) {
@@ -7517,31 +3291,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall_class_super_method_with_4_args(v_class, method_name, arg0, arg1, arg2, arg3);
     }
 
-    public static final SubLObject funcall_instance_super_method_with_5_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), instance, arg0, arg1, arg2, arg3, arg4);
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_super_method_with_5_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_instance_super_method_with_5_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == subloop_structures.instance_p(instance)) || (!method_name.isSymbol()))) {
@@ -7556,31 +3305,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return funcall(subloop_structures.method_function_name(method), instance, arg0, arg1, arg2, arg3, arg4);
         }
         return funcall_class_super_method_with_5_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4);
-    }
-
-    public static final SubLObject funcall_instance_super_method_with_6_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_super_method_with_6_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_instance_super_method_with_6_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5) {
@@ -7599,31 +3323,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall_class_super_method_with_6_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5);
     }
 
-    public static final SubLObject funcall_instance_super_method_with_7_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_super_method_with_7_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_instance_super_method_with_7_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == subloop_structures.instance_p(instance)) || (!method_name.isSymbol()))) {
@@ -7638,31 +3337,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
         }
         return funcall_class_super_method_with_7_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6);
-    }
-
-    public static final SubLObject funcall_instance_super_method_with_8_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_super_method_with_8_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_instance_super_method_with_8_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7) {
@@ -7681,31 +3355,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall_class_super_method_with_8_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
     }
 
-    public static final SubLObject funcall_instance_super_method_with_9_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_super_method_with_9_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_instance_super_method_with_9_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == subloop_structures.instance_p(instance)) || (!method_name.isSymbol()))) {
@@ -7720,31 +3369,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
         }
         return funcall_class_super_method_with_9_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
-    }
-
-    public static final SubLObject funcall_instance_super_method_with_10_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_super_method_with_10_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_instance_super_method_with_10_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9) {
@@ -7763,31 +3387,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall_class_super_method_with_10_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
     }
 
-    public static final SubLObject funcall_instance_super_method_with_11_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_super_method_with_11_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_instance_super_method_with_11_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == subloop_structures.instance_p(instance)) || (!method_name.isSymbol()))) {
@@ -7802,31 +3401,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 });
         }
         return funcall_class_super_method_with_11_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
-    }
-
-    public static final SubLObject funcall_instance_super_method_with_12_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_super_method_with_12_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_instance_super_method_with_12_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11) {
@@ -7845,31 +3419,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall_class_super_method_with_12_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
     }
 
-    public static final SubLObject funcall_instance_super_method_with_13_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_super_method_with_13_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_instance_super_method_with_13_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == subloop_structures.instance_p(instance)) || (!method_name.isSymbol()))) {
@@ -7884,31 +3433,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12 });
         }
         return funcall_class_super_method_with_13_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
-    }
-
-    public static final SubLObject funcall_instance_super_method_with_14_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_super_method_with_14_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_instance_super_method_with_14_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13) {
@@ -7927,31 +3451,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall_class_super_method_with_14_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
     }
 
-    public static final SubLObject funcall_instance_super_method_with_15_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_super_method_with_15_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_instance_super_method_with_15_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == subloop_structures.instance_p(instance)) || (!method_name.isSymbol()))) {
@@ -7966,31 +3465,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14 });
         }
         return funcall_class_super_method_with_15_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
-    }
-
-    public static final SubLObject funcall_instance_super_method_with_16_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_super_method_with_16_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_instance_super_method_with_16_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15) {
@@ -8009,31 +3483,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall_class_super_method_with_16_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
     }
 
-    public static final SubLObject funcall_instance_super_method_with_17_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_super_method_with_17_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_instance_super_method_with_17_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == subloop_structures.instance_p(instance)) || (!method_name.isSymbol()))) {
@@ -8048,31 +3497,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 });
         }
         return funcall_class_super_method_with_17_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
-    }
-
-    public static final SubLObject funcall_instance_super_method_with_18_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_super_method_with_18_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_instance_super_method_with_18_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17) {
@@ -8091,31 +3515,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall_class_super_method_with_18_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17);
     }
 
-    public static final SubLObject funcall_instance_super_method_with_19_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17, SubLObject arg18) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_super_method_with_19_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_instance_super_method_with_19_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17, final SubLObject arg18) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == subloop_structures.instance_p(instance)) || (!method_name.isSymbol()))) {
@@ -8132,31 +3531,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return funcall_class_super_method_with_19_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18);
     }
 
-    public static final SubLObject funcall_instance_super_method_with_20_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17, SubLObject arg18, SubLObject arg19) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != subloop_structures.instance_p(instance)) && method_name.isSymbol())) {
-                    Errors.error($str_alt76$__FUNCALL_INSTANCE_METHOD__either, instance, method_name);
-                }
-            }
-            {
-                SubLObject v_class = subloop_structures.instance_class(instance);
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-                if (NIL != method) {
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19 });
-                } else {
-                    return com.cyc.cycjava.cycl.methods.funcall_class_super_method_with_20_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_instance_super_method_with_20_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17, final SubLObject arg18, final SubLObject arg19) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == subloop_structures.instance_p(instance)) || (!method_name.isSymbol()))) {
@@ -8171,55 +3545,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19 });
         }
         return funcall_class_super_method_with_20_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19);
-    }
-
-    public static final SubLObject funcall_class_or_instance_method_with_0_args_alt(SubLObject class_or_instance, SubLObject method_name) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != method_name) && method_name.isSymbol())) {
-                    Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                }
-            }
-            if (NIL != subloop_structures.instance_p(class_or_instance)) {
-                {
-                    SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                    SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                    if (NIL != method) {
-                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                            if (NIL == instances.instances_access_check_method(v_class, method)) {
-                                Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                            }
-                        }
-                        return funcall(subloop_structures.method_function_name(method), class_or_instance);
-                    } else {
-                        Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                        return NIL;
-                    }
-                }
-            } else {
-                {
-                    SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                    SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == v_class) {
-                            Errors.error($str_alt78$FUNCALL_CLASS_OR_INSTANCE_METHOD_, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), v_class);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_or_instance_method_with_0_args(final SubLObject class_or_instance, final SubLObject method_name) {
@@ -8253,55 +3578,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject funcall_class_or_instance_method_with_1_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != method_name) && method_name.isSymbol())) {
-                    Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                }
-            }
-            if (NIL != subloop_structures.instance_p(class_or_instance)) {
-                {
-                    SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                    SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                    if (NIL != method) {
-                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                            if (NIL == instances.instances_access_check_method(v_class, method)) {
-                                Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                            }
-                        }
-                        return funcall(subloop_structures.method_function_name(method), class_or_instance, arg0);
-                    } else {
-                        Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                        return NIL;
-                    }
-                }
-            } else {
-                {
-                    SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                    SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == v_class) {
-                            Errors.error($str_alt78$FUNCALL_CLASS_OR_INSTANCE_METHOD_, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), v_class, arg0);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_or_instance_method_with_1_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == method_name) || (!method_name.isSymbol()))) {
@@ -8331,55 +3607,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         }
         Errors.error($str77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
         return NIL;
-    }
-
-    public static final SubLObject funcall_class_or_instance_method_with_2_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != method_name) && method_name.isSymbol())) {
-                    Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                }
-            }
-            if (NIL != subloop_structures.instance_p(class_or_instance)) {
-                {
-                    SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                    SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                    if (NIL != method) {
-                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                            if (NIL == instances.instances_access_check_method(v_class, method)) {
-                                Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                            }
-                        }
-                        return funcall(subloop_structures.method_function_name(method), class_or_instance, arg0, arg1);
-                    } else {
-                        Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                        return NIL;
-                    }
-                }
-            } else {
-                {
-                    SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                    SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == v_class) {
-                            Errors.error($str_alt78$FUNCALL_CLASS_OR_INSTANCE_METHOD_, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), v_class, arg0, arg1);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_or_instance_method_with_2_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1) {
@@ -8413,55 +3640,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject funcall_class_or_instance_method_with_3_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != method_name) && method_name.isSymbol())) {
-                    Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                }
-            }
-            if (NIL != subloop_structures.instance_p(class_or_instance)) {
-                {
-                    SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                    SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                    if (NIL != method) {
-                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                            if (NIL == instances.instances_access_check_method(v_class, method)) {
-                                Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                            }
-                        }
-                        return funcall(subloop_structures.method_function_name(method), class_or_instance, arg0, arg1, arg2);
-                    } else {
-                        Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                        return NIL;
-                    }
-                }
-            } else {
-                {
-                    SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                    SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == v_class) {
-                            Errors.error($str_alt78$FUNCALL_CLASS_OR_INSTANCE_METHOD_, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), v_class, arg0, arg1, arg2);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_or_instance_method_with_3_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == method_name) || (!method_name.isSymbol()))) {
@@ -8491,55 +3669,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         }
         Errors.error($str77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
         return NIL;
-    }
-
-    public static final SubLObject funcall_class_or_instance_method_with_4_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != method_name) && method_name.isSymbol())) {
-                    Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                }
-            }
-            if (NIL != subloop_structures.instance_p(class_or_instance)) {
-                {
-                    SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                    SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                    if (NIL != method) {
-                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                            if (NIL == instances.instances_access_check_method(v_class, method)) {
-                                Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                            }
-                        }
-                        return funcall(subloop_structures.method_function_name(method), class_or_instance, arg0, arg1, arg2, arg3);
-                    } else {
-                        Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                        return NIL;
-                    }
-                }
-            } else {
-                {
-                    SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                    SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == v_class) {
-                            Errors.error($str_alt78$FUNCALL_CLASS_OR_INSTANCE_METHOD_, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), v_class, arg0, arg1, arg2, arg3);
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_or_instance_method_with_4_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3) {
@@ -8573,55 +3702,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject funcall_class_or_instance_method_with_5_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != method_name) && method_name.isSymbol())) {
-                    Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                }
-            }
-            if (NIL != subloop_structures.instance_p(class_or_instance)) {
-                {
-                    SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                    SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                    if (NIL != method) {
-                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                            if (NIL == instances.instances_access_check_method(v_class, method)) {
-                                Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                            }
-                        }
-                        return funcall(subloop_structures.method_function_name(method), class_or_instance, arg0, arg1, arg2, arg3, arg4);
-                    } else {
-                        Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                        return NIL;
-                    }
-                }
-            } else {
-                {
-                    SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                    SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == v_class) {
-                            Errors.error($str_alt78$FUNCALL_CLASS_OR_INSTANCE_METHOD_, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), v_class, arg0, arg1, arg2, arg3, arg4);
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_or_instance_method_with_5_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == method_name) || (!method_name.isSymbol()))) {
@@ -8651,55 +3731,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         }
         Errors.error($str77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
         return NIL;
-    }
-
-    public static final SubLObject funcall_class_or_instance_method_with_6_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != method_name) && method_name.isSymbol())) {
-                    Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                }
-            }
-            if (NIL != subloop_structures.instance_p(class_or_instance)) {
-                {
-                    SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                    SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                    if (NIL != method) {
-                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                            if (NIL == instances.instances_access_check_method(v_class, method)) {
-                                Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                            }
-                        }
-                        return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5 });
-                    } else {
-                        Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                        return NIL;
-                    }
-                }
-            } else {
-                {
-                    SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                    SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == v_class) {
-                            Errors.error($str_alt78$FUNCALL_CLASS_OR_INSTANCE_METHOD_, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5 });
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_or_instance_method_with_6_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5) {
@@ -8733,55 +3764,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject funcall_class_or_instance_method_with_7_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != method_name) && method_name.isSymbol())) {
-                    Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                }
-            }
-            if (NIL != subloop_structures.instance_p(class_or_instance)) {
-                {
-                    SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                    SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                    if (NIL != method) {
-                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                            if (NIL == instances.instances_access_check_method(v_class, method)) {
-                                Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                            }
-                        }
-                        return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
-                    } else {
-                        Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                        return NIL;
-                    }
-                }
-            } else {
-                {
-                    SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                    SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == v_class) {
-                            Errors.error($str_alt78$FUNCALL_CLASS_OR_INSTANCE_METHOD_, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6 });
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_or_instance_method_with_7_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == method_name) || (!method_name.isSymbol()))) {
@@ -8811,55 +3793,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         }
         Errors.error($str77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
         return NIL;
-    }
-
-    public static final SubLObject funcall_class_or_instance_method_with_8_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != method_name) && method_name.isSymbol())) {
-                    Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                }
-            }
-            if (NIL != subloop_structures.instance_p(class_or_instance)) {
-                {
-                    SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                    SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                    if (NIL != method) {
-                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                            if (NIL == instances.instances_access_check_method(v_class, method)) {
-                                Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                            }
-                        }
-                        return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
-                    } else {
-                        Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                        return NIL;
-                    }
-                }
-            } else {
-                {
-                    SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                    SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == v_class) {
-                            Errors.error($str_alt78$FUNCALL_CLASS_OR_INSTANCE_METHOD_, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 });
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_or_instance_method_with_8_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7) {
@@ -8893,55 +3826,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject funcall_class_or_instance_method_with_9_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != method_name) && method_name.isSymbol())) {
-                    Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                }
-            }
-            if (NIL != subloop_structures.instance_p(class_or_instance)) {
-                {
-                    SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                    SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                    if (NIL != method) {
-                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                            if (NIL == instances.instances_access_check_method(v_class, method)) {
-                                Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                            }
-                        }
-                        return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
-                    } else {
-                        Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                        return NIL;
-                    }
-                }
-            } else {
-                {
-                    SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                    SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == v_class) {
-                            Errors.error($str_alt78$FUNCALL_CLASS_OR_INSTANCE_METHOD_, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 });
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_or_instance_method_with_9_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == method_name) || (!method_name.isSymbol()))) {
@@ -8971,55 +3855,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         }
         Errors.error($str77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
         return NIL;
-    }
-
-    public static final SubLObject funcall_class_or_instance_method_with_10_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != method_name) && method_name.isSymbol())) {
-                    Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                }
-            }
-            if (NIL != subloop_structures.instance_p(class_or_instance)) {
-                {
-                    SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                    SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                    if (NIL != method) {
-                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                            if (NIL == instances.instances_access_check_method(v_class, method)) {
-                                Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                            }
-                        }
-                        return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
-                    } else {
-                        Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                        return NIL;
-                    }
-                }
-            } else {
-                {
-                    SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                    SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == v_class) {
-                            Errors.error($str_alt78$FUNCALL_CLASS_OR_INSTANCE_METHOD_, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 });
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_or_instance_method_with_10_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9) {
@@ -9053,55 +3888,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject funcall_class_or_instance_method_with_11_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != method_name) && method_name.isSymbol())) {
-                    Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                }
-            }
-            if (NIL != subloop_structures.instance_p(class_or_instance)) {
-                {
-                    SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                    SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                    if (NIL != method) {
-                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                            if (NIL == instances.instances_access_check_method(v_class, method)) {
-                                Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                            }
-                        }
-                        return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 });
-                    } else {
-                        Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                        return NIL;
-                    }
-                }
-            } else {
-                {
-                    SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                    SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == v_class) {
-                            Errors.error($str_alt78$FUNCALL_CLASS_OR_INSTANCE_METHOD_, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 });
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_or_instance_method_with_11_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == method_name) || (!method_name.isSymbol()))) {
@@ -9131,55 +3917,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         }
         Errors.error($str77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
         return NIL;
-    }
-
-    public static final SubLObject funcall_class_or_instance_method_with_12_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != method_name) && method_name.isSymbol())) {
-                    Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                }
-            }
-            if (NIL != subloop_structures.instance_p(class_or_instance)) {
-                {
-                    SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                    SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                    if (NIL != method) {
-                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                            if (NIL == instances.instances_access_check_method(v_class, method)) {
-                                Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                            }
-                        }
-                        return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11 });
-                    } else {
-                        Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                        return NIL;
-                    }
-                }
-            } else {
-                {
-                    SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                    SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == v_class) {
-                            Errors.error($str_alt78$FUNCALL_CLASS_OR_INSTANCE_METHOD_, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11 });
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_or_instance_method_with_12_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11) {
@@ -9213,55 +3950,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject funcall_class_or_instance_method_with_13_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != method_name) && method_name.isSymbol())) {
-                    Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                }
-            }
-            if (NIL != subloop_structures.instance_p(class_or_instance)) {
-                {
-                    SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                    SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                    if (NIL != method) {
-                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                            if (NIL == instances.instances_access_check_method(v_class, method)) {
-                                Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                            }
-                        }
-                        return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12 });
-                    } else {
-                        Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                        return NIL;
-                    }
-                }
-            } else {
-                {
-                    SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                    SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == v_class) {
-                            Errors.error($str_alt78$FUNCALL_CLASS_OR_INSTANCE_METHOD_, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12 });
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_or_instance_method_with_13_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == method_name) || (!method_name.isSymbol()))) {
@@ -9291,55 +3979,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         }
         Errors.error($str77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
         return NIL;
-    }
-
-    public static final SubLObject funcall_class_or_instance_method_with_14_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != method_name) && method_name.isSymbol())) {
-                    Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                }
-            }
-            if (NIL != subloop_structures.instance_p(class_or_instance)) {
-                {
-                    SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                    SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                    if (NIL != method) {
-                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                            if (NIL == instances.instances_access_check_method(v_class, method)) {
-                                Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                            }
-                        }
-                        return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13 });
-                    } else {
-                        Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                        return NIL;
-                    }
-                }
-            } else {
-                {
-                    SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                    SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == v_class) {
-                            Errors.error($str_alt78$FUNCALL_CLASS_OR_INSTANCE_METHOD_, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13 });
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_or_instance_method_with_14_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13) {
@@ -9373,55 +4012,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject funcall_class_or_instance_method_with_15_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != method_name) && method_name.isSymbol())) {
-                    Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                }
-            }
-            if (NIL != subloop_structures.instance_p(class_or_instance)) {
-                {
-                    SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                    SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                    if (NIL != method) {
-                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                            if (NIL == instances.instances_access_check_method(v_class, method)) {
-                                Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                            }
-                        }
-                        return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14 });
-                    } else {
-                        Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                        return NIL;
-                    }
-                }
-            } else {
-                {
-                    SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                    SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == v_class) {
-                            Errors.error($str_alt78$FUNCALL_CLASS_OR_INSTANCE_METHOD_, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14 });
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_or_instance_method_with_15_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == method_name) || (!method_name.isSymbol()))) {
@@ -9451,55 +4041,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         }
         Errors.error($str77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
         return NIL;
-    }
-
-    public static final SubLObject funcall_class_or_instance_method_with_16_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != method_name) && method_name.isSymbol())) {
-                    Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                }
-            }
-            if (NIL != subloop_structures.instance_p(class_or_instance)) {
-                {
-                    SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                    SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                    if (NIL != method) {
-                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                            if (NIL == instances.instances_access_check_method(v_class, method)) {
-                                Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                            }
-                        }
-                        return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15 });
-                    } else {
-                        Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                        return NIL;
-                    }
-                }
-            } else {
-                {
-                    SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                    SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == v_class) {
-                            Errors.error($str_alt78$FUNCALL_CLASS_OR_INSTANCE_METHOD_, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15 });
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_or_instance_method_with_16_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15) {
@@ -9533,55 +4074,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject funcall_class_or_instance_method_with_17_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != method_name) && method_name.isSymbol())) {
-                    Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                }
-            }
-            if (NIL != subloop_structures.instance_p(class_or_instance)) {
-                {
-                    SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                    SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                    if (NIL != method) {
-                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                            if (NIL == instances.instances_access_check_method(v_class, method)) {
-                                Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                            }
-                        }
-                        return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 });
-                    } else {
-                        Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                        return NIL;
-                    }
-                }
-            } else {
-                {
-                    SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                    SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == v_class) {
-                            Errors.error($str_alt78$FUNCALL_CLASS_OR_INSTANCE_METHOD_, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 });
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_or_instance_method_with_17_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == method_name) || (!method_name.isSymbol()))) {
@@ -9611,55 +4103,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         }
         Errors.error($str77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
         return NIL;
-    }
-
-    public static final SubLObject funcall_class_or_instance_method_with_18_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != method_name) && method_name.isSymbol())) {
-                    Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                }
-            }
-            if (NIL != subloop_structures.instance_p(class_or_instance)) {
-                {
-                    SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                    SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                    if (NIL != method) {
-                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                            if (NIL == instances.instances_access_check_method(v_class, method)) {
-                                Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                            }
-                        }
-                        return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17 });
-                    } else {
-                        Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                        return NIL;
-                    }
-                }
-            } else {
-                {
-                    SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                    SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == v_class) {
-                            Errors.error($str_alt78$FUNCALL_CLASS_OR_INSTANCE_METHOD_, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17 });
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_or_instance_method_with_18_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17) {
@@ -9693,55 +4136,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject funcall_class_or_instance_method_with_19_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17, SubLObject arg18) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != method_name) && method_name.isSymbol())) {
-                    Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                }
-            }
-            if (NIL != subloop_structures.instance_p(class_or_instance)) {
-                {
-                    SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                    SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                    if (NIL != method) {
-                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                            if (NIL == instances.instances_access_check_method(v_class, method)) {
-                                Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                            }
-                        }
-                        return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18 });
-                    } else {
-                        Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                        return NIL;
-                    }
-                }
-            } else {
-                {
-                    SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                    SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == v_class) {
-                            Errors.error($str_alt78$FUNCALL_CLASS_OR_INSTANCE_METHOD_, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18 });
-                }
-            }
-        }
-    }
-
     public static SubLObject funcall_class_or_instance_method_with_19_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17, final SubLObject arg18) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((NIL == method_name) || (!method_name.isSymbol()))) {
@@ -9771,55 +4165,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         }
         Errors.error($str77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
         return NIL;
-    }
-
-    public static final SubLObject funcall_class_or_instance_method_with_20_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17, SubLObject arg18, SubLObject arg19) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != method_name) && method_name.isSymbol())) {
-                    Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                }
-            }
-            if (NIL != subloop_structures.instance_p(class_or_instance)) {
-                {
-                    SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                    SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                    if (NIL != method) {
-                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                            if (NIL == instances.instances_access_check_method(v_class, method)) {
-                                Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                            }
-                        }
-                        return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19 });
-                    } else {
-                        Errors.error($str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO, method_name);
-                        return NIL;
-                    }
-                }
-            } else {
-                {
-                    SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                    SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == v_class) {
-                            Errors.error($str_alt78$FUNCALL_CLASS_OR_INSTANCE_METHOD_, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error(classes_utilities.$classes_utilities_undefined_class_method_message$.getGlobalValue(), method_name, v_class);
-                        }
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == instances.instances_access_check_method(v_class, method)) {
-                            Errors.error(classes_utilities.$classes_utilities_illegal_access_message$.getGlobalValue(), method_name, subloop_structures.class_name(v_class));
-                        }
-                    }
-                    return funcall(subloop_structures.method_function_name(method), new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19 });
-                }
-            }
-        }
     }
 
     public static SubLObject funcall_class_or_instance_method_with_20_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17, final SubLObject arg18, final SubLObject arg19) {
@@ -9853,33 +4198,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject safe_funcall_instance_method_with_0_args_alt(SubLObject instance, SubLObject method_name) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, instance), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_method_with_0_args(v_class, method_name);
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_instance_method_with_0_args(final SubLObject instance, final SubLObject method_name) {
         if (NIL == subloop_structures.instance_p(instance)) {
             return values(NIL, $TARGET_NOT_AN_INSTANCE);
@@ -9900,33 +4218,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, instance), NIL);
-    }
-
-    public static final SubLObject safe_funcall_instance_method_with_1_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, instance, arg0), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_method_with_1_args(v_class, method_name, arg0);
-            }
-        }
     }
 
     public static SubLObject safe_funcall_instance_method_with_1_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0) {
@@ -9951,33 +4242,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, instance, arg0), NIL);
     }
 
-    public static final SubLObject safe_funcall_instance_method_with_2_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, instance, arg0, arg1), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_method_with_2_args(v_class, method_name, arg0, arg1);
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_instance_method_with_2_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1) {
         if (NIL == subloop_structures.instance_p(instance)) {
             return values(NIL, $TARGET_NOT_AN_INSTANCE);
@@ -9998,33 +4262,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, instance, arg0, arg1), NIL);
-    }
-
-    public static final SubLObject safe_funcall_instance_method_with_3_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, instance, arg0, arg1, arg2), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_method_with_3_args(v_class, method_name, arg0, arg1, arg2);
-            }
-        }
     }
 
     public static SubLObject safe_funcall_instance_method_with_3_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2) {
@@ -10049,33 +4286,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, instance, arg0, arg1, arg2), NIL);
     }
 
-    public static final SubLObject safe_funcall_instance_method_with_4_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, instance, arg0, arg1, arg2, arg3), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_method_with_4_args(v_class, method_name, arg0, arg1, arg2, arg3);
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_instance_method_with_4_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3) {
         if (NIL == subloop_structures.instance_p(instance)) {
             return values(NIL, $TARGET_NOT_AN_INSTANCE);
@@ -10096,33 +4306,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, instance, arg0, arg1, arg2, arg3), NIL);
-    }
-
-    public static final SubLObject safe_funcall_instance_method_with_5_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, instance, arg0, arg1, arg2, arg3, arg4), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_method_with_5_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4);
-            }
-        }
     }
 
     public static SubLObject safe_funcall_instance_method_with_5_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4) {
@@ -10147,33 +4330,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, instance, arg0, arg1, arg2, arg3, arg4), NIL);
     }
 
-    public static final SubLObject safe_funcall_instance_method_with_6_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_method_with_6_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5);
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_instance_method_with_6_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5) {
         if (NIL == subloop_structures.instance_p(instance)) {
             return values(NIL, $TARGET_NOT_AN_INSTANCE);
@@ -10194,33 +4350,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_instance_method_with_7_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_method_with_7_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6);
-            }
-        }
     }
 
     public static SubLObject safe_funcall_instance_method_with_7_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6) {
@@ -10245,33 +4374,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_instance_method_with_8_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_method_with_8_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_instance_method_with_8_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7) {
         if (NIL == subloop_structures.instance_p(instance)) {
             return values(NIL, $TARGET_NOT_AN_INSTANCE);
@@ -10292,33 +4394,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_instance_method_with_9_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_method_with_9_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
-            }
-        }
     }
 
     public static SubLObject safe_funcall_instance_method_with_9_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8) {
@@ -10343,33 +4418,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_instance_method_with_10_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_method_with_10_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_instance_method_with_10_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9) {
         if (NIL == subloop_structures.instance_p(instance)) {
             return values(NIL, $TARGET_NOT_AN_INSTANCE);
@@ -10390,33 +4438,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_instance_method_with_11_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_method_with_11_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
-            }
-        }
     }
 
     public static SubLObject safe_funcall_instance_method_with_11_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10) {
@@ -10441,33 +4462,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_instance_method_with_12_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_method_with_12_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_instance_method_with_12_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11) {
         if (NIL == subloop_structures.instance_p(instance)) {
             return values(NIL, $TARGET_NOT_AN_INSTANCE);
@@ -10488,33 +4482,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_instance_method_with_13_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_method_with_13_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
-            }
-        }
     }
 
     public static SubLObject safe_funcall_instance_method_with_13_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12) {
@@ -10539,33 +4506,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_instance_method_with_14_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_method_with_14_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_instance_method_with_14_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13) {
         if (NIL == subloop_structures.instance_p(instance)) {
             return values(NIL, $TARGET_NOT_AN_INSTANCE);
@@ -10586,33 +4526,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_instance_method_with_15_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_method_with_15_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
-            }
-        }
     }
 
     public static SubLObject safe_funcall_instance_method_with_15_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14) {
@@ -10637,33 +4550,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_instance_method_with_16_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_method_with_16_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_instance_method_with_16_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15) {
         if (NIL == subloop_structures.instance_p(instance)) {
             return values(NIL, $TARGET_NOT_AN_INSTANCE);
@@ -10684,33 +4570,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_instance_method_with_17_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_method_with_17_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
-            }
-        }
     }
 
     public static SubLObject safe_funcall_instance_method_with_17_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16) {
@@ -10735,33 +4594,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_instance_method_with_18_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_method_with_18_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17);
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_instance_method_with_18_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17) {
         if (NIL == subloop_structures.instance_p(instance)) {
             return values(NIL, $TARGET_NOT_AN_INSTANCE);
@@ -10782,33 +4614,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_instance_method_with_19_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17, SubLObject arg18) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_method_with_19_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18);
-            }
-        }
     }
 
     public static SubLObject safe_funcall_instance_method_with_19_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17, final SubLObject arg18) {
@@ -10833,33 +4638,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_instance_method_with_20_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17, SubLObject arg18, SubLObject arg19) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_method_with_20_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19);
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_instance_method_with_20_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17, final SubLObject arg18, final SubLObject arg19) {
         if (NIL == subloop_structures.instance_p(instance)) {
             return values(NIL, $TARGET_NOT_AN_INSTANCE);
@@ -10880,33 +4658,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_instance_super_method_with_0_args_alt(SubLObject instance, SubLObject method_name) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!method_name.isSymbol()) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, instance), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_super_method_with_0_args(v_class, method_name);
-            }
-        }
     }
 
     public static SubLObject safe_funcall_instance_super_method_with_0_args(final SubLObject instance, final SubLObject method_name) {
@@ -10931,33 +4682,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, instance), NIL);
     }
 
-    public static final SubLObject safe_funcall_instance_super_method_with_1_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!method_name.isSymbol()) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, instance, arg0), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_super_method_with_1_args(v_class, method_name, arg0);
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_instance_super_method_with_1_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0) {
         if (NIL == subloop_structures.instance_p(instance)) {
             return values(NIL, $TARGET_NOT_AN_INSTANCE);
@@ -10978,33 +4702,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, instance, arg0), NIL);
-    }
-
-    public static final SubLObject safe_funcall_instance_super_method_with_2_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!method_name.isSymbol()) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, instance, arg0, arg1), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_super_method_with_2_args(v_class, method_name, arg0, arg1);
-            }
-        }
     }
 
     public static SubLObject safe_funcall_instance_super_method_with_2_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1) {
@@ -11029,33 +4726,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, instance, arg0, arg1), NIL);
     }
 
-    public static final SubLObject safe_funcall_instance_super_method_with_3_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!method_name.isSymbol()) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, instance, arg0, arg1, arg2), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_super_method_with_3_args(v_class, method_name, arg0, arg1, arg2);
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_instance_super_method_with_3_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2) {
         if (NIL == subloop_structures.instance_p(instance)) {
             return values(NIL, $TARGET_NOT_AN_INSTANCE);
@@ -11076,33 +4746,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, instance, arg0, arg1, arg2), NIL);
-    }
-
-    public static final SubLObject safe_funcall_instance_super_method_with_4_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!method_name.isSymbol()) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, instance, arg0, arg1, arg2, arg3), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_super_method_with_4_args(v_class, method_name, arg0, arg1, arg2, arg3);
-            }
-        }
     }
 
     public static SubLObject safe_funcall_instance_super_method_with_4_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3) {
@@ -11127,33 +4770,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, instance, arg0, arg1, arg2, arg3), NIL);
     }
 
-    public static final SubLObject safe_funcall_instance_super_method_with_5_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!method_name.isSymbol()) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, instance, arg0, arg1, arg2, arg3, arg4), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_super_method_with_5_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4);
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_instance_super_method_with_5_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4) {
         if (NIL == subloop_structures.instance_p(instance)) {
             return values(NIL, $TARGET_NOT_AN_INSTANCE);
@@ -11174,33 +4790,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, instance, arg0, arg1, arg2, arg3, arg4), NIL);
-    }
-
-    public static final SubLObject safe_funcall_instance_super_method_with_6_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!method_name.isSymbol()) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_super_method_with_6_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5);
-            }
-        }
     }
 
     public static SubLObject safe_funcall_instance_super_method_with_6_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5) {
@@ -11225,33 +4814,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_instance_super_method_with_7_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!method_name.isSymbol()) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_super_method_with_7_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6);
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_instance_super_method_with_7_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6) {
         if (NIL == subloop_structures.instance_p(instance)) {
             return values(NIL, $TARGET_NOT_AN_INSTANCE);
@@ -11272,33 +4834,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_instance_super_method_with_8_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!method_name.isSymbol()) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_super_method_with_8_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
-            }
-        }
     }
 
     public static SubLObject safe_funcall_instance_super_method_with_8_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7) {
@@ -11323,33 +4858,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_instance_super_method_with_9_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!method_name.isSymbol()) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_super_method_with_9_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_instance_super_method_with_9_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8) {
         if (NIL == subloop_structures.instance_p(instance)) {
             return values(NIL, $TARGET_NOT_AN_INSTANCE);
@@ -11370,33 +4878,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_instance_super_method_with_10_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!method_name.isSymbol()) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_super_method_with_10_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
-            }
-        }
     }
 
     public static SubLObject safe_funcall_instance_super_method_with_10_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9) {
@@ -11421,33 +4902,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_instance_super_method_with_11_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!method_name.isSymbol()) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_super_method_with_11_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_instance_super_method_with_11_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10) {
         if (NIL == subloop_structures.instance_p(instance)) {
             return values(NIL, $TARGET_NOT_AN_INSTANCE);
@@ -11468,33 +4922,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_instance_super_method_with_12_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!method_name.isSymbol()) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_super_method_with_12_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
-            }
-        }
     }
 
     public static SubLObject safe_funcall_instance_super_method_with_12_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11) {
@@ -11519,33 +4946,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_instance_super_method_with_13_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!method_name.isSymbol()) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_super_method_with_13_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_instance_super_method_with_13_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12) {
         if (NIL == subloop_structures.instance_p(instance)) {
             return values(NIL, $TARGET_NOT_AN_INSTANCE);
@@ -11566,33 +4966,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_instance_super_method_with_14_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!method_name.isSymbol()) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_super_method_with_14_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
-            }
-        }
     }
 
     public static SubLObject safe_funcall_instance_super_method_with_14_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13) {
@@ -11617,33 +4990,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_instance_super_method_with_15_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!method_name.isSymbol()) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_super_method_with_15_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_instance_super_method_with_15_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14) {
         if (NIL == subloop_structures.instance_p(instance)) {
             return values(NIL, $TARGET_NOT_AN_INSTANCE);
@@ -11664,33 +5010,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_instance_super_method_with_16_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!method_name.isSymbol()) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_super_method_with_16_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
-            }
-        }
     }
 
     public static SubLObject safe_funcall_instance_super_method_with_16_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15) {
@@ -11715,33 +5034,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_instance_super_method_with_17_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!method_name.isSymbol()) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_super_method_with_17_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_instance_super_method_with_17_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16) {
         if (NIL == subloop_structures.instance_p(instance)) {
             return values(NIL, $TARGET_NOT_AN_INSTANCE);
@@ -11762,33 +5054,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_instance_super_method_with_18_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!method_name.isSymbol()) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_super_method_with_18_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17);
-            }
-        }
     }
 
     public static SubLObject safe_funcall_instance_super_method_with_18_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17) {
@@ -11813,33 +5078,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_instance_super_method_with_19_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17, SubLObject arg18) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!method_name.isSymbol()) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_super_method_with_19_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18);
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_instance_super_method_with_19_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17, final SubLObject arg18) {
         if (NIL == subloop_structures.instance_p(instance)) {
             return values(NIL, $TARGET_NOT_AN_INSTANCE);
@@ -11862,33 +5100,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18 }), NIL);
     }
 
-    public static final SubLObject safe_funcall_instance_super_method_with_20_args_alt(SubLObject instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17, SubLObject arg18, SubLObject arg19) {
-        if (NIL == subloop_structures.instance_p(instance)) {
-            return values(NIL, $TARGET_NOT_AN_INSTANCE);
-        }
-        if (!method_name.isSymbol()) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        {
-            SubLObject v_class = subloop_structures.instance_class(instance);
-            SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-            if (NIL != method) {
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19 }), NIL);
-                }
-            } else {
-                return com.cyc.cycjava.cycl.methods.safe_funcall_class_super_method_with_20_args(v_class, method_name, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19);
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_instance_super_method_with_20_args(final SubLObject instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17, final SubLObject arg18, final SubLObject arg19) {
         if (NIL == subloop_structures.instance_p(instance)) {
             return values(NIL, $TARGET_NOT_AN_INSTANCE);
@@ -11909,53 +5120,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return values(NIL, $UNDEFINED_METHOD);
         }
         return values(funcall(function_ref, new SubLObject[]{ instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19 }), NIL);
-    }
-
-    public static final SubLObject safe_funcall_class_or_instance_method_with_0_args_alt(SubLObject class_or_instance, SubLObject method_name) {
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        if (NIL != subloop_structures.instance_p(class_or_instance)) {
-            {
-                SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == instances.instances_access_check_method(v_class, method)) {
-                        return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                    }
-                    {
-                        SubLObject function_ref = subloop_structures.method_function_name(method);
-                        if (NIL == fboundp(function_ref)) {
-                            return values(NIL, $UNDEFINED_METHOD);
-                        }
-                        return values(funcall(function_ref, class_or_instance), NIL);
-                    }
-                } else {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-            }
-        } else {
-            {
-                SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                if (NIL == subloop_structures.class_p(v_class)) {
-                    return values(NIL, $TARGET_NOT_A_CLASS);
-                }
-                if (NIL == method) {
-                    values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, v_class), NIL);
-                }
-            }
-        }
     }
 
     public static SubLObject safe_funcall_class_or_instance_method_with_0_args(final SubLObject class_or_instance, final SubLObject method_name) {
@@ -11993,53 +5157,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
                 return values(NIL, $UNDEFINED_METHOD);
             }
             return values(funcall(function_ref, v_class), NIL);
-        }
-    }
-
-    public static final SubLObject safe_funcall_class_or_instance_method_with_1_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0) {
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        if (NIL != subloop_structures.instance_p(class_or_instance)) {
-            {
-                SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == instances.instances_access_check_method(v_class, method)) {
-                        return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                    }
-                    {
-                        SubLObject function_ref = subloop_structures.method_function_name(method);
-                        if (NIL == fboundp(function_ref)) {
-                            return values(NIL, $UNDEFINED_METHOD);
-                        }
-                        return values(funcall(function_ref, class_or_instance, arg0), NIL);
-                    }
-                } else {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-            }
-        } else {
-            {
-                SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                if (NIL == subloop_structures.class_p(v_class)) {
-                    return values(NIL, $TARGET_NOT_A_CLASS);
-                }
-                if (NIL == method) {
-                    values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, v_class, arg0), NIL);
-                }
-            }
         }
     }
 
@@ -12081,53 +5198,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         }
     }
 
-    public static final SubLObject safe_funcall_class_or_instance_method_with_2_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1) {
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        if (NIL != subloop_structures.instance_p(class_or_instance)) {
-            {
-                SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == instances.instances_access_check_method(v_class, method)) {
-                        return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                    }
-                    {
-                        SubLObject function_ref = subloop_structures.method_function_name(method);
-                        if (NIL == fboundp(function_ref)) {
-                            return values(NIL, $UNDEFINED_METHOD);
-                        }
-                        return values(funcall(function_ref, class_or_instance, arg0, arg1), NIL);
-                    }
-                } else {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-            }
-        } else {
-            {
-                SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                if (NIL == subloop_structures.class_p(v_class)) {
-                    return values(NIL, $TARGET_NOT_A_CLASS);
-                }
-                if (NIL == method) {
-                    values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, v_class, arg0, arg1), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_or_instance_method_with_2_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1) {
         if ((NIL == method_name) || (!method_name.isSymbol())) {
             return values(NIL, $INVALID_METHOD_NAME);
@@ -12163,53 +5233,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
                 return values(NIL, $UNDEFINED_METHOD);
             }
             return values(funcall(function_ref, v_class, arg0, arg1), NIL);
-        }
-    }
-
-    public static final SubLObject safe_funcall_class_or_instance_method_with_3_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2) {
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        if (NIL != subloop_structures.instance_p(class_or_instance)) {
-            {
-                SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == instances.instances_access_check_method(v_class, method)) {
-                        return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                    }
-                    {
-                        SubLObject function_ref = subloop_structures.method_function_name(method);
-                        if (NIL == fboundp(function_ref)) {
-                            return values(NIL, $UNDEFINED_METHOD);
-                        }
-                        return values(funcall(function_ref, class_or_instance, arg0, arg1, arg2), NIL);
-                    }
-                } else {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-            }
-        } else {
-            {
-                SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                if (NIL == subloop_structures.class_p(v_class)) {
-                    return values(NIL, $TARGET_NOT_A_CLASS);
-                }
-                if (NIL == method) {
-                    values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, v_class, arg0, arg1, arg2), NIL);
-                }
-            }
         }
     }
 
@@ -12251,53 +5274,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         }
     }
 
-    public static final SubLObject safe_funcall_class_or_instance_method_with_4_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3) {
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        if (NIL != subloop_structures.instance_p(class_or_instance)) {
-            {
-                SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == instances.instances_access_check_method(v_class, method)) {
-                        return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                    }
-                    {
-                        SubLObject function_ref = subloop_structures.method_function_name(method);
-                        if (NIL == fboundp(function_ref)) {
-                            return values(NIL, $UNDEFINED_METHOD);
-                        }
-                        return values(funcall(function_ref, class_or_instance, arg0, arg1, arg2, arg3), NIL);
-                    }
-                } else {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-            }
-        } else {
-            {
-                SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                if (NIL == subloop_structures.class_p(v_class)) {
-                    return values(NIL, $TARGET_NOT_A_CLASS);
-                }
-                if (NIL == method) {
-                    values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, v_class, arg0, arg1, arg2, arg3), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_or_instance_method_with_4_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3) {
         if ((NIL == method_name) || (!method_name.isSymbol())) {
             return values(NIL, $INVALID_METHOD_NAME);
@@ -12333,53 +5309,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
                 return values(NIL, $UNDEFINED_METHOD);
             }
             return values(funcall(function_ref, v_class, arg0, arg1, arg2, arg3), NIL);
-        }
-    }
-
-    public static final SubLObject safe_funcall_class_or_instance_method_with_5_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4) {
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        if (NIL != subloop_structures.instance_p(class_or_instance)) {
-            {
-                SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == instances.instances_access_check_method(v_class, method)) {
-                        return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                    }
-                    {
-                        SubLObject function_ref = subloop_structures.method_function_name(method);
-                        if (NIL == fboundp(function_ref)) {
-                            return values(NIL, $UNDEFINED_METHOD);
-                        }
-                        return values(funcall(function_ref, class_or_instance, arg0, arg1, arg2, arg3, arg4), NIL);
-                    }
-                } else {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-            }
-        } else {
-            {
-                SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                if (NIL == subloop_structures.class_p(v_class)) {
-                    return values(NIL, $TARGET_NOT_A_CLASS);
-                }
-                if (NIL == method) {
-                    values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, v_class, arg0, arg1, arg2, arg3, arg4), NIL);
-                }
-            }
         }
     }
 
@@ -12421,53 +5350,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         }
     }
 
-    public static final SubLObject safe_funcall_class_or_instance_method_with_6_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5) {
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        if (NIL != subloop_structures.instance_p(class_or_instance)) {
-            {
-                SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == instances.instances_access_check_method(v_class, method)) {
-                        return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                    }
-                    {
-                        SubLObject function_ref = subloop_structures.method_function_name(method);
-                        if (NIL == fboundp(function_ref)) {
-                            return values(NIL, $UNDEFINED_METHOD);
-                        }
-                        return values(funcall(function_ref, new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5 }), NIL);
-                    }
-                } else {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-            }
-        } else {
-            {
-                SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                if (NIL == subloop_structures.class_p(v_class)) {
-                    return values(NIL, $TARGET_NOT_A_CLASS);
-                }
-                if (NIL == method) {
-                    values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5 }), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_or_instance_method_with_6_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5) {
         if ((NIL == method_name) || (!method_name.isSymbol())) {
             return values(NIL, $INVALID_METHOD_NAME);
@@ -12503,53 +5385,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
                 return values(NIL, $UNDEFINED_METHOD);
             }
             return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5 }), NIL);
-        }
-    }
-
-    public static final SubLObject safe_funcall_class_or_instance_method_with_7_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6) {
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        if (NIL != subloop_structures.instance_p(class_or_instance)) {
-            {
-                SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == instances.instances_access_check_method(v_class, method)) {
-                        return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                    }
-                    {
-                        SubLObject function_ref = subloop_structures.method_function_name(method);
-                        if (NIL == fboundp(function_ref)) {
-                            return values(NIL, $UNDEFINED_METHOD);
-                        }
-                        return values(funcall(function_ref, new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6 }), NIL);
-                    }
-                } else {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-            }
-        } else {
-            {
-                SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                if (NIL == subloop_structures.class_p(v_class)) {
-                    return values(NIL, $TARGET_NOT_A_CLASS);
-                }
-                if (NIL == method) {
-                    values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6 }), NIL);
-                }
-            }
         }
     }
 
@@ -12591,53 +5426,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         }
     }
 
-    public static final SubLObject safe_funcall_class_or_instance_method_with_8_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7) {
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        if (NIL != subloop_structures.instance_p(class_or_instance)) {
-            {
-                SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == instances.instances_access_check_method(v_class, method)) {
-                        return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                    }
-                    {
-                        SubLObject function_ref = subloop_structures.method_function_name(method);
-                        if (NIL == fboundp(function_ref)) {
-                            return values(NIL, $UNDEFINED_METHOD);
-                        }
-                        return values(funcall(function_ref, new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 }), NIL);
-                    }
-                } else {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-            }
-        } else {
-            {
-                SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                if (NIL == subloop_structures.class_p(v_class)) {
-                    return values(NIL, $TARGET_NOT_A_CLASS);
-                }
-                if (NIL == method) {
-                    values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 }), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_or_instance_method_with_8_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7) {
         if ((NIL == method_name) || (!method_name.isSymbol())) {
             return values(NIL, $INVALID_METHOD_NAME);
@@ -12673,53 +5461,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
                 return values(NIL, $UNDEFINED_METHOD);
             }
             return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7 }), NIL);
-        }
-    }
-
-    public static final SubLObject safe_funcall_class_or_instance_method_with_9_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8) {
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        if (NIL != subloop_structures.instance_p(class_or_instance)) {
-            {
-                SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == instances.instances_access_check_method(v_class, method)) {
-                        return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                    }
-                    {
-                        SubLObject function_ref = subloop_structures.method_function_name(method);
-                        if (NIL == fboundp(function_ref)) {
-                            return values(NIL, $UNDEFINED_METHOD);
-                        }
-                        return values(funcall(function_ref, new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 }), NIL);
-                    }
-                } else {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-            }
-        } else {
-            {
-                SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                if (NIL == subloop_structures.class_p(v_class)) {
-                    return values(NIL, $TARGET_NOT_A_CLASS);
-                }
-                if (NIL == method) {
-                    values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 }), NIL);
-                }
-            }
         }
     }
 
@@ -12761,53 +5502,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         }
     }
 
-    public static final SubLObject safe_funcall_class_or_instance_method_with_10_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9) {
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        if (NIL != subloop_structures.instance_p(class_or_instance)) {
-            {
-                SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == instances.instances_access_check_method(v_class, method)) {
-                        return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                    }
-                    {
-                        SubLObject function_ref = subloop_structures.method_function_name(method);
-                        if (NIL == fboundp(function_ref)) {
-                            return values(NIL, $UNDEFINED_METHOD);
-                        }
-                        return values(funcall(function_ref, new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 }), NIL);
-                    }
-                } else {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-            }
-        } else {
-            {
-                SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                if (NIL == subloop_structures.class_p(v_class)) {
-                    return values(NIL, $TARGET_NOT_A_CLASS);
-                }
-                if (NIL == method) {
-                    values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 }), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_or_instance_method_with_10_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9) {
         if ((NIL == method_name) || (!method_name.isSymbol())) {
             return values(NIL, $INVALID_METHOD_NAME);
@@ -12843,53 +5537,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
                 return values(NIL, $UNDEFINED_METHOD);
             }
             return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 }), NIL);
-        }
-    }
-
-    public static final SubLObject safe_funcall_class_or_instance_method_with_11_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10) {
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        if (NIL != subloop_structures.instance_p(class_or_instance)) {
-            {
-                SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == instances.instances_access_check_method(v_class, method)) {
-                        return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                    }
-                    {
-                        SubLObject function_ref = subloop_structures.method_function_name(method);
-                        if (NIL == fboundp(function_ref)) {
-                            return values(NIL, $UNDEFINED_METHOD);
-                        }
-                        return values(funcall(function_ref, new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 }), NIL);
-                    }
-                } else {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-            }
-        } else {
-            {
-                SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                if (NIL == subloop_structures.class_p(v_class)) {
-                    return values(NIL, $TARGET_NOT_A_CLASS);
-                }
-                if (NIL == method) {
-                    values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 }), NIL);
-                }
-            }
         }
     }
 
@@ -12931,53 +5578,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         }
     }
 
-    public static final SubLObject safe_funcall_class_or_instance_method_with_12_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11) {
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        if (NIL != subloop_structures.instance_p(class_or_instance)) {
-            {
-                SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == instances.instances_access_check_method(v_class, method)) {
-                        return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                    }
-                    {
-                        SubLObject function_ref = subloop_structures.method_function_name(method);
-                        if (NIL == fboundp(function_ref)) {
-                            return values(NIL, $UNDEFINED_METHOD);
-                        }
-                        return values(funcall(function_ref, new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11 }), NIL);
-                    }
-                } else {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-            }
-        } else {
-            {
-                SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                if (NIL == subloop_structures.class_p(v_class)) {
-                    return values(NIL, $TARGET_NOT_A_CLASS);
-                }
-                if (NIL == method) {
-                    values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11 }), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_or_instance_method_with_12_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11) {
         if ((NIL == method_name) || (!method_name.isSymbol())) {
             return values(NIL, $INVALID_METHOD_NAME);
@@ -13013,53 +5613,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
                 return values(NIL, $UNDEFINED_METHOD);
             }
             return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11 }), NIL);
-        }
-    }
-
-    public static final SubLObject safe_funcall_class_or_instance_method_with_13_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12) {
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        if (NIL != subloop_structures.instance_p(class_or_instance)) {
-            {
-                SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == instances.instances_access_check_method(v_class, method)) {
-                        return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                    }
-                    {
-                        SubLObject function_ref = subloop_structures.method_function_name(method);
-                        if (NIL == fboundp(function_ref)) {
-                            return values(NIL, $UNDEFINED_METHOD);
-                        }
-                        return values(funcall(function_ref, new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12 }), NIL);
-                    }
-                } else {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-            }
-        } else {
-            {
-                SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                if (NIL == subloop_structures.class_p(v_class)) {
-                    return values(NIL, $TARGET_NOT_A_CLASS);
-                }
-                if (NIL == method) {
-                    values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12 }), NIL);
-                }
-            }
         }
     }
 
@@ -13101,53 +5654,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         }
     }
 
-    public static final SubLObject safe_funcall_class_or_instance_method_with_14_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13) {
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        if (NIL != subloop_structures.instance_p(class_or_instance)) {
-            {
-                SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == instances.instances_access_check_method(v_class, method)) {
-                        return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                    }
-                    {
-                        SubLObject function_ref = subloop_structures.method_function_name(method);
-                        if (NIL == fboundp(function_ref)) {
-                            return values(NIL, $UNDEFINED_METHOD);
-                        }
-                        return values(funcall(function_ref, new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13 }), NIL);
-                    }
-                } else {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-            }
-        } else {
-            {
-                SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                if (NIL == subloop_structures.class_p(v_class)) {
-                    return values(NIL, $TARGET_NOT_A_CLASS);
-                }
-                if (NIL == method) {
-                    values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13 }), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_or_instance_method_with_14_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13) {
         if ((NIL == method_name) || (!method_name.isSymbol())) {
             return values(NIL, $INVALID_METHOD_NAME);
@@ -13183,53 +5689,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
                 return values(NIL, $UNDEFINED_METHOD);
             }
             return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13 }), NIL);
-        }
-    }
-
-    public static final SubLObject safe_funcall_class_or_instance_method_with_15_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14) {
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        if (NIL != subloop_structures.instance_p(class_or_instance)) {
-            {
-                SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == instances.instances_access_check_method(v_class, method)) {
-                        return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                    }
-                    {
-                        SubLObject function_ref = subloop_structures.method_function_name(method);
-                        if (NIL == fboundp(function_ref)) {
-                            return values(NIL, $UNDEFINED_METHOD);
-                        }
-                        return values(funcall(function_ref, new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14 }), NIL);
-                    }
-                } else {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-            }
-        } else {
-            {
-                SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                if (NIL == subloop_structures.class_p(v_class)) {
-                    return values(NIL, $TARGET_NOT_A_CLASS);
-                }
-                if (NIL == method) {
-                    values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14 }), NIL);
-                }
-            }
         }
     }
 
@@ -13271,53 +5730,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         }
     }
 
-    public static final SubLObject safe_funcall_class_or_instance_method_with_16_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15) {
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        if (NIL != subloop_structures.instance_p(class_or_instance)) {
-            {
-                SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == instances.instances_access_check_method(v_class, method)) {
-                        return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                    }
-                    {
-                        SubLObject function_ref = subloop_structures.method_function_name(method);
-                        if (NIL == fboundp(function_ref)) {
-                            return values(NIL, $UNDEFINED_METHOD);
-                        }
-                        return values(funcall(function_ref, new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15 }), NIL);
-                    }
-                } else {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-            }
-        } else {
-            {
-                SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                if (NIL == subloop_structures.class_p(v_class)) {
-                    return values(NIL, $TARGET_NOT_A_CLASS);
-                }
-                if (NIL == method) {
-                    values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15 }), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_or_instance_method_with_16_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15) {
         if ((NIL == method_name) || (!method_name.isSymbol())) {
             return values(NIL, $INVALID_METHOD_NAME);
@@ -13353,53 +5765,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
                 return values(NIL, $UNDEFINED_METHOD);
             }
             return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15 }), NIL);
-        }
-    }
-
-    public static final SubLObject safe_funcall_class_or_instance_method_with_17_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16) {
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        if (NIL != subloop_structures.instance_p(class_or_instance)) {
-            {
-                SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == instances.instances_access_check_method(v_class, method)) {
-                        return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                    }
-                    {
-                        SubLObject function_ref = subloop_structures.method_function_name(method);
-                        if (NIL == fboundp(function_ref)) {
-                            return values(NIL, $UNDEFINED_METHOD);
-                        }
-                        return values(funcall(function_ref, new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 }), NIL);
-                    }
-                } else {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-            }
-        } else {
-            {
-                SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                if (NIL == subloop_structures.class_p(v_class)) {
-                    return values(NIL, $TARGET_NOT_A_CLASS);
-                }
-                if (NIL == method) {
-                    values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 }), NIL);
-                }
-            }
         }
     }
 
@@ -13441,53 +5806,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         }
     }
 
-    public static final SubLObject safe_funcall_class_or_instance_method_with_18_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17) {
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        if (NIL != subloop_structures.instance_p(class_or_instance)) {
-            {
-                SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == instances.instances_access_check_method(v_class, method)) {
-                        return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                    }
-                    {
-                        SubLObject function_ref = subloop_structures.method_function_name(method);
-                        if (NIL == fboundp(function_ref)) {
-                            return values(NIL, $UNDEFINED_METHOD);
-                        }
-                        return values(funcall(function_ref, new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17 }), NIL);
-                    }
-                } else {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-            }
-        } else {
-            {
-                SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                if (NIL == subloop_structures.class_p(v_class)) {
-                    return values(NIL, $TARGET_NOT_A_CLASS);
-                }
-                if (NIL == method) {
-                    values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17 }), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_or_instance_method_with_18_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17) {
         if ((NIL == method_name) || (!method_name.isSymbol())) {
             return values(NIL, $INVALID_METHOD_NAME);
@@ -13523,53 +5841,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
                 return values(NIL, $UNDEFINED_METHOD);
             }
             return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17 }), NIL);
-        }
-    }
-
-    public static final SubLObject safe_funcall_class_or_instance_method_with_19_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17, SubLObject arg18) {
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        if (NIL != subloop_structures.instance_p(class_or_instance)) {
-            {
-                SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == instances.instances_access_check_method(v_class, method)) {
-                        return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                    }
-                    {
-                        SubLObject function_ref = subloop_structures.method_function_name(method);
-                        if (NIL == fboundp(function_ref)) {
-                            return values(NIL, $UNDEFINED_METHOD);
-                        }
-                        return values(funcall(function_ref, new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18 }), NIL);
-                    }
-                } else {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-            }
-        } else {
-            {
-                SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                if (NIL == subloop_structures.class_p(v_class)) {
-                    return values(NIL, $TARGET_NOT_A_CLASS);
-                }
-                if (NIL == method) {
-                    values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18 }), NIL);
-                }
-            }
         }
     }
 
@@ -13611,53 +5882,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         }
     }
 
-    public static final SubLObject safe_funcall_class_or_instance_method_with_20_args_alt(SubLObject class_or_instance, SubLObject method_name, SubLObject arg0, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5, SubLObject arg6, SubLObject arg7, SubLObject arg8, SubLObject arg9, SubLObject arg10, SubLObject arg11, SubLObject arg12, SubLObject arg13, SubLObject arg14, SubLObject arg15, SubLObject arg16, SubLObject arg17, SubLObject arg18, SubLObject arg19) {
-        if (!((NIL != method_name) && method_name.isSymbol())) {
-            return values(NIL, $INVALID_METHOD_NAME);
-        }
-        if (NIL != subloop_structures.instance_p(class_or_instance)) {
-            {
-                SubLObject v_class = subloop_structures.instance_class(class_or_instance);
-                SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                if (NIL != method) {
-                    if (NIL == instances.instances_access_check_method(v_class, method)) {
-                        return values(NIL, $ACCESS_LEVEL_CONFLICT);
-                    }
-                    {
-                        SubLObject function_ref = subloop_structures.method_function_name(method);
-                        if (NIL == fboundp(function_ref)) {
-                            return values(NIL, $UNDEFINED_METHOD);
-                        }
-                        return values(funcall(function_ref, new SubLObject[]{ class_or_instance, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19 }), NIL);
-                    }
-                } else {
-                    return values(NIL, $UNDECLARED_METHOD);
-                }
-            }
-        } else {
-            {
-                SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : classes.classes_retrieve_class(class_or_instance);
-                SubLObject method = (NIL != v_class) ? ((SubLObject) (com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class)))) : NIL;
-                if (NIL == subloop_structures.class_p(v_class)) {
-                    return values(NIL, $TARGET_NOT_A_CLASS);
-                }
-                if (NIL == method) {
-                    values(NIL, $UNDECLARED_METHOD);
-                }
-                if (NIL == instances.instances_access_check_method(v_class, method)) {
-                    values(NIL, $ACCESS_LEVEL_CONFLICT);
-                }
-                {
-                    SubLObject function_ref = subloop_structures.method_function_name(method);
-                    if (NIL == fboundp(function_ref)) {
-                        return values(NIL, $UNDEFINED_METHOD);
-                    }
-                    return values(funcall(function_ref, new SubLObject[]{ v_class, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19 }), NIL);
-                }
-            }
-        }
-    }
-
     public static SubLObject safe_funcall_class_or_instance_method_with_20_args(final SubLObject class_or_instance, final SubLObject method_name, final SubLObject arg0, final SubLObject arg1, final SubLObject arg2, final SubLObject arg3, final SubLObject arg4, final SubLObject arg5, final SubLObject arg6, final SubLObject arg7, final SubLObject arg8, final SubLObject arg9, final SubLObject arg10, final SubLObject arg11, final SubLObject arg12, final SubLObject arg13, final SubLObject arg14, final SubLObject arg15, final SubLObject arg16, final SubLObject arg17, final SubLObject arg18, final SubLObject arg19) {
         if ((NIL == method_name) || (!method_name.isSymbol())) {
             return values(NIL, $INVALID_METHOD_NAME);
@@ -13696,35 +5920,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         }
     }
 
-    public static final SubLObject resolve_method_alt(SubLObject method_name, SubLObject class_name) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_class = classes.classes_retrieve_class(class_name);
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == v_class) {
-                        Errors.error($str_alt80$RESOLVE_METHOD___S_is_not_a_defin, class_name);
-                    }
-                }
-                {
-                    SubLObject v_class_16 = v_class;
-                    SubLObject compiled_class_method_access_alist = subloop_structures.class_compiled_class_method_access_alist(v_class_16);
-                    SubLObject tablified_instance_methods = subloop_structures.class_tablified_instance_methods(v_class_16);
-                    SubLObject method = gethash(method_name, tablified_instance_methods, UNPROVIDED);
-                    if (NIL == method) {
-                        method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, compiled_class_method_access_alist);
-                    }
-                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                        if (NIL == method) {
-                            Errors.error($str_alt81$RESOLVE_METHOD___S_is_not_a_defin, method_name, class_name);
-                        }
-                    }
-                    return subloop_structures.method_function_name(method);
-                }
-            }
-        }
-    }
-
     public static SubLObject resolve_method(final SubLObject method_name, final SubLObject class_name) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_class = classes.classes_retrieve_class(class_name);
@@ -13742,39 +5937,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             Errors.error($str81$RESOLVE_METHOD___S_is_not_a_defin, method_name, class_name);
         }
         return subloop_structures.method_function_name(method);
-    }
-
-    public static final SubLObject quote_method_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            destructuring_bind_must_consp(current, datum, $list_alt82);
-            {
-                SubLObject temp = current.rest();
-                current = current.first();
-                {
-                    SubLObject method_name = NIL;
-                    SubLObject class_name = NIL;
-                    destructuring_bind_must_consp(current, datum, $list_alt82);
-                    method_name = current.first();
-                    current = current.rest();
-                    destructuring_bind_must_consp(current, datum, $list_alt82);
-                    class_name = current.first();
-                    current = current.rest();
-                    if (NIL == current) {
-                        current = temp;
-                        if (NIL == current) {
-                            return list(QUOTE, com.cyc.cycjava.cycl.methods.resolve_method(method_name, class_name));
-                        } else {
-                            cdestructuring_bind_error(datum, $list_alt82);
-                        }
-                    } else {
-                        cdestructuring_bind_error(datum, $list_alt82);
-                    }
-                }
-            }
-        }
-        return NIL;
     }
 
     public static SubLObject quote_method(final SubLObject macroform, final SubLObject environment) {
@@ -13799,46 +5961,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             cdestructuring_bind_error(datum, $list82);
         } else {
             cdestructuring_bind_error(datum, $list82);
-        }
-        return NIL;
-    }
-
-    public static final SubLObject fquote_method_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            destructuring_bind_must_consp(current, datum, $list_alt82);
-            {
-                SubLObject temp = current.rest();
-                current = current.first();
-                {
-                    SubLObject method_name = NIL;
-                    SubLObject class_name = NIL;
-                    destructuring_bind_must_consp(current, datum, $list_alt82);
-                    method_name = current.first();
-                    current = current.rest();
-                    destructuring_bind_must_consp(current, datum, $list_alt82);
-                    class_name = current.first();
-                    current = current.rest();
-                    if (NIL == current) {
-                        current = temp;
-                        if (NIL == current) {
-                            {
-                                SubLObject resolved_method = com.cyc.cycjava.cycl.methods.resolve_method(method_name, class_name);
-                                if (resolved_method.isFunction()) {
-                                    return list(QUOTE, symbol_function(resolved_method));
-                                } else {
-                                    return list(QUOTE, resolved_method);
-                                }
-                            }
-                        } else {
-                            cdestructuring_bind_error(datum, $list_alt82);
-                        }
-                    } else {
-                        cdestructuring_bind_error(datum, $list_alt82);
-                    }
-                }
-            }
         }
         return NIL;
     }
@@ -13874,27 +5996,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject method_name_to_function_name_alt(SubLObject method_name, SubLObject class_name) {
-        {
-            SubLObject v_class = classes.classes_retrieve_class(class_name);
-            if (NIL != subloop_structures.class_p(v_class)) {
-                {
-                    SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                    if (NIL != method) {
-                        return subloop_structures.method_function_name(method);
-                    } else {
-                        method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                        if (NIL != method) {
-                            return subloop_structures.method_function_name(method);
-                        }
-                        return NIL;
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject method_name_to_function_name(final SubLObject method_name, final SubLObject class_name) {
         final SubLObject v_class = classes.classes_retrieve_class(class_name);
         if (NIL == subloop_structures.class_p(v_class)) {
@@ -13907,61 +6008,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         method = method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
         if (NIL != method) {
             return subloop_structures.method_function_name(method);
-        }
-        return NIL;
-    }
-
-    public static final SubLObject inline_method_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            destructuring_bind_must_consp(current, datum, $list_alt83);
-            {
-                SubLObject temp = current.rest();
-                current = current.first();
-                {
-                    SubLObject method_name = NIL;
-                    SubLObject class_name = NIL;
-                    destructuring_bind_must_consp(current, datum, $list_alt83);
-                    method_name = current.first();
-                    current = current.rest();
-                    destructuring_bind_must_consp(current, datum, $list_alt83);
-                    class_name = current.first();
-                    current = current.rest();
-                    if (NIL == current) {
-                        current = temp;
-                        {
-                            SubLObject class_or_instance = NIL;
-                            destructuring_bind_must_consp(current, datum, $list_alt83);
-                            class_or_instance = current.first();
-                            current = current.rest();
-                            {
-                                SubLObject args = current;
-                                SubLObject v_class = classes.classes_retrieve_class(class_name);
-                                if (NIL != subloop_structures.class_p(v_class)) {
-                                    {
-                                        SubLObject method = gethash(method_name, subloop_structures.class_tablified_instance_methods(v_class), UNPROVIDED);
-                                        if (NIL != method) {
-                                            return listS(subloop_structures.method_function_name(method), class_or_instance, args);
-                                        } else {
-                                            method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                                            if (NIL != method) {
-                                                return listS(subloop_structures.method_function_name(method), class_or_instance, args);
-                                            } else {
-                                                return listS(FUNCALL_INSTANCE_METHOD, class_or_instance, list(QUOTE, method_name), args);
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    return listS(FUNCALL_INSTANCE_METHOD, class_or_instance, list(QUOTE, method_name), args);
-                                }
-                            }
-                        }
-                    } else {
-                        cdestructuring_bind_error(datum, $list_alt83);
-                    }
-                }
-            }
         }
         return NIL;
     }
@@ -14005,61 +6051,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return listS(FUNCALL_INSTANCE_METHOD, class_or_instance, list(QUOTE, method_name), args);
     }
 
-    public static final SubLObject inline_super_method_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            destructuring_bind_must_consp(current, datum, $list_alt83);
-            {
-                SubLObject temp = current.rest();
-                current = current.first();
-                {
-                    SubLObject method_name = NIL;
-                    SubLObject class_name = NIL;
-                    destructuring_bind_must_consp(current, datum, $list_alt83);
-                    method_name = current.first();
-                    current = current.rest();
-                    destructuring_bind_must_consp(current, datum, $list_alt83);
-                    class_name = current.first();
-                    current = current.rest();
-                    if (NIL == current) {
-                        current = temp;
-                        {
-                            SubLObject class_or_instance = NIL;
-                            destructuring_bind_must_consp(current, datum, $list_alt83);
-                            class_or_instance = current.first();
-                            current = current.rest();
-                            {
-                                SubLObject args = current;
-                                SubLObject v_class = classes.classes_retrieve_class(class_name);
-                                if (NIL != subloop_structures.class_p(v_class)) {
-                                    {
-                                        SubLObject method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_instance_method_access_alist(v_class));
-                                        if (NIL != method) {
-                                            return listS(subloop_structures.method_function_name(method), class_or_instance, args);
-                                        } else {
-                                            method = com.cyc.cycjava.cycl.methods.method_shadowed_assoc(method_name, subloop_structures.class_compiled_class_method_access_alist(v_class));
-                                            if (NIL != method) {
-                                                return listS(subloop_structures.method_function_name(method), class_or_instance, args);
-                                            } else {
-                                                return listS(FUNCALL_INSTANCE_SUPER_METHOD, class_or_instance, list(QUOTE, method_name), args);
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    return listS(FUNCALL_INSTANCE_SUPER_METHOD, class_or_instance, list(QUOTE, method_name), args);
-                                }
-                            }
-                        }
-                    } else {
-                        cdestructuring_bind_error(datum, $list_alt83);
-                    }
-                }
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject inline_super_method(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -14097,72 +6088,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return listS(subloop_structures.method_function_name(method), class_or_instance, args);
         }
         return listS(FUNCALL_INSTANCE_SUPER_METHOD, class_or_instance, list(QUOTE, method_name), args);
-    }
-
-    public static final SubLObject methods_inline_method_calls_internal_alt(SubLObject body, SubLObject v_class, SubLObject class_name, SubLObject method_list, SubLObject inside_backquote) {
-        if (inside_backquote == UNPROVIDED) {
-            inside_backquote = NIL;
-        }
-        if (NIL == body) {
-            return NIL;
-        } else {
-            if (body.isAtom()) {
-                return body;
-            } else {
-                if (body.first().isSymbol()) {
-                    if (body.rest().isCons()) {
-                        if (body.first() == QUOTE) {
-                            return body;
-                        } else {
-                            {
-                                SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(body.first(), method_list);
-                                if (NIL != method) {
-                                    {
-                                        SubLObject first_arg = cadr(body);
-                                        SubLObject args = cddr(body);
-                                        if (first_arg == SELF) {
-                                            {
-                                                SubLObject transformed_args = NIL;
-                                                SubLObject cdolist_list_var = args;
-                                                SubLObject arg = NIL;
-                                                for (arg = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , arg = cdolist_list_var.first()) {
-                                                    transformed_args = cons(com.cyc.cycjava.cycl.methods.methods_inline_method_calls_internal(arg, v_class, class_name, method_list, UNPROVIDED), transformed_args);
-                                                }
-                                                return listS(INLINE_METHOD, list(body.first(), class_name), SELF, nreverse(transformed_args));
-                                            }
-                                        } else {
-                                            if (first_arg == SUPER) {
-                                                {
-                                                    SubLObject transformed_args = NIL;
-                                                    SubLObject cdolist_list_var = args;
-                                                    SubLObject arg = NIL;
-                                                    for (arg = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , arg = cdolist_list_var.first()) {
-                                                        transformed_args = cons(com.cyc.cycjava.cycl.methods.methods_inline_method_calls_internal(arg, v_class, class_name, method_list, UNPROVIDED), transformed_args);
-                                                    }
-                                                    return listS(INLINE_SUPER_METHOD, list(body.first(), class_name), SELF, nreverse(transformed_args));
-                                                }
-                                            } else {
-                                                return cons(body.first(), com.cyc.cycjava.cycl.methods.methods_inline_method_calls_internal(body.rest(), v_class, class_name, method_list, UNPROVIDED));
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    return cons(body.first(), com.cyc.cycjava.cycl.methods.methods_inline_method_calls_internal(body.rest(), v_class, class_name, method_list, UNPROVIDED));
-                                }
-                            }
-                        }
-                    } else {
-                        return body;
-                    }
-                } else {
-                    if (body.first().isAtom()) {
-                        return cons(body.first(), com.cyc.cycjava.cycl.methods.methods_inline_method_calls_internal(body.rest(), v_class, class_name, method_list, UNPROVIDED));
-                    } else {
-                        return cons(com.cyc.cycjava.cycl.methods.methods_inline_method_calls_internal(body.first(), v_class, class_name, method_list, UNPROVIDED), com.cyc.cycjava.cycl.methods.methods_inline_method_calls_internal(body.rest(), v_class, class_name, method_list, UNPROVIDED));
-                    }
-                }
-            }
-        }
     }
 
     public static SubLObject methods_inline_method_calls_internal(final SubLObject body, final SubLObject v_class, final SubLObject class_name, final SubLObject method_list, SubLObject inside_backquote) {
@@ -14221,19 +6146,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         }
     }
 
-    public static final SubLObject methods_inline_method_calls_alt(SubLObject body, SubLObject class_name_or_class) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : class_name_or_class;
-            if (NIL != subloop_structures.class_p(v_class)) {
-                {
-                    SubLObject class_name = subloop_structures.class_name(v_class);
-                    return com.cyc.cycjava.cycl.methods.methods_inline_method_calls_internal(com.cyc.cycjava.cycl.methods.methods_inline_method_calls_internal(body, v_class, class_name, instances.instances_filter_methods_per_access(v_class, subloop_structures.class_compiled_class_method_access_alist(v_class)), UNPROVIDED), v_class, class_name, instances.instances_filter_methods_per_access(v_class, subloop_structures.class_compiled_instance_method_access_alist(v_class)), UNPROVIDED);
-                }
-            }
-            return body;
-        }
-    }
-
     public static SubLObject methods_inline_method_calls(final SubLObject body, final SubLObject class_name_or_class) {
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : class_name_or_class;
         if (NIL != subloop_structures.class_p(v_class)) {
@@ -14241,42 +6153,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return methods_inline_method_calls_internal(methods_inline_method_calls_internal(body, v_class, class_name, instances.instances_filter_methods_per_access(v_class, subloop_structures.class_compiled_class_method_access_alist(v_class)), UNPROVIDED), v_class, class_name, instances.instances_filter_methods_per_access(v_class, subloop_structures.class_compiled_instance_method_access_alist(v_class)), UNPROVIDED);
         }
         return body;
-    }
-
-    public static final SubLObject methods_transform_setq_for_auto_update_private_alt(SubLObject setq_form, SubLObject v_class) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject setq_pairs = setq_form.rest();
-                SubLObject new_forms = NIL;
-                SubLObject transformed = NIL;
-                SubLObject remainder = NIL;
-                for (remainder = setq_pairs; NIL != remainder; remainder = cddr(remainder)) {
-                    {
-                        SubLObject var = remainder.first();
-                        SubLObject form = cadr(remainder);
-                        thread.resetMultipleValues();
-                        {
-                            SubLObject getter = slots.get_instance_slot_accessors(v_class, var);
-                            SubLObject setter = thread.secondMultipleValue();
-                            thread.resetMultipleValues();
-                            if (NIL != setter) {
-                                transformed = T;
-                                new_forms = cons(copy_list(list(CSETQ, var, com.cyc.cycjava.cycl.methods.methods_transform_setqs_for_auto_update_private(form, v_class))), new_forms);
-                                new_forms = cons(copy_list(list(setter, SELF, var)), new_forms);
-                            } else {
-                                new_forms = cons(copy_list(list(CSETQ, var, form)), new_forms);
-                            }
-                        }
-                    }
-                }
-                if (NIL != transformed) {
-                    return cons(PROGN, nreverse(new_forms));
-                } else {
-                    return setq_form;
-                }
-            }
-        }
     }
 
     public static SubLObject methods_transform_setq_for_auto_update_private(final SubLObject setq_form, final SubLObject v_class) {
@@ -14310,31 +6186,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return setq_form;
     }
 
-    public static final SubLObject methods_transform_cinc_or_cdec_for_auto_update_private_alt(SubLObject setq_form, SubLObject v_class) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (setq_form.isCons() && setq_form.rest().isCons()) {
-                {
-                    SubLObject var = cadr(setq_form);
-                    SubLObject other_forms = com.cyc.cycjava.cycl.methods.methods_transform_setqs_for_auto_update_private(cddr(setq_form), v_class);
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject getter = slots.get_instance_slot_accessors(v_class, var);
-                        SubLObject setter = thread.secondMultipleValue();
-                        thread.resetMultipleValues();
-                        if (NIL != setter) {
-                            return copy_list(list(PROGN, listS(setq_form.first(), var, other_forms), list(setter, SELF, var)));
-                        } else {
-                            return setq_form;
-                        }
-                    }
-                }
-            } else {
-                return setq_form;
-            }
-        }
-    }
-
     public static SubLObject methods_transform_cinc_or_cdec_for_auto_update_private(final SubLObject setq_form, final SubLObject v_class) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((!setq_form.isCons()) || (!setq_form.rest().isCons())) {
@@ -14350,30 +6201,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return copy_list(list(PROGN, listS(setq_form.first(), var, other_forms), list(setter, SELF, var)));
         }
         return setq_form;
-    }
-
-    public static final SubLObject methods_transform_cpop_for_auto_update_private_alt(SubLObject setq_form, SubLObject v_class) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (setq_form.isCons() && setq_form.rest().isCons()) {
-                {
-                    SubLObject var = cadr(setq_form);
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject getter = slots.get_instance_slot_accessors(v_class, var);
-                        SubLObject setter = thread.secondMultipleValue();
-                        thread.resetMultipleValues();
-                        if (NIL != setter) {
-                            return copy_list(list(PROGN, setq_form, list(setter, SELF, var)));
-                        } else {
-                            return setq_form;
-                        }
-                    }
-                }
-            } else {
-                return setq_form;
-            }
-        }
     }
 
     public static SubLObject methods_transform_cpop_for_auto_update_private(final SubLObject setq_form, final SubLObject v_class) {
@@ -14392,32 +6219,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return setq_form;
     }
 
-    public static final SubLObject methods_transform_cpush_or_cpushnew_for_auto_update_private_alt(SubLObject setq_form, SubLObject v_class) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if ((setq_form.isCons() && setq_form.rest().isCons()) && cddr(setq_form).isCons()) {
-                {
-                    SubLObject item = com.cyc.cycjava.cycl.methods.methods_transform_setqs_for_auto_update_private(cadr(setq_form), v_class);
-                    SubLObject var = cddr(setq_form).first();
-                    SubLObject rest = cddr(setq_form).rest();
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject getter = slots.get_instance_slot_accessors(v_class, var);
-                        SubLObject setter = thread.secondMultipleValue();
-                        thread.resetMultipleValues();
-                        if (NIL != setter) {
-                            return copy_list(list(PROGN, listS(setq_form.first(), item, var, rest), list(setter, SELF, var)));
-                        } else {
-                            return setq_form;
-                        }
-                    }
-                }
-            } else {
-                return setq_form;
-            }
-        }
-    }
-
     public static SubLObject methods_transform_cpush_or_cpushnew_for_auto_update_private(final SubLObject setq_form, final SubLObject v_class) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (((!setq_form.isCons()) || (!setq_form.rest().isCons())) || (!cddr(setq_form).isCons())) {
@@ -14434,40 +6235,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             return copy_list(list(PROGN, listS(setq_form.first(), item, var, rest), list(setter, SELF, var)));
         }
         return setq_form;
-    }
-
-    public static final SubLObject methods_transform_cmultiple_value_setq_for_auto_update_private_alt(SubLObject setq_form, SubLObject v_class) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if ((((((setq_form.isCons() && (NIL != sublisp_true(setq_form.first()))) && setq_form.rest().isCons()) && setq_form.rest().first().isCons()) && setq_form.rest().rest().isCons()) && (NIL != sublisp_true(setq_form.rest().rest().first()))) && setq_form.rest().rest().rest().isList()) {
-                {
-                    SubLObject var_list = cadr(setq_form);
-                    SubLObject form = com.cyc.cycjava.cycl.methods.methods_transform_setqs_for_auto_update_private(cddr(setq_form).first(), v_class);
-                    SubLObject body = com.cyc.cycjava.cycl.methods.methods_transform_setqs_for_auto_update_private(cddr(setq_form).rest(), v_class);
-                    SubLObject update_forms = NIL;
-                    SubLObject cdolist_list_var = var_list;
-                    SubLObject var = NIL;
-                    for (var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , var = cdolist_list_var.first()) {
-                        thread.resetMultipleValues();
-                        {
-                            SubLObject getter = slots.get_instance_slot_accessors(v_class, var);
-                            SubLObject setter = thread.secondMultipleValue();
-                            thread.resetMultipleValues();
-                            if (NIL != setter) {
-                                update_forms = cons(copy_list(list(setter, SELF, var)), update_forms);
-                            }
-                        }
-                    }
-                    if (NIL != update_forms) {
-                        return copy_list(listS(CMULTIPLE_VALUE_SETQ, var_list, form, append(nreverse(update_forms), body, NIL)));
-                    } else {
-                        return copy_list(listS(CMULTIPLE_VALUE_SETQ, var_list, form, append(body, NIL)));
-                    }
-                }
-            } else {
-                return setq_form;
-            }
-        }
     }
 
     public static SubLObject methods_transform_cmultiple_value_setq_for_auto_update_private(final SubLObject setq_form, final SubLObject v_class) {
@@ -14499,42 +6266,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return copy_list(listS(CMULTIPLE_VALUE_SETQ, var_list, form, append(body, NIL)));
     }
 
-    public static final SubLObject methods_transform_setqs_for_auto_update_private_alt(SubLObject body, SubLObject v_class) {
-        if (NIL == body) {
-            return NIL;
-        } else {
-            if (body.isCons()) {
-                {
-                    SubLObject first_element = body.first();
-                    SubLObject rest_of_body = body.rest();
-                    if (NIL != member(first_element, $list_alt92, UNPROVIDED, UNPROVIDED)) {
-                        return com.cyc.cycjava.cycl.methods.methods_transform_setq_for_auto_update_private(body, v_class);
-                    } else {
-                        if (first_element == CPOP) {
-                            return com.cyc.cycjava.cycl.methods.methods_transform_cpop_for_auto_update_private(body, v_class);
-                        } else {
-                            if (NIL != member(first_element, $list_alt94, UNPROVIDED, UNPROVIDED)) {
-                                return com.cyc.cycjava.cycl.methods.methods_transform_cinc_or_cdec_for_auto_update_private(body, v_class);
-                            } else {
-                                if (NIL != member(first_element, $list_alt95, UNPROVIDED, UNPROVIDED)) {
-                                    return com.cyc.cycjava.cycl.methods.methods_transform_cpush_or_cpushnew_for_auto_update_private(body, v_class);
-                                } else {
-                                    if (first_element == CMULTIPLE_VALUE_SETQ) {
-                                        return com.cyc.cycjava.cycl.methods.methods_transform_cmultiple_value_setq_for_auto_update_private(body, v_class);
-                                    } else {
-                                        return cons(com.cyc.cycjava.cycl.methods.methods_transform_setqs_for_auto_update_private(first_element, v_class), com.cyc.cycjava.cycl.methods.methods_transform_setqs_for_auto_update_private(rest_of_body, v_class));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            } else {
-                return body;
-            }
-        }
-    }
-
     public static SubLObject methods_transform_setqs_for_auto_update_private(final SubLObject body, final SubLObject v_class) {
         if (NIL == body) {
             return NIL;
@@ -14562,49 +6293,12 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return cons(methods_transform_setqs_for_auto_update_private(first_element, v_class), methods_transform_setqs_for_auto_update_private(rest_of_body, v_class));
     }
 
-    public static final SubLObject methods_transform_setqs_for_auto_update_alt(SubLObject body, SubLObject class_name_or_class) {
-        {
-            SubLObject v_class = (class_name_or_class.isSymbol()) ? ((SubLObject) (classes.classes_retrieve_class(class_name_or_class))) : class_name_or_class;
-            if (NIL != subloop_structures.class_p(v_class)) {
-                return com.cyc.cycjava.cycl.methods.methods_transform_setqs_for_auto_update_private(body, v_class);
-            }
-            return body;
-        }
-    }
-
     public static SubLObject methods_transform_setqs_for_auto_update(final SubLObject body, final SubLObject class_name_or_class) {
         final SubLObject v_class = (class_name_or_class.isSymbol()) ? classes.classes_retrieve_class(class_name_or_class) : class_name_or_class;
         if (NIL != subloop_structures.class_p(v_class)) {
             return methods_transform_setqs_for_auto_update_private(body, v_class);
         }
         return body;
-    }
-
-    public static final SubLObject methods_substitute_ret_forms_with_throw_to_tag_alt(SubLObject body, SubLObject tag, SubLObject inside_backquote) {
-        if (inside_backquote == UNPROVIDED) {
-            inside_backquote = NIL;
-        }
-        if (NIL == body) {
-            return NIL;
-        } else {
-            if (body.isAtom()) {
-                return body;
-            } else {
-                if (body.first() == QUOTE) {
-                    return copy_tree(body);
-                } else {
-                    if (body.first() == RET) {
-                        if (body.rest().isCons()) {
-                            return list(THROW, list(QUOTE, tag), com.cyc.cycjava.cycl.methods.methods_substitute_ret_forms_with_throw_to_tag(cadr(body), tag, UNPROVIDED));
-                        } else {
-                            return list(THROW, list(QUOTE, tag), NIL);
-                        }
-                    } else {
-                        return cons(com.cyc.cycjava.cycl.methods.methods_substitute_ret_forms_with_throw_to_tag(body.first(), tag, UNPROVIDED), com.cyc.cycjava.cycl.methods.methods_substitute_ret_forms_with_throw_to_tag(body.rest(), tag, UNPROVIDED));
-                    }
-                }
-            }
-        }
     }
 
     public static SubLObject methods_substitute_ret_forms_with_throw_to_tag(final SubLObject body, final SubLObject tag, SubLObject inside_backquote) {
@@ -14629,106 +6323,8 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return list(THROW, list(QUOTE, tag), NIL);
     }
 
-    public static final SubLObject methods_lambda_list_to_listed_arg_value_expression_alt(SubLObject lambda_list) {
-        return cons(LIST, com.cyc.cycjava.cycl.methods.methods_filter_option_words_from_lambda_list(lambda_list));
-    }
-
     public static SubLObject methods_lambda_list_to_listed_arg_value_expression(final SubLObject lambda_list) {
         return cons(LIST, methods_filter_option_words_from_lambda_list(lambda_list));
-    }
-
-    public static final SubLObject generate_instance_variable_bindings_for_instance_alt(SubLObject var, SubLObject class_name, SubLObject method_name, SubLObject lambda_list, SubLObject method_properties, SubLObject instance_variables, SubLObject body, SubLObject read_only) {
-        if (read_only == UNPROVIDED) {
-            read_only = T;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject var_bindings = NIL;
-                SubLObject v_class = classes.classes_retrieve_class(class_name);
-                SubLObject update_expressions = NIL;
-                SubLObject preprocessed_conc_name = cconcatenate(symbol_name(class_name), $str_alt48$_);
-                SubLObject catch_tag = make_symbol(cconcatenate($str_alt99$OUTER_CATCH_FOR_, new SubLObject[]{ preprocessed_conc_name, $$$METHOD }));
-                SubLObject catch_var = make_symbol(cconcatenate($str_alt101$CATCH_VAR_FOR_, new SubLObject[]{ preprocessed_conc_name, $$$METHOD }));
-                SubLObject listed_args_var = make_symbol($str_alt102$LISTED_ARGS);
-                SubLObject preprocessed_body = com.cyc.cycjava.cycl.methods.methods_inline_method_calls(body, class_name);
-                SubLObject before_listeners_p = classes.classes_before_listeners_p(method_properties);
-                SubLObject after_listeners_p = classes.classes_after_listeners_p(method_properties);
-                SubLObject variable = NIL;
-                SubLObject explicit_getter = NIL;
-                SubLObject explicit_setter = NIL;
-                if ((NIL != classes.classes_no_member_variables_p(method_properties)) && (NIL == $methods_insert_trace_code_p$.getDynamicValue(thread))) {
-                    return bq_cons(PROGN, preprocessed_body);
-                }
-                if (NIL != classes.classes_auto_update_p(method_properties)) {
-                    preprocessed_body = com.cyc.cycjava.cycl.methods.methods_transform_setqs_for_auto_update(preprocessed_body, class_name);
-                    read_only = T;
-                }
-                if (NIL != classes.classes_read_only_p(method_properties)) {
-                    read_only = T;
-                }
-                {
-                    SubLObject cdolist_list_var = instance_variables;
-                    SubLObject instance_variable_form = NIL;
-                    for (instance_variable_form = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , instance_variable_form = cdolist_list_var.first()) {
-                        if (instance_variable_form.isCons()) {
-                            variable = instance_variable_form.first();
-                            explicit_getter = cadr(instance_variable_form);
-                            explicit_setter = cddr(instance_variable_form).first();
-                        } else {
-                            variable = instance_variable_form;
-                            thread.resetMultipleValues();
-                            {
-                                SubLObject explicit_getter_17 = slots.get_instance_slot_accessors(v_class, variable);
-                                SubLObject explicit_setter_18 = thread.secondMultipleValue();
-                                thread.resetMultipleValues();
-                                explicit_getter = explicit_getter_17;
-                                explicit_setter = explicit_setter_18;
-                            }
-                        }
-                        if (NIL != unquoted_symbol_in_tree_p(variable, preprocessed_body)) {
-                            var_bindings = cons(list(variable, list(explicit_getter, var)), var_bindings);
-                            if (NIL == read_only) {
-                                update_expressions = cons(list(explicit_setter, var, variable), update_expressions);
-                            }
-                        }
-                    }
-                }
-                if ((NIL != var_bindings) || (NIL != $methods_insert_trace_code_p$.getDynamicValue(thread))) {
-                    if ((NIL != read_only) && (NIL == $methods_insert_trace_code_p$.getDynamicValue(thread))) {
-                        if (NIL != after_listeners_p) {
-                            if (NIL != before_listeners_p) {
-                                return list(CLET, listS(bq_cons(catch_var, $list_alt104), list(listed_args_var, NIL != lambda_list ? ((SubLObject) (com.cyc.cycjava.cycl.methods.methods_lambda_list_to_listed_arg_value_expression(lambda_list))) : NIL), reverse(var_bindings)), listS(CCATCH, list(QUOTE, catch_tag), catch_var, list(METHOD_LISTENERS_INVOKE_BEFORE_LISTENERS, list(QUOTE, method_name), var, listed_args_var), com.cyc.cycjava.cycl.methods.methods_substitute_ret_forms_with_throw_to_tag(preprocessed_body, catch_tag, UNPROVIDED)), list(METHOD_LISTENERS_INVOKE_AFTER_LISTENERS, list(QUOTE, method_name), var, listed_args_var, catch_var), list(RET, catch_var));
-                            } else {
-                                return list(CLET, listS(bq_cons(catch_var, $list_alt104), list(listed_args_var, NIL != lambda_list ? ((SubLObject) (com.cyc.cycjava.cycl.methods.methods_lambda_list_to_listed_arg_value_expression(lambda_list))) : NIL), reverse(var_bindings)), listS(CCATCH, list(QUOTE, catch_tag), catch_var, com.cyc.cycjava.cycl.methods.methods_substitute_ret_forms_with_throw_to_tag(preprocessed_body, catch_tag, UNPROVIDED)), list(METHOD_LISTENERS_INVOKE_AFTER_LISTENERS, list(QUOTE, method_name), var, listed_args_var, catch_var), list(RET, catch_var));
-                            }
-                        } else {
-                            if (NIL != before_listeners_p) {
-                                return listS(CLET, bq_cons(list(listed_args_var, NIL != lambda_list ? ((SubLObject) (com.cyc.cycjava.cycl.methods.methods_lambda_list_to_listed_arg_value_expression(lambda_list))) : NIL), reverse(var_bindings)), list(METHOD_LISTENERS_INVOKE_BEFORE_LISTENERS, list(QUOTE, method_name), var, listed_args_var), preprocessed_body);
-                            } else {
-                                return listS(CLET, reverse(var_bindings), preprocessed_body);
-                            }
-                        }
-                    } else {
-                        return listS(CLET, bq_cons(bq_cons(catch_var, $list_alt104), append((NIL != before_listeners_p) || (NIL != after_listeners_p) ? ((SubLObject) (list(list(listed_args_var, NIL != lambda_list ? ((SubLObject) (com.cyc.cycjava.cycl.methods.methods_lambda_list_to_listed_arg_value_expression(lambda_list))) : NIL)))) : NIL, reverse(var_bindings))), list(CCATCH, list(QUOTE, catch_tag), catch_var, listS(CUNWIND_PROTECT, bq_cons(PROGN, append(NIL != before_listeners_p ? ((SubLObject) (list(list(METHOD_LISTENERS_INVOKE_BEFORE_LISTENERS, list(QUOTE, method_name), var, listed_args_var)))) : NIL, com.cyc.cycjava.cycl.methods.methods_substitute_ret_forms_with_throw_to_tag(preprocessed_body, catch_tag, UNPROVIDED))), append(NIL != $methods_insert_trace_code_p$.getDynamicValue(thread) ? ((SubLObject) (list(com.cyc.cycjava.cycl.methods.expand_methods_insert_tracing_exit_code(method_name, SELF, catch_var)))) : NIL, NIL != read_only ? ((SubLObject) (NIL)) : reverse(update_expressions), NIL))), append(NIL != after_listeners_p ? ((SubLObject) (list(list(METHOD_LISTENERS_INVOKE_AFTER_LISTENERS, list(QUOTE, method_name), var, listed_args_var, catch_var)))) : NIL, list(list(RET, catch_var))));
-                    }
-                } else {
-                    if (NIL != after_listeners_p) {
-                        if (NIL != before_listeners_p) {
-                            return list(CLET, listS(bq_cons(catch_var, $list_alt104), list(listed_args_var, NIL != lambda_list ? ((SubLObject) (com.cyc.cycjava.cycl.methods.methods_lambda_list_to_listed_arg_value_expression(lambda_list))) : NIL), reverse(var_bindings)), listS(CCATCH, list(QUOTE, catch_tag), catch_var, list(METHOD_LISTENERS_INVOKE_BEFORE_LISTENERS, list(QUOTE, method_name), var, listed_args_var), com.cyc.cycjava.cycl.methods.methods_substitute_ret_forms_with_throw_to_tag(preprocessed_body, catch_tag, UNPROVIDED)), list(METHOD_LISTENERS_INVOKE_AFTER_LISTENERS, list(QUOTE, method_name), var, listed_args_var, catch_var), list(RET, catch_var));
-                        } else {
-                            return bq_cons(PROGN, preprocessed_body);
-                        }
-                    } else {
-                        if (NIL != before_listeners_p) {
-                            return listS(CLET, bq_cons(list(listed_args_var, NIL != lambda_list ? ((SubLObject) (com.cyc.cycjava.cycl.methods.methods_lambda_list_to_listed_arg_value_expression(lambda_list))) : NIL), reverse(var_bindings)), list(METHOD_LISTENERS_INVOKE_BEFORE_LISTENERS, list(QUOTE, method_name), var, listed_args_var), preprocessed_body);
-                        } else {
-                            return bq_cons(PROGN, preprocessed_body);
-                        }
-                    }
-                }
-            }
-        }
     }
 
     public static SubLObject generate_instance_variable_bindings_for_instance(final SubLObject var, final SubLObject class_name, final SubLObject method_name, final SubLObject lambda_list, final SubLObject method_properties, final SubLObject instance_variables, final SubLObject body, SubLObject read_only) {
@@ -14815,84 +6411,12 @@ public final class methods extends SubLTranslatedFile implements V12 {
 
     }
 
-    public static final SubLObject methods_create_instance_method_decl_alt(SubLObject method_name, SubLObject class_name, SubLObject method_properties, SubLObject lambda_list, SubLObject body) {
-        {
-            SubLObject function_name = intern(cconcatenate(symbol_name(class_name), new SubLObject[]{ $str_alt48$_, symbol_name(method_name), $str_alt49$_METHOD }), UNPROVIDED);
-            SubLObject new_body = com.cyc.cycjava.cycl.methods.generate_instance_variable_bindings_for_instance(SELF, class_name, method_name, lambda_list, method_properties, instances.instances_filter_slots_per_access(classes.classes_retrieve_class(class_name), classes.classes_all_slots(class_name, UNPROVIDED)), body, NIL);
-            SubLObject self_in_bodyP = makeBoolean((NIL != unquoted_symbol_in_tree_p(SELF, new_body)) || (NIL != unquoted_symbol_in_tree_p(SUPER, new_body)));
-            SubLObject function_def = copy_tree(listS(DEFINE_PUBLIC, function_name, bq_cons(SELF, lambda_list), append(NIL != self_in_bodyP ? ((SubLObject) (NIL)) : copy_tree($list_alt109), list(new_body))));
-            return listS(method_name, function_name, function_def);
-        }
-    }
-
     public static SubLObject methods_create_instance_method_decl(final SubLObject method_name, final SubLObject class_name, final SubLObject method_properties, final SubLObject lambda_list, final SubLObject body) {
         final SubLObject function_name = intern(cconcatenate(symbol_name(class_name), new SubLObject[]{ $str48$_, symbol_name(method_name), $str49$_METHOD }), UNPROVIDED);
         final SubLObject new_body = generate_instance_variable_bindings_for_instance(SELF, class_name, method_name, lambda_list, method_properties, instances.instances_filter_slots_per_access(classes.classes_retrieve_class(class_name), classes.classes_all_slots(class_name, UNPROVIDED)), body, NIL);
         final SubLObject self_in_bodyP = makeBoolean((NIL != unquoted_symbol_in_tree_p(SELF, new_body)) || (NIL != unquoted_symbol_in_tree_p(SUPER, new_body)));
         final SubLObject function_def = copy_tree(listS(DEFINE_PUBLIC, function_name, bq_cons(SELF, lambda_list), append(NIL != self_in_bodyP ? NIL : copy_tree($list109), list(new_body))));
         return listS(method_name, function_name, function_def);
-    }
-
-    public static final SubLObject methods_generate_instance_function_definition_alt(SubLObject method, SubLObject method_properties, SubLObject method_body) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != subloop_structures.method_p(method)) {
-                {
-                    SubLObject method_19 = method;
-                    SubLObject name = subloop_structures.method_name(method_19);
-                    SubLObject class_name = subloop_structures.method_class_name(method_19);
-                    SubLObject lambda_list = subloop_structures.method_lambda_list(method_19);
-                    SubLObject scope = subloop_structures.method_scope(method_19);
-                    SubLObject function_name = subloop_structures.method_function_name(method_19);
-                    SubLObject function_def = subloop_structures.method_function_def(method_19);
-                    try {
-                        {
-                            SubLObject preprocessed_body = method_body;
-                            SubLObject documentation_string = NIL;
-                            if (method_body.isCons() && method_body.first().isString()) {
-                                preprocessed_body = method_body.rest();
-                                documentation_string = method_body.first();
-                            }
-                            {
-                                SubLObject new_body = com.cyc.cycjava.cycl.methods.generate_instance_variable_bindings_for_instance(SELF, class_name, name, lambda_list, method_properties, instances.instances_filter_slots_per_access(classes.classes_retrieve_class(class_name), classes.classes_all_slots(class_name, UNPROVIDED)), preprocessed_body, NIL);
-                                SubLObject self_in_bodyP = makeBoolean((NIL != unquoted_symbol_in_tree_p(SELF, new_body)) || (NIL != unquoted_symbol_in_tree_p(SUPER, new_body)));
-                                SubLObject special_form = DEFINE_PUBLIC;
-                                SubLObject pcase_var = scope;
-                                if (pcase_var.eql($FILE_SCOPE)) {
-                                    special_form = DEFINE_PRIVATE;
-                                } else {
-                                    if (pcase_var.eql($SYSTEM_SCOPE)) {
-                                        special_form = DEFINE_PROTECTED;
-                                    } else {
-                                        if (pcase_var.eql($GLOBAL_SCOPE)) {
-                                            special_form = DEFINE_PUBLIC;
-                                        }
-                                    }
-                                }
-                                function_def = listS(special_form, function_name, bq_cons(SELF, lambda_list), append(NIL != documentation_string ? ((SubLObject) (list(documentation_string))) : NIL, NIL != $methods_insert_trace_code_p$.getDynamicValue(thread) ? ((SubLObject) (list(com.cyc.cycjava.cycl.methods.expand_methods_insert_tracing_enter_code(name, SELF, lambda_list)))) : NIL, NIL != self_in_bodyP ? ((SubLObject) (NIL)) : copy_tree($list_alt109), list(new_body)));
-                            }
-                        }
-                    } finally {
-                        {
-                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                            try {
-                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                subloop_structures._csetf_method_name(method_19, name);
-                                subloop_structures._csetf_method_class_name(method_19, class_name);
-                                subloop_structures._csetf_method_lambda_list(method_19, lambda_list);
-                                subloop_structures._csetf_method_scope(method_19, scope);
-                                subloop_structures._csetf_method_function_name(method_19, function_name);
-                                subloop_structures._csetf_method_function_def(method_19, function_def);
-                            } finally {
-                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                }
-                return method;
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject methods_generate_instance_function_definition(final SubLObject method, final SubLObject method_properties, final SubLObject method_body) {
@@ -14948,81 +6472,11 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject methods_create_class_method_decl_alt(SubLObject method_name, SubLObject class_name, SubLObject method_properties, SubLObject lambda_list, SubLObject body) {
-        {
-            SubLObject function_name = intern(cconcatenate(symbol_name(class_name), new SubLObject[]{ $str_alt48$_, symbol_name(method_name), $str_alt49$_METHOD }), UNPROVIDED);
-            SubLObject new_body = com.cyc.cycjava.cycl.methods.generate_instance_variable_bindings_for_instance(SELF, class_name, method_name, lambda_list, method_properties, instances.instances_filter_slots_per_access(classes.classes_retrieve_class(class_name), classes.classes_all_class_slots(class_name, UNPROVIDED)), body, NIL);
-            SubLObject function_def = copy_tree(list(DEFINE_PUBLIC, function_name, bq_cons(SELF, lambda_list), $list_alt112, new_body));
-            return listS(method_name, function_name, function_def);
-        }
-    }
-
     public static SubLObject methods_create_class_method_decl(final SubLObject method_name, final SubLObject class_name, final SubLObject method_properties, final SubLObject lambda_list, final SubLObject body) {
         final SubLObject function_name = intern(cconcatenate(symbol_name(class_name), new SubLObject[]{ $str48$_, symbol_name(method_name), $str49$_METHOD }), UNPROVIDED);
         final SubLObject new_body = generate_instance_variable_bindings_for_instance(SELF, class_name, method_name, lambda_list, method_properties, instances.instances_filter_slots_per_access(classes.classes_retrieve_class(class_name), classes.classes_all_class_slots(class_name, UNPROVIDED)), body, NIL);
         final SubLObject function_def = copy_tree(list(DEFINE_PUBLIC, function_name, bq_cons(SELF, lambda_list), $list112, new_body));
         return listS(method_name, function_name, function_def);
-    }
-
-    public static final SubLObject methods_generate_class_function_definition_alt(SubLObject method, SubLObject method_properties, SubLObject method_body) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != subloop_structures.method_p(method)) {
-                {
-                    SubLObject method_20 = method;
-                    SubLObject name = subloop_structures.method_name(method_20);
-                    SubLObject class_name = subloop_structures.method_class_name(method_20);
-                    SubLObject lambda_list = subloop_structures.method_lambda_list(method_20);
-                    SubLObject scope = subloop_structures.method_scope(method_20);
-                    SubLObject function_name = subloop_structures.method_function_name(method_20);
-                    SubLObject function_def = subloop_structures.method_function_def(method_20);
-                    try {
-                        {
-                            SubLObject preprocessed_body = method_body;
-                            SubLObject documentation_string = NIL;
-                            if (method_body.isCons() && method_body.first().isString()) {
-                                preprocessed_body = method_body.rest();
-                                documentation_string = method_body.first();
-                            }
-                            {
-                                SubLObject new_body = com.cyc.cycjava.cycl.methods.generate_instance_variable_bindings_for_instance(SELF, class_name, name, lambda_list, method_properties, instances.instances_filter_slots_per_access(classes.classes_retrieve_class(class_name), classes.classes_all_class_slots(class_name, UNPROVIDED)), preprocessed_body, NIL);
-                                SubLObject special_form = DEFINE_PUBLIC;
-                                SubLObject pcase_var = scope;
-                                if (pcase_var.eql($FILE_SCOPE)) {
-                                    special_form = DEFINE_PRIVATE;
-                                } else {
-                                    if (pcase_var.eql($SYSTEM_SCOPE)) {
-                                        special_form = DEFINE_PROTECTED;
-                                    } else {
-                                        if (pcase_var.eql($GLOBAL_SCOPE)) {
-                                            special_form = DEFINE_PUBLIC;
-                                        }
-                                    }
-                                }
-                                function_def = copy_tree(listS(special_form, function_name, bq_cons(SELF, lambda_list), append(NIL != documentation_string ? ((SubLObject) (list(documentation_string))) : NIL, NIL != $methods_insert_trace_code_p$.getDynamicValue(thread) ? ((SubLObject) (list(com.cyc.cycjava.cycl.methods.expand_methods_insert_tracing_enter_code(name, SELF, lambda_list)))) : NIL, list($list_alt112, new_body))));
-                            }
-                        }
-                    } finally {
-                        {
-                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                            try {
-                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                subloop_structures._csetf_method_name(method_20, name);
-                                subloop_structures._csetf_method_class_name(method_20, class_name);
-                                subloop_structures._csetf_method_lambda_list(method_20, lambda_list);
-                                subloop_structures._csetf_method_scope(method_20, scope);
-                                subloop_structures._csetf_method_function_name(method_20, function_name);
-                                subloop_structures._csetf_method_function_def(method_20, function_def);
-                            } finally {
-                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                }
-                return method;
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject methods_generate_class_function_definition(final SubLObject method, final SubLObject method_properties, final SubLObject method_body) {
@@ -15077,25 +6531,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject methods_get_method_alt(SubLObject v_class, SubLObject method_name) {
-        if (NIL != subloop_structures.class_p(v_class)) {
-            {
-                SubLObject v_class_21 = v_class;
-                SubLObject compiled_instance_method_access_alist = subloop_structures.class_compiled_instance_method_access_alist(v_class_21);
-                SubLObject compiled_class_method_access_alist = subloop_structures.class_compiled_class_method_access_alist(v_class_21);
-                SubLObject method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, compiled_instance_method_access_alist);
-                if (NIL != method) {
-                    return method;
-                }
-                method = com.cyc.cycjava.cycl.methods.method_assoc(method_name, compiled_class_method_access_alist);
-                if (NIL != method) {
-                    return method;
-                }
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject methods_get_method(final SubLObject v_class, final SubLObject method_name) {
         if (NIL != subloop_structures.class_p(v_class)) {
             final SubLObject compiled_instance_method_access_alist = subloop_structures.class_compiled_instance_method_access_alist(v_class);
@@ -15107,46 +6542,6 @@ public final class methods extends SubLTranslatedFile implements V12 {
             method = method_assoc(method_name, compiled_class_method_access_alist);
             if (NIL != method) {
                 return method;
-            }
-        }
-        return NIL;
-    }
-
-    public static final SubLObject methods_get_all_method_names_alt(SubLObject class_or_instance) {
-        {
-            SubLObject v_class = (NIL != subloop_structures.class_p(class_or_instance)) ? ((SubLObject) (class_or_instance)) : NIL != subloop_structures.instance_p(class_or_instance) ? ((SubLObject) (subloop_structures.instance_class(class_or_instance))) : NIL;
-            if (NIL != v_class) {
-                {
-                    SubLObject collected_methods = NIL;
-                    SubLObject v_class_22 = v_class;
-                    SubLObject compiled_instance_method_access_alist = subloop_structures.class_compiled_instance_method_access_alist(v_class_22);
-                    SubLObject compiled_class_method_access_alist = subloop_structures.class_compiled_class_method_access_alist(v_class_22);
-                    {
-                        SubLObject cdolist_list_var = compiled_class_method_access_alist;
-                        SubLObject method = NIL;
-                        for (method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , method = cdolist_list_var.first()) {
-                            {
-                                SubLObject item_var = subloop_structures.method_name(method);
-                                if (NIL == member(item_var, collected_methods, symbol_function(EQL), symbol_function(IDENTITY))) {
-                                    collected_methods = cons(item_var, collected_methods);
-                                }
-                            }
-                        }
-                    }
-                    {
-                        SubLObject cdolist_list_var = compiled_instance_method_access_alist;
-                        SubLObject method = NIL;
-                        for (method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , method = cdolist_list_var.first()) {
-                            {
-                                SubLObject item_var = subloop_structures.method_name(method);
-                                if (NIL == member(item_var, collected_methods, symbol_function(EQL), symbol_function(IDENTITY))) {
-                                    collected_methods = cons(item_var, collected_methods);
-                                }
-                            }
-                        }
-                    }
-                    return nreverse(collected_methods);
-                }
             }
         }
         return NIL;
@@ -15187,294 +6582,294 @@ public final class methods extends SubLTranslatedFile implements V12 {
     }
 
     public static SubLObject declare_methods_file() {
-        declareFunction("methods_generate_format_string_for_tracing", "METHODS-GENERATE-FORMAT-STRING-FOR-TRACING", 1, 0, false);
-        declareFunction("methods_generate_method_enter_format_string", "METHODS-GENERATE-METHOD-ENTER-FORMAT-STRING", 1, 0, false);
-        declareFunction("methods_generate_method_exit_format_string", "METHODS-GENERATE-METHOD-EXIT-FORMAT-STRING", 0, 0, false);
-        declareFunction("methods_tracing_tab", "METHODS-TRACING-TAB", 2, 0, false);
-        declareFunction("methods_filter_option_words_from_lambda_list", "METHODS-FILTER-OPTION-WORDS-FROM-LAMBDA-LIST", 1, 0, false);
-        declareFunction("expand_methods_insert_tracing_enter_code", "EXPAND-METHODS-INSERT-TRACING-ENTER-CODE", 3, 0, false);
-        declareMacro("methods_insert_tracing_enter_code", "METHODS-INSERT-TRACING-ENTER-CODE");
-        declareFunction("expand_methods_insert_tracing_exit_code", "EXPAND-METHODS-INSERT-TRACING-EXIT-CODE", 3, 0, false);
-        declareMacro("methods_insert_tracing_exit_code", "METHODS-INSERT-TRACING-EXIT-CODE");
-        declareFunction("methods_protection_level_p", "METHODS-PROTECTION-LEVEL-P", 1, 0, false);
-        declareFunction("methods_scope_level_p", "METHODS-SCOPE-LEVEL-P", 1, 0, false);
-        declareFunction("valid_method_listener_types", "VALID-METHOD-LISTENER-TYPES", 0, 0, false);
-        declareFunction("method_listener_type_p", "METHOD-LISTENER-TYPE-P", 1, 0, false);
-        declareFunction("encode_method_listener_type", "ENCODE-METHOD-LISTENER-TYPE", 1, 0, false);
-        declareFunction("decode_method_listener_type", "DECODE-METHOD-LISTENER-TYPE", 1, 0, false);
-        declareFunction("method_listener_type_less_p", "METHOD-LISTENER-TYPE-LESS-P", 2, 0, false);
-        declareFunction("method_listener_type_greater_p", "METHOD-LISTENER-TYPE-GREATER-P", 2, 0, false);
-        declareFunction("methods_special_form_given_scope_level", "METHODS-SPECIAL-FORM-GIVEN-SCOPE-LEVEL", 1, 0, false);
-        declareFunction("method_assoc", "METHOD-ASSOC", 2, 0, false);
-        declareFunction("method_shadowed_assoc", "METHOD-SHADOWED-ASSOC", 2, 0, false);
-        declareFunction("method_class_assoc", "METHOD-CLASS-ASSOC", 3, 0, false);
-        declareFunction("method_class_shadowed_assoc", "METHOD-CLASS-SHADOWED-ASSOC", 3, 0, false);
-        declareFunction("methods_protection_level_of_method_decl", "METHODS-PROTECTION-LEVEL-OF-METHOD-DECL", 1, 0, false);
-        declareFunction("methods_scope_level_of_method_decl", "METHODS-SCOPE-LEVEL-OF-METHOD-DECL", 1, 0, false);
-        declareFunction("methods_update_type_of_method_decl", "METHODS-UPDATE-TYPE-OF-METHOD-DECL", 1, 0, false);
-        declareFunction("methods_before_listeners_p", "METHODS-BEFORE-LISTENERS-P", 1, 0, false);
-        declareFunction("methods_after_listeners_p", "METHODS-AFTER-LISTENERS-P", 1, 0, false);
-        declareFunction("method_instantiate_template_p", "METHOD-INSTANTIATE-TEMPLATE-P", 1, 0, false);
-        declareFunction("new_method", "NEW-METHOD", 3, 0, false);
-        declareFunction("methods_intern_method", "METHODS-INTERN-METHOD", 5, 0, false);
-        declareFunction("method_set_function_definition", "METHOD-SET-FUNCTION-DEFINITION", 4, 0, false);
-        declareFunction("methods_check_method_spec", "METHODS-CHECK-METHOD-SPEC", 2, 0, false);
-        declareMacro("def_instance_method", "DEF-INSTANCE-METHOD");
-        declareFunction("subloop_register_instance_method", "SUBLOOP-REGISTER-INSTANCE-METHOD", 3, 0, false);
-        declareMacro("def_default_instance_method", "DEF-DEFAULT-INSTANCE-METHOD");
-        declareFunction("methods_retrieve_instance_method_definition", "METHODS-RETRIEVE-INSTANCE-METHOD-DEFINITION", 2, 0, false);
-        declareFunction("methods_incorporate_instance_method", "METHODS-INCORPORATE-INSTANCE-METHOD", 5, 0, false);
-        declareFunction("methods_update_instance_method_decl", "METHODS-UPDATE-INSTANCE-METHOD-DECL", 5, 0, false);
-        declareMacro("def_class_method", "DEF-CLASS-METHOD");
-        declareFunction("subloop_register_class_method", "SUBLOOP-REGISTER-CLASS-METHOD", 3, 0, false);
-        declareFunction("methods_retrieve_class_method_definition", "METHODS-RETRIEVE-CLASS-METHOD-DEFINITION", 2, 0, false);
-        declareFunction("methods_incorporate_class_method", "METHODS-INCORPORATE-CLASS-METHOD", 5, 0, false);
-        declareFunction("methods_update_class_method_decl", "METHODS-UPDATE-CLASS-METHOD-DECL", 5, 0, false);
-        declareFunction("methods_method_name_given_method_decl", "METHODS-METHOD-NAME-GIVEN-METHOD-DECL", 1, 0, false);
-        declareFunction("methods_function_name_given_method_decl", "METHODS-FUNCTION-NAME-GIVEN-METHOD-DECL", 1, 0, false);
-        declareFunction("methods_function_def_given_method_decl", "METHODS-FUNCTION-DEF-GIVEN-METHOD-DECL", 1, 0, false);
-        declareFunction("methods_set_function_def_of_method_decl", "METHODS-SET-FUNCTION-DEF-OF-METHOD-DECL", 2, 0, false);
-        declareFunction("methods_add_method_decl", "METHODS-ADD-METHOD-DECL", 2, 0, false);
-        declareFunction("methods_retrieve_method_decl", "METHODS-RETRIEVE-METHOD-DECL", 2, 0, false);
-        declareFunction("methods_compile_method_access_alists", "METHODS-COMPILE-METHOD-ACCESS-ALISTS", 1, 0, false);
-        declareFunction("methods_compile_class_method_access_alist_upwards", "METHODS-COMPILE-CLASS-METHOD-ACCESS-ALIST-UPWARDS", 1, 1, false);
-        declareFunction("methods_compile_class_method_access_alist", "METHODS-COMPILE-CLASS-METHOD-ACCESS-ALIST", 1, 0, false);
-        declareFunction("methods_compile_instance_method_access_alist_upwards", "METHODS-COMPILE-INSTANCE-METHOD-ACCESS-ALIST-UPWARDS", 1, 1, false);
-        declareFunction("methods_compile_instance_method_access_alist", "METHODS-COMPILE-INSTANCE-METHOD-ACCESS-ALIST", 1, 0, false);
-        declareFunction("funcall_class_method_with_0_args", "FUNCALL-CLASS-METHOD-WITH-0-ARGS", 2, 0, false);
-        declareFunction("funcall_class_method_with_1_args", "FUNCALL-CLASS-METHOD-WITH-1-ARGS", 3, 0, false);
-        declareFunction("funcall_class_method_with_2_args", "FUNCALL-CLASS-METHOD-WITH-2-ARGS", 4, 0, false);
-        declareFunction("funcall_class_method_with_3_args", "FUNCALL-CLASS-METHOD-WITH-3-ARGS", 5, 0, false);
-        declareFunction("funcall_class_method_with_4_args", "FUNCALL-CLASS-METHOD-WITH-4-ARGS", 6, 0, false);
-        declareFunction("funcall_class_method_with_5_args", "FUNCALL-CLASS-METHOD-WITH-5-ARGS", 7, 0, false);
-        declareFunction("funcall_class_method_with_6_args", "FUNCALL-CLASS-METHOD-WITH-6-ARGS", 8, 0, false);
-        declareFunction("funcall_class_method_with_7_args", "FUNCALL-CLASS-METHOD-WITH-7-ARGS", 9, 0, false);
-        declareFunction("funcall_class_method_with_8_args", "FUNCALL-CLASS-METHOD-WITH-8-ARGS", 10, 0, false);
-        declareFunction("funcall_class_method_with_9_args", "FUNCALL-CLASS-METHOD-WITH-9-ARGS", 11, 0, false);
-        declareFunction("funcall_class_method_with_10_args", "FUNCALL-CLASS-METHOD-WITH-10-ARGS", 12, 0, false);
-        declareFunction("funcall_class_method_with_11_args", "FUNCALL-CLASS-METHOD-WITH-11-ARGS", 13, 0, false);
-        declareFunction("funcall_class_method_with_12_args", "FUNCALL-CLASS-METHOD-WITH-12-ARGS", 14, 0, false);
-        declareFunction("funcall_class_method_with_13_args", "FUNCALL-CLASS-METHOD-WITH-13-ARGS", 15, 0, false);
-        declareFunction("funcall_class_method_with_14_args", "FUNCALL-CLASS-METHOD-WITH-14-ARGS", 16, 0, false);
-        declareFunction("funcall_class_method_with_15_args", "FUNCALL-CLASS-METHOD-WITH-15-ARGS", 17, 0, false);
-        declareFunction("funcall_class_method_with_16_args", "FUNCALL-CLASS-METHOD-WITH-16-ARGS", 18, 0, false);
-        declareFunction("funcall_class_method_with_17_args", "FUNCALL-CLASS-METHOD-WITH-17-ARGS", 19, 0, false);
-        declareFunction("funcall_class_method_with_18_args", "FUNCALL-CLASS-METHOD-WITH-18-ARGS", 20, 0, false);
-        declareFunction("funcall_class_method_with_19_args", "FUNCALL-CLASS-METHOD-WITH-19-ARGS", 21, 0, false);
-        declareFunction("funcall_class_method_with_20_args", "FUNCALL-CLASS-METHOD-WITH-20-ARGS", 22, 0, false);
-        declareFunction("funcall_class_super_method_with_0_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-0-ARGS", 2, 0, false);
-        declareFunction("funcall_class_super_method_with_1_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-1-ARGS", 3, 0, false);
-        declareFunction("funcall_class_super_method_with_2_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-2-ARGS", 4, 0, false);
-        declareFunction("funcall_class_super_method_with_3_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-3-ARGS", 5, 0, false);
-        declareFunction("funcall_class_super_method_with_4_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-4-ARGS", 6, 0, false);
-        declareFunction("funcall_class_super_method_with_5_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-5-ARGS", 7, 0, false);
-        declareFunction("funcall_class_super_method_with_6_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-6-ARGS", 8, 0, false);
-        declareFunction("funcall_class_super_method_with_7_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-7-ARGS", 9, 0, false);
-        declareFunction("funcall_class_super_method_with_8_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-8-ARGS", 10, 0, false);
-        declareFunction("funcall_class_super_method_with_9_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-9-ARGS", 11, 0, false);
-        declareFunction("funcall_class_super_method_with_10_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-10-ARGS", 12, 0, false);
-        declareFunction("funcall_class_super_method_with_11_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-11-ARGS", 13, 0, false);
-        declareFunction("funcall_class_super_method_with_12_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-12-ARGS", 14, 0, false);
-        declareFunction("funcall_class_super_method_with_13_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-13-ARGS", 15, 0, false);
-        declareFunction("funcall_class_super_method_with_14_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-14-ARGS", 16, 0, false);
-        declareFunction("funcall_class_super_method_with_15_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-15-ARGS", 17, 0, false);
-        declareFunction("funcall_class_super_method_with_16_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-16-ARGS", 18, 0, false);
-        declareFunction("funcall_class_super_method_with_17_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-17-ARGS", 19, 0, false);
-        declareFunction("funcall_class_super_method_with_18_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-18-ARGS", 20, 0, false);
-        declareFunction("funcall_class_super_method_with_19_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-19-ARGS", 21, 0, false);
-        declareFunction("funcall_class_super_method_with_20_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-20-ARGS", 22, 0, false);
-        declareFunction("safe_funcall_class_method_with_0_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-0-ARGS", 2, 0, false);
-        declareFunction("safe_funcall_class_method_with_1_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-1-ARGS", 3, 0, false);
-        declareFunction("safe_funcall_class_method_with_2_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-2-ARGS", 4, 0, false);
-        declareFunction("safe_funcall_class_method_with_3_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-3-ARGS", 5, 0, false);
-        declareFunction("safe_funcall_class_method_with_4_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-4-ARGS", 6, 0, false);
-        declareFunction("safe_funcall_class_method_with_5_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-5-ARGS", 7, 0, false);
-        declareFunction("safe_funcall_class_method_with_6_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-6-ARGS", 8, 0, false);
-        declareFunction("safe_funcall_class_method_with_7_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-7-ARGS", 9, 0, false);
-        declareFunction("safe_funcall_class_method_with_8_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-8-ARGS", 10, 0, false);
-        declareFunction("safe_funcall_class_method_with_9_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-9-ARGS", 11, 0, false);
-        declareFunction("safe_funcall_class_method_with_10_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-10-ARGS", 12, 0, false);
-        declareFunction("safe_funcall_class_method_with_11_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-11-ARGS", 13, 0, false);
-        declareFunction("safe_funcall_class_method_with_12_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-12-ARGS", 14, 0, false);
-        declareFunction("safe_funcall_class_method_with_13_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-13-ARGS", 15, 0, false);
-        declareFunction("safe_funcall_class_method_with_14_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-14-ARGS", 16, 0, false);
-        declareFunction("safe_funcall_class_method_with_15_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-15-ARGS", 17, 0, false);
-        declareFunction("safe_funcall_class_method_with_16_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-16-ARGS", 18, 0, false);
-        declareFunction("safe_funcall_class_method_with_17_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-17-ARGS", 19, 0, false);
-        declareFunction("safe_funcall_class_method_with_18_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-18-ARGS", 20, 0, false);
-        declareFunction("safe_funcall_class_method_with_19_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-19-ARGS", 21, 0, false);
-        declareFunction("safe_funcall_class_method_with_20_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-20-ARGS", 22, 0, false);
-        declareFunction("safe_funcall_class_super_method_with_0_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-0-ARGS", 2, 0, false);
-        declareFunction("safe_funcall_class_super_method_with_1_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-1-ARGS", 3, 0, false);
-        declareFunction("safe_funcall_class_super_method_with_2_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-2-ARGS", 4, 0, false);
-        declareFunction("safe_funcall_class_super_method_with_3_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-3-ARGS", 5, 0, false);
-        declareFunction("safe_funcall_class_super_method_with_4_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-4-ARGS", 6, 0, false);
-        declareFunction("safe_funcall_class_super_method_with_5_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-5-ARGS", 7, 0, false);
-        declareFunction("safe_funcall_class_super_method_with_6_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-6-ARGS", 8, 0, false);
-        declareFunction("safe_funcall_class_super_method_with_7_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-7-ARGS", 9, 0, false);
-        declareFunction("safe_funcall_class_super_method_with_8_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-8-ARGS", 10, 0, false);
-        declareFunction("safe_funcall_class_super_method_with_9_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-9-ARGS", 11, 0, false);
-        declareFunction("safe_funcall_class_super_method_with_10_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-10-ARGS", 12, 0, false);
-        declareFunction("safe_funcall_class_super_method_with_11_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-11-ARGS", 13, 0, false);
-        declareFunction("safe_funcall_class_super_method_with_12_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-12-ARGS", 14, 0, false);
-        declareFunction("safe_funcall_class_super_method_with_13_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-13-ARGS", 15, 0, false);
-        declareFunction("safe_funcall_class_super_method_with_14_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-14-ARGS", 16, 0, false);
-        declareFunction("safe_funcall_class_super_method_with_15_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-15-ARGS", 17, 0, false);
-        declareFunction("safe_funcall_class_super_method_with_16_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-16-ARGS", 18, 0, false);
-        declareFunction("safe_funcall_class_super_method_with_17_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-17-ARGS", 19, 0, false);
-        declareFunction("safe_funcall_class_super_method_with_18_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-18-ARGS", 20, 0, false);
-        declareFunction("safe_funcall_class_super_method_with_19_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-19-ARGS", 21, 0, false);
-        declareFunction("safe_funcall_class_super_method_with_20_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-20-ARGS", 22, 0, false);
-        declareFunction("funcall_instance_method_with_0_args", "FUNCALL-INSTANCE-METHOD-WITH-0-ARGS", 2, 0, false);
-        declareFunction("funcall_instance_method_with_1_args", "FUNCALL-INSTANCE-METHOD-WITH-1-ARGS", 3, 0, false);
-        declareFunction("funcall_instance_method_with_2_args", "FUNCALL-INSTANCE-METHOD-WITH-2-ARGS", 4, 0, false);
-        declareFunction("funcall_instance_method_with_3_args", "FUNCALL-INSTANCE-METHOD-WITH-3-ARGS", 5, 0, false);
-        declareFunction("funcall_instance_method_with_4_args", "FUNCALL-INSTANCE-METHOD-WITH-4-ARGS", 6, 0, false);
-        declareFunction("funcall_instance_method_with_5_args", "FUNCALL-INSTANCE-METHOD-WITH-5-ARGS", 7, 0, false);
-        declareFunction("funcall_instance_method_with_6_args", "FUNCALL-INSTANCE-METHOD-WITH-6-ARGS", 8, 0, false);
-        declareFunction("funcall_instance_method_with_7_args", "FUNCALL-INSTANCE-METHOD-WITH-7-ARGS", 9, 0, false);
-        declareFunction("funcall_instance_method_with_8_args", "FUNCALL-INSTANCE-METHOD-WITH-8-ARGS", 10, 0, false);
-        declareFunction("funcall_instance_method_with_9_args", "FUNCALL-INSTANCE-METHOD-WITH-9-ARGS", 11, 0, false);
-        declareFunction("funcall_instance_method_with_10_args", "FUNCALL-INSTANCE-METHOD-WITH-10-ARGS", 12, 0, false);
-        declareFunction("funcall_instance_method_with_11_args", "FUNCALL-INSTANCE-METHOD-WITH-11-ARGS", 13, 0, false);
-        declareFunction("funcall_instance_method_with_12_args", "FUNCALL-INSTANCE-METHOD-WITH-12-ARGS", 14, 0, false);
-        declareFunction("funcall_instance_method_with_13_args", "FUNCALL-INSTANCE-METHOD-WITH-13-ARGS", 15, 0, false);
-        declareFunction("funcall_instance_method_with_14_args", "FUNCALL-INSTANCE-METHOD-WITH-14-ARGS", 16, 0, false);
-        declareFunction("funcall_instance_method_with_15_args", "FUNCALL-INSTANCE-METHOD-WITH-15-ARGS", 17, 0, false);
-        declareFunction("funcall_instance_method_with_16_args", "FUNCALL-INSTANCE-METHOD-WITH-16-ARGS", 18, 0, false);
-        declareFunction("funcall_instance_method_with_17_args", "FUNCALL-INSTANCE-METHOD-WITH-17-ARGS", 19, 0, false);
-        declareFunction("funcall_instance_method_with_18_args", "FUNCALL-INSTANCE-METHOD-WITH-18-ARGS", 20, 0, false);
-        declareFunction("funcall_instance_method_with_19_args", "FUNCALL-INSTANCE-METHOD-WITH-19-ARGS", 21, 0, false);
-        declareFunction("funcall_instance_method_with_20_args", "FUNCALL-INSTANCE-METHOD-WITH-20-ARGS", 22, 0, false);
-        declareFunction("funcall_instance_super_method_with_0_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-0-ARGS", 2, 0, false);
-        declareFunction("funcall_instance_super_method_with_1_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-1-ARGS", 3, 0, false);
-        declareFunction("funcall_instance_super_method_with_2_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-2-ARGS", 4, 0, false);
-        declareFunction("funcall_instance_super_method_with_3_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-3-ARGS", 5, 0, false);
-        declareFunction("funcall_instance_super_method_with_4_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-4-ARGS", 6, 0, false);
-        declareFunction("funcall_instance_super_method_with_5_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-5-ARGS", 7, 0, false);
-        declareFunction("funcall_instance_super_method_with_6_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-6-ARGS", 8, 0, false);
-        declareFunction("funcall_instance_super_method_with_7_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-7-ARGS", 9, 0, false);
-        declareFunction("funcall_instance_super_method_with_8_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-8-ARGS", 10, 0, false);
-        declareFunction("funcall_instance_super_method_with_9_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-9-ARGS", 11, 0, false);
-        declareFunction("funcall_instance_super_method_with_10_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-10-ARGS", 12, 0, false);
-        declareFunction("funcall_instance_super_method_with_11_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-11-ARGS", 13, 0, false);
-        declareFunction("funcall_instance_super_method_with_12_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-12-ARGS", 14, 0, false);
-        declareFunction("funcall_instance_super_method_with_13_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-13-ARGS", 15, 0, false);
-        declareFunction("funcall_instance_super_method_with_14_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-14-ARGS", 16, 0, false);
-        declareFunction("funcall_instance_super_method_with_15_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-15-ARGS", 17, 0, false);
-        declareFunction("funcall_instance_super_method_with_16_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-16-ARGS", 18, 0, false);
-        declareFunction("funcall_instance_super_method_with_17_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-17-ARGS", 19, 0, false);
-        declareFunction("funcall_instance_super_method_with_18_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-18-ARGS", 20, 0, false);
-        declareFunction("funcall_instance_super_method_with_19_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-19-ARGS", 21, 0, false);
-        declareFunction("funcall_instance_super_method_with_20_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-20-ARGS", 22, 0, false);
-        declareFunction("funcall_class_or_instance_method_with_0_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-0-ARGS", 2, 0, false);
-        declareFunction("funcall_class_or_instance_method_with_1_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-1-ARGS", 3, 0, false);
-        declareFunction("funcall_class_or_instance_method_with_2_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-2-ARGS", 4, 0, false);
-        declareFunction("funcall_class_or_instance_method_with_3_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-3-ARGS", 5, 0, false);
-        declareFunction("funcall_class_or_instance_method_with_4_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-4-ARGS", 6, 0, false);
-        declareFunction("funcall_class_or_instance_method_with_5_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-5-ARGS", 7, 0, false);
-        declareFunction("funcall_class_or_instance_method_with_6_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-6-ARGS", 8, 0, false);
-        declareFunction("funcall_class_or_instance_method_with_7_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-7-ARGS", 9, 0, false);
-        declareFunction("funcall_class_or_instance_method_with_8_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-8-ARGS", 10, 0, false);
-        declareFunction("funcall_class_or_instance_method_with_9_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-9-ARGS", 11, 0, false);
-        declareFunction("funcall_class_or_instance_method_with_10_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-10-ARGS", 12, 0, false);
-        declareFunction("funcall_class_or_instance_method_with_11_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-11-ARGS", 13, 0, false);
-        declareFunction("funcall_class_or_instance_method_with_12_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-12-ARGS", 14, 0, false);
-        declareFunction("funcall_class_or_instance_method_with_13_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-13-ARGS", 15, 0, false);
-        declareFunction("funcall_class_or_instance_method_with_14_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-14-ARGS", 16, 0, false);
-        declareFunction("funcall_class_or_instance_method_with_15_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-15-ARGS", 17, 0, false);
-        declareFunction("funcall_class_or_instance_method_with_16_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-16-ARGS", 18, 0, false);
-        declareFunction("funcall_class_or_instance_method_with_17_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-17-ARGS", 19, 0, false);
-        declareFunction("funcall_class_or_instance_method_with_18_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-18-ARGS", 20, 0, false);
-        declareFunction("funcall_class_or_instance_method_with_19_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-19-ARGS", 21, 0, false);
-        declareFunction("funcall_class_or_instance_method_with_20_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-20-ARGS", 22, 0, false);
-        declareFunction("safe_funcall_instance_method_with_0_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-0-ARGS", 2, 0, false);
-        declareFunction("safe_funcall_instance_method_with_1_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-1-ARGS", 3, 0, false);
-        declareFunction("safe_funcall_instance_method_with_2_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-2-ARGS", 4, 0, false);
-        declareFunction("safe_funcall_instance_method_with_3_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-3-ARGS", 5, 0, false);
-        declareFunction("safe_funcall_instance_method_with_4_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-4-ARGS", 6, 0, false);
-        declareFunction("safe_funcall_instance_method_with_5_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-5-ARGS", 7, 0, false);
-        declareFunction("safe_funcall_instance_method_with_6_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-6-ARGS", 8, 0, false);
-        declareFunction("safe_funcall_instance_method_with_7_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-7-ARGS", 9, 0, false);
-        declareFunction("safe_funcall_instance_method_with_8_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-8-ARGS", 10, 0, false);
-        declareFunction("safe_funcall_instance_method_with_9_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-9-ARGS", 11, 0, false);
-        declareFunction("safe_funcall_instance_method_with_10_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-10-ARGS", 12, 0, false);
-        declareFunction("safe_funcall_instance_method_with_11_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-11-ARGS", 13, 0, false);
-        declareFunction("safe_funcall_instance_method_with_12_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-12-ARGS", 14, 0, false);
-        declareFunction("safe_funcall_instance_method_with_13_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-13-ARGS", 15, 0, false);
-        declareFunction("safe_funcall_instance_method_with_14_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-14-ARGS", 16, 0, false);
-        declareFunction("safe_funcall_instance_method_with_15_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-15-ARGS", 17, 0, false);
-        declareFunction("safe_funcall_instance_method_with_16_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-16-ARGS", 18, 0, false);
-        declareFunction("safe_funcall_instance_method_with_17_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-17-ARGS", 19, 0, false);
-        declareFunction("safe_funcall_instance_method_with_18_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-18-ARGS", 20, 0, false);
-        declareFunction("safe_funcall_instance_method_with_19_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-19-ARGS", 21, 0, false);
-        declareFunction("safe_funcall_instance_method_with_20_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-20-ARGS", 22, 0, false);
-        declareFunction("safe_funcall_instance_super_method_with_0_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-0-ARGS", 2, 0, false);
-        declareFunction("safe_funcall_instance_super_method_with_1_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-1-ARGS", 3, 0, false);
-        declareFunction("safe_funcall_instance_super_method_with_2_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-2-ARGS", 4, 0, false);
-        declareFunction("safe_funcall_instance_super_method_with_3_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-3-ARGS", 5, 0, false);
-        declareFunction("safe_funcall_instance_super_method_with_4_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-4-ARGS", 6, 0, false);
-        declareFunction("safe_funcall_instance_super_method_with_5_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-5-ARGS", 7, 0, false);
-        declareFunction("safe_funcall_instance_super_method_with_6_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-6-ARGS", 8, 0, false);
-        declareFunction("safe_funcall_instance_super_method_with_7_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-7-ARGS", 9, 0, false);
-        declareFunction("safe_funcall_instance_super_method_with_8_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-8-ARGS", 10, 0, false);
-        declareFunction("safe_funcall_instance_super_method_with_9_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-9-ARGS", 11, 0, false);
-        declareFunction("safe_funcall_instance_super_method_with_10_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-10-ARGS", 12, 0, false);
-        declareFunction("safe_funcall_instance_super_method_with_11_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-11-ARGS", 13, 0, false);
-        declareFunction("safe_funcall_instance_super_method_with_12_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-12-ARGS", 14, 0, false);
-        declareFunction("safe_funcall_instance_super_method_with_13_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-13-ARGS", 15, 0, false);
-        declareFunction("safe_funcall_instance_super_method_with_14_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-14-ARGS", 16, 0, false);
-        declareFunction("safe_funcall_instance_super_method_with_15_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-15-ARGS", 17, 0, false);
-        declareFunction("safe_funcall_instance_super_method_with_16_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-16-ARGS", 18, 0, false);
-        declareFunction("safe_funcall_instance_super_method_with_17_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-17-ARGS", 19, 0, false);
-        declareFunction("safe_funcall_instance_super_method_with_18_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-18-ARGS", 20, 0, false);
-        declareFunction("safe_funcall_instance_super_method_with_19_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-19-ARGS", 21, 0, false);
-        declareFunction("safe_funcall_instance_super_method_with_20_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-20-ARGS", 22, 0, false);
-        declareFunction("safe_funcall_class_or_instance_method_with_0_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-0-ARGS", 2, 0, false);
-        declareFunction("safe_funcall_class_or_instance_method_with_1_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-1-ARGS", 3, 0, false);
-        declareFunction("safe_funcall_class_or_instance_method_with_2_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-2-ARGS", 4, 0, false);
-        declareFunction("safe_funcall_class_or_instance_method_with_3_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-3-ARGS", 5, 0, false);
-        declareFunction("safe_funcall_class_or_instance_method_with_4_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-4-ARGS", 6, 0, false);
-        declareFunction("safe_funcall_class_or_instance_method_with_5_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-5-ARGS", 7, 0, false);
-        declareFunction("safe_funcall_class_or_instance_method_with_6_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-6-ARGS", 8, 0, false);
-        declareFunction("safe_funcall_class_or_instance_method_with_7_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-7-ARGS", 9, 0, false);
-        declareFunction("safe_funcall_class_or_instance_method_with_8_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-8-ARGS", 10, 0, false);
-        declareFunction("safe_funcall_class_or_instance_method_with_9_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-9-ARGS", 11, 0, false);
-        declareFunction("safe_funcall_class_or_instance_method_with_10_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-10-ARGS", 12, 0, false);
-        declareFunction("safe_funcall_class_or_instance_method_with_11_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-11-ARGS", 13, 0, false);
-        declareFunction("safe_funcall_class_or_instance_method_with_12_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-12-ARGS", 14, 0, false);
-        declareFunction("safe_funcall_class_or_instance_method_with_13_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-13-ARGS", 15, 0, false);
-        declareFunction("safe_funcall_class_or_instance_method_with_14_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-14-ARGS", 16, 0, false);
-        declareFunction("safe_funcall_class_or_instance_method_with_15_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-15-ARGS", 17, 0, false);
-        declareFunction("safe_funcall_class_or_instance_method_with_16_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-16-ARGS", 18, 0, false);
-        declareFunction("safe_funcall_class_or_instance_method_with_17_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-17-ARGS", 19, 0, false);
-        declareFunction("safe_funcall_class_or_instance_method_with_18_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-18-ARGS", 20, 0, false);
-        declareFunction("safe_funcall_class_or_instance_method_with_19_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-19-ARGS", 21, 0, false);
-        declareFunction("safe_funcall_class_or_instance_method_with_20_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-20-ARGS", 22, 0, false);
-        declareFunction("resolve_method", "RESOLVE-METHOD", 2, 0, false);
-        declareMacro("quote_method", "QUOTE-METHOD");
-        declareMacro("fquote_method", "FQUOTE-METHOD");
-        declareFunction("method_name_to_function_name", "METHOD-NAME-TO-FUNCTION-NAME", 2, 0, false);
-        declareMacro("inline_method", "INLINE-METHOD");
-        declareMacro("inline_super_method", "INLINE-SUPER-METHOD");
-        declareFunction("methods_inline_method_calls_internal", "METHODS-INLINE-METHOD-CALLS-INTERNAL", 4, 1, false);
-        declareFunction("methods_inline_method_calls", "METHODS-INLINE-METHOD-CALLS", 2, 0, false);
-        declareFunction("methods_transform_setq_for_auto_update_private", "METHODS-TRANSFORM-SETQ-FOR-AUTO-UPDATE-PRIVATE", 2, 0, false);
-        declareFunction("methods_transform_cinc_or_cdec_for_auto_update_private", "METHODS-TRANSFORM-CINC-OR-CDEC-FOR-AUTO-UPDATE-PRIVATE", 2, 0, false);
-        declareFunction("methods_transform_cpop_for_auto_update_private", "METHODS-TRANSFORM-CPOP-FOR-AUTO-UPDATE-PRIVATE", 2, 0, false);
-        declareFunction("methods_transform_cpush_or_cpushnew_for_auto_update_private", "METHODS-TRANSFORM-CPUSH-OR-CPUSHNEW-FOR-AUTO-UPDATE-PRIVATE", 2, 0, false);
-        declareFunction("methods_transform_cmultiple_value_setq_for_auto_update_private", "METHODS-TRANSFORM-CMULTIPLE-VALUE-SETQ-FOR-AUTO-UPDATE-PRIVATE", 2, 0, false);
-        declareFunction("methods_transform_setqs_for_auto_update_private", "METHODS-TRANSFORM-SETQS-FOR-AUTO-UPDATE-PRIVATE", 2, 0, false);
-        declareFunction("methods_transform_setqs_for_auto_update", "METHODS-TRANSFORM-SETQS-FOR-AUTO-UPDATE", 2, 0, false);
-        declareFunction("methods_substitute_ret_forms_with_throw_to_tag", "METHODS-SUBSTITUTE-RET-FORMS-WITH-THROW-TO-TAG", 2, 1, false);
-        declareFunction("methods_lambda_list_to_listed_arg_value_expression", "METHODS-LAMBDA-LIST-TO-LISTED-ARG-VALUE-EXPRESSION", 1, 0, false);
-        declareFunction("generate_instance_variable_bindings_for_instance", "GENERATE-INSTANCE-VARIABLE-BINDINGS-FOR-INSTANCE", 7, 1, false);
-        declareFunction("methods_create_instance_method_decl", "METHODS-CREATE-INSTANCE-METHOD-DECL", 5, 0, false);
-        declareFunction("methods_generate_instance_function_definition", "METHODS-GENERATE-INSTANCE-FUNCTION-DEFINITION", 3, 0, false);
-        declareFunction("methods_create_class_method_decl", "METHODS-CREATE-CLASS-METHOD-DECL", 5, 0, false);
-        declareFunction("methods_generate_class_function_definition", "METHODS-GENERATE-CLASS-FUNCTION-DEFINITION", 3, 0, false);
-        declareFunction("methods_get_method", "METHODS-GET-METHOD", 2, 0, false);
-        declareFunction("methods_get_all_method_names", "METHODS-GET-ALL-METHOD-NAMES", 1, 0, false);
+        declareFunction(me, "methods_generate_format_string_for_tracing", "METHODS-GENERATE-FORMAT-STRING-FOR-TRACING", 1, 0, false);
+        declareFunction(me, "methods_generate_method_enter_format_string", "METHODS-GENERATE-METHOD-ENTER-FORMAT-STRING", 1, 0, false);
+        declareFunction(me, "methods_generate_method_exit_format_string", "METHODS-GENERATE-METHOD-EXIT-FORMAT-STRING", 0, 0, false);
+        declareFunction(me, "methods_tracing_tab", "METHODS-TRACING-TAB", 2, 0, false);
+        declareFunction(me, "methods_filter_option_words_from_lambda_list", "METHODS-FILTER-OPTION-WORDS-FROM-LAMBDA-LIST", 1, 0, false);
+        declareFunction(me, "expand_methods_insert_tracing_enter_code", "EXPAND-METHODS-INSERT-TRACING-ENTER-CODE", 3, 0, false);
+        declareMacro(me, "methods_insert_tracing_enter_code", "METHODS-INSERT-TRACING-ENTER-CODE");
+        declareFunction(me, "expand_methods_insert_tracing_exit_code", "EXPAND-METHODS-INSERT-TRACING-EXIT-CODE", 3, 0, false);
+        declareMacro(me, "methods_insert_tracing_exit_code", "METHODS-INSERT-TRACING-EXIT-CODE");
+        declareFunction(me, "methods_protection_level_p", "METHODS-PROTECTION-LEVEL-P", 1, 0, false);
+        declareFunction(me, "methods_scope_level_p", "METHODS-SCOPE-LEVEL-P", 1, 0, false);
+        declareFunction(me, "valid_method_listener_types", "VALID-METHOD-LISTENER-TYPES", 0, 0, false);
+        declareFunction(me, "method_listener_type_p", "METHOD-LISTENER-TYPE-P", 1, 0, false);
+        declareFunction(me, "encode_method_listener_type", "ENCODE-METHOD-LISTENER-TYPE", 1, 0, false);
+        declareFunction(me, "decode_method_listener_type", "DECODE-METHOD-LISTENER-TYPE", 1, 0, false);
+        declareFunction(me, "method_listener_type_less_p", "METHOD-LISTENER-TYPE-LESS-P", 2, 0, false);
+        declareFunction(me, "method_listener_type_greater_p", "METHOD-LISTENER-TYPE-GREATER-P", 2, 0, false);
+        declareFunction(me, "methods_special_form_given_scope_level", "METHODS-SPECIAL-FORM-GIVEN-SCOPE-LEVEL", 1, 0, false);
+        declareFunction(me, "method_assoc", "METHOD-ASSOC", 2, 0, false);
+        declareFunction(me, "method_shadowed_assoc", "METHOD-SHADOWED-ASSOC", 2, 0, false);
+        declareFunction(me, "method_class_assoc", "METHOD-CLASS-ASSOC", 3, 0, false);
+        declareFunction(me, "method_class_shadowed_assoc", "METHOD-CLASS-SHADOWED-ASSOC", 3, 0, false);
+        declareFunction(me, "methods_protection_level_of_method_decl", "METHODS-PROTECTION-LEVEL-OF-METHOD-DECL", 1, 0, false);
+        declareFunction(me, "methods_scope_level_of_method_decl", "METHODS-SCOPE-LEVEL-OF-METHOD-DECL", 1, 0, false);
+        declareFunction(me, "methods_update_type_of_method_decl", "METHODS-UPDATE-TYPE-OF-METHOD-DECL", 1, 0, false);
+        declareFunction(me, "methods_before_listeners_p", "METHODS-BEFORE-LISTENERS-P", 1, 0, false);
+        declareFunction(me, "methods_after_listeners_p", "METHODS-AFTER-LISTENERS-P", 1, 0, false);
+        declareFunction(me, "method_instantiate_template_p", "METHOD-INSTANTIATE-TEMPLATE-P", 1, 0, false);
+        declareFunction(me, "new_method", "NEW-METHOD", 3, 0, false);
+        declareFunction(me, "methods_intern_method", "METHODS-INTERN-METHOD", 5, 0, false);
+        declareFunction(me, "method_set_function_definition", "METHOD-SET-FUNCTION-DEFINITION", 4, 0, false);
+        declareFunction(me, "methods_check_method_spec", "METHODS-CHECK-METHOD-SPEC", 2, 0, false);
+        declareMacro(me, "def_instance_method", "DEF-INSTANCE-METHOD");
+        declareFunction(me, "subloop_register_instance_method", "SUBLOOP-REGISTER-INSTANCE-METHOD", 3, 0, false);
+        declareMacro(me, "def_default_instance_method", "DEF-DEFAULT-INSTANCE-METHOD");
+        declareFunction(me, "methods_retrieve_instance_method_definition", "METHODS-RETRIEVE-INSTANCE-METHOD-DEFINITION", 2, 0, false);
+        declareFunction(me, "methods_incorporate_instance_method", "METHODS-INCORPORATE-INSTANCE-METHOD", 5, 0, false);
+        declareFunction(me, "methods_update_instance_method_decl", "METHODS-UPDATE-INSTANCE-METHOD-DECL", 5, 0, false);
+        declareMacro(me, "def_class_method", "DEF-CLASS-METHOD");
+        declareFunction(me, "subloop_register_class_method", "SUBLOOP-REGISTER-CLASS-METHOD", 3, 0, false);
+        declareFunction(me, "methods_retrieve_class_method_definition", "METHODS-RETRIEVE-CLASS-METHOD-DEFINITION", 2, 0, false);
+        declareFunction(me, "methods_incorporate_class_method", "METHODS-INCORPORATE-CLASS-METHOD", 5, 0, false);
+        declareFunction(me, "methods_update_class_method_decl", "METHODS-UPDATE-CLASS-METHOD-DECL", 5, 0, false);
+        declareFunction(me, "methods_method_name_given_method_decl", "METHODS-METHOD-NAME-GIVEN-METHOD-DECL", 1, 0, false);
+        declareFunction(me, "methods_function_name_given_method_decl", "METHODS-FUNCTION-NAME-GIVEN-METHOD-DECL", 1, 0, false);
+        declareFunction(me, "methods_function_def_given_method_decl", "METHODS-FUNCTION-DEF-GIVEN-METHOD-DECL", 1, 0, false);
+        declareFunction(me, "methods_set_function_def_of_method_decl", "METHODS-SET-FUNCTION-DEF-OF-METHOD-DECL", 2, 0, false);
+        declareFunction(me, "methods_add_method_decl", "METHODS-ADD-METHOD-DECL", 2, 0, false);
+        declareFunction(me, "methods_retrieve_method_decl", "METHODS-RETRIEVE-METHOD-DECL", 2, 0, false);
+        declareFunction(me, "methods_compile_method_access_alists", "METHODS-COMPILE-METHOD-ACCESS-ALISTS", 1, 0, false);
+        declareFunction(me, "methods_compile_class_method_access_alist_upwards", "METHODS-COMPILE-CLASS-METHOD-ACCESS-ALIST-UPWARDS", 1, 1, false);
+        declareFunction(me, "methods_compile_class_method_access_alist", "METHODS-COMPILE-CLASS-METHOD-ACCESS-ALIST", 1, 0, false);
+        declareFunction(me, "methods_compile_instance_method_access_alist_upwards", "METHODS-COMPILE-INSTANCE-METHOD-ACCESS-ALIST-UPWARDS", 1, 1, false);
+        declareFunction(me, "methods_compile_instance_method_access_alist", "METHODS-COMPILE-INSTANCE-METHOD-ACCESS-ALIST", 1, 0, false);
+        declareFunction(me, "funcall_class_method_with_0_args", "FUNCALL-CLASS-METHOD-WITH-0-ARGS", 2, 0, false);
+        declareFunction(me, "funcall_class_method_with_1_args", "FUNCALL-CLASS-METHOD-WITH-1-ARGS", 3, 0, false);
+        declareFunction(me, "funcall_class_method_with_2_args", "FUNCALL-CLASS-METHOD-WITH-2-ARGS", 4, 0, false);
+        declareFunction(me, "funcall_class_method_with_3_args", "FUNCALL-CLASS-METHOD-WITH-3-ARGS", 5, 0, false);
+        declareFunction(me, "funcall_class_method_with_4_args", "FUNCALL-CLASS-METHOD-WITH-4-ARGS", 6, 0, false);
+        declareFunction(me, "funcall_class_method_with_5_args", "FUNCALL-CLASS-METHOD-WITH-5-ARGS", 7, 0, false);
+        declareFunction(me, "funcall_class_method_with_6_args", "FUNCALL-CLASS-METHOD-WITH-6-ARGS", 8, 0, false);
+        declareFunction(me, "funcall_class_method_with_7_args", "FUNCALL-CLASS-METHOD-WITH-7-ARGS", 9, 0, false);
+        declareFunction(me, "funcall_class_method_with_8_args", "FUNCALL-CLASS-METHOD-WITH-8-ARGS", 10, 0, false);
+        declareFunction(me, "funcall_class_method_with_9_args", "FUNCALL-CLASS-METHOD-WITH-9-ARGS", 11, 0, false);
+        declareFunction(me, "funcall_class_method_with_10_args", "FUNCALL-CLASS-METHOD-WITH-10-ARGS", 12, 0, false);
+        declareFunction(me, "funcall_class_method_with_11_args", "FUNCALL-CLASS-METHOD-WITH-11-ARGS", 13, 0, false);
+        declareFunction(me, "funcall_class_method_with_12_args", "FUNCALL-CLASS-METHOD-WITH-12-ARGS", 14, 0, false);
+        declareFunction(me, "funcall_class_method_with_13_args", "FUNCALL-CLASS-METHOD-WITH-13-ARGS", 15, 0, false);
+        declareFunction(me, "funcall_class_method_with_14_args", "FUNCALL-CLASS-METHOD-WITH-14-ARGS", 16, 0, false);
+        declareFunction(me, "funcall_class_method_with_15_args", "FUNCALL-CLASS-METHOD-WITH-15-ARGS", 17, 0, false);
+        declareFunction(me, "funcall_class_method_with_16_args", "FUNCALL-CLASS-METHOD-WITH-16-ARGS", 18, 0, false);
+        declareFunction(me, "funcall_class_method_with_17_args", "FUNCALL-CLASS-METHOD-WITH-17-ARGS", 19, 0, false);
+        declareFunction(me, "funcall_class_method_with_18_args", "FUNCALL-CLASS-METHOD-WITH-18-ARGS", 20, 0, false);
+        declareFunction(me, "funcall_class_method_with_19_args", "FUNCALL-CLASS-METHOD-WITH-19-ARGS", 21, 0, false);
+        declareFunction(me, "funcall_class_method_with_20_args", "FUNCALL-CLASS-METHOD-WITH-20-ARGS", 22, 0, false);
+        declareFunction(me, "funcall_class_super_method_with_0_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-0-ARGS", 2, 0, false);
+        declareFunction(me, "funcall_class_super_method_with_1_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-1-ARGS", 3, 0, false);
+        declareFunction(me, "funcall_class_super_method_with_2_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-2-ARGS", 4, 0, false);
+        declareFunction(me, "funcall_class_super_method_with_3_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-3-ARGS", 5, 0, false);
+        declareFunction(me, "funcall_class_super_method_with_4_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-4-ARGS", 6, 0, false);
+        declareFunction(me, "funcall_class_super_method_with_5_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-5-ARGS", 7, 0, false);
+        declareFunction(me, "funcall_class_super_method_with_6_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-6-ARGS", 8, 0, false);
+        declareFunction(me, "funcall_class_super_method_with_7_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-7-ARGS", 9, 0, false);
+        declareFunction(me, "funcall_class_super_method_with_8_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-8-ARGS", 10, 0, false);
+        declareFunction(me, "funcall_class_super_method_with_9_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-9-ARGS", 11, 0, false);
+        declareFunction(me, "funcall_class_super_method_with_10_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-10-ARGS", 12, 0, false);
+        declareFunction(me, "funcall_class_super_method_with_11_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-11-ARGS", 13, 0, false);
+        declareFunction(me, "funcall_class_super_method_with_12_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-12-ARGS", 14, 0, false);
+        declareFunction(me, "funcall_class_super_method_with_13_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-13-ARGS", 15, 0, false);
+        declareFunction(me, "funcall_class_super_method_with_14_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-14-ARGS", 16, 0, false);
+        declareFunction(me, "funcall_class_super_method_with_15_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-15-ARGS", 17, 0, false);
+        declareFunction(me, "funcall_class_super_method_with_16_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-16-ARGS", 18, 0, false);
+        declareFunction(me, "funcall_class_super_method_with_17_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-17-ARGS", 19, 0, false);
+        declareFunction(me, "funcall_class_super_method_with_18_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-18-ARGS", 20, 0, false);
+        declareFunction(me, "funcall_class_super_method_with_19_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-19-ARGS", 21, 0, false);
+        declareFunction(me, "funcall_class_super_method_with_20_args", "FUNCALL-CLASS-SUPER-METHOD-WITH-20-ARGS", 22, 0, false);
+        declareFunction(me, "safe_funcall_class_method_with_0_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-0-ARGS", 2, 0, false);
+        declareFunction(me, "safe_funcall_class_method_with_1_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-1-ARGS", 3, 0, false);
+        declareFunction(me, "safe_funcall_class_method_with_2_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-2-ARGS", 4, 0, false);
+        declareFunction(me, "safe_funcall_class_method_with_3_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-3-ARGS", 5, 0, false);
+        declareFunction(me, "safe_funcall_class_method_with_4_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-4-ARGS", 6, 0, false);
+        declareFunction(me, "safe_funcall_class_method_with_5_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-5-ARGS", 7, 0, false);
+        declareFunction(me, "safe_funcall_class_method_with_6_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-6-ARGS", 8, 0, false);
+        declareFunction(me, "safe_funcall_class_method_with_7_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-7-ARGS", 9, 0, false);
+        declareFunction(me, "safe_funcall_class_method_with_8_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-8-ARGS", 10, 0, false);
+        declareFunction(me, "safe_funcall_class_method_with_9_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-9-ARGS", 11, 0, false);
+        declareFunction(me, "safe_funcall_class_method_with_10_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-10-ARGS", 12, 0, false);
+        declareFunction(me, "safe_funcall_class_method_with_11_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-11-ARGS", 13, 0, false);
+        declareFunction(me, "safe_funcall_class_method_with_12_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-12-ARGS", 14, 0, false);
+        declareFunction(me, "safe_funcall_class_method_with_13_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-13-ARGS", 15, 0, false);
+        declareFunction(me, "safe_funcall_class_method_with_14_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-14-ARGS", 16, 0, false);
+        declareFunction(me, "safe_funcall_class_method_with_15_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-15-ARGS", 17, 0, false);
+        declareFunction(me, "safe_funcall_class_method_with_16_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-16-ARGS", 18, 0, false);
+        declareFunction(me, "safe_funcall_class_method_with_17_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-17-ARGS", 19, 0, false);
+        declareFunction(me, "safe_funcall_class_method_with_18_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-18-ARGS", 20, 0, false);
+        declareFunction(me, "safe_funcall_class_method_with_19_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-19-ARGS", 21, 0, false);
+        declareFunction(me, "safe_funcall_class_method_with_20_args", "SAFE-FUNCALL-CLASS-METHOD-WITH-20-ARGS", 22, 0, false);
+        declareFunction(me, "safe_funcall_class_super_method_with_0_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-0-ARGS", 2, 0, false);
+        declareFunction(me, "safe_funcall_class_super_method_with_1_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-1-ARGS", 3, 0, false);
+        declareFunction(me, "safe_funcall_class_super_method_with_2_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-2-ARGS", 4, 0, false);
+        declareFunction(me, "safe_funcall_class_super_method_with_3_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-3-ARGS", 5, 0, false);
+        declareFunction(me, "safe_funcall_class_super_method_with_4_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-4-ARGS", 6, 0, false);
+        declareFunction(me, "safe_funcall_class_super_method_with_5_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-5-ARGS", 7, 0, false);
+        declareFunction(me, "safe_funcall_class_super_method_with_6_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-6-ARGS", 8, 0, false);
+        declareFunction(me, "safe_funcall_class_super_method_with_7_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-7-ARGS", 9, 0, false);
+        declareFunction(me, "safe_funcall_class_super_method_with_8_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-8-ARGS", 10, 0, false);
+        declareFunction(me, "safe_funcall_class_super_method_with_9_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-9-ARGS", 11, 0, false);
+        declareFunction(me, "safe_funcall_class_super_method_with_10_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-10-ARGS", 12, 0, false);
+        declareFunction(me, "safe_funcall_class_super_method_with_11_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-11-ARGS", 13, 0, false);
+        declareFunction(me, "safe_funcall_class_super_method_with_12_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-12-ARGS", 14, 0, false);
+        declareFunction(me, "safe_funcall_class_super_method_with_13_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-13-ARGS", 15, 0, false);
+        declareFunction(me, "safe_funcall_class_super_method_with_14_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-14-ARGS", 16, 0, false);
+        declareFunction(me, "safe_funcall_class_super_method_with_15_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-15-ARGS", 17, 0, false);
+        declareFunction(me, "safe_funcall_class_super_method_with_16_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-16-ARGS", 18, 0, false);
+        declareFunction(me, "safe_funcall_class_super_method_with_17_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-17-ARGS", 19, 0, false);
+        declareFunction(me, "safe_funcall_class_super_method_with_18_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-18-ARGS", 20, 0, false);
+        declareFunction(me, "safe_funcall_class_super_method_with_19_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-19-ARGS", 21, 0, false);
+        declareFunction(me, "safe_funcall_class_super_method_with_20_args", "SAFE-FUNCALL-CLASS-SUPER-METHOD-WITH-20-ARGS", 22, 0, false);
+        declareFunction(me, "funcall_instance_method_with_0_args", "FUNCALL-INSTANCE-METHOD-WITH-0-ARGS", 2, 0, false);
+        declareFunction(me, "funcall_instance_method_with_1_args", "FUNCALL-INSTANCE-METHOD-WITH-1-ARGS", 3, 0, false);
+        declareFunction(me, "funcall_instance_method_with_2_args", "FUNCALL-INSTANCE-METHOD-WITH-2-ARGS", 4, 0, false);
+        declareFunction(me, "funcall_instance_method_with_3_args", "FUNCALL-INSTANCE-METHOD-WITH-3-ARGS", 5, 0, false);
+        declareFunction(me, "funcall_instance_method_with_4_args", "FUNCALL-INSTANCE-METHOD-WITH-4-ARGS", 6, 0, false);
+        declareFunction(me, "funcall_instance_method_with_5_args", "FUNCALL-INSTANCE-METHOD-WITH-5-ARGS", 7, 0, false);
+        declareFunction(me, "funcall_instance_method_with_6_args", "FUNCALL-INSTANCE-METHOD-WITH-6-ARGS", 8, 0, false);
+        declareFunction(me, "funcall_instance_method_with_7_args", "FUNCALL-INSTANCE-METHOD-WITH-7-ARGS", 9, 0, false);
+        declareFunction(me, "funcall_instance_method_with_8_args", "FUNCALL-INSTANCE-METHOD-WITH-8-ARGS", 10, 0, false);
+        declareFunction(me, "funcall_instance_method_with_9_args", "FUNCALL-INSTANCE-METHOD-WITH-9-ARGS", 11, 0, false);
+        declareFunction(me, "funcall_instance_method_with_10_args", "FUNCALL-INSTANCE-METHOD-WITH-10-ARGS", 12, 0, false);
+        declareFunction(me, "funcall_instance_method_with_11_args", "FUNCALL-INSTANCE-METHOD-WITH-11-ARGS", 13, 0, false);
+        declareFunction(me, "funcall_instance_method_with_12_args", "FUNCALL-INSTANCE-METHOD-WITH-12-ARGS", 14, 0, false);
+        declareFunction(me, "funcall_instance_method_with_13_args", "FUNCALL-INSTANCE-METHOD-WITH-13-ARGS", 15, 0, false);
+        declareFunction(me, "funcall_instance_method_with_14_args", "FUNCALL-INSTANCE-METHOD-WITH-14-ARGS", 16, 0, false);
+        declareFunction(me, "funcall_instance_method_with_15_args", "FUNCALL-INSTANCE-METHOD-WITH-15-ARGS", 17, 0, false);
+        declareFunction(me, "funcall_instance_method_with_16_args", "FUNCALL-INSTANCE-METHOD-WITH-16-ARGS", 18, 0, false);
+        declareFunction(me, "funcall_instance_method_with_17_args", "FUNCALL-INSTANCE-METHOD-WITH-17-ARGS", 19, 0, false);
+        declareFunction(me, "funcall_instance_method_with_18_args", "FUNCALL-INSTANCE-METHOD-WITH-18-ARGS", 20, 0, false);
+        declareFunction(me, "funcall_instance_method_with_19_args", "FUNCALL-INSTANCE-METHOD-WITH-19-ARGS", 21, 0, false);
+        declareFunction(me, "funcall_instance_method_with_20_args", "FUNCALL-INSTANCE-METHOD-WITH-20-ARGS", 22, 0, false);
+        declareFunction(me, "funcall_instance_super_method_with_0_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-0-ARGS", 2, 0, false);
+        declareFunction(me, "funcall_instance_super_method_with_1_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-1-ARGS", 3, 0, false);
+        declareFunction(me, "funcall_instance_super_method_with_2_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-2-ARGS", 4, 0, false);
+        declareFunction(me, "funcall_instance_super_method_with_3_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-3-ARGS", 5, 0, false);
+        declareFunction(me, "funcall_instance_super_method_with_4_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-4-ARGS", 6, 0, false);
+        declareFunction(me, "funcall_instance_super_method_with_5_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-5-ARGS", 7, 0, false);
+        declareFunction(me, "funcall_instance_super_method_with_6_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-6-ARGS", 8, 0, false);
+        declareFunction(me, "funcall_instance_super_method_with_7_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-7-ARGS", 9, 0, false);
+        declareFunction(me, "funcall_instance_super_method_with_8_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-8-ARGS", 10, 0, false);
+        declareFunction(me, "funcall_instance_super_method_with_9_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-9-ARGS", 11, 0, false);
+        declareFunction(me, "funcall_instance_super_method_with_10_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-10-ARGS", 12, 0, false);
+        declareFunction(me, "funcall_instance_super_method_with_11_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-11-ARGS", 13, 0, false);
+        declareFunction(me, "funcall_instance_super_method_with_12_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-12-ARGS", 14, 0, false);
+        declareFunction(me, "funcall_instance_super_method_with_13_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-13-ARGS", 15, 0, false);
+        declareFunction(me, "funcall_instance_super_method_with_14_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-14-ARGS", 16, 0, false);
+        declareFunction(me, "funcall_instance_super_method_with_15_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-15-ARGS", 17, 0, false);
+        declareFunction(me, "funcall_instance_super_method_with_16_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-16-ARGS", 18, 0, false);
+        declareFunction(me, "funcall_instance_super_method_with_17_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-17-ARGS", 19, 0, false);
+        declareFunction(me, "funcall_instance_super_method_with_18_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-18-ARGS", 20, 0, false);
+        declareFunction(me, "funcall_instance_super_method_with_19_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-19-ARGS", 21, 0, false);
+        declareFunction(me, "funcall_instance_super_method_with_20_args", "FUNCALL-INSTANCE-SUPER-METHOD-WITH-20-ARGS", 22, 0, false);
+        declareFunction(me, "funcall_class_or_instance_method_with_0_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-0-ARGS", 2, 0, false);
+        declareFunction(me, "funcall_class_or_instance_method_with_1_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-1-ARGS", 3, 0, false);
+        declareFunction(me, "funcall_class_or_instance_method_with_2_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-2-ARGS", 4, 0, false);
+        declareFunction(me, "funcall_class_or_instance_method_with_3_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-3-ARGS", 5, 0, false);
+        declareFunction(me, "funcall_class_or_instance_method_with_4_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-4-ARGS", 6, 0, false);
+        declareFunction(me, "funcall_class_or_instance_method_with_5_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-5-ARGS", 7, 0, false);
+        declareFunction(me, "funcall_class_or_instance_method_with_6_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-6-ARGS", 8, 0, false);
+        declareFunction(me, "funcall_class_or_instance_method_with_7_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-7-ARGS", 9, 0, false);
+        declareFunction(me, "funcall_class_or_instance_method_with_8_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-8-ARGS", 10, 0, false);
+        declareFunction(me, "funcall_class_or_instance_method_with_9_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-9-ARGS", 11, 0, false);
+        declareFunction(me, "funcall_class_or_instance_method_with_10_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-10-ARGS", 12, 0, false);
+        declareFunction(me, "funcall_class_or_instance_method_with_11_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-11-ARGS", 13, 0, false);
+        declareFunction(me, "funcall_class_or_instance_method_with_12_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-12-ARGS", 14, 0, false);
+        declareFunction(me, "funcall_class_or_instance_method_with_13_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-13-ARGS", 15, 0, false);
+        declareFunction(me, "funcall_class_or_instance_method_with_14_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-14-ARGS", 16, 0, false);
+        declareFunction(me, "funcall_class_or_instance_method_with_15_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-15-ARGS", 17, 0, false);
+        declareFunction(me, "funcall_class_or_instance_method_with_16_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-16-ARGS", 18, 0, false);
+        declareFunction(me, "funcall_class_or_instance_method_with_17_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-17-ARGS", 19, 0, false);
+        declareFunction(me, "funcall_class_or_instance_method_with_18_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-18-ARGS", 20, 0, false);
+        declareFunction(me, "funcall_class_or_instance_method_with_19_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-19-ARGS", 21, 0, false);
+        declareFunction(me, "funcall_class_or_instance_method_with_20_args", "FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-20-ARGS", 22, 0, false);
+        declareFunction(me, "safe_funcall_instance_method_with_0_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-0-ARGS", 2, 0, false);
+        declareFunction(me, "safe_funcall_instance_method_with_1_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-1-ARGS", 3, 0, false);
+        declareFunction(me, "safe_funcall_instance_method_with_2_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-2-ARGS", 4, 0, false);
+        declareFunction(me, "safe_funcall_instance_method_with_3_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-3-ARGS", 5, 0, false);
+        declareFunction(me, "safe_funcall_instance_method_with_4_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-4-ARGS", 6, 0, false);
+        declareFunction(me, "safe_funcall_instance_method_with_5_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-5-ARGS", 7, 0, false);
+        declareFunction(me, "safe_funcall_instance_method_with_6_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-6-ARGS", 8, 0, false);
+        declareFunction(me, "safe_funcall_instance_method_with_7_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-7-ARGS", 9, 0, false);
+        declareFunction(me, "safe_funcall_instance_method_with_8_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-8-ARGS", 10, 0, false);
+        declareFunction(me, "safe_funcall_instance_method_with_9_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-9-ARGS", 11, 0, false);
+        declareFunction(me, "safe_funcall_instance_method_with_10_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-10-ARGS", 12, 0, false);
+        declareFunction(me, "safe_funcall_instance_method_with_11_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-11-ARGS", 13, 0, false);
+        declareFunction(me, "safe_funcall_instance_method_with_12_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-12-ARGS", 14, 0, false);
+        declareFunction(me, "safe_funcall_instance_method_with_13_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-13-ARGS", 15, 0, false);
+        declareFunction(me, "safe_funcall_instance_method_with_14_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-14-ARGS", 16, 0, false);
+        declareFunction(me, "safe_funcall_instance_method_with_15_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-15-ARGS", 17, 0, false);
+        declareFunction(me, "safe_funcall_instance_method_with_16_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-16-ARGS", 18, 0, false);
+        declareFunction(me, "safe_funcall_instance_method_with_17_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-17-ARGS", 19, 0, false);
+        declareFunction(me, "safe_funcall_instance_method_with_18_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-18-ARGS", 20, 0, false);
+        declareFunction(me, "safe_funcall_instance_method_with_19_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-19-ARGS", 21, 0, false);
+        declareFunction(me, "safe_funcall_instance_method_with_20_args", "SAFE-FUNCALL-INSTANCE-METHOD-WITH-20-ARGS", 22, 0, false);
+        declareFunction(me, "safe_funcall_instance_super_method_with_0_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-0-ARGS", 2, 0, false);
+        declareFunction(me, "safe_funcall_instance_super_method_with_1_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-1-ARGS", 3, 0, false);
+        declareFunction(me, "safe_funcall_instance_super_method_with_2_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-2-ARGS", 4, 0, false);
+        declareFunction(me, "safe_funcall_instance_super_method_with_3_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-3-ARGS", 5, 0, false);
+        declareFunction(me, "safe_funcall_instance_super_method_with_4_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-4-ARGS", 6, 0, false);
+        declareFunction(me, "safe_funcall_instance_super_method_with_5_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-5-ARGS", 7, 0, false);
+        declareFunction(me, "safe_funcall_instance_super_method_with_6_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-6-ARGS", 8, 0, false);
+        declareFunction(me, "safe_funcall_instance_super_method_with_7_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-7-ARGS", 9, 0, false);
+        declareFunction(me, "safe_funcall_instance_super_method_with_8_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-8-ARGS", 10, 0, false);
+        declareFunction(me, "safe_funcall_instance_super_method_with_9_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-9-ARGS", 11, 0, false);
+        declareFunction(me, "safe_funcall_instance_super_method_with_10_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-10-ARGS", 12, 0, false);
+        declareFunction(me, "safe_funcall_instance_super_method_with_11_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-11-ARGS", 13, 0, false);
+        declareFunction(me, "safe_funcall_instance_super_method_with_12_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-12-ARGS", 14, 0, false);
+        declareFunction(me, "safe_funcall_instance_super_method_with_13_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-13-ARGS", 15, 0, false);
+        declareFunction(me, "safe_funcall_instance_super_method_with_14_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-14-ARGS", 16, 0, false);
+        declareFunction(me, "safe_funcall_instance_super_method_with_15_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-15-ARGS", 17, 0, false);
+        declareFunction(me, "safe_funcall_instance_super_method_with_16_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-16-ARGS", 18, 0, false);
+        declareFunction(me, "safe_funcall_instance_super_method_with_17_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-17-ARGS", 19, 0, false);
+        declareFunction(me, "safe_funcall_instance_super_method_with_18_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-18-ARGS", 20, 0, false);
+        declareFunction(me, "safe_funcall_instance_super_method_with_19_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-19-ARGS", 21, 0, false);
+        declareFunction(me, "safe_funcall_instance_super_method_with_20_args", "SAFE-FUNCALL-INSTANCE-SUPER-METHOD-WITH-20-ARGS", 22, 0, false);
+        declareFunction(me, "safe_funcall_class_or_instance_method_with_0_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-0-ARGS", 2, 0, false);
+        declareFunction(me, "safe_funcall_class_or_instance_method_with_1_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-1-ARGS", 3, 0, false);
+        declareFunction(me, "safe_funcall_class_or_instance_method_with_2_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-2-ARGS", 4, 0, false);
+        declareFunction(me, "safe_funcall_class_or_instance_method_with_3_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-3-ARGS", 5, 0, false);
+        declareFunction(me, "safe_funcall_class_or_instance_method_with_4_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-4-ARGS", 6, 0, false);
+        declareFunction(me, "safe_funcall_class_or_instance_method_with_5_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-5-ARGS", 7, 0, false);
+        declareFunction(me, "safe_funcall_class_or_instance_method_with_6_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-6-ARGS", 8, 0, false);
+        declareFunction(me, "safe_funcall_class_or_instance_method_with_7_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-7-ARGS", 9, 0, false);
+        declareFunction(me, "safe_funcall_class_or_instance_method_with_8_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-8-ARGS", 10, 0, false);
+        declareFunction(me, "safe_funcall_class_or_instance_method_with_9_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-9-ARGS", 11, 0, false);
+        declareFunction(me, "safe_funcall_class_or_instance_method_with_10_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-10-ARGS", 12, 0, false);
+        declareFunction(me, "safe_funcall_class_or_instance_method_with_11_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-11-ARGS", 13, 0, false);
+        declareFunction(me, "safe_funcall_class_or_instance_method_with_12_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-12-ARGS", 14, 0, false);
+        declareFunction(me, "safe_funcall_class_or_instance_method_with_13_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-13-ARGS", 15, 0, false);
+        declareFunction(me, "safe_funcall_class_or_instance_method_with_14_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-14-ARGS", 16, 0, false);
+        declareFunction(me, "safe_funcall_class_or_instance_method_with_15_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-15-ARGS", 17, 0, false);
+        declareFunction(me, "safe_funcall_class_or_instance_method_with_16_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-16-ARGS", 18, 0, false);
+        declareFunction(me, "safe_funcall_class_or_instance_method_with_17_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-17-ARGS", 19, 0, false);
+        declareFunction(me, "safe_funcall_class_or_instance_method_with_18_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-18-ARGS", 20, 0, false);
+        declareFunction(me, "safe_funcall_class_or_instance_method_with_19_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-19-ARGS", 21, 0, false);
+        declareFunction(me, "safe_funcall_class_or_instance_method_with_20_args", "SAFE-FUNCALL-CLASS-OR-INSTANCE-METHOD-WITH-20-ARGS", 22, 0, false);
+        declareFunction(me, "resolve_method", "RESOLVE-METHOD", 2, 0, false);
+        declareMacro(me, "quote_method", "QUOTE-METHOD");
+        declareMacro(me, "fquote_method", "FQUOTE-METHOD");
+        declareFunction(me, "method_name_to_function_name", "METHOD-NAME-TO-FUNCTION-NAME", 2, 0, false);
+        declareMacro(me, "inline_method", "INLINE-METHOD");
+        declareMacro(me, "inline_super_method", "INLINE-SUPER-METHOD");
+        declareFunction(me, "methods_inline_method_calls_internal", "METHODS-INLINE-METHOD-CALLS-INTERNAL", 4, 1, false);
+        declareFunction(me, "methods_inline_method_calls", "METHODS-INLINE-METHOD-CALLS", 2, 0, false);
+        declareFunction(me, "methods_transform_setq_for_auto_update_private", "METHODS-TRANSFORM-SETQ-FOR-AUTO-UPDATE-PRIVATE", 2, 0, false);
+        declareFunction(me, "methods_transform_cinc_or_cdec_for_auto_update_private", "METHODS-TRANSFORM-CINC-OR-CDEC-FOR-AUTO-UPDATE-PRIVATE", 2, 0, false);
+        declareFunction(me, "methods_transform_cpop_for_auto_update_private", "METHODS-TRANSFORM-CPOP-FOR-AUTO-UPDATE-PRIVATE", 2, 0, false);
+        declareFunction(me, "methods_transform_cpush_or_cpushnew_for_auto_update_private", "METHODS-TRANSFORM-CPUSH-OR-CPUSHNEW-FOR-AUTO-UPDATE-PRIVATE", 2, 0, false);
+        declareFunction(me, "methods_transform_cmultiple_value_setq_for_auto_update_private", "METHODS-TRANSFORM-CMULTIPLE-VALUE-SETQ-FOR-AUTO-UPDATE-PRIVATE", 2, 0, false);
+        declareFunction(me, "methods_transform_setqs_for_auto_update_private", "METHODS-TRANSFORM-SETQS-FOR-AUTO-UPDATE-PRIVATE", 2, 0, false);
+        declareFunction(me, "methods_transform_setqs_for_auto_update", "METHODS-TRANSFORM-SETQS-FOR-AUTO-UPDATE", 2, 0, false);
+        declareFunction(me, "methods_substitute_ret_forms_with_throw_to_tag", "METHODS-SUBSTITUTE-RET-FORMS-WITH-THROW-TO-TAG", 2, 1, false);
+        declareFunction(me, "methods_lambda_list_to_listed_arg_value_expression", "METHODS-LAMBDA-LIST-TO-LISTED-ARG-VALUE-EXPRESSION", 1, 0, false);
+        declareFunction(me, "generate_instance_variable_bindings_for_instance", "GENERATE-INSTANCE-VARIABLE-BINDINGS-FOR-INSTANCE", 7, 1, false);
+        declareFunction(me, "methods_create_instance_method_decl", "METHODS-CREATE-INSTANCE-METHOD-DECL", 5, 0, false);
+        declareFunction(me, "methods_generate_instance_function_definition", "METHODS-GENERATE-INSTANCE-FUNCTION-DEFINITION", 3, 0, false);
+        declareFunction(me, "methods_create_class_method_decl", "METHODS-CREATE-CLASS-METHOD-DECL", 5, 0, false);
+        declareFunction(me, "methods_generate_class_function_definition", "METHODS-GENERATE-CLASS-FUNCTION-DEFINITION", 3, 0, false);
+        declareFunction(me, "methods_get_method", "METHODS-GET-METHOD", 2, 0, false);
+        declareFunction(me, "methods_get_all_method_names", "METHODS-GET-ALL-METHOD-NAMES", 1, 0, false);
         return NIL;
     }
 
@@ -15515,113 +6910,131 @@ public final class methods extends SubLTranslatedFile implements V12 {
     }
 
     static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
-
-    // Internal Constants
-    @LispMethod(comment = "Internal Constants")
-    static private final SubLString $str_alt0$__S__S__ = makeString("(~S ~S)(");
-
-    static private final SubLString $str_alt1$_S = makeString("~S");
-
-    static private final SubLString $str_alt2$__S = makeString(" ~S");
-
-    static private final SubLString $str_alt3$_ = makeString(")");
-
-    static private final SubLString $str_alt4$_S___enter__ = makeString("~S: <enter> ");
-
-    static private final SubLString $str_alt5$_S___exit____S__S______S = makeString("~S: <exit> (~S ~S) -> ~S");
-
-    static private final SubLString $str_alt6$__ = makeString("  ");
-
-    static private final SubLList $list_alt12 = list(makeSymbol("CSETQ"), makeSymbol("*METHODS-BLOCK-TRACING*"), T);
-
-    static private final SubLList $list_alt13 = list(makeSymbol("TERPRI"), makeSymbol("*STANDARD-OUTPUT*"));
-
-    static private final SubLList $list_alt14 = list(makeSymbol("METHODS-TRACING-TAB"), makeSymbol("*STANDARD-OUTPUT*"), makeSymbol("*METHODS-TRACE-DEPTH*"));
-
-    static private final SubLList $list_alt19 = list(list(makeSymbol("CSETQ"), makeSymbol("*METHODS-BLOCK-TRACING*"), NIL));
-
-    static private final SubLList $list_alt20 = list(list(makeSymbol("CINC"), makeSymbol("*METHODS-TRACE-DEPTH*")));
-
-    static private final SubLList $list_alt21 = list(makeSymbol("METHOD-NAME"), makeSymbol("INSTANCE"), makeSymbol("ARGS"));
-
-    static private final SubLList $list_alt22 = list(makeSymbol("CDEC"), makeSymbol("*METHODS-TRACE-DEPTH*"));
-
-    static private final SubLList $list_alt23 = list(makeSymbol("METHOD-NAME"), makeSymbol("INSTANCE"), makeSymbol("RESULT"));
-
-    static private final SubLList $list_alt24 = list(makeKeyword("PRIVATE"), makeKeyword("PROTECTED"), makeKeyword("PUBLIC"));
-
-    static private final SubLList $list_alt25 = list(makeKeyword("FILE-SCOPE"), makeKeyword("SYSTEM-SCOPE"), makeKeyword("GLOBAL-SCOPE"));
-
-    static private final SubLList $list_alt26 = list(makeKeyword("BEFORE-LISTENERS"), makeKeyword("AFTER-LISTENERS"));
-
-    static private final SubLString $str_alt28$_S___S_is_not_a_member_of_the__S_ = makeString("~S: ~S is not a member of the ~S enumeration.");
-
-    static private final SubLString $str_alt30$_S___S_is_not_a_valid_encoding_of = makeString("~S: ~S is not a valid encoding of the ~S enumeration.");
-
-    static private final SubLString $str_alt32$_S___S_was_expected_to_be_a_membe = makeString("~S: ~S was expected to be a member of the enumeration ~S.");
-
-    static private final SubLList $list_alt34 = list(makeSymbol("DEFINE-PRIVATE"), makeSymbol("DEFINE-PROTECTED"), makeSymbol("DEFINE-PUBLIC"));
-
-    static private final SubLString $str_alt48$_ = makeString("-");
-
-    static private final SubLString $str_alt49$_METHOD = makeString("-METHOD");
-
-    static private final SubLString $str_alt50$_S___S_is_not_a_valid_method_spec = makeString("~S: ~S is not a valid method specification.~%~\n     A valid method specification matches the pattern (<method name> <class name> . <method properties>).");
-
-    static private final SubLString $str_alt51$_S___S_is_not_a_valid_method_name = makeString("~S: ~S is not a valid method name.  Only a non-null symbol is a valid method name.");
-
-    static private final SubLString $str_alt52$_S__While_defining_method__S___S_ = makeString("~S: While defining method ~S, ~S is not a valid class name.  Only a non-null symbol is a valid class name.");
-
-    static private final SubLList $list_alt53 = list(makeSymbol("METHOD-SPEC"), makeSymbol("LAMBDA-LIST"), makeSymbol("&BODY"), makeSymbol("BODY"));
-
-    static private final SubLList $list_alt55 = listS(makeSymbol("METHOD-NAME"), makeSymbol("CLASS-NAME"), makeSymbol("METHOD-PROPERTIES"));
-
-    static private final SubLString $str_alt61$Default_method_call__a_on_class__ = makeString("Default method call ~a on class ~a");
-
-    static private final SubLString $str_alt62$DEF_INSTANCE_METHOD___S_is_not_th = makeString("DEF-INSTANCE-METHOD: ~S is not the name of a class.");
-
-    static private final SubLString $str_alt66$DEF_CLASS_METHOD___S_is_not_the_n = makeString("DEF-CLASS-METHOD: ~S is not the name of a class.");
-
-    static private final SubLString $str_alt67$FUNCALL_CLASS_METHOD___S_is_not_a = makeString("FUNCALL-CLASS-METHOD: ~S is not a defined class.");
-
-    static private final SubLString $str_alt68$FUNCALL_CLASS_METHOD___S_is_not_a = makeString("FUNCALL-CLASS-METHOD: ~S is not a method of class ~S.");
-
-    static private final SubLString $str_alt69$FUNCALL_CLASS_SUPER_METHOD___S_is = makeString("FUNCALL-CLASS-SUPER-METHOD: ~S is not a defined class.");
-
-    static private final SubLString $str_alt70$FUNCALL_CLASS_SUPER_METHOD___S_is = makeString("FUNCALL-CLASS-SUPER-METHOD: ~S is not a method of class ~S.");
-
-    static private final SubLString $str_alt76$__FUNCALL_INSTANCE_METHOD__either = makeString("~%FUNCALL-INSTANCE-METHOD: either instance ~S or method ~S are invalid.");
-
-    static private final SubLString $str_alt77$__FUNCALL_CLASS_OR_INSTANCE_METHO = makeString("~%FUNCALL-CLASS-OR-INSTANCE-METHOD: Method ~S is invalid.");
-
-    static private final SubLString $str_alt78$FUNCALL_CLASS_OR_INSTANCE_METHOD_ = makeString("FUNCALL-CLASS-OR-INSTANCE-METHOD: ~S is not a valid class.");
-
-    static private final SubLString $str_alt80$RESOLVE_METHOD___S_is_not_a_defin = makeString("RESOLVE-METHOD: ~S is not a defined class.");
-
-    static private final SubLString $str_alt81$RESOLVE_METHOD___S_is_not_a_defin = makeString("RESOLVE-METHOD: ~S is not a defined method of class ~S.");
-
-    static private final SubLList $list_alt82 = list(list(makeSymbol("METHOD-NAME"), makeSymbol("CLASS-NAME")));
-
-    static private final SubLList $list_alt83 = list(list(makeSymbol("METHOD-NAME"), makeSymbol("CLASS-NAME")), makeSymbol("CLASS-OR-INSTANCE"), makeSymbol("&REST"), makeSymbol("ARGS"));
-
-    static private final SubLList $list_alt92 = list(makeSymbol("CSETQ"), makeSymbol("CSETF"));
-
-    static private final SubLList $list_alt94 = list(makeSymbol("CINC"), makeSymbol("CDEC"));
-
-    static private final SubLList $list_alt95 = list(makeSymbol("CPUSH"), makeSymbol("CPUSHNEW"));
-
-    static private final SubLString $str_alt99$OUTER_CATCH_FOR_ = makeString("OUTER-CATCH-FOR-");
-
-    static private final SubLString $str_alt101$CATCH_VAR_FOR_ = makeString("CATCH-VAR-FOR-");
-
-    static private final SubLString $str_alt102$LISTED_ARGS = makeString("LISTED-ARGS");
-
-    static private final SubLList $list_alt104 = list(NIL);
-
-    static private final SubLList $list_alt109 = list(list(makeSymbol("IGNORE"), makeSymbol("SELF")));
-
-    static private final SubLList $list_alt112 = list(makeSymbol("PWHEN"), list(makeSymbol("INSTANCE-P"), makeSymbol("SELF")), list(makeSymbol("CSETQ"), makeSymbol("SELF"), list(makeSymbol("INSTANCE-CLASS"), makeSymbol("SELF"))));
 }
 
 /**

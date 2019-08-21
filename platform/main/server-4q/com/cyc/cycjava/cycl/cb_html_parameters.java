@@ -1,158 +1,139 @@
 package com.cyc.cycjava.cycl;
 
-
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
+public final class cb_html_parameters
+    extends
+      SubLTranslatedFile
+{
+  public static final SubLFile me;
+  public static final String myName = "com.cyc.cycjava.cycl.cb_html_parameters";
+  public static final String myFingerPrint = "bf11cac43edde25761b233816dc05d0ca4a0a5bafd5bcabb4318dd659d0230b4";
+  @SubLTranslatedFile.SubL(source = "cycl/cb-html-parameters.lisp", position = 922L)
+  public static SubLSymbol $cb_html_assertion_sentence_class$;
+  @SubLTranslatedFile.SubL(source = "cycl/cb-html-parameters.lisp", position = 1065L)
+  public static SubLSymbol $cb_html_assertion_class$;
+  @SubLTranslatedFile.SubL(source = "cycl/cb-html-parameters.lisp", position = 1229L)
+  public static SubLSymbol $cb_html_assert_class$;
+  @SubLTranslatedFile.SubL(source = "cycl/cb-html-parameters.lisp", position = 1348L)
+  public static SubLSymbol $cb_html_rule_class$;
+  @SubLTranslatedFile.SubL(source = "cycl/cb-html-parameters.lisp", position = 1476L)
+  public static SubLSymbol $cb_html_nat_class$;
+  @SubLTranslatedFile.SubL(source = "cycl/cb-html-parameters.lisp", position = 1543L)
+  public static SubLSymbol $cb_html_cons_class$;
+  @SubLTranslatedFile.SubL(source = "cycl/cb-html-parameters.lisp", position = 1611L)
+  public static SubLSymbol $cb_html_string_class$;
+  @SubLTranslatedFile.SubL(source = "cycl/cb-html-parameters.lisp", position = 1681L)
+  public static SubLSymbol $cb_html_edit_class$;
+  @SubLTranslatedFile.SubL(source = "cycl/cb-html-parameters.lisp", position = 1827L)
+  public static SubLSymbol $cb_html_no_edit_class$;
+  @SubLTranslatedFile.SubL(source = "cycl/cb-html-parameters.lisp", position = 1977L)
+  public static SubLSymbol $cb_html_no_modification_class$;
+  @SubLTranslatedFile.SubL(source = "cycl/cb-html-parameters.lisp", position = 2152L)
+  public static SubLSymbol $cb_html_lexical_assertion_class$;
+  @SubLTranslatedFile.SubL(source = "cycl/cb-html-parameters.lisp", position = 2293L)
+  public static SubLSymbol $cb_html_warn_class$;
+  @SubLTranslatedFile.SubL(source = "cycl/cb-html-parameters.lisp", position = 2411L)
+  public static SubLSymbol $cb_html_obsolete_class$;
+  private static final SubLString $str0$assert_sent_;
+  private static final SubLString $str1$assertion_;
+  private static final SubLString $str2$assert_;
+  private static final SubLString $str3$rule_;
+  private static final SubLString $str4$nat_;
+  private static final SubLString $str5$cons_;
+  private static final SubLString $str6$string_;
+  private static final SubLString $str7$edit_;
+  private static final SubLString $str8$noedit_;
+  private static final SubLString $str9$nomod_;
+  private static final SubLString $str10$lex_;
+  private static final SubLString $str11$warn_;
+  private static final SubLString $str12$obsolete_;
 
-public final class cb_html_parameters extends SubLTranslatedFile implements V10 {
-    public static final SubLFile me = new cb_html_parameters();
+  public static SubLObject declare_cb_html_parameters_file()
+  {
+    return NIL;
+  }
 
+  public static SubLObject init_cb_html_parameters_file()
+  {
+    $cb_html_assertion_sentence_class$ = SubLFiles.defparameter( "*CB-HTML-ASSERTION-SENTENCE-CLASS*", $str0$assert_sent_ );
+    $cb_html_assertion_class$ = SubLFiles.defparameter( "*CB-HTML-ASSERTION-CLASS*", $str1$assertion_ );
+    $cb_html_assert_class$ = SubLFiles.defparameter( "*CB-HTML-ASSERT-CLASS*", $str2$assert_ );
+    $cb_html_rule_class$ = SubLFiles.defparameter( "*CB-HTML-RULE-CLASS*", $str3$rule_ );
+    $cb_html_nat_class$ = SubLFiles.defparameter( "*CB-HTML-NAT-CLASS*", $str4$nat_ );
+    $cb_html_cons_class$ = SubLFiles.defparameter( "*CB-HTML-CONS-CLASS*", $str5$cons_ );
+    $cb_html_string_class$ = SubLFiles.defparameter( "*CB-HTML-STRING-CLASS*", $str6$string_ );
+    $cb_html_edit_class$ = SubLFiles.defparameter( "*CB-HTML-EDIT-CLASS*", $str7$edit_ );
+    $cb_html_no_edit_class$ = SubLFiles.defparameter( "*CB-HTML-NO-EDIT-CLASS*", $str8$noedit_ );
+    $cb_html_no_modification_class$ = SubLFiles.defparameter( "*CB-HTML-NO-MODIFICATION-CLASS*", $str9$nomod_ );
+    $cb_html_lexical_assertion_class$ = SubLFiles.defparameter( "*CB-HTML-LEXICAL-ASSERTION-CLASS*", $str10$lex_ );
+    $cb_html_warn_class$ = SubLFiles.defparameter( "*CB-HTML-WARN-CLASS*", $str11$warn_ );
+    $cb_html_obsolete_class$ = SubLFiles.defparameter( "*CB-HTML-OBSOLETE-CLASS*", $str12$obsolete_ );
+    return NIL;
+  }
 
+  public static SubLObject setup_cb_html_parameters_file()
+  {
+    return NIL;
+  }
 
-    // defparameter
-    public static final SubLSymbol $cb_html_assertion_sentence_class$ = makeSymbol("*CB-HTML-ASSERTION-SENTENCE-CLASS*");
+  @Override
+  public void declareFunctions()
+  {
+    declare_cb_html_parameters_file();
+  }
 
-    // defparameter
-    public static final SubLSymbol $cb_html_assertion_class$ = makeSymbol("*CB-HTML-ASSERTION-CLASS*");
+  @Override
+  public void initializeVariables()
+  {
+    init_cb_html_parameters_file();
+  }
 
-    // defparameter
-    public static final SubLSymbol $cb_html_assert_class$ = makeSymbol("*CB-HTML-ASSERT-CLASS*");
-
-    // defparameter
-    public static final SubLSymbol $cb_html_rule_class$ = makeSymbol("*CB-HTML-RULE-CLASS*");
-
-    // defparameter
-    public static final SubLSymbol $cb_html_nat_class$ = makeSymbol("*CB-HTML-NAT-CLASS*");
-
-    // defparameter
-    public static final SubLSymbol $cb_html_cons_class$ = makeSymbol("*CB-HTML-CONS-CLASS*");
-
-    // defparameter
-    public static final SubLSymbol $cb_html_string_class$ = makeSymbol("*CB-HTML-STRING-CLASS*");
-
-    // defparameter
-    public static final SubLSymbol $cb_html_edit_class$ = makeSymbol("*CB-HTML-EDIT-CLASS*");
-
-    // defparameter
-    public static final SubLSymbol $cb_html_no_edit_class$ = makeSymbol("*CB-HTML-NO-EDIT-CLASS*");
-
-    // defparameter
-    public static final SubLSymbol $cb_html_no_modification_class$ = makeSymbol("*CB-HTML-NO-MODIFICATION-CLASS*");
-
-    // defparameter
-    public static final SubLSymbol $cb_html_lexical_assertion_class$ = makeSymbol("*CB-HTML-LEXICAL-ASSERTION-CLASS*");
-
-    // defparameter
-    public static final SubLSymbol $cb_html_warn_class$ = makeSymbol("*CB-HTML-WARN-CLASS*");
-
-    // defparameter
-    public static final SubLSymbol $cb_html_obsolete_class$ = makeSymbol("*CB-HTML-OBSOLETE-CLASS*");
-
-    private static final SubLString $str0$assert_sent_ = makeString("assert-sent ");
-
-    private static final SubLString $$$assertion_ = makeString("assertion ");
-
-    private static final SubLString $$$assert_ = makeString("assert ");
-
-    private static final SubLString $$$rule_ = makeString("rule ");
-
-    private static final SubLString $$$nat_ = makeString("nat ");
-
-    private static final SubLString $$$cons_ = makeString("cons ");
-
-    private static final SubLString $$$string_ = makeString("string ");
-
-    private static final SubLString $$$edit_ = makeString("edit ");
-
-    private static final SubLString $$$noedit_ = makeString("noedit ");
-
-    private static final SubLString $$$nomod_ = makeString("nomod ");
-
-    private static final SubLString $$$lex_ = makeString("lex ");
-
-    private static final SubLString $$$warn_ = makeString("warn ");
-
-    private static final SubLString $$$obsolete_ = makeString("obsolete ");
-
-    public static SubLObject declare_cb_html_parameters_file() {
-        return NIL;
-    }
-
-    public static SubLObject init_cb_html_parameters_file() {
-        defparameter("*CB-HTML-ASSERTION-SENTENCE-CLASS*", $str0$assert_sent_);
-        defparameter("*CB-HTML-ASSERTION-CLASS*", $$$assertion_);
-        defparameter("*CB-HTML-ASSERT-CLASS*", $$$assert_);
-        defparameter("*CB-HTML-RULE-CLASS*", $$$rule_);
-        defparameter("*CB-HTML-NAT-CLASS*", $$$nat_);
-        defparameter("*CB-HTML-CONS-CLASS*", $$$cons_);
-        defparameter("*CB-HTML-STRING-CLASS*", $$$string_);
-        defparameter("*CB-HTML-EDIT-CLASS*", $$$edit_);
-        defparameter("*CB-HTML-NO-EDIT-CLASS*", $$$noedit_);
-        defparameter("*CB-HTML-NO-MODIFICATION-CLASS*", $$$nomod_);
-        defparameter("*CB-HTML-LEXICAL-ASSERTION-CLASS*", $$$lex_);
-        defparameter("*CB-HTML-WARN-CLASS*", $$$warn_);
-        defparameter("*CB-HTML-OBSOLETE-CLASS*", $$$obsolete_);
-        return NIL;
-    }
-
-    public static SubLObject setup_cb_html_parameters_file() {
-        return NIL;
-    }
-
-    @Override
-    public void declareFunctions() {
-        declare_cb_html_parameters_file();
-    }
-
-    @Override
-    public void initializeVariables() {
-        init_cb_html_parameters_file();
-    }
-
-    @Override
-    public void runTopLevelForms() {
-        setup_cb_html_parameters_file();
-    }
-
-    static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+  @Override
+  public void runTopLevelForms()
+  {
+    setup_cb_html_parameters_file();
+  }
+  static
+  {
+    me = new cb_html_parameters();
+    $cb_html_assertion_sentence_class$ = null;
+    $cb_html_assertion_class$ = null;
+    $cb_html_assert_class$ = null;
+    $cb_html_rule_class$ = null;
+    $cb_html_nat_class$ = null;
+    $cb_html_cons_class$ = null;
+    $cb_html_string_class$ = null;
+    $cb_html_edit_class$ = null;
+    $cb_html_no_edit_class$ = null;
+    $cb_html_no_modification_class$ = null;
+    $cb_html_lexical_assertion_class$ = null;
+    $cb_html_warn_class$ = null;
+    $cb_html_obsolete_class$ = null;
+    $str0$assert_sent_ = makeString( "assert-sent " );
+    $str1$assertion_ = makeString( "assertion " );
+    $str2$assert_ = makeString( "assert " );
+    $str3$rule_ = makeString( "rule " );
+    $str4$nat_ = makeString( "nat " );
+    $str5$cons_ = makeString( "cons " );
+    $str6$string_ = makeString( "string " );
+    $str7$edit_ = makeString( "edit " );
+    $str8$noedit_ = makeString( "noedit " );
+    $str9$nomod_ = makeString( "nomod " );
+    $str10$lex_ = makeString( "lex " );
+    $str11$warn_ = makeString( "warn " );
+    $str12$obsolete_ = makeString( "obsolete " );
+  }
 }
-
-/**
+/*
+ * 
  * Total time: 62 ms
+ * 
  */

@@ -305,7 +305,7 @@ public final class kbi_word extends SubLTranslatedFile implements V02 {
                                                                                     {
                                                                                         SubLObject part_of_speech = assertions_high.gaf_arg2(as);
                                                                                         SubLObject mt = assertions_high.assertion_mt(as);
-                                                                                        SubLObject denotations = kb_mapping_utilities.pred_arg_values(word, $$denotation, part_of_speech, ONE_INTEGER, TWO_INTEGER, FOUR_INTEGER, UNPROVIDED);
+                                                                                        SubLObject denotations = kb_mapping_utilities.pred_arg_values(word, $$denotation, part_of_speech, ONE_INTEGER, TWO_INTEGER, FOUR_INTEGER, UNPROVIDED, UNPROVIDED_SYM);
                                                                                         if ((NIL != denotation_inducing_posP(part_of_speech)) && (NIL == denotations)) {
                                                                                             kbi_utilities.add_kbi_result(list(mt, part_of_speech));
                                                                                         }

@@ -41,7 +41,7 @@ public class cycl implements SubLFile {
 
 	static public SubLObject setup_cycl_file() {
 		SubLObject r = SubLT.T;
-		for (int i = 2; i < 5; i++) {
+		for (int i = 2; i < 10; i++) {
 			r = setup_cycl_file_alt(i);
 			if (r == SubLT.T)
 				return r;
@@ -238,6 +238,7 @@ public class cycl implements SubLFile {
 		initialize("com.cyc.cycjava.cycl.at_vars");
 		initialize("com.cyc.cycjava.cycl.gt_vars");
 		initialize("com.cyc.cycjava.cycl.czer_vars");
+		initialize("com.cyc.cycjava.cycl.utilities_macros");
 		initialize("com.cyc.cycjava.cycl.kbi_vars");
 		initialize("com.cyc.cycjava.cycl.mt_relevance_macros");
 		initialize("com.cyc.cycjava.cycl.pred_relevance_macros");
@@ -1350,7 +1351,7 @@ public class cycl implements SubLFile {
 			initialize("com.cyc.cycjava.cycl.document_search");
 			initialize("com.cyc.cycjava.cycl.yahoo");
 			initialize("com.cyc.cycjava.cycl.clustering");
-			initialize("com.cyc.cycjava.cycl.abstract_lexicon");
+			// initialize("com.cyc.cycjava.cycl.abstract_lexicon");
 			initialize("com.cyc.cycjava.cycl.term_lexicon");
 			initialize("com.cyc.cycjava.cycl.semtrans_lexicon");
 			initialize("com.cyc.cycjava.cycl.psp_lexicon");

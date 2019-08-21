@@ -1,183 +1,8 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.access_macros.register_external_symbol;
-import static com.cyc.cycjava.cycl.access_macros.register_macro_helper;
-import static com.cyc.cycjava.cycl.agenda.agenda_busyP;
-import static com.cyc.cycjava.cycl.agenda.agenda_running;
-import static com.cyc.cycjava.cycl.cfasl_utilities.cfasl_load;
-import static com.cyc.cycjava.cycl.constant_handles.constant_count;
-import static com.cyc.cycjava.cycl.constant_handles.constant_p;
-import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
-import static com.cyc.cycjava.cycl.control_vars.$communication_mode$;
-import static com.cyc.cycjava.cycl.control_vars.$read_require_constant_exists$;
-import static com.cyc.cycjava.cycl.control_vars.$unencapsulating_within_agenda$;
-import static com.cyc.cycjava.cycl.control_vars.caught_up_on_master_transcript;
-import static com.cyc.cycjava.cycl.control_vars.cyc_image_id;
-import static com.cyc.cycjava.cycl.control_vars.kb_loaded;
-import static com.cyc.cycjava.cycl.control_vars.non_tiny_kb_loadedP;
-import static com.cyc.cycjava.cycl.control_vars.set_auto_increment_kb;
-import static com.cyc.cycjava.cycl.control_vars.set_kb_loaded;
-import static com.cyc.cycjava.cycl.control_vars.set_load_submitted_transcripts;
-import static com.cyc.cycjava.cycl.control_vars.set_send_submitted_transcript_loading_notices;
-import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.define_test_case_table_int;
-import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.run_all_test_case_tables;
-import static com.cyc.cycjava.cycl.dictionary.dictionary_contents;
-import static com.cyc.cycjava.cycl.dictionary.new_dictionary;
-import static com.cyc.cycjava.cycl.file_utilities.absolute_pathP;
-import static com.cyc.cycjava.cycl.file_utilities.guess_path_type_robust;
-import static com.cyc.cycjava.cycl.file_utilities.make_absolute_path_relative_to;
-import static com.cyc.cycjava.cycl.file_utilities.make_directory_recursive;
-import static com.cyc.cycjava.cycl.file_utilities.make_path_absolute_relative_to;
-import static com.cyc.cycjava.cycl.file_utilities.path_separator_string;
-import static com.cyc.cycjava.cycl.file_utilities.possibly_append_path_separator_char;
-import static com.cyc.cycjava.cycl.id_index.id_index_count;
-import static com.cyc.cycjava.cycl.id_index.id_index_dense_objects;
-import static com.cyc.cycjava.cycl.id_index.id_index_dense_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_lookup;
-import static com.cyc.cycjava.cycl.id_index.id_index_next_id;
-import static com.cyc.cycjava.cycl.id_index.id_index_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_skip_tombstones_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_id_threshold;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_objects;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_tombstone_p;
-import static com.cyc.cycjava.cycl.inference.harness.inference_metrics.$gathering_forward_inference_metricsP$;
-import static com.cyc.cycjava.cycl.iteration.iteration_next;
-import static com.cyc.cycjava.cycl.iteration.new_filter_and_transform_iterator;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.index_leaves;
-import static com.cyc.cycjava.cycl.kb_utilities.kb_statistics;
-import static com.cyc.cycjava.cycl.list_utilities.remove_if_not;
-import static com.cyc.cycjava.cycl.list_utilities.sublisp_boolean;
-import static com.cyc.cycjava.cycl.map_utilities.map_get;
-import static com.cyc.cycjava.cycl.map_utilities.map_put;
-import static com.cyc.cycjava.cycl.map_utilities.map_size;
-import static com.cyc.cycjava.cycl.sbhl.sbhl_module_vars.$sbhl_module$;
-import static com.cyc.cycjava.cycl.sbhl.sbhl_module_vars.get_sbhl_module;
-import static com.cyc.cycjava.cycl.sbhl.sbhl_module_vars.get_sbhl_module_link_pred;
-import static com.cyc.cycjava.cycl.sbhl.sbhl_module_vars.get_sbhl_modules;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.$catch_error_message_target$;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.declare_defglobal;
-import static com.cyc.cycjava.cycl.subl_promotions.make_process_with_args;
-import static com.cyc.cycjava.cycl.tcp_server_utilities.all_tcp_servers;
-import static com.cyc.cycjava.cycl.tcp_server_utilities.disable_tcp_server;
-import static com.cyc.cycjava.cycl.tcp_server_utilities.tcp_server_type;
-import static com.cyc.cycjava.cycl.utilities_macros.$is_noting_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_index$;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_prediction$;
-import static com.cyc.cycjava.cycl.utilities_macros.$percent_progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_elapsed_seconds_for_notification$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_last_pacification_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_note$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_notification_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_pacifications_since_last_nl$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_sofar$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_total$;
-import static com.cyc.cycjava.cycl.utilities_macros.$silent_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$suppress_all_progress_faster_than_seconds$;
-import static com.cyc.cycjava.cycl.utilities_macros.$within_noting_percent_progress$;
-import static com.cyc.cycjava.cycl.utilities_macros.note_funcall_helper_function;
-import static com.cyc.cycjava.cycl.utilities_macros.note_percent_progress;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_percent_progress_postamble;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_percent_progress_preamble;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_progress_postamble;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_progress_preamble;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.alpha_char_p;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.char_downcase;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.char_upcase;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.upper_case_p;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.append;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.rplaca;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.bind;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.currentBinding;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.rebind;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.getEntryKey;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.getEntrySetIterator;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.getEntryValue;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.gethash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.gethash_without_values;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.hash_table_count;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.iteratorHasNext;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.iteratorNextEntry;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.make_hash_table;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.releaseEntrySetIterator;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.sethash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.release_lock;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.seize_lock;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.$most_positive_fixnum$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.abs;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.divide;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.evenp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.floor;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.multiply;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.numGE;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.numLE;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.oddp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.subtract;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.zerop;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.cconcatenate;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.delete;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.find;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.length;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.nreverse;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.position_if;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.remove_if;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.reverse;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.boundp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.process_wait;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.sleep;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.get_internal_real_time;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.get_universal_time;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.keywordp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.stringp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.sublisp_null;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.values;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.aref;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeDouble;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_listp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.property_list_member;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.assoc;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cadr;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.member;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.putf;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.second;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.close;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.force_output;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.read_line;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.terpri;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.write_string;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
-import static com.cyc.tool.subl.util.SubLFiles.defconstant;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-
-import java.util.Iterator;
-import java.util.Map;
-
+import com.cyc.cycjava.cycl.builder_utilities;
+import com.cyc.cycjava.cycl.control_vars;
 import com.cyc.cycjava.cycl.cyc_testing.cyc_testing;
 import com.cyc.cycjava.cycl.cyc_testing.cyc_testing_utilities;
 import com.cyc.cycjava.cycl.inference.browser.cb_query;
@@ -195,17 +20,9 @@ import com.cyc.cycjava.cycl.sbhl.sbhl_module_utilities;
 import com.cyc.cycjava.cycl.sbhl.sbhl_module_vars;
 import com.cyc.cycjava.cycl.sbhl.sbhl_paranoia;
 import com.cyc.cycjava.cycl.sbhl.sbhl_search_vars;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Environment;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Filesys;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Processes;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Storage;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sxhash;
+import com.cyc.cycjava.cycl.subl_macro_promotions;
+import com.cyc.cycjava.cycl.utilities_macros;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.*;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
@@ -217,634 +34,69 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.builder_utilities.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
+import static com.cyc.cycjava.cycl.id_index.*;
+import static com.cyc.cycjava.cycl.kb_indexing_datastructures.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.MINUS_ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWENTY_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.$most_positive_fixnum$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- * module:      BUILDER-UTILITIES
- * source file: /cyc/top/cycl/builder-utilities.lisp
- * created:     2019/07/03 17:37:54
- */
-public final class builder_utilities extends SubLTranslatedFile implements V12 {
-    public static final SubLObject tester_catch_up_and_dump_units(SubLObject path) {
-        if (path == UNPROVIDED) {
-            path = $str_alt90$_scratch_new_units;
-        }
-        {
-            SubLObject append_stack_traces_to_error_messagesP = T;
-            com.cyc.cycjava.cycl.builder_utilities.catch_up_on_operations_verbose(UNPROVIDED, UNPROVIDED);
-            return dumper.dump_standard_kb(path);
-        }
-    }
 
-    public static final SubLObject run_tester_tests_int(SubLObject path, SubLObject to_email, SubLObject run_test_case_tablesP, SubLObject send_not_working_if_no_failuresP) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject overall_result = NIL;
-                SubLObject cyc_test_runs = NIL;
-                {
-                    SubLObject _prev_bind_0 = cyc_testing.$run_tiny_kb_tests_in_full_kbP$.currentBinding(thread);
-                    try {
-                        cyc_testing.$run_tiny_kb_tests_in_full_kbP$.bind(T, thread);
-                        thread.resetMultipleValues();
-                        {
-                            SubLObject overall_temp = cyc_testing.run_all_cyc_tests_int(path, $post_build_output_stream$.getDynamicValue(thread), $TERSE, NIL, $POST_BUILD, cyc_testing.$run_tiny_kb_tests_in_full_kbP$.getDynamicValue(thread), run_test_case_tablesP, T, $ALL, NIL);
-                            SubLObject runs_temp = thread.secondMultipleValue();
-                            thread.resetMultipleValues();
-                            cyc_test_runs = runs_temp;
-                            overall_result = overall_temp;
-                            cyc_test_runs = runs_temp;
-                        }
-                    } finally {
-                        cyc_testing.$run_tiny_kb_tests_in_full_kbP$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                {
-                    SubLObject pcase_var = overall_result;
-                    if (pcase_var.eql($HARNESS_ERROR) || pcase_var.eql($FAILURE)) {
-                        com.cyc.cycjava.cycl.builder_utilities.post_test_collate_and_email_results(cyc_test_runs, to_email, run_test_case_tablesP, send_not_working_if_no_failuresP);
-                    } else {
-                        if (pcase_var.eql($SUCCESS)) {
-                            com.cyc.cycjava.cycl.builder_utilities.post_test_collate_and_email_results(cyc_test_runs, to_email, run_test_case_tablesP, send_not_working_if_no_failuresP);
-                        } else {
-                            Errors.error($str_alt50$Unknown_overall_result_type__A, overall_result);
-                        }
-                    }
-                }
-                return values(overall_result, cyc_test_runs);
-            }
-        }
-    }
-
-    public static final SubLObject run_tester_tests(SubLObject path, SubLObject run_test_case_tablesP, SubLObject catch_up_on_operationsP, SubLObject cyclops_results_file, SubLObject new_units_path, SubLObject exit_on_completionP, SubLObject send_not_working_if_no_failuresP, SubLObject suppress_notifyP, SubLObject email_of_person_in_charge) {
-        if (path == UNPROVIDED) {
-            path = $str_alt91$_home_tester_src_head_cycorp_cyc_;
-        }
-        if (run_test_case_tablesP == UNPROVIDED) {
-            run_test_case_tablesP = T;
-        }
-        if (catch_up_on_operationsP == UNPROVIDED) {
-            catch_up_on_operationsP = T;
-        }
-        if (cyclops_results_file == UNPROVIDED) {
-            cyclops_results_file = $str_alt92$_home_tester_tester_cyclops_resul;
-        }
-        if (new_units_path == UNPROVIDED) {
-            new_units_path = NIL;
-        }
-        if (exit_on_completionP == UNPROVIDED) {
-            exit_on_completionP = T;
-        }
-        if (send_not_working_if_no_failuresP == UNPROVIDED) {
-            send_not_working_if_no_failuresP = NIL;
-        }
-        if (suppress_notifyP == UNPROVIDED) {
-            suppress_notifyP = NIL;
-        }
-        if (email_of_person_in_charge == UNPROVIDED) {
-            email_of_person_in_charge = $str_alt93$tester_cyc_com;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject tests_passP = NIL;
-                SubLObject append_stack_traces_to_error_messagesP = T;
-                kb_cleanup.forget_ephemeral_terms(UNPROVIDED);
-                cyc_testing.undeclare_all_cyc_test_files();
-                if (NIL != cyclops_results_file) {
-                    com.cyc.cycjava.cycl.builder_utilities.run_tester_cyclops(cyclops_results_file, email_of_person_in_charge);
-                }
-                if (NIL != catch_up_on_operationsP) {
-                    format(T, $str_alt94$Starting_to_catch_up_on_operation);
-                    com.cyc.cycjava.cycl.builder_utilities.catch_up_on_operations_verbose(UNPROVIDED, UNPROVIDED);
-                    format(T, $str_alt95$Finished_catching_up_on_operation);
-                }
-                if (NIL != path) {
-                    {
-                        SubLObject tiny_kbP = makeBoolean(NIL == non_tiny_kb_loadedP());
-                        SubLObject overall_result = NIL;
-                        {
-                            SubLObject _prev_bind_0 = $read_require_constant_exists$.currentBinding(thread);
-                            SubLObject _prev_bind_1 = $post_build_verbose$.currentBinding(thread);
-                            SubLObject _prev_bind_2 = $post_build_output_stream$.currentBinding(thread);
-                            SubLObject _prev_bind_3 = $post_build_suppress_notify$.currentBinding(thread);
-                            try {
-                                $read_require_constant_exists$.bind(NIL, thread);
-                                $post_build_verbose$.bind(T, thread);
-                                $post_build_output_stream$.bind(StreamsLow.$standard_output$.getDynamicValue(thread), thread);
-                                $post_build_suppress_notify$.bind(suppress_notifyP, thread);
-                                thread.resetMultipleValues();
-                                {
-                                    SubLObject overall_temp = com.cyc.cycjava.cycl.builder_utilities.run_tester_tests_int(path, email_of_person_in_charge, run_test_case_tablesP, send_not_working_if_no_failuresP);
-                                    SubLObject cyc_test_runs = thread.secondMultipleValue();
-                                    thread.resetMultipleValues();
-                                }
-                            } finally {
-                                $post_build_suppress_notify$.rebind(_prev_bind_3, thread);
-                                $post_build_output_stream$.rebind(_prev_bind_2, thread);
-                                $post_build_verbose$.rebind(_prev_bind_1, thread);
-                                $read_require_constant_exists$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                }
-                if ((NIL != tests_passP) && (NIL != new_units_path)) {
-                }
-                if (NIL != exit_on_completionP) {
-                    force_output(UNPROVIDED);
-                    if (NIL != tests_passP) {
-                        Processes.exit(ZERO_INTEGER);
-                    } else {
-                        Processes.exit(ONE_INTEGER);
-                    }
-                }
-                return NIL;
-            }
-        }
-    }
-
-    public static final SubLObject run_tester_cyclops(SubLObject cyclops_results_file, SubLObject to_email) {
-        {
-            SubLObject cyclops_results = ZERO_INTEGER;
-            SubLObject error_msg = NIL;
-            SubLObject cyclops_time = $float$0_0;
-            try {
-                {
-                    SubLObject _prev_bind_0 = currentBinding(Errors.$error_handler$);
-                    try {
-                        bind(Errors.$error_handler$, CATCH_ERROR_MESSAGE_HANDLER);
-                        try {
-                            {
-                                SubLObject stream = NIL;
-                                SubLObject time_var = get_internal_real_time();
-                                cyclops_results = number_utilities.four_significant_digits(system_benchmarks.benchmark_cyclops_compensating_for_paging(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED));
-                                cyclops_time = divide(subtract(get_internal_real_time(), time_var), time_high.$internal_time_units_per_second$.getGlobalValue());
-                                try {
-                                    stream = compatibility.open_text(cyclops_results_file, $APPEND, UNPROVIDED);
-                                    format(stream, $str_alt99$_A__A__A__A__A__A__A__A__A_, new SubLObject[]{ cyclops_results, cyclops_time, misc_utilities.machine_bogomips(), Environment.get_network_name(Environment.get_machine_name($$$unknown)), operation_communication.kb_version_string(), operation_communication.remote_ops_processed(), system_info.cyc_revision_string(), Environment.lisp_implementation_type(), numeric_date_utilities.timestring(get_universal_time()) });
-                                    if (NIL != to_email) {
-                                        com.cyc.cycjava.cycl.builder_utilities.post_build_notify(to_email, format(NIL, $str_alt101$Got_Cyclops_results_of__A_on__A_u, new SubLObject[]{ cyclops_results, Environment.get_network_name(Environment.get_machine_name($$$unknown)), Environment.lisp_implementation_type() }), $SUMMARY_TESTER, NIL, NIL);
-                                    }
-                                } finally {
-                                    {
-                                        SubLObject _prev_bind_0_2 = currentBinding($is_thread_performing_cleanupP$);
-                                        try {
-                                            bind($is_thread_performing_cleanupP$, T);
-                                            if (NIL != stream) {
-                                                close(stream, UNPROVIDED);
-                                            }
-                                        } finally {
-                                            rebind($is_thread_performing_cleanupP$, _prev_bind_0_2);
-                                        }
-                                    }
-                                }
-                            }
-                        } catch (Throwable catch_var) {
-                            Errors.handleThrowable(catch_var, NIL);
-                        }
-                    } finally {
-                        rebind(Errors.$error_handler$, _prev_bind_0);
-                    }
-                }
-            } catch (Throwable ccatch_env_var) {
-                error_msg = Errors.handleThrowable(ccatch_env_var, $catch_error_message_target$.getGlobalValue());
-            }
-            if (NIL != error_msg) {
-                format(T, $str_alt102$Error_running_Cycops_____A__, error_msg);
-                if (NIL != to_email) {
-                    com.cyc.cycjava.cycl.builder_utilities.post_build_notify(to_email, format(NIL, $str_alt103$Failed_to_run_Cyclops__on__A_usin, new SubLObject[]{ Environment.get_network_name(Environment.get_machine_name($$$unknown)), Environment.lisp_implementation_type(), error_msg }), $SUMMARY_TESTER, NIL, NIL);
-                }
-            }
-            return cyclops_results;
-        }
-    }
-
-    public static final SubLObject run_post_build_working_tests(SubLObject path) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject test_dcl = (NIL != Filesys.directory_p(path)) ? ((SubLObject) (cconcatenate(path, $str_alt53$post_build_testdcl_lisp))) : path;
-                SubLObject overall_result = NIL;
-                SubLObject cyc_test_runs = NIL;
-                {
-                    SubLObject _prev_bind_0 = cyc_testing.$run_tiny_kb_tests_in_full_kbP$.currentBinding(thread);
-                    try {
-                        cyc_testing.$run_tiny_kb_tests_in_full_kbP$.bind(NIL, thread);
-                        thread.resetMultipleValues();
-                        {
-                            SubLObject overall_temp = cyc_testing.run_all_cyc_tests_int(test_dcl, $post_build_output_stream$.getDynamicValue(thread), $TERSE, NIL, $POST_BUILD, cyc_testing.$run_tiny_kb_tests_in_full_kbP$.getDynamicValue(thread), T, T, $ALL, NIL);
-                            SubLObject runs_temp = thread.secondMultipleValue();
-                            thread.resetMultipleValues();
-                            overall_result = overall_temp;
-                            cyc_test_runs = runs_temp;
-                        }
-                    } finally {
-                        cyc_testing.$run_tiny_kb_tests_in_full_kbP$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return values(overall_result, cyc_test_runs);
-            }
-        }
-    }
-
-    /**
-     * Run tests defined in PATH. WORLD-LOCATION and, if available, EXECUTABLE-LOCATION
-     * are present for the purpose of telling test owners how to reproduce failures.
-     * If EXIT-ON-COMPLETION? is non-nil, the executable will halt with a zero exit code
-     * when all tests succeeded, and a 1 exit code if any failed.  If SUPPRESS-NOTIFY?
-     * is non-nil, no results emails will be sent; instead, message information
-     * will be output to *post-build-output-stream*.
-     */
-    @LispMethod(comment = "Run tests defined in PATH. WORLD-LOCATION and, if available, EXECUTABLE-LOCATION\r\nare present for the purpose of telling test owners how to reproduce failures.\r\nIf EXIT-ON-COMPLETION? is non-nil, the executable will halt with a zero exit code\r\nwhen all tests succeeded, and a 1 exit code if any failed.  If SUPPRESS-NOTIFY?\r\nis non-nil, no results emails will be sent; instead, message information\r\nwill be output to *post-build-output-stream*.\nRun tests defined in PATH. WORLD-LOCATION and, if available, EXECUTABLE-LOCATION\nare present for the purpose of telling test owners how to reproduce failures.\nIf EXIT-ON-COMPLETION? is non-nil, the executable will halt with a zero exit code\nwhen all tests succeeded, and a 1 exit code if any failed.  If SUPPRESS-NOTIFY?\nis non-nil, no results emails will be sent; instead, message information\nwill be output to *post-build-output-stream*.")
-    public static final SubLObject run_post_build_tests(SubLObject path, SubLObject world_location, SubLObject executable_location, SubLObject exit_on_completionP, SubLObject suppress_notifyP) {
-        if (executable_location == UNPROVIDED) {
-            executable_location = NIL;
-        }
-        if (exit_on_completionP == UNPROVIDED) {
-            exit_on_completionP = NIL;
-        }
-        if (suppress_notifyP == UNPROVIDED) {
-            suppress_notifyP = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            kb_cleanup.forget_ephemeral_terms(UNPROVIDED);
-            cyc_testing.undeclare_all_cyc_test_files();
-            {
-                SubLObject tiny_kbP = makeBoolean(NIL == non_tiny_kb_loadedP());
-                SubLObject overall_result = NIL;
-                SubLObject releaseP = T;
-                {
-                    SubLObject _prev_bind_0 = $read_require_constant_exists$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $post_build_output_stream$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = $post_build_suppress_notify$.currentBinding(thread);
-                    try {
-                        $read_require_constant_exists$.bind(NIL, thread);
-                        $post_build_output_stream$.bind(StreamsLow.$standard_output$.getDynamicValue(thread), thread);
-                        $post_build_suppress_notify$.bind(suppress_notifyP, thread);
-                        thread.resetMultipleValues();
-                        {
-                            SubLObject overall_temp = com.cyc.cycjava.cycl.builder_utilities.run_post_build_working_tests(path);
-                            SubLObject cyc_test_runs = thread.secondMultipleValue();
-                            thread.resetMultipleValues();
-                            if (NIL != cyc_testing.most_recent_cyc_test_file_load_failures()) {
-                                {
-                                    SubLObject failing_load_message = $str_alt41$;
-                                    SubLObject cdolist_list_var = cyc_testing.most_recent_cyc_test_file_load_failures();
-                                    SubLObject failure = NIL;
-                                    for (failure = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , failure = cdolist_list_var.first()) {
-                                        {
-                                            SubLObject filename = cyc_testing.cyc_test_file_filename(failure);
-                                            failing_load_message = cconcatenate(failing_load_message, cconcatenate(format_nil.format_nil_a_no_copy(filename), new SubLObject[]{ $str_alt42$_was_expected_to_load__but_did_no, format_nil.$format_nil_percent$.getGlobalValue() }));
-                                        }
-                                    }
-                                    com.cyc.cycjava.cycl.builder_utilities.post_build_notify(mail_utilities.user_email(UNPROVIDED), cconcatenate(cconcatenate($str_alt43$Some_test_files_failed_to_load_pr, new SubLObject[]{ format_nil.$format_nil_percent$.getGlobalValue(), format_nil.$format_nil_percent$.getGlobalValue() }), failing_load_message), $HARNESS_ERROR, world_location, executable_location);
-                                }
-                            }
-                            overall_result = overall_temp;
-                            if (overall_result == $HARNESS_ERROR) {
-                                com.cyc.cycjava.cycl.builder_utilities.post_build_notify(mail_utilities.user_email(UNPROVIDED), $str_alt45$run_all_cyc_tests_failed_with_a__, $HARNESS_ERROR, world_location, executable_location);
-                            }
-                            {
-                                SubLObject pcase_var = overall_result;
-                                if (pcase_var.eql($HARNESS_ERROR) || pcase_var.eql($FAILURE)) {
-                                    releaseP = NIL;
-                                    com.cyc.cycjava.cycl.builder_utilities.post_build_collate_and_email_results(cyc_test_runs, world_location, executable_location);
-                                } else {
-                                    if (pcase_var.eql($SUCCESS)) {
-                                        com.cyc.cycjava.cycl.builder_utilities.post_build_notify(mail_utilities.user_email(UNPROVIDED), $str_alt48$run_all_cyc_tests_succeeded_witho, $SUMMARY, world_location, executable_location);
-                                    } else {
-                                        releaseP = NIL;
-                                        Errors.error($str_alt50$Unknown_overall_result_type__A, overall_result);
-                                    }
-                                }
-                            }
-                        }
-                        if (NIL == tiny_kbP) {
-                            if (image_demo_internals.run_all_ir_tests() == $FAILURE) {
-                                com.cyc.cycjava.cycl.builder_utilities.post_build_notify($ir_test_owner$.getDynamicValue(thread), $str_alt51$IR_tests_had_failures___Call__RUN, $FAILURES, world_location, executable_location);
-                            }
-                        }
-                    } finally {
-                        $post_build_suppress_notify$.rebind(_prev_bind_2, thread);
-                        $post_build_output_stream$.rebind(_prev_bind_1, thread);
-                        $read_require_constant_exists$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                if (NIL != exit_on_completionP) {
-                    force_output(UNPROVIDED);
-                    if (NIL != releaseP) {
-                        Processes.exit(ZERO_INTEGER);
-                    } else {
-                        Processes.exit(ONE_INTEGER);
-                    }
-                }
-                return overall_result;
-            }
-        }
-    }
-
-    public static final SubLObject post_test_collate_and_email_results(SubLObject cyc_test_runs, SubLObject to_email, SubLObject run_test_case_tablesP, SubLObject send_not_working_if_no_failuresP) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != $post_build_verbose$.getDynamicValue(thread)) {
-                format($post_build_output_stream$.getDynamicValue(thread), $str_alt84$__Preparing_to_send_notices_about, length(cyc_test_runs));
-            }
-            {
-                SubLObject owners_hash = make_hash_table($int$64, symbol_function(EQUAL), UNPROVIDED);
-                SubLObject owners_not_working_hash = make_hash_table($int$64, symbol_function(EQUAL), UNPROVIDED);
-                SubLObject builder_summary = $str_alt41$;
-                SubLObject builder_summary_not_working = $str_alt41$;
-                SubLObject unowned_results = $str_alt41$;
-                SubLObject unowned_not_working = $str_alt41$;
-                {
-                    SubLObject cdolist_list_var = cyc_testing.cyc_tests();
-                    SubLObject cyc_test = NIL;
-                    for (cyc_test = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , cyc_test = cdolist_list_var.first()) {
-                        {
-                            SubLObject owner = cyc_testing.cyc_test_owner(cyc_test);
-                            SubLObject summary = string_utilities.copy_string($str_alt41$);
-                            if ((NIL == cyc_testing.cyc_test_workingP(cyc_test)) && (NIL != cyc_testing.run_cyc_testP(cyc_test, cyc_testing.cyc_test_type(cyc_test), run_test_case_tablesP, T))) {
-                                if (owner.isString()) {
-                                    summary = cconcatenate(string_utilities.to_string(cyc_testing.cyc_test_name(cyc_test)), $str_alt107$_);
-                                    com.cyc.cycjava.cycl.builder_utilities.post_build_add_owner_summary(owners_not_working_hash, owner, summary);
-                                }
-                                unowned_not_working = cconcatenate(unowned_not_working, summary);
-                                builder_summary_not_working = cconcatenate(builder_summary_not_working, summary);
-                                if (NIL != send_not_working_if_no_failuresP) {
-                                    sethash(owner, owners_hash, string_utilities.copy_string($str_alt41$));
-                                }
-                            }
-                        }
-                    }
-                }
-                {
-                    SubLObject cdolist_list_var = cyc_test_runs;
-                    SubLObject cyc_test_run = NIL;
-                    for (cyc_test_run = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , cyc_test_run = cdolist_list_var.first()) {
-                        {
-                            SubLObject owner = cyc_testing.cyc_test_run_owner(cyc_test_run);
-                            SubLObject result = cyc_testing.cyc_test_run_result(cyc_test_run);
-                            SubLObject summary = cyc_testing.cyc_test_run_summary(cyc_test_run, $WITH_OWNER, $TERSE);
-                            if (NIL != cyc_testing.cyc_test_failure_result_p(result)) {
-                                if (owner.isString()) {
-                                    com.cyc.cycjava.cycl.builder_utilities.post_build_add_owner_summary(owners_hash, owner, summary);
-                                } else {
-                                    unowned_results = cconcatenate(unowned_results, summary);
-                                }
-                                builder_summary = cconcatenate(builder_summary, summary);
-                            }
-                        }
-                    }
-                }
-                if (NIL != $post_build_verbose$.getDynamicValue(thread)) {
-                    format($post_build_output_stream$.getDynamicValue(thread), $str_alt87$__Notifying__A_owners_about_test_, hash_table_count(owners_hash));
-                }
-                if (NIL != $post_build_verbose$.getDynamicValue(thread)) {
-                    format($post_build_output_stream$.getDynamicValue(thread), $str_alt108$__Notifying__A_owners_about_not_w, hash_table_count(owners_not_working_hash));
-                }
-                {
-                    SubLObject owner = NIL;
-                    SubLObject summaries = NIL;
-                    {
-                        final Iterator cdohash_iterator = getEntrySetIterator(owners_hash);
-                        try {
-                            while (iteratorHasNext(cdohash_iterator)) {
-                                final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
-                                owner = getEntryKey(cdohash_entry);
-                                summaries = getEntryValue(cdohash_entry);
-                                {
-                                    SubLObject final_summary = cconcatenate($str_alt109$_Newly_failing_tests__possibly_cr, new SubLObject[]{ $str_alt41$.equal(summaries) ? ((SubLObject) ($str_alt110$_None_)) : summaries, NIL != gethash_without_values(owner, owners_not_working_hash, UNPROVIDED) ? ((SubLObject) (cconcatenate($str_alt111$__Known_non_working_tests__import, gethash_without_values(owner, owners_not_working_hash, UNPROVIDED)))) : $str_alt41$, $str_alt112$__Please__either_fix_or_mark_any_ });
-                                    com.cyc.cycjava.cycl.builder_utilities.post_build_notify(mail_utilities.user_email(owner), final_summary, $FAILURES_TESTER, NIL, NIL);
-                                }
-                                if (NIL != $post_build_verbose$.getDynamicValue(thread)) {
-                                    format($post_build_output_stream$.getDynamicValue(thread), $str_alt88$__Notifying__A_with_test_summary, to_email);
-                                }
-                            } 
-                        } finally {
-                            releaseEntrySetIterator(cdohash_iterator);
-                        }
-                    }
-                }
-                if ((NIL == builder_summary) || $str_alt41$.equal(builder_summary)) {
-                    builder_summary = $str_alt113$All_tests_passed_without_error_;
-                }
-                com.cyc.cycjava.cycl.builder_utilities.post_build_notify(to_email, builder_summary, $SUMMARY_TESTER, NIL, NIL);
-                if (NIL == string_utilities.empty_string_p(unowned_results)) {
-                    if (NIL != $post_build_verbose$.getDynamicValue(thread)) {
-                        format($post_build_output_stream$.getDynamicValue(thread), $str_alt89$__Notifying__A_about_unowned_resu, to_email);
-                    }
-                    com.cyc.cycjava.cycl.builder_utilities.post_build_notify(to_email, unowned_results, $UNOWNED_TESTER, NIL, NIL);
-                }
-            }
-            return NIL;
-        }
-    }
-
-    public static final SubLObject post_build_problem_subject(SubLObject notify_type) {
-        {
-            SubLObject prefix = $str_alt41$;
-            SubLObject pcase_var = notify_type;
-            if (pcase_var.eql($HARNESS_ERROR)) {
-                prefix = $str_alt70$Post_build_HARNESS_ERROR__;
-            } else {
-                if (pcase_var.eql($FAILURES)) {
-                    prefix = $str_alt71$Post_build_failures__;
-                } else {
-                    if (pcase_var.eql($SUMMARY)) {
-                        prefix = $str_alt72$Post_build_summary__;
-                    } else {
-                        if (pcase_var.eql($UNOWNED)) {
-                            prefix = $str_alt74$Post_build_unowned_tests__;
-                        } else {
-                            if (pcase_var.eql($HARNESS_ERROR_TESTER)) {
-                                prefix = $str_alt75$Post_test_HARNESS_ERROR__;
-                            } else {
-                                if (pcase_var.eql($FAILURES_TESTER)) {
-                                    prefix = $str_alt76$Post_test_failures__;
-                                } else {
-                                    if (pcase_var.eql($SUMMARY_TESTER)) {
-                                        prefix = $str_alt77$Post_test_summary__;
-                                    } else {
-                                        if (pcase_var.eql($UNOWNED_TESTER)) {
-                                            prefix = $str_alt78$Post_test_unowned_tests__;
-                                        } else {
-                                            Errors.error($str_alt79$Unnown_post_build_notify_type__A, notify_type);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            if ((((notify_type == $HARNESS_ERROR) || (notify_type == $FAILURES)) || (notify_type == $SUMMARY)) || (notify_type == $UNOWNED)) {
-                return cconcatenate(format_nil.format_nil_a_no_copy(prefix), new SubLObject[]{ $str_alt80$_KB_, format_nil.format_nil_a_no_copy(operation_communication.kb_version_string()), $str_alt81$__System_, format_nil.format_nil_a_no_copy(system_info.cyc_revision_string()), $str_alt82$__Image_, format_nil.format_nil_a_no_copy(cyc_image_id()) });
-            } else {
-                return cconcatenate(format_nil.format_nil_a_no_copy(prefix), new SubLObject[]{ $str_alt80$_KB_, format_nil.format_nil_a_no_copy(operation_communication.kb_version_string()), $str_alt36$_, format_nil.format_nil_a_no_copy(operation_communication.remote_ops_processed()), $str_alt83$_System_, format_nil.format_nil_a_no_copy(system_info.cyc_revision_string()) });
-            }
-        }
-    }
-
-    /**
-     * Email MESSAGE to TO-EMAIL. NOTIFY-TYPE is one of :HARNESS-ERROR, :FAILURES, :SUMMARY or :UNOWNED.
-     * WORLD-LOCATION and EXECUTABLE-LOCATION are used to explain how to reproduce problems.
-     */
-    @LispMethod(comment = "Email MESSAGE to TO-EMAIL. NOTIFY-TYPE is one of :HARNESS-ERROR, :FAILURES, :SUMMARY or :UNOWNED.\r\nWORLD-LOCATION and EXECUTABLE-LOCATION are used to explain how to reproduce problems.\nEmail MESSAGE to TO-EMAIL. NOTIFY-TYPE is one of :HARNESS-ERROR, :FAILURES, :SUMMARY or :UNOWNED.\nWORLD-LOCATION and EXECUTABLE-LOCATION are used to explain how to reproduce problems.")
-    public static final SubLObject post_build_notify(SubLObject to_email, SubLObject message, SubLObject notify_type, SubLObject world_location, SubLObject executable_location) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != $post_build_verbose$.getDynamicValue(thread)) {
-                format($post_build_output_stream$.getDynamicValue(thread), $str_alt56$__);
-                if (NIL != $post_build_suppress_notify$.getDynamicValue(thread)) {
-                    format($post_build_output_stream$.getDynamicValue(thread), $str_alt57$_Not__);
-                }
-                format($post_build_output_stream$.getDynamicValue(thread), $str_alt58$Notifying__A_with_message__A, to_email, message);
-            }
-            {
-                SubLObject test_environment_description = cconcatenate($str_alt59$Tests_were_run_on_world_file_, format_nil.format_nil_a_no_copy(world_location));
-                if ((((notify_type == $HARNESS_ERROR_TESTER) || (notify_type == $FAILURES_TESTER)) || (notify_type == $SUMMARY_TESTER)) || (notify_type == $UNOWNED_TESTER)) {
-                    message = cconcatenate(message, $str_alt64$__PS_Use_the__SubL_Tester__projec);
-                } else {
-                    if (NIL != executable_location) {
-                        test_environment_description = cconcatenate(test_environment_description, cconcatenate($str_alt65$_using_executable_, format_nil.format_nil_a_no_copy(executable_location)));
-                    }
-                    test_environment_description = cconcatenate(test_environment_description, cconcatenate($str_alt36$_, new SubLObject[]{ format_nil.$format_nil_percent$.getGlobalValue(), format_nil.$format_nil_percent$.getGlobalValue() }));
-                    message = cconcatenate(test_environment_description, message);
-                }
-                if (NIL != $post_build_suppress_notify$.getDynamicValue(thread)) {
-                    format($post_build_output_stream$.getDynamicValue(thread), $str_alt66$____Email_notification_is_disable);
-                    format($post_build_output_stream$.getDynamicValue(thread), $str_alt67$__To___A, to_email);
-                    format($post_build_output_stream$.getDynamicValue(thread), $str_alt68$__Subject___A, com.cyc.cycjava.cycl.builder_utilities.post_build_problem_subject(notify_type));
-                    format($post_build_output_stream$.getDynamicValue(thread), $str_alt69$___A, message);
-                    return NIL;
-                } else {
-                    return mail_utilities.mail_message(mail_utilities.user_email(UNPROVIDED), to_email, message, com.cyc.cycjava.cycl.builder_utilities.post_build_problem_subject(notify_type), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                }
-            }
-        }
-    }
-
-    public static final SubLObject post_build_collate_and_email_results(SubLObject cyc_test_runs, SubLObject world_location, SubLObject executable_location) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != $post_build_verbose$.getDynamicValue(thread)) {
-                format($post_build_output_stream$.getDynamicValue(thread), $str_alt84$__Preparing_to_send_notices_about, length(cyc_test_runs));
-            }
-            {
-                SubLObject owners_hash = make_hash_table($int$64, symbol_function(EQUAL), UNPROVIDED);
-                SubLObject builder_summary = $str_alt41$;
-                SubLObject unowned_results = $str_alt41$;
-                SubLObject cdolist_list_var = cyc_test_runs;
-                SubLObject cyc_test_run = NIL;
-                for (cyc_test_run = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , cyc_test_run = cdolist_list_var.first()) {
-                    {
-                        SubLObject owner = cyc_testing.cyc_test_run_owner(cyc_test_run);
-                        SubLObject result = cyc_testing.cyc_test_run_result(cyc_test_run);
-                        SubLObject summary = cyc_testing.cyc_test_run_summary(cyc_test_run, $WITH_OWNER, $TERSE);
-                        if (NIL != cyc_testing.cyc_test_failure_result_p(result)) {
-                            if (owner.isString()) {
-                                com.cyc.cycjava.cycl.builder_utilities.post_build_add_owner_summary(owners_hash, owner, summary);
-                            } else {
-                                unowned_results = cconcatenate(unowned_results, summary);
-                            }
-                            builder_summary = cconcatenate(builder_summary, summary);
-                        }
-                    }
-                }
-                if (NIL != $post_build_verbose$.getDynamicValue(thread)) {
-                    format($post_build_output_stream$.getDynamicValue(thread), $str_alt87$__Notifying__A_owners_about_test_, hash_table_count(owners_hash));
-                }
-                {
-                    SubLObject owner = NIL;
-                    SubLObject summaries = NIL;
-                    {
-                        final Iterator cdohash_iterator = getEntrySetIterator(owners_hash);
-                        try {
-                            while (iteratorHasNext(cdohash_iterator)) {
-                                final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
-                                owner = getEntryKey(cdohash_entry);
-                                summaries = getEntryValue(cdohash_entry);
-                                com.cyc.cycjava.cycl.builder_utilities.post_build_notify(mail_utilities.user_email(owner), summaries, $FAILURES, world_location, executable_location);
-                            } 
-                        } finally {
-                            releaseEntrySetIterator(cdohash_iterator);
-                        }
-                    }
-                }
-                if (NIL != $post_build_verbose$.getDynamicValue(thread)) {
-                    format($post_build_output_stream$.getDynamicValue(thread), $str_alt88$__Notifying__A_with_test_summary, mail_utilities.user_email(UNPROVIDED));
-                }
-                com.cyc.cycjava.cycl.builder_utilities.post_build_notify(mail_utilities.user_email(UNPROVIDED), builder_summary, $SUMMARY, world_location, executable_location);
-                if (NIL == string_utilities.empty_string_p(unowned_results)) {
-                    if (NIL != $post_build_verbose$.getDynamicValue(thread)) {
-                        format($post_build_output_stream$.getDynamicValue(thread), $str_alt89$__Notifying__A_about_unowned_resu, mail_utilities.user_email(UNPROVIDED));
-                    }
-                    com.cyc.cycjava.cycl.builder_utilities.post_build_notify(mail_utilities.user_email(UNPROVIDED), unowned_results, $UNOWNED, world_location, executable_location);
-                }
-            }
-            return NIL;
-        }
-    }
-
-    public static final SubLObject post_build_add_owner_summary(SubLObject owners_hash, SubLObject owner, SubLObject summary) {
-        {
-            SubLObject known = gethash(owner, owners_hash, UNPROVIDED);
-            if (!known.isString()) {
-                known = $str_alt41$;
-            }
-            {
-                SubLObject v_new = cconcatenate(known, summary);
-                sethash(owner, owners_hash, v_new);
-                return v_new;
-            }
-        }
-    }
-
-    static private final SubLString $str_alt41$ = makeString("");
-
-    // defparameter
-    @LispMethod(comment = "defparameter")
-    private static final SubLSymbol $post_build_output_stream$ = makeSymbol("*POST-BUILD-OUTPUT-STREAM*");
-
-    /**
-     * If T, no results mail will be sent; mail content will be output to
-     * post-build-output-stream*.
-     */
-    // defparameter
-    @LispMethod(comment = "If T, no results mail will be sent; mail content will be output to\r\npost-build-output-stream*.\nIf T, no results mail will be sent; mail content will be output to\npost-build-output-stream*.\ndefparameter")
-    private static final SubLSymbol $post_build_suppress_notify$ = makeSymbol("*POST-BUILD-SUPPRESS-NOTIFY*");
-
-    /**
-     * This is T for now, until things are working more reliably
-     */
-    // defparameter
-    @LispMethod(comment = "This is T for now, until things are working more reliably\ndefparameter")
-    private static final SubLSymbol $post_build_verbose$ = makeSymbol("*POST-BUILD-VERBOSE*");
-
-    // defparameter
-    @LispMethod(comment = "defparameter")
-    private static final SubLSymbol $ir_test_owner$ = makeSymbol("*IR-TEST-OWNER*");
-
+public final class builder_utilities extends SubLTranslatedFile {
     public static final SubLFile me = new builder_utilities();
 
+    public static final String myName = "com.cyc.cycjava.cycl.builder_utilities";
 
+    public static final String myFingerPrint = "9f9c4a9bf19ab5398e93f63b23ebbf4d76304c277e04963f31529e23d9546185";
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     public static final SubLSymbol $standard_regression_conditions$ = makeSymbol("*STANDARD-REGRESSION-CONDITIONS*");
 
     // defparameter
     // A list of all cyc product identifiers
-    /**
-     * A list of all cyc product identifiers
-     */
-    @LispMethod(comment = "A list of all cyc product identifiers\ndefparameter")
     public static final SubLSymbol $all_cyc_products$ = makeSymbol("*ALL-CYC-PRODUCTS*");
 
     // defparameter
@@ -852,35 +104,25 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
      * A list of cyc product definitions, each of which is of the form
      * ([CYC-PRODUCT] [CODE-PRODUCT] [KB-PRODUCT] [BRANCH-TAG])
      */
-    @LispMethod(comment = "A list of cyc product definitions, each of which is of the form\r\n([CYC-PRODUCT] [CODE-PRODUCT] [KB-PRODUCT] [BRANCH-TAG])\ndefparameter\nA list of cyc product definitions, each of which is of the form\n([CYC-PRODUCT] [CODE-PRODUCT] [KB-PRODUCT] [BRANCH-TAG])")
     public static final SubLSymbol $cyc_product_definitions$ = makeSymbol("*CYC-PRODUCT-DEFINITIONS*");
+
+
 
     // defconstant
     // The value of *CODE-PRODUCT* is set in this definition.
-    /**
-     * The value of *CODE-PRODUCT* is set in this definition.
-     */
-    @LispMethod(comment = "The value of *CODE-PRODUCT* is set in this definition.\ndefconstant")
     private static final SubLSymbol $code_product$ = makeSymbol("*CODE-PRODUCT*");
+
+
 
     // defconstant
     // The value of *BRANCH-TAG* is set in this definition.
-    /**
-     * The value of *BRANCH-TAG* is set in this definition.
-     */
-    @LispMethod(comment = "The value of *BRANCH-TAG* is set in this definition.\ndefconstant")
     private static final SubLSymbol $branch_tag$ = makeSymbol("*BRANCH-TAG*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $generic_sbhl_caching_policy_templates$ = makeSymbol("*GENERIC-SBHL-CACHING-POLICY-TEMPLATES*");
 
     // defparameter
     // Processes all of the tests in this list as part of the SBHL cache tuning.
-    /**
-     * Processes all of the tests in this list as part of the SBHL cache tuning.
-     */
-    @LispMethod(comment = "Processes all of the tests in this list as part of the SBHL cache tuning.\ndefparameter")
     public static final SubLSymbol $cyc_tests_to_use_for_sbhl_cache_tuning$ = makeSymbol("*CYC-TESTS-TO-USE-FOR-SBHL-CACHE-TUNING*");
 
     // defparameter
@@ -889,7 +131,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
      *
      * @unknown Currently not implemented.
      */
-    @LispMethod(comment = "Runs all of these queries as part of the SBHL cache tuning.\r\n\r\n@unknown Currently not implemented.\ndefparameter")
     public static final SubLSymbol $kb_queries_to_use_for_sbhl_cache_tuning$ = makeSymbol("*KB-QUERIES-TO-USE-FOR-SBHL-CACHE-TUNING*");
 
     // defparameter
@@ -898,20 +139,22 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
      *
      * @unknown Currently not implemented
      */
-    @LispMethod(comment = "When T, runs the CycLOPS benchmark once as part of the SBHL cache tuning.\r\n\r\n@unknown Currently not implemented\ndefparameter")
     public static final SubLSymbol $run_cyclops_for_sbhl_cache_tuningP$ = makeSymbol("*RUN-CYCLOPS-FOR-SBHL-CACHE-TUNING?*");
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $build_process_worker_count$ = makeSymbol("*BUILD-PROCESS-WORKER-COUNT*");
 
+
+
+
+
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $constant_obfuscation_cache$ = makeSymbol("*CONSTANT-OBFUSCATION-CACHE*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $ts_comment_stream$ = makeSymbol("*TS-COMMENT-STREAM*");
+
+
 
     private static final SubLString $str1$This_cyc_image_is_no_longer_usabl = makeString("This cyc image is no longer usable and will now exit.");
 
@@ -939,6 +182,8 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str13$_load = makeString(".load");
 
+
+
     private static final SubLString $str15$Writing_cyc_image_to__A__ = makeString("Writing cyc image to ~A~%");
 
     private static final SubLSymbol CYC_LOAD_KB = makeSymbol("CYC-LOAD-KB");
@@ -951,6 +196,8 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol CYC_SNAPSHOT_KB = makeSymbol("CYC-SNAPSHOT-KB");
 
+
+
     private static final SubLSymbol CYC_DUMP_SNAPSHOT_KB = makeSymbol("CYC-DUMP-SNAPSHOT-KB");
 
     private static final SubLString $str23$Dump_snapshot_KB_trivially_finish = makeString("Dump snapshot KB trivially finished: dump directory and current units are both ~S");
@@ -958,6 +205,8 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
     private static final SubLString $str24$Setting_up_safe_KB_dump_environme = makeString("Setting up safe KB dump environment");
 
     private static final SubLString $str25$Agenda_was_not_successfully_halte = makeString("Agenda was not successfully halted!");
+
+
 
     private static final SubLString $str27$Restoring_pre_dump_environment = makeString("Restoring pre-dump environment");
 
@@ -1003,6 +252,8 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str48$Builder_s_catchup_to_rollover_ser = makeString("Builder's catchup-to-rollover server - DO NOT USE");
 
+
+
     private static final SubLString $str50$Unable_to_open__S = makeString("Unable to open ~S");
 
     private static final SubLString $str51$Getting_caught_up_to_KB_rollover_ = makeString("Getting caught up to KB rollover to ");
@@ -1013,11 +264,15 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
 
 
 
+    private static final SubLObject $$Guest = reader_make_constant_shell(makeString("Guest"));
+
     private static final SubLString $$$CycAdministrator = makeString("CycAdministrator");
 
     private static final SubLString $str57$Getting_caught_up__ = makeString("Getting caught up~%");
 
     private static final SubLString $str58$Builder_s_transcript_loading_serv = makeString("Builder's transcript-loading server - DO NOT USE");
+
+
 
     private static final SubLString $str60$Builder_s_catchup_to_current_serv = makeString("Builder's catchup-to-current server - DO NOT USE");
 
@@ -1027,13 +282,19 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $$$_to_KB_ = makeString(" to KB ");
 
+
+
     private static final SubLString $str65$Caught_up_to_KB__A__ = makeString("Caught up to KB ~A~%");
+
+
 
     private static final SubLString $str67$Could_not_get_total_master_transc = makeString("Could not get total master transcript operations for KB ~a after rolling over from KB ~a");
 
     private static final SubLString $$$Now_getting_caught_up_from_KB_ = makeString("Now getting caught up from KB ");
 
     private static final SubLString $str69$__Catching_up_on_operations_took_ = makeString("~%Catching up on operations took: ~A secs~%");
+
+
 
     private static final SubLString $str71$___A__ = makeString("~&~A~%");
 
@@ -1059,6 +320,10 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str82$tests_post_build_testdcl_lisp = makeString("tests/post-build-testdcl.lisp");
 
+
+
+
+
     private static final SubLString $str85$release_baseline_tests_ = makeString("release-baseline-tests-");
 
     private static final SubLString $str86$_cfasl = makeString(".cfasl");
@@ -1069,9 +334,13 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLList $list89 = list(makeSymbol("CATEGORY"), makeSymbol("TEST"), makeSymbol("OUTCOME"), makeSymbol("TIME"));
 
+
+
     private static final SubLSymbol COMPUTE_BASELINE_REGRESSIONS = makeSymbol("COMPUTE-BASELINE-REGRESSIONS");
 
     private static final SubLList $list92 = list(makeSymbol("TEST"), makeSymbol("B-OUTCOME"));
+
+
 
     private static final SubLSymbol SHOW_BASELINE_REGRESSION_INFO = makeSymbol("SHOW-BASELINE-REGRESSION-INFO");
 
@@ -1091,13 +360,31 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str102$___S__ = makeString("  ~S~%");
 
+
+
+
+
     private static final SubLString $str105$The_cyc_product___A__is_already_p = makeString("The cyc product, ~A, is already present with the declared definition.");
 
     private static final SubLString $str106$There_already_exists_a_different_ = makeString("There already exists a different cyc product, ~A, with this definition.");
 
     private static final SubLString $str107$The_cyc_product__A_already_exists = makeString("The cyc product ~A already exists with a different definition.");
 
+
+
+
+
+
+
+
+
     private static final SubLString $$$head = makeString("head");
+
+
+
+
+
+
 
     private static final SubLString $str116$cake_release_0p3_20051215 = makeString("cake-release-0p3-20051215");
 
@@ -1108,6 +395,8 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
     private static final SubLSymbol $UNKNOWN_CYC_PRODUCT = makeKeyword("UNKNOWN-CYC-PRODUCT");
 
     private static final SubLSymbol LOAD_FILE_DEPENDENCY_INFORMATION = makeSymbol("LOAD-FILE-DEPENDENCY-INFORMATION");
+
+
 
     private static final SubLSymbol WHITESPACE_CHAR_P = makeSymbol("WHITESPACE-CHAR-P");
 
@@ -1125,13 +414,19 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $$$fileset = makeString("fileset");
 
+
+
     private static final SubLString $$$name = makeString("name");
+
+
 
     private static final SubLString $$$include = makeString("include");
 
     private static final SubLString $$$exclude = makeString("exclude");
 
     private static final SubLSymbol CONSTRUCT_ROOTED_FILE_SET_FROM_LIST = makeSymbol("CONSTRUCT-ROOTED-FILE-SET-FROM-LIST");
+
+
 
     private static final SubLSymbol ROOT_FILE_SET = makeSymbol("ROOT-FILE-SET");
 
@@ -1141,9 +436,23 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol TEST_REROOT_FILE_SET = makeSymbol("TEST-REROOT-FILE-SET");
 
+
+
+
+
+
+
+
+
+
+
+
+
     private static final SubLList $list147 = list(list(list(list(makeString("/cycdoc/img/cb/red_diam.gif"), makeString("/cycdoc/img/square-minus.gif")), makeString("/cycdoc"), makeString("doc")), makeKeyword("SUCCESS")));
 
     private static final SubLString $str148$Rerooting_from__A_to__A_failed_an = makeString("Rerooting from ~A to ~A failed and produced ~A.");
+
+
 
     private static final SubLSymbol SERIALIZE_KB_STORE_LRU_INFORMATION = makeSymbol("SERIALIZE-KB-STORE-LRU-INFORMATION");
 
@@ -1165,9 +474,17 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLInteger $int$1600 = makeInteger(1600);
 
-    private static final SubLSymbol FACT_SHEET_PATH_FOR_TERM_FILTER_AND_TRANSFORM = makeSymbol("FACT-SHEET-PATH-FOR-TERM-FILTER-AND-TRANSFORM");
+    public static final SubLSymbol FACT_SHEET_PATH_FOR_TERM_FILTER_AND_TRANSFORM = makeSymbol("FACT-SHEET-PATH-FOR-TERM-FILTER-AND-TRANSFORM");
 
 
+
+
+
+
+
+    private static final SubLObject $$genlMt = reader_make_constant_shell(makeString("genlMt"));
+
+    private static final SubLObject $$isa = reader_make_constant_shell(makeString("isa"));
 
 
 
@@ -1177,7 +494,7 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLInteger $int$2000 = makeInteger(2000);
 
-
+    private static final SubLObject $$quotedIsa = reader_make_constant_shell(makeString("quotedIsa"));
 
     private static final SubLInteger $int$5000 = makeInteger(5000);
 
@@ -1185,15 +502,21 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
 
 
 
+    private static final SubLObject $$genls = reader_make_constant_shell(makeString("genls"));
 
+    private static final SubLObject $$disjointWith = reader_make_constant_shell(makeString("disjointWith"));
 
     private static final SubLInteger $int$1500 = makeInteger(1500);
 
     private static final SubLInteger $int$200 = makeInteger(200);
 
+    private static final SubLObject $$genlPreds = reader_make_constant_shell(makeString("genlPreds"));
 
+    private static final SubLObject $$genlInverse = reader_make_constant_shell(makeString("genlInverse"));
 
+    private static final SubLObject $$negationPreds = reader_make_constant_shell(makeString("negationPreds"));
 
+    private static final SubLObject $$negationInverse = reader_make_constant_shell(makeString("negationInverse"));
 
 
 
@@ -1203,17 +526,35 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLList $list185 = list(makeSymbol("PRED"), makeSymbol("POLICY"), makeSymbol("CAPACITY"), makeSymbol("&OPTIONAL"), makeSymbol("EXEMPT"), makeSymbol("PREFETCH"));
 
-    static private final SubLList $list186 = cons(makeUninternedSymbol("KEY"), makeSymbol("MODULE"));
+    public static final SubLList $list186 = cons(makeUninternedSymbol("KEY"), makeSymbol("MODULE"));
+
+
 
     private static final SubLString $str188$Gathering_SBHL_cache_tuning_data_ = makeString("Gathering SBHL cache tuning data via CYC tests ....");
+
+
+
+
 
     private static final SubLString $str191$Gathering_SBHL_cache_tuning_data_ = makeString("Gathering SBHL cache tuning data via KB queries ....");
 
     private static final SubLString $str192$KBQ_Support_currently_not_impleme = makeString("KBQ Support currently not implemented");
 
+
+
     private static final SubLString $str194$Gathering_SBHL_cache_tuning_data_ = makeString("Gathering SBHL cache tuning data via CycLOPs ....");
 
+
+
     private static final SubLSymbol COMPILE_KB_SNAPSHOT_STATISTICS = makeSymbol("COMPILE-KB-SNAPSHOT-STATISTICS");
+
+
+
+
+
+
+
+
 
     private static final SubLString $$$category = makeString("category");
 
@@ -1229,15 +570,27 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol GATHER_KB_SNAPSHOT_STATISTICS = makeSymbol("GATHER-KB-SNAPSHOT-STATISTICS");
 
+
+
     private static final SubLList $list209 = list(makeSymbol("&KEY"), makeSymbol("DATA-FILE"), makeSymbol("INDEX-FILE"), makeSymbol("TYPE"), list(makeSymbol("COMPLEX-DATA-FILE")), list(makeSymbol("COMPLEX-INDEX-FILE")));
 
-    private static final SubLList $list210 = list(makeKeyword("DATA-FILE"), makeKeyword("INDEX-FILE"), $TYPE, makeKeyword("COMPLEX-DATA-FILE"), makeKeyword("COMPLEX-INDEX-FILE"));
+    private static final SubLList $list210 = list(makeKeyword("DATA-FILE"), makeKeyword("INDEX-FILE"), makeKeyword("TYPE"), makeKeyword("COMPLEX-DATA-FILE"), makeKeyword("COMPLEX-INDEX-FILE"));
 
     private static final SubLSymbol $ALLOW_OTHER_KEYS = makeKeyword("ALLOW-OTHER-KEYS");
+
+
+
+
+
+
 
     private static final SubLSymbol $COMPLEX_DATA_FILE = makeKeyword("COMPLEX-DATA-FILE");
 
     private static final SubLSymbol $COMPLEX_INDEX_FILE = makeKeyword("COMPLEX-INDEX-FILE");
+
+
+
+
 
     private static final SubLString $str219$Unsupported_file_vector_type__A__ = makeString("Unsupported file vector type ~A ....~%");
 
@@ -1259,9 +612,13 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol PREPARE_KB_MINI_DUMP = makeSymbol("PREPARE-KB-MINI-DUMP");
 
+
+
     private static final SubLSymbol PERFORM_KB_MINI_DUMP = makeSymbol("PERFORM-KB-MINI-DUMP");
 
     private static final SubLString $str231$Error_while_performing_mini_dump_ = makeString("Error while performing mini-dump~%~A~%");
+
+
 
     private static final SubLSymbol LAUNCH_ASYNCHRONOUS_KB_MINI_DUMP = makeSymbol("LAUNCH-ASYNCHRONOUS-KB-MINI-DUMP");
 
@@ -1277,6 +634,8 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol WITH_ALLOWED_OBFUSCATION_NAMESPACE_SUPPORT = makeSymbol("WITH-ALLOWED-OBFUSCATION-NAMESPACE-SUPPORT");
 
+
+
     private static final SubLList $list241 = list(list(makeSymbol("*ALLOWED-OBFUSCATION-NAME-SPACES*"), list(makeSymbol("LIST"), makeString("cyc"))));
 
     private static final SubLSymbol WITH_ALLOWED_OBFUSCATION_NAMESPACE = makeSymbol("WITH-ALLOWED-OBFUSCATION-NAMESPACE");
@@ -1284,6 +643,8 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
     private static final SubLList $list243 = list(list(makeSymbol("NAMESPACE")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
     public static final SubLSymbol $allowed_obfuscation_name_spaces$ = makeSymbol("*ALLOWED-OBFUSCATION-NAME-SPACES*");
+
+
 
     private static final SubLList $list246 = list(makeSymbol("*ALLOWED-OBFUSCATION-NAME-SPACES*"));
 
@@ -1297,17 +658,21 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLList $list251 = list(list(makeSymbol("FUNCTION"), makeSymbol("&OPTIONAL"), list(makeSymbol("STATE"), makeKeyword("UNPROVIDED"))), makeSymbol("&BODY"), makeSymbol("BODY"));
 
+
+
     private static final SubLSymbol $sym253$STATE_VAL = makeUninternedSymbol("STATE-VAL");
 
     public static final SubLSymbol $constant_obfuscation_name_generator_state$ = makeSymbol("*CONSTANT-OBFUSCATION-NAME-GENERATOR-STATE*");
 
     private static final SubLSymbol WITH_CONSTANT_NAME_OBFUSCATION = makeSymbol("WITH-CONSTANT-NAME-OBFUSCATION");
 
-    private static final SubLList $list256 = list(QUOTE, makeSymbol("OBFUSCATE-CONSTANT-NAME-VIA-GENERATOR-FN"));
+    private static final SubLList $list256 = list(makeSymbol("QUOTE"), makeSymbol("OBFUSCATE-CONSTANT-NAME-VIA-GENERATOR-FN"));
 
     private static final SubLSymbol OBFUSCATE_CONSTANT_NAME_VIA_GENERATOR_FN = makeSymbol("OBFUSCATE-CONSTANT-NAME-VIA-GENERATOR-FN");
 
     private static final SubLList $list258 = cons(makeSymbol("GENERATOR"), makeSymbol("STATE"));
+
+
 
     private static final SubLString $str260$_ = makeString("_");
 
@@ -1322,6 +687,12 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
     private static final SubLSymbol MAKE_OBFUSCATION_GENSYM_STATE = makeSymbol("MAKE-OBFUSCATION-GENSYM-STATE");
 
     private static final SubLString $$$C = makeString("C");
+
+
+
+
+
+
 
     private static final SubLSymbol OBFUSCATE_CONSTANT_NAME_GENSYM = makeSymbol("OBFUSCATE-CONSTANT-NAME-GENSYM");
 
@@ -1346,6 +717,8 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
     private static final SubLSymbol $sym280$NOT_TERM_OF_UNIT_ASSERTION_ = makeSymbol("NOT-TERM-OF-UNIT-ASSERTION?");
 
     private static final SubLString $str281$____New_Space = makeString(" -- New Space");
+
+
 
     private static final SubLSymbol DETERMINE_ASSERTION_OBFUSCATIONS = makeSymbol("DETERMINE-ASSERTION-OBFUSCATIONS");
 
@@ -1373,11 +746,19 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str295$_edits_had_been_made_to_the_KB_ = makeString(" edits had been made to the KB.");
 
+
+
     private static final SubLSymbol WEAKLY_SCRAMBLE_STRING_IN_ASSERTIONS = makeSymbol("WEAKLY-SCRAMBLE-STRING-IN-ASSERTIONS");
 
     private static final SubLSymbol WEAKLY_SCRAMBLE_STRING_IN_NAUTS = makeSymbol("WEAKLY-SCRAMBLE-STRING-IN-NAUTS");
 
     private static final SubLSymbol MIX_CASE_STRING = makeSymbol("MIX-CASE-STRING");
+
+
+
+    private static final SubLObject $$EverythingPSC = reader_make_constant_shell(makeString("EverythingPSC"));
+
+    private static final SubLObject $$Collection = reader_make_constant_shell(makeString("Collection"));
 
 
 
@@ -1391,15 +772,33 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
 
 
 
+    private static final SubLObject $$CollectionType = reader_make_constant_shell(makeString("CollectionType"));
+
     private static final SubLString $str310$Nothing_to_clip_ = makeString("Nothing to clip.");
+
+
 
     private static final SubLString $str312$Invalid_percentage__A__cannot_cli = makeString("Invalid percentage ~A: cannot clip from ~A to ~A.");
 
     private static final SubLString $str313$___A__Deleting__A_____ = makeString("~&~A: Deleting ~A ... ");
 
+
+
+
+
+
+
+
+
     private static final SubLString $str318$_A_is_not_a__A = makeString("~A is not a ~A");
 
+
+
+
+
     private static final SubLString $$$continue_anyway = makeString("continue anyway");
+
+
 
     private static final SubLString $str323$_A_is_not_a_valid__sbhl_type_erro = makeString("~A is not a valid *sbhl-type-error-action* value");
 
@@ -1415,6 +814,8 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol $sym329$_EXIT = makeSymbol("%EXIT");
 
+
+
     private static final SubLString $str331$___A__Current_FORT_Count____A__ = makeString("~&~A: Current FORT Count : ~A~%");
 
     private static final SubLString $str332$___A__Gathering_tabu_collections_ = makeString("~&~A: Gathering tabu-collections ....~%");
@@ -1425,47 +826,26 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLFloat $float$0_1 = makeDouble(0.1);
 
+
+
     private static final SubLString $str337$___A__Clipping_stopped_at__A_FORT = makeString("~&~A: Clipping stopped at ~A FORTs remaining with reason code ~A.~%");
 
     private static final SubLSymbol GENERATE_TERMS_TRANSCRIPT = makeSymbol("GENERATE-TERMS-TRANSCRIPT");
 
-
+    private static final SubLObject $$CycAdministrator = reader_make_constant_shell(makeString("CycAdministrator"));
 
     private static final SubLInteger $int$212 = makeInteger(212);
 
     private static final SubLString $str341$Finding_assertions_about_missing_ = makeString("Finding assertions about missing SAP terms ....");
 
-    private static final SubLList $list342 = list(reader_make_constant_shell("isa"), reader_make_constant_shell("genls"));
+    private static final SubLList $list342 = list(reader_make_constant_shell(makeString("isa")), reader_make_constant_shell(makeString("genls")));
 
     private static final SubLString $str343$Could_not_find_constant_for__S___ = makeString("Could not find constant for ~S ... skipping.~%");
 
     private static final SubLString $str344$_A_constants_were_skipped___ = makeString("~A constants were skipped.~%");
 
-    // Definitions
-    /**
-     * Close all oldspace areas except the most recent.
-     */
-    @LispMethod(comment = "Close all oldspace areas except the most recent.")
-    public static final SubLObject close_old_areas_alt() {
-        return NIL;
-    }
-
-    // Definitions
-    /**
-     * Close all oldspace areas except the most recent.
-     */
-    @LispMethod(comment = "Close all oldspace areas except the most recent.")
     public static SubLObject close_old_areas() {
         return NIL;
-    }
-
-    public static final SubLObject verify_cyc_build_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            run_all_test_case_tables(StreamsLow.$standard_output$.getDynamicValue(thread), $TERSE, NIL, T, UNPROVIDED);
-            constant_completion.report_constant_names_in_code_but_not_kb();
-            return NIL;
-        }
     }
 
     public static SubLObject verify_cyc_build() {
@@ -1475,31 +855,10 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     * Load the KB units files then write out a Cyc image.
-     */
-    @LispMethod(comment = "Load the KB units files then write out a Cyc image.")
-    public static final SubLObject cyc_build_world_alt(SubLObject units_directory_path, SubLObject world_filename) {
-        dumper.load_kb(units_directory_path);
-        com.cyc.cycjava.cycl.builder_utilities.build_write_image(world_filename);
-        return NIL;
-    }
-
-    /**
-     * Load the KB units files then write out a Cyc image.
-     */
-    @LispMethod(comment = "Load the KB units files then write out a Cyc image.")
     public static SubLObject cyc_build_world(final SubLObject units_directory_path, final SubLObject world_filename) {
         dumper.load_kb(units_directory_path);
         build_write_image(world_filename);
         operation_communication.halt_cyc_image($str1$This_cyc_image_is_no_longer_usabl);
-        return NIL;
-    }
-
-    public static final SubLObject cyc_build_world_verify_alt(SubLObject dump_directory, SubLObject world_filename) {
-        dumper.load_kb(dump_directory);
-        com.cyc.cycjava.cycl.builder_utilities.verify_cyc_build();
-        com.cyc.cycjava.cycl.builder_utilities.build_write_image(world_filename);
         return NIL;
     }
 
@@ -1511,22 +870,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     * Write out a Cyc image.
-     */
-    @LispMethod(comment = "Write out a Cyc image.")
-    public static final SubLObject build_write_image_alt(SubLObject world_filename) {
-        if (NIL != Filesys.probe_file(world_filename)) {
-            Errors.cerror($$$Continue, $str_alt3$World_file__A_already_exists_and_, world_filename);
-        }
-        operation_communication.write_cyc_image(world_filename, T);
-        return NIL;
-    }
-
-    /**
-     * Write out a Cyc image.
-     */
-    @LispMethod(comment = "Write out a Cyc image.")
     public static SubLObject build_write_image(final SubLObject world_filename) {
         research_cyc_init.perform_research_cyc_build_finalizations();
         if (NIL != Filesys.probe_file(world_filename)) {
@@ -1536,13 +879,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject cyc_install_directory_name_alt(SubLObject cyc_product_string, SubLObject revision_letter) {
-        if (revision_letter == UNPROVIDED) {
-            revision_letter = $$$A;
-        }
-        return cconcatenate($str_alt5$cyc_, new SubLObject[]{ format_nil.format_nil_a_no_copy(cyc_product_string), $str_alt6$_, format_nil.format_nil_a_no_copy(system_info.cyc_revision_string_s1p_format()), $str_alt7$_kb_, format_nil.format_nil_a_no_copy(operation_communication.kb_version_string()), $str_alt6$_, format_nil.format_nil_a_no_copy(revision_letter) });
-    }
-
     public static SubLObject cyc_install_directory_name(final SubLObject cyc_product_string, SubLObject revision_letter) {
         if (revision_letter == UNPROVIDED) {
             revision_letter = $$$A;
@@ -1550,21 +886,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return cconcatenate($str6$cyc_, new SubLObject[]{ format_nil.format_nil_a_no_copy(cyc_product_string), $str7$_, format_nil.format_nil_a_no_copy(system_info.cyc_revision_string_s1p_format()), $str8$_kb_, format_nil.format_nil_a_no_copy(operation_communication.kb_version_string()), $str7$_, format_nil.format_nil_a_no_copy(revision_letter) });
     }
 
-    /**
-     * The canonical location for Cyc installed images at Cycorp.
-     */
-    @LispMethod(comment = "The canonical location for Cyc installed images at Cycorp.")
-    public static final SubLObject cyc_install_directory_alt(SubLObject cyc_platform_string, SubLObject cyc_product_string, SubLObject cyc_toolset, SubLObject revision_letter) {
-        if (revision_letter == UNPROVIDED) {
-            revision_letter = $$$A;
-        }
-        return cconcatenate($str_alt8$_cyc_, new SubLObject[]{ format_nil.format_nil_a_no_copy(cyc_platform_string), $str_alt9$_, format_nil.format_nil_a_no_copy(cyc_product_string), $str_alt10$_install_, format_nil.format_nil_a_no_copy(com.cyc.cycjava.cycl.builder_utilities.cyc_install_directory_name(cyc_product_string, revision_letter)), $str_alt9$_, format_nil.format_nil_a_no_copy(cyc_toolset), $str_alt9$_ });
-    }
-
-    /**
-     * The canonical location for Cyc installed images at Cycorp.
-     */
-    @LispMethod(comment = "The canonical location for Cyc installed images at Cycorp.")
     public static SubLObject cyc_install_directory(final SubLObject cyc_platform_string, final SubLObject cyc_product_string, final SubLObject cyc_toolset, SubLObject revision_letter) {
         if (revision_letter == UNPROVIDED) {
             revision_letter = $$$A;
@@ -1572,37 +893,12 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return cconcatenate($str9$_cyc_, new SubLObject[]{ format_nil.format_nil_a_no_copy(cyc_platform_string), $str10$_, format_nil.format_nil_a_no_copy(cyc_product_string), $str11$_install_, format_nil.format_nil_a_no_copy(cyc_install_directory_name(cyc_product_string, revision_letter)), $str10$_, format_nil.format_nil_a_no_copy(cyc_toolset), $str10$_ });
     }
 
-    public static final SubLObject cyc_versioned_world_name_alt() {
-        return cconcatenate($str_alt11$kb_, new SubLObject[]{ format_nil.format_nil_a_no_copy(operation_communication.kb_version_string()), $str_alt12$_load });
-    }
-
     public static SubLObject cyc_versioned_world_name() {
         return cconcatenate($str12$kb_, new SubLObject[]{ format_nil.format_nil_a_no_copy(operation_communication.kb_version_string()), $str13$_load });
     }
 
-    /**
-     * Write out a Cyc image to DIRECTORY with a name reflecting the KB and code versions.
-     */
-    @LispMethod(comment = "Write out a Cyc image to DIRECTORY with a name reflecting the KB and code versions.")
-    public static final SubLObject build_write_image_versioned_alt(SubLObject directory) {
-        SubLTrampolineFile.checkType(directory, DIRECTORY_P);
-        {
-            SubLObject filename = cconcatenate(directory, com.cyc.cycjava.cycl.builder_utilities.cyc_versioned_world_name());
-            format(T, $str_alt14$Writing_cyc_image_to__A__, filename);
-            if (NIL != com.cyc.cycjava.cycl.builder_utilities.build_write_image(filename)) {
-                return filename;
-            } else {
-                return NIL;
-            }
-        }
-    }
-
-    /**
-     * Write out a Cyc image to DIRECTORY with a name reflecting the KB and code versions.
-     */
-    @LispMethod(comment = "Write out a Cyc image to DIRECTORY with a name reflecting the KB and code versions.")
     public static SubLObject build_write_image_versioned(final SubLObject directory) {
-        assert NIL != Filesys.directory_p(directory) : "! Filesys.directory_p(directory) " + ("Filesys.directory_p(directory) " + "CommonSymbols.NIL != Filesys.directory_p(directory) ") + directory;
+        assert NIL != Filesys.directory_p(directory) : "Filesys.directory_p(directory) " + "CommonSymbols.NIL != Filesys.directory_p(directory) " + directory;
         final SubLObject filename = cconcatenate(directory, cyc_versioned_world_name());
         format(T, $str15$Writing_cyc_image_to__A__, filename);
         if (NIL != build_write_image(filename)) {
@@ -1933,17 +1229,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return result;
     }
 
-    public static final SubLObject builder_log_directory_alt() {
-        {
-            SubLObject log_directory = cconcatenate($str_alt15$_home_builder_logs_, new SubLObject[]{ format(NIL, $str_alt16$_4__0D, add(ONE_INTEGER, kb_loaded())), $str_alt9$_ });
-            if (NIL == Filesys.directory_p(log_directory)) {
-                Errors.warn($str_alt17$No_log_directory__A_____strange__, log_directory);
-                make_directory_recursive(log_directory, UNPROVIDED, UNPROVIDED);
-            }
-            return log_directory;
-        }
-    }
-
     public static SubLObject builder_log_directory() {
         final SubLObject log_directory = cconcatenate($str43$_home_builder_logs_, new SubLObject[]{ operation_communication.kb_number_string(add(ONE_INTEGER, kb_loaded())), $str10$_ });
         if (NIL == Filesys.directory_p(log_directory)) {
@@ -1953,90 +1238,10 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return log_directory;
     }
 
-    public static final SubLObject builder_forward_inference_metrics_log_alt() {
-        return cconcatenate(format_nil.format_nil_a_no_copy(com.cyc.cycjava.cycl.builder_utilities.builder_log_directory()), new SubLObject[]{ $str_alt18$forward_inference_metrics_, format_nil.format_nil_a_no_copy(Environment.get_process_id(UNPROVIDED)), $str_alt19$_html });
-    }
-
     public static SubLObject builder_forward_inference_metrics_log() {
         return cconcatenate(format_nil.format_nil_a_no_copy(builder_log_directory()), new SubLObject[]{ $str45$forward_inference_metrics_, format_nil.format_nil_a_no_copy(Environment.get_process_id(UNPROVIDED)), $str46$_html });
     }
 
-    /**
-     * The catchup image waits for the KB to roll over and then automatically
-     * writes a catchup image.
-     */
-    @LispMethod(comment = "The catchup image waits for the KB to roll over and then automatically\r\nwrites a catchup image.\nThe catchup image waits for the KB to roll over and then automatically\nwrites a catchup image.")
-    public static final SubLObject catchup_to_rollover_and_write_image_alt(SubLObject catchup_world_file, SubLObject kb_num, SubLObject send_submitted_transcript_loading_noticesP) {
-        if (kb_num == UNPROVIDED) {
-            kb_num = NIL;
-        }
-        if (send_submitted_transcript_loading_noticesP == UNPROVIDED) {
-            send_submitted_transcript_loading_noticesP = T;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (((NIL != kb_num) && (kb_num != kb_loaded())) && (ZERO_INTEGER == operation_communication.read_master_transcript_op_number())) {
-                Errors.error($str_alt20$The_catchup_image_expected_to_be_, kb_num, operation_communication.kb_version_string());
-            }
-            cb_system_tools.note_image_purpose($str_alt21$Builder_s_catchup_to_rollover_ser);
-            kb_statistics(UNPROVIDED);
-            $gathering_forward_inference_metricsP$.setDynamicValue(T, thread);
-            set_load_submitted_transcripts(T);
-            if (NIL != send_submitted_transcript_loading_noticesP) {
-                set_send_submitted_transcript_loading_notices(T);
-            }
-            set_auto_increment_kb(NIL);
-            com.cyc.cycjava.cycl.builder_utilities.catchup_to_rollover();
-            Storage.room(T);
-            kb_statistics(UNPROVIDED);
-            com.cyc.cycjava.cycl.builder_utilities.build_write_image(catchup_world_file);
-            {
-                SubLObject builder_forward_inference_metrics_log = com.cyc.cycjava.cycl.builder_utilities.builder_forward_inference_metrics_log();
-                if (NIL == Filesys.probe_file(builder_forward_inference_metrics_log)) {
-                    {
-                        SubLObject stream = NIL;
-                        try {
-                            stream = compatibility.open_text(builder_forward_inference_metrics_log, $OUTPUT, NIL);
-                            if (!stream.isStream()) {
-                                Errors.error($str_alt23$Unable_to_open__S, builder_forward_inference_metrics_log);
-                            }
-                            {
-                                SubLObject stream_1 = stream;
-                                {
-                                    SubLObject _prev_bind_0 = html_macros.$html_stream$.currentBinding(thread);
-                                    try {
-                                        html_macros.$html_stream$.bind(stream_1, thread);
-                                        cb_query.cb_show_forward_inference_metrics(TWENTY_INTEGER);
-                                    } finally {
-                                        html_macros.$html_stream$.rebind(_prev_bind_0, thread);
-                                    }
-                                }
-                            }
-                        } finally {
-                            {
-                                SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                try {
-                                    $is_thread_performing_cleanupP$.bind(T, thread);
-                                    if (stream.isStream()) {
-                                        close(stream, UNPROVIDED);
-                                    }
-                                } finally {
-                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
-    /**
-     * The catchup image waits for the KB to roll over and then automatically
-     * writes a catchup image.
-     */
-    @LispMethod(comment = "The catchup image waits for the KB to roll over and then automatically\r\nwrites a catchup image.\nThe catchup image waits for the KB to roll over and then automatically\nwrites a catchup image.")
     public static SubLObject catchup_to_rollover_and_write_image(final SubLObject catchup_world_file, SubLObject kb_num, SubLObject send_submitted_transcript_loading_noticesP) {
         if (kb_num == UNPROVIDED) {
             kb_num = NIL;
@@ -2093,47 +1298,12 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     * Set up cyc to catchup to the next KB then stop receiving operations.  Returns when caught up.
-     */
-    @LispMethod(comment = "Set up cyc to catchup to the next KB then stop receiving operations.  Returns when caught up.")
-    public static final SubLObject catchup_to_rollover_alt() {
-        com.cyc.cycjava.cycl.builder_utilities.catchup_to_rollover_setup();
-        process_wait(cconcatenate($str_alt24$Getting_caught_up_to_KB_rollover_, format_nil.format_nil_a_no_copy(add(ONE_INTEGER, kb_loaded()))), KB_FULL_TRANSCRIPT_LOADED);
-        return NIL;
-    }
-
-    /**
-     * Set up cyc to catchup to the next KB then stop receiving operations.  Returns when caught up.
-     */
-    @LispMethod(comment = "Set up cyc to catchup to the next KB then stop receiving operations.  Returns when caught up.")
     public static SubLObject catchup_to_rollover() {
         catchup_to_rollover_setup();
         process_wait(cconcatenate($str51$Getting_caught_up_to_KB_rollover_, format_nil.format_nil_a_no_copy(add(ONE_INTEGER, kb_loaded()))), KB_FULL_TRANSCRIPT_LOADED);
         return NIL;
     }
 
-    /**
-     * Setup the cyc image to catchup to the rollover then stop processing operations.
-     */
-    @LispMethod(comment = "Setup the cyc image to catchup to the rollover then stop processing operations.")
-    public static final SubLObject catchup_to_rollover_setup_alt() {
-        if (NIL == agenda_running()) {
-            Errors.error($str_alt26$The_agenda_is_not_running___Fix_y);
-        }
-        operation_communication.set_communication_mode($RECEIVE_ONLY);
-        if (operation_communication.set_the_cyclist($$$TheBuilder) == $$Guest) {
-            operation_communication.set_the_cyclist($$$CycAdministrator);
-        }
-        format(T, $str_alt31$Getting_caught_up__);
-        force_output(T);
-        return NIL;
-    }
-
-    /**
-     * Setup the cyc image to catchup to the rollover then stop processing operations.
-     */
-    @LispMethod(comment = "Setup the cyc image to catchup to the rollover then stop processing operations.")
     public static SubLObject catchup_to_rollover_setup() {
         if (NIL == agenda.agenda_running()) {
             Errors.error($str53$The_agenda_is_not_running___Fix_y);
@@ -2145,29 +1315,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         format(T, $str57$Getting_caught_up__);
         force_output(T);
         return NIL;
-    }
-
-    public static final SubLObject load_submitted_transcripts_and_write_image_alt(SubLObject ordered_concatenation_transcript, SubLObject predump_world_file) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            cb_system_tools.note_image_purpose($str_alt32$Builder_s_transcript_loading_serv);
-            {
-                SubLObject _prev_bind_0 = Errors.$continue_cerrorP$.currentBinding(thread);
-                SubLObject _prev_bind_1 = $unencapsulating_within_agenda$.currentBinding(thread);
-                try {
-                    Errors.$continue_cerrorP$.bind(T, thread);
-                    $unencapsulating_within_agenda$.bind(T, thread);
-                    operation_communication.load_transcript_file(ordered_concatenation_transcript, NIL, $NONE, UNPROVIDED, UNPROVIDED);
-                } finally {
-                    $unencapsulating_within_agenda$.rebind(_prev_bind_1, thread);
-                    Errors.$continue_cerrorP$.rebind(_prev_bind_0, thread);
-                }
-            }
-            Storage.room(T);
-            kb_statistics(UNPROVIDED);
-            com.cyc.cycjava.cycl.builder_utilities.build_write_image(predump_world_file);
-            return NIL;
-        }
     }
 
     public static SubLObject load_submitted_transcripts_and_write_image(final SubLObject ordered_concatenation_transcript, final SubLObject predump_world_file) {
@@ -2189,89 +1336,16 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject catchup_to_current_and_write_image_versioned_alt(SubLObject directory) {
-        com.cyc.cycjava.cycl.builder_utilities.catchup_to_current_kb();
-        return com.cyc.cycjava.cycl.builder_utilities.build_write_image_versioned(directory);
-    }
-
     public static SubLObject catchup_to_current_and_write_image_versioned(final SubLObject directory) {
         catchup_to_current_kb();
         return build_write_image_versioned(directory);
     }
 
-    /**
-     * Catchup to the most current operation transmitted then automatically write the current image.
-     */
-    @LispMethod(comment = "Catchup to the most current operation transmitted then automatically write the current image.")
-    public static final SubLObject catchup_to_current_and_write_image_alt(SubLObject current_world_file) {
-        com.cyc.cycjava.cycl.builder_utilities.catchup_to_current_kb();
-        return com.cyc.cycjava.cycl.builder_utilities.build_write_image(current_world_file);
-    }
-
-    /**
-     * Catchup to the most current operation transmitted then automatically write the current image.
-     */
-    @LispMethod(comment = "Catchup to the most current operation transmitted then automatically write the current image.")
     public static SubLObject catchup_to_current_and_write_image(final SubLObject current_world_file) {
         catchup_to_current_kb();
         return build_write_image(current_world_file);
     }
 
-    /**
-     * Catchup to the most current operation transmitted.
-     */
-    @LispMethod(comment = "Catchup to the most current operation transmitted.")
-    public static final SubLObject catchup_to_current_kb_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            cb_system_tools.note_image_purpose($str_alt34$Builder_s_catchup_to_current_serv);
-            if (NIL == agenda_running()) {
-                Errors.error($str_alt26$The_agenda_is_not_running___Fix_y);
-            }
-            kb_statistics(UNPROVIDED);
-            operation_communication.set_communication_mode($RECEIVE_ONLY);
-            if (operation_communication.set_the_cyclist($$$TheBuilder) == $$Guest) {
-                operation_communication.set_the_cyclist($$$CycAdministrator);
-            }
-            sleep(FIVE_INTEGER);
-            {
-                SubLObject start_op_num = operation_communication.read_master_transcript_op_number();
-                {
-                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                    try {
-                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                        $last_percent_progress_prediction$.bind(NIL, thread);
-                        $within_noting_percent_progress$.bind(T, thread);
-                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                        noting_percent_progress_preamble(cconcatenate($str_alt35$Getting_caught_up_from_KB_, new SubLObject[]{ format_nil.format_nil_a_no_copy(kb_loaded()), $str_alt36$_, format_nil.format_nil_a_no_copy(operation_communication.read_master_transcript_op_number()), $str_alt37$_to_KB_, format_nil.format_nil_a_no_copy(kb_loaded()), $str_alt36$_, format_nil.format_nil_a_no_copy(transcript_server.total_master_transcript_operations(UNPROVIDED)) }));
-                        while (NIL == caught_up_on_master_transcript()) {
-                            note_percent_progress(subtract(operation_communication.read_master_transcript_op_number(), start_op_num), subtract(transcript_server.total_master_transcript_operations(UNPROVIDED), start_op_num));
-                            sleep(FIVE_INTEGER);
-                        } 
-                        noting_percent_progress_postamble();
-                    } finally {
-                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            operation_communication.set_communication_mode($DEAF);
-            format(T, $str_alt39$Caught_up_to_KB__A__, operation_communication.kb_version_string());
-            sleep(FIVE_INTEGER);
-            kb_statistics(UNPROVIDED);
-            return NIL;
-        }
-    }
-
-    /**
-     * Catchup to the most current operation transmitted.
-     */
-    @LispMethod(comment = "Catchup to the most current operation transmitted.")
     public static SubLObject catchup_to_current_kb() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         cb_system_tools.note_image_purpose($str60$Builder_s_catchup_to_current_serv);
@@ -2324,13 +1398,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject caught_up_on_operationsP_alt(SubLObject remote_op_count) {
-        if (remote_op_count == UNPROVIDED) {
-            remote_op_count = transcript_server.total_master_transcript_operations(UNPROVIDED);
-        }
-        return numLE(remote_op_count, operation_communication.remote_ops_processed());
-    }
-
     public static SubLObject caught_up_on_operationsP(SubLObject target_remote_op_count) {
         if (target_remote_op_count == UNPROVIDED) {
             target_remote_op_count = transcript_server.total_master_transcript_operations_patient(UNPROVIDED);
@@ -2338,54 +1405,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         SubLTrampolineFile.enforceType(target_remote_op_count, NON_NEGATIVE_INTEGER_P);
         final SubLObject actual_remote_op_count = operation_communication.kb_op_number();
         return numLE(target_remote_op_count, actual_remote_op_count);
-    }
-
-    public static final SubLObject catch_up_on_operations_verbose(SubLObject target_op_count, SubLObject load_submitted_operationsP) {
-        if (target_op_count == UNPROVIDED) {
-            target_op_count = transcript_server.total_master_transcript_operations(UNPROVIDED);
-        }
-        if (load_submitted_operationsP == UNPROVIDED) {
-            load_submitted_operationsP = T;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            operation_communication.set_the_cyclist($$$CycAdministrator);
-            set_load_submitted_transcripts(load_submitted_operationsP);
-            operation_communication.set_receive_state($$$yes);
-            sleep(THREE_INTEGER);
-            {
-                SubLObject start_op_count = operation_communication.remote_ops_processed();
-                SubLObject total_time = ZERO_INTEGER;
-                SubLObject time_var = get_internal_real_time();
-                {
-                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                    try {
-                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                        $last_percent_progress_prediction$.bind(NIL, thread);
-                        $within_noting_percent_progress$.bind(T, thread);
-                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                        noting_percent_progress_preamble(cconcatenate($str_alt35$Getting_caught_up_from_KB_, new SubLObject[]{ format_nil.format_nil_a_no_copy(kb_loaded()), $str_alt36$_, format_nil.format_nil_a_no_copy(start_op_count), $str_alt37$_to_KB_, format_nil.format_nil_a_no_copy(kb_loaded()), $str_alt36$_, format_nil.format_nil_a_no_copy(target_op_count) }));
-                        while (NIL == com.cyc.cycjava.cycl.builder_utilities.caught_up_on_operationsP(target_op_count)) {
-                            note_percent_progress(subtract(operation_communication.remote_ops_processed(), start_op_count), subtract(target_op_count, start_op_count));
-                            sleep(FIVE_INTEGER);
-                        } 
-                        noting_percent_progress_postamble();
-                    } finally {
-                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                total_time = divide(subtract(get_internal_real_time(), time_var), time_high.$internal_time_units_per_second$.getGlobalValue());
-                format(T, $str_alt105$__Cathcing_up_on_operations_took_, total_time);
-            }
-            operation_communication.set_receive_state($$$no);
-            return NIL;
-        }
     }
 
     public static SubLObject catch_up_on_operations_verbose(SubLObject target_op_count, SubLObject load_submitted_operationsP, SubLObject keep_going_upon_kb_rolloverP) {
@@ -2765,49 +1784,12 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return diff_detail;
     }
 
-    /**
-     * Declare that CYC-PRODUCT is composed of CODE-PRODUCT, KB-PRODUCT and BRANCH-TAG.
-     * This information is used to compositionally determine the CYC-PRODUCT of
-     * a running image, which in turn can be used to gate various behaviors.
-     */
-    @LispMethod(comment = "Declare that CYC-PRODUCT is composed of CODE-PRODUCT, KB-PRODUCT and BRANCH-TAG.\r\nThis information is used to compositionally determine the CYC-PRODUCT of\r\na running image, which in turn can be used to gate various behaviors.\nDeclare that CYC-PRODUCT is composed of CODE-PRODUCT, KB-PRODUCT and BRANCH-TAG.\nThis information is used to compositionally determine the CYC-PRODUCT of\na running image, which in turn can be used to gate various behaviors.")
-    public static final SubLObject declare_cyc_product_alt(SubLObject cyc_product, SubLObject code_product, SubLObject kb_product, SubLObject branch_tag) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(cyc_product, KEYWORDP);
-            SubLTrampolineFile.checkType(kb_product, KEYWORDP);
-            SubLTrampolineFile.checkType(code_product, KEYWORDP);
-            SubLTrampolineFile.checkType(branch_tag, STRINGP);
-            if (NIL != com.cyc.cycjava.cycl.builder_utilities.cyc_product_definition_presentP(cyc_product, code_product, kb_product, branch_tag)) {
-                return Errors.warn($str_alt116$The_cyc_product___A__is_already_p, cyc_product);
-            } else {
-                if (NIL != com.cyc.cycjava.cycl.builder_utilities.find_cyc_product(code_product, kb_product, branch_tag)) {
-                    return Errors.error($str_alt117$There_already_exists_a_different_, com.cyc.cycjava.cycl.builder_utilities.find_cyc_product(code_product, kb_product, branch_tag));
-                } else {
-                    if (NIL != assoc(cyc_product, $cyc_product_definitions$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED)) {
-                        return Errors.error($str_alt118$The_cyc_product__A_already_exists, cyc_product);
-                    } else {
-                        $all_cyc_products$.setDynamicValue(cons(cyc_product, $all_cyc_products$.getDynamicValue(thread)), thread);
-                        $cyc_product_definitions$.setDynamicValue(cons(list(cyc_product, kb_product, code_product, branch_tag), $cyc_product_definitions$.getDynamicValue(thread)), thread);
-                        return $cyc_product_definitions$.getDynamicValue(thread);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Declare that CYC-PRODUCT is composed of CODE-PRODUCT, KB-PRODUCT and BRANCH-TAG.
-     * This information is used to compositionally determine the CYC-PRODUCT of
-     * a running image, which in turn can be used to gate various behaviors.
-     */
-    @LispMethod(comment = "Declare that CYC-PRODUCT is composed of CODE-PRODUCT, KB-PRODUCT and BRANCH-TAG.\r\nThis information is used to compositionally determine the CYC-PRODUCT of\r\na running image, which in turn can be used to gate various behaviors.\nDeclare that CYC-PRODUCT is composed of CODE-PRODUCT, KB-PRODUCT and BRANCH-TAG.\nThis information is used to compositionally determine the CYC-PRODUCT of\na running image, which in turn can be used to gate various behaviors.")
     public static SubLObject declare_cyc_product(final SubLObject cyc_product, final SubLObject code_product, final SubLObject kb_product, final SubLObject branch_tag) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != keywordp(cyc_product) : "! keywordp(cyc_product) " + ("Types.keywordp(cyc_product) " + "CommonSymbols.NIL != Types.keywordp(cyc_product) ") + cyc_product;
-        assert NIL != keywordp(kb_product) : "! keywordp(kb_product) " + ("Types.keywordp(kb_product) " + "CommonSymbols.NIL != Types.keywordp(kb_product) ") + kb_product;
-        assert NIL != keywordp(code_product) : "! keywordp(code_product) " + ("Types.keywordp(code_product) " + "CommonSymbols.NIL != Types.keywordp(code_product) ") + code_product;
-        assert NIL != stringp(branch_tag) : "! stringp(branch_tag) " + ("Types.stringp(branch_tag) " + "CommonSymbols.NIL != Types.stringp(branch_tag) ") + branch_tag;
+        assert NIL != keywordp(cyc_product) : "Types.keywordp(cyc_product) " + "CommonSymbols.NIL != Types.keywordp(cyc_product) " + cyc_product;
+        assert NIL != keywordp(kb_product) : "Types.keywordp(kb_product) " + "CommonSymbols.NIL != Types.keywordp(kb_product) " + kb_product;
+        assert NIL != keywordp(code_product) : "Types.keywordp(code_product) " + "CommonSymbols.NIL != Types.keywordp(code_product) " + code_product;
+        assert NIL != stringp(branch_tag) : "Types.stringp(branch_tag) " + "CommonSymbols.NIL != Types.stringp(branch_tag) " + branch_tag;
         if (NIL != cyc_product_definition_presentP(cyc_product, code_product, kb_product, branch_tag)) {
             return Errors.warn($str105$The_cyc_product___A__is_already_p, cyc_product);
         }
@@ -2815,151 +1797,51 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
             return Errors.error($str106$There_already_exists_a_different_, find_cyc_product(code_product, kb_product, branch_tag));
         }
         if (NIL != assoc(cyc_product, $cyc_product_definitions$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED)) {
-            if (!SubLMain.BOOTY_HACKZ)
-                return Errors.error($str107$The_cyc_product__A_already_exists, cyc_product);
-
+           if(!SubLMain.BOOTY_HACKZ)  return Errors.error($str107$The_cyc_product__A_already_exists, cyc_product);
         }
         $all_cyc_products$.setDynamicValue(cons(cyc_product, $all_cyc_products$.getDynamicValue(thread)), thread);
         $cyc_product_definitions$.setDynamicValue(cons(list(cyc_product, kb_product, code_product, branch_tag), $cyc_product_definitions$.getDynamicValue(thread)), thread);
         return $cyc_product_definitions$.getDynamicValue(thread);
     }
 
-    /**
-     * Returns T if a cyc product definition composed of these 4 values exists.
-     */
-    @LispMethod(comment = "Returns T if a cyc product definition composed of these 4 values exists.")
-    public static final SubLObject cyc_product_definition_presentP_alt(SubLObject cyc_product, SubLObject code_product, SubLObject kb_product, SubLObject branch_tag) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return member(list(cyc_product, code_product, kb_product, branch_tag), $cyc_product_definitions$.getDynamicValue(thread), symbol_function(EQUAL), UNPROVIDED);
-        }
-    }
-
-    /**
-     * Returns T if a cyc product definition composed of these 4 values exists.
-     */
-    @LispMethod(comment = "Returns T if a cyc product definition composed of these 4 values exists.")
     public static SubLObject cyc_product_definition_presentP(final SubLObject cyc_product, final SubLObject code_product, final SubLObject kb_product, final SubLObject branch_tag) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return member(list(cyc_product, code_product, kb_product, branch_tag), $cyc_product_definitions$.getDynamicValue(thread), symbol_function(EQUAL), UNPROVIDED);
     }
 
-    /**
-     * Returns the cyc product identifier for this combination of code-product,
-     * kb-product and branch-tag.
-     */
-    @LispMethod(comment = "Returns the cyc product identifier for this combination of code-product,\r\nkb-product and branch-tag.\nReturns the cyc product identifier for this combination of code-product,\nkb-product and branch-tag.")
-    public static final SubLObject find_cyc_product_alt(SubLObject code_product, SubLObject kb_product, SubLObject branch_tag) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return find(list(code_product, kb_product, branch_tag), $cyc_product_definitions$.getDynamicValue(thread), symbol_function(EQUAL), symbol_function(CDR), UNPROVIDED, UNPROVIDED).first();
-        }
-    }
-
-    /**
-     * Returns the cyc product identifier for this combination of code-product,
-     * kb-product and branch-tag.
-     */
-    @LispMethod(comment = "Returns the cyc product identifier for this combination of code-product,\r\nkb-product and branch-tag.\nReturns the cyc product identifier for this combination of code-product,\nkb-product and branch-tag.")
     public static SubLObject find_cyc_product(final SubLObject code_product, final SubLObject kb_product, final SubLObject branch_tag) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return find(list(code_product, kb_product, branch_tag), $cyc_product_definitions$.getDynamicValue(thread), symbol_function(EQUAL), symbol_function(CDR), UNPROVIDED, UNPROVIDED).first();
     }
 
-    /**
-     *
-     *
-     * @return keywordp
-    Return a token identifying the cyc product of this running image,
-    which was initialized at startup based on properties of the code and
-    KB.
-     */
-    @LispMethod(comment = "@return keywordp\r\nReturn a token identifying the cyc product of this running image,\r\nwhich was initialized at startup based on properties of the code and\r\nKB.")
-    public static final SubLObject cyc_product_alt() {
-        return $cyc_product$.getGlobalValue();
-    }
-
-    /**
-     *
-     *
-     * @return keywordp
-    Return a token identifying the cyc product of this running image,
-    which was initialized at startup based on properties of the code and
-    KB.
-     */
-    @LispMethod(comment = "@return keywordp\r\nReturn a token identifying the cyc product of this running image,\r\nwhich was initialized at startup based on properties of the code and\r\nKB.")
     public static SubLObject cyc_product() {
         return $cyc_product$.getGlobalValue();
-    }
-
-    public static final SubLObject code_product_alt() {
-        return $code_product$.getGlobalValue();
     }
 
     public static SubLObject code_product() {
         return $code_product$.getGlobalValue();
     }
 
-    public static final SubLObject kb_product_alt() {
-        return $kb_product$.getGlobalValue();
-    }
-
     public static SubLObject kb_product() {
         return $kb_product$.getGlobalValue();
-    }
-
-    public static final SubLObject branch_tag_alt() {
-        return $branch_tag$.getGlobalValue();
     }
 
     public static SubLObject branch_tag() {
         return $branch_tag$.getGlobalValue();
     }
 
-    public static final SubLObject set_cyc_product_alt(SubLObject cyc_product) {
-        SubLTrampolineFile.checkType(cyc_product, KEYWORDP);
-        $cyc_product$.setGlobalValue(cyc_product);
-        return com.cyc.cycjava.cycl.builder_utilities.cyc_product();
-    }
-
     public static SubLObject set_cyc_product(final SubLObject cyc_product) {
-        assert NIL != keywordp(cyc_product) : "! keywordp(cyc_product) " + ("Types.keywordp(cyc_product) " + "CommonSymbols.NIL != Types.keywordp(cyc_product) ") + cyc_product;
+        assert NIL != keywordp(cyc_product) : "Types.keywordp(cyc_product) " + "CommonSymbols.NIL != Types.keywordp(cyc_product) " + cyc_product;
         $cyc_product$.setGlobalValue(cyc_product);
         return cyc_product();
     }
 
-    public static final SubLObject set_kb_product_alt(SubLObject kb_product) {
-        SubLTrampolineFile.checkType(kb_product, KEYWORDP);
-        $kb_product$.setGlobalValue(kb_product);
-        return com.cyc.cycjava.cycl.builder_utilities.kb_product();
-    }
-
     public static SubLObject set_kb_product(final SubLObject kb_product) {
-        assert NIL != keywordp(kb_product) : "! keywordp(kb_product) " + ("Types.keywordp(kb_product) " + "CommonSymbols.NIL != Types.keywordp(kb_product) ") + kb_product;
+        assert NIL != keywordp(kb_product) : "Types.keywordp(kb_product) " + "CommonSymbols.NIL != Types.keywordp(kb_product) " + kb_product;
         $kb_product$.setGlobalValue(kb_product);
         return kb_product();
     }
 
-    /**
-     * Detect what the value of *CYC-PRODUCT* should be, then set it.
-     */
-    @LispMethod(comment = "Detect what the value of *CYC-PRODUCT* should be, then set it.")
-    public static final SubLObject initialize_cyc_product_alt() {
-        {
-            SubLObject cyc_product = com.cyc.cycjava.cycl.builder_utilities.detect_cyc_product();
-            if (NIL != cyc_product) {
-                com.cyc.cycjava.cycl.builder_utilities.set_cyc_product(cyc_product);
-            } else {
-                com.cyc.cycjava.cycl.builder_utilities.set_cyc_product($UNKNOWN_CYC_PRODUCT);
-            }
-            return cyc_product;
-        }
-    }
-
-    /**
-     * Detect what the value of *CYC-PRODUCT* should be, then set it.
-     */
-    @LispMethod(comment = "Detect what the value of *CYC-PRODUCT* should be, then set it.")
     public static SubLObject initialize_cyc_product() {
         final SubLObject cyc_product = detect_cyc_product();
         if (NIL != cyc_product) {
@@ -2970,102 +1852,10 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return cyc_product;
     }
 
-    public static final SubLObject detect_cyc_product_alt() {
-        return com.cyc.cycjava.cycl.builder_utilities.find_cyc_product(com.cyc.cycjava.cycl.builder_utilities.code_product(), com.cyc.cycjava.cycl.builder_utilities.kb_product(), com.cyc.cycjava.cycl.builder_utilities.branch_tag());
-    }
-
     public static SubLObject detect_cyc_product() {
         return find_cyc_product(code_product(), kb_product(), branch_tag());
     }
 
-    /**
-     * Read a line based, tuple representation of file dependency from the text file
-     * in path and return as a mapping of file names to sets.
-     * The file format is <DEPENDENT> <SPACE> <DEPENDENCY>
-     *
-     * @param PATH
-     * 		the path of the file containing the dependency information
-     * @param TEST
-     * 		the comparison test for file names; defaults to case-sensitive
-     * @return MAP-P of STRINGP -> SET-P of STRINGP with TEST as MAP-TEST
-     */
-    @LispMethod(comment = "Read a line based, tuple representation of file dependency from the text file\r\nin path and return as a mapping of file names to sets.\r\nThe file format is <DEPENDENT> <SPACE> <DEPENDENCY>\r\n\r\n@param PATH\r\n\t\tthe path of the file containing the dependency information\r\n@param TEST\r\n\t\tthe comparison test for file names; defaults to case-sensitive\r\n@return MAP-P of STRINGP -> SET-P of STRINGP with TEST as MAP-TEST\nRead a line based, tuple representation of file dependency from the text file\nin path and return as a mapping of file names to sets.\nThe file format is <DEPENDENT> <SPACE> <DEPENDENCY>")
-    public static final SubLObject load_file_dependency_information_alt(SubLObject path, SubLObject test) {
-        if (test == UNPROVIDED) {
-            test = EQUAL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject information = new_dictionary(test, UNPROVIDED);
-                SubLObject file_var = path;
-                SubLObject stream = NIL;
-                try {
-                    {
-                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                        try {
-                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                            stream = compatibility.open_text(file_var, $INPUT, NIL);
-                        } finally {
-                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    if (!stream.isStream()) {
-                        Errors.error($str_alt23$Unable_to_open__S, file_var);
-                    }
-                    {
-                        SubLObject stream_var = stream;
-                        if (stream_var.isStream()) {
-                            {
-                                SubLObject stream_var_3 = stream_var;
-                                SubLObject line_number_var = NIL;
-                                SubLObject line = NIL;
-                                for (line_number_var = ZERO_INTEGER, line = read_line(stream_var_3, NIL, NIL, UNPROVIDED); NIL != line; line_number_var = number_utilities.f_1X(line_number_var) , line = read_line(stream_var_3, NIL, NIL, UNPROVIDED)) {
-                                    {
-                                        SubLObject split_point = position_if(WHITESPACE_CHAR_P, line, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                        SubLObject dependent = string_utilities.substring(line, ZERO_INTEGER, split_point);
-                                        SubLObject dependency = string_utilities.substring(line, add(ONE_INTEGER, split_point), UNPROVIDED);
-                                        SubLObject dependencies = map_get(information, dependent, UNPROVIDED);
-                                        if (NIL == set.set_p(dependencies)) {
-                                            dependencies = set.new_set(test, UNPROVIDED);
-                                            map_put(information, dependent, dependencies);
-                                        }
-                                        set.set_add(dependency, dependencies);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            if (stream.isStream()) {
-                                close(stream, UNPROVIDED);
-                            }
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                return information;
-            }
-        }
-    }
-
-    /**
-     * Read a line based, tuple representation of file dependency from the text file
-     * in path and return as a mapping of file names to sets.
-     * The file format is <DEPENDENT> <SPACE> <DEPENDENCY>
-     *
-     * @param PATH
-     * 		the path of the file containing the dependency information
-     * @param TEST
-     * 		the comparison test for file names; defaults to case-sensitive
-     * @return MAP-P of STRINGP -> SET-P of STRINGP with TEST as MAP-TEST
-     */
-    @LispMethod(comment = "Read a line based, tuple representation of file dependency from the text file\r\nin path and return as a mapping of file names to sets.\r\nThe file format is <DEPENDENT> <SPACE> <DEPENDENCY>\r\n\r\n@param PATH\r\n\t\tthe path of the file containing the dependency information\r\n@param TEST\r\n\t\tthe comparison test for file names; defaults to case-sensitive\r\n@return MAP-P of STRINGP -> SET-P of STRINGP with TEST as MAP-TEST\nRead a line based, tuple representation of file dependency from the text file\nin path and return as a mapping of file names to sets.\nThe file format is <DEPENDENT> <SPACE> <DEPENDENCY>")
     public static SubLObject load_file_dependency_information(final SubLObject path, SubLObject test) {
         if (test == UNPROVIDED) {
             test = EQUAL;
@@ -3119,58 +1909,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return information;
     }
 
-    /**
-     * Perform one iteration of file-set augmentation by adding files from the
-     * dependency information, a MAP-P of STRINGP to SET-P of STRINGP, whenever
-     * the file-set element has a key in the dependency information.
-     *
-     * @param FILE-SET
-     * 		a SET-P of STRINGP
-     * @param DEPENDENCY-INFORMATION
-     * 		a MAP-P of STRINGP -> SET-P of STRINGP
-     * @return NON-NEGATIVE-INTEGER-P a count of additions, or 0 if none happened
-     */
-    @LispMethod(comment = "Perform one iteration of file-set augmentation by adding files from the\r\ndependency information, a MAP-P of STRINGP to SET-P of STRINGP, whenever\r\nthe file-set element has a key in the dependency information.\r\n\r\n@param FILE-SET\r\n\t\ta SET-P of STRINGP\r\n@param DEPENDENCY-INFORMATION\r\n\t\ta MAP-P of STRINGP -> SET-P of STRINGP\r\n@return NON-NEGATIVE-INTEGER-P a count of additions, or 0 if none happened\nPerform one iteration of file-set augmentation by adding files from the\ndependency information, a MAP-P of STRINGP to SET-P of STRINGP, whenever\nthe file-set element has a key in the dependency information.")
-    public static final SubLObject augment_file_set_alt(SubLObject file_set, SubLObject dependency_information) {
-        {
-            SubLObject additions = set.new_set(set.set_test(file_set), UNPROVIDED);
-            SubLObject set_contents_var = set.do_set_internal(file_set);
-            SubLObject basis_object = set_contents.do_set_contents_basis_object(set_contents_var);
-            SubLObject state = NIL;
-            for (state = set_contents.do_set_contents_initial_state(basis_object, set_contents_var); NIL == set_contents.do_set_contents_doneP(basis_object, state); state = set_contents.do_set_contents_update_state(state)) {
-                {
-                    SubLObject file = set_contents.do_set_contents_next(basis_object, state);
-                    if (NIL != set_contents.do_set_contents_element_validP(state, file)) {
-                        {
-                            SubLObject dependencies = map_get(dependency_information, file, UNPROVIDED);
-                            if (NIL != set.set_p(dependencies)) {
-                                set_utilities.set_nmerge(additions, dependencies);
-                            }
-                        }
-                    }
-                }
-            }
-            set_utilities.set_nprune(additions, file_set);
-            {
-                SubLObject actual_additions = set.set_size(additions);
-                set_utilities.set_nmerge(file_set, additions);
-                return actual_additions;
-            }
-        }
-    }
-
-    /**
-     * Perform one iteration of file-set augmentation by adding files from the
-     * dependency information, a MAP-P of STRINGP to SET-P of STRINGP, whenever
-     * the file-set element has a key in the dependency information.
-     *
-     * @param FILE-SET
-     * 		a SET-P of STRINGP
-     * @param DEPENDENCY-INFORMATION
-     * 		a MAP-P of STRINGP -> SET-P of STRINGP
-     * @return NON-NEGATIVE-INTEGER-P a count of additions, or 0 if none happened
-     */
-    @LispMethod(comment = "Perform one iteration of file-set augmentation by adding files from the\r\ndependency information, a MAP-P of STRINGP to SET-P of STRINGP, whenever\r\nthe file-set element has a key in the dependency information.\r\n\r\n@param FILE-SET\r\n\t\ta SET-P of STRINGP\r\n@param DEPENDENCY-INFORMATION\r\n\t\ta MAP-P of STRINGP -> SET-P of STRINGP\r\n@return NON-NEGATIVE-INTEGER-P a count of additions, or 0 if none happened\nPerform one iteration of file-set augmentation by adding files from the\ndependency information, a MAP-P of STRINGP to SET-P of STRINGP, whenever\nthe file-set element has a key in the dependency information.")
     public static SubLObject augment_file_set(final SubLObject file_set, final SubLObject dependency_information) {
         final SubLObject additions = set.new_set(set.set_test(file_set), UNPROVIDED);
         final SubLObject set_contents_var = set.do_set_internal(file_set);
@@ -3193,41 +1931,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return actual_additions;
     }
 
-    /**
-     * Repeatedly augment file set until no more progress is made (which is
-     * determined via tracking the result of
-     *
-     * @unknown AUGMENT-FILE-SET
-     * @return FILE-SET
-     */
-    @LispMethod(comment = "Repeatedly augment file set until no more progress is made (which is\r\ndetermined via tracking the result of\r\n\r\n@unknown AUGMENT-FILE-SET\r\n@return FILE-SET\nRepeatedly augment file set until no more progress is made (which is\ndetermined via tracking the result of")
-    public static final SubLObject completely_augment_file_set_alt(SubLObject file_set, SubLObject dependency_information) {
-        {
-            SubLObject ceiling = add(set.set_size(file_set), map_size(dependency_information));
-            SubLObject counter = ZERO_INTEGER;
-            SubLObject doneP = NIL;
-            while (NIL == doneP) {
-                {
-                    SubLObject additions = com.cyc.cycjava.cycl.builder_utilities.augment_file_set(file_set, dependency_information);
-                    doneP = zerop(additions);
-                }
-                counter = add(counter, ONE_INTEGER);
-                if (ceiling.numL(counter)) {
-                    Errors.error($str_alt136$Augmenting_the_file_set_not_termi, ceiling);
-                }
-            } 
-            return file_set;
-        }
-    }
-
-    /**
-     * Repeatedly augment file set until no more progress is made (which is
-     * determined via tracking the result of
-     *
-     * @unknown AUGMENT-FILE-SET
-     * @return FILE-SET
-     */
-    @LispMethod(comment = "Repeatedly augment file set until no more progress is made (which is\r\ndetermined via tracking the result of\r\n\r\n@unknown AUGMENT-FILE-SET\r\n@return FILE-SET\nRepeatedly augment file set until no more progress is made (which is\ndetermined via tracking the result of")
     public static SubLObject completely_augment_file_set(final SubLObject file_set, final SubLObject dependency_information) {
         final SubLObject ceiling = add(set.set_size(file_set), map_utilities.map_size(dependency_information));
         SubLObject counter = ZERO_INTEGER;
@@ -3243,105 +1946,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return file_set;
     }
 
-    /**
-     * Writes the declaration for an ANT fileset element to *XML-STREAM*.
-     *
-     * @param FILESET-ID
-     * 		STRINGP the id of the fileset specification
-     * @param DIR-SPEC
-     * 		STRINGP the directory specification, or a variable reference (${VAR})
-     * @param FILES-TO-INCLUDE
-     * 		LIST-OF-STRING-P file or file patterns to include
-     * @param FILES-TO-EXCLUDE
-     * 		LIST-OF-STRING-P file of file patterns to exclude
-     * @return STRINGP the file-set-id
-     */
-    @LispMethod(comment = "Writes the declaration for an ANT fileset element to *XML-STREAM*.\r\n\r\n@param FILESET-ID\r\n\t\tSTRINGP the id of the fileset specification\r\n@param DIR-SPEC\r\n\t\tSTRINGP the directory specification, or a variable reference (${VAR})\r\n@param FILES-TO-INCLUDE\r\n\t\tLIST-OF-STRING-P file or file patterns to include\r\n@param FILES-TO-EXCLUDE\r\n\t\tLIST-OF-STRING-P file of file patterns to exclude\r\n@return STRINGP the file-set-id")
-    public static final SubLObject write_ant_fileset_declaration_alt(SubLObject fileset_id, SubLObject dir_spec, SubLObject files_to_include, SubLObject files_to_exclude) {
-        if (files_to_exclude == UNPROVIDED) {
-            files_to_exclude = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject attributes = list($$$id, fileset_id, $$$dir, dir_spec);
-                {
-                    SubLObject _prev_bind_0 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                    try {
-                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                        xml_utilities.xml_start_tag_internal($$$fileset, attributes, NIL);
-                        {
-                            SubLObject name_attribute_list = list($$$name, $VALUE);
-                            SubLObject name_spot = name_attribute_list.rest();
-                            {
-                                SubLObject cdolist_list_var = files_to_include;
-                                SubLObject file_to_include = NIL;
-                                for (file_to_include = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , file_to_include = cdolist_list_var.first()) {
-                                    rplaca(name_spot, file_to_include);
-                                    xml_utilities.xml_terpri();
-                                    {
-                                        SubLObject _prev_bind_0_4 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                        SubLObject _prev_bind_1_5 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                        try {
-                                            xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                            xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                            xml_utilities.xml_start_tag_internal($$$include, name_attribute_list, T);
-                                        } finally {
-                                            xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_5, thread);
-                                            xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_4, thread);
-                                        }
-                                    }
-                                }
-                            }
-                            {
-                                SubLObject cdolist_list_var = files_to_exclude;
-                                SubLObject file_to_exclude = NIL;
-                                for (file_to_exclude = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , file_to_exclude = cdolist_list_var.first()) {
-                                    rplaca(name_spot, file_to_exclude);
-                                    xml_utilities.xml_terpri();
-                                    {
-                                        SubLObject _prev_bind_0_6 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                        SubLObject _prev_bind_1_7 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                        try {
-                                            xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                            xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                            xml_utilities.xml_start_tag_internal($$$exclude, name_attribute_list, T);
-                                        } finally {
-                                            xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_7, thread);
-                                            xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_6, thread);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1, thread);
-                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                xml_utilities.xml_terpri();
-                xml_utilities.xml_end_tag_internal($$$fileset);
-            }
-            return fileset_id;
-        }
-    }
-
-    /**
-     * Writes the declaration for an ANT fileset element to *XML-STREAM*.
-     *
-     * @param FILESET-ID
-     * 		STRINGP the id of the fileset specification
-     * @param DIR-SPEC
-     * 		STRINGP the directory specification, or a variable reference (${VAR})
-     * @param FILES-TO-INCLUDE
-     * 		LIST-OF-STRING-P file or file patterns to include
-     * @param FILES-TO-EXCLUDE
-     * 		LIST-OF-STRING-P file of file patterns to exclude
-     * @return STRINGP the file-set-id
-     */
-    @LispMethod(comment = "Writes the declaration for an ANT fileset element to *XML-STREAM*.\r\n\r\n@param FILESET-ID\r\n\t\tSTRINGP the id of the fileset specification\r\n@param DIR-SPEC\r\n\t\tSTRINGP the directory specification, or a variable reference (${VAR})\r\n@param FILES-TO-INCLUDE\r\n\t\tLIST-OF-STRING-P file or file patterns to include\r\n@param FILES-TO-EXCLUDE\r\n\t\tLIST-OF-STRING-P file of file patterns to exclude\r\n@return STRINGP the file-set-id")
     public static SubLObject write_ant_fileset_declaration(final SubLObject fileset_id, final SubLObject dir_spec, final SubLObject files_to_include, SubLObject files_to_exclude) {
         if (files_to_exclude == UNPROVIDED) {
             files_to_exclude = NIL;
@@ -3432,26 +2036,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return fileset_id;
     }
 
-    /**
-     * Given a list of relative file paths, root them at ROOT and turn the
-     * result into a file set.
-     */
-    @LispMethod(comment = "Given a list of relative file paths, root them at ROOT and turn the\r\nresult into a file set.\nGiven a list of relative file paths, root them at ROOT and turn the\nresult into a file set.")
-    public static final SubLObject construct_rooted_file_set_from_list_alt(SubLObject file_list, SubLObject root, SubLObject test) {
-        if (root == UNPROVIDED) {
-            root = path_separator_string($UNIX);
-        }
-        if (test == UNPROVIDED) {
-            test = EQUAL;
-        }
-        return com.cyc.cycjava.cycl.builder_utilities.root_file_set(set_utilities.construct_set_from_list(file_list, test, UNPROVIDED), root, test);
-    }
-
-    /**
-     * Given a list of relative file paths, root them at ROOT and turn the
-     * result into a file set.
-     */
-    @LispMethod(comment = "Given a list of relative file paths, root them at ROOT and turn the\r\nresult into a file set.\nGiven a list of relative file paths, root them at ROOT and turn the\nresult into a file set.")
     public static SubLObject construct_rooted_file_set_from_list(final SubLObject file_list, SubLObject root, SubLObject test) {
         if (root == UNPROVIDED) {
             root = file_utilities.path_separator_string($UNIX);
@@ -3462,42 +2046,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return root_file_set(set_utilities.construct_set_from_list(file_list, test, UNPROVIDED), root, test);
     }
 
-    /**
-     * Given a set of relative file paths, root them in the file hierarchy at ROOT.
-     *
-     * @return SET-P of STRINGP with SET-TEST of TEST
-     */
-    @LispMethod(comment = "Given a set of relative file paths, root them in the file hierarchy at ROOT.\r\n\r\n@return SET-P of STRINGP with SET-TEST of TEST")
-    public static final SubLObject root_file_set_alt(SubLObject file_set, SubLObject root, SubLObject test) {
-        if (root == UNPROVIDED) {
-            root = path_separator_string($UNIX);
-        }
-        if (test == UNPROVIDED) {
-            test = EQUAL;
-        }
-        {
-            SubLObject new_file_set = set.new_set(test, set.set_size(file_set));
-            SubLObject set_contents_var = set.do_set_internal(file_set);
-            SubLObject basis_object = set_contents.do_set_contents_basis_object(set_contents_var);
-            SubLObject state = NIL;
-            for (state = set_contents.do_set_contents_initial_state(basis_object, set_contents_var); NIL == set_contents.do_set_contents_doneP(basis_object, state); state = set_contents.do_set_contents_update_state(state)) {
-                {
-                    SubLObject file = set_contents.do_set_contents_next(basis_object, state);
-                    if (NIL != set_contents.do_set_contents_element_validP(state, file)) {
-                        set.set_add(make_path_absolute_relative_to(root, file), new_file_set);
-                    }
-                }
-            }
-            return new_file_set;
-        }
-    }
-
-    /**
-     * Given a set of relative file paths, root them in the file hierarchy at ROOT.
-     *
-     * @return SET-P of STRINGP with SET-TEST of TEST
-     */
-    @LispMethod(comment = "Given a set of relative file paths, root them in the file hierarchy at ROOT.\r\n\r\n@return SET-P of STRINGP with SET-TEST of TEST")
     public static SubLObject root_file_set(final SubLObject file_set, SubLObject root, SubLObject test) {
         if (root == UNPROVIDED) {
             root = file_utilities.path_separator_string($UNIX);
@@ -3519,48 +2067,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return new_file_set;
     }
 
-    /**
-     * Given a set of absolute file paths, unroot them from the file hierarchy at
-     * ROOT and make them relative again.
-     * Notice that (sets-coextensional? REL-SET (unroot-file-set (root-file-set REL-SET)))
-     * if REL-SET contains only relative paths.
-     *
-     * @return SET-P of STRINGP with SET-TEST of TEST
-     */
-    @LispMethod(comment = "Given a set of absolute file paths, unroot them from the file hierarchy at\r\nROOT and make them relative again.\r\nNotice that (sets-coextensional? REL-SET (unroot-file-set (root-file-set REL-SET)))\r\nif REL-SET contains only relative paths.\r\n\r\n@return SET-P of STRINGP with SET-TEST of TEST\nGiven a set of absolute file paths, unroot them from the file hierarchy at\nROOT and make them relative again.\nNotice that (sets-coextensional? REL-SET (unroot-file-set (root-file-set REL-SET)))\nif REL-SET contains only relative paths.")
-    public static final SubLObject unroot_file_set_alt(SubLObject file_set, SubLObject root, SubLObject test) {
-        if (root == UNPROVIDED) {
-            root = path_separator_string($UNIX);
-        }
-        if (test == UNPROVIDED) {
-            test = EQUAL;
-        }
-        {
-            SubLObject new_file_set = set.new_set(test, set.set_size(file_set));
-            SubLObject set_contents_var = set.do_set_internal(file_set);
-            SubLObject basis_object = set_contents.do_set_contents_basis_object(set_contents_var);
-            SubLObject state = NIL;
-            for (state = set_contents.do_set_contents_initial_state(basis_object, set_contents_var); NIL == set_contents.do_set_contents_doneP(basis_object, state); state = set_contents.do_set_contents_update_state(state)) {
-                {
-                    SubLObject file = set_contents.do_set_contents_next(basis_object, state);
-                    if (NIL != set_contents.do_set_contents_element_validP(state, file)) {
-                        set.set_add(make_absolute_path_relative_to(file, root), new_file_set);
-                    }
-                }
-            }
-            return new_file_set;
-        }
-    }
-
-    /**
-     * Given a set of absolute file paths, unroot them from the file hierarchy at
-     * ROOT and make them relative again.
-     * Notice that (sets-coextensional? REL-SET (unroot-file-set (root-file-set REL-SET)))
-     * if REL-SET contains only relative paths.
-     *
-     * @return SET-P of STRINGP with SET-TEST of TEST
-     */
-    @LispMethod(comment = "Given a set of absolute file paths, unroot them from the file hierarchy at\r\nROOT and make them relative again.\r\nNotice that (sets-coextensional? REL-SET (unroot-file-set (root-file-set REL-SET)))\r\nif REL-SET contains only relative paths.\r\n\r\n@return SET-P of STRINGP with SET-TEST of TEST\nGiven a set of absolute file paths, unroot them from the file hierarchy at\nROOT and make them relative again.\nNotice that (sets-coextensional? REL-SET (unroot-file-set (root-file-set REL-SET)))\nif REL-SET contains only relative paths.")
     public static SubLObject unroot_file_set(final SubLObject file_set, SubLObject root, SubLObject test) {
         if (root == UNPROVIDED) {
             root = file_utilities.path_separator_string($UNIX);
@@ -3582,61 +2088,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return new_file_set;
     }
 
-    /**
-     * Take the file set, pull off the old root and plant it on the new root.
-     * If the new root specification is not an absolute path, then the
-     * resulting path is not absolute either.
-     *
-     * @return SET-P of STRINGP with SET-TEST of TEST
-     */
-    @LispMethod(comment = "Take the file set, pull off the old root and plant it on the new root.\r\nIf the new root specification is not an absolute path, then the\r\nresulting path is not absolute either.\r\n\r\n@return SET-P of STRINGP with SET-TEST of TEST\nTake the file set, pull off the old root and plant it on the new root.\nIf the new root specification is not an absolute path, then the\nresulting path is not absolute either.")
-    public static final SubLObject reroot_file_set_alt(SubLObject file_set, SubLObject old_root, SubLObject new_root, SubLObject test) {
-        if (test == UNPROVIDED) {
-            test = EQUAL;
-        }
-        old_root = possibly_append_path_separator_char(old_root);
-        new_root = possibly_append_path_separator_char(new_root);
-        {
-            SubLObject absolute_target_p = absolute_pathP(new_root);
-            SubLObject target_root = new_root;
-            SubLObject new_file_set = set.new_set(test, set.set_size(file_set));
-            SubLObject path_type = NIL;
-            SubLObject path_string = NIL;
-            if (NIL == absolute_target_p) {
-                path_type = guess_path_type_robust(new_root);
-                path_string = path_separator_string(path_type);
-                target_root = make_path_absolute_relative_to(path_string, new_root);
-            }
-            {
-                SubLObject set_contents_var = set.do_set_internal(file_set);
-                SubLObject basis_object = set_contents.do_set_contents_basis_object(set_contents_var);
-                SubLObject state = NIL;
-                for (state = set_contents.do_set_contents_initial_state(basis_object, set_contents_var); NIL == set_contents.do_set_contents_doneP(basis_object, state); state = set_contents.do_set_contents_update_state(state)) {
-                    {
-                        SubLObject file = set_contents.do_set_contents_next(basis_object, state);
-                        if (NIL != set_contents.do_set_contents_element_validP(state, file)) {
-                            {
-                                SubLObject uprooted_file = make_absolute_path_relative_to(file, old_root);
-                                SubLObject rerooted_file = make_path_absolute_relative_to(target_root, uprooted_file);
-                                SubLObject final_file = (NIL != absolute_target_p) ? ((SubLObject) (rerooted_file)) : make_absolute_path_relative_to(rerooted_file, path_string);
-                                set.set_add(final_file, new_file_set);
-                            }
-                        }
-                    }
-                }
-            }
-            return new_file_set;
-        }
-    }
-
-    /**
-     * Take the file set, pull off the old root and plant it on the new root.
-     * If the new root specification is not an absolute path, then the
-     * resulting path is not absolute either.
-     *
-     * @return SET-P of STRINGP with SET-TEST of TEST
-     */
-    @LispMethod(comment = "Take the file set, pull off the old root and plant it on the new root.\r\nIf the new root specification is not an absolute path, then the\r\nresulting path is not absolute either.\r\n\r\n@return SET-P of STRINGP with SET-TEST of TEST\nTake the file set, pull off the old root and plant it on the new root.\nIf the new root specification is not an absolute path, then the\nresulting path is not absolute either.")
     public static SubLObject reroot_file_set(final SubLObject file_set, SubLObject old_root, SubLObject new_root, SubLObject test) {
         if (test == UNPROVIDED) {
             test = EQUAL;
@@ -3672,47 +2123,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return new_file_set;
     }
 
-    /**
-     *
-     *
-     * @unknown This is not a very strong test.
-     */
-    @LispMethod(comment = "@unknown This is not a very strong test.")
-    public static final SubLObject test_reroot_file_set_alt(SubLObject file_list, SubLObject old_root, SubLObject new_root, SubLObject test) {
-        if (test == UNPROVIDED) {
-            test = EQUAL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject file_set = set_utilities.construct_set_from_list(file_list, test, UNPROVIDED);
-                SubLObject new_file_set = com.cyc.cycjava.cycl.builder_utilities.reroot_file_set(file_set, old_root, new_root, test);
-                SubLObject set_contents_var = set.do_set_internal(new_file_set);
-                SubLObject basis_object = set_contents.do_set_contents_basis_object(set_contents_var);
-                SubLObject state = NIL;
-                for (state = set_contents.do_set_contents_initial_state(basis_object, set_contents_var); NIL == set_contents.do_set_contents_doneP(basis_object, state); state = set_contents.do_set_contents_update_state(state)) {
-                    {
-                        SubLObject new_file = set_contents.do_set_contents_next(basis_object, state);
-                        if (NIL != set_contents.do_set_contents_element_validP(state, new_file)) {
-                            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                                if (NIL == string_utilities.starts_with(new_file, new_root)) {
-                                    Errors.error($str_alt159$Rerooting_from__A_to__A_failed_an, old_root, new_root, new_file);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return $SUCCESS;
-        }
-    }
-
-    /**
-     *
-     *
-     * @unknown This is not a very strong test.
-     */
-    @LispMethod(comment = "@unknown This is not a very strong test.")
     public static SubLObject test_reroot_file_set(final SubLObject file_list, final SubLObject old_root, final SubLObject new_root, SubLObject test) {
         if (test == UNPROVIDED) {
             test = EQUAL;
@@ -3881,46 +2291,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject enumerate_fact_sheets_for_kb_to_file_alt(SubLObject filename) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject stream = NIL;
-                try {
-                    {
-                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                        try {
-                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                            stream = compatibility.open_text(filename, $OUTPUT, NIL);
-                        } finally {
-                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    if (!stream.isStream()) {
-                        Errors.error($str_alt23$Unable_to_open__S, filename);
-                    }
-                    {
-                        SubLObject s = stream;
-                        com.cyc.cycjava.cycl.builder_utilities.enumerate_fact_sheets_for_kb(s);
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            if (stream.isStream()) {
-                                close(stream, UNPROVIDED);
-                            }
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-            }
-            return filename;
-        }
-    }
-
     public static SubLObject enumerate_fact_sheets_for_kb_to_file(final SubLObject filename) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject stream = NIL;
@@ -3953,43 +2323,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return filename;
     }
 
-    /**
-     * Enumerate all of the fact sheets that this KB could expect to
-     * have available and write them to the provided stream.
-     */
-    @LispMethod(comment = "Enumerate all of the fact sheets that this KB could expect to\r\nhave available and write them to the provided stream.\nEnumerate all of the fact sheets that this KB could expect to\nhave available and write them to the provided stream.")
-    public static final SubLObject enumerate_fact_sheets_for_kb_alt(SubLObject stream) {
-        if (stream == UNPROVIDED) {
-            stream = StreamsLow.$standard_output$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject path_iterator = new_filter_and_transform_iterator(forts.new_forts_iterator(), FACT_SHEET_PATH_FOR_TERM_FILTER_AND_TRANSFORM, UNPROVIDED);
-                SubLObject done_var = NIL;
-                while (NIL == done_var) {
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject path = iteration_next(path_iterator);
-                        SubLObject valid = thread.secondMultipleValue();
-                        thread.resetMultipleValues();
-                        if (NIL != valid) {
-                            write_string(path, stream, UNPROVIDED, UNPROVIDED);
-                            terpri(stream);
-                        }
-                        done_var = makeBoolean(NIL == valid);
-                    }
-                } 
-            }
-            return NIL;
-        }
-    }
-
-    /**
-     * Enumerate all of the fact sheets that this KB could expect to
-     * have available and write them to the provided stream.
-     */
-    @LispMethod(comment = "Enumerate all of the fact sheets that this KB could expect to\r\nhave available and write them to the provided stream.\nEnumerate all of the fact sheets that this KB could expect to\nhave available and write them to the provided stream.")
     public static SubLObject enumerate_fact_sheets_for_kb(SubLObject stream) {
         if (stream == UNPROVIDED) {
             stream = StreamsLow.$standard_output$.getDynamicValue();
@@ -4010,40 +2343,11 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     * Filter transform terms into the path for the term.
-     *
-     * @see ENUMERATE-FACT-SHEETS-FOR-KB-TO-STREAM
-     */
-    @LispMethod(comment = "Filter transform terms into the path for the term.\r\n\r\n@see ENUMERATE-FACT-SHEETS-FOR-KB-TO-STREAM")
-    public static final SubLObject fact_sheet_path_for_term_filter_and_transform_alt(SubLObject v_term) {
-        if (NIL != fact_sheets.term_ok_for_fact_sheet_p(v_term, UNPROVIDED)) {
-            return values(fact_sheets.fact_sheet_file_for_fact_sheet_term(v_term), T);
-        }
-        return values(NIL, NIL);
-    }
-
-    /**
-     * Filter transform terms into the path for the term.
-     *
-     * @see ENUMERATE-FACT-SHEETS-FOR-KB-TO-STREAM
-     */
-    @LispMethod(comment = "Filter transform terms into the path for the term.\r\n\r\n@see ENUMERATE-FACT-SHEETS-FOR-KB-TO-STREAM")
     public static SubLObject fact_sheet_path_for_term_filter_and_transform(final SubLObject v_term) {
         if (NIL != fact_sheets.term_ok_for_fact_sheet_p(v_term, UNPROVIDED)) {
             return values(fact_sheets.fact_sheet_file_for_fact_sheet_term(v_term), T);
         }
         return values(NIL, NIL);
-    }
-
-    public static final SubLObject specify_sbhl_caching_policy_template_alt(SubLObject link_predicate, SubLObject policy, SubLObject capacity, SubLObject exempts, SubLObject prefetch) {
-        if (exempts == UNPROVIDED) {
-            exempts = ZERO_INTEGER;
-        }
-        if (prefetch == UNPROVIDED) {
-            prefetch = ZERO_INTEGER;
-        }
-        return list(link_predicate, policy, capacity, exempts, prefetch);
     }
 
     public static SubLObject specify_sbhl_caching_policy_template(final SubLObject link_predicate, final SubLObject policy, final SubLObject capacity, SubLObject exempts, SubLObject prefetch) {
@@ -4056,32 +2360,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return list(link_predicate, policy, capacity, exempts, prefetch);
     }
 
-    /**
-     * Given the tuning data, load it and compue policies from it appropriate to the
-     * data gathered and the current value of *GENERIC-SBHL-CACHING-POLICY-TEMPLATES*.
-     *
-     * @return POLICIES-FILE
-     */
-    @LispMethod(comment = "Given the tuning data, load it and compue policies from it appropriate to the\r\ndata gathered and the current value of *GENERIC-SBHL-CACHING-POLICY-TEMPLATES*.\r\n\r\n@return POLICIES-FILE\nGiven the tuning data, load it and compue policies from it appropriate to the\ndata gathered and the current value of *GENERIC-SBHL-CACHING-POLICY-TEMPLATES*.")
-    public static final SubLObject generate_kb_sbhl_caching_policies_alt(SubLObject tuning_data_file, SubLObject policies_file, SubLObject externalizedP) {
-        if (externalizedP == UNPROVIDED) {
-            externalizedP = T;
-        }
-        {
-            SubLObject tuning_data = cfasl_load(tuning_data_file);
-            SubLObject policies = com.cyc.cycjava.cycl.builder_utilities.propose_kb_sbhl_caching_policies_from_tuning_data(tuning_data, UNPROVIDED);
-            sbhl_caching_policies.save_sbhl_caching_policies(policies, policies_file, externalizedP);
-            return policies_file;
-        }
-    }
-
-    /**
-     * Given the tuning data, load it and compue policies from it appropriate to the
-     * data gathered and the current value of *GENERIC-SBHL-CACHING-POLICY-TEMPLATES*.
-     *
-     * @return POLICIES-FILE
-     */
-    @LispMethod(comment = "Given the tuning data, load it and compue policies from it appropriate to the\r\ndata gathered and the current value of *GENERIC-SBHL-CACHING-POLICY-TEMPLATES*.\r\n\r\n@return POLICIES-FILE\nGiven the tuning data, load it and compue policies from it appropriate to the\ndata gathered and the current value of *GENERIC-SBHL-CACHING-POLICY-TEMPLATES*.")
     public static SubLObject generate_kb_sbhl_caching_policies(final SubLObject tuning_data_file, final SubLObject policies_file, SubLObject externalizedP) {
         if (externalizedP == UNPROVIDED) {
             externalizedP = T;
@@ -4092,27 +2370,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return policies_file;
     }
 
-    /**
-     * Generate a caching policies file that reflects the pre-swapout state of the
-     * system.
-     */
-    @LispMethod(comment = "Generate a caching policies file that reflects the pre-swapout state of the\r\nsystem.\nGenerate a caching policies file that reflects the pre-swapout state of the\nsystem.")
-    public static final SubLObject generate_legacy_kb_sbhl_caching_policies_alt(SubLObject policies_file, SubLObject externalizedP) {
-        if (externalizedP == UNPROVIDED) {
-            externalizedP = T;
-        }
-        {
-            SubLObject policies = com.cyc.cycjava.cycl.builder_utilities.propose_legacy_kb_sbhl_caching_policies(UNPROVIDED);
-            sbhl_caching_policies.save_sbhl_caching_policies(policies, policies_file, externalizedP);
-        }
-        return policies_file;
-    }
-
-    /**
-     * Generate a caching policies file that reflects the pre-swapout state of the
-     * system.
-     */
-    @LispMethod(comment = "Generate a caching policies file that reflects the pre-swapout state of the\r\nsystem.\nGenerate a caching policies file that reflects the pre-swapout state of the\nsystem.")
     public static SubLObject generate_legacy_kb_sbhl_caching_policies(final SubLObject policies_file, SubLObject externalizedP) {
         if (externalizedP == UNPROVIDED) {
             externalizedP = T;
@@ -4122,31 +2379,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return policies_file;
     }
 
-    /**
-     * Generate a caching policies file that reflects the a system where
-     * everything is paged in up front.
-     *
-     * @return the policies-file
-     */
-    @LispMethod(comment = "Generate a caching policies file that reflects the a system where\r\neverything is paged in up front.\r\n\r\n@return the policies-file\nGenerate a caching policies file that reflects the a system where\neverything is paged in up front.")
-    public static final SubLObject generate_completely_cached_kb_sbhl_caching_policies_alt(SubLObject policies_file, SubLObject externalizedP) {
-        if (externalizedP == UNPROVIDED) {
-            externalizedP = T;
-        }
-        {
-            SubLObject policies = com.cyc.cycjava.cycl.builder_utilities.propose_completely_cached_kb_sbhl_caching_policies(UNPROVIDED);
-            sbhl_caching_policies.save_sbhl_caching_policies(policies, policies_file, externalizedP);
-        }
-        return policies_file;
-    }
-
-    /**
-     * Generate a caching policies file that reflects the a system where
-     * everything is paged in up front.
-     *
-     * @return the policies-file
-     */
-    @LispMethod(comment = "Generate a caching policies file that reflects the a system where\r\neverything is paged in up front.\r\n\r\n@return the policies-file\nGenerate a caching policies file that reflects the a system where\neverything is paged in up front.")
     public static SubLObject generate_completely_cached_kb_sbhl_caching_policies(final SubLObject policies_file, SubLObject externalizedP) {
         if (externalizedP == UNPROVIDED) {
             externalizedP = T;
@@ -4156,102 +2388,12 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return policies_file;
     }
 
-    /**
-     * Given a dictionary of link predicates mapping to usage counts of the arg1,
-     * and general knowledge of the tuning stratgies for CYC, propose a list of
-     * SBHL caching policies.
-     *
-     * @return the computed SBHL caching policies
-     */
-    @LispMethod(comment = "Given a dictionary of link predicates mapping to usage counts of the arg1,\r\nand general knowledge of the tuning stratgies for CYC, propose a list of\r\nSBHL caching policies.\r\n\r\n@return the computed SBHL caching policies\nGiven a dictionary of link predicates mapping to usage counts of the arg1,\nand general knowledge of the tuning stratgies for CYC, propose a list of\nSBHL caching policies.")
-    public static final SubLObject propose_kb_sbhl_caching_policies_from_tuning_data_alt(SubLObject tuning_data, SubLObject templates) {
-        if (templates == UNPROVIDED) {
-            templates = $generic_sbhl_caching_policy_templates$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(tuning_data, DICTIONARY_P);
-            {
-                SubLObject default_template = find($DEFAULT, templates, EQL, FIRST, UNPROVIDED, UNPROVIDED);
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (!default_template.isCons()) {
-                        Errors.error($str_alt185$The_templates_list__A_does_not_co, templates);
-                    }
-                }
-                {
-                    SubLObject policies = NIL;
-                    SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary_contents(tuning_data));
-                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                        thread.resetMultipleValues();
-                        {
-                            SubLObject link_predicate = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                            SubLObject ref_counts = thread.secondMultipleValue();
-                            thread.resetMultipleValues();
-                            {
-                                SubLObject policy_template = find(link_predicate, templates, EQL, FIRST, UNPROVIDED, UNPROVIDED);
-                                if (NIL == policy_template) {
-                                    policy_template = default_template;
-                                }
-                                {
-                                    SubLObject datum = policy_template;
-                                    SubLObject current = datum;
-                                    SubLObject pred = NIL;
-                                    SubLObject policy = NIL;
-                                    SubLObject capacity = NIL;
-                                    destructuring_bind_must_consp(current, datum, $list_alt186);
-                                    pred = current.first();
-                                    current = current.rest();
-                                    destructuring_bind_must_consp(current, datum, $list_alt186);
-                                    policy = current.first();
-                                    current = current.rest();
-                                    destructuring_bind_must_consp(current, datum, $list_alt186);
-                                    capacity = current.first();
-                                    current = current.rest();
-                                    {
-                                        SubLObject exempt = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
-                                        destructuring_bind_must_listp(current, datum, $list_alt186);
-                                        current = current.rest();
-                                        {
-                                            SubLObject prefetch = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
-                                            destructuring_bind_must_listp(current, datum, $list_alt186);
-                                            current = current.rest();
-                                            if (NIL == current) {
-                                                {
-                                                    SubLObject terms = sbhl_caching_policies.recommend_sbhl_caching_preference_term_list_from_ref_counts(ref_counts, sbhl_module_vars.get_sbhl_module(link_predicate));
-                                                    SubLObject caching_policy = sbhl_caching_policies.create_sbhl_caching_policy_from_term_recommendation_list(link_predicate, policy, capacity, terms, exempt, prefetch);
-                                                    policies = cons(caching_policy, policies);
-                                                }
-                                            } else {
-                                                cdestructuring_bind_error(datum, $list_alt186);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                        }
-                    } 
-                    dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                    return policies;
-                }
-            }
-        }
-    }
-
-    /**
-     * Given a dictionary of link predicates mapping to usage counts of the arg1,
-     * and general knowledge of the tuning stratgies for CYC, propose a list of
-     * SBHL caching policies.
-     *
-     * @return the computed SBHL caching policies
-     */
-    @LispMethod(comment = "Given a dictionary of link predicates mapping to usage counts of the arg1,\r\nand general knowledge of the tuning stratgies for CYC, propose a list of\r\nSBHL caching policies.\r\n\r\n@return the computed SBHL caching policies\nGiven a dictionary of link predicates mapping to usage counts of the arg1,\nand general knowledge of the tuning stratgies for CYC, propose a list of\nSBHL caching policies.")
     public static SubLObject propose_kb_sbhl_caching_policies_from_tuning_data(final SubLObject tuning_data, SubLObject templates) {
         if (templates == UNPROVIDED) {
             templates = $generic_sbhl_caching_policy_templates$.getDynamicValue();
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != dictionary.dictionary_p(tuning_data) : "! dictionary.dictionary_p(tuning_data) " + ("dictionary.dictionary_p(tuning_data) " + "CommonSymbols.NIL != dictionary.dictionary_p(tuning_data) ") + tuning_data;
+        assert NIL != dictionary.dictionary_p(tuning_data) : "dictionary.dictionary_p(tuning_data) " + "CommonSymbols.NIL != dictionary.dictionary_p(tuning_data) " + tuning_data;
         final SubLObject default_template = find($DEFAULT, templates, EQL, FIRST, UNPROVIDED, UNPROVIDED);
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (!default_template.isCons())) {
             Errors.error($str184$The_templates_list__A_does_not_co, templates);
@@ -4288,7 +2430,7 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
             destructuring_bind_must_listp(current, datum, $list185);
             current = current.rest();
             if (NIL == current) {
-                final SubLObject terms = sbhl_caching_policies.recommend_sbhl_caching_preference_term_list_from_ref_counts(ref_counts, get_sbhl_module(link_predicate));
+                final SubLObject terms = sbhl_caching_policies.recommend_sbhl_caching_preference_term_list_from_ref_counts(ref_counts, sbhl_module_vars.get_sbhl_module(link_predicate));
                 final SubLObject caching_policy = sbhl_caching_policies.create_sbhl_caching_policy_from_term_recommendation_list(link_predicate, policy, capacity, terms, exempt, prefetch);
                 policies = cons(caching_policy, policies);
             } else {
@@ -4299,29 +2441,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return policies;
     }
 
-    /**
-     * Generate a KB sbhl caching policy proposal where every SBHL cache is completely
-     * paged in and no swap-out is supported. This proposal is suitable for small KBs
-     * or large memory systems.
-     *
-     * @return the policies
-     */
-    @LispMethod(comment = "Generate a KB sbhl caching policy proposal where every SBHL cache is completely\r\npaged in and no swap-out is supported. This proposal is suitable for small KBs\r\nor large memory systems.\r\n\r\n@return the policies\nGenerate a KB sbhl caching policy proposal where every SBHL cache is completely\npaged in and no swap-out is supported. This proposal is suitable for small KBs\nor large memory systems.")
-    public static final SubLObject propose_completely_cached_kb_sbhl_caching_policies_alt(SubLObject link_predicates) {
-        if (link_predicates == UNPROVIDED) {
-            link_predicates = NIL;
-        }
-        return com.cyc.cycjava.cycl.builder_utilities.propose_all_sticky_kb_sbhl_caching_policies(link_predicates, T);
-    }
-
-    /**
-     * Generate a KB sbhl caching policy proposal where every SBHL cache is completely
-     * paged in and no swap-out is supported. This proposal is suitable for small KBs
-     * or large memory systems.
-     *
-     * @return the policies
-     */
-    @LispMethod(comment = "Generate a KB sbhl caching policy proposal where every SBHL cache is completely\r\npaged in and no swap-out is supported. This proposal is suitable for small KBs\r\nor large memory systems.\r\n\r\n@return the policies\nGenerate a KB sbhl caching policy proposal where every SBHL cache is completely\npaged in and no swap-out is supported. This proposal is suitable for small KBs\nor large memory systems.")
     public static SubLObject propose_completely_cached_kb_sbhl_caching_policies(SubLObject link_predicates) {
         if (link_predicates == UNPROVIDED) {
             link_predicates = NIL;
@@ -4329,29 +2448,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return propose_all_sticky_kb_sbhl_caching_policies(link_predicates, T);
     }
 
-    /**
-     * Generate a KB SBHL caching policy proposal that reflects the state of the
-     * the system before the introduction of swap-out support--i.e. all modules
-     * are handled as sticky and nothing is pre-fetched.
-     *
-     * @return the policies
-     */
-    @LispMethod(comment = "Generate a KB SBHL caching policy proposal that reflects the state of the\r\nthe system before the introduction of swap-out support--i.e. all modules\r\nare handled as sticky and nothing is pre-fetched.\r\n\r\n@return the policies\nGenerate a KB SBHL caching policy proposal that reflects the state of the\nthe system before the introduction of swap-out support--i.e. all modules\nare handled as sticky and nothing is pre-fetched.")
-    public static final SubLObject propose_legacy_kb_sbhl_caching_policies_alt(SubLObject link_predicates) {
-        if (link_predicates == UNPROVIDED) {
-            link_predicates = NIL;
-        }
-        return com.cyc.cycjava.cycl.builder_utilities.propose_all_sticky_kb_sbhl_caching_policies(link_predicates, NIL);
-    }
-
-    /**
-     * Generate a KB SBHL caching policy proposal that reflects the state of the
-     * the system before the introduction of swap-out support--i.e. all modules
-     * are handled as sticky and nothing is pre-fetched.
-     *
-     * @return the policies
-     */
-    @LispMethod(comment = "Generate a KB SBHL caching policy proposal that reflects the state of the\r\nthe system before the introduction of swap-out support--i.e. all modules\r\nare handled as sticky and nothing is pre-fetched.\r\n\r\n@return the policies\nGenerate a KB SBHL caching policy proposal that reflects the state of the\nthe system before the introduction of swap-out support--i.e. all modules\nare handled as sticky and nothing is pre-fetched.")
     public static SubLObject propose_legacy_kb_sbhl_caching_policies(SubLObject link_predicates) {
         if (link_predicates == UNPROVIDED) {
             link_predicates = NIL;
@@ -4359,39 +2455,9 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return propose_all_sticky_kb_sbhl_caching_policies(link_predicates, NIL);
     }
 
-    /**
-     * Helper for getting just the predicates out of the module structures.
-     */
-    @LispMethod(comment = "Helper for getting just the predicates out of the module structures.")
-    public static final SubLObject get_all_sbhl_module_link_predicates_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject link_predicates = NIL;
-                SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary_contents(sbhl_module_vars.get_sbhl_modules()));
-                while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject key = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                        SubLObject module = thread.secondMultipleValue();
-                        thread.resetMultipleValues();
-                        link_predicates = cons(sbhl_module_vars.get_sbhl_module_link_pred(module), link_predicates);
-                        iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                    }
-                } 
-                dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                return link_predicates;
-            }
-        }
-    }
-
-    /**
-     * Helper for getting just the predicates out of the module structures.
-     */
-    @LispMethod(comment = "Helper for getting just the predicates out of the module structures.")
     public static SubLObject get_all_sbhl_module_link_predicates() {
         SubLObject link_predicates = NIL;
-        SubLObject cdolist_list_var = get_sbhl_modules();
+        SubLObject cdolist_list_var = sbhl_module_vars.get_sbhl_modules();
         SubLObject cons = NIL;
         cons = cdolist_list_var.first();
         while (NIL != cdolist_list_var) {
@@ -4402,50 +2468,13 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
             destructuring_bind_must_consp(current, datum, $list186);
             key = current.first();
             current = module = current.rest();
-            link_predicates = cons(get_sbhl_module_link_pred(module), link_predicates);
+            link_predicates = cons(sbhl_module_vars.get_sbhl_module_link_pred(module), link_predicates);
             cdolist_list_var = cdolist_list_var.rest();
             cons = cdolist_list_var.first();
         } 
         return link_predicates;
     }
 
-    /**
-     * Generate a KB SBHL caching policy proposal for sticky SBHL caching that for all
-     * passed link predicates.
-     *
-     * @param WITH-PREFETCH-P
-     * 		determines whether the prefetch will be all or none
-     * @return the policies
-     */
-    @LispMethod(comment = "Generate a KB SBHL caching policy proposal for sticky SBHL caching that for all\r\npassed link predicates.\r\n\r\n@param WITH-PREFETCH-P\r\n\t\tdetermines whether the prefetch will be all or none\r\n@return the policies\nGenerate a KB SBHL caching policy proposal for sticky SBHL caching that for all\npassed link predicates.")
-    public static final SubLObject propose_all_sticky_kb_sbhl_caching_policies_alt(SubLObject link_predicates, SubLObject with_prefetch_p) {
-        if (NIL == link_predicates) {
-            link_predicates = com.cyc.cycjava.cycl.builder_utilities.get_all_sbhl_module_link_predicates();
-        }
-        {
-            SubLObject prefetch = (NIL != with_prefetch_p) ? ((SubLObject) ($ALL)) : NIL;
-            SubLObject policies = NIL;
-            SubLObject cdolist_list_var = link_predicates;
-            SubLObject link_predicate = NIL;
-            for (link_predicate = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , link_predicate = cdolist_list_var.first()) {
-                {
-                    SubLObject legacy_policy = sbhl_caching_policies.create_sbhl_caching_policy_from_term_recommendation_list(link_predicate, $STICKY, $UNDEFINED, NIL, $ALL, prefetch);
-                    policies = cons(legacy_policy, policies);
-                }
-            }
-            return nreverse(policies);
-        }
-    }
-
-    /**
-     * Generate a KB SBHL caching policy proposal for sticky SBHL caching that for all
-     * passed link predicates.
-     *
-     * @param WITH-PREFETCH-P
-     * 		determines whether the prefetch will be all or none
-     * @return the policies
-     */
-    @LispMethod(comment = "Generate a KB SBHL caching policy proposal for sticky SBHL caching that for all\r\npassed link predicates.\r\n\r\n@param WITH-PREFETCH-P\r\n\t\tdetermines whether the prefetch will be all or none\r\n@return the policies\nGenerate a KB SBHL caching policy proposal for sticky SBHL caching that for all\npassed link predicates.")
     public static SubLObject propose_all_sticky_kb_sbhl_caching_policies(SubLObject link_predicates, final SubLObject with_prefetch_p) {
         if (NIL == link_predicates) {
             link_predicates = get_all_sbhl_module_link_predicates();
@@ -4478,40 +2507,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return data_file;
     }
 
-    /**
-     * The main entry point for the SBHL cache tuning infrastructure.
-     * Sets up the recording of data on the SBHL graphs' caches,
-     * runs a set of experiments, snap-shooting the data as it goes,
-     * then saves out a CFASL report file to FILENAME and tears down the
-     * recording infrastructure.
-     *
-     * @return 0 FILENAME
-     * @return 1 FAILED plist of failed contributions to the data gathering
-     */
-    @LispMethod(comment = "The main entry point for the SBHL cache tuning infrastructure.\r\nSets up the recording of data on the SBHL graphs\' caches,\r\nruns a set of experiments, snap-shooting the data as it goes,\r\nthen saves out a CFASL report file to FILENAME and tears down the\r\nrecording infrastructure.\r\n\r\n@return 0 FILENAME\r\n@return 1 FAILED plist of failed contributions to the data gathering\nThe main entry point for the SBHL cache tuning infrastructure.\nSets up the recording of data on the SBHL graphs\' caches,\nruns a set of experiments, snap-shooting the data as it goes,\nthen saves out a CFASL report file to FILENAME and tears down the\nrecording infrastructure.")
-    public static final SubLObject gather_data_for_sbhl_cache_tuning_alt(SubLObject filename) {
-        {
-            SubLObject state = new_dictionary(UNPROVIDED, UNPROVIDED);
-            SubLObject failed_contributions = NIL;
-            com.cyc.cycjava.cycl.builder_utilities.sbhl_cache_tuning_data_gathering_prologue();
-            failed_contributions = com.cyc.cycjava.cycl.builder_utilities.run_sbhl_cache_tuning_data_gathering(state);
-            com.cyc.cycjava.cycl.builder_utilities.sbhl_cache_tuning_data_gathering_generate_report(filename, state);
-            com.cyc.cycjava.cycl.builder_utilities.sbhl_cache_tuning_data_gathering_epilogue();
-            return values(filename, failed_contributions);
-        }
-    }
-
-    /**
-     * The main entry point for the SBHL cache tuning infrastructure.
-     * Sets up the recording of data on the SBHL graphs' caches,
-     * runs a set of experiments, snap-shooting the data as it goes,
-     * then saves out a CFASL report file to FILENAME and tears down the
-     * recording infrastructure.
-     *
-     * @return 0 FILENAME
-     * @return 1 FAILED plist of failed contributions to the data gathering
-     */
-    @LispMethod(comment = "The main entry point for the SBHL cache tuning infrastructure.\r\nSets up the recording of data on the SBHL graphs\' caches,\r\nruns a set of experiments, snap-shooting the data as it goes,\r\nthen saves out a CFASL report file to FILENAME and tears down the\r\nrecording infrastructure.\r\n\r\n@return 0 FILENAME\r\n@return 1 FAILED plist of failed contributions to the data gathering\nThe main entry point for the SBHL cache tuning infrastructure.\nSets up the recording of data on the SBHL graphs\' caches,\nruns a set of experiments, snap-shooting the data as it goes,\nthen saves out a CFASL report file to FILENAME and tears down the\nrecording infrastructure.")
     public static SubLObject gather_data_for_sbhl_cache_tuning(final SubLObject filename) {
         final SubLObject state = dictionary.new_dictionary(UNPROVIDED, UNPROVIDED);
         SubLObject failed_contributions = NIL;
@@ -4520,185 +2515,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         sbhl_cache_tuning_data_gathering_generate_report(filename, state);
         sbhl_cache_tuning_data_gathering_epilogue();
         return values(filename, failed_contributions);
-    }
-
-    public static final SubLObject run_sbhl_cache_tuning_data_gathering_alt(SubLObject state) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject failed_contributions = NIL;
-                if (NIL != sublisp_boolean($cyc_tests_to_use_for_sbhl_cache_tuning$.getDynamicValue(thread))) {
-                    {
-                        SubLObject failures = NIL;
-                        SubLObject list_var = $cyc_tests_to_use_for_sbhl_cache_tuning$.getDynamicValue(thread);
-                        $progress_note$.setDynamicValue($str_alt187$Gathering_SBHL_cache_tuning_data_, thread);
-                        $progress_start_time$.setDynamicValue(get_universal_time(), thread);
-                        $progress_total$.setDynamicValue(length(list_var), thread);
-                        $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
-                        {
-                            SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                            SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                            SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                            SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                            try {
-                                $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                                $last_percent_progress_prediction$.bind(NIL, thread);
-                                $within_noting_percent_progress$.bind(T, thread);
-                                $percent_progress_start_time$.bind(get_universal_time(), thread);
-                                noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
-                                {
-                                    SubLObject csome_list_var = list_var;
-                                    SubLObject test_name = NIL;
-                                    for (test_name = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , test_name = csome_list_var.first()) {
-                                        note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
-                                        $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
-                                        {
-                                            SubLObject msg = NIL;
-                                            try {
-                                                {
-                                                    SubLObject _prev_bind_0_8 = Errors.$error_handler$.currentBinding(thread);
-                                                    try {
-                                                        Errors.$error_handler$.bind(CATCH_ERROR_MESSAGE_HANDLER, thread);
-                                                        try {
-                                                            com.cyc.cycjava.cycl.builder_utilities.sbhl_cache_tuning_experiment_prologue();
-                                                            cyc_testing.run_cyc_test_int(test_name, $SILENT, NIL, NIL, $STANDARD, StreamsLow.$null_output$.getDynamicValue(thread), cyc_testing.$run_tiny_kb_tests_in_full_kbP$.getDynamicValue(thread));
-                                                            com.cyc.cycjava.cycl.builder_utilities.sbhl_cache_tuning_experiment_epilogue(state);
-                                                        } catch (Throwable catch_var) {
-                                                            Errors.handleThrowable(catch_var, NIL);
-                                                        }
-                                                    } finally {
-                                                        Errors.$error_handler$.rebind(_prev_bind_0_8, thread);
-                                                    }
-                                                }
-                                            } catch (Throwable ccatch_env_var) {
-                                                msg = Errors.handleThrowable(ccatch_env_var, $catch_error_message_target$.getGlobalValue());
-                                            }
-                                            if (msg.isString()) {
-                                                failures = cons(cons(test_name, msg), failures);
-                                            }
-                                        }
-                                    }
-                                }
-                                noting_percent_progress_postamble();
-                            } finally {
-                                $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                                $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                                $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                                $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                        if (NIL != sublisp_boolean(failures)) {
-                            failed_contributions = putf(failed_contributions, $CYC_TESTS, failures);
-                        }
-                    }
-                }
-                if (NIL != sublisp_boolean($kb_queries_to_use_for_sbhl_cache_tuning$.getDynamicValue(thread))) {
-                    {
-                        SubLObject failures = NIL;
-                        SubLObject list_var = $kb_queries_to_use_for_sbhl_cache_tuning$.getDynamicValue(thread);
-                        $progress_note$.setDynamicValue($str_alt190$Gathering_SBHL_cache_tuning_data_, thread);
-                        $progress_start_time$.setDynamicValue(get_universal_time(), thread);
-                        $progress_total$.setDynamicValue(length(list_var), thread);
-                        $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
-                        {
-                            SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                            SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                            SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                            SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                            try {
-                                $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                                $last_percent_progress_prediction$.bind(NIL, thread);
-                                $within_noting_percent_progress$.bind(T, thread);
-                                $percent_progress_start_time$.bind(get_universal_time(), thread);
-                                noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
-                                {
-                                    SubLObject csome_list_var = list_var;
-                                    SubLObject kbq = NIL;
-                                    for (kbq = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , kbq = csome_list_var.first()) {
-                                        note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
-                                        $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
-                                        failures = cons(cons(kbq, $str_alt191$KBQ_Support_currently_not_impleme), failures);
-                                    }
-                                }
-                                noting_percent_progress_postamble();
-                            } finally {
-                                $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                                $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                                $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                                $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                        if (NIL != sublisp_boolean(failures)) {
-                            failed_contributions = putf(failed_contributions, $KB_QUERIES, failures);
-                        }
-                    }
-                }
-                if (NIL != sublisp_boolean($run_cyclops_for_sbhl_cache_tuningP$.getDynamicValue(thread))) {
-                    {
-                        SubLObject failures = NIL;
-                        $progress_note$.setDynamicValue($str_alt193$Gathering_SBHL_cache_tuning_data_, thread);
-                        $progress_start_time$.setDynamicValue(get_universal_time(), thread);
-                        $progress_total$.setDynamicValue(ONE_INTEGER, thread);
-                        $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
-                        {
-                            SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                            SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                            SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                            SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                            try {
-                                $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                                $last_percent_progress_prediction$.bind(NIL, thread);
-                                $within_noting_percent_progress$.bind(T, thread);
-                                $percent_progress_start_time$.bind(get_universal_time(), thread);
-                                noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
-                                {
-                                    SubLObject counter = NIL;
-                                    for (counter = ZERO_INTEGER; counter.numL($progress_total$.getDynamicValue(thread)); counter = add(counter, ONE_INTEGER)) {
-                                        note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
-                                        $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
-                                        {
-                                            SubLObject msg = NIL;
-                                            try {
-                                                {
-                                                    SubLObject _prev_bind_0_9 = Errors.$error_handler$.currentBinding(thread);
-                                                    try {
-                                                        Errors.$error_handler$.bind(CATCH_ERROR_MESSAGE_HANDLER, thread);
-                                                        try {
-                                                            com.cyc.cycjava.cycl.builder_utilities.sbhl_cache_tuning_experiment_prologue();
-                                                            system_benchmarks.benchmark_cyclops_compensating_for_paging(ZERO_INTEGER, ONE_INTEGER, SIX_INTEGER, StreamsLow.$null_output$.getDynamicValue(thread));
-                                                            com.cyc.cycjava.cycl.builder_utilities.sbhl_cache_tuning_experiment_epilogue(state);
-                                                        } catch (Throwable catch_var) {
-                                                            Errors.handleThrowable(catch_var, NIL);
-                                                        }
-                                                    } finally {
-                                                        Errors.$error_handler$.rebind(_prev_bind_0_9, thread);
-                                                    }
-                                                }
-                                            } catch (Throwable ccatch_env_var) {
-                                                msg = Errors.handleThrowable(ccatch_env_var, $catch_error_message_target$.getGlobalValue());
-                                            }
-                                            if (msg.isString()) {
-                                                failures = cons(cons($CYCLOPS, msg), failures);
-                                            }
-                                        }
-                                    }
-                                }
-                                noting_percent_progress_postamble();
-                            } finally {
-                                $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                                $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                                $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                                $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                        if (NIL != sublisp_boolean(failures)) {
-                            failed_contributions = putf(failed_contributions, $CYCLOPS, failures);
-                        }
-                    }
-                }
-                return failed_contributions;
-            }
-        }
     }
 
     public static SubLObject run_sbhl_cache_tuning_data_gathering(final SubLObject state) {
@@ -4921,118 +2737,18 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return failed_contributions;
     }
 
-    /**
-     * Perform any setup that is necessary for running the overall cache
-     * tuning data gathering task.
-     */
-    @LispMethod(comment = "Perform any setup that is necessary for running the overall cache\r\ntuning data gathering task.\nPerform any setup that is necessary for running the overall cache\ntuning data gathering task.")
-    public static final SubLObject sbhl_cache_tuning_data_gathering_prologue_alt() {
-        return sbhl_caching_policies.setup_sbhl_graphs_for_sbhl_cache_tuning_data_gathering();
-    }
-
-    /**
-     * Perform any setup that is necessary for running the overall cache
-     * tuning data gathering task.
-     */
-    @LispMethod(comment = "Perform any setup that is necessary for running the overall cache\r\ntuning data gathering task.\nPerform any setup that is necessary for running the overall cache\ntuning data gathering task.")
     public static SubLObject sbhl_cache_tuning_data_gathering_prologue() {
         return sbhl_caching_policies.setup_sbhl_graphs_for_sbhl_cache_tuning_data_gathering();
     }
 
-    /**
-     * Perform any setup that is necessary for running one particular
-     * experiment within the context of the wider cache tuning
-     * data gathering task.
-     */
-    @LispMethod(comment = "Perform any setup that is necessary for running one particular\r\nexperiment within the context of the wider cache tuning\r\ndata gathering task.\nPerform any setup that is necessary for running one particular\nexperiment within the context of the wider cache tuning\ndata gathering task.")
-    public static final SubLObject sbhl_cache_tuning_experiment_prologue_alt() {
-        return sbhl_caching_policies.setup_sbhl_graphs_for_sbhl_cache_tuning_experiment();
-    }
-
-    /**
-     * Perform any setup that is necessary for running one particular
-     * experiment within the context of the wider cache tuning
-     * data gathering task.
-     */
-    @LispMethod(comment = "Perform any setup that is necessary for running one particular\r\nexperiment within the context of the wider cache tuning\r\ndata gathering task.\nPerform any setup that is necessary for running one particular\nexperiment within the context of the wider cache tuning\ndata gathering task.")
     public static SubLObject sbhl_cache_tuning_experiment_prologue() {
         return sbhl_caching_policies.setup_sbhl_graphs_for_sbhl_cache_tuning_experiment();
     }
 
-    /**
-     * Perform any tear down that is necessary after having completed
-     * on run of one particular experiment within the context of the
-     * wider cache tuning data gathering task.
-     */
-    @LispMethod(comment = "Perform any tear down that is necessary after having completed\r\non run of one particular experiment within the context of the\r\nwider cache tuning data gathering task.\nPerform any tear down that is necessary after having completed\non run of one particular experiment within the context of the\nwider cache tuning data gathering task.")
-    public static final SubLObject sbhl_cache_tuning_experiment_epilogue_alt(SubLObject state) {
-        return sbhl_caching_policies.tear_down_sbhl_graphs_for_sbhl_cache_tuning_experiment(state);
-    }
-
-    /**
-     * Perform any tear down that is necessary after having completed
-     * on run of one particular experiment within the context of the
-     * wider cache tuning data gathering task.
-     */
-    @LispMethod(comment = "Perform any tear down that is necessary after having completed\r\non run of one particular experiment within the context of the\r\nwider cache tuning data gathering task.\nPerform any tear down that is necessary after having completed\non run of one particular experiment within the context of the\nwider cache tuning data gathering task.")
     public static SubLObject sbhl_cache_tuning_experiment_epilogue(final SubLObject state) {
         return sbhl_caching_policies.tear_down_sbhl_graphs_for_sbhl_cache_tuning_experiment(state);
     }
 
-    /**
-     * Called after the completion of all the experiments but before
-     * the infrastructure tear down takes place, this method captures
-     * all the data that is to be preserved and produces the final
-     * products of the runs.
-     */
-    @LispMethod(comment = "Called after the completion of all the experiments but before\r\nthe infrastructure tear down takes place, this method captures\r\nall the data that is to be preserved and produces the final\r\nproducts of the runs.\nCalled after the completion of all the experiments but before\nthe infrastructure tear down takes place, this method captures\nall the data that is to be preserved and produces the final\nproducts of the runs.")
-    public static final SubLObject sbhl_cache_tuning_data_gathering_generate_report_alt(SubLObject filename, SubLObject state) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject stream = NIL;
-                try {
-                    {
-                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                        try {
-                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                            stream = compatibility.open_binary(filename, $OUTPUT, NIL);
-                        } finally {
-                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    if (!stream.isStream()) {
-                        Errors.error($str_alt23$Unable_to_open__S, filename);
-                    }
-                    {
-                        SubLObject s = stream;
-                        sbhl_caching_policies.contribute_sbhl_graphs_data_for_sbhl_cache_tuning_experiment(s, state);
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            if (stream.isStream()) {
-                                close(stream, UNPROVIDED);
-                            }
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-            }
-            return filename;
-        }
-    }
-
-    /**
-     * Called after the completion of all the experiments but before
-     * the infrastructure tear down takes place, this method captures
-     * all the data that is to be preserved and produces the final
-     * products of the runs.
-     */
-    @LispMethod(comment = "Called after the completion of all the experiments but before\r\nthe infrastructure tear down takes place, this method captures\r\nall the data that is to be preserved and produces the final\r\nproducts of the runs.\nCalled after the completion of all the experiments but before\nthe infrastructure tear down takes place, this method captures\nall the data that is to be preserved and produces the final\nproducts of the runs.")
     public static SubLObject sbhl_cache_tuning_data_gathering_generate_report(final SubLObject filename, final SubLObject state) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject stream = NIL;
@@ -5065,20 +2781,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return filename;
     }
 
-    /**
-     * Wrap up the SBHL cache tuning data gathering task, releasing
-     * any lingering resources.
-     */
-    @LispMethod(comment = "Wrap up the SBHL cache tuning data gathering task, releasing\r\nany lingering resources.\nWrap up the SBHL cache tuning data gathering task, releasing\nany lingering resources.")
-    public static final SubLObject sbhl_cache_tuning_data_gathering_epilogue_alt() {
-        return sbhl_caching_policies.tear_down_sbhl_graphs_for_sbhl_cache_tuning_data_gathering();
-    }
-
-    /**
-     * Wrap up the SBHL cache tuning data gathering task, releasing
-     * any lingering resources.
-     */
-    @LispMethod(comment = "Wrap up the SBHL cache tuning data gathering task, releasing\r\nany lingering resources.\nWrap up the SBHL cache tuning data gathering task, releasing\nany lingering resources.")
     public static SubLObject sbhl_cache_tuning_data_gathering_epilogue() {
         return sbhl_caching_policies.tear_down_sbhl_graphs_for_sbhl_cache_tuning_data_gathering();
     }
@@ -5173,38 +2875,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return result_map;
     }
 
-    static private final SubLString $str_alt3$World_file__A_already_exists_and_ = makeString("World file ~A already exists and may not be overwritable if in use.");
-
-    static private final SubLString $str_alt5$cyc_ = makeString("cyc-");
-
-    static private final SubLString $str_alt6$_ = makeString("-");
-
-    static private final SubLString $str_alt7$_kb_ = makeString("-kb-");
-
-    static private final SubLString $str_alt8$_cyc_ = makeString("/cyc/");
-
-    static private final SubLString $str_alt9$_ = makeString("/");
-
-    static private final SubLString $str_alt10$_install_ = makeString("/install/");
-
-    static private final SubLString $str_alt11$kb_ = makeString("kb-");
-
-    static private final SubLString $str_alt12$_load = makeString(".load");
-
-    static private final SubLString $str_alt14$Writing_cyc_image_to__A__ = makeString("Writing cyc image to ~A~%");
-
-    static private final SubLString $str_alt15$_home_builder_logs_ = makeString("/home/builder/logs/");
-
-    static private final SubLString $str_alt16$_4__0D = makeString("~4,'0D");
-
-    static private final SubLString $str_alt17$No_log_directory__A_____strange__ = makeString("No log directory ~A ... strange.~%");
-
-    static private final SubLString $str_alt18$forward_inference_metrics_ = makeString("forward-inference-metrics-");
-
-    static private final SubLString $str_alt19$_html = makeString(".html");
-
-    static private final SubLString $str_alt20$The_catchup_image_expected_to_be_ = makeString("The catchup image expected to be using world ~A but has ~A.");
-
     public static SubLObject gather_one_kb_snapshot_statistic(final SubLObject result_map, final SubLObject data_file, final SubLObject index_file, final SubLObject directory) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject data_file_path = dumper.kb_dump_file(data_file, directory, UNPROVIDED);
@@ -5236,28 +2906,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         }
         return result_map;
     }
-
-    static private final SubLString $str_alt21$Builder_s_catchup_to_rollover_ser = makeString("Builder's catchup-to-rollover server - DO NOT USE");
-
-    static private final SubLString $str_alt23$Unable_to_open__S = makeString("Unable to open ~S");
-
-    static private final SubLString $str_alt24$Getting_caught_up_to_KB_rollover_ = makeString("Getting caught up to KB rollover to ");
-
-    static private final SubLString $str_alt26$The_agenda_is_not_running___Fix_y = makeString("The agenda is not running.  Fix your init files, probably parameters.lisp.");
-
-    static private final SubLString $str_alt31$Getting_caught_up__ = makeString("Getting caught up~%");
-
-    static private final SubLString $str_alt32$Builder_s_transcript_loading_serv = makeString("Builder's transcript-loading server - DO NOT USE");
-
-    static private final SubLString $str_alt34$Builder_s_catchup_to_current_serv = makeString("Builder's catchup-to-current server - DO NOT USE");
-
-    static private final SubLString $str_alt35$Getting_caught_up_from_KB_ = makeString("Getting caught up from KB ");
-
-    static private final SubLString $str_alt36$_ = makeString(".");
-
-    static private final SubLString $str_alt37$_to_KB_ = makeString(" to KB ");
-
-    static private final SubLString $str_alt39$Caught_up_to_KB__A__ = makeString("Caught up to KB ~A~%");
 
     public static SubLObject track_kb_snapshot_statistics(final SubLObject directory, SubLObject pollsecs) {
         if (pollsecs == UNPROVIDED) {
@@ -5300,97 +2948,10 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return result_map;
     }
 
-    static private final SubLString $$$karen = makeString("karen");
-
-    static private final SubLString $str_alt42$_was_expected_to_load__but_did_no = makeString(" was expected to load, but did not.");
-
-    static private final SubLString $str_alt43$Some_test_files_failed_to_load_pr = makeString("Some test files failed to load properly.");
-
-    static private final SubLString $str_alt45$run_all_cyc_tests_failed_with_a__ = makeString("run-all-cyc-tests failed with a :HARNESS-ERROR.  See log for failure details.");
-
-    static private final SubLString $str_alt48$run_all_cyc_tests_succeeded_witho = makeString("run-all-cyc-tests succeeded without error!");
-
-    private static final SubLSymbol $SUMMARY = makeKeyword("SUMMARY");
-
-    static private final SubLString $str_alt50$Unknown_overall_result_type__A = makeString("Unknown overall result type ~A");
-
-    static private final SubLString $str_alt51$IR_tests_had_failures___Call__RUN = makeString("IR tests had failures.  Call (RUN-ALL-IR-TESTS) to reproduce.");
-
-    private static final SubLSymbol $FAILURES = makeKeyword("FAILURES");
-
-    static private final SubLString $str_alt53$post_build_testdcl_lisp = makeString("post-build-testdcl.lisp");
-
-    static private final SubLString $str_alt56$__ = makeString("~%");
-
-    static private final SubLString $str_alt57$_Not__ = makeString("(Not) ");
-
-    static private final SubLString $str_alt58$Notifying__A_with_message__A = makeString("Notifying ~A with message ~A");
-
-    static private final SubLString $str_alt59$Tests_were_run_on_world_file_ = makeString("Tests were run on world file ");
-
-    private static final SubLSymbol $HARNESS_ERROR_TESTER = makeKeyword("HARNESS-ERROR-TESTER");
-
-    private static final SubLSymbol $FAILURES_TESTER = makeKeyword("FAILURES-TESTER");
-
-    private static final SubLSymbol $SUMMARY_TESTER = makeKeyword("SUMMARY-TESTER");
-
-    private static final SubLSymbol $UNOWNED_TESTER = makeKeyword("UNOWNED-TESTER");
-
-    static private final SubLString $str_alt64$__PS_Use_the__SubL_Tester__projec = makeString("\n\nPS Use the \'SubL-Tester\' project to debug this build. You might need to catch up on operations after starting Cyc.\n");
-
-    /**
-     * Determine a unique, ascending identifier for distinguishing this
-     * dump from the others within the same KB number.
-     *
-     * @return TIMESTAMP, an UNIVERSAL-TIME-P, for identifying the dump
-     */
-    @LispMethod(comment = "Determine a unique, ascending identifier for distinguishing this\r\ndump from the others within the same KB number.\r\n\r\n@return TIMESTAMP, an UNIVERSAL-TIME-P, for identifying the dump\nDetermine a unique, ascending identifier for distinguishing this\ndump from the others within the same KB number.")
-    public static final SubLObject get_kb_mini_dump_timestamp_alt() {
-        return get_universal_time();
-    }
-
-    /**
-     * Determine a unique, ascending identifier for distinguishing this
-     * dump from the others within the same KB number.
-     *
-     * @return TIMESTAMP, an UNIVERSAL-TIME-P, for identifying the dump
-     */
-    @LispMethod(comment = "Determine a unique, ascending identifier for distinguishing this\r\ndump from the others within the same KB number.\r\n\r\n@return TIMESTAMP, an UNIVERSAL-TIME-P, for identifying the dump\nDetermine a unique, ascending identifier for distinguishing this\ndump from the others within the same KB number.")
     public static SubLObject get_kb_mini_dump_timestamp() {
         return get_universal_time();
     }
 
-    /**
-     * Get everything ready for a KB mini dump.
-     *
-     * @return :SUCCESS
-     */
-    @LispMethod(comment = "Get everything ready for a KB mini dump.\r\n\r\n@return :SUCCESS")
-    public static final SubLObject prepare_kb_mini_dump_alt() {
-        {
-            SubLObject cdolist_list_var = all_tcp_servers();
-            SubLObject tcp_server = NIL;
-            for (tcp_server = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , tcp_server = cdolist_list_var.first()) {
-                {
-                    SubLObject type = tcp_server_type(tcp_server);
-                    if ($CYC_API != type) {
-                        disable_tcp_server(type);
-                    }
-                }
-            }
-        }
-        while (NIL != agenda_busyP()) {
-            sleep(ONE_INTEGER);
-        } 
-        return $SUCCESS;
-    }
-
-    /**
-     * Get everything ready for a KB mini dump.
-     *
-     * @return :SUCCESS
-     */
-    @LispMethod(comment = "Get everything ready for a KB mini dump.\r\n\r\n@return :SUCCESS")
     public static SubLObject prepare_kb_mini_dump() {
         operation_communication.set_receive_state($$$no);
         SubLObject cdolist_list_var = tcp_server_utilities.all_tcp_servers();
@@ -5410,67 +2971,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return $SUCCESS;
     }
 
-    static private final SubLString $str_alt65$_using_executable_ = makeString(" using executable ");
-
-    static private final SubLString $str_alt66$____Email_notification_is_disable = makeString("~%~%Email notification is disabled.  This mail would have been sent:");
-
-    static private final SubLString $str_alt67$__To___A = makeString("~%To: ~A");
-
-    static private final SubLString $str_alt68$__Subject___A = makeString("~%Subject: ~A");
-
-    static private final SubLString $str_alt69$___A = makeString("~%~A");
-
-    static private final SubLString $str_alt70$Post_build_HARNESS_ERROR__ = makeString("Post-build HARNESS ERROR: ");
-
-    static private final SubLString $str_alt71$Post_build_failures__ = makeString("Post-build failures: ");
-
-    /**
-     * Do the actual KB mini dump. Shut down the image if the dump
-     * succeeded.
-     *
-     * @return :ERROR in the case of a problem; the method does not
-    return when it succeeds.
-     */
-    @LispMethod(comment = "Do the actual KB mini dump. Shut down the image if the dump\r\nsucceeded.\r\n\r\n@return :ERROR in the case of a problem; the method does not\r\nreturn when it succeeds.\nDo the actual KB mini dump. Shut down the image if the dump\nsucceeded.")
-    public static final SubLObject perform_kb_mini_dump_alt(SubLObject units_path) {
-        {
-            SubLObject curr_kb = kb_loaded();
-            SubLObject msg = NIL;
-            try {
-                {
-                    SubLObject _prev_bind_0 = currentBinding(Errors.$error_handler$);
-                    try {
-                        bind(Errors.$error_handler$, CATCH_ERROR_MESSAGE_HANDLER);
-                        try {
-                            set_kb_loaded(subtract(curr_kb, ONE_INTEGER));
-                            dumper.dump_kb(units_path);
-                        } catch (Throwable catch_var) {
-                            Errors.handleThrowable(catch_var, NIL);
-                        }
-                    } finally {
-                        rebind(Errors.$error_handler$, _prev_bind_0);
-                    }
-                }
-            } catch (Throwable ccatch_env_var) {
-                msg = Errors.handleThrowable(ccatch_env_var, $catch_error_message_target$.getGlobalValue());
-            }
-            if (!msg.isString()) {
-                com.cyc.cycjava.cycl.builder_utilities.mark_kb_mini_dump_as_successful(units_path);
-                return operation_communication.halt_cyc_image(UNPROVIDED);
-            }
-            set_kb_loaded(curr_kb);
-            return values($ERROR, msg);
-        }
-    }
-
-    /**
-     * Do the actual KB mini dump. Shut down the image if the dump
-     * succeeded.
-     *
-     * @return :ERROR in the case of a problem; the method does not
-    return when it succeeds.
-     */
-    @LispMethod(comment = "Do the actual KB mini dump. Shut down the image if the dump\r\nsucceeded.\r\n\r\n@return :ERROR in the case of a problem; the method does not\r\nreturn when it succeeds.\nDo the actual KB mini dump. Shut down the image if the dump\nsucceeded.")
     public static SubLObject perform_kb_mini_dump(final SubLObject units_path) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject curr_kb = kb_loaded();
@@ -5503,113 +3003,10 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return operation_communication.halt_cyc_image(UNPROVIDED);
     }
 
-    static private final SubLString $str_alt72$Post_build_summary__ = makeString("Post-build summary: ");
-
-    private static final SubLSymbol $UNOWNED = makeKeyword("UNOWNED");
-
-    static private final SubLString $str_alt74$Post_build_unowned_tests__ = makeString("Post-build unowned tests: ");
-
-    static private final SubLString $str_alt75$Post_test_HARNESS_ERROR__ = makeString("Post-test HARNESS ERROR: ");
-
-    static private final SubLString $str_alt76$Post_test_failures__ = makeString("Post-test failures: ");
-
-    static private final SubLString $str_alt77$Post_test_summary__ = makeString("Post-test summary: ");
-
-    static private final SubLString $str_alt78$Post_test_unowned_tests__ = makeString("Post-test unowned tests: ");
-
-    static private final SubLString $str_alt79$Unnown_post_build_notify_type__A = makeString("Unnown post-build notify type ~A");
-
-    static private final SubLString $str_alt80$_KB_ = makeString(" KB ");
-
-    static private final SubLString $str_alt81$__System_ = makeString(", System ");
-
-    static private final SubLString $str_alt82$__Image_ = makeString(", Image ");
-
-    static private final SubLString $str_alt83$_System_ = makeString(" System ");
-
-    static private final SubLString $str_alt84$__Preparing_to_send_notices_about = makeString("~%Preparing to send notices about ~A test runs");
-
-    static private final SubLString $str_alt87$__Notifying__A_owners_about_test_ = makeString("~%Notifying ~A owners about test problems.");
-
-    /**
-     * Launch a process that performs the KB mini dump and shuts the image
-     * down on success.
-     * To be used by the Cyc API, which is difficult to script for
-     * arbitrary waits
-     *
-     * @return VALID-PROCESS-P
-     */
-    @LispMethod(comment = "Launch a process that performs the KB mini dump and shuts the image\r\ndown on success.\r\nTo be used by the Cyc API, which is difficult to script for\r\narbitrary waits\r\n\r\n@return VALID-PROCESS-P\nLaunch a process that performs the KB mini dump and shuts the image\ndown on success.\nTo be used by the Cyc API, which is difficult to script for\narbitrary waits")
-    public static final SubLObject launch_asynchronous_kb_mini_dump_alt(SubLObject units_path) {
-        return make_process_with_args($$$Mini_KB_Dumper, PERFORM_KB_MINI_DUMP, list(units_path));
-    }
-
-    /**
-     * Launch a process that performs the KB mini dump and shuts the image
-     * down on success.
-     * To be used by the Cyc API, which is difficult to script for
-     * arbitrary waits
-     *
-     * @return VALID-PROCESS-P
-     */
-    @LispMethod(comment = "Launch a process that performs the KB mini dump and shuts the image\r\ndown on success.\r\nTo be used by the Cyc API, which is difficult to script for\r\narbitrary waits\r\n\r\n@return VALID-PROCESS-P\nLaunch a process that performs the KB mini dump and shuts the image\ndown on success.\nTo be used by the Cyc API, which is difficult to script for\narbitrary waits")
     public static SubLObject launch_asynchronous_kb_mini_dump(final SubLObject units_path) {
         return subl_promotions.make_process_with_args($$$Mini_KB_Dumper, PERFORM_KB_MINI_DUMP, list(units_path));
     }
 
-    static private final SubLString $str_alt88$__Notifying__A_with_test_summary = makeString("~%Notifying ~A with test summary");
-
-    static private final SubLString $str_alt89$__Notifying__A_about_unowned_resu = makeString("~%Notifying ~A about unowned results");
-
-    /**
-     * Write a file that contains the time stamp of when we finished.
-     */
-    @LispMethod(comment = "Write a file that contains the time stamp of when we finished.")
-    public static final SubLObject mark_kb_mini_dump_as_successful_alt(SubLObject units_path) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject dump_finished_file = cconcatenate(units_path, $str_alt202$mini_dump_finished_text);
-                SubLObject stream = NIL;
-                try {
-                    {
-                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                        try {
-                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                            stream = compatibility.open_text(dump_finished_file, $OUTPUT, NIL);
-                        } finally {
-                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    if (!stream.isStream()) {
-                        Errors.error($str_alt23$Unable_to_open__S, dump_finished_file);
-                    }
-                    {
-                        SubLObject s = stream;
-                        write_string(numeric_date_utilities.timestring(UNPROVIDED), s, UNPROVIDED, UNPROVIDED);
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            if (stream.isStream()) {
-                                close(stream, UNPROVIDED);
-                            }
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-            }
-            return units_path;
-        }
-    }
-
-    /**
-     * Write a file that contains the time stamp of when we finished.
-     */
-    @LispMethod(comment = "Write a file that contains the time stamp of when we finished.")
     public static SubLObject mark_kb_mini_dump_as_successful(final SubLObject units_path) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject dump_finished_file = cconcatenate(units_path, $str235$mini_dump_finished_text);
@@ -5643,35 +3040,9 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return units_path;
     }
 
-    static private final SubLString $str_alt90$_scratch_new_units = makeString("/scratch/new-units");
-
-    static private final SubLString $str_alt91$_home_tester_src_head_cycorp_cyc_ = makeString("/home/tester/src/head/cycorp/cyc/top/tests/");
-
-    static private final SubLString $str_alt92$_home_tester_tester_cyclops_resul = makeString("/home/tester/tester-cyclops-results.txt");
-
-    static private final SubLString $str_alt93$tester_cyc_com = makeString("tester@cyc.com");
-
-    static private final SubLString $str_alt94$Starting_to_catch_up_on_operation = makeString("Starting to catch up on operations.");
-
-    static private final SubLString $str_alt95$Finished_catching_up_on_operation = makeString("Finished catching up on operations.");
-
-    public static final SubLFloat $float$0_0 = makeDouble(0.0);
-
-    static private final SubLString $str_alt99$_A__A__A__A__A__A__A__A__A_ = makeString("~A\t~A\t~A\t~A\t~A\t~A\t~A\t~A\t~A\n");
-
-    static private final SubLString $$$unknown = makeString("unknown");
-
-    static private final SubLString $str_alt101$Got_Cyclops_results_of__A_on__A_u = makeString("Got Cyclops results of ~A on ~A using ~A.~%");
-
-    static private final SubLString $str_alt102$Error_running_Cycops_____A__ = makeString("Error running Cycops: ~%~A~%");
-
-    static private final SubLString $str_alt103$Failed_to_run_Cyclops__on__A_usin = makeString("Failed to run Cyclops  on ~A using ~A because~%~A~%.");
-
     public static SubLObject build_process_worker_count() {
         return $build_process_worker_count$.getGlobalValue();
     }
-
-    static private final SubLString $str_alt105$__Cathcing_up_on_operations_took_ = makeString("~%Cathcing up on operations took: ~A secs~%");
 
     public static SubLObject set_build_process_worker_count(final SubLObject workers) {
         SubLTrampolineFile.enforceType(workers, NON_NEGATIVE_INTEGER_P);
@@ -5680,17 +3051,9 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return old;
     }
 
-    static private final SubLString $str_alt107$_ = makeString("\n");
-
-    static private final SubLString $str_alt108$__Notifying__A_owners_about_not_w = makeString("~%Notifying ~A owners about not working tests.");
-
-    static private final SubLString $str_alt109$_Newly_failing_tests__possibly_cr = makeString("\nNewly failing tests (possibly critical):\n\n");
-
     public static SubLObject build_process_parallelism_permittedP() {
         return numGE(build_process_worker_count(), TWO_INTEGER);
     }
-
-    static private final SubLString $str_alt110$_None_ = makeString("<None>");
 
     public static SubLObject with_allowed_obfuscation_namespace_support(final SubLObject macroform, final SubLObject environment) {
         final SubLObject datum = macroform.rest();
@@ -5698,10 +3061,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         final SubLObject current = body = datum;
         return listS(CLET, $list241, append(body, NIL));
     }
-
-    static private final SubLString $str_alt111$__Known_non_working_tests__import = makeString("\n\nKnown non-working tests (important but non-critical): \n\n");
-
-    static private final SubLString $str_alt112$__Please__either_fix_or_mark_any_ = makeString("\n\nPlease, either fix or mark any newly failing tests as \'not working\' before the next testing cycle -- which is currently nightly.\n\nThank you very kindly for your immediate attention to these issues.\n\n--Tester\n");
 
     public static SubLObject with_allowed_obfuscation_namespace(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
@@ -5722,21 +3081,11 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    static private final SubLString $str_alt113$All_tests_passed_without_error_ = makeString("All tests passed without error!");
-
-    static private final SubLString $str_alt116$The_cyc_product___A__is_already_p = makeString("The cyc product, ~A, is already present with the declared definition.");
-
-    static private final SubLString $str_alt117$There_already_exists_a_different_ = makeString("There already exists a different cyc product, ~A, with this definition.");
-
-    static private final SubLString $str_alt118$The_cyc_product__A_already_exists = makeString("The cyc product ~A already exists with a different definition.");
-
     public static SubLObject allowed_obfuscation_namespace_constantP(final SubLObject constant) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject namespace = constants_high.constant_namespace(constant);
         return makeBoolean((NIL != Strings.stringE($$$cyc, namespace, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED)) || (NIL != subl_promotions.memberP(namespace, $allowed_obfuscation_name_spaces$.getDynamicValue(thread), EQUAL, UNPROVIDED)));
     }
-
-    static private final SubLString $str_alt127$cake_release_0p3_20051215 = makeString("cake-release-0p3-20051215");
 
     public static SubLObject un_obfuscatable_constantP(final SubLObject constant) {
         return makeBoolean((NIL != constant_completion.constant_mentioned_in_codeP(constant)) || (NIL == allowed_obfuscation_namespace_constantP(constant)));
@@ -5765,8 +3114,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    static private final SubLString $str_alt136$Augmenting_the_file_set_not_termi = makeString("Augmenting the file set not terminating after ~A iterations.");
-
     public static SubLObject obfuscate_constant_name_via_generator_fn(final SubLObject constant) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject current;
@@ -5778,12 +3125,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         current = state = current.rest();
         return obfuscate_constant_name_via_generator_function(constant, generator, state);
     }
-
-    static private final SubLString $$$rck = makeString("rck");
-
-    static private final SubLList $list_alt158 = list(list(list(list(makeString("/cycdoc/img/cb/red_diam.gif"), makeString("/cycdoc/img/square-minus.gif")), makeString("/cycdoc"), makeString("doc")), makeKeyword("SUCCESS")));
-
-    static private final SubLString $str_alt159$Rerooting_from__A_to__A_failed_an = makeString("Rerooting from ~A to ~A failed and produced ~A.");
 
     public static SubLObject obfuscate_constant_name_via_generator_function(final SubLObject constant, final SubLObject generator, final SubLObject state) {
         final SubLThread thread = SubLProcess.currentSubLThread();
@@ -5804,8 +3145,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         }
         return obfuscated_name;
     }
-
-    public static final SubLInteger $int$500 = makeInteger(500);
 
     public static SubLObject new_constant_obfuscation_cache() {
         return make_hash_table(constant_count(), hash_table_utilities.to_hash_test(KBEQ), UNPROVIDED);
@@ -5833,18 +3172,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    static private final SubLString $str_alt185$The_templates_list__A_does_not_co = makeString("The templates list ~A does not contain a default rule.");
-
-    static private final SubLList $list_alt186 = list(makeSymbol("PRED"), makeSymbol("POLICY"), makeSymbol("CAPACITY"), makeSymbol("&OPTIONAL"), makeSymbol("EXEMPT"), makeSymbol("PREFETCH"));
-
-    static private final SubLString $str_alt187$Gathering_SBHL_cache_tuning_data_ = makeString("Gathering SBHL cache tuning data via CYC tests ....");
-
-    static private final SubLString $str_alt190$Gathering_SBHL_cache_tuning_data_ = makeString("Gathering SBHL cache tuning data via KB queries ....");
-
-    static private final SubLString $str_alt191$KBQ_Support_currently_not_impleme = makeString("KBQ Support currently not implemented");
-
-    static private final SubLString $str_alt193$Gathering_SBHL_cache_tuning_data_ = makeString("Gathering SBHL cache tuning data via CycLOPs ....");
-
     public static SubLObject make_obfuscation_gensym_state(SubLObject upcase_prefix, SubLObject downcase_prefix) {
         if (upcase_prefix == UNPROVIDED) {
             upcase_prefix = $$$C;
@@ -5857,8 +3184,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         }
         return list($ISG, integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED), $UPCASE, upcase_prefix, $DOWNCASE, downcase_prefix);
     }
-
-    static private final SubLString $str_alt202$mini_dump_finished_text = makeString("mini-dump-finished.text");
 
     public static SubLObject obfuscate_constant_name_gensym(final SubLObject constant, final SubLObject state) {
         SubLObject allow_other_keys_p = NIL;
@@ -5891,26 +3216,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         final SubLObject id = integer_sequence_generator.integer_sequence_generator_next(isg);
         return cconcatenate(format_nil.format_nil_a_no_copy(prefix), new SubLObject[]{ $str260$_, format_nil.format_nil_d_no_copy(id) });
     }
-
-    static private final SubLSymbol $sym208$HIGHER_ORDER_COLLECTION_ = makeSymbol("HIGHER-ORDER-COLLECTION?");
-
-    static private final SubLSymbol $sym209$_ = makeSymbol("<");
-
-    static private final SubLString $str_alt213$Nothing_to_clip_ = makeString("Nothing to clip.");
-
-    static private final SubLString $str_alt215$Invalid_percentage__A__cannot_cli = makeString("Invalid percentage ~A: cannot clip from ~A to ~A.");
-
-    static private final SubLString $str_alt219$___A__Deleting__A_____ = makeString("~&~A: Deleting ~A ... ");
-
-    static private final SubLString $str_alt220$_done___ = makeString(" done.~%");
-
-    static private final SubLSymbol $sym221$_EXIT = makeSymbol("%EXIT");
-
-    static private final SubLString $str_alt223$___A__Current_FORT_Count____A__ = makeString("~&~A: Current FORT Count : ~A~%");
-
-    static private final SubLString $str_alt224$___A__Gathering_tabu_collections_ = makeString("~&~A: Gathering tabu-collections ....~%");
-
-    static private final SubLString $str_alt225$___A__Selecting_clippable_collect = makeString("~&~A: Selecting clippable collections ....~%");
 
     public static SubLObject obfuscate_and_dump_essential_kb(final SubLObject dump_dir, final SubLObject assertion_fn, final SubLObject nart_fn, final SubLObject constant_fn, SubLObject constant_state) {
         if (constant_state == UNPROVIDED) {
@@ -6000,10 +3305,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         }
         return dump_dir;
     }
-
-    static private final SubLString $str_alt226$___A__Clipping_collections_______ = makeString("~&~A: Clipping collections ....~%");
-
-    static private final SubLString $str_alt229$___A__Clipping_stopped_at__A_FORT = makeString("~&~A: Clipping stopped at ~A FORTs remaining with reason code ~A.~%");
 
     public static SubLObject determine_obfuscation_candidates(SubLObject message) {
         if (message == UNPROVIDED) {
@@ -6222,7 +3523,7 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
             final SubLObject mess = message;
             final SubLObject total2 = id_index_count(idx);
             SubLObject sofar2 = ZERO_INTEGER;
-            assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
+            assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
             final SubLObject _prev_bind_13 = $last_percent_progress_index$.currentBinding(thread);
             final SubLObject _prev_bind_14 = $last_percent_progress_prediction$.currentBinding(thread);
             final SubLObject _prev_bind_15 = $within_noting_percent_progress$.currentBinding(thread);
@@ -6335,7 +3636,7 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         final SubLObject mess = message;
         SubLObject sofar = ZERO_INTEGER;
         final SubLObject total = map_utilities.map_size(assertion_edits);
-        assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
+        assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
         final SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
         final SubLObject _prev_bind_2 = $last_percent_progress_prediction$.currentBinding(thread);
         final SubLObject _prev_bind_3 = $within_noting_percent_progress$.currentBinding(thread);
@@ -6426,7 +3727,7 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         final SubLObject mess = message;
         SubLObject sofar = ZERO_INTEGER;
         final SubLObject total = map_utilities.map_size(nart_edits);
-        assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
+        assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
         final SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
         final SubLObject _prev_bind_2 = $last_percent_progress_prediction$.currentBinding(thread);
         final SubLObject _prev_bind_3 = $within_noting_percent_progress$.currentBinding(thread);
@@ -6766,100 +4067,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return result;
     }
 
-    /**
-     * Fetch the collections in the current KB and prioritize them according to
-     * their clippability.
-     * Notice that while the method accepts an MT, the cardinaility and generality
-     * methods used to implement the prioritization does not honor these.
-     */
-    @LispMethod(comment = "Fetch the collections in the current KB and prioritize them according to\r\ntheir clippability.\r\nNotice that while the method accepts an MT, the cardinaility and generality\r\nmethods used to implement the prioritization does not honor these.\nFetch the collections in the current KB and prioritize them according to\ntheir clippability.\nNotice that while the method accepts an MT, the cardinaility and generality\nmethods used to implement the prioritization does not honor these.")
-    public static final SubLObject select_clippable_collections_alt(SubLObject tabu_collections, SubLObject elmt) {
-        if (tabu_collections == UNPROVIDED) {
-            tabu_collections = NIL;
-        }
-        if (elmt == UNPROVIDED) {
-            elmt = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject collections = NIL;
-                if (NIL == elmt) {
-                    {
-                        SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                        SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                        try {
-                            mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                            mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                            collections = isa.all_instances($$Collection, UNPROVIDED, UNPROVIDED);
-                        } finally {
-                            mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                            mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                } else {
-                    {
-                        SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                        SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                        try {
-                            mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_GENL_MT, thread);
-                            mt_relevance_macros.$mt$.bind(elmt, thread);
-                            collections = isa.all_instances($$Collection, UNPROVIDED, UNPROVIDED);
-                        } finally {
-                            mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                            mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                {
-                    SubLObject cdolist_list_var = tabu_collections;
-                    SubLObject tabu_collection = NIL;
-                    for (tabu_collection = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , tabu_collection = cdolist_list_var.first()) {
-                        collections = delete(tabu_collection, collections, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    }
-                }
-                collections = remove_if_not(symbol_function(FORT_P), collections, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                if (NIL == elmt) {
-                    {
-                        SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                        SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                        try {
-                            mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                            mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                            collections = remove_if(symbol_function($sym208$HIGHER_ORDER_COLLECTION_), collections, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        } finally {
-                            mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                            mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                } else {
-                    {
-                        SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                        SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                        try {
-                            mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_GENL_MT, thread);
-                            mt_relevance_macros.$mt$.bind(elmt, thread);
-                            collections = remove_if(symbol_function($sym208$HIGHER_ORDER_COLLECTION_), collections, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        } finally {
-                            mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                            mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                collections = Sort.sort(collections, symbol_function($sym209$_), INSTANCE_CARDINALITY);
-                collections = cardinality_estimates.stable_sort_by_generality_estimate(collections, $ASCENDING);
-                return collections;
-            }
-        }
-    }
-
-    /**
-     * Fetch the collections in the current KB and prioritize them according to
-     * their clippability.
-     * Notice that while the method accepts an MT, the cardinaility and generality
-     * methods used to implement the prioritization does not honor these.
-     */
-    @LispMethod(comment = "Fetch the collections in the current KB and prioritize them according to\r\ntheir clippability.\r\nNotice that while the method accepts an MT, the cardinaility and generality\r\nmethods used to implement the prioritization does not honor these.\nFetch the collections in the current KB and prioritize them according to\ntheir clippability.\nNotice that while the method accepts an MT, the cardinaility and generality\nmethods used to implement the prioritization does not honor these.")
     public static SubLObject select_clippable_collections(SubLObject tabu_collections, SubLObject elmt) {
         if (tabu_collections == UNPROVIDED) {
             tabu_collections = NIL;
@@ -6929,115 +4136,10 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return collections;
     }
 
-    /**
-     * Assume the ELMT to come in from the outside.
-     */
-    @LispMethod(comment = "Assume the ELMT to come in from the outside.")
-    public static final SubLObject higher_order_collectionP_alt(SubLObject col) {
-        return isa.isaP(col, $$CollectionType, UNPROVIDED, UNPROVIDED);
-    }
-
-    /**
-     * Assume the ELMT to come in from the outside.
-     */
-    @LispMethod(comment = "Assume the ELMT to come in from the outside.")
     public static SubLObject higher_order_collectionP(final SubLObject col) {
         return isa.isaP(col, $$CollectionType, UNPROVIDED, UNPROVIDED);
     }
 
-    /**
-     * Compute the TABU collections for this clipping operation. TERMS contains
-     * individuals or collections.
-     */
-    @LispMethod(comment = "Compute the TABU collections for this clipping operation. TERMS contains\r\nindividuals or collections.\nCompute the TABU collections for this clipping operation. TERMS contains\nindividuals or collections.")
-    public static final SubLObject gather_tabu_collections_for_clipping_alt(SubLObject terms, SubLObject code_constants, SubLObject elmt) {
-        if (code_constants == UNPROVIDED) {
-            code_constants = NIL;
-        }
-        if (elmt == UNPROVIDED) {
-            elmt = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == code_constants) {
-                code_constants = constant_completion.constants_mentioned_in_code();
-            }
-            {
-                SubLObject collections = set.new_set(UNPROVIDED, UNPROVIDED);
-                SubLObject actual_terms = cconcatenate(terms, new SubLObject[]{ code_constants, core.all_core_constants() });
-                SubLObject cols_to_add = NIL;
-                SubLObject cdolist_list_var = actual_terms;
-                SubLObject v_term = NIL;
-                for (v_term = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_term = cdolist_list_var.first()) {
-                    if (NIL != fort_types_interface.collectionP(v_term)) {
-                        if (NIL != elmt) {
-                            {
-                                SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                                SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                                try {
-                                    mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_GENL_MT, thread);
-                                    mt_relevance_macros.$mt$.bind(elmt, thread);
-                                    cols_to_add = genls.all_genls(v_term, UNPROVIDED, UNPROVIDED);
-                                } finally {
-                                    mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                                    mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                                SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                                try {
-                                    mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                                    mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                                    cols_to_add = genls.all_genls(v_term, UNPROVIDED, UNPROVIDED);
-                                } finally {
-                                    mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                                    mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                                }
-                            }
-                        }
-                    } else {
-                        if (NIL != elmt) {
-                            {
-                                SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                                SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                                try {
-                                    mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_GENL_MT, thread);
-                                    mt_relevance_macros.$mt$.bind(elmt, thread);
-                                    cols_to_add = isa.all_isa(v_term, UNPROVIDED, UNPROVIDED);
-                                } finally {
-                                    mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                                    mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                                SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                                try {
-                                    mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                                    mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                                    cols_to_add = isa.all_isa(v_term, UNPROVIDED, UNPROVIDED);
-                                } finally {
-                                    mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                                    mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                                }
-                            }
-                        }
-                    }
-                    set_utilities.set_add_all(cols_to_add, collections);
-                }
-                return set.set_element_list(collections);
-            }
-        }
-    }
-
-    /**
-     * Compute the TABU collections for this clipping operation. TERMS contains
-     * individuals or collections.
-     */
-    @LispMethod(comment = "Compute the TABU collections for this clipping operation. TERMS contains\r\nindividuals or collections.\nCompute the TABU collections for this clipping operation. TERMS contains\nindividuals or collections.")
     public static SubLObject gather_tabu_collections_for_clipping(final SubLObject terms, SubLObject code_constants, SubLObject elmt) {
         if (code_constants == UNPROVIDED) {
             code_constants = NIL;
@@ -7112,102 +4214,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return set.set_element_list(collections);
     }
 
-    /**
-     * Clip collections form the permitted collections list until the instance count
-     * drops below the percentage of FORTs specified in percentage or there are no
-     * permitted collections left to clip.
-     */
-    @LispMethod(comment = "Clip collections form the permitted collections list until the instance count\r\ndrops below the percentage of FORTs specified in percentage or there are no\r\npermitted collections left to clip.\nClip collections form the permitted collections list until the instance count\ndrops below the percentage of FORTs specified in percentage or there are no\npermitted collections left to clip.")
-    public static final SubLObject clip_kb_percentage_alt(SubLObject permitted_collections, SubLObject percentage, SubLObject logP) {
-        if (logP == UNPROVIDED) {
-            logP = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject count_at_start = forts.fort_count();
-                SubLObject count_at_end = floor(multiply(percentage, count_at_start), UNPROVIDED);
-                if (!count_at_end.numL(count_at_start)) {
-                    if (count_at_start.numE(count_at_end)) {
-                        Errors.warn($str_alt213$Nothing_to_clip_);
-                        return values(forts.fort_count(), $PERCENTAGE);
-                    }
-                    Errors.error($str_alt215$Invalid_percentage__A__cannot_cli, percentage, count_at_end, count_at_start);
-                }
-                {
-                    SubLObject list_var = permitted_collections;
-                    $progress_note$.setDynamicValue($$$cdolist, thread);
-                    $progress_start_time$.setDynamicValue(get_universal_time(), thread);
-                    $progress_total$.setDynamicValue(length(list_var), thread);
-                    $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
-                    {
-                        SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                        SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                        SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                        SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                        try {
-                            $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                            $last_percent_progress_prediction$.bind(NIL, thread);
-                            $within_noting_percent_progress$.bind(T, thread);
-                            $percent_progress_start_time$.bind(get_universal_time(), thread);
-                            noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
-                            {
-                                SubLObject csome_list_var = list_var;
-                                SubLObject permitted_collection = NIL;
-                                for (permitted_collection = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , permitted_collection = csome_list_var.first()) {
-                                    note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
-                                    $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
-                                    {
-                                        SubLObject ignore_errors_tag = NIL;
-                                        try {
-                                            {
-                                                SubLObject _prev_bind_0_10 = Errors.$error_handler$.currentBinding(thread);
-                                                try {
-                                                    Errors.$error_handler$.bind(symbol_function(IGNORE_ERRORS_HANDLER), thread);
-                                                    try {
-                                                        if (NIL != logP) {
-                                                            format_nil.force_format(T, $str_alt219$___A__Deleting__A_____, numeric_date_utilities.timestring(UNPROVIDED), permitted_collection, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                        }
-                                                        cyc_kernel.cyc_kill(permitted_collection);
-                                                    } catch (Throwable catch_var) {
-                                                        Errors.handleThrowable(catch_var, NIL);
-                                                    }
-                                                } finally {
-                                                    Errors.$error_handler$.rebind(_prev_bind_0_10, thread);
-                                                }
-                                            }
-                                        } catch (Throwable ccatch_env_var) {
-                                            ignore_errors_tag = Errors.handleThrowable(ccatch_env_var, $IGNORE_ERRORS_TARGET);
-                                        }
-                                    }
-                                    if (NIL != logP) {
-                                        format_nil.force_format(T, $str_alt220$_done___, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                    }
-                                    if (forts.fort_count().numLE(count_at_end)) {
-                                        return values(forts.fort_count(), $PERCENTAGE);
-                                    }
-                                }
-                            }
-                            noting_percent_progress_postamble();
-                        } finally {
-                            $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                            $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                            $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                            $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                return values(forts.fort_count(), $EXHAUSTED);
-            }
-        }
-    }
-
-    /**
-     * Clip collections form the permitted collections list until the instance count
-     * drops below the percentage of FORTs specified in percentage or there are no
-     * permitted collections left to clip.
-     */
-    @LispMethod(comment = "Clip collections form the permitted collections list until the instance count\r\ndrops below the percentage of FORTs specified in percentage or there are no\r\npermitted collections left to clip.\nClip collections form the permitted collections list until the instance count\ndrops below the percentage of FORTs specified in percentage or there are no\npermitted collections left to clip.")
     public static SubLObject clip_kb_percentage(final SubLObject permitted_collections, final SubLObject percentage, SubLObject logP) {
         if (logP == UNPROVIDED) {
             logP = NIL;
@@ -7261,10 +4267,10 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
                                     mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
                                     mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
                                     final SubLObject node_var = permitted_collection;
-                                    final SubLObject _prev_bind_0_$47 = $sbhl_module$.currentBinding(thread);
+                                    final SubLObject _prev_bind_0_$47 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
                                     final SubLObject _prev_bind_1_$48 = sbhl_marking_vars.$sbhl_gather_space$.currentBinding(thread);
                                     try {
-                                        $sbhl_module$.bind(get_sbhl_module($$isa), thread);
+                                        sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module($$isa), thread);
                                         sbhl_marking_vars.$sbhl_gather_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
                                         try {
                                             SubLObject node_var_$50 = node_var;
@@ -7301,39 +4307,39 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
                                                         final SubLObject _prev_bind_1_$50 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
                                                         final SubLObject _prev_bind_2_$56 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
                                                         final SubLObject _prev_bind_3_$57 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                        final SubLObject _prev_bind_4_$58 = $sbhl_module$.currentBinding(thread);
+                                                        final SubLObject _prev_bind_4_$58 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
                                                         try {
-                                                            sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(get_sbhl_module($$isa)), thread);
-                                                            sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_utilities.get_sbhl_transfers_through_module(get_sbhl_module($$isa))), thread);
-                                                            sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_utilities.get_sbhl_transfers_through_module(get_sbhl_module($$isa))), thread);
+                                                            sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)), thread);
+                                                            sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
+                                                            sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
                                                             sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
-                                                            $sbhl_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(get_sbhl_module($$isa)), thread);
-                                                            if ((NIL != sbhl_paranoia.suspend_sbhl_type_checkingP()) || (NIL != sbhl_module_utilities.apply_sbhl_module_type_test(node_var, get_sbhl_module(UNPROVIDED)))) {
+                                                            sbhl_module_vars.$sbhl_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)), thread);
+                                                            if ((NIL != sbhl_paranoia.suspend_sbhl_type_checkingP()) || (NIL != sbhl_module_utilities.apply_sbhl_module_type_test(node_var, sbhl_module_vars.get_sbhl_module(UNPROVIDED)))) {
                                                                 final SubLObject _prev_bind_0_$51 = sbhl_search_vars.$sbhl_search_direction$.currentBinding(thread);
                                                                 final SubLObject _prev_bind_1_$51 = sbhl_link_vars.$sbhl_link_direction$.currentBinding(thread);
                                                                 final SubLObject _prev_bind_2_$57 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
                                                                 try {
                                                                     sbhl_search_vars.$sbhl_search_direction$.bind(sbhl_search_vars.get_sbhl_backward_search_direction(), thread);
-                                                                    sbhl_link_vars.$sbhl_link_direction$.bind(sbhl_module_utilities.sbhl_search_direction_to_link_direction(sbhl_search_vars.get_sbhl_backward_search_direction(), sbhl_module_utilities.get_sbhl_transfers_through_module(get_sbhl_module($$isa))), thread);
+                                                                    sbhl_link_vars.$sbhl_link_direction$.bind(sbhl_module_utilities.sbhl_search_direction_to_link_direction(sbhl_search_vars.get_sbhl_backward_search_direction(), sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
                                                                     sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
                                                                     sbhl_marking_utilities.sbhl_mark_node_marked(node_var_$50, UNPROVIDED);
                                                                     while (NIL != node_var_$50) {
                                                                         final SubLObject tt_node_var = node_var_$50;
                                                                         SubLObject cdolist_list_var;
-                                                                        final SubLObject accessible_modules = cdolist_list_var = sbhl_macros.get_sbhl_accessible_modules(get_sbhl_module($$isa));
+                                                                        final SubLObject accessible_modules = cdolist_list_var = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_vars.get_sbhl_module($$isa));
                                                                         SubLObject module_var = NIL;
                                                                         module_var = cdolist_list_var.first();
                                                                         while (NIL != cdolist_list_var) {
-                                                                            final SubLObject _prev_bind_0_$52 = $sbhl_module$.currentBinding(thread);
+                                                                            final SubLObject _prev_bind_0_$52 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
                                                                             final SubLObject _prev_bind_1_$52 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
                                                                             try {
-                                                                                $sbhl_module$.bind(module_var, thread);
+                                                                                sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
                                                                                 sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
                                                                                 final SubLObject node = function_terms.naut_to_nart(tt_node_var);
                                                                                 if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
-                                                                                    final SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, get_sbhl_module(UNPROVIDED));
+                                                                                    final SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
                                                                                     if (NIL != d_link) {
-                                                                                        final SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_module_utilities.get_sbhl_module_backward_direction(get_sbhl_module($$isa)), get_sbhl_module(UNPROVIDED));
+                                                                                        final SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
                                                                                         if (NIL != mt_links) {
                                                                                             SubLObject iteration_state;
                                                                                             for (iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links)); NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state); iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state)) {
@@ -7401,7 +4407,7 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
                                                                                     } else {
                                                                                         sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str325$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
                                                                                     }
-                                                                                    if (NIL != sbhl_macros.do_sbhl_non_fort_linksP(node, get_sbhl_module(UNPROVIDED))) {
+                                                                                    if (NIL != sbhl_macros.do_sbhl_non_fort_linksP(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED))) {
                                                                                         SubLObject csome_list_var_$68 = sbhl_link_methods.non_fort_instance_table_lookup(node);
                                                                                         SubLObject instance_tuple = NIL;
                                                                                         instance_tuple = csome_list_var_$68.first();
@@ -7478,7 +4484,7 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
                                                                                 } else
                                                                                     if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
                                                                                         SubLObject cdolist_list_var_$72;
-                                                                                        final SubLObject new_list = cdolist_list_var_$72 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_module_utilities.get_sbhl_module_backward_direction(get_sbhl_module($$isa)), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), get_sbhl_module(UNPROVIDED))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_module_utilities.get_sbhl_module_backward_direction(get_sbhl_module($$isa)), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), get_sbhl_module(UNPROVIDED));
+                                                                                        final SubLObject new_list = cdolist_list_var_$72 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
                                                                                         SubLObject generating_fn = NIL;
                                                                                         generating_fn = cdolist_list_var_$72.first();
                                                                                         while (NIL != cdolist_list_var_$72) {
@@ -7526,26 +4532,26 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
 
                                                                             } finally {
                                                                                 sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_$52, thread);
-                                                                                $sbhl_module$.rebind(_prev_bind_0_$52, thread);
+                                                                                sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_$52, thread);
                                                                             }
                                                                             cdolist_list_var = cdolist_list_var.rest();
                                                                             module_var = cdolist_list_var.first();
                                                                         } 
                                                                         SubLObject cdolist_list_var2;
-                                                                        final SubLObject accessible_modules2 = cdolist_list_var2 = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_utilities.get_sbhl_transfers_through_module(get_sbhl_module($$isa)));
+                                                                        final SubLObject accessible_modules2 = cdolist_list_var2 = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)));
                                                                         SubLObject module_var2 = NIL;
                                                                         module_var2 = cdolist_list_var2.first();
                                                                         while (NIL != cdolist_list_var2) {
-                                                                            final SubLObject _prev_bind_0_$58 = $sbhl_module$.currentBinding(thread);
+                                                                            final SubLObject _prev_bind_0_$58 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
                                                                             final SubLObject _prev_bind_1_$53 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
                                                                             try {
-                                                                                $sbhl_module$.bind(module_var2, thread);
+                                                                                sbhl_module_vars.$sbhl_module$.bind(module_var2, thread);
                                                                                 sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
                                                                                 final SubLObject node2 = function_terms.naut_to_nart(node_var_$50);
                                                                                 if (NIL != sbhl_link_vars.sbhl_node_object_p(node2)) {
-                                                                                    final SubLObject d_link2 = sbhl_graphs.get_sbhl_graph_link(node2, get_sbhl_module(UNPROVIDED));
+                                                                                    final SubLObject d_link2 = sbhl_graphs.get_sbhl_graph_link(node2, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
                                                                                     if (NIL != d_link2) {
-                                                                                        final SubLObject mt_links2 = sbhl_links.get_sbhl_mt_links(d_link2, sbhl_link_vars.get_sbhl_link_direction(), get_sbhl_module(UNPROVIDED));
+                                                                                        final SubLObject mt_links2 = sbhl_links.get_sbhl_mt_links(d_link2, sbhl_link_vars.get_sbhl_link_direction(), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
                                                                                         if (NIL != mt_links2) {
                                                                                             SubLObject iteration_state2;
                                                                                             for (iteration_state2 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links2)); NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state2); iteration_state2 = dictionary_contents.do_dictionary_contents_next(iteration_state2)) {
@@ -7616,7 +4622,7 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
                                                                                 } else
                                                                                     if (NIL != obsolete.cnat_p(node2, UNPROVIDED)) {
                                                                                         SubLObject cdolist_list_var_$73;
-                                                                                        final SubLObject new_list2 = cdolist_list_var_$73 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), get_sbhl_module(UNPROVIDED))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), get_sbhl_module(UNPROVIDED));
+                                                                                        final SubLObject new_list2 = cdolist_list_var_$73 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
                                                                                         SubLObject generating_fn2 = NIL;
                                                                                         generating_fn2 = cdolist_list_var_$73.first();
                                                                                         while (NIL != cdolist_list_var_$73) {
@@ -7664,7 +4670,7 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
 
                                                                             } finally {
                                                                                 sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_$53, thread);
-                                                                                $sbhl_module$.rebind(_prev_bind_0_$58, thread);
+                                                                                sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_$58, thread);
                                                                             }
                                                                             cdolist_list_var2 = cdolist_list_var2.rest();
                                                                             module_var2 = cdolist_list_var2.first();
@@ -7677,10 +4683,10 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
                                                                     sbhl_search_vars.$sbhl_search_direction$.rebind(_prev_bind_0_$51, thread);
                                                                 }
                                                             } else {
-                                                                sbhl_paranoia.sbhl_warn(TWO_INTEGER, $str327$Node__a_does_not_pass_sbhl_type_t, node_var, sbhl_module_utilities.get_sbhl_type_test(get_sbhl_module(UNPROVIDED)), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                sbhl_paranoia.sbhl_warn(TWO_INTEGER, $str327$Node__a_does_not_pass_sbhl_type_t, node_var, sbhl_module_utilities.get_sbhl_type_test(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), UNPROVIDED, UNPROVIDED, UNPROVIDED);
                                                             }
                                                         } finally {
-                                                            $sbhl_module$.rebind(_prev_bind_4_$58, thread);
+                                                            sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4_$58, thread);
                                                             sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3_$57, thread);
                                                             sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2_$56, thread);
                                                             sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1_$50, thread);
@@ -7717,7 +4723,7 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
                                         }
                                     } finally {
                                         sbhl_marking_vars.$sbhl_gather_space$.rebind(_prev_bind_1_$48, thread);
-                                        $sbhl_module$.rebind(_prev_bind_0_$47, thread);
+                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_$47, thread);
                                     }
                                 } finally {
                                     mt_relevance_macros.$mt$.rebind(_prev_bind_1_$47, thread);
@@ -7770,46 +4776,6 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return values(forts.fort_count(), $EXHAUSTED);
     }
 
-    /**
-     * Turn the clipping infrastructure into a process that can be executed from
-     * the build to produce a reduced KB.
-     *
-     * @return 0 number of FORTs
-     * @return 1 reason code (:EXHAUSTED or :PERCENTAGE)
-     */
-    @LispMethod(comment = "Turn the clipping infrastructure into a process that can be executed from\r\nthe build to produce a reduced KB.\r\n\r\n@return 0 number of FORTs\r\n@return 1 reason code (:EXHAUSTED or :PERCENTAGE)\nTurn the clipping infrastructure into a process that can be executed from\nthe build to produce a reduced KB.")
-    public static final SubLObject clip_kb_given_tabu_term_list_alt(SubLObject tabu_term_list) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject tabu_collections = NIL;
-                SubLObject clippable_collections = NIL;
-                format_nil.force_format(T, $str_alt223$___A__Current_FORT_Count____A__, numeric_date_utilities.timestring(UNPROVIDED), forts.fort_count(), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                format_nil.force_format(T, $str_alt224$___A__Gathering_tabu_collections_, numeric_date_utilities.timestring(UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                tabu_collections = com.cyc.cycjava.cycl.builder_utilities.gather_tabu_collections_for_clipping(tabu_term_list, UNPROVIDED, UNPROVIDED);
-                format_nil.force_format(T, $str_alt225$___A__Selecting_clippable_collect, numeric_date_utilities.timestring(UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                clippable_collections = com.cyc.cycjava.cycl.builder_utilities.select_clippable_collections(tabu_collections, UNPROVIDED);
-                format_nil.force_format(T, $str_alt226$___A__Clipping_collections_______, numeric_date_utilities.timestring(UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                thread.resetMultipleValues();
-                {
-                    SubLObject final_count = com.cyc.cycjava.cycl.builder_utilities.clip_kb_percentage(clippable_collections, $float$0_1, $LOG);
-                    SubLObject reason = thread.secondMultipleValue();
-                    thread.resetMultipleValues();
-                    format_nil.force_format(T, $str_alt229$___A__Clipping_stopped_at__A_FORT, numeric_date_utilities.timestring(UNPROVIDED), final_count, reason, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    return values(final_count, reason);
-                }
-            }
-        }
-    }
-
-    /**
-     * Turn the clipping infrastructure into a process that can be executed from
-     * the build to produce a reduced KB.
-     *
-     * @return 0 number of FORTs
-     * @return 1 reason code (:EXHAUSTED or :PERCENTAGE)
-     */
-    @LispMethod(comment = "Turn the clipping infrastructure into a process that can be executed from\r\nthe build to produce a reduced KB.\r\n\r\n@return 0 number of FORTs\r\n@return 1 reason code (:EXHAUSTED or :PERCENTAGE)\nTurn the clipping infrastructure into a process that can be executed from\nthe build to produce a reduced KB.")
     public static SubLObject clip_kb_given_tabu_term_list(final SubLObject tabu_term_list) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject tabu_collections = NIL;
@@ -7976,396 +4942,127 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return ts_file;
     }
 
-    public static final SubLObject declare_builder_utilities_file_alt() {
-        declareFunction("close_old_areas", "CLOSE-OLD-AREAS", 0, 0, false);
-        declareFunction("verify_cyc_build", "VERIFY-CYC-BUILD", 0, 0, false);
-        declareFunction("cyc_build_world", "CYC-BUILD-WORLD", 2, 0, false);
-        declareFunction("cyc_build_world_verify", "CYC-BUILD-WORLD-VERIFY", 2, 0, false);
-        declareFunction("build_write_image", "BUILD-WRITE-IMAGE", 1, 0, false);
-        declareFunction("cyc_install_directory_name", "CYC-INSTALL-DIRECTORY-NAME", 1, 1, false);
-        declareFunction("cyc_install_directory", "CYC-INSTALL-DIRECTORY", 3, 1, false);
-        declareFunction("cyc_versioned_world_name", "CYC-VERSIONED-WORLD-NAME", 0, 0, false);
-        declareFunction("build_write_image_versioned", "BUILD-WRITE-IMAGE-VERSIONED", 1, 0, false);
-        declareFunction("builder_log_directory", "BUILDER-LOG-DIRECTORY", 0, 0, false);
-        declareFunction("builder_forward_inference_metrics_log", "BUILDER-FORWARD-INFERENCE-METRICS-LOG", 0, 0, false);
-        declareFunction("catchup_to_rollover_and_write_image", "CATCHUP-TO-ROLLOVER-AND-WRITE-IMAGE", 1, 2, false);
-        declareFunction("catchup_to_rollover", "CATCHUP-TO-ROLLOVER", 0, 0, false);
-        declareFunction("catchup_to_rollover_setup", "CATCHUP-TO-ROLLOVER-SETUP", 0, 0, false);
-        declareFunction("load_submitted_transcripts_and_write_image", "LOAD-SUBMITTED-TRANSCRIPTS-AND-WRITE-IMAGE", 2, 0, false);
-        declareFunction("catchup_to_current_and_write_image_versioned", "CATCHUP-TO-CURRENT-AND-WRITE-IMAGE-VERSIONED", 1, 0, false);
-        declareFunction("catchup_to_current_and_write_image", "CATCHUP-TO-CURRENT-AND-WRITE-IMAGE", 1, 0, false);
-        declareFunction("catchup_to_current_kb", "CATCHUP-TO-CURRENT-KB", 0, 0, false);
-        declareFunction("run_post_build_tests", "RUN-POST-BUILD-TESTS", 2, 3, false);
-        declareFunction("run_post_build_working_tests", "RUN-POST-BUILD-WORKING-TESTS", 1, 0, false);
-        declareFunction("post_build_notify", "POST-BUILD-NOTIFY", 5, 0, false);
-        declareFunction("post_build_problem_subject", "POST-BUILD-PROBLEM-SUBJECT", 1, 0, false);
-        declareFunction("post_build_collate_and_email_results", "POST-BUILD-COLLATE-AND-EMAIL-RESULTS", 3, 0, false);
-        declareFunction("post_build_add_owner_summary", "POST-BUILD-ADD-OWNER-SUMMARY", 3, 0, false);
-        declareFunction("tester_catch_up_and_dump_units", "TESTER-CATCH-UP-AND-DUMP-UNITS", 0, 1, false);
-        declareFunction("run_tester_tests", "RUN-TESTER-TESTS", 0, 9, false);
-        declareFunction("run_tester_cyclops", "RUN-TESTER-CYCLOPS", 2, 0, false);
-        declareFunction("caught_up_on_operationsP", "CAUGHT-UP-ON-OPERATIONS?", 0, 1, false);
-        declareFunction("catch_up_on_operations_verbose", "CATCH-UP-ON-OPERATIONS-VERBOSE", 0, 2, false);
-        declareFunction("run_tester_tests_int", "RUN-TESTER-TESTS-INT", 4, 0, false);
-        declareFunction("post_test_collate_and_email_results", "POST-TEST-COLLATE-AND-EMAIL-RESULTS", 4, 0, false);
-        declareFunction("declare_cyc_product", "DECLARE-CYC-PRODUCT", 4, 0, false);
-        declareFunction("cyc_product_definition_presentP", "CYC-PRODUCT-DEFINITION-PRESENT?", 4, 0, false);
-        declareFunction("find_cyc_product", "FIND-CYC-PRODUCT", 3, 0, false);
-        declareFunction("cyc_product", "CYC-PRODUCT", 0, 0, false);
-        declareFunction("code_product", "CODE-PRODUCT", 0, 0, false);
-        declareFunction("kb_product", "KB-PRODUCT", 0, 0, false);
-        declareFunction("branch_tag", "BRANCH-TAG", 0, 0, false);
-        declareFunction("set_cyc_product", "SET-CYC-PRODUCT", 1, 0, false);
-        declareFunction("set_kb_product", "SET-KB-PRODUCT", 1, 0, false);
-        declareFunction("initialize_cyc_product", "INITIALIZE-CYC-PRODUCT", 0, 0, false);
-        declareFunction("detect_cyc_product", "DETECT-CYC-PRODUCT", 0, 0, false);
-        declareFunction("load_file_dependency_information", "LOAD-FILE-DEPENDENCY-INFORMATION", 1, 1, false);
-        declareFunction("augment_file_set", "AUGMENT-FILE-SET", 2, 0, false);
-        declareFunction("completely_augment_file_set", "COMPLETELY-AUGMENT-FILE-SET", 2, 0, false);
-        declareFunction("write_ant_fileset_declaration", "WRITE-ANT-FILESET-DECLARATION", 3, 1, false);
-        declareFunction("construct_rooted_file_set_from_list", "CONSTRUCT-ROOTED-FILE-SET-FROM-LIST", 1, 2, false);
-        declareFunction("root_file_set", "ROOT-FILE-SET", 1, 2, false);
-        declareFunction("unroot_file_set", "UNROOT-FILE-SET", 1, 2, false);
-        declareFunction("reroot_file_set", "REROOT-FILE-SET", 3, 1, false);
-        declareFunction("test_reroot_file_set", "TEST-REROOT-FILE-SET", 3, 1, false);
-        declareFunction("enumerate_fact_sheets_for_kb_to_file", "ENUMERATE-FACT-SHEETS-FOR-KB-TO-FILE", 1, 0, false);
-        declareFunction("enumerate_fact_sheets_for_kb", "ENUMERATE-FACT-SHEETS-FOR-KB", 0, 1, false);
-        declareFunction("fact_sheet_path_for_term_filter_and_transform", "FACT-SHEET-PATH-FOR-TERM-FILTER-AND-TRANSFORM", 1, 0, false);
-        declareFunction("specify_sbhl_caching_policy_template", "SPECIFY-SBHL-CACHING-POLICY-TEMPLATE", 3, 2, false);
-        declareFunction("generate_kb_sbhl_caching_policies", "GENERATE-KB-SBHL-CACHING-POLICIES", 2, 1, false);
-        declareFunction("generate_legacy_kb_sbhl_caching_policies", "GENERATE-LEGACY-KB-SBHL-CACHING-POLICIES", 1, 1, false);
-        declareFunction("generate_completely_cached_kb_sbhl_caching_policies", "GENERATE-COMPLETELY-CACHED-KB-SBHL-CACHING-POLICIES", 1, 1, false);
-        declareFunction("propose_kb_sbhl_caching_policies_from_tuning_data", "PROPOSE-KB-SBHL-CACHING-POLICIES-FROM-TUNING-DATA", 1, 1, false);
-        declareFunction("propose_completely_cached_kb_sbhl_caching_policies", "PROPOSE-COMPLETELY-CACHED-KB-SBHL-CACHING-POLICIES", 0, 1, false);
-        declareFunction("propose_legacy_kb_sbhl_caching_policies", "PROPOSE-LEGACY-KB-SBHL-CACHING-POLICIES", 0, 1, false);
-        declareFunction("get_all_sbhl_module_link_predicates", "GET-ALL-SBHL-MODULE-LINK-PREDICATES", 0, 0, false);
-        declareFunction("propose_all_sticky_kb_sbhl_caching_policies", "PROPOSE-ALL-STICKY-KB-SBHL-CACHING-POLICIES", 2, 0, false);
-        declareFunction("gather_data_for_sbhl_cache_tuning", "GATHER-DATA-FOR-SBHL-CACHE-TUNING", 1, 0, false);
-        declareFunction("run_sbhl_cache_tuning_data_gathering", "RUN-SBHL-CACHE-TUNING-DATA-GATHERING", 1, 0, false);
-        declareFunction("sbhl_cache_tuning_data_gathering_prologue", "SBHL-CACHE-TUNING-DATA-GATHERING-PROLOGUE", 0, 0, false);
-        declareFunction("sbhl_cache_tuning_experiment_prologue", "SBHL-CACHE-TUNING-EXPERIMENT-PROLOGUE", 0, 0, false);
-        declareFunction("sbhl_cache_tuning_experiment_epilogue", "SBHL-CACHE-TUNING-EXPERIMENT-EPILOGUE", 1, 0, false);
-        declareFunction("sbhl_cache_tuning_data_gathering_generate_report", "SBHL-CACHE-TUNING-DATA-GATHERING-GENERATE-REPORT", 2, 0, false);
-        declareFunction("sbhl_cache_tuning_data_gathering_epilogue", "SBHL-CACHE-TUNING-DATA-GATHERING-EPILOGUE", 0, 0, false);
-        declareFunction("get_kb_mini_dump_timestamp", "GET-KB-MINI-DUMP-TIMESTAMP", 0, 0, false);
-        declareFunction("prepare_kb_mini_dump", "PREPARE-KB-MINI-DUMP", 0, 0, false);
-        declareFunction("perform_kb_mini_dump", "PERFORM-KB-MINI-DUMP", 1, 0, false);
-        declareFunction("launch_asynchronous_kb_mini_dump", "LAUNCH-ASYNCHRONOUS-KB-MINI-DUMP", 1, 0, false);
-        declareFunction("mark_kb_mini_dump_as_successful", "MARK-KB-MINI-DUMP-AS-SUCCESSFUL", 1, 0, false);
-        declareFunction("select_clippable_collections", "SELECT-CLIPPABLE-COLLECTIONS", 0, 2, false);
-        declareFunction("higher_order_collectionP", "HIGHER-ORDER-COLLECTION?", 1, 0, false);
-        declareFunction("gather_tabu_collections_for_clipping", "GATHER-TABU-COLLECTIONS-FOR-CLIPPING", 1, 2, false);
-        declareFunction("clip_kb_percentage", "CLIP-KB-PERCENTAGE", 2, 1, false);
-        declareFunction("clip_kb_given_tabu_term_list", "CLIP-KB-GIVEN-TABU-TERM-LIST", 1, 0, false);
-        return NIL;
-    }
-
     public static SubLObject declare_builder_utilities_file() {
-        if (SubLFiles.USE_V1) {
-            declareFunction("close_old_areas", "CLOSE-OLD-AREAS", 0, 0, false);
-            declareFunction("verify_cyc_build", "VERIFY-CYC-BUILD", 0, 0, false);
-            declareFunction("cyc_build_world", "CYC-BUILD-WORLD", 2, 0, false);
-            declareFunction("cyc_build_world_verify", "CYC-BUILD-WORLD-VERIFY", 2, 0, false);
-            declareFunction("build_write_image", "BUILD-WRITE-IMAGE", 1, 0, false);
-            declareFunction("cyc_install_directory_name", "CYC-INSTALL-DIRECTORY-NAME", 1, 1, false);
-            declareFunction("cyc_install_directory", "CYC-INSTALL-DIRECTORY", 3, 1, false);
-            declareFunction("cyc_versioned_world_name", "CYC-VERSIONED-WORLD-NAME", 0, 0, false);
-            declareFunction("build_write_image_versioned", "BUILD-WRITE-IMAGE-VERSIONED", 1, 0, false);
-            declareFunction("cyc_load_kb", "CYC-LOAD-KB", 1, 0, false);
-            declareFunction("cyc_load_incremental_kb", "CYC-LOAD-INCREMENTAL-KB", 1, 0, false);
-            declareFunction("cyc_dump_standard_kb", "CYC-DUMP-STANDARD-KB", 1, 0, false);
-            declareFunction("cyc_snapshot_kb", "CYC-SNAPSHOT-KB", 1, 1, false);
-            declareFunction("cyc_dump_snapshot_kb", "CYC-DUMP-SNAPSHOT-KB", 1, 1, false);
-            declareFunction("suggest_kb_snapshot_directory", "SUGGEST-KB-SNAPSHOT-DIRECTORY", 1, 0, false);
-            declareFunction("builder_catchup_and_dump_pipeline", "BUILDER-CATCHUP-AND-DUMP-PIPELINE", 3, 3, false);
-            declareFunction("builder_log_directory", "BUILDER-LOG-DIRECTORY", 0, 0, false);
-            declareFunction("builder_forward_inference_metrics_log", "BUILDER-FORWARD-INFERENCE-METRICS-LOG", 0, 0, false);
-            declareFunction("catchup_to_rollover_and_write_image", "CATCHUP-TO-ROLLOVER-AND-WRITE-IMAGE", 1, 2, false);
-            declareFunction("catchup_to_rollover", "CATCHUP-TO-ROLLOVER", 0, 0, false);
-            declareFunction("catchup_to_rollover_setup", "CATCHUP-TO-ROLLOVER-SETUP", 0, 0, false);
-            declareFunction("load_submitted_transcripts_and_write_image", "LOAD-SUBMITTED-TRANSCRIPTS-AND-WRITE-IMAGE", 2, 0, false);
-            declareFunction("catchup_to_current_and_write_image_versioned", "CATCHUP-TO-CURRENT-AND-WRITE-IMAGE-VERSIONED", 1, 0, false);
-            declareFunction("catchup_to_current_and_write_image", "CATCHUP-TO-CURRENT-AND-WRITE-IMAGE", 1, 0, false);
-            declareFunction("catchup_to_current_kb", "CATCHUP-TO-CURRENT-KB", 0, 0, false);
-            declareFunction("caught_up_on_operationsP", "CAUGHT-UP-ON-OPERATIONS?", 0, 1, false);
-            declareFunction("catch_up_on_operations_verbose", "CATCH-UP-ON-OPERATIONS-VERBOSE", 0, 3, false);
-            declareFunction("catch_up_on_operations_very_verbosely", "CATCH-UP-ON-OPERATIONS-VERY-VERBOSELY", 0, 3, false);
-            declareFunction("run_baseline_tests", "RUN-BASELINE-TESTS", 0, 0, false);
-            declareFunction("baseline_results_to_map", "BASELINE-RESULTS-TO-MAP", 1, 0, false);
-            declareFunction("compute_baseline_regressions", "COMPUTE-BASELINE-REGRESSIONS", 2, 0, false);
-            declareFunction("show_baseline_regression_info", "SHOW-BASELINE-REGRESSION-INFO", 1, 1, false);
-            declareFunction("show_baseline_regression_details", "SHOW-BASELINE-REGRESSION-DETAILS", 1, 2, false);
-            declareFunction("declare_cyc_product", "DECLARE-CYC-PRODUCT", 4, 0, false);
-            declareFunction("cyc_product_definition_presentP", "CYC-PRODUCT-DEFINITION-PRESENT?", 4, 0, false);
-            declareFunction("find_cyc_product", "FIND-CYC-PRODUCT", 3, 0, false);
-            declareFunction("cyc_product", "CYC-PRODUCT", 0, 0, false);
-            declareFunction("code_product", "CODE-PRODUCT", 0, 0, false);
-            declareFunction("kb_product", "KB-PRODUCT", 0, 0, false);
-            declareFunction("branch_tag", "BRANCH-TAG", 0, 0, false);
-            declareFunction("set_cyc_product", "SET-CYC-PRODUCT", 1, 0, false);
-            declareFunction("set_kb_product", "SET-KB-PRODUCT", 1, 0, false);
-            declareFunction("initialize_cyc_product", "INITIALIZE-CYC-PRODUCT", 0, 0, false);
-            declareFunction("detect_cyc_product", "DETECT-CYC-PRODUCT", 0, 0, false);
-            declareFunction("load_file_dependency_information", "LOAD-FILE-DEPENDENCY-INFORMATION", 1, 1, false);
-            declareFunction("augment_file_set", "AUGMENT-FILE-SET", 2, 0, false);
-            declareFunction("completely_augment_file_set", "COMPLETELY-AUGMENT-FILE-SET", 2, 0, false);
-            declareFunction("write_ant_fileset_declaration", "WRITE-ANT-FILESET-DECLARATION", 3, 1, false);
-            declareFunction("construct_rooted_file_set_from_list", "CONSTRUCT-ROOTED-FILE-SET-FROM-LIST", 1, 2, false);
-            declareFunction("root_file_set", "ROOT-FILE-SET", 1, 2, false);
-            declareFunction("unroot_file_set", "UNROOT-FILE-SET", 1, 2, false);
-            declareFunction("reroot_file_set", "REROOT-FILE-SET", 3, 1, false);
-            declareFunction("test_reroot_file_set", "TEST-REROOT-FILE-SET", 3, 1, false);
-            declareFunction("serialize_kb_store_lru_information", "SERIALIZE-KB-STORE-LRU-INFORMATION", 1, 0, false);
-            declareFunction("precache_kb_store_by_lru_information", "PRECACHE-KB-STORE-BY-LRU-INFORMATION", 1, 0, false);
-            declareFunction("set_kb_store_lru_settings", "SET-KB-STORE-LRU-SETTINGS", 0, 2, false);
-            declareFunction("set_kb_store_lru_swap_level", "SET-KB-STORE-LRU-SWAP-LEVEL", 0, 1, false);
-            declareFunction("enumerate_fact_sheets_for_kb_to_file", "ENUMERATE-FACT-SHEETS-FOR-KB-TO-FILE", 1, 0, false);
-            declareFunction("enumerate_fact_sheets_for_kb", "ENUMERATE-FACT-SHEETS-FOR-KB", 0, 1, false);
-            declareFunction("fact_sheet_path_for_term_filter_and_transform", "FACT-SHEET-PATH-FOR-TERM-FILTER-AND-TRANSFORM", 1, 0, false);
-            declareFunction("specify_sbhl_caching_policy_template", "SPECIFY-SBHL-CACHING-POLICY-TEMPLATE", 3, 2, false);
-            declareFunction("generate_kb_sbhl_caching_policies", "GENERATE-KB-SBHL-CACHING-POLICIES", 2, 1, false);
-            declareFunction("generate_legacy_kb_sbhl_caching_policies", "GENERATE-LEGACY-KB-SBHL-CACHING-POLICIES", 1, 1, false);
-            declareFunction("generate_completely_cached_kb_sbhl_caching_policies", "GENERATE-COMPLETELY-CACHED-KB-SBHL-CACHING-POLICIES", 1, 1, false);
-            declareFunction("propose_kb_sbhl_caching_policies_from_tuning_data", "PROPOSE-KB-SBHL-CACHING-POLICIES-FROM-TUNING-DATA", 1, 1, false);
-            declareFunction("propose_completely_cached_kb_sbhl_caching_policies", "PROPOSE-COMPLETELY-CACHED-KB-SBHL-CACHING-POLICIES", 0, 1, false);
-            declareFunction("propose_legacy_kb_sbhl_caching_policies", "PROPOSE-LEGACY-KB-SBHL-CACHING-POLICIES", 0, 1, false);
-            declareFunction("get_all_sbhl_module_link_predicates", "GET-ALL-SBHL-MODULE-LINK-PREDICATES", 0, 0, false);
-            declareFunction("propose_all_sticky_kb_sbhl_caching_policies", "PROPOSE-ALL-STICKY-KB-SBHL-CACHING-POLICIES", 2, 0, false);
-            declareFunction("start_recording_sbhl_cache_tuning_data", "START-RECORDING-SBHL-CACHE-TUNING-DATA", 0, 0, false);
-            declareFunction("stop_recording_sbhl_cache_tuning_data", "STOP-RECORDING-SBHL-CACHE-TUNING-DATA", 1, 0, false);
-            declareFunction("gather_data_for_sbhl_cache_tuning", "GATHER-DATA-FOR-SBHL-CACHE-TUNING", 1, 0, false);
-            declareFunction("run_sbhl_cache_tuning_data_gathering", "RUN-SBHL-CACHE-TUNING-DATA-GATHERING", 1, 0, false);
-            declareFunction("sbhl_cache_tuning_data_gathering_prologue", "SBHL-CACHE-TUNING-DATA-GATHERING-PROLOGUE", 0, 0, false);
-            declareFunction("sbhl_cache_tuning_experiment_prologue", "SBHL-CACHE-TUNING-EXPERIMENT-PROLOGUE", 0, 0, false);
-            declareFunction("sbhl_cache_tuning_experiment_epilogue", "SBHL-CACHE-TUNING-EXPERIMENT-EPILOGUE", 1, 0, false);
-            declareFunction("sbhl_cache_tuning_data_gathering_generate_report", "SBHL-CACHE-TUNING-DATA-GATHERING-GENERATE-REPORT", 2, 0, false);
-            declareFunction("sbhl_cache_tuning_data_gathering_epilogue", "SBHL-CACHE-TUNING-DATA-GATHERING-EPILOGUE", 0, 0, false);
-            declareFunction("compile_kb_snapshot_statistics", "COMPILE-KB-SNAPSHOT-STATISTICS", 0, 1, false);
-            declareFunction("gather_kb_snapshot_statistics", "GATHER-KB-SNAPSHOT-STATISTICS", 1, 1, false);
-            declareFunction("gather_one_kb_snapshot_statistic", "GATHER-ONE-KB-SNAPSHOT-STATISTIC", 4, 0, false);
-            declareFunction("track_kb_snapshot_statistics", "TRACK-KB-SNAPSHOT-STATISTICS", 1, 1, false);
-            declareFunction("get_kb_mini_dump_timestamp", "GET-KB-MINI-DUMP-TIMESTAMP", 0, 0, false);
-            declareFunction("prepare_kb_mini_dump", "PREPARE-KB-MINI-DUMP", 0, 0, false);
-            declareFunction("perform_kb_mini_dump", "PERFORM-KB-MINI-DUMP", 1, 0, false);
-            declareFunction("launch_asynchronous_kb_mini_dump", "LAUNCH-ASYNCHRONOUS-KB-MINI-DUMP", 1, 0, false);
-            declareFunction("mark_kb_mini_dump_as_successful", "MARK-KB-MINI-DUMP-AS-SUCCESSFUL", 1, 0, false);
-            declareFunction("build_process_worker_count", "BUILD-PROCESS-WORKER-COUNT", 0, 0, false);
-            declareFunction("set_build_process_worker_count", "SET-BUILD-PROCESS-WORKER-COUNT", 1, 0, false);
-            declareFunction("build_process_parallelism_permittedP", "BUILD-PROCESS-PARALLELISM-PERMITTED?", 0, 0, false);
-            declareMacro("with_allowed_obfuscation_namespace_support", "WITH-ALLOWED-OBFUSCATION-NAMESPACE-SUPPORT");
-            declareMacro("with_allowed_obfuscation_namespace", "WITH-ALLOWED-OBFUSCATION-NAMESPACE");
-            declareFunction("allowed_obfuscation_namespace_constantP", "ALLOWED-OBFUSCATION-NAMESPACE-CONSTANT?", 1, 0, false);
-            declareFunction("un_obfuscatable_constantP", "UN-OBFUSCATABLE-CONSTANT?", 1, 0, false);
-            declareMacro("with_constant_obfuscation", "WITH-CONSTANT-OBFUSCATION");
-            declareFunction("obfuscate_constant_name_via_generator_fn", "OBFUSCATE-CONSTANT-NAME-VIA-GENERATOR-FN", 1, 0, false);
-            declareFunction("obfuscate_constant_name_via_generator_function", "OBFUSCATE-CONSTANT-NAME-VIA-GENERATOR-FUNCTION", 3, 0, false);
-            declareFunction("new_constant_obfuscation_cache", "NEW-CONSTANT-OBFUSCATION-CACHE", 0, 0, false);
-            declareMacro("with_cached_constant_obfuscation", "WITH-CACHED-CONSTANT-OBFUSCATION");
-            declareFunction("make_obfuscation_gensym_state", "MAKE-OBFUSCATION-GENSYM-STATE", 0, 2, false);
-            declareFunction("obfuscate_constant_name_gensym", "OBFUSCATE-CONSTANT-NAME-GENSYM", 2, 0, false);
-            declareFunction("obfuscate_and_dump_essential_kb", "OBFUSCATE-AND-DUMP-ESSENTIAL-KB", 4, 1, false);
-            declareFunction("determine_obfuscation_candidates", "DETERMINE-OBFUSCATION-CANDIDATES", 0, 1, false);
-            declareFunction("not_term_of_unit_assertionP", "NOT-TERM-OF-UNIT-ASSERTION?", 1, 0, false);
-            declareFunction("determine_assertion_obfuscations", "DETERMINE-ASSERTION-OBFUSCATIONS", 2, 1, false);
-            declareFunction("determine_nart_obfuscations", "DETERMINE-NART-OBFUSCATIONS", 2, 1, false);
-            declareFunction("apply_assertion_obfuscations", "APPLY-ASSERTION-OBFUSCATIONS", 1, 1, false);
-            declareFunction("weakly_scramble_string_in_assertions", "WEAKLY-SCRAMBLE-STRING-IN-ASSERTIONS", 2, 0, false);
-            declareFunction("weakly_scramble_string_in_nauts", "WEAKLY-SCRAMBLE-STRING-IN-NAUTS", 2, 0, false);
-            declareFunction("mix_case_string", "MIX-CASE-STRING", 1, 0, false);
-            declareFunction("select_clippable_collections", "SELECT-CLIPPABLE-COLLECTIONS", 0, 2, false);
-            declareFunction("higher_order_collectionP", "HIGHER-ORDER-COLLECTION?", 1, 0, false);
-            declareFunction("gather_tabu_collections_for_clipping", "GATHER-TABU-COLLECTIONS-FOR-CLIPPING", 1, 2, false);
-            declareFunction("clip_kb_percentage", "CLIP-KB-PERCENTAGE", 2, 1, false);
-            declareFunction("clip_kb_given_tabu_term_list", "CLIP-KB-GIVEN-TABU-TERM-LIST", 1, 0, false);
-            declareFunction("generate_terms_transcript", "GENERATE-TERMS-TRANSCRIPT", 2, 0, false);
-        }
-        if (SubLFiles.USE_V2) {
-            declareFunction("run_post_build_tests", "RUN-POST-BUILD-TESTS", 2, 3, false);
-            declareFunction("run_post_build_working_tests", "RUN-POST-BUILD-WORKING-TESTS", 1, 0, false);
-            declareFunction("post_build_notify", "POST-BUILD-NOTIFY", 5, 0, false);
-            declareFunction("post_build_problem_subject", "POST-BUILD-PROBLEM-SUBJECT", 1, 0, false);
-            declareFunction("post_build_collate_and_email_results", "POST-BUILD-COLLATE-AND-EMAIL-RESULTS", 3, 0, false);
-            declareFunction("post_build_add_owner_summary", "POST-BUILD-ADD-OWNER-SUMMARY", 3, 0, false);
-            declareFunction("tester_catch_up_and_dump_units", "TESTER-CATCH-UP-AND-DUMP-UNITS", 0, 1, false);
-            declareFunction("run_tester_tests", "RUN-TESTER-TESTS", 0, 9, false);
-            declareFunction("run_tester_cyclops", "RUN-TESTER-CYCLOPS", 2, 0, false);
-            declareFunction("catch_up_on_operations_verbose", "CATCH-UP-ON-OPERATIONS-VERBOSE", 0, 2, false);
-            declareFunction("run_tester_tests_int", "RUN-TESTER-TESTS-INT", 4, 0, false);
-            declareFunction("post_test_collate_and_email_results", "POST-TEST-COLLATE-AND-EMAIL-RESULTS", 4, 0, false);
-        }
-        return NIL;
-    }
-
-    public static SubLObject declare_builder_utilities_file_Previous() {
-        declareFunction("close_old_areas", "CLOSE-OLD-AREAS", 0, 0, false);
-        declareFunction("verify_cyc_build", "VERIFY-CYC-BUILD", 0, 0, false);
-        declareFunction("cyc_build_world", "CYC-BUILD-WORLD", 2, 0, false);
-        declareFunction("cyc_build_world_verify", "CYC-BUILD-WORLD-VERIFY", 2, 0, false);
-        declareFunction("build_write_image", "BUILD-WRITE-IMAGE", 1, 0, false);
-        declareFunction("cyc_install_directory_name", "CYC-INSTALL-DIRECTORY-NAME", 1, 1, false);
-        declareFunction("cyc_install_directory", "CYC-INSTALL-DIRECTORY", 3, 1, false);
-        declareFunction("cyc_versioned_world_name", "CYC-VERSIONED-WORLD-NAME", 0, 0, false);
-        declareFunction("build_write_image_versioned", "BUILD-WRITE-IMAGE-VERSIONED", 1, 0, false);
-        declareFunction("cyc_load_kb", "CYC-LOAD-KB", 1, 0, false);
-        declareFunction("cyc_load_incremental_kb", "CYC-LOAD-INCREMENTAL-KB", 1, 0, false);
-        declareFunction("cyc_dump_standard_kb", "CYC-DUMP-STANDARD-KB", 1, 0, false);
-        declareFunction("cyc_snapshot_kb", "CYC-SNAPSHOT-KB", 1, 1, false);
-        declareFunction("cyc_dump_snapshot_kb", "CYC-DUMP-SNAPSHOT-KB", 1, 1, false);
-        declareFunction("suggest_kb_snapshot_directory", "SUGGEST-KB-SNAPSHOT-DIRECTORY", 1, 0, false);
-        declareFunction("builder_catchup_and_dump_pipeline", "BUILDER-CATCHUP-AND-DUMP-PIPELINE", 3, 3, false);
-        declareFunction("builder_log_directory", "BUILDER-LOG-DIRECTORY", 0, 0, false);
-        declareFunction("builder_forward_inference_metrics_log", "BUILDER-FORWARD-INFERENCE-METRICS-LOG", 0, 0, false);
-        declareFunction("catchup_to_rollover_and_write_image", "CATCHUP-TO-ROLLOVER-AND-WRITE-IMAGE", 1, 2, false);
-        declareFunction("catchup_to_rollover", "CATCHUP-TO-ROLLOVER", 0, 0, false);
-        declareFunction("catchup_to_rollover_setup", "CATCHUP-TO-ROLLOVER-SETUP", 0, 0, false);
-        declareFunction("load_submitted_transcripts_and_write_image", "LOAD-SUBMITTED-TRANSCRIPTS-AND-WRITE-IMAGE", 2, 0, false);
-        declareFunction("catchup_to_current_and_write_image_versioned", "CATCHUP-TO-CURRENT-AND-WRITE-IMAGE-VERSIONED", 1, 0, false);
-        declareFunction("catchup_to_current_and_write_image", "CATCHUP-TO-CURRENT-AND-WRITE-IMAGE", 1, 0, false);
-        declareFunction("catchup_to_current_kb", "CATCHUP-TO-CURRENT-KB", 0, 0, false);
-        declareFunction("caught_up_on_operationsP", "CAUGHT-UP-ON-OPERATIONS?", 0, 1, false);
-        declareFunction("catch_up_on_operations_verbose", "CATCH-UP-ON-OPERATIONS-VERBOSE", 0, 3, false);
-        declareFunction("catch_up_on_operations_very_verbosely", "CATCH-UP-ON-OPERATIONS-VERY-VERBOSELY", 0, 3, false);
-        declareFunction("run_baseline_tests", "RUN-BASELINE-TESTS", 0, 0, false);
-        declareFunction("baseline_results_to_map", "BASELINE-RESULTS-TO-MAP", 1, 0, false);
-        declareFunction("compute_baseline_regressions", "COMPUTE-BASELINE-REGRESSIONS", 2, 0, false);
-        declareFunction("show_baseline_regression_info", "SHOW-BASELINE-REGRESSION-INFO", 1, 1, false);
-        declareFunction("show_baseline_regression_details", "SHOW-BASELINE-REGRESSION-DETAILS", 1, 2, false);
-        declareFunction("declare_cyc_product", "DECLARE-CYC-PRODUCT", 4, 0, false);
-        declareFunction("cyc_product_definition_presentP", "CYC-PRODUCT-DEFINITION-PRESENT?", 4, 0, false);
-        declareFunction("find_cyc_product", "FIND-CYC-PRODUCT", 3, 0, false);
-        declareFunction("cyc_product", "CYC-PRODUCT", 0, 0, false);
-        declareFunction("code_product", "CODE-PRODUCT", 0, 0, false);
-        declareFunction("kb_product", "KB-PRODUCT", 0, 0, false);
-        declareFunction("branch_tag", "BRANCH-TAG", 0, 0, false);
-        declareFunction("set_cyc_product", "SET-CYC-PRODUCT", 1, 0, false);
-        declareFunction("set_kb_product", "SET-KB-PRODUCT", 1, 0, false);
-        declareFunction("initialize_cyc_product", "INITIALIZE-CYC-PRODUCT", 0, 0, false);
-        declareFunction("detect_cyc_product", "DETECT-CYC-PRODUCT", 0, 0, false);
-        declareFunction("load_file_dependency_information", "LOAD-FILE-DEPENDENCY-INFORMATION", 1, 1, false);
-        declareFunction("augment_file_set", "AUGMENT-FILE-SET", 2, 0, false);
-        declareFunction("completely_augment_file_set", "COMPLETELY-AUGMENT-FILE-SET", 2, 0, false);
-        declareFunction("write_ant_fileset_declaration", "WRITE-ANT-FILESET-DECLARATION", 3, 1, false);
-        declareFunction("construct_rooted_file_set_from_list", "CONSTRUCT-ROOTED-FILE-SET-FROM-LIST", 1, 2, false);
-        declareFunction("root_file_set", "ROOT-FILE-SET", 1, 2, false);
-        declareFunction("unroot_file_set", "UNROOT-FILE-SET", 1, 2, false);
-        declareFunction("reroot_file_set", "REROOT-FILE-SET", 3, 1, false);
-        declareFunction("test_reroot_file_set", "TEST-REROOT-FILE-SET", 3, 1, false);
-        declareFunction("serialize_kb_store_lru_information", "SERIALIZE-KB-STORE-LRU-INFORMATION", 1, 0, false);
-        declareFunction("precache_kb_store_by_lru_information", "PRECACHE-KB-STORE-BY-LRU-INFORMATION", 1, 0, false);
-        declareFunction("set_kb_store_lru_settings", "SET-KB-STORE-LRU-SETTINGS", 0, 2, false);
-        declareFunction("set_kb_store_lru_swap_level", "SET-KB-STORE-LRU-SWAP-LEVEL", 0, 1, false);
-        declareFunction("enumerate_fact_sheets_for_kb_to_file", "ENUMERATE-FACT-SHEETS-FOR-KB-TO-FILE", 1, 0, false);
-        declareFunction("enumerate_fact_sheets_for_kb", "ENUMERATE-FACT-SHEETS-FOR-KB", 0, 1, false);
-        declareFunction("fact_sheet_path_for_term_filter_and_transform", "FACT-SHEET-PATH-FOR-TERM-FILTER-AND-TRANSFORM", 1, 0, false);
-        declareFunction("specify_sbhl_caching_policy_template", "SPECIFY-SBHL-CACHING-POLICY-TEMPLATE", 3, 2, false);
-        declareFunction("generate_kb_sbhl_caching_policies", "GENERATE-KB-SBHL-CACHING-POLICIES", 2, 1, false);
-        declareFunction("generate_legacy_kb_sbhl_caching_policies", "GENERATE-LEGACY-KB-SBHL-CACHING-POLICIES", 1, 1, false);
-        declareFunction("generate_completely_cached_kb_sbhl_caching_policies", "GENERATE-COMPLETELY-CACHED-KB-SBHL-CACHING-POLICIES", 1, 1, false);
-        declareFunction("propose_kb_sbhl_caching_policies_from_tuning_data", "PROPOSE-KB-SBHL-CACHING-POLICIES-FROM-TUNING-DATA", 1, 1, false);
-        declareFunction("propose_completely_cached_kb_sbhl_caching_policies", "PROPOSE-COMPLETELY-CACHED-KB-SBHL-CACHING-POLICIES", 0, 1, false);
-        declareFunction("propose_legacy_kb_sbhl_caching_policies", "PROPOSE-LEGACY-KB-SBHL-CACHING-POLICIES", 0, 1, false);
-        declareFunction("get_all_sbhl_module_link_predicates", "GET-ALL-SBHL-MODULE-LINK-PREDICATES", 0, 0, false);
-        declareFunction("propose_all_sticky_kb_sbhl_caching_policies", "PROPOSE-ALL-STICKY-KB-SBHL-CACHING-POLICIES", 2, 0, false);
-        declareFunction("start_recording_sbhl_cache_tuning_data", "START-RECORDING-SBHL-CACHE-TUNING-DATA", 0, 0, false);
-        declareFunction("stop_recording_sbhl_cache_tuning_data", "STOP-RECORDING-SBHL-CACHE-TUNING-DATA", 1, 0, false);
-        declareFunction("gather_data_for_sbhl_cache_tuning", "GATHER-DATA-FOR-SBHL-CACHE-TUNING", 1, 0, false);
-        declareFunction("run_sbhl_cache_tuning_data_gathering", "RUN-SBHL-CACHE-TUNING-DATA-GATHERING", 1, 0, false);
-        declareFunction("sbhl_cache_tuning_data_gathering_prologue", "SBHL-CACHE-TUNING-DATA-GATHERING-PROLOGUE", 0, 0, false);
-        declareFunction("sbhl_cache_tuning_experiment_prologue", "SBHL-CACHE-TUNING-EXPERIMENT-PROLOGUE", 0, 0, false);
-        declareFunction("sbhl_cache_tuning_experiment_epilogue", "SBHL-CACHE-TUNING-EXPERIMENT-EPILOGUE", 1, 0, false);
-        declareFunction("sbhl_cache_tuning_data_gathering_generate_report", "SBHL-CACHE-TUNING-DATA-GATHERING-GENERATE-REPORT", 2, 0, false);
-        declareFunction("sbhl_cache_tuning_data_gathering_epilogue", "SBHL-CACHE-TUNING-DATA-GATHERING-EPILOGUE", 0, 0, false);
-        declareFunction("compile_kb_snapshot_statistics", "COMPILE-KB-SNAPSHOT-STATISTICS", 0, 1, false);
-        declareFunction("gather_kb_snapshot_statistics", "GATHER-KB-SNAPSHOT-STATISTICS", 1, 1, false);
-        declareFunction("gather_one_kb_snapshot_statistic", "GATHER-ONE-KB-SNAPSHOT-STATISTIC", 4, 0, false);
-        declareFunction("track_kb_snapshot_statistics", "TRACK-KB-SNAPSHOT-STATISTICS", 1, 1, false);
-        declareFunction("get_kb_mini_dump_timestamp", "GET-KB-MINI-DUMP-TIMESTAMP", 0, 0, false);
-        declareFunction("prepare_kb_mini_dump", "PREPARE-KB-MINI-DUMP", 0, 0, false);
-        declareFunction("perform_kb_mini_dump", "PERFORM-KB-MINI-DUMP", 1, 0, false);
-        declareFunction("launch_asynchronous_kb_mini_dump", "LAUNCH-ASYNCHRONOUS-KB-MINI-DUMP", 1, 0, false);
-        declareFunction("mark_kb_mini_dump_as_successful", "MARK-KB-MINI-DUMP-AS-SUCCESSFUL", 1, 0, false);
-        declareFunction("build_process_worker_count", "BUILD-PROCESS-WORKER-COUNT", 0, 0, false);
-        declareFunction("set_build_process_worker_count", "SET-BUILD-PROCESS-WORKER-COUNT", 1, 0, false);
-        declareFunction("build_process_parallelism_permittedP", "BUILD-PROCESS-PARALLELISM-PERMITTED?", 0, 0, false);
-        declareMacro("with_allowed_obfuscation_namespace_support", "WITH-ALLOWED-OBFUSCATION-NAMESPACE-SUPPORT");
-        declareMacro("with_allowed_obfuscation_namespace", "WITH-ALLOWED-OBFUSCATION-NAMESPACE");
-        declareFunction("allowed_obfuscation_namespace_constantP", "ALLOWED-OBFUSCATION-NAMESPACE-CONSTANT?", 1, 0, false);
-        declareFunction("un_obfuscatable_constantP", "UN-OBFUSCATABLE-CONSTANT?", 1, 0, false);
-        declareMacro("with_constant_obfuscation", "WITH-CONSTANT-OBFUSCATION");
-        declareFunction("obfuscate_constant_name_via_generator_fn", "OBFUSCATE-CONSTANT-NAME-VIA-GENERATOR-FN", 1, 0, false);
-        declareFunction("obfuscate_constant_name_via_generator_function", "OBFUSCATE-CONSTANT-NAME-VIA-GENERATOR-FUNCTION", 3, 0, false);
-        declareFunction("new_constant_obfuscation_cache", "NEW-CONSTANT-OBFUSCATION-CACHE", 0, 0, false);
-        declareMacro("with_cached_constant_obfuscation", "WITH-CACHED-CONSTANT-OBFUSCATION");
-        declareFunction("make_obfuscation_gensym_state", "MAKE-OBFUSCATION-GENSYM-STATE", 0, 2, false);
-        declareFunction("obfuscate_constant_name_gensym", "OBFUSCATE-CONSTANT-NAME-GENSYM", 2, 0, false);
-        declareFunction("obfuscate_and_dump_essential_kb", "OBFUSCATE-AND-DUMP-ESSENTIAL-KB", 4, 1, false);
-        declareFunction("determine_obfuscation_candidates", "DETERMINE-OBFUSCATION-CANDIDATES", 0, 1, false);
-        declareFunction("not_term_of_unit_assertionP", "NOT-TERM-OF-UNIT-ASSERTION?", 1, 0, false);
-        declareFunction("determine_assertion_obfuscations", "DETERMINE-ASSERTION-OBFUSCATIONS", 2, 1, false);
-        declareFunction("determine_nart_obfuscations", "DETERMINE-NART-OBFUSCATIONS", 2, 1, false);
-        declareFunction("apply_assertion_obfuscations", "APPLY-ASSERTION-OBFUSCATIONS", 1, 1, false);
-        declareFunction("weakly_scramble_string_in_assertions", "WEAKLY-SCRAMBLE-STRING-IN-ASSERTIONS", 2, 0, false);
-        declareFunction("weakly_scramble_string_in_nauts", "WEAKLY-SCRAMBLE-STRING-IN-NAUTS", 2, 0, false);
-        declareFunction("mix_case_string", "MIX-CASE-STRING", 1, 0, false);
-        declareFunction("select_clippable_collections", "SELECT-CLIPPABLE-COLLECTIONS", 0, 2, false);
-        declareFunction("higher_order_collectionP", "HIGHER-ORDER-COLLECTION?", 1, 0, false);
-        declareFunction("gather_tabu_collections_for_clipping", "GATHER-TABU-COLLECTIONS-FOR-CLIPPING", 1, 2, false);
-        declareFunction("clip_kb_percentage", "CLIP-KB-PERCENTAGE", 2, 1, false);
-        declareFunction("clip_kb_given_tabu_term_list", "CLIP-KB-GIVEN-TABU-TERM-LIST", 1, 0, false);
-        declareFunction("generate_terms_transcript", "GENERATE-TERMS-TRANSCRIPT", 2, 0, false);
-        return NIL;
-    }
-
-    public static final SubLObject init_builder_utilities_file_alt() {
-        defparameter("*IR-TEST-OWNER*", $$$karen);
-        defparameter("*POST-BUILD-VERBOSE*", T);
-        defparameter("*POST-BUILD-SUPPRESS-NOTIFY*", NIL);
-        defparameter("*POST-BUILD-OUTPUT-STREAM*", NIL);
-        defparameter("*ALL-CYC-PRODUCTS*", NIL);
-        defparameter("*CYC-PRODUCT-DEFINITIONS*", NIL);
-        deflexical("*CYC-PRODUCT*", NIL != boundp($cyc_product$) ? ((SubLObject) ($cyc_product$.getGlobalValue())) : NIL);
-        defconstant("*CODE-PRODUCT*", $STANDARD);
-        deflexical("*KB-PRODUCT*", NIL != boundp($kb_product$) ? ((SubLObject) ($kb_product$.getGlobalValue())) : NIL);
-        defconstant("*BRANCH-TAG*", $$$head);
-        defparameter("*GENERIC-SBHL-CACHING-POLICY-TEMPLATES*", list(new SubLObject[]{ com.cyc.cycjava.cycl.builder_utilities.specify_sbhl_caching_policy_template($DEFAULT, $STICKY, $UNDEFINED, $ALL, UNPROVIDED), com.cyc.cycjava.cycl.builder_utilities.specify_sbhl_caching_policy_template($$genlMt, $STICKY, $UNDEFINED, $ALL, $ALL), com.cyc.cycjava.cycl.builder_utilities.specify_sbhl_caching_policy_template($$genlPreds, $SWAPOUT, $int$500, $int$500, $int$200), com.cyc.cycjava.cycl.builder_utilities.specify_sbhl_caching_policy_template($$negationPreds, $SWAPOUT, $int$500, $int$100, ZERO_INTEGER), com.cyc.cycjava.cycl.builder_utilities.specify_sbhl_caching_policy_template($$disjointWith, $SWAPOUT, $int$500, $int$500, $int$200), com.cyc.cycjava.cycl.builder_utilities.specify_sbhl_caching_policy_template($$genlInverse, $SWAPOUT, $int$500, $int$500, $int$200), com.cyc.cycjava.cycl.builder_utilities.specify_sbhl_caching_policy_template($$negationInverse, $SWAPOUT, $int$500, $int$100, ZERO_INTEGER), com.cyc.cycjava.cycl.builder_utilities.specify_sbhl_caching_policy_template($$genls, $SWAPOUT, $int$5000, $int$5000, $int$2000), com.cyc.cycjava.cycl.builder_utilities.specify_sbhl_caching_policy_template($$isa, $SWAPOUT, $int$10000, $int$8000, $int$2000), com.cyc.cycjava.cycl.builder_utilities.specify_sbhl_caching_policy_template($$quotedIsa, $SWAPOUT, $int$5000, $int$4000, $int$1000) }));
-        defparameter("*CYC-TESTS-TO-USE-FOR-SBHL-CACHE-TUNING*", NIL);
-        defparameter("*KB-QUERIES-TO-USE-FOR-SBHL-CACHE-TUNING*", NIL);
-        defparameter("*RUN-CYCLOPS-FOR-SBHL-CACHE-TUNING?*", NIL);
+        declareFunction(me, "close_old_areas", "CLOSE-OLD-AREAS", 0, 0, false);
+        declareFunction(me, "verify_cyc_build", "VERIFY-CYC-BUILD", 0, 0, false);
+        declareFunction(me, "cyc_build_world", "CYC-BUILD-WORLD", 2, 0, false);
+        declareFunction(me, "cyc_build_world_verify", "CYC-BUILD-WORLD-VERIFY", 2, 0, false);
+        declareFunction(me, "build_write_image", "BUILD-WRITE-IMAGE", 1, 0, false);
+        declareFunction(me, "cyc_install_directory_name", "CYC-INSTALL-DIRECTORY-NAME", 1, 1, false);
+        declareFunction(me, "cyc_install_directory", "CYC-INSTALL-DIRECTORY", 3, 1, false);
+        declareFunction(me, "cyc_versioned_world_name", "CYC-VERSIONED-WORLD-NAME", 0, 0, false);
+        declareFunction(me, "build_write_image_versioned", "BUILD-WRITE-IMAGE-VERSIONED", 1, 0, false);
+        declareFunction(me, "cyc_load_kb", "CYC-LOAD-KB", 1, 0, false);
+        declareFunction(me, "cyc_load_incremental_kb", "CYC-LOAD-INCREMENTAL-KB", 1, 0, false);
+        declareFunction(me, "cyc_dump_standard_kb", "CYC-DUMP-STANDARD-KB", 1, 0, false);
+        declareFunction(me, "cyc_snapshot_kb", "CYC-SNAPSHOT-KB", 1, 1, false);
+        declareFunction(me, "cyc_dump_snapshot_kb", "CYC-DUMP-SNAPSHOT-KB", 1, 1, false);
+        declareFunction(me, "suggest_kb_snapshot_directory", "SUGGEST-KB-SNAPSHOT-DIRECTORY", 1, 0, false);
+        declareFunction(me, "builder_catchup_and_dump_pipeline", "BUILDER-CATCHUP-AND-DUMP-PIPELINE", 3, 3, false);
+        declareFunction(me, "builder_log_directory", "BUILDER-LOG-DIRECTORY", 0, 0, false);
+        declareFunction(me, "builder_forward_inference_metrics_log", "BUILDER-FORWARD-INFERENCE-METRICS-LOG", 0, 0, false);
+        declareFunction(me, "catchup_to_rollover_and_write_image", "CATCHUP-TO-ROLLOVER-AND-WRITE-IMAGE", 1, 2, false);
+        declareFunction(me, "catchup_to_rollover", "CATCHUP-TO-ROLLOVER", 0, 0, false);
+        declareFunction(me, "catchup_to_rollover_setup", "CATCHUP-TO-ROLLOVER-SETUP", 0, 0, false);
+        declareFunction(me, "load_submitted_transcripts_and_write_image", "LOAD-SUBMITTED-TRANSCRIPTS-AND-WRITE-IMAGE", 2, 0, false);
+        declareFunction(me, "catchup_to_current_and_write_image_versioned", "CATCHUP-TO-CURRENT-AND-WRITE-IMAGE-VERSIONED", 1, 0, false);
+        declareFunction(me, "catchup_to_current_and_write_image", "CATCHUP-TO-CURRENT-AND-WRITE-IMAGE", 1, 0, false);
+        declareFunction(me, "catchup_to_current_kb", "CATCHUP-TO-CURRENT-KB", 0, 0, false);
+        declareFunction(me, "caught_up_on_operationsP", "CAUGHT-UP-ON-OPERATIONS?", 0, 1, false);
+        declareFunction(me, "catch_up_on_operations_verbose", "CATCH-UP-ON-OPERATIONS-VERBOSE", 0, 3, false);
+        declareFunction(me, "catch_up_on_operations_very_verbosely", "CATCH-UP-ON-OPERATIONS-VERY-VERBOSELY", 0, 3, false);
+        declareFunction(me, "run_baseline_tests", "RUN-BASELINE-TESTS", 0, 0, false);
+        declareFunction(me, "baseline_results_to_map", "BASELINE-RESULTS-TO-MAP", 1, 0, false);
+        declareFunction(me, "compute_baseline_regressions", "COMPUTE-BASELINE-REGRESSIONS", 2, 0, false);
+        declareFunction(me, "show_baseline_regression_info", "SHOW-BASELINE-REGRESSION-INFO", 1, 1, false);
+        declareFunction(me, "show_baseline_regression_details", "SHOW-BASELINE-REGRESSION-DETAILS", 1, 2, false);
+        declareFunction(me, "declare_cyc_product", "DECLARE-CYC-PRODUCT", 4, 0, false);
+        declareFunction(me, "cyc_product_definition_presentP", "CYC-PRODUCT-DEFINITION-PRESENT?", 4, 0, false);
+        declareFunction(me, "find_cyc_product", "FIND-CYC-PRODUCT", 3, 0, false);
+        declareFunction(me, "cyc_product", "CYC-PRODUCT", 0, 0, false);
+        declareFunction(me, "code_product", "CODE-PRODUCT", 0, 0, false);
+        declareFunction(me, "kb_product", "KB-PRODUCT", 0, 0, false);
+        declareFunction(me, "branch_tag", "BRANCH-TAG", 0, 0, false);
+        declareFunction(me, "set_cyc_product", "SET-CYC-PRODUCT", 1, 0, false);
+        declareFunction(me, "set_kb_product", "SET-KB-PRODUCT", 1, 0, false);
+        declareFunction(me, "initialize_cyc_product", "INITIALIZE-CYC-PRODUCT", 0, 0, false);
+        declareFunction(me, "detect_cyc_product", "DETECT-CYC-PRODUCT", 0, 0, false);
+        declareFunction(me, "load_file_dependency_information", "LOAD-FILE-DEPENDENCY-INFORMATION", 1, 1, false);
+        declareFunction(me, "augment_file_set", "AUGMENT-FILE-SET", 2, 0, false);
+        declareFunction(me, "completely_augment_file_set", "COMPLETELY-AUGMENT-FILE-SET", 2, 0, false);
+        declareFunction(me, "write_ant_fileset_declaration", "WRITE-ANT-FILESET-DECLARATION", 3, 1, false);
+        declareFunction(me, "construct_rooted_file_set_from_list", "CONSTRUCT-ROOTED-FILE-SET-FROM-LIST", 1, 2, false);
+        declareFunction(me, "root_file_set", "ROOT-FILE-SET", 1, 2, false);
+        declareFunction(me, "unroot_file_set", "UNROOT-FILE-SET", 1, 2, false);
+        declareFunction(me, "reroot_file_set", "REROOT-FILE-SET", 3, 1, false);
+        declareFunction(me, "test_reroot_file_set", "TEST-REROOT-FILE-SET", 3, 1, false);
+        declareFunction(me, "serialize_kb_store_lru_information", "SERIALIZE-KB-STORE-LRU-INFORMATION", 1, 0, false);
+        declareFunction(me, "precache_kb_store_by_lru_information", "PRECACHE-KB-STORE-BY-LRU-INFORMATION", 1, 0, false);
+        declareFunction(me, "set_kb_store_lru_settings", "SET-KB-STORE-LRU-SETTINGS", 0, 2, false);
+        declareFunction(me, "set_kb_store_lru_swap_level", "SET-KB-STORE-LRU-SWAP-LEVEL", 0, 1, false);
+        declareFunction(me, "enumerate_fact_sheets_for_kb_to_file", "ENUMERATE-FACT-SHEETS-FOR-KB-TO-FILE", 1, 0, false);
+        declareFunction(me, "enumerate_fact_sheets_for_kb", "ENUMERATE-FACT-SHEETS-FOR-KB", 0, 1, false);
+        declareFunction(me, "fact_sheet_path_for_term_filter_and_transform", "FACT-SHEET-PATH-FOR-TERM-FILTER-AND-TRANSFORM", 1, 0, false);
+        declareFunction(me, "specify_sbhl_caching_policy_template", "SPECIFY-SBHL-CACHING-POLICY-TEMPLATE", 3, 2, false);
+        declareFunction(me, "generate_kb_sbhl_caching_policies", "GENERATE-KB-SBHL-CACHING-POLICIES", 2, 1, false);
+        declareFunction(me, "generate_legacy_kb_sbhl_caching_policies", "GENERATE-LEGACY-KB-SBHL-CACHING-POLICIES", 1, 1, false);
+        declareFunction(me, "generate_completely_cached_kb_sbhl_caching_policies", "GENERATE-COMPLETELY-CACHED-KB-SBHL-CACHING-POLICIES", 1, 1, false);
+        declareFunction(me, "propose_kb_sbhl_caching_policies_from_tuning_data", "PROPOSE-KB-SBHL-CACHING-POLICIES-FROM-TUNING-DATA", 1, 1, false);
+        declareFunction(me, "propose_completely_cached_kb_sbhl_caching_policies", "PROPOSE-COMPLETELY-CACHED-KB-SBHL-CACHING-POLICIES", 0, 1, false);
+        declareFunction(me, "propose_legacy_kb_sbhl_caching_policies", "PROPOSE-LEGACY-KB-SBHL-CACHING-POLICIES", 0, 1, false);
+        declareFunction(me, "get_all_sbhl_module_link_predicates", "GET-ALL-SBHL-MODULE-LINK-PREDICATES", 0, 0, false);
+        declareFunction(me, "propose_all_sticky_kb_sbhl_caching_policies", "PROPOSE-ALL-STICKY-KB-SBHL-CACHING-POLICIES", 2, 0, false);
+        declareFunction(me, "start_recording_sbhl_cache_tuning_data", "START-RECORDING-SBHL-CACHE-TUNING-DATA", 0, 0, false);
+        declareFunction(me, "stop_recording_sbhl_cache_tuning_data", "STOP-RECORDING-SBHL-CACHE-TUNING-DATA", 1, 0, false);
+        declareFunction(me, "gather_data_for_sbhl_cache_tuning", "GATHER-DATA-FOR-SBHL-CACHE-TUNING", 1, 0, false);
+        declareFunction(me, "run_sbhl_cache_tuning_data_gathering", "RUN-SBHL-CACHE-TUNING-DATA-GATHERING", 1, 0, false);
+        declareFunction(me, "sbhl_cache_tuning_data_gathering_prologue", "SBHL-CACHE-TUNING-DATA-GATHERING-PROLOGUE", 0, 0, false);
+        declareFunction(me, "sbhl_cache_tuning_experiment_prologue", "SBHL-CACHE-TUNING-EXPERIMENT-PROLOGUE", 0, 0, false);
+        declareFunction(me, "sbhl_cache_tuning_experiment_epilogue", "SBHL-CACHE-TUNING-EXPERIMENT-EPILOGUE", 1, 0, false);
+        declareFunction(me, "sbhl_cache_tuning_data_gathering_generate_report", "SBHL-CACHE-TUNING-DATA-GATHERING-GENERATE-REPORT", 2, 0, false);
+        declareFunction(me, "sbhl_cache_tuning_data_gathering_epilogue", "SBHL-CACHE-TUNING-DATA-GATHERING-EPILOGUE", 0, 0, false);
+        declareFunction(me, "compile_kb_snapshot_statistics", "COMPILE-KB-SNAPSHOT-STATISTICS", 0, 1, false);
+        declareFunction(me, "gather_kb_snapshot_statistics", "GATHER-KB-SNAPSHOT-STATISTICS", 1, 1, false);
+        declareFunction(me, "gather_one_kb_snapshot_statistic", "GATHER-ONE-KB-SNAPSHOT-STATISTIC", 4, 0, false);
+        declareFunction(me, "track_kb_snapshot_statistics", "TRACK-KB-SNAPSHOT-STATISTICS", 1, 1, false);
+        declareFunction(me, "get_kb_mini_dump_timestamp", "GET-KB-MINI-DUMP-TIMESTAMP", 0, 0, false);
+        declareFunction(me, "prepare_kb_mini_dump", "PREPARE-KB-MINI-DUMP", 0, 0, false);
+        declareFunction(me, "perform_kb_mini_dump", "PERFORM-KB-MINI-DUMP", 1, 0, false);
+        declareFunction(me, "launch_asynchronous_kb_mini_dump", "LAUNCH-ASYNCHRONOUS-KB-MINI-DUMP", 1, 0, false);
+        declareFunction(me, "mark_kb_mini_dump_as_successful", "MARK-KB-MINI-DUMP-AS-SUCCESSFUL", 1, 0, false);
+        declareFunction(me, "build_process_worker_count", "BUILD-PROCESS-WORKER-COUNT", 0, 0, false);
+        declareFunction(me, "set_build_process_worker_count", "SET-BUILD-PROCESS-WORKER-COUNT", 1, 0, false);
+        declareFunction(me, "build_process_parallelism_permittedP", "BUILD-PROCESS-PARALLELISM-PERMITTED?", 0, 0, false);
+        declareMacro(me, "with_allowed_obfuscation_namespace_support", "WITH-ALLOWED-OBFUSCATION-NAMESPACE-SUPPORT");
+        declareMacro(me, "with_allowed_obfuscation_namespace", "WITH-ALLOWED-OBFUSCATION-NAMESPACE");
+        declareFunction(me, "allowed_obfuscation_namespace_constantP", "ALLOWED-OBFUSCATION-NAMESPACE-CONSTANT?", 1, 0, false);
+        declareFunction(me, "un_obfuscatable_constantP", "UN-OBFUSCATABLE-CONSTANT?", 1, 0, false);
+        declareMacro(me, "with_constant_obfuscation", "WITH-CONSTANT-OBFUSCATION");
+        declareFunction(me, "obfuscate_constant_name_via_generator_fn", "OBFUSCATE-CONSTANT-NAME-VIA-GENERATOR-FN", 1, 0, false);
+        declareFunction(me, "obfuscate_constant_name_via_generator_function", "OBFUSCATE-CONSTANT-NAME-VIA-GENERATOR-FUNCTION", 3, 0, false);
+        declareFunction(me, "new_constant_obfuscation_cache", "NEW-CONSTANT-OBFUSCATION-CACHE", 0, 0, false);
+        declareMacro(me, "with_cached_constant_obfuscation", "WITH-CACHED-CONSTANT-OBFUSCATION");
+        declareFunction(me, "make_obfuscation_gensym_state", "MAKE-OBFUSCATION-GENSYM-STATE", 0, 2, false);
+        declareFunction(me, "obfuscate_constant_name_gensym", "OBFUSCATE-CONSTANT-NAME-GENSYM", 2, 0, false);
+        declareFunction(me, "obfuscate_and_dump_essential_kb", "OBFUSCATE-AND-DUMP-ESSENTIAL-KB", 4, 1, false);
+        declareFunction(me, "determine_obfuscation_candidates", "DETERMINE-OBFUSCATION-CANDIDATES", 0, 1, false);
+        declareFunction(me, "not_term_of_unit_assertionP", "NOT-TERM-OF-UNIT-ASSERTION?", 1, 0, false);
+        declareFunction(me, "determine_assertion_obfuscations", "DETERMINE-ASSERTION-OBFUSCATIONS", 2, 1, false);
+        declareFunction(me, "determine_nart_obfuscations", "DETERMINE-NART-OBFUSCATIONS", 2, 1, false);
+        declareFunction(me, "apply_assertion_obfuscations", "APPLY-ASSERTION-OBFUSCATIONS", 1, 1, false);
+        declareFunction(me, "weakly_scramble_string_in_assertions", "WEAKLY-SCRAMBLE-STRING-IN-ASSERTIONS", 2, 0, false);
+        declareFunction(me, "weakly_scramble_string_in_nauts", "WEAKLY-SCRAMBLE-STRING-IN-NAUTS", 2, 0, false);
+        declareFunction(me, "mix_case_string", "MIX-CASE-STRING", 1, 0, false);
+        declareFunction(me, "select_clippable_collections", "SELECT-CLIPPABLE-COLLECTIONS", 0, 2, false);
+        declareFunction(me, "higher_order_collectionP", "HIGHER-ORDER-COLLECTION?", 1, 0, false);
+        declareFunction(me, "gather_tabu_collections_for_clipping", "GATHER-TABU-COLLECTIONS-FOR-CLIPPING", 1, 2, false);
+        declareFunction(me, "clip_kb_percentage", "CLIP-KB-PERCENTAGE", 2, 1, false);
+        declareFunction(me, "clip_kb_given_tabu_term_list", "CLIP-KB-GIVEN-TABU-TERM-LIST", 1, 0, false);
+        declareFunction(me, "generate_terms_transcript", "GENERATE-TERMS-TRANSCRIPT", 2, 0, false);
         return NIL;
     }
 
     public static SubLObject init_builder_utilities_file() {
-        if (SubLFiles.USE_V1) {
-            deflexical("*STANDARD-REGRESSION-CONDITIONS*", $list97);
-            defparameter("*ALL-CYC-PRODUCTS*", NIL);
-            defparameter("*CYC-PRODUCT-DEFINITIONS*", NIL);
-            deflexical("*CYC-PRODUCT*", SubLTrampolineFile.maybeDefault($cyc_product$, $cyc_product$, NIL));
-            defconstant("*CODE-PRODUCT*", $STANDARD);
-            deflexical("*KB-PRODUCT*", SubLTrampolineFile.maybeDefault($kb_product$, $kb_product$, NIL));
-            defconstant("*BRANCH-TAG*", $$$head);
-            defparameter("*GENERIC-SBHL-CACHING-POLICY-TEMPLATES*", list(new SubLObject[]{ specify_sbhl_caching_policy_template($DEFAULT, $STICKY, $UNDEFINED, $ALL, UNPROVIDED), specify_sbhl_caching_policy_template($$genlMt, $STICKY, $UNDEFINED, $ALL, $ALL), specify_sbhl_caching_policy_template($$isa, $SWAPOUT, $int$10000, $int$8000, $int$2000), specify_sbhl_caching_policy_template($$quotedIsa, $SWAPOUT, $int$5000, $int$4000, $int$1000), specify_sbhl_caching_policy_template($$genls, $SWAPOUT, $int$5000, $int$5000, $int$2000), specify_sbhl_caching_policy_template($$disjointWith, $SWAPOUT, $int$1500, $int$1500, $int$200), specify_sbhl_caching_policy_template($$genlPreds, $SWAPOUT, $int$1500, $int$1500, $int$200), specify_sbhl_caching_policy_template($$genlInverse, $SWAPOUT, $int$1500, $int$1500, $int$200), specify_sbhl_caching_policy_template($$negationPreds, $SWAPOUT, $int$1500, $int$1000, ZERO_INTEGER), specify_sbhl_caching_policy_template($$negationInverse, $SWAPOUT, $int$1500, $int$1000, ZERO_INTEGER) }));
-            defparameter("*CYC-TESTS-TO-USE-FOR-SBHL-CACHE-TUNING*", NIL);
-            defparameter("*KB-QUERIES-TO-USE-FOR-SBHL-CACHE-TUNING*", NIL);
-            defparameter("*RUN-CYCLOPS-FOR-SBHL-CACHE-TUNING?*", NIL);
-            deflexical("*BUILD-PROCESS-WORKER-COUNT*", ONE_INTEGER);
-            defparameter("*ALLOWED-OBFUSCATION-NAME-SPACES*", NIL);
-            defparameter("*CONSTANT-OBFUSCATION-NAME-GENERATOR-STATE*", NIL);
-            defparameter("*CONSTANT-OBFUSCATION-CACHE*", NIL);
-            defparameter("*TS-COMMENT-STREAM*", NIL);
-        }
-        if (SubLFiles.USE_V2) {
-            defparameter("*IR-TEST-OWNER*", $$$karen);
-            defparameter("*POST-BUILD-VERBOSE*", T);
-            defparameter("*POST-BUILD-SUPPRESS-NOTIFY*", NIL);
-            defparameter("*POST-BUILD-OUTPUT-STREAM*", NIL);
-            deflexical("*CYC-PRODUCT*", NIL != boundp($cyc_product$) ? ((SubLObject) ($cyc_product$.getGlobalValue())) : NIL);
-            deflexical("*KB-PRODUCT*", NIL != boundp($kb_product$) ? ((SubLObject) ($kb_product$.getGlobalValue())) : NIL);
-            defparameter("*GENERIC-SBHL-CACHING-POLICY-TEMPLATES*", list(new SubLObject[]{ com.cyc.cycjava.cycl.builder_utilities.specify_sbhl_caching_policy_template($DEFAULT, $STICKY, $UNDEFINED, $ALL, UNPROVIDED), com.cyc.cycjava.cycl.builder_utilities.specify_sbhl_caching_policy_template($$genlMt, $STICKY, $UNDEFINED, $ALL, $ALL), com.cyc.cycjava.cycl.builder_utilities.specify_sbhl_caching_policy_template($$genlPreds, $SWAPOUT, $int$500, $int$500, $int$200), com.cyc.cycjava.cycl.builder_utilities.specify_sbhl_caching_policy_template($$negationPreds, $SWAPOUT, $int$500, $int$100, ZERO_INTEGER), com.cyc.cycjava.cycl.builder_utilities.specify_sbhl_caching_policy_template($$disjointWith, $SWAPOUT, $int$500, $int$500, $int$200), com.cyc.cycjava.cycl.builder_utilities.specify_sbhl_caching_policy_template($$genlInverse, $SWAPOUT, $int$500, $int$500, $int$200), com.cyc.cycjava.cycl.builder_utilities.specify_sbhl_caching_policy_template($$negationInverse, $SWAPOUT, $int$500, $int$100, ZERO_INTEGER), com.cyc.cycjava.cycl.builder_utilities.specify_sbhl_caching_policy_template($$genls, $SWAPOUT, $int$5000, $int$5000, $int$2000), com.cyc.cycjava.cycl.builder_utilities.specify_sbhl_caching_policy_template($$isa, $SWAPOUT, $int$10000, $int$8000, $int$2000), com.cyc.cycjava.cycl.builder_utilities.specify_sbhl_caching_policy_template($$quotedIsa, $SWAPOUT, $int$5000, $int$4000, $int$1000) }));
-        }
-        return NIL;
-    }
-
-    public static SubLObject init_builder_utilities_file_Previous() {
         deflexical("*STANDARD-REGRESSION-CONDITIONS*", $list97);
         defparameter("*ALL-CYC-PRODUCTS*", NIL);
         defparameter("*CYC-PRODUCT-DEFINITIONS*", NIL);
@@ -8385,97 +5082,7 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject setup_builder_utilities_file_alt() {
-        register_external_symbol(CYC_BUILD_WORLD_VERIFY);
-        com.cyc.cycjava.cycl.builder_utilities.declare_cyc_product($HEAD, $STANDARD, $FULL, $$$head);
-        com.cyc.cycjava.cycl.builder_utilities.declare_cyc_product($CAE_0_3, $TKB, $AKB, $str_alt127$cake_release_0p3_20051215);
-        declare_defglobal($cyc_product$);
-        declare_defglobal($kb_product$);
-        register_external_symbol(LOAD_FILE_DEPENDENCY_INFORMATION);
-        register_external_symbol(AUGMENT_FILE_SET);
-        register_external_symbol(COMPLETELY_AUGMENT_FILE_SET);
-        register_external_symbol(WRITE_ANT_FILESET_DECLARATION);
-        register_external_symbol(CONSTRUCT_ROOTED_FILE_SET_FROM_LIST);
-        register_external_symbol(ROOT_FILE_SET);
-        register_external_symbol(UNROOT_FILE_SET);
-        register_external_symbol(REROOT_FILE_SET);
-        define_test_case_table_int(TEST_REROOT_FILE_SET, list(new SubLObject[]{ $TEST, NIL, $OWNER, $$$rck, $CLASSES, NIL, $KB, $TINY, $WORKING_, T }), $list_alt158);
-        note_funcall_helper_function(FACT_SHEET_PATH_FOR_TERM_FILTER_AND_TRANSFORM);
-        register_external_symbol(GET_KB_MINI_DUMP_TIMESTAMP);
-        register_external_symbol(PREPARE_KB_MINI_DUMP);
-        register_external_symbol(PERFORM_KB_MINI_DUMP);
-        register_external_symbol(LAUNCH_ASYNCHRONOUS_KB_MINI_DUMP);
-        return NIL;
-    }
-
     public static SubLObject setup_builder_utilities_file() {
-        if (SubLFiles.USE_V1) {
-            register_external_symbol(CYC_BUILD_WORLD_VERIFY);
-            register_external_symbol(CYC_LOAD_KB);
-            register_external_symbol(CYC_LOAD_INCREMENTAL_KB);
-            register_external_symbol(CYC_DUMP_STANDARD_KB);
-            register_external_symbol(CYC_SNAPSHOT_KB);
-            register_external_symbol(CYC_DUMP_SNAPSHOT_KB);
-            register_external_symbol(SUGGEST_KB_SNAPSHOT_DIRECTORY);
-            register_external_symbol(RUN_BASELINE_TESTS);
-            register_external_symbol(BASELINE_RESULTS_TO_MAP);
-            register_external_symbol(COMPUTE_BASELINE_REGRESSIONS);
-            register_external_symbol(SHOW_BASELINE_REGRESSION_INFO);
-            register_external_symbol(SHOW_BASELINE_REGRESSION_DETAILS);
-            declare_cyc_product($HEAD, $STANDARD, $FULL, $$$head);
-            declare_cyc_product($CAE_0_3, $TKB, $AKB, $str116$cake_release_0p3_20051215);
-            declare_defglobal($cyc_product$);
-            declare_defglobal($kb_product$);
-            register_external_symbol(LOAD_FILE_DEPENDENCY_INFORMATION);
-            register_external_symbol(AUGMENT_FILE_SET);
-            register_external_symbol(COMPLETELY_AUGMENT_FILE_SET);
-            register_external_symbol(WRITE_ANT_FILESET_DECLARATION);
-            register_external_symbol(CONSTRUCT_ROOTED_FILE_SET_FROM_LIST);
-            register_external_symbol(ROOT_FILE_SET);
-            register_external_symbol(UNROOT_FILE_SET);
-            register_external_symbol(REROOT_FILE_SET);
-            define_test_case_table_int(TEST_REROOT_FILE_SET, list(new SubLObject[]{ $TEST, NIL, $OWNER, NIL, $CLASSES, NIL, $KB, $TINY, $WORKING_, T }), $list147);
-            register_external_symbol(SERIALIZE_KB_STORE_LRU_INFORMATION);
-            register_external_symbol(PRECACHE_KB_STORE_BY_LRU_INFORMATION);
-            note_funcall_helper_function(FACT_SHEET_PATH_FOR_TERM_FILTER_AND_TRANSFORM);
-            register_external_symbol(COMPILE_KB_SNAPSHOT_STATISTICS);
-            register_external_symbol(GATHER_KB_SNAPSHOT_STATISTICS);
-            register_external_symbol(TRACK_KB_SNAPSHOT_STATISTICS);
-            register_external_symbol(GET_KB_MINI_DUMP_TIMESTAMP);
-            register_external_symbol(PREPARE_KB_MINI_DUMP);
-            register_external_symbol(PERFORM_KB_MINI_DUMP);
-            register_external_symbol(LAUNCH_ASYNCHRONOUS_KB_MINI_DUMP);
-            register_external_symbol(BUILD_PROCESS_WORKER_COUNT);
-            register_external_symbol(SET_BUILD_PROCESS_WORKER_COUNT);
-            register_external_symbol($sym238$BUILD_PROCESS_PARALLELISM_PERMITTED_);
-            register_external_symbol(WITH_ALLOWED_OBFUSCATION_NAMESPACE_SUPPORT);
-            register_external_symbol(WITH_ALLOWED_OBFUSCATION_NAMESPACE);
-            register_external_symbol($sym247$ALLOWED_OBFUSCATION_NAMESPACE_CONSTANT_);
-            register_external_symbol($sym249$UN_OBFUSCATABLE_CONSTANT_);
-            register_external_symbol(WITH_CONSTANT_OBFUSCATION);
-            register_external_symbol(OBFUSCATE_CONSTANT_NAME_VIA_GENERATOR_FN);
-            register_macro_helper(NEW_CONSTANT_OBFUSCATION_CACHE, WITH_CACHED_CONSTANT_OBFUSCATION);
-            register_external_symbol(WITH_CACHED_CONSTANT_OBFUSCATION);
-            register_external_symbol(MAKE_OBFUSCATION_GENSYM_STATE);
-            register_external_symbol(OBFUSCATE_CONSTANT_NAME_GENSYM);
-            register_external_symbol(OBFUSCATE_AND_DUMP_ESSENTIAL_KB);
-            register_external_symbol(DETERMINE_OBFUSCATION_CANDIDATES);
-            register_external_symbol(DETERMINE_ASSERTION_OBFUSCATIONS);
-            register_external_symbol(DETERMINE_NART_OBFUSCATIONS);
-            register_external_symbol(APPLY_ASSERTION_OBFUSCATIONS);
-            register_external_symbol(WEAKLY_SCRAMBLE_STRING_IN_ASSERTIONS);
-            register_external_symbol(WEAKLY_SCRAMBLE_STRING_IN_NAUTS);
-            register_external_symbol(MIX_CASE_STRING);
-            register_external_symbol(GENERATE_TERMS_TRANSCRIPT);
-        }
-        if (SubLFiles.USE_V2) {
-            com.cyc.cycjava.cycl.builder_utilities.declare_cyc_product($CAE_0_3, $TKB, $AKB, $str_alt127$cake_release_0p3_20051215);
-            define_test_case_table_int(TEST_REROOT_FILE_SET, list(new SubLObject[]{ $TEST, NIL, $OWNER, $$$rck, $CLASSES, NIL, $KB, $TINY, $WORKING_, T }), $list_alt158);
-        }
-        return NIL;
-    }
-
-    public static SubLObject setup_builder_utilities_file_Previous() {
         register_external_symbol(CYC_BUILD_WORLD_VERIFY);
         register_external_symbol(CYC_LOAD_KB);
         register_external_symbol(CYC_LOAD_INCREMENTAL_KB);
@@ -8552,6 +5159,368 @@ public final class builder_utilities extends SubLTranslatedFile implements V12 {
     }
 
     static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
 

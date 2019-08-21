@@ -3608,20 +3608,7 @@ public final class learning_reader_disambiguation extends SubLTranslatedFile imp
                     try {
                         memoization_state.$memoization_state$.bind(local_state, thread);
                         {
-                            SubLObject original_memoization_process = NIL;
-                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                {
-                                    SubLObject current_proc = current_process();
-                                    if (NIL == original_memoization_process) {
-                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                    } else {
-                                        if (original_memoization_process != current_proc) {
-                                            Errors.error($str_alt207$Invalid_attempt_to_reuse_memoizat);
-                                        }
-                                    }
-                                }
-                            }
+                            SubLObject original_memoization_process = memoization_state.aquireMemoStateLock(local_state);
                             try {
                                 {
                                     SubLObject list_var = paragraph_texts;
@@ -4307,20 +4294,7 @@ public final class learning_reader_disambiguation extends SubLTranslatedFile imp
                             try {
                                 memoization_state.$memoization_state$.bind(local_state, thread);
                                 {
-                                    SubLObject original_memoization_process = NIL;
-                                    if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                        original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                        {
-                                            SubLObject current_proc = current_process();
-                                            if (NIL == original_memoization_process) {
-                                                memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                            } else {
-                                                if (original_memoization_process != current_proc) {
-                                                    Errors.error($str_alt207$Invalid_attempt_to_reuse_memoizat);
-                                                }
-                                            }
-                                        }
-                                    }
+                                    final SubLObject original_memoization_process = memoization_state.aquireMemoStateLock(local_state);
                                     try {
                                         {
                                             SubLObject done_count = ZERO_INTEGER;
@@ -4479,20 +4453,7 @@ public final class learning_reader_disambiguation extends SubLTranslatedFile imp
                     try {
                         memoization_state.$memoization_state$.bind(local_state, thread);
                         {
-                            SubLObject original_memoization_process = NIL;
-                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                {
-                                    SubLObject current_proc = current_process();
-                                    if (NIL == original_memoization_process) {
-                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                    } else {
-                                        if (original_memoization_process != current_proc) {
-                                            Errors.error($str_alt207$Invalid_attempt_to_reuse_memoizat);
-                                        }
-                                    }
-                                }
-                            }
+                            SubLObject original_memoization_process = memoization_state.aquireMemoStateLock(local_state);
                             try {
                                 {
                                     SubLObject _prev_bind_0_94 = $topic_struct$.currentBinding(thread);
@@ -4669,20 +4630,7 @@ public final class learning_reader_disambiguation extends SubLTranslatedFile imp
                             try {
                                 memoization_state.$memoization_state$.bind(local_state, thread);
                                 {
-                                    SubLObject original_memoization_process = NIL;
-                                    if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                        original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                        {
-                                            SubLObject current_proc = current_process();
-                                            if (NIL == original_memoization_process) {
-                                                memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                            } else {
-                                                if (original_memoization_process != current_proc) {
-                                                    Errors.error($str_alt207$Invalid_attempt_to_reuse_memoizat);
-                                                }
-                                            }
-                                        }
-                                    }
+                                    final SubLObject original_memoization_process = memoization_state.aquireMemoStateLock(local_state);
                                     try {
                                         {
                                             SubLObject done_count = ZERO_INTEGER;
@@ -4858,20 +4806,7 @@ public final class learning_reader_disambiguation extends SubLTranslatedFile imp
                                 try {
                                     memoization_state.$memoization_state$.bind(local_state, thread);
                                     {
-                                        SubLObject original_memoization_process = NIL;
-                                        if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                            original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                            {
-                                                SubLObject current_proc = current_process();
-                                                if (NIL == original_memoization_process) {
-                                                    memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                                } else {
-                                                    if (original_memoization_process != current_proc) {
-                                                        Errors.error($str_alt207$Invalid_attempt_to_reuse_memoizat);
-                                                    }
-                                                }
-                                            }
-                                        }
+                                        final SubLObject original_memoization_process = memoization_state.aquireMemoStateLock(local_state);
                                         try {
                                             {
                                                 SubLObject done_count = ZERO_INTEGER;
@@ -6165,20 +6100,7 @@ public final class learning_reader_disambiguation extends SubLTranslatedFile imp
                     try {
                         memoization_state.$memoization_state$.bind(local_state, thread);
                         {
-                            SubLObject original_memoization_process = NIL;
-                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                {
-                                    SubLObject current_proc = current_process();
-                                    if (NIL == original_memoization_process) {
-                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                    } else {
-                                        if (original_memoization_process != current_proc) {
-                                            Errors.error($str_alt207$Invalid_attempt_to_reuse_memoizat);
-                                        }
-                                    }
-                                }
-                            }
+                            SubLObject original_memoization_process = memoization_state.aquireMemoStateLock(local_state);
                             try {
                                 {
                                     SubLObject cdolist_list_var = $topic_struct_test_texts$.getGlobalValue();
@@ -6258,20 +6180,7 @@ public final class learning_reader_disambiguation extends SubLTranslatedFile imp
                     try {
                         memoization_state.$memoization_state$.bind(local_state, thread);
                         {
-                            SubLObject original_memoization_process = NIL;
-                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                {
-                                    SubLObject current_proc = current_process();
-                                    if (NIL == original_memoization_process) {
-                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                    } else {
-                                        if (original_memoization_process != current_proc) {
-                                            Errors.error($str_alt207$Invalid_attempt_to_reuse_memoizat);
-                                        }
-                                    }
-                                }
-                            }
+                            SubLObject original_memoization_process = memoization_state.aquireMemoStateLock(local_state);
                             try {
                                 {
                                     SubLObject already_resourcing_p = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.getDynamicValue(thread);

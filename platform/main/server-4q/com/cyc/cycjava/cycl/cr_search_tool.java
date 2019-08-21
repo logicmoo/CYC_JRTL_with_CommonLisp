@@ -1128,7 +1128,7 @@ public final class cr_search_tool extends SubLTranslatedFile implements V02 {
                                                     html_utilities.html_princ($str_alt60$Enter_a_seed_collection_for_a_new);
                                                     html_utilities.html_markup(html_macros.$html_strong_tail$.getGlobalValue());
                                                     html_utilities.html_newline(UNPROVIDED);
-                                                    html_complete.html_complete_button($$$start, $$$Complete, $$Collection, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                    html_complete.html_complete_button($$$start, $$$Complete, $$Collection, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED_SYM);
                                                     html_utilities.html_indent(UNPROVIDED);
                                                     html_utilities.html_text_input($$$start, NIL, $int$40);
                                                     html_utilities.html_newline(UNPROVIDED);
@@ -1445,7 +1445,7 @@ public final class cr_search_tool extends SubLTranslatedFile implements V02 {
                                                                                 html_utilities.html_princ($$$None);
                                                                             }
                                                                             html_utilities.html_hr(UNPROVIDED, UNPROVIDED);
-                                                                            html_complete.html_complete_button($$$mt, $$$Complete, $$Microtheory, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                            html_complete.html_complete_button($$$mt, $$$Complete, $$Microtheory, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED_SYM);
                                                                             html_utilities.html_markup(html_macros.$html_strong_head$.getGlobalValue());
                                                                             html_utilities.html_princ($str_alt93$_Mt___);
                                                                             html_utilities.html_markup(html_macros.$html_strong_tail$.getGlobalValue());
@@ -1467,7 +1467,7 @@ public final class cr_search_tool extends SubLTranslatedFile implements V02 {
                                                                             html_utilities.html_markup(html_macros.$html_strong_tail$.getGlobalValue());
                                                                             html_utilities.html_submit_input($$$Add_Terms, $str_alt96$add_forward, UNPROVIDED);
                                                                             html_utilities.html_newline(UNPROVIDED);
-                                                                            html_complete.html_complete_button($$$entered, $$$Complete, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                            html_complete.html_complete_button($$$entered, $$$Complete, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED_SYM);
                                                                             html_utilities.html_markup(html_macros.$html_strong_head$.getGlobalValue());
                                                                             html_utilities.html_princ($str_alt106$_Term___);
                                                                             html_utilities.html_markup(html_macros.$html_strong_tail$.getGlobalValue());

@@ -1,62 +1,49 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.access_macros.register_external_symbol;
-import static com.cyc.cycjava.cycl.cb_utilities.cb_fort_display_string;
-import static com.cyc.cycjava.cycl.cb_utilities.cb_string_for_fort;
-import static com.cyc.cycjava.cycl.constant_handles.constant_p;
-import static com.cyc.cycjava.cycl.constant_handles.do_constants_table;
-import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
-import static com.cyc.cycjava.cycl.el_utilities.el_formula_p;
-import static com.cyc.cycjava.cycl.el_utilities.make_binary_formula;
-import static com.cyc.cycjava.cycl.el_utilities.make_el_formula;
-import static com.cyc.cycjava.cycl.el_utilities.replace_formula_arg_position;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_empty_p;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_id_and_object_validP;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_next_id;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_next_state;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_state_object;
-import static com.cyc.cycjava.cycl.id_index.id_index_count;
-import static com.cyc.cycjava.cycl.id_index.id_index_dense_objects;
-import static com.cyc.cycjava.cycl.id_index.id_index_dense_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_next_id;
-import static com.cyc.cycjava.cycl.id_index.id_index_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_skip_tombstones_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_id_threshold;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_objects;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_tombstone_p;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.indexed_term_p;
-import static com.cyc.cycjava.cycl.lexicon_vars.$lexicon_lookup_mt$;
-import static com.cyc.cycjava.cycl.lexicon_vars.$root_form_speech_parts$;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.declare_defglobal;
-import static com.cyc.cycjava.cycl.utilities_macros.$is_noting_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_index$;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_prediction$;
-import static com.cyc.cycjava.cycl.utilities_macros.$percent_progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_elapsed_seconds_for_notification$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_last_pacification_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_note$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_notification_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_pacifications_since_last_nl$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_sofar$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_total$;
-import static com.cyc.cycjava.cycl.utilities_macros.$silent_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$suppress_all_progress_faster_than_seconds$;
-import static com.cyc.cycjava.cycl.utilities_macros.$within_noting_percent_progress$;
-import static com.cyc.cycjava.cycl.utilities_macros.note_percent_progress;
-import static com.cyc.cycjava.cycl.utilities_macros.note_progress;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_percent_progress_postamble;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_percent_progress_preamble;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_progress_postamble;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_progress_preamble;
-import static com.cyc.cycjava.cycl.utilities_macros.register_html_interface_variable;
-import static com.cyc.cycjava.cycl.utilities_macros.register_html_state_variable;
+import com.cyc.cycjava.cycl.inference.ask_utilities;
+import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
+import com.cyc.cycjava.cycl.inference.kb_query;
+import com.cyc.cycjava.cycl.lexification_utilities;
+import com.cyc.cycjava.cycl.sbhl.sbhl_graphs;
+import com.cyc.cycjava.cycl.sbhl.sbhl_link_methods;
+import com.cyc.cycjava.cycl.sbhl.sbhl_link_vars;
+import com.cyc.cycjava.cycl.sbhl.sbhl_links;
+import com.cyc.cycjava.cycl.sbhl.sbhl_macros;
+import com.cyc.cycjava.cycl.sbhl.sbhl_marking_utilities;
+import com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars;
+import com.cyc.cycjava.cycl.sbhl.sbhl_module_utilities;
+import com.cyc.cycjava.cycl.sbhl.sbhl_module_vars;
+import com.cyc.cycjava.cycl.sbhl.sbhl_paranoia;
+import com.cyc.cycjava.cycl.sbhl.sbhl_search_vars;
+import com.cyc.cycjava.cycl.utilities_macros;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
+
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.cb_utilities.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.id_index.*;
+import static com.cyc.cycjava.cycl.kb_indexing_datastructures.*;
+import static com.cyc.cycjava.cycl.lexification_utilities.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_asterisk;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_caret;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_colon;
@@ -72,1858 +59,110 @@ import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotatio
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_rparen;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_semicolon;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_space;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.digit_char_p;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.upper_case_p;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.append;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.bind;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.currentBinding;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.rebind;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.gethash_without_values;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.divide;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.max;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.multiply;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.subtract;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.cconcatenate;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.length;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.nreverse;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.position;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.remove;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.remove_duplicates;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.substitute;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.boundp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUALP;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.MINUS_ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NINE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SEVEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWELVE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.decode_universal_time;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.encode_universal_time;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.get_internal_real_time;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.get_universal_time;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.integerp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.stringp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.sublisp_null;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.arg2;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.multiple_value_list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.resetMultipleValues;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.values;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.aref;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_listp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.butlast;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.intersection;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.member;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.putf;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.second;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.parse_integer;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.read_from_string_ignoring_errors;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.close;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.force_output;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.get_output_stream_string;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.make_private_string_output_stream;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.write_string;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
-import static com.cyc.tool.subl.util.SubLFiles.defconstant;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-import static com.cyc.tool.subl.util.SubLFiles.defvar;
-
-import com.cyc.cycjava.cycl.inference.ask_utilities;
-import com.cyc.cycjava.cycl.inference.kb_query;
-import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_store;
-import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
-import com.cyc.cycjava.cycl.sbhl.sbhl_graphs;
-import com.cyc.cycjava.cycl.sbhl.sbhl_link_methods;
-import com.cyc.cycjava.cycl.sbhl.sbhl_link_vars;
-import com.cyc.cycjava.cycl.sbhl.sbhl_links;
-import com.cyc.cycjava.cycl.sbhl.sbhl_macros;
-import com.cyc.cycjava.cycl.sbhl.sbhl_marking_utilities;
-import com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars;
-import com.cyc.cycjava.cycl.sbhl.sbhl_module_utilities;
-import com.cyc.cycjava.cycl.sbhl.sbhl_module_vars;
-import com.cyc.cycjava.cycl.sbhl.sbhl_paranoia;
-import com.cyc.cycjava.cycl.sbhl.sbhl_search_vars;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- * module:      LEXIFICATION-UTILITIES
- * source file: /cyc/top/cycl/lexification-utilities.lisp
- * created:     2019/07/03 17:38:22
- */
-public final class lexification_utilities extends SubLTranslatedFile implements V12 {
-    public static final SubLObject try_to_lexify_attack(SubLObject attack, SubLObject domain_mt, SubLObject lexical_mt, SubLObject problem_store) {
-        if (lexical_mt == UNPROVIDED) {
-            lexical_mt = $$TerrorismLexicalMt;
-        }
-        if (problem_store == UNPROVIDED) {
-            problem_store = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if ((NIL != inference_datastructures_problem_store.problem_store_p(problem_store)) && inference_datastructures_problem_store.problem_store_size(problem_store).numG($int$250000)) {
-                inference_datastructures_problem_store.destroy_problem_store(problem_store);
-                problem_store = inference_datastructures_problem_store.new_problem_store(UNPROVIDED);
-            }
-            Errors.warn($str_alt195$_A_Starting_attempt_to_lexify__S, numeric_date_utilities.timestring(UNPROVIDED), attack);
-            {
-                SubLObject v_set = com.cyc.cycjava.cycl.lexification_utilities.gather_defining_sentence_set_for_attack(attack, domain_mt, problem_store);
-                SubLObject phrases = (NIL != v_set) ? ((SubLObject) (com.cyc.cycjava.cycl.lexification_utilities.definite_descriptions_for_attack_from_presuppositions(attack, v_set, lexical_mt, problem_store))) : NIL;
-                SubLObject cdolist_list_var = phrases;
-                SubLObject phrase = NIL;
-                for (phrase = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , phrase = cdolist_list_var.first()) {
-                    {
-                        SubLObject current_cyclist = operation_communication.the_cyclist();
-                        {
-                            SubLObject _prev_bind_0 = api_control_vars.$the_cyclist$.currentBinding(thread);
-                            try {
-                                api_control_vars.$the_cyclist$.bind($$Guest == current_cyclist ? ((SubLObject) ($$Baxter)) : current_cyclist, thread);
-                                ke.ke_assert(list($$definiteDescriptions, attack, phrase), lexical_mt, UNPROVIDED, UNPROVIDED);
-                            } finally {
-                                api_control_vars.$the_cyclist$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                }
-                Errors.warn($str_alt198$_A_Finished_lexifying__S___Phrase, numeric_date_utilities.timestring(UNPROVIDED), attack);
-                format_nil.print_one_per_line(phrases, UNPROVIDED);
-            }
-            return attack;
-        }
-    }
-
-    public static final SubLObject location_sentence_for_event(SubLObject event, SubLObject mt, SubLObject problem_store) {
-        if (problem_store == UNPROVIDED) {
-            problem_store = NIL;
-        }
-        {
-            SubLObject var = $sym218$_LOCATION;
-            SubLObject query_sentence = list($$eventOccursAt, event, var);
-            SubLObject v_properties = list($MAX_NUMBER, ONE_INTEGER, $PROBLEM_STORE, problem_store, $ANSWER_LANGUAGE, $HL);
-            SubLObject location = ask_utilities.query_variable(var, query_sentence, mt, v_properties).first();
-            return NIL != location ? ((SubLObject) (make_binary_formula($$eventOccursAt, event, location))) : NIL;
-        }
-    }
-
-    /**
-     * Lexify all unlexified #$TerroristAttacks as a batch.  (Don't forget to transmit the results!)
-     * Modeled on @xref LEXIFY-ATTACKS
-     */
-    @LispMethod(comment = "Lexify all unlexified #$TerroristAttacks as a batch.  (Don\'t forget to transmit the results!)\r\nModeled on @xref LEXIFY-ATTACKS\nLexify all unlexified #$TerroristAttacks as a batch.  (Don\'t forget to transmit the results!)\nModeled on @xref LEXIFY-ATTACKS")
-    public static final SubLObject lexify_unlexified_terrorist_attacks() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject num_lexified = ZERO_INTEGER;
-                SubLObject problem_store = inference_datastructures_problem_store.new_problem_store(UNPROVIDED);
-                SubLObject old_cyclist = operation_communication.the_cyclist();
-                try {
-                    operation_communication.set_the_cyclist($$Cyc);
-                    {
-                        SubLObject node_var = $$TerroristAttack;
-                        {
-                            SubLObject _prev_bind_0 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                            SubLObject _prev_bind_1 = sbhl_marking_vars.$sbhl_gather_space$.currentBinding(thread);
-                            try {
-                                sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module($$isa), thread);
-                                sbhl_marking_vars.$sbhl_gather_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
-                                {
-                                    SubLObject node_var_114 = node_var;
-                                    SubLObject deck_type = (false) ? ((SubLObject) ($QUEUE)) : $STACK;
-                                    SubLObject recur_deck = deck.create_deck(deck_type);
-                                    {
-                                        SubLObject _prev_bind_0_115 = sbhl_marking_vars.$sbhl_space$.currentBinding(thread);
-                                        try {
-                                            sbhl_marking_vars.$sbhl_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
-                                            {
-                                                SubLObject mt_var = $$EverythingPSC;
-                                                {
-                                                    SubLObject _prev_bind_0_116 = mt_relevance_macros.$mt$.currentBinding(thread);
-                                                    SubLObject _prev_bind_1_117 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                                                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
-                                                    try {
-                                                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
-                                                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
-                                                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
-                                                        {
-                                                            SubLObject tv_var = NIL;
-                                                            {
-                                                                SubLObject _prev_bind_0_118 = sbhl_search_vars.$sbhl_tv$.currentBinding(thread);
-                                                                SubLObject _prev_bind_1_119 = sbhl_search_vars.$relevant_sbhl_tv_function$.currentBinding(thread);
-                                                                try {
-                                                                    sbhl_search_vars.$sbhl_tv$.bind(NIL != tv_var ? ((SubLObject) (tv_var)) : sbhl_search_vars.get_sbhl_true_tv(), thread);
-                                                                    sbhl_search_vars.$relevant_sbhl_tv_function$.bind(NIL != tv_var ? ((SubLObject) (RELEVANT_SBHL_TV_IS_GENERAL_TV)) : sbhl_search_vars.$relevant_sbhl_tv_function$.getDynamicValue(thread), thread);
-                                                                    if (NIL != tv_var) {
-                                                                        if (NIL != sbhl_paranoia.sbhl_object_type_checking_p()) {
-                                                                            if (NIL == sbhl_search_vars.sbhl_true_tv_p(tv_var)) {
-                                                                                {
-                                                                                    SubLObject pcase_var = sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread);
-                                                                                    if (pcase_var.eql($ERROR)) {
-                                                                                        sbhl_paranoia.sbhl_error(ONE_INTEGER, $str_alt159$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                    } else {
-                                                                                        if (pcase_var.eql($CERROR)) {
-                                                                                            sbhl_paranoia.sbhl_cerror(ONE_INTEGER, $$$continue_anyway, $str_alt159$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                        } else {
-                                                                                            if (pcase_var.eql($WARN)) {
-                                                                                                Errors.warn($str_alt159$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
-                                                                                            } else {
-                                                                                                Errors.warn($str_alt164$_A_is_not_a_valid__sbhl_type_erro, sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread));
-                                                                                                Errors.cerror($$$continue_anyway, $str_alt159$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                    {
-                                                                        SubLObject _prev_bind_0_120 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
-                                                                        SubLObject _prev_bind_1_121 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
-                                                                        SubLObject _prev_bind_2_122 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
-                                                                        SubLObject _prev_bind_3 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                        SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                                        try {
-                                                                            sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)), thread);
-                                                                            sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
-                                                                            sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
-                                                                            sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
-                                                                            sbhl_module_vars.$sbhl_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)), thread);
-                                                                            if ((NIL != sbhl_paranoia.suspend_sbhl_type_checkingP()) || (NIL != sbhl_module_utilities.apply_sbhl_module_type_test(node_var, sbhl_module_vars.get_sbhl_module(UNPROVIDED)))) {
-                                                                                {
-                                                                                    SubLObject _prev_bind_0_123 = sbhl_search_vars.$sbhl_search_direction$.currentBinding(thread);
-                                                                                    SubLObject _prev_bind_1_124 = sbhl_link_vars.$sbhl_link_direction$.currentBinding(thread);
-                                                                                    SubLObject _prev_bind_2_125 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                                    try {
-                                                                                        sbhl_search_vars.$sbhl_search_direction$.bind(sbhl_search_vars.get_sbhl_backward_search_direction(), thread);
-                                                                                        sbhl_link_vars.$sbhl_link_direction$.bind(sbhl_module_utilities.sbhl_search_direction_to_link_direction(sbhl_search_vars.get_sbhl_backward_search_direction(), sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
-                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
-                                                                                        sbhl_marking_utilities.sbhl_mark_node_marked(node_var_114, UNPROVIDED);
-                                                                                        while (NIL != node_var_114) {
-                                                                                            {
-                                                                                                SubLObject tt_node_var = node_var_114;
-                                                                                                SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_vars.get_sbhl_module($$isa));
-                                                                                                SubLObject cdolist_list_var = accessible_modules;
-                                                                                                SubLObject module_var = NIL;
-                                                                                                for (module_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , module_var = cdolist_list_var.first()) {
-                                                                                                    {
-                                                                                                        SubLObject _prev_bind_0_126 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                                                                        SubLObject _prev_bind_1_127 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                                                        try {
-                                                                                                            sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
-                                                                                                            sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
-                                                                                                            {
-                                                                                                                SubLObject node = function_terms.naut_to_nart(tt_node_var);
-                                                                                                                if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
-                                                                                                                    {
-                                                                                                                        SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                        if (NIL != d_link) {
-                                                                                                                            {
-                                                                                                                                SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                                if (NIL != mt_links) {
-                                                                                                                                    {
-                                                                                                                                        SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
-                                                                                                                                        while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                                                                                                                                            thread.resetMultipleValues();
-                                                                                                                                            {
-                                                                                                                                                SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                                                                                                SubLObject tv_links = thread.secondMultipleValue();
-                                                                                                                                                thread.resetMultipleValues();
-                                                                                                                                                if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                                                                    {
-                                                                                                                                                        SubLObject _prev_bind_0_128 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                                                                        try {
-                                                                                                                                                            sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                                                            {
-                                                                                                                                                                SubLObject iteration_state_129 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
-                                                                                                                                                                while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_129)) {
-                                                                                                                                                                    thread.resetMultipleValues();
-                                                                                                                                                                    {
-                                                                                                                                                                        SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_129);
-                                                                                                                                                                        SubLObject link_nodes = thread.secondMultipleValue();
-                                                                                                                                                                        thread.resetMultipleValues();
-                                                                                                                                                                        if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                                                            {
-                                                                                                                                                                                SubLObject _prev_bind_0_130 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                                                                try {
-                                                                                                                                                                                    sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                                                                    {
-                                                                                                                                                                                        SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                                                                        SubLObject cdolist_list_var_131 = new_list;
-                                                                                                                                                                                        SubLObject attack = NIL;
-                                                                                                                                                                                        for (attack = cdolist_list_var_131.first(); NIL != cdolist_list_var_131; cdolist_list_var_131 = cdolist_list_var_131.rest() , attack = cdolist_list_var_131.first()) {
-                                                                                                                                                                                            if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(attack, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
-                                                                                                                                                                                                sbhl_marking_utilities.sbhl_mark_node_marked(attack, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                                                                                                                                                                                if (NIL != forts.fort_p(attack)) {
-                                                                                                                                                                                                    {
-                                                                                                                                                                                                        SubLObject lex_result = com.cyc.cycjava.cycl.lexification_utilities.possibly_lexify_terrorist_attack(attack, problem_store);
-                                                                                                                                                                                                        if (lex_result == $DONE) {
-                                                                                                                                                                                                            format(T, $str_alt180$__Already_Lexified___S__, attack);
-                                                                                                                                                                                                        } else {
-                                                                                                                                                                                                            if (NIL == lex_result) {
-                                                                                                                                                                                                                format(T, $str_alt181$__No_Lexifications_to_be_had___S_, attack);
-                                                                                                                                                                                                            } else {
-                                                                                                                                                                                                                num_lexified = add(num_lexified, ONE_INTEGER);
-                                                                                                                                                                                                                format(T, $str_alt182$__Lexified__S___S__, num_lexified, attack);
-                                                                                                                                                                                                            }
-                                                                                                                                                                                                        }
-                                                                                                                                                                                                    }
-                                                                                                                                                                                                    force_output(UNPROVIDED);
-                                                                                                                                                                                                    if (inference_datastructures_problem_store.problem_store_size(problem_store).numG($int$100000)) {
-                                                                                                                                                                                                        inference_datastructures_problem_store.destroy_problem_store(problem_store);
-                                                                                                                                                                                                        problem_store = inference_datastructures_problem_store.new_problem_store(UNPROVIDED);
-                                                                                                                                                                                                    }
-                                                                                                                                                                                                }
-                                                                                                                                                                                            }
-                                                                                                                                                                                        }
-                                                                                                                                                                                    }
-                                                                                                                                                                                } finally {
-                                                                                                                                                                                    sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_130, thread);
-                                                                                                                                                                                }
-                                                                                                                                                                            }
-                                                                                                                                                                        }
-                                                                                                                                                                        iteration_state_129 = dictionary_contents.do_dictionary_contents_next(iteration_state_129);
-                                                                                                                                                                    }
-                                                                                                                                                                } 
-                                                                                                                                                                dictionary_contents.do_dictionary_contents_finalize(iteration_state_129);
-                                                                                                                                                            }
-                                                                                                                                                        } finally {
-                                                                                                                                                            sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_128, thread);
-                                                                                                                                                        }
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                                iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                                                                                                            }
-                                                                                                                                        } 
-                                                                                                                                        dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        } else {
-                                                                                                                            sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt165$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                    if (NIL != sbhl_macros.do_sbhl_non_fort_linksP(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED))) {
-                                                                                                                        {
-                                                                                                                            SubLObject csome_list_var = sbhl_link_methods.non_fort_instance_table_lookup(node);
-                                                                                                                            SubLObject instance_tuple = NIL;
-                                                                                                                            for (instance_tuple = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , instance_tuple = csome_list_var.first()) {
-                                                                                                                                {
-                                                                                                                                    SubLObject datum = instance_tuple;
-                                                                                                                                    SubLObject current = datum;
-                                                                                                                                    SubLObject link_node = NIL;
-                                                                                                                                    SubLObject mt = NIL;
-                                                                                                                                    SubLObject tv = NIL;
-                                                                                                                                    destructuring_bind_must_consp(current, datum, $list_alt166);
-                                                                                                                                    link_node = current.first();
-                                                                                                                                    current = current.rest();
-                                                                                                                                    destructuring_bind_must_consp(current, datum, $list_alt166);
-                                                                                                                                    mt = current.first();
-                                                                                                                                    current = current.rest();
-                                                                                                                                    destructuring_bind_must_consp(current, datum, $list_alt166);
-                                                                                                                                    tv = current.first();
-                                                                                                                                    current = current.rest();
-                                                                                                                                    if (NIL == current) {
-                                                                                                                                        if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                                                            {
-                                                                                                                                                SubLObject _prev_bind_0_132 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                                                                try {
-                                                                                                                                                    sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                                                    if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                                        {
-                                                                                                                                                            SubLObject _prev_bind_0_133 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                                            try {
-                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                                                {
-                                                                                                                                                                    SubLObject link_nodes = list(link_node);
-                                                                                                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                                                    SubLObject cdolist_list_var_134 = new_list;
-                                                                                                                                                                    SubLObject attack = NIL;
-                                                                                                                                                                    for (attack = cdolist_list_var_134.first(); NIL != cdolist_list_var_134; cdolist_list_var_134 = cdolist_list_var_134.rest() , attack = cdolist_list_var_134.first()) {
-                                                                                                                                                                        if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(attack, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
-                                                                                                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(attack, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                                                                                                                                                            if (NIL != forts.fort_p(attack)) {
-                                                                                                                                                                                {
-                                                                                                                                                                                    SubLObject lex_result = com.cyc.cycjava.cycl.lexification_utilities.possibly_lexify_terrorist_attack(attack, problem_store);
-                                                                                                                                                                                    if (lex_result == $DONE) {
-                                                                                                                                                                                        format(T, $str_alt180$__Already_Lexified___S__, attack);
-                                                                                                                                                                                    } else {
-                                                                                                                                                                                        if (NIL == lex_result) {
-                                                                                                                                                                                            format(T, $str_alt181$__No_Lexifications_to_be_had___S_, attack);
-                                                                                                                                                                                        } else {
-                                                                                                                                                                                            num_lexified = add(num_lexified, ONE_INTEGER);
-                                                                                                                                                                                            format(T, $str_alt182$__Lexified__S___S__, num_lexified, attack);
-                                                                                                                                                                                        }
-                                                                                                                                                                                    }
-                                                                                                                                                                                }
-                                                                                                                                                                                force_output(UNPROVIDED);
-                                                                                                                                                                                if (inference_datastructures_problem_store.problem_store_size(problem_store).numG($int$100000)) {
-                                                                                                                                                                                    inference_datastructures_problem_store.destroy_problem_store(problem_store);
-                                                                                                                                                                                    problem_store = inference_datastructures_problem_store.new_problem_store(UNPROVIDED);
-                                                                                                                                                                                }
-                                                                                                                                                                            }
-                                                                                                                                                                        }
-                                                                                                                                                                    }
-                                                                                                                                                                }
-                                                                                                                                                            } finally {
-                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_133, thread);
-                                                                                                                                                            }
-                                                                                                                                                        }
-                                                                                                                                                    }
-                                                                                                                                                } finally {
-                                                                                                                                                    sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_132, thread);
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    } else {
-                                                                                                                                        cdestructuring_bind_error(datum, $list_alt166);
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                } else {
-                                                                                                                    if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
-                                                                                                                        {
-                                                                                                                            SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                            SubLObject cdolist_list_var_135 = new_list;
-                                                                                                                            SubLObject generating_fn = NIL;
-                                                                                                                            for (generating_fn = cdolist_list_var_135.first(); NIL != cdolist_list_var_135; cdolist_list_var_135 = cdolist_list_var_135.rest() , generating_fn = cdolist_list_var_135.first()) {
-                                                                                                                                {
-                                                                                                                                    SubLObject _prev_bind_0_136 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
-                                                                                                                                    try {
-                                                                                                                                        sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
-                                                                                                                                        {
-                                                                                                                                            SubLObject link_nodes = funcall(generating_fn, node);
-                                                                                                                                            SubLObject new_list_137 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                            SubLObject cdolist_list_var_138 = new_list_137;
-                                                                                                                                            SubLObject attack = NIL;
-                                                                                                                                            for (attack = cdolist_list_var_138.first(); NIL != cdolist_list_var_138; cdolist_list_var_138 = cdolist_list_var_138.rest() , attack = cdolist_list_var_138.first()) {
-                                                                                                                                                if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(attack, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
-                                                                                                                                                    sbhl_marking_utilities.sbhl_mark_node_marked(attack, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                                                                                                                                    if (NIL != forts.fort_p(attack)) {
-                                                                                                                                                        {
-                                                                                                                                                            SubLObject lex_result = com.cyc.cycjava.cycl.lexification_utilities.possibly_lexify_terrorist_attack(attack, problem_store);
-                                                                                                                                                            if (lex_result == $DONE) {
-                                                                                                                                                                format(T, $str_alt180$__Already_Lexified___S__, attack);
-                                                                                                                                                            } else {
-                                                                                                                                                                if (NIL == lex_result) {
-                                                                                                                                                                    format(T, $str_alt181$__No_Lexifications_to_be_had___S_, attack);
-                                                                                                                                                                } else {
-                                                                                                                                                                    num_lexified = add(num_lexified, ONE_INTEGER);
-                                                                                                                                                                    format(T, $str_alt182$__Lexified__S___S__, num_lexified, attack);
-                                                                                                                                                                }
-                                                                                                                                                            }
-                                                                                                                                                        }
-                                                                                                                                                        force_output(UNPROVIDED);
-                                                                                                                                                        if (inference_datastructures_problem_store.problem_store_size(problem_store).numG($int$100000)) {
-                                                                                                                                                            inference_datastructures_problem_store.destroy_problem_store(problem_store);
-                                                                                                                                                            problem_store = inference_datastructures_problem_store.new_problem_store(UNPROVIDED);
-                                                                                                                                                        }
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    } finally {
-                                                                                                                                        sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_136, thread);
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        } finally {
-                                                                                                            sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_127, thread);
-                                                                                                            sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_126, thread);
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                            {
-                                                                                                SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)));
-                                                                                                SubLObject cdolist_list_var = accessible_modules;
-                                                                                                SubLObject module_var = NIL;
-                                                                                                for (module_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , module_var = cdolist_list_var.first()) {
-                                                                                                    {
-                                                                                                        SubLObject _prev_bind_0_139 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                                                                        SubLObject _prev_bind_1_140 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                                                        try {
-                                                                                                            sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
-                                                                                                            sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
-                                                                                                            {
-                                                                                                                SubLObject node = function_terms.naut_to_nart(node_var_114);
-                                                                                                                if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
-                                                                                                                    {
-                                                                                                                        SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                        if (NIL != d_link) {
-                                                                                                                            {
-                                                                                                                                SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_link_vars.get_sbhl_link_direction(), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                                if (NIL != mt_links) {
-                                                                                                                                    {
-                                                                                                                                        SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
-                                                                                                                                        while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                                                                                                                                            thread.resetMultipleValues();
-                                                                                                                                            {
-                                                                                                                                                SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                                                                                                SubLObject tv_links = thread.secondMultipleValue();
-                                                                                                                                                thread.resetMultipleValues();
-                                                                                                                                                if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                                                                    {
-                                                                                                                                                        SubLObject _prev_bind_0_141 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                                                                        try {
-                                                                                                                                                            sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                                                            {
-                                                                                                                                                                SubLObject iteration_state_142 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
-                                                                                                                                                                while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_142)) {
-                                                                                                                                                                    thread.resetMultipleValues();
-                                                                                                                                                                    {
-                                                                                                                                                                        SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_142);
-                                                                                                                                                                        SubLObject link_nodes = thread.secondMultipleValue();
-                                                                                                                                                                        thread.resetMultipleValues();
-                                                                                                                                                                        if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                                                            {
-                                                                                                                                                                                SubLObject _prev_bind_0_143 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                                                                try {
-                                                                                                                                                                                    sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                                                                    {
-                                                                                                                                                                                        SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                                                                        SubLObject cdolist_list_var_144 = new_list;
-                                                                                                                                                                                        SubLObject node_vars_link_node = NIL;
-                                                                                                                                                                                        for (node_vars_link_node = cdolist_list_var_144.first(); NIL != cdolist_list_var_144; cdolist_list_var_144 = cdolist_list_var_144.rest() , node_vars_link_node = cdolist_list_var_144.first()) {
-                                                                                                                                                                                            if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
-                                                                                                                                                                                                sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
-                                                                                                                                                                                                deck.deck_push(node_vars_link_node, recur_deck);
-                                                                                                                                                                                            }
-                                                                                                                                                                                        }
-                                                                                                                                                                                    }
-                                                                                                                                                                                } finally {
-                                                                                                                                                                                    sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_143, thread);
-                                                                                                                                                                                }
-                                                                                                                                                                            }
-                                                                                                                                                                        }
-                                                                                                                                                                        iteration_state_142 = dictionary_contents.do_dictionary_contents_next(iteration_state_142);
-                                                                                                                                                                    }
-                                                                                                                                                                } 
-                                                                                                                                                                dictionary_contents.do_dictionary_contents_finalize(iteration_state_142);
-                                                                                                                                                            }
-                                                                                                                                                        } finally {
-                                                                                                                                                            sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_141, thread);
-                                                                                                                                                        }
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                                iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                                                                                                            }
-                                                                                                                                        } 
-                                                                                                                                        dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        } else {
-                                                                                                                            sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt165$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                } else {
-                                                                                                                    if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
-                                                                                                                        {
-                                                                                                                            SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                            SubLObject cdolist_list_var_145 = new_list;
-                                                                                                                            SubLObject generating_fn = NIL;
-                                                                                                                            for (generating_fn = cdolist_list_var_145.first(); NIL != cdolist_list_var_145; cdolist_list_var_145 = cdolist_list_var_145.rest() , generating_fn = cdolist_list_var_145.first()) {
-                                                                                                                                {
-                                                                                                                                    SubLObject _prev_bind_0_146 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
-                                                                                                                                    try {
-                                                                                                                                        sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
-                                                                                                                                        {
-                                                                                                                                            SubLObject link_nodes = funcall(generating_fn, node);
-                                                                                                                                            SubLObject new_list_147 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                            SubLObject cdolist_list_var_148 = new_list_147;
-                                                                                                                                            SubLObject node_vars_link_node = NIL;
-                                                                                                                                            for (node_vars_link_node = cdolist_list_var_148.first(); NIL != cdolist_list_var_148; cdolist_list_var_148 = cdolist_list_var_148.rest() , node_vars_link_node = cdolist_list_var_148.first()) {
-                                                                                                                                                if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
-                                                                                                                                                    sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
-                                                                                                                                                    deck.deck_push(node_vars_link_node, recur_deck);
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    } finally {
-                                                                                                                                        sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_146, thread);
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        } finally {
-                                                                                                            sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_140, thread);
-                                                                                                            sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_139, thread);
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                            node_var_114 = deck.deck_pop(recur_deck);
-                                                                                        } 
-                                                                                    } finally {
-                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_2_125, thread);
-                                                                                        sbhl_link_vars.$sbhl_link_direction$.rebind(_prev_bind_1_124, thread);
-                                                                                        sbhl_search_vars.$sbhl_search_direction$.rebind(_prev_bind_0_123, thread);
-                                                                                    }
-                                                                                }
-                                                                            } else {
-                                                                                sbhl_paranoia.sbhl_warn(TWO_INTEGER, $str_alt167$Node__a_does_not_pass_sbhl_type_t, node_var, sbhl_module_utilities.get_sbhl_type_test(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                            }
-                                                                        } finally {
-                                                                            sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
-                                                                            sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3, thread);
-                                                                            sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2_122, thread);
-                                                                            sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1_121, thread);
-                                                                            sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0_120, thread);
-                                                                        }
-                                                                    }
-                                                                } finally {
-                                                                    sbhl_search_vars.$relevant_sbhl_tv_function$.rebind(_prev_bind_1_119, thread);
-                                                                    sbhl_search_vars.$sbhl_tv$.rebind(_prev_bind_0_118, thread);
-                                                                }
-                                                            }
-                                                        }
-                                                    } finally {
-                                                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
-                                                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1_117, thread);
-                                                        mt_relevance_macros.$mt$.rebind(_prev_bind_0_116, thread);
-                                                    }
-                                                }
-                                                sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_space$.getDynamicValue(thread));
-                                            }
-                                        } finally {
-                                            sbhl_marking_vars.$sbhl_space$.rebind(_prev_bind_0_115, thread);
-                                        }
-                                    }
-                                    sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                }
-                            } finally {
-                                sbhl_marking_vars.$sbhl_gather_space$.rebind(_prev_bind_1, thread);
-                                sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                    inference_datastructures_problem_store.destroy_problem_store(problem_store);
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            operation_communication.set_the_cyclist(old_cyclist);
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                return num_lexified;
-            }
-        }
-    }
-
-    public static final SubLObject lexify_attacks(SubLObject domain_mt, SubLObject lexical_mt) {
-        if (lexical_mt == UNPROVIDED) {
-            lexical_mt = $$TerrorismLexicalMt;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject problem_store = inference_datastructures_problem_store.new_problem_store(UNPROVIDED);
-                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(domain_mt);
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
-                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
-                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
-                        {
-                            SubLObject node_var = $$TerroristAttack;
-                            {
-                                SubLObject _prev_bind_0_149 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                SubLObject _prev_bind_1_150 = sbhl_marking_vars.$sbhl_gather_space$.currentBinding(thread);
-                                try {
-                                    sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module($$isa), thread);
-                                    sbhl_marking_vars.$sbhl_gather_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
-                                    {
-                                        SubLObject node_var_151 = node_var;
-                                        SubLObject deck_type = (false) ? ((SubLObject) ($QUEUE)) : $STACK;
-                                        SubLObject recur_deck = deck.create_deck(deck_type);
-                                        {
-                                            SubLObject _prev_bind_0_152 = sbhl_marking_vars.$sbhl_space$.currentBinding(thread);
-                                            try {
-                                                sbhl_marking_vars.$sbhl_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
-                                                {
-                                                    SubLObject tv_var = NIL;
-                                                    {
-                                                        SubLObject _prev_bind_0_153 = sbhl_search_vars.$sbhl_tv$.currentBinding(thread);
-                                                        SubLObject _prev_bind_1_154 = sbhl_search_vars.$relevant_sbhl_tv_function$.currentBinding(thread);
-                                                        try {
-                                                            sbhl_search_vars.$sbhl_tv$.bind(NIL != tv_var ? ((SubLObject) (tv_var)) : sbhl_search_vars.get_sbhl_true_tv(), thread);
-                                                            sbhl_search_vars.$relevant_sbhl_tv_function$.bind(NIL != tv_var ? ((SubLObject) (RELEVANT_SBHL_TV_IS_GENERAL_TV)) : sbhl_search_vars.$relevant_sbhl_tv_function$.getDynamicValue(thread), thread);
-                                                            if (NIL != tv_var) {
-                                                                if (NIL != sbhl_paranoia.sbhl_object_type_checking_p()) {
-                                                                    if (NIL == sbhl_search_vars.sbhl_true_tv_p(tv_var)) {
-                                                                        {
-                                                                            SubLObject pcase_var = sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread);
-                                                                            if (pcase_var.eql($ERROR)) {
-                                                                                sbhl_paranoia.sbhl_error(ONE_INTEGER, $str_alt159$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                            } else {
-                                                                                if (pcase_var.eql($CERROR)) {
-                                                                                    sbhl_paranoia.sbhl_cerror(ONE_INTEGER, $$$continue_anyway, $str_alt159$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                } else {
-                                                                                    if (pcase_var.eql($WARN)) {
-                                                                                        Errors.warn($str_alt159$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
-                                                                                    } else {
-                                                                                        Errors.warn($str_alt164$_A_is_not_a_valid__sbhl_type_erro, sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread));
-                                                                                        Errors.cerror($$$continue_anyway, $str_alt159$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                            {
-                                                                SubLObject _prev_bind_0_155 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
-                                                                SubLObject _prev_bind_1_156 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
-                                                                SubLObject _prev_bind_2_157 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
-                                                                SubLObject _prev_bind_3 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                                try {
-                                                                    sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)), thread);
-                                                                    sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
-                                                                    sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
-                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
-                                                                    sbhl_module_vars.$sbhl_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)), thread);
-                                                                    if ((NIL != sbhl_paranoia.suspend_sbhl_type_checkingP()) || (NIL != sbhl_module_utilities.apply_sbhl_module_type_test(node_var, sbhl_module_vars.get_sbhl_module(UNPROVIDED)))) {
-                                                                        {
-                                                                            SubLObject _prev_bind_0_158 = sbhl_search_vars.$sbhl_search_direction$.currentBinding(thread);
-                                                                            SubLObject _prev_bind_1_159 = sbhl_link_vars.$sbhl_link_direction$.currentBinding(thread);
-                                                                            SubLObject _prev_bind_2_160 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                            try {
-                                                                                sbhl_search_vars.$sbhl_search_direction$.bind(sbhl_search_vars.get_sbhl_backward_search_direction(), thread);
-                                                                                sbhl_link_vars.$sbhl_link_direction$.bind(sbhl_module_utilities.sbhl_search_direction_to_link_direction(sbhl_search_vars.get_sbhl_backward_search_direction(), sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
-                                                                                sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
-                                                                                sbhl_marking_utilities.sbhl_mark_node_marked(node_var_151, UNPROVIDED);
-                                                                                while (NIL != node_var_151) {
-                                                                                    {
-                                                                                        SubLObject tt_node_var = node_var_151;
-                                                                                        SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_vars.get_sbhl_module($$isa));
-                                                                                        SubLObject cdolist_list_var = accessible_modules;
-                                                                                        SubLObject module_var = NIL;
-                                                                                        for (module_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , module_var = cdolist_list_var.first()) {
-                                                                                            {
-                                                                                                SubLObject _prev_bind_0_161 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                                                                SubLObject _prev_bind_1_162 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                                                try {
-                                                                                                    sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
-                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
-                                                                                                    {
-                                                                                                        SubLObject node = function_terms.naut_to_nart(tt_node_var);
-                                                                                                        if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
-                                                                                                            {
-                                                                                                                SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                if (NIL != d_link) {
-                                                                                                                    {
-                                                                                                                        SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                        if (NIL != mt_links) {
-                                                                                                                            {
-                                                                                                                                SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
-                                                                                                                                while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                                                                                                                                    thread.resetMultipleValues();
-                                                                                                                                    {
-                                                                                                                                        SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                                                                                        SubLObject tv_links = thread.secondMultipleValue();
-                                                                                                                                        thread.resetMultipleValues();
-                                                                                                                                        if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                                                            {
-                                                                                                                                                SubLObject _prev_bind_0_163 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                                                                try {
-                                                                                                                                                    sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                                                    {
-                                                                                                                                                        SubLObject iteration_state_164 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
-                                                                                                                                                        while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_164)) {
-                                                                                                                                                            thread.resetMultipleValues();
-                                                                                                                                                            {
-                                                                                                                                                                SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_164);
-                                                                                                                                                                SubLObject link_nodes = thread.secondMultipleValue();
-                                                                                                                                                                thread.resetMultipleValues();
-                                                                                                                                                                if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                                                    {
-                                                                                                                                                                        SubLObject _prev_bind_0_165 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                                                        try {
-                                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                                                            {
-                                                                                                                                                                                SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                                                                SubLObject cdolist_list_var_166 = new_list;
-                                                                                                                                                                                SubLObject attack = NIL;
-                                                                                                                                                                                for (attack = cdolist_list_var_166.first(); NIL != cdolist_list_var_166; cdolist_list_var_166 = cdolist_list_var_166.rest() , attack = cdolist_list_var_166.first()) {
-                                                                                                                                                                                    if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(attack, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
-                                                                                                                                                                                        sbhl_marking_utilities.sbhl_mark_node_marked(attack, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                                                                                                                                                                        if (NIL != forts.fort_p(attack)) {
-                                                                                                                                                                                            if ((NIL != constant_p(attack)) && (NIL == kb_mapping_utilities.some_pred_value_in_relevant_mts(attack, $$definiteDescriptions, UNPROVIDED, UNPROVIDED, UNPROVIDED))) {
-                                                                                                                                                                                                com.cyc.cycjava.cycl.lexification_utilities.try_to_lexify_attack(attack, domain_mt, lexical_mt, problem_store);
-                                                                                                                                                                                            }
-                                                                                                                                                                                            if (inference_datastructures_problem_store.problem_store_size(problem_store).numG($int$100000)) {
-                                                                                                                                                                                                inference_datastructures_problem_store.destroy_problem_store(problem_store);
-                                                                                                                                                                                                problem_store = inference_datastructures_problem_store.new_problem_store(UNPROVIDED);
-                                                                                                                                                                                            }
-                                                                                                                                                                                        }
-                                                                                                                                                                                    }
-                                                                                                                                                                                }
-                                                                                                                                                                            }
-                                                                                                                                                                        } finally {
-                                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_165, thread);
-                                                                                                                                                                        }
-                                                                                                                                                                    }
-                                                                                                                                                                }
-                                                                                                                                                                iteration_state_164 = dictionary_contents.do_dictionary_contents_next(iteration_state_164);
-                                                                                                                                                            }
-                                                                                                                                                        } 
-                                                                                                                                                        dictionary_contents.do_dictionary_contents_finalize(iteration_state_164);
-                                                                                                                                                    }
-                                                                                                                                                } finally {
-                                                                                                                                                    sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_163, thread);
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                        iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                                                                                                    }
-                                                                                                                                } 
-                                                                                                                                dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                } else {
-                                                                                                                    sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt165$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                                                }
-                                                                                                            }
-                                                                                                            if (NIL != sbhl_macros.do_sbhl_non_fort_linksP(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED))) {
-                                                                                                                {
-                                                                                                                    SubLObject csome_list_var = sbhl_link_methods.non_fort_instance_table_lookup(node);
-                                                                                                                    SubLObject instance_tuple = NIL;
-                                                                                                                    for (instance_tuple = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , instance_tuple = csome_list_var.first()) {
-                                                                                                                        {
-                                                                                                                            SubLObject datum = instance_tuple;
-                                                                                                                            SubLObject current = datum;
-                                                                                                                            SubLObject link_node = NIL;
-                                                                                                                            SubLObject mt = NIL;
-                                                                                                                            SubLObject tv = NIL;
-                                                                                                                            destructuring_bind_must_consp(current, datum, $list_alt166);
-                                                                                                                            link_node = current.first();
-                                                                                                                            current = current.rest();
-                                                                                                                            destructuring_bind_must_consp(current, datum, $list_alt166);
-                                                                                                                            mt = current.first();
-                                                                                                                            current = current.rest();
-                                                                                                                            destructuring_bind_must_consp(current, datum, $list_alt166);
-                                                                                                                            tv = current.first();
-                                                                                                                            current = current.rest();
-                                                                                                                            if (NIL == current) {
-                                                                                                                                if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                                                    {
-                                                                                                                                        SubLObject _prev_bind_0_167 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                                                        try {
-                                                                                                                                            sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                                            if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                                {
-                                                                                                                                                    SubLObject _prev_bind_0_168 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                                    try {
-                                                                                                                                                        sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                                        {
-                                                                                                                                                            SubLObject link_nodes = list(link_node);
-                                                                                                                                                            SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                                            SubLObject cdolist_list_var_169 = new_list;
-                                                                                                                                                            SubLObject attack = NIL;
-                                                                                                                                                            for (attack = cdolist_list_var_169.first(); NIL != cdolist_list_var_169; cdolist_list_var_169 = cdolist_list_var_169.rest() , attack = cdolist_list_var_169.first()) {
-                                                                                                                                                                if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(attack, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
-                                                                                                                                                                    sbhl_marking_utilities.sbhl_mark_node_marked(attack, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                                                                                                                                                    if (NIL != forts.fort_p(attack)) {
-                                                                                                                                                                        if ((NIL != constant_p(attack)) && (NIL == kb_mapping_utilities.some_pred_value_in_relevant_mts(attack, $$definiteDescriptions, UNPROVIDED, UNPROVIDED, UNPROVIDED))) {
-                                                                                                                                                                            com.cyc.cycjava.cycl.lexification_utilities.try_to_lexify_attack(attack, domain_mt, lexical_mt, problem_store);
-                                                                                                                                                                        }
-                                                                                                                                                                        if (inference_datastructures_problem_store.problem_store_size(problem_store).numG($int$100000)) {
-                                                                                                                                                                            inference_datastructures_problem_store.destroy_problem_store(problem_store);
-                                                                                                                                                                            problem_store = inference_datastructures_problem_store.new_problem_store(UNPROVIDED);
-                                                                                                                                                                        }
-                                                                                                                                                                    }
-                                                                                                                                                                }
-                                                                                                                                                            }
-                                                                                                                                                        }
-                                                                                                                                                    } finally {
-                                                                                                                                                        sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_168, thread);
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        } finally {
-                                                                                                                                            sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_167, thread);
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            } else {
-                                                                                                                                cdestructuring_bind_error(datum, $list_alt166);
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        } else {
-                                                                                                            if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
-                                                                                                                {
-                                                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                    SubLObject cdolist_list_var_170 = new_list;
-                                                                                                                    SubLObject generating_fn = NIL;
-                                                                                                                    for (generating_fn = cdolist_list_var_170.first(); NIL != cdolist_list_var_170; cdolist_list_var_170 = cdolist_list_var_170.rest() , generating_fn = cdolist_list_var_170.first()) {
-                                                                                                                        {
-                                                                                                                            SubLObject _prev_bind_0_171 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
-                                                                                                                            try {
-                                                                                                                                sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
-                                                                                                                                {
-                                                                                                                                    SubLObject link_nodes = funcall(generating_fn, node);
-                                                                                                                                    SubLObject new_list_172 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                    SubLObject cdolist_list_var_173 = new_list_172;
-                                                                                                                                    SubLObject attack = NIL;
-                                                                                                                                    for (attack = cdolist_list_var_173.first(); NIL != cdolist_list_var_173; cdolist_list_var_173 = cdolist_list_var_173.rest() , attack = cdolist_list_var_173.first()) {
-                                                                                                                                        if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(attack, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
-                                                                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(attack, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                                                                                                                            if (NIL != forts.fort_p(attack)) {
-                                                                                                                                                if ((NIL != constant_p(attack)) && (NIL == kb_mapping_utilities.some_pred_value_in_relevant_mts(attack, $$definiteDescriptions, UNPROVIDED, UNPROVIDED, UNPROVIDED))) {
-                                                                                                                                                    com.cyc.cycjava.cycl.lexification_utilities.try_to_lexify_attack(attack, domain_mt, lexical_mt, problem_store);
-                                                                                                                                                }
-                                                                                                                                                if (inference_datastructures_problem_store.problem_store_size(problem_store).numG($int$100000)) {
-                                                                                                                                                    inference_datastructures_problem_store.destroy_problem_store(problem_store);
-                                                                                                                                                    problem_store = inference_datastructures_problem_store.new_problem_store(UNPROVIDED);
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            } finally {
-                                                                                                                                sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_171, thread);
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                } finally {
-                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_162, thread);
-                                                                                                    sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_161, thread);
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                    {
-                                                                                        SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)));
-                                                                                        SubLObject cdolist_list_var = accessible_modules;
-                                                                                        SubLObject module_var = NIL;
-                                                                                        for (module_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , module_var = cdolist_list_var.first()) {
-                                                                                            {
-                                                                                                SubLObject _prev_bind_0_174 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                                                                SubLObject _prev_bind_1_175 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                                                try {
-                                                                                                    sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
-                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
-                                                                                                    {
-                                                                                                        SubLObject node = function_terms.naut_to_nart(node_var_151);
-                                                                                                        if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
-                                                                                                            {
-                                                                                                                SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                if (NIL != d_link) {
-                                                                                                                    {
-                                                                                                                        SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_link_vars.get_sbhl_link_direction(), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                        if (NIL != mt_links) {
-                                                                                                                            {
-                                                                                                                                SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
-                                                                                                                                while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                                                                                                                                    thread.resetMultipleValues();
-                                                                                                                                    {
-                                                                                                                                        SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                                                                                        SubLObject tv_links = thread.secondMultipleValue();
-                                                                                                                                        thread.resetMultipleValues();
-                                                                                                                                        if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                                                            {
-                                                                                                                                                SubLObject _prev_bind_0_176 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                                                                try {
-                                                                                                                                                    sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                                                    {
-                                                                                                                                                        SubLObject iteration_state_177 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
-                                                                                                                                                        while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_177)) {
-                                                                                                                                                            thread.resetMultipleValues();
-                                                                                                                                                            {
-                                                                                                                                                                SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_177);
-                                                                                                                                                                SubLObject link_nodes = thread.secondMultipleValue();
-                                                                                                                                                                thread.resetMultipleValues();
-                                                                                                                                                                if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                                                    {
-                                                                                                                                                                        SubLObject _prev_bind_0_178 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                                                        try {
-                                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                                                            {
-                                                                                                                                                                                SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                                                                SubLObject cdolist_list_var_179 = new_list;
-                                                                                                                                                                                SubLObject node_vars_link_node = NIL;
-                                                                                                                                                                                for (node_vars_link_node = cdolist_list_var_179.first(); NIL != cdolist_list_var_179; cdolist_list_var_179 = cdolist_list_var_179.rest() , node_vars_link_node = cdolist_list_var_179.first()) {
-                                                                                                                                                                                    if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
-                                                                                                                                                                                        sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
-                                                                                                                                                                                        deck.deck_push(node_vars_link_node, recur_deck);
-                                                                                                                                                                                    }
-                                                                                                                                                                                }
-                                                                                                                                                                            }
-                                                                                                                                                                        } finally {
-                                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_178, thread);
-                                                                                                                                                                        }
-                                                                                                                                                                    }
-                                                                                                                                                                }
-                                                                                                                                                                iteration_state_177 = dictionary_contents.do_dictionary_contents_next(iteration_state_177);
-                                                                                                                                                            }
-                                                                                                                                                        } 
-                                                                                                                                                        dictionary_contents.do_dictionary_contents_finalize(iteration_state_177);
-                                                                                                                                                    }
-                                                                                                                                                } finally {
-                                                                                                                                                    sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_176, thread);
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                        iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                                                                                                    }
-                                                                                                                                } 
-                                                                                                                                dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                } else {
-                                                                                                                    sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt165$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                                                }
-                                                                                                            }
-                                                                                                        } else {
-                                                                                                            if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
-                                                                                                                {
-                                                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                    SubLObject cdolist_list_var_180 = new_list;
-                                                                                                                    SubLObject generating_fn = NIL;
-                                                                                                                    for (generating_fn = cdolist_list_var_180.first(); NIL != cdolist_list_var_180; cdolist_list_var_180 = cdolist_list_var_180.rest() , generating_fn = cdolist_list_var_180.first()) {
-                                                                                                                        {
-                                                                                                                            SubLObject _prev_bind_0_181 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
-                                                                                                                            try {
-                                                                                                                                sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
-                                                                                                                                {
-                                                                                                                                    SubLObject link_nodes = funcall(generating_fn, node);
-                                                                                                                                    SubLObject new_list_182 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                    SubLObject cdolist_list_var_183 = new_list_182;
-                                                                                                                                    SubLObject node_vars_link_node = NIL;
-                                                                                                                                    for (node_vars_link_node = cdolist_list_var_183.first(); NIL != cdolist_list_var_183; cdolist_list_var_183 = cdolist_list_var_183.rest() , node_vars_link_node = cdolist_list_var_183.first()) {
-                                                                                                                                        if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
-                                                                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
-                                                                                                                                            deck.deck_push(node_vars_link_node, recur_deck);
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            } finally {
-                                                                                                                                sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_181, thread);
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                } finally {
-                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_175, thread);
-                                                                                                    sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_174, thread);
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                    node_var_151 = deck.deck_pop(recur_deck);
-                                                                                } 
-                                                                            } finally {
-                                                                                sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_2_160, thread);
-                                                                                sbhl_link_vars.$sbhl_link_direction$.rebind(_prev_bind_1_159, thread);
-                                                                                sbhl_search_vars.$sbhl_search_direction$.rebind(_prev_bind_0_158, thread);
-                                                                            }
-                                                                        }
-                                                                    } else {
-                                                                        sbhl_paranoia.sbhl_warn(TWO_INTEGER, $str_alt167$Node__a_does_not_pass_sbhl_type_t, node_var, sbhl_module_utilities.get_sbhl_type_test(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                    }
-                                                                } finally {
-                                                                    sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
-                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3, thread);
-                                                                    sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2_157, thread);
-                                                                    sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1_156, thread);
-                                                                    sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0_155, thread);
-                                                                }
-                                                            }
-                                                        } finally {
-                                                            sbhl_search_vars.$relevant_sbhl_tv_function$.rebind(_prev_bind_1_154, thread);
-                                                            sbhl_search_vars.$sbhl_tv$.rebind(_prev_bind_0_153, thread);
-                                                        }
-                                                    }
-                                                    sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_space$.getDynamicValue(thread));
-                                                }
-                                            } finally {
-                                                sbhl_marking_vars.$sbhl_space$.rebind(_prev_bind_0_152, thread);
-                                            }
-                                        }
-                                        sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                    }
-                                } finally {
-                                    sbhl_marking_vars.$sbhl_gather_space$.rebind(_prev_bind_1_150, thread);
-                                    sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_149, thread);
-                                }
-                            }
-                        }
-                    } finally {
-                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                inference_datastructures_problem_store.destroy_problem_store(problem_store);
-            }
-            return $DONE;
-        }
-    }
-
-    public static final SubLObject gather_defining_sentence_set_for_attack(SubLObject attack, SubLObject mt, SubLObject problem_store) {
-        if (problem_store == UNPROVIDED) {
-            problem_store = NIL;
-        }
-        {
-            SubLObject sentences = NIL;
-            SubLObject attack_type_sentence = com.cyc.cycjava.cycl.lexification_utilities.attack_type_sentence_for_attack(attack, mt, problem_store);
-            if (NIL == attack_type_sentence) {
-                Errors.warn($str_alt210$Couldn_t_find_attack_type_for__S_, attack, mt);
-                return NIL;
-            }
-            sentences = cons(attack_type_sentence, sentences);
-            {
-                SubLObject location_sentence = com.cyc.cycjava.cycl.lexification_utilities.location_sentence_for_event(attack, mt, problem_store);
-                if (NIL == location_sentence) {
-                    Errors.warn($str_alt211$Couldn_t_find_location_for__S_in_, attack, mt);
-                    return NIL;
-                }
-                sentences = cons(location_sentence, sentences);
-            }
-            {
-                SubLObject date_sentence = com.cyc.cycjava.cycl.lexification_utilities.date_sentence_for_event(attack, mt, problem_store);
-                if (NIL == date_sentence) {
-                    Errors.warn($str_alt212$Couldn_t_find_date_for__S_in__S, attack, mt);
-                    return NIL;
-                }
-                sentences = cons(date_sentence, sentences);
-            }
-            return make_el_formula($$TheSet, nreverse(sentences), UNPROVIDED);
-        }
-    }
-
-    public static final SubLObject definite_descriptions_for_attack_from_presuppositions(SubLObject attack, SubLObject v_set, SubLObject lexical_mt, SubLObject problem_store) {
-        if (problem_store == UNPROVIDED) {
-            problem_store = NIL;
-        }
-        {
-            SubLObject query_sentence = list($$and, list($$thereExists, $sym200$_PHRASE, list($$and, $list_alt201, list($$phraseDenotesAndPresupposes, $sym200$_PHRASE, attack, v_set))));
-            SubLObject v_properties = list($MAX_TRANSFORMATION_DEPTH, FOUR_INTEGER, $MAX_NUMBER, THREE_INTEGER, $MAX_TIME, $int$300, $PROBLEM_STORE, problem_store);
-            return ask_utilities.query_variable($sym207$_STRING, query_sentence, listS($$MtUnionFn, lexical_mt, $list_alt209), v_properties);
-        }
-    }
-
-    public static final SubLObject date_sentence_for_event(SubLObject event, SubLObject mt, SubLObject problem_store) {
-        if (problem_store == UNPROVIDED) {
-            problem_store = NIL;
-        }
-        {
-            SubLObject var = $sym214$_DATE;
-            SubLObject query_sentence = list($$dateOfEvent, event, var);
-            SubLObject v_properties = list($MAX_NUMBER, ONE_INTEGER, $PROBLEM_STORE, problem_store, $ANSWER_LANGUAGE, $HL);
-            SubLObject date = ask_utilities.query_variable(var, query_sentence, mt, v_properties).first();
-            return NIL != date ? ((SubLObject) (make_binary_formula($$dateOfEvent, event, date))) : NIL;
-        }
-    }
-
-    public static final SubLObject count_attack_lexifications() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject total = ZERO_INTEGER;
-                SubLObject lexified = ZERO_INTEGER;
-                SubLObject total_lexifications = ZERO_INTEGER;
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                        {
-                            SubLObject node_var = $$TerroristAttack;
-                            {
-                                SubLObject _prev_bind_0_184 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                SubLObject _prev_bind_1_185 = sbhl_marking_vars.$sbhl_gather_space$.currentBinding(thread);
-                                try {
-                                    sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module($$isa), thread);
-                                    sbhl_marking_vars.$sbhl_gather_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
-                                    {
-                                        SubLObject node_var_186 = node_var;
-                                        SubLObject deck_type = (false) ? ((SubLObject) ($QUEUE)) : $STACK;
-                                        SubLObject recur_deck = deck.create_deck(deck_type);
-                                        {
-                                            SubLObject _prev_bind_0_187 = sbhl_marking_vars.$sbhl_space$.currentBinding(thread);
-                                            try {
-                                                sbhl_marking_vars.$sbhl_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
-                                                {
-                                                    SubLObject tv_var = NIL;
-                                                    {
-                                                        SubLObject _prev_bind_0_188 = sbhl_search_vars.$sbhl_tv$.currentBinding(thread);
-                                                        SubLObject _prev_bind_1_189 = sbhl_search_vars.$relevant_sbhl_tv_function$.currentBinding(thread);
-                                                        try {
-                                                            sbhl_search_vars.$sbhl_tv$.bind(NIL != tv_var ? ((SubLObject) (tv_var)) : sbhl_search_vars.get_sbhl_true_tv(), thread);
-                                                            sbhl_search_vars.$relevant_sbhl_tv_function$.bind(NIL != tv_var ? ((SubLObject) (RELEVANT_SBHL_TV_IS_GENERAL_TV)) : sbhl_search_vars.$relevant_sbhl_tv_function$.getDynamicValue(thread), thread);
-                                                            if (NIL != tv_var) {
-                                                                if (NIL != sbhl_paranoia.sbhl_object_type_checking_p()) {
-                                                                    if (NIL == sbhl_search_vars.sbhl_true_tv_p(tv_var)) {
-                                                                        {
-                                                                            SubLObject pcase_var = sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread);
-                                                                            if (pcase_var.eql($ERROR)) {
-                                                                                sbhl_paranoia.sbhl_error(ONE_INTEGER, $str_alt159$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                            } else {
-                                                                                if (pcase_var.eql($CERROR)) {
-                                                                                    sbhl_paranoia.sbhl_cerror(ONE_INTEGER, $$$continue_anyway, $str_alt159$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                } else {
-                                                                                    if (pcase_var.eql($WARN)) {
-                                                                                        Errors.warn($str_alt159$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
-                                                                                    } else {
-                                                                                        Errors.warn($str_alt164$_A_is_not_a_valid__sbhl_type_erro, sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread));
-                                                                                        Errors.cerror($$$continue_anyway, $str_alt159$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                            {
-                                                                SubLObject _prev_bind_0_190 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
-                                                                SubLObject _prev_bind_1_191 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
-                                                                SubLObject _prev_bind_2 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
-                                                                SubLObject _prev_bind_3 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                                try {
-                                                                    sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)), thread);
-                                                                    sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
-                                                                    sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
-                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
-                                                                    sbhl_module_vars.$sbhl_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)), thread);
-                                                                    if ((NIL != sbhl_paranoia.suspend_sbhl_type_checkingP()) || (NIL != sbhl_module_utilities.apply_sbhl_module_type_test(node_var, sbhl_module_vars.get_sbhl_module(UNPROVIDED)))) {
-                                                                        {
-                                                                            SubLObject _prev_bind_0_192 = sbhl_search_vars.$sbhl_search_direction$.currentBinding(thread);
-                                                                            SubLObject _prev_bind_1_193 = sbhl_link_vars.$sbhl_link_direction$.currentBinding(thread);
-                                                                            SubLObject _prev_bind_2_194 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                            try {
-                                                                                sbhl_search_vars.$sbhl_search_direction$.bind(sbhl_search_vars.get_sbhl_backward_search_direction(), thread);
-                                                                                sbhl_link_vars.$sbhl_link_direction$.bind(sbhl_module_utilities.sbhl_search_direction_to_link_direction(sbhl_search_vars.get_sbhl_backward_search_direction(), sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
-                                                                                sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
-                                                                                sbhl_marking_utilities.sbhl_mark_node_marked(node_var_186, UNPROVIDED);
-                                                                                while (NIL != node_var_186) {
-                                                                                    {
-                                                                                        SubLObject tt_node_var = node_var_186;
-                                                                                        SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_vars.get_sbhl_module($$isa));
-                                                                                        SubLObject cdolist_list_var = accessible_modules;
-                                                                                        SubLObject module_var = NIL;
-                                                                                        for (module_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , module_var = cdolist_list_var.first()) {
-                                                                                            {
-                                                                                                SubLObject _prev_bind_0_195 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                                                                SubLObject _prev_bind_1_196 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                                                try {
-                                                                                                    sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
-                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
-                                                                                                    {
-                                                                                                        SubLObject node = function_terms.naut_to_nart(tt_node_var);
-                                                                                                        if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
-                                                                                                            {
-                                                                                                                SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                if (NIL != d_link) {
-                                                                                                                    {
-                                                                                                                        SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                        if (NIL != mt_links) {
-                                                                                                                            {
-                                                                                                                                SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
-                                                                                                                                while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                                                                                                                                    thread.resetMultipleValues();
-                                                                                                                                    {
-                                                                                                                                        SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                                                                                        SubLObject tv_links = thread.secondMultipleValue();
-                                                                                                                                        thread.resetMultipleValues();
-                                                                                                                                        if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                                                            {
-                                                                                                                                                SubLObject _prev_bind_0_197 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                                                                try {
-                                                                                                                                                    sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                                                    {
-                                                                                                                                                        SubLObject iteration_state_198 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
-                                                                                                                                                        while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_198)) {
-                                                                                                                                                            thread.resetMultipleValues();
-                                                                                                                                                            {
-                                                                                                                                                                SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_198);
-                                                                                                                                                                SubLObject link_nodes = thread.secondMultipleValue();
-                                                                                                                                                                thread.resetMultipleValues();
-                                                                                                                                                                if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                                                    {
-                                                                                                                                                                        SubLObject _prev_bind_0_199 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                                                        try {
-                                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                                                            {
-                                                                                                                                                                                SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                                                                SubLObject cdolist_list_var_200 = new_list;
-                                                                                                                                                                                SubLObject attack = NIL;
-                                                                                                                                                                                for (attack = cdolist_list_var_200.first(); NIL != cdolist_list_var_200; cdolist_list_var_200 = cdolist_list_var_200.rest() , attack = cdolist_list_var_200.first()) {
-                                                                                                                                                                                    if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(attack, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
-                                                                                                                                                                                        sbhl_marking_utilities.sbhl_mark_node_marked(attack, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                                                                                                                                                                        if (NIL != forts.fort_p(attack)) {
-                                                                                                                                                                                            total = add(total, ONE_INTEGER);
-                                                                                                                                                                                            {
-                                                                                                                                                                                                SubLObject lex_count = length(kb_mapping_utilities.pred_values(attack, $$definiteDescriptions, UNPROVIDED, UNPROVIDED, UNPROVIDED));
-                                                                                                                                                                                                if (lex_count.isPositive()) {
-                                                                                                                                                                                                    lexified = add(lexified, ONE_INTEGER);
-                                                                                                                                                                                                    total_lexifications = add(total_lexifications, lex_count);
-                                                                                                                                                                                                }
-                                                                                                                                                                                            }
-                                                                                                                                                                                        }
-                                                                                                                                                                                    }
-                                                                                                                                                                                }
-                                                                                                                                                                            }
-                                                                                                                                                                        } finally {
-                                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_199, thread);
-                                                                                                                                                                        }
-                                                                                                                                                                    }
-                                                                                                                                                                }
-                                                                                                                                                                iteration_state_198 = dictionary_contents.do_dictionary_contents_next(iteration_state_198);
-                                                                                                                                                            }
-                                                                                                                                                        } 
-                                                                                                                                                        dictionary_contents.do_dictionary_contents_finalize(iteration_state_198);
-                                                                                                                                                    }
-                                                                                                                                                } finally {
-                                                                                                                                                    sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_197, thread);
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                        iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                                                                                                    }
-                                                                                                                                } 
-                                                                                                                                dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                } else {
-                                                                                                                    sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt165$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                                                }
-                                                                                                            }
-                                                                                                            if (NIL != sbhl_macros.do_sbhl_non_fort_linksP(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED))) {
-                                                                                                                {
-                                                                                                                    SubLObject csome_list_var = sbhl_link_methods.non_fort_instance_table_lookup(node);
-                                                                                                                    SubLObject instance_tuple = NIL;
-                                                                                                                    for (instance_tuple = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , instance_tuple = csome_list_var.first()) {
-                                                                                                                        {
-                                                                                                                            SubLObject datum = instance_tuple;
-                                                                                                                            SubLObject current = datum;
-                                                                                                                            SubLObject link_node = NIL;
-                                                                                                                            SubLObject mt = NIL;
-                                                                                                                            SubLObject tv = NIL;
-                                                                                                                            destructuring_bind_must_consp(current, datum, $list_alt166);
-                                                                                                                            link_node = current.first();
-                                                                                                                            current = current.rest();
-                                                                                                                            destructuring_bind_must_consp(current, datum, $list_alt166);
-                                                                                                                            mt = current.first();
-                                                                                                                            current = current.rest();
-                                                                                                                            destructuring_bind_must_consp(current, datum, $list_alt166);
-                                                                                                                            tv = current.first();
-                                                                                                                            current = current.rest();
-                                                                                                                            if (NIL == current) {
-                                                                                                                                if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                                                    {
-                                                                                                                                        SubLObject _prev_bind_0_201 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                                                        try {
-                                                                                                                                            sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                                            if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                                {
-                                                                                                                                                    SubLObject _prev_bind_0_202 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                                    try {
-                                                                                                                                                        sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                                        {
-                                                                                                                                                            SubLObject link_nodes = list(link_node);
-                                                                                                                                                            SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                                            SubLObject cdolist_list_var_203 = new_list;
-                                                                                                                                                            SubLObject attack = NIL;
-                                                                                                                                                            for (attack = cdolist_list_var_203.first(); NIL != cdolist_list_var_203; cdolist_list_var_203 = cdolist_list_var_203.rest() , attack = cdolist_list_var_203.first()) {
-                                                                                                                                                                if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(attack, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
-                                                                                                                                                                    sbhl_marking_utilities.sbhl_mark_node_marked(attack, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                                                                                                                                                    if (NIL != forts.fort_p(attack)) {
-                                                                                                                                                                        total = add(total, ONE_INTEGER);
-                                                                                                                                                                        {
-                                                                                                                                                                            SubLObject lex_count = length(kb_mapping_utilities.pred_values(attack, $$definiteDescriptions, UNPROVIDED, UNPROVIDED, UNPROVIDED));
-                                                                                                                                                                            if (lex_count.isPositive()) {
-                                                                                                                                                                                lexified = add(lexified, ONE_INTEGER);
-                                                                                                                                                                                total_lexifications = add(total_lexifications, lex_count);
-                                                                                                                                                                            }
-                                                                                                                                                                        }
-                                                                                                                                                                    }
-                                                                                                                                                                }
-                                                                                                                                                            }
-                                                                                                                                                        }
-                                                                                                                                                    } finally {
-                                                                                                                                                        sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_202, thread);
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        } finally {
-                                                                                                                                            sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_201, thread);
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            } else {
-                                                                                                                                cdestructuring_bind_error(datum, $list_alt166);
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        } else {
-                                                                                                            if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
-                                                                                                                {
-                                                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                    SubLObject cdolist_list_var_204 = new_list;
-                                                                                                                    SubLObject generating_fn = NIL;
-                                                                                                                    for (generating_fn = cdolist_list_var_204.first(); NIL != cdolist_list_var_204; cdolist_list_var_204 = cdolist_list_var_204.rest() , generating_fn = cdolist_list_var_204.first()) {
-                                                                                                                        {
-                                                                                                                            SubLObject _prev_bind_0_205 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
-                                                                                                                            try {
-                                                                                                                                sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
-                                                                                                                                {
-                                                                                                                                    SubLObject link_nodes = funcall(generating_fn, node);
-                                                                                                                                    SubLObject new_list_206 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                    SubLObject cdolist_list_var_207 = new_list_206;
-                                                                                                                                    SubLObject attack = NIL;
-                                                                                                                                    for (attack = cdolist_list_var_207.first(); NIL != cdolist_list_var_207; cdolist_list_var_207 = cdolist_list_var_207.rest() , attack = cdolist_list_var_207.first()) {
-                                                                                                                                        if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(attack, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
-                                                                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(attack, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                                                                                                                            if (NIL != forts.fort_p(attack)) {
-                                                                                                                                                total = add(total, ONE_INTEGER);
-                                                                                                                                                {
-                                                                                                                                                    SubLObject lex_count = length(kb_mapping_utilities.pred_values(attack, $$definiteDescriptions, UNPROVIDED, UNPROVIDED, UNPROVIDED));
-                                                                                                                                                    if (lex_count.isPositive()) {
-                                                                                                                                                        lexified = add(lexified, ONE_INTEGER);
-                                                                                                                                                        total_lexifications = add(total_lexifications, lex_count);
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            } finally {
-                                                                                                                                sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_205, thread);
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                } finally {
-                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_196, thread);
-                                                                                                    sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_195, thread);
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                    {
-                                                                                        SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)));
-                                                                                        SubLObject cdolist_list_var = accessible_modules;
-                                                                                        SubLObject module_var = NIL;
-                                                                                        for (module_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , module_var = cdolist_list_var.first()) {
-                                                                                            {
-                                                                                                SubLObject _prev_bind_0_208 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                                                                SubLObject _prev_bind_1_209 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                                                try {
-                                                                                                    sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
-                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
-                                                                                                    {
-                                                                                                        SubLObject node = function_terms.naut_to_nart(node_var_186);
-                                                                                                        if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
-                                                                                                            {
-                                                                                                                SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                if (NIL != d_link) {
-                                                                                                                    {
-                                                                                                                        SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_link_vars.get_sbhl_link_direction(), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                        if (NIL != mt_links) {
-                                                                                                                            {
-                                                                                                                                SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
-                                                                                                                                while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                                                                                                                                    thread.resetMultipleValues();
-                                                                                                                                    {
-                                                                                                                                        SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                                                                                        SubLObject tv_links = thread.secondMultipleValue();
-                                                                                                                                        thread.resetMultipleValues();
-                                                                                                                                        if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                                                            {
-                                                                                                                                                SubLObject _prev_bind_0_210 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                                                                try {
-                                                                                                                                                    sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                                                    {
-                                                                                                                                                        SubLObject iteration_state_211 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
-                                                                                                                                                        while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_211)) {
-                                                                                                                                                            thread.resetMultipleValues();
-                                                                                                                                                            {
-                                                                                                                                                                SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_211);
-                                                                                                                                                                SubLObject link_nodes = thread.secondMultipleValue();
-                                                                                                                                                                thread.resetMultipleValues();
-                                                                                                                                                                if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                                                    {
-                                                                                                                                                                        SubLObject _prev_bind_0_212 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                                                        try {
-                                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                                                            {
-                                                                                                                                                                                SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                                                                SubLObject cdolist_list_var_213 = new_list;
-                                                                                                                                                                                SubLObject node_vars_link_node = NIL;
-                                                                                                                                                                                for (node_vars_link_node = cdolist_list_var_213.first(); NIL != cdolist_list_var_213; cdolist_list_var_213 = cdolist_list_var_213.rest() , node_vars_link_node = cdolist_list_var_213.first()) {
-                                                                                                                                                                                    if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
-                                                                                                                                                                                        sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
-                                                                                                                                                                                        deck.deck_push(node_vars_link_node, recur_deck);
-                                                                                                                                                                                    }
-                                                                                                                                                                                }
-                                                                                                                                                                            }
-                                                                                                                                                                        } finally {
-                                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_212, thread);
-                                                                                                                                                                        }
-                                                                                                                                                                    }
-                                                                                                                                                                }
-                                                                                                                                                                iteration_state_211 = dictionary_contents.do_dictionary_contents_next(iteration_state_211);
-                                                                                                                                                            }
-                                                                                                                                                        } 
-                                                                                                                                                        dictionary_contents.do_dictionary_contents_finalize(iteration_state_211);
-                                                                                                                                                    }
-                                                                                                                                                } finally {
-                                                                                                                                                    sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_210, thread);
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                        iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                                                                                                    }
-                                                                                                                                } 
-                                                                                                                                dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                } else {
-                                                                                                                    sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt165$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                                                }
-                                                                                                            }
-                                                                                                        } else {
-                                                                                                            if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
-                                                                                                                {
-                                                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                    SubLObject cdolist_list_var_214 = new_list;
-                                                                                                                    SubLObject generating_fn = NIL;
-                                                                                                                    for (generating_fn = cdolist_list_var_214.first(); NIL != cdolist_list_var_214; cdolist_list_var_214 = cdolist_list_var_214.rest() , generating_fn = cdolist_list_var_214.first()) {
-                                                                                                                        {
-                                                                                                                            SubLObject _prev_bind_0_215 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
-                                                                                                                            try {
-                                                                                                                                sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
-                                                                                                                                {
-                                                                                                                                    SubLObject link_nodes = funcall(generating_fn, node);
-                                                                                                                                    SubLObject new_list_216 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                    SubLObject cdolist_list_var_217 = new_list_216;
-                                                                                                                                    SubLObject node_vars_link_node = NIL;
-                                                                                                                                    for (node_vars_link_node = cdolist_list_var_217.first(); NIL != cdolist_list_var_217; cdolist_list_var_217 = cdolist_list_var_217.rest() , node_vars_link_node = cdolist_list_var_217.first()) {
-                                                                                                                                        if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
-                                                                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
-                                                                                                                                            deck.deck_push(node_vars_link_node, recur_deck);
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            } finally {
-                                                                                                                                sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_215, thread);
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                } finally {
-                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_209, thread);
-                                                                                                    sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_208, thread);
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                    node_var_186 = deck.deck_pop(recur_deck);
-                                                                                } 
-                                                                            } finally {
-                                                                                sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_2_194, thread);
-                                                                                sbhl_link_vars.$sbhl_link_direction$.rebind(_prev_bind_1_193, thread);
-                                                                                sbhl_search_vars.$sbhl_search_direction$.rebind(_prev_bind_0_192, thread);
-                                                                            }
-                                                                        }
-                                                                    } else {
-                                                                        sbhl_paranoia.sbhl_warn(TWO_INTEGER, $str_alt167$Node__a_does_not_pass_sbhl_type_t, node_var, sbhl_module_utilities.get_sbhl_type_test(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                    }
-                                                                } finally {
-                                                                    sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
-                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3, thread);
-                                                                    sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2, thread);
-                                                                    sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1_191, thread);
-                                                                    sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0_190, thread);
-                                                                }
-                                                            }
-                                                        } finally {
-                                                            sbhl_search_vars.$relevant_sbhl_tv_function$.rebind(_prev_bind_1_189, thread);
-                                                            sbhl_search_vars.$sbhl_tv$.rebind(_prev_bind_0_188, thread);
-                                                        }
-                                                    }
-                                                    sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_space$.getDynamicValue(thread));
-                                                }
-                                            } finally {
-                                                sbhl_marking_vars.$sbhl_space$.rebind(_prev_bind_0_187, thread);
-                                            }
-                                        }
-                                        sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                    }
-                                } finally {
-                                    sbhl_marking_vars.$sbhl_gather_space$.rebind(_prev_bind_1_185, thread);
-                                    sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_184, thread);
-                                }
-                            }
-                            format(T, $str_alt193$_S_of__S_have_definite_descriptio, new SubLObject[]{ lexified, total, total_lexifications });
-                        }
-                    } finally {
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return values(total, lexified, total_lexifications);
-            }
-        }
-    }
-
-    public static final SubLObject attack_type_sentence_for_attack(SubLObject attack, SubLObject mt, SubLObject problem_store) {
-        if (problem_store == UNPROVIDED) {
-            problem_store = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject attack_type = NIL;
-                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(mt);
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
-                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
-                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
-                        {
-                            SubLObject pred_var = $$isa;
-                            if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(attack, NIL, pred_var)) {
-                                {
-                                    SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(attack, NIL, pred_var);
-                                    SubLObject done_var = attack_type;
-                                    SubLObject token_var = NIL;
-                                    while (NIL == done_var) {
-                                        {
-                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                            if (NIL != valid) {
-                                                {
-                                                    SubLObject final_index_iterator = NIL;
-                                                    try {
-                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
-                                                        {
-                                                            SubLObject done_var_218 = attack_type;
-                                                            SubLObject token_var_219 = NIL;
-                                                            while (NIL == done_var_218) {
-                                                                {
-                                                                    SubLObject isa_gaf = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_219);
-                                                                    SubLObject valid_220 = makeBoolean(token_var_219 != isa_gaf);
-                                                                    if (NIL != valid_220) {
-                                                                        {
-                                                                            SubLObject type = assertions_high.gaf_arg2(isa_gaf);
-                                                                            if (((NIL != isa.isaP(type, $$AttackType, UNPROVIDED, UNPROVIDED)) || (NIL != isa.isaP(type, $$ActTypeCommonlyConsideredCriminal, UNPROVIDED, UNPROVIDED))) || ((!type.eql($$TerroristAttack)) && (NIL != genls.genlP(type, $$TerroristAttack, UNPROVIDED, UNPROVIDED)))) {
-                                                                                attack_type = type;
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                    done_var_218 = makeBoolean((NIL == valid_220) || (NIL != attack_type));
-                                                                }
-                                                            } 
-                                                        }
-                                                    } finally {
-                                                        {
-                                                            SubLObject _prev_bind_0_221 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                            try {
-                                                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                if (NIL != final_index_iterator) {
-                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                }
-                                                            } finally {
-                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_221, thread);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            done_var = makeBoolean((NIL == valid) || (NIL != attack_type));
-                                        }
-                                    } 
-                                }
-                            }
-                            if ((NIL == attack_type) && (NIL != isa.isaP(attack, $$TerroristAttack, UNPROVIDED, UNPROVIDED))) {
-                                attack_type = $$TerroristAttack;
-                            }
-                        }
-                    } finally {
-                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return NIL != attack_type ? ((SubLObject) (list($$isa, attack, attack_type))) : NIL;
-            }
-        }
-    }
-
-    static private final SubLString $str_alt57$ = makeString("");
-
+public final class lexification_utilities extends SubLTranslatedFile {
     public static final SubLFile me = new lexification_utilities();
 
+    public static final String myName = "com.cyc.cycjava.cycl.lexification_utilities";
 
+    public static final String myFingerPrint = "4726a48153d58acdb611e5671afc8f11282aefc377590f12c8806f63139e370b";
 
     // defconstant
     // Definitions
     // Trace level for no tracing at all
-    /**
-     * Trace level for no tracing at all
-     */
-    @LispMethod(comment = "Trace level for no tracing at all\ndefconstant")
     public static final SubLSymbol $lex_none$ = makeSymbol("*LEX-NONE*");
 
     // defconstant
-    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $lex_always$ = makeSymbol("*LEX-ALWAYS*");
 
     // defconstant
     // Minimal tracing
-    /**
-     * Minimal tracing
-     */
-    @LispMethod(comment = "Minimal tracing\ndefconstant")
     public static final SubLSymbol $lex_basic$ = makeSymbol("*LEX-BASIC*");
 
     // defconstant
     // Alias for @xref *lex-basic*
-    /**
-     * Alias for @xref *lex-basic*
-     */
-    @LispMethod(comment = "Alias for @xref *lex-basic*\ndefconstant")
     public static final SubLSymbol $lex_warning$ = makeSymbol("*LEX-WARNING*");
 
     // defconstant
     // Tracing level for main flow of control
-    /**
-     * Tracing level for main flow of control
-     */
-    @LispMethod(comment = "Tracing level for main flow of control\ndefconstant")
     public static final SubLSymbol $lex_detailed$ = makeSymbol("*LEX-DETAILED*");
 
     // defconstant
     // Tracing level with useful but verbose output
-    /**
-     * Tracing level with useful but verbose output
-     */
-    @LispMethod(comment = "Tracing level with useful but verbose output\ndefconstant")
     public static final SubLSymbol $lex_verbose$ = makeSymbol("*LEX-VERBOSE*");
 
     // defconstant
     // next level after @xref *lex-verbose*
-    /**
-     * next level after @xref *lex-verbose*
-     */
-    @LispMethod(comment = "next level after @xref *lex-verbose*\ndefconstant")
     public static final SubLSymbol $lex_very_detailed$ = makeSymbol("*LEX-VERY-DETAILED*");
 
     // defconstant
     // next level after @xref *lex-very-detailed*
-    /**
-     * next level after @xref *lex-very-detailed*
-     */
-    @LispMethod(comment = "next level after @xref *lex-very-detailed*\ndefconstant")
     public static final SubLSymbol $lex_very_verbose$ = makeSymbol("*LEX-VERY-VERBOSE*");
 
     // defconstant
     // next level after @xref *lex-very-verbose*
-    /**
-     * next level after @xref *lex-very-verbose*
-     */
-    @LispMethod(comment = "next level after @xref *lex-very-verbose*\ndefconstant")
     public static final SubLSymbol $lex_most_detailed$ = makeSymbol("*LEX-MOST-DETAILED*");
 
     // defconstant
     // next level after @xref *lex-most-detailed*
-    /**
-     * next level after @xref *lex-most-detailed*
-     */
-    @LispMethod(comment = "next level after @xref *lex-most-detailed*\ndefconstant")
     public static final SubLSymbol $lex_most_verbose$ = makeSymbol("*LEX-MOST-VERBOSE*");
 
     // defconstant
     // highest practical trace level
-    /**
-     * highest practical trace level
-     */
-    @LispMethod(comment = "highest practical trace level\ndefconstant")
     public static final SubLSymbol $lex_all$ = makeSymbol("*LEX-ALL*");
+
+
+
+
+
+
+
+
 
     // defparameter
     // Whitespace characters for @xref lex-string-tokenize
-    /**
-     * Whitespace characters for @xref lex-string-tokenize
-     */
-    @LispMethod(comment = "Whitespace characters for @xref lex-string-tokenize\ndefparameter")
     private static final SubLSymbol $lex_white_space_chars$ = makeSymbol("*LEX-WHITE-SPACE-CHARS*");
 
     // defparameter
@@ -1931,59 +170,92 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
      * Punctuation characters for @xref lex-string-tokenize
      *
      * @unknown This is different from the standard punctuation characters (@xref
-    standard-punctuation-chars*) in that dashes and apostrophes are
+    *standard-punctuation-chars*) in that dashes and apostrophes are
     excluded
      */
-    @LispMethod(comment = "Punctuation characters for @xref lex-string-tokenize\r\n\r\n@unknown This is different from the standard punctuation characters (@xref\r\nstandard-punctuation-chars*) in that dashes and apostrophes are\r\nexcluded\ndefparameter")
     private static final SubLSymbol $lex_punctuation_chars$ = makeSymbol("*LEX-PUNCTUATION-CHARS*");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // deflexical
     /**
      * Gating parameter to turn off this functionality while it appears to be both
      * broken and expensive.
      */
-    @LispMethod(comment = "Gating parameter to turn off this functionality while it appears to be both\r\nbroken and expensive.\ndeflexical\nGating parameter to turn off this functionality while it appears to be both\nbroken and expensive.")
     private static final SubLSymbol $terrorist_attack_lexification_worksP$ = makeSymbol("*TERRORIST-ATTACK-LEXIFICATION-WORKS?*");
 
     // Internal Constants
-    @LispMethod(comment = "Internal Constants")
     public static final SubLSymbol $lexification_check_max_days$ = makeSymbol("*LEXIFICATION-CHECK-MAX-DAYS*");
 
-
+    private static final SubLInteger $int$30 = makeInteger(30);
 
     public static final SubLSymbol $lexification_reviewer$ = makeSymbol("*LEXIFICATION-REVIEWER*");
 
+
+
     public static final SubLSymbol $num_predicate_examples$ = makeSymbol("*NUM-PREDICATE-EXAMPLES*");
 
-    static private final SubLList $list5 = list(new SubLObject[]{ CHAR_period, CHAR_semicolon, CHAR_comma, CHAR_colon, CHAR_quotation, CHAR_exclamation, CHAR_question, CHAR_lparen, CHAR_rparen, CHAR_percent, CHAR_caret, CHAR_asterisk });
+    public static final SubLList $list5 = list(new SubLObject[]{ CHAR_period, CHAR_semicolon, CHAR_comma, CHAR_colon, CHAR_quotation, CHAR_exclamation, CHAR_question, CHAR_lparen, CHAR_rparen, CHAR_percent, CHAR_caret, CHAR_asterisk });
 
-    static private final SubLList $list6 = list(makeSymbol("LEVEL"), makeSymbol("FORMAT-SPEC"), makeSymbol("&REST"), makeSymbol("ARGS"));
+    public static final SubLList $list6 = list(makeSymbol("LEVEL"), makeSymbol("FORMAT-SPEC"), makeSymbol("&REST"), makeSymbol("ARGS"));
 
-    static private final SubLSymbol $sym8$__ = makeSymbol(">=");
+
+
+    public static final SubLSymbol $sym8$__ = makeSymbol(">=");
 
     public static final SubLSymbol $lex_trace_level$ = makeSymbol("*LEX-TRACE-LEVEL*");
 
+
+
     public static final SubLSymbol $trace_output$ = makeSymbol("*TRACE-OUTPUT*");
 
-    static private final SubLList $list12 = list(list(makeSymbol("FORCE-OUTPUT"), makeSymbol("*TRACE-OUTPUT*")));
+    public static final SubLList $list12 = list(list(makeSymbol("FORCE-OUTPUT"), makeSymbol("*TRACE-OUTPUT*")));
 
-    static private final SubLList $list13 = list(makeSymbol("FORMAT-SPEC"), makeSymbol("&REST"), makeSymbol("ARGS"));
+    public static final SubLList $list13 = list(makeSymbol("FORMAT-SPEC"), makeSymbol("&REST"), makeSymbol("ARGS"));
 
-    static private final SubLList $list15 = list(makeSymbol("MAX"), makeSymbol("*LEX-TRACE-LEVEL*"), makeSymbol("*LEX-BASIC*"));
 
-    static private final SubLString $str17$Warning__ = makeString("Warning: ");
 
-    static private final SubLList $list18 = list(makeSymbol("FORM"), makeSymbol("&REST"), makeSymbol("OPTIONAL-FORMS"));
+    public static final SubLList $list15 = list(makeSymbol("MAX"), makeSymbol("*LEX-TRACE-LEVEL*"), makeSymbol("*LEX-BASIC*"));
 
-    static private final SubLList $list19 = list(makeSymbol(">="), makeSymbol("*LEX-TRACE-LEVEL*"), makeSymbol("*LEX-VERBOSE*"));
 
-    static private final SubLList $list20 = list(makeSymbol("TRACE-LEVEL"), makeSymbol("FORM"), makeSymbol("&REST"), makeSymbol("OPTIONAL-FORMS"));
 
-    static private final SubLList $list21 = list(makeSymbol("MAX"), makeSymbol("*LEX-TRACE-LEVEL*"), makeSymbol("*LEX-VERBOSE*"));
+    public static final SubLString $str17$Warning__ = makeString("Warning: ");
+
+    public static final SubLList $list18 = list(makeSymbol("FORM"), makeSymbol("&REST"), makeSymbol("OPTIONAL-FORMS"));
+
+    public static final SubLList $list19 = list(makeSymbol(">="), makeSymbol("*LEX-TRACE-LEVEL*"), makeSymbol("*LEX-VERBOSE*"));
+
+    public static final SubLList $list20 = list(makeSymbol("TRACE-LEVEL"), makeSymbol("FORM"), makeSymbol("&REST"), makeSymbol("OPTIONAL-FORMS"));
+
+    public static final SubLList $list21 = list(makeSymbol("MAX"), makeSymbol("*LEX-TRACE-LEVEL*"), makeSymbol("*LEX-VERBOSE*"));
 
     private static final SubLList $list22 = list(makeSymbol("EXPRESSION"));
 
+
+
+
+
     private static final SubLString $str25$____assertion_failed___a______ = makeString("*** assertion failed: ~a ***~%");
+
+
 
     private static final SubLList $list27 = list(list(makeSymbol("VAR"), makeSymbol("&OPTIONAL"), list(makeSymbol("MESSAGE"), makeString("Finding unlexified terms...")), makeSymbol("ALLOW-TERMSTRINGS?")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
@@ -2005,27 +277,35 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
 
 
 
+    private static final SubLObject $$EverythingPSC = reader_make_constant_shell(makeString("EverythingPSC"));
+
+    private static final SubLObject $$termDoesntNeedLexification = reader_make_constant_shell(makeString("termDoesntNeedLexification"));
+
+    private static final SubLObject $$instancesDontNeedLexification = reader_make_constant_shell(makeString("instancesDontNeedLexification"));
+
+    private static final SubLObject $const40$quotedInstancesDontNeedLexificati = reader_make_constant_shell(makeString("quotedInstancesDontNeedLexification"));
 
 
-    private static final SubLObject $const40$quotedInstancesDontNeedLexificati = reader_make_constant_shell("quotedInstancesDontNeedLexification");
 
 
 
+    private static final SubLObject $$termStrings = reader_make_constant_shell(makeString("termStrings"));
 
+    private static final SubLObject $$and = reader_make_constant_shell(makeString("and"));
 
+    private static final SubLObject $$conceptuallyRelated = reader_make_constant_shell(makeString("conceptuallyRelated"));
 
+    public static final SubLList $list46 = list(makeSymbol("?MT"));
 
-    static private final SubLList $list46 = list(makeSymbol("?MT"));
-
-    private static final SubLList $list47 = list(list(reader_make_constant_shell("genlMt"), makeSymbol("?MT"), reader_make_constant_shell("GeneralLexiconMt")));
+    private static final SubLList $list47 = list(list(reader_make_constant_shell(makeString("genlMt")), makeSymbol("?MT"), reader_make_constant_shell(makeString("GeneralLexiconMt"))));
 
     private static final SubLList $list48 = list(makeKeyword("RETURN"), list(makeKeyword("TEMPLATE"), makeSymbol("?MT")));
 
-
+    private static final SubLObject $$TemporaryLexicalAssertionsMt = reader_make_constant_shell(makeString("TemporaryLexicalAssertionsMt"));
 
     private static final SubLString $str50$char__a_next__a_next_next__a_run_ = makeString("char=~a next=~a next-next=~a run-len=~a new-index=~a~%");
 
-    private static final SubLList $list51 = list(reader_make_constant_shell("singular"));
+    private static final SubLList $list51 = list(reader_make_constant_shell(makeString("singular")));
 
     private static final SubLString $$$_Mt = makeString(" Mt");
 
@@ -2039,19 +319,21 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
 
     private static final SubLString $str57$__ = makeString(" -");
 
+    private static final SubLObject $$multiWordString = reader_make_constant_shell(makeString("multiWordString"));
 
+    private static final SubLObject $$Know_TheWord = reader_make_constant_shell(makeString("Know-TheWord"));
 
-    private static final SubLObject $$Know_TheWord = reader_make_constant_shell("Know-TheWord");
+    private static final SubLObject $$MassNoun = reader_make_constant_shell(makeString("MassNoun"));
 
-
-
-
+    private static final SubLObject $$EnglishMt = reader_make_constant_shell(makeString("EnglishMt"));
 
     private static final SubLString $str62$ = makeString("");
 
+
+
     private static final SubLInteger $int$3600 = makeInteger(3600);
 
-
+    private static final SubLInteger $int$24 = makeInteger(24);
 
     private static final SubLSymbol $IGNORE_ERRORS_TARGET = makeKeyword("IGNORE-ERRORS-TARGET");
 
@@ -2061,41 +343,75 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
 
     private static final SubLSymbol NUM_PREDICATE_EXTENT_INDEX = makeSymbol("NUM-PREDICATE-EXTENT-INDEX");
 
+    private static final SubLObject $$CycLReifiableDenotationalTerm = reader_make_constant_shell(makeString("CycLReifiableDenotationalTerm"));
 
-
-
+    private static final SubLObject $$EnglishLexiconMt = reader_make_constant_shell(makeString("EnglishLexiconMt"));
 
     private static final SubLSymbol KEYWORD_FOR_POS = makeSymbol("KEYWORD-FOR-POS");
 
+    private static final SubLObject $$ProperNoun = reader_make_constant_shell(makeString("ProperNoun"));
 
 
 
+    private static final SubLObject $$Determiner = reader_make_constant_shell(makeString("Determiner"));
 
 
 
+    private static final SubLObject $$Pronoun = reader_make_constant_shell(makeString("Pronoun"));
 
 
 
+    private static final SubLObject $$Noun = reader_make_constant_shell(makeString("Noun"));
 
 
 
+    private static final SubLObject $$Verb = reader_make_constant_shell(makeString("Verb"));
 
 
 
+    private static final SubLObject $$Adjective = reader_make_constant_shell(makeString("Adjective"));
+
+
+
+    private static final SubLObject $$Adverb = reader_make_constant_shell(makeString("Adverb"));
+
+
+
+    private static final SubLObject $$Preposition = reader_make_constant_shell(makeString("Preposition"));
+
+
+
+    private static final SubLObject $$Conjunction = reader_make_constant_shell(makeString("Conjunction"));
 
 
 
     private static final SubLSymbol $keyword_for_pos_caching_state$ = makeSymbol("*KEYWORD-FOR-POS-CACHING-STATE*");
 
+
+
+
+
     private static final SubLSymbol PRECISE_KEYWORD_FOR_POS = makeSymbol("PRECISE-KEYWORD-FOR-POS");
 
 
 
+    private static final SubLObject $$CountNoun = reader_make_constant_shell(makeString("CountNoun"));
 
 
 
+    private static final SubLObject $$AgentiveNoun = reader_make_constant_shell(makeString("AgentiveNoun"));
 
 
+
+    private static final SubLObject $$GerundiveNoun = reader_make_constant_shell(makeString("GerundiveNoun"));
+
+
+
+    private static final SubLObject $$DeVerbalNoun = reader_make_constant_shell(makeString("DeVerbalNoun"));
+
+
+
+    private static final SubLObject $$AuxVerb = reader_make_constant_shell(makeString("AuxVerb"));
 
 
 
@@ -2111,9 +427,9 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
 
     private static final SubLString $str111$invalid_formula____a__ = makeString("invalid formula:~%~a~%");
 
+    private static final SubLObject $$Individual = reader_make_constant_shell(makeString("Individual"));
 
-
-    private static final SubLList $list113 = list(reader_make_constant_shell("ProperNoun"));
+    private static final SubLList $list113 = list(reader_make_constant_shell(makeString("ProperNoun")));
 
     private static final SubLSymbol PLURALIZE_WORD = makeSymbol("PLURALIZE-WORD");
 
@@ -2131,29 +447,33 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
 
     private static final SubLSymbol $basic_preds_for_part_of_speech_caching_state$ = makeSymbol("*BASIC-PREDS-FOR-PART-OF-SPEECH-CACHING-STATE*");
 
+
+
     private static final SubLSymbol FIND_ROOT_WORDFORM = makeSymbol("FIND-ROOT-WORDFORM");
 
     private static final SubLSymbol $find_root_wordform_caching_state$ = makeSymbol("*FIND-ROOT-WORDFORM-CACHING-STATE*");
 
 
 
+    private static final SubLObject $$AllLexicalMicrotheoryPSC = reader_make_constant_shell(makeString("AllLexicalMicrotheoryPSC"));
+
     private static final SubLSymbol IS_ABBREVIATION_PREDICATE = makeSymbol("IS-ABBREVIATION-PREDICATE");
 
-
+    private static final SubLObject $$arg2Isa = reader_make_constant_shell(makeString("arg2Isa"));
 
     private static final SubLList $list129 = list(makeSymbol("?CONSTRAINT"));
 
-    private static final SubLList $list130 = list(list(reader_make_constant_shell("genls"), makeSymbol("?CONSTRAINT"), reader_make_constant_shell("Abbreviation")));
+    private static final SubLList $list130 = list(list(reader_make_constant_shell(makeString("genls")), makeSymbol("?CONSTRAINT"), reader_make_constant_shell(makeString("Abbreviation"))));
 
-
+    private static final SubLObject $$InferencePSC = reader_make_constant_shell(makeString("InferencePSC"));
 
     private static final SubLSymbol $is_abbreviation_predicate_caching_state$ = makeSymbol("*IS-ABBREVIATION-PREDICATE-CACHING-STATE*");
 
     private static final SubLInteger $int$128 = makeInteger(128);
 
+    private static final SubLInteger $int$40 = makeInteger(40);
 
-
-
+    private static final SubLObject $$properNameStrings = reader_make_constant_shell(makeString("properNameStrings"));
 
     private static final SubLSymbol EXAMPLES_FOR_PRED = makeSymbol("EXAMPLES-FOR-PRED");
 
@@ -2161,23 +481,31 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
 
     private static final SubLSymbol $examples_for_pred_caching_state$ = makeSymbol("*EXAMPLES-FOR-PRED-CACHING-STATE*");
 
-    private static final SubLObject $$examples_Positive = reader_make_constant_shell("examples-Positive");
+    private static final SubLObject $$examples_Positive = reader_make_constant_shell(makeString("examples-Positive"));
 
-    private static final SubLList $list140 = list(reader_make_constant_shell("exampleSentence"), reader_make_constant_shell("examplePredSentence"), reader_make_constant_shell("exampleAssertions"));
+    private static final SubLList $list140 = list(reader_make_constant_shell(makeString("exampleSentence")), reader_make_constant_shell(makeString("examplePredSentence")), reader_make_constant_shell(makeString("exampleAssertions")));
+
+
+
+
 
     private static final SubLString $str143$try_lex_assert__s_in_MT__a__ = makeString("try-lex-assert ~s in MT ~a~%");
 
+    private static final SubLObject $$toBeReviewedBy = reader_make_constant_shell(makeString("toBeReviewedBy"));
 
+    private static final SubLObject $$ist = reader_make_constant_shell(makeString("ist"));
 
-
-
-
+    private static final SubLObject $$BookkeepingMt = reader_make_constant_shell(makeString("BookkeepingMt"));
 
     private static final SubLString $str147$try_lex_assert_now__s_in_MT__a__ = makeString("try-lex-assert-now ~s in MT ~a~%");
 
-
+    private static final SubLObject $$DeadTerm = reader_make_constant_shell(makeString("DeadTerm"));
 
     private static final SubLString $$$DeadTerm = makeString("DeadTerm");
+
+    private static final SubLObject $$preferredTermStrings = reader_make_constant_shell(makeString("preferredTermStrings"));
+
+
 
 
 
@@ -2187,9 +515,9 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
 
     private static final SubLSymbol $sym155$_EXIT = makeSymbol("%EXIT");
 
+    private static final SubLObject $$nameableCollection = reader_make_constant_shell(makeString("nameableCollection"));
 
-
-
+    private static final SubLObject $$comment = reader_make_constant_shell(makeString("comment"));
 
     private static final SubLList $list158 = list(makeString("worthy"), makeString("ous"), makeString("ical"), makeString("less"), makeString("like"), makeString("able"), makeString("ible"), makeString("ic"));
 
@@ -2205,13 +533,29 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
 
     private static final SubLList $list164 = list(makeKeyword("ANY"), makeKeyword("INITIAL"));
 
+    private static final SubLObject $$HeadInitialMultiWordPhrasePred = reader_make_constant_shell(makeString("HeadInitialMultiWordPhrasePred"));
+
+    private static final SubLObject $$isa = reader_make_constant_shell(makeString("isa"));
+
+
+
+
+
+
+
 
 
 
 
     private static final SubLString $str172$_A_is_not_a__A = makeString("~A is not a ~A");
 
+
+
+
+
     private static final SubLString $$$continue_anyway = makeString("continue anyway");
+
+
 
     private static final SubLString $str177$_A_is_not_a_valid__sbhl_type_erro = makeString("~A is not a valid *sbhl-type-error-action* value");
 
@@ -2225,9 +569,15 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
 
     private static final SubLList $list182 = list(makeKeyword("ANY"), makeKeyword("FINAL"));
 
-
+    private static final SubLObject $$HeadFinalMultiWordPhrasePred = reader_make_constant_shell(makeString("HeadFinalMultiWordPhrasePred"));
 
     private static final SubLList $list184 = list(makeKeyword("ANY"), makeKeyword("MEDIAL"));
+
+    private static final SubLObject $$HeadMedialMultiWordPhrasePred = reader_make_constant_shell(makeString("HeadMedialMultiWordPhrasePred"));
+
+
+
+
 
 
 
@@ -2239,9 +589,13 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
 
     private static final SubLSymbol POSSIBLY_LEXIFY_TERRORIST_ATTACK = makeSymbol("POSSIBLY-LEXIFY-TERRORIST-ATTACK");
 
+    private static final SubLObject $$definiteDescriptions = reader_make_constant_shell(makeString("definiteDescriptions"));
+
 
 
     private static final SubLList $list195 = list(makeSymbol("STRING"), makeSymbol("ASSERTION-EL-SET"));
+
+    private static final SubLObject $$TerrorismLexicalMt = reader_make_constant_shell(makeString("TerrorismLexicalMt"));
 
 
 
@@ -2249,29 +603,13 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
 
     private static final SubLList $list199 = list(list(ONE_INTEGER, TWO_INTEGER, ONE_INTEGER), list(TWO_INTEGER, TWO_INTEGER, TWO_INTEGER, TWO_INTEGER));
 
-    static private final SubLList $list201 = list(reader_make_constant_shell("TestQueryFn"), reader_make_constant_shell("NLGIT-LexifyTerroristAttack"));
 
-    public static final SubLObject lexification_reviewer_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return $lexification_reviewer$.getDynamicValue(thread);
-        }
-    }
+
+    public static final SubLList $list201 = list(reader_make_constant_shell(makeString("TestQueryFn")), reader_make_constant_shell(makeString("NLGIT-LexifyTerroristAttack")));
 
     public static SubLObject lexification_reviewer() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return $lexification_reviewer$.getDynamicValue(thread);
-    }
-
-    public static final SubLObject set_lexification_reviewer_alt(SubLObject cyclist) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != cyclist) {
-                SubLTrampolineFile.checkType(cyclist, FORT_P);
-            }
-            $lexification_reviewer$.setDynamicValue(cyclist, thread);
-            return $lexification_reviewer$.getDynamicValue(thread);
-        }
     }
 
     public static SubLObject set_lexification_reviewer(final SubLObject cyclist) {
@@ -2283,37 +621,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return $lexification_reviewer$.getDynamicValue(thread);
     }
 
-    /**
-     * Formats and displays tracing message to @xref *trace-output* stream
-     *
-     * @unknown Only produce code for the in-house version of the system (ie, #+Cyc-Maint)
-     */
-    @LispMethod(comment = "Formats and displays tracing message to @xref *trace-output* stream\r\n\r\n@unknown Only produce code for the in-house version of the system (ie, #+Cyc-Maint)")
-    public static final SubLObject lex_trace_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            SubLObject level = NIL;
-            SubLObject format_spec = NIL;
-            destructuring_bind_must_consp(current, datum, $list_alt6);
-            level = current.first();
-            current = current.rest();
-            destructuring_bind_must_consp(current, datum, $list_alt6);
-            format_spec = current.first();
-            current = current.rest();
-            {
-                SubLObject args = current;
-                return listS(PWHEN, list($sym8$__, $lex_trace_level$, level), listS(FORMAT, $trace_output$, format_spec, append(args, NIL)), $list_alt12);
-            }
-        }
-    }
-
-    /**
-     * Formats and displays tracing message to @xref *trace-output* stream
-     *
-     * @unknown Only produce code for the in-house version of the system (ie, #+Cyc-Maint)
-     */
-    @LispMethod(comment = "Formats and displays tracing message to @xref *trace-output* stream\r\n\r\n@unknown Only produce code for the in-house version of the system (ie, #+Cyc-Maint)")
     public static SubLObject lex_trace(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -2329,29 +636,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return listS(PWHEN, list($sym8$__, $lex_trace_level$, level), listS(FORMAT, $trace_output$, format_spec, append(args, NIL)), $list12);
     }
 
-    /**
-     * Formats and displays warning message to @xref *trace-output* stream
-     */
-    @LispMethod(comment = "Formats and displays warning message to @xref *trace-output* stream")
-    public static final SubLObject lex_warn_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            SubLObject format_spec = NIL;
-            destructuring_bind_must_consp(current, datum, $list_alt13);
-            format_spec = current.first();
-            current = current.rest();
-            {
-                SubLObject args = current;
-                return listS(LEX_TRACE, $list_alt15, list(CCONCATENATE, $str_alt17$Warning__, format_spec), append(args, NIL));
-            }
-        }
-    }
-
-    /**
-     * Formats and displays warning message to @xref *trace-output* stream
-     */
-    @LispMethod(comment = "Formats and displays warning message to @xref *trace-output* stream")
     public static SubLObject lex_warn(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -2363,33 +647,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return listS(LEX_TRACE, $list15, list(CCONCATENATE, $str17$Warning__, format_spec), append(args, NIL));
     }
 
-    /**
-     * Evaluates the form(s) if debugging
-     *
-     * @unknown Only produce code for the in-house version of the system (ie, #+Cyc-Maint)
-     */
-    @LispMethod(comment = "Evaluates the form(s) if debugging\r\n\r\n@unknown Only produce code for the in-house version of the system (ie, #+Cyc-Maint)")
-    public static final SubLObject lex_debug_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            SubLObject form = NIL;
-            destructuring_bind_must_consp(current, datum, $list_alt18);
-            form = current.first();
-            current = current.rest();
-            {
-                SubLObject optional_forms = current;
-                return listS(PWHEN, $list_alt19, form, append(optional_forms, NIL));
-            }
-        }
-    }
-
-    /**
-     * Evaluates the form(s) if debugging
-     *
-     * @unknown Only produce code for the in-house version of the system (ie, #+Cyc-Maint)
-     */
-    @LispMethod(comment = "Evaluates the form(s) if debugging\r\n\r\n@unknown Only produce code for the in-house version of the system (ie, #+Cyc-Maint)")
     public static SubLObject lex_debug(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -2416,29 +673,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return listS(PWHEN, $list19, form, append(optional_forms, NIL));
     }
 
-    /**
-     * Formats and displays debugging message to @xref *trace-output* stream
-     */
-    @LispMethod(comment = "Formats and displays debugging message to @xref *trace-output* stream")
-    public static final SubLObject lex_debug_out_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            SubLObject format_spec = NIL;
-            destructuring_bind_must_consp(current, datum, $list_alt13);
-            format_spec = current.first();
-            current = current.rest();
-            {
-                SubLObject args = current;
-                return listS(LEX_TRACE, $list_alt20, format_spec, append(args, NIL));
-            }
-        }
-    }
-
-    /**
-     * Formats and displays debugging message to @xref *trace-output* stream
-     */
-    @LispMethod(comment = "Formats and displays debugging message to @xref *trace-output* stream")
     public static SubLObject lex_debug_out(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -2450,29 +684,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return listS(LEX_TRACE, $list21, format_spec, append(args, NIL));
     }
 
-    /**
-     * Sets the current trace level to usual debugging level for the lexification modules
-     *
-     * @return integer ; the new tracing level
-     */
-    @LispMethod(comment = "Sets the current trace level to usual debugging level for the lexification modules\r\n\r\n@return integer ; the new tracing level")
-    public static final SubLObject lex_debug_on_alt(SubLObject trace_level) {
-        if (trace_level == UNPROVIDED) {
-            trace_level = $lex_verbose$.getGlobalValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            $lex_trace_level$.setDynamicValue(trace_level, thread);
-            return $lex_trace_level$.getDynamicValue(thread);
-        }
-    }
-
-    /**
-     * Sets the current trace level to usual debugging level for the lexification modules
-     *
-     * @return integer ; the new tracing level
-     */
-    @LispMethod(comment = "Sets the current trace level to usual debugging level for the lexification modules\r\n\r\n@return integer ; the new tracing level")
     public static SubLObject lex_debug_on(SubLObject trace_level) {
         if (trace_level == UNPROVIDED) {
             trace_level = $lex_verbose$.getGlobalValue();
@@ -2482,35 +693,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return $lex_trace_level$.getDynamicValue(thread);
     }
 
-    /**
-     * Issue a warning if the expression is false. This is similar to the assert macro except that execution is not interrupted.
-     *
-     * @unknown Only produces code for the in-house version of the system (ie, #+Cyc-Maint)
-     */
-    @LispMethod(comment = "Issue a warning if the expression is false. This is similar to the assert macro except that execution is not interrupted.\r\n\r\n@unknown Only produces code for the in-house version of the system (ie, #+Cyc-Maint)")
-    public static final SubLObject lex_assertion_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            SubLObject expression = NIL;
-            destructuring_bind_must_consp(current, datum, $list_alt21);
-            expression = current.first();
-            current = current.rest();
-            if (NIL == current) {
-                return list(PUNLESS, expression, list(LEX_WARN, $str_alt24$____assertion_failed___a______, list(QUOTE, expression)));
-            } else {
-                cdestructuring_bind_error(datum, $list_alt21);
-            }
-        }
-        return NIL;
-    }
-
-    /**
-     * Issue a warning if the expression is false. This is similar to the assert macro except that execution is not interrupted.
-     *
-     * @unknown Only produces code for the in-house version of the system (ie, #+Cyc-Maint)
-     */
-    @LispMethod(comment = "Issue a warning if the expression is false. This is similar to the assert macro except that execution is not interrupted.\r\n\r\n@unknown Only produces code for the in-house version of the system (ie, #+Cyc-Maint)")
     public static SubLObject lex_assertion(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -2525,54 +707,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return NIL;
     }
 
-    /**
-     * Iterate over all entirely unlexified terms, executing BODY within the scope of VAR,
-     * which is bound to each constant in turn. The optional MESSAGE is a progress message string and ALLOW-TERMSTRINGS? indicated that termStrings are considered during the check.
-     */
-    @LispMethod(comment = "Iterate over all entirely unlexified terms, executing BODY within the scope of VAR,\r\nwhich is bound to each constant in turn. The optional MESSAGE is a progress message string and ALLOW-TERMSTRINGS? indicated that termStrings are considered during the check.\nIterate over all entirely unlexified terms, executing BODY within the scope of VAR,\nwhich is bound to each constant in turn. The optional MESSAGE is a progress message string and ALLOW-TERMSTRINGS? indicated that termStrings are considered during the check.")
-    public static final SubLObject do_unlexified_terms_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            destructuring_bind_must_consp(current, datum, $list_alt26);
-            {
-                SubLObject temp = current.rest();
-                current = current.first();
-                {
-                    SubLObject var = NIL;
-                    destructuring_bind_must_consp(current, datum, $list_alt26);
-                    var = current.first();
-                    current = current.rest();
-                    {
-                        SubLObject message = (current.isCons()) ? ((SubLObject) (current.first())) : $str_alt27$Finding_unlexified_terms___;
-                        destructuring_bind_must_listp(current, datum, $list_alt26);
-                        current = current.rest();
-                        {
-                            SubLObject allow_termstringsP = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
-                            destructuring_bind_must_listp(current, datum, $list_alt26);
-                            current = current.rest();
-                            if (NIL == current) {
-                                current = temp;
-                                {
-                                    SubLObject body = current;
-                                    return list(DO_CONSTANTS, list(var, message), listS(PWHEN, list($sym29$UNLEXIFIED_, var, allow_termstringsP), append(body, NIL)));
-                                }
-                            } else {
-                                cdestructuring_bind_error(datum, $list_alt26);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return NIL;
-    }
-
-    /**
-     * Iterate over all entirely unlexified terms, executing BODY within the scope of VAR,
-     * which is bound to each constant in turn. The optional MESSAGE is a progress message string and ALLOW-TERMSTRINGS? indicated that termStrings are considered during the check.
-     */
-    @LispMethod(comment = "Iterate over all entirely unlexified terms, executing BODY within the scope of VAR,\r\nwhich is bound to each constant in turn. The optional MESSAGE is a progress message string and ALLOW-TERMSTRINGS? indicated that termStrings are considered during the check.\nIterate over all entirely unlexified terms, executing BODY within the scope of VAR,\nwhich is bound to each constant in turn. The optional MESSAGE is a progress message string and ALLOW-TERMSTRINGS? indicated that termStrings are considered during the check.")
     public static SubLObject do_unlexified_terms(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -2598,43 +732,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return NIL;
     }
 
-    /**
-     *
-     *
-     * @return list ; Cyc terms created by the cyclist but not yet lexified
-     * @unknown extend this to NAT's as well
-     */
-    @LispMethod(comment = "@return list ; Cyc terms created by the cyclist but not yet lexified\r\n@unknown extend this to NAT\'s as well")
-    public static final SubLObject unlexified_terms_for_cyclist_alt(SubLObject cyclist, SubLObject max_days, SubLObject check_termstringsP) {
-        if (max_days == UNPROVIDED) {
-            max_days = $lexification_check_max_days$.getGlobalValue();
-        }
-        if (check_termstringsP == UNPROVIDED) {
-            check_termstringsP = NIL;
-        }
-        {
-            SubLObject unlexified_forts = NIL;
-            SubLObject start_date = com.cyc.cycjava.cycl.lexification_utilities.n_universal_days_ago(max_days);
-            SubLObject todays_date = com.cyc.cycjava.cycl.lexification_utilities.universal_time_to_universal_date(get_universal_time());
-            SubLObject cyclist_forts = kb_utilities.constants_created_between(start_date, todays_date, cyclist);
-            SubLObject cdolist_list_var = cyclist_forts;
-            SubLObject fort = NIL;
-            for (fort = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , fort = cdolist_list_var.first()) {
-                if (NIL != com.cyc.cycjava.cycl.lexification_utilities.unlexifiedP(fort, check_termstringsP)) {
-                    unlexified_forts = cons(fort, unlexified_forts);
-                }
-            }
-            return unlexified_forts;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return list ; Cyc terms created by the cyclist but not yet lexified
-     * @unknown extend this to NAT's as well
-     */
-    @LispMethod(comment = "@return list ; Cyc terms created by the cyclist but not yet lexified\r\n@unknown extend this to NAT\'s as well")
     public static SubLObject unlexified_terms_for_cyclist(final SubLObject cyclist, SubLObject max_days, SubLObject check_termstringsP) {
         if (max_days == UNPROVIDED) {
             max_days = $lexification_check_max_days$.getGlobalValue();
@@ -2703,60 +800,9 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return unlexified_forts;
     }
 
-    /**
-     *
-     *
-     * @param FORT;
-     * 		Something that passes @xref INDEXED-TERM-P.
-     * @return BOOLEAN; Is lexification not needed for FORT?
-     * @unknown baxter
-     */
-    @LispMethod(comment = "@param FORT;\r\n\t\tSomething that passes @xref INDEXED-TERM-P.\r\n@return BOOLEAN; Is lexification not needed for FORT?\r\n@unknown baxter")
-    public static final SubLObject lexification_not_neededP_alt(SubLObject fort) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(fort, INDEXED_TERM_P);
-            {
-                SubLObject not_neededP = NIL;
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                        if (NIL != kb_mapping_utilities.pred_values(fort, $$termDoesntNeedLexification, UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
-                            not_neededP = T;
-                        } else {
-                            if (NIL != isa.isa_anyP(fort, kb_mapping_utilities.pred_refs($$instancesDontNeedLexification, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED)) {
-                                not_neededP = T;
-                            } else {
-                                if (NIL != isa.quoted_isa_anyP(fort, kb_mapping_utilities.pred_refs($const35$quotedInstancesDontNeedLexificati, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED)) {
-                                    not_neededP = T;
-                                }
-                            }
-                        }
-                    } finally {
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return not_neededP;
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @param FORT;
-     * 		Something that passes @xref INDEXED-TERM-P.
-     * @return BOOLEAN; Is lexification not needed for FORT?
-     * @unknown baxter
-     */
-    @LispMethod(comment = "@param FORT;\r\n\t\tSomething that passes @xref INDEXED-TERM-P.\r\n@return BOOLEAN; Is lexification not needed for FORT?\r\n@unknown baxter")
     public static SubLObject lexification_not_neededP(final SubLObject fort) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != indexed_term_p(fort) : "! kb_indexing_datastructures.indexed_term_p(fort) " + ("kb_indexing_datastructures.indexed_term_p(fort) " + "CommonSymbols.NIL != kb_indexing_datastructures.indexed_term_p(fort) ") + fort;
+        assert NIL != indexed_term_p(fort) : "kb_indexing_datastructures.indexed_term_p(fort) " + "CommonSymbols.NIL != kb_indexing_datastructures.indexed_term_p(fort) " + fort;
         SubLObject not_neededP = NIL;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
         final SubLObject _prev_bind_2 = mt_relevance_macros.$mt$.currentBinding(thread);
@@ -2781,39 +827,11 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return not_neededP;
     }
 
-    /**
-     *
-     *
-     * @return boolean ; T iff there are no lexical assertions for FORT (excluding forts that don't need lexification such as Microtheories), optionally considering termStrings via ALLOW-TERMSTRINGS?
-     * @unknown This is different from @xref unit-with-no-nl?, which allows termStrings by default and which doesn't account for terms that don't need lexification
-     */
-    @LispMethod(comment = "@return boolean ; T iff there are no lexical assertions for FORT (excluding forts that don\'t need lexification such as Microtheories), optionally considering termStrings via ALLOW-TERMSTRINGS?\r\n@unknown This is different from @xref unit-with-no-nl?, which allows termStrings by default and which doesn\'t account for terms that don\'t need lexification")
-    public static final SubLObject unlexifiedP_alt(SubLObject fort, SubLObject allow_termstringsP) {
-        if (allow_termstringsP == UNPROVIDED) {
-            allow_termstringsP = NIL;
-        }
-        SubLTrampolineFile.checkType(fort, INDEXED_TERM_P);
-        {
-            SubLObject is_unlexified = NIL;
-            if (NIL == com.cyc.cycjava.cycl.lexification_utilities.lexification_not_neededP(fort)) {
-                is_unlexified = sublisp_null(lexicon_utilities.lexifications_for_term(fort, allow_termstringsP, ONE_INTEGER));
-            }
-            return is_unlexified;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return boolean ; T iff there are no lexical assertions for FORT (excluding forts that don't need lexification such as Microtheories), optionally considering termStrings via ALLOW-TERMSTRINGS?
-     * @unknown This is different from @xref unit-with-no-nl?, which allows termStrings by default and which doesn't account for terms that don't need lexification
-     */
-    @LispMethod(comment = "@return boolean ; T iff there are no lexical assertions for FORT (excluding forts that don\'t need lexification such as Microtheories), optionally considering termStrings via ALLOW-TERMSTRINGS?\r\n@unknown This is different from @xref unit-with-no-nl?, which allows termStrings by default and which doesn\'t account for terms that don\'t need lexification")
     public static SubLObject unlexifiedP(final SubLObject fort, SubLObject allow_termstringsP) {
         if (allow_termstringsP == UNPROVIDED) {
             allow_termstringsP = NIL;
         }
-        assert NIL != indexed_term_p(fort) : "! kb_indexing_datastructures.indexed_term_p(fort) " + ("kb_indexing_datastructures.indexed_term_p(fort) " + "CommonSymbols.NIL != kb_indexing_datastructures.indexed_term_p(fort) ") + fort;
+        assert NIL != indexed_term_p(fort) : "kb_indexing_datastructures.indexed_term_p(fort) " + "CommonSymbols.NIL != kb_indexing_datastructures.indexed_term_p(fort) " + fort;
         SubLObject is_unlexified = NIL;
         if (NIL == lexification_not_neededP(fort)) {
             is_unlexified = sublisp_null(lexicon_utilities.lexifications_for_term(fort, allow_termstringsP, ONE_INTEGER, UNPROVIDED));
@@ -2821,21 +839,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return is_unlexified;
     }
 
-    /**
-     * negation of @xref unlexified? useful in mapping functions
-     */
-    @LispMethod(comment = "negation of @xref unlexified? useful in mapping functions")
-    public static final SubLObject lexifiedP_alt(SubLObject fort, SubLObject allow_termstringsP) {
-        if (allow_termstringsP == UNPROVIDED) {
-            allow_termstringsP = NIL;
-        }
-        return makeBoolean(NIL == com.cyc.cycjava.cycl.lexification_utilities.unlexifiedP(fort, allow_termstringsP));
-    }
-
-    /**
-     * negation of @xref unlexified? useful in mapping functions
-     */
-    @LispMethod(comment = "negation of @xref unlexified? useful in mapping functions")
     public static SubLObject lexifiedP(final SubLObject fort, SubLObject allow_termstringsP) {
         if (allow_termstringsP == UNPROVIDED) {
             allow_termstringsP = NIL;
@@ -2843,51 +846,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return makeBoolean(NIL == unlexifiedP(fort, allow_termstringsP));
     }
 
-    /**
-     *
-     *
-     * @return BOOLEAN; Is some generalization of term lexified?
-     * @unknown check is done from *MT*.
-     */
-    @LispMethod(comment = "@return BOOLEAN; Is some generalization of term lexified?\r\n@unknown check is done from *MT*.")
-    public static final SubLObject generalization_is_lexifiedP_alt(SubLObject v_term) {
-        {
-            SubLObject lexified = NIL;
-            if (NIL != pph_utilities.pph_relationP(v_term)) {
-                if (NIL == lexified) {
-                    {
-                        SubLObject csome_list_var = pph_utilities.pph_all_genl_relations(v_term);
-                        SubLObject genl_relation = NIL;
-                        for (genl_relation = csome_list_var.first(); !((NIL != lexified) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , genl_relation = csome_list_var.first()) {
-                            if (NIL == lexicon_utilities.missing_generation_assertion(genl_relation)) {
-                                lexified = genl_relation;
-                            }
-                        }
-                    }
-                }
-                if (NIL == lexified) {
-                    {
-                        SubLObject csome_list_var = genl_predicates.all_genl_inverses(v_term, UNPROVIDED, UNPROVIDED);
-                        SubLObject genl_relation = NIL;
-                        for (genl_relation = csome_list_var.first(); !((NIL != lexified) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , genl_relation = csome_list_var.first()) {
-                            if (NIL == lexicon_utilities.missing_generation_assertion(genl_relation)) {
-                                lexified = genl_relation;
-                            }
-                        }
-                    }
-                }
-            }
-            return values(list_utilities.sublisp_boolean(lexified), lexified);
-        }
-    }
-
-    /**
-     *
-     *
-     * @return BOOLEAN; Is some generalization of term lexified?
-     * @unknown check is done from *MT*.
-     */
-    @LispMethod(comment = "@return BOOLEAN; Is some generalization of term lexified?\r\n@unknown check is done from *MT*.")
     public static SubLObject generalization_is_lexifiedP(final SubLObject v_term) {
         SubLObject lexified = NIL;
         if (NIL != pph_utilities.pph_relationP(v_term)) {
@@ -2919,83 +877,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return values(list_utilities.sublisp_boolean(lexified), lexified);
     }
 
-    /**
-     *
-     *
-     * @return list ; terms unlexified in the KB (up to MAX-COUNT items)
-     * @unknown This is currently just restricted to Cyc constants
-     */
-    @LispMethod(comment = "@return list ; terms unlexified in the KB (up to MAX-COUNT items)\r\n@unknown This is currently just restricted to Cyc constants")
-    public static final SubLObject get_unlexified_terms_alt(SubLObject allow_termstringsP, SubLObject max_num) {
-        if (allow_termstringsP == UNPROVIDED) {
-            allow_termstringsP = NIL;
-        }
-        if (max_num == UNPROVIDED) {
-            max_num = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject count = ZERO_INTEGER;
-                SubLObject max_count = (NIL != max_num) ? ((SubLObject) (max_num)) : forts.fort_count();
-                SubLObject term_list = NIL;
-                SubLObject idx = do_constants_table();
-                SubLObject total = id_index_count(idx);
-                SubLObject sofar = ZERO_INTEGER;
-                SubLTrampolineFile.checkType($str_alt27$Finding_unlexified_terms___, STRINGP);
-                {
-                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                    try {
-                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                        $last_percent_progress_prediction$.bind(NIL, thread);
-                        $within_noting_percent_progress$.bind(T, thread);
-                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                        noting_percent_progress_preamble($str_alt27$Finding_unlexified_terms___);
-                        if (NIL == do_id_index_empty_p(idx, $SKIP)) {
-                            {
-                                SubLObject id = do_id_index_next_id(idx, T, NIL, NIL);
-                                SubLObject state_var = do_id_index_next_state(idx, T, id, NIL);
-                                SubLObject v_term = NIL;
-                                while (NIL != id) {
-                                    v_term = do_id_index_state_object(idx, $SKIP, id, state_var);
-                                    if (NIL != do_id_index_id_and_object_validP(id, v_term, $SKIP)) {
-                                        note_percent_progress(sofar, total);
-                                        sofar = add(sofar, ONE_INTEGER);
-                                        if (NIL != com.cyc.cycjava.cycl.lexification_utilities.unlexifiedP(v_term, allow_termstringsP)) {
-                                            if (!count.numGE(max_count)) {
-                                                count = add(count, ONE_INTEGER);
-                                                term_list = cons(v_term, term_list);
-                                            }
-                                        }
-                                    }
-                                    id = do_id_index_next_id(idx, T, id, state_var);
-                                    state_var = do_id_index_next_state(idx, T, id, state_var);
-                                } 
-                            }
-                        }
-                        noting_percent_progress_postamble();
-                    } finally {
-                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return term_list;
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return list ; terms unlexified in the KB (up to MAX-COUNT items)
-     * @unknown This is currently just restricted to Cyc constants
-     */
-    @LispMethod(comment = "@return list ; terms unlexified in the KB (up to MAX-COUNT items)\r\n@unknown This is currently just restricted to Cyc constants")
     public static SubLObject get_unlexified_terms(SubLObject allow_termstringsP, SubLObject max_num) {
         if (allow_termstringsP == UNPROVIDED) {
             allow_termstringsP = NIL;
@@ -3011,7 +892,7 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         final SubLObject mess = $str28$Finding_unlexified_terms___;
         final SubLObject total = id_index_count(idx);
         SubLObject sofar = ZERO_INTEGER;
-        assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
+        assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
         final SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
         final SubLObject _prev_bind_2 = $last_percent_progress_prediction$.currentBinding(thread);
         final SubLObject _prev_bind_3 = $within_noting_percent_progress$.currentBinding(thread);
@@ -3089,30 +970,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return term_list;
     }
 
-    /**
-     *
-     *
-     * @return list ; #$termStrings assertions in lexical mt for CYCLIST
-     * @unknown constrain conceptuallyRelated result to spec of GeneralLexiconMt
-     */
-    @LispMethod(comment = "@return list ; #$termStrings assertions in lexical mt for CYCLIST\r\n@unknown constrain conceptuallyRelated result to spec of GeneralLexiconMt")
-    public static final SubLObject get_termstring_assertions_for_cyclist_alt(SubLObject cyclist) {
-        if (cyclist == UNPROVIDED) {
-            cyclist = operation_communication.the_cyclist();
-        }
-        {
-            SubLObject mt = com.cyc.cycjava.cycl.lexification_utilities.lexical_mt_for_cyclist(cyclist);
-            return kb_mapping.gather_predicate_extent_index($$termStrings, mt, UNPROVIDED);
-        }
-    }
-
-    /**
-     *
-     *
-     * @return list ; #$termStrings assertions in lexical mt for CYCLIST
-     * @unknown constrain conceptuallyRelated result to spec of GeneralLexiconMt
-     */
-    @LispMethod(comment = "@return list ; #$termStrings assertions in lexical mt for CYCLIST\r\n@unknown constrain conceptuallyRelated result to spec of GeneralLexiconMt")
     public static SubLObject get_termstring_assertions_for_cyclist(SubLObject cyclist) {
         if (cyclist == UNPROVIDED) {
             cyclist = operation_communication.the_cyclist();
@@ -3121,28 +978,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return kb_mapping.gather_predicate_extent_index($$termStrings, mt, UNPROVIDED);
     }
 
-    /**
-     *
-     *
-     * @return mt ; MT which has been assigned to CYCLIST (or TemporaryLexicalAssertionsMt if none assigned)
-     */
-    @LispMethod(comment = "@return mt ; MT which has been assigned to CYCLIST (or TemporaryLexicalAssertionsMt if none assigned)")
-    public static final SubLObject lexical_mt_for_cyclist_alt(SubLObject cyclist) {
-        if (cyclist == UNPROVIDED) {
-            cyclist = operation_communication.the_cyclist();
-        }
-        {
-            SubLObject mt = inference_kernel.new_cyc_query(listS($$and, listS($$conceptuallyRelated, cyclist, $list_alt41), $list_alt42), $$EverythingPSC, $list_alt43).first();
-            return NIL != mt ? ((SubLObject) (mt)) : $$TemporaryLexicalAssertionsMt;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return mt ; MT which has been assigned to CYCLIST (or TemporaryLexicalAssertionsMt if none assigned)
-     */
-    @LispMethod(comment = "@return mt ; MT which has been assigned to CYCLIST (or TemporaryLexicalAssertionsMt if none assigned)")
     public static SubLObject lexical_mt_for_cyclist(SubLObject cyclist) {
         if (cyclist == UNPROVIDED) {
             cyclist = operation_communication.the_cyclist();
@@ -3151,79 +986,10 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return NIL != mt ? mt : $$TemporaryLexicalAssertionsMt;
     }
 
-    /**
-     *
-     *
-     * @return boolean ; whether CHAR is an potential acronym character
-     * @unknown Uppercase letters and digits are considered potential acronym characters
-     */
-    @LispMethod(comment = "@return boolean ; whether CHAR is an potential acronym character\r\n@unknown Uppercase letters and digits are considered potential acronym characters")
-    public static final SubLObject acronym_char_p_alt(SubLObject v_char) {
-        return makeBoolean((NIL != upper_case_p(v_char)) || (NIL != digit_char_p(v_char, UNPROVIDED)));
-    }
-
-    /**
-     *
-     *
-     * @return boolean ; whether CHAR is an potential acronym character
-     * @unknown Uppercase letters and digits are considered potential acronym characters
-     */
-    @LispMethod(comment = "@return boolean ; whether CHAR is an potential acronym character\r\n@unknown Uppercase letters and digits are considered potential acronym characters")
     public static SubLObject acronym_char_p(final SubLObject v_char) {
         return makeBoolean((NIL != upper_case_p(v_char)) || (NIL != digit_char_p(v_char, UNPROVIDED)));
     }
 
-    /**
-     *
-     *
-     * @return string ; the string with runs of single capital letters grouped together
-     * @unknown This is intended for post-processing the output of @xref space-dont-uncapitalize
-     */
-    @LispMethod(comment = "@return string ; the string with runs of single capital letters grouped together\r\n@unknown This is intended for post-processing the output of @xref space-dont-uncapitalize")
-    public static final SubLObject regroup_acronyms_alt(SubLObject string) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject old_length = length(string);
-                SubLObject new_string = Strings.make_string(old_length, UNPROVIDED);
-                SubLObject run_len = ZERO_INTEGER;
-                SubLObject new_index = MINUS_ONE_INTEGER;
-                SubLObject string_var = string;
-                SubLObject end_var = length(string_var);
-                SubLObject end_var_1 = end_var;
-                SubLObject index = NIL;
-                for (index = ZERO_INTEGER; !index.numGE(end_var_1); index = number_utilities.f_1X(index)) {
-                    {
-                        SubLObject v_char = Strings.sublisp_char(string_var, index);
-                        SubLObject next_char = string_utilities.char_at(string, add(index, ONE_INTEGER));
-                        SubLObject next_next_char = string_utilities.char_at(string, add(index, TWO_INTEGER));
-                        if (!((((v_char == CHAR_space) && (NIL != com.cyc.cycjava.cycl.lexification_utilities.acronym_char_p(next_char))) && ((next_next_char == CHAR_space) || (next_next_char == NIL))) && run_len.numE(ONE_INTEGER))) {
-                            new_index = add(new_index, ONE_INTEGER);
-                            Strings.set_char(new_string, new_index, v_char);
-                        }
-                        if ($lex_trace_level$.getDynamicValue(thread).numGE($lex_very_verbose$.getGlobalValue())) {
-                            format(StreamsLow.$trace_output$.getDynamicValue(thread), $str_alt45$char__a_next__a_next_next__a_run_, new SubLObject[]{ v_char, next_char, next_next_char, run_len, new_index });
-                            force_output(StreamsLow.$trace_output$.getDynamicValue(thread));
-                        }
-                        if (NIL != com.cyc.cycjava.cycl.lexification_utilities.acronym_char_p(v_char)) {
-                            run_len = add(run_len, ONE_INTEGER);
-                        } else {
-                            run_len = ZERO_INTEGER;
-                        }
-                    }
-                }
-                return string_utilities.trim_sides(new_string, UNPROVIDED);
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return string ; the string with runs of single capital letters grouped together
-     * @unknown This is intended for post-processing the output of @xref space-dont-uncapitalize
-     */
-    @LispMethod(comment = "@return string ; the string with runs of single capital letters grouped together\r\n@unknown This is intended for post-processing the output of @xref space-dont-uncapitalize")
     public static SubLObject regroup_acronyms(final SubLObject string) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject old_length = length(string);
@@ -3257,35 +1023,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return string_utilities.trim_sides(new_string, UNPROVIDED);
     }
 
-    /**
-     *
-     *
-     * @return string ; TERM's label converted into a phrase
-     * @unknown For constants, the default generation method for terms is used. However, for NARTs, the generation code is used (to allow use of generation templates).
-     * @unknown Phrases or Cyc individuals will be in uppercase unless RETAIN-CASE? specified.
-     */
-    @LispMethod(comment = "@return string ; TERM\'s label converted into a phrase\r\n@unknown For constants, the default generation method for terms is used. However, for NARTs, the generation code is used (to allow use of generation templates).\r\n@unknown Phrases or Cyc individuals will be in uppercase unless RETAIN-CASE? specified.")
-    public static final SubLObject phrase_from_term_alt(SubLObject v_term, SubLObject retain_caseP) {
-        if (retain_caseP == UNPROVIDED) {
-            retain_caseP = NIL;
-        }
-        {
-            SubLObject phrase = (NIL != constant_p(v_term)) ? ((SubLObject) (com.cyc.cycjava.cycl.lexification_utilities.regroup_acronyms(kb_utilities.string_for_unlexified_term(v_term, UNPROVIDED)))) : pph_main.generate_phrase(v_term, $list_alt46, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            if (!((NIL != com.cyc.cycjava.cycl.lexification_utilities.cyc_individual_constantP(v_term)) || (NIL != retain_caseP))) {
-                phrase = Strings.string_downcase(phrase, UNPROVIDED, UNPROVIDED);
-            }
-            return phrase;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return string ; TERM's label converted into a phrase
-     * @unknown For constants, the default generation method for terms is used. However, for NARTs, the generation code is used (to allow use of generation templates).
-     * @unknown Phrases or Cyc individuals will be in uppercase unless RETAIN-CASE? specified.
-     */
-    @LispMethod(comment = "@return string ; TERM\'s label converted into a phrase\r\n@unknown For constants, the default generation method for terms is used. However, for NARTs, the generation code is used (to allow use of generation templates).\r\n@unknown Phrases or Cyc individuals will be in uppercase unless RETAIN-CASE? specified.")
     public static SubLObject phrase_from_term(final SubLObject v_term, SubLObject retain_caseP) {
         if (retain_caseP == UNPROVIDED) {
             retain_caseP = NIL;
@@ -3297,42 +1034,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return phrase;
     }
 
-    /**
-     *
-     *
-     * @return boolean ; whether TERM refers to an individual constant in the KB
-     */
-    @LispMethod(comment = "@return boolean ; whether TERM refers to an individual constant in the KB")
-    public static final SubLObject cyc_individual_constantP_alt(SubLObject v_term) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject is_individual = NIL;
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                        if (NIL == fort_types_interface.fort_types(v_term, UNPROVIDED)) {
-                            is_individual = T;
-                        }
-                    } finally {
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return is_individual;
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return boolean ; whether TERM refers to an individual constant in the KB
-     */
-    @LispMethod(comment = "@return boolean ; whether TERM refers to an individual constant in the KB")
     public static SubLObject cyc_individual_constantP(final SubLObject v_term) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject is_individual = NIL;
@@ -3351,31 +1052,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return is_individual;
     }
 
-    /**
-     *
-     *
-     * @return string ; phrase to use for MT
-     */
-    @LispMethod(comment = "@return string ; phrase to use for MT")
-    public static final SubLObject phrase_for_mt_alt(SubLObject mt) {
-        {
-            SubLObject mt_phrase = com.cyc.cycjava.cycl.lexification_utilities.phrase_from_term(mt, T);
-            mt_phrase = string_utilities.strip_trailer(mt_phrase, $str_alt47$_Mt);
-            if (NIL != string_utilities.ends_with(mt_phrase, $str_alt48$_G, UNPROVIDED)) {
-                mt_phrase = cconcatenate($str_alt49$General_, string_utilities.strip_trailer(mt_phrase, $str_alt48$_G));
-            }
-            mt_phrase = string_utilities.string_substitute($str_alt50$_, $str_alt51$___, mt_phrase, UNPROVIDED);
-            mt_phrase = string_utilities.string_substitute($str_alt50$_, $str_alt52$__, mt_phrase, UNPROVIDED);
-            return string_utilities.trim_whitespace(mt_phrase);
-        }
-    }
-
-    /**
-     *
-     *
-     * @return string ; phrase to use for MT
-     */
-    @LispMethod(comment = "@return string ; phrase to use for MT")
     public static SubLObject phrase_for_mt(final SubLObject mt) {
         SubLObject mt_phrase = phrase_from_term(mt, T);
         mt_phrase = string_utilities.strip_trailer(mt_phrase, $$$_Mt);
@@ -3387,52 +1063,11 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return string_utilities.trim_whitespace(mt_phrase);
     }
 
-    /**
-     *
-     *
-     * @return formula ; formula to be used for lexifying MT
-     */
-    @LispMethod(comment = "@return formula ; formula to be used for lexifying MT")
-    public static final SubLObject lexification_for_mt_alt(SubLObject mt) {
-        {
-            SubLObject tokenized_phrase = string_utilities.string_tokenize(com.cyc.cycjava.cycl.lexification_utilities.phrase_for_mt(mt), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            return list($$multiWordString, tokenized_phrase, $$Know_TheWord, $$MassNoun, mt);
-        }
-    }
-
-    /**
-     *
-     *
-     * @return formula ; formula to be used for lexifying MT
-     */
-    @LispMethod(comment = "@return formula ; formula to be used for lexifying MT")
     public static SubLObject lexification_for_mt(final SubLObject mt) {
         final SubLObject tokenized_phrase = string_utilities.string_tokenize(phrase_for_mt(mt), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         return list($$multiWordString, tokenized_phrase, $$Know_TheWord, $$MassNoun, mt);
     }
 
-    /**
-     * perform lexification for all MT's in MT-LIST
-     */
-    @LispMethod(comment = "perform lexification for all MT\'s in MT-LIST")
-    public static final SubLObject lexify_mts_alt(SubLObject mt_list) {
-        {
-            SubLObject cdolist_list_var = mt_list;
-            SubLObject mt = NIL;
-            for (mt = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , mt = cdolist_list_var.first()) {
-                {
-                    SubLObject formula = com.cyc.cycjava.cycl.lexification_utilities.lexification_for_mt(mt);
-                    com.cyc.cycjava.cycl.lexification_utilities.try_lex_assert(formula, $$EnglishMt, UNPROVIDED, UNPROVIDED);
-                }
-            }
-        }
-        return T;
-    }
-
-    /**
-     * perform lexification for all MT's in MT-LIST
-     */
-    @LispMethod(comment = "perform lexification for all MT\'s in MT-LIST")
     public static SubLObject lexify_mts(final SubLObject mt_list) {
         SubLObject cdolist_list_var = mt_list;
         SubLObject mt = NIL;
@@ -3446,41 +1081,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return T;
     }
 
-    /**
-     *
-     *
-     * @return boolean ; whether MT should not be lexified
-     * @unknown Rather than filtering based on constant type (e.g., HPKBDisplayConstant), this checks
-    whether the MT was named using recognizable words (i.e., contained in NL trie).
-     */
-    @LispMethod(comment = "@return boolean ; whether MT should not be lexified\r\n@unknown Rather than filtering based on constant type (e.g., HPKBDisplayConstant), this checks\r\nwhether the MT was named using recognizable words (i.e., contained in NL trie).")
-    public static final SubLObject skip_mt_lexificationP_alt(SubLObject mt) {
-        {
-            SubLObject tokenized_phrase = string_utilities.string_tokenize(com.cyc.cycjava.cycl.lexification_utilities.phrase_for_mt(mt), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            SubLObject skipP = NIL;
-            if (NIL == skipP) {
-                {
-                    SubLObject csome_list_var = tokenized_phrase;
-                    SubLObject word = NIL;
-                    for (word = csome_list_var.first(); !((NIL != skipP) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , word = csome_list_var.first()) {
-                        if (!((NIL != list_utilities.proper_list_p(nl_trie.nl_trie_search(word, UNPROVIDED, UNPROVIDED))) || (NIL != string_utilities.is_numericP(word)))) {
-                            skipP = T;
-                        }
-                    }
-                }
-            }
-            return skipP;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return boolean ; whether MT should not be lexified
-     * @unknown Rather than filtering based on constant type (e.g., HPKBDisplayConstant), this checks
-    whether the MT was named using recognizable words (i.e., contained in NL trie).
-     */
-    @LispMethod(comment = "@return boolean ; whether MT should not be lexified\r\n@unknown Rather than filtering based on constant type (e.g., HPKBDisplayConstant), this checks\r\nwhether the MT was named using recognizable words (i.e., contained in NL trie).")
     public static SubLObject skip_mt_lexificationP(final SubLObject mt) {
         final SubLObject tokenized_phrase = string_utilities.string_tokenize(phrase_for_mt(mt), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         SubLObject skipP = NIL;
@@ -3499,36 +1099,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return skipP;
     }
 
-    /**
-     *
-     *
-     * @return boolean ; T iff all the items have values other than nil or the empty string
-     */
-    @LispMethod(comment = "@return boolean ; T iff all the items have values other than nil or the empty string")
-    public static final SubLObject all_specifiedP_alt(SubLObject list) {
-        {
-            SubLObject unspecified = NIL;
-            if (NIL == unspecified) {
-                {
-                    SubLObject csome_list_var = list;
-                    SubLObject item = NIL;
-                    for (item = csome_list_var.first(); !((NIL != unspecified) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , item = csome_list_var.first()) {
-                        if ((NIL == item) || item.equal($str_alt57$)) {
-                            unspecified = T;
-                        }
-                    }
-                }
-            }
-            return makeBoolean(NIL == unspecified);
-        }
-    }
-
-    /**
-     *
-     *
-     * @return boolean ; T iff all the items have values other than nil or the empty string
-     */
-    @LispMethod(comment = "@return boolean ; T iff all the items have values other than nil or the empty string")
     public static SubLObject all_specifiedP(final SubLObject list) {
         SubLObject unspecified = NIL;
         if (NIL == unspecified) {
@@ -3546,36 +1116,9 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return makeBoolean(NIL == unspecified);
     }
 
-    /**
-     *
-     *
-     * @return universal-time ; conversion of universal-date YYYYMMDD to universal-time
-     */
-    @LispMethod(comment = "@return universal-time ; conversion of universal-date YYYYMMDD to universal-time")
-    public static final SubLObject universal_date_to_universal_time_alt(SubLObject yyyymmdd) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(yyyymmdd, INTEGERP);
-            thread.resetMultipleValues();
-            {
-                SubLObject month = numeric_date_utilities.decode_universal_date(yyyymmdd);
-                SubLObject day = thread.secondMultipleValue();
-                SubLObject year = thread.thirdMultipleValue();
-                thread.resetMultipleValues();
-                return encode_universal_time(ZERO_INTEGER, ZERO_INTEGER, ZERO_INTEGER, month, day, year, UNPROVIDED);
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return universal-time ; conversion of universal-date YYYYMMDD to universal-time
-     */
-    @LispMethod(comment = "@return universal-time ; conversion of universal-date YYYYMMDD to universal-time")
     public static SubLObject universal_date_to_universal_time(final SubLObject yyyymmdd) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != integerp(yyyymmdd) : "! integerp(yyyymmdd) " + ("Types.integerp(yyyymmdd) " + "CommonSymbols.NIL != Types.integerp(yyyymmdd) ") + yyyymmdd;
+        assert NIL != integerp(yyyymmdd) : "Types.integerp(yyyymmdd) " + "CommonSymbols.NIL != Types.integerp(yyyymmdd) " + yyyymmdd;
         thread.resetMultipleValues();
         final SubLObject month = numeric_date_utilities.decode_universal_date(yyyymmdd);
         final SubLObject day = thread.secondMultipleValue();
@@ -3584,35 +1127,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return encode_universal_time(ZERO_INTEGER, ZERO_INTEGER, ZERO_INTEGER, month, day, year, UNPROVIDED);
     }
 
-    /**
-     *
-     *
-     * @return universal-date ; universal date format (YYYYMMDD) of universal-time
-     */
-    @LispMethod(comment = "@return universal-date ; universal date format (YYYYMMDD) of universal-time")
-    public static final SubLObject universal_time_to_universal_date_alt(SubLObject universal_time) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject second = decode_universal_time(universal_time, UNPROVIDED);
-                SubLObject minute = thread.secondMultipleValue();
-                SubLObject hour = thread.thirdMultipleValue();
-                SubLObject day = thread.fourthMultipleValue();
-                SubLObject month = thread.fifthMultipleValue();
-                SubLObject year = thread.sixthMultipleValue();
-                thread.resetMultipleValues();
-                return numeric_date_utilities.encode_universal_date(day, month, year);
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return universal-date ; universal date format (YYYYMMDD) of universal-time
-     */
-    @LispMethod(comment = "@return universal-date ; universal date format (YYYYMMDD) of universal-time")
     public static SubLObject universal_time_to_universal_date(final SubLObject universal_time) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -3626,27 +1140,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return numeric_date_utilities.encode_universal_date(day, month, year);
     }
 
-    /**
-     *
-     *
-     * @return universal-date ; the date n days ago
-     */
-    @LispMethod(comment = "@return universal-date ; the date n days ago")
-    public static final SubLObject n_universal_days_ago_alt(SubLObject num_days) {
-        {
-            SubLObject today_seconds = get_universal_time();
-            SubLObject seconds_per_day = multiply($int$3600, $int$24);
-            SubLObject previous_seconds = subtract(today_seconds, multiply(num_days, seconds_per_day));
-            return com.cyc.cycjava.cycl.lexification_utilities.universal_time_to_universal_date(previous_seconds);
-        }
-    }
-
-    /**
-     *
-     *
-     * @return universal-date ; the date n days ago
-     */
-    @LispMethod(comment = "@return universal-date ; the date n days ago")
     public static SubLObject n_universal_days_ago(final SubLObject num_days) {
         final SubLObject today_seconds = get_universal_time();
         final SubLObject seconds_per_day = multiply($int$3600, $int$24);
@@ -3654,51 +1147,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return universal_time_to_universal_date(previous_seconds);
     }
 
-    /**
-     *
-     *
-     * @return integer ; value of STRING or DEFAULT if not numeric
-     */
-    @LispMethod(comment = "@return integer ; value of STRING or DEFAULT if not numeric")
-    public static final SubLObject extract_integer_alt(SubLObject numeric_string, SubLObject v_default) {
-        if (v_default == UNPROVIDED) {
-            v_default = ZERO_INTEGER;
-        }
-        {
-            SubLObject value = v_default;
-            SubLObject ignore_errors_tag = NIL;
-            try {
-                {
-                    SubLObject _prev_bind_0 = currentBinding(Errors.$error_handler$);
-                    try {
-                        bind(Errors.$error_handler$, symbol_function(IGNORE_ERRORS_HANDLER));
-                        try {
-                            {
-                                SubLObject num = parse_integer(numeric_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                if (NIL != num) {
-                                    value = num;
-                                }
-                            }
-                        } catch (Throwable catch_var) {
-                            Errors.handleThrowable(catch_var, NIL);
-                        }
-                    } finally {
-                        rebind(Errors.$error_handler$, _prev_bind_0);
-                    }
-                }
-            } catch (Throwable ccatch_env_var) {
-                ignore_errors_tag = Errors.handleThrowable(ccatch_env_var, $IGNORE_ERRORS_TARGET);
-            }
-            return value;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return integer ; value of STRING or DEFAULT if not numeric
-     */
-    @LispMethod(comment = "@return integer ; value of STRING or DEFAULT if not numeric")
     public static SubLObject extract_integer(final SubLObject numeric_string, SubLObject v_default) {
         if (v_default == UNPROVIDED) {
             v_default = ZERO_INTEGER;
@@ -3730,83 +1178,14 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return value;
     }
 
-    /**
-     *
-     *
-     * @return list ; the predicate in the list sorted by usage (i.e., @xref num-predicate-extent-index)
-     * @unknown look into using something like cb-relevant-num-all-assertions
-     */
-    @LispMethod(comment = "@return list ; the predicate in the list sorted by usage (i.e., @xref num-predicate-extent-index)\r\n@unknown look into using something like cb-relevant-num-all-assertions")
-    public static final SubLObject sort_by_pred_usage_alt(SubLObject list) {
-        return Sort.stable_sort(list, symbol_function($sym63$_), symbol_function(NUM_PREDICATE_EXTENT_INDEX));
-    }
-
-    /**
-     *
-     *
-     * @return list ; the predicate in the list sorted by usage (i.e., @xref num-predicate-extent-index)
-     * @unknown look into using something like cb-relevant-num-all-assertions
-     */
-    @LispMethod(comment = "@return list ; the predicate in the list sorted by usage (i.e., @xref num-predicate-extent-index)\r\n@unknown look into using something like cb-relevant-num-all-assertions")
     public static SubLObject sort_by_pred_usage(final SubLObject list) {
         return Sort.stable_sort(list, symbol_function($sym68$_), symbol_function(NUM_PREDICATE_EXTENT_INDEX));
     }
 
-    /**
-     * Returns the most specific value of #$arg1Isa for PRED in any MT
-     */
-    @LispMethod(comment = "Returns the most specific value of #$arg1Isa for PRED in any MT")
-    public static final SubLObject most_specific_arg1_constraint_alt(SubLObject pred) {
-        return com.cyc.cycjava.cycl.lexification_utilities.most_specific_argn_constraint(pred, ONE_INTEGER);
-    }
-
-    /**
-     * Returns the most specific value of #$arg1Isa for PRED in any MT
-     */
-    @LispMethod(comment = "Returns the most specific value of #$arg1Isa for PRED in any MT")
     public static SubLObject most_specific_arg1_constraint(final SubLObject pred) {
         return most_specific_argn_constraint(pred, ONE_INTEGER);
     }
 
-    /**
-     * Returns the most specific value of #$argIsa for PRED at ARG-POS in any MT
-     *
-     * @unknown CycLReifiableDenotationalTerm filtered since that has an unintuitive generality estimate (e.g., lower generality than #$Collection)
-     */
-    @LispMethod(comment = "Returns the most specific value of #$argIsa for PRED at ARG-POS in any MT\r\n\r\n@unknown CycLReifiableDenotationalTerm filtered since that has an unintuitive generality estimate (e.g., lower generality than #$Collection)")
-    public static final SubLObject most_specific_argn_constraint_alt(SubLObject pred, SubLObject arg_pos) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject constraint = $$CycLReifiableDenotationalTerm;
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                        {
-                            SubLObject constraints = remove($$CycLReifiableDenotationalTerm, cardinality_estimates.sort_by_generality_estimate(kb_accessors.argn_isa(pred, arg_pos, UNPROVIDED), UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                            if (NIL != constraints) {
-                                constraint = constraints.first();
-                            }
-                        }
-                    } finally {
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return constraint;
-            }
-        }
-    }
-
-    /**
-     * Returns the most specific value of #$argIsa for PRED at ARG-POS in any MT
-     *
-     * @unknown CycLReifiableDenotationalTerm filtered since that has an unintuitive generality estimate (e.g., lower generality than #$Collection)
-     */
-    @LispMethod(comment = "Returns the most specific value of #$argIsa for PRED at ARG-POS in any MT\r\n\r\n@unknown CycLReifiableDenotationalTerm filtered since that has an unintuitive generality estimate (e.g., lower generality than #$Collection)")
     public static SubLObject most_specific_argn_constraint(final SubLObject pred, final SubLObject arg_pos) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject constraint = $$CycLReifiableDenotationalTerm;
@@ -3826,34 +1205,8 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return constraint;
     }
 
-    /**
-     *
-     *
-     * @return fort ; most specific type for RELATION at POSITION
-     */
-    @LispMethod(comment = "@return fort ; most specific type for RELATION at POSITION")
-    public static final SubLObject get_relation_argument_type_alt(SubLObject relation, SubLObject position) {
-        return com.cyc.cycjava.cycl.lexification_utilities.most_specific_argn_constraint(relation, position);
-    }
-
-    /**
-     *
-     *
-     * @return fort ; most specific type for RELATION at POSITION
-     */
-    @LispMethod(comment = "@return fort ; most specific type for RELATION at POSITION")
     public static SubLObject get_relation_argument_type(final SubLObject relation, SubLObject position) {
         return most_specific_argn_constraint(relation, position);
-    }
-
-    public static final SubLObject clear_keyword_for_pos_alt() {
-        {
-            SubLObject cs = $keyword_for_pos_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
-        }
-        return NIL;
     }
 
     public static SubLObject clear_keyword_for_pos() {
@@ -3864,13 +1217,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return NIL;
     }
 
-    public static final SubLObject remove_keyword_for_pos_alt(SubLObject pos, SubLObject lexical_mt) {
-        if (lexical_mt == UNPROVIDED) {
-            lexical_mt = $$EnglishLexiconMt;
-        }
-        return memoization_state.caching_state_remove_function_results_with_args($keyword_for_pos_caching_state$.getGlobalValue(), list(pos, lexical_mt), UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject remove_keyword_for_pos(final SubLObject pos, SubLObject lexical_mt) {
         if (lexical_mt == UNPROVIDED) {
             lexical_mt = $$EnglishLexiconMt;
@@ -3878,58 +1224,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return memoization_state.caching_state_remove_function_results_with_args($keyword_for_pos_caching_state$.getGlobalValue(), list(pos, lexical_mt), UNPROVIDED, UNPROVIDED);
     }
 
-    /**
-     *
-     *
-     * @return symbol ; keyword corresponding to the part of speech (eg, #$CountNoun -> :noun).
-     */
-    @LispMethod(comment = "@return symbol ; keyword corresponding to the part of speech (eg, #$CountNoun -> :noun).")
-    public static final SubLObject keyword_for_pos_internal_alt(SubLObject pos, SubLObject lexical_mt) {
-        if (NIL != lexicon_accessors.genl_posP(pos, $$ProperNoun, lexical_mt)) {
-            return $PROPER_NOUN;
-        } else {
-            if (NIL != lexicon_accessors.genl_posP(pos, $$Determiner, lexical_mt)) {
-                return $DET;
-            } else {
-                if (NIL != lexicon_accessors.genl_posP(pos, $$Pronoun, lexical_mt)) {
-                    return $PRONOUN;
-                } else {
-                    if (NIL != lexicon_accessors.genl_posP(pos, $$Noun, lexical_mt)) {
-                        return $NOUN;
-                    } else {
-                        if (NIL != lexicon_accessors.genl_posP(pos, $$Verb, lexical_mt)) {
-                            return $VERB;
-                        } else {
-                            if (NIL != lexicon_accessors.genl_posP(pos, $$Adjective, lexical_mt)) {
-                                return $ADJECTIVE;
-                            } else {
-                                if (NIL != lexicon_accessors.genl_posP(pos, $$Adverb, lexical_mt)) {
-                                    return $ADVERB;
-                                } else {
-                                    if (NIL != lexicon_accessors.genl_posP(pos, $$Preposition, lexical_mt)) {
-                                        return $PREP;
-                                    } else {
-                                        if (NIL != lexicon_accessors.genl_posP(pos, $$Conjunction, lexical_mt)) {
-                                            return $CONJ;
-                                        } else {
-                                            return NIL;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return symbol ; keyword corresponding to the part of speech (eg, #$CountNoun -> :noun).
-     */
-    @LispMethod(comment = "@return symbol ; keyword corresponding to the part of speech (eg, #$CountNoun -> :noun).")
     public static SubLObject keyword_for_pos_internal(final SubLObject pos, final SubLObject lexical_mt) {
         if (NIL != lexicon_accessors.genl_posP(pos, $$ProperNoun, lexical_mt)) {
             return $PROPER_NOUN;
@@ -3959,45 +1253,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
             return $CONJ;
         }
         return NIL;
-    }
-
-    public static final SubLObject keyword_for_pos_alt(SubLObject pos, SubLObject lexical_mt) {
-        if (lexical_mt == UNPROVIDED) {
-            lexical_mt = $$EnglishLexiconMt;
-        }
-        {
-            SubLObject caching_state = $keyword_for_pos_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(KEYWORD_FOR_POS, $keyword_for_pos_caching_state$, NIL, EQL, TWO_INTEGER, $int$100);
-            }
-            {
-                SubLObject sxhash = memoization_state.sxhash_calc_2(pos, lexical_mt);
-                SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
-                if (collisions != $kw88$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    {
-                        SubLObject cdolist_list_var = collisions;
-                        SubLObject collision = NIL;
-                        for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
-                            {
-                                SubLObject cached_args = collision.first();
-                                SubLObject results2 = second(collision);
-                                if (pos.eql(cached_args.first())) {
-                                    cached_args = cached_args.rest();
-                                    if (((NIL != cached_args) && (NIL == cached_args.rest())) && lexical_mt.eql(cached_args.first())) {
-                                        return memoization_state.caching_results(results2);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                {
-                    SubLObject results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.lexification_utilities.keyword_for_pos_internal(pos, lexical_mt)));
-                    memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(pos, lexical_mt));
-                    return memoization_state.caching_results(results);
-                }
-            }
-        }
     }
 
     public static SubLObject keyword_for_pos(final SubLObject pos, SubLObject lexical_mt) {
@@ -4032,29 +1287,12 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return memoization_state.caching_results(results3);
     }
 
-    public static final SubLObject clear_precise_keyword_for_pos_alt() {
-        {
-            SubLObject cs = $precise_keyword_for_pos_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject clear_precise_keyword_for_pos() {
         final SubLObject cs = $precise_keyword_for_pos_caching_state$.getGlobalValue();
         if (NIL != cs) {
             memoization_state.caching_state_clear(cs);
         }
         return NIL;
-    }
-
-    public static final SubLObject remove_precise_keyword_for_pos_alt(SubLObject pos, SubLObject lexical_mt) {
-        if (lexical_mt == UNPROVIDED) {
-            lexical_mt = $$EnglishLexiconMt;
-        }
-        return memoization_state.caching_state_remove_function_results_with_args($precise_keyword_for_pos_caching_state$.getGlobalValue(), list(pos, lexical_mt), UNPROVIDED, UNPROVIDED);
     }
 
     public static SubLObject remove_precise_keyword_for_pos(final SubLObject pos, SubLObject lexical_mt) {
@@ -4064,51 +1302,8 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return memoization_state.caching_state_remove_function_results_with_args($precise_keyword_for_pos_caching_state$.getGlobalValue(), list(pos, lexical_mt), UNPROVIDED, UNPROVIDED);
     }
 
-    /**
-     *
-     *
-     * @return symbol ; precise keyword corresponding to the part of speech (eg, #$MassNoun -> :mass-noun).
-     * @unknown Make sure this is kept in synch with @xref pos-for-keyword
-     */
-    @LispMethod(comment = "@return symbol ; precise keyword corresponding to the part of speech (eg, #$MassNoun -> :mass-noun).\r\n@unknown Make sure this is kept in synch with @xref pos-for-keyword")
-    public static final SubLObject precise_keyword_for_pos_internal_alt(SubLObject pos, SubLObject lexical_mt) {
-        SubLTrampolineFile.checkType(pos, FORT_P);
-        if (NIL != lexicon_accessors.genl_posP(pos, $$MassNoun, lexical_mt)) {
-            return $MASS_NOUN;
-        } else {
-            if (NIL != lexicon_accessors.genl_posP(pos, $$CountNoun, lexical_mt)) {
-                return $SIMPLE_NOUN;
-            } else {
-                if (NIL != lexicon_accessors.genl_posP(pos, $$AgentiveNoun, lexical_mt)) {
-                    return $AGENTIVE_NOUN;
-                } else {
-                    if (NIL != lexicon_accessors.genl_posP(pos, $$GerundiveNoun, lexical_mt)) {
-                        return $GERUNDIVE_NOUN;
-                    } else {
-                        if (NIL != lexicon_accessors.genl_posP(pos, $$DeVerbalNoun, lexical_mt)) {
-                            return $DEVERBAL_NOUN;
-                        } else {
-                            if (NIL != lexicon_accessors.genl_posP(pos, $$AuxVerb, lexical_mt)) {
-                                return $AUX;
-                            } else {
-                                return com.cyc.cycjava.cycl.lexification_utilities.keyword_for_pos(pos, UNPROVIDED);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return symbol ; precise keyword corresponding to the part of speech (eg, #$MassNoun -> :mass-noun).
-     * @unknown Make sure this is kept in synch with @xref pos-for-keyword
-     */
-    @LispMethod(comment = "@return symbol ; precise keyword corresponding to the part of speech (eg, #$MassNoun -> :mass-noun).\r\n@unknown Make sure this is kept in synch with @xref pos-for-keyword")
     public static SubLObject precise_keyword_for_pos_internal(final SubLObject pos, final SubLObject lexical_mt) {
-        assert NIL != forts.fort_p(pos) : "! forts.fort_p(pos) " + ("forts.fort_p(pos) " + "CommonSymbols.NIL != forts.fort_p(pos) ") + pos;
+        assert NIL != forts.fort_p(pos) : "forts.fort_p(pos) " + "CommonSymbols.NIL != forts.fort_p(pos) " + pos;
         if (NIL != lexicon_accessors.genl_posP(pos, $$MassNoun, lexical_mt)) {
             return $MASS_NOUN;
         }
@@ -4128,45 +1323,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
             return $AUX;
         }
         return keyword_for_pos(pos, UNPROVIDED);
-    }
-
-    public static final SubLObject precise_keyword_for_pos_alt(SubLObject pos, SubLObject lexical_mt) {
-        if (lexical_mt == UNPROVIDED) {
-            lexical_mt = $$EnglishLexiconMt;
-        }
-        {
-            SubLObject caching_state = $precise_keyword_for_pos_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(PRECISE_KEYWORD_FOR_POS, $precise_keyword_for_pos_caching_state$, NIL, EQL, TWO_INTEGER, $int$100);
-            }
-            {
-                SubLObject sxhash = memoization_state.sxhash_calc_2(pos, lexical_mt);
-                SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
-                if (collisions != $kw88$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    {
-                        SubLObject cdolist_list_var = collisions;
-                        SubLObject collision = NIL;
-                        for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
-                            {
-                                SubLObject cached_args = collision.first();
-                                SubLObject results2 = second(collision);
-                                if (pos.eql(cached_args.first())) {
-                                    cached_args = cached_args.rest();
-                                    if (((NIL != cached_args) && (NIL == cached_args.rest())) && lexical_mt.eql(cached_args.first())) {
-                                        return memoization_state.caching_results(results2);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                {
-                    SubLObject results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.lexification_utilities.precise_keyword_for_pos_internal(pos, lexical_mt)));
-                    memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(pos, lexical_mt));
-                    return memoization_state.caching_results(results);
-                }
-            }
-        }
     }
 
     public static SubLObject precise_keyword_for_pos(final SubLObject pos, SubLObject lexical_mt) {
@@ -4201,29 +1357,12 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return memoization_state.caching_results(results3);
     }
 
-    public static final SubLObject clear_keyword_for_pred_alt() {
-        {
-            SubLObject cs = $keyword_for_pred_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject clear_keyword_for_pred() {
         final SubLObject cs = $keyword_for_pred_caching_state$.getGlobalValue();
         if (NIL != cs) {
             memoization_state.caching_state_clear(cs);
         }
         return NIL;
-    }
-
-    public static final SubLObject remove_keyword_for_pred_alt(SubLObject pred, SubLObject lexical_mt) {
-        if (lexical_mt == UNPROVIDED) {
-            lexical_mt = $$EnglishLexiconMt;
-        }
-        return memoization_state.caching_state_remove_function_results_with_args($keyword_for_pred_caching_state$.getGlobalValue(), list(pred, lexical_mt), UNPROVIDED, UNPROVIDED);
     }
 
     public static SubLObject remove_keyword_for_pred(final SubLObject pred, SubLObject lexical_mt) {
@@ -4233,63 +1372,8 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return memoization_state.caching_state_remove_function_results_with_args($keyword_for_pred_caching_state$.getGlobalValue(), list(pred, lexical_mt), UNPROVIDED, UNPROVIDED);
     }
 
-    /**
-     *
-     *
-     * @return symbol ; keyword corresponding to the part of speech predicate
-     */
-    @LispMethod(comment = "@return symbol ; keyword corresponding to the part of speech predicate")
-    public static final SubLObject keyword_for_pred_internal_alt(SubLObject pred, SubLObject lexical_mt) {
-        return com.cyc.cycjava.cycl.lexification_utilities.keyword_for_pos(lexicon_accessors.pos_of_pred(pred), lexical_mt);
-    }
-
-    /**
-     *
-     *
-     * @return symbol ; keyword corresponding to the part of speech predicate
-     */
-    @LispMethod(comment = "@return symbol ; keyword corresponding to the part of speech predicate")
     public static SubLObject keyword_for_pred_internal(final SubLObject pred, final SubLObject lexical_mt) {
         return keyword_for_pos(lexicon_accessors.pos_of_pred(pred), lexical_mt);
-    }
-
-    public static final SubLObject keyword_for_pred_alt(SubLObject pred, SubLObject lexical_mt) {
-        if (lexical_mt == UNPROVIDED) {
-            lexical_mt = $$EnglishLexiconMt;
-        }
-        {
-            SubLObject caching_state = $keyword_for_pred_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(KEYWORD_FOR_PRED, $keyword_for_pred_caching_state$, NIL, EQL, TWO_INTEGER, $int$100);
-            }
-            {
-                SubLObject sxhash = memoization_state.sxhash_calc_2(pred, lexical_mt);
-                SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
-                if (collisions != $kw88$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    {
-                        SubLObject cdolist_list_var = collisions;
-                        SubLObject collision = NIL;
-                        for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
-                            {
-                                SubLObject cached_args = collision.first();
-                                SubLObject results2 = second(collision);
-                                if (pred.eql(cached_args.first())) {
-                                    cached_args = cached_args.rest();
-                                    if (((NIL != cached_args) && (NIL == cached_args.rest())) && lexical_mt.eql(cached_args.first())) {
-                                        return memoization_state.caching_results(results2);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                {
-                    SubLObject results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.lexification_utilities.keyword_for_pred_internal(pred, lexical_mt)));
-                    memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(pred, lexical_mt));
-                    return memoization_state.caching_results(results);
-                }
-            }
-        }
     }
 
     public static SubLObject keyword_for_pred(final SubLObject pred, SubLObject lexical_mt) {
@@ -4324,29 +1408,12 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return memoization_state.caching_results(results3);
     }
 
-    public static final SubLObject clear_precise_keyword_for_pred_alt() {
-        {
-            SubLObject cs = $precise_keyword_for_pred_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject clear_precise_keyword_for_pred() {
         final SubLObject cs = $precise_keyword_for_pred_caching_state$.getGlobalValue();
         if (NIL != cs) {
             memoization_state.caching_state_clear(cs);
         }
         return NIL;
-    }
-
-    public static final SubLObject remove_precise_keyword_for_pred_alt(SubLObject pred, SubLObject lexical_mt) {
-        if (lexical_mt == UNPROVIDED) {
-            lexical_mt = $$EnglishLexiconMt;
-        }
-        return memoization_state.caching_state_remove_function_results_with_args($precise_keyword_for_pred_caching_state$.getGlobalValue(), list(pred, lexical_mt), UNPROVIDED, UNPROVIDED);
     }
 
     public static SubLObject remove_precise_keyword_for_pred(final SubLObject pred, SubLObject lexical_mt) {
@@ -4356,63 +1423,8 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return memoization_state.caching_state_remove_function_results_with_args($precise_keyword_for_pred_caching_state$.getGlobalValue(), list(pred, lexical_mt), UNPROVIDED, UNPROVIDED);
     }
 
-    /**
-     *
-     *
-     * @return symbol ; precise keyword corresponding to the part of speech predicate
-     */
-    @LispMethod(comment = "@return symbol ; precise keyword corresponding to the part of speech predicate")
-    public static final SubLObject precise_keyword_for_pred_internal_alt(SubLObject pred, SubLObject lexical_mt) {
-        return com.cyc.cycjava.cycl.lexification_utilities.precise_keyword_for_pos(lexicon_accessors.pos_of_pred(pred), lexical_mt);
-    }
-
-    /**
-     *
-     *
-     * @return symbol ; precise keyword corresponding to the part of speech predicate
-     */
-    @LispMethod(comment = "@return symbol ; precise keyword corresponding to the part of speech predicate")
     public static SubLObject precise_keyword_for_pred_internal(final SubLObject pred, final SubLObject lexical_mt) {
         return precise_keyword_for_pos(lexicon_accessors.pos_of_pred(pred), lexical_mt);
-    }
-
-    public static final SubLObject precise_keyword_for_pred_alt(SubLObject pred, SubLObject lexical_mt) {
-        if (lexical_mt == UNPROVIDED) {
-            lexical_mt = $$EnglishLexiconMt;
-        }
-        {
-            SubLObject caching_state = $precise_keyword_for_pred_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(PRECISE_KEYWORD_FOR_PRED, $precise_keyword_for_pred_caching_state$, NIL, EQL, TWO_INTEGER, $int$100);
-            }
-            {
-                SubLObject sxhash = memoization_state.sxhash_calc_2(pred, lexical_mt);
-                SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
-                if (collisions != $kw88$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    {
-                        SubLObject cdolist_list_var = collisions;
-                        SubLObject collision = NIL;
-                        for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
-                            {
-                                SubLObject cached_args = collision.first();
-                                SubLObject results2 = second(collision);
-                                if (pred.eql(cached_args.first())) {
-                                    cached_args = cached_args.rest();
-                                    if (((NIL != cached_args) && (NIL == cached_args.rest())) && lexical_mt.eql(cached_args.first())) {
-                                        return memoization_state.caching_results(results2);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                {
-                    SubLObject results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.lexification_utilities.precise_keyword_for_pred_internal(pred, lexical_mt)));
-                    memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(pred, lexical_mt));
-                    return memoization_state.caching_results(results);
-                }
-            }
-        }
     }
 
     public static SubLObject precise_keyword_for_pred(final SubLObject pred, SubLObject lexical_mt) {
@@ -4447,28 +1459,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return memoization_state.caching_results(results3);
     }
 
-    /**
-     * Validate the formula and provide diagnosis if invalid
-     *
-     * @return string ; status message if the formula is invalid in mt
-     */
-    @LispMethod(comment = "Validate the formula and provide diagnosis if invalid\r\n\r\n@return string ; status message if the formula is invalid in mt")
-    public static final SubLObject invalid_formulaP_alt(SubLObject formula, SubLObject mt) {
-        {
-            SubLObject status = NIL;
-            if (NIL == wff.el_wffP(formula, mt, UNPROVIDED)) {
-                status = wff.explanation_of_why_not_wff(formula, mt, UNPROVIDED);
-            }
-            return status;
-        }
-    }
-
-    /**
-     * Validate the formula and provide diagnosis if invalid
-     *
-     * @return string ; status message if the formula is invalid in mt
-     */
-    @LispMethod(comment = "Validate the formula and provide diagnosis if invalid\r\n\r\n@return string ; status message if the formula is invalid in mt")
     public static SubLObject invalid_formulaP(final SubLObject formula, final SubLObject mt) {
         SubLObject status = NIL;
         if (NIL == wff.el_wffP(formula, mt, UNPROVIDED)) {
@@ -4477,28 +1467,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return status;
     }
 
-    /**
-     * Validate the formula for the lexification and provide diagnosis if invalid
-     *
-     * @return string ; status message if the formula is invalid in mt
-     */
-    @LispMethod(comment = "Validate the formula for the lexification and provide diagnosis if invalid\r\n\r\n@return string ; status message if the formula is invalid in mt")
-    public static final SubLObject invalid_lexificationP_alt(SubLObject formula, SubLObject mt) {
-        {
-            SubLObject status = com.cyc.cycjava.cycl.lexification_utilities.invalid_formulaP(formula, mt);
-            if (NIL != status) {
-                status = format(NIL, $str_alt106$invalid_formula____a__, status);
-            }
-            return status;
-        }
-    }
-
-    /**
-     * Validate the formula for the lexification and provide diagnosis if invalid
-     *
-     * @return string ; status message if the formula is invalid in mt
-     */
-    @LispMethod(comment = "Validate the formula for the lexification and provide diagnosis if invalid\r\n\r\n@return string ; status message if the formula is invalid in mt")
     public static SubLObject invalid_lexificationP(final SubLObject formula, final SubLObject mt) {
         SubLObject status = invalid_formulaP(formula, mt);
         if (NIL != status) {
@@ -4507,62 +1475,10 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return status;
     }
 
-    /**
-     *
-     *
-     * @return real-pos ; Cyc SpeechPart for the part-of-speech keyword
-     */
-    @LispMethod(comment = "@return real-pos ; Cyc SpeechPart for the part-of-speech keyword")
-    public static final SubLObject lex_pos_for_keyword_alt(SubLObject pos_keyword) {
-        return lexicon_accessors.pos_for_keyword(pos_keyword, UNPROVIDED);
-    }
-
-    /**
-     *
-     *
-     * @return real-pos ; Cyc SpeechPart for the part-of-speech keyword
-     */
-    @LispMethod(comment = "@return real-pos ; Cyc SpeechPart for the part-of-speech keyword")
     public static SubLObject lex_pos_for_keyword(final SubLObject pos_keyword) {
         return lexicon_accessors.pos_for_keyword(pos_keyword, UNPROVIDED);
     }
 
-    /**
-     *
-     *
-     * @return list ; list of SpeechParts applicable to WORD-FORM
-    Determines the parts-of-speech for the word-form, based on whether on explicit
-    syntactic mapping exists with it or whether the word maps into an individual,
-    in which case ProperNoun is used
-     */
-    @LispMethod(comment = "@return list ; list of SpeechParts applicable to WORD-FORM\r\nDetermines the parts-of-speech for the word-form, based on whether on explicit\r\nsyntactic mapping exists with it or whether the word maps into an individual,\r\nin which case ProperNoun is used")
-    public static final SubLObject parts_of_speech_alt(SubLObject word_form) {
-        {
-            SubLObject pos_list = lexicon_accessors.pos_of_string(word_form, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            if (NIL == pos_list) {
-                {
-                    SubLObject csome_list_var = lexicon_accessors.denots_of_string(word_form, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    SubLObject denot = NIL;
-                    for (denot = csome_list_var.first(); !((NIL != pos_list) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , denot = csome_list_var.first()) {
-                        if (NIL != isa.isa_in_any_mtP(denot, $$Individual)) {
-                            pos_list = $list_alt108;
-                        }
-                    }
-                }
-            }
-            return pos_list;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return list ; list of SpeechParts applicable to WORD-FORM
-    Determines the parts-of-speech for the word-form, based on whether on explicit
-    syntactic mapping exists with it or whether the word maps into an individual,
-    in which case ProperNoun is used
-     */
-    @LispMethod(comment = "@return list ; list of SpeechParts applicable to WORD-FORM\r\nDetermines the parts-of-speech for the word-form, based on whether on explicit\r\nsyntactic mapping exists with it or whether the word maps into an individual,\r\nin which case ProperNoun is used")
     public static SubLObject parts_of_speech(final SubLObject word_form) {
         SubLObject pos_list = lexicon_accessors.pos_of_string(word_form, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         if (NIL == pos_list) {
@@ -4580,26 +1496,12 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return pos_list;
     }
 
-    public static final SubLObject clear_pluralize_word_alt() {
-        {
-            SubLObject cs = $pluralize_word_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject clear_pluralize_word() {
         final SubLObject cs = $pluralize_word_caching_state$.getGlobalValue();
         if (NIL != cs) {
             memoization_state.caching_state_clear(cs);
         }
         return NIL;
-    }
-
-    public static final SubLObject remove_pluralize_word(SubLObject word) {
-        return memoization_state.caching_state_remove_function_results_with_args($pluralize_word_caching_state$.getGlobalValue(), list(word), UNPROVIDED, UNPROVIDED);
     }
 
     public static SubLObject remove_pluralize_word(final SubLObject word, SubLObject mt) {
@@ -4609,36 +1511,8 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return memoization_state.caching_state_remove_function_results_with_args($pluralize_word_caching_state$.getGlobalValue(), list(word, mt), UNPROVIDED, UNPROVIDED);
     }
 
-    /**
-     *
-     *
-     * @return string ; plural form of word
-     * @unknown noun stemming is used to ensure that pluralization is only inflection used
-     */
-    @LispMethod(comment = "@return string ; plural form of word\r\n@unknown noun stemming is used to ensure that pluralization is only inflection used")
-    public static final SubLObject pluralize_word_internal(SubLObject word) {
-        return morphology.pluralize_string(morphology.find_stem(word, $NOUN), UNPROVIDED);
-    }
-
     public static SubLObject pluralize_word_internal(final SubLObject word, final SubLObject mt) {
         return morphology.pluralize_string(morphology.find_stem(word, $NOUN), mt);
-    }
-
-    public static final SubLObject pluralize_word(SubLObject word) {
-        {
-            SubLObject caching_state = $pluralize_word_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(PLURALIZE_WORD, $pluralize_word_caching_state$, NIL, EQUAL, ONE_INTEGER, $int$1024);
-            }
-            {
-                SubLObject results = memoization_state.caching_state_lookup(caching_state, word, $kw88$_MEMOIZED_ITEM_NOT_FOUND_);
-                if (results == $kw88$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.lexification_utilities.pluralize_word_internal(word)));
-                    memoization_state.caching_state_put(caching_state, word, results, UNPROVIDED);
-                }
-                return memoization_state.caching_results(results);
-            }
-        }
     }
 
     public static SubLObject pluralize_word(final SubLObject word, SubLObject mt) {
@@ -4673,26 +1547,12 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return memoization_state.caching_results(results3);
     }
 
-    public static final SubLObject clear_singularize_word_alt() {
-        {
-            SubLObject cs = $singularize_word_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject clear_singularize_word() {
         final SubLObject cs = $singularize_word_caching_state$.getGlobalValue();
         if (NIL != cs) {
             memoization_state.caching_state_clear(cs);
         }
         return NIL;
-    }
-
-    public static final SubLObject remove_singularize_word(SubLObject word) {
-        return memoization_state.caching_state_remove_function_results_with_args($singularize_word_caching_state$.getGlobalValue(), list(word), UNPROVIDED, UNPROVIDED);
     }
 
     public static SubLObject remove_singularize_word(final SubLObject word, SubLObject mt) {
@@ -4702,35 +1562,8 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return memoization_state.caching_state_remove_function_results_with_args($singularize_word_caching_state$.getGlobalValue(), list(word, mt), UNPROVIDED, UNPROVIDED);
     }
 
-    /**
-     *
-     *
-     * @return string ; singular form of word
-     */
-    @LispMethod(comment = "@return string ; singular form of word")
-    public static final SubLObject singularize_word_internal(SubLObject word) {
-        return morphology.plural_noun_to_sg(word, UNPROVIDED);
-    }
-
     public static SubLObject singularize_word_internal(final SubLObject word, final SubLObject mt) {
         return morphology.plural_noun_to_sg(word, mt);
-    }
-
-    public static final SubLObject singularize_word(SubLObject word) {
-        {
-            SubLObject caching_state = $singularize_word_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(SINGULARIZE_WORD, $singularize_word_caching_state$, NIL, EQUAL, ONE_INTEGER, $int$1024);
-            }
-            {
-                SubLObject results = memoization_state.caching_state_lookup(caching_state, word, $kw88$_MEMOIZED_ITEM_NOT_FOUND_);
-                if (results == $kw88$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.lexification_utilities.singularize_word_internal(word)));
-                    memoization_state.caching_state_put(caching_state, word, results, UNPROVIDED);
-                }
-                return memoization_state.caching_results(results);
-            }
-        }
     }
 
     public static SubLObject singularize_word(final SubLObject word, SubLObject mt) {
@@ -4765,16 +1598,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return memoization_state.caching_results(results3);
     }
 
-    public static final SubLObject clear_basic_preds_for_part_of_speech_alt() {
-        {
-            SubLObject cs = $basic_preds_for_part_of_speech_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject clear_basic_preds_for_part_of_speech() {
         final SubLObject cs = $basic_preds_for_part_of_speech_caching_state$.getGlobalValue();
         if (NIL != cs) {
@@ -4783,49 +1606,12 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return NIL;
     }
 
-    public static final SubLObject remove_basic_preds_for_part_of_speech_alt(SubLObject pos_keyword) {
-        return memoization_state.caching_state_remove_function_results_with_args($basic_preds_for_part_of_speech_caching_state$.getGlobalValue(), list(pos_keyword), UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject remove_basic_preds_for_part_of_speech(final SubLObject pos_keyword) {
         return memoization_state.caching_state_remove_function_results_with_args($basic_preds_for_part_of_speech_caching_state$.getGlobalValue(), list(pos_keyword), UNPROVIDED, UNPROVIDED);
     }
 
-    /**
-     *
-     *
-     * @return list : syntactic predicates for POS-KEYWORD that can be used to define root word forms
-     */
-    @LispMethod(comment = "@return list : syntactic predicates for POS-KEYWORD that can be used to define root word forms")
-    public static final SubLObject basic_preds_for_part_of_speech_internal_alt(SubLObject pos_keyword) {
-        return intersection(lexicon_utilities.preds_for_keyword(pos_keyword), $root_form_speech_parts$.getGlobalValue(), UNPROVIDED, UNPROVIDED);
-    }
-
-    /**
-     *
-     *
-     * @return list : syntactic predicates for POS-KEYWORD that can be used to define root word forms
-     */
-    @LispMethod(comment = "@return list : syntactic predicates for POS-KEYWORD that can be used to define root word forms")
     public static SubLObject basic_preds_for_part_of_speech_internal(final SubLObject pos_keyword) {
         return intersection(lexicon_utilities.preds_for_keyword(pos_keyword), lexicon_vars.$root_form_speech_parts$.getGlobalValue(), UNPROVIDED, UNPROVIDED);
-    }
-
-    public static final SubLObject basic_preds_for_part_of_speech_alt(SubLObject pos_keyword) {
-        {
-            SubLObject caching_state = $basic_preds_for_part_of_speech_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(BASIC_PREDS_FOR_PART_OF_SPEECH, $basic_preds_for_part_of_speech_caching_state$, NIL, EQ, ONE_INTEGER, TWELVE_INTEGER);
-            }
-            {
-                SubLObject results = memoization_state.caching_state_lookup(caching_state, pos_keyword, $kw88$_MEMOIZED_ITEM_NOT_FOUND_);
-                if (results == $kw88$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.lexification_utilities.basic_preds_for_part_of_speech_internal(pos_keyword)));
-                    memoization_state.caching_state_put(caching_state, pos_keyword, results, UNPROVIDED);
-                }
-                return memoization_state.caching_results(results);
-            }
-        }
     }
 
     public static SubLObject basic_preds_for_part_of_speech(final SubLObject pos_keyword) {
@@ -4841,16 +1627,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return memoization_state.caching_results(results);
     }
 
-    public static final SubLObject clear_find_root_wordform_alt() {
-        {
-            SubLObject cs = $find_root_wordform_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject clear_find_root_wordform() {
         final SubLObject cs = $find_root_wordform_caching_state$.getGlobalValue();
         if (NIL != cs) {
@@ -4859,60 +1635,10 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return NIL;
     }
 
-    public static final SubLObject remove_find_root_wordform_alt(SubLObject wordform) {
-        return memoization_state.caching_state_remove_function_results_with_args($find_root_wordform_caching_state$.getGlobalValue(), list(wordform), UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject remove_find_root_wordform(final SubLObject wordform) {
         return memoization_state.caching_state_remove_function_results_with_args($find_root_wordform_caching_state$.getGlobalValue(), list(wordform), UNPROVIDED, UNPROVIDED);
     }
 
-    /**
-     *
-     *
-     * @return string ; the root form of the word with the variant wordform
-    This first checks for the wordform for the one of the mappings that match the root (e.g., infinitive). Otherwise, it returning the wordform from the lexical unit concept name with the -TheWord suffix removed
-     */
-    @LispMethod(comment = "@return string ; the root form of the word with the variant wordform\r\nThis first checks for the wordform for the one of the mappings that match the root (e.g., infinitive). Otherwise, it returning the wordform from the lexical unit concept name with the -TheWord suffix removed")
-    public static final SubLObject find_root_wordform_internal_alt(SubLObject wordform) {
-        {
-            SubLObject word_units_to_check = append(lexicon_accessors.words_of_stringXpos(wordform, $VERB, UNPROVIDED, UNPROVIDED, UNPROVIDED), lexicon_accessors.words_of_stringXpos(wordform, $NOUN, UNPROVIDED, UNPROVIDED, UNPROVIDED), lexicon_cache.words_of_string(wordform, UNPROVIDED, UNPROVIDED, UNPROVIDED));
-            SubLObject root = NIL;
-            if (NIL == root) {
-                {
-                    SubLObject csome_list_var = word_units_to_check;
-                    SubLObject word_unit = NIL;
-                    for (word_unit = csome_list_var.first(); !((NIL != root) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , word_unit = csome_list_var.first()) {
-                        root = lexicon_cache.ordered_strings_of_word_unit(word_unit, $root_form_speech_parts$.getGlobalValue(), UNPROVIDED, UNPROVIDED).first();
-                    }
-                }
-            }
-            if (NIL == root) {
-                {
-                    SubLObject csome_list_var = lexicon_cache.words_of_string(wordform, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    SubLObject word_unit = NIL;
-                    for (word_unit = csome_list_var.first(); !((NIL != root) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , word_unit = csome_list_var.first()) {
-                        {
-                            SubLObject label = cb_string_for_fort(word_unit);
-                            root = Strings.string_downcase(string_utilities.string_upto(label, CHAR_hyphen), UNPROVIDED, UNPROVIDED);
-                        }
-                    }
-                }
-            }
-            if (NIL == root) {
-                root = wordform;
-            }
-            return root;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return string ; the root form of the word with the variant wordform
-    This first checks for the wordform for the one of the mappings that match the root (e.g., infinitive). Otherwise, it returning the wordform from the lexical unit concept name with the -TheWord suffix removed
-     */
-    @LispMethod(comment = "@return string ; the root form of the word with the variant wordform\r\nThis first checks for the wordform for the one of the mappings that match the root (e.g., infinitive). Otherwise, it returning the wordform from the lexical unit concept name with the -TheWord suffix removed")
     public static SubLObject find_root_wordform_internal(final SubLObject wordform) {
         final SubLObject word_units_to_check = append(lexicon_accessors.words_of_stringXpos(wordform, $VERB, UNPROVIDED, UNPROVIDED, UNPROVIDED), lexicon_accessors.words_of_stringXpos(wordform, $NOUN, UNPROVIDED, UNPROVIDED, UNPROVIDED), lexicon_cache.words_of_string(wordform, UNPROVIDED, UNPROVIDED, UNPROVIDED));
         SubLObject root = NIL;
@@ -4939,23 +1665,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return root;
     }
 
-    public static final SubLObject find_root_wordform_alt(SubLObject wordform) {
-        {
-            SubLObject caching_state = $find_root_wordform_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(FIND_ROOT_WORDFORM, $find_root_wordform_caching_state$, NIL, EQUAL, ONE_INTEGER, $int$1024);
-            }
-            {
-                SubLObject results = memoization_state.caching_state_lookup(caching_state, wordform, $kw88$_MEMOIZED_ITEM_NOT_FOUND_);
-                if (results == $kw88$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.lexification_utilities.find_root_wordform_internal(wordform)));
-                    memoization_state.caching_state_put(caching_state, wordform, results, UNPROVIDED);
-                }
-                return memoization_state.caching_results(results);
-            }
-        }
-    }
-
     public static SubLObject find_root_wordform(final SubLObject wordform) {
         SubLObject caching_state = $find_root_wordform_caching_state$.getGlobalValue();
         if (NIL == caching_state) {
@@ -4969,42 +1678,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return memoization_state.caching_results(results);
     }
 
-    /**
-     *
-     *
-     * @return list ; all phrases that refer to the term
-     * @unknown @xref *pph-language-mt* shadowed to #$AllLexicalMicrotheoryPSC to account for terms lexified in non-standard MT's
-     */
-    @LispMethod(comment = "@return list ; all phrases that refer to the term\r\n@unknown @xref *pph-language-mt* shadowed to #$AllLexicalMicrotheoryPSC to account for terms lexified in non-standard MT\'s")
-    public static final SubLObject lexified_phrases_for_term_alt(SubLObject v_term, SubLObject include_preds) {
-        if (include_preds == UNPROVIDED) {
-            include_preds = $ALL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject phrases = NIL;
-                {
-                    SubLObject _prev_bind_0 = pph_vars.$pph_language_mt$.currentBinding(thread);
-                    try {
-                        pph_vars.$pph_language_mt$.bind($$AllLexicalMicrotheoryPSC, thread);
-                        phrases = remove_duplicates(pph_methods_lexicon.all_phrases_for_term(v_term, include_preds, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), symbol_function(EQUALP), UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    } finally {
-                        pph_vars.$pph_language_mt$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return phrases;
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return list ; all phrases that refer to the term
-     * @unknown @xref *pph-language-mt* shadowed to #$AllLexicalMicrotheoryPSC to account for terms lexified in non-standard MT's
-     */
-    @LispMethod(comment = "@return list ; all phrases that refer to the term\r\n@unknown @xref *pph-language-mt* shadowed to #$AllLexicalMicrotheoryPSC to account for terms lexified in non-standard MT\'s")
     public static SubLObject lexified_phrases_for_term(final SubLObject v_term, SubLObject include_preds) {
         if (include_preds == UNPROVIDED) {
             include_preds = $ALL;
@@ -5021,75 +1694,14 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return phrases;
     }
 
-    /**
-     *
-     *
-     * @return list ; all non-plural phrases that refer to term
-     * @unknown tom
-     */
-    @LispMethod(comment = "@return list ; all non-plural phrases that refer to term\r\n@unknown tom")
-    public static final SubLObject nonplural_lexified_phrases_for_term_alt(SubLObject v_term) {
-        return com.cyc.cycjava.cycl.lexification_utilities.lexified_phrases_for_term(v_term, $root_form_speech_parts$.getGlobalValue());
-    }
-
-    /**
-     *
-     *
-     * @return list ; all non-plural phrases that refer to term
-     * @unknown tom
-     */
-    @LispMethod(comment = "@return list ; all non-plural phrases that refer to term\r\n@unknown tom")
     public static SubLObject nonplural_lexified_phrases_for_term(final SubLObject v_term) {
         return lexified_phrases_for_term(v_term, lexicon_vars.$root_form_speech_parts$.getGlobalValue());
     }
 
-    /**
-     *
-     *
-     * @return string ; concatenation of the words with space delimiters
-     * @unknown currently this is just a wrapper around @xref bunge
-     */
-    @LispMethod(comment = "@return string ; concatenation of the words with space delimiters\r\n@unknown currently this is just a wrapper around @xref bunge")
-    public static final SubLObject join_words_alt(SubLObject word_list) {
-        return string_utilities.bunge(word_list, UNPROVIDED);
-    }
-
-    /**
-     *
-     *
-     * @return string ; concatenation of the words with space delimiters
-     * @unknown currently this is just a wrapper around @xref bunge
-     */
-    @LispMethod(comment = "@return string ; concatenation of the words with space delimiters\r\n@unknown currently this is just a wrapper around @xref bunge")
     public static SubLObject join_words(final SubLObject word_list) {
         return string_utilities.bunge(word_list, UNPROVIDED);
     }
 
-    /**
-     *
-     *
-     * @return boolean ; t iff any vowel occurs in the string
-     */
-    @LispMethod(comment = "@return boolean ; t iff any vowel occurs in the string")
-    public static final SubLObject has_vowel_alt(SubLObject string) {
-        {
-            SubLObject cdotimes_end_var = length(string);
-            SubLObject i = NIL;
-            for (i = ZERO_INTEGER; i.numL(cdotimes_end_var); i = add(i, ONE_INTEGER)) {
-                if (NIL != morphology.vowel_charP(Strings.sublisp_char(string, i), T)) {
-                    return T;
-                }
-            }
-        }
-        return NIL;
-    }
-
-    /**
-     *
-     *
-     * @return boolean ; t iff any vowel occurs in the string
-     */
-    @LispMethod(comment = "@return boolean ; t iff any vowel occurs in the string")
     public static SubLObject has_vowel(final SubLObject string) {
         SubLObject cdotimes_end_var;
         SubLObject i;
@@ -5101,46 +1713,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return NIL;
     }
 
-    /**
-     *
-     *
-     * @return string ; the stem wordform (also called base) for WORDFORM
-     * @unknown This is like @xref find-stem but includes a check for regular morphology based on POS-KEYWORD to find stems not already in the lexicon
-     */
-    @LispMethod(comment = "@return string ; the stem wordform (also called base) for WORDFORM\r\n@unknown This is like @xref find-stem but includes a check for regular morphology based on POS-KEYWORD to find stems not already in the lexicon")
-    public static final SubLObject guess_stem_alt(SubLObject wordform, SubLObject pos_keyword) {
-        if (pos_keyword == UNPROVIDED) {
-            pos_keyword = $SIMPLE_NOUN;
-        }
-        {
-            SubLObject stem = morphology.find_stem(wordform, UNPROVIDED);
-            if (stem.equalp(wordform) && (NIL == lexicon_cache.words_of_string(wordform, UNPROVIDED, UNPROVIDED, UNPROVIDED))) {
-                {
-                    SubLObject test_stem = stem;
-                    SubLObject pcase_var = pos_keyword;
-                    if (pcase_var.eql($VERB)) {
-                        test_stem = morphology.inflected_verb_to_infinitive(wordform);
-                    } else {
-                        if (pcase_var.eql($SIMPLE_NOUN)) {
-                            test_stem = morphology.plural_noun_to_sg(wordform, UNPROVIDED);
-                        }
-                    }
-                    if (NIL != com.cyc.cycjava.cycl.lexification_utilities.has_vowel(test_stem)) {
-                        stem = test_stem;
-                    }
-                }
-            }
-            return stem;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return string ; the stem wordform (also called base) for WORDFORM
-     * @unknown This is like @xref find-stem but includes a check for regular morphology based on POS-KEYWORD to find stems not already in the lexicon
-     */
-    @LispMethod(comment = "@return string ; the stem wordform (also called base) for WORDFORM\r\n@unknown This is like @xref find-stem but includes a check for regular morphology based on POS-KEYWORD to find stems not already in the lexicon")
     public static SubLObject guess_stem(final SubLObject wordform, SubLObject pos_keyword) {
         if (pos_keyword == UNPROVIDED) {
             pos_keyword = $SIMPLE_NOUN;
@@ -5163,16 +1735,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return stem;
     }
 
-    public static final SubLObject clear_is_abbreviation_predicate_alt() {
-        {
-            SubLObject cs = $is_abbreviation_predicate_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject clear_is_abbreviation_predicate() {
         final SubLObject cs = $is_abbreviation_predicate_caching_state$.getGlobalValue();
         if (NIL != cs) {
@@ -5181,51 +1743,12 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return NIL;
     }
 
-    public static final SubLObject remove_is_abbreviation_predicate_alt(SubLObject pred) {
-        return memoization_state.caching_state_remove_function_results_with_args($is_abbreviation_predicate_caching_state$.getGlobalValue(), list(pred), UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject remove_is_abbreviation_predicate(final SubLObject pred) {
         return memoization_state.caching_state_remove_function_results_with_args($is_abbreviation_predicate_caching_state$.getGlobalValue(), list(pred), UNPROVIDED, UNPROVIDED);
     }
 
-    /**
-     *
-     *
-     * @return boolean ; true iff predicate takes an abbreviation as the second argument
-     * @unknown See if there is a more efficient way of doing this
-     */
-    @LispMethod(comment = "@return boolean ; true iff predicate takes an abbreviation as the second argument\r\n@unknown See if there is a more efficient way of doing this")
-    public static final SubLObject is_abbreviation_predicate_internal_alt(SubLObject pred) {
-        return fi.fi_ask_int(listS($$and, listS($$arg2Isa, pred, $list_alt122), $list_alt123), $$InferencePSC, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-    }
-
-    /**
-     *
-     *
-     * @return boolean ; true iff predicate takes an abbreviation as the second argument
-     * @unknown See if there is a more efficient way of doing this
-     */
-    @LispMethod(comment = "@return boolean ; true iff predicate takes an abbreviation as the second argument\r\n@unknown See if there is a more efficient way of doing this")
     public static SubLObject is_abbreviation_predicate_internal(final SubLObject pred) {
         return fi.fi_ask_int(listS($$and, listS($$arg2Isa, pred, $list129), $list130), $$InferencePSC, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-    }
-
-    public static final SubLObject is_abbreviation_predicate_alt(SubLObject pred) {
-        {
-            SubLObject caching_state = $is_abbreviation_predicate_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(IS_ABBREVIATION_PREDICATE, $is_abbreviation_predicate_caching_state$, NIL, EQL, ONE_INTEGER, $int$40);
-            }
-            {
-                SubLObject results = memoization_state.caching_state_lookup(caching_state, pred, $kw88$_MEMOIZED_ITEM_NOT_FOUND_);
-                if (results == $kw88$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.lexification_utilities.is_abbreviation_predicate_internal(pred)));
-                    memoization_state.caching_state_put(caching_state, pred, results, UNPROVIDED);
-                }
-                return memoization_state.caching_results(results);
-            }
-        }
     }
 
     public static SubLObject is_abbreviation_predicate(final SubLObject pred) {
@@ -5241,32 +1764,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return memoization_state.caching_results(results);
     }
 
-    /**
-     *
-     *
-     * @return list ; Cyc proper-name predicates that take an abbreviation as the second argument
-     */
-    @LispMethod(comment = "@return list ; Cyc proper-name predicates that take an abbreviation as the second argument")
-    public static final SubLObject get_abbreviation_predicates_alt() {
-        {
-            SubLObject abbrev_preds = NIL;
-            SubLObject cdolist_list_var = genl_predicates.all_spec_preds($$properNameStrings, UNPROVIDED, UNPROVIDED);
-            SubLObject pred = NIL;
-            for (pred = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pred = cdolist_list_var.first()) {
-                if (NIL != com.cyc.cycjava.cycl.lexification_utilities.is_abbreviation_predicate(pred)) {
-                    abbrev_preds = cons(pred, abbrev_preds);
-                }
-            }
-            return abbrev_preds;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return list ; Cyc proper-name predicates that take an abbreviation as the second argument
-     */
-    @LispMethod(comment = "@return list ; Cyc proper-name predicates that take an abbreviation as the second argument")
     public static SubLObject get_abbreviation_predicates() {
         SubLObject abbrev_preds = NIL;
         SubLObject cdolist_list_var = genl_predicates.all_spec_preds($$properNameStrings, UNPROVIDED, UNPROVIDED);
@@ -5282,29 +1779,12 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return abbrev_preds;
     }
 
-    public static final SubLObject clear_examples_for_pred_alt() {
-        {
-            SubLObject cs = $examples_for_pred_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject clear_examples_for_pred() {
         final SubLObject cs = $examples_for_pred_caching_state$.getGlobalValue();
         if (NIL != cs) {
             memoization_state.caching_state_clear(cs);
         }
         return NIL;
-    }
-
-    public static final SubLObject remove_examples_for_pred_alt(SubLObject pred, SubLObject num) {
-        if (num == UNPROVIDED) {
-            num = $num_predicate_examples$.getGlobalValue();
-        }
-        return memoization_state.caching_state_remove_function_results_with_args($examples_for_pred_caching_state$.getGlobalValue(), list(pred, num), UNPROVIDED, UNPROVIDED);
     }
 
     public static SubLObject remove_examples_for_pred(final SubLObject pred, SubLObject num) {
@@ -5314,42 +1794,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return memoization_state.caching_state_remove_function_results_with_args($examples_for_pred_caching_state$.getGlobalValue(), list(pred, num), UNPROVIDED, UNPROVIDED);
     }
 
-    /**
-     * Return up the specified number of examples for the proper-name predicate, first checking for examplePositive assertions and then using actual examples from the KB
-     *
-     * @return list : examples phrases lexified with the proper name predicate
-     */
-    @LispMethod(comment = "Return up the specified number of examples for the proper-name predicate, first checking for examplePositive assertions and then using actual examples from the KB\r\n\r\n@return list : examples phrases lexified with the proper name predicate")
-    public static final SubLObject examples_for_pred_internal_alt(SubLObject pred, SubLObject num) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if ($lex_trace_level$.getDynamicValue(thread).numGE(max($lex_trace_level$.getDynamicValue(thread), $lex_verbose$.getGlobalValue()))) {
-                format(StreamsLow.$trace_output$.getDynamicValue(thread), $str_alt129$examples_for_pred__a__a___, pred, num);
-                force_output(StreamsLow.$trace_output$.getDynamicValue(thread));
-            }
-            {
-                SubLObject positive_examples = com.cyc.cycjava.cycl.lexification_utilities.positive_examples_for_pred(pred);
-                SubLObject examples = list_utilities.first_n(num, positive_examples);
-                SubLObject got_enoughP = list_utilities.lengthGE(examples, num, UNPROVIDED);
-                SubLObject real_examples = NIL;
-                SubLObject real_example = NIL;
-                for (real_examples = com.cyc.cycjava.cycl.lexification_utilities.real_examples_for_pred(pred), real_example = real_examples.first(); !((NIL == real_example) || (NIL != got_enoughP)); real_examples = real_examples.rest() , real_example = real_examples.first()) {
-                    if (NIL == subl_promotions.memberP(real_example, examples, symbol_function(EQUALP), UNPROVIDED)) {
-                        examples = cons(real_example, examples);
-                        got_enoughP = list_utilities.lengthGE(examples, num, UNPROVIDED);
-                    }
-                }
-                return nreverse(examples);
-            }
-        }
-    }
-
-    /**
-     * Return up the specified number of examples for the proper-name predicate, first checking for examplePositive assertions and then using actual examples from the KB
-     *
-     * @return list : examples phrases lexified with the proper name predicate
-     */
-    @LispMethod(comment = "Return up the specified number of examples for the proper-name predicate, first checking for examplePositive assertions and then using actual examples from the KB\r\n\r\n@return list : examples phrases lexified with the proper name predicate")
     public static SubLObject examples_for_pred_internal(final SubLObject pred, final SubLObject num) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ($lex_trace_level$.getDynamicValue(thread).numGE(max($lex_trace_level$.getDynamicValue(thread), $lex_verbose$.getGlobalValue()))) {
@@ -5369,45 +1813,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
             real_examples = real_examples.rest();
         }
         return nreverse(examples);
-    }
-
-    public static final SubLObject examples_for_pred_alt(SubLObject pred, SubLObject num) {
-        if (num == UNPROVIDED) {
-            num = $num_predicate_examples$.getGlobalValue();
-        }
-        {
-            SubLObject caching_state = $examples_for_pred_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(EXAMPLES_FOR_PRED, $examples_for_pred_caching_state$, NIL, EQL, TWO_INTEGER, $int$100);
-            }
-            {
-                SubLObject sxhash = memoization_state.sxhash_calc_2(pred, num);
-                SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
-                if (collisions != $kw88$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    {
-                        SubLObject cdolist_list_var = collisions;
-                        SubLObject collision = NIL;
-                        for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
-                            {
-                                SubLObject cached_args = collision.first();
-                                SubLObject results2 = second(collision);
-                                if (pred.eql(cached_args.first())) {
-                                    cached_args = cached_args.rest();
-                                    if (((NIL != cached_args) && (NIL == cached_args.rest())) && num.eql(cached_args.first())) {
-                                        return memoization_state.caching_results(results2);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                {
-                    SubLObject results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.lexification_utilities.examples_for_pred_internal(pred, num)));
-                    memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(pred, num));
-                    return memoization_state.caching_results(results);
-                }
-            }
-        }
     }
 
     public static SubLObject examples_for_pred(final SubLObject pred, SubLObject num) {
@@ -5442,43 +1847,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return memoization_state.caching_results(results3);
     }
 
-    /**
-     *
-     *
-     * @return list : phrases used in the proper name #$examples-Positive dealing with PRED
-     * @unknown This also includes  exampleAssertions, examplePredSentences, and exampleSentence
-     */
-    @LispMethod(comment = "@return list : phrases used in the proper name #$examples-Positive dealing with PRED\r\n@unknown This also includes  exampleAssertions, examplePredSentences, and exampleSentence")
-    public static final SubLObject positive_examples_for_pred_alt(SubLObject pred) {
-        {
-            SubLObject examples = com.cyc.cycjava.cycl.lexification_utilities.other_positive_examples_for_pred(pred);
-            SubLObject cdolist_list_var = kb_mapping_utilities.pred_values_in_any_mt(pred, $$examples_Positive, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            SubLObject formula_text = NIL;
-            for (formula_text = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , formula_text = cdolist_list_var.first()) {
-                {
-                    SubLObject formula = read_from_string_ignoring_errors(formula_text, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    SubLObject phrase = (NIL != el_formula_p(formula)) ? ((SubLObject) (cycl_utilities.formula_arg2(formula, UNPROVIDED))) : NIL;
-                    if (phrase.isString()) {
-                        {
-                            SubLObject item_var = phrase;
-                            if (NIL == member(item_var, examples, symbol_function(EQL), symbol_function(IDENTITY))) {
-                                examples = cons(item_var, examples);
-                            }
-                        }
-                    }
-                }
-            }
-            return examples;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return list : phrases used in the proper name #$examples-Positive dealing with PRED
-     * @unknown This also includes  exampleAssertions, examplePredSentences, and exampleSentence
-     */
-    @LispMethod(comment = "@return list : phrases used in the proper name #$examples-Positive dealing with PRED\r\n@unknown This also includes  exampleAssertions, examplePredSentences, and exampleSentence")
     public static SubLObject positive_examples_for_pred(final SubLObject pred) {
         SubLObject examples = other_positive_examples_for_pred(pred);
         SubLObject cdolist_list_var = kb_mapping_utilities.pred_values_in_any_mt(pred, $$examples_Positive, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -5499,46 +1867,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return examples;
     }
 
-    /**
-     *
-     *
-     * @return list : phrases used in #$exampleSentences or #$exampleAssertions dealing with PRED
-     */
-    @LispMethod(comment = "@return list : phrases used in #$exampleSentences or #$exampleAssertions dealing with PRED")
-    public static final SubLObject other_positive_examples_for_pred_alt(SubLObject pred) {
-        {
-            SubLObject examples = NIL;
-            SubLObject cdolist_list_var = $list_alt132;
-            SubLObject example_pred = NIL;
-            for (example_pred = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , example_pred = cdolist_list_var.first()) {
-                {
-                    SubLObject cdolist_list_var_2 = kb_mapping_utilities.pred_values_in_any_mt(pred, example_pred, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    SubLObject formula = NIL;
-                    for (formula = cdolist_list_var_2.first(); NIL != cdolist_list_var_2; cdolist_list_var_2 = cdolist_list_var_2.rest() , formula = cdolist_list_var_2.first()) {
-                        {
-                            SubLObject phrase = cycl_utilities.formula_arg2(formula, UNPROVIDED);
-                            if (phrase.isString()) {
-                                {
-                                    SubLObject item_var = phrase;
-                                    if (NIL == member(item_var, examples, symbol_function(EQL), symbol_function(IDENTITY))) {
-                                        examples = cons(item_var, examples);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return examples;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return list : phrases used in #$exampleSentences or #$exampleAssertions dealing with PRED
-     */
-    @LispMethod(comment = "@return list : phrases used in #$exampleSentences or #$exampleAssertions dealing with PRED")
     public static SubLObject other_positive_examples_for_pred(final SubLObject pred) {
         SubLObject examples = NIL;
         SubLObject cdolist_list_var = $list140;
@@ -5565,97 +1893,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return examples;
     }
 
-    /**
-     *
-     *
-     * @return list : phrases used in the proper name assertions using PRED
-     */
-    @LispMethod(comment = "@return list : phrases used in the proper name assertions using PRED")
-    public static final SubLObject real_examples_for_pred_alt(SubLObject pred) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject examples = NIL;
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                        {
-                            SubLObject pred_var = pred;
-                            if (NIL != kb_mapping_macros.do_predicate_extent_index_key_validator(pred_var)) {
-                                {
-                                    SubLObject iterator_var = kb_mapping_macros.new_predicate_extent_final_index_spec_iterator(pred_var);
-                                    SubLObject done_var = NIL;
-                                    SubLObject token_var = NIL;
-                                    while (NIL == done_var) {
-                                        {
-                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                            if (NIL != valid) {
-                                                {
-                                                    SubLObject final_index_iterator = NIL;
-                                                    try {
-                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
-                                                        {
-                                                            SubLObject done_var_3 = NIL;
-                                                            SubLObject token_var_4 = NIL;
-                                                            while (NIL == done_var_3) {
-                                                                {
-                                                                    SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_4);
-                                                                    SubLObject valid_5 = makeBoolean(token_var_4 != assertion);
-                                                                    if (NIL != valid_5) {
-                                                                        if (NIL != assertions_high.gaf_assertionP(assertion)) {
-                                                                            {
-                                                                                SubLObject phrase = assertions_high.gaf_arg2(assertion);
-                                                                                if (phrase.isString()) {
-                                                                                    examples = cons(phrase, examples);
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                    done_var_3 = makeBoolean(NIL == valid_5);
-                                                                }
-                                                            } 
-                                                        }
-                                                    } finally {
-                                                        {
-                                                            SubLObject _prev_bind_0_6 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                            try {
-                                                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                if (NIL != final_index_iterator) {
-                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                }
-                                                            } finally {
-                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_6, thread);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            done_var = makeBoolean(NIL == valid);
-                                        }
-                                    } 
-                                }
-                            }
-                        }
-                    } finally {
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return examples;
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return list : phrases used in the proper name assertions using PRED
-     */
-    @LispMethod(comment = "@return list : phrases used in the proper name assertions using PRED")
     public static SubLObject real_examples_for_pred(final SubLObject pred) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject examples = NIL;
@@ -5743,30 +1980,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return examples;
     }
 
-    /**
-     * Version of @xref try-assert that also adds a meta-assertion specifying review status
-     */
-    @LispMethod(comment = "Version of @xref try-assert that also adds a meta-assertion specifying review status")
-    public static final SubLObject try_lex_assert_alt(SubLObject formula, SubLObject mt, SubLObject strength, SubLObject direction) {
-        if (strength == UNPROVIDED) {
-            strength = $DEFAULT;
-        }
-        if (direction == UNPROVIDED) {
-            direction = NIL;
-        }
-        {
-            SubLObject ok = misc_kb_utilities.try_assert(formula, mt, strength, direction);
-            if ((NIL != ok) && (NIL != forts.fort_p(com.cyc.cycjava.cycl.lexification_utilities.lexification_reviewer()))) {
-                misc_kb_utilities.try_assert(list($$toBeReviewedBy, list($$ist, mt, formula), com.cyc.cycjava.cycl.lexification_utilities.lexification_reviewer()), $$BookkeepingMt, UNPROVIDED, UNPROVIDED);
-            }
-            return ok;
-        }
-    }
-
-    /**
-     * Version of @xref try-assert that also adds a meta-assertion specifying review status
-     */
-    @LispMethod(comment = "Version of @xref try-assert that also adds a meta-assertion specifying review status")
     public static SubLObject try_lex_assert(final SubLObject formula, final SubLObject mt, SubLObject strength, SubLObject direction) {
         if (strength == UNPROVIDED) {
             strength = $DEFAULT;
@@ -5786,30 +1999,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return ok;
     }
 
-    /**
-     * Version of @xref try-assert-now that also adds a meta-assertion specifying review status
-     */
-    @LispMethod(comment = "Version of @xref try-assert-now that also adds a meta-assertion specifying review status")
-    public static final SubLObject try_lex_assert_now_alt(SubLObject formula, SubLObject mt, SubLObject strength, SubLObject direction) {
-        if (strength == UNPROVIDED) {
-            strength = $DEFAULT;
-        }
-        if (direction == UNPROVIDED) {
-            direction = NIL;
-        }
-        {
-            SubLObject ok = misc_kb_utilities.try_assert_now(formula, mt, strength, direction);
-            if ((NIL != ok) && (NIL != forts.fort_p(com.cyc.cycjava.cycl.lexification_utilities.lexification_reviewer()))) {
-                misc_kb_utilities.try_assert(list($$toBeReviewedBy, list($$ist, mt, formula), com.cyc.cycjava.cycl.lexification_utilities.lexification_reviewer()), $$BookkeepingMt, UNPROVIDED, UNPROVIDED);
-            }
-            return ok;
-        }
-    }
-
-    /**
-     * Version of @xref try-assert-now that also adds a meta-assertion specifying review status
-     */
-    @LispMethod(comment = "Version of @xref try-assert-now that also adds a meta-assertion specifying review status")
     public static SubLObject try_lex_assert_now(final SubLObject formula, final SubLObject mt, SubLObject strength, SubLObject direction) {
         if (strength == UNPROVIDED) {
             strength = $DEFAULT;
@@ -5829,34 +2018,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return ok;
     }
 
-    /**
-     *
-     *
-     * @param SEPARATE-PUNCTUATION?;
-     * 		Should we separate punctuation characters into separate strings?
-     * @return list ; list of tokens (words or puctuation symbols) in the phrase, with extra spacing ignored.
-    Final punctuation is removed.
-     */
-    @LispMethod(comment = "@param SEPARATE-PUNCTUATION?;\r\n\t\tShould we separate punctuation characters into separate strings?\r\n@return list ; list of tokens (words or puctuation symbols) in the phrase, with extra spacing ignored.\r\nFinal punctuation is removed.")
-    public static final SubLObject lex_string_tokenize_alt(SubLObject phrase, SubLObject separate_punctuationP) {
-        if (separate_punctuationP == UNPROVIDED) {
-            separate_punctuationP = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return standard_tokenization.tokenize_sentence(com.cyc.cycjava.cycl.lexification_utilities.lex_remove_final_punctuation(phrase), $lex_white_space_chars$.getDynamicValue(thread), NIL != separate_punctuationP ? ((SubLObject) ($lex_punctuation_chars$.getDynamicValue(thread))) : NIL, UNPROVIDED);
-        }
-    }
-
-    /**
-     *
-     *
-     * @param SEPARATE-PUNCTUATION?;
-     * 		Should we separate punctuation characters into separate strings?
-     * @return list ; list of tokens (words or puctuation symbols) in the phrase, with extra spacing ignored.
-    Final punctuation is removed.
-     */
-    @LispMethod(comment = "@param SEPARATE-PUNCTUATION?;\r\n\t\tShould we separate punctuation characters into separate strings?\r\n@return list ; list of tokens (words or puctuation symbols) in the phrase, with extra spacing ignored.\r\nFinal punctuation is removed.")
     public static SubLObject lex_string_tokenize(final SubLObject phrase, SubLObject separate_punctuationP) {
         if (separate_punctuationP == UNPROVIDED) {
             separate_punctuationP = NIL;
@@ -5865,87 +2026,16 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return standard_tokenization.tokenize_sentence(lex_remove_final_punctuation(phrase), $lex_white_space_chars$.getDynamicValue(thread), NIL != separate_punctuationP ? $lex_punctuation_chars$.getDynamicValue(thread) : NIL, UNPROVIDED);
     }
 
-    /**
-     *
-     *
-     * @param PHRASE
-    stringp
-     * 		
-     * @return STRINGP; PHRASE with any final punctuation removed.
-     * @unknown non-destructive.
-     */
-    @LispMethod(comment = "@param PHRASE\nstringp\r\n\t\t\r\n@return STRINGP; PHRASE with any final punctuation removed.\r\n@unknown non-destructive.")
-    public static final SubLObject lex_remove_final_punctuation_alt(SubLObject phrase) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            while ((NIL != string_utilities.non_empty_stringP(phrase)) && (NIL != member(string_utilities.last_char(phrase), $lex_punctuation_chars$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED))) {
-                phrase = string_utilities.strip_final(phrase, UNPROVIDED);
-            } 
-            return phrase;
-        }
-    }
-
-    /**
-     *
-     *
-     * @param PHRASE
-    stringp
-     * 		
-     * @return STRINGP; PHRASE with any final punctuation removed.
-     * @unknown non-destructive.
-     */
-    @LispMethod(comment = "@param PHRASE\nstringp\r\n\t\t\r\n@return STRINGP; PHRASE with any final punctuation removed.\r\n@unknown non-destructive.")
     public static SubLObject lex_remove_final_punctuation(SubLObject phrase) {
         for (final SubLThread thread = SubLProcess.currentSubLThread(); (NIL != string_utilities.non_empty_stringP(phrase)) && (NIL != member(string_utilities.last_char(phrase), $lex_punctuation_chars$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED)); phrase = string_utilities.strip_final(phrase, UNPROVIDED)) {
         }
         return phrase;
     }
 
-    public static final SubLObject lex_find_word_in_string_alt(SubLObject wordstring, SubLObject string) {
-        return position(wordstring, com.cyc.cycjava.cycl.lexification_utilities.lex_string_tokenize(string, UNPROVIDED), EQUAL, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject lex_find_word_in_string(final SubLObject wordstring, final SubLObject string) {
         return position(wordstring, lex_string_tokenize(string, UNPROVIDED), EQUAL, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
-    /**
-     * Produce a brief English description for the Cyc TERM. This is intended for menus in place of the constant names or (heaven forbid) NART formulas.
-     *
-     * @unknown This is a wrapper around @xref generate-phrase that removes the surrounding quotes if any (unlexified phrasing indicator)
-     */
-    @LispMethod(comment = "Produce a brief English description for the Cyc TERM. This is intended for menus in place of the constant names or (heaven forbid) NART formulas.\r\n\r\n@unknown This is a wrapper around @xref generate-phrase that removes the surrounding quotes if any (unlexified phrasing indicator)")
-    public static final SubLObject lex_describe_term_alt(SubLObject v_term, SubLObject lexical_mt) {
-        if (lexical_mt == UNPROVIDED) {
-            lexical_mt = $lexicon_lookup_mt$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject description = NIL;
-                if (lexical_mt.isString()) {
-                    lexical_mt = misc_kb_utilities.fort_for_string(lexical_mt);
-                }
-                {
-                    SubLObject _prev_bind_0 = pph_vars.$pph_language_mt$.currentBinding(thread);
-                    try {
-                        pph_vars.$pph_language_mt$.bind(lexical_mt, thread);
-                        description = string_utilities.unquote_string(pph_main.generate_phrase(v_term, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED));
-                    } finally {
-                        pph_vars.$pph_language_mt$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return description;
-            }
-        }
-    }
-
-    /**
-     * Produce a brief English description for the Cyc TERM. This is intended for menus in place of the constant names or (heaven forbid) NART formulas.
-     *
-     * @unknown This is a wrapper around @xref generate-phrase that removes the surrounding quotes if any (unlexified phrasing indicator)
-     */
-    @LispMethod(comment = "Produce a brief English description for the Cyc TERM. This is intended for menus in place of the constant names or (heaven forbid) NART formulas.\r\n\r\n@unknown This is a wrapper around @xref generate-phrase that removes the surrounding quotes if any (unlexified phrasing indicator)")
     public static SubLObject lex_describe_term(final SubLObject v_term, SubLObject lexical_mt) {
         if (lexical_mt == UNPROVIDED) {
             lexical_mt = lexicon_vars.$lexicon_lookup_mt$.getDynamicValue();
@@ -5965,28 +2055,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return description;
     }
 
-    /**
-     * Like @xref fort-for-string but #$DeadTerm is not returned for numerals, etc.
-     *
-     * @unknown tom
-     */
-    @LispMethod(comment = "Like @xref fort-for-string but #$DeadTerm is not returned for numerals, etc.\r\n\r\n@unknown tom")
-    public static final SubLObject lex_fort_for_string_alt(SubLObject fort_label) {
-        {
-            SubLObject fort = misc_kb_utilities.fort_for_string(fort_label);
-            if (!((fort == $$DeadTerm) && (NIL == string_utilities.substringP($$$DeadTerm, fort_label, UNPROVIDED, UNPROVIDED, UNPROVIDED)))) {
-                return fort;
-            }
-        }
-        return NIL;
-    }
-
-    /**
-     * Like @xref fort-for-string but #$DeadTerm is not returned for numerals, etc.
-     *
-     * @unknown tom
-     */
-    @LispMethod(comment = "Like @xref fort-for-string but #$DeadTerm is not returned for numerals, etc.\r\n\r\n@unknown tom")
     public static SubLObject lex_fort_for_string(final SubLObject fort_label) {
         final SubLObject fort = misc_kb_utilities.fort_for_string(fort_label);
         if ((!fort.eql($$DeadTerm)) || (NIL != string_utilities.substringP($$$DeadTerm, fort_label, UNPROVIDED, UNPROVIDED, UNPROVIDED))) {
@@ -5995,63 +2063,11 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return NIL;
     }
 
-    /**
-     *
-     *
-     * @return integer ; arity of the specified term or 0 if unknown (or not a relation)
-     */
-    @LispMethod(comment = "@return integer ; arity of the specified term or 0 if unknown (or not a relation)")
-    public static final SubLObject lex_arity_in_any_mt_alt(SubLObject v_term) {
-        {
-            SubLObject v_arity = arity.arity(v_term);
-            return NIL != v_arity ? ((SubLObject) (v_arity)) : ZERO_INTEGER;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return integer ; arity of the specified term or 0 if unknown (or not a relation)
-     */
-    @LispMethod(comment = "@return integer ; arity of the specified term or 0 if unknown (or not a relation)")
     public static SubLObject lex_arity_in_any_mt(final SubLObject v_term) {
         final SubLObject v_arity = arity.arity(v_term);
         return NIL != v_arity ? v_arity : ZERO_INTEGER;
     }
 
-    /**
-     *
-     *
-     * @return list : all phrases referring to term and derived from loose lexifications
-     * @unknown There might be an overlap between the result of this and @xref proper-lexification-phrases-for-term
-     */
-    @LispMethod(comment = "@return list : all phrases referring to term and derived from loose lexifications\r\n@unknown There might be an overlap between the result of this and @xref proper-lexification-phrases-for-term")
-    public static final SubLObject loose_lexification_phrases_for_term_alt(SubLObject v_term) {
-        {
-            SubLObject phrases = NIL;
-            SubLObject cdolist_list_var = lexicon_utilities.loose_lexifications_for_term(v_term);
-            SubLObject assertion = NIL;
-            for (assertion = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , assertion = cdolist_list_var.first()) {
-                if (NIL != assertions_high.gaf_assertionP(assertion)) {
-                    {
-                        SubLObject item_var = assertions_high.gaf_arg2(assertion);
-                        if (NIL == member(item_var, phrases, symbol_function(EQUALP), symbol_function(IDENTITY))) {
-                            phrases = cons(item_var, phrases);
-                        }
-                    }
-                }
-            }
-            return phrases;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return list : all phrases referring to term and derived from loose lexifications
-     * @unknown There might be an overlap between the result of this and @xref proper-lexification-phrases-for-term
-     */
-    @LispMethod(comment = "@return list : all phrases referring to term and derived from loose lexifications\r\n@unknown There might be an overlap between the result of this and @xref proper-lexification-phrases-for-term")
     public static SubLObject loose_lexification_phrases_for_term(final SubLObject v_term) {
         SubLObject phrases = NIL;
         SubLObject cdolist_list_var = lexicon_utilities.loose_lexifications_for_term(v_term);
@@ -6070,67 +2086,11 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return phrases;
     }
 
-    /**
-     *
-     *
-     * @return string ; preferred way of referring to TERM based on loose lexifications
-     */
-    @LispMethod(comment = "@return string ; preferred way of referring to TERM based on loose lexifications")
-    public static final SubLObject preferred_loose_lexification_phrase_for_term_alt(SubLObject v_term) {
-        {
-            SubLObject phrase = kb_mapping_utilities.fpred_value_in_any_mt(v_term, $$preferredTermStrings, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            return phrase;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return string ; preferred way of referring to TERM based on loose lexifications
-     */
-    @LispMethod(comment = "@return string ; preferred way of referring to TERM based on loose lexifications")
     public static SubLObject preferred_loose_lexification_phrase_for_term(final SubLObject v_term) {
         final SubLObject phrase = kb_mapping_utilities.fpred_value_in_any_mt(v_term, $$preferredTermStrings, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         return phrase;
     }
 
-    /**
-     *
-     *
-     * @return list : all phrases referring to term and derived from proper lexifications
-     * @unknown There might be an overlap between the result of this and @xref loose-lexification-phrases-for-term
-     */
-    @LispMethod(comment = "@return list : all phrases referring to term and derived from proper lexifications\r\n@unknown There might be an overlap between the result of this and @xref loose-lexification-phrases-for-term")
-    public static final SubLObject proper_lexification_phrases_for_term_alt(SubLObject v_term) {
-        {
-            SubLObject phrases = NIL;
-            SubLObject cdolist_list_var = lexicon_utilities.proper_lexifications_for_term(v_term);
-            SubLObject assertion = NIL;
-            for (assertion = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , assertion = cdolist_list_var.first()) {
-                {
-                    SubLObject cdolist_list_var_7 = com.cyc.cycjava.cycl.lexification_utilities.phrases_from_semantic_assertion(assertion, UNPROVIDED);
-                    SubLObject phrase = NIL;
-                    for (phrase = cdolist_list_var_7.first(); NIL != cdolist_list_var_7; cdolist_list_var_7 = cdolist_list_var_7.rest() , phrase = cdolist_list_var_7.first()) {
-                        {
-                            SubLObject item_var = phrase;
-                            if (NIL == member(item_var, phrases, symbol_function(EQL), symbol_function(IDENTITY))) {
-                                phrases = cons(item_var, phrases);
-                            }
-                        }
-                    }
-                }
-            }
-            return phrases;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return list : all phrases referring to term and derived from proper lexifications
-     * @unknown There might be an overlap between the result of this and @xref loose-lexification-phrases-for-term
-     */
-    @LispMethod(comment = "@return list : all phrases referring to term and derived from proper lexifications\r\n@unknown There might be an overlap between the result of this and @xref loose-lexification-phrases-for-term")
     public static SubLObject proper_lexification_phrases_for_term(final SubLObject v_term) {
         SubLObject phrases = NIL;
         SubLObject cdolist_list_var = lexicon_utilities.proper_lexifications_for_term(v_term);
@@ -6154,83 +2114,12 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return phrases;
     }
 
-    /**
-     *
-     *
-     * @return list ; all the phrases that can be derived from the lexical ASSERTION
-     * @unknown All lexical assertions will be used, regardless of politeness, etc.
-     */
-    @LispMethod(comment = "@return list ; all the phrases that can be derived from the lexical ASSERTION\r\n@unknown All lexical assertions will be used, regardless of politeness, etc.")
-    public static final SubLObject phrases_from_semantic_assertion_alt(SubLObject assertion, SubLObject nl_preds) {
-        if (nl_preds == UNPROVIDED) {
-            nl_preds = $ANY;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(assertion, ASSERTION_P);
-            {
-                SubLObject phrases = NIL;
-                if (NIL != assertions_high.gaf_assertionP(assertion)) {
-                    {
-                        SubLObject _prev_bind_0 = $lexicon_lookup_mt$.currentBinding(thread);
-                        try {
-                            $lexicon_lookup_mt$.bind(assertions_high.assertion_mt(assertion), thread);
-                            {
-                                SubLObject air_pred = assertions_high.gaf_arg0(assertion);
-                                SubLObject pos_arg = lexicon_utilities.pos_arg_of_pred_cached(air_pred);
-                                SubLObject v_term = lexicon_utilities.term_from_nl_assertion(assertion);
-                                if (NIL != pos_arg) {
-                                    {
-                                        SubLObject pos = assertions_high.gaf_arg(assertion, pos_arg);
-                                        SubLObject pos_preds = lexicon_utilities.preds_of_pos(pos, UNPROVIDED);
-                                        SubLObject cdolist_list_var = pph_utilities.pph_filter_preds(nl_preds, pos_preds, UNPROVIDED);
-                                        SubLObject pred = NIL;
-                                        for (pred = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pred = cdolist_list_var.first()) {
-                                            {
-                                                SubLObject phrase = pph_data_structures.pph_phrase_output_item_string(pph_methods_lexicon.generate_phrase_from_as(assertion, v_term, list(pred), NIL, UNPROVIDED));
-                                                if (NIL != phrase) {
-                                                    {
-                                                        SubLObject item_var = phrase;
-                                                        if (NIL == member(item_var, phrases, symbol_function(EQUALP), symbol_function(IDENTITY))) {
-                                                            phrases = cons(item_var, phrases);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    {
-                                        SubLObject item_var = pph_data_structures.pph_phrase_output_item_string(pph_methods_lexicon.generate_phrase_from_as(assertion, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED));
-                                        if (NIL == member(item_var, phrases, symbol_function(EQUALP), symbol_function(IDENTITY))) {
-                                            phrases = cons(item_var, phrases);
-                                        }
-                                    }
-                                }
-                            }
-                        } finally {
-                            $lexicon_lookup_mt$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                return phrases;
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return list ; all the phrases that can be derived from the lexical ASSERTION
-     * @unknown All lexical assertions will be used, regardless of politeness, etc.
-     */
-    @LispMethod(comment = "@return list ; all the phrases that can be derived from the lexical ASSERTION\r\n@unknown All lexical assertions will be used, regardless of politeness, etc.")
     public static SubLObject phrases_from_semantic_assertion(final SubLObject assertion, SubLObject nl_preds) {
         if (nl_preds == UNPROVIDED) {
             nl_preds = $ANY;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
+        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
         SubLObject phrases = NIL;
         if (NIL != assertions_high.gaf_assertionP(assertion)) {
             final SubLObject _prev_bind_0 = lexicon_vars.$lexicon_lookup_mt$.currentBinding(thread);
@@ -6277,7 +2166,7 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
             nl_preds = $ANY;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != cycl_grammar.cycl_formulaic_sentence_p(sentence) : "! cycl_grammar.cycl_formulaic_sentence_p(sentence) " + ("cycl_grammar.cycl_formulaic_sentence_p(sentence) " + "CommonSymbols.NIL != cycl_grammar.cycl_formulaic_sentence_p(sentence) ") + sentence;
+        assert NIL != cycl_grammar.cycl_formulaic_sentence_p(sentence) : "cycl_grammar.cycl_formulaic_sentence_p(sentence) " + "CommonSymbols.NIL != cycl_grammar.cycl_formulaic_sentence_p(sentence) " + sentence;
         final SubLObject _prev_bind_0 = pph_macros.$new_pph_phrases$.currentBinding(thread);
         final SubLObject _prev_bind_2 = pph_macros.$new_pph_phrase_count$.currentBinding(thread);
         final SubLObject _prev_bind_3 = pph_macros.$destroy_new_pph_phrasesP$.currentBinding(thread);
@@ -6338,105 +2227,22 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return pph_string.pph_string_to_cycl(pph_data_structures.pph_phrase_output_item_string(pph_methods_lexicon.generate_phrase_from_lexification_sentence(sentence, nl_preds, NIL, UNPROVIDED)));
     }
 
-    /**
-     *
-     *
-     * @return boolean ; whether TERM should be given a proper name lexification by default
-     * @unknown Normally proper-name lexifications only apply to #$Individuals.  However, certain types of collections are nameable (see #$nameableCollection).
-     */
-    @LispMethod(comment = "@return boolean ; whether TERM should be given a proper name lexification by default\r\n@unknown Normally proper-name lexifications only apply to #$Individuals.  However, certain types of collections are nameable (see #$nameableCollection).")
-    public static final SubLObject is_nameable_entityP_alt(SubLObject v_term) {
-        return makeBoolean((NIL != com.cyc.cycjava.cycl.lexification_utilities.is_nameable_individualP(v_term)) || (NIL != com.cyc.cycjava.cycl.lexification_utilities.is_nameable_collectionP(v_term)));
-    }
-
-    /**
-     *
-     *
-     * @return boolean ; whether TERM should be given a proper name lexification by default
-     * @unknown Normally proper-name lexifications only apply to #$Individuals.  However, certain types of collections are nameable (see #$nameableCollection).
-     */
-    @LispMethod(comment = "@return boolean ; whether TERM should be given a proper name lexification by default\r\n@unknown Normally proper-name lexifications only apply to #$Individuals.  However, certain types of collections are nameable (see #$nameableCollection).")
     public static SubLObject is_nameable_entityP(final SubLObject v_term) {
         return makeBoolean((NIL != is_nameable_individualP(v_term)) || (NIL != is_nameable_collectionP(v_term)));
     }
 
-    /**
-     *
-     *
-     * @return boolean ; whether TERM (an #$Individual) should be given a proper name lexification by default
-     */
-    @LispMethod(comment = "@return boolean ; whether TERM (an #$Individual) should be given a proper name lexification by default")
-    public static final SubLObject is_nameable_individualP_alt(SubLObject v_term) {
-        return isa.isa_in_any_mtP(v_term, $$Individual);
-    }
-
-    /**
-     *
-     *
-     * @return boolean ; whether TERM (an #$Individual) should be given a proper name lexification by default
-     */
-    @LispMethod(comment = "@return boolean ; whether TERM (an #$Individual) should be given a proper name lexification by default")
     public static SubLObject is_nameable_individualP(final SubLObject v_term) {
         return isa.isa_in_any_mtP(v_term, $$Individual);
     }
 
-    /**
-     *
-     *
-     * @return boolean ; whether TERM (a #$Collection) should be given a proper name lexification by default
-     */
-    @LispMethod(comment = "@return boolean ; whether TERM (a #$Collection) should be given a proper name lexification by default")
-    public static final SubLObject is_nameable_collectionP_alt(SubLObject v_term) {
-        return list_utilities.sublisp_boolean(fi.fi_ask_int(list($$nameableCollection, v_term), $$EverythingPSC, ONE_INTEGER, UNPROVIDED, UNPROVIDED, UNPROVIDED));
-    }
-
-    /**
-     *
-     *
-     * @return boolean ; whether TERM (a #$Collection) should be given a proper name lexification by default
-     */
-    @LispMethod(comment = "@return boolean ; whether TERM (a #$Collection) should be given a proper name lexification by default")
     public static SubLObject is_nameable_collectionP(final SubLObject v_term) {
         return list_utilities.sublisp_boolean(fi.fi_ask_int(list($$nameableCollection, v_term), $$EverythingPSC, ONE_INTEGER, UNPROVIDED, UNPROVIDED, UNPROVIDED));
     }
 
-    /**
-     *
-     *
-     * @return boolean ; T iff string is empty or nil
-     */
-    @LispMethod(comment = "@return boolean ; T iff string is empty or nil")
-    public static final SubLObject lex_empty_stringP_alt(SubLObject string) {
-        return makeBoolean((NIL != string_utilities.empty_string_p(string)) || (NIL == string));
-    }
-
-    /**
-     *
-     *
-     * @return boolean ; T iff string is empty or nil
-     */
-    @LispMethod(comment = "@return boolean ; T iff string is empty or nil")
     public static SubLObject lex_empty_stringP(final SubLObject string) {
         return makeBoolean((NIL != string_utilities.empty_string_p(string)) || (NIL == string));
     }
 
-    /**
-     * clears the cached information used by the lexification utilities
-     */
-    @LispMethod(comment = "clears the cached information used by the lexification utilities")
-    public static final SubLObject clear_lexification_caches_alt() {
-        com.cyc.cycjava.cycl.lexification_utilities.clear_keyword_for_pos();
-        com.cyc.cycjava.cycl.lexification_utilities.clear_precise_keyword_for_pos();
-        com.cyc.cycjava.cycl.lexification_utilities.clear_is_abbreviation_predicate();
-        com.cyc.cycjava.cycl.lexification_utilities.clear_examples_for_pred();
-        com.cyc.cycjava.cycl.lexification_utilities.clear_pluralize_word();
-        com.cyc.cycjava.cycl.lexification_utilities.clear_singularize_word();
-        com.cyc.cycjava.cycl.lexification_utilities.clear_find_root_wordform();
-        com.cyc.cycjava.cycl.lexification_utilities.clear_is_abbreviation_predicate();
-        return T;
-    }
-
-    @LispMethod(comment = "clears the cached information used by the lexification utilities")
     public static SubLObject clear_lexification_caches() {
         clear_keyword_for_pos();
         clear_precise_keyword_for_pos();
@@ -6449,84 +2255,14 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return T;
     }
 
-    /**
-     *
-     *
-     * @return string ; label to use for fort or the empty string if null
-     * @unknown This is a wrapper around @xref cb-fort-display-string
-     */
-    @LispMethod(comment = "@return string ; label to use for fort or the empty string if null\r\n@unknown This is a wrapper around @xref cb-fort-display-string")
-    public static final SubLObject string_for_fort_alt(SubLObject fort) {
-        return NIL != forts.valid_fortP(fort) ? ((SubLObject) (cb_fort_display_string(fort))) : $str_alt57$;
-    }
-
-    /**
-     *
-     *
-     * @return string ; label to use for fort or the empty string if null
-     * @unknown This is a wrapper around @xref cb-fort-display-string
-     */
-    @LispMethod(comment = "@return string ; label to use for fort or the empty string if null\r\n@unknown This is a wrapper around @xref cb-fort-display-string")
     public static SubLObject string_for_fort(final SubLObject fort) {
         return NIL != forts.valid_fortP(fort) ? cb_fort_display_string(fort) : $str62$;
     }
 
-    /**
-     *
-     *
-     * @return string ; field-value or an empty string if null
-     */
-    @LispMethod(comment = "@return string ; field-value or an empty string if null")
-    public static final SubLObject string_for_field_alt(SubLObject field_value) {
-        return NIL != field_value ? ((SubLObject) (string_utilities.to_string(field_value))) : $str_alt57$;
-    }
-
-    /**
-     *
-     *
-     * @return string ; field-value or an empty string if null
-     */
-    @LispMethod(comment = "@return string ; field-value or an empty string if null")
     public static SubLObject string_for_field(final SubLObject field_value) {
         return NIL != field_value ? string_utilities.to_string(field_value) : $str62$;
     }
 
-    /**
-     *
-     *
-     * @return boolean ; T iff the term is a predicate or a function in any MT
-     */
-    @LispMethod(comment = "@return boolean ; T iff the term is a predicate or a function in any MT")
-    public static final SubLObject is_relationalP_alt(SubLObject v_term) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject relationalP = NIL;
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                        if ((NIL != fort_types_interface.predicateP(v_term)) || (NIL != fort_types_interface.functionP(v_term))) {
-                            relationalP = T;
-                        }
-                    } finally {
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return relationalP;
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return boolean ; T iff the term is a predicate or a function in any MT
-     */
-    @LispMethod(comment = "@return boolean ; T iff the term is a predicate or a function in any MT")
     public static SubLObject is_relationalP(final SubLObject v_term) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject relationalP = NIL;
@@ -6545,42 +2281,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return relationalP;
     }
 
-    /**
-     *
-     *
-     * @return boolean ; T iff the term is a function in any MT
-     */
-    @LispMethod(comment = "@return boolean ; T iff the term is a function in any MT")
-    public static final SubLObject is_functionalP_alt(SubLObject v_term) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject functionalP = NIL;
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                        if (NIL != fort_types_interface.functionP(v_term)) {
-                            functionalP = T;
-                        }
-                    } finally {
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return functionalP;
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return boolean ; T iff the term is a function in any MT
-     */
-    @LispMethod(comment = "@return boolean ; T iff the term is a function in any MT")
     public static SubLObject is_functionalP(final SubLObject v_term) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject functionalP = NIL;
@@ -6599,55 +2299,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return functionalP;
     }
 
-    /**
-     *
-     *
-     * @return string ; text from the #$comment assertion(s) for TERM
-     * @unknown newlines embedded in the comments are replaced with spaces and multiple comments are separated by two newlines
-     */
-    @LispMethod(comment = "@return string ; text from the #$comment assertion(s) for TERM\r\n@unknown newlines embedded in the comments are replaced with spaces and multiple comments are separated by two newlines")
-    public static final SubLObject get_term_comments_alt(SubLObject v_term) {
-        {
-            SubLObject comments = kb_mapping_utilities.pred_values_in_any_mt(v_term, $$comment, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            SubLObject double_newline = Strings.make_string(TWO_INTEGER, CHAR_newline);
-            SubLObject formatted_comments = NIL;
-            SubLObject stream = NIL;
-            try {
-                stream = make_private_string_output_stream();
-                {
-                    SubLObject list_var = NIL;
-                    SubLObject comment = NIL;
-                    SubLObject i = NIL;
-                    for (list_var = comments, comment = list_var.first(), i = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , comment = list_var.first() , i = add(ONE_INTEGER, i)) {
-                        if (i.numG(ZERO_INTEGER)) {
-                            write_string(double_newline, stream, UNPROVIDED, UNPROVIDED);
-                        }
-                        write_string(substitute(CHAR_space, CHAR_newline, comment, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), stream, UNPROVIDED, UNPROVIDED);
-                    }
-                }
-                formatted_comments = get_output_stream_string(stream);
-            } finally {
-                {
-                    SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
-                    try {
-                        bind($is_thread_performing_cleanupP$, T);
-                        close(stream, UNPROVIDED);
-                    } finally {
-                        rebind($is_thread_performing_cleanupP$, _prev_bind_0);
-                    }
-                }
-            }
-            return formatted_comments;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return string ; text from the #$comment assertion(s) for TERM
-     * @unknown newlines embedded in the comments are replaced with spaces and multiple comments are separated by two newlines
-     */
-    @LispMethod(comment = "@return string ; text from the #$comment assertion(s) for TERM\r\n@unknown newlines embedded in the comments are replaced with spaces and multiple comments are separated by two newlines")
     public static SubLObject get_term_comments(final SubLObject v_term) {
         final SubLObject comments = kb_mapping_utilities.pred_values_in_any_mt(v_term, $$comment, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         final SubLObject double_newline = Strings.make_string(TWO_INTEGER, CHAR_newline);
@@ -6681,64 +2332,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return formatted_comments;
     }
 
-    /**
-     *
-     *
-     * @return boolean ; whether WORDFORM is likely to belong to PART-OF-SPEECH (for LEXICAL-MT) based on it's morphology or whether it has been explicitly asserted as such
-     */
-    @LispMethod(comment = "@return boolean ; whether WORDFORM is likely to belong to PART-OF-SPEECH (for LEXICAL-MT) based on it\'s morphology or whether it has been explicitly asserted as such")
-    public static final SubLObject likely_has_part_of_speechP_alt(SubLObject part_of_speech, SubLObject wordform, SubLObject lexical_mt) {
-        if (lexical_mt == UNPROVIDED) {
-            lexical_mt = $lexicon_lookup_mt$.getDynamicValue();
-        }
-        {
-            SubLObject ok = subl_promotions.memberP(part_of_speech, lexicon_accessors.pos_of_string(wordform, UNPROVIDED, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED);
-            SubLObject indicator_suffixes = NIL;
-            SubLObject pcase_var = part_of_speech;
-            if (pcase_var.eql($$Adjective)) {
-                indicator_suffixes = $list_alt145;
-            } else {
-                if (pcase_var.eql($$Adverb)) {
-                    indicator_suffixes = $list_alt146;
-                } else {
-                    if (pcase_var.eql($$Noun)) {
-                        indicator_suffixes = $list_alt147;
-                    } else {
-                        if (pcase_var.eql($$Verb)) {
-                            indicator_suffixes = $list_alt148;
-                        } else {
-                            if (pcase_var.eql($$GerundiveNoun)) {
-                                indicator_suffixes = $list_alt149;
-                            } else {
-                                if (pcase_var.eql($$AgentiveNoun)) {
-                                    indicator_suffixes = $list_alt150;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            if (NIL == ok) {
-                {
-                    SubLObject csome_list_var = indicator_suffixes;
-                    SubLObject suffix = NIL;
-                    for (suffix = csome_list_var.first(); !((NIL != ok) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , suffix = csome_list_var.first()) {
-                        if (NIL != string_utilities.ends_with(wordform, suffix, UNPROVIDED)) {
-                            ok = T;
-                        }
-                    }
-                }
-            }
-            return ok;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return boolean ; whether WORDFORM is likely to belong to PART-OF-SPEECH (for LEXICAL-MT) based on it's morphology or whether it has been explicitly asserted as such
-     */
-    @LispMethod(comment = "@return boolean ; whether WORDFORM is likely to belong to PART-OF-SPEECH (for LEXICAL-MT) based on it\'s morphology or whether it has been explicitly asserted as such")
     public static SubLObject likely_has_part_of_speechP(final SubLObject part_of_speech, final SubLObject wordform, SubLObject lexical_mt) {
         if (lexical_mt == UNPROVIDED) {
             lexical_mt = lexicon_vars.$lexicon_lookup_mt$.getDynamicValue();
@@ -6783,25 +2376,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return ok;
     }
 
-    /**
-     *
-     *
-     * @return boolean ; whether WORDFORM is likely to be an adverb (for LEXICAL-MT) based on it's morphology
-     */
-    @LispMethod(comment = "@return boolean ; whether WORDFORM is likely to be an adverb (for LEXICAL-MT) based on it\'s morphology")
-    public static final SubLObject likely_adverbP_alt(SubLObject wordform, SubLObject lexical_mt) {
-        if (lexical_mt == UNPROVIDED) {
-            lexical_mt = $lexicon_lookup_mt$.getDynamicValue();
-        }
-        return com.cyc.cycjava.cycl.lexification_utilities.likely_has_part_of_speechP($$Adverb, wordform, lexical_mt);
-    }
-
-    /**
-     *
-     *
-     * @return boolean ; whether WORDFORM is likely to be an adverb (for LEXICAL-MT) based on it's morphology
-     */
-    @LispMethod(comment = "@return boolean ; whether WORDFORM is likely to be an adverb (for LEXICAL-MT) based on it\'s morphology")
     public static SubLObject likely_adverbP(final SubLObject wordform, SubLObject lexical_mt) {
         if (lexical_mt == UNPROVIDED) {
             lexical_mt = lexicon_vars.$lexicon_lookup_mt$.getDynamicValue();
@@ -6809,25 +2383,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return likely_has_part_of_speechP($$Adverb, wordform, lexical_mt);
     }
 
-    /**
-     *
-     *
-     * @return boolean ; whether WORDFORM is likely to be an adjective (for LEXICAL-MT) based on it's morphology
-     */
-    @LispMethod(comment = "@return boolean ; whether WORDFORM is likely to be an adjective (for LEXICAL-MT) based on it\'s morphology")
-    public static final SubLObject likely_adjectiveP_alt(SubLObject wordform, SubLObject lexical_mt) {
-        if (lexical_mt == UNPROVIDED) {
-            lexical_mt = $lexicon_lookup_mt$.getDynamicValue();
-        }
-        return com.cyc.cycjava.cycl.lexification_utilities.likely_has_part_of_speechP($$Adjective, wordform, lexical_mt);
-    }
-
-    /**
-     *
-     *
-     * @return boolean ; whether WORDFORM is likely to be an adjective (for LEXICAL-MT) based on it's morphology
-     */
-    @LispMethod(comment = "@return boolean ; whether WORDFORM is likely to be an adjective (for LEXICAL-MT) based on it\'s morphology")
     public static SubLObject likely_adjectiveP(final SubLObject wordform, SubLObject lexical_mt) {
         if (lexical_mt == UNPROVIDED) {
             lexical_mt = lexicon_vars.$lexicon_lookup_mt$.getDynamicValue();
@@ -6835,25 +2390,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return likely_has_part_of_speechP($$Adjective, wordform, lexical_mt);
     }
 
-    /**
-     *
-     *
-     * @return boolean ; whether WORDFORM is likely to be a noun (for LEXICAL-MT) based on it's morphology
-     */
-    @LispMethod(comment = "@return boolean ; whether WORDFORM is likely to be a noun (for LEXICAL-MT) based on it\'s morphology")
-    public static final SubLObject likely_nounP_alt(SubLObject wordform, SubLObject lexical_mt) {
-        if (lexical_mt == UNPROVIDED) {
-            lexical_mt = $lexicon_lookup_mt$.getDynamicValue();
-        }
-        return com.cyc.cycjava.cycl.lexification_utilities.likely_has_part_of_speechP($$Noun, wordform, lexical_mt);
-    }
-
-    /**
-     *
-     *
-     * @return boolean ; whether WORDFORM is likely to be a noun (for LEXICAL-MT) based on it's morphology
-     */
-    @LispMethod(comment = "@return boolean ; whether WORDFORM is likely to be a noun (for LEXICAL-MT) based on it\'s morphology")
     public static SubLObject likely_nounP(final SubLObject wordform, SubLObject lexical_mt) {
         if (lexical_mt == UNPROVIDED) {
             lexical_mt = lexicon_vars.$lexicon_lookup_mt$.getDynamicValue();
@@ -6861,25 +2397,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return likely_has_part_of_speechP($$Noun, wordform, lexical_mt);
     }
 
-    /**
-     *
-     *
-     * @return boolean ; whether WORDFORM is likely to be a verb (for LEXICAL-MT) based on it's morphology
-     */
-    @LispMethod(comment = "@return boolean ; whether WORDFORM is likely to be a verb (for LEXICAL-MT) based on it\'s morphology")
-    public static final SubLObject likely_verbP_alt(SubLObject wordform, SubLObject lexical_mt) {
-        if (lexical_mt == UNPROVIDED) {
-            lexical_mt = $lexicon_lookup_mt$.getDynamicValue();
-        }
-        return com.cyc.cycjava.cycl.lexification_utilities.likely_has_part_of_speechP($$Verb, wordform, lexical_mt);
-    }
-
-    /**
-     *
-     *
-     * @return boolean ; whether WORDFORM is likely to be a verb (for LEXICAL-MT) based on it's morphology
-     */
-    @LispMethod(comment = "@return boolean ; whether WORDFORM is likely to be a verb (for LEXICAL-MT) based on it\'s morphology")
     public static SubLObject likely_verbP(final SubLObject wordform, SubLObject lexical_mt) {
         if (lexical_mt == UNPROVIDED) {
             lexical_mt = lexicon_vars.$lexicon_lookup_mt$.getDynamicValue();
@@ -6887,42 +2404,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return likely_has_part_of_speechP($$Verb, wordform, lexical_mt);
     }
 
-    /**
-     *
-     *
-     * @return integer ; usage count of assertions with WORD-UNIT in the specified PART-OF-SPEECH
-     */
-    @LispMethod(comment = "@return integer ; usage count of assertions with WORD-UNIT in the specified PART-OF-SPEECH")
-    public static final SubLObject word_unit_part_of_speech_usage_alt(SubLObject word_unit, SubLObject part_of_speech) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject usage = ZERO_INTEGER;
-                if ((NIL != indexed_term_p(word_unit)) && (NIL != indexed_term_p(part_of_speech))) {
-                    {
-                        SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                        SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                        try {
-                            mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                            mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                            usage = length(virtual_indexing.assertions_mentioning_terms(list(word_unit, part_of_speech), UNPROVIDED));
-                        } finally {
-                            mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                            mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                return usage;
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return integer ; usage count of assertions with WORD-UNIT in the specified PART-OF-SPEECH
-     */
-    @LispMethod(comment = "@return integer ; usage count of assertions with WORD-UNIT in the specified PART-OF-SPEECH")
     public static SubLObject word_unit_part_of_speech_usage(final SubLObject word_unit, final SubLObject part_of_speech) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject usage = ZERO_INTEGER;
@@ -6941,30 +2422,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return usage;
     }
 
-    /**
-     *
-     *
-     * @return integer ; combined @xref word-unit-part-of-speech-usage for all words mapping WORDFORM in PART-OF-SPEECH
-     */
-    @LispMethod(comment = "@return integer ; combined @xref word-unit-part-of-speech-usage for all words mapping WORDFORM in PART-OF-SPEECH")
-    public static final SubLObject wordform_part_of_speech_usage_alt(SubLObject wordform, SubLObject part_of_speech) {
-        {
-            SubLObject usage = ZERO_INTEGER;
-            SubLObject cdolist_list_var = lexicon_accessors.words_of_stringXspeech_part(wordform, part_of_speech, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            SubLObject word_unit = NIL;
-            for (word_unit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , word_unit = cdolist_list_var.first()) {
-                usage = add(usage, com.cyc.cycjava.cycl.lexification_utilities.word_unit_part_of_speech_usage(word_unit, part_of_speech));
-            }
-            return usage;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return integer ; combined @xref word-unit-part-of-speech-usage for all words mapping WORDFORM in PART-OF-SPEECH
-     */
-    @LispMethod(comment = "@return integer ; combined @xref word-unit-part-of-speech-usage for all words mapping WORDFORM in PART-OF-SPEECH")
     public static SubLObject wordform_part_of_speech_usage(final SubLObject wordform, final SubLObject part_of_speech) {
         SubLObject usage = ZERO_INTEGER;
         SubLObject cdolist_list_var = lexicon_accessors.words_of_stringXspeech_part(wordform, part_of_speech, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -6978,1316 +2435,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return usage;
     }
 
-    /**
-     *
-     *
-     * @param SPEECH-PART
-     * 		speech-part? or :ANY.
-     * @param POSITION
-     * 		keywordp; :ANY, :INITIAL, :MEDIAL, :FINAL.
-     * @return integer ; number of times WORD-UNIT occurs as a head of a multi-word assertion (e.g., multiWordString) with SPEECH-PART and POSITION.
-     */
-    @LispMethod(comment = "@param SPEECH-PART\r\n\t\tspeech-part? or :ANY.\r\n@param POSITION\r\n\t\tkeywordp; :ANY, :INITIAL, :MEDIAL, :FINAL.\r\n@return integer ; number of times WORD-UNIT occurs as a head of a multi-word assertion (e.g., multiWordString) with SPEECH-PART and POSITION.")
-    public static final SubLObject headword_usage_alt(SubLObject word_unit, SubLObject speech_part, SubLObject position) {
-        if (speech_part == UNPROVIDED) {
-            speech_part = $ANY;
-        }
-        if (position == UNPROVIDED) {
-            position = $ANY;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject count = ZERO_INTEGER;
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                        if (NIL != subl_promotions.memberP(position, $list_alt151, UNPROVIDED, UNPROVIDED)) {
-                            {
-                                SubLObject node_var = $$HeadInitialMultiWordPhrasePred;
-                                {
-                                    SubLObject _prev_bind_0_8 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                    SubLObject _prev_bind_1_9 = sbhl_marking_vars.$sbhl_gather_space$.currentBinding(thread);
-                                    try {
-                                        sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module($$isa), thread);
-                                        sbhl_marking_vars.$sbhl_gather_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
-                                        {
-                                            SubLObject node_var_10 = node_var;
-                                            SubLObject deck_type = (false) ? ((SubLObject) ($QUEUE)) : $STACK;
-                                            SubLObject recur_deck = deck.create_deck(deck_type);
-                                            {
-                                                SubLObject _prev_bind_0_11 = sbhl_marking_vars.$sbhl_space$.currentBinding(thread);
-                                                try {
-                                                    sbhl_marking_vars.$sbhl_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
-                                                    {
-                                                        SubLObject tv_var = NIL;
-                                                        {
-                                                            SubLObject _prev_bind_0_12 = sbhl_search_vars.$sbhl_tv$.currentBinding(thread);
-                                                            SubLObject _prev_bind_1_13 = sbhl_search_vars.$relevant_sbhl_tv_function$.currentBinding(thread);
-                                                            try {
-                                                                sbhl_search_vars.$sbhl_tv$.bind(NIL != tv_var ? ((SubLObject) (tv_var)) : sbhl_search_vars.get_sbhl_true_tv(), thread);
-                                                                sbhl_search_vars.$relevant_sbhl_tv_function$.bind(NIL != tv_var ? ((SubLObject) (RELEVANT_SBHL_TV_IS_GENERAL_TV)) : sbhl_search_vars.$relevant_sbhl_tv_function$.getDynamicValue(thread), thread);
-                                                                if (NIL != tv_var) {
-                                                                    if (NIL != sbhl_paranoia.sbhl_object_type_checking_p()) {
-                                                                        if (NIL == sbhl_search_vars.sbhl_true_tv_p(tv_var)) {
-                                                                            {
-                                                                                SubLObject pcase_var = sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread);
-                                                                                if (pcase_var.eql($ERROR)) {
-                                                                                    sbhl_paranoia.sbhl_error(ONE_INTEGER, $str_alt159$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                } else {
-                                                                                    if (pcase_var.eql($CERROR)) {
-                                                                                        sbhl_paranoia.sbhl_cerror(ONE_INTEGER, $$$continue_anyway, $str_alt159$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                    } else {
-                                                                                        if (pcase_var.eql($WARN)) {
-                                                                                            Errors.warn($str_alt159$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
-                                                                                        } else {
-                                                                                            Errors.warn($str_alt164$_A_is_not_a_valid__sbhl_type_erro, sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread));
-                                                                                            Errors.cerror($$$continue_anyway, $str_alt159$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                                {
-                                                                    SubLObject _prev_bind_0_14 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
-                                                                    SubLObject _prev_bind_1_15 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
-                                                                    SubLObject _prev_bind_2 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
-                                                                    SubLObject _prev_bind_3 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                    SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                                    try {
-                                                                        sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)), thread);
-                                                                        sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
-                                                                        sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
-                                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
-                                                                        sbhl_module_vars.$sbhl_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)), thread);
-                                                                        if ((NIL != sbhl_paranoia.suspend_sbhl_type_checkingP()) || (NIL != sbhl_module_utilities.apply_sbhl_module_type_test(node_var, sbhl_module_vars.get_sbhl_module(UNPROVIDED)))) {
-                                                                            {
-                                                                                SubLObject _prev_bind_0_16 = sbhl_search_vars.$sbhl_search_direction$.currentBinding(thread);
-                                                                                SubLObject _prev_bind_1_17 = sbhl_link_vars.$sbhl_link_direction$.currentBinding(thread);
-                                                                                SubLObject _prev_bind_2_18 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                                try {
-                                                                                    sbhl_search_vars.$sbhl_search_direction$.bind(sbhl_search_vars.get_sbhl_backward_search_direction(), thread);
-                                                                                    sbhl_link_vars.$sbhl_link_direction$.bind(sbhl_module_utilities.sbhl_search_direction_to_link_direction(sbhl_search_vars.get_sbhl_backward_search_direction(), sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
-                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
-                                                                                    sbhl_marking_utilities.sbhl_mark_node_marked(node_var_10, UNPROVIDED);
-                                                                                    while (NIL != node_var_10) {
-                                                                                        {
-                                                                                            SubLObject tt_node_var = node_var_10;
-                                                                                            SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_vars.get_sbhl_module($$isa));
-                                                                                            SubLObject cdolist_list_var = accessible_modules;
-                                                                                            SubLObject module_var = NIL;
-                                                                                            for (module_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , module_var = cdolist_list_var.first()) {
-                                                                                                {
-                                                                                                    SubLObject _prev_bind_0_19 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                                                                    SubLObject _prev_bind_1_20 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                                                    try {
-                                                                                                        sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
-                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
-                                                                                                        {
-                                                                                                            SubLObject node = function_terms.naut_to_nart(tt_node_var);
-                                                                                                            if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
-                                                                                                                {
-                                                                                                                    SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                    if (NIL != d_link) {
-                                                                                                                        {
-                                                                                                                            SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                            if (NIL != mt_links) {
-                                                                                                                                {
-                                                                                                                                    SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
-                                                                                                                                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                                                                                                                                        thread.resetMultipleValues();
-                                                                                                                                        {
-                                                                                                                                            SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                                                                                            SubLObject tv_links = thread.secondMultipleValue();
-                                                                                                                                            thread.resetMultipleValues();
-                                                                                                                                            if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                                                                {
-                                                                                                                                                    SubLObject _prev_bind_0_21 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                                                                    try {
-                                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                                                        {
-                                                                                                                                                            SubLObject iteration_state_22 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
-                                                                                                                                                            while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_22)) {
-                                                                                                                                                                thread.resetMultipleValues();
-                                                                                                                                                                {
-                                                                                                                                                                    SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_22);
-                                                                                                                                                                    SubLObject link_nodes = thread.secondMultipleValue();
-                                                                                                                                                                    thread.resetMultipleValues();
-                                                                                                                                                                    if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                                                        {
-                                                                                                                                                                            SubLObject _prev_bind_0_23 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                                                            try {
-                                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                                                                {
-                                                                                                                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                                                                    SubLObject cdolist_list_var_24 = new_list;
-                                                                                                                                                                                    SubLObject pred = NIL;
-                                                                                                                                                                                    for (pred = cdolist_list_var_24.first(); NIL != cdolist_list_var_24; cdolist_list_var_24 = cdolist_list_var_24.rest() , pred = cdolist_list_var_24.first()) {
-                                                                                                                                                                                        if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(pred, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
-                                                                                                                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(pred, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                                                                                                                                                                            if (NIL != forts.fort_p(pred)) {
-                                                                                                                                                                                                count = add(count, com.cyc.cycjava.cycl.lexification_utilities.headword_usage_for_pred(word_unit, speech_part, pred));
-                                                                                                                                                                                            }
-                                                                                                                                                                                        }
-                                                                                                                                                                                    }
-                                                                                                                                                                                }
-                                                                                                                                                                            } finally {
-                                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_23, thread);
-                                                                                                                                                                            }
-                                                                                                                                                                        }
-                                                                                                                                                                    }
-                                                                                                                                                                    iteration_state_22 = dictionary_contents.do_dictionary_contents_next(iteration_state_22);
-                                                                                                                                                                }
-                                                                                                                                                            } 
-                                                                                                                                                            dictionary_contents.do_dictionary_contents_finalize(iteration_state_22);
-                                                                                                                                                        }
-                                                                                                                                                    } finally {
-                                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_21, thread);
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                            iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                                                                                                        }
-                                                                                                                                    } 
-                                                                                                                                    dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    } else {
-                                                                                                                        sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt165$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                                                    }
-                                                                                                                }
-                                                                                                                if (NIL != sbhl_macros.do_sbhl_non_fort_linksP(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED))) {
-                                                                                                                    {
-                                                                                                                        SubLObject csome_list_var = sbhl_link_methods.non_fort_instance_table_lookup(node);
-                                                                                                                        SubLObject instance_tuple = NIL;
-                                                                                                                        for (instance_tuple = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , instance_tuple = csome_list_var.first()) {
-                                                                                                                            {
-                                                                                                                                SubLObject datum = instance_tuple;
-                                                                                                                                SubLObject current = datum;
-                                                                                                                                SubLObject link_node = NIL;
-                                                                                                                                SubLObject mt = NIL;
-                                                                                                                                SubLObject tv = NIL;
-                                                                                                                                destructuring_bind_must_consp(current, datum, $list_alt166);
-                                                                                                                                link_node = current.first();
-                                                                                                                                current = current.rest();
-                                                                                                                                destructuring_bind_must_consp(current, datum, $list_alt166);
-                                                                                                                                mt = current.first();
-                                                                                                                                current = current.rest();
-                                                                                                                                destructuring_bind_must_consp(current, datum, $list_alt166);
-                                                                                                                                tv = current.first();
-                                                                                                                                current = current.rest();
-                                                                                                                                if (NIL == current) {
-                                                                                                                                    if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                                                        {
-                                                                                                                                            SubLObject _prev_bind_0_25 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                                                            try {
-                                                                                                                                                sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                                                if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                                    {
-                                                                                                                                                        SubLObject _prev_bind_0_26 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                                        try {
-                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                                            {
-                                                                                                                                                                SubLObject link_nodes = list(link_node);
-                                                                                                                                                                SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                                                SubLObject cdolist_list_var_27 = new_list;
-                                                                                                                                                                SubLObject pred = NIL;
-                                                                                                                                                                for (pred = cdolist_list_var_27.first(); NIL != cdolist_list_var_27; cdolist_list_var_27 = cdolist_list_var_27.rest() , pred = cdolist_list_var_27.first()) {
-                                                                                                                                                                    if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(pred, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
-                                                                                                                                                                        sbhl_marking_utilities.sbhl_mark_node_marked(pred, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                                                                                                                                                        if (NIL != forts.fort_p(pred)) {
-                                                                                                                                                                            count = add(count, com.cyc.cycjava.cycl.lexification_utilities.headword_usage_for_pred(word_unit, speech_part, pred));
-                                                                                                                                                                        }
-                                                                                                                                                                    }
-                                                                                                                                                                }
-                                                                                                                                                            }
-                                                                                                                                                        } finally {
-                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_26, thread);
-                                                                                                                                                        }
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            } finally {
-                                                                                                                                                sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_25, thread);
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                } else {
-                                                                                                                                    cdestructuring_bind_error(datum, $list_alt166);
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            } else {
-                                                                                                                if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
-                                                                                                                    {
-                                                                                                                        SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                        SubLObject cdolist_list_var_28 = new_list;
-                                                                                                                        SubLObject generating_fn = NIL;
-                                                                                                                        for (generating_fn = cdolist_list_var_28.first(); NIL != cdolist_list_var_28; cdolist_list_var_28 = cdolist_list_var_28.rest() , generating_fn = cdolist_list_var_28.first()) {
-                                                                                                                            {
-                                                                                                                                SubLObject _prev_bind_0_29 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
-                                                                                                                                try {
-                                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
-                                                                                                                                    {
-                                                                                                                                        SubLObject link_nodes = funcall(generating_fn, node);
-                                                                                                                                        SubLObject new_list_30 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                        SubLObject cdolist_list_var_31 = new_list_30;
-                                                                                                                                        SubLObject pred = NIL;
-                                                                                                                                        for (pred = cdolist_list_var_31.first(); NIL != cdolist_list_var_31; cdolist_list_var_31 = cdolist_list_var_31.rest() , pred = cdolist_list_var_31.first()) {
-                                                                                                                                            if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(pred, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
-                                                                                                                                                sbhl_marking_utilities.sbhl_mark_node_marked(pred, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                                                                                                                                if (NIL != forts.fort_p(pred)) {
-                                                                                                                                                    count = add(count, com.cyc.cycjava.cycl.lexification_utilities.headword_usage_for_pred(word_unit, speech_part, pred));
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                } finally {
-                                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_29, thread);
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    } finally {
-                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_20, thread);
-                                                                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_19, thread);
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                        {
-                                                                                            SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)));
-                                                                                            SubLObject cdolist_list_var = accessible_modules;
-                                                                                            SubLObject module_var = NIL;
-                                                                                            for (module_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , module_var = cdolist_list_var.first()) {
-                                                                                                {
-                                                                                                    SubLObject _prev_bind_0_32 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                                                                    SubLObject _prev_bind_1_33 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                                                    try {
-                                                                                                        sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
-                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
-                                                                                                        {
-                                                                                                            SubLObject node = function_terms.naut_to_nart(node_var_10);
-                                                                                                            if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
-                                                                                                                {
-                                                                                                                    SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                    if (NIL != d_link) {
-                                                                                                                        {
-                                                                                                                            SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_link_vars.get_sbhl_link_direction(), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                            if (NIL != mt_links) {
-                                                                                                                                {
-                                                                                                                                    SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
-                                                                                                                                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                                                                                                                                        thread.resetMultipleValues();
-                                                                                                                                        {
-                                                                                                                                            SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                                                                                            SubLObject tv_links = thread.secondMultipleValue();
-                                                                                                                                            thread.resetMultipleValues();
-                                                                                                                                            if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                                                                {
-                                                                                                                                                    SubLObject _prev_bind_0_34 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                                                                    try {
-                                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                                                        {
-                                                                                                                                                            SubLObject iteration_state_35 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
-                                                                                                                                                            while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_35)) {
-                                                                                                                                                                thread.resetMultipleValues();
-                                                                                                                                                                {
-                                                                                                                                                                    SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_35);
-                                                                                                                                                                    SubLObject link_nodes = thread.secondMultipleValue();
-                                                                                                                                                                    thread.resetMultipleValues();
-                                                                                                                                                                    if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                                                        {
-                                                                                                                                                                            SubLObject _prev_bind_0_36 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                                                            try {
-                                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                                                                {
-                                                                                                                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                                                                    SubLObject cdolist_list_var_37 = new_list;
-                                                                                                                                                                                    SubLObject node_vars_link_node = NIL;
-                                                                                                                                                                                    for (node_vars_link_node = cdolist_list_var_37.first(); NIL != cdolist_list_var_37; cdolist_list_var_37 = cdolist_list_var_37.rest() , node_vars_link_node = cdolist_list_var_37.first()) {
-                                                                                                                                                                                        if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
-                                                                                                                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
-                                                                                                                                                                                            deck.deck_push(node_vars_link_node, recur_deck);
-                                                                                                                                                                                        }
-                                                                                                                                                                                    }
-                                                                                                                                                                                }
-                                                                                                                                                                            } finally {
-                                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_36, thread);
-                                                                                                                                                                            }
-                                                                                                                                                                        }
-                                                                                                                                                                    }
-                                                                                                                                                                    iteration_state_35 = dictionary_contents.do_dictionary_contents_next(iteration_state_35);
-                                                                                                                                                                }
-                                                                                                                                                            } 
-                                                                                                                                                            dictionary_contents.do_dictionary_contents_finalize(iteration_state_35);
-                                                                                                                                                        }
-                                                                                                                                                    } finally {
-                                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_34, thread);
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                            iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                                                                                                        }
-                                                                                                                                    } 
-                                                                                                                                    dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    } else {
-                                                                                                                        sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt165$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            } else {
-                                                                                                                if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
-                                                                                                                    {
-                                                                                                                        SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                        SubLObject cdolist_list_var_38 = new_list;
-                                                                                                                        SubLObject generating_fn = NIL;
-                                                                                                                        for (generating_fn = cdolist_list_var_38.first(); NIL != cdolist_list_var_38; cdolist_list_var_38 = cdolist_list_var_38.rest() , generating_fn = cdolist_list_var_38.first()) {
-                                                                                                                            {
-                                                                                                                                SubLObject _prev_bind_0_39 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
-                                                                                                                                try {
-                                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
-                                                                                                                                    {
-                                                                                                                                        SubLObject link_nodes = funcall(generating_fn, node);
-                                                                                                                                        SubLObject new_list_40 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                        SubLObject cdolist_list_var_41 = new_list_40;
-                                                                                                                                        SubLObject node_vars_link_node = NIL;
-                                                                                                                                        for (node_vars_link_node = cdolist_list_var_41.first(); NIL != cdolist_list_var_41; cdolist_list_var_41 = cdolist_list_var_41.rest() , node_vars_link_node = cdolist_list_var_41.first()) {
-                                                                                                                                            if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
-                                                                                                                                                sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
-                                                                                                                                                deck.deck_push(node_vars_link_node, recur_deck);
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                } finally {
-                                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_39, thread);
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    } finally {
-                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_33, thread);
-                                                                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_32, thread);
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                        node_var_10 = deck.deck_pop(recur_deck);
-                                                                                    } 
-                                                                                } finally {
-                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_2_18, thread);
-                                                                                    sbhl_link_vars.$sbhl_link_direction$.rebind(_prev_bind_1_17, thread);
-                                                                                    sbhl_search_vars.$sbhl_search_direction$.rebind(_prev_bind_0_16, thread);
-                                                                                }
-                                                                            }
-                                                                        } else {
-                                                                            sbhl_paranoia.sbhl_warn(TWO_INTEGER, $str_alt167$Node__a_does_not_pass_sbhl_type_t, node_var, sbhl_module_utilities.get_sbhl_type_test(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                        }
-                                                                    } finally {
-                                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
-                                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3, thread);
-                                                                        sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2, thread);
-                                                                        sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1_15, thread);
-                                                                        sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0_14, thread);
-                                                                    }
-                                                                }
-                                                            } finally {
-                                                                sbhl_search_vars.$relevant_sbhl_tv_function$.rebind(_prev_bind_1_13, thread);
-                                                                sbhl_search_vars.$sbhl_tv$.rebind(_prev_bind_0_12, thread);
-                                                            }
-                                                        }
-                                                        sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_space$.getDynamicValue(thread));
-                                                    }
-                                                } finally {
-                                                    sbhl_marking_vars.$sbhl_space$.rebind(_prev_bind_0_11, thread);
-                                                }
-                                            }
-                                            sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                        }
-                                    } finally {
-                                        sbhl_marking_vars.$sbhl_gather_space$.rebind(_prev_bind_1_9, thread);
-                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_8, thread);
-                                    }
-                                }
-                            }
-                        }
-                        if (NIL != subl_promotions.memberP(position, $list_alt168, UNPROVIDED, UNPROVIDED)) {
-                            {
-                                SubLObject node_var = $$HeadFinalMultiWordPhrasePred;
-                                {
-                                    SubLObject _prev_bind_0_42 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                    SubLObject _prev_bind_1_43 = sbhl_marking_vars.$sbhl_gather_space$.currentBinding(thread);
-                                    try {
-                                        sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module($$isa), thread);
-                                        sbhl_marking_vars.$sbhl_gather_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
-                                        {
-                                            SubLObject node_var_44 = node_var;
-                                            SubLObject deck_type = (false) ? ((SubLObject) ($QUEUE)) : $STACK;
-                                            SubLObject recur_deck = deck.create_deck(deck_type);
-                                            {
-                                                SubLObject _prev_bind_0_45 = sbhl_marking_vars.$sbhl_space$.currentBinding(thread);
-                                                try {
-                                                    sbhl_marking_vars.$sbhl_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
-                                                    {
-                                                        SubLObject tv_var = NIL;
-                                                        {
-                                                            SubLObject _prev_bind_0_46 = sbhl_search_vars.$sbhl_tv$.currentBinding(thread);
-                                                            SubLObject _prev_bind_1_47 = sbhl_search_vars.$relevant_sbhl_tv_function$.currentBinding(thread);
-                                                            try {
-                                                                sbhl_search_vars.$sbhl_tv$.bind(NIL != tv_var ? ((SubLObject) (tv_var)) : sbhl_search_vars.get_sbhl_true_tv(), thread);
-                                                                sbhl_search_vars.$relevant_sbhl_tv_function$.bind(NIL != tv_var ? ((SubLObject) (RELEVANT_SBHL_TV_IS_GENERAL_TV)) : sbhl_search_vars.$relevant_sbhl_tv_function$.getDynamicValue(thread), thread);
-                                                                if (NIL != tv_var) {
-                                                                    if (NIL != sbhl_paranoia.sbhl_object_type_checking_p()) {
-                                                                        if (NIL == sbhl_search_vars.sbhl_true_tv_p(tv_var)) {
-                                                                            {
-                                                                                SubLObject pcase_var = sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread);
-                                                                                if (pcase_var.eql($ERROR)) {
-                                                                                    sbhl_paranoia.sbhl_error(ONE_INTEGER, $str_alt159$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                } else {
-                                                                                    if (pcase_var.eql($CERROR)) {
-                                                                                        sbhl_paranoia.sbhl_cerror(ONE_INTEGER, $$$continue_anyway, $str_alt159$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                    } else {
-                                                                                        if (pcase_var.eql($WARN)) {
-                                                                                            Errors.warn($str_alt159$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
-                                                                                        } else {
-                                                                                            Errors.warn($str_alt164$_A_is_not_a_valid__sbhl_type_erro, sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread));
-                                                                                            Errors.cerror($$$continue_anyway, $str_alt159$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                                {
-                                                                    SubLObject _prev_bind_0_48 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
-                                                                    SubLObject _prev_bind_1_49 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
-                                                                    SubLObject _prev_bind_2 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
-                                                                    SubLObject _prev_bind_3 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                    SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                                    try {
-                                                                        sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)), thread);
-                                                                        sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
-                                                                        sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
-                                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
-                                                                        sbhl_module_vars.$sbhl_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)), thread);
-                                                                        if ((NIL != sbhl_paranoia.suspend_sbhl_type_checkingP()) || (NIL != sbhl_module_utilities.apply_sbhl_module_type_test(node_var, sbhl_module_vars.get_sbhl_module(UNPROVIDED)))) {
-                                                                            {
-                                                                                SubLObject _prev_bind_0_50 = sbhl_search_vars.$sbhl_search_direction$.currentBinding(thread);
-                                                                                SubLObject _prev_bind_1_51 = sbhl_link_vars.$sbhl_link_direction$.currentBinding(thread);
-                                                                                SubLObject _prev_bind_2_52 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                                try {
-                                                                                    sbhl_search_vars.$sbhl_search_direction$.bind(sbhl_search_vars.get_sbhl_backward_search_direction(), thread);
-                                                                                    sbhl_link_vars.$sbhl_link_direction$.bind(sbhl_module_utilities.sbhl_search_direction_to_link_direction(sbhl_search_vars.get_sbhl_backward_search_direction(), sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
-                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
-                                                                                    sbhl_marking_utilities.sbhl_mark_node_marked(node_var_44, UNPROVIDED);
-                                                                                    while (NIL != node_var_44) {
-                                                                                        {
-                                                                                            SubLObject tt_node_var = node_var_44;
-                                                                                            SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_vars.get_sbhl_module($$isa));
-                                                                                            SubLObject cdolist_list_var = accessible_modules;
-                                                                                            SubLObject module_var = NIL;
-                                                                                            for (module_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , module_var = cdolist_list_var.first()) {
-                                                                                                {
-                                                                                                    SubLObject _prev_bind_0_53 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                                                                    SubLObject _prev_bind_1_54 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                                                    try {
-                                                                                                        sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
-                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
-                                                                                                        {
-                                                                                                            SubLObject node = function_terms.naut_to_nart(tt_node_var);
-                                                                                                            if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
-                                                                                                                {
-                                                                                                                    SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                    if (NIL != d_link) {
-                                                                                                                        {
-                                                                                                                            SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                            if (NIL != mt_links) {
-                                                                                                                                {
-                                                                                                                                    SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
-                                                                                                                                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                                                                                                                                        thread.resetMultipleValues();
-                                                                                                                                        {
-                                                                                                                                            SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                                                                                            SubLObject tv_links = thread.secondMultipleValue();
-                                                                                                                                            thread.resetMultipleValues();
-                                                                                                                                            if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                                                                {
-                                                                                                                                                    SubLObject _prev_bind_0_55 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                                                                    try {
-                                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                                                        {
-                                                                                                                                                            SubLObject iteration_state_56 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
-                                                                                                                                                            while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_56)) {
-                                                                                                                                                                thread.resetMultipleValues();
-                                                                                                                                                                {
-                                                                                                                                                                    SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_56);
-                                                                                                                                                                    SubLObject link_nodes = thread.secondMultipleValue();
-                                                                                                                                                                    thread.resetMultipleValues();
-                                                                                                                                                                    if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                                                        {
-                                                                                                                                                                            SubLObject _prev_bind_0_57 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                                                            try {
-                                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                                                                {
-                                                                                                                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                                                                    SubLObject cdolist_list_var_58 = new_list;
-                                                                                                                                                                                    SubLObject pred = NIL;
-                                                                                                                                                                                    for (pred = cdolist_list_var_58.first(); NIL != cdolist_list_var_58; cdolist_list_var_58 = cdolist_list_var_58.rest() , pred = cdolist_list_var_58.first()) {
-                                                                                                                                                                                        if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(pred, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
-                                                                                                                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(pred, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                                                                                                                                                                            if (NIL != forts.fort_p(pred)) {
-                                                                                                                                                                                                count = add(count, com.cyc.cycjava.cycl.lexification_utilities.headword_usage_for_pred(word_unit, speech_part, pred));
-                                                                                                                                                                                            }
-                                                                                                                                                                                        }
-                                                                                                                                                                                    }
-                                                                                                                                                                                }
-                                                                                                                                                                            } finally {
-                                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_57, thread);
-                                                                                                                                                                            }
-                                                                                                                                                                        }
-                                                                                                                                                                    }
-                                                                                                                                                                    iteration_state_56 = dictionary_contents.do_dictionary_contents_next(iteration_state_56);
-                                                                                                                                                                }
-                                                                                                                                                            } 
-                                                                                                                                                            dictionary_contents.do_dictionary_contents_finalize(iteration_state_56);
-                                                                                                                                                        }
-                                                                                                                                                    } finally {
-                                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_55, thread);
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                            iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                                                                                                        }
-                                                                                                                                    } 
-                                                                                                                                    dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    } else {
-                                                                                                                        sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt165$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                                                    }
-                                                                                                                }
-                                                                                                                if (NIL != sbhl_macros.do_sbhl_non_fort_linksP(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED))) {
-                                                                                                                    {
-                                                                                                                        SubLObject csome_list_var = sbhl_link_methods.non_fort_instance_table_lookup(node);
-                                                                                                                        SubLObject instance_tuple = NIL;
-                                                                                                                        for (instance_tuple = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , instance_tuple = csome_list_var.first()) {
-                                                                                                                            {
-                                                                                                                                SubLObject datum = instance_tuple;
-                                                                                                                                SubLObject current = datum;
-                                                                                                                                SubLObject link_node = NIL;
-                                                                                                                                SubLObject mt = NIL;
-                                                                                                                                SubLObject tv = NIL;
-                                                                                                                                destructuring_bind_must_consp(current, datum, $list_alt166);
-                                                                                                                                link_node = current.first();
-                                                                                                                                current = current.rest();
-                                                                                                                                destructuring_bind_must_consp(current, datum, $list_alt166);
-                                                                                                                                mt = current.first();
-                                                                                                                                current = current.rest();
-                                                                                                                                destructuring_bind_must_consp(current, datum, $list_alt166);
-                                                                                                                                tv = current.first();
-                                                                                                                                current = current.rest();
-                                                                                                                                if (NIL == current) {
-                                                                                                                                    if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                                                        {
-                                                                                                                                            SubLObject _prev_bind_0_59 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                                                            try {
-                                                                                                                                                sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                                                if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                                    {
-                                                                                                                                                        SubLObject _prev_bind_0_60 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                                        try {
-                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                                            {
-                                                                                                                                                                SubLObject link_nodes = list(link_node);
-                                                                                                                                                                SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                                                SubLObject cdolist_list_var_61 = new_list;
-                                                                                                                                                                SubLObject pred = NIL;
-                                                                                                                                                                for (pred = cdolist_list_var_61.first(); NIL != cdolist_list_var_61; cdolist_list_var_61 = cdolist_list_var_61.rest() , pred = cdolist_list_var_61.first()) {
-                                                                                                                                                                    if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(pred, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
-                                                                                                                                                                        sbhl_marking_utilities.sbhl_mark_node_marked(pred, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                                                                                                                                                        if (NIL != forts.fort_p(pred)) {
-                                                                                                                                                                            count = add(count, com.cyc.cycjava.cycl.lexification_utilities.headword_usage_for_pred(word_unit, speech_part, pred));
-                                                                                                                                                                        }
-                                                                                                                                                                    }
-                                                                                                                                                                }
-                                                                                                                                                            }
-                                                                                                                                                        } finally {
-                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_60, thread);
-                                                                                                                                                        }
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            } finally {
-                                                                                                                                                sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_59, thread);
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                } else {
-                                                                                                                                    cdestructuring_bind_error(datum, $list_alt166);
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            } else {
-                                                                                                                if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
-                                                                                                                    {
-                                                                                                                        SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                        SubLObject cdolist_list_var_62 = new_list;
-                                                                                                                        SubLObject generating_fn = NIL;
-                                                                                                                        for (generating_fn = cdolist_list_var_62.first(); NIL != cdolist_list_var_62; cdolist_list_var_62 = cdolist_list_var_62.rest() , generating_fn = cdolist_list_var_62.first()) {
-                                                                                                                            {
-                                                                                                                                SubLObject _prev_bind_0_63 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
-                                                                                                                                try {
-                                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
-                                                                                                                                    {
-                                                                                                                                        SubLObject link_nodes = funcall(generating_fn, node);
-                                                                                                                                        SubLObject new_list_64 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                        SubLObject cdolist_list_var_65 = new_list_64;
-                                                                                                                                        SubLObject pred = NIL;
-                                                                                                                                        for (pred = cdolist_list_var_65.first(); NIL != cdolist_list_var_65; cdolist_list_var_65 = cdolist_list_var_65.rest() , pred = cdolist_list_var_65.first()) {
-                                                                                                                                            if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(pred, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
-                                                                                                                                                sbhl_marking_utilities.sbhl_mark_node_marked(pred, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                                                                                                                                if (NIL != forts.fort_p(pred)) {
-                                                                                                                                                    count = add(count, com.cyc.cycjava.cycl.lexification_utilities.headword_usage_for_pred(word_unit, speech_part, pred));
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                } finally {
-                                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_63, thread);
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    } finally {
-                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_54, thread);
-                                                                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_53, thread);
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                        {
-                                                                                            SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)));
-                                                                                            SubLObject cdolist_list_var = accessible_modules;
-                                                                                            SubLObject module_var = NIL;
-                                                                                            for (module_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , module_var = cdolist_list_var.first()) {
-                                                                                                {
-                                                                                                    SubLObject _prev_bind_0_66 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                                                                    SubLObject _prev_bind_1_67 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                                                    try {
-                                                                                                        sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
-                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
-                                                                                                        {
-                                                                                                            SubLObject node = function_terms.naut_to_nart(node_var_44);
-                                                                                                            if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
-                                                                                                                {
-                                                                                                                    SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                    if (NIL != d_link) {
-                                                                                                                        {
-                                                                                                                            SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_link_vars.get_sbhl_link_direction(), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                            if (NIL != mt_links) {
-                                                                                                                                {
-                                                                                                                                    SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
-                                                                                                                                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                                                                                                                                        thread.resetMultipleValues();
-                                                                                                                                        {
-                                                                                                                                            SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                                                                                            SubLObject tv_links = thread.secondMultipleValue();
-                                                                                                                                            thread.resetMultipleValues();
-                                                                                                                                            if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                                                                {
-                                                                                                                                                    SubLObject _prev_bind_0_68 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                                                                    try {
-                                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                                                        {
-                                                                                                                                                            SubLObject iteration_state_69 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
-                                                                                                                                                            while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_69)) {
-                                                                                                                                                                thread.resetMultipleValues();
-                                                                                                                                                                {
-                                                                                                                                                                    SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_69);
-                                                                                                                                                                    SubLObject link_nodes = thread.secondMultipleValue();
-                                                                                                                                                                    thread.resetMultipleValues();
-                                                                                                                                                                    if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                                                        {
-                                                                                                                                                                            SubLObject _prev_bind_0_70 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                                                            try {
-                                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                                                                {
-                                                                                                                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                                                                    SubLObject cdolist_list_var_71 = new_list;
-                                                                                                                                                                                    SubLObject node_vars_link_node = NIL;
-                                                                                                                                                                                    for (node_vars_link_node = cdolist_list_var_71.first(); NIL != cdolist_list_var_71; cdolist_list_var_71 = cdolist_list_var_71.rest() , node_vars_link_node = cdolist_list_var_71.first()) {
-                                                                                                                                                                                        if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
-                                                                                                                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
-                                                                                                                                                                                            deck.deck_push(node_vars_link_node, recur_deck);
-                                                                                                                                                                                        }
-                                                                                                                                                                                    }
-                                                                                                                                                                                }
-                                                                                                                                                                            } finally {
-                                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_70, thread);
-                                                                                                                                                                            }
-                                                                                                                                                                        }
-                                                                                                                                                                    }
-                                                                                                                                                                    iteration_state_69 = dictionary_contents.do_dictionary_contents_next(iteration_state_69);
-                                                                                                                                                                }
-                                                                                                                                                            } 
-                                                                                                                                                            dictionary_contents.do_dictionary_contents_finalize(iteration_state_69);
-                                                                                                                                                        }
-                                                                                                                                                    } finally {
-                                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_68, thread);
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                            iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                                                                                                        }
-                                                                                                                                    } 
-                                                                                                                                    dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    } else {
-                                                                                                                        sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt165$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            } else {
-                                                                                                                if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
-                                                                                                                    {
-                                                                                                                        SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                        SubLObject cdolist_list_var_72 = new_list;
-                                                                                                                        SubLObject generating_fn = NIL;
-                                                                                                                        for (generating_fn = cdolist_list_var_72.first(); NIL != cdolist_list_var_72; cdolist_list_var_72 = cdolist_list_var_72.rest() , generating_fn = cdolist_list_var_72.first()) {
-                                                                                                                            {
-                                                                                                                                SubLObject _prev_bind_0_73 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
-                                                                                                                                try {
-                                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
-                                                                                                                                    {
-                                                                                                                                        SubLObject link_nodes = funcall(generating_fn, node);
-                                                                                                                                        SubLObject new_list_74 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                        SubLObject cdolist_list_var_75 = new_list_74;
-                                                                                                                                        SubLObject node_vars_link_node = NIL;
-                                                                                                                                        for (node_vars_link_node = cdolist_list_var_75.first(); NIL != cdolist_list_var_75; cdolist_list_var_75 = cdolist_list_var_75.rest() , node_vars_link_node = cdolist_list_var_75.first()) {
-                                                                                                                                            if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
-                                                                                                                                                sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
-                                                                                                                                                deck.deck_push(node_vars_link_node, recur_deck);
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                } finally {
-                                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_73, thread);
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    } finally {
-                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_67, thread);
-                                                                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_66, thread);
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                        node_var_44 = deck.deck_pop(recur_deck);
-                                                                                    } 
-                                                                                } finally {
-                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_2_52, thread);
-                                                                                    sbhl_link_vars.$sbhl_link_direction$.rebind(_prev_bind_1_51, thread);
-                                                                                    sbhl_search_vars.$sbhl_search_direction$.rebind(_prev_bind_0_50, thread);
-                                                                                }
-                                                                            }
-                                                                        } else {
-                                                                            sbhl_paranoia.sbhl_warn(TWO_INTEGER, $str_alt167$Node__a_does_not_pass_sbhl_type_t, node_var, sbhl_module_utilities.get_sbhl_type_test(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                        }
-                                                                    } finally {
-                                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
-                                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3, thread);
-                                                                        sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2, thread);
-                                                                        sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1_49, thread);
-                                                                        sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0_48, thread);
-                                                                    }
-                                                                }
-                                                            } finally {
-                                                                sbhl_search_vars.$relevant_sbhl_tv_function$.rebind(_prev_bind_1_47, thread);
-                                                                sbhl_search_vars.$sbhl_tv$.rebind(_prev_bind_0_46, thread);
-                                                            }
-                                                        }
-                                                        sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_space$.getDynamicValue(thread));
-                                                    }
-                                                } finally {
-                                                    sbhl_marking_vars.$sbhl_space$.rebind(_prev_bind_0_45, thread);
-                                                }
-                                            }
-                                            sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                        }
-                                    } finally {
-                                        sbhl_marking_vars.$sbhl_gather_space$.rebind(_prev_bind_1_43, thread);
-                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_42, thread);
-                                    }
-                                }
-                            }
-                        }
-                        if (NIL != subl_promotions.memberP(position, $list_alt170, UNPROVIDED, UNPROVIDED)) {
-                            {
-                                SubLObject node_var = $$HeadMedialMultiWordPhrasePred;
-                                {
-                                    SubLObject _prev_bind_0_76 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                    SubLObject _prev_bind_1_77 = sbhl_marking_vars.$sbhl_gather_space$.currentBinding(thread);
-                                    try {
-                                        sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module($$isa), thread);
-                                        sbhl_marking_vars.$sbhl_gather_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
-                                        {
-                                            SubLObject node_var_78 = node_var;
-                                            SubLObject deck_type = (false) ? ((SubLObject) ($QUEUE)) : $STACK;
-                                            SubLObject recur_deck = deck.create_deck(deck_type);
-                                            {
-                                                SubLObject _prev_bind_0_79 = sbhl_marking_vars.$sbhl_space$.currentBinding(thread);
-                                                try {
-                                                    sbhl_marking_vars.$sbhl_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
-                                                    {
-                                                        SubLObject tv_var = NIL;
-                                                        {
-                                                            SubLObject _prev_bind_0_80 = sbhl_search_vars.$sbhl_tv$.currentBinding(thread);
-                                                            SubLObject _prev_bind_1_81 = sbhl_search_vars.$relevant_sbhl_tv_function$.currentBinding(thread);
-                                                            try {
-                                                                sbhl_search_vars.$sbhl_tv$.bind(NIL != tv_var ? ((SubLObject) (tv_var)) : sbhl_search_vars.get_sbhl_true_tv(), thread);
-                                                                sbhl_search_vars.$relevant_sbhl_tv_function$.bind(NIL != tv_var ? ((SubLObject) (RELEVANT_SBHL_TV_IS_GENERAL_TV)) : sbhl_search_vars.$relevant_sbhl_tv_function$.getDynamicValue(thread), thread);
-                                                                if (NIL != tv_var) {
-                                                                    if (NIL != sbhl_paranoia.sbhl_object_type_checking_p()) {
-                                                                        if (NIL == sbhl_search_vars.sbhl_true_tv_p(tv_var)) {
-                                                                            {
-                                                                                SubLObject pcase_var = sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread);
-                                                                                if (pcase_var.eql($ERROR)) {
-                                                                                    sbhl_paranoia.sbhl_error(ONE_INTEGER, $str_alt159$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                } else {
-                                                                                    if (pcase_var.eql($CERROR)) {
-                                                                                        sbhl_paranoia.sbhl_cerror(ONE_INTEGER, $$$continue_anyway, $str_alt159$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                    } else {
-                                                                                        if (pcase_var.eql($WARN)) {
-                                                                                            Errors.warn($str_alt159$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
-                                                                                        } else {
-                                                                                            Errors.warn($str_alt164$_A_is_not_a_valid__sbhl_type_erro, sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread));
-                                                                                            Errors.cerror($$$continue_anyway, $str_alt159$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                                {
-                                                                    SubLObject _prev_bind_0_82 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
-                                                                    SubLObject _prev_bind_1_83 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
-                                                                    SubLObject _prev_bind_2 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
-                                                                    SubLObject _prev_bind_3 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                    SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                                    try {
-                                                                        sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)), thread);
-                                                                        sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
-                                                                        sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
-                                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
-                                                                        sbhl_module_vars.$sbhl_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)), thread);
-                                                                        if ((NIL != sbhl_paranoia.suspend_sbhl_type_checkingP()) || (NIL != sbhl_module_utilities.apply_sbhl_module_type_test(node_var, sbhl_module_vars.get_sbhl_module(UNPROVIDED)))) {
-                                                                            {
-                                                                                SubLObject _prev_bind_0_84 = sbhl_search_vars.$sbhl_search_direction$.currentBinding(thread);
-                                                                                SubLObject _prev_bind_1_85 = sbhl_link_vars.$sbhl_link_direction$.currentBinding(thread);
-                                                                                SubLObject _prev_bind_2_86 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                                try {
-                                                                                    sbhl_search_vars.$sbhl_search_direction$.bind(sbhl_search_vars.get_sbhl_backward_search_direction(), thread);
-                                                                                    sbhl_link_vars.$sbhl_link_direction$.bind(sbhl_module_utilities.sbhl_search_direction_to_link_direction(sbhl_search_vars.get_sbhl_backward_search_direction(), sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
-                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
-                                                                                    sbhl_marking_utilities.sbhl_mark_node_marked(node_var_78, UNPROVIDED);
-                                                                                    while (NIL != node_var_78) {
-                                                                                        {
-                                                                                            SubLObject tt_node_var = node_var_78;
-                                                                                            SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_vars.get_sbhl_module($$isa));
-                                                                                            SubLObject cdolist_list_var = accessible_modules;
-                                                                                            SubLObject module_var = NIL;
-                                                                                            for (module_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , module_var = cdolist_list_var.first()) {
-                                                                                                {
-                                                                                                    SubLObject _prev_bind_0_87 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                                                                    SubLObject _prev_bind_1_88 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                                                    try {
-                                                                                                        sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
-                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
-                                                                                                        {
-                                                                                                            SubLObject node = function_terms.naut_to_nart(tt_node_var);
-                                                                                                            if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
-                                                                                                                {
-                                                                                                                    SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                    if (NIL != d_link) {
-                                                                                                                        {
-                                                                                                                            SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                            if (NIL != mt_links) {
-                                                                                                                                {
-                                                                                                                                    SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
-                                                                                                                                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                                                                                                                                        thread.resetMultipleValues();
-                                                                                                                                        {
-                                                                                                                                            SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                                                                                            SubLObject tv_links = thread.secondMultipleValue();
-                                                                                                                                            thread.resetMultipleValues();
-                                                                                                                                            if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                                                                {
-                                                                                                                                                    SubLObject _prev_bind_0_89 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                                                                    try {
-                                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                                                        {
-                                                                                                                                                            SubLObject iteration_state_90 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
-                                                                                                                                                            while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_90)) {
-                                                                                                                                                                thread.resetMultipleValues();
-                                                                                                                                                                {
-                                                                                                                                                                    SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_90);
-                                                                                                                                                                    SubLObject link_nodes = thread.secondMultipleValue();
-                                                                                                                                                                    thread.resetMultipleValues();
-                                                                                                                                                                    if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                                                        {
-                                                                                                                                                                            SubLObject _prev_bind_0_91 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                                                            try {
-                                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                                                                {
-                                                                                                                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                                                                    SubLObject cdolist_list_var_92 = new_list;
-                                                                                                                                                                                    SubLObject pred = NIL;
-                                                                                                                                                                                    for (pred = cdolist_list_var_92.first(); NIL != cdolist_list_var_92; cdolist_list_var_92 = cdolist_list_var_92.rest() , pred = cdolist_list_var_92.first()) {
-                                                                                                                                                                                        if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(pred, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
-                                                                                                                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(pred, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                                                                                                                                                                            if (NIL != forts.fort_p(pred)) {
-                                                                                                                                                                                                count = add(count, com.cyc.cycjava.cycl.lexification_utilities.headword_usage_for_pred(word_unit, speech_part, pred));
-                                                                                                                                                                                            }
-                                                                                                                                                                                        }
-                                                                                                                                                                                    }
-                                                                                                                                                                                }
-                                                                                                                                                                            } finally {
-                                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_91, thread);
-                                                                                                                                                                            }
-                                                                                                                                                                        }
-                                                                                                                                                                    }
-                                                                                                                                                                    iteration_state_90 = dictionary_contents.do_dictionary_contents_next(iteration_state_90);
-                                                                                                                                                                }
-                                                                                                                                                            } 
-                                                                                                                                                            dictionary_contents.do_dictionary_contents_finalize(iteration_state_90);
-                                                                                                                                                        }
-                                                                                                                                                    } finally {
-                                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_89, thread);
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                            iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                                                                                                        }
-                                                                                                                                    } 
-                                                                                                                                    dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    } else {
-                                                                                                                        sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt165$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                                                    }
-                                                                                                                }
-                                                                                                                if (NIL != sbhl_macros.do_sbhl_non_fort_linksP(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED))) {
-                                                                                                                    {
-                                                                                                                        SubLObject csome_list_var = sbhl_link_methods.non_fort_instance_table_lookup(node);
-                                                                                                                        SubLObject instance_tuple = NIL;
-                                                                                                                        for (instance_tuple = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , instance_tuple = csome_list_var.first()) {
-                                                                                                                            {
-                                                                                                                                SubLObject datum = instance_tuple;
-                                                                                                                                SubLObject current = datum;
-                                                                                                                                SubLObject link_node = NIL;
-                                                                                                                                SubLObject mt = NIL;
-                                                                                                                                SubLObject tv = NIL;
-                                                                                                                                destructuring_bind_must_consp(current, datum, $list_alt166);
-                                                                                                                                link_node = current.first();
-                                                                                                                                current = current.rest();
-                                                                                                                                destructuring_bind_must_consp(current, datum, $list_alt166);
-                                                                                                                                mt = current.first();
-                                                                                                                                current = current.rest();
-                                                                                                                                destructuring_bind_must_consp(current, datum, $list_alt166);
-                                                                                                                                tv = current.first();
-                                                                                                                                current = current.rest();
-                                                                                                                                if (NIL == current) {
-                                                                                                                                    if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                                                        {
-                                                                                                                                            SubLObject _prev_bind_0_93 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                                                            try {
-                                                                                                                                                sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                                                if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                                    {
-                                                                                                                                                        SubLObject _prev_bind_0_94 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                                        try {
-                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                                            {
-                                                                                                                                                                SubLObject link_nodes = list(link_node);
-                                                                                                                                                                SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                                                SubLObject cdolist_list_var_95 = new_list;
-                                                                                                                                                                SubLObject pred = NIL;
-                                                                                                                                                                for (pred = cdolist_list_var_95.first(); NIL != cdolist_list_var_95; cdolist_list_var_95 = cdolist_list_var_95.rest() , pred = cdolist_list_var_95.first()) {
-                                                                                                                                                                    if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(pred, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
-                                                                                                                                                                        sbhl_marking_utilities.sbhl_mark_node_marked(pred, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                                                                                                                                                        if (NIL != forts.fort_p(pred)) {
-                                                                                                                                                                            count = add(count, com.cyc.cycjava.cycl.lexification_utilities.headword_usage_for_pred(word_unit, speech_part, pred));
-                                                                                                                                                                        }
-                                                                                                                                                                    }
-                                                                                                                                                                }
-                                                                                                                                                            }
-                                                                                                                                                        } finally {
-                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_94, thread);
-                                                                                                                                                        }
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            } finally {
-                                                                                                                                                sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_93, thread);
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                } else {
-                                                                                                                                    cdestructuring_bind_error(datum, $list_alt166);
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            } else {
-                                                                                                                if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
-                                                                                                                    {
-                                                                                                                        SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                        SubLObject cdolist_list_var_96 = new_list;
-                                                                                                                        SubLObject generating_fn = NIL;
-                                                                                                                        for (generating_fn = cdolist_list_var_96.first(); NIL != cdolist_list_var_96; cdolist_list_var_96 = cdolist_list_var_96.rest() , generating_fn = cdolist_list_var_96.first()) {
-                                                                                                                            {
-                                                                                                                                SubLObject _prev_bind_0_97 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
-                                                                                                                                try {
-                                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
-                                                                                                                                    {
-                                                                                                                                        SubLObject link_nodes = funcall(generating_fn, node);
-                                                                                                                                        SubLObject new_list_98 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                        SubLObject cdolist_list_var_99 = new_list_98;
-                                                                                                                                        SubLObject pred = NIL;
-                                                                                                                                        for (pred = cdolist_list_var_99.first(); NIL != cdolist_list_var_99; cdolist_list_var_99 = cdolist_list_var_99.rest() , pred = cdolist_list_var_99.first()) {
-                                                                                                                                            if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(pred, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
-                                                                                                                                                sbhl_marking_utilities.sbhl_mark_node_marked(pred, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                                                                                                                                if (NIL != forts.fort_p(pred)) {
-                                                                                                                                                    count = add(count, com.cyc.cycjava.cycl.lexification_utilities.headword_usage_for_pred(word_unit, speech_part, pred));
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                } finally {
-                                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_97, thread);
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    } finally {
-                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_88, thread);
-                                                                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_87, thread);
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                        {
-                                                                                            SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)));
-                                                                                            SubLObject cdolist_list_var = accessible_modules;
-                                                                                            SubLObject module_var = NIL;
-                                                                                            for (module_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , module_var = cdolist_list_var.first()) {
-                                                                                                {
-                                                                                                    SubLObject _prev_bind_0_100 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                                                                    SubLObject _prev_bind_1_101 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                                                    try {
-                                                                                                        sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
-                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
-                                                                                                        {
-                                                                                                            SubLObject node = function_terms.naut_to_nart(node_var_78);
-                                                                                                            if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
-                                                                                                                {
-                                                                                                                    SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                    if (NIL != d_link) {
-                                                                                                                        {
-                                                                                                                            SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_link_vars.get_sbhl_link_direction(), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                            if (NIL != mt_links) {
-                                                                                                                                {
-                                                                                                                                    SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
-                                                                                                                                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                                                                                                                                        thread.resetMultipleValues();
-                                                                                                                                        {
-                                                                                                                                            SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                                                                                            SubLObject tv_links = thread.secondMultipleValue();
-                                                                                                                                            thread.resetMultipleValues();
-                                                                                                                                            if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                                                                {
-                                                                                                                                                    SubLObject _prev_bind_0_102 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                                                                    try {
-                                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                                                        {
-                                                                                                                                                            SubLObject iteration_state_103 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
-                                                                                                                                                            while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_103)) {
-                                                                                                                                                                thread.resetMultipleValues();
-                                                                                                                                                                {
-                                                                                                                                                                    SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_103);
-                                                                                                                                                                    SubLObject link_nodes = thread.secondMultipleValue();
-                                                                                                                                                                    thread.resetMultipleValues();
-                                                                                                                                                                    if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                                                        {
-                                                                                                                                                                            SubLObject _prev_bind_0_104 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                                                            try {
-                                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                                                                {
-                                                                                                                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                                                                    SubLObject cdolist_list_var_105 = new_list;
-                                                                                                                                                                                    SubLObject node_vars_link_node = NIL;
-                                                                                                                                                                                    for (node_vars_link_node = cdolist_list_var_105.first(); NIL != cdolist_list_var_105; cdolist_list_var_105 = cdolist_list_var_105.rest() , node_vars_link_node = cdolist_list_var_105.first()) {
-                                                                                                                                                                                        if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
-                                                                                                                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
-                                                                                                                                                                                            deck.deck_push(node_vars_link_node, recur_deck);
-                                                                                                                                                                                        }
-                                                                                                                                                                                    }
-                                                                                                                                                                                }
-                                                                                                                                                                            } finally {
-                                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_104, thread);
-                                                                                                                                                                            }
-                                                                                                                                                                        }
-                                                                                                                                                                    }
-                                                                                                                                                                    iteration_state_103 = dictionary_contents.do_dictionary_contents_next(iteration_state_103);
-                                                                                                                                                                }
-                                                                                                                                                            } 
-                                                                                                                                                            dictionary_contents.do_dictionary_contents_finalize(iteration_state_103);
-                                                                                                                                                        }
-                                                                                                                                                    } finally {
-                                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_102, thread);
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                            iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                                                                                                        }
-                                                                                                                                    } 
-                                                                                                                                    dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    } else {
-                                                                                                                        sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt165$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            } else {
-                                                                                                                if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
-                                                                                                                    {
-                                                                                                                        SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
-                                                                                                                        SubLObject cdolist_list_var_106 = new_list;
-                                                                                                                        SubLObject generating_fn = NIL;
-                                                                                                                        for (generating_fn = cdolist_list_var_106.first(); NIL != cdolist_list_var_106; cdolist_list_var_106 = cdolist_list_var_106.rest() , generating_fn = cdolist_list_var_106.first()) {
-                                                                                                                            {
-                                                                                                                                SubLObject _prev_bind_0_107 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
-                                                                                                                                try {
-                                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
-                                                                                                                                    {
-                                                                                                                                        SubLObject link_nodes = funcall(generating_fn, node);
-                                                                                                                                        SubLObject new_list_108 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
-                                                                                                                                        SubLObject cdolist_list_var_109 = new_list_108;
-                                                                                                                                        SubLObject node_vars_link_node = NIL;
-                                                                                                                                        for (node_vars_link_node = cdolist_list_var_109.first(); NIL != cdolist_list_var_109; cdolist_list_var_109 = cdolist_list_var_109.rest() , node_vars_link_node = cdolist_list_var_109.first()) {
-                                                                                                                                            if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
-                                                                                                                                                sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
-                                                                                                                                                deck.deck_push(node_vars_link_node, recur_deck);
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                } finally {
-                                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_107, thread);
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    } finally {
-                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_101, thread);
-                                                                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_100, thread);
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                        node_var_78 = deck.deck_pop(recur_deck);
-                                                                                    } 
-                                                                                } finally {
-                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_2_86, thread);
-                                                                                    sbhl_link_vars.$sbhl_link_direction$.rebind(_prev_bind_1_85, thread);
-                                                                                    sbhl_search_vars.$sbhl_search_direction$.rebind(_prev_bind_0_84, thread);
-                                                                                }
-                                                                            }
-                                                                        } else {
-                                                                            sbhl_paranoia.sbhl_warn(TWO_INTEGER, $str_alt167$Node__a_does_not_pass_sbhl_type_t, node_var, sbhl_module_utilities.get_sbhl_type_test(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                        }
-                                                                    } finally {
-                                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
-                                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3, thread);
-                                                                        sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2, thread);
-                                                                        sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1_83, thread);
-                                                                        sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0_82, thread);
-                                                                    }
-                                                                }
-                                                            } finally {
-                                                                sbhl_search_vars.$relevant_sbhl_tv_function$.rebind(_prev_bind_1_81, thread);
-                                                                sbhl_search_vars.$sbhl_tv$.rebind(_prev_bind_0_80, thread);
-                                                            }
-                                                        }
-                                                        sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_space$.getDynamicValue(thread));
-                                                    }
-                                                } finally {
-                                                    sbhl_marking_vars.$sbhl_space$.rebind(_prev_bind_0_79, thread);
-                                                }
-                                            }
-                                            sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
-                                        }
-                                    } finally {
-                                        sbhl_marking_vars.$sbhl_gather_space$.rebind(_prev_bind_1_77, thread);
-                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_76, thread);
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return count;
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @param SPEECH-PART
-     * 		speech-part? or :ANY.
-     * @param POSITION
-     * 		keywordp; :ANY, :INITIAL, :MEDIAL, :FINAL.
-     * @return integer ; number of times WORD-UNIT occurs as a head of a multi-word assertion (e.g., multiWordString) with SPEECH-PART and POSITION.
-     */
-    @LispMethod(comment = "@param SPEECH-PART\r\n\t\tspeech-part? or :ANY.\r\n@param POSITION\r\n\t\tkeywordp; :ANY, :INITIAL, :MEDIAL, :FINAL.\r\n@return integer ; number of times WORD-UNIT occurs as a head of a multi-word assertion (e.g., multiWordString) with SPEECH-PART and POSITION.")
     public static SubLObject headword_usage(final SubLObject word_unit, SubLObject speech_part, SubLObject position) {
         if (speech_part == UNPROVIDED) {
             speech_part = $ANY;
@@ -9728,106 +3875,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return count;
     }
 
-    /**
-     *
-     *
-     * @param SPEECH-PART
-     * 		speech-part? or :ANY.
-     * @param PRED;
-     * 		a lexical predicate.
-     * @return INTEGERP; Number of times (mt set outside) WORD-UNIT occurs with SPEECH-PART
-    in the appropriate argument places in the predicate extent of PRED.
-     */
-    @LispMethod(comment = "@param SPEECH-PART\r\n\t\tspeech-part? or :ANY.\r\n@param PRED;\r\n\t\ta lexical predicate.\r\n@return INTEGERP; Number of times (mt set outside) WORD-UNIT occurs with SPEECH-PART\r\nin the appropriate argument places in the predicate extent of PRED.")
-    public static final SubLObject headword_usage_for_pred_alt(SubLObject word_unit, SubLObject speech_part, SubLObject pred) {
-        {
-            SubLObject wu_arg = lexicon_utilities.wu_arg_of_pred_cached(pred);
-            SubLObject pos_arg = lexicon_utilities.pos_arg_of_pred_cached(pred);
-            if (!wu_arg.isInteger()) {
-                return ZERO_INTEGER;
-            } else {
-                if (speech_part == $ANY) {
-                    return kb_indexing.num_gaf_arg_index(word_unit, wu_arg, pred, UNPROVIDED);
-                } else {
-                    if (!pos_arg.isInteger()) {
-                        return ZERO_INTEGER;
-                    } else {
-                        if (NIL != lexicon_accessors.speech_partP(speech_part, UNPROVIDED)) {
-                            {
-                                SubLObject count = ZERO_INTEGER;
-                                SubLObject pred_var = pred;
-                                if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(word_unit, wu_arg, pred_var)) {
-                                    {
-                                        SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(word_unit, wu_arg, pred_var);
-                                        SubLObject done_var = NIL;
-                                        SubLObject token_var = NIL;
-                                        while (NIL == done_var) {
-                                            {
-                                                SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                if (NIL != valid) {
-                                                    {
-                                                        SubLObject final_index_iterator = NIL;
-                                                        try {
-                                                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
-                                                            {
-                                                                SubLObject done_var_110 = NIL;
-                                                                SubLObject token_var_111 = NIL;
-                                                                while (NIL == done_var_110) {
-                                                                    {
-                                                                        SubLObject as = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_111);
-                                                                        SubLObject valid_112 = makeBoolean(token_var_111 != as);
-                                                                        if (NIL != valid_112) {
-                                                                            if (NIL != lexicon_accessors.genl_posP(assertions_high.gaf_arg(as, pos_arg), speech_part, UNPROVIDED)) {
-                                                                                count = add(count, ONE_INTEGER);
-                                                                            }
-                                                                        }
-                                                                        done_var_110 = makeBoolean(NIL == valid_112);
-                                                                    }
-                                                                } 
-                                                            }
-                                                        } finally {
-                                                            {
-                                                                SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
-                                                                try {
-                                                                    bind($is_thread_performing_cleanupP$, T);
-                                                                    if (NIL != final_index_iterator) {
-                                                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                    }
-                                                                } finally {
-                                                                    rebind($is_thread_performing_cleanupP$, _prev_bind_0);
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                done_var = makeBoolean(NIL == valid);
-                                            }
-                                        } 
-                                    }
-                                }
-                                return count;
-                            }
-                        } else {
-                            return ZERO_INTEGER;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @param SPEECH-PART
-     * 		speech-part? or :ANY.
-     * @param PRED;
-     * 		a lexical predicate.
-     * @return INTEGERP; Number of times (mt set outside) WORD-UNIT occurs with SPEECH-PART
-    in the appropriate argument places in the predicate extent of PRED.
-     */
-    @LispMethod(comment = "@param SPEECH-PART\r\n\t\tspeech-part? or :ANY.\r\n@param PRED;\r\n\t\ta lexical predicate.\r\n@return INTEGERP; Number of times (mt set outside) WORD-UNIT occurs with SPEECH-PART\r\nin the appropriate argument places in the predicate extent of PRED.")
     public static SubLObject headword_usage_for_pred(final SubLObject word_unit, final SubLObject speech_part, final SubLObject pred) {
         final SubLObject wu_arg = lexicon_utilities.wu_arg_of_pred_cached(pred);
         final SubLObject pos_arg = lexicon_utilities.pos_arg_of_pred_cached(pred);
@@ -9885,74 +3932,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return ZERO_INTEGER;
     }
 
-    /**
-     *
-     *
-     * @return integer ; 0-based position of the word in the PHRASE-WORDS list that has the highest @xref headword-usage (preferring later ones in case of ties), defaulting to the last position
-     * @unknown When IGNORE-CAPITALIZED-WORDS is set, only lowercase words are considered during the check
-     * @unknown Include a way to specify how ties are handled
-     */
-    @LispMethod(comment = "@return integer ; 0-based position of the word in the PHRASE-WORDS list that has the highest @xref headword-usage (preferring later ones in case of ties), defaulting to the last position\r\n@unknown When IGNORE-CAPITALIZED-WORDS is set, only lowercase words are considered during the check\r\n@unknown Include a way to specify how ties are handled")
-    public static final SubLObject most_frequent_headword_alt(SubLObject phrase_words, SubLObject ignore_capitalized_words) {
-        if (ignore_capitalized_words == UNPROVIDED) {
-            ignore_capitalized_words = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject last_position = number_utilities.f_1_(length(phrase_words));
-                SubLObject position = last_position;
-                SubLObject max_usage = ZERO_INTEGER;
-                SubLObject list_var = NIL;
-                SubLObject word = NIL;
-                SubLObject i = NIL;
-                for (list_var = phrase_words, word = list_var.first(), i = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , word = list_var.first() , i = add(ONE_INTEGER, i)) {
-                    {
-                        SubLObject usage = ZERO_INTEGER;
-                        SubLObject word_position = (i.isZero()) ? ((SubLObject) ($INITIAL)) : i.eql(last_position) ? ((SubLObject) ($FINAL)) : $MEDIAL;
-                        if (!((NIL != lexicon_accessors.closed_lexical_class_stringP(word, UNPROVIDED)) || ((NIL != ignore_capitalized_words) && (NIL != com.cyc.cycjava.cycl.lexification_utilities.initial_capitalizedP(word))))) {
-                            {
-                                SubLObject cdolist_list_var = lexicon_cache.words_of_string(word, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject word_unit = NIL;
-                                for (word_unit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , word_unit = cdolist_list_var.first()) {
-                                    usage = add(usage, ONE_INTEGER);
-                                    {
-                                        SubLObject cdolist_list_var_113 = lexicon_accessors.pos_of_stringXword(word, word_unit, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                        SubLObject pos = NIL;
-                                        for (pos = cdolist_list_var_113.first(); NIL != cdolist_list_var_113; cdolist_list_var_113 = cdolist_list_var_113.rest() , pos = cdolist_list_var_113.first()) {
-                                            usage = add(usage, com.cyc.cycjava.cycl.lexification_utilities.headword_usage(word_unit, pos, word_position));
-                                        }
-                                    }
-                                }
-                            }
-                            if ($lex_trace_level$.getDynamicValue(thread).numGE(max($lex_trace_level$.getDynamicValue(thread), $lex_verbose$.getGlobalValue()))) {
-                                format(StreamsLow.$trace_output$.getDynamicValue(thread), $str_alt175$word__a_usage___a__, i, usage);
-                                force_output(StreamsLow.$trace_output$.getDynamicValue(thread));
-                            }
-                            if (usage.numGE(max_usage)) {
-                                if ($lex_trace_level$.getDynamicValue(thread).numGE(max($lex_trace_level$.getDynamicValue(thread), $lex_verbose$.getGlobalValue()))) {
-                                    format(StreamsLow.$trace_output$.getDynamicValue(thread), $str_alt176$Setting_new_guessed_headword_to__, word);
-                                    force_output(StreamsLow.$trace_output$.getDynamicValue(thread));
-                                }
-                                position = i;
-                                max_usage = usage;
-                            }
-                        }
-                    }
-                }
-                return position;
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return integer ; 0-based position of the word in the PHRASE-WORDS list that has the highest @xref headword-usage (preferring later ones in case of ties), defaulting to the last position
-     * @unknown When IGNORE-CAPITALIZED-WORDS is set, only lowercase words are considered during the check
-     * @unknown Include a way to specify how ties are handled
-     */
-    @LispMethod(comment = "@return integer ; 0-based position of the word in the PHRASE-WORDS list that has the highest @xref headword-usage (preferring later ones in case of ties), defaulting to the last position\r\n@unknown When IGNORE-CAPITALIZED-WORDS is set, only lowercase words are considered during the check\r\n@unknown Include a way to specify how ties are handled")
     public static SubLObject most_frequent_headword(final SubLObject phrase_words, SubLObject ignore_capitalized_words) {
         if (ignore_capitalized_words == UNPROVIDED) {
             ignore_capitalized_words = NIL;
@@ -10003,47 +3982,12 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return position;
     }
 
-    /**
-     * Determines whether the word starts with a capital letter
-     */
-    @LispMethod(comment = "Determines whether the word starts with a capital letter")
-    public static final SubLObject initial_capitalizedP_alt(SubLObject word) {
-        SubLTrampolineFile.checkType(word, STRINGP);
-        {
-            SubLObject first_letter = string_utilities.first_char(word);
-            return upper_case_p(first_letter);
-        }
-    }
-
-    /**
-     * Determines whether the word starts with a capital letter
-     */
-    @LispMethod(comment = "Determines whether the word starts with a capital letter")
     public static SubLObject initial_capitalizedP(final SubLObject word) {
-        assert NIL != stringp(word) : "! stringp(word) " + ("Types.stringp(word) " + "CommonSymbols.NIL != Types.stringp(word) ") + word;
+        assert NIL != stringp(word) : "Types.stringp(word) " + "CommonSymbols.NIL != Types.stringp(word) " + word;
         final SubLObject first_letter = string_utilities.first_char(word);
         return upper_case_p(first_letter);
-    }/**
-     * Determines whether the word starts with a capital letter
-     */
-
-
-    /**
-     *
-     *
-     * @return integer ; 0-based position of the most-like headword in the PHRASE-WORDS
-     */
-    @LispMethod(comment = "@return integer ; 0-based position of the most-like headword in the PHRASE-WORDS")
-    public static final SubLObject most_likely_headword_alt(SubLObject phrase_words) {
-        return com.cyc.cycjava.cycl.lexification_utilities.most_frequent_headword(phrase_words, T);
     }
 
-    /**
-     *
-     *
-     * @return integer ; 0-based position of the most-like headword in the PHRASE-WORDS
-     */
-    @LispMethod(comment = "@return integer ; 0-based position of the most-like headword in the PHRASE-WORDS")
     public static SubLObject most_likely_headword(final SubLObject phrase_words) {
         return most_frequent_headword(phrase_words, T);
     }
@@ -10052,39 +3996,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         final SubLObject all_other_phrases = remove(lex_phrase, lexified_phrases_for_term(cyc_term, UNPROVIDED), symbol_function(EQUALP), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         final SubLObject other_phrases = list_utilities.remove_if_not(symbol_function(STRINGP), all_other_phrases, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         return Sort.sort(other_phrases, $sym191$CYCL_STRING__, UNPROVIDED);
-    }
-
-    public static final SubLObject possibly_lexify_terrorist_attack_alt(SubLObject attack, SubLObject problem_store) {
-        if (problem_store == UNPROVIDED) {
-            problem_store = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject skipP = makeBoolean(NIL == $terrorist_attack_lexification_worksP$.getGlobalValue());
-                if (NIL == skipP) {
-                    {
-                        SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate($$EnglishMt);
-                        {
-                            SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
-                            SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                            SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
-                            try {
-                                mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
-                                mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
-                                mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
-                                skipP = kb_mapping_utilities.some_pred_value(attack, $$definiteDescriptions, ONE_INTEGER, UNPROVIDED);
-                            } finally {
-                                mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
-                                mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
-                                mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                }
-                return NIL != skipP ? ((SubLObject) ($DONE)) : com.cyc.cycjava.cycl.lexification_utilities.lexify_terrorist_attack(attack, problem_store);
-            }
-        }
     }
 
     public static SubLObject possibly_lexify_terrorist_attack(final SubLObject attack, SubLObject problem_store) {
@@ -10110,61 +4021,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
             }
         }
         return NIL != skipP ? $DONE : lexify_terrorist_attack(attack, problem_store);
-    }
-
-    public static final SubLObject lexify_terrorist_attack_alt(SubLObject attack, SubLObject problem_store) {
-        if (problem_store == UNPROVIDED) {
-            problem_store = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject strings = NIL;
-                SubLObject time = ZERO_INTEGER;
-                SubLObject lexifications = NIL;
-                SubLObject time_var = get_internal_real_time();
-                {
-                    SubLObject _prev_bind_0 = pph_vars.$pph_use_indexical_datesP$.currentBinding(thread);
-                    try {
-                        pph_vars.$pph_use_indexical_datesP$.bind(NIL, thread);
-                        lexifications = com.cyc.cycjava.cycl.lexification_utilities.terrorist_attack_lexifications(attack, problem_store);
-                    } finally {
-                        pph_vars.$pph_use_indexical_datesP$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                {
-                    SubLObject cdolist_list_var = lexifications;
-                    SubLObject lex_info = NIL;
-                    for (lex_info = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , lex_info = cdolist_list_var.first()) {
-                        {
-                            SubLObject datum = lex_info;
-                            SubLObject current = datum;
-                            SubLObject string = NIL;
-                            SubLObject assertion_el_set = NIL;
-                            destructuring_bind_must_consp(current, datum, $list_alt186);
-                            string = current.first();
-                            current = current.rest();
-                            destructuring_bind_must_consp(current, datum, $list_alt186);
-                            assertion_el_set = current.first();
-                            current = current.rest();
-                            if (NIL == current) {
-                                {
-                                    SubLObject lex_sentence = NIL;
-                                    lex_sentence = list($$definiteDescriptions, attack, string);
-                                    if (NIL != ke.ke_assert_now(lex_sentence, $$TerrorismLexicalMt, $DEFAULT, $FORWARD)) {
-                                        strings = cons(string, strings);
-                                    }
-                                }
-                            } else {
-                                cdestructuring_bind_error(datum, $list_alt186);
-                            }
-                        }
-                    }
-                }
-                time = divide(subtract(get_internal_real_time(), time_var), time_high.$internal_time_units_per_second$.getGlobalValue());
-                return values(strings, time);
-            }
-        }
     }
 
     public static SubLObject lexify_terrorist_attack(final SubLObject attack, SubLObject problem_store) {
@@ -10213,39 +4069,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return values(strings, time);
     }
 
-    /**
-     *
-     *
-     * @return LISTP of lexifications of ATTACK.
-     */
-    @LispMethod(comment = "@return LISTP of lexifications of ATTACK.")
-    public static final SubLObject terrorist_attack_lexifications_alt(SubLObject attack, SubLObject problem_store) {
-        if (problem_store == UNPROVIDED) {
-            problem_store = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject results = NIL;
-                thread.resetMultipleValues();
-                {
-                    SubLObject sentence = com.cyc.cycjava.cycl.lexification_utilities.terrorist_attack_lexification_query_args(attack, problem_store);
-                    SubLObject mt = thread.secondMultipleValue();
-                    SubLObject query_properties = thread.thirdMultipleValue();
-                    thread.resetMultipleValues();
-                    results = ask_utilities.query_template($list_alt189, sentence, mt, query_properties);
-                }
-                return results;
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return LISTP of lexifications of ATTACK.
-     */
-    @LispMethod(comment = "@return LISTP of lexifications of ATTACK.")
     public static SubLObject terrorist_attack_lexifications(final SubLObject attack, SubLObject problem_store) {
         if (problem_store == UNPROVIDED) {
             problem_store = NIL;
@@ -10259,31 +4082,6 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         thread.resetMultipleValues();
         results = ask_utilities.query_template($list198, sentence, mt, query_properties);
         return results;
-    }
-
-    public static final SubLObject terrorist_attack_lexification_query_args_alt(SubLObject attack, SubLObject problem_store) {
-        if (problem_store == UNPROVIDED) {
-            problem_store = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject sentence = kb_query.kbq_query_arguments(com.cyc.cycjava.cycl.lexification_utilities.terrorist_attack_lexification_kbq());
-                SubLObject mt = thread.secondMultipleValue();
-                SubLObject query_properties = thread.thirdMultipleValue();
-                thread.resetMultipleValues();
-                {
-                    SubLObject cdolist_list_var = $list_alt190;
-                    SubLObject arg_pos = NIL;
-                    for (arg_pos = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , arg_pos = cdolist_list_var.first()) {
-                        sentence = replace_formula_arg_position(arg_pos, attack, sentence);
-                    }
-                }
-                putf(query_properties, $PROBLEM_STORE, problem_store);
-                return values(sentence, mt, query_properties);
-            }
-        }
     }
 
     public static SubLObject terrorist_attack_lexification_query_args(final SubLObject attack, SubLObject problem_store) {
@@ -10308,510 +4106,145 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
         return values(sentence, mt, query_properties);
     }
 
-    public static final SubLObject terrorist_attack_lexification_kbq_alt() {
-        return narts_high.find_nart($list_alt192);
-    }
-
     public static SubLObject terrorist_attack_lexification_kbq() {
         return narts_high.find_nart($list201);
     }
 
-    public static final SubLObject declare_lexification_utilities_file_alt() {
-        declareFunction("lexification_reviewer", "LEXIFICATION-REVIEWER", 0, 0, false);
-        declareFunction("set_lexification_reviewer", "SET-LEXIFICATION-REVIEWER", 1, 0, false);
-        declareMacro("lex_trace", "LEX-TRACE");
-        declareMacro("lex_warn", "LEX-WARN");
-        declareMacro("lex_debug", "LEX-DEBUG");
-        declareMacro("lex_debug_out", "LEX-DEBUG-OUT");
-        declareFunction("lex_debug_on", "LEX-DEBUG-ON", 0, 1, false);
-        declareMacro("lex_assertion", "LEX-ASSERTION");
-        declareMacro("do_unlexified_terms", "DO-UNLEXIFIED-TERMS");
-        declareFunction("unlexified_terms_for_cyclist", "UNLEXIFIED-TERMS-FOR-CYCLIST", 1, 2, false);
-        declareFunction("lexification_not_neededP", "LEXIFICATION-NOT-NEEDED?", 1, 0, false);
-        declareFunction("unlexifiedP", "UNLEXIFIED?", 1, 1, false);
-        declareFunction("lexifiedP", "LEXIFIED?", 1, 1, false);
-        declareFunction("generalization_is_lexifiedP", "GENERALIZATION-IS-LEXIFIED?", 1, 0, false);
-        declareFunction("get_unlexified_terms", "GET-UNLEXIFIED-TERMS", 0, 2, false);
-        declareFunction("get_termstring_assertions_for_cyclist", "GET-TERMSTRING-ASSERTIONS-FOR-CYCLIST", 0, 1, false);
-        declareFunction("lexical_mt_for_cyclist", "LEXICAL-MT-FOR-CYCLIST", 0, 1, false);
-        declareFunction("acronym_char_p", "ACRONYM-CHAR-P", 1, 0, false);
-        declareFunction("regroup_acronyms", "REGROUP-ACRONYMS", 1, 0, false);
-        declareFunction("phrase_from_term", "PHRASE-FROM-TERM", 1, 1, false);
-        declareFunction("cyc_individual_constantP", "CYC-INDIVIDUAL-CONSTANT?", 1, 0, false);
-        declareFunction("phrase_for_mt", "PHRASE-FOR-MT", 1, 0, false);
-        declareFunction("lexification_for_mt", "LEXIFICATION-FOR-MT", 1, 0, false);
-        declareFunction("lexify_mts", "LEXIFY-MTS", 1, 0, false);
-        declareFunction("skip_mt_lexificationP", "SKIP-MT-LEXIFICATION?", 1, 0, false);
-        declareFunction("all_specifiedP", "ALL-SPECIFIED?", 1, 0, false);
-        declareFunction("universal_date_to_universal_time", "UNIVERSAL-DATE-TO-UNIVERSAL-TIME", 1, 0, false);
-        declareFunction("universal_time_to_universal_date", "UNIVERSAL-TIME-TO-UNIVERSAL-DATE", 1, 0, false);
-        declareFunction("n_universal_days_ago", "N-UNIVERSAL-DAYS-AGO", 1, 0, false);
-        declareFunction("extract_integer", "EXTRACT-INTEGER", 1, 1, false);
-        declareFunction("sort_by_pred_usage", "SORT-BY-PRED-USAGE", 1, 0, false);
-        declareFunction("most_specific_arg1_constraint", "MOST-SPECIFIC-ARG1-CONSTRAINT", 1, 0, false);
-        declareFunction("most_specific_argn_constraint", "MOST-SPECIFIC-ARGN-CONSTRAINT", 2, 0, false);
-        declareFunction("get_relation_argument_type", "GET-RELATION-ARGUMENT-TYPE", 2, 0, false);
-        declareFunction("clear_keyword_for_pos", "CLEAR-KEYWORD-FOR-POS", 0, 0, false);
-        declareFunction("remove_keyword_for_pos", "REMOVE-KEYWORD-FOR-POS", 1, 1, false);
-        declareFunction("keyword_for_pos_internal", "KEYWORD-FOR-POS-INTERNAL", 2, 0, false);
-        declareFunction("keyword_for_pos", "KEYWORD-FOR-POS", 1, 1, false);
-        declareFunction("clear_precise_keyword_for_pos", "CLEAR-PRECISE-KEYWORD-FOR-POS", 0, 0, false);
-        declareFunction("remove_precise_keyword_for_pos", "REMOVE-PRECISE-KEYWORD-FOR-POS", 1, 1, false);
-        declareFunction("precise_keyword_for_pos_internal", "PRECISE-KEYWORD-FOR-POS-INTERNAL", 2, 0, false);
-        declareFunction("precise_keyword_for_pos", "PRECISE-KEYWORD-FOR-POS", 1, 1, false);
-        declareFunction("clear_keyword_for_pred", "CLEAR-KEYWORD-FOR-PRED", 0, 0, false);
-        declareFunction("remove_keyword_for_pred", "REMOVE-KEYWORD-FOR-PRED", 1, 1, false);
-        declareFunction("keyword_for_pred_internal", "KEYWORD-FOR-PRED-INTERNAL", 2, 0, false);
-        declareFunction("keyword_for_pred", "KEYWORD-FOR-PRED", 1, 1, false);
-        declareFunction("clear_precise_keyword_for_pred", "CLEAR-PRECISE-KEYWORD-FOR-PRED", 0, 0, false);
-        declareFunction("remove_precise_keyword_for_pred", "REMOVE-PRECISE-KEYWORD-FOR-PRED", 1, 1, false);
-        declareFunction("precise_keyword_for_pred_internal", "PRECISE-KEYWORD-FOR-PRED-INTERNAL", 2, 0, false);
-        declareFunction("precise_keyword_for_pred", "PRECISE-KEYWORD-FOR-PRED", 1, 1, false);
-        declareFunction("invalid_formulaP", "INVALID-FORMULA?", 2, 0, false);
-        declareFunction("invalid_lexificationP", "INVALID-LEXIFICATION?", 2, 0, false);
-        declareFunction("lex_pos_for_keyword", "LEX-POS-FOR-KEYWORD", 1, 0, false);
-        declareFunction("parts_of_speech", "PARTS-OF-SPEECH", 1, 0, false);
-        declareFunction("clear_pluralize_word", "CLEAR-PLURALIZE-WORD", 0, 0, false);
-        declareFunction("remove_pluralize_word", "REMOVE-PLURALIZE-WORD", 1, 0, false);
-        declareFunction("pluralize_word_internal", "PLURALIZE-WORD-INTERNAL", 1, 0, false);
-        declareFunction("pluralize_word", "PLURALIZE-WORD", 1, 0, false);
-        declareFunction("clear_singularize_word", "CLEAR-SINGULARIZE-WORD", 0, 0, false);
-        declareFunction("remove_singularize_word", "REMOVE-SINGULARIZE-WORD", 1, 0, false);
-        declareFunction("singularize_word_internal", "SINGULARIZE-WORD-INTERNAL", 1, 0, false);
-        declareFunction("singularize_word", "SINGULARIZE-WORD", 1, 0, false);
-        declareFunction("clear_basic_preds_for_part_of_speech", "CLEAR-BASIC-PREDS-FOR-PART-OF-SPEECH", 0, 0, false);
-        declareFunction("remove_basic_preds_for_part_of_speech", "REMOVE-BASIC-PREDS-FOR-PART-OF-SPEECH", 1, 0, false);
-        declareFunction("basic_preds_for_part_of_speech_internal", "BASIC-PREDS-FOR-PART-OF-SPEECH-INTERNAL", 1, 0, false);
-        declareFunction("basic_preds_for_part_of_speech", "BASIC-PREDS-FOR-PART-OF-SPEECH", 1, 0, false);
-        declareFunction("clear_find_root_wordform", "CLEAR-FIND-ROOT-WORDFORM", 0, 0, false);
-        declareFunction("remove_find_root_wordform", "REMOVE-FIND-ROOT-WORDFORM", 1, 0, false);
-        declareFunction("find_root_wordform_internal", "FIND-ROOT-WORDFORM-INTERNAL", 1, 0, false);
-        declareFunction("find_root_wordform", "FIND-ROOT-WORDFORM", 1, 0, false);
-        declareFunction("lexified_phrases_for_term", "LEXIFIED-PHRASES-FOR-TERM", 1, 1, false);
-        declareFunction("nonplural_lexified_phrases_for_term", "NONPLURAL-LEXIFIED-PHRASES-FOR-TERM", 1, 0, false);
-        declareFunction("join_words", "JOIN-WORDS", 1, 0, false);
-        declareFunction("has_vowel", "HAS-VOWEL", 1, 0, false);
-        declareFunction("guess_stem", "GUESS-STEM", 1, 1, false);
-        declareFunction("clear_is_abbreviation_predicate", "CLEAR-IS-ABBREVIATION-PREDICATE", 0, 0, false);
-        declareFunction("remove_is_abbreviation_predicate", "REMOVE-IS-ABBREVIATION-PREDICATE", 1, 0, false);
-        declareFunction("is_abbreviation_predicate_internal", "IS-ABBREVIATION-PREDICATE-INTERNAL", 1, 0, false);
-        declareFunction("is_abbreviation_predicate", "IS-ABBREVIATION-PREDICATE", 1, 0, false);
-        declareFunction("get_abbreviation_predicates", "GET-ABBREVIATION-PREDICATES", 0, 0, false);
-        declareFunction("clear_examples_for_pred", "CLEAR-EXAMPLES-FOR-PRED", 0, 0, false);
-        declareFunction("remove_examples_for_pred", "REMOVE-EXAMPLES-FOR-PRED", 1, 1, false);
-        declareFunction("examples_for_pred_internal", "EXAMPLES-FOR-PRED-INTERNAL", 2, 0, false);
-        declareFunction("examples_for_pred", "EXAMPLES-FOR-PRED", 1, 1, false);
-        declareFunction("positive_examples_for_pred", "POSITIVE-EXAMPLES-FOR-PRED", 1, 0, false);
-        declareFunction("other_positive_examples_for_pred", "OTHER-POSITIVE-EXAMPLES-FOR-PRED", 1, 0, false);
-        declareFunction("real_examples_for_pred", "REAL-EXAMPLES-FOR-PRED", 1, 0, false);
-        declareFunction("try_lex_assert", "TRY-LEX-ASSERT", 2, 2, false);
-        declareFunction("try_lex_assert_now", "TRY-LEX-ASSERT-NOW", 2, 2, false);
-        declareFunction("lex_string_tokenize", "LEX-STRING-TOKENIZE", 1, 1, false);
-        declareFunction("lex_remove_final_punctuation", "LEX-REMOVE-FINAL-PUNCTUATION", 1, 0, false);
-        declareFunction("lex_find_word_in_string", "LEX-FIND-WORD-IN-STRING", 2, 0, false);
-        declareFunction("lex_describe_term", "LEX-DESCRIBE-TERM", 1, 1, false);
-        declareFunction("lex_fort_for_string", "LEX-FORT-FOR-STRING", 1, 0, false);
-        declareFunction("lex_arity_in_any_mt", "LEX-ARITY-IN-ANY-MT", 1, 0, false);
-        declareFunction("loose_lexification_phrases_for_term", "LOOSE-LEXIFICATION-PHRASES-FOR-TERM", 1, 0, false);
-        declareFunction("preferred_loose_lexification_phrase_for_term", "PREFERRED-LOOSE-LEXIFICATION-PHRASE-FOR-TERM", 1, 0, false);
-        declareFunction("proper_lexification_phrases_for_term", "PROPER-LEXIFICATION-PHRASES-FOR-TERM", 1, 0, false);
-        declareFunction("phrases_from_semantic_assertion", "PHRASES-FROM-SEMANTIC-ASSERTION", 1, 1, false);
-        declareFunction("is_nameable_entityP", "IS-NAMEABLE-ENTITY?", 1, 0, false);
-        declareFunction("is_nameable_individualP", "IS-NAMEABLE-INDIVIDUAL?", 1, 0, false);
-        declareFunction("is_nameable_collectionP", "IS-NAMEABLE-COLLECTION?", 1, 0, false);
-        declareFunction("lex_empty_stringP", "LEX-EMPTY-STRING?", 1, 0, false);
-        declareFunction("clear_lexification_caches", "CLEAR-LEXIFICATION-CACHES", 0, 0, false);
-        declareFunction("string_for_fort", "STRING-FOR-FORT", 1, 0, false);
-        declareFunction("string_for_field", "STRING-FOR-FIELD", 1, 0, false);
-        declareFunction("is_relationalP", "IS-RELATIONAL?", 1, 0, false);
-        declareFunction("is_functionalP", "IS-FUNCTIONAL?", 1, 0, false);
-        declareFunction("get_term_comments", "GET-TERM-COMMENTS", 1, 0, false);
-        declareFunction("likely_has_part_of_speechP", "LIKELY-HAS-PART-OF-SPEECH?", 2, 1, false);
-        declareFunction("likely_adverbP", "LIKELY-ADVERB?", 1, 1, false);
-        declareFunction("likely_adjectiveP", "LIKELY-ADJECTIVE?", 1, 1, false);
-        declareFunction("likely_nounP", "LIKELY-NOUN?", 1, 1, false);
-        declareFunction("likely_verbP", "LIKELY-VERB?", 1, 1, false);
-        declareFunction("word_unit_part_of_speech_usage", "WORD-UNIT-PART-OF-SPEECH-USAGE", 2, 0, false);
-        declareFunction("wordform_part_of_speech_usage", "WORDFORM-PART-OF-SPEECH-USAGE", 2, 0, false);
-        declareFunction("headword_usage", "HEADWORD-USAGE", 1, 2, false);
-        declareFunction("headword_usage_for_pred", "HEADWORD-USAGE-FOR-PRED", 3, 0, false);
-        declareFunction("most_frequent_headword", "MOST-FREQUENT-HEADWORD", 1, 1, false);
-        declareFunction("initial_capitalizedP", "INITIAL-CAPITALIZED?", 1, 0, false);
-        declareFunction("most_likely_headword", "MOST-LIKELY-HEADWORD", 1, 0, false);
-        declareFunction("lexify_unlexified_terrorist_attacks", "LEXIFY-UNLEXIFIED-TERRORIST-ATTACKS", 0, 0, false);
-        declareFunction("possibly_lexify_terrorist_attack", "POSSIBLY-LEXIFY-TERRORIST-ATTACK", 1, 1, false);
-        declareFunction("lexify_terrorist_attack", "LEXIFY-TERRORIST-ATTACK", 1, 1, false);
-        declareFunction("terrorist_attack_lexifications", "TERRORIST-ATTACK-LEXIFICATIONS", 1, 1, false);
-        declareFunction("terrorist_attack_lexification_query_args", "TERRORIST-ATTACK-LEXIFICATION-QUERY-ARGS", 1, 1, false);
-        declareFunction("terrorist_attack_lexification_kbq", "TERRORIST-ATTACK-LEXIFICATION-KBQ", 0, 0, false);
-        declareFunction("lexify_attacks", "LEXIFY-ATTACKS", 1, 1, false);
-        declareFunction("count_attack_lexifications", "COUNT-ATTACK-LEXIFICATIONS", 0, 0, false);
-        declareFunction("try_to_lexify_attack", "TRY-TO-LEXIFY-ATTACK", 2, 2, false);
-        declareFunction("definite_descriptions_for_attack_from_presuppositions", "DEFINITE-DESCRIPTIONS-FOR-ATTACK-FROM-PRESUPPOSITIONS", 3, 1, false);
-        declareFunction("gather_defining_sentence_set_for_attack", "GATHER-DEFINING-SENTENCE-SET-FOR-ATTACK", 2, 1, false);
-        declareFunction("date_sentence_for_event", "DATE-SENTENCE-FOR-EVENT", 2, 1, false);
-        declareFunction("location_sentence_for_event", "LOCATION-SENTENCE-FOR-EVENT", 2, 1, false);
-        declareFunction("attack_type_sentence_for_attack", "ATTACK-TYPE-SENTENCE-FOR-ATTACK", 2, 1, false);
-        return NIL;
-    }
-
     public static SubLObject declare_lexification_utilities_file() {
-        if (SubLFiles.USE_V1) {
-            declareFunction("lexification_reviewer", "LEXIFICATION-REVIEWER", 0, 0, false);
-            declareFunction("set_lexification_reviewer", "SET-LEXIFICATION-REVIEWER", 1, 0, false);
-            declareMacro("lex_trace", "LEX-TRACE");
-            declareMacro("lex_warn", "LEX-WARN");
-            declareMacro("lex_debug", "LEX-DEBUG");
-            declareMacro("lex_if_level", "LEX-IF-LEVEL");
-            declareMacro("lex_debug_out", "LEX-DEBUG-OUT");
-            declareFunction("lex_debug_on", "LEX-DEBUG-ON", 0, 1, false);
-            declareMacro("lex_assertion", "LEX-ASSERTION");
-            declareMacro("do_unlexified_terms", "DO-UNLEXIFIED-TERMS");
-            declareFunction("unlexified_terms_for_cyclist", "UNLEXIFIED-TERMS-FOR-CYCLIST", 1, 2, false);
-            declareFunction("lexification_not_neededP", "LEXIFICATION-NOT-NEEDED?", 1, 0, false);
-            declareFunction("unlexifiedP", "UNLEXIFIED?", 1, 1, false);
-            declareFunction("lexifiedP", "LEXIFIED?", 1, 1, false);
-            declareFunction("generalization_is_lexifiedP", "GENERALIZATION-IS-LEXIFIED?", 1, 0, false);
-            declareFunction("get_unlexified_terms", "GET-UNLEXIFIED-TERMS", 0, 2, false);
-            declareFunction("get_termstring_assertions_for_cyclist", "GET-TERMSTRING-ASSERTIONS-FOR-CYCLIST", 0, 1, false);
-            declareFunction("lexical_mt_for_cyclist", "LEXICAL-MT-FOR-CYCLIST", 0, 1, false);
-            declareFunction("acronym_char_p", "ACRONYM-CHAR-P", 1, 0, false);
-            declareFunction("regroup_acronyms", "REGROUP-ACRONYMS", 1, 0, false);
-            declareFunction("phrase_from_term", "PHRASE-FROM-TERM", 1, 1, false);
-            declareFunction("cyc_individual_constantP", "CYC-INDIVIDUAL-CONSTANT?", 1, 0, false);
-            declareFunction("phrase_for_mt", "PHRASE-FOR-MT", 1, 0, false);
-            declareFunction("lexification_for_mt", "LEXIFICATION-FOR-MT", 1, 0, false);
-            declareFunction("lexify_mts", "LEXIFY-MTS", 1, 0, false);
-            declareFunction("skip_mt_lexificationP", "SKIP-MT-LEXIFICATION?", 1, 0, false);
-            declareFunction("all_specifiedP", "ALL-SPECIFIED?", 1, 0, false);
-            declareFunction("universal_date_to_universal_time", "UNIVERSAL-DATE-TO-UNIVERSAL-TIME", 1, 0, false);
-            declareFunction("universal_time_to_universal_date", "UNIVERSAL-TIME-TO-UNIVERSAL-DATE", 1, 0, false);
-            declareFunction("n_universal_days_ago", "N-UNIVERSAL-DAYS-AGO", 1, 0, false);
-            declareFunction("extract_integer", "EXTRACT-INTEGER", 1, 1, false);
-            declareFunction("sort_by_pred_usage", "SORT-BY-PRED-USAGE", 1, 0, false);
-            declareFunction("most_specific_arg1_constraint", "MOST-SPECIFIC-ARG1-CONSTRAINT", 1, 0, false);
-            declareFunction("most_specific_argn_constraint", "MOST-SPECIFIC-ARGN-CONSTRAINT", 2, 0, false);
-            declareFunction("get_relation_argument_type", "GET-RELATION-ARGUMENT-TYPE", 2, 0, false);
-            declareFunction("clear_keyword_for_pos", "CLEAR-KEYWORD-FOR-POS", 0, 0, false);
-            declareFunction("remove_keyword_for_pos", "REMOVE-KEYWORD-FOR-POS", 1, 1, false);
-            declareFunction("keyword_for_pos_internal", "KEYWORD-FOR-POS-INTERNAL", 2, 0, false);
-            declareFunction("keyword_for_pos", "KEYWORD-FOR-POS", 1, 1, false);
-            declareFunction("clear_precise_keyword_for_pos", "CLEAR-PRECISE-KEYWORD-FOR-POS", 0, 0, false);
-            declareFunction("remove_precise_keyword_for_pos", "REMOVE-PRECISE-KEYWORD-FOR-POS", 1, 1, false);
-            declareFunction("precise_keyword_for_pos_internal", "PRECISE-KEYWORD-FOR-POS-INTERNAL", 2, 0, false);
-            declareFunction("precise_keyword_for_pos", "PRECISE-KEYWORD-FOR-POS", 1, 1, false);
-            declareFunction("clear_keyword_for_pred", "CLEAR-KEYWORD-FOR-PRED", 0, 0, false);
-            declareFunction("remove_keyword_for_pred", "REMOVE-KEYWORD-FOR-PRED", 1, 1, false);
-            declareFunction("keyword_for_pred_internal", "KEYWORD-FOR-PRED-INTERNAL", 2, 0, false);
-            declareFunction("keyword_for_pred", "KEYWORD-FOR-PRED", 1, 1, false);
-            declareFunction("clear_precise_keyword_for_pred", "CLEAR-PRECISE-KEYWORD-FOR-PRED", 0, 0, false);
-            declareFunction("remove_precise_keyword_for_pred", "REMOVE-PRECISE-KEYWORD-FOR-PRED", 1, 1, false);
-            declareFunction("precise_keyword_for_pred_internal", "PRECISE-KEYWORD-FOR-PRED-INTERNAL", 2, 0, false);
-            declareFunction("precise_keyword_for_pred", "PRECISE-KEYWORD-FOR-PRED", 1, 1, false);
-            declareFunction("invalid_formulaP", "INVALID-FORMULA?", 2, 0, false);
-            declareFunction("invalid_lexificationP", "INVALID-LEXIFICATION?", 2, 0, false);
-            declareFunction("lex_pos_for_keyword", "LEX-POS-FOR-KEYWORD", 1, 0, false);
-            declareFunction("parts_of_speech", "PARTS-OF-SPEECH", 1, 0, false);
-            declareFunction("clear_pluralize_word", "CLEAR-PLURALIZE-WORD", 0, 0, false);
-            declareFunction("remove_pluralize_word", "REMOVE-PLURALIZE-WORD", 1, 1, false);
-            declareFunction("pluralize_word_internal", "PLURALIZE-WORD-INTERNAL", 2, 0, false);
-            declareFunction("pluralize_word", "PLURALIZE-WORD", 1, 1, false);
-            declareFunction("clear_singularize_word", "CLEAR-SINGULARIZE-WORD", 0, 0, false);
-            declareFunction("remove_singularize_word", "REMOVE-SINGULARIZE-WORD", 1, 1, false);
-            declareFunction("singularize_word_internal", "SINGULARIZE-WORD-INTERNAL", 2, 0, false);
-            declareFunction("singularize_word", "SINGULARIZE-WORD", 1, 1, false);
-            declareFunction("clear_basic_preds_for_part_of_speech", "CLEAR-BASIC-PREDS-FOR-PART-OF-SPEECH", 0, 0, false);
-            declareFunction("remove_basic_preds_for_part_of_speech", "REMOVE-BASIC-PREDS-FOR-PART-OF-SPEECH", 1, 0, false);
-            declareFunction("basic_preds_for_part_of_speech_internal", "BASIC-PREDS-FOR-PART-OF-SPEECH-INTERNAL", 1, 0, false);
-            declareFunction("basic_preds_for_part_of_speech", "BASIC-PREDS-FOR-PART-OF-SPEECH", 1, 0, false);
-            declareFunction("clear_find_root_wordform", "CLEAR-FIND-ROOT-WORDFORM", 0, 0, false);
-            declareFunction("remove_find_root_wordform", "REMOVE-FIND-ROOT-WORDFORM", 1, 0, false);
-            declareFunction("find_root_wordform_internal", "FIND-ROOT-WORDFORM-INTERNAL", 1, 0, false);
-            declareFunction("find_root_wordform", "FIND-ROOT-WORDFORM", 1, 0, false);
-            declareFunction("lexified_phrases_for_term", "LEXIFIED-PHRASES-FOR-TERM", 1, 1, false);
-            declareFunction("nonplural_lexified_phrases_for_term", "NONPLURAL-LEXIFIED-PHRASES-FOR-TERM", 1, 0, false);
-            declareFunction("join_words", "JOIN-WORDS", 1, 0, false);
-            declareFunction("has_vowel", "HAS-VOWEL", 1, 0, false);
-            declareFunction("guess_stem", "GUESS-STEM", 1, 1, false);
-            declareFunction("clear_is_abbreviation_predicate", "CLEAR-IS-ABBREVIATION-PREDICATE", 0, 0, false);
-            declareFunction("remove_is_abbreviation_predicate", "REMOVE-IS-ABBREVIATION-PREDICATE", 1, 0, false);
-            declareFunction("is_abbreviation_predicate_internal", "IS-ABBREVIATION-PREDICATE-INTERNAL", 1, 0, false);
-            declareFunction("is_abbreviation_predicate", "IS-ABBREVIATION-PREDICATE", 1, 0, false);
-            declareFunction("get_abbreviation_predicates", "GET-ABBREVIATION-PREDICATES", 0, 0, false);
-            declareFunction("clear_examples_for_pred", "CLEAR-EXAMPLES-FOR-PRED", 0, 0, false);
-            declareFunction("remove_examples_for_pred", "REMOVE-EXAMPLES-FOR-PRED", 1, 1, false);
-            declareFunction("examples_for_pred_internal", "EXAMPLES-FOR-PRED-INTERNAL", 2, 0, false);
-            declareFunction("examples_for_pred", "EXAMPLES-FOR-PRED", 1, 1, false);
-            declareFunction("positive_examples_for_pred", "POSITIVE-EXAMPLES-FOR-PRED", 1, 0, false);
-            declareFunction("other_positive_examples_for_pred", "OTHER-POSITIVE-EXAMPLES-FOR-PRED", 1, 0, false);
-            declareFunction("real_examples_for_pred", "REAL-EXAMPLES-FOR-PRED", 1, 0, false);
-            declareFunction("try_lex_assert", "TRY-LEX-ASSERT", 2, 2, false);
-            declareFunction("try_lex_assert_now", "TRY-LEX-ASSERT-NOW", 2, 2, false);
-            declareFunction("lex_string_tokenize", "LEX-STRING-TOKENIZE", 1, 1, false);
-            declareFunction("lex_remove_final_punctuation", "LEX-REMOVE-FINAL-PUNCTUATION", 1, 0, false);
-            declareFunction("lex_find_word_in_string", "LEX-FIND-WORD-IN-STRING", 2, 0, false);
-            declareFunction("lex_describe_term", "LEX-DESCRIBE-TERM", 1, 1, false);
-            declareFunction("lex_fort_for_string", "LEX-FORT-FOR-STRING", 1, 0, false);
-            declareFunction("lex_arity_in_any_mt", "LEX-ARITY-IN-ANY-MT", 1, 0, false);
-            declareFunction("loose_lexification_phrases_for_term", "LOOSE-LEXIFICATION-PHRASES-FOR-TERM", 1, 0, false);
-            declareFunction("preferred_loose_lexification_phrase_for_term", "PREFERRED-LOOSE-LEXIFICATION-PHRASE-FOR-TERM", 1, 0, false);
-            declareFunction("proper_lexification_phrases_for_term", "PROPER-LEXIFICATION-PHRASES-FOR-TERM", 1, 0, false);
-            declareFunction("phrases_from_semantic_assertion", "PHRASES-FROM-SEMANTIC-ASSERTION", 1, 1, false);
-            declareFunction("phrases_from_lexification_sentence", "PHRASES-FROM-LEXIFICATION-SENTENCE", 1, 1, false);
-            declareFunction("phrase_from_lexification_sentence", "PHRASE-FROM-LEXIFICATION-SENTENCE", 2, 0, false);
-            declareFunction("is_nameable_entityP", "IS-NAMEABLE-ENTITY?", 1, 0, false);
-            declareFunction("is_nameable_individualP", "IS-NAMEABLE-INDIVIDUAL?", 1, 0, false);
-            declareFunction("is_nameable_collectionP", "IS-NAMEABLE-COLLECTION?", 1, 0, false);
-            declareFunction("lex_empty_stringP", "LEX-EMPTY-STRING?", 1, 0, false);
-            declareFunction("clear_lexification_caches", "CLEAR-LEXIFICATION-CACHES", 0, 0, false);
-            declareFunction("string_for_fort", "STRING-FOR-FORT", 1, 0, false);
-            declareFunction("string_for_field", "STRING-FOR-FIELD", 1, 0, false);
-            declareFunction("is_relationalP", "IS-RELATIONAL?", 1, 0, false);
-            declareFunction("is_functionalP", "IS-FUNCTIONAL?", 1, 0, false);
-            declareFunction("get_term_comments", "GET-TERM-COMMENTS", 1, 0, false);
-            declareFunction("likely_has_part_of_speechP", "LIKELY-HAS-PART-OF-SPEECH?", 2, 1, false);
-            declareFunction("likely_adverbP", "LIKELY-ADVERB?", 1, 1, false);
-            declareFunction("likely_adjectiveP", "LIKELY-ADJECTIVE?", 1, 1, false);
-            declareFunction("likely_nounP", "LIKELY-NOUN?", 1, 1, false);
-            declareFunction("likely_verbP", "LIKELY-VERB?", 1, 1, false);
-            declareFunction("word_unit_part_of_speech_usage", "WORD-UNIT-PART-OF-SPEECH-USAGE", 2, 0, false);
-            declareFunction("wordform_part_of_speech_usage", "WORDFORM-PART-OF-SPEECH-USAGE", 2, 0, false);
-            declareFunction("headword_usage", "HEADWORD-USAGE", 1, 2, false);
-            declareFunction("headword_usage_for_pred", "HEADWORD-USAGE-FOR-PRED", 3, 0, false);
-            declareFunction("most_frequent_headword", "MOST-FREQUENT-HEADWORD", 1, 1, false);
-            declareFunction("initial_capitalizedP", "INITIAL-CAPITALIZED?", 1, 0, false);
-            declareFunction("most_likely_headword", "MOST-LIKELY-HEADWORD", 1, 0, false);
-            declareFunction("other_lexified_phrases_for_term", "OTHER-LEXIFIED-PHRASES-FOR-TERM", 2, 0, false);
-            declareFunction("possibly_lexify_terrorist_attack", "POSSIBLY-LEXIFY-TERRORIST-ATTACK", 1, 1, false);
-            declareFunction("lexify_terrorist_attack", "LEXIFY-TERRORIST-ATTACK", 1, 1, false);
-            declareFunction("terrorist_attack_lexifications", "TERRORIST-ATTACK-LEXIFICATIONS", 1, 1, false);
-            declareFunction("terrorist_attack_lexification_query_args", "TERRORIST-ATTACK-LEXIFICATION-QUERY-ARGS", 1, 1, false);
-            declareFunction("terrorist_attack_lexification_kbq", "TERRORIST-ATTACK-LEXIFICATION-KBQ", 0, 0, false);
-        }
-        if (SubLFiles.USE_V2) {
-            declareFunction("remove_pluralize_word", "REMOVE-PLURALIZE-WORD", 1, 0, false);
-            declareFunction("pluralize_word_internal", "PLURALIZE-WORD-INTERNAL", 1, 0, false);
-            declareFunction("pluralize_word", "PLURALIZE-WORD", 1, 0, false);
-            declareFunction("remove_singularize_word", "REMOVE-SINGULARIZE-WORD", 1, 0, false);
-            declareFunction("singularize_word_internal", "SINGULARIZE-WORD-INTERNAL", 1, 0, false);
-            declareFunction("singularize_word", "SINGULARIZE-WORD", 1, 0, false);
-            declareFunction("lexify_unlexified_terrorist_attacks", "LEXIFY-UNLEXIFIED-TERRORIST-ATTACKS", 0, 0, false);
-            declareFunction("lexify_attacks", "LEXIFY-ATTACKS", 1, 1, false);
-            declareFunction("count_attack_lexifications", "COUNT-ATTACK-LEXIFICATIONS", 0, 0, false);
-            declareFunction("try_to_lexify_attack", "TRY-TO-LEXIFY-ATTACK", 2, 2, false);
-            declareFunction("definite_descriptions_for_attack_from_presuppositions", "DEFINITE-DESCRIPTIONS-FOR-ATTACK-FROM-PRESUPPOSITIONS", 3, 1, false);
-            declareFunction("gather_defining_sentence_set_for_attack", "GATHER-DEFINING-SENTENCE-SET-FOR-ATTACK", 2, 1, false);
-            declareFunction("date_sentence_for_event", "DATE-SENTENCE-FOR-EVENT", 2, 1, false);
-            declareFunction("location_sentence_for_event", "LOCATION-SENTENCE-FOR-EVENT", 2, 1, false);
-            declareFunction("attack_type_sentence_for_attack", "ATTACK-TYPE-SENTENCE-FOR-ATTACK", 2, 1, false);
-        }
-        return NIL;
-    }
-
-    public static SubLObject declare_lexification_utilities_file_Previous() {
-        declareFunction("lexification_reviewer", "LEXIFICATION-REVIEWER", 0, 0, false);
-        declareFunction("set_lexification_reviewer", "SET-LEXIFICATION-REVIEWER", 1, 0, false);
-        declareMacro("lex_trace", "LEX-TRACE");
-        declareMacro("lex_warn", "LEX-WARN");
-        declareMacro("lex_debug", "LEX-DEBUG");
-        declareMacro("lex_if_level", "LEX-IF-LEVEL");
-        declareMacro("lex_debug_out", "LEX-DEBUG-OUT");
-        declareFunction("lex_debug_on", "LEX-DEBUG-ON", 0, 1, false);
-        declareMacro("lex_assertion", "LEX-ASSERTION");
-        declareMacro("do_unlexified_terms", "DO-UNLEXIFIED-TERMS");
-        declareFunction("unlexified_terms_for_cyclist", "UNLEXIFIED-TERMS-FOR-CYCLIST", 1, 2, false);
-        declareFunction("lexification_not_neededP", "LEXIFICATION-NOT-NEEDED?", 1, 0, false);
-        declareFunction("unlexifiedP", "UNLEXIFIED?", 1, 1, false);
-        declareFunction("lexifiedP", "LEXIFIED?", 1, 1, false);
-        declareFunction("generalization_is_lexifiedP", "GENERALIZATION-IS-LEXIFIED?", 1, 0, false);
-        declareFunction("get_unlexified_terms", "GET-UNLEXIFIED-TERMS", 0, 2, false);
-        declareFunction("get_termstring_assertions_for_cyclist", "GET-TERMSTRING-ASSERTIONS-FOR-CYCLIST", 0, 1, false);
-        declareFunction("lexical_mt_for_cyclist", "LEXICAL-MT-FOR-CYCLIST", 0, 1, false);
-        declareFunction("acronym_char_p", "ACRONYM-CHAR-P", 1, 0, false);
-        declareFunction("regroup_acronyms", "REGROUP-ACRONYMS", 1, 0, false);
-        declareFunction("phrase_from_term", "PHRASE-FROM-TERM", 1, 1, false);
-        declareFunction("cyc_individual_constantP", "CYC-INDIVIDUAL-CONSTANT?", 1, 0, false);
-        declareFunction("phrase_for_mt", "PHRASE-FOR-MT", 1, 0, false);
-        declareFunction("lexification_for_mt", "LEXIFICATION-FOR-MT", 1, 0, false);
-        declareFunction("lexify_mts", "LEXIFY-MTS", 1, 0, false);
-        declareFunction("skip_mt_lexificationP", "SKIP-MT-LEXIFICATION?", 1, 0, false);
-        declareFunction("all_specifiedP", "ALL-SPECIFIED?", 1, 0, false);
-        declareFunction("universal_date_to_universal_time", "UNIVERSAL-DATE-TO-UNIVERSAL-TIME", 1, 0, false);
-        declareFunction("universal_time_to_universal_date", "UNIVERSAL-TIME-TO-UNIVERSAL-DATE", 1, 0, false);
-        declareFunction("n_universal_days_ago", "N-UNIVERSAL-DAYS-AGO", 1, 0, false);
-        declareFunction("extract_integer", "EXTRACT-INTEGER", 1, 1, false);
-        declareFunction("sort_by_pred_usage", "SORT-BY-PRED-USAGE", 1, 0, false);
-        declareFunction("most_specific_arg1_constraint", "MOST-SPECIFIC-ARG1-CONSTRAINT", 1, 0, false);
-        declareFunction("most_specific_argn_constraint", "MOST-SPECIFIC-ARGN-CONSTRAINT", 2, 0, false);
-        declareFunction("get_relation_argument_type", "GET-RELATION-ARGUMENT-TYPE", 2, 0, false);
-        declareFunction("clear_keyword_for_pos", "CLEAR-KEYWORD-FOR-POS", 0, 0, false);
-        declareFunction("remove_keyword_for_pos", "REMOVE-KEYWORD-FOR-POS", 1, 1, false);
-        declareFunction("keyword_for_pos_internal", "KEYWORD-FOR-POS-INTERNAL", 2, 0, false);
-        declareFunction("keyword_for_pos", "KEYWORD-FOR-POS", 1, 1, false);
-        declareFunction("clear_precise_keyword_for_pos", "CLEAR-PRECISE-KEYWORD-FOR-POS", 0, 0, false);
-        declareFunction("remove_precise_keyword_for_pos", "REMOVE-PRECISE-KEYWORD-FOR-POS", 1, 1, false);
-        declareFunction("precise_keyword_for_pos_internal", "PRECISE-KEYWORD-FOR-POS-INTERNAL", 2, 0, false);
-        declareFunction("precise_keyword_for_pos", "PRECISE-KEYWORD-FOR-POS", 1, 1, false);
-        declareFunction("clear_keyword_for_pred", "CLEAR-KEYWORD-FOR-PRED", 0, 0, false);
-        declareFunction("remove_keyword_for_pred", "REMOVE-KEYWORD-FOR-PRED", 1, 1, false);
-        declareFunction("keyword_for_pred_internal", "KEYWORD-FOR-PRED-INTERNAL", 2, 0, false);
-        declareFunction("keyword_for_pred", "KEYWORD-FOR-PRED", 1, 1, false);
-        declareFunction("clear_precise_keyword_for_pred", "CLEAR-PRECISE-KEYWORD-FOR-PRED", 0, 0, false);
-        declareFunction("remove_precise_keyword_for_pred", "REMOVE-PRECISE-KEYWORD-FOR-PRED", 1, 1, false);
-        declareFunction("precise_keyword_for_pred_internal", "PRECISE-KEYWORD-FOR-PRED-INTERNAL", 2, 0, false);
-        declareFunction("precise_keyword_for_pred", "PRECISE-KEYWORD-FOR-PRED", 1, 1, false);
-        declareFunction("invalid_formulaP", "INVALID-FORMULA?", 2, 0, false);
-        declareFunction("invalid_lexificationP", "INVALID-LEXIFICATION?", 2, 0, false);
-        declareFunction("lex_pos_for_keyword", "LEX-POS-FOR-KEYWORD", 1, 0, false);
-        declareFunction("parts_of_speech", "PARTS-OF-SPEECH", 1, 0, false);
-        declareFunction("clear_pluralize_word", "CLEAR-PLURALIZE-WORD", 0, 0, false);
-        declareFunction("remove_pluralize_word", "REMOVE-PLURALIZE-WORD", 1, 1, false);
-        declareFunction("pluralize_word_internal", "PLURALIZE-WORD-INTERNAL", 2, 0, false);
-        declareFunction("pluralize_word", "PLURALIZE-WORD", 1, 1, false);
-        declareFunction("clear_singularize_word", "CLEAR-SINGULARIZE-WORD", 0, 0, false);
-        declareFunction("remove_singularize_word", "REMOVE-SINGULARIZE-WORD", 1, 1, false);
-        declareFunction("singularize_word_internal", "SINGULARIZE-WORD-INTERNAL", 2, 0, false);
-        declareFunction("singularize_word", "SINGULARIZE-WORD", 1, 1, false);
-        declareFunction("clear_basic_preds_for_part_of_speech", "CLEAR-BASIC-PREDS-FOR-PART-OF-SPEECH", 0, 0, false);
-        declareFunction("remove_basic_preds_for_part_of_speech", "REMOVE-BASIC-PREDS-FOR-PART-OF-SPEECH", 1, 0, false);
-        declareFunction("basic_preds_for_part_of_speech_internal", "BASIC-PREDS-FOR-PART-OF-SPEECH-INTERNAL", 1, 0, false);
-        declareFunction("basic_preds_for_part_of_speech", "BASIC-PREDS-FOR-PART-OF-SPEECH", 1, 0, false);
-        declareFunction("clear_find_root_wordform", "CLEAR-FIND-ROOT-WORDFORM", 0, 0, false);
-        declareFunction("remove_find_root_wordform", "REMOVE-FIND-ROOT-WORDFORM", 1, 0, false);
-        declareFunction("find_root_wordform_internal", "FIND-ROOT-WORDFORM-INTERNAL", 1, 0, false);
-        declareFunction("find_root_wordform", "FIND-ROOT-WORDFORM", 1, 0, false);
-        declareFunction("lexified_phrases_for_term", "LEXIFIED-PHRASES-FOR-TERM", 1, 1, false);
-        declareFunction("nonplural_lexified_phrases_for_term", "NONPLURAL-LEXIFIED-PHRASES-FOR-TERM", 1, 0, false);
-        declareFunction("join_words", "JOIN-WORDS", 1, 0, false);
-        declareFunction("has_vowel", "HAS-VOWEL", 1, 0, false);
-        declareFunction("guess_stem", "GUESS-STEM", 1, 1, false);
-        declareFunction("clear_is_abbreviation_predicate", "CLEAR-IS-ABBREVIATION-PREDICATE", 0, 0, false);
-        declareFunction("remove_is_abbreviation_predicate", "REMOVE-IS-ABBREVIATION-PREDICATE", 1, 0, false);
-        declareFunction("is_abbreviation_predicate_internal", "IS-ABBREVIATION-PREDICATE-INTERNAL", 1, 0, false);
-        declareFunction("is_abbreviation_predicate", "IS-ABBREVIATION-PREDICATE", 1, 0, false);
-        declareFunction("get_abbreviation_predicates", "GET-ABBREVIATION-PREDICATES", 0, 0, false);
-        declareFunction("clear_examples_for_pred", "CLEAR-EXAMPLES-FOR-PRED", 0, 0, false);
-        declareFunction("remove_examples_for_pred", "REMOVE-EXAMPLES-FOR-PRED", 1, 1, false);
-        declareFunction("examples_for_pred_internal", "EXAMPLES-FOR-PRED-INTERNAL", 2, 0, false);
-        declareFunction("examples_for_pred", "EXAMPLES-FOR-PRED", 1, 1, false);
-        declareFunction("positive_examples_for_pred", "POSITIVE-EXAMPLES-FOR-PRED", 1, 0, false);
-        declareFunction("other_positive_examples_for_pred", "OTHER-POSITIVE-EXAMPLES-FOR-PRED", 1, 0, false);
-        declareFunction("real_examples_for_pred", "REAL-EXAMPLES-FOR-PRED", 1, 0, false);
-        declareFunction("try_lex_assert", "TRY-LEX-ASSERT", 2, 2, false);
-        declareFunction("try_lex_assert_now", "TRY-LEX-ASSERT-NOW", 2, 2, false);
-        declareFunction("lex_string_tokenize", "LEX-STRING-TOKENIZE", 1, 1, false);
-        declareFunction("lex_remove_final_punctuation", "LEX-REMOVE-FINAL-PUNCTUATION", 1, 0, false);
-        declareFunction("lex_find_word_in_string", "LEX-FIND-WORD-IN-STRING", 2, 0, false);
-        declareFunction("lex_describe_term", "LEX-DESCRIBE-TERM", 1, 1, false);
-        declareFunction("lex_fort_for_string", "LEX-FORT-FOR-STRING", 1, 0, false);
-        declareFunction("lex_arity_in_any_mt", "LEX-ARITY-IN-ANY-MT", 1, 0, false);
-        declareFunction("loose_lexification_phrases_for_term", "LOOSE-LEXIFICATION-PHRASES-FOR-TERM", 1, 0, false);
-        declareFunction("preferred_loose_lexification_phrase_for_term", "PREFERRED-LOOSE-LEXIFICATION-PHRASE-FOR-TERM", 1, 0, false);
-        declareFunction("proper_lexification_phrases_for_term", "PROPER-LEXIFICATION-PHRASES-FOR-TERM", 1, 0, false);
-        declareFunction("phrases_from_semantic_assertion", "PHRASES-FROM-SEMANTIC-ASSERTION", 1, 1, false);
-        declareFunction("phrases_from_lexification_sentence", "PHRASES-FROM-LEXIFICATION-SENTENCE", 1, 1, false);
-        declareFunction("phrase_from_lexification_sentence", "PHRASE-FROM-LEXIFICATION-SENTENCE", 2, 0, false);
-        declareFunction("is_nameable_entityP", "IS-NAMEABLE-ENTITY?", 1, 0, false);
-        declareFunction("is_nameable_individualP", "IS-NAMEABLE-INDIVIDUAL?", 1, 0, false);
-        declareFunction("is_nameable_collectionP", "IS-NAMEABLE-COLLECTION?", 1, 0, false);
-        declareFunction("lex_empty_stringP", "LEX-EMPTY-STRING?", 1, 0, false);
-        declareFunction("clear_lexification_caches", "CLEAR-LEXIFICATION-CACHES", 0, 0, false);
-        declareFunction("string_for_fort", "STRING-FOR-FORT", 1, 0, false);
-        declareFunction("string_for_field", "STRING-FOR-FIELD", 1, 0, false);
-        declareFunction("is_relationalP", "IS-RELATIONAL?", 1, 0, false);
-        declareFunction("is_functionalP", "IS-FUNCTIONAL?", 1, 0, false);
-        declareFunction("get_term_comments", "GET-TERM-COMMENTS", 1, 0, false);
-        declareFunction("likely_has_part_of_speechP", "LIKELY-HAS-PART-OF-SPEECH?", 2, 1, false);
-        declareFunction("likely_adverbP", "LIKELY-ADVERB?", 1, 1, false);
-        declareFunction("likely_adjectiveP", "LIKELY-ADJECTIVE?", 1, 1, false);
-        declareFunction("likely_nounP", "LIKELY-NOUN?", 1, 1, false);
-        declareFunction("likely_verbP", "LIKELY-VERB?", 1, 1, false);
-        declareFunction("word_unit_part_of_speech_usage", "WORD-UNIT-PART-OF-SPEECH-USAGE", 2, 0, false);
-        declareFunction("wordform_part_of_speech_usage", "WORDFORM-PART-OF-SPEECH-USAGE", 2, 0, false);
-        declareFunction("headword_usage", "HEADWORD-USAGE", 1, 2, false);
-        declareFunction("headword_usage_for_pred", "HEADWORD-USAGE-FOR-PRED", 3, 0, false);
-        declareFunction("most_frequent_headword", "MOST-FREQUENT-HEADWORD", 1, 1, false);
-        declareFunction("initial_capitalizedP", "INITIAL-CAPITALIZED?", 1, 0, false);
-        declareFunction("most_likely_headword", "MOST-LIKELY-HEADWORD", 1, 0, false);
-        declareFunction("other_lexified_phrases_for_term", "OTHER-LEXIFIED-PHRASES-FOR-TERM", 2, 0, false);
-        declareFunction("possibly_lexify_terrorist_attack", "POSSIBLY-LEXIFY-TERRORIST-ATTACK", 1, 1, false);
-        declareFunction("lexify_terrorist_attack", "LEXIFY-TERRORIST-ATTACK", 1, 1, false);
-        declareFunction("terrorist_attack_lexifications", "TERRORIST-ATTACK-LEXIFICATIONS", 1, 1, false);
-        declareFunction("terrorist_attack_lexification_query_args", "TERRORIST-ATTACK-LEXIFICATION-QUERY-ARGS", 1, 1, false);
-        declareFunction("terrorist_attack_lexification_kbq", "TERRORIST-ATTACK-LEXIFICATION-KBQ", 0, 0, false);
-        return NIL;
-    }
-
-    public static final SubLObject init_lexification_utilities_file_alt() {
-        defconstant("*LEX-NONE*", ZERO_INTEGER);
-        defconstant("*LEX-BASIC*", ONE_INTEGER);
-        defconstant("*LEX-WARNING*", ONE_INTEGER);
-        defconstant("*LEX-DETAILED*", TWO_INTEGER);
-        defconstant("*LEX-VERBOSE*", THREE_INTEGER);
-        defconstant("*LEX-VERY-DETAILED*", FOUR_INTEGER);
-        defconstant("*LEX-VERY-VERBOSE*", FIVE_INTEGER);
-        defconstant("*LEX-MOST-DETAILED*", SIX_INTEGER);
-        defconstant("*LEX-MOST-VERBOSE*", SEVEN_INTEGER);
-        defconstant("*LEX-ALL*", NINE_INTEGER);
-        defvar("*LEX-TRACE-LEVEL*", $lex_basic$.getGlobalValue());
-        deflexical("*LEXIFICATION-CHECK-MAX-DAYS*", NIL != boundp($lexification_check_max_days$) ? ((SubLObject) ($lexification_check_max_days$.getGlobalValue())) : $int$30);
-        defvar("*LEXIFICATION-REVIEWER*", NIL);
-        deflexical("*NUM-PREDICATE-EXAMPLES*", NIL != boundp($num_predicate_examples$) ? ((SubLObject) ($num_predicate_examples$.getGlobalValue())) : THREE_INTEGER);
-        defparameter("*LEX-WHITE-SPACE-CHARS*", string_utilities.whitespace_chars());
-        defparameter("*LEX-PUNCTUATION-CHARS*", $list_alt5);
-        deflexical("*KEYWORD-FOR-POS-CACHING-STATE*", NIL);
-        deflexical("*PRECISE-KEYWORD-FOR-POS-CACHING-STATE*", NIL);
-        deflexical("*KEYWORD-FOR-PRED-CACHING-STATE*", NIL);
-        deflexical("*PRECISE-KEYWORD-FOR-PRED-CACHING-STATE*", NIL);
-        deflexical("*PLURALIZE-WORD-CACHING-STATE*", NIL);
-        deflexical("*SINGULARIZE-WORD-CACHING-STATE*", NIL);
-        deflexical("*BASIC-PREDS-FOR-PART-OF-SPEECH-CACHING-STATE*", NIL);
-        deflexical("*FIND-ROOT-WORDFORM-CACHING-STATE*", NIL);
-        deflexical("*IS-ABBREVIATION-PREDICATE-CACHING-STATE*", NIL);
-        deflexical("*EXAMPLES-FOR-PRED-CACHING-STATE*", NIL);
-        deflexical("*TERRORIST-ATTACK-LEXIFICATION-WORKS?*", NIL);
+        declareFunction(me, "lexification_reviewer", "LEXIFICATION-REVIEWER", 0, 0, false);
+        declareFunction(me, "set_lexification_reviewer", "SET-LEXIFICATION-REVIEWER", 1, 0, false);
+        declareMacro(me, "lex_trace", "LEX-TRACE");
+        declareMacro(me, "lex_warn", "LEX-WARN");
+        declareMacro(me, "lex_debug", "LEX-DEBUG");
+        declareMacro(me, "lex_if_level", "LEX-IF-LEVEL");
+        declareMacro(me, "lex_debug_out", "LEX-DEBUG-OUT");
+        declareFunction(me, "lex_debug_on", "LEX-DEBUG-ON", 0, 1, false);
+        declareMacro(me, "lex_assertion", "LEX-ASSERTION");
+        declareMacro(me, "do_unlexified_terms", "DO-UNLEXIFIED-TERMS");
+        declareFunction(me, "unlexified_terms_for_cyclist", "UNLEXIFIED-TERMS-FOR-CYCLIST", 1, 2, false);
+        declareFunction(me, "lexification_not_neededP", "LEXIFICATION-NOT-NEEDED?", 1, 0, false);
+        declareFunction(me, "unlexifiedP", "UNLEXIFIED?", 1, 1, false);
+        declareFunction(me, "lexifiedP", "LEXIFIED?", 1, 1, false);
+        declareFunction(me, "generalization_is_lexifiedP", "GENERALIZATION-IS-LEXIFIED?", 1, 0, false);
+        declareFunction(me, "get_unlexified_terms", "GET-UNLEXIFIED-TERMS", 0, 2, false);
+        declareFunction(me, "get_termstring_assertions_for_cyclist", "GET-TERMSTRING-ASSERTIONS-FOR-CYCLIST", 0, 1, false);
+        declareFunction(me, "lexical_mt_for_cyclist", "LEXICAL-MT-FOR-CYCLIST", 0, 1, false);
+        declareFunction(me, "acronym_char_p", "ACRONYM-CHAR-P", 1, 0, false);
+        declareFunction(me, "regroup_acronyms", "REGROUP-ACRONYMS", 1, 0, false);
+        declareFunction(me, "phrase_from_term", "PHRASE-FROM-TERM", 1, 1, false);
+        declareFunction(me, "cyc_individual_constantP", "CYC-INDIVIDUAL-CONSTANT?", 1, 0, false);
+        declareFunction(me, "phrase_for_mt", "PHRASE-FOR-MT", 1, 0, false);
+        declareFunction(me, "lexification_for_mt", "LEXIFICATION-FOR-MT", 1, 0, false);
+        declareFunction(me, "lexify_mts", "LEXIFY-MTS", 1, 0, false);
+        declareFunction(me, "skip_mt_lexificationP", "SKIP-MT-LEXIFICATION?", 1, 0, false);
+        declareFunction(me, "all_specifiedP", "ALL-SPECIFIED?", 1, 0, false);
+        declareFunction(me, "universal_date_to_universal_time", "UNIVERSAL-DATE-TO-UNIVERSAL-TIME", 1, 0, false);
+        declareFunction(me, "universal_time_to_universal_date", "UNIVERSAL-TIME-TO-UNIVERSAL-DATE", 1, 0, false);
+        declareFunction(me, "n_universal_days_ago", "N-UNIVERSAL-DAYS-AGO", 1, 0, false);
+        declareFunction(me, "extract_integer", "EXTRACT-INTEGER", 1, 1, false);
+        declareFunction(me, "sort_by_pred_usage", "SORT-BY-PRED-USAGE", 1, 0, false);
+        declareFunction(me, "most_specific_arg1_constraint", "MOST-SPECIFIC-ARG1-CONSTRAINT", 1, 0, false);
+        declareFunction(me, "most_specific_argn_constraint", "MOST-SPECIFIC-ARGN-CONSTRAINT", 2, 0, false);
+        declareFunction(me, "get_relation_argument_type", "GET-RELATION-ARGUMENT-TYPE", 2, 0, false);
+        declareFunction(me, "clear_keyword_for_pos", "CLEAR-KEYWORD-FOR-POS", 0, 0, false);
+        declareFunction(me, "remove_keyword_for_pos", "REMOVE-KEYWORD-FOR-POS", 1, 1, false);
+        declareFunction(me, "keyword_for_pos_internal", "KEYWORD-FOR-POS-INTERNAL", 2, 0, false);
+        declareFunction(me, "keyword_for_pos", "KEYWORD-FOR-POS", 1, 1, false);
+        declareFunction(me, "clear_precise_keyword_for_pos", "CLEAR-PRECISE-KEYWORD-FOR-POS", 0, 0, false);
+        declareFunction(me, "remove_precise_keyword_for_pos", "REMOVE-PRECISE-KEYWORD-FOR-POS", 1, 1, false);
+        declareFunction(me, "precise_keyword_for_pos_internal", "PRECISE-KEYWORD-FOR-POS-INTERNAL", 2, 0, false);
+        declareFunction(me, "precise_keyword_for_pos", "PRECISE-KEYWORD-FOR-POS", 1, 1, false);
+        declareFunction(me, "clear_keyword_for_pred", "CLEAR-KEYWORD-FOR-PRED", 0, 0, false);
+        declareFunction(me, "remove_keyword_for_pred", "REMOVE-KEYWORD-FOR-PRED", 1, 1, false);
+        declareFunction(me, "keyword_for_pred_internal", "KEYWORD-FOR-PRED-INTERNAL", 2, 0, false);
+        declareFunction(me, "keyword_for_pred", "KEYWORD-FOR-PRED", 1, 1, false);
+        declareFunction(me, "clear_precise_keyword_for_pred", "CLEAR-PRECISE-KEYWORD-FOR-PRED", 0, 0, false);
+        declareFunction(me, "remove_precise_keyword_for_pred", "REMOVE-PRECISE-KEYWORD-FOR-PRED", 1, 1, false);
+        declareFunction(me, "precise_keyword_for_pred_internal", "PRECISE-KEYWORD-FOR-PRED-INTERNAL", 2, 0, false);
+        declareFunction(me, "precise_keyword_for_pred", "PRECISE-KEYWORD-FOR-PRED", 1, 1, false);
+        declareFunction(me, "invalid_formulaP", "INVALID-FORMULA?", 2, 0, false);
+        declareFunction(me, "invalid_lexificationP", "INVALID-LEXIFICATION?", 2, 0, false);
+        declareFunction(me, "lex_pos_for_keyword", "LEX-POS-FOR-KEYWORD", 1, 0, false);
+        declareFunction(me, "parts_of_speech", "PARTS-OF-SPEECH", 1, 0, false);
+        declareFunction(me, "clear_pluralize_word", "CLEAR-PLURALIZE-WORD", 0, 0, false);
+        declareFunction(me, "remove_pluralize_word", "REMOVE-PLURALIZE-WORD", 1, 1, false);
+        declareFunction(me, "pluralize_word_internal", "PLURALIZE-WORD-INTERNAL", 2, 0, false);
+        declareFunction(me, "pluralize_word", "PLURALIZE-WORD", 1, 1, false);
+        declareFunction(me, "clear_singularize_word", "CLEAR-SINGULARIZE-WORD", 0, 0, false);
+        declareFunction(me, "remove_singularize_word", "REMOVE-SINGULARIZE-WORD", 1, 1, false);
+        declareFunction(me, "singularize_word_internal", "SINGULARIZE-WORD-INTERNAL", 2, 0, false);
+        declareFunction(me, "singularize_word", "SINGULARIZE-WORD", 1, 1, false);
+        declareFunction(me, "clear_basic_preds_for_part_of_speech", "CLEAR-BASIC-PREDS-FOR-PART-OF-SPEECH", 0, 0, false);
+        declareFunction(me, "remove_basic_preds_for_part_of_speech", "REMOVE-BASIC-PREDS-FOR-PART-OF-SPEECH", 1, 0, false);
+        declareFunction(me, "basic_preds_for_part_of_speech_internal", "BASIC-PREDS-FOR-PART-OF-SPEECH-INTERNAL", 1, 0, false);
+        declareFunction(me, "basic_preds_for_part_of_speech", "BASIC-PREDS-FOR-PART-OF-SPEECH", 1, 0, false);
+        declareFunction(me, "clear_find_root_wordform", "CLEAR-FIND-ROOT-WORDFORM", 0, 0, false);
+        declareFunction(me, "remove_find_root_wordform", "REMOVE-FIND-ROOT-WORDFORM", 1, 0, false);
+        declareFunction(me, "find_root_wordform_internal", "FIND-ROOT-WORDFORM-INTERNAL", 1, 0, false);
+        declareFunction(me, "find_root_wordform", "FIND-ROOT-WORDFORM", 1, 0, false);
+        declareFunction(me, "lexified_phrases_for_term", "LEXIFIED-PHRASES-FOR-TERM", 1, 1, false);
+        declareFunction(me, "nonplural_lexified_phrases_for_term", "NONPLURAL-LEXIFIED-PHRASES-FOR-TERM", 1, 0, false);
+        declareFunction(me, "join_words", "JOIN-WORDS", 1, 0, false);
+        declareFunction(me, "has_vowel", "HAS-VOWEL", 1, 0, false);
+        declareFunction(me, "guess_stem", "GUESS-STEM", 1, 1, false);
+        declareFunction(me, "clear_is_abbreviation_predicate", "CLEAR-IS-ABBREVIATION-PREDICATE", 0, 0, false);
+        declareFunction(me, "remove_is_abbreviation_predicate", "REMOVE-IS-ABBREVIATION-PREDICATE", 1, 0, false);
+        declareFunction(me, "is_abbreviation_predicate_internal", "IS-ABBREVIATION-PREDICATE-INTERNAL", 1, 0, false);
+        declareFunction(me, "is_abbreviation_predicate", "IS-ABBREVIATION-PREDICATE", 1, 0, false);
+        declareFunction(me, "get_abbreviation_predicates", "GET-ABBREVIATION-PREDICATES", 0, 0, false);
+        declareFunction(me, "clear_examples_for_pred", "CLEAR-EXAMPLES-FOR-PRED", 0, 0, false);
+        declareFunction(me, "remove_examples_for_pred", "REMOVE-EXAMPLES-FOR-PRED", 1, 1, false);
+        declareFunction(me, "examples_for_pred_internal", "EXAMPLES-FOR-PRED-INTERNAL", 2, 0, false);
+        declareFunction(me, "examples_for_pred", "EXAMPLES-FOR-PRED", 1, 1, false);
+        declareFunction(me, "positive_examples_for_pred", "POSITIVE-EXAMPLES-FOR-PRED", 1, 0, false);
+        declareFunction(me, "other_positive_examples_for_pred", "OTHER-POSITIVE-EXAMPLES-FOR-PRED", 1, 0, false);
+        declareFunction(me, "real_examples_for_pred", "REAL-EXAMPLES-FOR-PRED", 1, 0, false);
+        declareFunction(me, "try_lex_assert", "TRY-LEX-ASSERT", 2, 2, false);
+        declareFunction(me, "try_lex_assert_now", "TRY-LEX-ASSERT-NOW", 2, 2, false);
+        declareFunction(me, "lex_string_tokenize", "LEX-STRING-TOKENIZE", 1, 1, false);
+        declareFunction(me, "lex_remove_final_punctuation", "LEX-REMOVE-FINAL-PUNCTUATION", 1, 0, false);
+        declareFunction(me, "lex_find_word_in_string", "LEX-FIND-WORD-IN-STRING", 2, 0, false);
+        declareFunction(me, "lex_describe_term", "LEX-DESCRIBE-TERM", 1, 1, false);
+        declareFunction(me, "lex_fort_for_string", "LEX-FORT-FOR-STRING", 1, 0, false);
+        declareFunction(me, "lex_arity_in_any_mt", "LEX-ARITY-IN-ANY-MT", 1, 0, false);
+        declareFunction(me, "loose_lexification_phrases_for_term", "LOOSE-LEXIFICATION-PHRASES-FOR-TERM", 1, 0, false);
+        declareFunction(me, "preferred_loose_lexification_phrase_for_term", "PREFERRED-LOOSE-LEXIFICATION-PHRASE-FOR-TERM", 1, 0, false);
+        declareFunction(me, "proper_lexification_phrases_for_term", "PROPER-LEXIFICATION-PHRASES-FOR-TERM", 1, 0, false);
+        declareFunction(me, "phrases_from_semantic_assertion", "PHRASES-FROM-SEMANTIC-ASSERTION", 1, 1, false);
+        declareFunction(me, "phrases_from_lexification_sentence", "PHRASES-FROM-LEXIFICATION-SENTENCE", 1, 1, false);
+        declareFunction(me, "phrase_from_lexification_sentence", "PHRASE-FROM-LEXIFICATION-SENTENCE", 2, 0, false);
+        declareFunction(me, "is_nameable_entityP", "IS-NAMEABLE-ENTITY?", 1, 0, false);
+        declareFunction(me, "is_nameable_individualP", "IS-NAMEABLE-INDIVIDUAL?", 1, 0, false);
+        declareFunction(me, "is_nameable_collectionP", "IS-NAMEABLE-COLLECTION?", 1, 0, false);
+        declareFunction(me, "lex_empty_stringP", "LEX-EMPTY-STRING?", 1, 0, false);
+        declareFunction(me, "clear_lexification_caches", "CLEAR-LEXIFICATION-CACHES", 0, 0, false);
+        declareFunction(me, "string_for_fort", "STRING-FOR-FORT", 1, 0, false);
+        declareFunction(me, "string_for_field", "STRING-FOR-FIELD", 1, 0, false);
+        declareFunction(me, "is_relationalP", "IS-RELATIONAL?", 1, 0, false);
+        declareFunction(me, "is_functionalP", "IS-FUNCTIONAL?", 1, 0, false);
+        declareFunction(me, "get_term_comments", "GET-TERM-COMMENTS", 1, 0, false);
+        declareFunction(me, "likely_has_part_of_speechP", "LIKELY-HAS-PART-OF-SPEECH?", 2, 1, false);
+        declareFunction(me, "likely_adverbP", "LIKELY-ADVERB?", 1, 1, false);
+        declareFunction(me, "likely_adjectiveP", "LIKELY-ADJECTIVE?", 1, 1, false);
+        declareFunction(me, "likely_nounP", "LIKELY-NOUN?", 1, 1, false);
+        declareFunction(me, "likely_verbP", "LIKELY-VERB?", 1, 1, false);
+        declareFunction(me, "word_unit_part_of_speech_usage", "WORD-UNIT-PART-OF-SPEECH-USAGE", 2, 0, false);
+        declareFunction(me, "wordform_part_of_speech_usage", "WORDFORM-PART-OF-SPEECH-USAGE", 2, 0, false);
+        declareFunction(me, "headword_usage", "HEADWORD-USAGE", 1, 2, false);
+        declareFunction(me, "headword_usage_for_pred", "HEADWORD-USAGE-FOR-PRED", 3, 0, false);
+        declareFunction(me, "most_frequent_headword", "MOST-FREQUENT-HEADWORD", 1, 1, false);
+        declareFunction(me, "initial_capitalizedP", "INITIAL-CAPITALIZED?", 1, 0, false);
+        declareFunction(me, "most_likely_headword", "MOST-LIKELY-HEADWORD", 1, 0, false);
+        declareFunction(me, "other_lexified_phrases_for_term", "OTHER-LEXIFIED-PHRASES-FOR-TERM", 2, 0, false);
+        declareFunction(me, "possibly_lexify_terrorist_attack", "POSSIBLY-LEXIFY-TERRORIST-ATTACK", 1, 1, false);
+        declareFunction(me, "lexify_terrorist_attack", "LEXIFY-TERRORIST-ATTACK", 1, 1, false);
+        declareFunction(me, "terrorist_attack_lexifications", "TERRORIST-ATTACK-LEXIFICATIONS", 1, 1, false);
+        declareFunction(me, "terrorist_attack_lexification_query_args", "TERRORIST-ATTACK-LEXIFICATION-QUERY-ARGS", 1, 1, false);
+        declareFunction(me, "terrorist_attack_lexification_kbq", "TERRORIST-ATTACK-LEXIFICATION-KBQ", 0, 0, false);
         return NIL;
     }
 
     public static SubLObject init_lexification_utilities_file() {
-        if (SubLFiles.USE_V1) {
-            defconstant("*LEX-NONE*", ZERO_INTEGER);
-            defconstant("*LEX-ALWAYS*", ZERO_INTEGER);
-            defconstant("*LEX-BASIC*", ONE_INTEGER);
-            defconstant("*LEX-WARNING*", ONE_INTEGER);
-            defconstant("*LEX-DETAILED*", TWO_INTEGER);
-            defconstant("*LEX-VERBOSE*", THREE_INTEGER);
-            defconstant("*LEX-VERY-DETAILED*", FOUR_INTEGER);
-            defconstant("*LEX-VERY-VERBOSE*", FIVE_INTEGER);
-            defconstant("*LEX-MOST-DETAILED*", SIX_INTEGER);
-            defconstant("*LEX-MOST-VERBOSE*", SEVEN_INTEGER);
-            defconstant("*LEX-ALL*", NINE_INTEGER);
-            defvar("*LEX-TRACE-LEVEL*", $lex_basic$.getGlobalValue());
-            deflexical("*LEXIFICATION-CHECK-MAX-DAYS*", SubLTrampolineFile.maybeDefault($lexification_check_max_days$, $lexification_check_max_days$, $int$30));
-            defvar("*LEXIFICATION-REVIEWER*", NIL);
-            deflexical("*NUM-PREDICATE-EXAMPLES*", SubLTrampolineFile.maybeDefault($num_predicate_examples$, $num_predicate_examples$, THREE_INTEGER));
-            defparameter("*LEX-WHITE-SPACE-CHARS*", string_utilities.whitespace_chars());
-            defparameter("*LEX-PUNCTUATION-CHARS*", $list5);
-            deflexical("*KEYWORD-FOR-POS-CACHING-STATE*", NIL);
-            deflexical("*PRECISE-KEYWORD-FOR-POS-CACHING-STATE*", NIL);
-            deflexical("*KEYWORD-FOR-PRED-CACHING-STATE*", NIL);
-            deflexical("*PRECISE-KEYWORD-FOR-PRED-CACHING-STATE*", NIL);
-            deflexical("*PLURALIZE-WORD-CACHING-STATE*", NIL);
-            deflexical("*SINGULARIZE-WORD-CACHING-STATE*", NIL);
-            deflexical("*BASIC-PREDS-FOR-PART-OF-SPEECH-CACHING-STATE*", NIL);
-            deflexical("*FIND-ROOT-WORDFORM-CACHING-STATE*", NIL);
-            deflexical("*IS-ABBREVIATION-PREDICATE-CACHING-STATE*", NIL);
-            deflexical("*EXAMPLES-FOR-PRED-CACHING-STATE*", NIL);
-            deflexical("*TERRORIST-ATTACK-LEXIFICATION-WORKS?*", NIL);
-        }
-        if (SubLFiles.USE_V2) {
-            deflexical("*LEXIFICATION-CHECK-MAX-DAYS*", NIL != boundp($lexification_check_max_days$) ? ((SubLObject) ($lexification_check_max_days$.getGlobalValue())) : $int$30);
-            deflexical("*NUM-PREDICATE-EXAMPLES*", NIL != boundp($num_predicate_examples$) ? ((SubLObject) ($num_predicate_examples$.getGlobalValue())) : THREE_INTEGER);
-        }
-        return NIL;
-    }
-
-    public static SubLObject init_lexification_utilities_file_Previous() {
         defconstant("*LEX-NONE*", ZERO_INTEGER);
         defconstant("*LEX-ALWAYS*", ZERO_INTEGER);
         defconstant("*LEX-BASIC*", ONE_INTEGER);
@@ -10878,177 +4311,238 @@ public final class lexification_utilities extends SubLTranslatedFile implements 
     }
 
     static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
-
-    static private final SubLList $list_alt5 = list(new SubLObject[]{ CHAR_period, CHAR_semicolon, CHAR_comma, CHAR_colon, CHAR_quotation, CHAR_exclamation, CHAR_question, CHAR_lparen, CHAR_rparen, CHAR_percent, CHAR_caret, CHAR_asterisk });
-
-    static private final SubLList $list_alt6 = list(makeSymbol("LEVEL"), makeSymbol("FORMAT-SPEC"), makeSymbol("&REST"), makeSymbol("ARGS"));
-
-    static private final SubLList $list_alt12 = list(list(makeSymbol("FORCE-OUTPUT"), makeSymbol("*TRACE-OUTPUT*")));
-
-    static private final SubLList $list_alt13 = list(makeSymbol("FORMAT-SPEC"), makeSymbol("&REST"), makeSymbol("ARGS"));
-
-    static private final SubLList $list_alt15 = list(makeSymbol("MAX"), makeSymbol("*LEX-TRACE-LEVEL*"), makeSymbol("*LEX-BASIC*"));
-
-    static private final SubLString $str_alt17$Warning__ = makeString("Warning: ");
-
-    static private final SubLList $list_alt18 = list(makeSymbol("FORM"), makeSymbol("&REST"), makeSymbol("OPTIONAL-FORMS"));
-
-    static private final SubLList $list_alt19 = list(makeSymbol(">="), makeSymbol("*LEX-TRACE-LEVEL*"), makeSymbol("*LEX-VERBOSE*"));
-
-    static private final SubLList $list_alt20 = list(makeSymbol("MAX"), makeSymbol("*LEX-TRACE-LEVEL*"), makeSymbol("*LEX-VERBOSE*"));
-
-    static private final SubLList $list_alt21 = list(makeSymbol("EXPRESSION"));
-
-    static private final SubLString $str_alt24$____assertion_failed___a______ = makeString("*** assertion failed: ~a ***~%");
-
-    static private final SubLList $list_alt26 = list(list(makeSymbol("VAR"), makeSymbol("&OPTIONAL"), list(makeSymbol("MESSAGE"), makeString("Finding unlexified terms...")), makeSymbol("ALLOW-TERMSTRINGS?")), makeSymbol("&BODY"), makeSymbol("BODY"));
-
-    static private final SubLString $str_alt27$Finding_unlexified_terms___ = makeString("Finding unlexified terms...");
-
-    static private final SubLSymbol $sym29$UNLEXIFIED_ = makeSymbol("UNLEXIFIED?");
-
-    public static final SubLObject $const35$quotedInstancesDontNeedLexificati = reader_make_constant_shell("quotedInstancesDontNeedLexification");
-
-    static private final SubLList $list_alt41 = list(makeSymbol("?MT"));
-
-    static private final SubLList $list_alt42 = list(list(reader_make_constant_shell("genlMt"), makeSymbol("?MT"), reader_make_constant_shell("GeneralLexiconMt")));
-
-    static private final SubLList $list_alt43 = list(makeKeyword("RETURN"), list(makeKeyword("TEMPLATE"), makeSymbol("?MT")));
-
-    static private final SubLString $str_alt45$char__a_next__a_next_next__a_run_ = makeString("char=~a next=~a next-next=~a run-len=~a new-index=~a~%");
-
-    static private final SubLList $list_alt46 = list(reader_make_constant_shell("singular"));
-
-    static private final SubLString $str_alt47$_Mt = makeString(" Mt");
-
-    static private final SubLString $str_alt48$_G = makeString(" G");
-
-    static private final SubLString $str_alt49$General_ = makeString("General ");
-
-    static private final SubLString $str_alt50$_ = makeString(" ");
-
-    static private final SubLString $str_alt51$___ = makeString(" - ");
-
-    static private final SubLString $str_alt52$__ = makeString(" -");
-
-    static private final SubLSymbol $sym63$_ = makeSymbol(">");
-
-    public static final SubLSymbol $kw88$_MEMOIZED_ITEM_NOT_FOUND_ = makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
-
-    static private final SubLString $str_alt106$invalid_formula____a__ = makeString("invalid formula:~%~a~%");
-
-    static private final SubLList $list_alt108 = list(reader_make_constant_shell("ProperNoun"));
-
-    static private final SubLList $list_alt122 = list(makeSymbol("?CONSTRAINT"));
-
-    static private final SubLList $list_alt123 = list(list(reader_make_constant_shell("genls"), makeSymbol("?CONSTRAINT"), reader_make_constant_shell("Abbreviation")));
-
-    static private final SubLString $str_alt129$examples_for_pred__a__a___ = makeString("examples-for-pred(~a ~a)~%");
-
-    static private final SubLList $list_alt132 = list(reader_make_constant_shell("exampleSentence"), reader_make_constant_shell("examplePredSentence"), reader_make_constant_shell("exampleAssertions"));
-
-    static private final SubLList $list_alt145 = list(makeString("worthy"), makeString("ous"), makeString("ical"), makeString("less"), makeString("like"), makeString("able"), makeString("ible"), makeString("ic"));
-
-    static private final SubLList $list_alt146 = list(makeString("ly"));
-
-    static private final SubLList $list_alt147 = list(makeString("ability"), makeString("ism"), makeString("ness"), makeString("ation"), makeString("ion"), makeString("ity"));
-
-    static private final SubLList $list_alt148 = list(makeString("ify"), makeString("ize"));
-
-    static private final SubLList $list_alt149 = list(makeString("ing"));
-
-    static private final SubLList $list_alt150 = list(makeString("or"), makeString("er"));
-
-    static private final SubLList $list_alt151 = list(makeKeyword("ANY"), makeKeyword("INITIAL"));
-
-    static private final SubLString $str_alt159$_A_is_not_a__A = makeString("~A is not a ~A");
-
-    static private final SubLString $str_alt164$_A_is_not_a_valid__sbhl_type_erro = makeString("~A is not a valid *sbhl-type-error-action* value");
-
-    static private final SubLString $str_alt165$attempting_to_bind_direction_link = makeString("attempting to bind direction link variable, to NIL. macro body not executed.");
-
-    static private final SubLList $list_alt166 = list(makeUninternedSymbol("LINK-NODE"), makeUninternedSymbol("MT"), makeUninternedSymbol("TV"));
-
-    static private final SubLString $str_alt167$Node__a_does_not_pass_sbhl_type_t = makeString("Node ~a does not pass sbhl-type-test ~a~%");
-
-    static private final SubLList $list_alt168 = list(makeKeyword("ANY"), makeKeyword("FINAL"));
-
-    static private final SubLList $list_alt170 = list(makeKeyword("ANY"), makeKeyword("MEDIAL"));
-
-    static private final SubLString $str_alt175$word__a_usage___a__ = makeString("word ~a usage: ~a~%");
-
-    static private final SubLString $str_alt176$Setting_new_guessed_headword_to__ = makeString("Setting new guessed headword to ~S");
-
-
-
-
-
-    static private final SubLString $str_alt180$__Already_Lexified___S__ = makeString("~&Already Lexified: ~S~%");
-
-    static private final SubLString $str_alt181$__No_Lexifications_to_be_had___S_ = makeString("~&No Lexifications to be had: ~S~%");
-
-    static private final SubLString $str_alt182$__Lexified__S___S__ = makeString("~%Lexified ~S: ~S~%");
-
-    public static final SubLInteger $int$100000 = makeInteger(100000);
-
-    static private final SubLList $list_alt186 = list(makeSymbol("STRING"), makeSymbol("ASSERTION-EL-SET"));
-
-    static private final SubLList $list_alt189 = list(makeSymbol("?STRING"), makeSymbol("?SET"));
-
-    static private final SubLList $list_alt190 = list(list(ONE_INTEGER, TWO_INTEGER, ONE_INTEGER), list(TWO_INTEGER, TWO_INTEGER, TWO_INTEGER, TWO_INTEGER));
-
-    static private final SubLList $list_alt192 = list(reader_make_constant_shell("TestQueryFn"), reader_make_constant_shell("NLGIT-LexifyTerroristAttack"));
-
-    static private final SubLString $str_alt193$_S_of__S_have_definite_descriptio = makeString("~S of ~S have definite descriptions.~% Total definite descriptions: ~S");
-
-    public static final SubLInteger $int$250000 = makeInteger(250000);
-
-    static private final SubLString $str_alt195$_A_Starting_attempt_to_lexify__S = makeString("~A Starting attempt to lexify ~S");
-
-
-
-
-
-    static private final SubLString $str_alt198$_A_Finished_lexifying__S___Phrase = makeString("~A Finished lexifying ~S~% Phrases:~%");
-
-
-
-    static private final SubLSymbol $sym200$_PHRASE = makeSymbol("?PHRASE");
-
-    static private final SubLList $list_alt201 = list(reader_make_constant_shell("evaluate"), makeSymbol("?STRING"), list(reader_make_constant_shell("BestStringOfNLPhraseFn"), makeSymbol("?PHRASE")));
-
-
-
-    private static final SubLSymbol $MAX_TRANSFORMATION_DEPTH = makeKeyword("MAX-TRANSFORMATION-DEPTH");
-
-    public static final SubLInteger $int$300 = makeInteger(300);
-
-    static private final SubLSymbol $sym207$_STRING = makeSymbol("?STRING");
-
-
-
-    static private final SubLList $list_alt209 = list(reader_make_constant_shell("EnglishParaphraseMt"));
-
-    static private final SubLString $str_alt210$Couldn_t_find_attack_type_for__S_ = makeString("Couldn't find attack type for ~S in ~S");
-
-    static private final SubLString $str_alt211$Couldn_t_find_location_for__S_in_ = makeString("Couldn't find location for ~S in ~S");
-
-    static private final SubLString $str_alt212$Couldn_t_find_date_for__S_in__S = makeString("Couldn't find date for ~S in ~S");
-
-
-
-    static private final SubLSymbol $sym214$_DATE = makeSymbol("?DATE");
-
-
-
-    static private final SubLSymbol $sym218$_LOCATION = makeSymbol("?LOCATION");
-
-
-
-
-
-
 }
 
 /**

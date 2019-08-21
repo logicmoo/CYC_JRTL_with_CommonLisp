@@ -1,83 +1,69 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-
+import com.cyc.cycjava.cycl.subloop_markable;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
+import static com.cyc.cycjava.cycl.subloop_markable.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- * module:      SUBLOOP-MARKABLE
- * source file: /cyc/top/cycl/subloop-markable.lisp
- * created:     2019/07/03 17:37:08
- */
-public final class subloop_markable extends SubLTranslatedFile implements V12 {
+
+public final class subloop_markable extends SubLTranslatedFile {
     public static final SubLFile me = new subloop_markable();
 
+    public static final String myName = "com.cyc.cycjava.cycl.subloop_markable";
 
+    public static final String myFingerPrint = "eadfbb3ae0c746a8d3199acd44a8338b32efa89d8cbb366d0b8cbd4264164676";
 
     // Internal Constants
-    @LispMethod(comment = "Internal Constants")
-    private static final SubLSymbol SUBLOOP_MARKABLE = makeSymbol("SUBLOOP-MARKABLE");
+    public static final SubLSymbol SUBLOOP_MARKABLE = makeSymbol("SUBLOOP-MARKABLE");
 
-    static private final SubLList $list1 = list(list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("CLEAR-ALL-MARKS"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("ADD-MARK"), list(makeSymbol("MARK")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("REMOVE-MARK"), list(makeSymbol("MARK")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("HAS-MARK-P"), list(makeSymbol("MARK")), makeKeyword("PUBLIC")));
+    public static final SubLList $list1 = list(list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("CLEAR-ALL-MARKS"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("ADD-MARK"), list(makeSymbol("MARK")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("REMOVE-MARK"), list(makeSymbol("MARK")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("HAS-MARK-P"), list(makeSymbol("MARK")), makeKeyword("PUBLIC")));
 
-    private static final SubLSymbol SUBLOOP_MARKABLE_TEMPLATE = makeSymbol("SUBLOOP-MARKABLE-TEMPLATE");
+    public static final SubLSymbol SUBLOOP_MARKABLE_TEMPLATE = makeSymbol("SUBLOOP-MARKABLE-TEMPLATE");
 
-    static private final SubLList $list3 = list(makeSymbol("SUBLOOP-MARKABLE"));
+    public static final SubLList $list3 = list(makeSymbol("SUBLOOP-MARKABLE"));
 
-    static private final SubLList $list4 = list(makeKeyword("EXTENDS"), list(makeSymbol("SUBLOOP-MARKABLE")));
+    public static final SubLList $list4 = list(makeKeyword("EXTENDS"), list(makeSymbol("SUBLOOP-MARKABLE")));
 
-    static private final SubLList $list5 = list(list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("GET-MARKS-INTERNAL"), NIL, makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("SET-MARKS-INTERNAL"), list(makeSymbol("NEW-MARKS")), makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("INITIALIZE-QUA-SUBLOOP-MARKABLE-TEMPLATE"), NIL, makeKeyword("PUBLIC")));
+    public static final SubLList $list5 = list(list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("GET-MARKS-INTERNAL"), NIL, makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("SET-MARKS-INTERNAL"), list(makeSymbol("NEW-MARKS")), makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("INITIALIZE-QUA-SUBLOOP-MARKABLE-TEMPLATE"), NIL, makeKeyword("PUBLIC")));
 
-    static private final SubLList $list7 = list(makeKeyword("PUBLIC"));
 
-    static private final SubLList $list8 = list(list(makeSymbol("SET-MARKS-INTERNAL"), makeSymbol("SELF"), NIL), list(RET, NIL));
 
-    static private final SubLList $list10 = list(makeSymbol("MARK"));
+    public static final SubLList $list7 = list(makeKeyword("PUBLIC"));
 
-    static private final SubLList $list11 = list(list(makeSymbol("CLET"), list(list(makeSymbol("LIST-OF-MARKS"), list(makeSymbol("GET-MARKS-INTERNAL"), makeSymbol("SELF")))), list(makeSymbol("PUNLESS"), list(makeSymbol("MEMBER"), makeSymbol("MARK"), makeSymbol("LIST-OF-MARKS")), list(makeSymbol("CPUSH"), makeSymbol("MARK"), makeSymbol("LIST-OF-MARKS")), list(makeSymbol("SET-MARKS-INTERNAL"), makeSymbol("SELF"), makeSymbol("LIST-OF-MARKS")))), list(RET, makeSymbol("MARK")));
+    public static final SubLList $list8 = list(list(makeSymbol("SET-MARKS-INTERNAL"), makeSymbol("SELF"), NIL), list(makeSymbol("RET"), NIL));
 
-    static private final SubLList $list13 = list(list(makeSymbol("SET-MARKS-INTERNAL"), makeSymbol("SELF"), list(makeSymbol("DELETE"), makeSymbol("MARK"), list(makeSymbol("GET-MARKS-INTERNAL"), makeSymbol("SELF")))), list(RET, makeSymbol("MARK")));
 
-    static private final SubLList $list_alt1 = list(list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("CLEAR-ALL-MARKS"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("ADD-MARK"), list(makeSymbol("MARK")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("REMOVE-MARK"), list(makeSymbol("MARK")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("HAS-MARK-P"), list(makeSymbol("MARK")), makeKeyword("PUBLIC")));
 
-    static private final SubLList $list15 = list(list(RET, list(makeSymbol("FIF"), list(makeSymbol("MEMBER"), makeSymbol("MARK"), list(makeSymbol("GET-MARKS-INTERNAL"), makeSymbol("SELF"))), T, NIL)));
+    public static final SubLList $list10 = list(makeSymbol("MARK"));
 
-    private static final SubLSymbol INITIALIZE_QUA_SUBLOOP_MARKABLE_TEMPLATE = makeSymbol("INITIALIZE-QUA-SUBLOOP-MARKABLE-TEMPLATE");
+    public static final SubLList $list11 = list(list(makeSymbol("CLET"), list(list(makeSymbol("LIST-OF-MARKS"), list(makeSymbol("GET-MARKS-INTERNAL"), makeSymbol("SELF")))), list(makeSymbol("PUNLESS"), list(makeSymbol("MEMBER"), makeSymbol("MARK"), makeSymbol("LIST-OF-MARKS")), list(makeSymbol("CPUSH"), makeSymbol("MARK"), makeSymbol("LIST-OF-MARKS")), list(makeSymbol("SET-MARKS-INTERNAL"), makeSymbol("SELF"), makeSymbol("LIST-OF-MARKS")))), list(makeSymbol("RET"), makeSymbol("MARK")));
 
-    static private final SubLList $list17 = list(list(makeSymbol("SET-MARKS-INTERNAL"), makeSymbol("SELF"), NIL), list(RET, makeSymbol("SELF")));
 
-    static private final SubLList $list_alt3 = list(makeSymbol("SUBLOOP-MARKABLE"));
 
-    static private final SubLList $list_alt4 = list(makeKeyword("EXTENDS"), list(makeSymbol("SUBLOOP-MARKABLE")));
+    public static final SubLList $list13 = list(list(makeSymbol("SET-MARKS-INTERNAL"), makeSymbol("SELF"), list(makeSymbol("DELETE"), makeSymbol("MARK"), list(makeSymbol("GET-MARKS-INTERNAL"), makeSymbol("SELF")))), list(makeSymbol("RET"), makeSymbol("MARK")));
 
-    // Definitions
-    public static final SubLObject subloop_markable_p_alt(SubLObject v_subloop_markable) {
-        return interfaces.subloop_instanceof_interface(v_subloop_markable, SUBLOOP_MARKABLE);
-    }
 
-    // Definitions
+
+    public static final SubLList $list15 = list(list(makeSymbol("RET"), list(makeSymbol("FIF"), list(makeSymbol("MEMBER"), makeSymbol("MARK"), list(makeSymbol("GET-MARKS-INTERNAL"), makeSymbol("SELF"))), T, NIL)));
+
+    public static final SubLSymbol INITIALIZE_QUA_SUBLOOP_MARKABLE_TEMPLATE = makeSymbol("INITIALIZE-QUA-SUBLOOP-MARKABLE-TEMPLATE");
+
+    public static final SubLList $list17 = list(list(makeSymbol("SET-MARKS-INTERNAL"), makeSymbol("SELF"), NIL), list(makeSymbol("RET"), makeSymbol("SELF")));
+
     public static SubLObject subloop_markable_p(final SubLObject v_subloop_markable) {
         return interfaces.subloop_instanceof_interface(v_subloop_markable, SUBLOOP_MARKABLE);
-    }
-
-    static private final SubLList $list_alt5 = list(list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("GET-MARKS-INTERNAL"), NIL, makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("SET-MARKS-INTERNAL"), list(makeSymbol("NEW-MARKS")), makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("INITIALIZE-QUA-SUBLOOP-MARKABLE-TEMPLATE"), NIL, makeKeyword("PUBLIC")));
-
-    public static final SubLObject subloop_markable_template_p_alt(SubLObject subloop_markable_template) {
-        return interfaces.subloop_instanceof_interface(subloop_markable_template, SUBLOOP_MARKABLE_TEMPLATE);
     }
 
     public static SubLObject subloop_markable_template_p(final SubLObject subloop_markable_template) {
@@ -85,20 +71,14 @@ public final class subloop_markable extends SubLTranslatedFile implements V12 {
     }
 
     public static SubLObject declare_subloop_markable_file() {
-        declareFunction("subloop_markable_p", "SUBLOOP-MARKABLE-P", 1, 0, false);
-        declareFunction("subloop_markable_template_p", "SUBLOOP-MARKABLE-TEMPLATE-P", 1, 0, false);
+        declareFunction(me, "subloop_markable_p", "SUBLOOP-MARKABLE-P", 1, 0, false);
+        declareFunction(me, "subloop_markable_template_p", "SUBLOOP-MARKABLE-TEMPLATE-P", 1, 0, false);
         return NIL;
     }
-
-    static private final SubLList $list_alt7 = list(makeKeyword("PUBLIC"));
-
-    static private final SubLList $list_alt8 = list(list(makeSymbol("SET-MARKS-INTERNAL"), makeSymbol("SELF"), NIL), list(RET, NIL));
 
     public static SubLObject init_subloop_markable_file() {
         return NIL;
     }
-
-    static private final SubLList $list_alt10 = list(makeSymbol("MARK"));
 
     public static SubLObject setup_subloop_markable_file() {
         interfaces.new_interface(SUBLOOP_MARKABLE, NIL, NIL, $list1);
@@ -110,12 +90,6 @@ public final class subloop_markable extends SubLTranslatedFile implements V12 {
         interfaces.interfaces_add_interface_instance_method(INITIALIZE_QUA_SUBLOOP_MARKABLE_TEMPLATE, SUBLOOP_MARKABLE_TEMPLATE, $list7, NIL, $list17);
         return NIL;
     }
-
-    static private final SubLList $list_alt11 = list(list(makeSymbol("CLET"), list(list(makeSymbol("LIST-OF-MARKS"), list(makeSymbol("GET-MARKS-INTERNAL"), makeSymbol("SELF")))), list(makeSymbol("PUNLESS"), list(makeSymbol("MEMBER"), makeSymbol("MARK"), makeSymbol("LIST-OF-MARKS")), list(makeSymbol("CPUSH"), makeSymbol("MARK"), makeSymbol("LIST-OF-MARKS")), list(makeSymbol("SET-MARKS-INTERNAL"), makeSymbol("SELF"), makeSymbol("LIST-OF-MARKS")))), list(RET, makeSymbol("MARK")));
-
-    static private final SubLList $list_alt13 = list(list(makeSymbol("SET-MARKS-INTERNAL"), makeSymbol("SELF"), list(makeSymbol("DELETE"), makeSymbol("MARK"), list(makeSymbol("GET-MARKS-INTERNAL"), makeSymbol("SELF")))), list(RET, makeSymbol("MARK")));
-
-    static private final SubLList $list_alt15 = list(list(RET, list(makeSymbol("FIF"), list(makeSymbol("MEMBER"), makeSymbol("MARK"), list(makeSymbol("GET-MARKS-INTERNAL"), makeSymbol("SELF"))), T, NIL)));
 
     @Override
     public void declareFunctions() {
@@ -132,9 +106,26 @@ public final class subloop_markable extends SubLTranslatedFile implements V12 {
         setup_subloop_markable_file();
     }
 
-    static private final SubLList $list_alt17 = list(list(makeSymbol("SET-MARKS-INTERNAL"), makeSymbol("SELF"), NIL), list(RET, makeSymbol("SELF")));
-
     static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
 

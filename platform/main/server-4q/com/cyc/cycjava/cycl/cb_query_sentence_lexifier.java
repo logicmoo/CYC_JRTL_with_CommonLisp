@@ -430,7 +430,7 @@ public final class cb_query_sentence_lexifier extends SubLTranslatedFile impleme
                                                         }
                                                         html_utilities.html_markup(html_macros.$html_textarea_tail$.getGlobalValue());
                                                         html_utilities.html_newline(UNPROVIDED);
-                                                        html_script_utilities.html_clear_input_button($str_alt42$_gloss, $$$Clear_Gloss);
+                                                        html_script_utilities.html_clear_input_button($str_alt42$_gloss, $$$Clear_Gloss, UNPROVIDED_SYM);
                                                         html_utilities.html_newline(TWO_INTEGER);
                                                         html_utilities.html_markup(html_macros.$html_bold_head$.getGlobalValue());
                                                         dhtml_macros.dhtml_switch_visibility_links_arrows($str_alt46$cycl_query, $str_alt47$CycL_Query_Sentence__);

@@ -1,104 +1,11 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.control_vars.$within_assert$;
-import static com.cyc.cycjava.cycl.control_vars.within_assertP;
-import static com.cyc.cycjava.cycl.el_utilities.el_formula_p;
-import static com.cyc.cycjava.cycl.el_utilities.make_binary_formula;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_empty_p;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_id_and_object_validP;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_next_id;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_next_state;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_state_object;
-import static com.cyc.cycjava.cycl.id_index.id_index_count;
-import static com.cyc.cycjava.cycl.id_index.id_index_dense_objects;
-import static com.cyc.cycjava.cycl.id_index.id_index_dense_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_next_id;
-import static com.cyc.cycjava.cycl.id_index.id_index_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_skip_tombstones_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_id_threshold;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_objects;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_tombstone_p;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.$catch_error_message_target$;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.$with_timeout_nesting_depth$;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.$within_with_timeout$;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.declare_defglobal;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.with_timeout_make_tag;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.with_timeout_start_timer;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.with_timeout_stop_timer;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_index$;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_prediction$;
-import static com.cyc.cycjava.cycl.utilities_macros.$percent_progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_note$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_sofar$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_total$;
-import static com.cyc.cycjava.cycl.utilities_macros.$within_noting_percent_progress$;
-import static com.cyc.cycjava.cycl.utilities_macros.note_percent_progress;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_percent_progress_postamble;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_percent_progress_preamble;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.bind;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.currentBinding;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.rebind;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.clrhash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.getEntryKey;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.getEntrySetIterator;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.getEntryValue;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.gethash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.gethash_without_values;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.hash_table_count;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.iteratorHasNext;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.iteratorNextEntry;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.make_hash_table;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.releaseEntrySetIterator;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.remhash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.sethash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.divide;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.multiply;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.numG;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.subtract;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.truncate;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.length;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.boundp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.current_process;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.get_universal_time;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.stringp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.values;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.aref;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.second;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.set_difference;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.read_ignoring_errors;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.close;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.file_length;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.file_position;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-import static com.cyc.tool.subl.util.SubLFiles.defvar;
-
-import java.util.Iterator;
-import java.util.Map;
-
+import com.cyc.cycjava.cycl.control_vars;
 import com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars;
+import com.cyc.cycjava.cycl.subl_macro_promotions;
+import com.cyc.cycjava.cycl.utilities_macros;
+import com.cyc.cycjava.cycl.wff_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Filesys;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
@@ -111,76 +18,115 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
+import java.util.Iterator;
+import java.util.Map;
+
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.id_index.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.cycjava.cycl.wff_utilities.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.MINUS_ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- * module:      WFF-UTILITIES
- * source file: /cyc/top/cycl/wff-utilities.lisp
- * created:     2019/07/03 17:37:28
- */
-public final class wff_utilities extends SubLTranslatedFile implements V12 {
+public final class wff_utilities extends SubLTranslatedFile {
     public static final SubLFile me = new wff_utilities();
 
+    public static final String myName = "com.cyc.cycjava.cycl.wff_utilities";
 
+    public static final String myFingerPrint = "453636a9f917be7a69d09ce199ff8ce43670496bac2011e8215676aefc66d538";
 
     // defparameter
-    // Definitions
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $check_wff_constantsP$ = makeSymbol("*CHECK-WFF-CONSTANTS?*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $check_wff_semanticsP$ = makeSymbol("*CHECK-WFF-SEMANTICS?*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $check_wff_coherenceP$ = makeSymbol("*CHECK-WFF-COHERENCE?*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $check_arg_typesP$ = makeSymbol("*CHECK-ARG-TYPES?*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $check_var_typesP$ = makeSymbol("*CHECK-VAR-TYPES?*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $check_arityP$ = makeSymbol("*CHECK-ARITY?*");
 
     // defparameter
-    /**
-     * Whether to use a totally syntactic wff-check if all semantic wff-checking is disabled.
-     */
-    @LispMethod(comment = "Whether to use a totally syntactic wff-check if all semantic wff-checking is disabled.\ndefparameter")
     public static final SubLSymbol $use_cycl_grammar_if_semantic_checking_disabledP$ = makeSymbol("*USE-CYCL-GRAMMAR-IF-SEMANTIC-CHECKING-DISABLED?*");
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // defvar
-    @LispMethod(comment = "defvar")
     private static final SubLSymbol $non_wff_store$ = makeSymbol("*NON-WFF-STORE*");
 
+
+
+
+
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $non_wff_current_assertion$ = makeSymbol("*NON-WFF-CURRENT-ASSERTION*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $non_wff_outlier_timeout$ = makeSymbol("*NON-WFF-OUTLIER-TIMEOUT*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $non_wff_count$ = makeSymbol("*NON-WFF-COUNT*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $non_wff_verboseP$ = makeSymbol("*NON-WFF-VERBOSE?*");
 
-    private static final SubLSymbol NON_WF_VARIABLE_P = makeSymbol("NON-WF-VARIABLE-P");
+
+
+    public static final SubLSymbol NON_WF_VARIABLE_P = makeSymbol("NON-WF-VARIABLE-P");
 
     public static final SubLSymbol $non_wff_list$ = makeSymbol("*NON-WFF-LIST*");
 
@@ -194,6 +140,12 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $$$mapping_Cyc_assertions = makeString("mapping Cyc assertions");
 
+
+
+
+
+
+
     private static final SubLString $str11$WFF_checking_assertion_range__A__ = makeString("WFF-checking assertion range ~A - ~A");
 
     private static final SubLList $list12 = list(makeUninternedSymbol("START"), makeUninternedSymbol("END"), makeUninternedSymbol("DELTA"));
@@ -202,9 +154,15 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
 
     public static final SubLSymbol $post_wff_hash$ = makeSymbol("*POST-WFF-HASH*");
 
+    private static final SubLObject $$genlMt = reader_make_constant_shell(makeString("genlMt"));
+
+    public static final SubLString $str16$it_is_not_the_case_that____genlMt = makeString("it is not the case that (#$genlMt ~s ~s)");
 
 
-    static private final SubLString $str16$it_is_not_the_case_that____genlMt = makeString("it is not the case that (#$genlMt ~s ~s)");
+
+
+
+
 
     private static final SubLInteger $int$2048 = makeInteger(2048);
 
@@ -212,33 +170,45 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
 
     public static final SubLSymbol $non_wff_end$ = makeSymbol("*NON-WFF-END*");
 
+    private static final SubLInteger $int$30 = makeInteger(30);
+
+    public static final SubLString $$$Determining_largest_checked_ID = makeString("Determining largest checked ID");
+
+    public static final SubLString $str25$____Starting_with_ID____S = makeString("~%~%Starting with ID = ~S");
 
 
-    static private final SubLString $$$Determining_largest_checked_ID = makeString("Determining largest checked ID");
 
-    static private final SubLString $str25$____Starting_with_ID____S = makeString("~%~%Starting with ID = ~S");
+    public static final SubLString $str27$Unable_to_open__S = makeString("Unable to open ~S");
 
-    static private final SubLString $str27$Unable_to_open__S = makeString("Unable to open ~S");
-
-    static private final SubLString $str28$____start_time__S_ = makeString("~%(:start-time ~S)");
-
-    static private final SubLString $str30$____S__S_ = makeString("~%(~S ~S)");
-
-    static private final SubLString $str31$WFF_took_more_than__S_seconds_on_ = makeString("WFF took more than ~S seconds on ~S");
-
-    static private final SubLString $str32$____error__S__S_ = makeString("~%(:error ~S ~S)");
-
-    static private final SubLString $str33$____end_time__S_ = makeString("~%(:end-time ~S)");
-
-    static private final SubLString $str34$No_WFF_sweep_has_been_started_ = makeString("No WFF-sweep has been started.");
-
-    static private final SubLString $str35$After__S___the_whole_KB_should_ta = makeString("After ~S%, the whole KB should take ~S days.  Expected completion: ~A.");
+    public static final SubLString $str28$____start_time__S_ = makeString("~%(:start-time ~S)");
 
 
+
+    public static final SubLString $str30$____S__S_ = makeString("~%(~S ~S)");
+
+    public static final SubLString $str31$WFF_took_more_than__S_seconds_on_ = makeString("WFF took more than ~S seconds on ~S");
+
+    public static final SubLString $str32$____error__S__S_ = makeString("~%(:error ~S ~S)");
+
+    public static final SubLString $str33$____end_time__S_ = makeString("~%(:end-time ~S)");
+
+    public static final SubLString $str34$No_WFF_sweep_has_been_started_ = makeString("No WFF-sweep has been started.");
+
+    public static final SubLString $str35$After__S___the_whole_KB_should_ta = makeString("After ~S%, the whole KB should take ~S days.  Expected completion: ~A.");
+
+    private static final SubLInteger $int$24 = makeInteger(24);
 
     private static final SubLInteger $int$60 = makeInteger(60);
 
-    static private final SubLString $str42$Converting__non_wff_list__to__non = makeString("Converting *non-wff-list* to *non-wff-store*");
+
+
+
+
+
+
+
+
+    public static final SubLString $str42$Converting__non_wff_list__to__non = makeString("Converting *non-wff-list* to *non-wff-store*");
 
     private static final SubLString $$$cdolist = makeString("cdolist");
 
@@ -252,7 +222,11 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str48$______A = makeString("~%;; ~A");
 
+
+
     private static final SubLString $str50$Saving_the_non_WFF_store_in_exter = makeString("Saving the non-WFF store in externalized form.");
+
+
 
     private static final SubLString $str52$Saving_the_non_WFF_store_in_inter = makeString("Saving the non-WFF store in internalized form.");
 
@@ -264,6 +238,10 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str56$Loading_the_non_WFF_store = makeString("Loading the non-WFF store");
 
+
+
+
+
     private static final SubLString $str59$The_assertion_with_this_external_ = makeString("The assertion with this external ID has a NIL assertion-id: ~S");
 
     private static final SubLString $str60$Assertions_with_HL_external_ID__S = makeString("Assertions with HL external ID ~S is not valid; skipping.");
@@ -272,22 +250,8 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str62$Record__S_is_an_unknown_type_ = makeString("Record ~S is an unknown type.");
 
-    /**
-     * Return T IFF ASSERTION's formula is not well-formed in its Mt.
-     */
-    @LispMethod(comment = "Return T IFF ASSERTION\'s formula is not well-formed in its Mt.")
-    public static final SubLObject assertion_not_wffP_alt(SubLObject assertion) {
-        {
-            SubLObject formula = uncanonicalizer.assertion_el_formula(assertion);
-            SubLObject mt = assertions_high.assertion_mt(assertion);
-            return makeBoolean(NIL == wff.el_wffP(formula, mt, UNPROVIDED));
-        }
-    }
 
-    /**
-     * Return T IFF ASSERTION's formula is not well-formed in its Mt.
-     */
-    @LispMethod(comment = "Return T IFF ASSERTION\'s formula is not well-formed in its Mt.")
+
     public static SubLObject assertion_not_wffP(final SubLObject assertion) {
         return makeBoolean(NIL == assertion_wffP(assertion));
     }
@@ -320,21 +284,6 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
         return wff.why_not_wff_assert(formula, mt, UNPROVIDED);
     }
 
-    public static final SubLObject set_dont_check_wff_semantics_alt() {
-        $within_assert$.setDynamicValue(NIL);
-        $check_arg_typesP$.setDynamicValue(NIL);
-        at_vars.$at_check_arg_typesP$.setDynamicValue(NIL);
-        $check_wff_semanticsP$.setDynamicValue(NIL);
-        $check_wff_coherenceP$.setDynamicValue(NIL);
-        $check_var_typesP$.setDynamicValue(NIL);
-        czer_vars.$simplify_literalP$.setDynamicValue(NIL);
-        at_vars.$at_check_relator_constraintsP$.setDynamicValue(NIL);
-        at_vars.$at_check_arg_formatP$.setDynamicValue(NIL);
-        wff_vars.$validate_constantsP$.setDynamicValue(NIL);
-        system_parameters.$suspend_sbhl_type_checkingP$.setDynamicValue(T);
-        return NIL;
-    }
-
     public static SubLObject set_dont_check_wff_semantics() {
         $within_assert$.setDynamicValue(NIL);
         $check_arg_typesP$.setDynamicValue(NIL);
@@ -350,18 +299,6 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject set_check_wff_semantics_alt() {
-        $check_arg_typesP$.setDynamicValue(T);
-        at_vars.$at_check_arg_typesP$.setDynamicValue(T);
-        $check_wff_semanticsP$.setDynamicValue(T);
-        $check_var_typesP$.setDynamicValue(T);
-        czer_vars.$simplify_literalP$.setDynamicValue(T);
-        at_vars.$at_check_relator_constraintsP$.setDynamicValue(T);
-        at_vars.$at_check_arg_formatP$.setDynamicValue(T);
-        wff_vars.$validate_constantsP$.setDynamicValue(T);
-        return NIL;
-    }
-
     public static SubLObject set_check_wff_semantics() {
         $check_arg_typesP$.setDynamicValue(T);
         at_vars.$at_check_arg_typesP$.setDynamicValue(T);
@@ -374,74 +311,18 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     *
-     *
-     * @return BOOLEAN; Should we check literals for assertibility?
-     */
-    @LispMethod(comment = "@return BOOLEAN; Should we check literals for assertibility?")
-    public static final SubLObject check_assertible_literalP_alt() {
-        return within_assertP();
-    }
-
-    /**
-     *
-     *
-     * @return BOOLEAN; Should we check literals for assertibility?
-     */
-    @LispMethod(comment = "@return BOOLEAN; Should we check literals for assertibility?")
     public static SubLObject check_assertible_literalP() {
         return within_assertP();
-    }
-
-    public static final SubLObject mal_mt_specP_alt(SubLObject mt) {
-        return makeBoolean(NIL == com.cyc.cycjava.cycl.wff_utilities.valid_mt_specP(mt));
     }
 
     public static SubLObject mal_mt_specP(final SubLObject mt) {
         return makeBoolean(NIL == valid_mt_specP(mt));
     }
 
-    public static final SubLObject valid_mt_specP_alt(SubLObject mt) {
-        return makeBoolean((NIL != hlmt.hlmtP(mt)) || ((NIL == mt) && (NIL != mt_relevance_macros.all_mts_are_relevantP())));
-    }
-
     public static SubLObject valid_mt_specP(final SubLObject mt) {
         return makeBoolean((NIL != hlmt.hlmtP(mt)) || ((NIL == mt) && (NIL != mt_relevance_macros.all_mts_are_relevantP())));
     }
 
-    /**
-     *
-     *
-     * @return boolean; t iff OBJECT is a well-formed fort.
-    notes a wff violation if OBJECT is an invalid fort.
-     */
-    @LispMethod(comment = "@return boolean; t iff OBJECT is a well-formed fort.\r\nnotes a wff violation if OBJECT is an invalid fort.")
-    public static final SubLObject wf_fort_p_alt(SubLObject v_object) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != forts.valid_fortP(v_object)) {
-                return T;
-            } else {
-                if (NIL == forts.fort_p(v_object)) {
-                    return NIL;
-                } else {
-                    if (NIL != wff_vars.$within_wffP$.getDynamicValue(thread)) {
-                        wff.note_wff_violation(list($MAL_FORT, v_object));
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
-    /**
-     *
-     *
-     * @return boolean; t iff OBJECT is a well-formed fort.
-    notes a wff violation if OBJECT is an invalid fort.
-     */
-    @LispMethod(comment = "@return boolean; t iff OBJECT is a well-formed fort.\r\nnotes a wff violation if OBJECT is an invalid fort.")
     public static SubLObject wf_fort_p(final SubLObject v_object) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != forts.valid_fortP(v_object)) {
@@ -456,238 +337,36 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     *
-     *
-     * @return boolean; t iff OBJECT is an ill-formed fort.
-    notes a wff violation if OBJECT is an invalid fort.
-     */
-    @LispMethod(comment = "@return boolean; t iff OBJECT is an ill-formed fort.\r\nnotes a wff violation if OBJECT is an invalid fort.")
-    public static final SubLObject non_wf_fort_p_alt(SubLObject v_object) {
-        return makeBoolean((NIL != forts.fort_p(v_object)) && (NIL == com.cyc.cycjava.cycl.wff_utilities.wf_fort_p(v_object)));
-    }
-
-    /**
-     *
-     *
-     * @return boolean; t iff OBJECT is an ill-formed fort.
-    notes a wff violation if OBJECT is an invalid fort.
-     */
-    @LispMethod(comment = "@return boolean; t iff OBJECT is an ill-formed fort.\r\nnotes a wff violation if OBJECT is an invalid fort.")
     public static SubLObject non_wf_fort_p(final SubLObject v_object) {
         return makeBoolean((NIL != forts.fort_p(v_object)) && (NIL == wf_fort_p(v_object)));
     }
 
-    /**
-     *
-     *
-     * @return boolean; Returns T iff OBJECT is an invalid el-var. @xref valid-el-var?
-     */
-    @LispMethod(comment = "@return boolean; Returns T iff OBJECT is an invalid el-var. @xref valid-el-var?")
-    public static final SubLObject non_wf_variable_p_alt(SubLObject v_object) {
-        return makeBoolean((NIL != cycl_variables.el_varP(v_object)) && (NIL == cycl_variables.valid_el_varP(v_object)));
-    }
-
-    /**
-     *
-     *
-     * @return boolean; Returns T iff OBJECT is an invalid el-var. @xref valid-el-var?
-     */
-    @LispMethod(comment = "@return boolean; Returns T iff OBJECT is an invalid el-var. @xref valid-el-var?")
     public static SubLObject non_wf_variable_p(final SubLObject v_object) {
         return makeBoolean((NIL != cycl_variables.el_varP(v_object)) && (NIL == cycl_variables.valid_el_varP(v_object)));
     }
 
-    /**
-     *
-     *
-     * @return boolean; Return T if SENTENCE has any invalid el-vars. @xref non-wf-variable-p
-     */
-    @LispMethod(comment = "@return boolean; Return T if SENTENCE has any invalid el-vars. @xref non-wf-variable-p")
-    public static final SubLObject mal_variablesP_alt(SubLObject sentence) {
-        return cycl_utilities.expression_find_if(symbol_function(NON_WF_VARIABLE_P), sentence, UNPROVIDED, UNPROVIDED);
-    }
-
-    /**
-     *
-     *
-     * @return boolean; Return T if SENTENCE has any invalid el-vars. @xref non-wf-variable-p
-     */
-    @LispMethod(comment = "@return boolean; Return T if SENTENCE has any invalid el-vars. @xref non-wf-variable-p")
     public static SubLObject mal_variablesP(final SubLObject sentence) {
         return cycl_utilities.expression_find_if(symbol_function(NON_WF_VARIABLE_P), sentence, UNPROVIDED, UNPROVIDED);
     }
 
-    /**
-     *
-     *
-     * @return listp; Returns a list of invalid variables in SENTENCE. @xref non-wf-variable-p
-     */
-    @LispMethod(comment = "@return listp; Returns a list of invalid variables in SENTENCE. @xref non-wf-variable-p")
-    public static final SubLObject mal_variables_alt(SubLObject sentence) {
-        return cycl_utilities.expression_gather(sentence, symbol_function(NON_WF_VARIABLE_P), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-    }
-
-    /**
-     *
-     *
-     * @return listp; Returns a list of invalid variables in SENTENCE. @xref non-wf-variable-p
-     */
-    @LispMethod(comment = "@return listp; Returns a list of invalid variables in SENTENCE. @xref non-wf-variable-p")
     public static SubLObject mal_variables(final SubLObject sentence) {
         return cycl_utilities.expression_gather(sentence, symbol_function(NON_WF_VARIABLE_P), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-    }
-
-    public static final SubLObject non_wff_assertion_ids_alt() {
-        return $non_wff_list$.getGlobalValue();
     }
 
     public static SubLObject non_wff_assertion_ids() {
         return $non_wff_list$.getGlobalValue();
     }
 
-    public static final SubLObject number_of_assertions_wff_checked_alt() {
-        return $num_assertions_checked$.getGlobalValue();
-    }
-
     public static SubLObject number_of_assertions_wff_checked() {
         return $num_assertions_checked$.getGlobalValue();
-    }
-
-    public static final SubLObject last_wff_checked_assertion_id_alt() {
-        return $last_checked_assertion_id$.getGlobalValue();
     }
 
     public static SubLObject last_wff_checked_assertion_id() {
         return $last_checked_assertion_id$.getGlobalValue();
     }
 
-    public static final SubLObject non_wff_error_alt() {
-        return $non_wff_error$.getGlobalValue();
-    }
-
     public static SubLObject non_wff_error() {
         return $non_wff_error$.getGlobalValue();
-    }
-
-    public static final SubLObject non_wffs_in_mts_alt(SubLObject mts, SubLObject start_id) {
-        if (start_id == UNPROVIDED) {
-            start_id = ZERO_INTEGER;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            $num_assertions_checked$.setGlobalValue(ZERO_INTEGER);
-            $last_checked_assertion_id$.setGlobalValue(ZERO_INTEGER);
-            {
-                SubLObject state = memoization_state.new_memoization_state(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                SubLObject local_state = state;
-                {
-                    SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
-                    try {
-                        memoization_state.$memoization_state$.bind(local_state, thread);
-                        {
-                            SubLObject original_memoization_process = NIL;
-                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                {
-                                    SubLObject current_proc = current_process();
-                                    if (NIL == original_memoization_process) {
-                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                    } else {
-                                        if (original_memoization_process != current_proc) {
-                                            Errors.error($str_alt7$Invalid_attempt_to_reuse_memoizat);
-                                        }
-                                    }
-                                }
-                            }
-                            try {
-                                {
-                                    SubLObject sbhl_ms_resource = sbhl_marking_vars.new_sbhl_marking_space_resource(TEN_INTEGER);
-                                    {
-                                        SubLObject _prev_bind_0_1 = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.currentBinding(thread);
-                                        SubLObject _prev_bind_1 = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.currentBinding(thread);
-                                        SubLObject _prev_bind_2 = sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.currentBinding(thread);
-                                        try {
-                                            sbhl_marking_vars.$resourced_sbhl_marking_spaces$.bind(sbhl_ms_resource, thread);
-                                            sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.bind(T, thread);
-                                            sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.bind(sbhl_marking_vars.determine_marking_space_limit(sbhl_marking_vars.$resourced_sbhl_marking_spaces$.getDynamicValue(thread)), thread);
-                                            {
-                                                SubLObject idx = assertion_handles.do_assertions_table();
-                                                SubLObject total = id_index_count(idx);
-                                                SubLObject sofar = ZERO_INTEGER;
-                                                SubLTrampolineFile.checkType($$$mapping_Cyc_assertions, STRINGP);
-                                                {
-                                                    SubLObject _prev_bind_0_2 = $last_percent_progress_index$.currentBinding(thread);
-                                                    SubLObject _prev_bind_1_3 = $last_percent_progress_prediction$.currentBinding(thread);
-                                                    SubLObject _prev_bind_2_4 = $within_noting_percent_progress$.currentBinding(thread);
-                                                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                                                    try {
-                                                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                                                        $last_percent_progress_prediction$.bind(NIL, thread);
-                                                        $within_noting_percent_progress$.bind(T, thread);
-                                                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                                                        noting_percent_progress_preamble($$$mapping_Cyc_assertions);
-                                                        if (NIL == do_id_index_empty_p(idx, $SKIP)) {
-                                                            {
-                                                                SubLObject id = do_id_index_next_id(idx, T, NIL, NIL);
-                                                                SubLObject state_var = do_id_index_next_state(idx, T, id, NIL);
-                                                                SubLObject ass = NIL;
-                                                                while (NIL != id) {
-                                                                    ass = do_id_index_state_object(idx, $SKIP, id, state_var);
-                                                                    if (NIL != do_id_index_id_and_object_validP(id, ass, $SKIP)) {
-                                                                        note_percent_progress(sofar, total);
-                                                                        sofar = add(sofar, ONE_INTEGER);
-                                                                        if (assertion_handles.assertion_id(ass).numGE(start_id) && (NIL != mt_relevance_macros.in_one_of_these_mtsP(ass, mts))) {
-                                                                            if (NIL != com.cyc.cycjava.cycl.wff_utilities.assertion_not_wffP(ass)) {
-                                                                                $non_wff_list$.setGlobalValue(cons(assertion_handles.assertion_id(ass), $non_wff_list$.getGlobalValue()));
-                                                                            }
-                                                                        }
-                                                                        $last_checked_assertion_id$.setGlobalValue(assertion_handles.assertion_id(ass));
-                                                                        $num_assertions_checked$.setGlobalValue(add($num_assertions_checked$.getGlobalValue(), ONE_INTEGER));
-                                                                    }
-                                                                    id = do_id_index_next_id(idx, T, id, state_var);
-                                                                    state_var = do_id_index_next_state(idx, T, id, state_var);
-                                                                } 
-                                                            }
-                                                        }
-                                                        noting_percent_progress_postamble();
-                                                    } finally {
-                                                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                                                        $within_noting_percent_progress$.rebind(_prev_bind_2_4, thread);
-                                                        $last_percent_progress_prediction$.rebind(_prev_bind_1_3, thread);
-                                                        $last_percent_progress_index$.rebind(_prev_bind_0_2, thread);
-                                                    }
-                                                }
-                                                sbhl_ms_resource = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.getDynamicValue(thread);
-                                            }
-                                        } finally {
-                                            sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.rebind(_prev_bind_2, thread);
-                                            sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.rebind(_prev_bind_1, thread);
-                                            sbhl_marking_vars.$resourced_sbhl_marking_spaces$.rebind(_prev_bind_0_1, thread);
-                                        }
-                                    }
-                                }
-                            } finally {
-                                {
-                                    SubLObject _prev_bind_0_5 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                    try {
-                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                        if ((NIL != local_state) && (NIL == original_memoization_process)) {
-                                            memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
-                                        }
-                                    } finally {
-                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_5, thread);
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return $non_wff_list$.getGlobalValue();
-        }
     }
 
     public static SubLObject non_wffs_in_mts(final SubLObject mts, SubLObject start_id) {
@@ -717,7 +396,7 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
                         final SubLObject mess = $$$mapping_Cyc_assertions;
                         final SubLObject total = id_index_count(idx);
                         SubLObject sofar = ZERO_INTEGER;
-                        assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
+                        assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
                         final SubLObject _prev_bind_0_$2 = $last_percent_progress_index$.currentBinding(thread);
                         final SubLObject _prev_bind_1_$3 = $last_percent_progress_prediction$.currentBinding(thread);
                         final SubLObject _prev_bind_2_$4 = $within_noting_percent_progress$.currentBinding(thread);
@@ -830,148 +509,6 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
         return $non_wff_list$.getGlobalValue();
     }
 
-    public static final SubLObject all_non_wff_assertion_ids_alt(SubLObject start_id) {
-        if (start_id == UNPROVIDED) {
-            start_id = ZERO_INTEGER;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            $num_assertions_checked$.setGlobalValue(ZERO_INTEGER);
-            $last_checked_assertion_id$.setGlobalValue(ZERO_INTEGER);
-            {
-                SubLObject state = memoization_state.new_memoization_state(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                SubLObject local_state = state;
-                {
-                    SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
-                    try {
-                        memoization_state.$memoization_state$.bind(local_state, thread);
-                        {
-                            SubLObject original_memoization_process = NIL;
-                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                {
-                                    SubLObject current_proc = current_process();
-                                    if (NIL == original_memoization_process) {
-                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                    } else {
-                                        if (original_memoization_process != current_proc) {
-                                            Errors.error($str_alt7$Invalid_attempt_to_reuse_memoizat);
-                                        }
-                                    }
-                                }
-                            }
-                            try {
-                                {
-                                    SubLObject sbhl_ms_resource = sbhl_marking_vars.new_sbhl_marking_space_resource(TEN_INTEGER);
-                                    {
-                                        SubLObject _prev_bind_0_6 = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.currentBinding(thread);
-                                        SubLObject _prev_bind_1 = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.currentBinding(thread);
-                                        SubLObject _prev_bind_2 = sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.currentBinding(thread);
-                                        try {
-                                            sbhl_marking_vars.$resourced_sbhl_marking_spaces$.bind(sbhl_ms_resource, thread);
-                                            sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.bind(T, thread);
-                                            sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.bind(sbhl_marking_vars.determine_marking_space_limit(sbhl_marking_vars.$resourced_sbhl_marking_spaces$.getDynamicValue(thread)), thread);
-                                            {
-                                                SubLObject idx = assertion_handles.do_assertions_table();
-                                                SubLObject total = id_index_count(idx);
-                                                SubLObject sofar = ZERO_INTEGER;
-                                                SubLTrampolineFile.checkType($$$mapping_Cyc_assertions, STRINGP);
-                                                {
-                                                    SubLObject _prev_bind_0_7 = $last_percent_progress_index$.currentBinding(thread);
-                                                    SubLObject _prev_bind_1_8 = $last_percent_progress_prediction$.currentBinding(thread);
-                                                    SubLObject _prev_bind_2_9 = $within_noting_percent_progress$.currentBinding(thread);
-                                                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                                                    try {
-                                                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                                                        $last_percent_progress_prediction$.bind(NIL, thread);
-                                                        $within_noting_percent_progress$.bind(T, thread);
-                                                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                                                        noting_percent_progress_preamble($$$mapping_Cyc_assertions);
-                                                        if (NIL == do_id_index_empty_p(idx, $SKIP)) {
-                                                            {
-                                                                SubLObject id = do_id_index_next_id(idx, T, NIL, NIL);
-                                                                SubLObject state_var = do_id_index_next_state(idx, T, id, NIL);
-                                                                SubLObject ass = NIL;
-                                                                while (NIL != id) {
-                                                                    ass = do_id_index_state_object(idx, $SKIP, id, state_var);
-                                                                    if (NIL != do_id_index_id_and_object_validP(id, ass, $SKIP)) {
-                                                                        note_percent_progress(sofar, total);
-                                                                        sofar = add(sofar, ONE_INTEGER);
-                                                                        if (assertion_handles.assertion_id(ass).numGE(start_id)) {
-                                                                            {
-                                                                                SubLObject error = NIL;
-                                                                                try {
-                                                                                    {
-                                                                                        SubLObject _prev_bind_0_10 = Errors.$error_handler$.currentBinding(thread);
-                                                                                        try {
-                                                                                            Errors.$error_handler$.bind(CATCH_ERROR_MESSAGE_HANDLER, thread);
-                                                                                            try {
-                                                                                                if (NIL != com.cyc.cycjava.cycl.wff_utilities.assertion_not_wffP(ass)) {
-                                                                                                    $non_wff_list$.setGlobalValue(cons(assertion_handles.assertion_id(ass), $non_wff_list$.getGlobalValue()));
-                                                                                                }
-                                                                                            } catch (Throwable catch_var) {
-                                                                                                Errors.handleThrowable(catch_var, NIL);
-                                                                                            }
-                                                                                        } finally {
-                                                                                            Errors.$error_handler$.rebind(_prev_bind_0_10, thread);
-                                                                                        }
-                                                                                    }
-                                                                                } catch (Throwable ccatch_env_var) {
-                                                                                    error = Errors.handleThrowable(ccatch_env_var, $catch_error_message_target$.getGlobalValue());
-                                                                                }
-                                                                                if (NIL != error) {
-                                                                                    $non_wff_error_list$.setGlobalValue(cons(assertion_handles.assertion_id(ass), $non_wff_error_list$.getGlobalValue()));
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                        $last_checked_assertion_id$.setGlobalValue(assertion_handles.assertion_id(ass));
-                                                                        $num_assertions_checked$.setGlobalValue(add($num_assertions_checked$.getGlobalValue(), ONE_INTEGER));
-                                                                    }
-                                                                    id = do_id_index_next_id(idx, T, id, state_var);
-                                                                    state_var = do_id_index_next_state(idx, T, id, state_var);
-                                                                } 
-                                                            }
-                                                        }
-                                                        noting_percent_progress_postamble();
-                                                    } finally {
-                                                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                                                        $within_noting_percent_progress$.rebind(_prev_bind_2_9, thread);
-                                                        $last_percent_progress_prediction$.rebind(_prev_bind_1_8, thread);
-                                                        $last_percent_progress_index$.rebind(_prev_bind_0_7, thread);
-                                                    }
-                                                }
-                                                sbhl_ms_resource = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.getDynamicValue(thread);
-                                            }
-                                        } finally {
-                                            sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.rebind(_prev_bind_2, thread);
-                                            sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.rebind(_prev_bind_1, thread);
-                                            sbhl_marking_vars.$resourced_sbhl_marking_spaces$.rebind(_prev_bind_0_6, thread);
-                                        }
-                                    }
-                                }
-                            } finally {
-                                {
-                                    SubLObject _prev_bind_0_11 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                    try {
-                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                        if ((NIL != local_state) && (NIL == original_memoization_process)) {
-                                            memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
-                                        }
-                                    } finally {
-                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_11, thread);
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return $non_wff_list$.getGlobalValue();
-        }
-    }
-
     public static SubLObject all_non_wff_assertion_ids(SubLObject start_id) {
         if (start_id == UNPROVIDED) {
             start_id = ZERO_INTEGER;
@@ -999,7 +536,7 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
                         final SubLObject mess = $$$mapping_Cyc_assertions;
                         final SubLObject total = id_index_count(idx);
                         SubLObject sofar = ZERO_INTEGER;
-                        assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
+                        assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
                         final SubLObject _prev_bind_0_$12 = $last_percent_progress_index$.currentBinding(thread);
                         final SubLObject _prev_bind_1_$13 = $last_percent_progress_prediction$.currentBinding(thread);
                         final SubLObject _prev_bind_2_$14 = $within_noting_percent_progress$.currentBinding(thread);
@@ -1160,152 +697,6 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
         return $non_wff_list$.getGlobalValue();
     }
 
-    public static final SubLObject non_wff_assertion_ids_in_range_alt(SubLObject start_id, SubLObject stop_id) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            $non_wff_list$.setGlobalValue(NIL);
-            $num_assertions_checked$.setGlobalValue(ZERO_INTEGER);
-            $last_checked_assertion_id$.setGlobalValue(ZERO_INTEGER);
-            $non_wff_error$.setGlobalValue(NIL);
-            {
-                SubLObject error = NIL;
-                SubLObject finished = NIL;
-                SubLObject message = format(NIL, $str_alt12$WFF_checking_assertion_range__A__, start_id, stop_id);
-                try {
-                    {
-                        SubLObject _prev_bind_0 = Errors.$error_handler$.currentBinding(thread);
-                        try {
-                            Errors.$error_handler$.bind(CATCH_ERROR_MESSAGE_HANDLER, thread);
-                            try {
-                                {
-                                    SubLObject state = memoization_state.new_memoization_state(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                    SubLObject local_state = state;
-                                    {
-                                        SubLObject _prev_bind_0_12 = memoization_state.$memoization_state$.currentBinding(thread);
-                                        try {
-                                            memoization_state.$memoization_state$.bind(local_state, thread);
-                                            {
-                                                SubLObject original_memoization_process = NIL;
-                                                if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                                    original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                                    {
-                                                        SubLObject current_proc = current_process();
-                                                        if (NIL == original_memoization_process) {
-                                                            memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                                        } else {
-                                                            if (original_memoization_process != current_proc) {
-                                                                Errors.error($str_alt7$Invalid_attempt_to_reuse_memoizat);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                try {
-                                                    {
-                                                        SubLObject sbhl_ms_resource = sbhl_marking_vars.new_sbhl_marking_space_resource(TEN_INTEGER);
-                                                        {
-                                                            SubLObject _prev_bind_0_13 = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.currentBinding(thread);
-                                                            SubLObject _prev_bind_1 = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.currentBinding(thread);
-                                                            SubLObject _prev_bind_2 = sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.currentBinding(thread);
-                                                            try {
-                                                                sbhl_marking_vars.$resourced_sbhl_marking_spaces$.bind(sbhl_ms_resource, thread);
-                                                                sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.bind(T, thread);
-                                                                sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.bind(sbhl_marking_vars.determine_marking_space_limit(sbhl_marking_vars.$resourced_sbhl_marking_spaces$.getDynamicValue(thread)), thread);
-                                                                {
-                                                                    SubLObject idx = assertion_handles.do_assertions_table();
-                                                                    SubLObject total = id_index_count(idx);
-                                                                    SubLObject sofar = ZERO_INTEGER;
-                                                                    SubLTrampolineFile.checkType(message, STRINGP);
-                                                                    {
-                                                                        SubLObject _prev_bind_0_14 = $last_percent_progress_index$.currentBinding(thread);
-                                                                        SubLObject _prev_bind_1_15 = $last_percent_progress_prediction$.currentBinding(thread);
-                                                                        SubLObject _prev_bind_2_16 = $within_noting_percent_progress$.currentBinding(thread);
-                                                                        SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                                                                        try {
-                                                                            $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                                                                            $last_percent_progress_prediction$.bind(NIL, thread);
-                                                                            $within_noting_percent_progress$.bind(T, thread);
-                                                                            $percent_progress_start_time$.bind(get_universal_time(), thread);
-                                                                            noting_percent_progress_preamble(message);
-                                                                            if (NIL == do_id_index_empty_p(idx, $SKIP)) {
-                                                                                {
-                                                                                    SubLObject id = do_id_index_next_id(idx, T, NIL, NIL);
-                                                                                    SubLObject state_var = do_id_index_next_state(idx, T, id, NIL);
-                                                                                    SubLObject ass = NIL;
-                                                                                    while ((NIL != id) && (NIL == finished)) {
-                                                                                        ass = do_id_index_state_object(idx, $SKIP, id, state_var);
-                                                                                        if (NIL != do_id_index_id_and_object_validP(id, ass, $SKIP)) {
-                                                                                            note_percent_progress(sofar, total);
-                                                                                            sofar = add(sofar, ONE_INTEGER);
-                                                                                            if (assertion_handles.assertion_id(ass).numGE(start_id)) {
-                                                                                                if (assertion_handles.assertion_id(ass).numGE(stop_id)) {
-                                                                                                    finished = T;
-                                                                                                }
-                                                                                                if (NIL != com.cyc.cycjava.cycl.wff_utilities.assertion_not_wffP(ass)) {
-                                                                                                    $non_wff_list$.setGlobalValue(cons(assertion_handles.assertion_id(ass), $non_wff_list$.getGlobalValue()));
-                                                                                                }
-                                                                                                $num_assertions_checked$.setGlobalValue(add($num_assertions_checked$.getGlobalValue(), ONE_INTEGER));
-                                                                                            }
-                                                                                            $last_checked_assertion_id$.setGlobalValue(assertion_handles.assertion_id(ass));
-                                                                                        }
-                                                                                        id = do_id_index_next_id(idx, T, id, state_var);
-                                                                                        state_var = do_id_index_next_state(idx, T, id, state_var);
-                                                                                    } 
-                                                                                }
-                                                                            }
-                                                                            noting_percent_progress_postamble();
-                                                                        } finally {
-                                                                            $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                                                                            $within_noting_percent_progress$.rebind(_prev_bind_2_16, thread);
-                                                                            $last_percent_progress_prediction$.rebind(_prev_bind_1_15, thread);
-                                                                            $last_percent_progress_index$.rebind(_prev_bind_0_14, thread);
-                                                                        }
-                                                                    }
-                                                                    sbhl_ms_resource = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.getDynamicValue(thread);
-                                                                }
-                                                            } finally {
-                                                                sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.rebind(_prev_bind_2, thread);
-                                                                sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.rebind(_prev_bind_1, thread);
-                                                                sbhl_marking_vars.$resourced_sbhl_marking_spaces$.rebind(_prev_bind_0_13, thread);
-                                                            }
-                                                        }
-                                                    }
-                                                } finally {
-                                                    {
-                                                        SubLObject _prev_bind_0_17 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                        try {
-                                                            $is_thread_performing_cleanupP$.bind(T, thread);
-                                                            if ((NIL != local_state) && (NIL == original_memoization_process)) {
-                                                                memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
-                                                            }
-                                                        } finally {
-                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_17, thread);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } finally {
-                                            memoization_state.$memoization_state$.rebind(_prev_bind_0_12, thread);
-                                        }
-                                    }
-                                }
-                            } catch (Throwable catch_var) {
-                                Errors.handleThrowable(catch_var, NIL);
-                            }
-                        } finally {
-                            Errors.$error_handler$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                } catch (Throwable ccatch_env_var) {
-                    error = Errors.handleThrowable(ccatch_env_var, $catch_error_message_target$.getGlobalValue());
-                }
-                if (NIL != error) {
-                    $non_wff_error$.setGlobalValue(error);
-                }
-            }
-            return $non_wff_list$.getGlobalValue();
-        }
-    }
-
     public static SubLObject non_wff_assertion_ids_in_range(final SubLObject start_id, final SubLObject stop_id) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         $non_wff_list$.setGlobalValue(NIL);
@@ -1341,7 +732,7 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
                                     final SubLObject mess = message;
                                     final SubLObject total = id_index_count(idx);
                                     SubLObject sofar = ZERO_INTEGER;
-                                    assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
+                                    assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
                                     final SubLObject _prev_bind_0_$25 = $last_percent_progress_index$.currentBinding(thread);
                                     final SubLObject _prev_bind_1_$26 = $last_percent_progress_prediction$.currentBinding(thread);
                                     final SubLObject _prev_bind_2_$27 = $within_noting_percent_progress$.currentBinding(thread);
@@ -1497,35 +888,6 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
         return $non_wff_list$.getGlobalValue();
     }
 
-    /**
-     * assumes (genlMt LOW HIGH)
-     */
-    @LispMethod(comment = "assumes (genlMt LOW HIGH)")
-    public static final SubLObject relevant_spec_mts_alt(SubLObject low, SubLObject high) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject formula = make_binary_formula($$genlMt, low, high);
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == kb_indexing.find_gaf_any_mt(formula)) {
-                        Errors.error($str_alt16$it_is_not_the_case_that____genlMt, low, high);
-                    }
-                }
-                fi.fi_unassert_int(formula, mt_vars.$mt_mt$.getGlobalValue());
-                {
-                    SubLObject result = NIL;
-                    result = set_difference(genl_mts.all_spec_mts(low, UNPROVIDED, UNPROVIDED), genl_mts.all_spec_mts(high, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED);
-                    fi.fi_assert_int(formula, mt_vars.$mt_mt$.getGlobalValue(), UNPROVIDED, UNPROVIDED);
-                    return result;
-                }
-            }
-        }
-    }
-
-    /**
-     * assumes (genlMt LOW HIGH)
-     */
-    @LispMethod(comment = "assumes (genlMt LOW HIGH)")
     public static SubLObject relevant_spec_mts(final SubLObject low, final SubLObject high) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject formula = make_binary_formula($$genlMt, low, high);
@@ -1537,30 +899,6 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
         result = set_difference(genl_mts.all_spec_mts(low, UNPROVIDED, UNPROVIDED), genl_mts.all_spec_mts(high, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED);
         fi.fi_assert_int(formula, mt_vars.$mt_mt$.getGlobalValue(), UNPROVIDED, UNPROVIDED);
         return result;
-    }
-
-    public static final SubLObject pre_num_wff_alt() {
-        {
-            SubLObject num = ZERO_INTEGER;
-            SubLObject id = NIL;
-            SubLObject not_wffP = NIL;
-            {
-                final Iterator cdohash_iterator = getEntrySetIterator($pre_wff_hash$.getGlobalValue());
-                try {
-                    while (iteratorHasNext(cdohash_iterator)) {
-                        final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
-                        id = getEntryKey(cdohash_entry);
-                        not_wffP = getEntryValue(cdohash_entry);
-                        if (NIL == not_wffP) {
-                            num = add(num, ONE_INTEGER);
-                        }
-                    } 
-                } finally {
-                    releaseEntrySetIterator(cdohash_iterator);
-                }
-            }
-            return num;
-        }
     }
 
     public static SubLObject pre_num_wff() {
@@ -1583,30 +921,6 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    public static final SubLObject pre_num_not_wff_alt() {
-        {
-            SubLObject num = ZERO_INTEGER;
-            SubLObject id = NIL;
-            SubLObject not_wffP = NIL;
-            {
-                final Iterator cdohash_iterator = getEntrySetIterator($pre_wff_hash$.getGlobalValue());
-                try {
-                    while (iteratorHasNext(cdohash_iterator)) {
-                        final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
-                        id = getEntryKey(cdohash_entry);
-                        not_wffP = getEntryValue(cdohash_entry);
-                        if (NIL != not_wffP) {
-                            num = add(num, ONE_INTEGER);
-                        }
-                    } 
-                } finally {
-                    releaseEntrySetIterator(cdohash_iterator);
-                }
-            }
-            return num;
-        }
-    }
-
     public static SubLObject pre_num_not_wff() {
         SubLObject num = ZERO_INTEGER;
         SubLObject id = NIL;
@@ -1627,36 +941,8 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    public static final SubLObject pre_percent_not_wff_alt() {
-        return multiply($int$100, divide(com.cyc.cycjava.cycl.wff_utilities.pre_num_not_wff(), hash_table_count($pre_wff_hash$.getGlobalValue())));
-    }
-
     public static SubLObject pre_percent_not_wff() {
         return multiply($int$100, divide(pre_num_not_wff(), hash_table_count($pre_wff_hash$.getGlobalValue())));
-    }
-
-    public static final SubLObject post_num_wff_alt() {
-        {
-            SubLObject num = ZERO_INTEGER;
-            SubLObject id = NIL;
-            SubLObject not_wffP = NIL;
-            {
-                final Iterator cdohash_iterator = getEntrySetIterator($post_wff_hash$.getGlobalValue());
-                try {
-                    while (iteratorHasNext(cdohash_iterator)) {
-                        final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
-                        id = getEntryKey(cdohash_entry);
-                        not_wffP = getEntryValue(cdohash_entry);
-                        if (NIL == not_wffP) {
-                            num = add(num, ONE_INTEGER);
-                        }
-                    } 
-                } finally {
-                    releaseEntrySetIterator(cdohash_iterator);
-                }
-            }
-            return num;
-        }
     }
 
     public static SubLObject post_num_wff() {
@@ -1679,30 +965,6 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    public static final SubLObject post_num_not_wff_alt() {
-        {
-            SubLObject num = ZERO_INTEGER;
-            SubLObject id = NIL;
-            SubLObject not_wffP = NIL;
-            {
-                final Iterator cdohash_iterator = getEntrySetIterator($post_wff_hash$.getGlobalValue());
-                try {
-                    while (iteratorHasNext(cdohash_iterator)) {
-                        final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
-                        id = getEntryKey(cdohash_entry);
-                        not_wffP = getEntryValue(cdohash_entry);
-                        if (NIL != not_wffP) {
-                            num = add(num, ONE_INTEGER);
-                        }
-                    } 
-                } finally {
-                    releaseEntrySetIterator(cdohash_iterator);
-                }
-            }
-            return num;
-        }
-    }
-
     public static SubLObject post_num_not_wff() {
         SubLObject num = ZERO_INTEGER;
         SubLObject id = NIL;
@@ -1723,135 +985,8 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    public static final SubLObject post_percent_not_wff_alt() {
-        return multiply($int$100, divide(com.cyc.cycjava.cycl.wff_utilities.post_num_not_wff(), hash_table_count($post_wff_hash$.getGlobalValue())));
-    }
-
     public static SubLObject post_percent_not_wff() {
         return multiply($int$100, divide(post_num_not_wff(), hash_table_count($post_wff_hash$.getGlobalValue())));
-    }
-
-    public static final SubLObject pre_wff_check_in_mts_alt(SubLObject mts, SubLObject init_wff_hashP, SubLObject start_id, SubLObject stop_id) {
-        if (init_wff_hashP == UNPROVIDED) {
-            init_wff_hashP = T;
-        }
-        if (start_id == UNPROVIDED) {
-            start_id = ZERO_INTEGER;
-        }
-        if (stop_id == UNPROVIDED) {
-            stop_id = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != init_wff_hashP) {
-                $pre_wff_hash$.setGlobalValue(make_hash_table($int$1000, UNPROVIDED, UNPROVIDED));
-            }
-            {
-                SubLObject state = memoization_state.new_memoization_state(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                SubLObject local_state = state;
-                {
-                    SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
-                    try {
-                        memoization_state.$memoization_state$.bind(local_state, thread);
-                        {
-                            SubLObject original_memoization_process = NIL;
-                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                {
-                                    SubLObject current_proc = current_process();
-                                    if (NIL == original_memoization_process) {
-                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                    } else {
-                                        if (original_memoization_process != current_proc) {
-                                            Errors.error($str_alt7$Invalid_attempt_to_reuse_memoizat);
-                                        }
-                                    }
-                                }
-                            }
-                            try {
-                                {
-                                    SubLObject sbhl_ms_resource = sbhl_marking_vars.new_sbhl_marking_space_resource(TEN_INTEGER);
-                                    {
-                                        SubLObject _prev_bind_0_18 = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.currentBinding(thread);
-                                        SubLObject _prev_bind_1 = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.currentBinding(thread);
-                                        SubLObject _prev_bind_2 = sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.currentBinding(thread);
-                                        try {
-                                            sbhl_marking_vars.$resourced_sbhl_marking_spaces$.bind(sbhl_ms_resource, thread);
-                                            sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.bind(T, thread);
-                                            sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.bind(sbhl_marking_vars.determine_marking_space_limit(sbhl_marking_vars.$resourced_sbhl_marking_spaces$.getDynamicValue(thread)), thread);
-                                            {
-                                                SubLObject idx = assertion_handles.do_assertions_table();
-                                                SubLObject total = id_index_count(idx);
-                                                SubLObject sofar = ZERO_INTEGER;
-                                                SubLTrampolineFile.checkType($$$mapping_Cyc_assertions, STRINGP);
-                                                {
-                                                    SubLObject _prev_bind_0_19 = $last_percent_progress_index$.currentBinding(thread);
-                                                    SubLObject _prev_bind_1_20 = $last_percent_progress_prediction$.currentBinding(thread);
-                                                    SubLObject _prev_bind_2_21 = $within_noting_percent_progress$.currentBinding(thread);
-                                                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                                                    try {
-                                                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                                                        $last_percent_progress_prediction$.bind(NIL, thread);
-                                                        $within_noting_percent_progress$.bind(T, thread);
-                                                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                                                        noting_percent_progress_preamble($$$mapping_Cyc_assertions);
-                                                        if (NIL == do_id_index_empty_p(idx, $SKIP)) {
-                                                            {
-                                                                SubLObject id = do_id_index_next_id(idx, T, NIL, NIL);
-                                                                SubLObject state_var = do_id_index_next_state(idx, T, id, NIL);
-                                                                SubLObject ass = NIL;
-                                                                while (NIL != id) {
-                                                                    ass = do_id_index_state_object(idx, $SKIP, id, state_var);
-                                                                    if (NIL != do_id_index_id_and_object_validP(id, ass, $SKIP)) {
-                                                                        note_percent_progress(sofar, total);
-                                                                        sofar = add(sofar, ONE_INTEGER);
-                                                                        if ((assertion_handles.assertion_id(ass).numGE(start_id) && (NIL != mt_relevance_macros.in_one_of_these_mtsP(ass, mts))) && ((NIL == stop_id) || assertion_handles.assertion_id(ass).numLE(stop_id))) {
-                                                                            sethash(assertion_handles.assertion_id(ass), $pre_wff_hash$.getGlobalValue(), com.cyc.cycjava.cycl.wff_utilities.assertion_not_wffP(ass));
-                                                                        }
-                                                                    }
-                                                                    id = do_id_index_next_id(idx, T, id, state_var);
-                                                                    state_var = do_id_index_next_state(idx, T, id, state_var);
-                                                                } 
-                                                            }
-                                                        }
-                                                        noting_percent_progress_postamble();
-                                                    } finally {
-                                                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                                                        $within_noting_percent_progress$.rebind(_prev_bind_2_21, thread);
-                                                        $last_percent_progress_prediction$.rebind(_prev_bind_1_20, thread);
-                                                        $last_percent_progress_index$.rebind(_prev_bind_0_19, thread);
-                                                    }
-                                                }
-                                                sbhl_ms_resource = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.getDynamicValue(thread);
-                                            }
-                                        } finally {
-                                            sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.rebind(_prev_bind_2, thread);
-                                            sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.rebind(_prev_bind_1, thread);
-                                            sbhl_marking_vars.$resourced_sbhl_marking_spaces$.rebind(_prev_bind_0_18, thread);
-                                        }
-                                    }
-                                }
-                            } finally {
-                                {
-                                    SubLObject _prev_bind_0_22 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                    try {
-                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                        if ((NIL != local_state) && (NIL == original_memoization_process)) {
-                                            memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
-                                        }
-                                    } finally {
-                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_22, thread);
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return $pre_wff_hash$.getGlobalValue();
-        }
     }
 
     public static SubLObject pre_wff_check_in_mts(final SubLObject mts, SubLObject init_wff_hashP, SubLObject start_id, SubLObject stop_id) {
@@ -1888,7 +1023,7 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
                         final SubLObject mess = $$$mapping_Cyc_assertions;
                         final SubLObject total = id_index_count(idx);
                         SubLObject sofar = ZERO_INTEGER;
-                        assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
+                        assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
                         final SubLObject _prev_bind_0_$35 = $last_percent_progress_index$.currentBinding(thread);
                         final SubLObject _prev_bind_1_$36 = $last_percent_progress_prediction$.currentBinding(thread);
                         final SubLObject _prev_bind_2_$37 = $within_noting_percent_progress$.currentBinding(thread);
@@ -1997,129 +1132,6 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
         return $pre_wff_hash$.getGlobalValue();
     }
 
-    public static final SubLObject post_wff_check_in_mts_alt(SubLObject mts, SubLObject init_wff_hashP, SubLObject start_id, SubLObject stop_id) {
-        if (init_wff_hashP == UNPROVIDED) {
-            init_wff_hashP = T;
-        }
-        if (start_id == UNPROVIDED) {
-            start_id = ZERO_INTEGER;
-        }
-        if (stop_id == UNPROVIDED) {
-            stop_id = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != init_wff_hashP) {
-                $post_wff_hash$.setGlobalValue(make_hash_table($int$1000, UNPROVIDED, UNPROVIDED));
-            }
-            {
-                SubLObject state = memoization_state.new_memoization_state(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                SubLObject local_state = state;
-                {
-                    SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
-                    try {
-                        memoization_state.$memoization_state$.bind(local_state, thread);
-                        {
-                            SubLObject original_memoization_process = NIL;
-                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                {
-                                    SubLObject current_proc = current_process();
-                                    if (NIL == original_memoization_process) {
-                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                    } else {
-                                        if (original_memoization_process != current_proc) {
-                                            Errors.error($str_alt7$Invalid_attempt_to_reuse_memoizat);
-                                        }
-                                    }
-                                }
-                            }
-                            try {
-                                {
-                                    SubLObject sbhl_ms_resource = sbhl_marking_vars.new_sbhl_marking_space_resource(TEN_INTEGER);
-                                    {
-                                        SubLObject _prev_bind_0_23 = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.currentBinding(thread);
-                                        SubLObject _prev_bind_1 = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.currentBinding(thread);
-                                        SubLObject _prev_bind_2 = sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.currentBinding(thread);
-                                        try {
-                                            sbhl_marking_vars.$resourced_sbhl_marking_spaces$.bind(sbhl_ms_resource, thread);
-                                            sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.bind(T, thread);
-                                            sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.bind(sbhl_marking_vars.determine_marking_space_limit(sbhl_marking_vars.$resourced_sbhl_marking_spaces$.getDynamicValue(thread)), thread);
-                                            {
-                                                SubLObject idx = assertion_handles.do_assertions_table();
-                                                SubLObject total = id_index_count(idx);
-                                                SubLObject sofar = ZERO_INTEGER;
-                                                SubLTrampolineFile.checkType($$$mapping_Cyc_assertions, STRINGP);
-                                                {
-                                                    SubLObject _prev_bind_0_24 = $last_percent_progress_index$.currentBinding(thread);
-                                                    SubLObject _prev_bind_1_25 = $last_percent_progress_prediction$.currentBinding(thread);
-                                                    SubLObject _prev_bind_2_26 = $within_noting_percent_progress$.currentBinding(thread);
-                                                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                                                    try {
-                                                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                                                        $last_percent_progress_prediction$.bind(NIL, thread);
-                                                        $within_noting_percent_progress$.bind(T, thread);
-                                                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                                                        noting_percent_progress_preamble($$$mapping_Cyc_assertions);
-                                                        if (NIL == do_id_index_empty_p(idx, $SKIP)) {
-                                                            {
-                                                                SubLObject id = do_id_index_next_id(idx, T, NIL, NIL);
-                                                                SubLObject state_var = do_id_index_next_state(idx, T, id, NIL);
-                                                                SubLObject ass = NIL;
-                                                                while (NIL != id) {
-                                                                    ass = do_id_index_state_object(idx, $SKIP, id, state_var);
-                                                                    if (NIL != do_id_index_id_and_object_validP(id, ass, $SKIP)) {
-                                                                        note_percent_progress(sofar, total);
-                                                                        sofar = add(sofar, ONE_INTEGER);
-                                                                        if ((assertion_handles.assertion_id(ass).numGE(start_id) && (NIL != mt_relevance_macros.in_one_of_these_mtsP(ass, mts))) && ((NIL == stop_id) || assertion_handles.assertion_id(ass).numLE(stop_id))) {
-                                                                            sethash(assertion_handles.assertion_id(ass), $post_wff_hash$.getGlobalValue(), com.cyc.cycjava.cycl.wff_utilities.assertion_not_wffP(ass));
-                                                                        }
-                                                                    }
-                                                                    id = do_id_index_next_id(idx, T, id, state_var);
-                                                                    state_var = do_id_index_next_state(idx, T, id, state_var);
-                                                                } 
-                                                            }
-                                                        }
-                                                        noting_percent_progress_postamble();
-                                                    } finally {
-                                                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                                                        $within_noting_percent_progress$.rebind(_prev_bind_2_26, thread);
-                                                        $last_percent_progress_prediction$.rebind(_prev_bind_1_25, thread);
-                                                        $last_percent_progress_index$.rebind(_prev_bind_0_24, thread);
-                                                    }
-                                                }
-                                                sbhl_ms_resource = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.getDynamicValue(thread);
-                                            }
-                                        } finally {
-                                            sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.rebind(_prev_bind_2, thread);
-                                            sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.rebind(_prev_bind_1, thread);
-                                            sbhl_marking_vars.$resourced_sbhl_marking_spaces$.rebind(_prev_bind_0_23, thread);
-                                        }
-                                    }
-                                }
-                            } finally {
-                                {
-                                    SubLObject _prev_bind_0_27 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                    try {
-                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                        if ((NIL != local_state) && (NIL == original_memoization_process)) {
-                                            memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
-                                        }
-                                    } finally {
-                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_27, thread);
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return $post_wff_hash$.getGlobalValue();
-        }
-    }
-
     public static SubLObject post_wff_check_in_mts(final SubLObject mts, SubLObject init_wff_hashP, SubLObject start_id, SubLObject stop_id) {
         if (init_wff_hashP == UNPROVIDED) {
             init_wff_hashP = T;
@@ -2154,7 +1166,7 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
                         final SubLObject mess = $$$mapping_Cyc_assertions;
                         final SubLObject total = id_index_count(idx);
                         SubLObject sofar = ZERO_INTEGER;
-                        assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
+                        assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
                         final SubLObject _prev_bind_0_$45 = $last_percent_progress_index$.currentBinding(thread);
                         final SubLObject _prev_bind_1_$46 = $last_percent_progress_prediction$.currentBinding(thread);
                         final SubLObject _prev_bind_2_$47 = $within_noting_percent_progress$.currentBinding(thread);
@@ -2263,30 +1275,6 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
         return $post_wff_hash$.getGlobalValue();
     }
 
-    public static final SubLObject last_checked_id_alt(SubLObject hash) {
-        {
-            SubLObject max = ZERO_INTEGER;
-            SubLObject id = NIL;
-            SubLObject val = NIL;
-            {
-                final Iterator cdohash_iterator = getEntrySetIterator(hash);
-                try {
-                    while (iteratorHasNext(cdohash_iterator)) {
-                        final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
-                        id = getEntryKey(cdohash_entry);
-                        val = getEntryValue(cdohash_entry);
-                        if (id.numG(max)) {
-                            max = id;
-                        }
-                    } 
-                } finally {
-                    releaseEntrySetIterator(cdohash_iterator);
-                }
-            }
-            return max;
-        }
-    }
-
     public static SubLObject last_checked_id(final SubLObject hash) {
         SubLObject max = ZERO_INTEGER;
         SubLObject id = NIL;
@@ -2305,35 +1293,6 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
             releaseEntrySetIterator(cdohash_iterator);
         }
         return max;
-    }
-
-    public static final SubLObject pre_post_deltas_alt(SubLObject post_smallerP) {
-        if (post_smallerP == UNPROVIDED) {
-            post_smallerP = T;
-        }
-        {
-            SubLObject small_hash = (NIL != post_smallerP) ? ((SubLObject) ($post_wff_hash$.getGlobalValue())) : $pre_wff_hash$.getGlobalValue();
-            SubLObject big_hash = (NIL != post_smallerP) ? ((SubLObject) ($pre_wff_hash$.getGlobalValue())) : $post_wff_hash$.getGlobalValue();
-            SubLObject deltas = NIL;
-            SubLObject key = NIL;
-            SubLObject val = NIL;
-            {
-                final Iterator cdohash_iterator = getEntrySetIterator(small_hash);
-                try {
-                    while (iteratorHasNext(cdohash_iterator)) {
-                        final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
-                        key = getEntryKey(cdohash_entry);
-                        val = getEntryValue(cdohash_entry);
-                        if (!val.eql(gethash(key, big_hash, UNPROVIDED))) {
-                            deltas = cons(key, deltas);
-                        }
-                    } 
-                } finally {
-                    releaseEntrySetIterator(cdohash_iterator);
-                }
-            }
-            return deltas;
-        }
     }
 
     public static SubLObject pre_post_deltas(SubLObject post_smallerP) {
@@ -2361,503 +1320,42 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
         return deltas;
     }
 
-    /**
-     * Return T IFF ASSERTION is currently noted to be non-WFF according to the non-wff store.
-     */
-    @LispMethod(comment = "Return T IFF ASSERTION is currently noted to be non-WFF according to the non-wff store.")
-    public static final SubLObject non_wff_cached_p_alt(SubLObject assertion) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(assertion, ASSERTION_P);
-            {
-                SubLObject assertion_id = assertion_handles.assertion_id(assertion);
-                return list_utilities.sublisp_boolean(gethash(assertion_id, $non_wff_store$.getDynamicValue(thread), UNPROVIDED));
-            }
-        }
-    }
-
-    /**
-     * Return T IFF ASSERTION is currently noted to be non-WFF according to the non-wff store.
-     */
-    @LispMethod(comment = "Return T IFF ASSERTION is currently noted to be non-WFF according to the non-wff store.")
     public static SubLObject non_wff_cached_p(final SubLObject assertion) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
+        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
         final SubLObject assertion_id = assertion_handles.assertion_id(assertion);
         return list_utilities.sublisp_boolean(gethash(assertion_id, $non_wff_store$.getDynamicValue(thread), UNPROVIDED));
     }
 
-    /**
-     * Enter ASSERTION into the non-wff store, and note it was non-WFF in KB-VERSION-STRING.
-     */
-    @LispMethod(comment = "Enter ASSERTION into the non-wff store, and note it was non-WFF in KB-VERSION-STRING.")
-    public static final SubLObject non_wff_enter_alt(SubLObject assertion, SubLObject kb_version_string) {
-        if (kb_version_string == UNPROVIDED) {
-            kb_version_string = operation_communication.kb_version_string();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(assertion, ASSERTION_P);
-            {
-                SubLObject assertion_id = assertion_handles.assertion_id(assertion);
-                return sethash(assertion_id, $non_wff_store$.getDynamicValue(thread), kb_version_string);
-            }
-        }
-    }
-
-    /**
-     * Enter ASSERTION into the non-wff store, and note it was non-WFF in KB-VERSION-STRING.
-     */
-    @LispMethod(comment = "Enter ASSERTION into the non-wff store, and note it was non-WFF in KB-VERSION-STRING.")
     public static SubLObject non_wff_enter(final SubLObject assertion, SubLObject kb_version_string) {
         if (kb_version_string == UNPROVIDED) {
             kb_version_string = operation_communication.kb_version_string();
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
+        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
         final SubLObject assertion_id = assertion_handles.assertion_id(assertion);
         return sethash(assertion_id, $non_wff_store$.getDynamicValue(thread), kb_version_string);
     }
 
-    /**
-     * Remove ASSERTION from the non-wff store.
-     */
-    @LispMethod(comment = "Remove ASSERTION from the non-wff store.")
-    public static final SubLObject non_wff_remove_alt(SubLObject assertion) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(assertion, ASSERTION_P);
-            {
-                SubLObject assertion_id = assertion_handles.assertion_id(assertion);
-                return remhash(assertion_id, $non_wff_store$.getDynamicValue(thread));
-            }
-        }
-    }
-
-    /**
-     * Remove ASSERTION from the non-wff store.
-     */
-    @LispMethod(comment = "Remove ASSERTION from the non-wff store.")
     public static SubLObject non_wff_remove(final SubLObject assertion) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
+        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
         final SubLObject assertion_id = assertion_handles.assertion_id(assertion);
         return remhash(assertion_id, $non_wff_store$.getDynamicValue(thread));
     }
 
-    /**
-     * Return a count of how many assertions are presently in the non-wff store.
-     */
-    @LispMethod(comment = "Return a count of how many assertions are presently in the non-wff store.")
-    public static final SubLObject non_wff_count_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return hash_table_count($non_wff_store$.getDynamicValue(thread));
-        }
-    }
-
-    /**
-     * Return a count of how many assertions are presently in the non-wff store.
-     */
-    @LispMethod(comment = "Return a count of how many assertions are presently in the non-wff store.")
     public static SubLObject non_wff_count() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return hash_table_count($non_wff_store$.getDynamicValue(thread));
     }
 
-    /**
-     * If ASSERTION is currently noted to be non-WFF according to the non-wff store,
-     * return the KB version string for the KB in which it was last determined to be
-     * non-WFF.
-     */
-    @LispMethod(comment = "If ASSERTION is currently noted to be non-WFF according to the non-wff store,\r\nreturn the KB version string for the KB in which it was last determined to be\r\nnon-WFF.\nIf ASSERTION is currently noted to be non-WFF according to the non-wff store,\nreturn the KB version string for the KB in which it was last determined to be\nnon-WFF.")
-    public static final SubLObject non_wff_in_what_kb_alt(SubLObject assertion) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(assertion, ASSERTION_P);
-            {
-                SubLObject assertion_id = assertion_handles.assertion_id(assertion);
-                return gethash(assertion_id, $non_wff_store$.getDynamicValue(thread), UNPROVIDED);
-            }
-        }
-    }
-
-    /**
-     * If ASSERTION is currently noted to be non-WFF according to the non-wff store,
-     * return the KB version string for the KB in which it was last determined to be
-     * non-WFF.
-     */
-    @LispMethod(comment = "If ASSERTION is currently noted to be non-WFF according to the non-wff store,\r\nreturn the KB version string for the KB in which it was last determined to be\r\nnon-WFF.\nIf ASSERTION is currently noted to be non-WFF according to the non-wff store,\nreturn the KB version string for the KB in which it was last determined to be\nnon-WFF.")
     public static SubLObject non_wff_in_what_kb(final SubLObject assertion) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
+        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
         final SubLObject assertion_id = assertion_handles.assertion_id(assertion);
         return gethash(assertion_id, $non_wff_store$.getDynamicValue(thread), UNPROVIDED);
     }
 
-    /**
-     * Sweep the entire KB for non-WFF assertions, writing out their external IDs to
-     * FILENAME.  If RESTART? is T, initialize the non-wff store from FILENAME and resume
-     * from the assertion with the largest internal ID of those recorded so far.
-     */
-    @LispMethod(comment = "Sweep the entire KB for non-WFF assertions, writing out their external IDs to\r\nFILENAME.  If RESTART? is T, initialize the non-wff store from FILENAME and resume\r\nfrom the assertion with the largest internal ID of those recorded so far.\nSweep the entire KB for non-WFF assertions, writing out their external IDs to\nFILENAME.  If RESTART? is T, initialize the non-wff store from FILENAME and resume\nfrom the assertion with the largest internal ID of those recorded so far.")
-    public static final SubLObject initialize_non_wff_store_to_file_alt(SubLObject filename, SubLObject restartP) {
-        if (restartP == UNPROVIDED) {
-            restartP = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            $non_wff_end$.setGlobalValue(NIL);
-            $non_wff_start$.setGlobalValue(get_universal_time());
-            {
-                SubLObject start_id = NIL;
-                if (NIL != restartP) {
-                    com.cyc.cycjava.cycl.wff_utilities.non_wff_store_load_externalized(filename);
-                    {
-                        SubLObject max_id = ZERO_INTEGER;
-                        SubLObject table_var = $non_wff_store$.getDynamicValue(thread);
-                        $progress_note$.setDynamicValue($$$Determining_largest_checked_ID, thread);
-                        $progress_start_time$.setDynamicValue(get_universal_time(), thread);
-                        $progress_total$.setDynamicValue(hash_table_count(table_var), thread);
-                        $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
-                        {
-                            SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                            SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                            SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                            SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                            try {
-                                $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                                $last_percent_progress_prediction$.bind(NIL, thread);
-                                $within_noting_percent_progress$.bind(T, thread);
-                                $percent_progress_start_time$.bind(get_universal_time(), thread);
-                                noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
-                                {
-                                    SubLObject internal_id = NIL;
-                                    SubLObject ignore = NIL;
-                                    {
-                                        final Iterator cdohash_iterator = getEntrySetIterator(table_var);
-                                        try {
-                                            while (iteratorHasNext(cdohash_iterator)) {
-                                                final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
-                                                internal_id = getEntryKey(cdohash_entry);
-                                                ignore = getEntryValue(cdohash_entry);
-                                                note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
-                                                $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
-                                                if (internal_id.numG(max_id)) {
-                                                    max_id = internal_id;
-                                                }
-                                            } 
-                                        } finally {
-                                            releaseEntrySetIterator(cdohash_iterator);
-                                        }
-                                    }
-                                }
-                                noting_percent_progress_postamble();
-                            } finally {
-                                $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                                $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                                $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                                $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                        $last_checked_assertion_id$.setGlobalValue(max_id);
-                    }
-                    start_id = add(ONE_INTEGER, $last_checked_assertion_id$.getGlobalValue());
-                    format(T, $str_alt25$____Starting_with_ID____S, start_id);
-                    $num_assertions_checked$.setGlobalValue(ZERO_INTEGER);
-                } else {
-                    {
-                        SubLObject stream = NIL;
-                        try {
-                            stream = compatibility.open_text(filename, $OUTPUT, NIL);
-                            if (!stream.isStream()) {
-                                Errors.error($str_alt27$Unable_to_open__S, filename);
-                            }
-                            {
-                                SubLObject stream_28 = stream;
-                                format(stream_28, $str_alt28$____start_time__S_, $non_wff_start$.getGlobalValue());
-                            }
-                        } finally {
-                            {
-                                SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                try {
-                                    $is_thread_performing_cleanupP$.bind(T, thread);
-                                    if (stream.isStream()) {
-                                        close(stream, UNPROVIDED);
-                                    }
-                                } finally {
-                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                                }
-                            }
-                        }
-                        clrhash($non_wff_store$.getDynamicValue(thread));
-                        $num_assertions_checked$.setGlobalValue(ZERO_INTEGER);
-                        $last_checked_assertion_id$.setGlobalValue(ZERO_INTEGER);
-                        start_id = ZERO_INTEGER;
-                    }
-                }
-                {
-                    SubLObject kb_version_string = operation_communication.kb_version_string();
-                    SubLObject state = memoization_state.new_memoization_state(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    SubLObject local_state = state;
-                    {
-                        SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
-                        try {
-                            memoization_state.$memoization_state$.bind(local_state, thread);
-                            {
-                                SubLObject original_memoization_process = NIL;
-                                if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                    original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                    {
-                                        SubLObject current_proc = current_process();
-                                        if (NIL == original_memoization_process) {
-                                            memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                        } else {
-                                            if (original_memoization_process != current_proc) {
-                                                Errors.error($str_alt7$Invalid_attempt_to_reuse_memoizat);
-                                            }
-                                        }
-                                    }
-                                }
-                                try {
-                                    {
-                                        SubLObject sbhl_ms_resource = sbhl_marking_vars.new_sbhl_marking_space_resource(TEN_INTEGER);
-                                        {
-                                            SubLObject _prev_bind_0_29 = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.currentBinding(thread);
-                                            SubLObject _prev_bind_1 = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.currentBinding(thread);
-                                            SubLObject _prev_bind_2 = sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.currentBinding(thread);
-                                            try {
-                                                sbhl_marking_vars.$resourced_sbhl_marking_spaces$.bind(sbhl_ms_resource, thread);
-                                                sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.bind(T, thread);
-                                                sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.bind(sbhl_marking_vars.determine_marking_space_limit(sbhl_marking_vars.$resourced_sbhl_marking_spaces$.getDynamicValue(thread)), thread);
-                                                {
-                                                    SubLObject idx = assertion_handles.do_assertions_table();
-                                                    SubLObject total = id_index_count(idx);
-                                                    SubLObject sofar = ZERO_INTEGER;
-                                                    SubLTrampolineFile.checkType($$$mapping_Cyc_assertions, STRINGP);
-                                                    {
-                                                        SubLObject _prev_bind_0_30 = $last_percent_progress_index$.currentBinding(thread);
-                                                        SubLObject _prev_bind_1_31 = $last_percent_progress_prediction$.currentBinding(thread);
-                                                        SubLObject _prev_bind_2_32 = $within_noting_percent_progress$.currentBinding(thread);
-                                                        SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                                                        try {
-                                                            $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                                                            $last_percent_progress_prediction$.bind(NIL, thread);
-                                                            $within_noting_percent_progress$.bind(T, thread);
-                                                            $percent_progress_start_time$.bind(get_universal_time(), thread);
-                                                            noting_percent_progress_preamble($$$mapping_Cyc_assertions);
-                                                            if (NIL == do_id_index_empty_p(idx, $SKIP)) {
-                                                                {
-                                                                    SubLObject id = do_id_index_next_id(idx, T, NIL, NIL);
-                                                                    SubLObject state_var = do_id_index_next_state(idx, T, id, NIL);
-                                                                    SubLObject ass = NIL;
-                                                                    while (NIL != id) {
-                                                                        ass = do_id_index_state_object(idx, $SKIP, id, state_var);
-                                                                        if (NIL != do_id_index_id_and_object_validP(id, ass, $SKIP)) {
-                                                                            note_percent_progress(sofar, total);
-                                                                            sofar = add(sofar, ONE_INTEGER);
-                                                                            if (assertion_handles.assertion_id(ass).numGE(start_id)) {
-                                                                                $non_wff_current_assertion$.setDynamicValue(ass, thread);
-                                                                                {
-                                                                                    SubLObject error = NIL;
-                                                                                    SubLObject timed_outP = NIL;
-                                                                                    try {
-                                                                                        {
-                                                                                            SubLObject _prev_bind_0_33 = Errors.$error_handler$.currentBinding(thread);
-                                                                                            try {
-                                                                                                Errors.$error_handler$.bind(CATCH_ERROR_MESSAGE_HANDLER, thread);
-                                                                                                try {
-                                                                                                    {
-                                                                                                        SubLObject tag = with_timeout_make_tag();
-                                                                                                        try {
-                                                                                                            {
-                                                                                                                SubLObject _prev_bind_0_34 = $within_with_timeout$.currentBinding(thread);
-                                                                                                                try {
-                                                                                                                    $within_with_timeout$.bind(T, thread);
-                                                                                                                    {
-                                                                                                                        SubLObject timer = NIL;
-                                                                                                                        try {
-                                                                                                                            {
-                                                                                                                                SubLObject _prev_bind_0_35 = $with_timeout_nesting_depth$.currentBinding(thread);
-                                                                                                                                try {
-                                                                                                                                    $with_timeout_nesting_depth$.bind(add(ONE_INTEGER, $with_timeout_nesting_depth$.getDynamicValue(thread)), thread);
-                                                                                                                                    timer = with_timeout_start_timer($non_wff_outlier_timeout$.getDynamicValue(thread), tag);
-                                                                                                                                    if (NIL != com.cyc.cycjava.cycl.wff_utilities.assertion_not_wffP(ass)) {
-                                                                                                                                        com.cyc.cycjava.cycl.wff_utilities.non_wff_enter(ass, kb_version_string);
-                                                                                                                                        {
-                                                                                                                                            SubLObject stream = NIL;
-                                                                                                                                            try {
-                                                                                                                                                stream = compatibility.open_text(filename, $APPEND, NIL);
-                                                                                                                                                if (!stream.isStream()) {
-                                                                                                                                                    Errors.error($str_alt27$Unable_to_open__S, filename);
-                                                                                                                                                }
-                                                                                                                                                {
-                                                                                                                                                    SubLObject stream_36 = stream;
-                                                                                                                                                    format(stream_36, $str_alt30$____S__S_, kb_utilities.hl_external_id_string(ass), kb_version_string);
-                                                                                                                                                }
-                                                                                                                                            } finally {
-                                                                                                                                                {
-                                                                                                                                                    SubLObject _prev_bind_0_37 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                                                                                    try {
-                                                                                                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                                                                                        if (stream.isStream()) {
-                                                                                                                                                            close(stream, UNPROVIDED);
-                                                                                                                                                        }
-                                                                                                                                                    } finally {
-                                                                                                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_37, thread);
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                } finally {
-                                                                                                                                    $with_timeout_nesting_depth$.rebind(_prev_bind_0_35, thread);
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        } finally {
-                                                                                                                            {
-                                                                                                                                SubLObject _prev_bind_0_38 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                                                                try {
-                                                                                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                                                                    with_timeout_stop_timer(timer);
-                                                                                                                                } finally {
-                                                                                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_38, thread);
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                } finally {
-                                                                                                                    $within_with_timeout$.rebind(_prev_bind_0_34, thread);
-                                                                                                                }
-                                                                                                            }
-                                                                                                        } catch (Throwable ccatch_env_var) {
-                                                                                                            timed_outP = Errors.handleThrowable(ccatch_env_var, tag);
-                                                                                                        }
-                                                                                                    }
-                                                                                                    if (NIL != timed_outP) {
-                                                                                                        Errors.error($str_alt31$WFF_took_more_than__S_seconds_on_, $non_wff_outlier_timeout$.getDynamicValue(thread), ass);
-                                                                                                    }
-                                                                                                } catch (Throwable catch_var) {
-                                                                                                    Errors.handleThrowable(catch_var, NIL);
-                                                                                                }
-                                                                                            } finally {
-                                                                                                Errors.$error_handler$.rebind(_prev_bind_0_33, thread);
-                                                                                            }
-                                                                                        }
-                                                                                    } catch (Throwable ccatch_env_var) {
-                                                                                        error = Errors.handleThrowable(ccatch_env_var, $catch_error_message_target$.getGlobalValue());
-                                                                                    }
-                                                                                    if (NIL != error) {
-                                                                                        $non_wff_error_list$.setGlobalValue(cons(assertion_handles.assertion_id(ass), $non_wff_error_list$.getGlobalValue()));
-                                                                                        {
-                                                                                            SubLObject stream = NIL;
-                                                                                            try {
-                                                                                                stream = compatibility.open_text(filename, $APPEND, NIL);
-                                                                                                if (!stream.isStream()) {
-                                                                                                    Errors.error($str_alt27$Unable_to_open__S, filename);
-                                                                                                }
-                                                                                                {
-                                                                                                    SubLObject stream_39 = stream;
-                                                                                                    format(stream_39, $str_alt32$____error__S__S_, kb_utilities.hl_external_id_string(ass), error);
-                                                                                                }
-                                                                                            } finally {
-                                                                                                {
-                                                                                                    SubLObject _prev_bind_0_40 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                                    try {
-                                                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                                        if (stream.isStream()) {
-                                                                                                            close(stream, UNPROVIDED);
-                                                                                                        }
-                                                                                                    } finally {
-                                                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_40, thread);
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                            $last_checked_assertion_id$.setGlobalValue(assertion_handles.assertion_id(ass));
-                                                                            $num_assertions_checked$.setGlobalValue(add($num_assertions_checked$.getGlobalValue(), ONE_INTEGER));
-                                                                        }
-                                                                        id = do_id_index_next_id(idx, T, id, state_var);
-                                                                        state_var = do_id_index_next_state(idx, T, id, state_var);
-                                                                    } 
-                                                                }
-                                                            }
-                                                            noting_percent_progress_postamble();
-                                                        } finally {
-                                                            $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                                                            $within_noting_percent_progress$.rebind(_prev_bind_2_32, thread);
-                                                            $last_percent_progress_prediction$.rebind(_prev_bind_1_31, thread);
-                                                            $last_percent_progress_index$.rebind(_prev_bind_0_30, thread);
-                                                        }
-                                                    }
-                                                    sbhl_ms_resource = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.getDynamicValue(thread);
-                                                }
-                                            } finally {
-                                                sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.rebind(_prev_bind_2, thread);
-                                                sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.rebind(_prev_bind_1, thread);
-                                                sbhl_marking_vars.$resourced_sbhl_marking_spaces$.rebind(_prev_bind_0_29, thread);
-                                            }
-                                        }
-                                    }
-                                } finally {
-                                    {
-                                        SubLObject _prev_bind_0_41 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                        try {
-                                            $is_thread_performing_cleanupP$.bind(T, thread);
-                                            if ((NIL != local_state) && (NIL == original_memoization_process)) {
-                                                memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
-                                            }
-                                        } finally {
-                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_41, thread);
-                                        }
-                                    }
-                                }
-                            }
-                        } finally {
-                            memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-            }
-            $non_wff_end$.setGlobalValue(get_universal_time());
-            {
-                SubLObject stream = NIL;
-                try {
-                    stream = compatibility.open_text(filename, $APPEND, NIL);
-                    if (!stream.isStream()) {
-                        Errors.error($str_alt27$Unable_to_open__S, filename);
-                    }
-                    {
-                        SubLObject stream_42 = stream;
-                        format(stream_42, $str_alt33$____end_time__S_, $non_wff_end$.getGlobalValue());
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            if (stream.isStream()) {
-                                close(stream, UNPROVIDED);
-                            }
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-            }
-            return $non_wff_store$.getDynamicValue(thread);
-        }
-    }
-
-    /**
-     * Sweep the entire KB for non-WFF assertions, writing out their external IDs to
-     * FILENAME.  If RESTART? is T, initialize the non-wff store from FILENAME and resume
-     * from the assertion with the largest internal ID of those recorded so far.
-     */
-    @LispMethod(comment = "Sweep the entire KB for non-WFF assertions, writing out their external IDs to\r\nFILENAME.  If RESTART? is T, initialize the non-wff store from FILENAME and resume\r\nfrom the assertion with the largest internal ID of those recorded so far.\nSweep the entire KB for non-WFF assertions, writing out their external IDs to\nFILENAME.  If RESTART? is T, initialize the non-wff store from FILENAME and resume\nfrom the assertion with the largest internal ID of those recorded so far.")
     public static SubLObject initialize_non_wff_store_to_file(final SubLObject filename, SubLObject restartP) {
         if (restartP == UNPROVIDED) {
             restartP = NIL;
@@ -2979,7 +1477,7 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
                         final SubLObject mess = $$$mapping_Cyc_assertions;
                         final SubLObject total = id_index_count(idx);
                         SubLObject sofar = ZERO_INTEGER;
-                        assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
+                        assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
                         final SubLObject _prev_bind_0_$56 = $last_percent_progress_index$.currentBinding(thread);
                         final SubLObject _prev_bind_1_$58 = $last_percent_progress_prediction$.currentBinding(thread);
                         final SubLObject _prev_bind_2_$59 = $within_noting_percent_progress$.currentBinding(thread);
@@ -3339,31 +1837,6 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
         return $non_wff_store$.getDynamicValue(thread);
     }
 
-    /**
-     * Return a string indicating the progress so far on initializing the non-wff store,
-     * and the expected total time to completion.
-     */
-    @LispMethod(comment = "Return a string indicating the progress so far on initializing the non-wff store,\r\nand the expected total time to completion.\nReturn a string indicating the progress so far on initializing the non-wff store,\nand the expected total time to completion.")
-    public static final SubLObject initialize_non_wff_store_progress_alt() {
-        if (NIL == $non_wff_start$.getGlobalValue()) {
-            return format(NIL, $str_alt34$No_WFF_sweep_has_been_started_);
-        }
-        {
-            SubLObject sofar = $num_assertions_checked$.getGlobalValue();
-            SubLObject total = assertion_handles.assertion_count();
-            SubLObject end_time = (NIL != $non_wff_end$.getGlobalValue()) ? ((SubLObject) ($non_wff_end$.getGlobalValue())) : get_universal_time();
-            SubLObject seconds_so_far = subtract(end_time, $non_wff_start$.getGlobalValue());
-            SubLObject predicted_total_seconds = truncate(multiply(seconds_so_far, divide(total, sofar)), UNPROVIDED);
-            SubLObject predicted_end = add($non_wff_start$.getGlobalValue(), predicted_total_seconds);
-            return format(NIL, $str_alt35$After__S___the_whole_KB_should_ta, new SubLObject[]{ number_utilities.significant_digits(multiply($int$100, divide(sofar, total)), THREE_INTEGER), number_utilities.significant_digits(divide(predicted_total_seconds, multiply($int$24, $int$60, $int$60)), TWO_INTEGER), numeric_date_utilities.time_abbreviation_string(predicted_end) });
-        }
-    }
-
-    /**
-     * Return a string indicating the progress so far on initializing the non-wff store,
-     * and the expected total time to completion.
-     */
-    @LispMethod(comment = "Return a string indicating the progress so far on initializing the non-wff store,\r\nand the expected total time to completion.\nReturn a string indicating the progress so far on initializing the non-wff store,\nand the expected total time to completion.")
     public static SubLObject initialize_non_wff_store_progress() {
         if (NIL == $non_wff_start$.getGlobalValue()) {
             return format(NIL, $str34$No_WFF_sweep_has_been_started_);
@@ -3377,51 +1850,12 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
         return format(NIL, $str35$After__S___the_whole_KB_should_ta, new SubLObject[]{ number_utilities.significant_digits(multiply($int$100, divide(sofar, total)), THREE_INTEGER), number_utilities.significant_digits(divide(predicted_total_seconds, multiply($int$24, $int$60, $int$60)), TWO_INTEGER), numeric_date_utilities.time_abbreviation_string(predicted_end) });
     }
 
-    /**
-     * Return T IFF FILENAME exists.
-     */
-    @LispMethod(comment = "Return T IFF FILENAME exists.")
-    public static final SubLObject initialize_non_wff_store_to_file_startedP_alt(SubLObject filename) {
-        return list_utilities.sublisp_boolean(Filesys.probe_file(filename));
-    }
-
-    /**
-     * Return T IFF FILENAME exists.
-     */
-    @LispMethod(comment = "Return T IFF FILENAME exists.")
     public static SubLObject initialize_non_wff_store_to_file_startedP(final SubLObject filename) {
         return list_utilities.sublisp_boolean(Filesys.probe_file(filename));
     }
 
-    /**
-     * Return T IFF FILENAME contains non-WFF store data that includes an :END-TIME with a value.
-     */
-    @LispMethod(comment = "Return T IFF FILENAME contains non-WFF store data that includes an :END-TIME with a value.")
-    public static final SubLObject initialize_non_wff_store_to_file_completeP_alt(SubLObject filename) {
-        return com.cyc.cycjava.cycl.wff_utilities.non_wff_store_file_value_for_record(filename, $END_TIME);
-    }
-
-    /**
-     * Return T IFF FILENAME contains non-WFF store data that includes an :END-TIME with a value.
-     */
-    @LispMethod(comment = "Return T IFF FILENAME contains non-WFF store data that includes an :END-TIME with a value.")
     public static SubLObject initialize_non_wff_store_to_file_completeP(final SubLObject filename) {
         return non_wff_store_file_value_for_record(filename, $END_TIME);
-    }
-
-    public static final SubLObject non_wff_file_newerP_alt(SubLObject filename) {
-        {
-            SubLObject start_time = com.cyc.cycjava.cycl.wff_utilities.non_wff_store_file_value_for_record(filename, $START_TIME);
-            if (start_time.isInteger()) {
-                if ($non_wff_start$.getGlobalValue().isInteger()) {
-                    return numG(start_time, $non_wff_start$.getGlobalValue());
-                } else {
-                    return T;
-                }
-            } else {
-                return NIL;
-            }
-        }
     }
 
     public static SubLObject non_wff_file_newerP(final SubLObject filename) {
@@ -3435,56 +1869,6 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
         return T;
     }
 
-    /**
-     * returns first value found for KEYWORD in FILENAME.
-     */
-    @LispMethod(comment = "returns first value found for KEYWORD in FILENAME.")
-    public static final SubLObject non_wff_store_file_value_for_record_alt(SubLObject filename, SubLObject keyword) {
-        {
-            SubLObject found = NIL;
-            SubLObject value = NIL;
-            if (NIL != com.cyc.cycjava.cycl.wff_utilities.initialize_non_wff_store_to_file_startedP(filename)) {
-                {
-                    SubLObject stream = NIL;
-                    try {
-                        stream = compatibility.open_text(filename, $INPUT, NIL);
-                        if (!stream.isStream()) {
-                            Errors.error($str_alt27$Unable_to_open__S, filename);
-                        }
-                        {
-                            SubLObject instream = stream;
-                            SubLObject item = NIL;
-                            for (item = read_ignoring_errors(instream, NIL, $EOF); !((item == $EOF) || (NIL != found)); item = read_ignoring_errors(instream, NIL, $EOF)) {
-                                if (item.isCons() && (item.first() == keyword)) {
-                                    found = T;
-                                    value = second(item);
-                                }
-                            }
-                        }
-                    } finally {
-                        {
-                            SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
-                            try {
-                                bind($is_thread_performing_cleanupP$, T);
-                                if (stream.isStream()) {
-                                    close(stream, UNPROVIDED);
-                                }
-                            } finally {
-                                rebind($is_thread_performing_cleanupP$, _prev_bind_0);
-                            }
-                        }
-                    }
-                }
-                return values(value, found);
-            }
-        }
-        return NIL;
-    }
-
-    /**
-     * returns first value found for KEYWORD in FILENAME.
-     */
-    @LispMethod(comment = "returns first value found for KEYWORD in FILENAME.")
     public static SubLObject non_wff_store_file_value_for_record(final SubLObject filename, final SubLObject keyword) {
         SubLObject found = NIL;
         SubLObject value = NIL;
@@ -3519,54 +1903,6 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
             return values(value, found);
         }
         return NIL;
-    }
-
-    public static final SubLObject initialize_non_wff_store_from_non_wff_list_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            clrhash($non_wff_store$.getDynamicValue(thread));
-            {
-                SubLObject list_var = $non_wff_list$.getGlobalValue();
-                $progress_note$.setDynamicValue($str_alt42$Converting__non_wff_list__to__non, thread);
-                $progress_start_time$.setDynamicValue(get_universal_time(), thread);
-                $progress_total$.setDynamicValue(length(list_var), thread);
-                $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
-                {
-                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                    try {
-                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                        $last_percent_progress_prediction$.bind(NIL, thread);
-                        $within_noting_percent_progress$.bind(T, thread);
-                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                        noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
-                        {
-                            SubLObject csome_list_var = list_var;
-                            SubLObject id = NIL;
-                            for (id = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , id = csome_list_var.first()) {
-                                note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
-                                $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
-                                {
-                                    SubLObject assertion = assertion_handles.find_assertion_by_id(id);
-                                    if (NIL != assertion_handles.assertion_p(assertion)) {
-                                        com.cyc.cycjava.cycl.wff_utilities.non_wff_enter(assertion, UNPROVIDED);
-                                    }
-                                }
-                            }
-                        }
-                        noting_percent_progress_postamble();
-                    } finally {
-                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return $non_wff_store$.getDynamicValue(thread);
-        }
     }
 
     public static SubLObject initialize_non_wff_store_from_non_wff_list() {
@@ -3629,19 +1965,6 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
         return $non_wff_store$.getDynamicValue(thread);
     }
 
-    public static final SubLObject possibly_load_newer_non_wff_store_alt() {
-        {
-            SubLObject filename = com.cyc.cycjava.cycl.wff_utilities.external_non_wff_store_filename();
-            if (NIL != com.cyc.cycjava.cycl.wff_utilities.non_wff_file_newerP(filename)) {
-                if (NIL != com.cyc.cycjava.cycl.wff_utilities.initialize_non_wff_store_to_file_completeP(filename)) {
-                    format(T, $str_alt43$Loading_newer_non_wff_store_from_, filename);
-                    return com.cyc.cycjava.cycl.wff_utilities.non_wff_store_load_externalized(filename);
-                }
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject possibly_load_newer_non_wff_store() {
         final SubLObject filename = external_non_wff_store_filename();
         if ((NIL != non_wff_file_newerP(filename)) && (NIL != initialize_non_wff_store_to_file_completeP(filename))) {
@@ -3651,109 +1974,10 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject external_non_wff_store_filename_alt() {
-        return file_utilities.cyc_home_filename($list_alt44, $str_alt45$non_wff_store, $$$text);
-    }
-
     public static SubLObject external_non_wff_store_filename() {
         return file_utilities.cyc_home_filename($list45, $str46$non_wff_store, $$$text);
     }
 
-    /**
-     * Write the non-wff store out to FILENAME as duples of the form
-     * (<hl-external-id> <kb-version-string>).
-     */
-    @LispMethod(comment = "Write the non-wff store out to FILENAME as duples of the form\r\n(<hl-external-id> <kb-version-string>).\nWrite the non-wff store out to FILENAME as duples of the form\n(<hl-external-id> <kb-version-string>).")
-    public static final SubLObject non_wff_store_save_externalized_alt(SubLObject filename) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject stream = NIL;
-                try {
-                    stream = compatibility.open_text(filename, $OUTPUT, NIL);
-                    if (!stream.isStream()) {
-                        Errors.error($str_alt27$Unable_to_open__S, filename);
-                    }
-                    {
-                        SubLObject out = stream;
-                        format(out, $str_alt47$______A, misc_utilities.copyright_notice());
-                        com.cyc.cycjava.cycl.wff_utilities.non_wff_store_save_preamble(out, $EXTERNAL);
-                        {
-                            SubLObject table_var = $non_wff_store$.getDynamicValue(thread);
-                            $progress_note$.setDynamicValue($str_alt49$Saving_the_non_WFF_store_in_exter, thread);
-                            $progress_start_time$.setDynamicValue(get_universal_time(), thread);
-                            $progress_total$.setDynamicValue(hash_table_count(table_var), thread);
-                            $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
-                            {
-                                SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                                SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                                SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                                SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                                try {
-                                    $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                                    $last_percent_progress_prediction$.bind(NIL, thread);
-                                    $within_noting_percent_progress$.bind(T, thread);
-                                    $percent_progress_start_time$.bind(get_universal_time(), thread);
-                                    noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
-                                    {
-                                        SubLObject internal_id = NIL;
-                                        SubLObject kb_version_string = NIL;
-                                        {
-                                            final Iterator cdohash_iterator = getEntrySetIterator(table_var);
-                                            try {
-                                                while (iteratorHasNext(cdohash_iterator)) {
-                                                    final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
-                                                    internal_id = getEntryKey(cdohash_entry);
-                                                    kb_version_string = getEntryValue(cdohash_entry);
-                                                    note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
-                                                    $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
-                                                    {
-                                                        SubLObject assertion = assertion_handles.find_assertion_by_id(internal_id);
-                                                        SubLObject external_id = NIL;
-                                                        if (NIL != assertions_high.valid_assertion(assertion, UNPROVIDED)) {
-                                                            external_id = kb_utilities.hl_external_id_string(assertion);
-                                                        }
-                                                        format(out, $str_alt30$____S__S_, external_id, kb_version_string);
-                                                    }
-                                                } 
-                                            } finally {
-                                                releaseEntrySetIterator(cdohash_iterator);
-                                            }
-                                        }
-                                    }
-                                    noting_percent_progress_postamble();
-                                } finally {
-                                    $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                                    $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                                    $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                                    $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                                }
-                            }
-                        }
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            if (stream.isStream()) {
-                                close(stream, UNPROVIDED);
-                            }
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-            }
-            return T;
-        }
-    }
-
-    /**
-     * Write the non-wff store out to FILENAME as duples of the form
-     * (<hl-external-id> <kb-version-string>).
-     */
-    @LispMethod(comment = "Write the non-wff store out to FILENAME as duples of the form\r\n(<hl-external-id> <kb-version-string>).\nWrite the non-wff store out to FILENAME as duples of the form\n(<hl-external-id> <kb-version-string>).")
     public static SubLObject non_wff_store_save_externalized(final SubLObject filename) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject stream = NIL;
@@ -3842,99 +2066,6 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
         return T;
     }
 
-    /**
-     * Write the non-wff store out to FILENAME as duples of the form
-     * (<internal-assertion-id> <kb-version-string>).
-     */
-    @LispMethod(comment = "Write the non-wff store out to FILENAME as duples of the form\r\n(<internal-assertion-id> <kb-version-string>).\nWrite the non-wff store out to FILENAME as duples of the form\n(<internal-assertion-id> <kb-version-string>).")
-    public static final SubLObject non_wff_store_save_internalized_alt(SubLObject filename) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject stream = NIL;
-                try {
-                    stream = compatibility.open_text(filename, $OUTPUT, NIL);
-                    if (!stream.isStream()) {
-                        Errors.error($str_alt27$Unable_to_open__S, filename);
-                    }
-                    {
-                        SubLObject out = stream;
-                        format(out, $str_alt47$______A, misc_utilities.copyright_notice());
-                        com.cyc.cycjava.cycl.wff_utilities.non_wff_store_save_preamble(out, $INTERNAL);
-                        {
-                            SubLObject table_var = $non_wff_store$.getDynamicValue(thread);
-                            $progress_note$.setDynamicValue($str_alt51$Saving_the_non_WFF_store_in_inter, thread);
-                            $progress_start_time$.setDynamicValue(get_universal_time(), thread);
-                            $progress_total$.setDynamicValue(hash_table_count(table_var), thread);
-                            $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
-                            {
-                                SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                                SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                                SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                                SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                                try {
-                                    $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                                    $last_percent_progress_prediction$.bind(NIL, thread);
-                                    $within_noting_percent_progress$.bind(T, thread);
-                                    $percent_progress_start_time$.bind(get_universal_time(), thread);
-                                    noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
-                                    {
-                                        SubLObject internal_id = NIL;
-                                        SubLObject kb_version_string = NIL;
-                                        {
-                                            final Iterator cdohash_iterator = getEntrySetIterator(table_var);
-                                            try {
-                                                while (iteratorHasNext(cdohash_iterator)) {
-                                                    final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
-                                                    internal_id = getEntryKey(cdohash_entry);
-                                                    kb_version_string = getEntryValue(cdohash_entry);
-                                                    note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
-                                                    $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
-                                                    {
-                                                        SubLObject assertion = assertion_handles.find_assertion_by_id(internal_id);
-                                                        if (NIL != assertions_high.valid_assertion(assertion, UNPROVIDED)) {
-                                                            format(out, $str_alt30$____S__S_, internal_id, kb_version_string);
-                                                        }
-                                                    }
-                                                } 
-                                            } finally {
-                                                releaseEntrySetIterator(cdohash_iterator);
-                                            }
-                                        }
-                                    }
-                                    noting_percent_progress_postamble();
-                                } finally {
-                                    $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                                    $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                                    $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                                    $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                                }
-                            }
-                        }
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            if (stream.isStream()) {
-                                close(stream, UNPROVIDED);
-                            }
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-            }
-            return T;
-        }
-    }
-
-    /**
-     * Write the non-wff store out to FILENAME as duples of the form
-     * (<internal-assertion-id> <kb-version-string>).
-     */
-    @LispMethod(comment = "Write the non-wff store out to FILENAME as duples of the form\r\n(<internal-assertion-id> <kb-version-string>).\nWrite the non-wff store out to FILENAME as duples of the form\n(<internal-assertion-id> <kb-version-string>).")
     public static SubLObject non_wff_store_save_internalized(final SubLObject filename) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject stream = NIL;
@@ -4021,35 +2152,6 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
         return T;
     }
 
-    public static final SubLObject non_wff_store_save_preamble_alt(SubLObject stream, SubLObject format) {
-        format(stream, $str_alt52$____record_count__S_, com.cyc.cycjava.cycl.wff_utilities.non_wff_count());
-        format(stream, $str_alt28$____start_time__S_, $non_wff_start$.getGlobalValue());
-        if (NIL != $non_wff_end$.getGlobalValue()) {
-            format(stream, $str_alt33$____end_time__S_, $non_wff_end$.getGlobalValue());
-        }
-        {
-            SubLObject cdolist_list_var = $non_wff_error_list$.getGlobalValue();
-            SubLObject error_id = NIL;
-            for (error_id = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , error_id = cdolist_list_var.first()) {
-                if (error_id.isInteger()) {
-                    {
-                        SubLObject pcase_var = format;
-                        if (pcase_var.eql($EXTERNAL)) {
-                            format(stream, $str_alt53$____error__S_, kb_utilities.hl_external_id_string(assertion_handles.find_assertion_by_id(error_id)));
-                        } else {
-                            if (pcase_var.eql($INTERNAL)) {
-                                format(stream, $str_alt53$____error__S_, error_id);
-                            }
-                        }
-                    }
-                } else {
-                    Errors.warn($str_alt54$__Problem__NIL_assertion_ID_in_er);
-                }
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject non_wff_store_save_preamble(final SubLObject stream, final SubLObject format) {
         format(stream, $str53$____record_count__S_, non_wff_count());
         format(stream, $str28$____start_time__S_, $non_wff_start$.getGlobalValue());
@@ -4077,97 +2179,12 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     * Initialize the non-wff store by loading FILENAME.
-     */
-    @LispMethod(comment = "Initialize the non-wff store by loading FILENAME.")
-    public static final SubLObject non_wff_store_load_externalized_alt(SubLObject filename) {
-        return com.cyc.cycjava.cycl.wff_utilities.non_wff_store_load(filename);
-    }
-
-    /**
-     * Initialize the non-wff store by loading FILENAME.
-     */
-    @LispMethod(comment = "Initialize the non-wff store by loading FILENAME.")
     public static SubLObject non_wff_store_load_externalized(final SubLObject filename) {
         return non_wff_store_load(filename);
     }
 
-    /**
-     * Initialize the non-wff store by loading FILENAME.
-     */
-    @LispMethod(comment = "Initialize the non-wff store by loading FILENAME.")
-    public static final SubLObject non_wff_store_load_internalized_alt(SubLObject filename) {
-        return com.cyc.cycjava.cycl.wff_utilities.non_wff_store_load(filename);
-    }
-
-    /**
-     * Initialize the non-wff store by loading FILENAME.
-     */
-    @LispMethod(comment = "Initialize the non-wff store by loading FILENAME.")
     public static SubLObject non_wff_store_load_internalized(final SubLObject filename) {
         return non_wff_store_load(filename);
-    }
-
-    public static final SubLObject non_wff_store_load_alt(SubLObject filename) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            clrhash($non_wff_store$.getDynamicValue(thread));
-            $non_wff_error_list$.setGlobalValue(NIL);
-            {
-                SubLObject stream = NIL;
-                try {
-                    stream = compatibility.open_text(filename, $INPUT, NIL);
-                    if (!stream.isStream()) {
-                        Errors.error($str_alt27$Unable_to_open__S, filename);
-                    }
-                    {
-                        SubLObject instream = stream;
-                        SubLObject length = file_length(instream);
-                        {
-                            SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                            SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                            SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                            SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                            try {
-                                $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                                $last_percent_progress_prediction$.bind(NIL, thread);
-                                $within_noting_percent_progress$.bind(T, thread);
-                                $percent_progress_start_time$.bind(get_universal_time(), thread);
-                                noting_percent_progress_preamble($str_alt55$Loading_the_non_WFF_store);
-                                {
-                                    SubLObject item = NIL;
-                                    SubLObject position = NIL;
-                                    for (item = read_ignoring_errors(instream, NIL, $EOF), position = file_position(instream, UNPROVIDED); item != $EOF; item = read_ignoring_errors(instream, NIL, $EOF) , position = file_position(instream, UNPROVIDED)) {
-                                        com.cyc.cycjava.cycl.wff_utilities.non_wff_store_process_item(item);
-                                        note_percent_progress(position, length);
-                                    }
-                                }
-                                noting_percent_progress_postamble();
-                            } finally {
-                                $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                                $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                                $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                                $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            if (stream.isStream()) {
-                                close(stream, UNPROVIDED);
-                            }
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-            }
-            return $non_wff_store$.getDynamicValue(thread);
-        }
     }
 
     public static SubLObject non_wff_store_load(final SubLObject filename) {
@@ -4236,80 +2253,6 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
         return $non_wff_store$.getDynamicValue(thread);
     }
 
-    public static final SubLObject non_wff_store_process_item_alt(SubLObject item) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (item.first() == $RECORD_COUNT) {
-                $non_wff_count$.setDynamicValue(second(item), thread);
-            } else {
-                if (item.first() == $START_TIME) {
-                    $non_wff_start$.setGlobalValue(second(item));
-                } else {
-                    if (item.first() == $END_TIME) {
-                        $non_wff_end$.setGlobalValue(second(item));
-                    } else {
-                        if (item.first() == $ERROR) {
-                            if (NIL != kb_utilities.hl_external_id_string_p(second(item))) {
-                                {
-                                    SubLObject assertion = kb_utilities.find_object_by_hl_external_id_string(second(item));
-                                    if (NIL != assertion_handles.assertion_p(assertion)) {
-                                        if (assertion_handles.assertion_id(assertion).isInteger()) {
-                                            $non_wff_error_list$.setGlobalValue(cons(assertion_handles.assertion_id(assertion), $non_wff_error_list$.getGlobalValue()));
-                                        } else {
-                                            if (NIL != $non_wff_verboseP$.getDynamicValue(thread)) {
-                                                Errors.warn($str_alt58$The_assertion_with_this_external_, second(item));
-                                            }
-                                        }
-                                    }
-                                }
-                            } else {
-                                if (NIL != assertion_handles.assertion_id_p(second(item))) {
-                                    {
-                                        SubLObject assertion = assertion_handles.find_assertion_by_id(second(item));
-                                        if (NIL != assertion_handles.assertion_p(assertion)) {
-                                            $non_wff_error_list$.setGlobalValue(cons(second(item), $non_wff_error_list$.getGlobalValue()));
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            if (NIL != kb_utilities.hl_external_id_string_p(item.first())) {
-                                {
-                                    SubLObject assertion = kb_utilities.find_object_by_hl_external_id_string(item.first());
-                                    if (NIL != assertions_high.valid_assertion(assertion, UNPROVIDED)) {
-                                        com.cyc.cycjava.cycl.wff_utilities.non_wff_enter(assertion, second(item));
-                                    } else {
-                                        if (NIL != $non_wff_verboseP$.getDynamicValue(thread)) {
-                                            Errors.warn($str_alt59$Assertions_with_HL_external_ID__S, item.first());
-                                        }
-                                    }
-                                }
-                            } else {
-                                if (NIL != assertion_handles.assertion_id_p(item.first())) {
-                                    {
-                                        SubLObject assertion = assertion_handles.find_assertion_by_id(item.first());
-                                        if (NIL != assertions_high.valid_assertion(assertion, UNPROVIDED)) {
-                                            com.cyc.cycjava.cycl.wff_utilities.non_wff_enter(assertion, second(item));
-                                        } else {
-                                            if (NIL != $non_wff_verboseP$.getDynamicValue(thread)) {
-                                                Errors.warn($str_alt60$Assertions_with_internal_ID__S_is, item.first());
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    if (NIL != $non_wff_verboseP$.getDynamicValue(thread)) {
-                                        Errors.warn($str_alt61$Record__S_is_an_unknown_type_, item);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject non_wff_store_process_item(final SubLObject item) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (item.first() == $RECORD_COUNT) {
@@ -4374,44 +2317,6 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    static private final SubLString $str_alt7$Invalid_attempt_to_reuse_memoizat = makeString("Invalid attempt to reuse memoization state in multiple threads simultaneously.");
-
-    static private final SubLString $str_alt12$WFF_checking_assertion_range__A__ = makeString("WFF-checking assertion range ~A - ~A");
-
-    static private final SubLString $str_alt16$it_is_not_the_case_that____genlMt = makeString("it is not the case that (#$genlMt ~s ~s)");
-
-    static private final SubLString $str_alt25$____Starting_with_ID____S = makeString("~%~%Starting with ID = ~S");
-
-    static private final SubLString $str_alt27$Unable_to_open__S = makeString("Unable to open ~S");
-
-    static private final SubLString $str_alt28$____start_time__S_ = makeString("~%(:start-time ~S)");
-
-    static private final SubLString $str_alt30$____S__S_ = makeString("~%(~S ~S)");
-
-    /**
-     * Check ASSERTION for well-formedness, adding or removing it from the non-wff store
-     * as needed.  Return T iff WFF, NIL otherwise.
-     */
-    @LispMethod(comment = "Check ASSERTION for well-formedness, adding or removing it from the non-wff store\r\nas needed.  Return T iff WFF, NIL otherwise.\nCheck ASSERTION for well-formedness, adding or removing it from the non-wff store\nas needed.  Return T iff WFF, NIL otherwise.")
-    public static final SubLObject wff_check_assertion_alt(SubLObject assertion) {
-        {
-            SubLObject sentence = uncanonicalizer.assertion_el_formula(assertion);
-            SubLObject mt = assertions_high.assertion_mt(assertion);
-            SubLObject wffP = wff.el_wffP(sentence, mt, UNPROVIDED);
-            if (NIL != wffP) {
-                com.cyc.cycjava.cycl.wff_utilities.non_wff_remove(assertion);
-            } else {
-                com.cyc.cycjava.cycl.wff_utilities.non_wff_enter(assertion, UNPROVIDED);
-            }
-            return wffP;
-        }
-    }
-
-    /**
-     * Check ASSERTION for well-formedness, adding or removing it from the non-wff store
-     * as needed.  Return T iff WFF, NIL otherwise.
-     */
-    @LispMethod(comment = "Check ASSERTION for well-formedness, adding or removing it from the non-wff store\r\nas needed.  Return T iff WFF, NIL otherwise.\nCheck ASSERTION for well-formedness, adding or removing it from the non-wff store\nas needed.  Return T iff WFF, NIL otherwise.")
     public static SubLObject wff_check_assertion(final SubLObject assertion) {
         final SubLObject sentence = uncanonicalizer.assertion_el_formula(assertion);
         final SubLObject mt = assertions_high.assertion_mt(assertion);
@@ -4424,42 +2329,8 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
         return wffP;
     }
 
-    static private final SubLString $str_alt31$WFF_took_more_than__S_seconds_on_ = makeString("WFF took more than ~S seconds on ~S");
-
-    static private final SubLString $str_alt32$____error__S__S_ = makeString("~%(:error ~S ~S)");
-
-    static private final SubLString $str_alt33$____end_time__S_ = makeString("~%(:end-time ~S)");
-
-    static private final SubLString $str_alt34$No_WFF_sweep_has_been_started_ = makeString("No WFF-sweep has been started.");
-
-    /**
-     * Find an assertion using the tl-formula SENTENCE and MT, and check its well-formedness.
-     * Return T iff WFF, NIL otherwise.
-     */
-    @LispMethod(comment = "Find an assertion using the tl-formula SENTENCE and MT, and check its well-formedness.\r\nReturn T iff WFF, NIL otherwise.\nFind an assertion using the tl-formula SENTENCE and MT, and check its well-formedness.\nReturn T iff WFF, NIL otherwise.")
-    public static final SubLObject wff_check_assertions_via_tl_alt(SubLObject sentence, SubLObject mt) {
-        SubLTrampolineFile.checkType(sentence, EL_FORMULA_P);
-        {
-            SubLObject assertions = ke.find_assertions_via_tl(sentence, mt);
-            SubLObject wffP = T;
-            SubLObject cdolist_list_var = assertions;
-            SubLObject assertion = NIL;
-            for (assertion = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , assertion = cdolist_list_var.first()) {
-                if (NIL == com.cyc.cycjava.cycl.wff_utilities.wff_check_assertion(assertion)) {
-                    wffP = NIL;
-                }
-            }
-            return wffP;
-        }
-    }
-
-    /**
-     * Find an assertion using the tl-formula SENTENCE and MT, and check its well-formedness.
-     * Return T iff WFF, NIL otherwise.
-     */
-    @LispMethod(comment = "Find an assertion using the tl-formula SENTENCE and MT, and check its well-formedness.\r\nReturn T iff WFF, NIL otherwise.\nFind an assertion using the tl-formula SENTENCE and MT, and check its well-formedness.\nReturn T iff WFF, NIL otherwise.")
     public static SubLObject wff_check_assertions_via_tl(final SubLObject sentence, final SubLObject mt) {
-        assert NIL != el_formula_p(sentence) : "! el_utilities.el_formula_p(sentence) " + ("el_utilities.el_formula_p(sentence) " + "CommonSymbols.NIL != el_utilities.el_formula_p(sentence) ") + sentence;
+        assert NIL != el_formula_p(sentence) : "el_utilities.el_formula_p(sentence) " + "CommonSymbols.NIL != el_utilities.el_formula_p(sentence) " + sentence;
         final SubLObject assertions = ke.find_assertions_via_tl(sentence, mt);
         SubLObject wffP = T;
         SubLObject cdolist_list_var = assertions;
@@ -4475,165 +2346,70 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
         return wffP;
     }
 
-    static private final SubLString $str_alt35$After__S___the_whole_KB_should_ta = makeString("After ~S%, the whole KB should take ~S days.  Expected completion: ~A.");
-
-    static private final SubLString $str_alt42$Converting__non_wff_list__to__non = makeString("Converting *non-wff-list* to *non-wff-store*");
-
-    static private final SubLString $str_alt43$Loading_newer_non_wff_store_from_ = makeString("Loading newer non-wff store from ~A");
-
-    static private final SubLList $list_alt44 = list(makeString("data"), makeString("non-wff"));
-
-    static private final SubLString $str_alt45$non_wff_store = makeString("non-wff-store");
-
     public static SubLObject declare_wff_utilities_file() {
-        declareFunction("assertion_not_wffP", "ASSERTION-NOT-WFF?", 1, 0, false);
-        declareFunction("assertion_wffP", "ASSERTION-WFF?", 1, 0, false);
-        declareFunction("assertion_not_wff_assertibleP", "ASSERTION-NOT-WFF-ASSERTIBLE?", 1, 0, false);
-        declareFunction("assertion_wff_assertibleP", "ASSERTION-WFF-ASSERTIBLE?", 1, 0, false);
-        declareFunction("assertion_why_not_wff", "ASSERTION-WHY-NOT-WFF", 1, 0, false);
-        declareFunction("assertion_why_not_wff_assert", "ASSERTION-WHY-NOT-WFF-ASSERT", 1, 0, false);
-        declareFunction("set_dont_check_wff_semantics", "SET-DONT-CHECK-WFF-SEMANTICS", 0, 0, false);
-        declareFunction("set_check_wff_semantics", "SET-CHECK-WFF-SEMANTICS", 0, 0, false);
-        declareFunction("check_assertible_literalP", "CHECK-ASSERTIBLE-LITERAL?", 0, 0, false);
-        declareFunction("mal_mt_specP", "MAL-MT-SPEC?", 1, 0, false);
-        declareFunction("valid_mt_specP", "VALID-MT-SPEC?", 1, 0, false);
-        declareFunction("wf_fort_p", "WF-FORT-P", 1, 0, false);
-        declareFunction("non_wf_fort_p", "NON-WF-FORT-P", 1, 0, false);
+        declareFunction(me, "assertion_not_wffP", "ASSERTION-NOT-WFF?", 1, 0, false);
+        declareFunction(me, "assertion_wffP", "ASSERTION-WFF?", 1, 0, false);
+        declareFunction(me, "assertion_not_wff_assertibleP", "ASSERTION-NOT-WFF-ASSERTIBLE?", 1, 0, false);
+        declareFunction(me, "assertion_wff_assertibleP", "ASSERTION-WFF-ASSERTIBLE?", 1, 0, false);
+        declareFunction(me, "assertion_why_not_wff", "ASSERTION-WHY-NOT-WFF", 1, 0, false);
+        declareFunction(me, "assertion_why_not_wff_assert", "ASSERTION-WHY-NOT-WFF-ASSERT", 1, 0, false);
+        declareFunction(me, "set_dont_check_wff_semantics", "SET-DONT-CHECK-WFF-SEMANTICS", 0, 0, false);
+        declareFunction(me, "set_check_wff_semantics", "SET-CHECK-WFF-SEMANTICS", 0, 0, false);
+        declareFunction(me, "check_assertible_literalP", "CHECK-ASSERTIBLE-LITERAL?", 0, 0, false);
+        declareFunction(me, "mal_mt_specP", "MAL-MT-SPEC?", 1, 0, false);
+        declareFunction(me, "valid_mt_specP", "VALID-MT-SPEC?", 1, 0, false);
+        declareFunction(me, "wf_fort_p", "WF-FORT-P", 1, 0, false);
+        declareFunction(me, "non_wf_fort_p", "NON-WF-FORT-P", 1, 0, false);
         new wff_utilities.$non_wf_fort_p$UnaryFunction();
-        declareFunction("non_wf_variable_p", "NON-WF-VARIABLE-P", 1, 0, false);
+        declareFunction(me, "non_wf_variable_p", "NON-WF-VARIABLE-P", 1, 0, false);
         new wff_utilities.$non_wf_variable_p$UnaryFunction();
-        declareFunction("mal_variablesP", "MAL-VARIABLES?", 1, 0, false);
-        declareFunction("mal_variables", "MAL-VARIABLES", 1, 0, false);
-        declareFunction("non_wff_assertion_ids", "NON-WFF-ASSERTION-IDS", 0, 0, false);
-        declareFunction("number_of_assertions_wff_checked", "NUMBER-OF-ASSERTIONS-WFF-CHECKED", 0, 0, false);
-        declareFunction("last_wff_checked_assertion_id", "LAST-WFF-CHECKED-ASSERTION-ID", 0, 0, false);
-        declareFunction("non_wff_error", "NON-WFF-ERROR", 0, 0, false);
-        declareFunction("non_wffs_in_mts", "NON-WFFS-IN-MTS", 1, 1, false);
-        declareFunction("all_non_wff_assertion_ids", "ALL-NON-WFF-ASSERTION-IDS", 0, 1, false);
-        declareFunction("non_wff_assertion_ids_in_range", "NON-WFF-ASSERTION-IDS-IN-RANGE", 2, 0, false);
-        declareFunction("relevant_spec_mts", "RELEVANT-SPEC-MTS", 2, 0, false);
-        declareFunction("pre_num_wff", "PRE-NUM-WFF", 0, 0, false);
-        declareFunction("pre_num_not_wff", "PRE-NUM-NOT-WFF", 0, 0, false);
-        declareFunction("pre_percent_not_wff", "PRE-PERCENT-NOT-WFF", 0, 0, false);
-        declareFunction("post_num_wff", "POST-NUM-WFF", 0, 0, false);
-        declareFunction("post_num_not_wff", "POST-NUM-NOT-WFF", 0, 0, false);
-        declareFunction("post_percent_not_wff", "POST-PERCENT-NOT-WFF", 0, 0, false);
-        declareFunction("pre_wff_check_in_mts", "PRE-WFF-CHECK-IN-MTS", 1, 3, false);
-        declareFunction("post_wff_check_in_mts", "POST-WFF-CHECK-IN-MTS", 1, 3, false);
-        declareFunction("last_checked_id", "LAST-CHECKED-ID", 1, 0, false);
-        declareFunction("pre_post_deltas", "PRE-POST-DELTAS", 0, 1, false);
-        declareFunction("non_wff_cached_p", "NON-WFF-CACHED-P", 1, 0, false);
-        declareFunction("non_wff_enter", "NON-WFF-ENTER", 1, 1, false);
-        declareFunction("non_wff_remove", "NON-WFF-REMOVE", 1, 0, false);
-        declareFunction("non_wff_count", "NON-WFF-COUNT", 0, 0, false);
-        declareFunction("non_wff_in_what_kb", "NON-WFF-IN-WHAT-KB", 1, 0, false);
-        declareFunction("initialize_non_wff_store_to_file", "INITIALIZE-NON-WFF-STORE-TO-FILE", 1, 1, false);
-        declareFunction("initialize_non_wff_store_progress", "INITIALIZE-NON-WFF-STORE-PROGRESS", 0, 0, false);
-        declareFunction("initialize_non_wff_store_to_file_startedP", "INITIALIZE-NON-WFF-STORE-TO-FILE-STARTED?", 1, 0, false);
-        declareFunction("initialize_non_wff_store_to_file_completeP", "INITIALIZE-NON-WFF-STORE-TO-FILE-COMPLETE?", 1, 0, false);
-        declareFunction("non_wff_file_newerP", "NON-WFF-FILE-NEWER?", 1, 0, false);
-        declareFunction("non_wff_store_file_value_for_record", "NON-WFF-STORE-FILE-VALUE-FOR-RECORD", 2, 0, false);
-        declareFunction("initialize_non_wff_store_from_non_wff_list", "INITIALIZE-NON-WFF-STORE-FROM-NON-WFF-LIST", 0, 0, false);
-        declareFunction("possibly_load_newer_non_wff_store", "POSSIBLY-LOAD-NEWER-NON-WFF-STORE", 0, 0, false);
-        declareFunction("external_non_wff_store_filename", "EXTERNAL-NON-WFF-STORE-FILENAME", 0, 0, false);
-        declareFunction("non_wff_store_save_externalized", "NON-WFF-STORE-SAVE-EXTERNALIZED", 1, 0, false);
-        declareFunction("non_wff_store_save_internalized", "NON-WFF-STORE-SAVE-INTERNALIZED", 1, 0, false);
-        declareFunction("non_wff_store_save_preamble", "NON-WFF-STORE-SAVE-PREAMBLE", 2, 0, false);
-        declareFunction("non_wff_store_load_externalized", "NON-WFF-STORE-LOAD-EXTERNALIZED", 1, 0, false);
-        declareFunction("non_wff_store_load_internalized", "NON-WFF-STORE-LOAD-INTERNALIZED", 1, 0, false);
-        declareFunction("non_wff_store_load", "NON-WFF-STORE-LOAD", 1, 0, false);
-        declareFunction("non_wff_store_process_item", "NON-WFF-STORE-PROCESS-ITEM", 1, 0, false);
-        declareFunction("wff_check_assertion", "WFF-CHECK-ASSERTION", 1, 0, false);
-        declareFunction("wff_check_assertions_via_tl", "WFF-CHECK-ASSERTIONS-VIA-TL", 2, 0, false);
-        return NIL;
-    }
-
-    static private final SubLString $str_alt47$______A = makeString("~%;; ~A");
-
-    static private final SubLString $str_alt49$Saving_the_non_WFF_store_in_exter = makeString("Saving the non-WFF store in externalized form.");
-
-    static private final SubLString $str_alt51$Saving_the_non_WFF_store_in_inter = makeString("Saving the non-WFF store in internalized form.");
-
-    static private final SubLString $str_alt52$____record_count__S_ = makeString("~%(:record-count ~S)");
-
-    static private final SubLString $str_alt53$____error__S_ = makeString("~%(:error ~S)");
-
-    static private final SubLString $str_alt54$__Problem__NIL_assertion_ID_in_er = makeString("~%Problem: NIL assertion ID in error list.");
-
-    static private final SubLString $str_alt55$Loading_the_non_WFF_store = makeString("Loading the non-WFF store");
-
-    static private final SubLString $str_alt58$The_assertion_with_this_external_ = makeString("The assertion with this external ID has a NIL assertion-id: ~S");
-
-    static private final SubLString $str_alt59$Assertions_with_HL_external_ID__S = makeString("Assertions with HL external ID ~S is not valid; skipping.");
-
-    static private final SubLString $str_alt60$Assertions_with_internal_ID__S_is = makeString("Assertions with internal ID ~S is not valid; skipping.");
-
-    static private final SubLString $str_alt61$Record__S_is_an_unknown_type_ = makeString("Record ~S is an unknown type.");
-
-    public static final SubLObject init_wff_utilities_file_alt() {
-        defparameter("*CHECK-WFF-CONSTANTS?*", T);
-        defparameter("*CHECK-WFF-SEMANTICS?*", T);
-        defparameter("*CHECK-WFF-COHERENCE?*", NIL);
-        defparameter("*CHECK-ARG-TYPES?*", T);
-        defparameter("*CHECK-VAR-TYPES?*", T);
-        defparameter("*CHECK-ARITY?*", T);
-        defparameter("*USE-CYCL-GRAMMAR-IF-SEMANTIC-CHECKING-DISABLED?*", T);
-        deflexical("*NON-WFF-LIST*", NIL != boundp($non_wff_list$) ? ((SubLObject) ($non_wff_list$.getGlobalValue())) : NIL);
-        deflexical("*NUM-ASSERTIONS-CHECKED*", NIL != boundp($num_assertions_checked$) ? ((SubLObject) ($num_assertions_checked$.getGlobalValue())) : ZERO_INTEGER);
-        deflexical("*LAST-CHECKED-ASSERTION-ID*", NIL != boundp($last_checked_assertion_id$) ? ((SubLObject) ($last_checked_assertion_id$.getGlobalValue())) : ZERO_INTEGER);
-        deflexical("*NON-WFF-ERROR*", NIL != boundp($non_wff_error$) ? ((SubLObject) ($non_wff_error$.getGlobalValue())) : NIL);
-        deflexical("*NON-WFF-ERROR-LIST*", NIL != boundp($non_wff_error_list$) ? ((SubLObject) ($non_wff_error_list$.getGlobalValue())) : NIL);
-        deflexical("*PRE-WFF-HASH*", NIL != boundp($pre_wff_hash$) ? ((SubLObject) ($pre_wff_hash$.getGlobalValue())) : NIL);
-        deflexical("*POST-WFF-HASH*", NIL != boundp($post_wff_hash$) ? ((SubLObject) ($post_wff_hash$.getGlobalValue())) : NIL);
-        defvar("*NON-WFF-STORE*", make_hash_table($int$2048, symbol_function(EQUAL), UNPROVIDED));
-        deflexical("*NON-WFF-START*", NIL != boundp($non_wff_start$) ? ((SubLObject) ($non_wff_start$.getGlobalValue())) : NIL);
-        deflexical("*NON-WFF-END*", NIL != boundp($non_wff_end$) ? ((SubLObject) ($non_wff_end$.getGlobalValue())) : NIL);
-        defparameter("*NON-WFF-CURRENT-ASSERTION*", NIL);
-        defparameter("*NON-WFF-OUTLIER-TIMEOUT*", $int$30);
-        defparameter("*NON-WFF-COUNT*", NIL);
-        defparameter("*NON-WFF-VERBOSE?*", NIL);
+        declareFunction(me, "mal_variablesP", "MAL-VARIABLES?", 1, 0, false);
+        declareFunction(me, "mal_variables", "MAL-VARIABLES", 1, 0, false);
+        declareFunction(me, "non_wff_assertion_ids", "NON-WFF-ASSERTION-IDS", 0, 0, false);
+        declareFunction(me, "number_of_assertions_wff_checked", "NUMBER-OF-ASSERTIONS-WFF-CHECKED", 0, 0, false);
+        declareFunction(me, "last_wff_checked_assertion_id", "LAST-WFF-CHECKED-ASSERTION-ID", 0, 0, false);
+        declareFunction(me, "non_wff_error", "NON-WFF-ERROR", 0, 0, false);
+        declareFunction(me, "non_wffs_in_mts", "NON-WFFS-IN-MTS", 1, 1, false);
+        declareFunction(me, "all_non_wff_assertion_ids", "ALL-NON-WFF-ASSERTION-IDS", 0, 1, false);
+        declareFunction(me, "non_wff_assertion_ids_in_range", "NON-WFF-ASSERTION-IDS-IN-RANGE", 2, 0, false);
+        declareFunction(me, "relevant_spec_mts", "RELEVANT-SPEC-MTS", 2, 0, false);
+        declareFunction(me, "pre_num_wff", "PRE-NUM-WFF", 0, 0, false);
+        declareFunction(me, "pre_num_not_wff", "PRE-NUM-NOT-WFF", 0, 0, false);
+        declareFunction(me, "pre_percent_not_wff", "PRE-PERCENT-NOT-WFF", 0, 0, false);
+        declareFunction(me, "post_num_wff", "POST-NUM-WFF", 0, 0, false);
+        declareFunction(me, "post_num_not_wff", "POST-NUM-NOT-WFF", 0, 0, false);
+        declareFunction(me, "post_percent_not_wff", "POST-PERCENT-NOT-WFF", 0, 0, false);
+        declareFunction(me, "pre_wff_check_in_mts", "PRE-WFF-CHECK-IN-MTS", 1, 3, false);
+        declareFunction(me, "post_wff_check_in_mts", "POST-WFF-CHECK-IN-MTS", 1, 3, false);
+        declareFunction(me, "last_checked_id", "LAST-CHECKED-ID", 1, 0, false);
+        declareFunction(me, "pre_post_deltas", "PRE-POST-DELTAS", 0, 1, false);
+        declareFunction(me, "non_wff_cached_p", "NON-WFF-CACHED-P", 1, 0, false);
+        declareFunction(me, "non_wff_enter", "NON-WFF-ENTER", 1, 1, false);
+        declareFunction(me, "non_wff_remove", "NON-WFF-REMOVE", 1, 0, false);
+        declareFunction(me, "non_wff_count", "NON-WFF-COUNT", 0, 0, false);
+        declareFunction(me, "non_wff_in_what_kb", "NON-WFF-IN-WHAT-KB", 1, 0, false);
+        declareFunction(me, "initialize_non_wff_store_to_file", "INITIALIZE-NON-WFF-STORE-TO-FILE", 1, 1, false);
+        declareFunction(me, "initialize_non_wff_store_progress", "INITIALIZE-NON-WFF-STORE-PROGRESS", 0, 0, false);
+        declareFunction(me, "initialize_non_wff_store_to_file_startedP", "INITIALIZE-NON-WFF-STORE-TO-FILE-STARTED?", 1, 0, false);
+        declareFunction(me, "initialize_non_wff_store_to_file_completeP", "INITIALIZE-NON-WFF-STORE-TO-FILE-COMPLETE?", 1, 0, false);
+        declareFunction(me, "non_wff_file_newerP", "NON-WFF-FILE-NEWER?", 1, 0, false);
+        declareFunction(me, "non_wff_store_file_value_for_record", "NON-WFF-STORE-FILE-VALUE-FOR-RECORD", 2, 0, false);
+        declareFunction(me, "initialize_non_wff_store_from_non_wff_list", "INITIALIZE-NON-WFF-STORE-FROM-NON-WFF-LIST", 0, 0, false);
+        declareFunction(me, "possibly_load_newer_non_wff_store", "POSSIBLY-LOAD-NEWER-NON-WFF-STORE", 0, 0, false);
+        declareFunction(me, "external_non_wff_store_filename", "EXTERNAL-NON-WFF-STORE-FILENAME", 0, 0, false);
+        declareFunction(me, "non_wff_store_save_externalized", "NON-WFF-STORE-SAVE-EXTERNALIZED", 1, 0, false);
+        declareFunction(me, "non_wff_store_save_internalized", "NON-WFF-STORE-SAVE-INTERNALIZED", 1, 0, false);
+        declareFunction(me, "non_wff_store_save_preamble", "NON-WFF-STORE-SAVE-PREAMBLE", 2, 0, false);
+        declareFunction(me, "non_wff_store_load_externalized", "NON-WFF-STORE-LOAD-EXTERNALIZED", 1, 0, false);
+        declareFunction(me, "non_wff_store_load_internalized", "NON-WFF-STORE-LOAD-INTERNALIZED", 1, 0, false);
+        declareFunction(me, "non_wff_store_load", "NON-WFF-STORE-LOAD", 1, 0, false);
+        declareFunction(me, "non_wff_store_process_item", "NON-WFF-STORE-PROCESS-ITEM", 1, 0, false);
+        declareFunction(me, "wff_check_assertion", "WFF-CHECK-ASSERTION", 1, 0, false);
+        declareFunction(me, "wff_check_assertions_via_tl", "WFF-CHECK-ASSERTIONS-VIA-TL", 2, 0, false);
         return NIL;
     }
 
     public static SubLObject init_wff_utilities_file() {
-        if (SubLFiles.USE_V1) {
-            defparameter("*CHECK-WFF-CONSTANTS?*", T);
-            defparameter("*CHECK-WFF-SEMANTICS?*", T);
-            defparameter("*CHECK-WFF-COHERENCE?*", NIL);
-            defparameter("*CHECK-ARG-TYPES?*", T);
-            defparameter("*CHECK-VAR-TYPES?*", T);
-            defparameter("*CHECK-ARITY?*", T);
-            defparameter("*USE-CYCL-GRAMMAR-IF-SEMANTIC-CHECKING-DISABLED?*", T);
-            deflexical("*NON-WFF-LIST*", SubLTrampolineFile.maybeDefault($non_wff_list$, $non_wff_list$, NIL));
-            deflexical("*NUM-ASSERTIONS-CHECKED*", SubLTrampolineFile.maybeDefault($num_assertions_checked$, $num_assertions_checked$, ZERO_INTEGER));
-            deflexical("*LAST-CHECKED-ASSERTION-ID*", SubLTrampolineFile.maybeDefault($last_checked_assertion_id$, $last_checked_assertion_id$, ZERO_INTEGER));
-            deflexical("*NON-WFF-ERROR*", SubLTrampolineFile.maybeDefault($non_wff_error$, $non_wff_error$, NIL));
-            deflexical("*NON-WFF-ERROR-LIST*", SubLTrampolineFile.maybeDefault($non_wff_error_list$, $non_wff_error_list$, NIL));
-            deflexical("*PRE-WFF-HASH*", SubLTrampolineFile.maybeDefault($pre_wff_hash$, $pre_wff_hash$, NIL));
-            deflexical("*POST-WFF-HASH*", SubLTrampolineFile.maybeDefault($post_wff_hash$, $post_wff_hash$, NIL));
-            defvar("*NON-WFF-STORE*", make_hash_table($int$2048, symbol_function(EQUAL), UNPROVIDED));
-            deflexical("*NON-WFF-START*", SubLTrampolineFile.maybeDefault($non_wff_start$, $non_wff_start$, NIL));
-            deflexical("*NON-WFF-END*", SubLTrampolineFile.maybeDefault($non_wff_end$, $non_wff_end$, NIL));
-            defparameter("*NON-WFF-CURRENT-ASSERTION*", NIL);
-            defparameter("*NON-WFF-OUTLIER-TIMEOUT*", $int$30);
-            defparameter("*NON-WFF-COUNT*", NIL);
-            defparameter("*NON-WFF-VERBOSE?*", NIL);
-        }
-        if (SubLFiles.USE_V2) {
-            deflexical("*NON-WFF-LIST*", NIL != boundp($non_wff_list$) ? ((SubLObject) ($non_wff_list$.getGlobalValue())) : NIL);
-            deflexical("*NUM-ASSERTIONS-CHECKED*", NIL != boundp($num_assertions_checked$) ? ((SubLObject) ($num_assertions_checked$.getGlobalValue())) : ZERO_INTEGER);
-            deflexical("*LAST-CHECKED-ASSERTION-ID*", NIL != boundp($last_checked_assertion_id$) ? ((SubLObject) ($last_checked_assertion_id$.getGlobalValue())) : ZERO_INTEGER);
-            deflexical("*NON-WFF-ERROR*", NIL != boundp($non_wff_error$) ? ((SubLObject) ($non_wff_error$.getGlobalValue())) : NIL);
-            deflexical("*NON-WFF-ERROR-LIST*", NIL != boundp($non_wff_error_list$) ? ((SubLObject) ($non_wff_error_list$.getGlobalValue())) : NIL);
-            deflexical("*PRE-WFF-HASH*", NIL != boundp($pre_wff_hash$) ? ((SubLObject) ($pre_wff_hash$.getGlobalValue())) : NIL);
-            deflexical("*POST-WFF-HASH*", NIL != boundp($post_wff_hash$) ? ((SubLObject) ($post_wff_hash$.getGlobalValue())) : NIL);
-            deflexical("*NON-WFF-START*", NIL != boundp($non_wff_start$) ? ((SubLObject) ($non_wff_start$.getGlobalValue())) : NIL);
-            deflexical("*NON-WFF-END*", NIL != boundp($non_wff_end$) ? ((SubLObject) ($non_wff_end$.getGlobalValue())) : NIL);
-        }
-        return NIL;
-    }
-
-    public static SubLObject init_wff_utilities_file_Previous() {
         defparameter("*CHECK-WFF-CONSTANTS?*", T);
         defparameter("*CHECK-WFF-SEMANTICS?*", T);
         defparameter("*CHECK-WFF-COHERENCE?*", NIL);
@@ -4687,6 +2463,92 @@ public final class wff_utilities extends SubLTranslatedFile implements V12 {
     }
 
     static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     public static final class $non_wf_fort_p$UnaryFunction extends UnaryFunction {

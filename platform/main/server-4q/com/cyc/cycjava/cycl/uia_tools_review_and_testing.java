@@ -680,7 +680,7 @@ public final class uia_tools_review_and_testing extends SubLTranslatedFile imple
             if ((NIL != assertions_high.asserted_assertionP(v_assert)) && (NIL == uia_term_review_cyc_assertedP(v_assert))) {
                 assert_plist = putf(assert_plist, $CREATOR, $USER);
             } else
-                if (NIL != assertions_high.forward_deduced_assertionP(v_assert)) {
+                if (NIL != assertions_high.forward_deduced_assertionP(v_assert, UNPROVIDED_SYM)) {
                     assert_plist = putf(assert_plist, $CREATOR, $DERIVED);
                     assert_plist = putf(assert_plist, $JUSTIFICATIONS, uia_trampolines.uia_meta_supports(v_assert));
                 } else {

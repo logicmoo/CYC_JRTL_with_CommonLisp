@@ -1,22 +1,7 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.subl_macro_promotions.declare_defglobal;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.append;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.numE;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.boundp;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-
+import com.cyc.cycjava.cycl.nart_index_manager;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -25,40 +10,50 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
+import static com.cyc.cycjava.cycl.nart_index_manager.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWENTY_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- * module:      NART-INDEX-MANAGER
- * source file: /cyc/top/cycl/nart-index-manager.lisp
- * created:     2019/07/03 17:37:20
- */
-public final class nart_index_manager extends SubLTranslatedFile implements V12 {
+
+public final class nart_index_manager extends SubLTranslatedFile {
     public static final SubLFile me = new nart_index_manager();
+
+    public static final String myName = "com.cyc.cycjava.cycl.nart_index_manager";
+
+    public static final String myFingerPrint = "3744da31014cb2d8f8745a72c1a0a79638b02d4b50e65915a24edf2e4dc36e15";
 
 
 
     // deflexical
-    @LispMethod(comment = "Based on arete experiments, only 20% of all narts are touched during normal inference,\r\nso we\'ll make a conservative guess that every one of those touched the nart\'s index.\ndeflexical\nBased on arete experiments, only 20% of all narts are touched during normal inference,\nso we\'ll make a conservative guess that every one of those touched the nart\'s index.")
     private static final SubLSymbol $nart_index_lru_size_percentage$ = makeSymbol("*NART-INDEX-LRU-SIZE-PERCENTAGE*");
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $nart_index_lru_size_max$ = makeSymbol("*NART-INDEX-LRU-SIZE-MAX*");
 
     // Internal Constants
-    @LispMethod(comment = "Internal Constants")
     public static final SubLSymbol $nart_index_manager$ = makeSymbol("*NART-INDEX-MANAGER*");
+
+
 
     private static final SubLInteger $int$30000 = makeInteger(30000);
 
     private static final SubLString $str3$nart_index = makeString("nart-index");
 
     private static final SubLSymbol LOAD_NART_INDEX_FROM_CACHE = makeSymbol("LOAD-NART-INDEX-FROM-CACHE");
+
+
 
     private static final SubLSymbol $sym6$_EXIT = makeSymbol("%EXIT");
 
@@ -74,14 +69,11 @@ public final class nart_index_manager extends SubLTranslatedFile implements V12 
 
     private static final SubLString $$$cnim = makeString("cnim");
 
+
+
     private static final SubLSymbol WITH_KBOM_FULLY_LOADED = makeSymbol("WITH-KBOM-FULLY-LOADED");
 
     private static final SubLList $list15 = list(makeSymbol("*NART-INDEX-MANAGER*"));
-
-    public static final SubLObject setup_nart_index_table_alt(SubLObject size, SubLObject exactP) {
-        $nart_index_manager$.setGlobalValue(kb_object_manager.new_kb_object_manager($str_alt2$nart_index, size, $nart_index_lru_size_percentage$.getGlobalValue(), LOAD_NART_INDEX_FROM_CACHE, exactP));
-        return T;
-    }
 
     public static SubLObject setup_nart_index_table(final SubLObject size, final SubLObject exactP) {
         $nart_index_manager$.setGlobalValue(kb_object_manager.new_kb_object_manager($str3$nart_index, size, $nart_index_lru_size_percentage$.getGlobalValue(), $nart_index_lru_size_max$.getGlobalValue(), LOAD_NART_INDEX_FROM_CACHE, exactP));
@@ -104,96 +96,32 @@ public final class nart_index_manager extends SubLTranslatedFile implements V12 
         return kb_object_manager.resize_kbom_lru_cache_from_percentage_and_max($nart_index_manager$.getGlobalValue(), percentage, max);
     }
 
-    public static final SubLObject optimize_nart_index_table_alt(SubLObject new_nart_id_threshold) {
-        return kb_object_manager.optimize_kb_object_content_table($nart_index_manager$.getGlobalValue(), new_nart_id_threshold);
-    }
-
     public static SubLObject optimize_nart_index_table(final SubLObject new_nart_id_threshold) {
         return kb_object_manager.optimize_kb_object_content_table($nart_index_manager$.getGlobalValue(), new_nart_id_threshold);
-    }
-
-    public static final SubLObject clear_nart_index_table_alt() {
-        return kb_object_manager.clear_kb_object_content_table($nart_index_manager$.getGlobalValue());
     }
 
     public static SubLObject clear_nart_index_table() {
         return kb_object_manager.clear_kb_object_content_table($nart_index_manager$.getGlobalValue());
     }
 
-    /**
-     * Enable the tracking of nart-index usage counts.
-     */
-    @LispMethod(comment = "Enable the tracking of nart-index usage counts.")
-    public static final SubLObject maintain_nart_index_usage_counts_alt() {
-        return kb_object_manager.maintain_kb_object_usage_counts($nart_index_manager$.getGlobalValue());
-    }
-
-    /**
-     * Enable the tracking of nart-index usage counts.
-     */
-    @LispMethod(comment = "Enable the tracking of nart-index usage counts.")
     public static SubLObject maintain_nart_index_usage_counts() {
         return kb_object_manager.maintain_kb_object_usage_counts($nart_index_manager$.getGlobalValue());
     }
 
-    /**
-     * Disable the tracking of nart-index usage counts.
-     */
-    @LispMethod(comment = "Disable the tracking of nart-index usage counts.")
-    public static final SubLObject dont_maintain_nart_index_usage_counts_alt() {
-        return kb_object_manager.dont_maintain_kb_object_usage_counts($nart_index_manager$.getGlobalValue());
-    }
-
-    /**
-     * Disable the tracking of nart-index usage counts.
-     */
-    @LispMethod(comment = "Disable the tracking of nart-index usage counts.")
     public static SubLObject dont_maintain_nart_index_usage_counts() {
         return kb_object_manager.dont_maintain_kb_object_usage_counts($nart_index_manager$.getGlobalValue());
     }
 
-    /**
-     * Test predicate whether nart-index usage counts are already enabled or not.
-     */
-    @LispMethod(comment = "Test predicate whether nart-index usage counts are already enabled or not.")
-    public static final SubLObject nart_index_usage_counts_enabled_p_alt() {
-        return kb_object_manager.kb_object_usage_counts_enabledP($nart_index_manager$.getGlobalValue());
-    }
-
-    /**
-     * Test predicate whether nart-index usage counts are already enabled or not.
-     */
-    @LispMethod(comment = "Test predicate whether nart-index usage counts are already enabled or not.")
     public static SubLObject nart_index_usage_counts_enabled_p() {
         return kb_object_manager.kb_object_usage_counts_enabledP($nart_index_manager$.getGlobalValue());
     }
 
-    /**
-     * Return the number of nart-indices whose content is cached in memory.
-     */
-    @LispMethod(comment = "Return the number of nart-indices whose content is cached in memory.")
-    public static final SubLObject cached_nart_index_count_alt() {
-        return kb_object_manager.cached_kb_object_count($nart_index_manager$.getGlobalValue());
-    }
-
-    /**
-     * Return the number of nart-indices whose content is cached in memory.
-     */
-    @LispMethod(comment = "Return the number of nart-indices whose content is cached in memory.")
     public static SubLObject cached_nart_index_count() {
         return kb_object_manager.cached_kb_object_count($nart_index_manager$.getGlobalValue());
     }
 
-    public static final SubLObject nart_indices_completely_cachedP_alt() {
-        return numE(nart_handles.nart_count(), com.cyc.cycjava.cycl.nart_index_manager.cached_nart_index_count());
-    }
-
     public static SubLObject nart_indices_completely_cachedP() {
         return numE(nart_handles.nart_count(), cached_nart_index_count());
-    }
-
-    public static final SubLObject lookup_nart_index_alt(SubLObject id) {
-        return kb_object_manager.lookup_kb_object_content($nart_index_manager$.getGlobalValue(), id);
     }
 
     public static SubLObject lookup_nart_index(final SubLObject id) {
@@ -211,40 +139,12 @@ public final class nart_index_manager extends SubLTranslatedFile implements V12 
         return kb_object_manager.kb_object_id_cachedP($nart_index_manager$.getGlobalValue(), id);
     }
 
-    /**
-     * Note that ID will be used as the id for NART-INDEX.
-     */
-    @LispMethod(comment = "Note that ID will be used as the id for NART-INDEX.")
-    public static final SubLObject register_nart_index_alt(SubLObject id, SubLObject nart_index) {
-        return kb_object_manager.register_kb_object_content($nart_index_manager$.getGlobalValue(), id, nart_index);
-    }
-
-    /**
-     * Note that ID will be used as the id for NART-INDEX.
-     */
-    @LispMethod(comment = "Note that ID will be used as the id for NART-INDEX.")
     public static SubLObject register_nart_index(final SubLObject id, final SubLObject nart_index) {
         return kb_object_manager.register_kb_object_content($nart_index_manager$.getGlobalValue(), id, nart_index);
     }
 
-    /**
-     * Note that ID is not in use as an NART-INDEX id
-     */
-    @LispMethod(comment = "Note that ID is not in use as an NART-INDEX id")
-    public static final SubLObject deregister_nart_index_alt(SubLObject id) {
-        return kb_object_manager.deregister_kb_object_content($nart_index_manager$.getGlobalValue(), id);
-    }
-
-    /**
-     * Note that ID is not in use as an NART-INDEX id
-     */
-    @LispMethod(comment = "Note that ID is not in use as an NART-INDEX id")
     public static SubLObject deregister_nart_index(final SubLObject id) {
         return kb_object_manager.deregister_kb_object_content($nart_index_manager$.getGlobalValue(), id);
-    }
-
-    public static final SubLObject mark_nart_index_as_muted_alt(SubLObject id) {
-        return kb_object_manager.mark_kb_object_content_as_muted($nart_index_manager$.getGlobalValue(), id);
     }
 
     public static SubLObject mark_nart_index_as_muted(final SubLObject id) {
@@ -258,78 +158,20 @@ public final class nart_index_manager extends SubLTranslatedFile implements V12 
         }
     }
 
-    /**
-     * Turn metering of nart-index content swap time on.
-     */
-    @LispMethod(comment = "Turn metering of nart-index content swap time on.")
-    public static final SubLObject meter_nart_index_swap_time_alt() {
-        return kb_object_manager.meter_kb_object_content_swap_time($nart_index_manager$.getGlobalValue());
-    }
-
-    /**
-     * Turn metering of nart-index content swap time on.
-     */
-    @LispMethod(comment = "Turn metering of nart-index content swap time on.")
     public static SubLObject meter_nart_index_swap_time() {
         return kb_object_manager.meter_kb_object_content_swap_time($nart_index_manager$.getGlobalValue());
     }
 
-    /**
-     * Turn metering of nart-index content swap time off.
-     */
-    @LispMethod(comment = "Turn metering of nart-index content swap time off.")
-    public static final SubLObject dont_meter_nart_index_swap_time_alt() {
-        return kb_object_manager.dont_meter_kb_object_content_swap_time($nart_index_manager$.getGlobalValue());
-    }
-
-    /**
-     * Turn metering of nart-index content swap time off.
-     */
-    @LispMethod(comment = "Turn metering of nart-index content swap time off.")
     public static SubLObject dont_meter_nart_index_swap_time() {
         return kb_object_manager.dont_meter_kb_object_content_swap_time($nart_index_manager$.getGlobalValue());
     }
 
-    /**
-     * Reset nart-index content swap time to 0.
-     */
-    @LispMethod(comment = "Reset nart-index content swap time to 0.")
-    public static final SubLObject clear_nart_index_swap_time_alt() {
-        return kb_object_manager.clear_kb_object_content_swap_time($nart_index_manager$.getGlobalValue());
-    }
-
-    /**
-     * Reset nart-index content swap time to 0.
-     */
-    @LispMethod(comment = "Reset nart-index content swap time to 0.")
     public static SubLObject clear_nart_index_swap_time() {
         return kb_object_manager.clear_kb_object_content_swap_time($nart_index_manager$.getGlobalValue());
     }
 
-    /**
-     *
-     *
-     * @return NON-NEGATIVE-NUMBER-P; How many seconds have been spent inside
-    SWAP-IN-NART-INDEX with metering on since the last time it was cleared?
-     */
-    @LispMethod(comment = "@return NON-NEGATIVE-NUMBER-P; How many seconds have been spent inside\r\nSWAP-IN-NART-INDEX with metering on since the last time it was cleared?")
-    public static final SubLObject current_nart_index_swap_time_alt() {
-        return kb_object_manager.kb_object_manager_swap_time($nart_index_manager$.getGlobalValue());
-    }
-
-    /**
-     *
-     *
-     * @return NON-NEGATIVE-NUMBER-P; How many seconds have been spent inside
-    SWAP-IN-NART-INDEX with metering on since the last time it was cleared?
-     */
-    @LispMethod(comment = "@return NON-NEGATIVE-NUMBER-P; How many seconds have been spent inside\r\nSWAP-IN-NART-INDEX with metering on since the last time it was cleared?")
     public static SubLObject current_nart_index_swap_time() {
         return kb_object_manager.kb_object_manager_swap_time($nart_index_manager$.getGlobalValue());
-    }
-
-    public static final SubLObject swap_out_all_pristine_nart_indices_alt() {
-        return kb_object_manager.swap_out_all_pristine_kb_objects_int($nart_index_manager$.getGlobalValue());
     }
 
     public static SubLObject swap_out_all_pristine_nart_indices() {
@@ -343,10 +185,6 @@ public final class nart_index_manager extends SubLTranslatedFile implements V12 
         }
     }
 
-    public static final SubLObject initialize_nart_index_hl_store_cache_alt() {
-        return kb_object_manager.initialize_kb_object_hl_store_cache($nart_index_manager$.getGlobalValue(), $str_alt4$nat_indices, $str_alt5$nat_indices_index);
-    }
-
     public static SubLObject initialize_nart_index_hl_store_cache() {
         final SubLObject result = kb_object_manager.initialize_kb_object_hl_store_cache($nart_index_manager$.getGlobalValue(), $str7$nat_indices, $str8$nat_indices_index, $str9$nat_complex_indices, $str10$nat_complex_indices_index);
         kb_storage_logging.register_kb_storage_logging_tag(kb_object_manager.kb_object_manager_file_vector($nart_index_manager$.getGlobalValue()), $$$nim);
@@ -357,12 +195,6 @@ public final class nart_index_manager extends SubLTranslatedFile implements V12 
         }
         return result;
     }
-
-    static private final SubLString $str_alt2$nart_index = makeString("nart-index");
-
-    static private final SubLString $str_alt4$nat_indices = makeString("nat-indices");
-
-    static private final SubLString $str_alt5$nat_indices_index = makeString("nat-indices-index");
 
     public static SubLObject wide_nart_index_hl_store_cacheP() {
         return kb_object_manager.wide_kb_object_managerP($nart_index_manager$.getGlobalValue());
@@ -396,55 +228,37 @@ public final class nart_index_manager extends SubLTranslatedFile implements V12 
     }
 
     public static SubLObject declare_nart_index_manager_file() {
-        declareFunction("setup_nart_index_table", "SETUP-NART-INDEX-TABLE", 2, 0, false);
-        declareFunction("resize_nart_index_kbom_lru", "RESIZE-NART-INDEX-KBOM-LRU", 0, 2, false);
-        declareFunction("optimize_nart_index_table", "OPTIMIZE-NART-INDEX-TABLE", 1, 0, false);
-        declareFunction("clear_nart_index_table", "CLEAR-NART-INDEX-TABLE", 0, 0, false);
-        declareFunction("maintain_nart_index_usage_counts", "MAINTAIN-NART-INDEX-USAGE-COUNTS", 0, 0, false);
-        declareFunction("dont_maintain_nart_index_usage_counts", "DONT-MAINTAIN-NART-INDEX-USAGE-COUNTS", 0, 0, false);
-        declareFunction("nart_index_usage_counts_enabled_p", "NART-INDEX-USAGE-COUNTS-ENABLED-P", 0, 0, false);
-        declareFunction("cached_nart_index_count", "CACHED-NART-INDEX-COUNT", 0, 0, false);
-        declareFunction("nart_indices_completely_cachedP", "NART-INDICES-COMPLETELY-CACHED?", 0, 0, false);
-        declareFunction("lookup_nart_index", "LOOKUP-NART-INDEX", 1, 0, false);
-        declareFunction("nart_index_cachedP", "NART-INDEX-CACHED?", 1, 0, false);
-        declareFunction("register_nart_index", "REGISTER-NART-INDEX", 2, 0, false);
-        declareFunction("deregister_nart_index", "DEREGISTER-NART-INDEX", 1, 0, false);
-        declareFunction("mark_nart_index_as_muted", "MARK-NART-INDEX-AS-MUTED", 1, 0, false);
-        declareFunction("meter_nart_index_swap_time", "METER-NART-INDEX-SWAP-TIME", 0, 0, false);
-        declareFunction("dont_meter_nart_index_swap_time", "DONT-METER-NART-INDEX-SWAP-TIME", 0, 0, false);
-        declareFunction("clear_nart_index_swap_time", "CLEAR-NART-INDEX-SWAP-TIME", 0, 0, false);
-        declareFunction("current_nart_index_swap_time", "CURRENT-NART-INDEX-SWAP-TIME", 0, 0, false);
-        declareFunction("swap_out_all_pristine_nart_indices", "SWAP-OUT-ALL-PRISTINE-NART-INDICES", 0, 0, false);
-        declareFunction("initialize_nart_index_hl_store_cache", "INITIALIZE-NART-INDEX-HL-STORE-CACHE", 0, 0, false);
-        declareFunction("wide_nart_index_hl_store_cacheP", "WIDE-NART-INDEX-HL-STORE-CACHE?", 0, 0, false);
-        declareFunction("wide_nart_complex_index_hl_store_cacheP", "WIDE-NART-COMPLEX-INDEX-HL-STORE-CACHE?", 0, 0, false);
-        declareFunction("new_muted_nart_index_iterator", "NEW-MUTED-NART-INDEX-ITERATOR", 0, 0, false);
-        declareFunction("nart_index_change_stream_buffer_sizes", "NART-INDEX-CHANGE-STREAM-BUFFER-SIZES", 2, 0, false);
-        declareFunction("nart_index_enable_memory_mapping", "NART-INDEX-ENABLE-MEMORY-MAPPING", 0, 0, false);
-        declareFunction("nart_index_memory_mappedP", "NART-INDEX-MEMORY-MAPPED?", 0, 0, false);
-        declareMacro("with_nart_index_fully_loaded", "WITH-NART-INDEX-FULLY-LOADED");
-        return NIL;
-    }
-
-    public static final SubLObject init_nart_index_manager_file_alt() {
-        deflexical("*NART-INDEX-MANAGER*", NIL != boundp($nart_index_manager$) ? ((SubLObject) ($nart_index_manager$.getGlobalValue())) : $UNINITIALIZED);
-        deflexical("*NART-INDEX-LRU-SIZE-PERCENTAGE*", TWENTY_INTEGER);
+        declareFunction(me, "setup_nart_index_table", "SETUP-NART-INDEX-TABLE", 2, 0, false);
+        declareFunction(me, "resize_nart_index_kbom_lru", "RESIZE-NART-INDEX-KBOM-LRU", 0, 2, false);
+        declareFunction(me, "optimize_nart_index_table", "OPTIMIZE-NART-INDEX-TABLE", 1, 0, false);
+        declareFunction(me, "clear_nart_index_table", "CLEAR-NART-INDEX-TABLE", 0, 0, false);
+        declareFunction(me, "maintain_nart_index_usage_counts", "MAINTAIN-NART-INDEX-USAGE-COUNTS", 0, 0, false);
+        declareFunction(me, "dont_maintain_nart_index_usage_counts", "DONT-MAINTAIN-NART-INDEX-USAGE-COUNTS", 0, 0, false);
+        declareFunction(me, "nart_index_usage_counts_enabled_p", "NART-INDEX-USAGE-COUNTS-ENABLED-P", 0, 0, false);
+        declareFunction(me, "cached_nart_index_count", "CACHED-NART-INDEX-COUNT", 0, 0, false);
+        declareFunction(me, "nart_indices_completely_cachedP", "NART-INDICES-COMPLETELY-CACHED?", 0, 0, false);
+        declareFunction(me, "lookup_nart_index", "LOOKUP-NART-INDEX", 1, 0, false);
+        declareFunction(me, "nart_index_cachedP", "NART-INDEX-CACHED?", 1, 0, false);
+        declareFunction(me, "register_nart_index", "REGISTER-NART-INDEX", 2, 0, false);
+        declareFunction(me, "deregister_nart_index", "DEREGISTER-NART-INDEX", 1, 0, false);
+        declareFunction(me, "mark_nart_index_as_muted", "MARK-NART-INDEX-AS-MUTED", 1, 0, false);
+        declareFunction(me, "meter_nart_index_swap_time", "METER-NART-INDEX-SWAP-TIME", 0, 0, false);
+        declareFunction(me, "dont_meter_nart_index_swap_time", "DONT-METER-NART-INDEX-SWAP-TIME", 0, 0, false);
+        declareFunction(me, "clear_nart_index_swap_time", "CLEAR-NART-INDEX-SWAP-TIME", 0, 0, false);
+        declareFunction(me, "current_nart_index_swap_time", "CURRENT-NART-INDEX-SWAP-TIME", 0, 0, false);
+        declareFunction(me, "swap_out_all_pristine_nart_indices", "SWAP-OUT-ALL-PRISTINE-NART-INDICES", 0, 0, false);
+        declareFunction(me, "initialize_nart_index_hl_store_cache", "INITIALIZE-NART-INDEX-HL-STORE-CACHE", 0, 0, false);
+        declareFunction(me, "wide_nart_index_hl_store_cacheP", "WIDE-NART-INDEX-HL-STORE-CACHE?", 0, 0, false);
+        declareFunction(me, "wide_nart_complex_index_hl_store_cacheP", "WIDE-NART-COMPLEX-INDEX-HL-STORE-CACHE?", 0, 0, false);
+        declareFunction(me, "new_muted_nart_index_iterator", "NEW-MUTED-NART-INDEX-ITERATOR", 0, 0, false);
+        declareFunction(me, "nart_index_change_stream_buffer_sizes", "NART-INDEX-CHANGE-STREAM-BUFFER-SIZES", 2, 0, false);
+        declareFunction(me, "nart_index_enable_memory_mapping", "NART-INDEX-ENABLE-MEMORY-MAPPING", 0, 0, false);
+        declareFunction(me, "nart_index_memory_mappedP", "NART-INDEX-MEMORY-MAPPED?", 0, 0, false);
+        declareMacro(me, "with_nart_index_fully_loaded", "WITH-NART-INDEX-FULLY-LOADED");
         return NIL;
     }
 
     public static SubLObject init_nart_index_manager_file() {
-        if (SubLFiles.USE_V1) {
-            deflexical("*NART-INDEX-MANAGER*", SubLTrampolineFile.maybeDefault($nart_index_manager$, $nart_index_manager$, $UNINITIALIZED));
-            deflexical("*NART-INDEX-LRU-SIZE-PERCENTAGE*", TWENTY_INTEGER);
-            deflexical("*NART-INDEX-LRU-SIZE-MAX*", $int$30000);
-        }
-        if (SubLFiles.USE_V2) {
-            deflexical("*NART-INDEX-MANAGER*", NIL != boundp($nart_index_manager$) ? ((SubLObject) ($nart_index_manager$.getGlobalValue())) : $UNINITIALIZED);
-        }
-        return NIL;
-    }
-
-    public static SubLObject init_nart_index_manager_file_Previous() {
         deflexical("*NART-INDEX-MANAGER*", SubLTrampolineFile.maybeDefault($nart_index_manager$, $nart_index_manager$, $UNINITIALIZED));
         deflexical("*NART-INDEX-LRU-SIZE-PERCENTAGE*", TWENTY_INTEGER);
         deflexical("*NART-INDEX-LRU-SIZE-MAX*", $int$30000);
@@ -472,6 +286,26 @@ public final class nart_index_manager extends SubLTranslatedFile implements V12 
     }
 
     static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
 

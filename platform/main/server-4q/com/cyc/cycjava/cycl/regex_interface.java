@@ -1,24 +1,23 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl;
 
 
+import com.cyc.cycjava.cycl.regex_interface;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
+import static com.cyc.cycjava.cycl.regex_interface.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- * module:      REGEX-INTERFACE
- * source file: /cyc/top/cycl/regex-interface.lisp
- * created:     2019/07/03 17:37:10
- */
-public final class regex_interface extends SubLTranslatedFile implements V12 {
+
+public final class regex_interface extends SubLTranslatedFile {
     public static final SubLFile me = new regex_interface();
 
+    public static final String myName = "com.cyc.cycjava.cycl.regex_interface";
 
+    public static final String myFingerPrint = "c19299fb9e18c9dff77296b35b8b153a4629ccca5e772b3b409df956a6d0acb2";
 
     public static SubLObject declare_regex_interface_file() {
         return NIL;
@@ -48,6 +47,7 @@ public final class regex_interface extends SubLTranslatedFile implements V12 {
     }
 
     static {
+
     }
 }
 

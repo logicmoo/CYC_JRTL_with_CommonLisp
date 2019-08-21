@@ -1,91 +1,8 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.assertions_high.assertion_mt;
-import static com.cyc.cycjava.cycl.assertions_high.gaf_arg2;
-import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
-import static com.cyc.cycjava.cycl.cycl_grammar.cycl_formula_p;
-import static com.cyc.cycjava.cycl.cycl_grammar.cycl_sentence_p;
-import static com.cyc.cycjava.cycl.el_utilities.atomic_sentenceP;
-import static com.cyc.cycjava.cycl.el_utilities.el_formula_with_operator_p;
-import static com.cyc.cycjava.cycl.el_utilities.ist_sentence_p;
-import static com.cyc.cycjava.cycl.el_utilities.make_el_formula;
-import static com.cyc.cycjava.cycl.el_utilities.make_ist_sentence;
-import static com.cyc.cycjava.cycl.el_utilities.make_unary_formula;
-import static com.cyc.cycjava.cycl.el_utilities.replace_formula_arg;
-import static com.cyc.cycjava.cycl.el_utilities.same_formula_arity_p;
-import static com.cyc.cycjava.cycl.html_utilities.html_char;
-import static com.cyc.cycjava.cycl.html_utilities.html_markup;
-import static com.cyc.cycjava.cycl.isa.nearest_common_isa;
-import static com.cyc.cycjava.cycl.mt_relevance_macros.$mt$;
-import static com.cyc.cycjava.cycl.mt_relevance_macros.$relevant_mt_function$;
-import static com.cyc.cycjava.cycl.mt_relevance_macros.$relevant_mts$;
-import static com.cyc.cycjava.cycl.mt_relevance_macros.update_inference_mt_relevance_function;
-import static com.cyc.cycjava.cycl.mt_relevance_macros.update_inference_mt_relevance_mt;
-import static com.cyc.cycjava.cycl.mt_relevance_macros.update_inference_mt_relevance_mt_list;
-import static com.cyc.cycjava.cycl.mt_relevance_macros.with_inference_mt_relevance_validate;
-import static com.cyc.cycjava.cycl.pph_sentence.new_pph_sentence;
-import static com.cyc.cycjava.cycl.pph_sentence.pph_sentence_copy;
-import static com.cyc.cycjava.cycl.pph_sentence.pph_sentence_cycl;
-import static com.cyc.cycjava.cycl.pph_sentence.pph_sentence_doneP;
-import static com.cyc.cycjava.cycl.pph_sentence.pph_sentence_generate;
-import static com.cyc.cycjava.cycl.pph_sentence.pph_sentence_output_list;
-import static com.cyc.cycjava.cycl.pph_sentence.pph_sentence_p;
-import static com.cyc.cycjava.cycl.pph_sentence.pph_sentence_set_output_list;
-import static com.cyc.cycjava.cycl.pph_sentence.pph_sentence_set_topic;
-import static com.cyc.cycjava.cycl.pph_sentence.pph_sentence_string;
-import static com.cyc.cycjava.cycl.pph_sentence.pph_sentence_topic;
-import static com.cyc.cycjava.cycl.stacks.create_stack;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.$catch_error_message_target$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_space;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.append;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.equal;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.multiply;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.numL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.subtract;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.truncate;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.cconcatenate;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.length;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.nreverse;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.position;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.listp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.arg2;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.multiple_value_list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.nth_value_step_1;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.nth_value_step_2;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.values;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.aref;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeDouble;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.copy_list;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.member;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.second;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.princ;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.close;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.force_output;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.get_output_stream_string;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.make_private_string_output_stream;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-
+import com.cyc.cycjava.cycl.pph_document;
+import com.cyc.cycjava.cycl.subl_macro_promotions;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
@@ -97,49 +14,68 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.html_utilities.*;
+import static com.cyc.cycjava.cycl.pph_document.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_space;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUALP;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- * module:      PPH-DOCUMENT
- * source file: /cyc/top/cycl/pph-document.lisp
- * created:     2019/07/03 17:38:19
- */
-public final class pph_document extends SubLTranslatedFile implements V12 {
+
+public final class pph_document extends SubLTranslatedFile {
     public static final SubLFile me = new pph_document();
 
+    public static final String myName = "com.cyc.cycjava.cycl.pph_document";
 
+    public static final String myFingerPrint = "bf1ac1f054bc08e035028335c774f0fbb85e6e48a9fdc61bfd074cd1eb5d636c";
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $pph_summary_max_sentences_for_same_pred$ = makeSymbol("*PPH-SUMMARY-MAX-SENTENCES-FOR-SAME-PRED*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $pph_track_summary_sourcesP$ = makeSymbol("*PPH-TRACK-SUMMARY-SOURCES?*");
 
     // defparameter
     // LISTP of sources for facts used in the current summary.
-    /**
-     * LISTP of sources for facts used in the current summary.
-     */
-    @LispMethod(comment = "LISTP of sources for facts used in the current summary.\ndefparameter")
     public static final SubLSymbol $pph_summary_sources$ = makeSymbol("*PPH-SUMMARY-SOURCES*");
 
     // defparameter
     // ALIST-P mapping sentences to their lists of sources
-    /**
-     * ALIST-P mapping sentences to their lists of sources
-     */
-    @LispMethod(comment = "ALIST-P mapping sentences to their lists of sources\ndefparameter")
     private static final SubLSymbol $pph_summary_sentence_sources$ = makeSymbol("*PPH-SUMMARY-SENTENCE-SOURCES*");
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $pph_coordination_preds$ = makeSymbol("*PPH-COORDINATION-PREDS*");
 
     // deflexical
@@ -147,32 +83,36 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
      * Don't coordinate the specified args for these predicates -- they don't do
      * well.
      */
-    @LispMethod(comment = "Don\'t coordinate the specified args for these predicates -- they don\'t do\r\nwell.\ndeflexical\nDon\'t coordinate the specified args for these predicates -- they don\'t do\nwell.")
     private static final SubLSymbol $pph_coordination_preds_blacklist$ = makeSymbol("*PPH-COORDINATION-PREDS-BLACKLIST*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $pph_assume_preds_allow_coordinationP$ = makeSymbol("*PPH-ASSUME-PREDS-ALLOW-COORDINATION?*");
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $pph_attempt_reverse_consolidationP$ = makeSymbol("*PPH-ATTEMPT-REVERSE-CONSOLIDATION?*");
 
     // Internal Constants
-    @LispMethod(comment = "Internal Constants")
-    private static final SubLSymbol PPH_SENTENCE_P = makeSymbol("PPH-SENTENCE-P");
+    public static final SubLSymbol PPH_SENTENCE_P = makeSymbol("PPH-SENTENCE-P");
 
     private static final SubLSymbol PPH_SENTENCE_FROM_ASSERTION = makeSymbol("PPH-SENTENCE-FROM-ASSERTION");
 
+
+
     private static final SubLSymbol $sym3$_EXIT = makeSymbol("%EXIT");
+
+
+
+
 
     private static final SubLSymbol PPH_CHECK_FOR_ISOMORPHIC_ASSERTION = makeSymbol("PPH-CHECK-FOR-ISOMORPHIC-ASSERTION");
 
-    private static final SubLObject $const7$QuantificationalRuleMacroPredicat = reader_make_constant_shell("QuantificationalRuleMacroPredicate-Canonical");
+    private static final SubLObject $const7$QuantificationalRuleMacroPredicat = reader_make_constant_shell(makeString("QuantificationalRuleMacroPredicate-Canonical"));
 
 
 
+    private static final SubLObject $$and = reader_make_constant_shell(makeString("and"));
 
+    private static final SubLObject $$MtTimeDimFn = reader_make_constant_shell(makeString("MtTimeDimFn"));
 
     private static final SubLFloat $float$2_5 = makeDouble(2.5);
 
@@ -180,7 +120,7 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $$$other_ = makeString("other ");
 
-
+    private static final SubLObject $$plural = reader_make_constant_shell(makeString("plural"));
 
     private static final SubLString $$$others = makeString("others");
 
@@ -192,25 +132,33 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol PPH_CORE_TERM = makeSymbol("PPH-CORE-TERM");
 
-    private static final SubLList $list21 = list(list(reader_make_constant_shell("isa"), list(makeKeyword("ANY"), reader_make_constant_shell("TheCoordinationSet"))), list(reader_make_constant_shell("genls"), list(makeKeyword("ANY"), reader_make_constant_shell("TheCoordinationSet"))), list(reader_make_constant_shell("bordersOn"), list(makeKeyword("ANY"), reader_make_constant_shell("TheCoordinationSet"))), list(reader_make_constant_shell("politiesBorderEachOther"), list(makeKeyword("ANY"), reader_make_constant_shell("TheCoordinationSet"))), list(reader_make_constant_shell("internationalOrganizationMemberCountries"), list(makeKeyword("ANY"), reader_make_constant_shell("TheCoordinationSet"))), list(reader_make_constant_shell("ist"), list(ONE_INTEGER, reader_make_constant_shell("TheCoordinationSet")), list(TWO_INTEGER, reader_make_constant_shell("and"))));
-
-    static private final SubLList $list22 = list(cons(reader_make_constant_shell("conceptuallyRelated"), makeKeyword("ANY")), list(reader_make_constant_shell("between"), ONE_INTEGER, TWO_INTEGER), list(reader_make_constant_shell("collectionOverlapFraction"), TWO_INTEGER), cons(reader_make_constant_shell("connectedAtEnd"), makeKeyword("ANY")), cons(reader_make_constant_shell("affiliatedWith"), makeKeyword("ANY")));
-
-    static private final SubLList $list23 = list(makeSymbol("ARGNUM"), makeSymbol("THIS-FN"));
 
 
+    private static final SubLList $list21 = list(list(reader_make_constant_shell(makeString("isa")), list(makeKeyword("ANY"), reader_make_constant_shell(makeString("TheCoordinationSet")))), list(reader_make_constant_shell(makeString("genls")), list(makeKeyword("ANY"), reader_make_constant_shell(makeString("TheCoordinationSet")))), list(reader_make_constant_shell(makeString("bordersOn")), list(makeKeyword("ANY"), reader_make_constant_shell(makeString("TheCoordinationSet")))), list(reader_make_constant_shell(makeString("politiesBorderEachOther")), list(makeKeyword("ANY"), reader_make_constant_shell(makeString("TheCoordinationSet")))), list(reader_make_constant_shell(makeString("internationalOrganizationMemberCountries")), list(makeKeyword("ANY"), reader_make_constant_shell(makeString("TheCoordinationSet")))), list(reader_make_constant_shell(makeString("ist")), list(ONE_INTEGER, reader_make_constant_shell(makeString("TheCoordinationSet"))), list(TWO_INTEGER, reader_make_constant_shell(makeString("and")))));
+
+    public static final SubLList $list22 = list(cons(reader_make_constant_shell(makeString("conceptuallyRelated")), makeKeyword("ANY")), list(reader_make_constant_shell(makeString("between")), ONE_INTEGER, TWO_INTEGER), list(reader_make_constant_shell(makeString("collectionOverlapFraction")), TWO_INTEGER), cons(reader_make_constant_shell(makeString("connectedAtEnd")), makeKeyword("ANY")), cons(reader_make_constant_shell(makeString("affiliatedWith")), makeKeyword("ANY")));
+
+    public static final SubLList $list23 = list(makeSymbol("ARGNUM"), makeSymbol("THIS-FN"));
+
+
+
+    private static final SubLObject $$CycLSentence = reader_make_constant_shell(makeString("CycLSentence"));
 
     private static final SubLSymbol $sym26$PPH_SPEC_ = makeSymbol("PPH-SPEC?");
 
-
+    private static final SubLObject $$TheCoordinationSet = reader_make_constant_shell(makeString("TheCoordinationSet"));
 
     private static final SubLString $str28$Cached_demerits__D_for__S = makeString("Cached demerits ~D for ~S");
 
+    private static final SubLObject $$QuantitySlot = reader_make_constant_shell(makeString("QuantitySlot"));
 
+    private static final SubLObject $$BaseKB = reader_make_constant_shell(makeString("BaseKB"));
 
 
 
     private static final SubLSymbol PPH_RM_CYCL = makeSymbol("PPH-RM-CYCL");
+
+
 
     private static final SubLString $str34$Failed_to_paraphrase__S = makeString("Failed to paraphrase ~S");
 
@@ -230,15 +178,27 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str42$Result___S = makeString("Result: ~S");
 
+
+
     private static final SubLString $str44$Conjoining__S___and__S = makeString("Conjoining ~S~% and ~S");
 
     private static final SubLString $str45$Introduced_restrictive_relative_c = makeString("Introduced restrictive relative clause:~% ~S");
 
+
+
     private static final SubLSymbol POSSIBLY_CONVERT_SUMMARY_SENTENCE_TO_CYCL = makeSymbol("POSSIBLY-CONVERT-SUMMARY-SENTENCE-TO-CYCL");
+
+    private static final SubLObject $$followsFromPrecedingDiscourse = reader_make_constant_shell(makeString("followsFromPrecedingDiscourse"));
 
 
 
     private static final SubLString $str50$Can_t_make_a_summary_with_no_inpu = makeString("Can't make a summary with no input.");
+
+
+
+
+
+
 
     private static final SubLString $str54$Failed_to_generate__S = makeString("Failed to generate ~S");
 
@@ -246,64 +206,24 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str56$_similar_sentences_ = makeString(" similar sentences)");
 
+
+
     private static final SubLString $str58$___Top_level_CycL___S = makeString("~% Top-level CycL: ~S");
 
     private static final SubLString $str59$Can_t_truncate__S = makeString("Can't truncate ~S");
 
+    private static final SubLObject $$BeAux = reader_make_constant_shell(makeString("BeAux"));
 
+    private static final SubLObject $$isa = reader_make_constant_shell(makeString("isa"));
 
 
 
     private static final SubLSymbol $sym63$PPH_PROPER_SPEC_ = makeSymbol("PPH-PROPER-SPEC?");
 
-    // Definitions
-    public static final SubLObject pph_paragraph_p_alt(SubLObject obj) {
-        return pph_phrase.pph_phrase_p(obj, UNPROVIDED);
-    }
-
-    // Definitions
     public static SubLObject pph_paragraph_p(final SubLObject obj) {
         return pph_phrase.pph_phrase_p(obj, UNPROVIDED);
     }
 
-    /**
-     *
-     *
-     * @param PPH-SENTENCES;
-     * 		listp of PPH-SENTENCE-P objects.
-     */
-    @LispMethod(comment = "@param PPH-SENTENCES;\r\n\t\tlistp of PPH-SENTENCE-P objects.")
-    public static final SubLObject new_pph_paragraph_alt(SubLObject topic, SubLObject pph_sentences) {
-        if (topic == UNPROVIDED) {
-            topic = NIL;
-        }
-        if (pph_sentences == UNPROVIDED) {
-            pph_sentences = NIL;
-        }
-        {
-            SubLObject cdolist_list_var = pph_sentences;
-            SubLObject v_pph_sentence = NIL;
-            for (v_pph_sentence = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_pph_sentence = cdolist_list_var.first()) {
-                SubLTrampolineFile.checkType(v_pph_sentence, PPH_SENTENCE_P);
-            }
-        }
-        {
-            SubLObject paragraph = pph_data_structures.new_pph_phrase(UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            if (NIL != topic) {
-                com.cyc.cycjava.cycl.pph_document.pph_paragraph_set_topic(paragraph, topic);
-            }
-            pph_phrase.set_pph_phrase_dtrs_from_list(paragraph, pph_sentences, UNPROVIDED);
-            return paragraph;
-        }
-    }
-
-    /**
-     *
-     *
-     * @param PPH-SENTENCES;
-     * 		listp of PPH-SENTENCE-P objects.
-     */
-    @LispMethod(comment = "@param PPH-SENTENCES;\r\n\t\tlistp of PPH-SENTENCE-P objects.")
     public static SubLObject new_pph_paragraph(SubLObject topic, SubLObject pph_sentences) {
         if (topic == UNPROVIDED) {
             topic = NIL;
@@ -315,7 +235,7 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         SubLObject v_pph_sentence = NIL;
         v_pph_sentence = cdolist_list_var.first();
         while (NIL != cdolist_list_var) {
-            assert NIL != pph_sentence.pph_sentence_p(v_pph_sentence) : "! pph_sentence.pph_sentence_p(v_pph_sentence) " + ("pph_sentence.pph_sentence_p(v_pph_sentence) " + "CommonSymbols.NIL != pph_sentence.pph_sentence_p(v_pph_sentence) ") + v_pph_sentence;
+            assert NIL != pph_sentence.pph_sentence_p(v_pph_sentence) : "pph_sentence.pph_sentence_p(v_pph_sentence) " + "CommonSymbols.NIL != pph_sentence.pph_sentence_p(v_pph_sentence) " + v_pph_sentence;
             cdolist_list_var = cdolist_list_var.rest();
             v_pph_sentence = cdolist_list_var.first();
         } 
@@ -327,69 +247,6 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         return paragraph;
     }
 
-    /**
-     * Copy OLD-PARAGRAPH onto target.
-     *
-     * @return PPH-PARAGRAPH-P; TARGET, with all of the information of OLD-PARAGRAPH.
-     */
-    @LispMethod(comment = "Copy OLD-PARAGRAPH onto target.\r\n\r\n@return PPH-PARAGRAPH-P; TARGET, with all of the information of OLD-PARAGRAPH.")
-    public static final SubLObject pph_paragraph_copy_alt(SubLObject old_paragraph, SubLObject target) {
-        if (target == UNPROVIDED) {
-            target = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (!((NIL != pph_error.$suspend_pph_type_checkingP$.getDynamicValue(thread)) || (NIL != com.cyc.cycjava.cycl.pph_document.pph_paragraph_p(old_paragraph)))) {
-                {
-                    SubLObject new_format_string = cconcatenate($str_alt1$_PPH_error_level_, new SubLObject[]{ format_nil.format_nil_s_no_copy(ONE_INTEGER), $str_alt2$__, format_nil.format_nil_a_no_copy(cconcatenate(format_nil.format_nil_s_no_copy(old_paragraph), new SubLObject[]{ $str_alt3$_is_not_a_, format_nil.format_nil_s_no_copy(PPH_PARAGRAPH_P) })) });
-                    pph_error.pph_handle_error(new_format_string, list(EMPTY_SUBL_OBJECT_ARRAY));
-                }
-            }
-            if (NIL == target) {
-                target = com.cyc.cycjava.cycl.pph_document.new_pph_paragraph(UNPROVIDED, UNPROVIDED);
-            }
-            if (!((NIL != pph_error.$suspend_pph_type_checkingP$.getDynamicValue(thread)) || (NIL != com.cyc.cycjava.cycl.pph_document.pph_paragraph_p(target)))) {
-                {
-                    SubLObject new_format_string = cconcatenate($str_alt1$_PPH_error_level_, new SubLObject[]{ format_nil.format_nil_s_no_copy(ONE_INTEGER), $str_alt2$__, format_nil.format_nil_a_no_copy(cconcatenate(format_nil.format_nil_s_no_copy(target), new SubLObject[]{ $str_alt3$_is_not_a_, format_nil.format_nil_s_no_copy(PPH_PARAGRAPH_P) })) });
-                    pph_error.pph_handle_error(new_format_string, list(EMPTY_SUBL_OBJECT_ARRAY));
-                }
-            }
-            if (old_paragraph.equalp(target)) {
-                return target;
-            }
-            if (NIL != pph_phrase.pph_phrase_dtrs(old_paragraph)) {
-                {
-                    SubLObject sentence_copies = NIL;
-                    SubLObject dtr_num = ZERO_INTEGER;
-                    SubLObject vector_var = document.sign_constituents(old_paragraph);
-                    SubLObject backwardP_var = NIL;
-                    SubLObject length = length(vector_var);
-                    SubLObject v_iteration = NIL;
-                    for (v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = add(v_iteration, ONE_INTEGER)) {
-                        {
-                            SubLObject element_num = (NIL != backwardP_var) ? ((SubLObject) (subtract(length, v_iteration, ONE_INTEGER))) : v_iteration;
-                            SubLObject sentence = aref(vector_var, element_num);
-                            SubLObject sentence_copy = (NIL != pph_sentence_p(sentence)) ? ((SubLObject) (pph_sentence_copy(sentence, UNPROVIDED))) : sentence;
-                            sentence_copies = cons(sentence_copy, sentence_copies);
-                            dtr_num = add(dtr_num, ONE_INTEGER);
-                        }
-                    }
-                    pph_phrase.set_pph_phrase_dtrs_from_list(target, nreverse(sentence_copies), UNPROVIDED);
-                }
-            } else {
-                pph_phrase.pph_phrase_set_dtrs(target, NIL);
-            }
-            com.cyc.cycjava.cycl.pph_document.pph_paragraph_set_topic(target, com.cyc.cycjava.cycl.pph_document.pph_paragraph_topic(old_paragraph));
-            return target;
-        }
-    }
-
-    /**
-     * Copy OLD-PARAGRAPH onto target.
-     *
-     * @return PPH-PARAGRAPH-P; TARGET, with all of the information of OLD-PARAGRAPH.
-     */
-    @LispMethod(comment = "Copy OLD-PARAGRAPH onto target.\r\n\r\n@return PPH-PARAGRAPH-P; TARGET, with all of the information of OLD-PARAGRAPH.")
     public static SubLObject pph_paragraph_copy(final SubLObject old_paragraph, SubLObject target) {
         if (target == UNPROVIDED) {
             target = NIL;
@@ -427,71 +284,11 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         return target;
     }
 
-    /**
-     *
-     *
-     * @param SUMMARY-ASSERTIONS;
-     * 		listp of ASSERTION-P objects.
-     * @return (still unparaphrased) PPH-PARAGRAPH-P encapsulating the content of SUMMARY-ASSERTIONS.
-     */
-    @LispMethod(comment = "@param SUMMARY-ASSERTIONS;\r\n\t\tlistp of ASSERTION-P objects.\r\n@return (still unparaphrased) PPH-PARAGRAPH-P encapsulating the content of SUMMARY-ASSERTIONS.")
-    public static final SubLObject pph_summary_paragraph_from_assertions_alt(SubLObject fort, SubLObject summary_assertions) {
-        {
-            SubLObject cycl_sentences = Mapping.mapcar(PPH_SENTENCE_FROM_ASSERTION, summary_assertions);
-            return com.cyc.cycjava.cycl.pph_document.pph_summary_paragraph_from_cycl_sentences(fort, cycl_sentences);
-        }
-    }
-
-    /**
-     *
-     *
-     * @param SUMMARY-ASSERTIONS;
-     * 		listp of ASSERTION-P objects.
-     * @return (still unparaphrased) PPH-PARAGRAPH-P encapsulating the content of SUMMARY-ASSERTIONS.
-     */
-    @LispMethod(comment = "@param SUMMARY-ASSERTIONS;\r\n\t\tlistp of ASSERTION-P objects.\r\n@return (still unparaphrased) PPH-PARAGRAPH-P encapsulating the content of SUMMARY-ASSERTIONS.")
     public static SubLObject pph_summary_paragraph_from_assertions(final SubLObject fort, final SubLObject summary_assertions) {
         final SubLObject cycl_sentences = Mapping.mapcar(PPH_SENTENCE_FROM_ASSERTION, summary_assertions);
         return pph_summary_paragraph_from_cycl_sentences(fort, cycl_sentences);
     }
 
-    /**
-     * Generate and print out to STREAM a summary of FORT using SUMMARY-CYCL-SENTENCES.
-     *
-     * @param SUMMARY-CYCL-SENTENCES;
-     * 		listp of EL-FORMULA-P objects.
-     * @return (paraphrased) PPH-PARAGRAPH-P encapsulating the content of SUMMARY-CYCL-SENTENCES.
-     */
-    @LispMethod(comment = "Generate and print out to STREAM a summary of FORT using SUMMARY-CYCL-SENTENCES.\r\n\r\n@param SUMMARY-CYCL-SENTENCES;\r\n\t\tlistp of EL-FORMULA-P objects.\r\n@return (paraphrased) PPH-PARAGRAPH-P encapsulating the content of SUMMARY-CYCL-SENTENCES.")
-    public static final SubLObject pph_test_paragraph_from_cycl_sentences_alt(SubLObject fort, SubLObject summary_cycl_sentences, SubLObject language_mt, SubLObject domain_mt, SubLObject mode, SubLObject stream) {
-        if (language_mt == UNPROVIDED) {
-            language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
-        }
-        if (domain_mt == UNPROVIDED) {
-            domain_mt = pph_vars.$pph_domain_mt$.getDynamicValue();
-        }
-        if (mode == UNPROVIDED) {
-            mode = $TEXT;
-        }
-        if (stream == UNPROVIDED) {
-            stream = StreamsLow.$standard_output$.getDynamicValue();
-        }
-        {
-            SubLObject paragraph = com.cyc.cycjava.cycl.pph_document.pph_summary_paragraph_from_cycl_sentences(fort, summary_cycl_sentences);
-            com.cyc.cycjava.cycl.pph_document.pph_paragraph_generate(paragraph, language_mt, domain_mt, mode);
-            com.cyc.cycjava.cycl.pph_document.pph_paragraph_print(paragraph, stream);
-            return paragraph;
-        }
-    }
-
-    /**
-     * Generate and print out to STREAM a summary of FORT using SUMMARY-CYCL-SENTENCES.
-     *
-     * @param SUMMARY-CYCL-SENTENCES;
-     * 		listp of EL-FORMULA-P objects.
-     * @return (paraphrased) PPH-PARAGRAPH-P encapsulating the content of SUMMARY-CYCL-SENTENCES.
-     */
-    @LispMethod(comment = "Generate and print out to STREAM a summary of FORT using SUMMARY-CYCL-SENTENCES.\r\n\r\n@param SUMMARY-CYCL-SENTENCES;\r\n\t\tlistp of EL-FORMULA-P objects.\r\n@return (paraphrased) PPH-PARAGRAPH-P encapsulating the content of SUMMARY-CYCL-SENTENCES.")
     public static SubLObject pph_test_paragraph_from_cycl_sentences(final SubLObject fort, final SubLObject summary_cycl_sentences, SubLObject language_mt, SubLObject domain_mt, SubLObject mode, SubLObject stream) {
         if (language_mt == UNPROVIDED) {
             language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
@@ -521,35 +318,6 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         }
     }
 
-    /**
-     *
-     *
-     * @param SUMMARY-CYCL-SENTENCES;
-     * 		listp of EL-FORMULA-P objects.
-     * @return (still unparaphrased) PPH-PARAGRAPH-P encapsulating the content of SUMMARY-CYCL-SENTENCES.
-     */
-    @LispMethod(comment = "@param SUMMARY-CYCL-SENTENCES;\r\n\t\tlistp of EL-FORMULA-P objects.\r\n@return (still unparaphrased) PPH-PARAGRAPH-P encapsulating the content of SUMMARY-CYCL-SENTENCES.")
-    public static final SubLObject pph_summary_paragraph_from_cycl_sentences_alt(SubLObject fort, SubLObject summary_cycl_sentences) {
-        {
-            SubLObject processed_cycl_sentences = com.cyc.cycjava.cycl.pph_document.pph_process_cycl_sentences_for_summary(summary_cycl_sentences);
-            SubLObject pph_sentences = NIL;
-            SubLObject cdolist_list_var = processed_cycl_sentences;
-            SubLObject summary_cycl = NIL;
-            for (summary_cycl = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , summary_cycl = cdolist_list_var.first()) {
-                pph_sentences = cons(pph_sentence_copy(new_pph_sentence(fact_sheets.summary_sentence_cycl(summary_cycl), $DECLARATIVE, UNPROVIDED), UNPROVIDED), pph_sentences);
-            }
-            return com.cyc.cycjava.cycl.pph_document.pph_paragraph_copy(com.cyc.cycjava.cycl.pph_document.new_pph_paragraph(fort, nreverse(pph_sentences)), UNPROVIDED);
-        }
-    }
-
-    /**
-     *
-     *
-     * @param SUMMARY-CYCL-SENTENCES;
-     * 		listp of EL-FORMULA-P objects.
-     * @return (still unparaphrased) PPH-PARAGRAPH-P encapsulating the content of SUMMARY-CYCL-SENTENCES.
-     */
-    @LispMethod(comment = "@param SUMMARY-CYCL-SENTENCES;\r\n\t\tlistp of EL-FORMULA-P objects.\r\n@return (still unparaphrased) PPH-PARAGRAPH-P encapsulating the content of SUMMARY-CYCL-SENTENCES.")
     public static SubLObject pph_summary_paragraph_from_cycl_sentences(final SubLObject fort, final SubLObject summary_cycl_sentences) {
         final SubLObject processed_cycl_sentences = pph_process_cycl_sentences_for_summary(summary_cycl_sentences);
         SubLObject pph_sentences = NIL;
@@ -565,24 +333,9 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         return pph_paragraph_copy(new_pph_paragraph(fort, nreverse(pph_sentences)), UNPROVIDED);
     }
 
-    public static final SubLObject pph_summary_max_sentences_for_same_pred_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return $pph_summary_max_sentences_for_same_pred$.getDynamicValue(thread);
-        }
-    }
-
     public static SubLObject pph_summary_max_sentences_for_same_pred() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return $pph_summary_max_sentences_for_same_pred$.getDynamicValue(thread);
-    }
-
-    public static final SubLObject add_pph_summary_source_alt(SubLObject source) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            $pph_summary_sources$.setDynamicValue(list_utilities.nadd_to_end(source, $pph_summary_sources$.getDynamicValue(thread)), thread);
-            return $pph_summary_sources$.getDynamicValue(thread);
-        }
     }
 
     public static SubLObject add_pph_summary_source(SubLObject source) {
@@ -591,27 +344,9 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         return $pph_summary_sources$.getDynamicValue(thread);
     }
 
-    public static final SubLObject pph_summary_sentence_sources_alt(SubLObject sentence) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType($pph_summary_sentence_sources$.getDynamicValue(thread), LISTP);
-            thread.resetMultipleValues();
-            {
-                SubLObject sources = list_utilities.alist_lookup($pph_summary_sentence_sources$.getDynamicValue(thread), sentence, symbol_function(EQUAL), NIL);
-                SubLObject foundP = thread.secondMultipleValue();
-                thread.resetMultipleValues();
-                if (NIL == foundP) {
-                    sources = com.cyc.cycjava.cycl.pph_document.pph_cycl_sentence_sources(sentence);
-                    com.cyc.cycjava.cycl.pph_document.pph_note_summary_sentence_sources(sentence, sources);
-                }
-                return sources;
-            }
-        }
-    }
-
     public static SubLObject pph_summary_sentence_sources(final SubLObject sentence) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != listp($pph_summary_sentence_sources$.getDynamicValue(thread)) : "! listp(pph_document.$pph_summary_sentence_sources$.getDynamicValue(thread)) " + ("Types.listp(pph_document.$pph_summary_sentence_sources$.getDynamicValue(thread)) " + "CommonSymbols.NIL != Types.listp(pph_document.$pph_summary_sentence_sources$.getDynamicValue(thread)) ") + $pph_summary_sentence_sources$.getDynamicValue(thread);
+        assert NIL != listp($pph_summary_sentence_sources$.getDynamicValue(thread)) : "Types.listp(pph_document.$pph_summary_sentence_sources$.getDynamicValue(thread)) " + "CommonSymbols.NIL != Types.listp(pph_document.$pph_summary_sentence_sources$.getDynamicValue(thread)) " + $pph_summary_sentence_sources$.getDynamicValue(thread);
         thread.resetMultipleValues();
         SubLObject v_sources = list_utilities.alist_lookup($pph_summary_sentence_sources$.getDynamicValue(thread), sentence, symbol_function(EQUAL), NIL);
         final SubLObject foundP = thread.secondMultipleValue();
@@ -623,80 +358,14 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         return v_sources;
     }
 
-    public static final SubLObject pph_note_summary_sentence_sources_alt(SubLObject sentence, SubLObject sources) {
-        if (sources == UNPROVIDED) {
-            sources = com.cyc.cycjava.cycl.pph_document.pph_cycl_sentence_sources(sentence);
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType($pph_summary_sentence_sources$.getDynamicValue(thread), LISTP);
-            $pph_summary_sentence_sources$.setDynamicValue(list_utilities.alist_enter($pph_summary_sentence_sources$.getDynamicValue(thread), sentence, sources, UNPROVIDED), thread);
-            return sources;
-        }
-    }
-
     public static SubLObject pph_note_summary_sentence_sources(final SubLObject sentence, SubLObject v_sources) {
         if (v_sources == UNPROVIDED) {
             v_sources = pph_cycl_sentence_sources(sentence);
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != listp($pph_summary_sentence_sources$.getDynamicValue(thread)) : "! listp(pph_document.$pph_summary_sentence_sources$.getDynamicValue(thread)) " + ("Types.listp(pph_document.$pph_summary_sentence_sources$.getDynamicValue(thread)) " + "CommonSymbols.NIL != Types.listp(pph_document.$pph_summary_sentence_sources$.getDynamicValue(thread)) ") + $pph_summary_sentence_sources$.getDynamicValue(thread);
+        assert NIL != listp($pph_summary_sentence_sources$.getDynamicValue(thread)) : "Types.listp(pph_document.$pph_summary_sentence_sources$.getDynamicValue(thread)) " + "CommonSymbols.NIL != Types.listp(pph_document.$pph_summary_sentence_sources$.getDynamicValue(thread)) " + $pph_summary_sentence_sources$.getDynamicValue(thread);
         $pph_summary_sentence_sources$.setDynamicValue(list_utilities.alist_enter($pph_summary_sentence_sources$.getDynamicValue(thread), sentence, v_sources, UNPROVIDED), thread);
         return v_sources;
-    }
-
-    public static final SubLObject pph_maybe_add_source_footnotes_alt(SubLObject sentence, SubLObject paraphrase, SubLObject domain_mt) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject revised = NIL;
-                if (NIL != $pph_track_summary_sourcesP$.getDynamicValue(thread)) {
-                    if (paraphrase.isString()) {
-                        {
-                            SubLObject source_ids = NIL;
-                            SubLObject sources = com.cyc.cycjava.cycl.pph_document.pph_summary_sentence_sources(sentence);
-                            SubLObject next_new_source_id = number_utilities.f_1X(length($pph_summary_sources$.getDynamicValue(thread)));
-                            if (NIL != assertion_handles.assertion_p(sentence)) {
-                                {
-                                    SubLObject cdolist_list_var = pph_proof.pph_assertion_corroborating_sources(sentence, domain_mt);
-                                    SubLObject corroborating_source = NIL;
-                                    for (corroborating_source = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , corroborating_source = cdolist_list_var.first()) {
-                                        {
-                                            SubLObject item_var = corroborating_source;
-                                            if (NIL == member(item_var, sources, symbol_function(EQUAL), symbol_function(IDENTITY))) {
-                                                sources = cons(item_var, sources);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            {
-                                SubLObject cdolist_list_var = sources;
-                                SubLObject source = NIL;
-                                for (source = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , source = cdolist_list_var.first()) {
-                                    {
-                                        SubLObject zero_indexed_source_id = position(source, $pph_summary_sources$.getDynamicValue(thread), symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                        SubLObject source_id = NIL;
-                                        if (NIL != zero_indexed_source_id) {
-                                            source_id = number_utilities.f_1X(zero_indexed_source_id);
-                                        } else {
-                                            source_id = next_new_source_id;
-                                            com.cyc.cycjava.cycl.pph_document.add_pph_summary_source(source);
-                                            next_new_source_id = add(next_new_source_id, ONE_INTEGER);
-                                        }
-                                        source_ids = cons(cons(source_id, source), source_ids);
-                                    }
-                                }
-                            }
-                            if (NIL != source_ids) {
-                                revised = com.cyc.cycjava.cycl.pph_document.pph_add_source_footnotes(paraphrase, source_ids);
-                            }
-                        }
-                    }
-                }
-                return NIL != revised ? ((SubLObject) (revised)) : paraphrase;
-            }
-        }
     }
 
     public static SubLObject pph_maybe_add_source_footnotes(final SubLObject sentence, final SubLObject paraphrase, final SubLObject domain_mt) {
@@ -741,36 +410,6 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
             }
         }
         return NIL != revised ? revised : paraphrase;
-    }
-
-    public static final SubLObject pph_add_source_footnotes_alt(SubLObject paraphrase, SubLObject source_ids) {
-        {
-            SubLObject ending_tags = NIL;
-            SubLObject strippedP = NIL;
-            SubLObject revised = paraphrase;
-            while (NIL == strippedP) {
-                if (NIL != string_utilities.ends_with(revised, html_macros.$html_unordered_list_tail$.getGlobalValue(), symbol_function(EQUALP))) {
-                    ending_tags = cons(html_macros.$html_unordered_list_tail$.getGlobalValue(), ending_tags);
-                    revised = string_utilities.post_remove(revised, html_macros.$html_unordered_list_tail$.getGlobalValue(), symbol_function(EQUALP));
-                } else {
-                    if (NIL != string_utilities.ends_with(revised, html_macros.$html_list_item_tail$.getGlobalValue(), symbol_function(EQUALP))) {
-                        ending_tags = cons(html_macros.$html_list_item_tail$.getGlobalValue(), ending_tags);
-                        revised = string_utilities.post_remove(revised, html_macros.$html_list_item_tail$.getGlobalValue(), symbol_function(EQUALP));
-                    } else {
-                        strippedP = T;
-                    }
-                }
-            } 
-            revised = cconcatenate(revised, pph_html.pph_footnote_string_for_source_ids(source_ids));
-            {
-                SubLObject cdolist_list_var = ending_tags;
-                SubLObject ending_tag = NIL;
-                for (ending_tag = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ending_tag = cdolist_list_var.first()) {
-                    revised = cconcatenate(revised, ending_tag);
-                }
-            }
-            return revised;
-        }
     }
 
     public static SubLObject pph_add_source_footnotes(final SubLObject paraphrase, final SubLObject source_ids) {
@@ -868,94 +507,6 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         return memoization_state.caching_results(results3);
     }
 
-    /**
-     * Turn CYCL-SENTENCES into a better list of CycL sentences for paraphrasing as a summary
-     *
-     * @param CYCL-SENTENCES
-     * 		listp of cycl-sentences or NEW-SUMMARY-SENTENCE
-     */
-    @LispMethod(comment = "Turn CYCL-SENTENCES into a better list of CycL sentences for paraphrasing as a summary\r\n\r\n@param CYCL-SENTENCES\r\n\t\tlistp of cycl-sentences or NEW-SUMMARY-SENTENCE")
-    public static final SubLObject pph_process_cycl_sentences_for_summary_alt(SubLObject cycl_sentences) {
-        {
-            SubLObject output_cycls = NIL;
-            SubLObject base_cycl = NIL;
-            SubLObject coordinate_argnum = NIL;
-            SubLObject coordinate_terms = NIL;
-            SubLObject coordinated_cycls = NIL;
-            SubLObject cdolist_list_var = cycl_sentences;
-            SubLObject summary_sentence = NIL;
-            for (summary_sentence = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , summary_sentence = cdolist_list_var.first()) {
-                {
-                    SubLObject input_cycl = fact_sheets.summary_sentence_cycl(summary_sentence);
-                    if (input_cycl.equal(base_cycl)) {
-                    } else {
-                        if (NIL != com.cyc.cycjava.cycl.pph_document.pph_coordination_matchP(input_cycl, base_cycl, coordinate_argnum)) {
-                            if (NIL == coordinate_argnum) {
-                                coordinate_argnum = com.cyc.cycjava.cycl.pph_document.pph_find_coordinate_argnum(base_cycl, input_cycl);
-                            }
-                            if (NIL != coordinate_argnum) {
-                                {
-                                    SubLObject item_var = cycl_utilities.formula_arg(input_cycl, coordinate_argnum, UNPROVIDED);
-                                    if (NIL == member(item_var, coordinate_terms, symbol_function(EQUAL), symbol_function(IDENTITY))) {
-                                        coordinate_terms = cons(item_var, coordinate_terms);
-                                    }
-                                }
-                                {
-                                    SubLObject item_var = summary_sentence;
-                                    if (NIL == member(item_var, coordinated_cycls, EQUAL, symbol_function(IDENTITY))) {
-                                        coordinated_cycls = cons(item_var, coordinated_cycls);
-                                    }
-                                }
-                            }
-                        } else {
-                            if (((NIL != base_cycl) && (NIL != coordinate_argnum)) && (NIL != coordinate_terms)) {
-                                output_cycls = cons(fact_sheets.new_summary_sentence(com.cyc.cycjava.cycl.pph_document.pph_coordinate_sentence(base_cycl, coordinate_argnum, coordinate_terms), coordinated_cycls), output_cycls);
-                                {
-                                    SubLObject item_var = summary_sentence;
-                                    if (NIL == member(item_var, coordinated_cycls, EQUAL, symbol_function(IDENTITY))) {
-                                        coordinated_cycls = cons(item_var, coordinated_cycls);
-                                    }
-                                }
-                            } else {
-                                if (NIL != base_cycl) {
-                                    output_cycls = cons(base_cycl, output_cycls);
-                                }
-                            }
-                            base_cycl = input_cycl;
-                            coordinate_terms = NIL;
-                            coordinate_argnum = NIL;
-                            coordinated_cycls = NIL;
-                        }
-                    }
-                }
-            }
-            if (((NIL != base_cycl) && (NIL != coordinate_argnum)) && (NIL != coordinate_terms)) {
-                {
-                    SubLObject item_var = base_cycl;
-                    if (NIL == member(item_var, coordinated_cycls, EQUAL, symbol_function(IDENTITY))) {
-                        coordinated_cycls = cons(item_var, coordinated_cycls);
-                    }
-                }
-                output_cycls = cons(fact_sheets.new_summary_sentence(com.cyc.cycjava.cycl.pph_document.pph_coordinate_sentence(base_cycl, coordinate_argnum, coordinate_terms), coordinated_cycls), output_cycls);
-            } else {
-                if (NIL != base_cycl) {
-                    output_cycls = cons(base_cycl, output_cycls);
-                }
-            }
-            if (NIL == output_cycls) {
-                return cycl_sentences;
-            }
-            return nreverse(output_cycls);
-        }
-    }
-
-    /**
-     * Turn CYCL-SENTENCES into a better list of CycL sentences for paraphrasing as a summary
-     *
-     * @param CYCL-SENTENCES
-     * 		listp of cycl-sentences or NEW-SUMMARY-SENTENCE
-     */
-    @LispMethod(comment = "Turn CYCL-SENTENCES into a better list of CycL sentences for paraphrasing as a summary\r\n\r\n@param CYCL-SENTENCES\r\n\t\tlistp of cycl-sentences or NEW-SUMMARY-SENTENCE")
     public static SubLObject pph_process_cycl_sentences_for_summary(final SubLObject cycl_sentences) {
         SubLObject output_cycls = NIL;
         SubLObject base_cycl = NIL;
@@ -1029,27 +580,6 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         return kb_utilities.sort_terms(terms_to_coordinate, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
-    public static final SubLObject pph_summary_sentences_share_predP_alt(SubLObject sentences) {
-        {
-            SubLObject failP = NIL;
-            SubLObject pred = NIL;
-            if (NIL == failP) {
-                {
-                    SubLObject csome_list_var = sentences;
-                    SubLObject sentence = NIL;
-                    for (sentence = csome_list_var.first(); !((NIL != failP) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , sentence = csome_list_var.first()) {
-                        if (NIL != pred) {
-                            failP = makeBoolean(!com.cyc.cycjava.cycl.pph_document.pph_summary_sentence_pred(sentence).equal(pred));
-                        } else {
-                            pred = com.cyc.cycjava.cycl.pph_document.pph_summary_sentence_pred(sentence);
-                        }
-                    }
-                }
-            }
-            return makeBoolean(NIL == failP);
-        }
-    }
-
     public static SubLObject pph_summary_sentences_share_predP(final SubLObject sentences) {
         SubLObject failP = NIL;
         SubLObject pred = NIL;
@@ -1073,10 +603,6 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         return makeBoolean(NIL == failP);
     }
 
-    public static final SubLObject pph_summary_sentence_pred_alt(SubLObject sentence) {
-        return NIL != ist_sentence_p(sentence) ? ((SubLObject) (com.cyc.cycjava.cycl.pph_document.pph_summary_sentence_pred(cycl_utilities.formula_arg2(sentence, UNPROVIDED)))) : cycl_utilities.formula_arg0(sentence);
-    }
-
     public static SubLObject pph_summary_sentence_pred(final SubLObject sentence) {
         return pph_summary_sentence_arg(sentence, ZERO_INTEGER);
     }
@@ -1097,38 +623,6 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         for (argnum = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , arg = list_var.first() , argnum = number_utilities.f_1X(argnum)) {
             if ((NIL != cycl_grammar.cycl_nat_p(arg)) && cycl_utilities.nat_functor(arg).equal(pph_get_coordination_fn(pred, argnum))) {
                 return T;
-            }
-        }
-        return NIL;
-    }
-
-    public static final SubLObject pph_coordinate_sentence_alt(SubLObject base_cycl, SubLObject coordinate_argnum, SubLObject coordinate_terms) {
-        if (NIL == coordinate_terms) {
-            return base_cycl;
-        }
-        {
-            SubLObject pred = cycl_utilities.formula_arg0(base_cycl);
-            SubLObject coordination_fn = com.cyc.cycjava.cycl.pph_document.pph_get_coordination_fn(pred, coordinate_argnum);
-            if (NIL != coordination_fn) {
-                {
-                    SubLObject base_term = cycl_utilities.formula_arg(base_cycl, coordinate_argnum, UNPROVIDED);
-                    SubLObject all_coordinate_terms = cons(base_term, coordinate_terms);
-                    SubLObject sources = com.cyc.cycjava.cycl.pph_document.pph_summary_sentence_sources(base_cycl);
-                    if ($$and.eql(coordination_fn)) {
-                        all_coordinate_terms = com.cyc.cycjava.cycl.pph_document.pph_process_cycl_sentences_for_summary(all_coordinate_terms);
-                    }
-                    {
-                        SubLObject terms_to_coordinate = com.cyc.cycjava.cycl.pph_document.pph_terms_to_coordinate(all_coordinate_terms);
-                        SubLObject coordination = ($$and.eql(coordination_fn) && (NIL != list_utilities.singletonP(terms_to_coordinate))) ? ((SubLObject) (list_utilities.only_one(terms_to_coordinate))) : make_el_formula(coordination_fn, terms_to_coordinate, UNPROVIDED);
-                        SubLObject new_sentence = replace_formula_arg(coordinate_argnum, coordination, base_cycl);
-                        SubLObject mt_time_index = (NIL != cycl_sentence_p(base_cycl)) ? ((SubLObject) (pph_methods.pph_mt_time_index(com.cyc.cycjava.cycl.pph_document.pph_cycl_sentence_mt(base_cycl, UNPROVIDED)))) : pph_methods.pph_default_mt_time_index();
-                        if (!mt_time_index.equal(pph_methods.pph_default_mt_time_index())) {
-                            new_sentence = make_ist_sentence(pph_utilities.pph_canonicalize_hlmt(list($$MtTimeDimFn, mt_time_index)), new_sentence);
-                        }
-                        com.cyc.cycjava.cycl.pph_document.pph_note_summary_sentence_sources(new_sentence, sources);
-                        return new_sentence;
-                    }
-                }
             }
         }
         return NIL;
@@ -1204,25 +698,6 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject pph_terms_to_coordinate_alt(SubLObject all_coordinate_terms) {
-        {
-            SubLObject sentence_max = com.cyc.cycjava.cycl.pph_document.pph_summary_max_sentences_for_same_pred();
-            if (NIL == sentence_max) {
-                return all_coordinate_terms;
-            } else {
-                {
-                    SubLObject max = truncate(multiply($float$2_5, sentence_max), UNPROVIDED);
-                    SubLObject too_manyP = list_utilities.lengthG(all_coordinate_terms, max, UNPROVIDED);
-                    SubLObject one_too_manyP = makeBoolean((NIL != too_manyP) && (NIL != list_utilities.lengthE(all_coordinate_terms, number_utilities.f_1X(max), UNPROVIDED)));
-                    SubLObject max_terms = (NIL != one_too_manyP) ? ((SubLObject) (number_utilities.f_1_(max))) : max;
-                    SubLObject explicit_terms = list_utilities.first_n(max_terms, all_coordinate_terms);
-                    SubLObject number_left_off = (NIL != too_manyP) ? ((SubLObject) (subtract(length(all_coordinate_terms), max_terms))) : ZERO_INTEGER;
-                    return NIL != too_manyP ? ((SubLObject) (list_utilities.add_to_end(cconcatenate(format_nil.format_nil_d_no_copy(number_left_off), new SubLObject[]{ $str_alt13$_, format_nil.format_nil_a_no_copy(com.cyc.cycjava.cycl.pph_document.pph_coordination_contraction_type_string(all_coordinate_terms)) }), explicit_terms))) : explicit_terms;
-                }
-            }
-        }
-    }
-
     public static SubLObject pph_terms_to_coordinate(final SubLObject all_coordinate_terms) {
         final SubLObject sentence_max = pph_summary_max_sentences_for_same_pred();
         if (NIL == sentence_max) {
@@ -1237,20 +712,6 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         return NIL != too_manyP ? list_utilities.add_to_end(cconcatenate(format_nil.format_nil_d_no_copy(number_left_off), new SubLObject[]{ $$$_, format_nil.format_nil_a_no_copy(pph_coordination_contraction_type_string(all_coordinate_terms)) }), explicit_terms) : explicit_terms;
     }
 
-    public static final SubLObject pph_coordination_contraction_type_string_alt(SubLObject terms) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject type = com.cyc.cycjava.cycl.pph_document.pph_coordination_contraction_type(terms, pph_vars.$pph_domain_mt$.getDynamicValue(thread));
-                if (NIL != type) {
-                    return cconcatenate($str_alt14$other_, pph_main.generate_phrase(type, list($$plural), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED));
-                } else {
-                    return $$$others;
-                }
-            }
-        }
-    }
-
     public static SubLObject pph_coordination_contraction_type_string(final SubLObject terms) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject type = pph_coordination_contraction_type(terms, pph_vars.$pph_domain_mt$.getDynamicValue(thread));
@@ -1258,45 +719,6 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
             return cconcatenate($$$other_, pph_main.generate_phrase(type, list($$plural), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED));
         }
         return $$$others;
-    }
-
-    public static final SubLObject pph_coordination_contraction_type_alt(SubLObject terms, SubLObject mt) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject types = NIL;
-                SubLObject mt_var = with_inference_mt_relevance_validate(mt);
-                {
-                    SubLObject _prev_bind_0 = $mt$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = $relevant_mts$.currentBinding(thread);
-                    try {
-                        $mt$.bind(update_inference_mt_relevance_mt(mt_var), thread);
-                        $relevant_mt_function$.bind(update_inference_mt_relevance_function(mt_var), thread);
-                        $relevant_mts$.bind(update_inference_mt_relevance_mt_list(mt_var), thread);
-                        if (NIL != list_utilities.every_in_list($sym17$INDIVIDUAL_, terms, UNPROVIDED)) {
-                            types = nearest_common_isa(terms, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        } else {
-                            if (NIL != list_utilities.every_in_list($sym18$SPECS_FN_NAT_, terms, UNPROVIDED)) {
-                                types = Mapping.mapcar(PPH_MAKE_TYPE_LEVEL, genls.nearest_common_genls(Mapping.mapcar(PPH_CORE_TERM, terms), UNPROVIDED, UNPROVIDED, UNPROVIDED));
-                            } else {
-                                if (NIL != list_utilities.every_in_list(COLLECTION_P, terms, UNPROVIDED)) {
-                                    types = genls.nearest_common_genls(terms, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                }
-                            }
-                        }
-                    } finally {
-                        $relevant_mts$.rebind(_prev_bind_2, thread);
-                        $relevant_mt_function$.rebind(_prev_bind_1, thread);
-                        $mt$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                if (NIL == types) {
-                    return NIL;
-                }
-                return pph_utilities.pph_salient_generalization(cardinality_estimates.sort_by_generality_estimate(types, UNPROVIDED).first(), mt, NIL);
-            }
-        }
     }
 
     public static SubLObject pph_coordination_contraction_type(final SubLObject terms, final SubLObject mt) {
@@ -1334,60 +756,6 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
 
     public static SubLObject pph_predicate_is_coordination_restrictedP(final SubLObject pred) {
         return list_utilities.sublisp_boolean(list_utilities.alist_lookup_without_values($pph_coordination_preds_blacklist$.getGlobalValue(), pred, symbol_function(EQUAL), NIL));
-    }
-
-    public static final SubLObject pph_get_coordination_fn_alt(SubLObject pred, SubLObject coordinate_argnum) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject info = list_utilities.alist_lookup_without_values($pph_coordination_preds$.getGlobalValue(), pred, symbol_function(EQUAL), NIL);
-                SubLObject fn = NIL;
-                if (NIL == fn) {
-                    {
-                        SubLObject csome_list_var = info;
-                        SubLObject pair = NIL;
-                        for (pair = csome_list_var.first(); !((NIL != fn) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , pair = csome_list_var.first()) {
-                            {
-                                SubLObject datum = pair;
-                                SubLObject current = datum;
-                                SubLObject argnum = NIL;
-                                SubLObject this_fn = NIL;
-                                destructuring_bind_must_consp(current, datum, $list_alt24);
-                                argnum = current.first();
-                                current = current.rest();
-                                destructuring_bind_must_consp(current, datum, $list_alt24);
-                                this_fn = current.first();
-                                current = current.rest();
-                                if (NIL == current) {
-                                    if ((argnum == $ANY) || argnum.eql(coordinate_argnum)) {
-                                        fn = this_fn;
-                                    }
-                                } else {
-                                    cdestructuring_bind_error(datum, $list_alt24);
-                                }
-                            }
-                        }
-                    }
-                }
-                if ((NIL != $pph_assume_preds_allow_coordinationP$.getDynamicValue(thread)) && (NIL == fn)) {
-                    {
-                        SubLObject blacklist_entry = list_utilities.alist_lookup_without_values($pph_coordination_preds_blacklist$.getGlobalValue(), pred, symbol_function(EQUAL), NIL);
-                        if (blacklist_entry.eql($ANY)) {
-                        } else {
-                            if (NIL != member(coordinate_argnum, blacklist_entry, UNPROVIDED, UNPROVIDED)) {
-                            } else {
-                                if (coordinate_argnum.isInteger() && (NIL != subl_promotions.memberP($$CycLSentence, kb_accessors.argn_quoted_isa(pred, coordinate_argnum, UNPROVIDED), $sym27$PPH_SPEC_, UNPROVIDED))) {
-                                    fn = $$and;
-                                } else {
-                                    fn = $$TheCoordinationSet;
-                                }
-                            }
-                        }
-                    }
-                }
-                return fn;
-            }
-        }
     }
 
     public static SubLObject pph_get_coordination_fn(final SubLObject pred, final SubLObject coordinate_argnum) {
@@ -1435,10 +803,6 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         return fn;
     }
 
-    public static final SubLObject pph_find_coordinate_argnum_alt(SubLObject base_cycl, SubLObject input_cycl) {
-        return nth_value_step_2(nth_value_step_1(ONE_INTEGER), com.cyc.cycjava.cycl.pph_document.pph_coordination_matchP(input_cycl, base_cycl, NIL));
-    }
-
     public static SubLObject pph_find_coordinate_argnum(final SubLObject base_cycl, final SubLObject input_cycl) {
         return nth_value_step_2(nth_value_step_1(ONE_INTEGER), pph_coordination_matchP(input_cycl, base_cycl, NIL));
     }
@@ -1448,49 +812,6 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         return NIL != cached_demerits ? cached_demerits : ZERO_INTEGER;
     }
 
-    /**
-     * Does INPUT-CYCL match BASE-CYCL in all but COORDINATE-ARGNUM?
-     */
-    @LispMethod(comment = "Does INPUT-CYCL match BASE-CYCL in all but COORDINATE-ARGNUM?")
-    public static final SubLObject pph_coordination_matchP_alt(SubLObject input_cycl, SubLObject base_cycl, SubLObject coordinate_argnum) {
-        {
-            SubLObject matchP = NIL;
-            if (((((NIL != cycl_formula_p(input_cycl)) && (NIL != cycl_formula_p(base_cycl))) && (NIL != same_formula_arity_p(input_cycl, base_cycl, UNPROVIDED))) && (NIL != com.cyc.cycjava.cycl.pph_document.pph_same_mt_time_indexP(input_cycl, base_cycl))) && (NIL != com.cyc.cycjava.cycl.pph_document.pph_same_sourcesP(input_cycl, base_cycl))) {
-                {
-                    SubLObject mismatchP = NIL;
-                    SubLObject terms = cycl_utilities.formula_terms(input_cycl, $IGNORE);
-                    SubLObject list_var = NIL;
-                    SubLObject input_term = NIL;
-                    SubLObject argnum = NIL;
-                    for (list_var = terms, input_term = list_var.first(), argnum = ZERO_INTEGER; !((NIL != mismatchP) || (NIL == list_var)); list_var = list_var.rest() , input_term = list_var.first() , argnum = number_utilities.f_1X(argnum)) {
-                        if (argnum.eql(coordinate_argnum)) {
-                        } else {
-                            if (cycl_utilities.formula_arg(base_cycl, argnum, UNPROVIDED).equal(input_term)) {
-                            } else {
-                                if (((NIL == coordinate_argnum) && argnum.isPositive()) && (NIL == fort_types_interface.predicate_p(input_term))) {
-                                    coordinate_argnum = argnum;
-                                } else {
-                                    mismatchP = T;
-                                }
-                            }
-                        }
-                    }
-                    if (NIL == mismatchP) {
-                        if (NIL == com.cyc.cycjava.cycl.pph_document.pph_get_coordination_fn(cycl_utilities.formula_arg0(input_cycl), coordinate_argnum)) {
-                            mismatchP = T;
-                        }
-                    }
-                    matchP = makeBoolean(NIL == mismatchP);
-                }
-            }
-            return values(matchP, coordinate_argnum);
-        }
-    }
-
-    /**
-     * Does INPUT-CYCL match BASE-CYCL in all but COORDINATE-ARGNUM?
-     */
-    @LispMethod(comment = "Does INPUT-CYCL match BASE-CYCL in all but COORDINATE-ARGNUM?")
     public static SubLObject pph_coordination_matchP(final SubLObject input_cycl, final SubLObject base_cycl, SubLObject coordinate_argnum) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject matchP = NIL;
@@ -1539,27 +860,8 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         return values(matchP, coordinate_argnum);
     }
 
-    public static final SubLObject pph_same_mt_time_indexP_alt(SubLObject sentence1, SubLObject sentence2) {
-        return equal(pph_methods.pph_mt_time_index(com.cyc.cycjava.cycl.pph_document.pph_cycl_sentence_mt(sentence1, $$BaseKB)), pph_methods.pph_mt_time_index(com.cyc.cycjava.cycl.pph_document.pph_cycl_sentence_mt(sentence2, $$BaseKB)));
-    }
-
     public static SubLObject pph_same_mt_time_indexP(final SubLObject sentence1, final SubLObject sentence2) {
         return equal(pph_methods.pph_mt_time_index(pph_cycl_sentence_mt(sentence1, $$BaseKB)), pph_methods.pph_mt_time_index(pph_cycl_sentence_mt(sentence2, $$BaseKB)));
-    }
-
-    public static final SubLObject pph_cycl_sentence_mt_alt(SubLObject sentence, SubLObject v_default) {
-        if (v_default == UNPROVIDED) {
-            v_default = NIL;
-        }
-        if (NIL != assertion_handles.assertion_p(sentence)) {
-            return assertion_mt(sentence);
-        } else {
-            if (NIL != ist_sentence_p(sentence)) {
-                return cycl_utilities.formula_arg1(sentence, UNPROVIDED);
-            } else {
-                return v_default;
-            }
-        }
     }
 
     public static SubLObject pph_cycl_sentence_mt(final SubLObject sentence, SubLObject v_default) {
@@ -1575,24 +877,8 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         return v_default;
     }
 
-    public static final SubLObject pph_same_sourcesP_alt(SubLObject sentence1, SubLObject sentence2) {
-        return list_utilities.sets_equalP(com.cyc.cycjava.cycl.pph_document.pph_cycl_sentence_sources(sentence1), com.cyc.cycjava.cycl.pph_document.pph_cycl_sentence_sources(sentence2), UNPROVIDED);
-    }
-
     public static SubLObject pph_same_sourcesP(final SubLObject sentence1, final SubLObject sentence2) {
         return list_utilities.sets_equalP(pph_cycl_sentence_sources(sentence1), pph_cycl_sentence_sources(sentence2), UNPROVIDED);
-    }
-
-    public static final SubLObject pph_cycl_sentence_sources_alt(SubLObject sentence) {
-        if (NIL != assertion_handles.assertion_p(sentence)) {
-            return pph_proof.pph_assertion_sources(sentence);
-        } else {
-            if (NIL != ist_sentence_p(sentence)) {
-                return pph_proof.pph_mt_sources(cycl_utilities.formula_arg1(sentence, UNPROVIDED));
-            } else {
-                return NIL;
-            }
-        }
     }
 
     public static SubLObject pph_cycl_sentence_sources(final SubLObject sentence) {
@@ -1605,69 +891,12 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject pph_paragraph_set_topic_alt(SubLObject paragraph, SubLObject topic) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (!((NIL != pph_error.$suspend_pph_type_checkingP$.getDynamicValue(thread)) || (NIL != com.cyc.cycjava.cycl.pph_document.pph_paragraph_p(paragraph)))) {
-                {
-                    SubLObject new_format_string = cconcatenate($str_alt1$_PPH_error_level_, new SubLObject[]{ format_nil.format_nil_s_no_copy(ONE_INTEGER), $str_alt2$__, format_nil.format_nil_a_no_copy(cconcatenate(format_nil.format_nil_s_no_copy(paragraph), new SubLObject[]{ $str_alt3$_is_not_a_, format_nil.format_nil_s_no_copy(PPH_PARAGRAPH_P) })) });
-                    pph_error.pph_handle_error(new_format_string, list(EMPTY_SUBL_OBJECT_ARRAY));
-                }
-            }
-            return pph_data_structures.pph_phrase_info_set(paragraph, $TOPIC, topic);
-        }
-    }
-
     public static SubLObject pph_paragraph_set_topic(final SubLObject paragraph, final SubLObject topic) {
         return pph_data_structures.pph_phrase_info_set(paragraph, $TOPIC, topic);
     }
 
-    public static final SubLObject pph_paragraph_topic_alt(SubLObject paragraph) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (!((NIL != pph_error.$suspend_pph_type_checkingP$.getDynamicValue(thread)) || (NIL != com.cyc.cycjava.cycl.pph_document.pph_paragraph_p(paragraph)))) {
-                {
-                    SubLObject new_format_string = cconcatenate($str_alt1$_PPH_error_level_, new SubLObject[]{ format_nil.format_nil_s_no_copy(ONE_INTEGER), $str_alt2$__, format_nil.format_nil_a_no_copy(cconcatenate(format_nil.format_nil_s_no_copy(paragraph), new SubLObject[]{ $str_alt3$_is_not_a_, format_nil.format_nil_s_no_copy(PPH_PARAGRAPH_P) })) });
-                    pph_error.pph_handle_error(new_format_string, list(EMPTY_SUBL_OBJECT_ARRAY));
-                }
-            }
-            return pph_data_structures.pph_phrase_info_lookup(paragraph, $TOPIC, pph_phrase.pph_unknown_cycl());
-        }
-    }
-
     public static SubLObject pph_paragraph_topic(final SubLObject paragraph) {
         return pph_data_structures.pph_phrase_info_lookup(paragraph, $TOPIC, pph_phrase.pph_unknown_cycl());
-    }
-
-    public static final SubLObject pph_paragraph_doneP_alt(SubLObject paragraph) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (!((NIL != pph_error.$suspend_pph_type_checkingP$.getDynamicValue(thread)) || (NIL != com.cyc.cycjava.cycl.pph_document.pph_paragraph_p(paragraph)))) {
-                {
-                    SubLObject new_format_string = cconcatenate($str_alt1$_PPH_error_level_, new SubLObject[]{ format_nil.format_nil_s_no_copy(ONE_INTEGER), $str_alt2$__, format_nil.format_nil_a_no_copy(cconcatenate(format_nil.format_nil_s_no_copy(paragraph), new SubLObject[]{ $str_alt3$_is_not_a_, format_nil.format_nil_s_no_copy(PPH_PARAGRAPH_P) })) });
-                    pph_error.pph_handle_error(new_format_string, list(EMPTY_SUBL_OBJECT_ARRAY));
-                }
-            }
-            {
-                SubLObject unfinished_sentenceP = NIL;
-                SubLObject sentence_num = ZERO_INTEGER;
-                SubLObject vector_var = document.sign_constituents(paragraph);
-                SubLObject backwardP_var = NIL;
-                SubLObject length = length(vector_var);
-                SubLObject v_iteration = NIL;
-                for (v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = add(v_iteration, ONE_INTEGER)) {
-                    {
-                        SubLObject element_num = (NIL != backwardP_var) ? ((SubLObject) (subtract(length, v_iteration, ONE_INTEGER))) : v_iteration;
-                        SubLObject sentence = aref(vector_var, element_num);
-                        if (NIL == pph_sentence_doneP(sentence)) {
-                            unfinished_sentenceP = T;
-                        }
-                        sentence_num = add(sentence_num, ONE_INTEGER);
-                    }
-                }
-                return makeBoolean(NIL == unfinished_sentenceP);
-            }
-        }
     }
 
     public static SubLObject pph_paragraph_doneP(final SubLObject paragraph) {
@@ -1692,149 +921,12 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         return makeBoolean(NIL == unfinished_sentenceP);
     }
 
-    public static final SubLObject pph_paragraph_demerits_alt(SubLObject paragraph) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (!((NIL != pph_error.$suspend_pph_type_checkingP$.getDynamicValue(thread)) || (NIL != com.cyc.cycjava.cycl.pph_document.pph_paragraph_p(paragraph)))) {
-                {
-                    SubLObject new_format_string = cconcatenate($str_alt1$_PPH_error_level_, new SubLObject[]{ format_nil.format_nil_s_no_copy(ONE_INTEGER), $str_alt2$__, format_nil.format_nil_a_no_copy(cconcatenate(format_nil.format_nil_s_no_copy(paragraph), new SubLObject[]{ $str_alt3$_is_not_a_, format_nil.format_nil_s_no_copy(PPH_PARAGRAPH_P) })) });
-                    pph_error.pph_handle_error(new_format_string, list(EMPTY_SUBL_OBJECT_ARRAY));
-                }
-            }
-            return pph_phrase.pph_phrase_demerits(paragraph);
-        }
-    }
-
     public static SubLObject pph_paragraph_demerits(final SubLObject paragraph) {
         return pph_phrase.pph_phrase_demerits(paragraph);
     }
 
-    public static final SubLObject pph_paragraph_remove_sentence_alt(SubLObject paragraph, SubLObject sentence) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (!((NIL != pph_error.$suspend_pph_type_checkingP$.getDynamicValue(thread)) || (NIL != com.cyc.cycjava.cycl.pph_document.pph_paragraph_p(paragraph)))) {
-                {
-                    SubLObject new_format_string = cconcatenate($str_alt1$_PPH_error_level_, new SubLObject[]{ format_nil.format_nil_s_no_copy(ONE_INTEGER), $str_alt2$__, format_nil.format_nil_a_no_copy(cconcatenate(format_nil.format_nil_s_no_copy(paragraph), new SubLObject[]{ $str_alt3$_is_not_a_, format_nil.format_nil_s_no_copy(PPH_PARAGRAPH_P) })) });
-                    pph_error.pph_handle_error(new_format_string, list(EMPTY_SUBL_OBJECT_ARRAY));
-                }
-            }
-            if (!((NIL != pph_error.$suspend_pph_type_checkingP$.getDynamicValue(thread)) || (NIL != pph_sentence_p(sentence)))) {
-                {
-                    SubLObject new_format_string = cconcatenate($str_alt1$_PPH_error_level_, new SubLObject[]{ format_nil.format_nil_s_no_copy(ONE_INTEGER), $str_alt2$__, format_nil.format_nil_a_no_copy(cconcatenate(format_nil.format_nil_s_no_copy(sentence), new SubLObject[]{ $str_alt3$_is_not_a_, format_nil.format_nil_s_no_copy(PPH_SENTENCE_P) })) });
-                    pph_error.pph_handle_error(new_format_string, list(EMPTY_SUBL_OBJECT_ARRAY));
-                }
-            }
-            return pph_phrase.pph_phrase_remove_dtr(paragraph, sentence);
-        }
-    }
-
     public static SubLObject pph_paragraph_remove_sentence(final SubLObject paragraph, final SubLObject sentence) {
         return pph_phrase.pph_phrase_remove_dtr(paragraph, sentence);
-    }
-
-    public static final SubLObject pph_paragraph_generate_alt(SubLObject paragraph, SubLObject language_mt, SubLObject domain_mt, SubLObject mode) {
-        if (language_mt == UNPROVIDED) {
-            language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
-        }
-        if (domain_mt == UNPROVIDED) {
-            domain_mt = pph_vars.$pph_domain_mt$.getDynamicValue();
-        }
-        if (mode == UNPROVIDED) {
-            mode = $TEXT;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject use_bulletsP = numL(pph_vars.$pph_use_bulleted_lists_min_level$.getDynamicValue(thread), ONE_INTEGER);
-                SubLObject paragraph_topic = com.cyc.cycjava.cycl.pph_document.pph_paragraph_topic(paragraph);
-                if (NIL != pph_macros.pph_discourse_context_initializedP()) {
-                    pph_drs.pph_ensure_discourse_participant_rms();
-                    {
-                        SubLObject sentence_num = ZERO_INTEGER;
-                        SubLObject vector_var = document.sign_constituents(paragraph);
-                        SubLObject backwardP_var = NIL;
-                        SubLObject length = length(vector_var);
-                        SubLObject v_iteration = NIL;
-                        for (v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = add(v_iteration, ONE_INTEGER)) {
-                            {
-                                SubLObject element_num = (NIL != backwardP_var) ? ((SubLObject) (subtract(length, v_iteration, ONE_INTEGER))) : v_iteration;
-                                SubLObject sentence = aref(vector_var, element_num);
-                                if ((NIL != pph_phrase.pph_known_cycl_p(paragraph_topic)) && (NIL != pph_phrase.pph_unknown_cycl_p(pph_sentence_topic(sentence)))) {
-                                    pph_sentence_set_topic(sentence, paragraph_topic);
-                                }
-                                pph_sentence_generate(sentence, language_mt, domain_mt, mode);
-                                if ((NIL != use_bulletsP) && (NIL == string_utilities.substringP(pph_methods_formulas.pph_start_list_tag(UNPROVIDED), pph_sentence_string(sentence, UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED))) {
-                                    pph_sentence_set_output_list(sentence, cons(pph_methods_formulas.pph_start_list_item_item(), list_utilities.add_to_end(pph_methods_formulas.pph_end_list_item_item(), pph_sentence_output_list(sentence))));
-                                }
-                                sentence_num = add(sentence_num, ONE_INTEGER);
-                            }
-                        }
-                    }
-                } else {
-                    {
-                        SubLObject _prev_bind_0 = pph_vars.$pph_discourse_context$.currentBinding(thread);
-                        try {
-                            pph_vars.$pph_discourse_context$.bind(pph_drs.new_pph_discourse_context(), thread);
-                            if (NIL != pph_error.pph_trace_level_exceeds_minimumP(TWO_INTEGER)) {
-                                format(T, $str_alt32$__Entering_WITHIN_NEW_PPH_DISCOUR, pph_vars.$pph_discourse_context$.getDynamicValue(thread));
-                            }
-                            try {
-                                pph_drs.pph_ensure_discourse_participant_rms();
-                                {
-                                    SubLObject sentence_num = ZERO_INTEGER;
-                                    SubLObject vector_var = document.sign_constituents(paragraph);
-                                    SubLObject backwardP_var = NIL;
-                                    SubLObject length = length(vector_var);
-                                    SubLObject v_iteration = NIL;
-                                    for (v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = add(v_iteration, ONE_INTEGER)) {
-                                        {
-                                            SubLObject element_num = (NIL != backwardP_var) ? ((SubLObject) (subtract(length, v_iteration, ONE_INTEGER))) : v_iteration;
-                                            SubLObject sentence = aref(vector_var, element_num);
-                                            if ((NIL != pph_phrase.pph_known_cycl_p(paragraph_topic)) && (NIL != pph_phrase.pph_unknown_cycl_p(pph_sentence_topic(sentence)))) {
-                                                pph_sentence_set_topic(sentence, paragraph_topic);
-                                            }
-                                            pph_sentence_generate(sentence, language_mt, domain_mt, mode);
-                                            if ((NIL != use_bulletsP) && (NIL == string_utilities.substringP(pph_methods_formulas.pph_start_list_tag(UNPROVIDED), pph_sentence_string(sentence, UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED))) {
-                                                pph_sentence_set_output_list(sentence, cons(pph_methods_formulas.pph_start_list_item_item(), list_utilities.add_to_end(pph_methods_formulas.pph_end_list_item_item(), pph_sentence_output_list(sentence))));
-                                            }
-                                            sentence_num = add(sentence_num, ONE_INTEGER);
-                                        }
-                                    }
-                                }
-                            } finally {
-                                {
-                                    SubLObject _prev_bind_0_1 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                    try {
-                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                        if (NIL != pph_error.pph_trace_level_exceeds_minimumP(TWO_INTEGER)) {
-                                            format(T, $str_alt33$__Leaving_WITHIN_NEW_PPH_DISCOURS, pph_vars.$pph_discourse_context$.getDynamicValue(thread));
-                                        }
-                                        pph_macros.clear_pph_discourse_context();
-                                    } finally {
-                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_1, thread);
-                                    }
-                                }
-                            }
-                        } finally {
-                            pph_vars.$pph_discourse_context$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                if (NIL != use_bulletsP) {
-                    {
-                        SubLObject first_sentence = pph_phrase.pph_phrase_nth_dtr(paragraph, ZERO_INTEGER);
-                        pph_sentence_set_output_list(first_sentence, cons(pph_methods_formulas.pph_start_list_item(UNPROVIDED), pph_sentence_output_list(first_sentence)));
-                    }
-                    {
-                        SubLObject end_list_dtr = new_pph_sentence(UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        pph_sentence_set_output_list(end_list_dtr, list(pph_methods_formulas.pph_end_list_item(UNPROVIDED)));
-                        pph_phrase.pph_phrase_note_done(end_list_dtr);
-                        pph_phrase.pph_phrase_append(end_list_dtr, paragraph);
-                    }
-                }
-            }
-            return paragraph;
-        }
     }
 
     public static SubLObject pph_paragraph_generate(final SubLObject paragraph, SubLObject language_mt, SubLObject domain_mt, SubLObject mode) {
@@ -2153,23 +1245,6 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         return previous_sentence;
     }
 
-    public static final SubLObject pph_html_paragraph_print_alt(SubLObject paragraph, SubLObject new_paragraphP) {
-        if (new_paragraphP == UNPROVIDED) {
-            new_paragraphP = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != new_paragraphP) {
-                html_markup(html_macros.$html_paragraph_head$.getGlobalValue());
-                com.cyc.cycjava.cycl.pph_document.pph_paragraph_print(paragraph, html_macros.$html_stream$.getDynamicValue(thread));
-                html_markup(html_macros.$html_paragraph_tail$.getGlobalValue());
-            } else {
-                com.cyc.cycjava.cycl.pph_document.pph_paragraph_print(paragraph, html_macros.$html_stream$.getDynamicValue(thread));
-            }
-            return paragraph;
-        }
-    }
-
     public static SubLObject pph_html_paragraph_print(final SubLObject paragraph, SubLObject new_paragraphP) {
         if (new_paragraphP == UNPROVIDED) {
             new_paragraphP = NIL;
@@ -2185,41 +1260,6 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         return paragraph;
     }
 
-    /**
-     * Print the string of PARAGRAPH to STREAM
-     */
-    @LispMethod(comment = "Print the string of PARAGRAPH to STREAM")
-    public static final SubLObject pph_paragraph_print_alt(SubLObject paragraph, SubLObject stream) {
-        if (stream == UNPROVIDED) {
-            stream = StreamsLow.$standard_output$.getDynamicValue();
-        }
-        {
-            SubLObject sentence_count = pph_phrase.pph_phrase_dtr_count(paragraph);
-            SubLObject sentence_num = ZERO_INTEGER;
-            SubLObject vector_var = document.sign_constituents(paragraph);
-            SubLObject backwardP_var = NIL;
-            SubLObject length = length(vector_var);
-            SubLObject v_iteration = NIL;
-            for (v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = add(v_iteration, ONE_INTEGER)) {
-                {
-                    SubLObject element_num = (NIL != backwardP_var) ? ((SubLObject) (subtract(length, v_iteration, ONE_INTEGER))) : v_iteration;
-                    SubLObject sentence = aref(vector_var, element_num);
-                    SubLObject sentence_string = pph_sentence_string(sentence, T);
-                    princ(sentence_string, stream);
-                    if (sentence_count.numG(number_utilities.f_1X(sentence_num))) {
-                        princ($str_alt13$_, stream);
-                    }
-                    sentence_num = add(sentence_num, ONE_INTEGER);
-                }
-            }
-        }
-        return paragraph;
-    }
-
-    /**
-     * Print the string of PARAGRAPH to STREAM
-     */
-    @LispMethod(comment = "Print the string of PARAGRAPH to STREAM")
     public static SubLObject pph_paragraph_print(final SubLObject paragraph, SubLObject stream) {
         if (stream == UNPROVIDED) {
             stream = StreamsLow.$standard_output$.getDynamicValue();
@@ -2248,32 +1288,6 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         return paragraph;
     }
 
-    /**
-     * Print out an NL version of JUSTIFICATION, which is a justification of CONCLUSION.
-     */
-    @LispMethod(comment = "Print out an NL version of JUSTIFICATION, which is a justification of CONCLUSION.")
-    public static final SubLObject pph_paraphrase_justification_alt(SubLObject conclusion, SubLObject justification, SubLObject language_mt, SubLObject domain_mt, SubLObject mode) {
-        if (language_mt == UNPROVIDED) {
-            language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
-        }
-        if (domain_mt == UNPROVIDED) {
-            domain_mt = pph_vars.$pph_domain_mt$.getDynamicValue();
-        }
-        if (mode == UNPROVIDED) {
-            mode = $TEXT;
-        }
-        {
-            SubLObject paragraph = com.cyc.cycjava.cycl.pph_document.pph_justification_paragraph_from_supports(conclusion, justification);
-            com.cyc.cycjava.cycl.pph_document.pph_paragraph_generate(paragraph, language_mt, domain_mt, mode);
-            com.cyc.cycjava.cycl.pph_document.pph_paragraph_print(paragraph, UNPROVIDED);
-        }
-        return conclusion;
-    }
-
-    /**
-     * Print out an NL version of JUSTIFICATION, which is a justification of CONCLUSION.
-     */
-    @LispMethod(comment = "Print out an NL version of JUSTIFICATION, which is a justification of CONCLUSION.")
     public static SubLObject pph_paraphrase_justification(final SubLObject conclusion, final SubLObject justification, SubLObject language_mt, SubLObject domain_mt, SubLObject mode) {
         if (language_mt == UNPROVIDED) {
             language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
@@ -2290,41 +1304,6 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         return conclusion;
     }
 
-    /**
-     *
-     *
-     * @param SUPPORTS;
-     * 		listp of SUPPORT-P objects.
-     * @return (still unparaphrased) PPH-PARAGRAPH-P encapsulating the content of SUPPORTS.
-     */
-    @LispMethod(comment = "@param SUPPORTS;\r\n\t\tlistp of SUPPORT-P objects.\r\n@return (still unparaphrased) PPH-PARAGRAPH-P encapsulating the content of SUPPORTS.")
-    public static final SubLObject pph_justification_paragraph_from_supports_alt(SubLObject conclusion, SubLObject supports) {
-        {
-            SubLObject support_sentences = Mapping.mapcar(SUPPORT_SENTENCE, supports);
-            SubLObject processed_support_sentences = Mapping.mapcar(POSSIBLY_CONVERT_SUMMARY_SENTENCE_TO_CYCL, com.cyc.cycjava.cycl.pph_document.pph_process_cycl_sentences_for_summary(support_sentences));
-            SubLObject pph_sentences = NIL;
-            SubLObject cdolist_list_var = processed_support_sentences;
-            SubLObject support_cycl = NIL;
-            for (support_cycl = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , support_cycl = cdolist_list_var.first()) {
-                pph_sentences = cons(pph_sentence_copy(new_pph_sentence(support_cycl, $DECLARATIVE, UNPROVIDED), UNPROVIDED), pph_sentences);
-            }
-            {
-                SubLObject conclusion_cycl = make_unary_formula($$followsFromPrecedingDiscourse, conclusion);
-                SubLObject conclusion_sentence = new_pph_sentence(conclusion_cycl, $DECLARATIVE, UNPROVIDED);
-                pph_sentences = cons(conclusion_sentence, pph_sentences);
-            }
-            return com.cyc.cycjava.cycl.pph_document.pph_paragraph_copy(com.cyc.cycjava.cycl.pph_document.new_pph_paragraph(conclusion, nreverse(pph_sentences)), UNPROVIDED);
-        }
-    }
-
-    /**
-     *
-     *
-     * @param SUPPORTS;
-     * 		listp of SUPPORT-P objects.
-     * @return (still unparaphrased) PPH-PARAGRAPH-P encapsulating the content of SUPPORTS.
-     */
-    @LispMethod(comment = "@param SUPPORTS;\r\n\t\tlistp of SUPPORT-P objects.\r\n@return (still unparaphrased) PPH-PARAGRAPH-P encapsulating the content of SUPPORTS.")
     public static SubLObject pph_justification_paragraph_from_supports(final SubLObject conclusion, final SubLObject supports) {
         final SubLObject support_sentences = Mapping.mapcar(SUPPORT_SENTENCE, supports);
         final SubLObject processed_support_sentences = Mapping.mapcar(POSSIBLY_CONVERT_SUMMARY_SENTENCE_TO_CYCL, pph_process_cycl_sentences_for_summary(support_sentences));
@@ -2343,90 +1322,6 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         return pph_paragraph_copy(new_pph_paragraph(conclusion, nreverse(pph_sentences)), UNPROVIDED);
     }
 
-    /**
-     *
-     *
-     * @return 0 STRINGP or NIL; A summary of TERM using SUMMARY-SENTENCES.
-    NIL is returned iff (PPH-FAILURE-IS-AN-OPTION-P) is non-NIL and we can't
-    generate an acceptable summary.
-     * @return 1 LISTP of sentences we failed to generate acceptable paraphrases for.
-     * @return 0 LISTP of (SENTENCE . STRINGP) pairs.
-     */
-    @LispMethod(comment = "@return 0 STRINGP or NIL; A summary of TERM using SUMMARY-SENTENCES.\r\nNIL is returned iff (PPH-FAILURE-IS-AN-OPTION-P) is non-NIL and we can\'t\r\ngenerate an acceptable summary.\r\n@return 1 LISTP of sentences we failed to generate acceptable paraphrases for.\r\n@return 0 LISTP of (SENTENCE . STRINGP) pairs.")
-    public static final SubLObject pph_summarize_term_alt(SubLObject v_term, SubLObject raw_summary_sentences, SubLObject language_mt, SubLObject domain_mt, SubLObject mode, SubLObject truncate_initial_sentenceP) {
-        if (language_mt == UNPROVIDED) {
-            language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
-        }
-        if (domain_mt == UNPROVIDED) {
-            domain_mt = pph_vars.$pph_domain_mt$.getDynamicValue();
-        }
-        if (mode == UNPROVIDED) {
-            mode = $TEXT;
-        }
-        if (truncate_initial_sentenceP == UNPROVIDED) {
-            truncate_initial_sentenceP = T;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(raw_summary_sentences, LISTP);
-            SubLTrampolineFile.checkType(language_mt, HLMT_P);
-            SubLTrampolineFile.checkType(domain_mt, HLMT_P);
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (NIL == list_utilities.lengthG(raw_summary_sentences, ZERO_INTEGER, UNPROVIDED)) {
-                    Errors.error($str_alt38$Can_t_make_a_summary_with_no_inpu);
-                }
-            }
-            {
-                SubLObject string = NIL;
-                SubLObject failed_sentences = NIL;
-                SubLObject sentence_paraphrases = NIL;
-                {
-                    SubLObject _prev_bind_0 = $pph_summary_sentence_sources$.currentBinding(thread);
-                    try {
-                        $pph_summary_sentence_sources$.bind($pph_summary_sentence_sources$.getDynamicValue(thread).isList() ? ((SubLObject) ($pph_summary_sentence_sources$.getDynamicValue(thread))) : NIL, thread);
-                        {
-                            SubLObject summary_sentences = com.cyc.cycjava.cycl.pph_document.pph_process_cycl_sentences_for_summary(raw_summary_sentences);
-                            if (((mode == $HTML) && (NIL != list_utilities.lengthG(summary_sentences, ONE_INTEGER, UNPROVIDED))) && (NIL != com.cyc.cycjava.cycl.pph_document.pph_summary_sentences_share_predP(summary_sentences))) {
-                                thread.resetMultipleValues();
-                                {
-                                    SubLObject string_2 = com.cyc.cycjava.cycl.pph_document.pph_summarize_term_bulleted(v_term, summary_sentences, language_mt, domain_mt);
-                                    SubLObject sentence_paraphrases_3 = thread.secondMultipleValue();
-                                    thread.resetMultipleValues();
-                                    string = string_2;
-                                    sentence_paraphrases = sentence_paraphrases_3;
-                                }
-                            } else {
-                                thread.resetMultipleValues();
-                                {
-                                    SubLObject string_4 = com.cyc.cycjava.cycl.pph_document.pph_summarize_term_with_paragraph(v_term, summary_sentences, language_mt, domain_mt, mode, truncate_initial_sentenceP);
-                                    SubLObject failed_sentences_5 = thread.secondMultipleValue();
-                                    SubLObject sentence_paraphrases_6 = thread.thirdMultipleValue();
-                                    thread.resetMultipleValues();
-                                    string = string_4;
-                                    failed_sentences = failed_sentences_5;
-                                    sentence_paraphrases = sentence_paraphrases_6;
-                                }
-                            }
-                        }
-                    } finally {
-                        $pph_summary_sentence_sources$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return values(string, failed_sentences, sentence_paraphrases);
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return 0 STRINGP or NIL; A summary of TERM using SUMMARY-SENTENCES.
-    NIL is returned iff (PPH-FAILURE-IS-AN-OPTION-P) is non-NIL and we can't
-    generate an acceptable summary.
-     * @return 1 LISTP of sentences we failed to generate acceptable paraphrases for.
-     * @return 0 LISTP of (SENTENCE . STRINGP) pairs.
-     */
-    @LispMethod(comment = "@return 0 STRINGP or NIL; A summary of TERM using SUMMARY-SENTENCES.\r\nNIL is returned iff (PPH-FAILURE-IS-AN-OPTION-P) is non-NIL and we can\'t\r\ngenerate an acceptable summary.\r\n@return 1 LISTP of sentences we failed to generate acceptable paraphrases for.\r\n@return 0 LISTP of (SENTENCE . STRINGP) pairs.")
     public static SubLObject pph_summarize_term(final SubLObject v_term, final SubLObject raw_summary_sentences, SubLObject language_mt, SubLObject domain_mt, SubLObject mode, SubLObject truncate_initial_sentenceP) {
         if (language_mt == UNPROVIDED) {
             language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
@@ -2441,9 +1336,9 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
             truncate_initial_sentenceP = T;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != listp(raw_summary_sentences) : "! listp(raw_summary_sentences) " + ("Types.listp(raw_summary_sentences) " + "CommonSymbols.NIL != Types.listp(raw_summary_sentences) ") + raw_summary_sentences;
-        assert NIL != hlmt.hlmt_p(language_mt) : "! hlmt.hlmt_p(language_mt) " + ("hlmt.hlmt_p(language_mt) " + "CommonSymbols.NIL != hlmt.hlmt_p(language_mt) ") + language_mt;
-        assert NIL != hlmt.hlmt_p(domain_mt) : "! hlmt.hlmt_p(domain_mt) " + ("hlmt.hlmt_p(domain_mt) " + "CommonSymbols.NIL != hlmt.hlmt_p(domain_mt) ") + domain_mt;
+        assert NIL != listp(raw_summary_sentences) : "Types.listp(raw_summary_sentences) " + "CommonSymbols.NIL != Types.listp(raw_summary_sentences) " + raw_summary_sentences;
+        assert NIL != hlmt.hlmt_p(language_mt) : "hlmt.hlmt_p(language_mt) " + "CommonSymbols.NIL != hlmt.hlmt_p(language_mt) " + language_mt;
+        assert NIL != hlmt.hlmt_p(domain_mt) : "hlmt.hlmt_p(domain_mt) " + "CommonSymbols.NIL != hlmt.hlmt_p(domain_mt) " + domain_mt;
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (NIL == list_utilities.lengthG(raw_summary_sentences, ZERO_INTEGER, UNPROVIDED))) {
             Errors.error($str50$Can_t_make_a_summary_with_no_inpu);
         }
@@ -2485,56 +1380,6 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         } finally {
             pph_vars.$pph_language_mt$.rebind(_prev_bind_2, thread);
             pph_vars.$pph_domain_mt$.rebind(_prev_bind_0, thread);
-        }
-    }
-
-    public static final SubLObject pph_summarize_term_bulleted_alt(SubLObject v_term, SubLObject summary_sentences, SubLObject language_mt, SubLObject domain_mt) {
-        {
-            SubLObject sentence_paraphrases = NIL;
-            SubLObject max = com.cyc.cycjava.cycl.pph_document.pph_summary_max_sentences_for_same_pred();
-            SubLObject number_done = ZERO_INTEGER;
-            SubLObject enoughP = NIL;
-            SubLObject string = NIL;
-            if (NIL == enoughP) {
-                {
-                    SubLObject csome_list_var = summary_sentences;
-                    SubLObject summary_sentence = NIL;
-                    for (summary_sentence = csome_list_var.first(); !((NIL != enoughP) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , summary_sentence = csome_list_var.first()) {
-                        {
-                            SubLObject cycl_sentence = fact_sheets.summary_sentence_cycl(summary_sentence);
-                            SubLObject paraphrase = pph_main.generate_text_wXsentential_force(cycl_sentence, $DECLARATIVE, $DEFAULT, language_mt, domain_mt, $HTML, UNPROVIDED);
-                            if (paraphrase.isString()) {
-                                paraphrase = com.cyc.cycjava.cycl.pph_document.pph_maybe_add_source_footnotes(cycl_sentence, paraphrase, domain_mt);
-                                number_done = add(number_done, ONE_INTEGER);
-                                if (NIL == member(paraphrase, sentence_paraphrases, symbol_function(EQUAL), symbol_function(CDR))) {
-                                    sentence_paraphrases = cons(cons(cycl_sentence, paraphrase), sentence_paraphrases);
-                                }
-                                enoughP = makeBoolean((NIL != max) && (NIL != list_utilities.lengthG(sentence_paraphrases, max, UNPROVIDED)));
-                            }
-                        }
-                    }
-                }
-            }
-            if (NIL != enoughP) {
-                {
-                    SubLObject number_left_off = subtract(length(summary_sentences), number_done);
-                    if (number_left_off.isPositive()) {
-                        if (ONE_INTEGER.eql(number_left_off)) {
-                            sentence_paraphrases = sentence_paraphrases.rest();
-                            number_left_off = add(number_left_off, ONE_INTEGER);
-                        }
-                        {
-                            SubLObject string_7 = cconcatenate($str_alt42$_, new SubLObject[]{ format_nil.format_nil_s_no_copy(number_left_off), $str_alt43$_similar_sentences_ });
-                            sentence_paraphrases = cons(cons(NIL, string_7), sentence_paraphrases);
-                        }
-                    }
-                }
-            }
-            if (NIL != sentence_paraphrases) {
-                sentence_paraphrases = nreverse(sentence_paraphrases);
-                string = com.cyc.cycjava.cycl.pph_document.pph_make_bulleted_list(list_utilities.alist_values(sentence_paraphrases));
-            }
-            return values(string, sentence_paraphrases);
         }
     }
 
@@ -2687,68 +1532,6 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         return values(string, failed_sentences, sentence_paraphrases);
     }
 
-    public static final SubLObject pph_make_bulleted_list_alt(SubLObject texts) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject string = NIL;
-                SubLObject stream = NIL;
-                try {
-                    stream = make_private_string_output_stream();
-                    {
-                        SubLObject _prev_bind_0 = html_macros.$html_stream$.currentBinding(thread);
-                        try {
-                            html_macros.$html_stream$.bind(stream, thread);
-                            html_markup(html_macros.$html_unordered_list_head$.getGlobalValue());
-                            html_char(CHAR_greater, UNPROVIDED);
-                            {
-                                SubLObject _prev_bind_0_8 = html_macros.$html_safe_print$.currentBinding(thread);
-                                try {
-                                    html_macros.$html_safe_print$.bind(T, thread);
-                                    {
-                                        SubLObject cdolist_list_var = texts;
-                                        SubLObject text = NIL;
-                                        for (text = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , text = cdolist_list_var.first()) {
-                                            html_markup(html_macros.$html_list_item_head$.getGlobalValue());
-                                            html_char(CHAR_greater, UNPROVIDED);
-                                            {
-                                                SubLObject _prev_bind_0_9 = html_macros.$html_safe_print$.currentBinding(thread);
-                                                try {
-                                                    html_macros.$html_safe_print$.bind(T, thread);
-                                                    html_markup(text);
-                                                } finally {
-                                                    html_macros.$html_safe_print$.rebind(_prev_bind_0_9, thread);
-                                                }
-                                            }
-                                            html_markup(html_macros.$html_list_item_tail$.getGlobalValue());
-                                        }
-                                    }
-                                } finally {
-                                    html_macros.$html_safe_print$.rebind(_prev_bind_0_8, thread);
-                                }
-                            }
-                            html_markup(html_macros.$html_unordered_list_tail$.getGlobalValue());
-                        } finally {
-                            html_macros.$html_stream$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    string = get_output_stream_string(stream);
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            close(stream, UNPROVIDED);
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                return string;
-            }
-        }
-    }
-
     public static SubLObject pph_make_bulleted_list(final SubLObject texts) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject string = NIL;
@@ -2800,264 +1583,6 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
             }
         }
         return string;
-    }
-
-    public static final SubLObject pph_summarize_term_with_paragraph_alt(SubLObject v_term, SubLObject summary_sentences, SubLObject language_mt, SubLObject domain_mt, SubLObject mode, SubLObject truncate_initial_sentenceP) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject failed_sentences = NIL;
-                SubLObject sentence_paraphrases = NIL;
-                SubLObject string = NIL;
-                {
-                    SubLObject _prev_bind_0 = pph_macros.$new_pph_phrases$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = pph_macros.$new_pph_phrase_count$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = pph_macros.$destroy_new_pph_phrasesP$.currentBinding(thread);
-                    try {
-                        pph_macros.$new_pph_phrases$.bind(create_stack(), thread);
-                        pph_macros.$new_pph_phrase_count$.bind(pph_macros.get_new_pph_phrase_count(), thread);
-                        pph_macros.$destroy_new_pph_phrasesP$.bind(T, thread);
-                        try {
-                            {
-                                SubLObject paragraph = com.cyc.cycjava.cycl.pph_document.pph_summary_paragraph_from_cycl_sentences(v_term, summary_sentences);
-                                SubLObject first_sentence = pph_phrase.pph_phrase_nth_dtr(paragraph, ZERO_INTEGER);
-                                SubLObject error_message = NIL;
-                                {
-                                    SubLObject _prev_bind_0_10 = Errors.$continue_cerrorP$.currentBinding(thread);
-                                    SubLObject _prev_bind_1_11 = pph_error.$pph_error_handling_onP$.currentBinding(thread);
-                                    try {
-                                        Errors.$continue_cerrorP$.bind(NIL, thread);
-                                        pph_error.$pph_error_handling_onP$.bind(T, thread);
-                                        if (NIL != pph_error.pph_break_on_errorP()) {
-                                            {
-                                                SubLObject _prev_bind_0_12 = pph_vars.$pph_use_bulleted_listsP$.currentBinding(thread);
-                                                try {
-                                                    pph_vars.$pph_use_bulleted_listsP$.bind(NIL, thread);
-                                                    com.cyc.cycjava.cycl.pph_document.pph_paragraph_generate(paragraph, language_mt, domain_mt, mode);
-                                                } finally {
-                                                    pph_vars.$pph_use_bulleted_listsP$.rebind(_prev_bind_0_12, thread);
-                                                }
-                                            }
-                                            if (NIL != truncate_initial_sentenceP) {
-                                                com.cyc.cycjava.cycl.pph_document.pph_maybe_truncate_summary_sentence(v_term, first_sentence);
-                                            }
-                                            {
-                                                SubLObject sentence_strings = NIL;
-                                                SubLObject sentences_to_omit = NIL;
-                                                SubLObject dtr_num = ZERO_INTEGER;
-                                                SubLObject vector_var = document.sign_constituents(paragraph);
-                                                SubLObject backwardP_var = NIL;
-                                                SubLObject length = length(vector_var);
-                                                SubLObject v_iteration = NIL;
-                                                for (v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = add(v_iteration, ONE_INTEGER)) {
-                                                    {
-                                                        SubLObject element_num = (NIL != backwardP_var) ? ((SubLObject) (subtract(length, v_iteration, ONE_INTEGER))) : v_iteration;
-                                                        SubLObject sentence = aref(vector_var, element_num);
-                                                        SubLObject sentence_string = pph_sentence_string(sentence, T);
-                                                        if (NIL == pph_sentence_doneP(sentence)) {
-                                                            if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
-                                                                Errors.warn($str_alt44$Failed_to_paraphrase__S, pph_sentence_cycl(sentence));
-                                                            }
-                                                            sentences_to_omit = cons(sentence, sentences_to_omit);
-                                                            failed_sentences = cons(pph_sentence_cycl(sentence), failed_sentences);
-                                                        } else {
-                                                            if (NIL != subl_promotions.memberP(sentence_string, sentence_strings, symbol_function(EQUAL), UNPROVIDED)) {
-                                                                sentences_to_omit = cons(sentence, sentences_to_omit);
-                                                            } else {
-                                                                sentence_strings = cons(sentence_string, sentence_strings);
-                                                            }
-                                                        }
-                                                        dtr_num = add(dtr_num, ONE_INTEGER);
-                                                    }
-                                                }
-                                                {
-                                                    SubLObject cdolist_list_var = sentences_to_omit;
-                                                    SubLObject sentence_to_omit = NIL;
-                                                    for (sentence_to_omit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , sentence_to_omit = cdolist_list_var.first()) {
-                                                        com.cyc.cycjava.cycl.pph_document.pph_paragraph_remove_sentence(paragraph, sentence_to_omit);
-                                                    }
-                                                }
-                                            }
-                                            {
-                                                SubLObject dtr_num = ZERO_INTEGER;
-                                                SubLObject vector_var = document.sign_constituents(paragraph);
-                                                SubLObject backwardP_var = NIL;
-                                                SubLObject length = length(vector_var);
-                                                SubLObject v_iteration = NIL;
-                                                for (v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = add(v_iteration, ONE_INTEGER)) {
-                                                    {
-                                                        SubLObject element_num = (NIL != backwardP_var) ? ((SubLObject) (subtract(length, v_iteration, ONE_INTEGER))) : v_iteration;
-                                                        SubLObject sentence = aref(vector_var, element_num);
-                                                        SubLObject tagsP = T;
-                                                        SubLObject sentence_string = pph_sentence_string(sentence, tagsP);
-                                                        SubLObject sentence_cycl = pph_sentence_cycl(sentence);
-                                                        SubLObject new_string = com.cyc.cycjava.cycl.pph_document.pph_maybe_add_source_footnotes(sentence_cycl, sentence_string, domain_mt);
-                                                        if (!sentence_string.equal(new_string)) {
-                                                            pph_phrase.pph_phrase_note_string(sentence, new_string, tagsP);
-                                                        }
-                                                        sentence_paraphrases = cons(cons(sentence_cycl, new_string), sentence_paraphrases);
-                                                        dtr_num = add(dtr_num, ONE_INTEGER);
-                                                    }
-                                                }
-                                            }
-                                            if ((NIL != com.cyc.cycjava.cycl.pph_document.pph_paragraph_doneP(paragraph)) || (NIL == pph_vars.pph_failure_is_an_option_p())) {
-                                                {
-                                                    SubLObject stream = NIL;
-                                                    try {
-                                                        stream = make_private_string_output_stream();
-                                                        com.cyc.cycjava.cycl.pph_document.pph_paragraph_print(paragraph, stream);
-                                                        string = get_output_stream_string(stream);
-                                                    } finally {
-                                                        {
-                                                            SubLObject _prev_bind_0_13 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                            try {
-                                                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                close(stream, UNPROVIDED);
-                                                            } finally {
-                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_13, thread);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } else {
-                                            try {
-                                                {
-                                                    SubLObject _prev_bind_0_14 = Errors.$error_handler$.currentBinding(thread);
-                                                    try {
-                                                        Errors.$error_handler$.bind(CATCH_ERROR_MESSAGE_HANDLER, thread);
-                                                        try {
-                                                            {
-                                                                SubLObject _prev_bind_0_15 = pph_vars.$pph_use_bulleted_listsP$.currentBinding(thread);
-                                                                try {
-                                                                    pph_vars.$pph_use_bulleted_listsP$.bind(NIL, thread);
-                                                                    com.cyc.cycjava.cycl.pph_document.pph_paragraph_generate(paragraph, language_mt, domain_mt, mode);
-                                                                } finally {
-                                                                    pph_vars.$pph_use_bulleted_listsP$.rebind(_prev_bind_0_15, thread);
-                                                                }
-                                                            }
-                                                            if (NIL != truncate_initial_sentenceP) {
-                                                                com.cyc.cycjava.cycl.pph_document.pph_maybe_truncate_summary_sentence(v_term, first_sentence);
-                                                            }
-                                                            {
-                                                                SubLObject sentence_strings = NIL;
-                                                                SubLObject sentences_to_omit = NIL;
-                                                                SubLObject dtr_num = ZERO_INTEGER;
-                                                                SubLObject vector_var = document.sign_constituents(paragraph);
-                                                                SubLObject backwardP_var = NIL;
-                                                                SubLObject length = length(vector_var);
-                                                                SubLObject v_iteration = NIL;
-                                                                for (v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = add(v_iteration, ONE_INTEGER)) {
-                                                                    {
-                                                                        SubLObject element_num = (NIL != backwardP_var) ? ((SubLObject) (subtract(length, v_iteration, ONE_INTEGER))) : v_iteration;
-                                                                        SubLObject sentence = aref(vector_var, element_num);
-                                                                        SubLObject sentence_string = pph_sentence_string(sentence, T);
-                                                                        if (NIL == pph_sentence_doneP(sentence)) {
-                                                                            if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
-                                                                                Errors.warn($str_alt44$Failed_to_paraphrase__S, pph_sentence_cycl(sentence));
-                                                                            }
-                                                                            sentences_to_omit = cons(sentence, sentences_to_omit);
-                                                                            failed_sentences = cons(pph_sentence_cycl(sentence), failed_sentences);
-                                                                        } else {
-                                                                            if (NIL != subl_promotions.memberP(sentence_string, sentence_strings, symbol_function(EQUAL), UNPROVIDED)) {
-                                                                                sentences_to_omit = cons(sentence, sentences_to_omit);
-                                                                            } else {
-                                                                                sentence_strings = cons(sentence_string, sentence_strings);
-                                                                            }
-                                                                        }
-                                                                        dtr_num = add(dtr_num, ONE_INTEGER);
-                                                                    }
-                                                                }
-                                                                {
-                                                                    SubLObject cdolist_list_var = sentences_to_omit;
-                                                                    SubLObject sentence_to_omit = NIL;
-                                                                    for (sentence_to_omit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , sentence_to_omit = cdolist_list_var.first()) {
-                                                                        com.cyc.cycjava.cycl.pph_document.pph_paragraph_remove_sentence(paragraph, sentence_to_omit);
-                                                                    }
-                                                                }
-                                                            }
-                                                            {
-                                                                SubLObject dtr_num = ZERO_INTEGER;
-                                                                SubLObject vector_var = document.sign_constituents(paragraph);
-                                                                SubLObject backwardP_var = NIL;
-                                                                SubLObject length = length(vector_var);
-                                                                SubLObject v_iteration = NIL;
-                                                                for (v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = add(v_iteration, ONE_INTEGER)) {
-                                                                    {
-                                                                        SubLObject element_num = (NIL != backwardP_var) ? ((SubLObject) (subtract(length, v_iteration, ONE_INTEGER))) : v_iteration;
-                                                                        SubLObject sentence = aref(vector_var, element_num);
-                                                                        SubLObject tagsP = T;
-                                                                        SubLObject sentence_string = pph_sentence_string(sentence, tagsP);
-                                                                        SubLObject sentence_cycl = pph_sentence_cycl(sentence);
-                                                                        SubLObject new_string = com.cyc.cycjava.cycl.pph_document.pph_maybe_add_source_footnotes(sentence_cycl, sentence_string, domain_mt);
-                                                                        if (!sentence_string.equal(new_string)) {
-                                                                            pph_phrase.pph_phrase_note_string(sentence, new_string, tagsP);
-                                                                        }
-                                                                        sentence_paraphrases = cons(cons(sentence_cycl, new_string), sentence_paraphrases);
-                                                                        dtr_num = add(dtr_num, ONE_INTEGER);
-                                                                    }
-                                                                }
-                                                            }
-                                                            if ((NIL != com.cyc.cycjava.cycl.pph_document.pph_paragraph_doneP(paragraph)) || (NIL == pph_vars.pph_failure_is_an_option_p())) {
-                                                                {
-                                                                    SubLObject stream = NIL;
-                                                                    try {
-                                                                        stream = make_private_string_output_stream();
-                                                                        com.cyc.cycjava.cycl.pph_document.pph_paragraph_print(paragraph, stream);
-                                                                        string = get_output_stream_string(stream);
-                                                                    } finally {
-                                                                        {
-                                                                            SubLObject _prev_bind_0_16 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                            try {
-                                                                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                close(stream, UNPROVIDED);
-                                                                            } finally {
-                                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_16, thread);
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        } catch (Throwable catch_var) {
-                                                            Errors.handleThrowable(catch_var, NIL);
-                                                        }
-                                                    } finally {
-                                                        Errors.$error_handler$.rebind(_prev_bind_0_14, thread);
-                                                    }
-                                                }
-                                            } catch (Throwable ccatch_env_var) {
-                                                error_message = Errors.handleThrowable(ccatch_env_var, $catch_error_message_target$.getGlobalValue());
-                                            }
-                                            if (error_message.isString()) {
-                                                Errors.warn(error_message);
-                                            }
-                                        }
-                                    } finally {
-                                        pph_error.$pph_error_handling_onP$.rebind(_prev_bind_1_11, thread);
-                                        Errors.$continue_cerrorP$.rebind(_prev_bind_0_10, thread);
-                                    }
-                                }
-                            }
-                        } finally {
-                            {
-                                SubLObject _prev_bind_0_17 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                try {
-                                    $is_thread_performing_cleanupP$.bind(T, thread);
-                                    pph_macros.destroy_new_pph_phrases();
-                                } finally {
-                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_17, thread);
-                                }
-                            }
-                        }
-                    } finally {
-                        pph_macros.$destroy_new_pph_phrasesP$.rebind(_prev_bind_2, thread);
-                        pph_macros.$new_pph_phrase_count$.rebind(_prev_bind_1, thread);
-                        pph_macros.$new_pph_phrases$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return values(string, failed_sentences, nreverse(sentence_paraphrases));
-            }
-        }
     }
 
     public static SubLObject pph_summarize_term_with_paragraph(final SubLObject v_term, final SubLObject summary_sentences, final SubLObject language_mt, final SubLObject domain_mt, final SubLObject mode, final SubLObject truncate_initial_sentenceP) {
@@ -3248,24 +1773,6 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         }
     }
 
-    public static final SubLObject pph_maybe_truncate_summary_sentence_alt(SubLObject v_term, SubLObject sentence) {
-        {
-            SubLObject olist = pph_phrase.pph_phrase_output_list(sentence);
-            SubLObject copula_item = com.cyc.cycjava.cycl.pph_document.pph_find_summary_copula_item(v_term, olist);
-            if (NIL != pph_data_structures.pph_phrase_output_item_p(copula_item)) {
-                {
-                    SubLObject new_olist = com.cyc.cycjava.cycl.pph_document.pph_truncate_summary_olist(olist, copula_item);
-                    pph_phrase.pph_phrase_set_output_list(sentence, new_olist, UNPROVIDED);
-                }
-            } else {
-                if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
-                    Errors.warn($str_alt46$Can_t_truncate__S, sentence);
-                }
-            }
-        }
-        return sentence;
-    }
-
     public static SubLObject pph_maybe_truncate_summary_sentence(final SubLObject v_term, final SubLObject sentence) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject olist = pph_phrase.pph_phrase_output_list(sentence);
@@ -3280,35 +1787,6 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
             }
 
         return sentence;
-    }
-
-    public static final SubLObject pph_find_summary_copula_item_alt(SubLObject v_term, SubLObject olist) {
-        {
-            SubLObject copula_item = NIL;
-            SubLObject found_termP = NIL;
-            SubLObject stopP = NIL;
-            if (NIL == stopP) {
-                {
-                    SubLObject csome_list_var = olist;
-                    SubLObject item = NIL;
-                    for (item = csome_list_var.first(); !((NIL != stopP) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , item = csome_list_var.first()) {
-                        if ((NIL != found_termP) && (NIL != com.cyc.cycjava.cycl.pph_document.pph_string_starts_with_copulaP(pph_data_structures.pph_phrase_output_item_string(item)))) {
-                            copula_item = item;
-                            stopP = T;
-                        } else {
-                            if (pph_data_structures.pph_phrase_output_item_cycl(item).eql(v_term)) {
-                                found_termP = T;
-                            } else {
-                                if ((NIL != found_termP) && (NIL != pph_data_structures.pph_phrase_output_item_cycl(item))) {
-                                    stopP = T;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return copula_item;
-        }
     }
 
     public static SubLObject pph_find_summary_copula_item(final SubLObject v_term, final SubLObject olist) {
@@ -3339,42 +1817,9 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         return copula_item;
     }
 
-    static private final SubLString $str_alt1$_PPH_error_level_ = makeString("(PPH error level ");
-
-    static private final SubLString $str_alt2$__ = makeString(") ");
-
-    static private final SubLString $str_alt3$_is_not_a_ = makeString(" is not a ");
-
-    private static final SubLSymbol PPH_PARAGRAPH_P = makeSymbol("PPH-PARAGRAPH-P");
-
-    static private final SubLString $str_alt13$_ = makeString(" ");
-
-    static private final SubLString $str_alt14$other_ = makeString("other ");
-
-    public static final SubLObject pph_english_copula_string_p_alt(SubLObject string) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return makeBoolean(string.isString() && (NIL != member($$BeAux, lexicon_accessors.pos_of_string(string, NIL, pph_vars.$pph_language_mt$.getDynamicValue(thread), UNPROVIDED), UNPROVIDED, UNPROVIDED)));
-        }
-    }
-
     public static SubLObject pph_english_copula_string_p(final SubLObject string) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return makeBoolean(string.isString() && (NIL != member($$BeAux, lexicon_accessors.pos_of_string(string, NIL, pph_vars.$pph_language_mt$.getDynamicValue(thread), UNPROVIDED), UNPROVIDED, UNPROVIDED)));
-    }
-
-    static private final SubLSymbol $sym17$INDIVIDUAL_ = makeSymbol("INDIVIDUAL?");
-
-    static private final SubLSymbol $sym18$SPECS_FN_NAT_ = makeSymbol("SPECS-FN-NAT?");
-
-    public static final SubLObject pph_string_starts_with_copulaP_alt(SubLObject string) {
-        if (NIL != pph_utilities.pph_english_contextP(UNPROVIDED)) {
-            {
-                SubLObject first_word = pph_utilities.pph_first_word(string, UNPROVIDED);
-                return com.cyc.cycjava.cycl.pph_document.pph_english_copula_string_p(first_word);
-            }
-        }
-        return NIL;
     }
 
     public static SubLObject pph_string_starts_with_copulaP(final SubLObject string) {
@@ -3383,34 +1828,6 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
             return pph_english_copula_string_p(first_word);
         }
         return NIL;
-    }
-
-    static private final SubLList $list_alt22 = list(list(reader_make_constant_shell("isa"), list(makeKeyword("ANY"), reader_make_constant_shell("TheCoordinationSet"))), list(reader_make_constant_shell("genls"), list(makeKeyword("ANY"), reader_make_constant_shell("TheCoordinationSet"))), list(reader_make_constant_shell("bordersOn"), list(makeKeyword("ANY"), reader_make_constant_shell("TheCoordinationSet"))), list(reader_make_constant_shell("politiesBorderEachOther"), list(makeKeyword("ANY"), reader_make_constant_shell("TheCoordinationSet"))), list(reader_make_constant_shell("internationalOrganizationMemberCountries"), list(makeKeyword("ANY"), reader_make_constant_shell("TheCoordinationSet"))), list(reader_make_constant_shell("ist"), list(ONE_INTEGER, reader_make_constant_shell("TheCoordinationSet")), list(TWO_INTEGER, reader_make_constant_shell("and"))));
-
-    public static final SubLObject pph_truncate_summary_olist_alt(SubLObject olist, SubLObject copula_item) {
-        {
-            SubLObject copula_string = pph_data_structures.pph_phrase_output_item_string(copula_item);
-            SubLObject first_space = position(CHAR_space, copula_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            SubLObject ans = olist.rest();
-            if (first_space.isInteger()) {
-                {
-                    SubLObject new_string = string_utilities.substring(copula_string, number_utilities.f_1X(first_space), UNPROVIDED);
-                    pph_data_structures.pph_phrase_output_item_set_string(copula_item, new_string);
-                }
-            }
-            while (NIL != ans) {
-                if (ans.first() != copula_item) {
-                    ans = ans.rest();
-                } else {
-                    if (first_space.isInteger()) {
-                        return ans;
-                    } else {
-                        return ans.rest();
-                    }
-                }
-            } 
-        }
-        return olist;
     }
 
     public static SubLObject pph_truncate_summary_olist(final SubLObject olist, final SubLObject copula_item) {
@@ -3434,132 +1851,6 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         return olist;
     }
 
-    static private final SubLList $list_alt23 = list(cons(reader_make_constant_shell("conceptuallyRelated"), makeKeyword("ANY")), list(reader_make_constant_shell("between"), ONE_INTEGER, TWO_INTEGER), cons(reader_make_constant_shell("connectedAtEnd"), makeKeyword("ANY")), cons(reader_make_constant_shell("affiliatedWith"), makeKeyword("ANY")));
-
-    /**
-     * Mock-up function for playing with paragraph/summary generation
-     */
-    @LispMethod(comment = "Mock-up function for playing with paragraph/summary generation")
-    public static final SubLObject pph_summarize_fort_alt(SubLObject fort, SubLObject language_mt, SubLObject domain_mt, SubLObject mode) {
-        if (language_mt == UNPROVIDED) {
-            language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
-        }
-        if (domain_mt == UNPROVIDED) {
-            domain_mt = pph_vars.$pph_domain_mt$.getDynamicValue();
-        }
-        if (mode == UNPROVIDED) {
-            mode = $TEXT;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject error_message = NIL;
-                {
-                    SubLObject _prev_bind_0 = Errors.$continue_cerrorP$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = pph_error.$pph_error_handling_onP$.currentBinding(thread);
-                    try {
-                        Errors.$continue_cerrorP$.bind(NIL, thread);
-                        pph_error.$pph_error_handling_onP$.bind(T, thread);
-                        if (NIL != pph_error.pph_break_on_errorP()) {
-                            {
-                                SubLObject _prev_bind_0_18 = pph_macros.$new_pph_phrases$.currentBinding(thread);
-                                SubLObject _prev_bind_1_19 = pph_macros.$new_pph_phrase_count$.currentBinding(thread);
-                                SubLObject _prev_bind_2 = pph_macros.$destroy_new_pph_phrasesP$.currentBinding(thread);
-                                try {
-                                    pph_macros.$new_pph_phrases$.bind(create_stack(), thread);
-                                    pph_macros.$new_pph_phrase_count$.bind(pph_macros.get_new_pph_phrase_count(), thread);
-                                    pph_macros.$destroy_new_pph_phrasesP$.bind(T, thread);
-                                    try {
-                                        {
-                                            SubLObject summary_assertions = com.cyc.cycjava.cycl.pph_document.pph_summary_assertions_for_fort(fort, domain_mt);
-                                            SubLObject paragraph = com.cyc.cycjava.cycl.pph_document.pph_summary_paragraph_from_assertions(fort, summary_assertions);
-                                            com.cyc.cycjava.cycl.pph_document.pph_paragraph_generate(paragraph, language_mt, domain_mt, mode);
-                                            com.cyc.cycjava.cycl.pph_document.pph_paragraph_print(paragraph, UNPROVIDED);
-                                        }
-                                    } finally {
-                                        {
-                                            SubLObject _prev_bind_0_20 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                            try {
-                                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                                pph_macros.destroy_new_pph_phrases();
-                                            } finally {
-                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_20, thread);
-                                            }
-                                        }
-                                    }
-                                } finally {
-                                    pph_macros.$destroy_new_pph_phrasesP$.rebind(_prev_bind_2, thread);
-                                    pph_macros.$new_pph_phrase_count$.rebind(_prev_bind_1_19, thread);
-                                    pph_macros.$new_pph_phrases$.rebind(_prev_bind_0_18, thread);
-                                }
-                            }
-                        } else {
-                            try {
-                                {
-                                    SubLObject _prev_bind_0_21 = Errors.$error_handler$.currentBinding(thread);
-                                    try {
-                                        Errors.$error_handler$.bind(CATCH_ERROR_MESSAGE_HANDLER, thread);
-                                        try {
-                                            {
-                                                SubLObject _prev_bind_0_22 = pph_macros.$new_pph_phrases$.currentBinding(thread);
-                                                SubLObject _prev_bind_1_23 = pph_macros.$new_pph_phrase_count$.currentBinding(thread);
-                                                SubLObject _prev_bind_2 = pph_macros.$destroy_new_pph_phrasesP$.currentBinding(thread);
-                                                try {
-                                                    pph_macros.$new_pph_phrases$.bind(create_stack(), thread);
-                                                    pph_macros.$new_pph_phrase_count$.bind(pph_macros.get_new_pph_phrase_count(), thread);
-                                                    pph_macros.$destroy_new_pph_phrasesP$.bind(T, thread);
-                                                    try {
-                                                        {
-                                                            SubLObject summary_assertions = com.cyc.cycjava.cycl.pph_document.pph_summary_assertions_for_fort(fort, domain_mt);
-                                                            SubLObject paragraph = com.cyc.cycjava.cycl.pph_document.pph_summary_paragraph_from_assertions(fort, summary_assertions);
-                                                            com.cyc.cycjava.cycl.pph_document.pph_paragraph_generate(paragraph, language_mt, domain_mt, mode);
-                                                            com.cyc.cycjava.cycl.pph_document.pph_paragraph_print(paragraph, UNPROVIDED);
-                                                        }
-                                                    } finally {
-                                                        {
-                                                            SubLObject _prev_bind_0_24 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                            try {
-                                                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                pph_macros.destroy_new_pph_phrases();
-                                                            } finally {
-                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_24, thread);
-                                                            }
-                                                        }
-                                                    }
-                                                } finally {
-                                                    pph_macros.$destroy_new_pph_phrasesP$.rebind(_prev_bind_2, thread);
-                                                    pph_macros.$new_pph_phrase_count$.rebind(_prev_bind_1_23, thread);
-                                                    pph_macros.$new_pph_phrases$.rebind(_prev_bind_0_22, thread);
-                                                }
-                                            }
-                                        } catch (Throwable catch_var) {
-                                            Errors.handleThrowable(catch_var, NIL);
-                                        }
-                                    } finally {
-                                        Errors.$error_handler$.rebind(_prev_bind_0_21, thread);
-                                    }
-                                }
-                            } catch (Throwable ccatch_env_var) {
-                                error_message = Errors.handleThrowable(ccatch_env_var, $catch_error_message_target$.getGlobalValue());
-                            }
-                            if (error_message.isString()) {
-                                Errors.warn(error_message);
-                            }
-                        }
-                    } finally {
-                        pph_error.$pph_error_handling_onP$.rebind(_prev_bind_1, thread);
-                        Errors.$continue_cerrorP$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return fort;
-        }
-    }
-
-    /**
-     * Mock-up function for playing with paragraph/summary generation
-     */
-    @LispMethod(comment = "Mock-up function for playing with paragraph/summary generation")
     public static SubLObject pph_summarize_fort(final SubLObject fort, SubLObject language_mt, SubLObject domain_mt, SubLObject mode) {
         if (language_mt == UNPROVIDED) {
             language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
@@ -3681,70 +1972,8 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
         return fort;
     }
 
-    static private final SubLList $list_alt24 = list(makeSymbol("ARGNUM"), makeSymbol("THIS-FN"));
-
-    static private final SubLSymbol $sym27$PPH_SPEC_ = makeSymbol("PPH-SPEC?");
-
-    static private final SubLString $str_alt32$__Entering_WITHIN_NEW_PPH_DISCOUR = makeString("~&Entering WITHIN-NEW-PPH-DISCOURSE-CONTEXT, *pph-discourse-context* is~% ~S~%");
-
-    static private final SubLString $str_alt33$__Leaving_WITHIN_NEW_PPH_DISCOURS = makeString("~&Leaving WITHIN-NEW-PPH-DISCOURSE-CONTEXT, *pph-discourse-context* is~% ~S~%");
-
-    static private final SubLString $str_alt38$Can_t_make_a_summary_with_no_inpu = makeString("Can't make a summary with no input.");
-
-    static private final SubLString $str_alt42$_ = makeString("(");
-
-    static private final SubLString $str_alt43$_similar_sentences_ = makeString(" similar sentences)");
-
-    static private final SubLString $str_alt44$Failed_to_paraphrase__S = makeString("Failed to paraphrase ~S");
-
-    static private final SubLString $str_alt46$Can_t_truncate__S = makeString("Can't truncate ~S");
-
-    static private final SubLSymbol $sym50$PPH_PROPER_SPEC_ = makeSymbol("PPH-PROPER-SPEC?");
-
-    public static final SubLObject pph_summary_assertions_for_fort_alt(SubLObject fort, SubLObject domain_mt) {
-        return com.cyc.cycjava.cycl.pph_document.pph_summary_isa_assertions_for_fort(fort, domain_mt);
-    }
-
     public static SubLObject pph_summary_assertions_for_fort(final SubLObject fort, final SubLObject domain_mt) {
         return pph_summary_isa_assertions_for_fort(fort, domain_mt);
-    }
-
-    public static final SubLObject pph_summary_isa_assertions_for_fort_alt(SubLObject fort, SubLObject domain_mt) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject assertions = NIL;
-                SubLObject mt_var = with_inference_mt_relevance_validate(domain_mt);
-                {
-                    SubLObject _prev_bind_0 = $mt$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = $relevant_mts$.currentBinding(thread);
-                    try {
-                        $mt$.bind(update_inference_mt_relevance_mt(mt_var), thread);
-                        $relevant_mt_function$.bind(update_inference_mt_relevance_function(mt_var), thread);
-                        $relevant_mts$.bind(update_inference_mt_relevance_mt_list(mt_var), thread);
-                        {
-                            SubLObject all_isa_assertions = kb_mapping.gather_gaf_arg_index_with_predicate(fort, ONE_INTEGER, $$isa, UNPROVIDED, UNPROVIDED);
-                            SubLObject cdolist_list_var = all_isa_assertions;
-                            SubLObject isa_assertion = NIL;
-                            for (isa_assertion = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , isa_assertion = cdolist_list_var.first()) {
-                                {
-                                    SubLObject isa_coll = gaf_arg2(isa_assertion);
-                                    if (!((NIL != member(isa_coll, assertions, symbol_function(EQUAL), GAF_ARG2)) || (NIL != member(isa_coll, all_isa_assertions, $sym50$PPH_PROPER_SPEC_, GAF_ARG2)))) {
-                                        assertions = cons(isa_assertion, assertions);
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        $relevant_mts$.rebind(_prev_bind_2, thread);
-                        $relevant_mt_function$.rebind(_prev_bind_1, thread);
-                        $mt$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return assertions;
-            }
-        }
     }
 
     public static SubLObject pph_summary_isa_assertions_for_fort(final SubLObject fort, final SubLObject domain_mt) {
@@ -3779,101 +2008,71 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
     }
 
     public static SubLObject declare_pph_document_file() {
-        declareFunction("pph_paragraph_p", "PPH-PARAGRAPH-P", 1, 0, false);
-        declareFunction("new_pph_paragraph", "NEW-PPH-PARAGRAPH", 0, 2, false);
-        declareFunction("pph_paragraph_copy", "PPH-PARAGRAPH-COPY", 1, 1, false);
-        declareFunction("pph_summary_paragraph_from_assertions", "PPH-SUMMARY-PARAGRAPH-FROM-ASSERTIONS", 2, 0, false);
-        declareFunction("pph_test_paragraph_from_cycl_sentences", "PPH-TEST-PARAGRAPH-FROM-CYCL-SENTENCES", 2, 4, false);
-        declareFunction("pph_summary_paragraph_from_cycl_sentences", "PPH-SUMMARY-PARAGRAPH-FROM-CYCL-SENTENCES", 2, 0, false);
-        declareFunction("pph_summary_max_sentences_for_same_pred", "PPH-SUMMARY-MAX-SENTENCES-FOR-SAME-PRED", 0, 0, false);
-        declareFunction("add_pph_summary_source", "ADD-PPH-SUMMARY-SOURCE", 1, 0, false);
-        declareFunction("pph_summary_sentence_sources", "PPH-SUMMARY-SENTENCE-SOURCES", 1, 0, false);
-        declareFunction("pph_note_summary_sentence_sources", "PPH-NOTE-SUMMARY-SENTENCE-SOURCES", 1, 1, false);
-        declareFunction("pph_maybe_add_source_footnotes", "PPH-MAYBE-ADD-SOURCE-FOOTNOTES", 3, 0, false);
-        declareFunction("pph_add_source_footnotes", "PPH-ADD-SOURCE-FOOTNOTES", 2, 0, false);
-        declareFunction("pph_check_for_isomorphic_assertion_internal", "PPH-CHECK-FOR-ISOMORPHIC-ASSERTION-INTERNAL", 1, 1, false);
-        declareFunction("pph_check_for_isomorphic_assertion", "PPH-CHECK-FOR-ISOMORPHIC-ASSERTION", 1, 1, false);
-        declareFunction("pph_process_cycl_sentences_for_summary", "PPH-PROCESS-CYCL-SENTENCES-FOR-SUMMARY", 1, 0, false);
-        declareFunction("sort_cycl_sentences_for_summary", "SORT-CYCL-SENTENCES-FOR-SUMMARY", 1, 0, false);
-        declareFunction("pph_sort_terms_to_coordinate", "PPH-SORT-TERMS-TO-COORDINATE", 1, 0, false);
-        declareFunction("pph_summary_sentences_share_predP", "PPH-SUMMARY-SENTENCES-SHARE-PRED?", 1, 0, false);
-        declareFunction("pph_summary_sentence_pred", "PPH-SUMMARY-SENTENCE-PRED", 1, 0, false);
-        declareFunction("pph_summary_sentence_arg", "PPH-SUMMARY-SENTENCE-ARG", 2, 0, false);
-        declareFunction("pph_coordinated_sentenceP", "PPH-COORDINATED-SENTENCE?", 1, 0, false);
-        declareFunction("pph_coordinate_sentence", "PPH-COORDINATE-SENTENCE", 3, 0, false);
-        declareFunction("pph_terms_to_coordinate", "PPH-TERMS-TO-COORDINATE", 1, 0, false);
-        declareFunction("pph_coordination_contraction_type_string", "PPH-COORDINATION-CONTRACTION-TYPE-STRING", 1, 0, false);
-        declareFunction("pph_coordination_contraction_type", "PPH-COORDINATION-CONTRACTION-TYPE", 2, 0, false);
-        declareFunction("pph_predicate_is_coordination_restrictedP", "PPH-PREDICATE-IS-COORDINATION-RESTRICTED?", 1, 0, false);
-        declareFunction("pph_get_coordination_fn", "PPH-GET-COORDINATION-FN", 2, 0, false);
-        declareFunction("pph_find_coordinate_argnum", "PPH-FIND-COORDINATE-ARGNUM", 2, 0, false);
-        declareFunction("cached_demerits_for_term", "CACHED-DEMERITS-FOR-TERM", 1, 0, false);
-        declareFunction("pph_coordination_matchP", "PPH-COORDINATION-MATCH?", 3, 0, false);
-        declareFunction("pph_same_mt_time_indexP", "PPH-SAME-MT-TIME-INDEX?", 2, 0, false);
-        declareFunction("pph_cycl_sentence_mt", "PPH-CYCL-SENTENCE-MT", 1, 1, false);
-        declareFunction("pph_same_sourcesP", "PPH-SAME-SOURCES?", 2, 0, false);
-        declareFunction("pph_cycl_sentence_sources", "PPH-CYCL-SENTENCE-SOURCES", 1, 0, false);
-        declareFunction("pph_paragraph_set_topic", "PPH-PARAGRAPH-SET-TOPIC", 2, 0, false);
-        declareFunction("pph_paragraph_topic", "PPH-PARAGRAPH-TOPIC", 1, 0, false);
-        declareFunction("pph_paragraph_doneP", "PPH-PARAGRAPH-DONE?", 1, 0, false);
-        declareFunction("pph_paragraph_demerits", "PPH-PARAGRAPH-DEMERITS", 1, 0, false);
-        declareFunction("pph_paragraph_remove_sentence", "PPH-PARAGRAPH-REMOVE-SENTENCE", 2, 0, false);
-        declareFunction("pph_paragraph_generate", "PPH-PARAGRAPH-GENERATE", 1, 3, false);
-        declareFunction("pph_sentence_topic_from_paragraph", "PPH-SENTENCE-TOPIC-FROM-PARAGRAPH", 1, 0, false);
-        declareFunction("pph_paragraph_remove_duplicates_and_failures", "PPH-PARAGRAPH-REMOVE-DUPLICATES-AND-FAILURES", 1, 0, false);
-        declareFunction("pph_paragraph_attempt_to_consolidate_sentences", "PPH-PARAGRAPH-ATTEMPT-TO-CONSOLIDATE-SENTENCES", 1, 0, false);
-        declareFunction("pph_attempt_consolidation", "PPH-ATTEMPT-CONSOLIDATION", 2, 0, false);
-        declareFunction("pph_consolidate_sentences_with_same_subject", "PPH-CONSOLIDATE-SENTENCES-WITH-SAME-SUBJECT", 2, 0, false);
-        declareFunction("pph_html_paragraph_print", "PPH-HTML-PARAGRAPH-PRINT", 1, 1, false);
-        declareFunction("pph_paragraph_print", "PPH-PARAGRAPH-PRINT", 1, 1, false);
-        declareFunction("pph_paraphrase_justification", "PPH-PARAPHRASE-JUSTIFICATION", 2, 3, false);
-        declareFunction("pph_justification_paragraph_from_supports", "PPH-JUSTIFICATION-PARAGRAPH-FROM-SUPPORTS", 2, 0, false);
-        declareFunction("pph_summarize_term", "PPH-SUMMARIZE-TERM", 2, 4, false);
-        declareFunction("pph_summarize_term_bulleted", "PPH-SUMMARIZE-TERM-BULLETED", 4, 0, false);
-        declareFunction("pph_make_bulleted_list", "PPH-MAKE-BULLETED-LIST", 1, 0, false);
-        declareFunction("pph_summarize_term_with_paragraph", "PPH-SUMMARIZE-TERM-WITH-PARAGRAPH", 6, 0, false);
-        declareFunction("pph_maybe_truncate_summary_sentence", "PPH-MAYBE-TRUNCATE-SUMMARY-SENTENCE", 2, 0, false);
-        declareFunction("pph_find_summary_copula_item", "PPH-FIND-SUMMARY-COPULA-ITEM", 2, 0, false);
-        declareFunction("pph_english_copula_string_p", "PPH-ENGLISH-COPULA-STRING-P", 1, 0, false);
-        declareFunction("pph_string_starts_with_copulaP", "PPH-STRING-STARTS-WITH-COPULA?", 1, 0, false);
-        declareFunction("pph_truncate_summary_olist", "PPH-TRUNCATE-SUMMARY-OLIST", 2, 0, false);
-        declareFunction("pph_summarize_fort", "PPH-SUMMARIZE-FORT", 1, 3, false);
-        declareFunction("pph_summary_assertions_for_fort", "PPH-SUMMARY-ASSERTIONS-FOR-FORT", 2, 0, false);
-        declareFunction("pph_summary_isa_assertions_for_fort", "PPH-SUMMARY-ISA-ASSERTIONS-FOR-FORT", 2, 0, false);
-        return NIL;
-    }
-
-    public static final SubLObject init_pph_document_file_alt() {
-        defparameter("*PPH-SUMMARY-MAX-SENTENCES-FOR-SAME-PRED*", THREE_INTEGER);
-        defparameter("*PPH-TRACK-SUMMARY-SOURCES?*", NIL);
-        defparameter("*PPH-SUMMARY-SOURCES*", NIL);
-        defparameter("*PPH-SUMMARY-SENTENCE-SOURCES*", $UNBOUND);
-        deflexical("*PPH-COORDINATION-PREDS*", $list_alt22);
-        deflexical("*PPH-COORDINATION-PREDS-BLACKLIST*", $list_alt23);
-        defparameter("*PPH-ASSUME-PREDS-ALLOW-COORDINATION?*", T);
+        declareFunction(me, "pph_paragraph_p", "PPH-PARAGRAPH-P", 1, 0, false);
+        declareFunction(me, "new_pph_paragraph", "NEW-PPH-PARAGRAPH", 0, 2, false);
+        declareFunction(me, "pph_paragraph_copy", "PPH-PARAGRAPH-COPY", 1, 1, false);
+        declareFunction(me, "pph_summary_paragraph_from_assertions", "PPH-SUMMARY-PARAGRAPH-FROM-ASSERTIONS", 2, 0, false);
+        declareFunction(me, "pph_test_paragraph_from_cycl_sentences", "PPH-TEST-PARAGRAPH-FROM-CYCL-SENTENCES", 2, 4, false);
+        declareFunction(me, "pph_summary_paragraph_from_cycl_sentences", "PPH-SUMMARY-PARAGRAPH-FROM-CYCL-SENTENCES", 2, 0, false);
+        declareFunction(me, "pph_summary_max_sentences_for_same_pred", "PPH-SUMMARY-MAX-SENTENCES-FOR-SAME-PRED", 0, 0, false);
+        declareFunction(me, "add_pph_summary_source", "ADD-PPH-SUMMARY-SOURCE", 1, 0, false);
+        declareFunction(me, "pph_summary_sentence_sources", "PPH-SUMMARY-SENTENCE-SOURCES", 1, 0, false);
+        declareFunction(me, "pph_note_summary_sentence_sources", "PPH-NOTE-SUMMARY-SENTENCE-SOURCES", 1, 1, false);
+        declareFunction(me, "pph_maybe_add_source_footnotes", "PPH-MAYBE-ADD-SOURCE-FOOTNOTES", 3, 0, false);
+        declareFunction(me, "pph_add_source_footnotes", "PPH-ADD-SOURCE-FOOTNOTES", 2, 0, false);
+        declareFunction(me, "pph_check_for_isomorphic_assertion_internal", "PPH-CHECK-FOR-ISOMORPHIC-ASSERTION-INTERNAL", 1, 1, false);
+        declareFunction(me, "pph_check_for_isomorphic_assertion", "PPH-CHECK-FOR-ISOMORPHIC-ASSERTION", 1, 1, false);
+        declareFunction(me, "pph_process_cycl_sentences_for_summary", "PPH-PROCESS-CYCL-SENTENCES-FOR-SUMMARY", 1, 0, false);
+        declareFunction(me, "sort_cycl_sentences_for_summary", "SORT-CYCL-SENTENCES-FOR-SUMMARY", 1, 0, false);
+        declareFunction(me, "pph_sort_terms_to_coordinate", "PPH-SORT-TERMS-TO-COORDINATE", 1, 0, false);
+        declareFunction(me, "pph_summary_sentences_share_predP", "PPH-SUMMARY-SENTENCES-SHARE-PRED?", 1, 0, false);
+        declareFunction(me, "pph_summary_sentence_pred", "PPH-SUMMARY-SENTENCE-PRED", 1, 0, false);
+        declareFunction(me, "pph_summary_sentence_arg", "PPH-SUMMARY-SENTENCE-ARG", 2, 0, false);
+        declareFunction(me, "pph_coordinated_sentenceP", "PPH-COORDINATED-SENTENCE?", 1, 0, false);
+        declareFunction(me, "pph_coordinate_sentence", "PPH-COORDINATE-SENTENCE", 3, 0, false);
+        declareFunction(me, "pph_terms_to_coordinate", "PPH-TERMS-TO-COORDINATE", 1, 0, false);
+        declareFunction(me, "pph_coordination_contraction_type_string", "PPH-COORDINATION-CONTRACTION-TYPE-STRING", 1, 0, false);
+        declareFunction(me, "pph_coordination_contraction_type", "PPH-COORDINATION-CONTRACTION-TYPE", 2, 0, false);
+        declareFunction(me, "pph_predicate_is_coordination_restrictedP", "PPH-PREDICATE-IS-COORDINATION-RESTRICTED?", 1, 0, false);
+        declareFunction(me, "pph_get_coordination_fn", "PPH-GET-COORDINATION-FN", 2, 0, false);
+        declareFunction(me, "pph_find_coordinate_argnum", "PPH-FIND-COORDINATE-ARGNUM", 2, 0, false);
+        declareFunction(me, "cached_demerits_for_term", "CACHED-DEMERITS-FOR-TERM", 1, 0, false);
+        declareFunction(me, "pph_coordination_matchP", "PPH-COORDINATION-MATCH?", 3, 0, false);
+        declareFunction(me, "pph_same_mt_time_indexP", "PPH-SAME-MT-TIME-INDEX?", 2, 0, false);
+        declareFunction(me, "pph_cycl_sentence_mt", "PPH-CYCL-SENTENCE-MT", 1, 1, false);
+        declareFunction(me, "pph_same_sourcesP", "PPH-SAME-SOURCES?", 2, 0, false);
+        declareFunction(me, "pph_cycl_sentence_sources", "PPH-CYCL-SENTENCE-SOURCES", 1, 0, false);
+        declareFunction(me, "pph_paragraph_set_topic", "PPH-PARAGRAPH-SET-TOPIC", 2, 0, false);
+        declareFunction(me, "pph_paragraph_topic", "PPH-PARAGRAPH-TOPIC", 1, 0, false);
+        declareFunction(me, "pph_paragraph_doneP", "PPH-PARAGRAPH-DONE?", 1, 0, false);
+        declareFunction(me, "pph_paragraph_demerits", "PPH-PARAGRAPH-DEMERITS", 1, 0, false);
+        declareFunction(me, "pph_paragraph_remove_sentence", "PPH-PARAGRAPH-REMOVE-SENTENCE", 2, 0, false);
+        declareFunction(me, "pph_paragraph_generate", "PPH-PARAGRAPH-GENERATE", 1, 3, false);
+        declareFunction(me, "pph_sentence_topic_from_paragraph", "PPH-SENTENCE-TOPIC-FROM-PARAGRAPH", 1, 0, false);
+        declareFunction(me, "pph_paragraph_remove_duplicates_and_failures", "PPH-PARAGRAPH-REMOVE-DUPLICATES-AND-FAILURES", 1, 0, false);
+        declareFunction(me, "pph_paragraph_attempt_to_consolidate_sentences", "PPH-PARAGRAPH-ATTEMPT-TO-CONSOLIDATE-SENTENCES", 1, 0, false);
+        declareFunction(me, "pph_attempt_consolidation", "PPH-ATTEMPT-CONSOLIDATION", 2, 0, false);
+        declareFunction(me, "pph_consolidate_sentences_with_same_subject", "PPH-CONSOLIDATE-SENTENCES-WITH-SAME-SUBJECT", 2, 0, false);
+        declareFunction(me, "pph_html_paragraph_print", "PPH-HTML-PARAGRAPH-PRINT", 1, 1, false);
+        declareFunction(me, "pph_paragraph_print", "PPH-PARAGRAPH-PRINT", 1, 1, false);
+        declareFunction(me, "pph_paraphrase_justification", "PPH-PARAPHRASE-JUSTIFICATION", 2, 3, false);
+        declareFunction(me, "pph_justification_paragraph_from_supports", "PPH-JUSTIFICATION-PARAGRAPH-FROM-SUPPORTS", 2, 0, false);
+        declareFunction(me, "pph_summarize_term", "PPH-SUMMARIZE-TERM", 2, 4, false);
+        declareFunction(me, "pph_summarize_term_bulleted", "PPH-SUMMARIZE-TERM-BULLETED", 4, 0, false);
+        declareFunction(me, "pph_make_bulleted_list", "PPH-MAKE-BULLETED-LIST", 1, 0, false);
+        declareFunction(me, "pph_summarize_term_with_paragraph", "PPH-SUMMARIZE-TERM-WITH-PARAGRAPH", 6, 0, false);
+        declareFunction(me, "pph_maybe_truncate_summary_sentence", "PPH-MAYBE-TRUNCATE-SUMMARY-SENTENCE", 2, 0, false);
+        declareFunction(me, "pph_find_summary_copula_item", "PPH-FIND-SUMMARY-COPULA-ITEM", 2, 0, false);
+        declareFunction(me, "pph_english_copula_string_p", "PPH-ENGLISH-COPULA-STRING-P", 1, 0, false);
+        declareFunction(me, "pph_string_starts_with_copulaP", "PPH-STRING-STARTS-WITH-COPULA?", 1, 0, false);
+        declareFunction(me, "pph_truncate_summary_olist", "PPH-TRUNCATE-SUMMARY-OLIST", 2, 0, false);
+        declareFunction(me, "pph_summarize_fort", "PPH-SUMMARIZE-FORT", 1, 3, false);
+        declareFunction(me, "pph_summary_assertions_for_fort", "PPH-SUMMARY-ASSERTIONS-FOR-FORT", 2, 0, false);
+        declareFunction(me, "pph_summary_isa_assertions_for_fort", "PPH-SUMMARY-ISA-ASSERTIONS-FOR-FORT", 2, 0, false);
         return NIL;
     }
 
     public static SubLObject init_pph_document_file() {
-        if (SubLFiles.USE_V1) {
-            defparameter("*PPH-SUMMARY-MAX-SENTENCES-FOR-SAME-PRED*", THREE_INTEGER);
-            defparameter("*PPH-TRACK-SUMMARY-SOURCES?*", NIL);
-            defparameter("*PPH-SUMMARY-SOURCES*", NIL);
-            defparameter("*PPH-SUMMARY-SENTENCE-SOURCES*", misc_utilities.uninitialized());
-            deflexical("*PPH-COORDINATION-PREDS*", $list21);
-            deflexical("*PPH-COORDINATION-PREDS-BLACKLIST*", $list22);
-            defparameter("*PPH-ASSUME-PREDS-ALLOW-COORDINATION?*", T);
-            deflexical("*PPH-ATTEMPT-REVERSE-CONSOLIDATION?*", T);
-        }
-        if (SubLFiles.USE_V2) {
-            defparameter("*PPH-SUMMARY-SENTENCE-SOURCES*", $UNBOUND);
-            deflexical("*PPH-COORDINATION-PREDS*", $list_alt22);
-            deflexical("*PPH-COORDINATION-PREDS-BLACKLIST*", $list_alt23);
-        }
-        return NIL;
-    }
-
-    public static SubLObject init_pph_document_file_Previous() {
         defparameter("*PPH-SUMMARY-MAX-SENTENCES-FOR-SAME-PRED*", THREE_INTEGER);
         defparameter("*PPH-TRACK-SUMMARY-SOURCES?*", NIL);
         defparameter("*PPH-SUMMARY-SOURCES*", NIL);
@@ -3906,6 +2105,79 @@ public final class pph_document extends SubLTranslatedFile implements V12 {
     }
 
     static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
 

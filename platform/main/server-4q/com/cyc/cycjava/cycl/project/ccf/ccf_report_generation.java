@@ -714,7 +714,7 @@ public final class ccf_report_generation extends SubLTranslatedFile implements V
     }
 
     public static final SubLObject get_default_boolean_string_for_ks_internal(SubLObject ks, SubLObject bool_value) {
-        return kb_mapping_utilities.pred_arg_values(ks, $$defaultBooleanStringsForKS, bool_value, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED).first();
+        return kb_mapping_utilities.pred_arg_values(ks, $$defaultBooleanStringsForKS, bool_value, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED_SYM).first();
     }
 
     public static final SubLObject get_default_boolean_string_for_ks(SubLObject ks, SubLObject bool_value) {
@@ -1325,7 +1325,7 @@ public final class ccf_report_generation extends SubLTranslatedFile implements V
      * assertion).
      */
     public static final SubLObject input_columns_from_logical_indexical(SubLObject lfi, SubLObject input_ks) {
-        return kb_mapping_utilities.pred_arg_values(lfi, $$valueFromColumnInSKS, input_ks, TWO_INTEGER, ONE_INTEGER, THREE_INTEGER, UNPROVIDED);
+        return kb_mapping_utilities.pred_arg_values(lfi, $$valueFromColumnInSKS, input_ks, TWO_INTEGER, ONE_INTEGER, THREE_INTEGER, UNPROVIDED, UNPROVIDED_SYM);
     }
 
     /**

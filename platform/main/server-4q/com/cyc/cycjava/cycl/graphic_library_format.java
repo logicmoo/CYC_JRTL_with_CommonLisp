@@ -1,41 +1,7 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.identity;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.plusp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.def_csetf;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.makeStructDeclNative;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.register_method;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cadr;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cddr;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.prin1;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.terpri;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.write_string;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.defconstant;
-
-import org.armedbear.lisp.Lisp;
-
+import com.cyc.cycjava.cycl.graphic_library_format;
 import com.cyc.cycjava.cycl.inference.ask_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
@@ -51,280 +17,77 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-
-
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- * module:      GRAPHIC-LIBRARY-FORMAT
- * source file: /cyc/top/cycl/graphic-library-format.lisp
- * created:     2019/07/03 17:38:02
- */
-public final class graphic_library_format extends SubLTranslatedFile implements V12 {
-    public static final class $glf_rendering_native extends SubLStructNative {
-        public SubLStructDecl getStructDecl() {
-            return structDecl;
-        }
-
-        public SubLObject getField2() {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_rendering_native.this.$label;
-        }
-
-        public SubLObject setField2(SubLObject value) {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_rendering_native.this.$label = value;
-        }
-
-        public SubLObject $label = Lisp.NIL;
-
-        private static final SubLStructDeclNative structDecl = makeStructDeclNative(com.cyc.cycjava.cycl.graphic_library_format.$glf_rendering_native.class, GLF_RENDERING, GLF_RENDERING_P, $list_alt169, $list_alt170, new String[]{ "$label" }, $list_alt171, $list_alt172, GLFRNDR_PRINT);
-    }
-
-    // Definitions
-    public static final class $glf_graph_native extends SubLStructNative {
-        public SubLStructDecl getStructDecl() {
-            return structDecl;
-        }
-
-        public SubLObject getField2() {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.this.$id;
-        }
-
-        public SubLObject getField3() {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.this.$types;
-        }
-
-        public SubLObject getField4() {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.this.$ais;
-        }
-
-        public SubLObject getField5() {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.this.$nodes;
-        }
-
-        public SubLObject getField6() {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.this.$node_types;
-        }
-
-        public SubLObject getField7() {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.this.$source_node;
-        }
-
-        public SubLObject getField8() {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.this.$arcs;
-        }
-
-        public SubLObject getField9() {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.this.$arc_types;
-        }
-
-        public SubLObject getField10() {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.this.$incoming_connectors;
-        }
-
-        public SubLObject getField11() {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.this.$outgoing_connectors;
-        }
-
-        public SubLObject getField12() {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.this.$incoming_connector_types;
-        }
-
-        public SubLObject getField13() {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.this.$outgoing_connector_types;
-        }
-
-        public SubLObject getField14() {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.this.$rendering_info;
-        }
-
-        public SubLObject setField2(SubLObject value) {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.this.$id = value;
-        }
-
-        public SubLObject setField3(SubLObject value) {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.this.$types = value;
-        }
-
-        public SubLObject setField4(SubLObject value) {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.this.$ais = value;
-        }
-
-        public SubLObject setField5(SubLObject value) {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.this.$nodes = value;
-        }
-
-        public SubLObject setField6(SubLObject value) {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.this.$node_types = value;
-        }
-
-        public SubLObject setField7(SubLObject value) {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.this.$source_node = value;
-        }
-
-        public SubLObject setField8(SubLObject value) {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.this.$arcs = value;
-        }
-
-        public SubLObject setField9(SubLObject value) {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.this.$arc_types = value;
-        }
-
-        public SubLObject setField10(SubLObject value) {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.this.$incoming_connectors = value;
-        }
-
-        public SubLObject setField11(SubLObject value) {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.this.$outgoing_connectors = value;
-        }
-
-        public SubLObject setField12(SubLObject value) {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.this.$incoming_connector_types = value;
-        }
-
-        public SubLObject setField13(SubLObject value) {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.this.$outgoing_connector_types = value;
-        }
-
-        public SubLObject setField14(SubLObject value) {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.this.$rendering_info = value;
-        }
-
-        public SubLObject $id = Lisp.NIL;
-
-        public SubLObject $types = Lisp.NIL;
-
-        public SubLObject $ais = Lisp.NIL;
-
-        public SubLObject $nodes = Lisp.NIL;
-
-        public SubLObject $node_types = Lisp.NIL;
-
-        public SubLObject $source_node = Lisp.NIL;
-
-        public SubLObject $arcs = Lisp.NIL;
-
-        public SubLObject $arc_types = Lisp.NIL;
-
-        public SubLObject $incoming_connectors = Lisp.NIL;
-
-        public SubLObject $outgoing_connectors = Lisp.NIL;
-
-        public SubLObject $incoming_connector_types = Lisp.NIL;
-
-        public SubLObject $outgoing_connector_types = Lisp.NIL;
-
-        public SubLObject $rendering_info = Lisp.NIL;
-
-        private static final SubLStructDeclNative structDecl = makeStructDeclNative(com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.class, GLF_GRAPH, GLF_GRAPH_P, $list_alt2, $list_alt3, new String[]{ "$id", "$types", "$ais", "$nodes", "$node_types", "$source_node", "$arcs", "$arc_types", "$incoming_connectors", "$outgoing_connectors", "$incoming_connector_types", "$outgoing_connector_types", "$rendering_info" }, $list_alt4, $list_alt5, GLFGRPH_PRINT);
-    }
-
-    public static final class $glf_arc_native extends SubLStructNative {
-        public SubLStructDecl getStructDecl() {
-            return structDecl;
-        }
-
-        public SubLObject getField2() {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_arc_native.this.$id;
-        }
-
-        public SubLObject getField3() {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_arc_native.this.$types;
-        }
-
-        public SubLObject getField4() {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_arc_native.this.$parent;
-        }
-
-        public SubLObject getField5() {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_arc_native.this.$from;
-        }
-
-        public SubLObject getField6() {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_arc_native.this.$to;
-        }
-
-        public SubLObject getField7() {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_arc_native.this.$semantics;
-        }
-
-        public SubLObject setField2(SubLObject value) {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_arc_native.this.$id = value;
-        }
-
-        public SubLObject setField3(SubLObject value) {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_arc_native.this.$types = value;
-        }
-
-        public SubLObject setField4(SubLObject value) {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_arc_native.this.$parent = value;
-        }
-
-        public SubLObject setField5(SubLObject value) {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_arc_native.this.$from = value;
-        }
-
-        public SubLObject setField6(SubLObject value) {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_arc_native.this.$to = value;
-        }
-
-        public SubLObject setField7(SubLObject value) {
-            return com.cyc.cycjava.cycl.graphic_library_format.$glf_arc_native.this.$semantics = value;
-        }
-
-        public SubLObject $id = Lisp.NIL;
-
-        public SubLObject $types = Lisp.NIL;
-
-        public SubLObject $parent = Lisp.NIL;
-
-        public SubLObject $from = Lisp.NIL;
-
-        public SubLObject $to = Lisp.NIL;
-
-        public SubLObject $semantics = Lisp.NIL;
-
-        private static final SubLStructDeclNative structDecl = makeStructDeclNative(com.cyc.cycjava.cycl.graphic_library_format.$glf_arc_native.class, GLF_ARC, GLF_ARC_P, $list_alt136, $list_alt137, new String[]{ "$id", "$types", "$parent", "$from", "$to", "$semantics" }, $list_alt138, $list_alt139, GLFARC_PRINT);
-    }
-
+import org.armedbear.lisp.Lisp;
+
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.graphic_library_format.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THIRTEEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+
+import static com.cyc.cycjava.cycl.graphic_library_format.*; 
+ public final class graphic_library_format extends SubLTranslatedFile {
     public static final SubLFile me = new graphic_library_format();
 
+    public static final String myName = "com.cyc.cycjava.cycl.graphic_library_format";
 
+    public static final String myFingerPrint = "ef2475bcbc7d9d072a980a2ad5319490c89018321af98a1955033c448dcdd186";
 
     // defconstant
-    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $dtp_glf_graph$ = makeSymbol("*DTP-GLF-GRAPH*");
 
     // defconstant
-    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $dtp_glf_node$ = makeSymbol("*DTP-GLF-NODE*");
 
     // defconstant
-    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $dtp_glf_arc$ = makeSymbol("*DTP-GLF-ARC*");
 
     // defconstant
-    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $dtp_glf_rendering$ = makeSymbol("*DTP-GLF-RENDERING*");
 
     // Internal Constants
-    @LispMethod(comment = "Internal Constants")
-    private static final SubLSymbol GLF_GRAPH = makeSymbol("GLF-GRAPH");
+    public static final SubLSymbol GLF_GRAPH = makeSymbol("GLF-GRAPH");
 
-    private static final SubLSymbol GLF_GRAPH_P = makeSymbol("GLF-GRAPH-P");
+    public static final SubLSymbol GLF_GRAPH_P = makeSymbol("GLF-GRAPH-P");
 
-    static private final SubLList $list2 = list(new SubLObject[]{ makeSymbol("ID"), makeSymbol("TYPES"), makeSymbol("AIS"), makeSymbol("NODES"), makeSymbol("NODE-TYPES"), makeSymbol("SOURCE-NODE"), makeSymbol("ARCS"), makeSymbol("ARC-TYPES"), makeSymbol("INCOMING-CONNECTORS"), makeSymbol("OUTGOING-CONNECTORS"), makeSymbol("INCOMING-CONNECTOR-TYPES"), makeSymbol("OUTGOING-CONNECTOR-TYPES"), makeSymbol("RENDERING-INFO") });
+    public static final SubLList $list2 = list(new SubLObject[]{ makeSymbol("ID"), makeSymbol("TYPES"), makeSymbol("AIS"), makeSymbol("NODES"), makeSymbol("NODE-TYPES"), makeSymbol("SOURCE-NODE"), makeSymbol("ARCS"), makeSymbol("ARC-TYPES"), makeSymbol("INCOMING-CONNECTORS"), makeSymbol("OUTGOING-CONNECTORS"), makeSymbol("INCOMING-CONNECTOR-TYPES"), makeSymbol("OUTGOING-CONNECTOR-TYPES"), makeSymbol("RENDERING-INFO") });
 
-    static private final SubLList $list3 = list(new SubLObject[]{ makeKeyword("ID"), makeKeyword("TYPES"), makeKeyword("AIS"), makeKeyword("NODES"), makeKeyword("NODE-TYPES"), makeKeyword("SOURCE-NODE"), $ARCS, makeKeyword("ARC-TYPES"), makeKeyword("INCOMING-CONNECTORS"), makeKeyword("OUTGOING-CONNECTORS"), makeKeyword("INCOMING-CONNECTOR-TYPES"), makeKeyword("OUTGOING-CONNECTOR-TYPES"), makeKeyword("RENDERING-INFO") });
+    public static final SubLList $list3 = list(new SubLObject[]{ makeKeyword("ID"), makeKeyword("TYPES"), makeKeyword("AIS"), makeKeyword("NODES"), makeKeyword("NODE-TYPES"), makeKeyword("SOURCE-NODE"), makeKeyword("ARCS"), makeKeyword("ARC-TYPES"), makeKeyword("INCOMING-CONNECTORS"), makeKeyword("OUTGOING-CONNECTORS"), makeKeyword("INCOMING-CONNECTOR-TYPES"), makeKeyword("OUTGOING-CONNECTOR-TYPES"), makeKeyword("RENDERING-INFO") });
 
-    static private final SubLList $list4 = list(new SubLObject[]{ makeSymbol("GLFGRPH-ID"), makeSymbol("GLFGRPH-TYPES"), makeSymbol("GLFGRPH-AIS"), makeSymbol("GLFGRPH-NODES"), makeSymbol("GLFGRPH-NODE-TYPES"), makeSymbol("GLFGRPH-SOURCE-NODE"), makeSymbol("GLFGRPH-ARCS"), makeSymbol("GLFGRPH-ARC-TYPES"), makeSymbol("GLFGRPH-INCOMING-CONNECTORS"), makeSymbol("GLFGRPH-OUTGOING-CONNECTORS"), makeSymbol("GLFGRPH-INCOMING-CONNECTOR-TYPES"), makeSymbol("GLFGRPH-OUTGOING-CONNECTOR-TYPES"), makeSymbol("GLFGRPH-RENDERING-INFO") });
+    public static final SubLList $list4 = list(new SubLObject[]{ makeSymbol("GLFGRPH-ID"), makeSymbol("GLFGRPH-TYPES"), makeSymbol("GLFGRPH-AIS"), makeSymbol("GLFGRPH-NODES"), makeSymbol("GLFGRPH-NODE-TYPES"), makeSymbol("GLFGRPH-SOURCE-NODE"), makeSymbol("GLFGRPH-ARCS"), makeSymbol("GLFGRPH-ARC-TYPES"), makeSymbol("GLFGRPH-INCOMING-CONNECTORS"), makeSymbol("GLFGRPH-OUTGOING-CONNECTORS"), makeSymbol("GLFGRPH-INCOMING-CONNECTOR-TYPES"), makeSymbol("GLFGRPH-OUTGOING-CONNECTOR-TYPES"), makeSymbol("GLFGRPH-RENDERING-INFO") });
 
-    static private final SubLList $list5 = list(new SubLObject[]{ makeSymbol("_CSETF-GLFGRPH-ID"), makeSymbol("_CSETF-GLFGRPH-TYPES"), makeSymbol("_CSETF-GLFGRPH-AIS"), makeSymbol("_CSETF-GLFGRPH-NODES"), makeSymbol("_CSETF-GLFGRPH-NODE-TYPES"), makeSymbol("_CSETF-GLFGRPH-SOURCE-NODE"), makeSymbol("_CSETF-GLFGRPH-ARCS"), makeSymbol("_CSETF-GLFGRPH-ARC-TYPES"), makeSymbol("_CSETF-GLFGRPH-INCOMING-CONNECTORS"), makeSymbol("_CSETF-GLFGRPH-OUTGOING-CONNECTORS"), makeSymbol("_CSETF-GLFGRPH-INCOMING-CONNECTOR-TYPES"), makeSymbol("_CSETF-GLFGRPH-OUTGOING-CONNECTOR-TYPES"), makeSymbol("_CSETF-GLFGRPH-RENDERING-INFO") });
+    public static final SubLList $list5 = list(new SubLObject[]{ makeSymbol("_CSETF-GLFGRPH-ID"), makeSymbol("_CSETF-GLFGRPH-TYPES"), makeSymbol("_CSETF-GLFGRPH-AIS"), makeSymbol("_CSETF-GLFGRPH-NODES"), makeSymbol("_CSETF-GLFGRPH-NODE-TYPES"), makeSymbol("_CSETF-GLFGRPH-SOURCE-NODE"), makeSymbol("_CSETF-GLFGRPH-ARCS"), makeSymbol("_CSETF-GLFGRPH-ARC-TYPES"), makeSymbol("_CSETF-GLFGRPH-INCOMING-CONNECTORS"), makeSymbol("_CSETF-GLFGRPH-OUTGOING-CONNECTORS"), makeSymbol("_CSETF-GLFGRPH-INCOMING-CONNECTOR-TYPES"), makeSymbol("_CSETF-GLFGRPH-OUTGOING-CONNECTOR-TYPES"), makeSymbol("_CSETF-GLFGRPH-RENDERING-INFO") });
 
-    private static final SubLSymbol GLFGRPH_PRINT = makeSymbol("GLFGRPH-PRINT");
+    public static final SubLSymbol GLFGRPH_PRINT = makeSymbol("GLFGRPH-PRINT");
 
-    private static final SubLSymbol GLF_GRAPH_PRINT_FUNCTION_TRAMPOLINE = makeSymbol("GLF-GRAPH-PRINT-FUNCTION-TRAMPOLINE");
+    public static final SubLSymbol GLF_GRAPH_PRINT_FUNCTION_TRAMPOLINE = makeSymbol("GLF-GRAPH-PRINT-FUNCTION-TRAMPOLINE");
 
     private static final SubLList $list8 = list(makeSymbol("OPTIMIZE-FUNCALL"), makeSymbol("GLF-GRAPH-P"));
 
@@ -380,13 +143,41 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
 
     private static final SubLSymbol _CSETF_GLFGRPH_RENDERING_INFO = makeSymbol("_CSETF-GLFGRPH-RENDERING-INFO");
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     private static final SubLSymbol $INCOMING_CONNECTOR_TYPES = makeKeyword("INCOMING-CONNECTOR-TYPES");
 
     private static final SubLSymbol $OUTGOING_CONNECTOR_TYPES = makeKeyword("OUTGOING-CONNECTOR-TYPES");
 
+
+
     private static final SubLString $str48$Invalid_slot__S_for_construction_ = makeString("Invalid slot ~S for construction function");
 
+
+
     private static final SubLSymbol MAKE_GLF_GRAPH = makeSymbol("MAKE-GLF-GRAPH");
+
+
+
+
 
     private static final SubLSymbol VISIT_DEFSTRUCT_OBJECT_GLF_GRAPH_METHOD = makeSymbol("VISIT-DEFSTRUCT-OBJECT-GLF-GRAPH-METHOD");
 
@@ -426,6 +217,8 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
 
     private static final SubLString $$$glfGraph = makeString("glfGraph");
 
+
+
     private static final SubLString $$$glfCore = makeString("glfCore");
 
     private static final SubLString $$$glfNodeTypes = makeString("glfNodeTypes");
@@ -445,6 +238,8 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
     private static final SubLString $$$glfOwnsNode = makeString("glfOwnsNode");
 
     private static final SubLString $$$glfIsHeadNode = makeString("glfIsHeadNode");
+
+
 
     private static final SubLString $$$glfHasTypes = makeString("glfHasTypes");
 
@@ -488,23 +283,29 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
 
     private static final SubLString $$$glfSemanticForArc = makeString("glfSemanticForArc");
 
+    private static final SubLObject $$isa = reader_make_constant_shell(makeString("isa"));
 
+    private static final SubLList $list106 = list(reader_make_constant_shell(makeString("Graph-CW")));
 
-    private static final SubLList $list106 = list(reader_make_constant_shell("Graph-CW"));
-
-
+    private static final SubLObject $$correspondingAIS = reader_make_constant_shell(makeString("correspondingAIS"));
 
     private static final SubLList $list108 = list(makeKeyword("AIS"));
 
+    private static final SubLObject $$GLFNode = reader_make_constant_shell(makeString("GLFNode"));
+
+    private static final SubLObject $$GLFArc = reader_make_constant_shell(makeString("GLFArc"));
 
 
 
+    private static final SubLObject $$nodeInSystem = reader_make_constant_shell(makeString("nodeInSystem"));
 
 
 
+    private static final SubLObject $$sourceNodeInSystem = reader_make_constant_shell(makeString("sourceNodeInSystem"));
 
 
 
+    private static final SubLObject $$linkInSystem = reader_make_constant_shell(makeString("linkInSystem"));
 
     private static final SubLSymbol GLF_NODE = makeSymbol("GLF-NODE");
 
@@ -540,6 +341,10 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
 
     private static final SubLSymbol _CSETF_GLFNODE_SEMANTICS = makeSymbol("_CSETF-GLFNODE-SEMANTICS");
 
+
+
+
+
     private static final SubLSymbol MAKE_GLF_NODE = makeSymbol("MAKE-GLF-NODE");
 
     private static final SubLSymbol VISIT_DEFSTRUCT_OBJECT_GLF_NODE_METHOD = makeSymbol("VISIT-DEFSTRUCT-OBJECT-GLF-NODE-METHOD");
@@ -552,7 +357,7 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
 
     private static final SubLString $$$_without_semantics_ = makeString(" without semantics ");
 
-    private static final SubLObject $$glfNodeSemantics_Underspecified = reader_make_constant_shell("glfNodeSemantics-Underspecified");
+    private static final SubLObject $$glfNodeSemantics_Underspecified = reader_make_constant_shell(makeString("glfNodeSemantics-Underspecified"));
 
     private static final SubLList $list143 = list(makeKeyword("SEMANTICS"));
 
@@ -562,7 +367,7 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
 
     private static final SubLList $list146 = list(makeSymbol("ID"), makeSymbol("TYPES"), makeSymbol("PARENT"), makeSymbol("FROM"), makeSymbol("TO"), makeSymbol("SEMANTICS"));
 
-    private static final SubLList $list147 = list(makeKeyword("ID"), makeKeyword("TYPES"), makeKeyword("PARENT"), $FROM, makeKeyword("TO"), makeKeyword("SEMANTICS"));
+    private static final SubLList $list147 = list(makeKeyword("ID"), makeKeyword("TYPES"), makeKeyword("PARENT"), makeKeyword("FROM"), makeKeyword("TO"), makeKeyword("SEMANTICS"));
 
     private static final SubLList $list148 = list(makeSymbol("GLFARC-ID"), makeSymbol("GLFARC-TYPES"), makeSymbol("GLFARC-PARENT"), makeSymbol("GLFARC-FROM"), makeSymbol("GLFARC-TO"), makeSymbol("GLFARC-SEMANTICS"));
 
@@ -598,6 +403,10 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
 
     private static final SubLSymbol _CSETF_GLFARC_SEMANTICS = makeSymbol("_CSETF-GLFARC-SEMANTICS");
 
+
+
+
+
     private static final SubLSymbol MAKE_GLF_ARC = makeSymbol("MAKE-GLF-ARC");
 
     private static final SubLSymbol VISIT_DEFSTRUCT_OBJECT_GLF_ARC_METHOD = makeSymbol("VISIT-DEFSTRUCT-OBJECT-GLF-ARC-METHOD");
@@ -610,13 +419,13 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
 
     private static final SubLString $str172$_meaning__ = makeString(" meaning: ");
 
-    private static final SubLObject $const173$variableMappingTableForGLFArcInDi = reader_make_constant_shell("variableMappingTableForGLFArcInDiagram");
+    private static final SubLObject $const173$variableMappingTableForGLFArcInDi = reader_make_constant_shell(makeString("variableMappingTableForGLFArcInDiagram"));
 
-
+    private static final SubLObject $$AISForFn = reader_make_constant_shell(makeString("AISForFn"));
 
     private static final SubLList $list175 = list(makeSymbol("?FROM"), makeSymbol("?TO"));
 
-
+    private static final SubLObject $$linkFromToInSystem = reader_make_constant_shell(makeString("linkFromToInSystem"));
 
     private static final SubLSymbol $sym177$_FROM = makeSymbol("?FROM");
 
@@ -646,6 +455,8 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
 
     private static final SubLSymbol _CSETF_GLFRNDR_LABEL = makeSymbol("_CSETF-GLFRNDR-LABEL");
 
+
+
     private static final SubLSymbol MAKE_GLF_RENDERING = makeSymbol("MAKE-GLF-RENDERING");
 
     private static final SubLSymbol VISIT_DEFSTRUCT_OBJECT_GLF_RENDERING_METHOD = makeSymbol("VISIT-DEFSTRUCT-OBJECT-GLF-RENDERING-METHOD");
@@ -654,362 +465,152 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
 
     private static final SubLString $str195$_label__ = makeString(" label: ");
 
-
-
-    public static final SubLObject glf_graph_print_function_trampoline_alt(SubLObject v_object, SubLObject stream) {
-        glfgrph_print(v_object, stream, ZERO_INTEGER);
-        return NIL;
-    }
+    private static final SubLObject $$glfComponentLabel = reader_make_constant_shell(makeString("glfComponentLabel"));
 
     public static SubLObject glf_graph_print_function_trampoline(final SubLObject v_object, final SubLObject stream) {
         glfgrph_print(v_object, stream, ZERO_INTEGER);
         return NIL;
     }
 
-    public static final SubLObject glf_graph_p_alt(SubLObject v_object) {
-        return v_object.getClass() == com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.class ? ((SubLObject) (T)) : NIL;
-    }
-
     public static SubLObject glf_graph_p(final SubLObject v_object) {
-        return v_object.getClass() == com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native.class ? T : NIL;
-    }
-
-    public static final SubLObject glfgrph_id_alt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, GLF_GRAPH_P);
-        return v_object.getField2();
+        return v_object.getClass() == $glf_graph_native.class ? T : NIL;
     }
 
     public static SubLObject glfgrph_id(final SubLObject v_object) {
-        assert NIL != glf_graph_p(v_object) : "! graphic_library_format.glf_graph_p(v_object) " + "graphic_library_format.glf_graph_p error :" + v_object;
+        assert NIL != glf_graph_p(v_object) : "graphic_library_format.glf_graph_p error :" + v_object;
         return v_object.getField2();
     }
 
-    public static final SubLObject glfgrph_types_alt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, GLF_GRAPH_P);
-        return v_object.getField3();
-    }
-
     public static SubLObject glfgrph_types(final SubLObject v_object) {
-        assert NIL != glf_graph_p(v_object) : "! graphic_library_format.glf_graph_p(v_object) " + "graphic_library_format.glf_graph_p error :" + v_object;
+        assert NIL != glf_graph_p(v_object) : "graphic_library_format.glf_graph_p error :" + v_object;
         return v_object.getField3();
-    }
-
-    public static final SubLObject glfgrph_ais_alt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, GLF_GRAPH_P);
-        return v_object.getField4();
     }
 
     public static SubLObject glfgrph_ais(final SubLObject v_object) {
-        assert NIL != glf_graph_p(v_object) : "! graphic_library_format.glf_graph_p(v_object) " + "graphic_library_format.glf_graph_p error :" + v_object;
+        assert NIL != glf_graph_p(v_object) : "graphic_library_format.glf_graph_p error :" + v_object;
         return v_object.getField4();
     }
 
-    public static final SubLObject glfgrph_nodes_alt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, GLF_GRAPH_P);
-        return v_object.getField5();
-    }
-
     public static SubLObject glfgrph_nodes(final SubLObject v_object) {
-        assert NIL != glf_graph_p(v_object) : "! graphic_library_format.glf_graph_p(v_object) " + "graphic_library_format.glf_graph_p error :" + v_object;
+        assert NIL != glf_graph_p(v_object) : "graphic_library_format.glf_graph_p error :" + v_object;
         return v_object.getField5();
-    }
-
-    public static final SubLObject glfgrph_node_types_alt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, GLF_GRAPH_P);
-        return v_object.getField6();
     }
 
     public static SubLObject glfgrph_node_types(final SubLObject v_object) {
-        assert NIL != glf_graph_p(v_object) : "! graphic_library_format.glf_graph_p(v_object) " + "graphic_library_format.glf_graph_p error :" + v_object;
+        assert NIL != glf_graph_p(v_object) : "graphic_library_format.glf_graph_p error :" + v_object;
         return v_object.getField6();
     }
 
-    public static final SubLObject glfgrph_source_node_alt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, GLF_GRAPH_P);
-        return v_object.getField7();
-    }
-
     public static SubLObject glfgrph_source_node(final SubLObject v_object) {
-        assert NIL != glf_graph_p(v_object) : "! graphic_library_format.glf_graph_p(v_object) " + "graphic_library_format.glf_graph_p error :" + v_object;
+        assert NIL != glf_graph_p(v_object) : "graphic_library_format.glf_graph_p error :" + v_object;
         return v_object.getField7();
-    }
-
-    public static final SubLObject glfgrph_arcs_alt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, GLF_GRAPH_P);
-        return v_object.getField8();
     }
 
     public static SubLObject glfgrph_arcs(final SubLObject v_object) {
-        assert NIL != glf_graph_p(v_object) : "! graphic_library_format.glf_graph_p(v_object) " + "graphic_library_format.glf_graph_p error :" + v_object;
+        assert NIL != glf_graph_p(v_object) : "graphic_library_format.glf_graph_p error :" + v_object;
         return v_object.getField8();
     }
 
-    public static final SubLObject glfgrph_arc_types_alt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, GLF_GRAPH_P);
-        return v_object.getField9();
-    }
-
     public static SubLObject glfgrph_arc_types(final SubLObject v_object) {
-        assert NIL != glf_graph_p(v_object) : "! graphic_library_format.glf_graph_p(v_object) " + "graphic_library_format.glf_graph_p error :" + v_object;
+        assert NIL != glf_graph_p(v_object) : "graphic_library_format.glf_graph_p error :" + v_object;
         return v_object.getField9();
-    }
-
-    public static final SubLObject glfgrph_incoming_connectors_alt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, GLF_GRAPH_P);
-        return v_object.getField10();
     }
 
     public static SubLObject glfgrph_incoming_connectors(final SubLObject v_object) {
-        assert NIL != glf_graph_p(v_object) : "! graphic_library_format.glf_graph_p(v_object) " + "graphic_library_format.glf_graph_p error :" + v_object;
+        assert NIL != glf_graph_p(v_object) : "graphic_library_format.glf_graph_p error :" + v_object;
         return v_object.getField10();
     }
 
-    public static final SubLObject glfgrph_outgoing_connectors_alt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, GLF_GRAPH_P);
-        return v_object.getField11();
-    }
-
     public static SubLObject glfgrph_outgoing_connectors(final SubLObject v_object) {
-        assert NIL != glf_graph_p(v_object) : "! graphic_library_format.glf_graph_p(v_object) " + "graphic_library_format.glf_graph_p error :" + v_object;
+        assert NIL != glf_graph_p(v_object) : "graphic_library_format.glf_graph_p error :" + v_object;
         return v_object.getField11();
-    }
-
-    public static final SubLObject glfgrph_incoming_connector_types_alt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, GLF_GRAPH_P);
-        return v_object.getField12();
     }
 
     public static SubLObject glfgrph_incoming_connector_types(final SubLObject v_object) {
-        assert NIL != glf_graph_p(v_object) : "! graphic_library_format.glf_graph_p(v_object) " + "graphic_library_format.glf_graph_p error :" + v_object;
+        assert NIL != glf_graph_p(v_object) : "graphic_library_format.glf_graph_p error :" + v_object;
         return v_object.getField12();
     }
 
-    public static final SubLObject glfgrph_outgoing_connector_types_alt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, GLF_GRAPH_P);
-        return v_object.getField13();
-    }
-
     public static SubLObject glfgrph_outgoing_connector_types(final SubLObject v_object) {
-        assert NIL != glf_graph_p(v_object) : "! graphic_library_format.glf_graph_p(v_object) " + "graphic_library_format.glf_graph_p error :" + v_object;
+        assert NIL != glf_graph_p(v_object) : "graphic_library_format.glf_graph_p error :" + v_object;
         return v_object.getField13();
-    }
-
-    public static final SubLObject glfgrph_rendering_info_alt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, GLF_GRAPH_P);
-        return v_object.getField14();
     }
 
     public static SubLObject glfgrph_rendering_info(final SubLObject v_object) {
-        assert NIL != glf_graph_p(v_object) : "! graphic_library_format.glf_graph_p(v_object) " + "graphic_library_format.glf_graph_p error :" + v_object;
+        assert NIL != glf_graph_p(v_object) : "graphic_library_format.glf_graph_p error :" + v_object;
         return v_object.getField14();
     }
 
-    public static final SubLObject _csetf_glfgrph_id_alt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, GLF_GRAPH_P);
-        return v_object.setField2(value);
-    }
-
     public static SubLObject _csetf_glfgrph_id(final SubLObject v_object, final SubLObject value) {
-        assert NIL != glf_graph_p(v_object) : "! graphic_library_format.glf_graph_p(v_object) " + "graphic_library_format.glf_graph_p error :" + v_object;
+        assert NIL != glf_graph_p(v_object) : "graphic_library_format.glf_graph_p error :" + v_object;
         return v_object.setField2(value);
-    }
-
-    public static final SubLObject _csetf_glfgrph_types_alt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, GLF_GRAPH_P);
-        return v_object.setField3(value);
     }
 
     public static SubLObject _csetf_glfgrph_types(final SubLObject v_object, final SubLObject value) {
-        assert NIL != glf_graph_p(v_object) : "! graphic_library_format.glf_graph_p(v_object) " + "graphic_library_format.glf_graph_p error :" + v_object;
+        assert NIL != glf_graph_p(v_object) : "graphic_library_format.glf_graph_p error :" + v_object;
         return v_object.setField3(value);
     }
 
-    public static final SubLObject _csetf_glfgrph_ais_alt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, GLF_GRAPH_P);
-        return v_object.setField4(value);
-    }
-
     public static SubLObject _csetf_glfgrph_ais(final SubLObject v_object, final SubLObject value) {
-        assert NIL != glf_graph_p(v_object) : "! graphic_library_format.glf_graph_p(v_object) " + "graphic_library_format.glf_graph_p error :" + v_object;
+        assert NIL != glf_graph_p(v_object) : "graphic_library_format.glf_graph_p error :" + v_object;
         return v_object.setField4(value);
-    }
-
-    public static final SubLObject _csetf_glfgrph_nodes_alt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, GLF_GRAPH_P);
-        return v_object.setField5(value);
     }
 
     public static SubLObject _csetf_glfgrph_nodes(final SubLObject v_object, final SubLObject value) {
-        assert NIL != glf_graph_p(v_object) : "! graphic_library_format.glf_graph_p(v_object) " + "graphic_library_format.glf_graph_p error :" + v_object;
+        assert NIL != glf_graph_p(v_object) : "graphic_library_format.glf_graph_p error :" + v_object;
         return v_object.setField5(value);
     }
 
-    public static final SubLObject _csetf_glfgrph_node_types_alt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, GLF_GRAPH_P);
-        return v_object.setField6(value);
-    }
-
     public static SubLObject _csetf_glfgrph_node_types(final SubLObject v_object, final SubLObject value) {
-        assert NIL != glf_graph_p(v_object) : "! graphic_library_format.glf_graph_p(v_object) " + "graphic_library_format.glf_graph_p error :" + v_object;
+        assert NIL != glf_graph_p(v_object) : "graphic_library_format.glf_graph_p error :" + v_object;
         return v_object.setField6(value);
-    }
-
-    public static final SubLObject _csetf_glfgrph_source_node_alt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, GLF_GRAPH_P);
-        return v_object.setField7(value);
     }
 
     public static SubLObject _csetf_glfgrph_source_node(final SubLObject v_object, final SubLObject value) {
-        assert NIL != glf_graph_p(v_object) : "! graphic_library_format.glf_graph_p(v_object) " + "graphic_library_format.glf_graph_p error :" + v_object;
+        assert NIL != glf_graph_p(v_object) : "graphic_library_format.glf_graph_p error :" + v_object;
         return v_object.setField7(value);
     }
 
-    public static final SubLObject _csetf_glfgrph_arcs_alt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, GLF_GRAPH_P);
-        return v_object.setField8(value);
-    }
-
     public static SubLObject _csetf_glfgrph_arcs(final SubLObject v_object, final SubLObject value) {
-        assert NIL != glf_graph_p(v_object) : "! graphic_library_format.glf_graph_p(v_object) " + "graphic_library_format.glf_graph_p error :" + v_object;
+        assert NIL != glf_graph_p(v_object) : "graphic_library_format.glf_graph_p error :" + v_object;
         return v_object.setField8(value);
-    }
-
-    public static final SubLObject _csetf_glfgrph_arc_types_alt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, GLF_GRAPH_P);
-        return v_object.setField9(value);
     }
 
     public static SubLObject _csetf_glfgrph_arc_types(final SubLObject v_object, final SubLObject value) {
-        assert NIL != glf_graph_p(v_object) : "! graphic_library_format.glf_graph_p(v_object) " + "graphic_library_format.glf_graph_p error :" + v_object;
+        assert NIL != glf_graph_p(v_object) : "graphic_library_format.glf_graph_p error :" + v_object;
         return v_object.setField9(value);
     }
 
-    public static final SubLObject _csetf_glfgrph_incoming_connectors_alt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, GLF_GRAPH_P);
-        return v_object.setField10(value);
-    }
-
     public static SubLObject _csetf_glfgrph_incoming_connectors(final SubLObject v_object, final SubLObject value) {
-        assert NIL != glf_graph_p(v_object) : "! graphic_library_format.glf_graph_p(v_object) " + "graphic_library_format.glf_graph_p error :" + v_object;
+        assert NIL != glf_graph_p(v_object) : "graphic_library_format.glf_graph_p error :" + v_object;
         return v_object.setField10(value);
-    }
-
-    public static final SubLObject _csetf_glfgrph_outgoing_connectors_alt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, GLF_GRAPH_P);
-        return v_object.setField11(value);
     }
 
     public static SubLObject _csetf_glfgrph_outgoing_connectors(final SubLObject v_object, final SubLObject value) {
-        assert NIL != glf_graph_p(v_object) : "! graphic_library_format.glf_graph_p(v_object) " + "graphic_library_format.glf_graph_p error :" + v_object;
+        assert NIL != glf_graph_p(v_object) : "graphic_library_format.glf_graph_p error :" + v_object;
         return v_object.setField11(value);
     }
 
-    public static final SubLObject _csetf_glfgrph_incoming_connector_types_alt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, GLF_GRAPH_P);
-        return v_object.setField12(value);
-    }
-
     public static SubLObject _csetf_glfgrph_incoming_connector_types(final SubLObject v_object, final SubLObject value) {
-        assert NIL != glf_graph_p(v_object) : "! graphic_library_format.glf_graph_p(v_object) " + "graphic_library_format.glf_graph_p error :" + v_object;
+        assert NIL != glf_graph_p(v_object) : "graphic_library_format.glf_graph_p error :" + v_object;
         return v_object.setField12(value);
-    }
-
-    public static final SubLObject _csetf_glfgrph_outgoing_connector_types_alt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, GLF_GRAPH_P);
-        return v_object.setField13(value);
     }
 
     public static SubLObject _csetf_glfgrph_outgoing_connector_types(final SubLObject v_object, final SubLObject value) {
-        assert NIL != glf_graph_p(v_object) : "! graphic_library_format.glf_graph_p(v_object) " + "graphic_library_format.glf_graph_p error :" + v_object;
+        assert NIL != glf_graph_p(v_object) : "graphic_library_format.glf_graph_p error :" + v_object;
         return v_object.setField13(value);
     }
 
-    public static final SubLObject _csetf_glfgrph_rendering_info_alt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, GLF_GRAPH_P);
-        return v_object.setField14(value);
-    }
-
     public static SubLObject _csetf_glfgrph_rendering_info(final SubLObject v_object, final SubLObject value) {
-        assert NIL != glf_graph_p(v_object) : "! graphic_library_format.glf_graph_p(v_object) " + "graphic_library_format.glf_graph_p error :" + v_object;
+        assert NIL != glf_graph_p(v_object) : "graphic_library_format.glf_graph_p error :" + v_object;
         return v_object.setField14(value);
-    }
-
-    public static final SubLObject make_glf_graph_alt(SubLObject arglist) {
-        if (arglist == UNPROVIDED) {
-            arglist = NIL;
-        }
-        {
-            SubLObject v_new = new com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native();
-            SubLObject next = NIL;
-            for (next = arglist; NIL != next; next = cddr(next)) {
-                {
-                    SubLObject current_arg = next.first();
-                    SubLObject current_value = cadr(next);
-                    SubLObject pcase_var = current_arg;
-                    if (pcase_var.eql($ID)) {
-                        _csetf_glfgrph_id(v_new, current_value);
-                    } else {
-                        if (pcase_var.eql($TYPES)) {
-                            _csetf_glfgrph_types(v_new, current_value);
-                        } else {
-                            if (pcase_var.eql($AIS)) {
-                                _csetf_glfgrph_ais(v_new, current_value);
-                            } else {
-                                if (pcase_var.eql($NODES)) {
-                                    _csetf_glfgrph_nodes(v_new, current_value);
-                                } else {
-                                    if (pcase_var.eql($NODE_TYPES)) {
-                                        _csetf_glfgrph_node_types(v_new, current_value);
-                                    } else {
-                                        if (pcase_var.eql($SOURCE_NODE)) {
-                                            _csetf_glfgrph_source_node(v_new, current_value);
-                                        } else {
-                                            if (pcase_var.eql($ARCS)) {
-                                                _csetf_glfgrph_arcs(v_new, current_value);
-                                            } else {
-                                                if (pcase_var.eql($ARC_TYPES)) {
-                                                    _csetf_glfgrph_arc_types(v_new, current_value);
-                                                } else {
-                                                    if (pcase_var.eql($INCOMING_CONNECTORS)) {
-                                                        _csetf_glfgrph_incoming_connectors(v_new, current_value);
-                                                    } else {
-                                                        if (pcase_var.eql($OUTGOING_CONNECTORS)) {
-                                                            _csetf_glfgrph_outgoing_connectors(v_new, current_value);
-                                                        } else {
-                                                            if (pcase_var.eql($INCOMING_CONNECTOR_TYPES)) {
-                                                                _csetf_glfgrph_incoming_connector_types(v_new, current_value);
-                                                            } else {
-                                                                if (pcase_var.eql($OUTGOING_CONNECTOR_TYPES)) {
-                                                                    _csetf_glfgrph_outgoing_connector_types(v_new, current_value);
-                                                                } else {
-                                                                    if (pcase_var.eql($RENDERING_INFO)) {
-                                                                        _csetf_glfgrph_rendering_info(v_new, current_value);
-                                                                    } else {
-                                                                        Errors.error($str_alt47$Invalid_slot__S_for_construction_, current_arg);
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return v_new;
-        }
     }
 
     public static SubLObject make_glf_graph(SubLObject arglist) {
         if (arglist == UNPROVIDED) {
             arglist = NIL;
         }
-        final SubLObject v_new = new com.cyc.cycjava.cycl.graphic_library_format.$glf_graph_native();
+        final SubLObject v_new = new $glf_graph_native();
         SubLObject next;
         SubLObject current_arg;
         SubLObject current_value;
@@ -1098,181 +699,32 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
         return visit_defstruct_glf_graph(obj, visitor_fn);
     }
 
-    public static final SubLObject glfgrph_has_node_typesP_alt(SubLObject v_graph) {
-        return plusp(set.set_size(glfgrph_node_types(v_graph)));
-    }
-
     public static SubLObject glfgrph_has_node_typesP(final SubLObject v_graph) {
         return plusp(set.set_size(glfgrph_node_types(v_graph)));
-    }
-
-    public static final SubLObject glfgrph_has_arc_typesP_alt(SubLObject v_graph) {
-        return plusp(set.set_size(glfgrph_arc_types(v_graph)));
     }
 
     public static SubLObject glfgrph_has_arc_typesP(final SubLObject v_graph) {
         return plusp(set.set_size(glfgrph_arc_types(v_graph)));
     }
 
-    public static final SubLObject glfgrph_has_incoming_connector_typesP_alt(SubLObject v_graph) {
-        return plusp(set.set_size(glfgrph_incoming_connector_types(v_graph)));
-    }
-
     public static SubLObject glfgrph_has_incoming_connector_typesP(final SubLObject v_graph) {
         return plusp(set.set_size(glfgrph_incoming_connector_types(v_graph)));
-    }
-
-    public static final SubLObject glfgrph_has_outgoing_connector_typesP_alt(SubLObject v_graph) {
-        return plusp(set.set_size(glfgrph_outgoing_connector_types(v_graph)));
     }
 
     public static SubLObject glfgrph_has_outgoing_connector_typesP(final SubLObject v_graph) {
         return plusp(set.set_size(glfgrph_outgoing_connector_types(v_graph)));
     }
 
-    public static final SubLObject glfgrph_has_rendering_infoP_alt(SubLObject v_graph) {
-        return makeBoolean(NIL == dictionary.dictionary_empty_p(glfgrph_rendering_info(v_graph)));
-    }
-
     public static SubLObject glfgrph_has_rendering_infoP(final SubLObject v_graph) {
         return makeBoolean(NIL == dictionary.dictionary_empty_p(glfgrph_rendering_info(v_graph)));
-    }
-
-    public static final SubLObject glfgrph_has_nodesP_alt(SubLObject v_graph) {
-        return list_utilities.sublisp_boolean(glfgrph_nodes(v_graph));
     }
 
     public static SubLObject glfgrph_has_nodesP(final SubLObject v_graph) {
         return list_utilities.sublisp_boolean(glfgrph_nodes(v_graph));
     }
 
-    public static final SubLObject glfgrph_has_arcsP_alt(SubLObject v_graph) {
-        return list_utilities.sublisp_boolean(glfgrph_arcs(v_graph));
-    }
-
     public static SubLObject glfgrph_has_arcsP(final SubLObject v_graph) {
         return list_utilities.sublisp_boolean(glfgrph_arcs(v_graph));
-    }
-
-    public static final SubLObject glfgrph_print_alt(SubLObject v_object, SubLObject stream, SubLObject depth) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            string_utilities.indent(stream, depth);
-            write_string($str_alt48$_GLF_Graph_, stream, UNPROVIDED, UNPROVIDED);
-            prin1(glfgrph_id(v_object), stream);
-            write_string($str_alt49$_of_types_, stream, UNPROVIDED, UNPROVIDED);
-            prin1(glfgrph_types(v_object), stream);
-            terpri(stream);
-            string_utilities.indent(stream, depth);
-            write_string($str_alt50$_corresponding_AIS__, stream, UNPROVIDED, UNPROVIDED);
-            prin1(glfgrph_ais(v_object), stream);
-            {
-                SubLObject showed_typeP = NIL;
-                terpri(stream);
-                string_utilities.indent(stream, depth);
-                write_string($str_alt51$_Types__, stream, UNPROVIDED, UNPROVIDED);
-                if (NIL != glfgrph_has_node_typesP(v_object)) {
-                    showed_typeP = T;
-                    terpri(stream);
-                    string_utilities.indent(stream, depth);
-                    write_string($str_alt52$__Node_Types__, stream, UNPROVIDED, UNPROVIDED);
-                    prin1(glfgrph_node_types(v_object), stream);
-                }
-                if (NIL != glfgrph_has_arc_typesP(v_object)) {
-                    showed_typeP = T;
-                    terpri(stream);
-                    string_utilities.indent(stream, depth);
-                    write_string($str_alt53$__Arc_Types__, stream, UNPROVIDED, UNPROVIDED);
-                    prin1(glfgrph_arc_types(v_object), stream);
-                }
-                if (NIL != glfgrph_has_incoming_connector_typesP(v_object)) {
-                    showed_typeP = T;
-                    terpri(stream);
-                    string_utilities.indent(stream, depth);
-                    write_string($str_alt54$__In_Connectors__, stream, UNPROVIDED, UNPROVIDED);
-                    prin1(glfgrph_incoming_connector_types(v_object), stream);
-                }
-                if (NIL != glfgrph_has_outgoing_connector_typesP(v_object)) {
-                    showed_typeP = T;
-                    terpri(stream);
-                    string_utilities.indent(stream, depth);
-                    write_string($str_alt55$__Out_Connectors__, stream, UNPROVIDED, UNPROVIDED);
-                    prin1(glfgrph_outgoing_connector_types(v_object), stream);
-                }
-                if (NIL == showed_typeP) {
-                    write_string($str_alt56$_no_information_available_, stream, UNPROVIDED, UNPROVIDED);
-                }
-            }
-            {
-                SubLObject showed_elementsP = NIL;
-                terpri(stream);
-                string_utilities.indent(stream, depth);
-                write_string($str_alt57$_Content__, stream, UNPROVIDED, UNPROVIDED);
-                if (NIL != glfgrph_nodes(v_object)) {
-                    showed_elementsP = T;
-                    terpri(stream);
-                    string_utilities.indent(stream, depth);
-                    write_string($str_alt58$__Nodes__first_is_source___, stream, UNPROVIDED, UNPROVIDED);
-                    if (NIL != glfgrph_source_node(v_object)) {
-                        terpri(stream);
-                        glfnode_print(glfgrph_source_node(v_object), stream, add(depth, THREE_INTEGER));
-                    }
-                    {
-                        SubLObject cdolist_list_var = glfgrph_nodes(v_object);
-                        SubLObject node = NIL;
-                        for (node = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , node = cdolist_list_var.first()) {
-                            if (node != glfgrph_source_node(v_object)) {
-                                terpri(stream);
-                                glfnode_print(node, stream, add(depth, THREE_INTEGER));
-                            }
-                        }
-                    }
-                }
-                if (NIL != glfgrph_arcs(v_object)) {
-                    showed_elementsP = T;
-                    terpri(stream);
-                    string_utilities.indent(stream, depth);
-                    write_string($str_alt59$__Arcs__, stream, UNPROVIDED, UNPROVIDED);
-                    {
-                        SubLObject cdolist_list_var = glfgrph_arcs(v_object);
-                        SubLObject arc = NIL;
-                        for (arc = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , arc = cdolist_list_var.first()) {
-                            terpri(stream);
-                            glfarc_print(arc, stream, add(depth, THREE_INTEGER));
-                        }
-                    }
-                }
-                if (NIL == showed_elementsP) {
-                    write_string($str_alt60$_currently_empty_, stream, UNPROVIDED, UNPROVIDED);
-                }
-            }
-            if (NIL != glfgrph_has_rendering_infoP(v_object)) {
-                terpri(stream);
-                string_utilities.indent(stream, depth);
-                write_string($str_alt61$_Rendering_Information_, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                {
-                    SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(glfgrph_rendering_info(v_object)));
-                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                        thread.resetMultipleValues();
-                        {
-                            SubLObject component_id = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                            SubLObject rendering = thread.secondMultipleValue();
-                            thread.resetMultipleValues();
-                            terpri(stream);
-                            string_utilities.indent(stream, depth);
-                            write_string($str_alt62$__, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                            prin1(component_id, stream);
-                            write_string($str_alt63$____, stream, UNPROVIDED, UNPROVIDED);
-                            glfrndr_print(rendering, stream, add(depth, THREE_INTEGER));
-                            iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                        }
-                    } 
-                    dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                }
-            }
-            write_string($str_alt64$__, stream, UNPROVIDED, UNPROVIDED);
-            return v_object;
-        }
     }
 
     public static SubLObject glfgrph_print(final SubLObject v_object, final SubLObject stream, final SubLObject depth) {
@@ -1387,49 +839,12 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
         return v_object;
     }
 
-    public static final SubLObject xml_serialize_glf_graph_alt(SubLObject glf_graph, SubLObject stream) {
-        if (stream == UNPROVIDED) {
-            stream = xml_vars.$xml_stream$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(glf_graph, GLF_GRAPH_P);
-            {
-                SubLObject _prev_bind_0 = xml_vars.$xml_stream$.currentBinding(thread);
-                try {
-                    xml_vars.$xml_stream$.bind(stream, thread);
-                    {
-                        SubLObject _prev_bind_0_1 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                        SubLObject _prev_bind_1 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                        try {
-                            xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                            xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                            xml_utilities.xml_start_tag_internal($$$glfGraph, NIL, NIL);
-                            xml_serialize_glf_graph_core(glf_graph, stream);
-                            xml_serialize_glf_graph_diagram(glf_graph, stream);
-                            xml_serialize_glf_graph_rendering(glf_graph, stream);
-                            xml_serialize_glf_graph_flow_model(glf_graph, stream);
-                        } finally {
-                            xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1, thread);
-                            xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_1, thread);
-                        }
-                    }
-                    xml_utilities.xml_terpri();
-                    xml_utilities.xml_end_tag_internal($$$glfGraph);
-                } finally {
-                    xml_vars.$xml_stream$.rebind(_prev_bind_0, thread);
-                }
-            }
-            return glf_graph;
-        }
-    }
-
     public static SubLObject xml_serialize_glf_graph(final SubLObject glf_graph, SubLObject stream) {
         if (stream == UNPROVIDED) {
             stream = xml_vars.$xml_stream$.getDynamicValue();
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != glf_graph_p(glf_graph) : "! graphic_library_format.glf_graph_p(glf_graph) " + ("graphic_library_format.glf_graph_p(glf_graph) " + "CommonSymbols.NIL != graphic_library_format.glf_graph_p(glf_graph) ") + glf_graph;
+        assert NIL != glf_graph_p(glf_graph) : "graphic_library_format.glf_graph_p(glf_graph) " + "CommonSymbols.NIL != graphic_library_format.glf_graph_p(glf_graph) " + glf_graph;
         final SubLObject _prev_bind_0 = xml_vars.$xml_stream$.currentBinding(thread);
         try {
             xml_vars.$xml_stream$.bind(stream, thread);
@@ -1470,113 +885,6 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
             xml_vars.$xml_stream$.rebind(_prev_bind_0, thread);
         }
         return glf_graph;
-    }
-
-    public static final SubLObject xml_serialize_glf_graph_core_alt(SubLObject glf_graph, SubLObject stream) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject _prev_bind_0 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                SubLObject _prev_bind_1 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                try {
-                    xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                    xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                    xml_utilities.xml_start_tag_internal($$$glfCore, NIL, NIL);
-                    if (NIL != glfgrph_has_node_typesP(glf_graph)) {
-                        {
-                            SubLObject _prev_bind_0_2 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                            SubLObject _prev_bind_1_3 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                            try {
-                                xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                xml_utilities.xml_start_tag_internal($$$glfNodeTypes, NIL, NIL);
-                                {
-                                    SubLObject set_contents_var = set.do_set_internal(glfgrph_node_types(glf_graph));
-                                    SubLObject basis_object = set_contents.do_set_contents_basis_object(set_contents_var);
-                                    SubLObject state = NIL;
-                                    for (state = set_contents.do_set_contents_initial_state(basis_object, set_contents_var); NIL == set_contents.do_set_contents_doneP(basis_object, state); state = set_contents.do_set_contents_update_state(state)) {
-                                        {
-                                            SubLObject type = set_contents.do_set_contents_next(basis_object, state);
-                                            if (NIL != set_contents.do_set_contents_element_validP(state, type)) {
-                                                {
-                                                    SubLObject _prev_bind_0_4 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                    SubLObject _prev_bind_1_5 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                                    try {
-                                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                        xml_utilities.xml_start_tag_internal($$$glfNodeType, NIL, NIL);
-                                                        cycml.cycml_serialize_term(type);
-                                                    } finally {
-                                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_5, thread);
-                                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_4, thread);
-                                                    }
-                                                }
-                                                xml_utilities.xml_terpri();
-                                                xml_utilities.xml_end_tag_internal($$$glfNodeType);
-                                            }
-                                        }
-                                    }
-                                }
-                            } finally {
-                                xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_3, thread);
-                                xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_2, thread);
-                            }
-                        }
-                        xml_utilities.xml_terpri();
-                        xml_utilities.xml_end_tag_internal($$$glfNodeTypes);
-                    }
-                    if (NIL != glfgrph_has_arc_typesP(glf_graph)) {
-                        {
-                            SubLObject _prev_bind_0_6 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                            SubLObject _prev_bind_1_7 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                            try {
-                                xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                xml_utilities.xml_start_tag_internal($$$glfArcTypes, NIL, NIL);
-                                {
-                                    SubLObject set_contents_var = set.do_set_internal(glfgrph_arc_types(glf_graph));
-                                    SubLObject basis_object = set_contents.do_set_contents_basis_object(set_contents_var);
-                                    SubLObject state = NIL;
-                                    for (state = set_contents.do_set_contents_initial_state(basis_object, set_contents_var); NIL == set_contents.do_set_contents_doneP(basis_object, state); state = set_contents.do_set_contents_update_state(state)) {
-                                        {
-                                            SubLObject type = set_contents.do_set_contents_next(basis_object, state);
-                                            if (NIL != set_contents.do_set_contents_element_validP(state, type)) {
-                                                {
-                                                    SubLObject _prev_bind_0_8 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                    SubLObject _prev_bind_1_9 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                                    try {
-                                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                        xml_utilities.xml_start_tag_internal($$$glfArcType, NIL, NIL);
-                                                        cycml.cycml_serialize_term(type);
-                                                    } finally {
-                                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_9, thread);
-                                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_8, thread);
-                                                    }
-                                                }
-                                                xml_utilities.xml_terpri();
-                                                xml_utilities.xml_end_tag_internal($$$glfArcType);
-                                            }
-                                        }
-                                    }
-                                }
-                            } finally {
-                                xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_7, thread);
-                                xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_6, thread);
-                            }
-                        }
-                        xml_utilities.xml_terpri();
-                        xml_utilities.xml_end_tag_internal($$$glfArcTypes);
-                    }
-                } finally {
-                    xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1, thread);
-                    xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0, thread);
-                }
-            }
-            xml_utilities.xml_terpri();
-            xml_utilities.xml_end_tag_internal($$$glfCore);
-            return glf_graph;
-        }
     }
 
     public static SubLObject xml_serialize_glf_graph_core(final SubLObject glf_graph, final SubLObject stream) {
@@ -1763,370 +1071,6 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
             }
         }
         return glf_graph;
-    }
-
-    public static final SubLObject xml_serialize_glf_graph_diagram_alt(SubLObject glf_graph, SubLObject stream) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject _prev_bind_0 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                SubLObject _prev_bind_1 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                try {
-                    xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                    xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                    xml_utilities.xml_start_tag_internal($$$glfDiagram, NIL, NIL);
-                    {
-                        SubLObject _prev_bind_0_10 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                        SubLObject _prev_bind_1_11 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                        try {
-                            xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                            xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                            xml_utilities.xml_start_tag_internal($$$glfId, NIL, NIL);
-                            cycml.cycml_serialize_term(glfgrph_id(glf_graph));
-                        } finally {
-                            xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_11, thread);
-                            xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_10, thread);
-                        }
-                    }
-                    xml_utilities.xml_terpri();
-                    xml_utilities.xml_end_tag_internal($$$glfId);
-                    if (NIL != glfgrph_has_nodesP(glf_graph)) {
-                        {
-                            SubLObject _prev_bind_0_12 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                            SubLObject _prev_bind_1_13 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                            try {
-                                xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                xml_utilities.xml_start_tag_internal($$$glfOwnsNodes, NIL, NIL);
-                                {
-                                    SubLObject cdolist_list_var = glfgrph_nodes(glf_graph);
-                                    SubLObject node = NIL;
-                                    for (node = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , node = cdolist_list_var.first()) {
-                                        {
-                                            SubLObject _prev_bind_0_14 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                            SubLObject _prev_bind_1_15 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                            try {
-                                                xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                xml_utilities.xml_start_tag_internal($$$glfOwnsNode, NIL, NIL);
-                                                if (node == glfgrph_source_node(glf_graph)) {
-                                                    {
-                                                        SubLObject _prev_bind_0_16 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                        SubLObject _prev_bind_1_17 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                                        try {
-                                                            xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                            xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                            xml_utilities.xml_start_tag_internal($$$glfIsHeadNode, NIL, $ATOMIC);
-                                                        } finally {
-                                                            xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_17, thread);
-                                                            xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_16, thread);
-                                                        }
-                                                    }
-                                                    if (false) {
-                                                        xml_utilities.xml_terpri();
-                                                        xml_utilities.xml_end_tag_internal($$$glfIsHeadNode);
-                                                    }
-                                                }
-                                                {
-                                                    SubLObject _prev_bind_0_18 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                    SubLObject _prev_bind_1_19 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                                    try {
-                                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                        xml_utilities.xml_start_tag_internal($$$glfId, NIL, NIL);
-                                                        cycml.cycml_serialize_term(glfnode_id(node));
-                                                    } finally {
-                                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_19, thread);
-                                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_18, thread);
-                                                    }
-                                                }
-                                                xml_utilities.xml_terpri();
-                                                xml_utilities.xml_end_tag_internal($$$glfId);
-                                                {
-                                                    SubLObject _prev_bind_0_20 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                    SubLObject _prev_bind_1_21 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                                    try {
-                                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                        xml_utilities.xml_start_tag_internal($$$glfHasTypes, NIL, NIL);
-                                                        {
-                                                            SubLObject cdolist_list_var_22 = glfnode_types(node);
-                                                            SubLObject type = NIL;
-                                                            for (type = cdolist_list_var_22.first(); NIL != cdolist_list_var_22; cdolist_list_var_22 = cdolist_list_var_22.rest() , type = cdolist_list_var_22.first()) {
-                                                                {
-                                                                    SubLObject _prev_bind_0_23 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                                    SubLObject _prev_bind_1_24 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                                                    try {
-                                                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                                        xml_utilities.xml_start_tag_internal($$$glfHasType, NIL, NIL);
-                                                                        {
-                                                                            SubLObject _prev_bind_0_25 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                                            SubLObject _prev_bind_1_26 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                                                            try {
-                                                                                xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                                                xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                                                xml_utilities.xml_start_tag_internal($$$glfId, NIL, NIL);
-                                                                                cycml.cycml_serialize_term(type);
-                                                                            } finally {
-                                                                                xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_26, thread);
-                                                                                xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_25, thread);
-                                                                            }
-                                                                        }
-                                                                        xml_utilities.xml_terpri();
-                                                                        xml_utilities.xml_end_tag_internal($$$glfId);
-                                                                    } finally {
-                                                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_24, thread);
-                                                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_23, thread);
-                                                                    }
-                                                                }
-                                                                xml_utilities.xml_terpri();
-                                                                xml_utilities.xml_end_tag_internal($$$glfHasType);
-                                                            }
-                                                        }
-                                                    } finally {
-                                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_21, thread);
-                                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_20, thread);
-                                                    }
-                                                }
-                                                xml_utilities.xml_terpri();
-                                                xml_utilities.xml_end_tag_internal($$$glfHasTypes);
-                                            } finally {
-                                                xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_15, thread);
-                                                xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_14, thread);
-                                            }
-                                        }
-                                        xml_utilities.xml_terpri();
-                                        xml_utilities.xml_end_tag_internal($$$glfOwnsNode);
-                                    }
-                                }
-                            } finally {
-                                xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_13, thread);
-                                xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_12, thread);
-                            }
-                        }
-                        xml_utilities.xml_terpri();
-                        xml_utilities.xml_end_tag_internal($$$glfOwnsNodes);
-                    }
-                    if (NIL != glfgrph_has_arcsP(glf_graph)) {
-                        {
-                            SubLObject _prev_bind_0_27 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                            SubLObject _prev_bind_1_28 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                            try {
-                                xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                xml_utilities.xml_start_tag_internal($$$glfOwnsArcs, NIL, NIL);
-                                {
-                                    SubLObject cdolist_list_var = glfgrph_arcs(glf_graph);
-                                    SubLObject arc = NIL;
-                                    for (arc = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , arc = cdolist_list_var.first()) {
-                                        {
-                                            SubLObject _prev_bind_0_29 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                            SubLObject _prev_bind_1_30 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                            try {
-                                                xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                xml_utilities.xml_start_tag_internal($$$glfOwnsArc, NIL, NIL);
-                                                {
-                                                    SubLObject _prev_bind_0_31 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                    SubLObject _prev_bind_1_32 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                                    try {
-                                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                        xml_utilities.xml_start_tag_internal($$$glfId, NIL, NIL);
-                                                        cycml.cycml_serialize_term(glfarc_id(arc));
-                                                    } finally {
-                                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_32, thread);
-                                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_31, thread);
-                                                    }
-                                                }
-                                                xml_utilities.xml_terpri();
-                                                xml_utilities.xml_end_tag_internal($$$glfId);
-                                                {
-                                                    SubLObject _prev_bind_0_33 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                    SubLObject _prev_bind_1_34 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                                    try {
-                                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                        xml_utilities.xml_start_tag_internal($$$glfHasTypes, NIL, NIL);
-                                                        {
-                                                            SubLObject cdolist_list_var_35 = glfarc_types(arc);
-                                                            SubLObject type = NIL;
-                                                            for (type = cdolist_list_var_35.first(); NIL != cdolist_list_var_35; cdolist_list_var_35 = cdolist_list_var_35.rest() , type = cdolist_list_var_35.first()) {
-                                                                {
-                                                                    SubLObject _prev_bind_0_36 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                                    SubLObject _prev_bind_1_37 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                                                    try {
-                                                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                                        xml_utilities.xml_start_tag_internal($$$glfHasType, NIL, NIL);
-                                                                        {
-                                                                            SubLObject _prev_bind_0_38 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                                            SubLObject _prev_bind_1_39 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                                                            try {
-                                                                                xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                                                xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                                                xml_utilities.xml_start_tag_internal($$$glfId, NIL, NIL);
-                                                                                cycml.cycml_serialize_term(type);
-                                                                            } finally {
-                                                                                xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_39, thread);
-                                                                                xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_38, thread);
-                                                                            }
-                                                                        }
-                                                                        xml_utilities.xml_terpri();
-                                                                        xml_utilities.xml_end_tag_internal($$$glfId);
-                                                                    } finally {
-                                                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_37, thread);
-                                                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_36, thread);
-                                                                    }
-                                                                }
-                                                                xml_utilities.xml_terpri();
-                                                                xml_utilities.xml_end_tag_internal($$$glfHasType);
-                                                            }
-                                                        }
-                                                    } finally {
-                                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_34, thread);
-                                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_33, thread);
-                                                    }
-                                                }
-                                                xml_utilities.xml_terpri();
-                                                xml_utilities.xml_end_tag_internal($$$glfHasTypes);
-                                                {
-                                                    SubLObject _prev_bind_0_40 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                    SubLObject _prev_bind_1_41 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                                    try {
-                                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                        xml_utilities.xml_start_tag_internal($$$glfFromSet, NIL, NIL);
-                                                        {
-                                                            SubLObject set_contents_var = set.do_set_internal(glfarc_from(arc));
-                                                            SubLObject basis_object = set_contents.do_set_contents_basis_object(set_contents_var);
-                                                            SubLObject state = NIL;
-                                                            for (state = set_contents.do_set_contents_initial_state(basis_object, set_contents_var); NIL == set_contents.do_set_contents_doneP(basis_object, state); state = set_contents.do_set_contents_update_state(state)) {
-                                                                {
-                                                                    SubLObject from = set_contents.do_set_contents_next(basis_object, state);
-                                                                    if (NIL != set_contents.do_set_contents_element_validP(state, from)) {
-                                                                        {
-                                                                            SubLObject _prev_bind_0_42 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                                            SubLObject _prev_bind_1_43 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                                                            try {
-                                                                                xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                                                xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                                                xml_utilities.xml_start_tag_internal($$$glfFrom, NIL, NIL);
-                                                                                {
-                                                                                    SubLObject _prev_bind_0_44 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                                                    SubLObject _prev_bind_1_45 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                                                                    try {
-                                                                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                                                        xml_utilities.xml_start_tag_internal($$$glfId, NIL, NIL);
-                                                                                        cycml.cycml_serialize_term(from);
-                                                                                    } finally {
-                                                                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_45, thread);
-                                                                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_44, thread);
-                                                                                    }
-                                                                                }
-                                                                                xml_utilities.xml_terpri();
-                                                                                xml_utilities.xml_end_tag_internal($$$glfId);
-                                                                            } finally {
-                                                                                xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_43, thread);
-                                                                                xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_42, thread);
-                                                                            }
-                                                                        }
-                                                                        xml_utilities.xml_terpri();
-                                                                        xml_utilities.xml_end_tag_internal($$$glfFrom);
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    } finally {
-                                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_41, thread);
-                                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_40, thread);
-                                                    }
-                                                }
-                                                xml_utilities.xml_terpri();
-                                                xml_utilities.xml_end_tag_internal($$$glfFromSet);
-                                                {
-                                                    SubLObject _prev_bind_0_46 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                    SubLObject _prev_bind_1_47 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                                    try {
-                                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                        xml_utilities.xml_start_tag_internal($$$glfToSet, NIL, NIL);
-                                                        {
-                                                            SubLObject set_contents_var = set.do_set_internal(glfarc_to(arc));
-                                                            SubLObject basis_object = set_contents.do_set_contents_basis_object(set_contents_var);
-                                                            SubLObject state = NIL;
-                                                            for (state = set_contents.do_set_contents_initial_state(basis_object, set_contents_var); NIL == set_contents.do_set_contents_doneP(basis_object, state); state = set_contents.do_set_contents_update_state(state)) {
-                                                                {
-                                                                    SubLObject to = set_contents.do_set_contents_next(basis_object, state);
-                                                                    if (NIL != set_contents.do_set_contents_element_validP(state, to)) {
-                                                                        {
-                                                                            SubLObject _prev_bind_0_48 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                                            SubLObject _prev_bind_1_49 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                                                            try {
-                                                                                xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                                                xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                                                xml_utilities.xml_start_tag_internal($$$glfTo, NIL, NIL);
-                                                                                {
-                                                                                    SubLObject _prev_bind_0_50 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                                                    SubLObject _prev_bind_1_51 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                                                                    try {
-                                                                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                                                        xml_utilities.xml_start_tag_internal($$$glfId, NIL, NIL);
-                                                                                        cycml.cycml_serialize_term(to);
-                                                                                    } finally {
-                                                                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_51, thread);
-                                                                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_50, thread);
-                                                                                    }
-                                                                                }
-                                                                                xml_utilities.xml_terpri();
-                                                                                xml_utilities.xml_end_tag_internal($$$glfId);
-                                                                            } finally {
-                                                                                xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_49, thread);
-                                                                                xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_48, thread);
-                                                                            }
-                                                                        }
-                                                                        xml_utilities.xml_terpri();
-                                                                        xml_utilities.xml_end_tag_internal($$$glfTo);
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    } finally {
-                                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_47, thread);
-                                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_46, thread);
-                                                    }
-                                                }
-                                                xml_utilities.xml_terpri();
-                                                xml_utilities.xml_end_tag_internal($$$glfToSet);
-                                            } finally {
-                                                xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_30, thread);
-                                                xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_29, thread);
-                                            }
-                                        }
-                                        xml_utilities.xml_terpri();
-                                        xml_utilities.xml_end_tag_internal($$$glfOwnsArc);
-                                    }
-                                }
-                            } finally {
-                                xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_28, thread);
-                                xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_27, thread);
-                            }
-                        }
-                        xml_utilities.xml_terpri();
-                        xml_utilities.xml_end_tag_internal($$$glfOwnsArcs);
-                    }
-                } finally {
-                    xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1, thread);
-                    xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0, thread);
-                }
-            }
-            xml_utilities.xml_terpri();
-            xml_utilities.xml_end_tag_internal($$$glfDiagram);
-            return glf_graph;
-        }
     }
 
     public static SubLObject xml_serialize_glf_graph_diagram(final SubLObject glf_graph, final SubLObject stream) {
@@ -2822,142 +1766,6 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
         return glf_graph;
     }
 
-    public static final SubLObject xml_serialize_glf_graph_rendering_alt(SubLObject glf_graph, SubLObject stream) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject _prev_bind_0 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                SubLObject _prev_bind_1 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                try {
-                    xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                    xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                    xml_utilities.xml_start_tag_internal($$$glfRendering, NIL, NIL);
-                    if (NIL != glfgrph_has_rendering_infoP(glf_graph)) {
-                        {
-                            SubLObject rendering_info = glfgrph_rendering_info(glf_graph);
-                            if (NIL != glfgrph_has_nodesP(glf_graph)) {
-                                {
-                                    SubLObject _prev_bind_0_52 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                    SubLObject _prev_bind_1_53 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                    try {
-                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                        xml_utilities.xml_start_tag_internal($$$glfRenderNodes, NIL, NIL);
-                                        {
-                                            SubLObject cdolist_list_var = glfgrph_nodes(glf_graph);
-                                            SubLObject node = NIL;
-                                            for (node = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , node = cdolist_list_var.first()) {
-                                                {
-                                                    SubLObject rendering = dictionary.dictionary_lookup(rendering_info, glfnode_id(node), UNPROVIDED);
-                                                    {
-                                                        SubLObject _prev_bind_0_54 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                        SubLObject _prev_bind_1_55 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                                        try {
-                                                            xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                            xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                            xml_utilities.xml_start_tag_internal($$$glfRenderNode, NIL, NIL);
-                                                            {
-                                                                SubLObject _prev_bind_0_56 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                                SubLObject _prev_bind_1_57 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                                                try {
-                                                                    xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                                    xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                                    xml_utilities.xml_start_tag_internal($$$glfId, NIL, NIL);
-                                                                    cycml.cycml_serialize_term(glfnode_id(node));
-                                                                } finally {
-                                                                    xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_57, thread);
-                                                                    xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_56, thread);
-                                                                }
-                                                            }
-                                                            xml_utilities.xml_terpri();
-                                                            xml_utilities.xml_end_tag_internal($$$glfId);
-                                                            xml_serialize_glf_graph_rendering_info(rendering, stream);
-                                                        } finally {
-                                                            xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_55, thread);
-                                                            xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_54, thread);
-                                                        }
-                                                    }
-                                                    xml_utilities.xml_terpri();
-                                                    xml_utilities.xml_end_tag_internal($$$glfRenderNode);
-                                                }
-                                            }
-                                        }
-                                    } finally {
-                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_53, thread);
-                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_52, thread);
-                                    }
-                                }
-                                xml_utilities.xml_terpri();
-                                xml_utilities.xml_end_tag_internal($$$glfRenderNodes);
-                            }
-                            if (NIL != glfgrph_has_arcsP(glf_graph)) {
-                                {
-                                    SubLObject _prev_bind_0_58 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                    SubLObject _prev_bind_1_59 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                    try {
-                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                        xml_utilities.xml_start_tag_internal($$$glfRenderArcs, NIL, NIL);
-                                        {
-                                            SubLObject cdolist_list_var = glfgrph_arcs(glf_graph);
-                                            SubLObject arc = NIL;
-                                            for (arc = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , arc = cdolist_list_var.first()) {
-                                                {
-                                                    SubLObject _prev_bind_0_60 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                    SubLObject _prev_bind_1_61 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                                    try {
-                                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                        xml_utilities.xml_start_tag_internal($$$glfRenderArc, NIL, NIL);
-                                                        {
-                                                            SubLObject _prev_bind_0_62 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                            SubLObject _prev_bind_1_63 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                                            try {
-                                                                xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                                xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                                xml_utilities.xml_start_tag_internal($$$glfId, NIL, NIL);
-                                                                cycml.cycml_serialize_term(glfarc_id(arc));
-                                                            } finally {
-                                                                xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_63, thread);
-                                                                xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_62, thread);
-                                                            }
-                                                        }
-                                                        xml_utilities.xml_terpri();
-                                                        xml_utilities.xml_end_tag_internal($$$glfId);
-                                                        {
-                                                            SubLObject rendering = dictionary.dictionary_lookup(rendering_info, glfarc_id(arc), UNPROVIDED);
-                                                            xml_serialize_glf_graph_rendering_info(rendering, stream);
-                                                        }
-                                                    } finally {
-                                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_61, thread);
-                                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_60, thread);
-                                                    }
-                                                }
-                                                xml_utilities.xml_terpri();
-                                                xml_utilities.xml_end_tag_internal($$$glfRenderArc);
-                                            }
-                                        }
-                                    } finally {
-                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_59, thread);
-                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_58, thread);
-                                    }
-                                }
-                                xml_utilities.xml_terpri();
-                                xml_utilities.xml_end_tag_internal($$$glfRenderArcs);
-                            }
-                        }
-                    }
-                } finally {
-                    xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1, thread);
-                    xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0, thread);
-                }
-            }
-            xml_utilities.xml_terpri();
-            xml_utilities.xml_end_tag_internal($$$glfRendering);
-            return glf_graph;
-        }
-    }
-
     public static SubLObject xml_serialize_glf_graph_rendering(final SubLObject glf_graph, final SubLObject stream) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         try {
@@ -3193,88 +2001,6 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
         return glf_graph;
     }
 
-    static private final SubLList $list_alt2 = list(new SubLObject[]{ makeSymbol("ID"), makeSymbol("TYPES"), makeSymbol("AIS"), makeSymbol("NODES"), makeSymbol("NODE-TYPES"), makeSymbol("SOURCE-NODE"), makeSymbol("ARCS"), makeSymbol("ARC-TYPES"), makeSymbol("INCOMING-CONNECTORS"), makeSymbol("OUTGOING-CONNECTORS"), makeSymbol("INCOMING-CONNECTOR-TYPES"), makeSymbol("OUTGOING-CONNECTOR-TYPES"), makeSymbol("RENDERING-INFO") });
-
-    static private final SubLList $list_alt3 = list(new SubLObject[]{ makeKeyword("ID"), makeKeyword("TYPES"), makeKeyword("AIS"), makeKeyword("NODES"), makeKeyword("NODE-TYPES"), makeKeyword("SOURCE-NODE"), $ARCS, makeKeyword("ARC-TYPES"), makeKeyword("INCOMING-CONNECTORS"), makeKeyword("OUTGOING-CONNECTORS"), makeKeyword("INCOMING-CONNECTOR-TYPES"), makeKeyword("OUTGOING-CONNECTOR-TYPES"), makeKeyword("RENDERING-INFO") });
-
-    static private final SubLList $list_alt4 = list(new SubLObject[]{ makeSymbol("GLFGRPH-ID"), makeSymbol("GLFGRPH-TYPES"), makeSymbol("GLFGRPH-AIS"), makeSymbol("GLFGRPH-NODES"), makeSymbol("GLFGRPH-NODE-TYPES"), makeSymbol("GLFGRPH-SOURCE-NODE"), makeSymbol("GLFGRPH-ARCS"), makeSymbol("GLFGRPH-ARC-TYPES"), makeSymbol("GLFGRPH-INCOMING-CONNECTORS"), makeSymbol("GLFGRPH-OUTGOING-CONNECTORS"), makeSymbol("GLFGRPH-INCOMING-CONNECTOR-TYPES"), makeSymbol("GLFGRPH-OUTGOING-CONNECTOR-TYPES"), makeSymbol("GLFGRPH-RENDERING-INFO") });
-
-    static private final SubLList $list_alt5 = list(new SubLObject[]{ makeSymbol("_CSETF-GLFGRPH-ID"), makeSymbol("_CSETF-GLFGRPH-TYPES"), makeSymbol("_CSETF-GLFGRPH-AIS"), makeSymbol("_CSETF-GLFGRPH-NODES"), makeSymbol("_CSETF-GLFGRPH-NODE-TYPES"), makeSymbol("_CSETF-GLFGRPH-SOURCE-NODE"), makeSymbol("_CSETF-GLFGRPH-ARCS"), makeSymbol("_CSETF-GLFGRPH-ARC-TYPES"), makeSymbol("_CSETF-GLFGRPH-INCOMING-CONNECTORS"), makeSymbol("_CSETF-GLFGRPH-OUTGOING-CONNECTORS"), makeSymbol("_CSETF-GLFGRPH-INCOMING-CONNECTOR-TYPES"), makeSymbol("_CSETF-GLFGRPH-OUTGOING-CONNECTOR-TYPES"), makeSymbol("_CSETF-GLFGRPH-RENDERING-INFO") });
-
-    static private final SubLString $str_alt47$Invalid_slot__S_for_construction_ = makeString("Invalid slot ~S for construction function");
-
-    static private final SubLString $str_alt48$_GLF_Graph_ = makeString("<GLF-Graph ");
-
-    static private final SubLString $str_alt49$_of_types_ = makeString(" of types ");
-
-    static private final SubLString $str_alt50$_corresponding_AIS__ = makeString(" corresponding AIS: ");
-
-    static private final SubLString $str_alt51$_Types__ = makeString(" Types: ");
-
-    static private final SubLString $str_alt52$__Node_Types__ = makeString("  Node-Types: ");
-
-    static private final SubLString $str_alt53$__Arc_Types__ = makeString("  Arc-Types: ");
-
-    static private final SubLString $str_alt54$__In_Connectors__ = makeString("  In-Connectors: ");
-
-    static private final SubLString $str_alt55$__Out_Connectors__ = makeString("  Out-Connectors: ");
-
-    static private final SubLString $str_alt56$_no_information_available_ = makeString(" no information available ");
-
-    static private final SubLString $str_alt57$_Content__ = makeString(" Content: ");
-
-    static private final SubLString $str_alt58$__Nodes__first_is_source___ = makeString("  Nodes (first is source): ");
-
-    static private final SubLString $str_alt59$__Arcs__ = makeString("  Arcs: ");
-
-    static private final SubLString $str_alt60$_currently_empty_ = makeString(" currently empty ");
-
-    static private final SubLString $str_alt61$_Rendering_Information_ = makeString(" Rendering Information ");
-
-    static private final SubLString $str_alt62$__ = makeString("  ");
-
-    static private final SubLString $str_alt63$____ = makeString(" -> ");
-
-    static private final SubLString $str_alt64$__ = makeString("> ");
-
-    public static final SubLObject xml_serialize_glf_graph_rendering_info_alt(SubLObject rendering, SubLObject stream) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject _prev_bind_0 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                SubLObject _prev_bind_1 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                try {
-                    xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                    xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                    xml_utilities.xml_start_tag_internal($$$glfRenderInfo, NIL, NIL);
-                    if (NIL != glfrndr_label(rendering)) {
-                        {
-                            SubLObject _prev_bind_0_64 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                            SubLObject _prev_bind_1_65 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                            try {
-                                xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                xml_utilities.xml_start_tag_internal($$$glfRenderLabel, NIL, NIL);
-                                cycml.cycml_serialize_term(glfrndr_label(rendering));
-                            } finally {
-                                xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_65, thread);
-                                xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_64, thread);
-                            }
-                        }
-                        xml_utilities.xml_terpri();
-                        xml_utilities.xml_end_tag_internal($$$glfRenderLabel);
-                    }
-                } finally {
-                    xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1, thread);
-                    xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0, thread);
-                }
-            }
-            xml_utilities.xml_terpri();
-            xml_utilities.xml_end_tag_internal($$$glfRenderInfo);
-            return rendering;
-        }
-    }
-
     public static SubLObject xml_serialize_glf_graph_rendering_info(final SubLObject rendering, final SubLObject stream) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         try {
@@ -3339,187 +2065,6 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
             }
         }
         return rendering;
-    }
-
-    static private final SubLList $list_alt99 = list(reader_make_constant_shell("Graph-CW"));
-
-    static private final SubLList $list_alt101 = list(makeKeyword("AIS"));
-
-    static private final SubLList $list_alt112 = list(makeSymbol("ID"), makeSymbol("TYPES"), makeSymbol("PARENT"), makeSymbol("SEMANTICS"));
-
-    static private final SubLList $list_alt113 = list(makeKeyword("ID"), makeKeyword("TYPES"), makeKeyword("PARENT"), makeKeyword("SEMANTICS"));
-
-    static private final SubLList $list_alt114 = list(makeSymbol("GLFNODE-ID"), makeSymbol("GLFNODE-TYPES"), makeSymbol("GLFNODE-PARENT"), makeSymbol("GLFNODE-SEMANTICS"));
-
-    static private final SubLList $list_alt115 = list(makeSymbol("_CSETF-GLFNODE-ID"), makeSymbol("_CSETF-GLFNODE-TYPES"), makeSymbol("_CSETF-GLFNODE-PARENT"), makeSymbol("_CSETF-GLFNODE-SEMANTICS"));
-
-    static private final SubLString $str_alt128$_GLF_Node_ = makeString("<GLF-Node ");
-
-    static private final SubLString $str_alt129$_of_graph_ = makeString(" of graph ");
-
-    static private final SubLString $str_alt130$_with_semantics_ = makeString(" with semantics ");
-
-    static private final SubLString $str_alt131$_without_semantics_ = makeString(" without semantics ");
-
-    static private final SubLList $list_alt133 = list(makeKeyword("SEMANTICS"));
-
-    static private final SubLList $list_alt136 = list(makeSymbol("ID"), makeSymbol("TYPES"), makeSymbol("PARENT"), makeSymbol("FROM"), makeSymbol("TO"), makeSymbol("SEMANTICS"));
-
-    public static final SubLObject xml_serialize_glf_graph_flow_model_alt(SubLObject glf_graph, SubLObject stream) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject _prev_bind_0 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                SubLObject _prev_bind_1 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                try {
-                    xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                    xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                    xml_utilities.xml_start_tag_internal($$$glfFlowModel, NIL, NIL);
-                    if (NIL != glfgrph_has_nodesP(glf_graph)) {
-                        {
-                            SubLObject _prev_bind_0_66 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                            SubLObject _prev_bind_1_67 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                            try {
-                                xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                xml_utilities.xml_start_tag_internal($$$glfSemanticForNodes, NIL, NIL);
-                                {
-                                    SubLObject cdolist_list_var = glfgrph_nodes(glf_graph);
-                                    SubLObject node = NIL;
-                                    for (node = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , node = cdolist_list_var.first()) {
-                                        if (NIL != glfnode_semantics(node)) {
-                                            {
-                                                SubLObject _prev_bind_0_68 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                SubLObject _prev_bind_1_69 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                                try {
-                                                    xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                    xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                    xml_utilities.xml_start_tag_internal($$$glfSemanticForNode, NIL, NIL);
-                                                    {
-                                                        SubLObject _prev_bind_0_70 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                        SubLObject _prev_bind_1_71 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                                        try {
-                                                            xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                            xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                            xml_utilities.xml_start_tag_internal($$$glfId, NIL, NIL);
-                                                            cycml.cycml_serialize_term(glfnode_id(node));
-                                                        } finally {
-                                                            xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_71, thread);
-                                                            xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_70, thread);
-                                                        }
-                                                    }
-                                                    xml_utilities.xml_terpri();
-                                                    xml_utilities.xml_end_tag_internal($$$glfId);
-                                                    {
-                                                        SubLObject _prev_bind_0_72 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                        SubLObject _prev_bind_1_73 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                                        try {
-                                                            xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                            xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                            xml_utilities.xml_start_tag_internal($$$glfHasSemantic, NIL, NIL);
-                                                            cycml.cycml_serialize_term(glfnode_semantics(node));
-                                                        } finally {
-                                                            xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_73, thread);
-                                                            xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_72, thread);
-                                                        }
-                                                    }
-                                                    xml_utilities.xml_terpri();
-                                                    xml_utilities.xml_end_tag_internal($$$glfHasSemantic);
-                                                } finally {
-                                                    xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_69, thread);
-                                                    xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_68, thread);
-                                                }
-                                            }
-                                            xml_utilities.xml_terpri();
-                                            xml_utilities.xml_end_tag_internal($$$glfSemanticForNode);
-                                        }
-                                    }
-                                }
-                            } finally {
-                                xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_67, thread);
-                                xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_66, thread);
-                            }
-                        }
-                        xml_utilities.xml_terpri();
-                        xml_utilities.xml_end_tag_internal($$$glfSemanticForNodes);
-                    }
-                    if (NIL != glfgrph_has_arcsP(glf_graph)) {
-                        {
-                            SubLObject _prev_bind_0_74 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                            SubLObject _prev_bind_1_75 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                            try {
-                                xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                xml_utilities.xml_start_tag_internal($$$glfSemanticForArcs, NIL, NIL);
-                                {
-                                    SubLObject cdolist_list_var = glfgrph_arcs(glf_graph);
-                                    SubLObject arc = NIL;
-                                    for (arc = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , arc = cdolist_list_var.first()) {
-                                        if (NIL != glfarc_semantics(arc)) {
-                                            {
-                                                SubLObject _prev_bind_0_76 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                SubLObject _prev_bind_1_77 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                                try {
-                                                    xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                    xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                    xml_utilities.xml_start_tag_internal($$$glfSemanticForArc, NIL, NIL);
-                                                    {
-                                                        SubLObject _prev_bind_0_78 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                        SubLObject _prev_bind_1_79 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                                        try {
-                                                            xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                            xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                            xml_utilities.xml_start_tag_internal($$$glfId, NIL, NIL);
-                                                            cycml.cycml_serialize_term(glfarc_id(arc));
-                                                        } finally {
-                                                            xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_79, thread);
-                                                            xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_78, thread);
-                                                        }
-                                                    }
-                                                    xml_utilities.xml_terpri();
-                                                    xml_utilities.xml_end_tag_internal($$$glfId);
-                                                    {
-                                                        SubLObject _prev_bind_0_80 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                        SubLObject _prev_bind_1_81 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                                        try {
-                                                            xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                            xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                            xml_utilities.xml_start_tag_internal($$$glfHasSemantic, NIL, NIL);
-                                                            cycml.cycml_serialize_term(glfarc_semantics(arc));
-                                                        } finally {
-                                                            xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_81, thread);
-                                                            xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_80, thread);
-                                                        }
-                                                    }
-                                                    xml_utilities.xml_terpri();
-                                                    xml_utilities.xml_end_tag_internal($$$glfHasSemantic);
-                                                } finally {
-                                                    xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_77, thread);
-                                                    xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_76, thread);
-                                                }
-                                            }
-                                            xml_utilities.xml_terpri();
-                                            xml_utilities.xml_end_tag_internal($$$glfSemanticForArc);
-                                        }
-                                    }
-                                }
-                            } finally {
-                                xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_75, thread);
-                                xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_74, thread);
-                            }
-                        }
-                        xml_utilities.xml_terpri();
-                        xml_utilities.xml_end_tag_internal($$$glfSemanticForArcs);
-                    }
-                } finally {
-                    xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1, thread);
-                    xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0, thread);
-                }
-            }
-            xml_utilities.xml_terpri();
-            xml_utilities.xml_end_tag_internal($$$glfFlowModel);
-            return glf_graph;
-        }
     }
 
     public static SubLObject xml_serialize_glf_graph_flow_model(final SubLObject glf_graph, final SubLObject stream) {
@@ -3814,63 +2359,10 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
         return glf_graph;
     }
 
-    static private final SubLList $list_alt137 = list(makeKeyword("ID"), makeKeyword("TYPES"), makeKeyword("PARENT"), $FROM, makeKeyword("TO"), makeKeyword("SEMANTICS"));
-
-    static private final SubLList $list_alt138 = list(makeSymbol("GLFARC-ID"), makeSymbol("GLFARC-TYPES"), makeSymbol("GLFARC-PARENT"), makeSymbol("GLFARC-FROM"), makeSymbol("GLFARC-TO"), makeSymbol("GLFARC-SEMANTICS"));
-
-    static private final SubLList $list_alt139 = list(makeSymbol("_CSETF-GLFARC-ID"), makeSymbol("_CSETF-GLFARC-TYPES"), makeSymbol("_CSETF-GLFARC-PARENT"), makeSymbol("_CSETF-GLFARC-FROM"), makeSymbol("_CSETF-GLFARC-TO"), makeSymbol("_CSETF-GLFARC-SEMANTICS"));
-
-    static private final SubLString $str_alt156$_GLF_Arc_ = makeString("<GLF-Arc ");
-
-    static private final SubLString $str_alt157$_from__ = makeString(" from: ");
-
-    static private final SubLString $str_alt158$_to____ = makeString(" to:   ");
-
-    static private final SubLString $str_alt159$_meaning__ = makeString(" meaning: ");
-
-    public static final SubLObject $const160$variableMappingTableForGLFArcInDi = reader_make_constant_shell("variableMappingTableForGLFArcInDiagram");
-
-    static private final SubLList $list_alt162 = list(makeSymbol("?FROM"), makeSymbol("?TO"));
-
-    static private final SubLSymbol $sym164$_FROM = makeSymbol("?FROM");
-
-    static private final SubLSymbol $sym165$_TO = makeSymbol("?TO");
-
-    static private final SubLList $list_alt166 = list(makeSymbol("SOURCE"), makeSymbol("TARGET"));
-
-    static private final SubLList $list_alt169 = list(makeSymbol("LABEL"));
-
-    static private final SubLList $list_alt170 = list(makeKeyword("LABEL"));
-
-    static private final SubLList $list_alt171 = list(makeSymbol("GLFRNDR-LABEL"));
-
-    static private final SubLList $list_alt172 = list(makeSymbol("_CSETF-GLFRNDR-LABEL"));
-
-    static private final SubLString $str_alt178$__GLF_Rendering_ = makeString("#<GLF-Rendering ");
-
-    static private final SubLString $str_alt179$_label__ = makeString(" label: ");
-
-    public static final SubLObject get_graph_defining_mt_alt(SubLObject graph_id) {
-        {
-            SubLObject assertion = kb_indexing.find_gaf_any_mt(listS($$isa, graph_id, $list_alt99));
-            SubLObject mt = assertions_high.assertion_mt(assertion);
-            return mt;
-        }
-    }
-
     public static SubLObject get_graph_defining_mt(final SubLObject graph_id) {
         final SubLObject assertion = kb_indexing.find_gaf_any_mt(listS($$isa, graph_id, $list106));
         final SubLObject mt = assertions_high.assertion_mt(assertion);
         return mt;
-    }
-
-    public static final SubLObject load_glf_graph_from_kb_alt(SubLObject graph_id, SubLObject mt) {
-        {
-            SubLObject v_graph = create_glf_graph_from_kb(graph_id, mt);
-            load_all_glf_nodes_from_kb(v_graph, mt);
-            load_all_glf_arcs_from_kb(v_graph, mt);
-            return v_graph;
-        }
     }
 
     public static SubLObject load_glf_graph_from_kb(final SubLObject graph_id, final SubLObject mt) {
@@ -3880,29 +2372,8 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
         return v_graph;
     }
 
-    public static final SubLObject map_glf_graph_to_ais_alt(SubLObject graph_id, SubLObject mt) {
-        return ask_utilities.ask_variable($AIS, listS($$correspondingAIS, graph_id, $list_alt101), mt, ZERO_INTEGER, ONE_INTEGER, UNPROVIDED, UNPROVIDED).first();
-    }
-
     public static SubLObject map_glf_graph_to_ais(final SubLObject graph_id, final SubLObject mt) {
         return ask_utilities.ask_variable($AIS, listS($$correspondingAIS, graph_id, $list108), mt, ZERO_INTEGER, ONE_INTEGER, UNPROVIDED, UNPROVIDED).first();
-    }
-
-    public static final SubLObject create_glf_graph_from_kb_alt(SubLObject graph_id, SubLObject mt) {
-        {
-            SubLObject v_graph = make_glf_graph(UNPROVIDED);
-            _csetf_glfgrph_id(v_graph, graph_id);
-            _csetf_glfgrph_types(v_graph, isa.min_isa(graph_id, mt, UNPROVIDED));
-            _csetf_glfgrph_ais(v_graph, map_glf_graph_to_ais(graph_id, mt));
-            _csetf_glfgrph_node_types(v_graph, set.new_set(symbol_function(EQUAL), UNPROVIDED));
-            initialize_glfgrph_node_types(v_graph, mt);
-            _csetf_glfgrph_arc_types(v_graph, set.new_set(symbol_function(EQUAL), UNPROVIDED));
-            initialize_glfgrph_arc_types(v_graph, mt);
-            _csetf_glfgrph_incoming_connector_types(v_graph, set.new_set(symbol_function(EQUAL), UNPROVIDED));
-            _csetf_glfgrph_outgoing_connector_types(v_graph, set.new_set(symbol_function(EQUAL), UNPROVIDED));
-            _csetf_glfgrph_rendering_info(v_graph, dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED));
-            return v_graph;
-        }
     }
 
     public static SubLObject create_glf_graph_from_kb(final SubLObject graph_id, final SubLObject mt) {
@@ -3920,25 +2391,6 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
         return v_graph;
     }
 
-    /**
-     * more should be coming from the KB here
-     */
-    @LispMethod(comment = "more should be coming from the KB here")
-    public static final SubLObject initialize_glfgrph_node_types_alt(SubLObject v_graph, SubLObject mt) {
-        {
-            SubLObject cdolist_list_var = genls.collection_leaves($$GLFNode, mt, UNPROVIDED);
-            SubLObject spec = NIL;
-            for (spec = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , spec = cdolist_list_var.first()) {
-                note_glf_graph_node_type(v_graph, spec);
-            }
-        }
-        return v_graph;
-    }
-
-    /**
-     * more should be coming from the KB here
-     */
-    @LispMethod(comment = "more should be coming from the KB here")
     public static SubLObject initialize_glfgrph_node_types(final SubLObject v_graph, final SubLObject mt) {
         SubLObject cdolist_list_var = genls.collection_leaves($$GLFNode, mt, UNPROVIDED);
         SubLObject spec = NIL;
@@ -3951,35 +2403,11 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
         return v_graph;
     }
 
-    public static final SubLObject note_glf_graph_node_type_alt(SubLObject v_graph, SubLObject node_type) {
-        set.set_add(node_type, glfgrph_node_types(v_graph));
-        return v_graph;
-    }
-
     public static SubLObject note_glf_graph_node_type(final SubLObject v_graph, final SubLObject node_type) {
         set.set_add(node_type, glfgrph_node_types(v_graph));
         return v_graph;
     }
 
-    /**
-     * more should be coming from the KB here
-     */
-    @LispMethod(comment = "more should be coming from the KB here")
-    public static final SubLObject initialize_glfgrph_arc_types_alt(SubLObject v_graph, SubLObject mt) {
-        {
-            SubLObject cdolist_list_var = genls.collection_leaves($$GLFArc, mt, UNPROVIDED);
-            SubLObject spec = NIL;
-            for (spec = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , spec = cdolist_list_var.first()) {
-                note_glf_graph_arc_type(v_graph, spec);
-            }
-        }
-        return v_graph;
-    }
-
-    /**
-     * more should be coming from the KB here
-     */
-    @LispMethod(comment = "more should be coming from the KB here")
     public static SubLObject initialize_glfgrph_arc_types(final SubLObject v_graph, final SubLObject mt) {
         SubLObject cdolist_list_var = genls.collection_leaves($$GLFArc, mt, UNPROVIDED);
         SubLObject spec = NIL;
@@ -3992,32 +2420,8 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
         return v_graph;
     }
 
-    public static final SubLObject note_glf_graph_arc_type_alt(SubLObject v_graph, SubLObject arc_type) {
-        set.set_add(arc_type, glfgrph_arc_types(v_graph));
-        return v_graph;
-    }
-
     public static SubLObject note_glf_graph_arc_type(final SubLObject v_graph, final SubLObject arc_type) {
         set.set_add(arc_type, glfgrph_arc_types(v_graph));
-        return v_graph;
-    }
-
-    public static final SubLObject load_all_glf_nodes_from_kb_alt(SubLObject v_graph, SubLObject mt) {
-        {
-            SubLObject ais = glfgrph_ais(v_graph);
-            SubLObject nodes = ask_utilities.ask_variable($NODE, list($$nodeInSystem, $NODE, ais), mt, ZERO_INTEGER, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            SubLObject source_node = ask_utilities.ask_variable($SOURCE, list($$sourceNodeInSystem, $SOURCE, ais), mt, ZERO_INTEGER, ONE_INTEGER, UNPROVIDED, UNPROVIDED).first();
-            SubLObject cdolist_list_var = nodes;
-            SubLObject node_id = NIL;
-            for (node_id = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , node_id = cdolist_list_var.first()) {
-                {
-                    SubLObject node = load_one_glf_node_from_kb(v_graph, node_id, mt);
-                    if (node_id == source_node) {
-                        _csetf_glfgrph_source_node(v_graph, node);
-                    }
-                }
-            }
-        }
         return v_graph;
     }
 
@@ -4039,21 +2443,6 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
         return v_graph;
     }
 
-    public static final SubLObject load_one_glf_node_from_kb_alt(SubLObject v_graph, SubLObject node_id, SubLObject mt) {
-        {
-            SubLObject node = create_glf_node_from_kb(v_graph, node_id, mt);
-            SubLObject rendering = create_glf_rendering_for_component_from_kb(v_graph, node_id, mt);
-            SubLObject cdolist_list_var = glfnode_types(node);
-            SubLObject type = NIL;
-            for (type = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , type = cdolist_list_var.first()) {
-                note_glf_graph_node_type(v_graph, type);
-            }
-            _csetf_glfgrph_nodes(v_graph, cons(node, glfgrph_nodes(v_graph)));
-            dictionary.dictionary_enter(glfgrph_rendering_info(v_graph), node_id, rendering);
-            return node;
-        }
-    }
-
     public static SubLObject load_one_glf_node_from_kb(final SubLObject v_graph, final SubLObject node_id, final SubLObject mt) {
         final SubLObject node = create_glf_node_from_kb(v_graph, node_id, mt);
         final SubLObject rendering = create_glf_rendering_for_component_from_kb(v_graph, node_id, mt);
@@ -4070,19 +2459,6 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
         return node;
     }
 
-    public static final SubLObject load_all_glf_arcs_from_kb_alt(SubLObject v_graph, SubLObject mt) {
-        {
-            SubLObject ais = glfgrph_ais(v_graph);
-            SubLObject arcs = ask_utilities.ask_variable($ARC, list($$linkInSystem, $ARC, ais), mt, ZERO_INTEGER, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            SubLObject cdolist_list_var = arcs;
-            SubLObject arc = NIL;
-            for (arc = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , arc = cdolist_list_var.first()) {
-                load_one_glf_arc_from_kb(v_graph, arc, mt);
-            }
-        }
-        return v_graph;
-    }
-
     public static SubLObject load_all_glf_arcs_from_kb(final SubLObject v_graph, final SubLObject mt) {
         final SubLObject ais = glfgrph_ais(v_graph);
         SubLObject cdolist_list_var;
@@ -4095,21 +2471,6 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
             arc = cdolist_list_var.first();
         } 
         return v_graph;
-    }
-
-    public static final SubLObject load_one_glf_arc_from_kb_alt(SubLObject v_graph, SubLObject arc_id, SubLObject mt) {
-        {
-            SubLObject arc = create_glf_arc_from_kb(v_graph, arc_id, mt);
-            SubLObject rendering = create_glf_rendering_for_component_from_kb(v_graph, arc_id, mt);
-            SubLObject cdolist_list_var = glfarc_types(arc);
-            SubLObject type = NIL;
-            for (type = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , type = cdolist_list_var.first()) {
-                note_glf_graph_arc_type(v_graph, type);
-            }
-            _csetf_glfgrph_arcs(v_graph, cons(arc, glfgrph_arcs(v_graph)));
-            dictionary.dictionary_enter(glfgrph_rendering_info(v_graph), arc_id, rendering);
-            return arc;
-        }
     }
 
     public static SubLObject load_one_glf_arc_from_kb(final SubLObject v_graph, final SubLObject arc_id, final SubLObject mt) {
@@ -4128,144 +2489,60 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
         return arc;
     }
 
-    public static final SubLObject glf_node_print_function_trampoline_alt(SubLObject v_object, SubLObject stream) {
-        glfnode_print(v_object, stream, ZERO_INTEGER);
-        return NIL;
-    }
-
     public static SubLObject glf_node_print_function_trampoline(final SubLObject v_object, final SubLObject stream) {
         glfnode_print(v_object, stream, ZERO_INTEGER);
         return NIL;
     }
 
-    public static final SubLObject glf_node_p_alt(SubLObject v_object) {
-        return v_object.getClass() == com.cyc.cycjava.cycl.graphic_library_format.$glf_node_native.class ? ((SubLObject) (T)) : NIL;
-    }
-
     public static SubLObject glf_node_p(final SubLObject v_object) {
-        return v_object.getClass() == com.cyc.cycjava.cycl.graphic_library_format.$glf_node_native.class ? T : NIL;
-    }
-
-    public static final SubLObject glfnode_id_alt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, GLF_NODE_P);
-        return v_object.getField2();
+        return v_object.getClass() == $glf_node_native.class ? T : NIL;
     }
 
     public static SubLObject glfnode_id(final SubLObject v_object) {
-        assert NIL != glf_node_p(v_object) : "! graphic_library_format.glf_node_p(v_object) " + "graphic_library_format.glf_node_p error :" + v_object;
+        assert NIL != glf_node_p(v_object) : "graphic_library_format.glf_node_p error :" + v_object;
         return v_object.getField2();
     }
 
-    public static final SubLObject glfnode_types_alt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, GLF_NODE_P);
-        return v_object.getField3();
-    }
-
     public static SubLObject glfnode_types(final SubLObject v_object) {
-        assert NIL != glf_node_p(v_object) : "! graphic_library_format.glf_node_p(v_object) " + "graphic_library_format.glf_node_p error :" + v_object;
+        assert NIL != glf_node_p(v_object) : "graphic_library_format.glf_node_p error :" + v_object;
         return v_object.getField3();
-    }
-
-    public static final SubLObject glfnode_parent_alt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, GLF_NODE_P);
-        return v_object.getField4();
     }
 
     public static SubLObject glfnode_parent(final SubLObject v_object) {
-        assert NIL != glf_node_p(v_object) : "! graphic_library_format.glf_node_p(v_object) " + "graphic_library_format.glf_node_p error :" + v_object;
+        assert NIL != glf_node_p(v_object) : "graphic_library_format.glf_node_p error :" + v_object;
         return v_object.getField4();
     }
 
-    public static final SubLObject glfnode_semantics_alt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, GLF_NODE_P);
-        return v_object.getField5();
-    }
-
     public static SubLObject glfnode_semantics(final SubLObject v_object) {
-        assert NIL != glf_node_p(v_object) : "! graphic_library_format.glf_node_p(v_object) " + "graphic_library_format.glf_node_p error :" + v_object;
+        assert NIL != glf_node_p(v_object) : "graphic_library_format.glf_node_p error :" + v_object;
         return v_object.getField5();
-    }
-
-    public static final SubLObject _csetf_glfnode_id_alt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, GLF_NODE_P);
-        return v_object.setField2(value);
     }
 
     public static SubLObject _csetf_glfnode_id(final SubLObject v_object, final SubLObject value) {
-        assert NIL != glf_node_p(v_object) : "! graphic_library_format.glf_node_p(v_object) " + "graphic_library_format.glf_node_p error :" + v_object;
+        assert NIL != glf_node_p(v_object) : "graphic_library_format.glf_node_p error :" + v_object;
         return v_object.setField2(value);
     }
 
-    public static final SubLObject _csetf_glfnode_types_alt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, GLF_NODE_P);
-        return v_object.setField3(value);
-    }
-
     public static SubLObject _csetf_glfnode_types(final SubLObject v_object, final SubLObject value) {
-        assert NIL != glf_node_p(v_object) : "! graphic_library_format.glf_node_p(v_object) " + "graphic_library_format.glf_node_p error :" + v_object;
+        assert NIL != glf_node_p(v_object) : "graphic_library_format.glf_node_p error :" + v_object;
         return v_object.setField3(value);
-    }
-
-    public static final SubLObject _csetf_glfnode_parent_alt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, GLF_NODE_P);
-        return v_object.setField4(value);
     }
 
     public static SubLObject _csetf_glfnode_parent(final SubLObject v_object, final SubLObject value) {
-        assert NIL != glf_node_p(v_object) : "! graphic_library_format.glf_node_p(v_object) " + "graphic_library_format.glf_node_p error :" + v_object;
+        assert NIL != glf_node_p(v_object) : "graphic_library_format.glf_node_p error :" + v_object;
         return v_object.setField4(value);
     }
 
-    public static final SubLObject _csetf_glfnode_semantics_alt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, GLF_NODE_P);
-        return v_object.setField5(value);
-    }
-
     public static SubLObject _csetf_glfnode_semantics(final SubLObject v_object, final SubLObject value) {
-        assert NIL != glf_node_p(v_object) : "! graphic_library_format.glf_node_p(v_object) " + "graphic_library_format.glf_node_p error :" + v_object;
+        assert NIL != glf_node_p(v_object) : "graphic_library_format.glf_node_p error :" + v_object;
         return v_object.setField5(value);
-    }
-
-    public static final SubLObject make_glf_node_alt(SubLObject arglist) {
-        if (arglist == UNPROVIDED) {
-            arglist = NIL;
-        }
-        {
-            SubLObject v_new = new com.cyc.cycjava.cycl.graphic_library_format.$glf_node_native();
-            SubLObject next = NIL;
-            for (next = arglist; NIL != next; next = cddr(next)) {
-                {
-                    SubLObject current_arg = next.first();
-                    SubLObject current_value = cadr(next);
-                    SubLObject pcase_var = current_arg;
-                    if (pcase_var.eql($ID)) {
-                        _csetf_glfnode_id(v_new, current_value);
-                    } else {
-                        if (pcase_var.eql($TYPES)) {
-                            _csetf_glfnode_types(v_new, current_value);
-                        } else {
-                            if (pcase_var.eql($PARENT)) {
-                                _csetf_glfnode_parent(v_new, current_value);
-                            } else {
-                                if (pcase_var.eql($SEMANTICS)) {
-                                    _csetf_glfnode_semantics(v_new, current_value);
-                                } else {
-                                    Errors.error($str_alt47$Invalid_slot__S_for_construction_, current_arg);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return v_new;
-        }
     }
 
     public static SubLObject make_glf_node(SubLObject arglist) {
         if (arglist == UNPROVIDED) {
             arglist = NIL;
         }
-        final SubLObject v_new = new com.cyc.cycjava.cycl.graphic_library_format.$glf_node_native();
+        final SubLObject v_new = new $glf_node_native();
         SubLObject next;
         SubLObject current_arg;
         SubLObject current_value;
@@ -4309,28 +2586,6 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
         return visit_defstruct_glf_node(obj, visitor_fn);
     }
 
-    public static final SubLObject glfnode_print_alt(SubLObject v_object, SubLObject stream, SubLObject depth) {
-        string_utilities.indent(stream, depth);
-        write_string($str_alt128$_GLF_Node_, stream, UNPROVIDED, UNPROVIDED);
-        prin1(glfnode_id(v_object), stream);
-        write_string($str_alt49$_of_types_, stream, UNPROVIDED, UNPROVIDED);
-        prin1(glfnode_types(v_object), stream);
-        terpri(stream);
-        string_utilities.indent(stream, depth);
-        write_string($str_alt129$_of_graph_, stream, UNPROVIDED, UNPROVIDED);
-        prin1(glfgrph_id(glfnode_parent(v_object)), stream);
-        terpri(stream);
-        string_utilities.indent(stream, depth);
-        if (NIL != glfnode_semantics(v_object)) {
-            write_string($str_alt130$_with_semantics_, stream, UNPROVIDED, UNPROVIDED);
-            prin1(glfnode_semantics(v_object), stream);
-        } else {
-            write_string($str_alt131$_without_semantics_, stream, UNPROVIDED, UNPROVIDED);
-        }
-        write_string($str_alt64$__, stream, UNPROVIDED, UNPROVIDED);
-        return v_object;
-    }
-
     public static SubLObject glfnode_print(final SubLObject v_object, final SubLObject stream, final SubLObject depth) {
         string_utilities.indent(stream, depth);
         write_string($str138$_GLF_Node_, stream, UNPROVIDED, UNPROVIDED);
@@ -4353,17 +2608,6 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
         return v_object;
     }
 
-    public static final SubLObject create_glf_node_from_kb_alt(SubLObject glf_graph, SubLObject node_id, SubLObject mt) {
-        {
-            SubLObject node = make_glf_node(UNPROVIDED);
-            _csetf_glfnode_id(node, node_id);
-            _csetf_glfnode_parent(node, glf_graph);
-            _csetf_glfnode_types(node, isa.min_isa(node_id, mt, UNPROVIDED));
-            _csetf_glfnode_semantics(node, ask_utilities.ask_variable($SEMANTICS, listS($$glfNodeSemantics_Underspecified, node_id, $list_alt133), mt, ZERO_INTEGER, ONE_INTEGER, UNPROVIDED, UNPROVIDED).first());
-            return node;
-        }
-    }
-
     public static SubLObject create_glf_node_from_kb(final SubLObject glf_graph, final SubLObject node_id, final SubLObject mt) {
         final SubLObject node = make_glf_node(UNPROVIDED);
         _csetf_glfnode_id(node, node_id);
@@ -4373,192 +2617,80 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
         return node;
     }
 
-    public static final SubLObject glf_arc_print_function_trampoline_alt(SubLObject v_object, SubLObject stream) {
-        glfarc_print(v_object, stream, ZERO_INTEGER);
-        return NIL;
-    }
-
     public static SubLObject glf_arc_print_function_trampoline(final SubLObject v_object, final SubLObject stream) {
         glfarc_print(v_object, stream, ZERO_INTEGER);
         return NIL;
     }
 
-    public static final SubLObject glf_arc_p_alt(SubLObject v_object) {
-        return v_object.getClass() == com.cyc.cycjava.cycl.graphic_library_format.$glf_arc_native.class ? ((SubLObject) (T)) : NIL;
-    }
-
     public static SubLObject glf_arc_p(final SubLObject v_object) {
-        return v_object.getClass() == com.cyc.cycjava.cycl.graphic_library_format.$glf_arc_native.class ? T : NIL;
-    }
-
-    public static final SubLObject glfarc_id_alt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, GLF_ARC_P);
-        return v_object.getField2();
+        return v_object.getClass() == $glf_arc_native.class ? T : NIL;
     }
 
     public static SubLObject glfarc_id(final SubLObject v_object) {
-        assert NIL != glf_arc_p(v_object) : "! graphic_library_format.glf_arc_p(v_object) " + "graphic_library_format.glf_arc_p error :" + v_object;
+        assert NIL != glf_arc_p(v_object) : "graphic_library_format.glf_arc_p error :" + v_object;
         return v_object.getField2();
     }
 
-    public static final SubLObject glfarc_types_alt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, GLF_ARC_P);
-        return v_object.getField3();
-    }
-
     public static SubLObject glfarc_types(final SubLObject v_object) {
-        assert NIL != glf_arc_p(v_object) : "! graphic_library_format.glf_arc_p(v_object) " + "graphic_library_format.glf_arc_p error :" + v_object;
+        assert NIL != glf_arc_p(v_object) : "graphic_library_format.glf_arc_p error :" + v_object;
         return v_object.getField3();
-    }
-
-    public static final SubLObject glfarc_parent_alt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, GLF_ARC_P);
-        return v_object.getField4();
     }
 
     public static SubLObject glfarc_parent(final SubLObject v_object) {
-        assert NIL != glf_arc_p(v_object) : "! graphic_library_format.glf_arc_p(v_object) " + "graphic_library_format.glf_arc_p error :" + v_object;
+        assert NIL != glf_arc_p(v_object) : "graphic_library_format.glf_arc_p error :" + v_object;
         return v_object.getField4();
     }
 
-    public static final SubLObject glfarc_from_alt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, GLF_ARC_P);
-        return v_object.getField5();
-    }
-
     public static SubLObject glfarc_from(final SubLObject v_object) {
-        assert NIL != glf_arc_p(v_object) : "! graphic_library_format.glf_arc_p(v_object) " + "graphic_library_format.glf_arc_p error :" + v_object;
+        assert NIL != glf_arc_p(v_object) : "graphic_library_format.glf_arc_p error :" + v_object;
         return v_object.getField5();
-    }
-
-    public static final SubLObject glfarc_to_alt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, GLF_ARC_P);
-        return v_object.getField6();
     }
 
     public static SubLObject glfarc_to(final SubLObject v_object) {
-        assert NIL != glf_arc_p(v_object) : "! graphic_library_format.glf_arc_p(v_object) " + "graphic_library_format.glf_arc_p error :" + v_object;
+        assert NIL != glf_arc_p(v_object) : "graphic_library_format.glf_arc_p error :" + v_object;
         return v_object.getField6();
     }
 
-    public static final SubLObject glfarc_semantics_alt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, GLF_ARC_P);
-        return v_object.getField7();
-    }
-
     public static SubLObject glfarc_semantics(final SubLObject v_object) {
-        assert NIL != glf_arc_p(v_object) : "! graphic_library_format.glf_arc_p(v_object) " + "graphic_library_format.glf_arc_p error :" + v_object;
+        assert NIL != glf_arc_p(v_object) : "graphic_library_format.glf_arc_p error :" + v_object;
         return v_object.getField7();
-    }
-
-    public static final SubLObject _csetf_glfarc_id_alt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, GLF_ARC_P);
-        return v_object.setField2(value);
     }
 
     public static SubLObject _csetf_glfarc_id(final SubLObject v_object, final SubLObject value) {
-        assert NIL != glf_arc_p(v_object) : "! graphic_library_format.glf_arc_p(v_object) " + "graphic_library_format.glf_arc_p error :" + v_object;
+        assert NIL != glf_arc_p(v_object) : "graphic_library_format.glf_arc_p error :" + v_object;
         return v_object.setField2(value);
     }
 
-    public static final SubLObject _csetf_glfarc_types_alt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, GLF_ARC_P);
-        return v_object.setField3(value);
-    }
-
     public static SubLObject _csetf_glfarc_types(final SubLObject v_object, final SubLObject value) {
-        assert NIL != glf_arc_p(v_object) : "! graphic_library_format.glf_arc_p(v_object) " + "graphic_library_format.glf_arc_p error :" + v_object;
+        assert NIL != glf_arc_p(v_object) : "graphic_library_format.glf_arc_p error :" + v_object;
         return v_object.setField3(value);
-    }
-
-    public static final SubLObject _csetf_glfarc_parent_alt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, GLF_ARC_P);
-        return v_object.setField4(value);
     }
 
     public static SubLObject _csetf_glfarc_parent(final SubLObject v_object, final SubLObject value) {
-        assert NIL != glf_arc_p(v_object) : "! graphic_library_format.glf_arc_p(v_object) " + "graphic_library_format.glf_arc_p error :" + v_object;
+        assert NIL != glf_arc_p(v_object) : "graphic_library_format.glf_arc_p error :" + v_object;
         return v_object.setField4(value);
     }
 
-    public static final SubLObject _csetf_glfarc_from_alt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, GLF_ARC_P);
-        return v_object.setField5(value);
-    }
-
     public static SubLObject _csetf_glfarc_from(final SubLObject v_object, final SubLObject value) {
-        assert NIL != glf_arc_p(v_object) : "! graphic_library_format.glf_arc_p(v_object) " + "graphic_library_format.glf_arc_p error :" + v_object;
+        assert NIL != glf_arc_p(v_object) : "graphic_library_format.glf_arc_p error :" + v_object;
         return v_object.setField5(value);
-    }
-
-    public static final SubLObject _csetf_glfarc_to_alt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, GLF_ARC_P);
-        return v_object.setField6(value);
     }
 
     public static SubLObject _csetf_glfarc_to(final SubLObject v_object, final SubLObject value) {
-        assert NIL != glf_arc_p(v_object) : "! graphic_library_format.glf_arc_p(v_object) " + "graphic_library_format.glf_arc_p error :" + v_object;
+        assert NIL != glf_arc_p(v_object) : "graphic_library_format.glf_arc_p error :" + v_object;
         return v_object.setField6(value);
     }
 
-    public static final SubLObject _csetf_glfarc_semantics_alt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, GLF_ARC_P);
-        return v_object.setField7(value);
-    }
-
     public static SubLObject _csetf_glfarc_semantics(final SubLObject v_object, final SubLObject value) {
-        assert NIL != glf_arc_p(v_object) : "! graphic_library_format.glf_arc_p(v_object) " + "graphic_library_format.glf_arc_p error :" + v_object;
+        assert NIL != glf_arc_p(v_object) : "graphic_library_format.glf_arc_p error :" + v_object;
         return v_object.setField7(value);
-    }
-
-    public static final SubLObject make_glf_arc_alt(SubLObject arglist) {
-        if (arglist == UNPROVIDED) {
-            arglist = NIL;
-        }
-        {
-            SubLObject v_new = new com.cyc.cycjava.cycl.graphic_library_format.$glf_arc_native();
-            SubLObject next = NIL;
-            for (next = arglist; NIL != next; next = cddr(next)) {
-                {
-                    SubLObject current_arg = next.first();
-                    SubLObject current_value = cadr(next);
-                    SubLObject pcase_var = current_arg;
-                    if (pcase_var.eql($ID)) {
-                        _csetf_glfarc_id(v_new, current_value);
-                    } else {
-                        if (pcase_var.eql($TYPES)) {
-                            _csetf_glfarc_types(v_new, current_value);
-                        } else {
-                            if (pcase_var.eql($PARENT)) {
-                                _csetf_glfarc_parent(v_new, current_value);
-                            } else {
-                                if (pcase_var.eql($FROM)) {
-                                    _csetf_glfarc_from(v_new, current_value);
-                                } else {
-                                    if (pcase_var.eql($TO)) {
-                                        _csetf_glfarc_to(v_new, current_value);
-                                    } else {
-                                        if (pcase_var.eql($SEMANTICS)) {
-                                            _csetf_glfarc_semantics(v_new, current_value);
-                                        } else {
-                                            Errors.error($str_alt47$Invalid_slot__S_for_construction_, current_arg);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return v_new;
-        }
     }
 
     public static SubLObject make_glf_arc(SubLObject arglist) {
         if (arglist == UNPROVIDED) {
             arglist = NIL;
         }
-        final SubLObject v_new = new com.cyc.cycjava.cycl.graphic_library_format.$glf_arc_native();
+        final SubLObject v_new = new $glf_arc_native();
         SubLObject next;
         SubLObject current_arg;
         SubLObject current_value;
@@ -4612,38 +2744,6 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
         return visit_defstruct_glf_arc(obj, visitor_fn);
     }
 
-    public static final SubLObject glfarc_print_alt(SubLObject v_object, SubLObject stream, SubLObject depth) {
-        string_utilities.indent(stream, depth);
-        write_string($str_alt156$_GLF_Arc_, stream, UNPROVIDED, UNPROVIDED);
-        prin1(glfarc_id(v_object), stream);
-        write_string($str_alt49$_of_types_, stream, UNPROVIDED, UNPROVIDED);
-        prin1(glfarc_types(v_object), stream);
-        terpri(stream);
-        string_utilities.indent(stream, depth);
-        write_string($str_alt129$_of_graph_, stream, UNPROVIDED, UNPROVIDED);
-        prin1(glfgrph_id(glfarc_parent(v_object)), stream);
-        if (set.set_size(glfarc_from(v_object)).isPositive()) {
-            terpri(stream);
-            string_utilities.indent(stream, depth);
-            write_string($str_alt157$_from__, stream, UNPROVIDED, UNPROVIDED);
-            prin1(set.set_element_list(glfarc_from(v_object)), stream);
-        }
-        if (set.set_size(glfarc_to(v_object)).isPositive()) {
-            terpri(stream);
-            string_utilities.indent(stream, depth);
-            write_string($str_alt158$_to____, stream, UNPROVIDED, UNPROVIDED);
-            prin1(set.set_element_list(glfarc_to(v_object)), stream);
-        }
-        if (NIL != glfarc_semantics(v_object)) {
-            terpri(stream);
-            string_utilities.indent(stream, depth);
-            write_string($str_alt159$_meaning__, stream, UNPROVIDED, UNPROVIDED);
-            prin1(glfarc_semantics(v_object), stream);
-        }
-        write_string($str_alt64$__, stream, UNPROVIDED, UNPROVIDED);
-        return v_object;
-    }
-
     public static SubLObject glfarc_print(final SubLObject v_object, final SubLObject stream, final SubLObject depth) {
         string_utilities.indent(stream, depth);
         write_string($str169$_GLF_Arc_, stream, UNPROVIDED, UNPROVIDED);
@@ -4674,48 +2774,6 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
         }
         write_string($str70$__, stream, UNPROVIDED, UNPROVIDED);
         return v_object;
-    }
-
-    public static final SubLObject create_glf_arc_from_kb_alt(SubLObject glf_graph, SubLObject arc_id, SubLObject mt) {
-        {
-            SubLObject arc = make_glf_arc(UNPROVIDED);
-            SubLObject graph_id = glfgrph_id(glf_graph);
-            SubLObject ais = glfgrph_ais(glf_graph);
-            _csetf_glfarc_id(arc, arc_id);
-            _csetf_glfarc_parent(arc, glf_graph);
-            _csetf_glfarc_types(arc, isa.min_isa(arc_id, mt, UNPROVIDED));
-            _csetf_glfarc_semantics(arc, ask_utilities.ask_variable($SEMANTICS, list($const160$variableMappingTableForGLFArcInDi, $SEMANTICS, arc_id, list($$AISForFn, graph_id)), mt, ZERO_INTEGER, ONE_INTEGER, UNPROVIDED, UNPROVIDED).first());
-            {
-                SubLObject from = set.new_set(symbol_function(EQUAL), UNPROVIDED);
-                SubLObject to = set.new_set(symbol_function(EQUAL), UNPROVIDED);
-                SubLObject linkage_bindings = ask_utilities.ask_template($list_alt162, list($$linkFromToInSystem, arc_id, $sym164$_FROM, $sym165$_TO, ais), mt, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                SubLObject cdolist_list_var = linkage_bindings;
-                SubLObject linkage_binding = NIL;
-                for (linkage_binding = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , linkage_binding = cdolist_list_var.first()) {
-                    {
-                        SubLObject datum = linkage_binding;
-                        SubLObject current = datum;
-                        SubLObject source = NIL;
-                        SubLObject target = NIL;
-                        destructuring_bind_must_consp(current, datum, $list_alt166);
-                        source = current.first();
-                        current = current.rest();
-                        destructuring_bind_must_consp(current, datum, $list_alt166);
-                        target = current.first();
-                        current = current.rest();
-                        if (NIL == current) {
-                            set.set_add(source, from);
-                            set.set_add(target, to);
-                        } else {
-                            cdestructuring_bind_error(datum, $list_alt166);
-                        }
-                    }
-                }
-                _csetf_glfarc_to(arc, to);
-                _csetf_glfarc_from(arc, from);
-            }
-            return arc;
-        }
     }
 
     public static SubLObject create_glf_arc_from_kb(final SubLObject glf_graph, final SubLObject arc_id, final SubLObject mt) {
@@ -4757,72 +2815,30 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
         return arc;
     }
 
-    public static final SubLObject glf_rendering_print_function_trampoline_alt(SubLObject v_object, SubLObject stream) {
-        glfrndr_print(v_object, stream, ZERO_INTEGER);
-        return NIL;
-    }
-
     public static SubLObject glf_rendering_print_function_trampoline(final SubLObject v_object, final SubLObject stream) {
         glfrndr_print(v_object, stream, ZERO_INTEGER);
         return NIL;
     }
 
-    public static final SubLObject glf_rendering_p_alt(SubLObject v_object) {
-        return v_object.getClass() == com.cyc.cycjava.cycl.graphic_library_format.$glf_rendering_native.class ? ((SubLObject) (T)) : NIL;
-    }
-
     public static SubLObject glf_rendering_p(final SubLObject v_object) {
-        return v_object.getClass() == com.cyc.cycjava.cycl.graphic_library_format.$glf_rendering_native.class ? T : NIL;
-    }
-
-    public static final SubLObject glfrndr_label_alt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, GLF_RENDERING_P);
-        return v_object.getField2();
+        return v_object.getClass() == $glf_rendering_native.class ? T : NIL;
     }
 
     public static SubLObject glfrndr_label(final SubLObject v_object) {
-        assert NIL != glf_rendering_p(v_object) : "! graphic_library_format.glf_rendering_p(v_object) " + "graphic_library_format.glf_rendering_p error :" + v_object;
+        assert NIL != glf_rendering_p(v_object) : "graphic_library_format.glf_rendering_p error :" + v_object;
         return v_object.getField2();
     }
 
-    public static final SubLObject _csetf_glfrndr_label_alt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, GLF_RENDERING_P);
-        return v_object.setField2(value);
-    }
-
     public static SubLObject _csetf_glfrndr_label(final SubLObject v_object, final SubLObject value) {
-        assert NIL != glf_rendering_p(v_object) : "! graphic_library_format.glf_rendering_p(v_object) " + "graphic_library_format.glf_rendering_p error :" + v_object;
+        assert NIL != glf_rendering_p(v_object) : "graphic_library_format.glf_rendering_p error :" + v_object;
         return v_object.setField2(value);
-    }
-
-    public static final SubLObject make_glf_rendering_alt(SubLObject arglist) {
-        if (arglist == UNPROVIDED) {
-            arglist = NIL;
-        }
-        {
-            SubLObject v_new = new com.cyc.cycjava.cycl.graphic_library_format.$glf_rendering_native();
-            SubLObject next = NIL;
-            for (next = arglist; NIL != next; next = cddr(next)) {
-                {
-                    SubLObject current_arg = next.first();
-                    SubLObject current_value = cadr(next);
-                    SubLObject pcase_var = current_arg;
-                    if (pcase_var.eql($LABEL)) {
-                        _csetf_glfrndr_label(v_new, current_value);
-                    } else {
-                        Errors.error($str_alt47$Invalid_slot__S_for_construction_, current_arg);
-                    }
-                }
-            }
-            return v_new;
-        }
     }
 
     public static SubLObject make_glf_rendering(SubLObject arglist) {
         if (arglist == UNPROVIDED) {
             arglist = NIL;
         }
-        final SubLObject v_new = new com.cyc.cycjava.cycl.graphic_library_format.$glf_rendering_native();
+        final SubLObject v_new = new $glf_rendering_native();
         SubLObject next;
         SubLObject current_arg;
         SubLObject current_value;
@@ -4851,19 +2867,6 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
         return visit_defstruct_glf_rendering(obj, visitor_fn);
     }
 
-    public static final SubLObject glfrndr_print_alt(SubLObject v_object, SubLObject stream, SubLObject depth) {
-        string_utilities.indent(stream, depth);
-        write_string($str_alt178$__GLF_Rendering_, stream, UNPROVIDED, UNPROVIDED);
-        if (NIL != glfrndr_label(v_object)) {
-            terpri(stream);
-            string_utilities.indent(stream, depth);
-            write_string($str_alt179$_label__, stream, UNPROVIDED, UNPROVIDED);
-            write_string(glfrndr_label(v_object), stream, UNPROVIDED, UNPROVIDED);
-        }
-        write_string($str_alt64$__, stream, UNPROVIDED, UNPROVIDED);
-        return v_object;
-    }
-
     public static SubLObject glfrndr_print(final SubLObject v_object, final SubLObject stream, final SubLObject depth) {
         string_utilities.indent(stream, depth);
         write_string($str194$__GLF_Rendering_, stream, UNPROVIDED, UNPROVIDED);
@@ -4877,15 +2880,6 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
         return v_object;
     }
 
-    public static final SubLObject create_glf_rendering_for_component_from_kb_alt(SubLObject glf_graph, SubLObject component_id, SubLObject mt) {
-        {
-            SubLObject rendering = make_glf_rendering(UNPROVIDED);
-            SubLObject ais = glfgrph_ais(glf_graph);
-            _csetf_glfrndr_label(rendering, ask_utilities.ask_variable($LABEL, list($$glfComponentLabel, component_id, $LABEL, ais), mt, ZERO_INTEGER, ONE_INTEGER, UNPROVIDED, UNPROVIDED).first());
-            return rendering;
-        }
-    }
-
     public static SubLObject create_glf_rendering_for_component_from_kb(final SubLObject glf_graph, final SubLObject component_id, final SubLObject mt) {
         final SubLObject rendering = make_glf_rendering(UNPROVIDED);
         final SubLObject ais = glfgrph_ais(glf_graph);
@@ -4894,110 +2888,110 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
     }
 
     public static SubLObject declare_graphic_library_format_file() {
-        declareFunction("glf_graph_print_function_trampoline", "GLF-GRAPH-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction("glf_graph_p", "GLF-GRAPH-P", 1, 0, false);
+        declareFunction(me, "glf_graph_print_function_trampoline", "GLF-GRAPH-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction(me, "glf_graph_p", "GLF-GRAPH-P", 1, 0, false);
         new graphic_library_format.$glf_graph_p$UnaryFunction();
-        declareFunction("glfgrph_id", "GLFGRPH-ID", 1, 0, false);
-        declareFunction("glfgrph_types", "GLFGRPH-TYPES", 1, 0, false);
-        declareFunction("glfgrph_ais", "GLFGRPH-AIS", 1, 0, false);
-        declareFunction("glfgrph_nodes", "GLFGRPH-NODES", 1, 0, false);
-        declareFunction("glfgrph_node_types", "GLFGRPH-NODE-TYPES", 1, 0, false);
-        declareFunction("glfgrph_source_node", "GLFGRPH-SOURCE-NODE", 1, 0, false);
-        declareFunction("glfgrph_arcs", "GLFGRPH-ARCS", 1, 0, false);
-        declareFunction("glfgrph_arc_types", "GLFGRPH-ARC-TYPES", 1, 0, false);
-        declareFunction("glfgrph_incoming_connectors", "GLFGRPH-INCOMING-CONNECTORS", 1, 0, false);
-        declareFunction("glfgrph_outgoing_connectors", "GLFGRPH-OUTGOING-CONNECTORS", 1, 0, false);
-        declareFunction("glfgrph_incoming_connector_types", "GLFGRPH-INCOMING-CONNECTOR-TYPES", 1, 0, false);
-        declareFunction("glfgrph_outgoing_connector_types", "GLFGRPH-OUTGOING-CONNECTOR-TYPES", 1, 0, false);
-        declareFunction("glfgrph_rendering_info", "GLFGRPH-RENDERING-INFO", 1, 0, false);
-        declareFunction("_csetf_glfgrph_id", "_CSETF-GLFGRPH-ID", 2, 0, false);
-        declareFunction("_csetf_glfgrph_types", "_CSETF-GLFGRPH-TYPES", 2, 0, false);
-        declareFunction("_csetf_glfgrph_ais", "_CSETF-GLFGRPH-AIS", 2, 0, false);
-        declareFunction("_csetf_glfgrph_nodes", "_CSETF-GLFGRPH-NODES", 2, 0, false);
-        declareFunction("_csetf_glfgrph_node_types", "_CSETF-GLFGRPH-NODE-TYPES", 2, 0, false);
-        declareFunction("_csetf_glfgrph_source_node", "_CSETF-GLFGRPH-SOURCE-NODE", 2, 0, false);
-        declareFunction("_csetf_glfgrph_arcs", "_CSETF-GLFGRPH-ARCS", 2, 0, false);
-        declareFunction("_csetf_glfgrph_arc_types", "_CSETF-GLFGRPH-ARC-TYPES", 2, 0, false);
-        declareFunction("_csetf_glfgrph_incoming_connectors", "_CSETF-GLFGRPH-INCOMING-CONNECTORS", 2, 0, false);
-        declareFunction("_csetf_glfgrph_outgoing_connectors", "_CSETF-GLFGRPH-OUTGOING-CONNECTORS", 2, 0, false);
-        declareFunction("_csetf_glfgrph_incoming_connector_types", "_CSETF-GLFGRPH-INCOMING-CONNECTOR-TYPES", 2, 0, false);
-        declareFunction("_csetf_glfgrph_outgoing_connector_types", "_CSETF-GLFGRPH-OUTGOING-CONNECTOR-TYPES", 2, 0, false);
-        declareFunction("_csetf_glfgrph_rendering_info", "_CSETF-GLFGRPH-RENDERING-INFO", 2, 0, false);
-        declareFunction("make_glf_graph", "MAKE-GLF-GRAPH", 0, 1, false);
-        declareFunction("visit_defstruct_glf_graph", "VISIT-DEFSTRUCT-GLF-GRAPH", 2, 0, false);
-        declareFunction("visit_defstruct_object_glf_graph_method", "VISIT-DEFSTRUCT-OBJECT-GLF-GRAPH-METHOD", 2, 0, false);
-        declareFunction("glfgrph_has_node_typesP", "GLFGRPH-HAS-NODE-TYPES?", 1, 0, false);
-        declareFunction("glfgrph_has_arc_typesP", "GLFGRPH-HAS-ARC-TYPES?", 1, 0, false);
-        declareFunction("glfgrph_has_incoming_connector_typesP", "GLFGRPH-HAS-INCOMING-CONNECTOR-TYPES?", 1, 0, false);
-        declareFunction("glfgrph_has_outgoing_connector_typesP", "GLFGRPH-HAS-OUTGOING-CONNECTOR-TYPES?", 1, 0, false);
-        declareFunction("glfgrph_has_rendering_infoP", "GLFGRPH-HAS-RENDERING-INFO?", 1, 0, false);
-        declareFunction("glfgrph_has_nodesP", "GLFGRPH-HAS-NODES?", 1, 0, false);
-        declareFunction("glfgrph_has_arcsP", "GLFGRPH-HAS-ARCS?", 1, 0, false);
-        declareFunction("glfgrph_print", "GLFGRPH-PRINT", 3, 0, false);
-        declareFunction("xml_serialize_glf_graph", "XML-SERIALIZE-GLF-GRAPH", 1, 1, false);
-        declareFunction("xml_serialize_glf_graph_core", "XML-SERIALIZE-GLF-GRAPH-CORE", 2, 0, false);
-        declareFunction("xml_serialize_glf_graph_diagram", "XML-SERIALIZE-GLF-GRAPH-DIAGRAM", 2, 0, false);
-        declareFunction("xml_serialize_glf_graph_rendering", "XML-SERIALIZE-GLF-GRAPH-RENDERING", 2, 0, false);
-        declareFunction("xml_serialize_glf_graph_rendering_info", "XML-SERIALIZE-GLF-GRAPH-RENDERING-INFO", 2, 0, false);
-        declareFunction("xml_serialize_glf_graph_flow_model", "XML-SERIALIZE-GLF-GRAPH-FLOW-MODEL", 2, 0, false);
-        declareFunction("get_graph_defining_mt", "GET-GRAPH-DEFINING-MT", 1, 0, false);
-        declareFunction("load_glf_graph_from_kb", "LOAD-GLF-GRAPH-FROM-KB", 2, 0, false);
-        declareFunction("map_glf_graph_to_ais", "MAP-GLF-GRAPH-TO-AIS", 2, 0, false);
-        declareFunction("create_glf_graph_from_kb", "CREATE-GLF-GRAPH-FROM-KB", 2, 0, false);
-        declareFunction("initialize_glfgrph_node_types", "INITIALIZE-GLFGRPH-NODE-TYPES", 2, 0, false);
-        declareFunction("note_glf_graph_node_type", "NOTE-GLF-GRAPH-NODE-TYPE", 2, 0, false);
-        declareFunction("initialize_glfgrph_arc_types", "INITIALIZE-GLFGRPH-ARC-TYPES", 2, 0, false);
-        declareFunction("note_glf_graph_arc_type", "NOTE-GLF-GRAPH-ARC-TYPE", 2, 0, false);
-        declareFunction("load_all_glf_nodes_from_kb", "LOAD-ALL-GLF-NODES-FROM-KB", 2, 0, false);
-        declareFunction("load_one_glf_node_from_kb", "LOAD-ONE-GLF-NODE-FROM-KB", 3, 0, false);
-        declareFunction("load_all_glf_arcs_from_kb", "LOAD-ALL-GLF-ARCS-FROM-KB", 2, 0, false);
-        declareFunction("load_one_glf_arc_from_kb", "LOAD-ONE-GLF-ARC-FROM-KB", 3, 0, false);
-        declareFunction("glf_node_print_function_trampoline", "GLF-NODE-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction("glf_node_p", "GLF-NODE-P", 1, 0, false);
+        declareFunction(me, "glfgrph_id", "GLFGRPH-ID", 1, 0, false);
+        declareFunction(me, "glfgrph_types", "GLFGRPH-TYPES", 1, 0, false);
+        declareFunction(me, "glfgrph_ais", "GLFGRPH-AIS", 1, 0, false);
+        declareFunction(me, "glfgrph_nodes", "GLFGRPH-NODES", 1, 0, false);
+        declareFunction(me, "glfgrph_node_types", "GLFGRPH-NODE-TYPES", 1, 0, false);
+        declareFunction(me, "glfgrph_source_node", "GLFGRPH-SOURCE-NODE", 1, 0, false);
+        declareFunction(me, "glfgrph_arcs", "GLFGRPH-ARCS", 1, 0, false);
+        declareFunction(me, "glfgrph_arc_types", "GLFGRPH-ARC-TYPES", 1, 0, false);
+        declareFunction(me, "glfgrph_incoming_connectors", "GLFGRPH-INCOMING-CONNECTORS", 1, 0, false);
+        declareFunction(me, "glfgrph_outgoing_connectors", "GLFGRPH-OUTGOING-CONNECTORS", 1, 0, false);
+        declareFunction(me, "glfgrph_incoming_connector_types", "GLFGRPH-INCOMING-CONNECTOR-TYPES", 1, 0, false);
+        declareFunction(me, "glfgrph_outgoing_connector_types", "GLFGRPH-OUTGOING-CONNECTOR-TYPES", 1, 0, false);
+        declareFunction(me, "glfgrph_rendering_info", "GLFGRPH-RENDERING-INFO", 1, 0, false);
+        declareFunction(me, "_csetf_glfgrph_id", "_CSETF-GLFGRPH-ID", 2, 0, false);
+        declareFunction(me, "_csetf_glfgrph_types", "_CSETF-GLFGRPH-TYPES", 2, 0, false);
+        declareFunction(me, "_csetf_glfgrph_ais", "_CSETF-GLFGRPH-AIS", 2, 0, false);
+        declareFunction(me, "_csetf_glfgrph_nodes", "_CSETF-GLFGRPH-NODES", 2, 0, false);
+        declareFunction(me, "_csetf_glfgrph_node_types", "_CSETF-GLFGRPH-NODE-TYPES", 2, 0, false);
+        declareFunction(me, "_csetf_glfgrph_source_node", "_CSETF-GLFGRPH-SOURCE-NODE", 2, 0, false);
+        declareFunction(me, "_csetf_glfgrph_arcs", "_CSETF-GLFGRPH-ARCS", 2, 0, false);
+        declareFunction(me, "_csetf_glfgrph_arc_types", "_CSETF-GLFGRPH-ARC-TYPES", 2, 0, false);
+        declareFunction(me, "_csetf_glfgrph_incoming_connectors", "_CSETF-GLFGRPH-INCOMING-CONNECTORS", 2, 0, false);
+        declareFunction(me, "_csetf_glfgrph_outgoing_connectors", "_CSETF-GLFGRPH-OUTGOING-CONNECTORS", 2, 0, false);
+        declareFunction(me, "_csetf_glfgrph_incoming_connector_types", "_CSETF-GLFGRPH-INCOMING-CONNECTOR-TYPES", 2, 0, false);
+        declareFunction(me, "_csetf_glfgrph_outgoing_connector_types", "_CSETF-GLFGRPH-OUTGOING-CONNECTOR-TYPES", 2, 0, false);
+        declareFunction(me, "_csetf_glfgrph_rendering_info", "_CSETF-GLFGRPH-RENDERING-INFO", 2, 0, false);
+        declareFunction(me, "make_glf_graph", "MAKE-GLF-GRAPH", 0, 1, false);
+        declareFunction(me, "visit_defstruct_glf_graph", "VISIT-DEFSTRUCT-GLF-GRAPH", 2, 0, false);
+        declareFunction(me, "visit_defstruct_object_glf_graph_method", "VISIT-DEFSTRUCT-OBJECT-GLF-GRAPH-METHOD", 2, 0, false);
+        declareFunction(me, "glfgrph_has_node_typesP", "GLFGRPH-HAS-NODE-TYPES?", 1, 0, false);
+        declareFunction(me, "glfgrph_has_arc_typesP", "GLFGRPH-HAS-ARC-TYPES?", 1, 0, false);
+        declareFunction(me, "glfgrph_has_incoming_connector_typesP", "GLFGRPH-HAS-INCOMING-CONNECTOR-TYPES?", 1, 0, false);
+        declareFunction(me, "glfgrph_has_outgoing_connector_typesP", "GLFGRPH-HAS-OUTGOING-CONNECTOR-TYPES?", 1, 0, false);
+        declareFunction(me, "glfgrph_has_rendering_infoP", "GLFGRPH-HAS-RENDERING-INFO?", 1, 0, false);
+        declareFunction(me, "glfgrph_has_nodesP", "GLFGRPH-HAS-NODES?", 1, 0, false);
+        declareFunction(me, "glfgrph_has_arcsP", "GLFGRPH-HAS-ARCS?", 1, 0, false);
+        declareFunction(me, "glfgrph_print", "GLFGRPH-PRINT", 3, 0, false);
+        declareFunction(me, "xml_serialize_glf_graph", "XML-SERIALIZE-GLF-GRAPH", 1, 1, false);
+        declareFunction(me, "xml_serialize_glf_graph_core", "XML-SERIALIZE-GLF-GRAPH-CORE", 2, 0, false);
+        declareFunction(me, "xml_serialize_glf_graph_diagram", "XML-SERIALIZE-GLF-GRAPH-DIAGRAM", 2, 0, false);
+        declareFunction(me, "xml_serialize_glf_graph_rendering", "XML-SERIALIZE-GLF-GRAPH-RENDERING", 2, 0, false);
+        declareFunction(me, "xml_serialize_glf_graph_rendering_info", "XML-SERIALIZE-GLF-GRAPH-RENDERING-INFO", 2, 0, false);
+        declareFunction(me, "xml_serialize_glf_graph_flow_model", "XML-SERIALIZE-GLF-GRAPH-FLOW-MODEL", 2, 0, false);
+        declareFunction(me, "get_graph_defining_mt", "GET-GRAPH-DEFINING-MT", 1, 0, false);
+        declareFunction(me, "load_glf_graph_from_kb", "LOAD-GLF-GRAPH-FROM-KB", 2, 0, false);
+        declareFunction(me, "map_glf_graph_to_ais", "MAP-GLF-GRAPH-TO-AIS", 2, 0, false);
+        declareFunction(me, "create_glf_graph_from_kb", "CREATE-GLF-GRAPH-FROM-KB", 2, 0, false);
+        declareFunction(me, "initialize_glfgrph_node_types", "INITIALIZE-GLFGRPH-NODE-TYPES", 2, 0, false);
+        declareFunction(me, "note_glf_graph_node_type", "NOTE-GLF-GRAPH-NODE-TYPE", 2, 0, false);
+        declareFunction(me, "initialize_glfgrph_arc_types", "INITIALIZE-GLFGRPH-ARC-TYPES", 2, 0, false);
+        declareFunction(me, "note_glf_graph_arc_type", "NOTE-GLF-GRAPH-ARC-TYPE", 2, 0, false);
+        declareFunction(me, "load_all_glf_nodes_from_kb", "LOAD-ALL-GLF-NODES-FROM-KB", 2, 0, false);
+        declareFunction(me, "load_one_glf_node_from_kb", "LOAD-ONE-GLF-NODE-FROM-KB", 3, 0, false);
+        declareFunction(me, "load_all_glf_arcs_from_kb", "LOAD-ALL-GLF-ARCS-FROM-KB", 2, 0, false);
+        declareFunction(me, "load_one_glf_arc_from_kb", "LOAD-ONE-GLF-ARC-FROM-KB", 3, 0, false);
+        declareFunction(me, "glf_node_print_function_trampoline", "GLF-NODE-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction(me, "glf_node_p", "GLF-NODE-P", 1, 0, false);
         new graphic_library_format.$glf_node_p$UnaryFunction();
-        declareFunction("glfnode_id", "GLFNODE-ID", 1, 0, false);
-        declareFunction("glfnode_types", "GLFNODE-TYPES", 1, 0, false);
-        declareFunction("glfnode_parent", "GLFNODE-PARENT", 1, 0, false);
-        declareFunction("glfnode_semantics", "GLFNODE-SEMANTICS", 1, 0, false);
-        declareFunction("_csetf_glfnode_id", "_CSETF-GLFNODE-ID", 2, 0, false);
-        declareFunction("_csetf_glfnode_types", "_CSETF-GLFNODE-TYPES", 2, 0, false);
-        declareFunction("_csetf_glfnode_parent", "_CSETF-GLFNODE-PARENT", 2, 0, false);
-        declareFunction("_csetf_glfnode_semantics", "_CSETF-GLFNODE-SEMANTICS", 2, 0, false);
-        declareFunction("make_glf_node", "MAKE-GLF-NODE", 0, 1, false);
-        declareFunction("visit_defstruct_glf_node", "VISIT-DEFSTRUCT-GLF-NODE", 2, 0, false);
-        declareFunction("visit_defstruct_object_glf_node_method", "VISIT-DEFSTRUCT-OBJECT-GLF-NODE-METHOD", 2, 0, false);
-        declareFunction("glfnode_print", "GLFNODE-PRINT", 3, 0, false);
-        declareFunction("create_glf_node_from_kb", "CREATE-GLF-NODE-FROM-KB", 3, 0, false);
-        declareFunction("glf_arc_print_function_trampoline", "GLF-ARC-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction("glf_arc_p", "GLF-ARC-P", 1, 0, false);
+        declareFunction(me, "glfnode_id", "GLFNODE-ID", 1, 0, false);
+        declareFunction(me, "glfnode_types", "GLFNODE-TYPES", 1, 0, false);
+        declareFunction(me, "glfnode_parent", "GLFNODE-PARENT", 1, 0, false);
+        declareFunction(me, "glfnode_semantics", "GLFNODE-SEMANTICS", 1, 0, false);
+        declareFunction(me, "_csetf_glfnode_id", "_CSETF-GLFNODE-ID", 2, 0, false);
+        declareFunction(me, "_csetf_glfnode_types", "_CSETF-GLFNODE-TYPES", 2, 0, false);
+        declareFunction(me, "_csetf_glfnode_parent", "_CSETF-GLFNODE-PARENT", 2, 0, false);
+        declareFunction(me, "_csetf_glfnode_semantics", "_CSETF-GLFNODE-SEMANTICS", 2, 0, false);
+        declareFunction(me, "make_glf_node", "MAKE-GLF-NODE", 0, 1, false);
+        declareFunction(me, "visit_defstruct_glf_node", "VISIT-DEFSTRUCT-GLF-NODE", 2, 0, false);
+        declareFunction(me, "visit_defstruct_object_glf_node_method", "VISIT-DEFSTRUCT-OBJECT-GLF-NODE-METHOD", 2, 0, false);
+        declareFunction(me, "glfnode_print", "GLFNODE-PRINT", 3, 0, false);
+        declareFunction(me, "create_glf_node_from_kb", "CREATE-GLF-NODE-FROM-KB", 3, 0, false);
+        declareFunction(me, "glf_arc_print_function_trampoline", "GLF-ARC-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction(me, "glf_arc_p", "GLF-ARC-P", 1, 0, false);
         new graphic_library_format.$glf_arc_p$UnaryFunction();
-        declareFunction("glfarc_id", "GLFARC-ID", 1, 0, false);
-        declareFunction("glfarc_types", "GLFARC-TYPES", 1, 0, false);
-        declareFunction("glfarc_parent", "GLFARC-PARENT", 1, 0, false);
-        declareFunction("glfarc_from", "GLFARC-FROM", 1, 0, false);
-        declareFunction("glfarc_to", "GLFARC-TO", 1, 0, false);
-        declareFunction("glfarc_semantics", "GLFARC-SEMANTICS", 1, 0, false);
-        declareFunction("_csetf_glfarc_id", "_CSETF-GLFARC-ID", 2, 0, false);
-        declareFunction("_csetf_glfarc_types", "_CSETF-GLFARC-TYPES", 2, 0, false);
-        declareFunction("_csetf_glfarc_parent", "_CSETF-GLFARC-PARENT", 2, 0, false);
-        declareFunction("_csetf_glfarc_from", "_CSETF-GLFARC-FROM", 2, 0, false);
-        declareFunction("_csetf_glfarc_to", "_CSETF-GLFARC-TO", 2, 0, false);
-        declareFunction("_csetf_glfarc_semantics", "_CSETF-GLFARC-SEMANTICS", 2, 0, false);
-        declareFunction("make_glf_arc", "MAKE-GLF-ARC", 0, 1, false);
-        declareFunction("visit_defstruct_glf_arc", "VISIT-DEFSTRUCT-GLF-ARC", 2, 0, false);
-        declareFunction("visit_defstruct_object_glf_arc_method", "VISIT-DEFSTRUCT-OBJECT-GLF-ARC-METHOD", 2, 0, false);
-        declareFunction("glfarc_print", "GLFARC-PRINT", 3, 0, false);
-        declareFunction("create_glf_arc_from_kb", "CREATE-GLF-ARC-FROM-KB", 3, 0, false);
-        declareFunction("glf_rendering_print_function_trampoline", "GLF-RENDERING-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction("glf_rendering_p", "GLF-RENDERING-P", 1, 0, false);
+        declareFunction(me, "glfarc_id", "GLFARC-ID", 1, 0, false);
+        declareFunction(me, "glfarc_types", "GLFARC-TYPES", 1, 0, false);
+        declareFunction(me, "glfarc_parent", "GLFARC-PARENT", 1, 0, false);
+        declareFunction(me, "glfarc_from", "GLFARC-FROM", 1, 0, false);
+        declareFunction(me, "glfarc_to", "GLFARC-TO", 1, 0, false);
+        declareFunction(me, "glfarc_semantics", "GLFARC-SEMANTICS", 1, 0, false);
+        declareFunction(me, "_csetf_glfarc_id", "_CSETF-GLFARC-ID", 2, 0, false);
+        declareFunction(me, "_csetf_glfarc_types", "_CSETF-GLFARC-TYPES", 2, 0, false);
+        declareFunction(me, "_csetf_glfarc_parent", "_CSETF-GLFARC-PARENT", 2, 0, false);
+        declareFunction(me, "_csetf_glfarc_from", "_CSETF-GLFARC-FROM", 2, 0, false);
+        declareFunction(me, "_csetf_glfarc_to", "_CSETF-GLFARC-TO", 2, 0, false);
+        declareFunction(me, "_csetf_glfarc_semantics", "_CSETF-GLFARC-SEMANTICS", 2, 0, false);
+        declareFunction(me, "make_glf_arc", "MAKE-GLF-ARC", 0, 1, false);
+        declareFunction(me, "visit_defstruct_glf_arc", "VISIT-DEFSTRUCT-GLF-ARC", 2, 0, false);
+        declareFunction(me, "visit_defstruct_object_glf_arc_method", "VISIT-DEFSTRUCT-OBJECT-GLF-ARC-METHOD", 2, 0, false);
+        declareFunction(me, "glfarc_print", "GLFARC-PRINT", 3, 0, false);
+        declareFunction(me, "create_glf_arc_from_kb", "CREATE-GLF-ARC-FROM-KB", 3, 0, false);
+        declareFunction(me, "glf_rendering_print_function_trampoline", "GLF-RENDERING-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction(me, "glf_rendering_p", "GLF-RENDERING-P", 1, 0, false);
         new graphic_library_format.$glf_rendering_p$UnaryFunction();
-        declareFunction("glfrndr_label", "GLFRNDR-LABEL", 1, 0, false);
-        declareFunction("_csetf_glfrndr_label", "_CSETF-GLFRNDR-LABEL", 2, 0, false);
-        declareFunction("make_glf_rendering", "MAKE-GLF-RENDERING", 0, 1, false);
-        declareFunction("visit_defstruct_glf_rendering", "VISIT-DEFSTRUCT-GLF-RENDERING", 2, 0, false);
-        declareFunction("visit_defstruct_object_glf_rendering_method", "VISIT-DEFSTRUCT-OBJECT-GLF-RENDERING-METHOD", 2, 0, false);
-        declareFunction("glfrndr_print", "GLFRNDR-PRINT", 3, 0, false);
-        declareFunction("create_glf_rendering_for_component_from_kb", "CREATE-GLF-RENDERING-FOR-COMPONENT-FROM-KB", 3, 0, false);
+        declareFunction(me, "glfrndr_label", "GLFRNDR-LABEL", 1, 0, false);
+        declareFunction(me, "_csetf_glfrndr_label", "_CSETF-GLFRNDR-LABEL", 2, 0, false);
+        declareFunction(me, "make_glf_rendering", "MAKE-GLF-RENDERING", 0, 1, false);
+        declareFunction(me, "visit_defstruct_glf_rendering", "VISIT-DEFSTRUCT-GLF-RENDERING", 2, 0, false);
+        declareFunction(me, "visit_defstruct_object_glf_rendering_method", "VISIT-DEFSTRUCT-OBJECT-GLF-RENDERING-METHOD", 2, 0, false);
+        declareFunction(me, "glfrndr_print", "GLFRNDR-PRINT", 3, 0, false);
+        declareFunction(me, "create_glf_rendering_for_component_from_kb", "CREATE-GLF-RENDERING-FOR-COMPONENT-FROM-KB", 3, 0, false);
         return NIL;
     }
 
@@ -5069,6 +3063,393 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
     }
 
     static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+    public static final class $glf_graph_native extends SubLStructNative {
+        public SubLObject $id;
+
+        public SubLObject $types;
+
+        public SubLObject $ais;
+
+        public SubLObject $nodes;
+
+        public SubLObject $node_types;
+
+        public SubLObject $source_node;
+
+        public SubLObject $arcs;
+
+        public SubLObject $arc_types;
+
+        public SubLObject $incoming_connectors;
+
+        public SubLObject $outgoing_connectors;
+
+        public SubLObject $incoming_connector_types;
+
+        public SubLObject $outgoing_connector_types;
+
+        public SubLObject $rendering_info;
+
+        private static final SubLStructDeclNative structDecl;
+
+        private $glf_graph_native() {
+            this.$id = Lisp.NIL;
+            this.$types = Lisp.NIL;
+            this.$ais = Lisp.NIL;
+            this.$nodes = Lisp.NIL;
+            this.$node_types = Lisp.NIL;
+            this.$source_node = Lisp.NIL;
+            this.$arcs = Lisp.NIL;
+            this.$arc_types = Lisp.NIL;
+            this.$incoming_connectors = Lisp.NIL;
+            this.$outgoing_connectors = Lisp.NIL;
+            this.$incoming_connector_types = Lisp.NIL;
+            this.$outgoing_connector_types = Lisp.NIL;
+            this.$rendering_info = Lisp.NIL;
+        }
+
+        @Override
+        public SubLStructDecl getStructDecl() {
+            return structDecl;
+        }
+
+        @Override
+        public SubLObject getField2() {
+            return this.$id;
+        }
+
+        @Override
+        public SubLObject getField3() {
+            return this.$types;
+        }
+
+        @Override
+        public SubLObject getField4() {
+            return this.$ais;
+        }
+
+        @Override
+        public SubLObject getField5() {
+            return this.$nodes;
+        }
+
+        @Override
+        public SubLObject getField6() {
+            return this.$node_types;
+        }
+
+        @Override
+        public SubLObject getField7() {
+            return this.$source_node;
+        }
+
+        @Override
+        public SubLObject getField8() {
+            return this.$arcs;
+        }
+
+        @Override
+        public SubLObject getField9() {
+            return this.$arc_types;
+        }
+
+        @Override
+        public SubLObject getField10() {
+            return this.$incoming_connectors;
+        }
+
+        @Override
+        public SubLObject getField11() {
+            return this.$outgoing_connectors;
+        }
+
+        @Override
+        public SubLObject getField12() {
+            return this.$incoming_connector_types;
+        }
+
+        @Override
+        public SubLObject getField13() {
+            return this.$outgoing_connector_types;
+        }
+
+        @Override
+        public SubLObject getField14() {
+            return this.$rendering_info;
+        }
+
+        @Override
+        public SubLObject setField2(final SubLObject value) {
+            return this.$id = value;
+        }
+
+        @Override
+        public SubLObject setField3(final SubLObject value) {
+            return this.$types = value;
+        }
+
+        @Override
+        public SubLObject setField4(final SubLObject value) {
+            return this.$ais = value;
+        }
+
+        @Override
+        public SubLObject setField5(final SubLObject value) {
+            return this.$nodes = value;
+        }
+
+        @Override
+        public SubLObject setField6(final SubLObject value) {
+            return this.$node_types = value;
+        }
+
+        @Override
+        public SubLObject setField7(final SubLObject value) {
+            return this.$source_node = value;
+        }
+
+        @Override
+        public SubLObject setField8(final SubLObject value) {
+            return this.$arcs = value;
+        }
+
+        @Override
+        public SubLObject setField9(final SubLObject value) {
+            return this.$arc_types = value;
+        }
+
+        @Override
+        public SubLObject setField10(final SubLObject value) {
+            return this.$incoming_connectors = value;
+        }
+
+        @Override
+        public SubLObject setField11(final SubLObject value) {
+            return this.$outgoing_connectors = value;
+        }
+
+        @Override
+        public SubLObject setField12(final SubLObject value) {
+            return this.$incoming_connector_types = value;
+        }
+
+        @Override
+        public SubLObject setField13(final SubLObject value) {
+            return this.$outgoing_connector_types = value;
+        }
+
+        @Override
+        public SubLObject setField14(final SubLObject value) {
+            return this.$rendering_info = value;
+        }
+
+        static {
+            structDecl = makeStructDeclNative($glf_graph_native.class, GLF_GRAPH, GLF_GRAPH_P, $list2, $list3, new String[]{ "$id", "$types", "$ais", "$nodes", "$node_types", "$source_node", "$arcs", "$arc_types", "$incoming_connectors", "$outgoing_connectors", "$incoming_connector_types", "$outgoing_connector_types", "$rendering_info" }, $list4, $list5, GLFGRPH_PRINT);
+        }
     }
 
     public static final class $glf_graph_p$UnaryFunction extends UnaryFunction {
@@ -5093,11 +3474,11 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
 
         private static final SubLStructDeclNative structDecl;
 
-        public $glf_node_native() {
-            graphic_library_format.$glf_node_native.this.$id = Lisp.NIL;
-            graphic_library_format.$glf_node_native.this.$types = Lisp.NIL;
-            graphic_library_format.$glf_node_native.this.$parent = Lisp.NIL;
-            graphic_library_format.$glf_node_native.this.$semantics = Lisp.NIL;
+        private $glf_node_native() {
+            this.$id = Lisp.NIL;
+            this.$types = Lisp.NIL;
+            this.$parent = Lisp.NIL;
+            this.$semantics = Lisp.NIL;
         }
 
         @Override
@@ -5107,46 +3488,46 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
 
         @Override
         public SubLObject getField2() {
-            return graphic_library_format.$glf_node_native.this.$id;
+            return this.$id;
         }
 
         @Override
         public SubLObject getField3() {
-            return graphic_library_format.$glf_node_native.this.$types;
+            return this.$types;
         }
 
         @Override
         public SubLObject getField4() {
-            return graphic_library_format.$glf_node_native.this.$parent;
+            return this.$parent;
         }
 
         @Override
         public SubLObject getField5() {
-            return graphic_library_format.$glf_node_native.this.$semantics;
+            return this.$semantics;
         }
 
         @Override
         public SubLObject setField2(final SubLObject value) {
-            return graphic_library_format.$glf_node_native.this.$id = value;
+            return this.$id = value;
         }
 
         @Override
         public SubLObject setField3(final SubLObject value) {
-            return graphic_library_format.$glf_node_native.this.$types = value;
+            return this.$types = value;
         }
 
         @Override
         public SubLObject setField4(final SubLObject value) {
-            return graphic_library_format.$glf_node_native.this.$parent = value;
+            return this.$parent = value;
         }
 
         @Override
         public SubLObject setField5(final SubLObject value) {
-            return graphic_library_format.$glf_node_native.this.$semantics = value;
+            return this.$semantics = value;
         }
 
         static {
-            structDecl = makeStructDeclNative(com.cyc.cycjava.cycl.graphic_library_format.$glf_node_native.class, GLF_NODE, GLF_NODE_P, $list119, $list120, new String[]{ "$id", "$types", "$parent", "$semantics" }, $list121, $list122, GLFNODE_PRINT);
+            structDecl = makeStructDeclNative($glf_node_native.class, GLF_NODE, GLF_NODE_P, $list119, $list120, new String[]{ "$id", "$types", "$parent", "$semantics" }, $list121, $list122, GLFNODE_PRINT);
         }
     }
 
@@ -5161,6 +3542,100 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
         }
     }
 
+    public static final class $glf_arc_native extends SubLStructNative {
+        public SubLObject $id;
+
+        public SubLObject $types;
+
+        public SubLObject $parent;
+
+        public SubLObject $from;
+
+        public SubLObject $to;
+
+        public SubLObject $semantics;
+
+        private static final SubLStructDeclNative structDecl;
+
+        private $glf_arc_native() {
+            this.$id = Lisp.NIL;
+            this.$types = Lisp.NIL;
+            this.$parent = Lisp.NIL;
+            this.$from = Lisp.NIL;
+            this.$to = Lisp.NIL;
+            this.$semantics = Lisp.NIL;
+        }
+
+        @Override
+        public SubLStructDecl getStructDecl() {
+            return structDecl;
+        }
+
+        @Override
+        public SubLObject getField2() {
+            return this.$id;
+        }
+
+        @Override
+        public SubLObject getField3() {
+            return this.$types;
+        }
+
+        @Override
+        public SubLObject getField4() {
+            return this.$parent;
+        }
+
+        @Override
+        public SubLObject getField5() {
+            return this.$from;
+        }
+
+        @Override
+        public SubLObject getField6() {
+            return this.$to;
+        }
+
+        @Override
+        public SubLObject getField7() {
+            return this.$semantics;
+        }
+
+        @Override
+        public SubLObject setField2(final SubLObject value) {
+            return this.$id = value;
+        }
+
+        @Override
+        public SubLObject setField3(final SubLObject value) {
+            return this.$types = value;
+        }
+
+        @Override
+        public SubLObject setField4(final SubLObject value) {
+            return this.$parent = value;
+        }
+
+        @Override
+        public SubLObject setField5(final SubLObject value) {
+            return this.$from = value;
+        }
+
+        @Override
+        public SubLObject setField6(final SubLObject value) {
+            return this.$to = value;
+        }
+
+        @Override
+        public SubLObject setField7(final SubLObject value) {
+            return this.$semantics = value;
+        }
+
+        static {
+            structDecl = makeStructDeclNative($glf_arc_native.class, GLF_ARC, GLF_ARC_P, $list146, $list147, new String[]{ "$id", "$types", "$parent", "$from", "$to", "$semantics" }, $list148, $list149, GLFARC_PRINT);
+        }
+    }
+
     public static final class $glf_arc_p$UnaryFunction extends UnaryFunction {
         public $glf_arc_p$UnaryFunction() {
             super(extractFunctionNamed("GLF-ARC-P"));
@@ -5169,6 +3644,35 @@ public final class graphic_library_format extends SubLTranslatedFile implements 
         @Override
         public SubLObject processItem(final SubLObject arg1) {
             return glf_arc_p(arg1);
+        }
+    }
+
+    public static final class $glf_rendering_native extends SubLStructNative {
+        public SubLObject $label;
+
+        private static final SubLStructDeclNative structDecl;
+
+        private $glf_rendering_native() {
+            this.$label = Lisp.NIL;
+        }
+
+        @Override
+        public SubLStructDecl getStructDecl() {
+            return structDecl;
+        }
+
+        @Override
+        public SubLObject getField2() {
+            return this.$label;
+        }
+
+        @Override
+        public SubLObject setField2(final SubLObject value) {
+            return this.$label = value;
+        }
+
+        static {
+            structDecl = makeStructDeclNative($glf_rendering_native.class, GLF_RENDERING, GLF_RENDERING_P, $list182, $list183, new String[]{ "$label" }, $list184, $list185, GLFRNDR_PRINT);
         }
     }
 

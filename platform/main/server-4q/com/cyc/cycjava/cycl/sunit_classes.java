@@ -4080,7 +4080,7 @@ public final class sunit_classes extends SubLTranslatedFile implements V02 {
                             SubLObject form = NIL;
                             SubLObject constant = NIL;
                             SubLObject unique = NIL;
-                            unique_name = constant_completion_high.uniquify_constant_name(name);
+                            unique_name = constant_completion_high.uniquify_constant_name(name, UNPROVIDED_SYM);
                             form = list(FI_FIND_OR_CREATE_INT, unique_name);
                             if (NIL != $sunit_verbose$.getDynamicValue(thread)) {
                                 format(StreamsLow.$standard_output$.getDynamicValue(thread), $str_alt487$___S, form);

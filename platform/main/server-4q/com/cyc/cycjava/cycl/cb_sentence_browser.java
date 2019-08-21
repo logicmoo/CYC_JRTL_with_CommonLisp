@@ -1,71 +1,9 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.cb_parameters.$cb_a_perform_access_diagnostics$;
-import static com.cyc.cycjava.cycl.cb_parameters.$cb_a_show_el_formula$;
-import static com.cyc.cycjava.cycl.cb_parameters.$cb_a_show_english$;
-import static com.cyc.cycjava.cycl.cb_parameters.$cb_a_show_hl_formula$;
-import static com.cyc.cycjava.cycl.cb_parameters.$cb_c_wrap_assertions$;
-import static com.cyc.cycjava.cycl.cb_parameters.$cb_default_mt$;
-import static com.cyc.cycjava.cycl.cb_parameters.$cb_editing_enabled$;
-import static com.cyc.cycjava.cycl.cb_parameters.$cb_permit_robots_to_followP$;
-import static com.cyc.cycjava.cycl.cb_parameters.$cb_permit_robots_to_indexP$;
-import static com.cyc.cycjava.cycl.cb_parameters.cb_glob_id;
-import static com.cyc.cycjava.cycl.cb_parameters.cb_glob_lookup_by_string;
-import static com.cyc.cycjava.cycl.cb_parameters.cb_head_shortcut_icon;
-import static com.cyc.cycjava.cycl.cb_parameters.cyc_cgi_url_int;
-import static com.cyc.cycjava.cycl.cb_utilities.cb_back_button;
-import static com.cyc.cycjava.cycl.cb_utilities.cb_error;
-import static com.cyc.cycjava.cycl.cb_utilities.cb_form;
-import static com.cyc.cycjava.cycl.cb_utilities.cb_frame_name;
-import static com.cyc.cycjava.cycl.cb_utilities.cb_guess_assertion;
-import static com.cyc.cycjava.cycl.cb_utilities.cb_help_preamble;
-import static com.cyc.cycjava.cycl.cb_utilities.cb_link;
-import static com.cyc.cycjava.cycl.cb_utilities.cb_show_sentence_in_nl;
-import static com.cyc.cycjava.cycl.cb_utilities.setup_cb_link_method;
-import static com.cyc.cycjava.cycl.control_vars.$show_assertions_in_english$;
-import static com.cyc.cycjava.cycl.cyc_file_dependencies.$cb_help_definitions$;
-import static com.cyc.cycjava.cycl.el_utilities.designated_mt;
-import static com.cyc.cycjava.cycl.el_utilities.designated_sentence;
-import static com.cyc.cycjava.cycl.el_utilities.ist_sentence_p;
-import static com.cyc.cycjava.cycl.el_utilities.make_el_formula;
-import static com.cyc.cycjava.cycl.el_utilities.possibly_sentence_p;
-import static com.cyc.cycjava.cycl.html_utilities.html_char;
-import static com.cyc.cycjava.cycl.html_utilities.html_color;
-import static com.cyc.cycjava.cycl.html_utilities.html_copyright_notice;
-import static com.cyc.cycjava.cycl.html_utilities.html_hidden_input;
-import static com.cyc.cycjava.cycl.html_utilities.html_hr;
-import static com.cyc.cycjava.cycl.html_utilities.html_indent;
-import static com.cyc.cycjava.cycl.html_utilities.html_markup;
-import static com.cyc.cycjava.cycl.html_utilities.html_meta_robot_instructions;
-import static com.cyc.cycjava.cycl.html_utilities.html_newline;
-import static com.cyc.cycjava.cycl.html_utilities.html_princ;
-import static com.cyc.cycjava.cycl.html_utilities.html_reset_input;
-import static com.cyc.cycjava.cycl.html_utilities.html_simple_attribute;
-import static com.cyc.cycjava.cycl.html_utilities.html_source_readability_terpri;
-import static com.cyc.cycjava.cycl.html_utilities.html_submit_input;
-import static com.cyc.cycjava.cycl.html_utilities.html_target_definition;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.sethash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.stringp;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_listp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.read_from_string_ignoring_errors;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-
+import com.cyc.cycjava.cycl.cb_parameters;
+import com.cyc.cycjava.cycl.cb_sentence_browser;
+import com.cyc.cycjava.cycl.control_vars;
 import com.cyc.cycjava.cycl.inference.browser.cb_query;
 import com.cyc.cycjava.cycl.inference.harness.forward;
 import com.cyc.cycjava.cycl.sksi.query_sks.sksi_hl_support_utilities;
@@ -77,40 +15,68 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
+import static com.cyc.cycjava.cycl.cb_parameters.*;
+import static com.cyc.cycjava.cycl.cb_sentence_browser.*;
+import static com.cyc.cycjava.cycl.cb_utilities.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.html_utilities.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWENTY_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- * module:      CB-SENTENCE-BROWSER
- * source file: /cyc/top/cycl/cb-sentence-browser.lisp
- * created:     2019/07/03 17:38:05
- */
-public final class cb_sentence_browser extends SubLTranslatedFile implements V12 {
+
+public final class cb_sentence_browser extends SubLTranslatedFile {
     public static final SubLFile me = new cb_sentence_browser();
 
+    public static final String myName = "com.cyc.cycjava.cycl.cb_sentence_browser";
 
+    public static final String myFingerPrint = "be9bca7e3451b03f76e53060dbbb6d2599aa013cff92503695ef68b0d49e88cd";
 
     // Internal Constants
-    @LispMethod(comment = "Internal Constants")
-    static private final SubLList $list0 = list(makeSymbol("ID-STRING"), makeSymbol("&OPTIONAL"), makeSymbol("JUSTIFY?"));
+    public static final SubLList $list0 = list(makeSymbol("ID-STRING"), makeSymbol("&OPTIONAL"), makeSymbol("JUSTIFY?"));
 
-    static private final SubLString $str1$Could_not_determine_a_sentence_fr = makeString("Could not determine a sentence from ~a");
+    public static final SubLString $str1$Could_not_determine_a_sentence_fr = makeString("Could not determine a sentence from ~a");
 
-    private static final SubLSymbol CB_SENTENCE = makeSymbol("CB-SENTENCE");
+    public static final SubLSymbol CB_SENTENCE = makeSymbol("CB-SENTENCE");
 
 
+
+    private static final SubLObject $$ist = reader_make_constant_shell(makeString("ist"));
 
     private static final SubLString $str5$__DOCTYPE_html_PUBLIC_____W3C__DT = makeString("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
 
     private static final SubLString $str6$_meta_http_equiv__X_UA_Compatible = makeString("<meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\" >");
 
+
+
     private static final SubLString $$$CycL_Sentence = makeString("CycL Sentence");
 
     private static final SubLString $str9$Mt___ = makeString("Mt : ");
+
+
 
     private static final SubLString $str11$Sentence_Not_Well_formed__ = makeString("Sentence Not Well-formed :");
 
@@ -120,7 +86,15 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
 
     private static final SubLString $str14$English_Translation___ = makeString("English Translation : ");
 
+
+
+
+
+
+
     private static final SubLString $$$_in_ = makeString(" in ");
+
+
 
     private static final SubLString $str20$cb_sentence_html = makeString("cb-sentence.html");
 
@@ -130,9 +104,19 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
 
     private static final SubLSymbol $ASSERT_SIMILAR_SENTENCE = makeKeyword("ASSERT-SIMILAR-SENTENCE");
 
+
+
+
+
     private static final SubLSymbol $SENTENCE_QUERY_SIMILAR = makeKeyword("SENTENCE-QUERY-SIMILAR");
 
+
+
+
+
     private static final SubLString $str29$_Show_English_ = makeString("[Show English]");
+
+
 
     private static final SubLString $str31$cb_sentence_with_show_english__a = makeString("cb-sentence-with-show-english&~a");
 
@@ -176,11 +160,15 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
 
     private static final SubLString $str51$_Assert_Similar_ = makeString("[Assert Similar]");
 
+
+
     private static final SubLString $str53$cb_assert_similar_sentence__a = makeString("cb-assert-similar-sentence&~a");
 
     private static final SubLSymbol CB_LINK_ASSERT_SIMILAR_SENTENCE = makeSymbol("CB-LINK-ASSERT-SIMILAR-SENTENCE");
 
     private static final SubLString $$$the_Cyc_KB_editing_facilities = makeString("the Cyc KB editing facilities");
+
+
 
     private static final SubLSymbol CB_ASSERT_SIMILAR_SENTENCE = makeSymbol("CB-ASSERT-SIMILAR-SENTENCE");
 
@@ -202,6 +190,8 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
 
     private static final SubLSymbol CB_UNASSERT_SENTENCE = makeSymbol("CB-UNASSERT-SENTENCE");
 
+
+
     private static final SubLString $str68$_Query_Similar_ = makeString("[Query Similar]");
 
     private static final SubLString $str69$cb_sentence_query_similar__A = makeString("cb-sentence-query-similar&~A");
@@ -222,7 +212,11 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
 
     private static final SubLString $$$Clone_CycL_Sentence = makeString("Clone CycL Sentence");
 
+
+
     private static final SubLSymbol $SAM_AUTOCOMPLETE_CSS = makeKeyword("SAM-AUTOCOMPLETE-CSS");
+
+
 
     private static final SubLString $str81$yui_skin_sam = makeString("yui-skin-sam");
 
@@ -252,6 +246,8 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
 
     private static final SubLSymbol CB_HANDLE_CLONE_SENTENCE = makeSymbol("CB-HANDLE-CLONE-SENTENCE");
 
+
+
     private static final SubLString $str96$Bad_sentence__probably_due_to_a_m = makeString("Bad sentence, probably due to a misspelling.~%Check these inputs:~%~%~S");
 
     private static final SubLString $str97$CycL_Sentence_not_Well_Formed = makeString("CycL Sentence not Well-Formed");
@@ -278,44 +274,8 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
 
     private static final SubLSymbol CB_JUSTIFY_SENTENCE = makeSymbol("CB-JUSTIFY-SENTENCE");
 
-    // Definitions
-    public static final SubLObject cb_sentence_alt(SubLObject args) {
-        {
-            SubLObject datum = args;
-            SubLObject current = datum;
-            SubLObject id_string = NIL;
-            destructuring_bind_must_consp(current, datum, $list_alt0);
-            id_string = current.first();
-            current = current.rest();
-            {
-                SubLObject justifyP = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
-                destructuring_bind_must_listp(current, datum, $list_alt0);
-                current = current.rest();
-                if (NIL == current) {
-                    {
-                        SubLObject sentence = cb_glob_lookup_by_string(id_string);
-                        if (NIL == possibly_sentence_p(sentence)) {
-                            return cb_error($str_alt1$Could_not_determine_a_sentence_fr, id_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        }
-                        {
-                            SubLObject v_assert = czer_meta.find_assertion_cycl(sentence, UNPROVIDED);
-                            if (NIL != assertion_handles.assertion_p(v_assert)) {
-                                cb_tools.cb_rem_from_sentence_history(sentence);
-                                cb_assertion_browser.cb_assertion_internal(v_assert);
-                            } else {
-                                com.cyc.cycjava.cycl.cb_sentence_browser.cb_sentence_internal(sentence, NIL, justifyP);
-                            }
-                        }
-                    }
-                } else {
-                    cdestructuring_bind_error(datum, $list_alt0);
-                }
-            }
-        }
-        return NIL;
-    }
 
-    // Definitions
+
     public static SubLObject cb_sentence(final SubLObject args) {
         SubLObject id_string = NIL;
         destructuring_bind_must_consp(args, args, $list0);
@@ -342,24 +302,6 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
         return NIL;
     }
 
-    public static final SubLObject cb_sentence_internal_alt(SubLObject sentence, SubLObject mt, SubLObject justifyP) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (justifyP == UNPROVIDED) {
-            justifyP = NIL;
-        }
-        if (NIL != ist_sentence_p(sentence)) {
-            {
-                SubLObject new_mt = designated_mt(sentence);
-                SubLObject subsentence = designated_sentence(sentence);
-                return com.cyc.cycjava.cycl.cb_sentence_browser.cb_sentence_internal(subsentence, new_mt, justifyP);
-            }
-        } else {
-            return com.cyc.cycjava.cycl.cb_sentence_browser.cb_sentence_internal_guts(sentence, mt, justifyP);
-        }
-    }
-
     public static SubLObject cb_sentence_internal(final SubLObject sentence, SubLObject mt, SubLObject justifyP) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -373,83 +315,6 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
             return cb_sentence_internal(subsentence, new_mt, justifyP);
         }
         return cb_sentence_internal_guts(sentence, mt, justifyP);
-    }
-
-    public static final SubLObject cb_sentence_internal_guts_alt(SubLObject sentence, SubLObject mt, SubLObject justifyP) {
-        if (justifyP == UNPROVIDED) {
-            justifyP = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            cb_tools.cb_add_to_sentence_history(make_el_formula($$ist, list(mt, sentence), UNPROVIDED));
-            html_markup(html_macros.$html_html_head$.getGlobalValue());
-            html_markup(html_macros.$html_head_head$.getGlobalValue());
-            html_macros.html_head_content_type();
-            html_source_readability_terpri(UNPROVIDED);
-            html_markup(html_macros.$html_title_head$.getGlobalValue());
-            format(html_macros.$html_stream$.getDynamicValue(thread), $$$CycL_Sentence);
-            html_markup(html_macros.$html_title_tail$.getGlobalValue());
-            html_markup(html_macros.$html_head_tail$.getGlobalValue());
-            html_source_readability_terpri(UNPROVIDED);
-            {
-                SubLObject _prev_bind_0 = html_macros.$html_inside_bodyP$.currentBinding(thread);
-                try {
-                    html_macros.$html_inside_bodyP$.bind(T, thread);
-                    html_markup(html_macros.$html_body_head$.getGlobalValue());
-                    html_char(CHAR_greater, UNPROVIDED);
-                    {
-                        SubLObject _prev_bind_0_1 = html_macros.$html_safe_print$.currentBinding(thread);
-                        try {
-                            html_macros.$html_safe_print$.bind(T, thread);
-                            html_markup(html_macros.$html_form_head$.getGlobalValue());
-                            html_markup(html_macros.$html_form_action$.getGlobalValue());
-                            html_char(CHAR_quotation, UNPROVIDED);
-                            html_markup(system_parameters.$cyc_cgi_program$.getDynamicValue(thread));
-                            html_char(CHAR_quotation, UNPROVIDED);
-                            html_char(CHAR_greater, UNPROVIDED);
-                            {
-                                SubLObject _prev_bind_0_2 = html_macros.$html_safe_print$.currentBinding(thread);
-                                SubLObject _prev_bind_1 = html_macros.$within_html_form$.currentBinding(thread);
-                                SubLObject _prev_bind_2 = html_macros.$html_form_field_uniquifier_code$.currentBinding(thread);
-                                try {
-                                    html_macros.$html_safe_print$.bind(T, thread);
-                                    html_macros.$within_html_form$.bind(T, thread);
-                                    html_macros.$html_form_field_uniquifier_code$.bind(html_macros.next_html_form_field_uniquifier_code(), thread);
-                                    html_markup(html_macros.$html_heading_head$.getGlobalValue());
-                                    html_markup(ONE_INTEGER);
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    html_princ($$$CycL_Sentence);
-                                    html_markup(html_macros.$html_heading_tail$.getGlobalValue());
-                                    html_markup(ONE_INTEGER);
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    com.cyc.cycjava.cycl.cb_sentence_browser.cb_sentence_toolbar(sentence, mt, justifyP);
-                                    html_hr(UNPROVIDED, UNPROVIDED);
-                                    com.cyc.cycjava.cycl.cb_sentence_browser.cb_sentence_info(sentence, mt, justifyP);
-                                    com.cyc.cycjava.cycl.cb_sentence_browser.cb_sentence_diagnostics(sentence, mt);
-                                    html_macros.embed_form_field_code(html_macros.$html_form_field_uniquifier_code$.getDynamicValue(thread));
-                                } finally {
-                                    html_macros.$html_form_field_uniquifier_code$.rebind(_prev_bind_2, thread);
-                                    html_macros.$within_html_form$.rebind(_prev_bind_1, thread);
-                                    html_macros.$html_safe_print$.rebind(_prev_bind_0_2, thread);
-                                }
-                            }
-                            html_markup(html_macros.$html_form_tail$.getGlobalValue());
-                            html_source_readability_terpri(UNPROVIDED);
-                            html_copyright_notice();
-                        } finally {
-                            html_macros.$html_safe_print$.rebind(_prev_bind_0_1, thread);
-                        }
-                    }
-                    html_markup(html_macros.$html_body_tail$.getGlobalValue());
-                    html_source_readability_terpri(UNPROVIDED);
-                } finally {
-                    html_macros.$html_inside_bodyP$.rebind(_prev_bind_0, thread);
-                }
-            }
-            html_markup(html_macros.$html_html_tail$.getGlobalValue());
-            html_source_readability_terpri(UNPROVIDED);
-            return NIL;
-        }
     }
 
     public static SubLObject cb_sentence_internal_guts(final SubLObject sentence, final SubLObject mt, SubLObject justifyP) {
@@ -533,20 +398,6 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
         return NIL;
     }
 
-    public static final SubLObject cb_sentence_info_alt(SubLObject sentence, SubLObject mt, SubLObject justifyP) {
-        if (justifyP == UNPROVIDED) {
-            justifyP = NIL;
-        }
-        if (NIL != mt) {
-            html_markup(html_macros.$html_strong_head$.getGlobalValue());
-            html_princ($str_alt5$Mt___);
-            html_markup(html_macros.$html_strong_tail$.getGlobalValue());
-            cb_form(mt, UNPROVIDED, UNPROVIDED);
-        }
-        com.cyc.cycjava.cycl.cb_sentence_browser.cb_sentence_show_variants(sentence, mt, justifyP);
-        return NIL;
-    }
-
     public static SubLObject cb_sentence_info(final SubLObject sentence, final SubLObject mt, SubLObject justifyP) {
         if (justifyP == UNPROVIDED) {
             justifyP = NIL;
@@ -561,72 +412,12 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
         return NIL;
     }
 
-    public static final SubLObject cb_sentence_diagnostics_alt(SubLObject sentence, SubLObject mt) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != $cb_a_perform_access_diagnostics$.getDynamicValue(thread)) {
-                com.cyc.cycjava.cycl.cb_sentence_browser.cb_sentence_access_diagnostics(sentence, mt);
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject cb_sentence_diagnostics(final SubLObject sentence, final SubLObject mt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != $cb_a_perform_access_diagnostics$.getDynamicValue(thread)) {
             cb_sentence_access_diagnostics(sentence, mt);
         }
         return NIL;
-    }
-
-    public static final SubLObject cb_sentence_access_diagnostics_alt(SubLObject sentence, SubLObject mt) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject some_problem = NIL;
-                if (NIL == wff.el_wffP(sentence, mt, UNPROVIDED)) {
-                    some_problem = T;
-                    html_macros.verify_not_within_html_pre();
-                    html_markup(html_macros.$html_preformatted_head$.getGlobalValue());
-                    {
-                        SubLObject _prev_bind_0 = html_macros.$within_html_pre$.currentBinding(thread);
-                        try {
-                            html_macros.$within_html_pre$.bind(T, thread);
-                            {
-                                SubLObject color_val = $RED;
-                                html_markup(html_macros.$html_font_head$.getGlobalValue());
-                                if (NIL != color_val) {
-                                    html_markup(html_macros.$html_font_color$.getGlobalValue());
-                                    html_char(CHAR_quotation, UNPROVIDED);
-                                    html_markup(html_color(color_val));
-                                    html_char(CHAR_quotation, UNPROVIDED);
-                                }
-                                html_char(CHAR_greater, UNPROVIDED);
-                                {
-                                    SubLObject _prev_bind_0_3 = html_macros.$html_safe_print$.currentBinding(thread);
-                                    try {
-                                        html_macros.$html_safe_print$.bind(T, thread);
-                                        html_markup(html_macros.$html_strong_head$.getGlobalValue());
-                                        html_markup(html_macros.$html_big_head$.getGlobalValue());
-                                        html_princ($str_alt7$Sentence_Not_Well_formed__);
-                                        html_markup(html_macros.$html_big_tail$.getGlobalValue());
-                                        html_markup(html_macros.$html_strong_tail$.getGlobalValue());
-                                    } finally {
-                                        html_macros.$html_safe_print$.rebind(_prev_bind_0_3, thread);
-                                    }
-                                }
-                                html_markup(html_macros.$html_font_tail$.getGlobalValue());
-                                wff.explain_why_not_wff(sentence, mt, html_macros.$html_stream$.getDynamicValue(thread));
-                            }
-                        } finally {
-                            html_macros.$within_html_pre$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    html_markup(html_macros.$html_preformatted_tail$.getGlobalValue());
-                }
-                return some_problem;
-            }
-        }
     }
 
     public static SubLObject cb_sentence_access_diagnostics(final SubLObject sentence, final SubLObject mt) {
@@ -669,56 +460,6 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
         return some_problem;
     }
 
-    public static final SubLObject cb_sentence_show_variants_alt(SubLObject sentence, SubLObject mt, SubLObject justifyP) {
-        if (justifyP == UNPROVIDED) {
-            justifyP = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != $cb_a_show_el_formula$.getDynamicValue(thread)) {
-                {
-                    SubLObject el_sentence = cycl_utilities.hl_to_el(sentence);
-                    if (!((NIL != $cb_a_show_hl_formula$.getDynamicValue(thread)) && fi.assertion_expand(narts_high.nart_expand(el_sentence)).equal(fi.assertion_expand(narts_high.nart_expand(sentence))))) {
-                        html_newline(UNPROVIDED);
-                        html_markup(html_macros.$html_strong_head$.getGlobalValue());
-                        html_princ($str_alt8$EL_Sentence___);
-                        html_markup(html_macros.$html_strong_tail$.getGlobalValue());
-                        html_newline(UNPROVIDED);
-                        com.cyc.cycjava.cycl.cb_sentence_browser.cb_show_sentence(el_sentence, mt, justifyP);
-                        html_newline(UNPROVIDED);
-                    }
-                }
-            }
-            if (NIL != $cb_a_show_hl_formula$.getDynamicValue(thread)) {
-                html_newline(UNPROVIDED);
-                html_markup(html_macros.$html_strong_head$.getGlobalValue());
-                html_princ($str_alt9$HL_Sentence___);
-                html_markup(html_macros.$html_strong_tail$.getGlobalValue());
-                html_newline(UNPROVIDED);
-                com.cyc.cycjava.cycl.cb_sentence_browser.cb_show_sentence(sentence, mt, justifyP);
-                html_newline(UNPROVIDED);
-            }
-            if (NIL != $cb_a_show_english$.getDynamicValue(thread)) {
-                html_newline(UNPROVIDED);
-                html_markup(html_macros.$html_strong_head$.getGlobalValue());
-                html_princ($str_alt10$English_Translation___);
-                html_markup(html_macros.$html_strong_tail$.getGlobalValue());
-                html_newline(UNPROVIDED);
-                {
-                    SubLObject _prev_bind_0 = $show_assertions_in_english$.currentBinding(thread);
-                    try {
-                        $show_assertions_in_english$.bind(T, thread);
-                        com.cyc.cycjava.cycl.cb_sentence_browser.cb_show_sentence_readably(sentence, mt, $cb_c_wrap_assertions$.getDynamicValue(thread), T, justifyP);
-                    } finally {
-                        $show_assertions_in_english$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                html_newline(UNPROVIDED);
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject cb_sentence_show_variants(final SubLObject sentence, final SubLObject mt, SubLObject justifyP) {
         if (justifyP == UNPROVIDED) {
             justifyP = NIL;
@@ -751,31 +492,16 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
             html_princ($str14$English_Translation___);
             html_markup(html_macros.$html_strong_tail$.getGlobalValue());
             html_newline(UNPROVIDED);
-            final SubLObject _prev_bind_0 = control_vars.$cb_major_presentation_language$.currentBinding(thread);
+            final SubLObject _prev_bind_0 = $cb_major_presentation_language$.currentBinding(thread);
             try {
-                control_vars.$cb_major_presentation_language$.bind($NL, thread);
+                $cb_major_presentation_language$.bind($NL, thread);
                 cb_show_sentence_readably(sentence, mt, $cb_c_wrap_assertions$.getDynamicValue(thread), T, justifyP);
             } finally {
-                control_vars.$cb_major_presentation_language$.rebind(_prev_bind_0, thread);
+                $cb_major_presentation_language$.rebind(_prev_bind_0, thread);
             }
             html_newline(UNPROVIDED);
         }
         return NIL;
-    }
-
-    public static final SubLObject cb_show_sentence_alt(SubLObject sentence, SubLObject mt, SubLObject justifyP) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (justifyP == UNPROVIDED) {
-            justifyP = NIL;
-        }
-        {
-            SubLObject ist_sentence = list($$ist, mt, sentence);
-            cb_link($SENTENCE, ist_sentence, justifyP, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            cb_form(sentence, UNPROVIDED, UNPROVIDED);
-            return NIL;
-        }
     }
 
     public static SubLObject cb_show_sentence(final SubLObject sentence, SubLObject mt, SubLObject justifyP) {
@@ -791,53 +517,6 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
         return NIL;
     }
 
-    /**
-     * Verbosely show SENTENCE by itself in a readable fashion
-     */
-    @LispMethod(comment = "Verbosely show SENTENCE by itself in a readable fashion")
-    public static final SubLObject cb_show_sentence_readably_alt(SubLObject sentence, SubLObject mt, SubLObject wrap, SubLObject include_mtP, SubLObject justifyP) {
-        if (wrap == UNPROVIDED) {
-            wrap = $cb_c_wrap_assertions$.getDynamicValue();
-        }
-        if (include_mtP == UNPROVIDED) {
-            include_mtP = T;
-        }
-        if (justifyP == UNPROVIDED) {
-            justifyP = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject ist_sentence = list($$ist, mt, sentence);
-                cb_link($SENTENCE, ist_sentence, justifyP, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                if (NIL != $show_assertions_in_english$.getDynamicValue(thread)) {
-                    cb_show_sentence_in_nl(sentence, mt);
-                    return sentence;
-                }
-                if (NIL != wrap) {
-                    cb_form(sentence, ZERO_INTEGER, T);
-                    if ((NIL != mt) && (NIL != include_mtP)) {
-                        html_princ($str_alt12$_in_);
-                        cb_form(mt, UNPROVIDED, UNPROVIDED);
-                    }
-                } else {
-                    html_markup(html_macros.$html_no_break_head$.getGlobalValue());
-                    cb_form(sentence, ZERO_INTEGER, NIL);
-                    if ((NIL != mt) && (NIL != include_mtP)) {
-                        html_princ($str_alt12$_in_);
-                        cb_form(mt, UNPROVIDED, UNPROVIDED);
-                    }
-                    html_markup(html_macros.$html_no_break_tail$.getGlobalValue());
-                }
-                return sentence;
-            }
-        }
-    }
-
-    /**
-     * Verbosely show SENTENCE by itself in a readable fashion
-     */
-    @LispMethod(comment = "Verbosely show SENTENCE by itself in a readable fashion")
     public static SubLObject cb_show_sentence_readably(final SubLObject sentence, final SubLObject mt, SubLObject wrap, SubLObject include_mtP, SubLObject justifyP) {
         if (wrap == UNPROVIDED) {
             wrap = $cb_c_wrap_assertions$.getDynamicValue();
@@ -851,7 +530,7 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject ist_sentence = list($$ist, mt, sentence);
         cb_link($SENTENCE, ist_sentence, justifyP, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-        final SubLObject pcase_var = control_vars.$cb_major_presentation_language$.getDynamicValue(thread);
+        final SubLObject pcase_var = $cb_major_presentation_language$.getDynamicValue(thread);
         if (pcase_var.eql($NL)) {
             cb_show_sentence_in_nl(sentence, mt);
             return sentence;
@@ -883,16 +562,6 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
         return sentence;
     }
 
-    public static final SubLObject sentence_modification_permittedP_alt(SubLObject sentence, SubLObject mt) {
-        if (NIL != subl_promotions.memberP(cycl_utilities.formula_operator(sentence), bookkeeping_store.bookkeeping_predicates_for_hl_store(), UNPROVIDED, UNPROVIDED)) {
-            return NIL;
-        }
-        if ((NIL != sksi_kb_accessors.sksi_content_mt_p(mt)) && (NIL == sksi_kb_accessors.modifiable_sk_source_in_any_mt_p(sksi_kb_accessors.content_mt_sk_source_in_any_mt(mt)))) {
-            return NIL;
-        }
-        return T;
-    }
-
     public static SubLObject sentence_modification_permittedP(final SubLObject sentence, final SubLObject mt) {
         if (NIL != subl_promotions.memberP(cycl_utilities.formula_operator(sentence), bookkeeping_store.bookkeeping_predicates_for_hl_store(), UNPROVIDED, UNPROVIDED)) {
             return NIL;
@@ -901,50 +570,6 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
             return NIL;
         }
         return T;
-    }
-
-    public static final SubLObject cb_sentence_toolbar_alt(SubLObject sentence, SubLObject mt, SubLObject justifyP) {
-        if (justifyP == UNPROVIDED) {
-            justifyP = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != possibly_sentence_p(sentence)) {
-                {
-                    SubLObject ist_sentence = list($$ist, mt, sentence);
-                    SubLObject non_modifiable_via_fiP = makeBoolean(NIL == com.cyc.cycjava.cycl.cb_sentence_browser.sentence_modification_permittedP(sentence, mt));
-                    cb_help_preamble($CB_SENTENCE, UNPROVIDED, UNPROVIDED);
-                    if (NIL == $cb_a_show_english$.getDynamicValue(thread)) {
-                        cb_link($SHOW_ENGLISH_FOR_CYCL_SENTENCE, ist_sentence, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        html_indent(UNPROVIDED);
-                    }
-                    if (NIL == $cb_a_show_el_formula$.getDynamicValue(thread)) {
-                        cb_link($SHOW_EL_VERSION_OF_SENTENCE, ist_sentence, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        html_indent(UNPROVIDED);
-                    }
-                    cb_link($WFF_CHECK_SENTENCE, ist_sentence, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    html_indent(UNPROVIDED);
-                    html_newline(UNPROVIDED);
-                    if (NIL != $cb_editing_enabled$.getDynamicValue(thread)) {
-                        cb_link($ASSERT_SIMILAR_SENTENCE, ist_sentence, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        html_indent(UNPROVIDED);
-                        cb_link($EDIT_SENTENCE, ist_sentence, NIL, non_modifiable_via_fiP, UNPROVIDED, UNPROVIDED);
-                        html_indent(UNPROVIDED);
-                        cb_link($UNASSERT_SENTENCE, ist_sentence, NIL, non_modifiable_via_fiP, UNPROVIDED, UNPROVIDED);
-                        html_indent(UNPROVIDED);
-                    }
-                    cb_link($SENTENCE_QUERY_SIMILAR, ist_sentence, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    html_indent(UNPROVIDED);
-                    cb_link($CLONE_SENTENCE, ist_sentence, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    html_indent(UNPROVIDED);
-                    if (NIL != justifyP) {
-                        cb_link($JUSTIFY_SENTENCE, ist_sentence, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        html_indent(UNPROVIDED);
-                    }
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject cb_sentence_toolbar(final SubLObject sentence, final SubLObject mt, SubLObject justifyP) {
@@ -985,45 +610,6 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
         return NIL;
     }
 
-    public static final SubLObject cb_link_show_english_for_cycl_sentence_alt(SubLObject sentence, SubLObject linktext) {
-        if (linktext == UNPROVIDED) {
-            linktext = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == linktext) {
-                linktext = $str_alt24$_Show_English_;
-            }
-            {
-                SubLObject frame_name_var = cb_frame_name($MAIN);
-                html_markup(html_macros.$html_anchor_head$.getGlobalValue());
-                html_markup(html_macros.$html_anchor_href$.getGlobalValue());
-                html_char(CHAR_quotation, UNPROVIDED);
-                cyc_cgi_url_int();
-                format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt26$cb_sentence_with_show_english__a, cb_glob_id(sentence));
-                html_char(CHAR_quotation, UNPROVIDED);
-                if (NIL != frame_name_var) {
-                    html_markup(html_macros.$html_anchor_target$.getGlobalValue());
-                    html_char(CHAR_quotation, UNPROVIDED);
-                    html_markup(frame_name_var);
-                    html_char(CHAR_quotation, UNPROVIDED);
-                }
-                html_char(CHAR_greater, UNPROVIDED);
-                {
-                    SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
-                    try {
-                        html_macros.$html_safe_print$.bind(T, thread);
-                        html_princ(linktext);
-                    } finally {
-                        html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                html_markup(html_macros.$html_anchor_tail$.getGlobalValue());
-            }
-            return sentence;
-        }
-    }
-
     public static SubLObject cb_link_show_english_for_cycl_sentence(final SubLObject sentence, SubLObject linktext) {
         if (linktext == UNPROVIDED) {
             linktext = NIL;
@@ -1057,22 +643,6 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
         return sentence;
     }
 
-    public static final SubLObject cb_sentence_with_show_english_alt(SubLObject args) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject _prev_bind_0 = $cb_a_show_english$.currentBinding(thread);
-                try {
-                    $cb_a_show_english$.bind(T, thread);
-                    com.cyc.cycjava.cycl.cb_sentence_browser.cb_sentence(args);
-                } finally {
-                    $cb_a_show_english$.rebind(_prev_bind_0, thread);
-                }
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject cb_sentence_with_show_english(final SubLObject args) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject _prev_bind_0 = $cb_a_show_english$.currentBinding(thread);
@@ -1083,45 +653,6 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
             $cb_a_show_english$.rebind(_prev_bind_0, thread);
         }
         return NIL;
-    }
-
-    public static final SubLObject cb_link_show_el_version_of_sentence_alt(SubLObject sentence, SubLObject linktext) {
-        if (linktext == UNPROVIDED) {
-            linktext = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == linktext) {
-                linktext = $str_alt29$_EL_Formula_;
-            }
-            {
-                SubLObject frame_name_var = cb_frame_name($MAIN);
-                html_markup(html_macros.$html_anchor_head$.getGlobalValue());
-                html_markup(html_macros.$html_anchor_href$.getGlobalValue());
-                html_char(CHAR_quotation, UNPROVIDED);
-                cyc_cgi_url_int();
-                format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt30$cb_sentence_with_show_el_formula_, cb_glob_id(sentence));
-                html_char(CHAR_quotation, UNPROVIDED);
-                if (NIL != frame_name_var) {
-                    html_markup(html_macros.$html_anchor_target$.getGlobalValue());
-                    html_char(CHAR_quotation, UNPROVIDED);
-                    html_markup(frame_name_var);
-                    html_char(CHAR_quotation, UNPROVIDED);
-                }
-                html_char(CHAR_greater, UNPROVIDED);
-                {
-                    SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
-                    try {
-                        html_macros.$html_safe_print$.bind(T, thread);
-                        html_princ(linktext);
-                    } finally {
-                        html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                html_markup(html_macros.$html_anchor_tail$.getGlobalValue());
-            }
-            return sentence;
-        }
     }
 
     public static SubLObject cb_link_show_el_version_of_sentence(final SubLObject sentence, SubLObject linktext) {
@@ -1157,22 +688,6 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
         return sentence;
     }
 
-    public static final SubLObject cb_sentence_with_show_el_formula_alt(SubLObject args) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject _prev_bind_0 = $cb_a_show_el_formula$.currentBinding(thread);
-                try {
-                    $cb_a_show_el_formula$.bind(T, thread);
-                    com.cyc.cycjava.cycl.cb_sentence_browser.cb_sentence(args);
-                } finally {
-                    $cb_a_show_el_formula$.rebind(_prev_bind_0, thread);
-                }
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject cb_sentence_with_show_el_formula(final SubLObject args) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject _prev_bind_0 = $cb_a_show_el_formula$.currentBinding(thread);
@@ -1183,45 +698,6 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
             $cb_a_show_el_formula$.rebind(_prev_bind_0, thread);
         }
         return NIL;
-    }
-
-    public static final SubLObject cb_link_wff_check_sentence_alt(SubLObject sentence, SubLObject linktext) {
-        if (linktext == UNPROVIDED) {
-            linktext = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == linktext) {
-                linktext = $str_alt33$_WFF_Check_;
-            }
-            {
-                SubLObject frame_name_var = cb_frame_name($MAIN);
-                html_markup(html_macros.$html_anchor_head$.getGlobalValue());
-                html_markup(html_macros.$html_anchor_href$.getGlobalValue());
-                html_char(CHAR_quotation, UNPROVIDED);
-                cyc_cgi_url_int();
-                format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt34$cb_wff_check_sentence__A, cb_glob_id(sentence));
-                html_char(CHAR_quotation, UNPROVIDED);
-                if (NIL != frame_name_var) {
-                    html_markup(html_macros.$html_anchor_target$.getGlobalValue());
-                    html_char(CHAR_quotation, UNPROVIDED);
-                    html_markup(frame_name_var);
-                    html_char(CHAR_quotation, UNPROVIDED);
-                }
-                html_char(CHAR_greater, UNPROVIDED);
-                {
-                    SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
-                    try {
-                        html_macros.$html_safe_print$.bind(T, thread);
-                        html_princ(linktext);
-                    } finally {
-                        html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                html_markup(html_macros.$html_anchor_tail$.getGlobalValue());
-            }
-            return sentence;
-        }
     }
 
     public static SubLObject cb_link_wff_check_sentence(final SubLObject sentence, SubLObject linktext) {
@@ -1255,44 +731,6 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
         }
         html_markup(html_macros.$html_anchor_tail$.getGlobalValue());
         return sentence;
-    }
-
-    public static final SubLObject cb_wff_check_sentence_alt(SubLObject args) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject datum = args;
-                SubLObject current = datum;
-                SubLObject id_string = NIL;
-                destructuring_bind_must_consp(current, datum, $list_alt36);
-                id_string = current.first();
-                current = current.rest();
-                if (NIL == current) {
-                    {
-                        SubLObject sentence = cb_glob_lookup_by_string(id_string);
-                        SubLObject mt = mt_vars.$default_assert_mt$.getGlobalValue();
-                        if (NIL == possibly_sentence_p(sentence)) {
-                            cb_error($str_alt37$_a_does_not_specify_a_CycL_senten, id_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        }
-                        if (NIL != $cb_default_mt$.getDynamicValue(thread)) {
-                            mt = $cb_default_mt$.getDynamicValue(thread);
-                        }
-                        {
-                            SubLObject mt_to_diagnose = mt;
-                            SubLObject sentence_to_diagnose = sentence;
-                            if (NIL != ist_sentence_p(sentence)) {
-                                mt_to_diagnose = designated_mt(sentence);
-                                sentence_to_diagnose = designated_sentence(sentence);
-                            }
-                            return cb_assertion_editor.cb_wff_check_sentence_int(sentence_to_diagnose, mt_to_diagnose, T, UNPROVIDED);
-                        }
-                    }
-                } else {
-                    cdestructuring_bind_error(datum, $list_alt36);
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject cb_wff_check_sentence(final SubLObject args) {
@@ -1396,45 +834,6 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
         return NIL;
     }
 
-    public static final SubLObject cb_link_assert_similar_sentence_alt(SubLObject sentence, SubLObject linktext) {
-        if (linktext == UNPROVIDED) {
-            linktext = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == linktext) {
-                linktext = $str_alt39$_Assert_Similar_;
-            }
-            {
-                SubLObject frame_name_var = cb_frame_name($SELF);
-                html_markup(html_macros.$html_anchor_head$.getGlobalValue());
-                html_markup(html_macros.$html_anchor_href$.getGlobalValue());
-                html_char(CHAR_quotation, UNPROVIDED);
-                cyc_cgi_url_int();
-                format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt41$cb_assert_similar_sentence__a, cb_glob_id(sentence));
-                html_char(CHAR_quotation, UNPROVIDED);
-                if (NIL != frame_name_var) {
-                    html_markup(html_macros.$html_anchor_target$.getGlobalValue());
-                    html_char(CHAR_quotation, UNPROVIDED);
-                    html_markup(frame_name_var);
-                    html_char(CHAR_quotation, UNPROVIDED);
-                }
-                html_char(CHAR_greater, UNPROVIDED);
-                {
-                    SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
-                    try {
-                        html_macros.$html_safe_print$.bind(T, thread);
-                        html_princ(linktext);
-                    } finally {
-                        html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                html_markup(html_macros.$html_anchor_tail$.getGlobalValue());
-            }
-            return sentence;
-        }
-    }
-
     public static SubLObject cb_link_assert_similar_sentence(final SubLObject sentence, SubLObject linktext) {
         if (linktext == UNPROVIDED) {
             linktext = NIL;
@@ -1468,34 +867,6 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
         return sentence;
     }
 
-    public static final SubLObject cb_assert_similar_sentence_alt(SubLObject args) {
-        if (NIL != ke.cyclist_is_guest()) {
-            cyc_navigator_internals.guest_warn($$$the_Cyc_KB_editing_facilities);
-        } else {
-            {
-                SubLObject datum = args;
-                SubLObject current = datum;
-                SubLObject id_string = NIL;
-                destructuring_bind_must_consp(current, datum, $list_alt36);
-                id_string = current.first();
-                current = current.rest();
-                if (NIL == current) {
-                    {
-                        SubLObject sentence = cb_glob_lookup_by_string(id_string);
-                        if (NIL == possibly_sentence_p(sentence)) {
-                            cb_error($str_alt37$_a_does_not_specify_a_CycL_senten, id_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                            return NIL;
-                        }
-                        cb_assertion_editor.cb_assert_internal($SIMILAR, NIL, sentence, T);
-                    }
-                } else {
-                    cdestructuring_bind_error(datum, $list_alt36);
-                }
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject cb_assert_similar_sentence(final SubLObject args) {
         if (NIL != ke.cyclist_is_guest()) {
             cyc_navigator_internals.guest_warn($$$the_Cyc_KB_editing_facilities);
@@ -1516,52 +887,6 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
             }
         }
         return NIL;
-    }
-
-    public static final SubLObject cb_link_edit_sentence_alt(SubLObject sentence, SubLObject linktext, SubLObject disabledP) {
-        if (linktext == UNPROVIDED) {
-            linktext = NIL;
-        }
-        if (disabledP == UNPROVIDED) {
-            disabledP = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == linktext) {
-                linktext = $str_alt46$_Edit_;
-            }
-            if (NIL != disabledP) {
-                cb_assertion_editor.cb_disabled_link(linktext);
-            } else {
-                {
-                    SubLObject frame_name_var = cb_frame_name($SELF);
-                    html_markup(html_macros.$html_anchor_head$.getGlobalValue());
-                    html_markup(html_macros.$html_anchor_href$.getGlobalValue());
-                    html_char(CHAR_quotation, UNPROVIDED);
-                    cyc_cgi_url_int();
-                    format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt47$cb_edit_sentence__a, cb_glob_id(sentence));
-                    html_char(CHAR_quotation, UNPROVIDED);
-                    if (NIL != frame_name_var) {
-                        html_markup(html_macros.$html_anchor_target$.getGlobalValue());
-                        html_char(CHAR_quotation, UNPROVIDED);
-                        html_markup(frame_name_var);
-                        html_char(CHAR_quotation, UNPROVIDED);
-                    }
-                    html_char(CHAR_greater, UNPROVIDED);
-                    {
-                        SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
-                        try {
-                            html_macros.$html_safe_print$.bind(T, thread);
-                            html_princ(linktext);
-                        } finally {
-                            html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    html_markup(html_macros.$html_anchor_tail$.getGlobalValue());
-                }
-            }
-            return sentence;
-        }
     }
 
     public static SubLObject cb_link_edit_sentence(final SubLObject sentence, SubLObject linktext, SubLObject disabledP) {
@@ -1604,34 +929,6 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
         return sentence;
     }
 
-    public static final SubLObject cb_edit_sentence_alt(SubLObject args) {
-        if (NIL != ke.cyclist_is_guest()) {
-            cyc_navigator_internals.guest_warn($$$the_Cyc_KB_editing_facilities);
-        } else {
-            {
-                SubLObject datum = args;
-                SubLObject current = datum;
-                SubLObject id_string = NIL;
-                destructuring_bind_must_consp(current, datum, $list_alt36);
-                id_string = current.first();
-                current = current.rest();
-                if (NIL == current) {
-                    {
-                        SubLObject sentence = cb_glob_lookup_by_string(id_string);
-                        if (NIL == possibly_sentence_p(sentence)) {
-                            cb_error($str_alt37$_a_does_not_specify_a_CycL_senten, id_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                            return NIL;
-                        }
-                        cb_assertion_editor.cb_assert_internal($EDIT_SENTENCE, NIL, sentence, T);
-                    }
-                } else {
-                    cdestructuring_bind_error(datum, $list_alt36);
-                }
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject cb_edit_sentence(final SubLObject args) {
         if (NIL != ke.cyclist_is_guest()) {
             cyc_navigator_internals.guest_warn($$$the_Cyc_KB_editing_facilities);
@@ -1652,52 +949,6 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
             }
         }
         return NIL;
-    }
-
-    public static final SubLObject cb_link_unassert_sentence_alt(SubLObject sentence, SubLObject linktext, SubLObject disabledP) {
-        if (linktext == UNPROVIDED) {
-            linktext = NIL;
-        }
-        if (disabledP == UNPROVIDED) {
-            disabledP = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == linktext) {
-                linktext = $str_alt50$_Unassert_;
-            }
-            if (NIL != disabledP) {
-                cb_assertion_editor.cb_disabled_link(linktext);
-            } else {
-                {
-                    SubLObject frame_name_var = cb_frame_name($SELF);
-                    html_markup(html_macros.$html_anchor_head$.getGlobalValue());
-                    html_markup(html_macros.$html_anchor_href$.getGlobalValue());
-                    html_char(CHAR_quotation, UNPROVIDED);
-                    cyc_cgi_url_int();
-                    format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt51$cb_unassert_sentence__a, cb_glob_id(sentence));
-                    html_char(CHAR_quotation, UNPROVIDED);
-                    if (NIL != frame_name_var) {
-                        html_markup(html_macros.$html_anchor_target$.getGlobalValue());
-                        html_char(CHAR_quotation, UNPROVIDED);
-                        html_markup(frame_name_var);
-                        html_char(CHAR_quotation, UNPROVIDED);
-                    }
-                    html_char(CHAR_greater, UNPROVIDED);
-                    {
-                        SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
-                        try {
-                            html_macros.$html_safe_print$.bind(T, thread);
-                            html_princ(linktext);
-                        } finally {
-                            html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    html_markup(html_macros.$html_anchor_tail$.getGlobalValue());
-                }
-            }
-            return sentence;
-        }
     }
 
     public static SubLObject cb_link_unassert_sentence(final SubLObject sentence, SubLObject linktext, SubLObject disabledP) {
@@ -1740,38 +991,6 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
         return sentence;
     }
 
-    public static final SubLObject cb_unassert_sentence_alt(SubLObject args) {
-        if (NIL != ke.cyclist_is_guest()) {
-            cyc_navigator_internals.guest_warn($$$the_Cyc_KB_editing_facilities);
-        } else {
-            {
-                SubLObject datum = args;
-                SubLObject current = datum;
-                SubLObject id_string = NIL;
-                destructuring_bind_must_consp(current, datum, $list_alt36);
-                id_string = current.first();
-                current = current.rest();
-                if (NIL == current) {
-                    {
-                        SubLObject sentence = cb_glob_lookup_by_string(id_string);
-                        if (NIL == possibly_sentence_p(sentence)) {
-                            cb_error($str_alt37$_a_does_not_specify_a_CycL_senten, id_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                            return NIL;
-                        }
-                        if (NIL != ist_sentence_p(sentence)) {
-                            cb_tools.cb_rem_from_sentence_history(sentence);
-                            ke.ke_unassert(cycl_utilities.formula_arg2(sentence, UNPROVIDED), cycl_utilities.formula_arg1(sentence, UNPROVIDED));
-                            cb_assertion_editor.cb_note_edit_change($$$Unassert, T, TWO_INTEGER, UNPROVIDED);
-                        }
-                    }
-                } else {
-                    cdestructuring_bind_error(datum, $list_alt36);
-                }
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject cb_unassert_sentence(final SubLObject args) {
         if (NIL != ke.cyclist_is_guest()) {
             cyc_navigator_internals.guest_warn($$$the_Cyc_KB_editing_facilities);
@@ -1798,52 +1017,12 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
         return NIL;
     }
 
-    public static final SubLObject cb_link_sentence_query_similar_alt(SubLObject sentence, SubLObject linktext) {
-        if (linktext == UNPROVIDED) {
-            linktext = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(sentence, POSSIBLY_SENTENCE_P);
-            if (NIL == linktext) {
-                linktext = $str_alt56$_Query_Similar_;
-            }
-            {
-                SubLObject frame_name_var = cb_frame_name($SELF);
-                html_markup(html_macros.$html_anchor_head$.getGlobalValue());
-                html_markup(html_macros.$html_anchor_href$.getGlobalValue());
-                html_char(CHAR_quotation, UNPROVIDED);
-                cyc_cgi_url_int();
-                format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt57$cb_sentence_query_similar__A, cb_glob_id(sentence));
-                html_char(CHAR_quotation, UNPROVIDED);
-                if (NIL != frame_name_var) {
-                    html_markup(html_macros.$html_anchor_target$.getGlobalValue());
-                    html_char(CHAR_quotation, UNPROVIDED);
-                    html_markup(frame_name_var);
-                    html_char(CHAR_quotation, UNPROVIDED);
-                }
-                html_char(CHAR_greater, UNPROVIDED);
-                {
-                    SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
-                    try {
-                        html_macros.$html_safe_print$.bind(T, thread);
-                        html_princ(linktext);
-                    } finally {
-                        html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                html_markup(html_macros.$html_anchor_tail$.getGlobalValue());
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject cb_link_sentence_query_similar(final SubLObject sentence, SubLObject linktext) {
         if (linktext == UNPROVIDED) {
             linktext = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != possibly_sentence_p(sentence) : "! el_utilities.possibly_sentence_p(sentence) " + ("el_utilities.possibly_sentence_p(sentence) " + "CommonSymbols.NIL != el_utilities.possibly_sentence_p(sentence) ") + sentence;
+        assert NIL != possibly_sentence_p(sentence) : "el_utilities.possibly_sentence_p(sentence) " + "CommonSymbols.NIL != el_utilities.possibly_sentence_p(sentence) " + sentence;
         if (NIL == linktext) {
             linktext = $str68$_Query_Similar_;
         }
@@ -1872,43 +1051,6 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
         return NIL;
     }
 
-    public static final SubLObject cb_sentence_query_similar_alt(SubLObject args) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject datum = args;
-                SubLObject current = datum;
-                SubLObject id_string = NIL;
-                destructuring_bind_must_consp(current, datum, $list_alt36);
-                id_string = current.first();
-                current = current.rest();
-                if (NIL == current) {
-                    {
-                        SubLObject sentence = cb_glob_lookup_by_string(id_string);
-                        if (NIL == possibly_sentence_p(sentence)) {
-                            return cb_error($str_alt59$That_sentence_is_not_available_, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        }
-                        {
-                            SubLObject mt = (NIL != $cb_default_mt$.getDynamicValue(thread)) ? ((SubLObject) ($cb_default_mt$.getDynamicValue(thread))) : mt_vars.$default_ask_mt$.getGlobalValue();
-                            thread.resetMultipleValues();
-                            {
-                                SubLObject sentence_4 = czer_utilities.unwrap_if_ist(sentence, mt);
-                                SubLObject mt_5 = thread.secondMultipleValue();
-                                thread.resetMultipleValues();
-                                sentence = sentence_4;
-                                mt = mt_5;
-                            }
-                            return cb_query.cb_similar_query(sentence, mt, UNPROVIDED);
-                        }
-                    }
-                } else {
-                    cdestructuring_bind_error(datum, $list_alt36);
-                }
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject cb_sentence_query_similar(final SubLObject args) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject id_string = NIL;
@@ -1933,52 +1075,12 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
         return cb_query.cb_similar_query(sentence, mt, UNPROVIDED);
     }
 
-    public static final SubLObject cb_link_clone_sentence_alt(SubLObject sentence, SubLObject linktext) {
-        if (linktext == UNPROVIDED) {
-            linktext = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(sentence, POSSIBLY_SENTENCE_P);
-            if (NIL == linktext) {
-                linktext = $str_alt61$_Clone_;
-            }
-            {
-                SubLObject frame_name_var = cb_frame_name($SELF);
-                html_markup(html_macros.$html_anchor_head$.getGlobalValue());
-                html_markup(html_macros.$html_anchor_href$.getGlobalValue());
-                html_char(CHAR_quotation, UNPROVIDED);
-                cyc_cgi_url_int();
-                format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt62$cb_clone_sentence__a, cb_glob_id(sentence));
-                html_char(CHAR_quotation, UNPROVIDED);
-                if (NIL != frame_name_var) {
-                    html_markup(html_macros.$html_anchor_target$.getGlobalValue());
-                    html_char(CHAR_quotation, UNPROVIDED);
-                    html_markup(frame_name_var);
-                    html_char(CHAR_quotation, UNPROVIDED);
-                }
-                html_char(CHAR_greater, UNPROVIDED);
-                {
-                    SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
-                    try {
-                        html_macros.$html_safe_print$.bind(T, thread);
-                        html_princ(linktext);
-                    } finally {
-                        html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                html_markup(html_macros.$html_anchor_tail$.getGlobalValue());
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject cb_link_clone_sentence(final SubLObject sentence, SubLObject linktext) {
         if (linktext == UNPROVIDED) {
             linktext = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != possibly_sentence_p(sentence) : "! el_utilities.possibly_sentence_p(sentence) " + ("el_utilities.possibly_sentence_p(sentence) " + "CommonSymbols.NIL != el_utilities.possibly_sentence_p(sentence) ") + sentence;
+        assert NIL != possibly_sentence_p(sentence) : "el_utilities.possibly_sentence_p(sentence) " + "CommonSymbols.NIL != el_utilities.possibly_sentence_p(sentence) " + sentence;
         if (NIL == linktext) {
             linktext = $str73$_Clone_;
         }
@@ -2007,29 +1109,6 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
         return NIL;
     }
 
-    public static final SubLObject cb_clone_sentence_alt(SubLObject args) {
-        {
-            SubLObject datum = args;
-            SubLObject current = datum;
-            SubLObject id_string = NIL;
-            destructuring_bind_must_consp(current, datum, $list_alt36);
-            id_string = current.first();
-            current = current.rest();
-            if (NIL == current) {
-                {
-                    SubLObject sentence = cb_glob_lookup_by_string(id_string);
-                    if (NIL == possibly_sentence_p(sentence)) {
-                        return cb_error($str_alt59$That_sentence_is_not_available_, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    }
-                    return com.cyc.cycjava.cycl.cb_sentence_browser.cb_clone_sentence_int(sentence);
-                }
-            } else {
-                cdestructuring_bind_error(datum, $list_alt36);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject cb_clone_sentence(final SubLObject args) {
         SubLObject id_string = NIL;
         destructuring_bind_must_consp(args, args, $list42);
@@ -2044,143 +1123,6 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
             return cb_error($str71$That_sentence_is_not_available_, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         }
         return cb_clone_sentence_int(sentence);
-    }
-
-    public static final SubLObject cb_clone_sentence_int_alt(SubLObject input_sentence) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject title_var = $$$Clone_CycL_Sentence;
-                {
-                    SubLObject _prev_bind_0 = html_macros.$html_id_space_id_generator$.currentBinding(thread);
-                    try {
-                        html_macros.$html_id_space_id_generator$.bind(NIL != integer_sequence_generator.integer_sequence_generator_p(html_macros.$html_id_space_id_generator$.getDynamicValue(thread)) ? ((SubLObject) (html_macros.$html_id_space_id_generator$.getDynamicValue(thread))) : integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED), thread);
-                        html_markup(html_macros.$html_html_head$.getGlobalValue());
-                        html_markup(html_macros.$html_head_head$.getGlobalValue());
-                        html_macros.html_head_content_type();
-                        cb_head_shortcut_icon();
-                        html_meta_robot_instructions($cb_permit_robots_to_indexP$.getDynamicValue(thread), $cb_permit_robots_to_followP$.getDynamicValue(thread));
-                        if (NIL != title_var) {
-                            html_source_readability_terpri(UNPROVIDED);
-                            html_markup(html_macros.$html_title_head$.getGlobalValue());
-                            html_princ(title_var);
-                            html_markup(html_macros.$html_title_tail$.getGlobalValue());
-                        }
-                        html_complete.html_complete_script();
-                        html_complete.html_autocomplete_css();
-                        html_complete.html_autocomplete_scripts();
-                        html_script_utilities.html_simple_applet_input_definition_script();
-                        html_markup(html_macros.$html_head_tail$.getGlobalValue());
-                        html_source_readability_terpri(UNPROVIDED);
-                        {
-                            SubLObject _prev_bind_0_6 = html_macros.$html_inside_bodyP$.currentBinding(thread);
-                            try {
-                                html_macros.$html_inside_bodyP$.bind(T, thread);
-                                html_markup(html_macros.$html_body_head$.getGlobalValue());
-                                if (NIL != html_macros.$html_default_bgcolor$.getDynamicValue(thread)) {
-                                    html_markup(html_macros.$html_body_bgcolor$.getGlobalValue());
-                                    html_char(CHAR_quotation, UNPROVIDED);
-                                    html_markup(html_color(html_macros.$html_default_bgcolor$.getDynamicValue(thread)));
-                                    html_char(CHAR_quotation, UNPROVIDED);
-                                }
-                                if (true) {
-                                    html_markup(html_macros.$html_body_class$.getGlobalValue());
-                                    html_char(CHAR_quotation, UNPROVIDED);
-                                    html_markup($str_alt68$yui_skin_sam);
-                                    html_char(CHAR_quotation, UNPROVIDED);
-                                }
-                                html_char(CHAR_greater, UNPROVIDED);
-                                {
-                                    SubLObject _prev_bind_0_7 = html_macros.$html_safe_print$.currentBinding(thread);
-                                    try {
-                                        html_macros.$html_safe_print$.bind(T, thread);
-                                        if (NIL != title_var) {
-                                            html_markup(html_macros.$html_heading_head$.getGlobalValue());
-                                            html_markup(TWO_INTEGER);
-                                            html_char(CHAR_greater, UNPROVIDED);
-                                            html_princ(title_var);
-                                            html_markup(html_macros.$html_heading_tail$.getGlobalValue());
-                                            html_markup(TWO_INTEGER);
-                                            html_char(CHAR_greater, UNPROVIDED);
-                                        }
-                                        {
-                                            SubLObject script = html_script_utilities.html_simple_applet_input_onsubmit_script(html_script_utilities.$default_sentence_input_simple_applets$.getGlobalValue());
-                                            SubLObject frame_name_var = cb_frame_name(NIL);
-                                            html_markup(html_macros.$html_form_head$.getGlobalValue());
-                                            html_markup(html_macros.$html_form_action$.getGlobalValue());
-                                            html_char(CHAR_quotation, UNPROVIDED);
-                                            html_markup(system_parameters.$cyc_cgi_program$.getDynamicValue(thread));
-                                            html_char(CHAR_quotation, UNPROVIDED);
-                                            if (NIL != html_macros.$html_form_method_post$.getGlobalValue()) {
-                                                html_markup(html_macros.$html_form_method$.getGlobalValue());
-                                                html_char(CHAR_quotation, UNPROVIDED);
-                                                html_markup(html_macros.$html_form_method_post$.getGlobalValue());
-                                                html_char(CHAR_quotation, UNPROVIDED);
-                                            }
-                                            if (NIL != frame_name_var) {
-                                                html_markup(html_macros.$html_form_target$.getGlobalValue());
-                                                html_char(CHAR_quotation, UNPROVIDED);
-                                                html_markup(frame_name_var);
-                                                html_char(CHAR_quotation, UNPROVIDED);
-                                            }
-                                            html_indent(ONE_INTEGER);
-                                            html_markup(script);
-                                            html_char(CHAR_greater, UNPROVIDED);
-                                            {
-                                                SubLObject _prev_bind_0_8 = html_macros.$html_safe_print$.currentBinding(thread);
-                                                SubLObject _prev_bind_1 = html_macros.$within_html_form$.currentBinding(thread);
-                                                SubLObject _prev_bind_2 = html_macros.$html_form_field_uniquifier_code$.currentBinding(thread);
-                                                try {
-                                                    html_macros.$html_safe_print$.bind(T, thread);
-                                                    html_macros.$within_html_form$.bind(T, thread);
-                                                    html_macros.$html_form_field_uniquifier_code$.bind(html_macros.next_html_form_field_uniquifier_code(), thread);
-                                                    html_hidden_input($str_alt69$cb_handle_clone_sentence, NIL, UNPROVIDED);
-                                                    {
-                                                        SubLObject sentence = input_sentence;
-                                                        SubLObject mt = (NIL != $cb_default_mt$.getDynamicValue(thread)) ? ((SubLObject) ($cb_default_mt$.getDynamicValue(thread))) : mt_vars.$default_clone_mt$.getGlobalValue();
-                                                        if (NIL != ist_sentence_p(input_sentence)) {
-                                                            sentence = designated_sentence(input_sentence);
-                                                            mt = designated_mt(input_sentence);
-                                                        }
-                                                        html_target_definition($str_alt70$clone_form);
-                                                        html_reset_input($$$Reset_Values);
-                                                        html_indent(UNPROVIDED);
-                                                        html_submit_input($$$Clone, $$$clone, UNPROVIDED);
-                                                        html_newline(UNPROVIDED);
-                                                        cb_form_widgets.cb_mt_input_section(mt, UNPROVIDED);
-                                                        html_newline(UNPROVIDED);
-                                                        cb_form_widgets.cb_el_sentence_input_section(sentence, $list_alt74);
-                                                    }
-                                                    html_macros.embed_form_field_code(html_macros.$html_form_field_uniquifier_code$.getDynamicValue(thread));
-                                                } finally {
-                                                    html_macros.$html_form_field_uniquifier_code$.rebind(_prev_bind_2, thread);
-                                                    html_macros.$within_html_form$.rebind(_prev_bind_1, thread);
-                                                    html_macros.$html_safe_print$.rebind(_prev_bind_0_8, thread);
-                                                }
-                                            }
-                                            html_markup(html_macros.$html_form_tail$.getGlobalValue());
-                                        }
-                                        html_source_readability_terpri(UNPROVIDED);
-                                        html_copyright_notice();
-                                    } finally {
-                                        html_macros.$html_safe_print$.rebind(_prev_bind_0_7, thread);
-                                    }
-                                }
-                                html_markup(html_macros.$html_body_tail$.getGlobalValue());
-                                html_source_readability_terpri(UNPROVIDED);
-                            } finally {
-                                html_macros.$html_inside_bodyP$.rebind(_prev_bind_0_6, thread);
-                            }
-                        }
-                        html_markup(html_macros.$html_html_tail$.getGlobalValue());
-                        html_source_readability_terpri(UNPROVIDED);
-                    } finally {
-                        html_macros.$html_id_space_id_generator$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject cb_clone_sentence_int(final SubLObject input_sentence) {
@@ -2339,54 +1281,6 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
         return NIL;
     }
 
-    public static final SubLObject cb_handle_clone_sentence_alt(SubLObject args) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject mt = cb_form_widgets.cb_extract_mt_input(args, UNPROVIDED, UNPROVIDED);
-                SubLObject mt_error = thread.secondMultipleValue();
-                SubLObject mt_error_string = thread.thirdMultipleValue();
-                thread.resetMultipleValues();
-                if (NIL != mt_error) {
-                    return cb_form_widgets.cb_mt_error(mt_error, mt_error_string);
-                }
-                thread.resetMultipleValues();
-                {
-                    SubLObject sentence = cb_form_widgets.cb_extract_el_sentence_input(args, $list_alt75);
-                    SubLObject sentence_error = thread.secondMultipleValue();
-                    SubLObject sentence_error_string = thread.thirdMultipleValue();
-                    thread.resetMultipleValues();
-                    if (NIL != sentence_error) {
-                        return cb_form_widgets.cb_el_sentence_error(sentence_error, sentence_error_string, UNPROVIDED);
-                    }
-                    {
-                        SubLObject errorP = NIL;
-                        {
-                            SubLObject _prev_bind_0 = cycl_grammar.$grammar_uses_kbP$.currentBinding(thread);
-                            try {
-                                cycl_grammar.$grammar_uses_kbP$.bind(NIL, thread);
-                                if (NIL == cycl_grammar.cycl_sentence_p(sentence)) {
-                                    com.cyc.cycjava.cycl.cb_sentence_browser.cb_explain_why_not_syntactically_wff(sentence);
-                                    errorP = T;
-                                }
-                            } finally {
-                                cycl_grammar.$grammar_uses_kbP$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                        if (NIL != errorP) {
-                            return NIL;
-                        }
-                    }
-                    {
-                        SubLObject sentence_to_view = (NIL != hlmt.hlmt_p(mt)) ? ((SubLObject) (list($$ist, mt, sentence))) : sentence;
-                        return com.cyc.cycjava.cycl.cb_sentence_browser.cb_sentence(list(string_utilities.str(cb_glob_id(sentence_to_view))));
-                    }
-                }
-            }
-        }
-    }
-
     public static SubLObject cb_handle_clone_sentence(final SubLObject args) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -2423,49 +1317,9 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
         return cb_sentence(list(string_utilities.str(cb_glob_id(sentence_to_view))));
     }
 
-    /**
-     * Return the CycL sentence specified by STRING, or generate an error page explaining the problem and return NIL.
-     */
-    @LispMethod(comment = "Return the CycL sentence specified by STRING, or generate an error page explaining the problem and return NIL.")
-    public static final SubLObject cb_extract_cycl_sentence_from_string_alt(SubLObject string) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(string, STRINGP);
-            {
-                SubLObject sentence = read_from_string_ignoring_errors(string, NIL, NIL, UNPROVIDED, UNPROVIDED);
-                SubLObject errorP = NIL;
-                if (NIL == sentence) {
-                    cb_error($str_alt78$Bad_sentence__probably_due_to_a_m, string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    return NIL;
-                }
-                {
-                    SubLObject _prev_bind_0 = cycl_grammar.$grammar_uses_kbP$.currentBinding(thread);
-                    try {
-                        cycl_grammar.$grammar_uses_kbP$.bind(NIL, thread);
-                        if (NIL == cycl_grammar.cycl_sentence_p(sentence)) {
-                            com.cyc.cycjava.cycl.cb_sentence_browser.cb_explain_why_not_syntactically_wff(sentence);
-                            errorP = T;
-                        }
-                    } finally {
-                        cycl_grammar.$grammar_uses_kbP$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                if (NIL != errorP) {
-                    return NIL;
-                } else {
-                    return sentence;
-                }
-            }
-        }
-    }
-
-    /**
-     * Return the CycL sentence specified by STRING, or generate an error page explaining the problem and return NIL.
-     */
-    @LispMethod(comment = "Return the CycL sentence specified by STRING, or generate an error page explaining the problem and return NIL.")
     public static SubLObject cb_extract_cycl_sentence_from_string(final SubLObject string) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != stringp(string) : "! stringp(string) " + ("Types.stringp(string) " + "CommonSymbols.NIL != Types.stringp(string) ") + string;
+        assert NIL != stringp(string) : "Types.stringp(string) " + "CommonSymbols.NIL != Types.stringp(string) " + string;
         final SubLObject sentence = read_from_string_ignoring_errors(string, NIL, NIL, UNPROVIDED, UNPROVIDED);
         SubLObject errorP = NIL;
         if (NIL == sentence) {
@@ -2486,144 +1340,6 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
             return NIL;
         }
         return sentence;
-    }
-
-    public static final SubLObject cb_explain_why_not_syntactically_wff_alt(SubLObject sentence) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject title_var = $str_alt79$CycL_Sentence_not_Well_Formed;
-                {
-                    SubLObject _prev_bind_0 = html_macros.$html_id_space_id_generator$.currentBinding(thread);
-                    try {
-                        html_macros.$html_id_space_id_generator$.bind(NIL != integer_sequence_generator.integer_sequence_generator_p(html_macros.$html_id_space_id_generator$.getDynamicValue(thread)) ? ((SubLObject) (html_macros.$html_id_space_id_generator$.getDynamicValue(thread))) : integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED), thread);
-                        html_markup(html_macros.$html_html_head$.getGlobalValue());
-                        html_markup(html_macros.$html_head_head$.getGlobalValue());
-                        html_macros.html_head_content_type();
-                        cb_head_shortcut_icon();
-                        html_meta_robot_instructions($cb_permit_robots_to_indexP$.getDynamicValue(thread), $cb_permit_robots_to_followP$.getDynamicValue(thread));
-                        if (NIL != title_var) {
-                            html_source_readability_terpri(UNPROVIDED);
-                            html_markup(html_macros.$html_title_head$.getGlobalValue());
-                            html_princ(title_var);
-                            html_markup(html_macros.$html_title_tail$.getGlobalValue());
-                        }
-                        html_markup(html_macros.$html_head_tail$.getGlobalValue());
-                        html_source_readability_terpri(UNPROVIDED);
-                        {
-                            SubLObject _prev_bind_0_9 = html_macros.$html_inside_bodyP$.currentBinding(thread);
-                            try {
-                                html_macros.$html_inside_bodyP$.bind(T, thread);
-                                html_markup(html_macros.$html_body_head$.getGlobalValue());
-                                if (NIL != html_macros.$html_default_bgcolor$.getDynamicValue(thread)) {
-                                    html_markup(html_macros.$html_body_bgcolor$.getGlobalValue());
-                                    html_char(CHAR_quotation, UNPROVIDED);
-                                    html_markup(html_color(html_macros.$html_default_bgcolor$.getDynamicValue(thread)));
-                                    html_char(CHAR_quotation, UNPROVIDED);
-                                }
-                                if (true) {
-                                    html_markup(html_macros.$html_body_class$.getGlobalValue());
-                                    html_char(CHAR_quotation, UNPROVIDED);
-                                    html_markup($str_alt68$yui_skin_sam);
-                                    html_char(CHAR_quotation, UNPROVIDED);
-                                }
-                                html_char(CHAR_greater, UNPROVIDED);
-                                {
-                                    SubLObject _prev_bind_0_10 = html_macros.$html_safe_print$.currentBinding(thread);
-                                    try {
-                                        html_macros.$html_safe_print$.bind(T, thread);
-                                        if (NIL != title_var) {
-                                            html_markup(html_macros.$html_heading_head$.getGlobalValue());
-                                            html_markup(TWO_INTEGER);
-                                            html_char(CHAR_greater, UNPROVIDED);
-                                            html_princ(title_var);
-                                            html_markup(html_macros.$html_heading_tail$.getGlobalValue());
-                                            html_markup(TWO_INTEGER);
-                                            html_char(CHAR_greater, UNPROVIDED);
-                                        }
-                                        html_markup(html_macros.$html_form_head$.getGlobalValue());
-                                        html_markup(html_macros.$html_form_action$.getGlobalValue());
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                        html_markup(system_parameters.$cyc_cgi_program$.getDynamicValue(thread));
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                        html_char(CHAR_greater, UNPROVIDED);
-                                        {
-                                            SubLObject _prev_bind_0_11 = html_macros.$html_safe_print$.currentBinding(thread);
-                                            SubLObject _prev_bind_1 = html_macros.$within_html_form$.currentBinding(thread);
-                                            SubLObject _prev_bind_2 = html_macros.$html_form_field_uniquifier_code$.currentBinding(thread);
-                                            try {
-                                                html_macros.$html_safe_print$.bind(T, thread);
-                                                html_macros.$within_html_form$.bind(T, thread);
-                                                html_macros.$html_form_field_uniquifier_code$.bind(html_macros.next_html_form_field_uniquifier_code(), thread);
-                                                cb_back_button($SELF, $$$Back);
-                                                html_newline(TWO_INTEGER);
-                                                html_markup(html_macros.$html_strong_head$.getGlobalValue());
-                                                html_princ($str_alt81$Sentence___);
-                                                html_markup(html_macros.$html_strong_tail$.getGlobalValue());
-                                                html_newline(UNPROVIDED);
-                                                cb_form(sentence, ZERO_INTEGER, T);
-                                                html_macros.verify_not_within_html_pre();
-                                                html_markup(html_macros.$html_preformatted_head$.getGlobalValue());
-                                                {
-                                                    SubLObject _prev_bind_0_12 = html_macros.$within_html_pre$.currentBinding(thread);
-                                                    try {
-                                                        html_macros.$within_html_pre$.bind(T, thread);
-                                                        html_markup(html_macros.$html_strong_head$.getGlobalValue());
-                                                        html_princ($str_alt82$Diagnosis___);
-                                                        html_markup(html_macros.$html_strong_tail$.getGlobalValue());
-                                                        html_newline(UNPROVIDED);
-                                                        html_princ($str_alt83$This_is_not_a_syntactically_well_);
-                                                        html_markup(html_macros.$html_anchor_head$.getGlobalValue());
-                                                        html_markup(html_macros.$html_anchor_href$.getGlobalValue());
-                                                        html_char(CHAR_quotation, UNPROVIDED);
-                                                        html_markup($str_alt84$_________cycdoc_ref_cycl_syntax_h);
-                                                        html_char(CHAR_quotation, UNPROVIDED);
-                                                        html_char(CHAR_greater, UNPROVIDED);
-                                                        {
-                                                            SubLObject _prev_bind_0_13 = html_macros.$html_safe_print$.currentBinding(thread);
-                                                            try {
-                                                                html_macros.$html_safe_print$.bind(T, thread);
-                                                                html_princ($$$Syntax_of_CycL);
-                                                            } finally {
-                                                                html_macros.$html_safe_print$.rebind(_prev_bind_0_13, thread);
-                                                            }
-                                                        }
-                                                        html_markup(html_macros.$html_anchor_tail$.getGlobalValue());
-                                                        html_princ($str_alt86$_document_);
-                                                    } finally {
-                                                        html_macros.$within_html_pre$.rebind(_prev_bind_0_12, thread);
-                                                    }
-                                                }
-                                                html_markup(html_macros.$html_preformatted_tail$.getGlobalValue());
-                                                html_macros.embed_form_field_code(html_macros.$html_form_field_uniquifier_code$.getDynamicValue(thread));
-                                            } finally {
-                                                html_macros.$html_form_field_uniquifier_code$.rebind(_prev_bind_2, thread);
-                                                html_macros.$within_html_form$.rebind(_prev_bind_1, thread);
-                                                html_macros.$html_safe_print$.rebind(_prev_bind_0_11, thread);
-                                            }
-                                        }
-                                        html_markup(html_macros.$html_form_tail$.getGlobalValue());
-                                        html_source_readability_terpri(UNPROVIDED);
-                                        html_copyright_notice();
-                                    } finally {
-                                        html_macros.$html_safe_print$.rebind(_prev_bind_0_10, thread);
-                                    }
-                                }
-                                html_markup(html_macros.$html_body_tail$.getGlobalValue());
-                                html_source_readability_terpri(UNPROVIDED);
-                            } finally {
-                                html_macros.$html_inside_bodyP$.rebind(_prev_bind_0_9, thread);
-                            }
-                        }
-                        html_markup(html_macros.$html_html_tail$.getGlobalValue());
-                        html_source_readability_terpri(UNPROVIDED);
-                    } finally {
-                        html_macros.$html_id_space_id_generator$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject cb_explain_why_not_syntactically_wff(final SubLObject sentence) {
@@ -2790,52 +1506,12 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
         return NIL;
     }
 
-    public static final SubLObject cb_link_justify_sentence_alt(SubLObject sentence, SubLObject linktext) {
-        if (linktext == UNPROVIDED) {
-            linktext = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(sentence, POSSIBLY_SENTENCE_P);
-            if (NIL == linktext) {
-                linktext = $str_alt87$_Justify_;
-            }
-            {
-                SubLObject frame_name_var = cb_frame_name($SELF);
-                html_markup(html_macros.$html_anchor_head$.getGlobalValue());
-                html_markup(html_macros.$html_anchor_href$.getGlobalValue());
-                html_char(CHAR_quotation, UNPROVIDED);
-                cyc_cgi_url_int();
-                format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt88$cb_justify_sentence__a, cb_glob_id(sentence));
-                html_char(CHAR_quotation, UNPROVIDED);
-                if (NIL != frame_name_var) {
-                    html_markup(html_macros.$html_anchor_target$.getGlobalValue());
-                    html_char(CHAR_quotation, UNPROVIDED);
-                    html_markup(frame_name_var);
-                    html_char(CHAR_quotation, UNPROVIDED);
-                }
-                html_char(CHAR_greater, UNPROVIDED);
-                {
-                    SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
-                    try {
-                        html_macros.$html_safe_print$.bind(T, thread);
-                        html_princ(linktext);
-                    } finally {
-                        html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                html_markup(html_macros.$html_anchor_tail$.getGlobalValue());
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject cb_link_justify_sentence(final SubLObject sentence, SubLObject linktext) {
         if (linktext == UNPROVIDED) {
             linktext = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != possibly_sentence_p(sentence) : "! el_utilities.possibly_sentence_p(sentence) " + ("el_utilities.possibly_sentence_p(sentence) " + "CommonSymbols.NIL != el_utilities.possibly_sentence_p(sentence) ") + sentence;
+        assert NIL != possibly_sentence_p(sentence) : "el_utilities.possibly_sentence_p(sentence) " + "CommonSymbols.NIL != el_utilities.possibly_sentence_p(sentence) " + sentence;
         if (NIL == linktext) {
             linktext = $str105$_Justify_;
         }
@@ -2864,29 +1540,6 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
         return NIL;
     }
 
-    public static final SubLObject cb_justify_sentence_alt(SubLObject args) {
-        {
-            SubLObject datum = args;
-            SubLObject current = datum;
-            SubLObject id_string = NIL;
-            destructuring_bind_must_consp(current, datum, $list_alt36);
-            id_string = current.first();
-            current = current.rest();
-            if (NIL == current) {
-                {
-                    SubLObject sentence = cb_glob_lookup_by_string(id_string);
-                    if (NIL == possibly_sentence_p(sentence)) {
-                        return cb_error($str_alt59$That_sentence_is_not_available_, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    }
-                    return com.cyc.cycjava.cycl.cb_sentence_browser.cb_justify_sentence_int(sentence);
-                }
-            } else {
-                cdestructuring_bind_error(datum, $list_alt36);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject cb_justify_sentence(final SubLObject args) {
         SubLObject id_string = NIL;
         destructuring_bind_must_consp(args, args, $list42);
@@ -2901,24 +1554,6 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
             return cb_error($str71$That_sentence_is_not_available_, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         }
         return cb_justify_sentence_int(sentence);
-    }
-
-    public static final SubLObject cb_justify_sentence_int_alt(SubLObject input_sentence) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != ist_sentence_p(input_sentence)) {
-                {
-                    SubLObject sentence = designated_sentence(input_sentence);
-                    SubLObject mt = designated_mt(input_sentence);
-                    SubLObject justification = NIL;
-                    com.cyc.cycjava.cycl.cb_sentence_browser.cb_show_sentence_readably(sentence, mt, $cb_c_wrap_assertions$.getDynamicValue(thread), T, T);
-                    html_newline(UNPROVIDED);
-                    justification = sksi_hl_support_utilities.sksi_justify_int(sentence, mt);
-                    return cb_assertion_browser.cb_hl_support_justify_int($SKSI, justification);
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject cb_justify_sentence_int(final SubLObject input_sentence) {
@@ -2936,42 +1571,42 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
     }
 
     public static SubLObject declare_cb_sentence_browser_file() {
-        declareFunction("cb_sentence", "CB-SENTENCE", 1, 0, false);
-        declareFunction("cb_sentence_internal", "CB-SENTENCE-INTERNAL", 1, 2, false);
-        declareFunction("cb_sentence_internal_guts", "CB-SENTENCE-INTERNAL-GUTS", 2, 1, false);
-        declareFunction("cb_sentence_info", "CB-SENTENCE-INFO", 2, 1, false);
-        declareFunction("cb_sentence_diagnostics", "CB-SENTENCE-DIAGNOSTICS", 2, 0, false);
-        declareFunction("cb_sentence_access_diagnostics", "CB-SENTENCE-ACCESS-DIAGNOSTICS", 2, 0, false);
-        declareFunction("cb_sentence_show_variants", "CB-SENTENCE-SHOW-VARIANTS", 2, 1, false);
-        declareFunction("cb_show_sentence", "CB-SHOW-SENTENCE", 1, 2, false);
-        declareFunction("cb_show_sentence_readably", "CB-SHOW-SENTENCE-READABLY", 2, 3, false);
-        declareFunction("sentence_modification_permittedP", "SENTENCE-MODIFICATION-PERMITTED?", 2, 0, false);
-        declareFunction("cb_sentence_toolbar", "CB-SENTENCE-TOOLBAR", 2, 1, false);
-        declareFunction("cb_link_show_english_for_cycl_sentence", "CB-LINK-SHOW-ENGLISH-FOR-CYCL-SENTENCE", 1, 1, false);
-        declareFunction("cb_sentence_with_show_english", "CB-SENTENCE-WITH-SHOW-ENGLISH", 1, 0, false);
-        declareFunction("cb_link_show_el_version_of_sentence", "CB-LINK-SHOW-EL-VERSION-OF-SENTENCE", 1, 1, false);
-        declareFunction("cb_sentence_with_show_el_formula", "CB-SENTENCE-WITH-SHOW-EL-FORMULA", 1, 0, false);
-        declareFunction("cb_link_wff_check_sentence", "CB-LINK-WFF-CHECK-SENTENCE", 1, 1, false);
-        declareFunction("cb_wff_check_sentence", "CB-WFF-CHECK-SENTENCE", 1, 0, false);
-        declareFunction("cb_link_wff_check_forward_placement_sentence", "CB-LINK-WFF-CHECK-FORWARD-PLACEMENT-SENTENCE", 2, 1, false);
-        declareFunction("cb_wff_check_forward_placement_sentence", "CB-WFF-CHECK-FORWARD-PLACEMENT-SENTENCE", 1, 0, false);
-        declareFunction("cb_link_assert_similar_sentence", "CB-LINK-ASSERT-SIMILAR-SENTENCE", 1, 1, false);
-        declareFunction("cb_assert_similar_sentence", "CB-ASSERT-SIMILAR-SENTENCE", 1, 0, false);
-        declareFunction("cb_link_edit_sentence", "CB-LINK-EDIT-SENTENCE", 1, 2, false);
-        declareFunction("cb_edit_sentence", "CB-EDIT-SENTENCE", 1, 0, false);
-        declareFunction("cb_link_unassert_sentence", "CB-LINK-UNASSERT-SENTENCE", 1, 2, false);
-        declareFunction("cb_unassert_sentence", "CB-UNASSERT-SENTENCE", 1, 0, false);
-        declareFunction("cb_link_sentence_query_similar", "CB-LINK-SENTENCE-QUERY-SIMILAR", 1, 1, false);
-        declareFunction("cb_sentence_query_similar", "CB-SENTENCE-QUERY-SIMILAR", 1, 0, false);
-        declareFunction("cb_link_clone_sentence", "CB-LINK-CLONE-SENTENCE", 1, 1, false);
-        declareFunction("cb_clone_sentence", "CB-CLONE-SENTENCE", 1, 0, false);
-        declareFunction("cb_clone_sentence_int", "CB-CLONE-SENTENCE-INT", 1, 0, false);
-        declareFunction("cb_handle_clone_sentence", "CB-HANDLE-CLONE-SENTENCE", 1, 0, false);
-        declareFunction("cb_extract_cycl_sentence_from_string", "CB-EXTRACT-CYCL-SENTENCE-FROM-STRING", 1, 0, false);
-        declareFunction("cb_explain_why_not_syntactically_wff", "CB-EXPLAIN-WHY-NOT-SYNTACTICALLY-WFF", 1, 0, false);
-        declareFunction("cb_link_justify_sentence", "CB-LINK-JUSTIFY-SENTENCE", 1, 1, false);
-        declareFunction("cb_justify_sentence", "CB-JUSTIFY-SENTENCE", 1, 0, false);
-        declareFunction("cb_justify_sentence_int", "CB-JUSTIFY-SENTENCE-INT", 1, 0, false);
+        declareFunction(me, "cb_sentence", "CB-SENTENCE", 1, 0, false);
+        declareFunction(me, "cb_sentence_internal", "CB-SENTENCE-INTERNAL", 1, 2, false);
+        declareFunction(me, "cb_sentence_internal_guts", "CB-SENTENCE-INTERNAL-GUTS", 2, 1, false);
+        declareFunction(me, "cb_sentence_info", "CB-SENTENCE-INFO", 2, 1, false);
+        declareFunction(me, "cb_sentence_diagnostics", "CB-SENTENCE-DIAGNOSTICS", 2, 0, false);
+        declareFunction(me, "cb_sentence_access_diagnostics", "CB-SENTENCE-ACCESS-DIAGNOSTICS", 2, 0, false);
+        declareFunction(me, "cb_sentence_show_variants", "CB-SENTENCE-SHOW-VARIANTS", 2, 1, false);
+        declareFunction(me, "cb_show_sentence", "CB-SHOW-SENTENCE", 1, 2, false);
+        declareFunction(me, "cb_show_sentence_readably", "CB-SHOW-SENTENCE-READABLY", 2, 3, false);
+        declareFunction(me, "sentence_modification_permittedP", "SENTENCE-MODIFICATION-PERMITTED?", 2, 0, false);
+        declareFunction(me, "cb_sentence_toolbar", "CB-SENTENCE-TOOLBAR", 2, 1, false);
+        declareFunction(me, "cb_link_show_english_for_cycl_sentence", "CB-LINK-SHOW-ENGLISH-FOR-CYCL-SENTENCE", 1, 1, false);
+        declareFunction(me, "cb_sentence_with_show_english", "CB-SENTENCE-WITH-SHOW-ENGLISH", 1, 0, false);
+        declareFunction(me, "cb_link_show_el_version_of_sentence", "CB-LINK-SHOW-EL-VERSION-OF-SENTENCE", 1, 1, false);
+        declareFunction(me, "cb_sentence_with_show_el_formula", "CB-SENTENCE-WITH-SHOW-EL-FORMULA", 1, 0, false);
+        declareFunction(me, "cb_link_wff_check_sentence", "CB-LINK-WFF-CHECK-SENTENCE", 1, 1, false);
+        declareFunction(me, "cb_wff_check_sentence", "CB-WFF-CHECK-SENTENCE", 1, 0, false);
+        declareFunction(me, "cb_link_wff_check_forward_placement_sentence", "CB-LINK-WFF-CHECK-FORWARD-PLACEMENT-SENTENCE", 2, 1, false);
+        declareFunction(me, "cb_wff_check_forward_placement_sentence", "CB-WFF-CHECK-FORWARD-PLACEMENT-SENTENCE", 1, 0, false);
+        declareFunction(me, "cb_link_assert_similar_sentence", "CB-LINK-ASSERT-SIMILAR-SENTENCE", 1, 1, false);
+        declareFunction(me, "cb_assert_similar_sentence", "CB-ASSERT-SIMILAR-SENTENCE", 1, 0, false);
+        declareFunction(me, "cb_link_edit_sentence", "CB-LINK-EDIT-SENTENCE", 1, 2, false);
+        declareFunction(me, "cb_edit_sentence", "CB-EDIT-SENTENCE", 1, 0, false);
+        declareFunction(me, "cb_link_unassert_sentence", "CB-LINK-UNASSERT-SENTENCE", 1, 2, false);
+        declareFunction(me, "cb_unassert_sentence", "CB-UNASSERT-SENTENCE", 1, 0, false);
+        declareFunction(me, "cb_link_sentence_query_similar", "CB-LINK-SENTENCE-QUERY-SIMILAR", 1, 1, false);
+        declareFunction(me, "cb_sentence_query_similar", "CB-SENTENCE-QUERY-SIMILAR", 1, 0, false);
+        declareFunction(me, "cb_link_clone_sentence", "CB-LINK-CLONE-SENTENCE", 1, 1, false);
+        declareFunction(me, "cb_clone_sentence", "CB-CLONE-SENTENCE", 1, 0, false);
+        declareFunction(me, "cb_clone_sentence_int", "CB-CLONE-SENTENCE-INT", 1, 0, false);
+        declareFunction(me, "cb_handle_clone_sentence", "CB-HANDLE-CLONE-SENTENCE", 1, 0, false);
+        declareFunction(me, "cb_extract_cycl_sentence_from_string", "CB-EXTRACT-CYCL-SENTENCE-FROM-STRING", 1, 0, false);
+        declareFunction(me, "cb_explain_why_not_syntactically_wff", "CB-EXPLAIN-WHY-NOT-SYNTACTICALLY-WFF", 1, 0, false);
+        declareFunction(me, "cb_link_justify_sentence", "CB-LINK-JUSTIFY-SENTENCE", 1, 1, false);
+        declareFunction(me, "cb_justify_sentence", "CB-JUSTIFY-SENTENCE", 1, 0, false);
+        declareFunction(me, "cb_justify_sentence_int", "CB-JUSTIFY-SENTENCE-INT", 1, 0, false);
         return NIL;
     }
 
@@ -2979,75 +1614,7 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
         return NIL;
     }
 
-    public static final SubLObject setup_cb_sentence_browser_file_alt() {
-        html_macros.note_html_handler_function(CB_SENTENCE);
-        sethash($CB_SENTENCE, $cb_help_definitions$.getGlobalValue(), list($str_alt14$cb_sentence_html, NIL));
-        setup_cb_link_method($SHOW_ENGLISH_FOR_CYCL_SENTENCE, CB_LINK_SHOW_ENGLISH_FOR_CYCL_SENTENCE, TWO_INTEGER);
-        html_macros.note_html_handler_function(CB_SENTENCE_WITH_SHOW_ENGLISH);
-        setup_cb_link_method($SHOW_EL_VERSION_OF_SENTENCE, CB_LINK_SHOW_EL_VERSION_OF_SENTENCE, TWO_INTEGER);
-        html_macros.note_html_handler_function(CB_SENTENCE_WITH_SHOW_EL_FORMULA);
-        setup_cb_link_method($WFF_CHECK_SENTENCE, CB_LINK_WFF_CHECK_SENTENCE, TWO_INTEGER);
-        html_macros.note_html_handler_function(CB_WFF_CHECK_SENTENCE);
-        setup_cb_link_method($ASSERT_SIMILAR_SENTENCE, CB_LINK_ASSERT_SIMILAR_SENTENCE, TWO_INTEGER);
-        html_macros.note_html_handler_function(CB_ASSERT_SIMILAR_SENTENCE);
-        setup_cb_link_method($EDIT_SENTENCE, CB_LINK_EDIT_SENTENCE, THREE_INTEGER);
-        html_macros.note_html_handler_function(CB_EDIT_SENTENCE);
-        setup_cb_link_method($UNASSERT_SENTENCE, CB_LINK_UNASSERT_SENTENCE, THREE_INTEGER);
-        html_macros.note_html_handler_function(CB_UNASSERT_SENTENCE);
-        setup_cb_link_method($SENTENCE_QUERY_SIMILAR, CB_LINK_SENTENCE_QUERY_SIMILAR, TWO_INTEGER);
-        html_macros.note_html_handler_function(CB_SENTENCE_QUERY_SIMILAR);
-        setup_cb_link_method($CLONE_SENTENCE, CB_LINK_CLONE_SENTENCE, TWO_INTEGER);
-        html_macros.note_html_handler_function(CB_CLONE_SENTENCE);
-        html_macros.note_html_handler_function(CB_HANDLE_CLONE_SENTENCE);
-        setup_cb_link_method($JUSTIFY_SENTENCE, CB_LINK_JUSTIFY_SENTENCE, TWO_INTEGER);
-        html_macros.note_html_handler_function(CB_JUSTIFY_SENTENCE);
-        return NIL;
-    }
-
     public static SubLObject setup_cb_sentence_browser_file() {
-        if (SubLFiles.USE_V1) {
-            html_macros.note_cgi_handler_function(CB_SENTENCE, $HTML_HANDLER);
-            sethash($CB_SENTENCE, cyc_file_dependencies.$cb_help_definitions$.getGlobalValue(), list($str20$cb_sentence_html, NIL));
-            setup_cb_link_method($SHOW_ENGLISH_FOR_CYCL_SENTENCE, CB_LINK_SHOW_ENGLISH_FOR_CYCL_SENTENCE, TWO_INTEGER);
-            html_macros.note_cgi_handler_function(CB_SENTENCE_WITH_SHOW_ENGLISH, $HTML_HANDLER);
-            setup_cb_link_method($SHOW_EL_VERSION_OF_SENTENCE, CB_LINK_SHOW_EL_VERSION_OF_SENTENCE, TWO_INTEGER);
-            html_macros.note_cgi_handler_function(CB_SENTENCE_WITH_SHOW_EL_FORMULA, $HTML_HANDLER);
-            setup_cb_link_method($WFF_CHECK_SENTENCE, CB_LINK_WFF_CHECK_SENTENCE, TWO_INTEGER);
-            html_macros.note_cgi_handler_function(CB_WFF_CHECK_SENTENCE, $HTML_HANDLER);
-            setup_cb_link_method($WFF_CHECK_FORWARD_PLACEMENT_SENTENCE, CB_LINK_WFF_CHECK_FORWARD_PLACEMENT_SENTENCE, THREE_INTEGER);
-            html_macros.note_cgi_handler_function(CB_WFF_CHECK_FORWARD_PLACEMENT_SENTENCE, $HTML_HANDLER);
-            setup_cb_link_method($ASSERT_SIMILAR_SENTENCE, CB_LINK_ASSERT_SIMILAR_SENTENCE, TWO_INTEGER);
-            html_macros.note_cgi_handler_function(CB_ASSERT_SIMILAR_SENTENCE, $HTML_HANDLER);
-            setup_cb_link_method($EDIT_SENTENCE, CB_LINK_EDIT_SENTENCE, THREE_INTEGER);
-            html_macros.note_cgi_handler_function(CB_EDIT_SENTENCE, $HTML_HANDLER);
-            setup_cb_link_method($UNASSERT_SENTENCE, CB_LINK_UNASSERT_SENTENCE, THREE_INTEGER);
-            html_macros.note_cgi_handler_function(CB_UNASSERT_SENTENCE, $HTML_HANDLER);
-            setup_cb_link_method($SENTENCE_QUERY_SIMILAR, CB_LINK_SENTENCE_QUERY_SIMILAR, TWO_INTEGER);
-            html_macros.note_cgi_handler_function(CB_SENTENCE_QUERY_SIMILAR, $HTML_HANDLER);
-            setup_cb_link_method($CLONE_SENTENCE, CB_LINK_CLONE_SENTENCE, TWO_INTEGER);
-            html_macros.note_cgi_handler_function(CB_CLONE_SENTENCE, $HTML_HANDLER);
-            html_macros.note_cgi_handler_function(CB_HANDLE_CLONE_SENTENCE, $HTML_HANDLER);
-            setup_cb_link_method($JUSTIFY_SENTENCE, CB_LINK_JUSTIFY_SENTENCE, TWO_INTEGER);
-            html_macros.note_cgi_handler_function(CB_JUSTIFY_SENTENCE, $HTML_HANDLER);
-        }
-        if (SubLFiles.USE_V2) {
-            html_macros.note_html_handler_function(CB_SENTENCE);
-            sethash($CB_SENTENCE, $cb_help_definitions$.getGlobalValue(), list($str_alt14$cb_sentence_html, NIL));
-            html_macros.note_html_handler_function(CB_SENTENCE_WITH_SHOW_ENGLISH);
-            html_macros.note_html_handler_function(CB_SENTENCE_WITH_SHOW_EL_FORMULA);
-            html_macros.note_html_handler_function(CB_WFF_CHECK_SENTENCE);
-            html_macros.note_html_handler_function(CB_ASSERT_SIMILAR_SENTENCE);
-            html_macros.note_html_handler_function(CB_EDIT_SENTENCE);
-            html_macros.note_html_handler_function(CB_UNASSERT_SENTENCE);
-            html_macros.note_html_handler_function(CB_SENTENCE_QUERY_SIMILAR);
-            html_macros.note_html_handler_function(CB_CLONE_SENTENCE);
-            html_macros.note_html_handler_function(CB_HANDLE_CLONE_SENTENCE);
-            html_macros.note_html_handler_function(CB_JUSTIFY_SENTENCE);
-        }
-        return NIL;
-    }
-
-    public static SubLObject setup_cb_sentence_browser_file_Previous() {
         html_macros.note_cgi_handler_function(CB_SENTENCE, $HTML_HANDLER);
         sethash($CB_SENTENCE, cyc_file_dependencies.$cb_help_definitions$.getGlobalValue(), list($str20$cb_sentence_html, NIL));
         setup_cb_link_method($SHOW_ENGLISH_FOR_CYCL_SENTENCE, CB_LINK_SHOW_ENGLISH_FOR_CYCL_SENTENCE, TWO_INTEGER);
@@ -3074,26 +1641,6 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
         return NIL;
     }
 
-    // Internal Constants
-    @LispMethod(comment = "Internal Constants")
-    static private final SubLList $list_alt0 = list(makeSymbol("ID-STRING"), makeSymbol("&OPTIONAL"), makeSymbol("JUSTIFY?"));
-
-    static private final SubLString $str_alt1$Could_not_determine_a_sentence_fr = makeString("Could not determine a sentence from ~a");
-
-    static private final SubLString $str_alt5$Mt___ = makeString("Mt : ");
-
-    static private final SubLString $str_alt7$Sentence_Not_Well_formed__ = makeString("Sentence Not Well-formed :");
-
-    static private final SubLString $str_alt8$EL_Sentence___ = makeString("EL Sentence : ");
-
-    static private final SubLString $str_alt9$HL_Sentence___ = makeString("HL Sentence : ");
-
-    static private final SubLString $str_alt10$English_Translation___ = makeString("English Translation : ");
-
-    static private final SubLString $str_alt12$_in_ = makeString(" in ");
-
-    static private final SubLString $str_alt14$cb_sentence_html = makeString("cb-sentence.html");
-
     @Override
     public void declareFunctions() {
         declare_cb_sentence_browser_file();
@@ -3110,75 +1657,118 @@ public final class cb_sentence_browser extends SubLTranslatedFile implements V12
     }
 
     static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
-
-    static private final SubLString $str_alt24$_Show_English_ = makeString("[Show English]");
-
-    static private final SubLString $str_alt26$cb_sentence_with_show_english__a = makeString("cb-sentence-with-show-english&~a");
-
-    static private final SubLString $str_alt29$_EL_Formula_ = makeString("[EL Formula]");
-
-    static private final SubLString $str_alt30$cb_sentence_with_show_el_formula_ = makeString("cb-sentence-with-show-el-formula&~a");
-
-    static private final SubLString $str_alt33$_WFF_Check_ = makeString("[WFF-Check]");
-
-    static private final SubLString $str_alt34$cb_wff_check_sentence__A = makeString("cb-wff-check-sentence&~A");
-
-    static private final SubLList $list_alt36 = list(makeSymbol("ID-STRING"));
-
-    static private final SubLString $str_alt37$_a_does_not_specify_a_CycL_senten = makeString("~a does not specify a CycL sentence");
-
-    static private final SubLString $str_alt39$_Assert_Similar_ = makeString("[Assert Similar]");
-
-    static private final SubLString $str_alt41$cb_assert_similar_sentence__a = makeString("cb-assert-similar-sentence&~a");
-
-    static private final SubLString $str_alt46$_Edit_ = makeString("[Edit]");
-
-    static private final SubLString $str_alt47$cb_edit_sentence__a = makeString("cb-edit-sentence&~a");
-
-    static private final SubLString $str_alt50$_Unassert_ = makeString("[Unassert]");
-
-    static private final SubLString $str_alt51$cb_unassert_sentence__a = makeString("cb-unassert-sentence&~a");
-
-    static private final SubLString $str_alt56$_Query_Similar_ = makeString("[Query Similar]");
-
-    static private final SubLString $str_alt57$cb_sentence_query_similar__A = makeString("cb-sentence-query-similar&~A");
-
-    static private final SubLString $str_alt59$That_sentence_is_not_available_ = makeString("That sentence is not available.");
-
-    static private final SubLString $str_alt61$_Clone_ = makeString("[Clone]");
-
-    static private final SubLString $str_alt62$cb_clone_sentence__a = makeString("cb-clone-sentence&~a");
-
-    static private final SubLString $str_alt67$text_javascript = makeString("text/javascript");
-
-    static private final SubLString $str_alt68$yui_skin_sam = makeString("yui-skin-sam");
-
-    static private final SubLString $str_alt69$cb_handle_clone_sentence = makeString("cb-handle-clone-sentence");
-
-    static private final SubLString $str_alt70$clone_form = makeString("clone-form");
-
-    static private final SubLList $list_alt74 = list(new SubLObject[]{ makeKeyword("INPUT-NAME"), makeString("sentence"), makeKeyword("COMPLETE-LABEL"), makeString("Complete"), makeKeyword("CYCLIFY-LABEL"), makeString("Cyclify"), makeKeyword("CLEAR-LABEL"), makeString("Clear Sentence"), makeKeyword("HEIGHT"), TWENTY_INTEGER, makeKeyword("WIDTH"), makeInteger(80) });
-
-    static private final SubLList $list_alt75 = list(makeKeyword("INPUT-NAME"), makeString("sentence"));
-
-    static private final SubLString $str_alt78$Bad_sentence__probably_due_to_a_m = makeString("Bad sentence, probably due to a misspelling.~%Check these inputs:~%~%~S");
-
-    static private final SubLString $str_alt79$CycL_Sentence_not_Well_Formed = makeString("CycL Sentence not Well-Formed");
-
-    static private final SubLString $str_alt81$Sentence___ = makeString("Sentence : ");
-
-    static private final SubLString $str_alt82$Diagnosis___ = makeString("Diagnosis : ");
-
-    static private final SubLString $str_alt83$This_is_not_a_syntactically_well_ = makeString("This is not a syntactically well-formed CycL sentence.  Please refer to the ");
-
-    static private final SubLString $str_alt84$_________cycdoc_ref_cycl_syntax_h = makeString("../../../cycdoc/ref/cycl-syntax.html#sentences");
-
-    static private final SubLString $str_alt86$_document_ = makeString(" document.");
-
-    static private final SubLString $str_alt87$_Justify_ = makeString("[Justify]");
-
-    static private final SubLString $str_alt88$cb_justify_sentence__a = makeString("cb-justify-sentence&~a");
 }
 
 /**

@@ -1,44 +1,7 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.el_utilities.el_formula_p;
-import static com.cyc.cycjava.cycl.el_utilities.make_binary_formula;
-import static com.cyc.cycjava.cycl.subl_promotions.memberP;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.append;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.nth;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.find_if;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.nreverse;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.position;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.current_process;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.sublisp_null;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.values;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.property_list_member;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cadr;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.member;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.set_difference;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-
+import com.cyc.cycjava.cycl.ghl_search_methods;
 import com.cyc.cycjava.cycl.sbhl.sbhl_graphs;
 import com.cyc.cycjava.cycl.sbhl.sbhl_link_vars;
 import com.cyc.cycjava.cycl.sbhl.sbhl_links;
@@ -59,39 +22,69 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.ghl_search_methods.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-public final class ghl_search_methods extends SubLTranslatedFile implements V12 {
+
+public final class ghl_search_methods extends SubLTranslatedFile {
     public static final SubLFile me = new ghl_search_methods();
 
+    public static final String myName = "com.cyc.cycjava.cycl.ghl_search_methods";
 
+    public static final String myFingerPrint = "05a4c3161b66c5c5cccc8a8a5de684c68a65b480cb0b25a7f62c58f3abece276";
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $ghl_mark_and_sweep_recursion_limit$ = makeSymbol("*GHL-MARK-AND-SWEEP-RECURSION-LIMIT*");
 
     // Internal Constants
-    @LispMethod(comment = "Internal Constants")
-    static private final SubLString $str0$Unsupported_search_behavior______ = makeString("Unsupported search behavior. ~%~% ~A ~%");
+    public static final SubLString $str0$Unsupported_search_behavior______ = makeString("Unsupported search behavior. ~%~% ~A ~%");
 
-    static private final SubLString $str1$Unsupported_search_conditions_ = makeString("Unsupported search conditions.");
+    public static final SubLString $str1$Unsupported_search_conditions_ = makeString("Unsupported search conditions.");
 
+    private static final SubLInteger $int$24 = makeInteger(24);
 
+    public static final SubLSymbol GHL_GOAL_SEARCH_P = makeSymbol("GHL-GOAL-SEARCH-P");
 
-    private static final SubLSymbol GHL_GOAL_SEARCH_P = makeSymbol("GHL-GOAL-SEARCH-P");
-
-    private static final SubLSymbol GHL_MAP_P = makeSymbol("GHL-MAP-P");
+    public static final SubLSymbol GHL_MAP_P = makeSymbol("GHL-MAP-P");
 
     private static final SubLString $str5$_A_is_neither_SET_P_nor_LISTP_ = makeString("~A is neither SET-P nor LISTP.");
 
     private static final SubLString $str6$attempting_to_bind_direction_link = makeString("attempting to bind direction link variable, to NIL. macro body not executed.");
 
+
+
     private static final SubLSymbol $sym8$RELEVANT_PRED_WRT_GT_ = makeSymbol("RELEVANT-PRED-WRT-GT?");
+
+
 
     private static final SubLList $list10 = list(makeUninternedSymbol("ASSERTION"), makeUninternedSymbol("VAR-MT"));
 
@@ -99,15 +92,51 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
 
 
 
-    static private final SubLList $list16 = list(list(new SubLObject[]{ makeSymbol("LINK-NODE"), makeSymbol("PRED"), makeSymbol("NODE"), makeSymbol("DIRECTION"), makeSymbol("&KEY"), makeSymbol("MT"), makeSymbol("TV"), makeSymbol("DONE"), list(makeSymbol("ORDER"), makeKeyword("DEPTH-FIRST")) }), makeSymbol("&BODY"), makeSymbol("BODY"));
+    private static final SubLObject $$genlPreds = reader_make_constant_shell(makeString("genlPreds"));
 
-    static private final SubLList $list17 = list(makeKeyword("MT"), makeKeyword("TV"), $DONE, makeKeyword("ORDER"));
+
+
+    private static final SubLObject $$genlInverse = reader_make_constant_shell(makeString("genlInverse"));
+
+    public static final SubLList $list16 = list(list(new SubLObject[]{ makeSymbol("LINK-NODE"), makeSymbol("PRED"), makeSymbol("NODE"), makeSymbol("DIRECTION"), makeSymbol("&KEY"), makeSymbol("MT"), makeSymbol("TV"), makeSymbol("DONE"), list(makeSymbol("ORDER"), makeKeyword("DEPTH-FIRST")) }), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+    public static final SubLList $list17 = list(makeKeyword("MT"), makeKeyword("TV"), makeKeyword("DONE"), makeKeyword("ORDER"));
 
     private static final SubLSymbol $ALLOW_OTHER_KEYS = makeKeyword("ALLOW-OTHER-KEYS");
 
-    static private final SubLSymbol $sym24$ITERATOR = makeUninternedSymbol("ITERATOR");
 
-    private static final SubLSymbol NEW_GHL_CLOSURE_ITERATOR = makeSymbol("NEW-GHL-CLOSURE-ITERATOR");
+
+
+
+
+
+
+
+
+
+    public static final SubLSymbol $sym24$ITERATOR = makeUninternedSymbol("ITERATOR");
+
+
+
+    public static final SubLSymbol NEW_GHL_CLOSURE_ITERATOR = makeSymbol("NEW-GHL-CLOSURE-ITERATOR");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     private static final SubLList $list36 = list(list(new SubLObject[]{ makeSymbol("LINK-NODE"), makeSymbol("PREDS"), makeSymbol("NODE"), makeSymbol("DIRECTIONS"), makeSymbol("&KEY"), makeSymbol("MT"), makeSymbol("TV"), makeSymbol("DONE"), list(makeSymbol("ORDER"), makeKeyword("DEPTH-FIRST")) }), makeSymbol("&BODY"), makeSymbol("BODY"));
 
@@ -123,7 +152,13 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
 
     private static final SubLSymbol GHL_CLOSURE_SEARCH_ITERATOR_FINALIZE = makeSymbol("GHL-CLOSURE-SEARCH-ITERATOR-FINALIZE");
 
+
+
     private static final SubLList $list44 = list(makeSymbol("SEARCH"), makeSymbol("SEARCH-DECK"), makeSymbol("MT"));
+
+
+
+
 
     private static final SubLSymbol GHL_OPPOSITE_DIRECTION = makeSymbol("GHL-OPPOSITE-DIRECTION");
 
@@ -131,9 +166,19 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
 
     private static final SubLSymbol $GOAL_SEARCH_P = makeKeyword("GOAL-SEARCH-P");
 
-    static private final SubLList $list52 = list(makeKeyword("MAP-FN"), makeSymbol("GHL-GOAL-MARK-NODE-AS-SEARCHED"));
+
+
+
+
+    public static final SubLList $list52 = list(makeKeyword("MAP-FN"), makeSymbol("GHL-GOAL-MARK-NODE-AS-SEARCHED"));
+
+
 
     private static final SubLSymbol $sym54$GHL_GOAL_OR_MARKED_AS_GOAL_ = makeSymbol("GHL-GOAL-OR-MARKED-AS-GOAL?");
+
+
+
+
 
     private static final SubLList $list57 = list(makeKeyword("JUSTIFY?"), T);
 
@@ -141,17 +186,10 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
 
 
 
-    // Definitions
-    public static final SubLObject ghl_search_alt(SubLObject v_search, SubLObject node) {
-        if (NIL != ghl_search_vars.ghl_transitive_search_p(v_search)) {
-            com.cyc.cycjava.cycl.ghl_search_methods.transitive_ghl_search(v_search, node);
-        } else {
-            ghl_search_vars.ghl_error(ONE_INTEGER, $str_alt0$Unsupported_search_behavior______, ghl_search_vars.describe_ghl_search(v_search), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-        }
-        return NIL;
-    }
+    private static final SubLObject $$InferencePSC = reader_make_constant_shell(makeString("InferencePSC"));
 
-    // Definitions
+
+
     public static SubLObject ghl_search(final SubLObject v_search, final SubLObject node) {
         if (NIL != ghl_search_vars.ghl_transitive_search_p(v_search)) {
             transitive_ghl_search(v_search, node);
@@ -161,35 +199,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    /**
-     * Predicate and Mt relevance established outside.
-     */
-    @LispMethod(comment = "Predicate and Mt relevance established outside.")
-    public static final SubLObject transitive_ghl_search_alt(SubLObject v_search, SubLObject node) {
-        if (((NIL != ghl_search_vars.ghl_depth_marking_search_p(v_search)) && (NIL != ghl_search_vars.ghl_iterative_deepening_search_p(v_search))) && (NIL != ghl_search_vars.ghl_add_edges_on_unwind_p(v_search))) {
-            com.cyc.cycjava.cycl.ghl_search_methods.ghl_all_edges_iterative_deepening_initializer(v_search, node, ghl_search_vars.ghl_depth_cutoff(v_search));
-        } else {
-            if ((NIL != ghl_search_vars.ghl_depth_marking_search_p(v_search)) && (NIL != ghl_search_vars.ghl_depth_first_search_p(v_search))) {
-                com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_depth_cutoff_initializer(v_search, node, ghl_search_vars.ghl_depth_cutoff(v_search));
-            } else {
-                if (NIL != ghl_search_vars.ghl_depth_first_search_p(v_search)) {
-                    com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_df(v_search, node);
-                } else {
-                    if (NIL != ghl_search_vars.ghl_breadth_first_search_p(v_search)) {
-                        com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_bf(v_search, node);
-                    } else {
-                        ghl_search_vars.ghl_error(ONE_INTEGER, $str_alt1$Unsupported_search_conditions_, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    }
-                }
-            }
-        }
-        return NIL;
-    }
-
-    /**
-     * Predicate and Mt relevance established outside.
-     */
-    @LispMethod(comment = "Predicate and Mt relevance established outside.")
     public static SubLObject transitive_ghl_search(final SubLObject v_search, final SubLObject node) {
         if (((NIL != ghl_search_vars.ghl_depth_marking_search_p(v_search)) && (NIL != ghl_search_vars.ghl_iterative_deepening_search_p(v_search))) && (NIL != ghl_search_vars.ghl_add_edges_on_unwind_p(v_search))) {
             ghl_all_edges_iterative_deepening_initializer(v_search, node, ghl_search_vars.ghl_depth_cutoff(v_search));
@@ -211,47 +220,22 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    public static final SubLObject ghl_mark_and_sweep_alt(SubLObject v_search, SubLObject node) {
-        return NIL != ghl_search_vars.ghl_depth_first_search_p(v_search) ? ((SubLObject) (com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_df(v_search, node))) : com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_bf(v_search, node);
-    }
-
     public static SubLObject ghl_mark_and_sweep(final SubLObject v_search, final SubLObject node) {
         return NIL != ghl_search_vars.ghl_depth_first_search_p(v_search) ? ghl_mark_and_sweep_df(v_search, node) : ghl_mark_and_sweep_bf(v_search, node);
-    }
-
-    public static final SubLObject ghl_unmark_and_sweep_alt(SubLObject v_search, SubLObject node) {
-        return NIL != ghl_search_vars.ghl_depth_first_search_p(v_search) ? ((SubLObject) (com.cyc.cycjava.cycl.ghl_search_methods.ghl_unmark_and_sweep_df(v_search, node))) : com.cyc.cycjava.cycl.ghl_search_methods.ghl_unmark_and_sweep_bf(v_search, node);
     }
 
     public static SubLObject ghl_unmark_and_sweep(final SubLObject v_search, final SubLObject node) {
         return NIL != ghl_search_vars.ghl_depth_first_search_p(v_search) ? ghl_unmark_and_sweep_df(v_search, node) : ghl_unmark_and_sweep_bf(v_search, node);
     }
 
-    public static final SubLObject ghl_mark_sweep_until_goal_alt(SubLObject v_search, SubLObject node) {
-        SubLTrampolineFile.checkType(v_search, GHL_GOAL_SEARCH_P);
-        return com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep(v_search, node);
-    }
-
     public static SubLObject ghl_mark_sweep_until_goal(final SubLObject v_search, final SubLObject node) {
-        assert NIL != ghl_search_vars.ghl_goal_search_p(v_search) : "! ghl_search_vars.ghl_goal_search_p(v_search) " + ("ghl_search_vars.ghl_goal_search_p(v_search) " + "CommonSymbols.NIL != ghl_search_vars.ghl_goal_search_p(v_search) ") + v_search;
+        assert NIL != ghl_search_vars.ghl_goal_search_p(v_search) : "ghl_search_vars.ghl_goal_search_p(v_search) " + "CommonSymbols.NIL != ghl_search_vars.ghl_goal_search_p(v_search) " + v_search;
         return ghl_mark_and_sweep(v_search, node);
     }
 
-    public static final SubLObject ghl_unmark_sweep_and_map_alt(SubLObject v_search, SubLObject node) {
-        SubLTrampolineFile.checkType(v_search, GHL_MAP_P);
-        return com.cyc.cycjava.cycl.ghl_search_methods.ghl_unmark_and_sweep(v_search, node);
-    }
-
     public static SubLObject ghl_unmark_sweep_and_map(final SubLObject v_search, final SubLObject node) {
-        assert NIL != ghl_search_vars.ghl_map_p(v_search) : "! ghl_search_vars.ghl_map_p(v_search) " + ("ghl_search_vars.ghl_map_p(v_search) " + "CommonSymbols.NIL != ghl_search_vars.ghl_map_p(v_search) ") + v_search;
+        assert NIL != ghl_search_vars.ghl_map_p(v_search) : "ghl_search_vars.ghl_map_p(v_search) " + "CommonSymbols.NIL != ghl_search_vars.ghl_map_p(v_search) " + v_search;
         return ghl_unmark_and_sweep(v_search, node);
-    }
-
-    public static final SubLObject ghl_mark_and_sweep_df_alt(SubLObject v_search, SubLObject node) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return $ghl_mark_and_sweep_recursion_limit$.getDynamicValue(thread).isInteger() ? ((SubLObject) (com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_df_hybrid(v_search, node, T, ZERO_INTEGER))) : com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_df_purely_recursive(v_search, node, T);
-        }
     }
 
     public static SubLObject ghl_mark_and_sweep_df(final SubLObject v_search, final SubLObject node) {
@@ -259,481 +243,17 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         return $ghl_mark_and_sweep_recursion_limit$.getDynamicValue(thread).isInteger() ? ghl_mark_and_sweep_df_hybrid(v_search, node, T, ZERO_INTEGER) : ghl_mark_and_sweep_df_purely_recursive(v_search, node, T);
     }
 
-    public static final SubLObject ghl_unmark_and_sweep_df_alt(SubLObject v_search, SubLObject node) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return $ghl_mark_and_sweep_recursion_limit$.getDynamicValue(thread).isInteger() ? ((SubLObject) (com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_df_hybrid(v_search, node, NIL, ZERO_INTEGER))) : com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_df_purely_recursive(v_search, node, NIL);
-        }
-    }
-
     public static SubLObject ghl_unmark_and_sweep_df(final SubLObject v_search, final SubLObject node) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return $ghl_mark_and_sweep_recursion_limit$.getDynamicValue(thread).isInteger() ? ghl_mark_and_sweep_df_hybrid(v_search, node, NIL, ZERO_INTEGER) : ghl_mark_and_sweep_df_purely_recursive(v_search, node, NIL);
-    }
-
-    public static final SubLObject ghl_mark_and_sweep_bf_alt(SubLObject v_search, SubLObject node) {
-        return com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_iterative_bf(v_search, node, T);
     }
 
     public static SubLObject ghl_mark_and_sweep_bf(final SubLObject v_search, final SubLObject node) {
         return ghl_mark_and_sweep_iterative_bf(v_search, node, T);
     }
 
-    public static final SubLObject ghl_unmark_and_sweep_bf_alt(SubLObject v_search, SubLObject node) {
-        return com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_iterative_bf(v_search, node, NIL);
-    }
-
     public static SubLObject ghl_unmark_and_sweep_bf(final SubLObject v_search, final SubLObject node) {
         return ghl_mark_and_sweep_iterative_bf(v_search, node, NIL);
-    }
-
-    public static final SubLObject ghl_mark_and_sweep_df_purely_recursive_alt(SubLObject v_search, SubLObject node, SubLObject mark) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (!((NIL != ghl_search_vars.ghl_goal_search_p(v_search)) && (NIL != ghl_search_vars.ghl_goal_found_p(v_search)))) {
-                if (NIL != (NIL != mark ? ((SubLObject) (makeBoolean(NIL == ghl_marking_utilities.ghl_marked_node_p(v_search, node)))) : ghl_marking_utilities.ghl_marked_node_p(v_search, node))) {
-                    ghl_marking_utilities.ghl_mark_node(v_search, node, mark);
-                    if ((NIL != ghl_search_vars.ghl_goal_search_p(v_search)) && (NIL != ghl_search_utilities.ghl_goal_nodeP(v_search, node, UNPROVIDED))) {
-                        ghl_search_utilities.ghl_resolve_goal_found(v_search, node);
-                    } else {
-                        if (NIL != ghl_search_vars.ghl_map_p(v_search)) {
-                            funcall(ghl_search_vars.ghl_map_fn(v_search), v_search, node);
-                        }
-                        {
-                            SubLObject cdolist_list_var = ghl_search_vars.ghl_relevant_predicates(v_search);
-                            SubLObject pred = NIL;
-                            for (pred = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pred = cdolist_list_var.first()) {
-                                {
-                                    SubLObject _prev_bind_0 = ghl_link_iterators.$ghl_link_pred$.currentBinding(thread);
-                                    try {
-                                        ghl_link_iterators.$ghl_link_pred$.bind(pred, thread);
-                                        if (NIL != sbhl_module_utilities.sbhl_predicate_p(pred)) {
-                                            {
-                                                SubLObject node_1 = function_terms.naut_to_nart(node);
-                                                {
-                                                    SubLObject _prev_bind_0_2 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
-                                                    SubLObject _prev_bind_1 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
-                                                    SubLObject _prev_bind_2 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
-                                                    SubLObject _prev_bind_3 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                    SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                    SubLObject _prev_bind_5 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                    try {
-                                                        sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_vars.get_sbhl_module(pred), thread);
-                                                        sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_vars.get_sbhl_module(pred)), thread);
-                                                        sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_vars.get_sbhl_module(pred)), thread);
-                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
-                                                        sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module(pred), thread);
-                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
-                                                        if (NIL != forts.fort_p(node_1)) {
-                                                            {
-                                                                SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node_1, sbhl_module_vars.get_sbhl_module(pred));
-                                                                if (NIL != d_link) {
-                                                                    if (NIL == graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) {
-                                                                        {
-                                                                            SubLObject csome_list_var = graphl_search_vars.determine_graphl_relevant_directions(ghl_search_vars.ghl_direction(v_search));
-                                                                            SubLObject search_direction = NIL;
-                                                                            for (search_direction = csome_list_var.first(); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , search_direction = csome_list_var.first()) {
-                                                                                {
-                                                                                    SubLObject link_direction = sbhl_module_utilities.sbhl_search_direction_to_link_direction(search_direction, sbhl_module_vars.get_sbhl_module(pred));
-                                                                                    SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, link_direction, sbhl_module_vars.get_sbhl_module(pred));
-                                                                                    if (NIL != mt_links) {
-                                                                                        {
-                                                                                            SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
-                                                                                            while (!((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL != dictionary_contents.do_dictionary_contents_doneP(iteration_state)))) {
-                                                                                                thread.resetMultipleValues();
-                                                                                                {
-                                                                                                    SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                                                    SubLObject tv_links = thread.secondMultipleValue();
-                                                                                                    thread.resetMultipleValues();
-                                                                                                    if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                        {
-                                                                                                            SubLObject _prev_bind_0_3 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                            try {
-                                                                                                                sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                {
-                                                                                                                    SubLObject iteration_state_4 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
-                                                                                                                    while (!((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL != dictionary_contents.do_dictionary_contents_doneP(iteration_state_4)))) {
-                                                                                                                        thread.resetMultipleValues();
-                                                                                                                        {
-                                                                                                                            SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_4);
-                                                                                                                            SubLObject link_nodes_var = thread.secondMultipleValue();
-                                                                                                                            thread.resetMultipleValues();
-                                                                                                                            if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                {
-                                                                                                                                    SubLObject _prev_bind_0_5 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                    try {
-                                                                                                                                        sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                        {
-                                                                                                                                            SubLObject rest = NIL;
-                                                                                                                                            for (rest = link_nodes_var; !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest)); rest = rest.rest()) {
-                                                                                                                                                {
-                                                                                                                                                    SubLObject link_node = rest.first();
-                                                                                                                                                    SubLObject support = ghl_link_iterators.ghl_make_sbhl_support(pred, node, link_node, ghl_search_vars.ghl_direction(v_search));
-                                                                                                                                                    com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_df_purely_recursive(v_search, link_node, mark);
-                                                                                                                                                    if ((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) && (NIL != ghl_search_vars.ghl_compute_justifyP(v_search))) {
-                                                                                                                                                        com.cyc.cycjava.cycl.ghl_search_methods.ghl_add_support_to_result(v_search, support);
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    } finally {
-                                                                                                                                        sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_5, thread);
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                            iteration_state_4 = dictionary_contents.do_dictionary_contents_next(iteration_state_4);
-                                                                                                                        }
-                                                                                                                    } 
-                                                                                                                    dictionary_contents.do_dictionary_contents_finalize(iteration_state_4);
-                                                                                                                }
-                                                                                                            } finally {
-                                                                                                                sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_3, thread);
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                    iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                                                                }
-                                                                                            } 
-                                                                                            dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                } else {
-                                                                    sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt5$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                }
-                                                            }
-                                                        } else {
-                                                            if (NIL != term.closed_nautP(node_1, UNPROVIDED)) {
-                                                                if (NIL == graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) {
-                                                                    {
-                                                                        SubLObject csome_list_var = graphl_search_vars.determine_graphl_relevant_directions(ghl_search_vars.ghl_direction(v_search));
-                                                                        SubLObject search_direction = NIL;
-                                                                        for (search_direction = csome_list_var.first(); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , search_direction = csome_list_var.first()) {
-                                                                            {
-                                                                                SubLObject link_direction = sbhl_module_utilities.sbhl_search_direction_to_link_direction(search_direction, sbhl_module_vars.get_sbhl_module(pred));
-                                                                                SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(link_direction, sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(pred))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(link_direction, sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(pred));
-                                                                                SubLObject rest = NIL;
-                                                                                for (rest = new_list; !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest)); rest = rest.rest()) {
-                                                                                    {
-                                                                                        SubLObject generating_fn = rest.first();
-                                                                                        {
-                                                                                            SubLObject _prev_bind_0_6 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
-                                                                                            try {
-                                                                                                sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
-                                                                                                {
-                                                                                                    SubLObject link_nodes_var = funcall(generating_fn, node_1);
-                                                                                                    SubLObject rest_7 = NIL;
-                                                                                                    for (rest_7 = link_nodes_var; !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest_7)); rest_7 = rest_7.rest()) {
-                                                                                                        {
-                                                                                                            SubLObject link_node = rest_7.first();
-                                                                                                            SubLObject support = ghl_link_iterators.ghl_make_sbhl_support(pred, node, link_node, ghl_search_vars.ghl_direction(v_search));
-                                                                                                            com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_df_purely_recursive(v_search, link_node, mark);
-                                                                                                            if ((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) && (NIL != ghl_search_vars.ghl_compute_justifyP(v_search))) {
-                                                                                                                com.cyc.cycjava.cycl.ghl_search_methods.ghl_add_support_to_result(v_search, support);
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            } finally {
-                                                                                                sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_6, thread);
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    } finally {
-                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_5, thread);
-                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
-                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3, thread);
-                                                        sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2, thread);
-                                                        sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1, thread);
-                                                        sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0_2, thread);
-                                                    }
-                                                }
-                                            }
-                                        } else {
-                                            if (NIL != ghl_link_iterators.gt_predicate_p(pred)) {
-                                                {
-                                                    SubLObject truth = enumeration_types.tv_truth($TRUE_DEF);
-                                                    SubLObject strength = enumeration_types.tv_strength($TRUE_DEF);
-                                                    {
-                                                        SubLObject _prev_bind_0_8 = ghl_search_vars.$gt_args_swapped_p$.currentBinding(thread);
-                                                        try {
-                                                            ghl_search_vars.$gt_args_swapped_p$.bind(NIL, thread);
-                                                            if (NIL == graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) {
-                                                                {
-                                                                    SubLObject csome_list_var = graphl_search_vars.determine_graphl_relevant_directions(ghl_search_vars.ghl_direction(v_search));
-                                                                    SubLObject search_direction = NIL;
-                                                                    for (search_direction = csome_list_var.first(); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , search_direction = csome_list_var.first()) {
-                                                                        {
-                                                                            SubLObject index_argnum = ghl_link_iterators.gt_index_argnum_for_direction(search_direction);
-                                                                            SubLObject gather_argnum = misc_utilities.other_binary_arg(index_argnum);
-                                                                            {
-                                                                                SubLObject _prev_bind_0_9 = ghl_link_iterators.$gt_relevant_pred$.currentBinding(thread);
-                                                                                SubLObject _prev_bind_1 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
-                                                                                try {
-                                                                                    ghl_link_iterators.$gt_relevant_pred$.bind(pred, thread);
-                                                                                    pred_relevance_macros.$relevant_pred_function$.bind($sym7$RELEVANT_PRED_WRT_GT_, thread);
-                                                                                    {
-                                                                                        SubLObject pred_var = NIL;
-                                                                                        if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(node, index_argnum, pred_var)) {
-                                                                                            {
-                                                                                                SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(node, index_argnum, pred_var);
-                                                                                                SubLObject done_var = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                                                SubLObject token_var = NIL;
-                                                                                                while (NIL == done_var) {
-                                                                                                    {
-                                                                                                        SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                                                                        SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                                                                        if (NIL != valid) {
-                                                                                                            {
-                                                                                                                SubLObject final_index_iterator = NIL;
-                                                                                                                try {
-                                                                                                                    final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, truth, NIL);
-                                                                                                                    {
-                                                                                                                        SubLObject done_var_10 = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                                                                        SubLObject token_var_11 = NIL;
-                                                                                                                        while (NIL == done_var_10) {
-                                                                                                                            {
-                                                                                                                                SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_11);
-                                                                                                                                SubLObject valid_12 = makeBoolean(token_var_11 != assertion);
-                                                                                                                                if (NIL != valid_12) {
-                                                                                                                                    if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                                                        {
-                                                                                                                                            SubLObject link_node = cycl_utilities.formula_arg(assertion, gather_argnum, UNPROVIDED);
-                                                                                                                                            SubLObject support = assertion;
-                                                                                                                                            com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_df_purely_recursive(v_search, link_node, mark);
-                                                                                                                                            if ((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) && (NIL != ghl_search_vars.ghl_compute_justifyP(v_search))) {
-                                                                                                                                                com.cyc.cycjava.cycl.ghl_search_methods.ghl_add_support_to_result(v_search, support);
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                                done_var_10 = makeBoolean((NIL == valid_12) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                                                                            }
-                                                                                                                        } 
-                                                                                                                    }
-                                                                                                                } finally {
-                                                                                                                    {
-                                                                                                                        SubLObject _prev_bind_0_13 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                                                        try {
-                                                                                                                            $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                                                            if (NIL != final_index_iterator) {
-                                                                                                                                kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                                                                            }
-                                                                                                                        } finally {
-                                                                                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_13, thread);
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                        done_var = makeBoolean((NIL == valid) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                                                    }
-                                                                                                } 
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                } finally {
-                                                                                    pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_1, thread);
-                                                                                    ghl_link_iterators.$gt_relevant_pred$.rebind(_prev_bind_0_9, thread);
-                                                                                }
-                                                                            }
-                                                                            if (NIL != gt_vars.gt_use_sksiP()) {
-                                                                                {
-                                                                                    SubLObject _prev_bind_0_14 = ghl_search_vars.$sksi_gt_search_pred$.currentBinding(thread);
-                                                                                    try {
-                                                                                        ghl_search_vars.$sksi_gt_search_pred$.bind(pred, thread);
-                                                                                        {
-                                                                                            SubLObject rest = NIL;
-                                                                                            for (rest = sksi_sks_mapping_utilities.gather_sksi_gaf_arg_index_relevant_pred(node, index_argnum, truth); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest)); rest = rest.rest()) {
-                                                                                                {
-                                                                                                    SubLObject gather_sentence_mt_pair = rest.first();
-                                                                                                    SubLObject datum = gather_sentence_mt_pair;
-                                                                                                    SubLObject current = datum;
-                                                                                                    SubLObject assertion = NIL;
-                                                                                                    SubLObject var_mt = NIL;
-                                                                                                    destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                                    assertion = current.first();
-                                                                                                    current = current.rest();
-                                                                                                    destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                                    var_mt = current.first();
-                                                                                                    current = current.rest();
-                                                                                                    if (NIL == current) {
-                                                                                                        if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                            {
-                                                                                                                SubLObject link_node = cycl_utilities.formula_arg(assertion, gather_argnum, UNPROVIDED);
-                                                                                                                SubLObject support = assertion;
-                                                                                                                com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_df_purely_recursive(v_search, link_node, mark);
-                                                                                                                if ((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) && (NIL != ghl_search_vars.ghl_compute_justifyP(v_search))) {
-                                                                                                                    com.cyc.cycjava.cycl.ghl_search_methods.ghl_add_support_to_result(v_search, support);
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    } else {
-                                                                                                        cdestructuring_bind_error(datum, $list_alt9);
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    } finally {
-                                                                                        ghl_search_vars.$sksi_gt_search_pred$.rebind(_prev_bind_0_14, thread);
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                            if (NIL != ghl_search_vars.ghl_uses_spec_preds_p()) {
-                                                                                {
-                                                                                    SubLObject _prev_bind_0_15 = ghl_search_vars.$gt_args_swapped_p$.currentBinding(thread);
-                                                                                    try {
-                                                                                        ghl_search_vars.$gt_args_swapped_p$.bind(T, thread);
-                                                                                        {
-                                                                                            SubLObject _prev_bind_0_16 = ghl_link_iterators.$gt_relevant_pred$.currentBinding(thread);
-                                                                                            SubLObject _prev_bind_1 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
-                                                                                            try {
-                                                                                                ghl_link_iterators.$gt_relevant_pred$.bind(pred, thread);
-                                                                                                pred_relevance_macros.$relevant_pred_function$.bind($sym7$RELEVANT_PRED_WRT_GT_, thread);
-                                                                                                {
-                                                                                                    SubLObject pred_var = NIL;
-                                                                                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(node, gather_argnum, pred_var)) {
-                                                                                                        {
-                                                                                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(node, gather_argnum, pred_var);
-                                                                                                            SubLObject done_var = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                                                            SubLObject token_var = NIL;
-                                                                                                            while (NIL == done_var) {
-                                                                                                                {
-                                                                                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                                                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                                                                                    if (NIL != valid) {
-                                                                                                                        {
-                                                                                                                            SubLObject final_index_iterator = NIL;
-                                                                                                                            try {
-                                                                                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, truth, NIL);
-                                                                                                                                {
-                                                                                                                                    SubLObject done_var_17 = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                                                                                    SubLObject token_var_18 = NIL;
-                                                                                                                                    while (NIL == done_var_17) {
-                                                                                                                                        {
-                                                                                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_18);
-                                                                                                                                            SubLObject valid_19 = makeBoolean(token_var_18 != assertion);
-                                                                                                                                            if (NIL != valid_19) {
-                                                                                                                                                if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                                                                    {
-                                                                                                                                                        SubLObject link_node = cycl_utilities.formula_arg(assertion, index_argnum, UNPROVIDED);
-                                                                                                                                                        SubLObject support = assertion;
-                                                                                                                                                        com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_df_purely_recursive(v_search, link_node, mark);
-                                                                                                                                                        if ((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) && (NIL != ghl_search_vars.ghl_compute_justifyP(v_search))) {
-                                                                                                                                                            com.cyc.cycjava.cycl.ghl_search_methods.ghl_add_support_to_result(v_search, support);
-                                                                                                                                                        }
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                            done_var_17 = makeBoolean((NIL == valid_19) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                                                                                        }
-                                                                                                                                    } 
-                                                                                                                                }
-                                                                                                                            } finally {
-                                                                                                                                {
-                                                                                                                                    SubLObject _prev_bind_0_20 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                                                                    try {
-                                                                                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                                                                        if (NIL != final_index_iterator) {
-                                                                                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                                                                                        }
-                                                                                                                                    } finally {
-                                                                                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_20, thread);
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                    done_var = makeBoolean((NIL == valid) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                                                                }
-                                                                                                            } 
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            } finally {
-                                                                                                pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_1, thread);
-                                                                                                ghl_link_iterators.$gt_relevant_pred$.rebind(_prev_bind_0_16, thread);
-                                                                                            }
-                                                                                        }
-                                                                                        if (NIL != gt_vars.gt_use_sksiP()) {
-                                                                                            {
-                                                                                                SubLObject _prev_bind_0_21 = ghl_search_vars.$sksi_gt_search_pred$.currentBinding(thread);
-                                                                                                try {
-                                                                                                    ghl_search_vars.$sksi_gt_search_pred$.bind(pred, thread);
-                                                                                                    {
-                                                                                                        SubLObject rest = NIL;
-                                                                                                        for (rest = sksi_sks_mapping_utilities.gather_sksi_gaf_arg_index_relevant_pred(node, gather_argnum, truth); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest)); rest = rest.rest()) {
-                                                                                                            {
-                                                                                                                SubLObject gather_sentence_mt_pair = rest.first();
-                                                                                                                SubLObject datum = gather_sentence_mt_pair;
-                                                                                                                SubLObject current = datum;
-                                                                                                                SubLObject assertion = NIL;
-                                                                                                                SubLObject var_mt = NIL;
-                                                                                                                destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                                                assertion = current.first();
-                                                                                                                current = current.rest();
-                                                                                                                destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                                                var_mt = current.first();
-                                                                                                                current = current.rest();
-                                                                                                                if (NIL == current) {
-                                                                                                                    if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                                        {
-                                                                                                                            SubLObject link_node = cycl_utilities.formula_arg(assertion, index_argnum, UNPROVIDED);
-                                                                                                                            SubLObject support = assertion;
-                                                                                                                            com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_df_purely_recursive(v_search, link_node, mark);
-                                                                                                                            if ((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) && (NIL != ghl_search_vars.ghl_compute_justifyP(v_search))) {
-                                                                                                                                com.cyc.cycjava.cycl.ghl_search_methods.ghl_add_support_to_result(v_search, support);
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                } else {
-                                                                                                                    cdestructuring_bind_error(datum, $list_alt9);
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                } finally {
-                                                                                                    ghl_search_vars.$sksi_gt_search_pred$.rebind(_prev_bind_0_21, thread);
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    } finally {
-                                                                                        ghl_search_vars.$gt_args_swapped_p$.rebind(_prev_bind_0_15, thread);
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        } finally {
-                                                            ghl_search_vars.$gt_args_swapped_p$.rebind(_prev_bind_0_8, thread);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    } finally {
-                                        ghl_link_iterators.$ghl_link_pred$.rebind(_prev_bind_0, thread);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject ghl_mark_and_sweep_df_purely_recursive(final SubLObject v_search, final SubLObject node, final SubLObject mark) {
@@ -1170,465 +690,9 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    public static final SubLObject ghl_mark_and_sweep_df_hybrid_alt(SubLObject v_search, SubLObject node, SubLObject mark, SubLObject depth) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return depth.numL($ghl_mark_and_sweep_recursion_limit$.getDynamicValue(thread)) ? ((SubLObject) (com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_recursive_df(v_search, node, mark, depth))) : com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_iterative_df(v_search, node, mark);
-        }
-    }
-
     public static SubLObject ghl_mark_and_sweep_df_hybrid(final SubLObject v_search, final SubLObject node, final SubLObject mark, final SubLObject depth) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return depth.numL($ghl_mark_and_sweep_recursion_limit$.getDynamicValue(thread)) ? ghl_mark_and_sweep_recursive_df(v_search, node, mark, depth) : ghl_mark_and_sweep_iterative_df(v_search, node, mark);
-    }
-
-    public static final SubLObject ghl_mark_and_sweep_recursive_df_alt(SubLObject v_search, SubLObject node, SubLObject mark, SubLObject depth) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (!((NIL != ghl_search_vars.ghl_goal_search_p(v_search)) && (NIL != ghl_search_vars.ghl_goal_found_p(v_search)))) {
-                if (NIL != (NIL != mark ? ((SubLObject) (makeBoolean(NIL == ghl_marking_utilities.ghl_marked_node_p(v_search, node)))) : ghl_marking_utilities.ghl_marked_node_p(v_search, node))) {
-                    ghl_marking_utilities.ghl_mark_node(v_search, node, mark);
-                    if ((NIL != ghl_search_vars.ghl_goal_search_p(v_search)) && (NIL != ghl_search_utilities.ghl_goal_nodeP(v_search, node, UNPROVIDED))) {
-                        ghl_search_utilities.ghl_resolve_goal_found(v_search, node);
-                    } else {
-                        if (NIL != ghl_search_vars.ghl_map_p(v_search)) {
-                            funcall(ghl_search_vars.ghl_map_fn(v_search), v_search, node);
-                        }
-                        {
-                            SubLObject cdolist_list_var = ghl_search_vars.ghl_relevant_predicates(v_search);
-                            SubLObject pred = NIL;
-                            for (pred = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pred = cdolist_list_var.first()) {
-                                {
-                                    SubLObject _prev_bind_0 = ghl_link_iterators.$ghl_link_pred$.currentBinding(thread);
-                                    try {
-                                        ghl_link_iterators.$ghl_link_pred$.bind(pred, thread);
-                                        if (NIL != sbhl_module_utilities.sbhl_predicate_p(pred)) {
-                                            {
-                                                SubLObject node_22 = function_terms.naut_to_nart(node);
-                                                {
-                                                    SubLObject _prev_bind_0_23 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
-                                                    SubLObject _prev_bind_1 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
-                                                    SubLObject _prev_bind_2 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
-                                                    SubLObject _prev_bind_3 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                    SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                    SubLObject _prev_bind_5 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                    try {
-                                                        sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_vars.get_sbhl_module(pred), thread);
-                                                        sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_vars.get_sbhl_module(pred)), thread);
-                                                        sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_vars.get_sbhl_module(pred)), thread);
-                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
-                                                        sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module(pred), thread);
-                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
-                                                        if (NIL != forts.fort_p(node_22)) {
-                                                            {
-                                                                SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node_22, sbhl_module_vars.get_sbhl_module(pred));
-                                                                if (NIL != d_link) {
-                                                                    if (NIL == graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) {
-                                                                        {
-                                                                            SubLObject csome_list_var = graphl_search_vars.determine_graphl_relevant_directions(ghl_search_vars.ghl_direction(v_search));
-                                                                            SubLObject search_direction = NIL;
-                                                                            for (search_direction = csome_list_var.first(); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , search_direction = csome_list_var.first()) {
-                                                                                {
-                                                                                    SubLObject link_direction = sbhl_module_utilities.sbhl_search_direction_to_link_direction(search_direction, sbhl_module_vars.get_sbhl_module(pred));
-                                                                                    SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, link_direction, sbhl_module_vars.get_sbhl_module(pred));
-                                                                                    if (NIL != mt_links) {
-                                                                                        {
-                                                                                            SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
-                                                                                            while (!((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL != dictionary_contents.do_dictionary_contents_doneP(iteration_state)))) {
-                                                                                                thread.resetMultipleValues();
-                                                                                                {
-                                                                                                    SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                                                    SubLObject tv_links = thread.secondMultipleValue();
-                                                                                                    thread.resetMultipleValues();
-                                                                                                    if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                        {
-                                                                                                            SubLObject _prev_bind_0_24 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                            try {
-                                                                                                                sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                {
-                                                                                                                    SubLObject iteration_state_25 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
-                                                                                                                    while (!((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL != dictionary_contents.do_dictionary_contents_doneP(iteration_state_25)))) {
-                                                                                                                        thread.resetMultipleValues();
-                                                                                                                        {
-                                                                                                                            SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_25);
-                                                                                                                            SubLObject link_nodes_var = thread.secondMultipleValue();
-                                                                                                                            thread.resetMultipleValues();
-                                                                                                                            if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                {
-                                                                                                                                    SubLObject _prev_bind_0_26 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                    try {
-                                                                                                                                        sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                        {
-                                                                                                                                            SubLObject rest = NIL;
-                                                                                                                                            for (rest = link_nodes_var; !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest)); rest = rest.rest()) {
-                                                                                                                                                {
-                                                                                                                                                    SubLObject link_node = rest.first();
-                                                                                                                                                    SubLObject support = ghl_link_iterators.ghl_make_sbhl_support(pred, node, link_node, ghl_search_vars.ghl_direction(v_search));
-                                                                                                                                                    com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_df_hybrid(v_search, link_node, mark, number_utilities.f_1X(depth));
-                                                                                                                                                    if ((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) && (NIL != ghl_search_vars.ghl_compute_justifyP(v_search))) {
-                                                                                                                                                        com.cyc.cycjava.cycl.ghl_search_methods.ghl_add_support_to_result(v_search, support);
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    } finally {
-                                                                                                                                        sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_26, thread);
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                            iteration_state_25 = dictionary_contents.do_dictionary_contents_next(iteration_state_25);
-                                                                                                                        }
-                                                                                                                    } 
-                                                                                                                    dictionary_contents.do_dictionary_contents_finalize(iteration_state_25);
-                                                                                                                }
-                                                                                                            } finally {
-                                                                                                                sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_24, thread);
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                    iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                                                                }
-                                                                                            } 
-                                                                                            dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                } else {
-                                                                    sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt5$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                }
-                                                            }
-                                                        } else {
-                                                            if (NIL != term.closed_nautP(node_22, UNPROVIDED)) {
-                                                                if (NIL == graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) {
-                                                                    {
-                                                                        SubLObject csome_list_var = graphl_search_vars.determine_graphl_relevant_directions(ghl_search_vars.ghl_direction(v_search));
-                                                                        SubLObject search_direction = NIL;
-                                                                        for (search_direction = csome_list_var.first(); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , search_direction = csome_list_var.first()) {
-                                                                            {
-                                                                                SubLObject link_direction = sbhl_module_utilities.sbhl_search_direction_to_link_direction(search_direction, sbhl_module_vars.get_sbhl_module(pred));
-                                                                                SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(link_direction, sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(pred))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(link_direction, sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(pred));
-                                                                                SubLObject rest = NIL;
-                                                                                for (rest = new_list; !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest)); rest = rest.rest()) {
-                                                                                    {
-                                                                                        SubLObject generating_fn = rest.first();
-                                                                                        {
-                                                                                            SubLObject _prev_bind_0_27 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
-                                                                                            try {
-                                                                                                sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
-                                                                                                {
-                                                                                                    SubLObject link_nodes_var = funcall(generating_fn, node_22);
-                                                                                                    SubLObject rest_28 = NIL;
-                                                                                                    for (rest_28 = link_nodes_var; !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest_28)); rest_28 = rest_28.rest()) {
-                                                                                                        {
-                                                                                                            SubLObject link_node = rest_28.first();
-                                                                                                            SubLObject support = ghl_link_iterators.ghl_make_sbhl_support(pred, node, link_node, ghl_search_vars.ghl_direction(v_search));
-                                                                                                            com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_df_hybrid(v_search, link_node, mark, number_utilities.f_1X(depth));
-                                                                                                            if ((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) && (NIL != ghl_search_vars.ghl_compute_justifyP(v_search))) {
-                                                                                                                com.cyc.cycjava.cycl.ghl_search_methods.ghl_add_support_to_result(v_search, support);
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            } finally {
-                                                                                                sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_27, thread);
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    } finally {
-                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_5, thread);
-                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
-                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3, thread);
-                                                        sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2, thread);
-                                                        sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1, thread);
-                                                        sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0_23, thread);
-                                                    }
-                                                }
-                                            }
-                                        } else {
-                                            if (NIL != ghl_link_iterators.gt_predicate_p(pred)) {
-                                                {
-                                                    SubLObject truth = enumeration_types.tv_truth($TRUE_DEF);
-                                                    SubLObject strength = enumeration_types.tv_strength($TRUE_DEF);
-                                                    {
-                                                        SubLObject _prev_bind_0_29 = ghl_search_vars.$gt_args_swapped_p$.currentBinding(thread);
-                                                        try {
-                                                            ghl_search_vars.$gt_args_swapped_p$.bind(NIL, thread);
-                                                            if (NIL == graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) {
-                                                                {
-                                                                    SubLObject csome_list_var = graphl_search_vars.determine_graphl_relevant_directions(ghl_search_vars.ghl_direction(v_search));
-                                                                    SubLObject search_direction = NIL;
-                                                                    for (search_direction = csome_list_var.first(); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , search_direction = csome_list_var.first()) {
-                                                                        {
-                                                                            SubLObject index_argnum = ghl_link_iterators.gt_index_argnum_for_direction(search_direction);
-                                                                            SubLObject gather_argnum = misc_utilities.other_binary_arg(index_argnum);
-                                                                            {
-                                                                                SubLObject _prev_bind_0_30 = ghl_link_iterators.$gt_relevant_pred$.currentBinding(thread);
-                                                                                SubLObject _prev_bind_1 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
-                                                                                try {
-                                                                                    ghl_link_iterators.$gt_relevant_pred$.bind(pred, thread);
-                                                                                    pred_relevance_macros.$relevant_pred_function$.bind($sym7$RELEVANT_PRED_WRT_GT_, thread);
-                                                                                    {
-                                                                                        SubLObject pred_var = NIL;
-                                                                                        if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(node, index_argnum, pred_var)) {
-                                                                                            {
-                                                                                                SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(node, index_argnum, pred_var);
-                                                                                                SubLObject done_var = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                                                SubLObject token_var = NIL;
-                                                                                                while (NIL == done_var) {
-                                                                                                    {
-                                                                                                        SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                                                                        SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                                                                        if (NIL != valid) {
-                                                                                                            {
-                                                                                                                SubLObject final_index_iterator = NIL;
-                                                                                                                try {
-                                                                                                                    final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, truth, NIL);
-                                                                                                                    {
-                                                                                                                        SubLObject done_var_31 = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                                                                        SubLObject token_var_32 = NIL;
-                                                                                                                        while (NIL == done_var_31) {
-                                                                                                                            {
-                                                                                                                                SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_32);
-                                                                                                                                SubLObject valid_33 = makeBoolean(token_var_32 != assertion);
-                                                                                                                                if (NIL != valid_33) {
-                                                                                                                                    if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                                                        {
-                                                                                                                                            SubLObject link_node = cycl_utilities.formula_arg(assertion, gather_argnum, UNPROVIDED);
-                                                                                                                                            SubLObject support = assertion;
-                                                                                                                                            com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_df_hybrid(v_search, link_node, mark, number_utilities.f_1X(depth));
-                                                                                                                                            if ((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) && (NIL != ghl_search_vars.ghl_compute_justifyP(v_search))) {
-                                                                                                                                                com.cyc.cycjava.cycl.ghl_search_methods.ghl_add_support_to_result(v_search, support);
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                                done_var_31 = makeBoolean((NIL == valid_33) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                                                                            }
-                                                                                                                        } 
-                                                                                                                    }
-                                                                                                                } finally {
-                                                                                                                    {
-                                                                                                                        SubLObject _prev_bind_0_34 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                                                        try {
-                                                                                                                            $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                                                            if (NIL != final_index_iterator) {
-                                                                                                                                kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                                                                            }
-                                                                                                                        } finally {
-                                                                                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_34, thread);
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                        done_var = makeBoolean((NIL == valid) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                                                    }
-                                                                                                } 
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                } finally {
-                                                                                    pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_1, thread);
-                                                                                    ghl_link_iterators.$gt_relevant_pred$.rebind(_prev_bind_0_30, thread);
-                                                                                }
-                                                                            }
-                                                                            if (NIL != gt_vars.gt_use_sksiP()) {
-                                                                                {
-                                                                                    SubLObject _prev_bind_0_35 = ghl_search_vars.$sksi_gt_search_pred$.currentBinding(thread);
-                                                                                    try {
-                                                                                        ghl_search_vars.$sksi_gt_search_pred$.bind(pred, thread);
-                                                                                        {
-                                                                                            SubLObject rest = NIL;
-                                                                                            for (rest = sksi_sks_mapping_utilities.gather_sksi_gaf_arg_index_relevant_pred(node, index_argnum, truth); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest)); rest = rest.rest()) {
-                                                                                                {
-                                                                                                    SubLObject gather_sentence_mt_pair = rest.first();
-                                                                                                    SubLObject datum = gather_sentence_mt_pair;
-                                                                                                    SubLObject current = datum;
-                                                                                                    SubLObject assertion = NIL;
-                                                                                                    SubLObject var_mt = NIL;
-                                                                                                    destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                                    assertion = current.first();
-                                                                                                    current = current.rest();
-                                                                                                    destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                                    var_mt = current.first();
-                                                                                                    current = current.rest();
-                                                                                                    if (NIL == current) {
-                                                                                                        if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                            {
-                                                                                                                SubLObject link_node = cycl_utilities.formula_arg(assertion, gather_argnum, UNPROVIDED);
-                                                                                                                SubLObject support = assertion;
-                                                                                                                com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_df_hybrid(v_search, link_node, mark, number_utilities.f_1X(depth));
-                                                                                                                if ((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) && (NIL != ghl_search_vars.ghl_compute_justifyP(v_search))) {
-                                                                                                                    com.cyc.cycjava.cycl.ghl_search_methods.ghl_add_support_to_result(v_search, support);
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    } else {
-                                                                                                        cdestructuring_bind_error(datum, $list_alt9);
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    } finally {
-                                                                                        ghl_search_vars.$sksi_gt_search_pred$.rebind(_prev_bind_0_35, thread);
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                            if (NIL != ghl_search_vars.ghl_uses_spec_preds_p()) {
-                                                                                {
-                                                                                    SubLObject _prev_bind_0_36 = ghl_search_vars.$gt_args_swapped_p$.currentBinding(thread);
-                                                                                    try {
-                                                                                        ghl_search_vars.$gt_args_swapped_p$.bind(T, thread);
-                                                                                        {
-                                                                                            SubLObject _prev_bind_0_37 = ghl_link_iterators.$gt_relevant_pred$.currentBinding(thread);
-                                                                                            SubLObject _prev_bind_1 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
-                                                                                            try {
-                                                                                                ghl_link_iterators.$gt_relevant_pred$.bind(pred, thread);
-                                                                                                pred_relevance_macros.$relevant_pred_function$.bind($sym7$RELEVANT_PRED_WRT_GT_, thread);
-                                                                                                {
-                                                                                                    SubLObject pred_var = NIL;
-                                                                                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(node, gather_argnum, pred_var)) {
-                                                                                                        {
-                                                                                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(node, gather_argnum, pred_var);
-                                                                                                            SubLObject done_var = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                                                            SubLObject token_var = NIL;
-                                                                                                            while (NIL == done_var) {
-                                                                                                                {
-                                                                                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                                                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                                                                                    if (NIL != valid) {
-                                                                                                                        {
-                                                                                                                            SubLObject final_index_iterator = NIL;
-                                                                                                                            try {
-                                                                                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, truth, NIL);
-                                                                                                                                {
-                                                                                                                                    SubLObject done_var_38 = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                                                                                    SubLObject token_var_39 = NIL;
-                                                                                                                                    while (NIL == done_var_38) {
-                                                                                                                                        {
-                                                                                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_39);
-                                                                                                                                            SubLObject valid_40 = makeBoolean(token_var_39 != assertion);
-                                                                                                                                            if (NIL != valid_40) {
-                                                                                                                                                if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                                                                    {
-                                                                                                                                                        SubLObject link_node = cycl_utilities.formula_arg(assertion, index_argnum, UNPROVIDED);
-                                                                                                                                                        SubLObject support = assertion;
-                                                                                                                                                        com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_df_hybrid(v_search, link_node, mark, number_utilities.f_1X(depth));
-                                                                                                                                                        if ((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) && (NIL != ghl_search_vars.ghl_compute_justifyP(v_search))) {
-                                                                                                                                                            com.cyc.cycjava.cycl.ghl_search_methods.ghl_add_support_to_result(v_search, support);
-                                                                                                                                                        }
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                            done_var_38 = makeBoolean((NIL == valid_40) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                                                                                        }
-                                                                                                                                    } 
-                                                                                                                                }
-                                                                                                                            } finally {
-                                                                                                                                {
-                                                                                                                                    SubLObject _prev_bind_0_41 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                                                                    try {
-                                                                                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                                                                        if (NIL != final_index_iterator) {
-                                                                                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                                                                                        }
-                                                                                                                                    } finally {
-                                                                                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_41, thread);
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                    done_var = makeBoolean((NIL == valid) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                                                                }
-                                                                                                            } 
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            } finally {
-                                                                                                pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_1, thread);
-                                                                                                ghl_link_iterators.$gt_relevant_pred$.rebind(_prev_bind_0_37, thread);
-                                                                                            }
-                                                                                        }
-                                                                                        if (NIL != gt_vars.gt_use_sksiP()) {
-                                                                                            {
-                                                                                                SubLObject _prev_bind_0_42 = ghl_search_vars.$sksi_gt_search_pred$.currentBinding(thread);
-                                                                                                try {
-                                                                                                    ghl_search_vars.$sksi_gt_search_pred$.bind(pred, thread);
-                                                                                                    {
-                                                                                                        SubLObject rest = NIL;
-                                                                                                        for (rest = sksi_sks_mapping_utilities.gather_sksi_gaf_arg_index_relevant_pred(node, gather_argnum, truth); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest)); rest = rest.rest()) {
-                                                                                                            {
-                                                                                                                SubLObject gather_sentence_mt_pair = rest.first();
-                                                                                                                SubLObject datum = gather_sentence_mt_pair;
-                                                                                                                SubLObject current = datum;
-                                                                                                                SubLObject assertion = NIL;
-                                                                                                                SubLObject var_mt = NIL;
-                                                                                                                destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                                                assertion = current.first();
-                                                                                                                current = current.rest();
-                                                                                                                destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                                                var_mt = current.first();
-                                                                                                                current = current.rest();
-                                                                                                                if (NIL == current) {
-                                                                                                                    if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                                        {
-                                                                                                                            SubLObject link_node = cycl_utilities.formula_arg(assertion, index_argnum, UNPROVIDED);
-                                                                                                                            SubLObject support = assertion;
-                                                                                                                            com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_df_hybrid(v_search, link_node, mark, number_utilities.f_1X(depth));
-                                                                                                                            if ((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) && (NIL != ghl_search_vars.ghl_compute_justifyP(v_search))) {
-                                                                                                                                com.cyc.cycjava.cycl.ghl_search_methods.ghl_add_support_to_result(v_search, support);
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                } else {
-                                                                                                                    cdestructuring_bind_error(datum, $list_alt9);
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                } finally {
-                                                                                                    ghl_search_vars.$sksi_gt_search_pred$.rebind(_prev_bind_0_42, thread);
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    } finally {
-                                                                                        ghl_search_vars.$gt_args_swapped_p$.rebind(_prev_bind_0_36, thread);
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        } finally {
-                                                            ghl_search_vars.$gt_args_swapped_p$.rebind(_prev_bind_0_29, thread);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    } finally {
-                                        ghl_link_iterators.$ghl_link_pred$.rebind(_prev_bind_0, thread);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject ghl_mark_and_sweep_recursive_df(final SubLObject v_search, final SubLObject node, final SubLObject mark, final SubLObject depth) {
@@ -2065,70 +1129,12 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    public static final SubLObject ghl_mark_and_sweep_iterative_df_alt(SubLObject v_search, SubLObject node, SubLObject mark) {
-        return com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_iterative(v_search, node, mark, $STACK);
-    }
-
     public static SubLObject ghl_mark_and_sweep_iterative_df(final SubLObject v_search, final SubLObject node, final SubLObject mark) {
         return ghl_mark_and_sweep_iterative(v_search, node, mark, $STACK);
     }
 
-    public static final SubLObject ghl_mark_and_sweep_iterative_bf_alt(SubLObject v_search, SubLObject node, SubLObject mark) {
-        return com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_iterative(v_search, node, mark, $QUEUE);
-    }
-
     public static SubLObject ghl_mark_and_sweep_iterative_bf(final SubLObject v_search, final SubLObject node, final SubLObject mark) {
         return ghl_mark_and_sweep_iterative(v_search, node, mark, $QUEUE);
-    }
-
-    public static final SubLObject ghl_mark_and_sweep_iterative_alt(SubLObject v_search, SubLObject node, SubLObject mark, SubLObject deck_style) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject search_deck = deck.create_deck(deck_style);
-                SubLObject unwind_deck = deck.create_deck(deck_style);
-                while (!((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == node))) {
-                    if (NIL != (NIL != mark ? ((SubLObject) (makeBoolean(NIL == ghl_marking_utilities.ghl_marked_node_p(v_search, node)))) : ghl_marking_utilities.ghl_marked_node_p(v_search, node))) {
-                        ghl_marking_utilities.ghl_mark_node(v_search, node, mark);
-                        if ((NIL != ghl_search_vars.ghl_goal_search_p(v_search)) && (NIL != ghl_search_utilities.ghl_goal_nodeP(v_search, node, UNPROVIDED))) {
-                            ghl_search_utilities.ghl_resolve_goal_found(v_search, node);
-                        } else {
-                            if (NIL != ghl_search_vars.ghl_map_p(v_search)) {
-                                funcall(ghl_search_vars.ghl_map_fn(v_search), v_search, node);
-                            }
-                            if (NIL != ghl_search_vars.ghl_compute_justifyP(v_search)) {
-                                {
-                                    SubLObject support_deck = deck.create_deck(deck_style);
-                                    com.cyc.cycjava.cycl.ghl_search_methods.ghl_add_accessible_link_nodes_and_supports_to_deck(v_search, node, search_deck, support_deck);
-                                    if (NIL != deck.deck_empty_p(support_deck)) {
-                                        com.cyc.cycjava.cycl.ghl_search_methods.ghl_remove_unneeded_supports(unwind_deck);
-                                    } else {
-                                        deck.deck_push(support_deck, unwind_deck);
-                                    }
-                                }
-                            } else {
-                                com.cyc.cycjava.cycl.ghl_search_methods.ghl_add_accessible_link_nodes_to_deck(v_search, node, search_deck);
-                            }
-                        }
-                    } else {
-                        if (NIL != ghl_search_vars.ghl_compute_justifyP(v_search)) {
-                            com.cyc.cycjava.cycl.ghl_search_methods.ghl_remove_unneeded_supports(unwind_deck);
-                        }
-                    }
-                    node = deck.deck_pop(search_deck);
-                } 
-                if ((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) && (NIL != ghl_search_vars.ghl_compute_justifyP(v_search))) {
-                    while (NIL == deck.deck_empty_p(unwind_deck)) {
-                        {
-                            SubLObject support_deck = deck.deck_pop(unwind_deck);
-                            SubLObject support = deck.deck_pop(support_deck);
-                            com.cyc.cycjava.cycl.ghl_search_methods.ghl_add_support_to_result(v_search, support);
-                        }
-                    } 
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject ghl_mark_and_sweep_iterative(final SubLObject v_search, SubLObject node, final SubLObject mark, final SubLObject deck_style) {
@@ -2171,418 +1177,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
             } 
         }
         return NIL;
-    }
-
-    public static final SubLObject ghl_add_accessible_link_nodes_to_deck_alt(SubLObject v_search, SubLObject node, SubLObject node_deck) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject count = ZERO_INTEGER;
-                SubLObject cdolist_list_var = ghl_search_vars.ghl_relevant_predicates(v_search);
-                SubLObject pred = NIL;
-                for (pred = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pred = cdolist_list_var.first()) {
-                    {
-                        SubLObject _prev_bind_0 = ghl_link_iterators.$ghl_link_pred$.currentBinding(thread);
-                        try {
-                            ghl_link_iterators.$ghl_link_pred$.bind(pred, thread);
-                            if (NIL != sbhl_module_utilities.sbhl_predicate_p(pred)) {
-                                {
-                                    SubLObject node_43 = function_terms.naut_to_nart(node);
-                                    {
-                                        SubLObject _prev_bind_0_44 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
-                                        SubLObject _prev_bind_1 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
-                                        SubLObject _prev_bind_2 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
-                                        SubLObject _prev_bind_3 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                        SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                        SubLObject _prev_bind_5 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                        try {
-                                            sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_vars.get_sbhl_module(pred), thread);
-                                            sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_vars.get_sbhl_module(pred)), thread);
-                                            sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_vars.get_sbhl_module(pred)), thread);
-                                            sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
-                                            sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module(pred), thread);
-                                            sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
-                                            if (NIL != forts.fort_p(node_43)) {
-                                                {
-                                                    SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node_43, sbhl_module_vars.get_sbhl_module(pred));
-                                                    if (NIL != d_link) {
-                                                        {
-                                                            SubLObject csome_list_var = graphl_search_vars.determine_graphl_relevant_directions(ghl_search_vars.ghl_direction(v_search));
-                                                            SubLObject search_direction = NIL;
-                                                            for (search_direction = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , search_direction = csome_list_var.first()) {
-                                                                {
-                                                                    SubLObject link_direction = sbhl_module_utilities.sbhl_search_direction_to_link_direction(search_direction, sbhl_module_vars.get_sbhl_module(pred));
-                                                                    SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, link_direction, sbhl_module_vars.get_sbhl_module(pred));
-                                                                    if (NIL != mt_links) {
-                                                                        {
-                                                                            SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
-                                                                            while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                                                                                thread.resetMultipleValues();
-                                                                                {
-                                                                                    SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                                    SubLObject tv_links = thread.secondMultipleValue();
-                                                                                    thread.resetMultipleValues();
-                                                                                    if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                        {
-                                                                                            SubLObject _prev_bind_0_45 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                            try {
-                                                                                                sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                {
-                                                                                                    SubLObject iteration_state_46 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
-                                                                                                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_46)) {
-                                                                                                        thread.resetMultipleValues();
-                                                                                                        {
-                                                                                                            SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_46);
-                                                                                                            SubLObject link_nodes_var = thread.secondMultipleValue();
-                                                                                                            thread.resetMultipleValues();
-                                                                                                            if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                {
-                                                                                                                    SubLObject _prev_bind_0_47 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                    try {
-                                                                                                                        sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                        {
-                                                                                                                            SubLObject cdolist_list_var_48 = link_nodes_var;
-                                                                                                                            SubLObject link_node = NIL;
-                                                                                                                            for (link_node = cdolist_list_var_48.first(); NIL != cdolist_list_var_48; cdolist_list_var_48 = cdolist_list_var_48.rest() , link_node = cdolist_list_var_48.first()) {
-                                                                                                                                count = add(count, ONE_INTEGER);
-                                                                                                                                deck.deck_push(link_node, node_deck);
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    } finally {
-                                                                                                                        sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_47, thread);
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                            iteration_state_46 = dictionary_contents.do_dictionary_contents_next(iteration_state_46);
-                                                                                                        }
-                                                                                                    } 
-                                                                                                    dictionary_contents.do_dictionary_contents_finalize(iteration_state_46);
-                                                                                                }
-                                                                                            } finally {
-                                                                                                sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_45, thread);
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                    iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                                                }
-                                                                            } 
-                                                                            dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    } else {
-                                                        sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt5$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                    }
-                                                }
-                                            } else {
-                                                if (NIL != term.closed_nautP(node_43, UNPROVIDED)) {
-                                                    {
-                                                        SubLObject csome_list_var = graphl_search_vars.determine_graphl_relevant_directions(ghl_search_vars.ghl_direction(v_search));
-                                                        SubLObject search_direction = NIL;
-                                                        for (search_direction = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , search_direction = csome_list_var.first()) {
-                                                            {
-                                                                SubLObject link_direction = sbhl_module_utilities.sbhl_search_direction_to_link_direction(search_direction, sbhl_module_vars.get_sbhl_module(pred));
-                                                                SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(link_direction, sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(pred))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(link_direction, sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(pred));
-                                                                SubLObject cdolist_list_var_49 = new_list;
-                                                                SubLObject generating_fn = NIL;
-                                                                for (generating_fn = cdolist_list_var_49.first(); NIL != cdolist_list_var_49; cdolist_list_var_49 = cdolist_list_var_49.rest() , generating_fn = cdolist_list_var_49.first()) {
-                                                                    {
-                                                                        SubLObject _prev_bind_0_50 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
-                                                                        try {
-                                                                            sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
-                                                                            {
-                                                                                SubLObject link_nodes_var = funcall(generating_fn, node_43);
-                                                                                SubLObject cdolist_list_var_51 = link_nodes_var;
-                                                                                SubLObject link_node = NIL;
-                                                                                for (link_node = cdolist_list_var_51.first(); NIL != cdolist_list_var_51; cdolist_list_var_51 = cdolist_list_var_51.rest() , link_node = cdolist_list_var_51.first()) {
-                                                                                    count = add(count, ONE_INTEGER);
-                                                                                    deck.deck_push(link_node, node_deck);
-                                                                                }
-                                                                            }
-                                                                        } finally {
-                                                                            sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_50, thread);
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } finally {
-                                            sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_5, thread);
-                                            sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
-                                            sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3, thread);
-                                            sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2, thread);
-                                            sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1, thread);
-                                            sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0_44, thread);
-                                        }
-                                    }
-                                }
-                            } else {
-                                if (NIL != ghl_link_iterators.gt_predicate_p(pred)) {
-                                    {
-                                        SubLObject truth = enumeration_types.tv_truth(ghl_search_vars.ghl_tv(v_search));
-                                        SubLObject strength = enumeration_types.tv_strength(ghl_search_vars.ghl_tv(v_search));
-                                        {
-                                            SubLObject _prev_bind_0_52 = ghl_search_vars.$gt_args_swapped_p$.currentBinding(thread);
-                                            try {
-                                                ghl_search_vars.$gt_args_swapped_p$.bind(NIL, thread);
-                                                {
-                                                    SubLObject csome_list_var = graphl_search_vars.determine_graphl_relevant_directions(ghl_search_vars.ghl_direction(v_search));
-                                                    SubLObject search_direction = NIL;
-                                                    for (search_direction = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , search_direction = csome_list_var.first()) {
-                                                        {
-                                                            SubLObject index_argnum = ghl_link_iterators.gt_index_argnum_for_direction(search_direction);
-                                                            SubLObject gather_argnum = misc_utilities.other_binary_arg(index_argnum);
-                                                            {
-                                                                SubLObject _prev_bind_0_53 = ghl_link_iterators.$gt_relevant_pred$.currentBinding(thread);
-                                                                SubLObject _prev_bind_1 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
-                                                                try {
-                                                                    ghl_link_iterators.$gt_relevant_pred$.bind(pred, thread);
-                                                                    pred_relevance_macros.$relevant_pred_function$.bind($sym7$RELEVANT_PRED_WRT_GT_, thread);
-                                                                    {
-                                                                        SubLObject pred_var = NIL;
-                                                                        if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(node, index_argnum, pred_var)) {
-                                                                            {
-                                                                                SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(node, index_argnum, pred_var);
-                                                                                SubLObject done_var = NIL;
-                                                                                SubLObject token_var = NIL;
-                                                                                while (NIL == done_var) {
-                                                                                    {
-                                                                                        SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                                                        SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                                                        if (NIL != valid) {
-                                                                                            {
-                                                                                                SubLObject final_index_iterator = NIL;
-                                                                                                try {
-                                                                                                    final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, truth, NIL);
-                                                                                                    {
-                                                                                                        SubLObject done_var_54 = NIL;
-                                                                                                        SubLObject token_var_55 = NIL;
-                                                                                                        while (NIL == done_var_54) {
-                                                                                                            {
-                                                                                                                SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_55);
-                                                                                                                SubLObject valid_56 = makeBoolean(token_var_55 != assertion);
-                                                                                                                if (NIL != valid_56) {
-                                                                                                                    if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                                        {
-                                                                                                                            SubLObject link_node = cycl_utilities.formula_arg(assertion, gather_argnum, UNPROVIDED);
-                                                                                                                            SubLObject support_var = assertion;
-                                                                                                                            count = add(count, ONE_INTEGER);
-                                                                                                                            deck.deck_push(link_node, node_deck);
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                                done_var_54 = makeBoolean(NIL == valid_56);
-                                                                                                            }
-                                                                                                        } 
-                                                                                                    }
-                                                                                                } finally {
-                                                                                                    {
-                                                                                                        SubLObject _prev_bind_0_57 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                                        try {
-                                                                                                            $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                                            if (NIL != final_index_iterator) {
-                                                                                                                kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                                                            }
-                                                                                                        } finally {
-                                                                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_57, thread);
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                        done_var = makeBoolean(NIL == valid);
-                                                                                    }
-                                                                                } 
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                } finally {
-                                                                    pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_1, thread);
-                                                                    ghl_link_iterators.$gt_relevant_pred$.rebind(_prev_bind_0_53, thread);
-                                                                }
-                                                            }
-                                                            if (NIL != gt_vars.gt_use_sksiP()) {
-                                                                {
-                                                                    SubLObject _prev_bind_0_58 = ghl_search_vars.$sksi_gt_search_pred$.currentBinding(thread);
-                                                                    try {
-                                                                        ghl_search_vars.$sksi_gt_search_pred$.bind(pred, thread);
-                                                                        {
-                                                                            SubLObject cdolist_list_var_59 = sksi_sks_mapping_utilities.gather_sksi_gaf_arg_index_relevant_pred(node, index_argnum, truth);
-                                                                            SubLObject gather_sentence_mt_pair = NIL;
-                                                                            for (gather_sentence_mt_pair = cdolist_list_var_59.first(); NIL != cdolist_list_var_59; cdolist_list_var_59 = cdolist_list_var_59.rest() , gather_sentence_mt_pair = cdolist_list_var_59.first()) {
-                                                                                {
-                                                                                    SubLObject datum = gather_sentence_mt_pair;
-                                                                                    SubLObject current = datum;
-                                                                                    SubLObject assertion = NIL;
-                                                                                    SubLObject var_mt = NIL;
-                                                                                    destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                    assertion = current.first();
-                                                                                    current = current.rest();
-                                                                                    destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                    var_mt = current.first();
-                                                                                    current = current.rest();
-                                                                                    if (NIL == current) {
-                                                                                        if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                            {
-                                                                                                SubLObject link_node = cycl_utilities.formula_arg(assertion, gather_argnum, UNPROVIDED);
-                                                                                                SubLObject support_var = assertion;
-                                                                                                count = add(count, ONE_INTEGER);
-                                                                                                deck.deck_push(link_node, node_deck);
-                                                                                            }
-                                                                                        }
-                                                                                    } else {
-                                                                                        cdestructuring_bind_error(datum, $list_alt9);
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    } finally {
-                                                                        ghl_search_vars.$sksi_gt_search_pred$.rebind(_prev_bind_0_58, thread);
-                                                                    }
-                                                                }
-                                                            }
-                                                            if (NIL != ghl_search_vars.ghl_uses_spec_preds_p()) {
-                                                                {
-                                                                    SubLObject _prev_bind_0_60 = ghl_search_vars.$gt_args_swapped_p$.currentBinding(thread);
-                                                                    try {
-                                                                        ghl_search_vars.$gt_args_swapped_p$.bind(T, thread);
-                                                                        {
-                                                                            SubLObject _prev_bind_0_61 = ghl_link_iterators.$gt_relevant_pred$.currentBinding(thread);
-                                                                            SubLObject _prev_bind_1 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
-                                                                            try {
-                                                                                ghl_link_iterators.$gt_relevant_pred$.bind(pred, thread);
-                                                                                pred_relevance_macros.$relevant_pred_function$.bind($sym7$RELEVANT_PRED_WRT_GT_, thread);
-                                                                                {
-                                                                                    SubLObject pred_var = NIL;
-                                                                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(node, gather_argnum, pred_var)) {
-                                                                                        {
-                                                                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(node, gather_argnum, pred_var);
-                                                                                            SubLObject done_var = NIL;
-                                                                                            SubLObject token_var = NIL;
-                                                                                            while (NIL == done_var) {
-                                                                                                {
-                                                                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                                                                    if (NIL != valid) {
-                                                                                                        {
-                                                                                                            SubLObject final_index_iterator = NIL;
-                                                                                                            try {
-                                                                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, truth, NIL);
-                                                                                                                {
-                                                                                                                    SubLObject done_var_62 = NIL;
-                                                                                                                    SubLObject token_var_63 = NIL;
-                                                                                                                    while (NIL == done_var_62) {
-                                                                                                                        {
-                                                                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_63);
-                                                                                                                            SubLObject valid_64 = makeBoolean(token_var_63 != assertion);
-                                                                                                                            if (NIL != valid_64) {
-                                                                                                                                if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                                                    {
-                                                                                                                                        SubLObject link_node = cycl_utilities.formula_arg(assertion, index_argnum, UNPROVIDED);
-                                                                                                                                        SubLObject support_var = assertion;
-                                                                                                                                        count = add(count, ONE_INTEGER);
-                                                                                                                                        deck.deck_push(link_node, node_deck);
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                            done_var_62 = makeBoolean(NIL == valid_64);
-                                                                                                                        }
-                                                                                                                    } 
-                                                                                                                }
-                                                                                                            } finally {
-                                                                                                                {
-                                                                                                                    SubLObject _prev_bind_0_65 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                                                    try {
-                                                                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                                                        if (NIL != final_index_iterator) {
-                                                                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                                                                        }
-                                                                                                                    } finally {
-                                                                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_65, thread);
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                    done_var = makeBoolean(NIL == valid);
-                                                                                                }
-                                                                                            } 
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            } finally {
-                                                                                pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_1, thread);
-                                                                                ghl_link_iterators.$gt_relevant_pred$.rebind(_prev_bind_0_61, thread);
-                                                                            }
-                                                                        }
-                                                                        if (NIL != gt_vars.gt_use_sksiP()) {
-                                                                            {
-                                                                                SubLObject _prev_bind_0_66 = ghl_search_vars.$sksi_gt_search_pred$.currentBinding(thread);
-                                                                                try {
-                                                                                    ghl_search_vars.$sksi_gt_search_pred$.bind(pred, thread);
-                                                                                    {
-                                                                                        SubLObject cdolist_list_var_67 = sksi_sks_mapping_utilities.gather_sksi_gaf_arg_index_relevant_pred(node, gather_argnum, truth);
-                                                                                        SubLObject gather_sentence_mt_pair = NIL;
-                                                                                        for (gather_sentence_mt_pair = cdolist_list_var_67.first(); NIL != cdolist_list_var_67; cdolist_list_var_67 = cdolist_list_var_67.rest() , gather_sentence_mt_pair = cdolist_list_var_67.first()) {
-                                                                                            {
-                                                                                                SubLObject datum = gather_sentence_mt_pair;
-                                                                                                SubLObject current = datum;
-                                                                                                SubLObject assertion = NIL;
-                                                                                                SubLObject var_mt = NIL;
-                                                                                                destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                                assertion = current.first();
-                                                                                                current = current.rest();
-                                                                                                destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                                var_mt = current.first();
-                                                                                                current = current.rest();
-                                                                                                if (NIL == current) {
-                                                                                                    if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                        {
-                                                                                                            SubLObject link_node = cycl_utilities.formula_arg(assertion, index_argnum, UNPROVIDED);
-                                                                                                            SubLObject support_var = assertion;
-                                                                                                            count = add(count, ONE_INTEGER);
-                                                                                                            deck.deck_push(link_node, node_deck);
-                                                                                                        }
-                                                                                                    }
-                                                                                                } else {
-                                                                                                    cdestructuring_bind_error(datum, $list_alt9);
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                } finally {
-                                                                                    ghl_search_vars.$sksi_gt_search_pred$.rebind(_prev_bind_0_66, thread);
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    } finally {
-                                                                        ghl_search_vars.$gt_args_swapped_p$.rebind(_prev_bind_0_60, thread);
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            } finally {
-                                                ghl_search_vars.$gt_args_swapped_p$.rebind(_prev_bind_0_52, thread);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        } finally {
-                            ghl_link_iterators.$ghl_link_pred$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                return count;
-            }
-        }
     }
 
     public static SubLObject ghl_add_accessible_link_nodes_to_deck(final SubLObject v_search, final SubLObject node, final SubLObject node_deck) {
@@ -2986,430 +1580,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         return count;
     }
 
-    public static final SubLObject ghl_add_accessible_link_nodes_and_supports_to_deck_alt(SubLObject v_search, SubLObject node, SubLObject node_deck, SubLObject support_deck) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject count = ZERO_INTEGER;
-                SubLObject cdolist_list_var = ghl_search_vars.ghl_relevant_predicates(v_search);
-                SubLObject pred = NIL;
-                for (pred = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pred = cdolist_list_var.first()) {
-                    {
-                        SubLObject _prev_bind_0 = ghl_link_iterators.$ghl_link_pred$.currentBinding(thread);
-                        try {
-                            ghl_link_iterators.$ghl_link_pred$.bind(pred, thread);
-                            if (NIL != sbhl_module_utilities.sbhl_predicate_p(pred)) {
-                                {
-                                    SubLObject node_68 = function_terms.naut_to_nart(node);
-                                    {
-                                        SubLObject _prev_bind_0_69 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
-                                        SubLObject _prev_bind_1 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
-                                        SubLObject _prev_bind_2 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
-                                        SubLObject _prev_bind_3 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                        SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                        SubLObject _prev_bind_5 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                        try {
-                                            sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_vars.get_sbhl_module(pred), thread);
-                                            sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_vars.get_sbhl_module(pred)), thread);
-                                            sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_vars.get_sbhl_module(pred)), thread);
-                                            sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
-                                            sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module(pred), thread);
-                                            sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
-                                            if (NIL != forts.fort_p(node_68)) {
-                                                {
-                                                    SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node_68, sbhl_module_vars.get_sbhl_module(pred));
-                                                    if (NIL != d_link) {
-                                                        {
-                                                            SubLObject csome_list_var = graphl_search_vars.determine_graphl_relevant_directions(ghl_search_vars.ghl_direction(v_search));
-                                                            SubLObject search_direction = NIL;
-                                                            for (search_direction = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , search_direction = csome_list_var.first()) {
-                                                                {
-                                                                    SubLObject link_direction = sbhl_module_utilities.sbhl_search_direction_to_link_direction(search_direction, sbhl_module_vars.get_sbhl_module(pred));
-                                                                    SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, link_direction, sbhl_module_vars.get_sbhl_module(pred));
-                                                                    if (NIL != mt_links) {
-                                                                        {
-                                                                            SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
-                                                                            while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                                                                                thread.resetMultipleValues();
-                                                                                {
-                                                                                    SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                                    SubLObject tv_links = thread.secondMultipleValue();
-                                                                                    thread.resetMultipleValues();
-                                                                                    if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                        {
-                                                                                            SubLObject _prev_bind_0_70 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                            try {
-                                                                                                sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                {
-                                                                                                    SubLObject iteration_state_71 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
-                                                                                                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_71)) {
-                                                                                                        thread.resetMultipleValues();
-                                                                                                        {
-                                                                                                            SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_71);
-                                                                                                            SubLObject link_nodes_var = thread.secondMultipleValue();
-                                                                                                            thread.resetMultipleValues();
-                                                                                                            if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                {
-                                                                                                                    SubLObject _prev_bind_0_72 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                    try {
-                                                                                                                        sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                        {
-                                                                                                                            SubLObject cdolist_list_var_73 = link_nodes_var;
-                                                                                                                            SubLObject link_node = NIL;
-                                                                                                                            for (link_node = cdolist_list_var_73.first(); NIL != cdolist_list_var_73; cdolist_list_var_73 = cdolist_list_var_73.rest() , link_node = cdolist_list_var_73.first()) {
-                                                                                                                                {
-                                                                                                                                    SubLObject support = ghl_link_iterators.ghl_make_sbhl_support(pred, node, link_node, ghl_search_vars.ghl_direction(v_search));
-                                                                                                                                    count = add(count, ONE_INTEGER);
-                                                                                                                                    deck.deck_push(link_node, node_deck);
-                                                                                                                                    deck.deck_push(support, support_deck);
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    } finally {
-                                                                                                                        sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_72, thread);
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                            iteration_state_71 = dictionary_contents.do_dictionary_contents_next(iteration_state_71);
-                                                                                                        }
-                                                                                                    } 
-                                                                                                    dictionary_contents.do_dictionary_contents_finalize(iteration_state_71);
-                                                                                                }
-                                                                                            } finally {
-                                                                                                sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_70, thread);
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                    iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                                                }
-                                                                            } 
-                                                                            dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    } else {
-                                                        sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt5$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                    }
-                                                }
-                                            } else {
-                                                if (NIL != term.closed_nautP(node_68, UNPROVIDED)) {
-                                                    {
-                                                        SubLObject csome_list_var = graphl_search_vars.determine_graphl_relevant_directions(ghl_search_vars.ghl_direction(v_search));
-                                                        SubLObject search_direction = NIL;
-                                                        for (search_direction = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , search_direction = csome_list_var.first()) {
-                                                            {
-                                                                SubLObject link_direction = sbhl_module_utilities.sbhl_search_direction_to_link_direction(search_direction, sbhl_module_vars.get_sbhl_module(pred));
-                                                                SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(link_direction, sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(pred))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(link_direction, sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(pred));
-                                                                SubLObject cdolist_list_var_74 = new_list;
-                                                                SubLObject generating_fn = NIL;
-                                                                for (generating_fn = cdolist_list_var_74.first(); NIL != cdolist_list_var_74; cdolist_list_var_74 = cdolist_list_var_74.rest() , generating_fn = cdolist_list_var_74.first()) {
-                                                                    {
-                                                                        SubLObject _prev_bind_0_75 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
-                                                                        try {
-                                                                            sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
-                                                                            {
-                                                                                SubLObject link_nodes_var = funcall(generating_fn, node_68);
-                                                                                SubLObject cdolist_list_var_76 = link_nodes_var;
-                                                                                SubLObject link_node = NIL;
-                                                                                for (link_node = cdolist_list_var_76.first(); NIL != cdolist_list_var_76; cdolist_list_var_76 = cdolist_list_var_76.rest() , link_node = cdolist_list_var_76.first()) {
-                                                                                    {
-                                                                                        SubLObject support = ghl_link_iterators.ghl_make_sbhl_support(pred, node, link_node, ghl_search_vars.ghl_direction(v_search));
-                                                                                        count = add(count, ONE_INTEGER);
-                                                                                        deck.deck_push(link_node, node_deck);
-                                                                                        deck.deck_push(support, support_deck);
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        } finally {
-                                                                            sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_75, thread);
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } finally {
-                                            sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_5, thread);
-                                            sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
-                                            sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3, thread);
-                                            sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2, thread);
-                                            sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1, thread);
-                                            sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0_69, thread);
-                                        }
-                                    }
-                                }
-                            } else {
-                                if (NIL != ghl_link_iterators.gt_predicate_p(pred)) {
-                                    {
-                                        SubLObject truth = enumeration_types.tv_truth(ghl_search_vars.ghl_tv(v_search));
-                                        SubLObject strength = enumeration_types.tv_strength(ghl_search_vars.ghl_tv(v_search));
-                                        {
-                                            SubLObject _prev_bind_0_77 = ghl_search_vars.$gt_args_swapped_p$.currentBinding(thread);
-                                            try {
-                                                ghl_search_vars.$gt_args_swapped_p$.bind(NIL, thread);
-                                                {
-                                                    SubLObject csome_list_var = graphl_search_vars.determine_graphl_relevant_directions(ghl_search_vars.ghl_direction(v_search));
-                                                    SubLObject search_direction = NIL;
-                                                    for (search_direction = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , search_direction = csome_list_var.first()) {
-                                                        {
-                                                            SubLObject index_argnum = ghl_link_iterators.gt_index_argnum_for_direction(search_direction);
-                                                            SubLObject gather_argnum = misc_utilities.other_binary_arg(index_argnum);
-                                                            {
-                                                                SubLObject _prev_bind_0_78 = ghl_link_iterators.$gt_relevant_pred$.currentBinding(thread);
-                                                                SubLObject _prev_bind_1 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
-                                                                try {
-                                                                    ghl_link_iterators.$gt_relevant_pred$.bind(pred, thread);
-                                                                    pred_relevance_macros.$relevant_pred_function$.bind($sym7$RELEVANT_PRED_WRT_GT_, thread);
-                                                                    {
-                                                                        SubLObject pred_var = NIL;
-                                                                        if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(node, index_argnum, pred_var)) {
-                                                                            {
-                                                                                SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(node, index_argnum, pred_var);
-                                                                                SubLObject done_var = NIL;
-                                                                                SubLObject token_var = NIL;
-                                                                                while (NIL == done_var) {
-                                                                                    {
-                                                                                        SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                                                        SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                                                        if (NIL != valid) {
-                                                                                            {
-                                                                                                SubLObject final_index_iterator = NIL;
-                                                                                                try {
-                                                                                                    final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, truth, NIL);
-                                                                                                    {
-                                                                                                        SubLObject done_var_79 = NIL;
-                                                                                                        SubLObject token_var_80 = NIL;
-                                                                                                        while (NIL == done_var_79) {
-                                                                                                            {
-                                                                                                                SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_80);
-                                                                                                                SubLObject valid_81 = makeBoolean(token_var_80 != assertion);
-                                                                                                                if (NIL != valid_81) {
-                                                                                                                    if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                                        {
-                                                                                                                            SubLObject link_node = cycl_utilities.formula_arg(assertion, gather_argnum, UNPROVIDED);
-                                                                                                                            SubLObject support = assertion;
-                                                                                                                            count = add(count, ONE_INTEGER);
-                                                                                                                            deck.deck_push(link_node, node_deck);
-                                                                                                                            deck.deck_push(support, support_deck);
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                                done_var_79 = makeBoolean(NIL == valid_81);
-                                                                                                            }
-                                                                                                        } 
-                                                                                                    }
-                                                                                                } finally {
-                                                                                                    {
-                                                                                                        SubLObject _prev_bind_0_82 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                                        try {
-                                                                                                            $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                                            if (NIL != final_index_iterator) {
-                                                                                                                kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                                                            }
-                                                                                                        } finally {
-                                                                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_82, thread);
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                        done_var = makeBoolean(NIL == valid);
-                                                                                    }
-                                                                                } 
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                } finally {
-                                                                    pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_1, thread);
-                                                                    ghl_link_iterators.$gt_relevant_pred$.rebind(_prev_bind_0_78, thread);
-                                                                }
-                                                            }
-                                                            if (NIL != gt_vars.gt_use_sksiP()) {
-                                                                {
-                                                                    SubLObject _prev_bind_0_83 = ghl_search_vars.$sksi_gt_search_pred$.currentBinding(thread);
-                                                                    try {
-                                                                        ghl_search_vars.$sksi_gt_search_pred$.bind(pred, thread);
-                                                                        {
-                                                                            SubLObject cdolist_list_var_84 = sksi_sks_mapping_utilities.gather_sksi_gaf_arg_index_relevant_pred(node, index_argnum, truth);
-                                                                            SubLObject gather_sentence_mt_pair = NIL;
-                                                                            for (gather_sentence_mt_pair = cdolist_list_var_84.first(); NIL != cdolist_list_var_84; cdolist_list_var_84 = cdolist_list_var_84.rest() , gather_sentence_mt_pair = cdolist_list_var_84.first()) {
-                                                                                {
-                                                                                    SubLObject datum = gather_sentence_mt_pair;
-                                                                                    SubLObject current = datum;
-                                                                                    SubLObject assertion = NIL;
-                                                                                    SubLObject var_mt = NIL;
-                                                                                    destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                    assertion = current.first();
-                                                                                    current = current.rest();
-                                                                                    destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                    var_mt = current.first();
-                                                                                    current = current.rest();
-                                                                                    if (NIL == current) {
-                                                                                        if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                            {
-                                                                                                SubLObject link_node = cycl_utilities.formula_arg(assertion, gather_argnum, UNPROVIDED);
-                                                                                                SubLObject support = assertion;
-                                                                                                count = add(count, ONE_INTEGER);
-                                                                                                deck.deck_push(link_node, node_deck);
-                                                                                                deck.deck_push(support, support_deck);
-                                                                                            }
-                                                                                        }
-                                                                                    } else {
-                                                                                        cdestructuring_bind_error(datum, $list_alt9);
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    } finally {
-                                                                        ghl_search_vars.$sksi_gt_search_pred$.rebind(_prev_bind_0_83, thread);
-                                                                    }
-                                                                }
-                                                            }
-                                                            if (NIL != ghl_search_vars.ghl_uses_spec_preds_p()) {
-                                                                {
-                                                                    SubLObject _prev_bind_0_85 = ghl_search_vars.$gt_args_swapped_p$.currentBinding(thread);
-                                                                    try {
-                                                                        ghl_search_vars.$gt_args_swapped_p$.bind(T, thread);
-                                                                        {
-                                                                            SubLObject _prev_bind_0_86 = ghl_link_iterators.$gt_relevant_pred$.currentBinding(thread);
-                                                                            SubLObject _prev_bind_1 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
-                                                                            try {
-                                                                                ghl_link_iterators.$gt_relevant_pred$.bind(pred, thread);
-                                                                                pred_relevance_macros.$relevant_pred_function$.bind($sym7$RELEVANT_PRED_WRT_GT_, thread);
-                                                                                {
-                                                                                    SubLObject pred_var = NIL;
-                                                                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(node, gather_argnum, pred_var)) {
-                                                                                        {
-                                                                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(node, gather_argnum, pred_var);
-                                                                                            SubLObject done_var = NIL;
-                                                                                            SubLObject token_var = NIL;
-                                                                                            while (NIL == done_var) {
-                                                                                                {
-                                                                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                                                                    if (NIL != valid) {
-                                                                                                        {
-                                                                                                            SubLObject final_index_iterator = NIL;
-                                                                                                            try {
-                                                                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, truth, NIL);
-                                                                                                                {
-                                                                                                                    SubLObject done_var_87 = NIL;
-                                                                                                                    SubLObject token_var_88 = NIL;
-                                                                                                                    while (NIL == done_var_87) {
-                                                                                                                        {
-                                                                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_88);
-                                                                                                                            SubLObject valid_89 = makeBoolean(token_var_88 != assertion);
-                                                                                                                            if (NIL != valid_89) {
-                                                                                                                                if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                                                    {
-                                                                                                                                        SubLObject link_node = cycl_utilities.formula_arg(assertion, index_argnum, UNPROVIDED);
-                                                                                                                                        SubLObject support = assertion;
-                                                                                                                                        count = add(count, ONE_INTEGER);
-                                                                                                                                        deck.deck_push(link_node, node_deck);
-                                                                                                                                        deck.deck_push(support, support_deck);
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                            done_var_87 = makeBoolean(NIL == valid_89);
-                                                                                                                        }
-                                                                                                                    } 
-                                                                                                                }
-                                                                                                            } finally {
-                                                                                                                {
-                                                                                                                    SubLObject _prev_bind_0_90 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                                                    try {
-                                                                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                                                        if (NIL != final_index_iterator) {
-                                                                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                                                                        }
-                                                                                                                    } finally {
-                                                                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_90, thread);
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                    done_var = makeBoolean(NIL == valid);
-                                                                                                }
-                                                                                            } 
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            } finally {
-                                                                                pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_1, thread);
-                                                                                ghl_link_iterators.$gt_relevant_pred$.rebind(_prev_bind_0_86, thread);
-                                                                            }
-                                                                        }
-                                                                        if (NIL != gt_vars.gt_use_sksiP()) {
-                                                                            {
-                                                                                SubLObject _prev_bind_0_91 = ghl_search_vars.$sksi_gt_search_pred$.currentBinding(thread);
-                                                                                try {
-                                                                                    ghl_search_vars.$sksi_gt_search_pred$.bind(pred, thread);
-                                                                                    {
-                                                                                        SubLObject cdolist_list_var_92 = sksi_sks_mapping_utilities.gather_sksi_gaf_arg_index_relevant_pred(node, gather_argnum, truth);
-                                                                                        SubLObject gather_sentence_mt_pair = NIL;
-                                                                                        for (gather_sentence_mt_pair = cdolist_list_var_92.first(); NIL != cdolist_list_var_92; cdolist_list_var_92 = cdolist_list_var_92.rest() , gather_sentence_mt_pair = cdolist_list_var_92.first()) {
-                                                                                            {
-                                                                                                SubLObject datum = gather_sentence_mt_pair;
-                                                                                                SubLObject current = datum;
-                                                                                                SubLObject assertion = NIL;
-                                                                                                SubLObject var_mt = NIL;
-                                                                                                destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                                assertion = current.first();
-                                                                                                current = current.rest();
-                                                                                                destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                                var_mt = current.first();
-                                                                                                current = current.rest();
-                                                                                                if (NIL == current) {
-                                                                                                    if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                        {
-                                                                                                            SubLObject link_node = cycl_utilities.formula_arg(assertion, index_argnum, UNPROVIDED);
-                                                                                                            SubLObject support = assertion;
-                                                                                                            count = add(count, ONE_INTEGER);
-                                                                                                            deck.deck_push(link_node, node_deck);
-                                                                                                            deck.deck_push(support, support_deck);
-                                                                                                        }
-                                                                                                    }
-                                                                                                } else {
-                                                                                                    cdestructuring_bind_error(datum, $list_alt9);
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                } finally {
-                                                                                    ghl_search_vars.$sksi_gt_search_pred$.rebind(_prev_bind_0_91, thread);
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    } finally {
-                                                                        ghl_search_vars.$gt_args_swapped_p$.rebind(_prev_bind_0_85, thread);
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            } finally {
-                                                ghl_search_vars.$gt_args_swapped_p$.rebind(_prev_bind_0_77, thread);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        } finally {
-                            ghl_link_iterators.$ghl_link_pred$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                return count;
-            }
-        }
-    }
-
     public static SubLObject ghl_add_accessible_link_nodes_and_supports_to_deck(final SubLObject v_search, final SubLObject node, final SubLObject node_deck, final SubLObject support_deck) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject count = ZERO_INTEGER;
@@ -3809,29 +1979,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         return count;
     }
 
-    public static final SubLObject ghl_remove_unneeded_supports_alt(SubLObject unwind_deck) {
-        {
-            SubLObject count = ZERO_INTEGER;
-            if (NIL == deck.deck_empty_p(unwind_deck)) {
-                {
-                    SubLObject support_deck = deck.deck_peek(unwind_deck);
-                    deck.deck_pop(support_deck);
-                    if (NIL != deck.deck_empty_p(support_deck)) {
-                        while (!((NIL != deck.deck_empty_p(unwind_deck)) || deck.deck_size(support_deck).numG(ONE_INTEGER))) {
-                            deck.deck_pop(unwind_deck);
-                            count = add(count, ONE_INTEGER);
-                            support_deck = deck.deck_peek(unwind_deck);
-                        } 
-                    }
-                    if (count.numG(ZERO_INTEGER) && (NIL != deck.deck_p(support_deck))) {
-                        deck.deck_pop(support_deck);
-                    }
-                }
-            }
-            return count;
-        }
-    }
-
     public static SubLObject ghl_remove_unneeded_supports(final SubLObject unwind_deck) {
         SubLObject count = ZERO_INTEGER;
         if (NIL == deck.deck_empty_p(unwind_deck)) {
@@ -3849,57 +1996,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
             }
         }
         return count;
-    }
-
-    public static final SubLObject ghl_add_support_to_result_alt(SubLObject v_search, SubLObject support) {
-        {
-            SubLObject support_pred = (NIL != assertion_handles.assertion_p(support)) ? ((SubLObject) (assertions_high.gaf_predicate(support))) : cycl_utilities.formula_operator(arguments.hl_support_sentence(support));
-            SubLObject search_preds = (ghl_search_vars.ghl_search_predicates(v_search).isList()) ? ((SubLObject) (ghl_search_vars.ghl_search_predicates(v_search))) : list(ghl_search_vars.ghl_search_predicates(v_search));
-            if (NIL == list_utilities.member_eqP(support_pred, search_preds)) {
-                {
-                    SubLObject genl_pred = NIL;
-                    SubLObject genl_inverse = NIL;
-                    if (NIL == genl_pred) {
-                        {
-                            SubLObject csome_list_var = search_preds;
-                            SubLObject search_pred = NIL;
-                            for (search_pred = csome_list_var.first(); !((NIL != genl_pred) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , search_pred = csome_list_var.first()) {
-                                if (NIL != genl_predicates.genl_predicateP(support_pred, search_pred, UNPROVIDED, UNPROVIDED)) {
-                                    genl_pred = search_pred;
-                                }
-                            }
-                        }
-                    }
-                    if (NIL == genl_inverse) {
-                        {
-                            SubLObject csome_list_var = search_preds;
-                            SubLObject search_pred = NIL;
-                            for (search_pred = csome_list_var.first(); !((NIL != genl_inverse) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , search_pred = csome_list_var.first()) {
-                                if (NIL != genl_predicates.genl_inverseP(support_pred, search_pred, UNPROVIDED, UNPROVIDED)) {
-                                    genl_inverse = search_pred;
-                                }
-                            }
-                        }
-                    }
-                    if (NIL != genl_pred) {
-                        {
-                            SubLObject support_sentence = make_binary_formula($$genlPreds, support_pred, genl_pred);
-                            SubLObject hl_support = arguments.make_hl_support($GENLPREDS, support_sentence, UNPROVIDED, UNPROVIDED);
-                            ghl_search_vars.ghl_add_to_result(v_search, hl_support, symbol_function(EQUAL));
-                        }
-                    }
-                    if (NIL != genl_inverse) {
-                        {
-                            SubLObject support_sentence = make_binary_formula($$genlInverse, support_pred, genl_inverse);
-                            SubLObject hl_support = arguments.make_hl_support($GENLPREDS, support_sentence, UNPROVIDED, UNPROVIDED);
-                            ghl_search_vars.ghl_add_to_result(v_search, hl_support, symbol_function(EQUAL));
-                        }
-                    }
-                }
-            }
-            ghl_search_vars.ghl_add_to_result(v_search, support, symbol_function(EQUAL));
-            return NIL;
-        }
     }
 
     public static SubLObject ghl_add_support_to_result(final SubLObject v_search, final SubLObject support) {
@@ -3947,17 +2043,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    public static final SubLObject ghl_add_justification_to_result_alt(SubLObject v_search, SubLObject justification) {
-        {
-            SubLObject cdolist_list_var = justification;
-            SubLObject support = NIL;
-            for (support = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , support = cdolist_list_var.first()) {
-                ghl_search_vars.ghl_add_to_result(v_search, support, symbol_function(EQUAL));
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject ghl_add_justification_to_result(final SubLObject v_search, final SubLObject justification) {
         SubLObject cdolist_list_var = justification;
         SubLObject support = NIL;
@@ -3968,74 +2053,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
             support = cdolist_list_var.first();
         } 
         return NIL;
-    }
-
-    public static final SubLObject ghl_create_justification_alt(SubLObject v_search, SubLObject supports) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject search_preds = (ghl_search_vars.ghl_search_predicates(v_search).isList()) ? ((SubLObject) (ghl_search_vars.ghl_search_predicates(v_search))) : list(ghl_search_vars.ghl_search_predicates(v_search));
-                SubLObject search_mt = mt_relevance_macros.$mt$.getDynamicValue(thread);
-                SubLObject search_tv = ghl_search_vars.ghl_tv(v_search);
-                SubLObject sbhl_tv = sbhl_link_vars.support_tv_to_sbhl_tv(search_tv);
-                SubLObject justification = NIL;
-                SubLObject cdolist_list_var = supports;
-                SubLObject support = NIL;
-                for (support = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , support = cdolist_list_var.first()) {
-                    if (NIL != arguments.support_p(support)) {
-                        justification = cons(support, justification);
-                    } else {
-                        justification = cons(sksi_infrastructure_utilities.make_sksi_support(support, search_mt), justification);
-                    }
-                    {
-                        SubLObject support_pred = (NIL != assertion_handles.assertion_p(support)) ? ((SubLObject) (assertions_high.gaf_predicate(support))) : NIL != arguments.hl_support_p(support) ? ((SubLObject) (cycl_utilities.formula_operator(arguments.hl_support_sentence(support)))) : NIL != el_formula_p(support) ? ((SubLObject) (cycl_utilities.formula_operator(support))) : NIL;
-                        if (NIL == list_utilities.member_eqP(support_pred, search_preds)) {
-                            {
-                                SubLObject genl_pred = NIL;
-                                SubLObject genl_inverse = NIL;
-                                if (NIL == genl_pred) {
-                                    {
-                                        SubLObject csome_list_var = search_preds;
-                                        SubLObject search_pred = NIL;
-                                        for (search_pred = csome_list_var.first(); !((NIL != genl_pred) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , search_pred = csome_list_var.first()) {
-                                            if (NIL != genl_predicates.genl_predicateP(support_pred, search_pred, search_mt, sbhl_tv)) {
-                                                genl_pred = search_pred;
-                                            }
-                                        }
-                                    }
-                                }
-                                if (NIL == genl_inverse) {
-                                    {
-                                        SubLObject csome_list_var = search_preds;
-                                        SubLObject search_pred = NIL;
-                                        for (search_pred = csome_list_var.first(); !((NIL != genl_inverse) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , search_pred = csome_list_var.first()) {
-                                            if (NIL != genl_predicates.genl_inverseP(support_pred, search_pred, search_mt, sbhl_tv)) {
-                                                genl_inverse = search_pred;
-                                            }
-                                        }
-                                    }
-                                }
-                                if (NIL != genl_pred) {
-                                    {
-                                        SubLObject support_sentence = make_binary_formula($$genlPreds, support_pred, genl_pred);
-                                        SubLObject hl_support = arguments.make_hl_support($GENLPREDS, support_sentence, search_mt, search_tv);
-                                        justification = cons(hl_support, justification);
-                                    }
-                                }
-                                if (NIL != genl_inverse) {
-                                    {
-                                        SubLObject support_sentence = make_binary_formula($$genlInverse, support_pred, genl_inverse);
-                                        SubLObject hl_support = arguments.make_hl_support($GENLPREDS, support_sentence, search_mt, search_tv);
-                                        justification = cons(hl_support, justification);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                return list_utilities.fast_delete_duplicates(nreverse(justification), symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            }
-        }
     }
 
     public static SubLObject ghl_create_justification(final SubLObject v_search, final SubLObject supports) {
@@ -4097,507 +2114,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
             support = cdolist_list_var.first();
         } 
         return list_utilities.fast_delete_duplicates(nreverse(justification), symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-    }
-
-    public static final SubLObject ghl_mark_and_sweep_depth_cutoff_initializer_alt(SubLObject v_search, SubLObject node, SubLObject depth) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject reflexive_just = ghl_search_utilities.ghl_node_admitted_by_some_reflexive_gaf(v_search, node);
-                ghl_marking_utilities.ghl_mark_node(v_search, node, depth);
-                if (NIL != reflexive_just) {
-                    if (NIL != ghl_search_vars.ghl_add_nodes_on_wind_p(v_search)) {
-                        ghl_search_vars.ghl_add_node_to_result(v_search, node);
-                    }
-                    if (NIL != ghl_search_utilities.ghl_goal_nodeP(v_search, node, UNPROVIDED)) {
-                        ghl_search_utilities.ghl_resolve_goal_found(v_search, node);
-                    }
-                }
-                {
-                    SubLObject new_depth = number_utilities.f_1_(depth);
-                    SubLObject preds = ghl_search_vars.ghl_relevant_predicates(v_search);
-                    SubLObject direction = ghl_search_vars.ghl_direction(v_search);
-                    if (!new_depth.numL(ZERO_INTEGER)) {
-                        {
-                            SubLObject cdolist_list_var = preds;
-                            SubLObject pred = NIL;
-                            for (pred = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pred = cdolist_list_var.first()) {
-                                {
-                                    SubLObject _prev_bind_0 = ghl_link_iterators.$ghl_link_pred$.currentBinding(thread);
-                                    try {
-                                        ghl_link_iterators.$ghl_link_pred$.bind(pred, thread);
-                                        if (NIL != sbhl_module_utilities.sbhl_predicate_p(pred)) {
-                                            {
-                                                SubLObject node_93 = function_terms.naut_to_nart(node);
-                                                {
-                                                    SubLObject _prev_bind_0_94 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
-                                                    SubLObject _prev_bind_1 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
-                                                    SubLObject _prev_bind_2 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
-                                                    SubLObject _prev_bind_3 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                    SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                    SubLObject _prev_bind_5 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                    try {
-                                                        sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_vars.get_sbhl_module(pred), thread);
-                                                        sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_vars.get_sbhl_module(pred)), thread);
-                                                        sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_vars.get_sbhl_module(pred)), thread);
-                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
-                                                        sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module(pred), thread);
-                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
-                                                        if (NIL != forts.fort_p(node_93)) {
-                                                            {
-                                                                SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node_93, sbhl_module_vars.get_sbhl_module(pred));
-                                                                if (NIL != d_link) {
-                                                                    if (NIL == graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) {
-                                                                        {
-                                                                            SubLObject csome_list_var = graphl_search_vars.determine_graphl_relevant_directions(direction);
-                                                                            SubLObject search_direction = NIL;
-                                                                            for (search_direction = csome_list_var.first(); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , search_direction = csome_list_var.first()) {
-                                                                                {
-                                                                                    SubLObject link_direction = sbhl_module_utilities.sbhl_search_direction_to_link_direction(search_direction, sbhl_module_vars.get_sbhl_module(pred));
-                                                                                    SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, link_direction, sbhl_module_vars.get_sbhl_module(pred));
-                                                                                    if (NIL != mt_links) {
-                                                                                        {
-                                                                                            SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
-                                                                                            while (!((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL != dictionary_contents.do_dictionary_contents_doneP(iteration_state)))) {
-                                                                                                thread.resetMultipleValues();
-                                                                                                {
-                                                                                                    SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                                                    SubLObject tv_links = thread.secondMultipleValue();
-                                                                                                    thread.resetMultipleValues();
-                                                                                                    if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                        {
-                                                                                                            SubLObject _prev_bind_0_95 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                            try {
-                                                                                                                sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                {
-                                                                                                                    SubLObject iteration_state_96 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
-                                                                                                                    while (!((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL != dictionary_contents.do_dictionary_contents_doneP(iteration_state_96)))) {
-                                                                                                                        thread.resetMultipleValues();
-                                                                                                                        {
-                                                                                                                            SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_96);
-                                                                                                                            SubLObject link_nodes_var = thread.secondMultipleValue();
-                                                                                                                            thread.resetMultipleValues();
-                                                                                                                            if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                {
-                                                                                                                                    SubLObject _prev_bind_0_97 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                    try {
-                                                                                                                                        sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                        {
-                                                                                                                                            SubLObject rest = NIL;
-                                                                                                                                            for (rest = link_nodes_var; !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest)); rest = rest.rest()) {
-                                                                                                                                                {
-                                                                                                                                                    SubLObject link_node = rest.first();
-                                                                                                                                                    SubLObject assertion = ghl_link_iterators.ghl_make_sbhl_support(pred, node, link_node, direction);
-                                                                                                                                                    com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_depth_cutoff(v_search, link_node, new_depth);
-                                                                                                                                                    if (NIL != ghl_search_vars.ghl_add_unwind_edges_now_p(v_search)) {
-                                                                                                                                                        {
-                                                                                                                                                            SubLObject link_pred = ghl_link_iterators.get_ghl_link_pred();
-                                                                                                                                                            if (NIL != sbhl_module_utilities.sbhl_predicate_p(link_pred)) {
-                                                                                                                                                                ghl_search_utilities.ghl_add_sbhl_assertion_to_result(v_search, sbhl_module_utilities.get_sbhl_link_pred(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), node, link_node, ghl_search_vars.ghl_direction(v_search), sbhl_link_vars.get_sbhl_link_mt());
-                                                                                                                                                            } else {
-                                                                                                                                                                ghl_search_utilities.ghl_add_gt_assertion_to_result(v_search, assertion);
-                                                                                                                                                            }
-                                                                                                                                                        }
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    } finally {
-                                                                                                                                        sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_97, thread);
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                            iteration_state_96 = dictionary_contents.do_dictionary_contents_next(iteration_state_96);
-                                                                                                                        }
-                                                                                                                    } 
-                                                                                                                    dictionary_contents.do_dictionary_contents_finalize(iteration_state_96);
-                                                                                                                }
-                                                                                                            } finally {
-                                                                                                                sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_95, thread);
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                    iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                                                                }
-                                                                                            } 
-                                                                                            dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                } else {
-                                                                    sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt5$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                }
-                                                            }
-                                                        } else {
-                                                            if (NIL != term.closed_nautP(node_93, UNPROVIDED)) {
-                                                                if (NIL == graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) {
-                                                                    {
-                                                                        SubLObject csome_list_var = graphl_search_vars.determine_graphl_relevant_directions(direction);
-                                                                        SubLObject search_direction = NIL;
-                                                                        for (search_direction = csome_list_var.first(); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , search_direction = csome_list_var.first()) {
-                                                                            {
-                                                                                SubLObject link_direction = sbhl_module_utilities.sbhl_search_direction_to_link_direction(search_direction, sbhl_module_vars.get_sbhl_module(pred));
-                                                                                SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(link_direction, sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(pred))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(link_direction, sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(pred));
-                                                                                SubLObject rest = NIL;
-                                                                                for (rest = new_list; !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest)); rest = rest.rest()) {
-                                                                                    {
-                                                                                        SubLObject generating_fn = rest.first();
-                                                                                        {
-                                                                                            SubLObject _prev_bind_0_98 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
-                                                                                            try {
-                                                                                                sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
-                                                                                                {
-                                                                                                    SubLObject link_nodes_var = funcall(generating_fn, node_93);
-                                                                                                    SubLObject rest_99 = NIL;
-                                                                                                    for (rest_99 = link_nodes_var; !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest_99)); rest_99 = rest_99.rest()) {
-                                                                                                        {
-                                                                                                            SubLObject link_node = rest_99.first();
-                                                                                                            SubLObject assertion = ghl_link_iterators.ghl_make_sbhl_support(pred, node, link_node, direction);
-                                                                                                            com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_depth_cutoff(v_search, link_node, new_depth);
-                                                                                                            if (NIL != ghl_search_vars.ghl_add_unwind_edges_now_p(v_search)) {
-                                                                                                                {
-                                                                                                                    SubLObject link_pred = ghl_link_iterators.get_ghl_link_pred();
-                                                                                                                    if (NIL != sbhl_module_utilities.sbhl_predicate_p(link_pred)) {
-                                                                                                                        ghl_search_utilities.ghl_add_sbhl_assertion_to_result(v_search, sbhl_module_utilities.get_sbhl_link_pred(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), node, link_node, ghl_search_vars.ghl_direction(v_search), sbhl_link_vars.get_sbhl_link_mt());
-                                                                                                                    } else {
-                                                                                                                        ghl_search_utilities.ghl_add_gt_assertion_to_result(v_search, assertion);
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            } finally {
-                                                                                                sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_98, thread);
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    } finally {
-                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_5, thread);
-                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
-                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3, thread);
-                                                        sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2, thread);
-                                                        sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1, thread);
-                                                        sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0_94, thread);
-                                                    }
-                                                }
-                                            }
-                                        } else {
-                                            if (NIL != ghl_link_iterators.gt_predicate_p(pred)) {
-                                                {
-                                                    SubLObject truth = enumeration_types.tv_truth($TRUE_DEF);
-                                                    SubLObject strength = enumeration_types.tv_strength($TRUE_DEF);
-                                                    {
-                                                        SubLObject _prev_bind_0_100 = ghl_search_vars.$gt_args_swapped_p$.currentBinding(thread);
-                                                        try {
-                                                            ghl_search_vars.$gt_args_swapped_p$.bind(NIL, thread);
-                                                            if (NIL == graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) {
-                                                                {
-                                                                    SubLObject csome_list_var = graphl_search_vars.determine_graphl_relevant_directions(direction);
-                                                                    SubLObject search_direction = NIL;
-                                                                    for (search_direction = csome_list_var.first(); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , search_direction = csome_list_var.first()) {
-                                                                        {
-                                                                            SubLObject index_argnum = ghl_link_iterators.gt_index_argnum_for_direction(search_direction);
-                                                                            SubLObject gather_argnum = misc_utilities.other_binary_arg(index_argnum);
-                                                                            {
-                                                                                SubLObject _prev_bind_0_101 = ghl_link_iterators.$gt_relevant_pred$.currentBinding(thread);
-                                                                                SubLObject _prev_bind_1 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
-                                                                                try {
-                                                                                    ghl_link_iterators.$gt_relevant_pred$.bind(pred, thread);
-                                                                                    pred_relevance_macros.$relevant_pred_function$.bind($sym7$RELEVANT_PRED_WRT_GT_, thread);
-                                                                                    {
-                                                                                        SubLObject pred_var = NIL;
-                                                                                        if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(node, index_argnum, pred_var)) {
-                                                                                            {
-                                                                                                SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(node, index_argnum, pred_var);
-                                                                                                SubLObject done_var = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                                                SubLObject token_var = NIL;
-                                                                                                while (NIL == done_var) {
-                                                                                                    {
-                                                                                                        SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                                                                        SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                                                                        if (NIL != valid) {
-                                                                                                            {
-                                                                                                                SubLObject final_index_iterator = NIL;
-                                                                                                                try {
-                                                                                                                    final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, truth, NIL);
-                                                                                                                    {
-                                                                                                                        SubLObject done_var_102 = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                                                                        SubLObject token_var_103 = NIL;
-                                                                                                                        while (NIL == done_var_102) {
-                                                                                                                            {
-                                                                                                                                SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_103);
-                                                                                                                                SubLObject valid_104 = makeBoolean(token_var_103 != assertion);
-                                                                                                                                if (NIL != valid_104) {
-                                                                                                                                    if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                                                        {
-                                                                                                                                            SubLObject link_node = cycl_utilities.formula_arg(assertion, gather_argnum, UNPROVIDED);
-                                                                                                                                            SubLObject assertion_105 = assertion;
-                                                                                                                                            com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_depth_cutoff(v_search, link_node, new_depth);
-                                                                                                                                            if (NIL != ghl_search_vars.ghl_add_unwind_edges_now_p(v_search)) {
-                                                                                                                                                {
-                                                                                                                                                    SubLObject link_pred = ghl_link_iterators.get_ghl_link_pred();
-                                                                                                                                                    if (NIL != sbhl_module_utilities.sbhl_predicate_p(link_pred)) {
-                                                                                                                                                        ghl_search_utilities.ghl_add_sbhl_assertion_to_result(v_search, sbhl_module_utilities.get_sbhl_link_pred(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), node, link_node, ghl_search_vars.ghl_direction(v_search), sbhl_link_vars.get_sbhl_link_mt());
-                                                                                                                                                    } else {
-                                                                                                                                                        ghl_search_utilities.ghl_add_gt_assertion_to_result(v_search, assertion_105);
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                                done_var_102 = makeBoolean((NIL == valid_104) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                                                                            }
-                                                                                                                        } 
-                                                                                                                    }
-                                                                                                                } finally {
-                                                                                                                    {
-                                                                                                                        SubLObject _prev_bind_0_106 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                                                        try {
-                                                                                                                            $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                                                            if (NIL != final_index_iterator) {
-                                                                                                                                kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                                                                            }
-                                                                                                                        } finally {
-                                                                                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_106, thread);
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                        done_var = makeBoolean((NIL == valid) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                                                    }
-                                                                                                } 
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                } finally {
-                                                                                    pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_1, thread);
-                                                                                    ghl_link_iterators.$gt_relevant_pred$.rebind(_prev_bind_0_101, thread);
-                                                                                }
-                                                                            }
-                                                                            if (NIL != gt_vars.gt_use_sksiP()) {
-                                                                                {
-                                                                                    SubLObject _prev_bind_0_107 = ghl_search_vars.$sksi_gt_search_pred$.currentBinding(thread);
-                                                                                    try {
-                                                                                        ghl_search_vars.$sksi_gt_search_pred$.bind(pred, thread);
-                                                                                        {
-                                                                                            SubLObject rest = NIL;
-                                                                                            for (rest = sksi_sks_mapping_utilities.gather_sksi_gaf_arg_index_relevant_pred(node, index_argnum, truth); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest)); rest = rest.rest()) {
-                                                                                                {
-                                                                                                    SubLObject gather_sentence_mt_pair = rest.first();
-                                                                                                    SubLObject datum = gather_sentence_mt_pair;
-                                                                                                    SubLObject current = datum;
-                                                                                                    SubLObject assertion = NIL;
-                                                                                                    SubLObject var_mt = NIL;
-                                                                                                    destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                                    assertion = current.first();
-                                                                                                    current = current.rest();
-                                                                                                    destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                                    var_mt = current.first();
-                                                                                                    current = current.rest();
-                                                                                                    if (NIL == current) {
-                                                                                                        if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                            {
-                                                                                                                SubLObject link_node = cycl_utilities.formula_arg(assertion, gather_argnum, UNPROVIDED);
-                                                                                                                SubLObject assertion_108 = assertion;
-                                                                                                                com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_depth_cutoff(v_search, link_node, new_depth);
-                                                                                                                if (NIL != ghl_search_vars.ghl_add_unwind_edges_now_p(v_search)) {
-                                                                                                                    {
-                                                                                                                        SubLObject link_pred = ghl_link_iterators.get_ghl_link_pred();
-                                                                                                                        if (NIL != sbhl_module_utilities.sbhl_predicate_p(link_pred)) {
-                                                                                                                            ghl_search_utilities.ghl_add_sbhl_assertion_to_result(v_search, sbhl_module_utilities.get_sbhl_link_pred(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), node, link_node, ghl_search_vars.ghl_direction(v_search), sbhl_link_vars.get_sbhl_link_mt());
-                                                                                                                        } else {
-                                                                                                                            ghl_search_utilities.ghl_add_gt_assertion_to_result(v_search, assertion_108);
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    } else {
-                                                                                                        cdestructuring_bind_error(datum, $list_alt9);
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    } finally {
-                                                                                        ghl_search_vars.$sksi_gt_search_pred$.rebind(_prev_bind_0_107, thread);
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                            if (NIL != ghl_search_vars.ghl_uses_spec_preds_p()) {
-                                                                                {
-                                                                                    SubLObject _prev_bind_0_109 = ghl_search_vars.$gt_args_swapped_p$.currentBinding(thread);
-                                                                                    try {
-                                                                                        ghl_search_vars.$gt_args_swapped_p$.bind(T, thread);
-                                                                                        {
-                                                                                            SubLObject _prev_bind_0_110 = ghl_link_iterators.$gt_relevant_pred$.currentBinding(thread);
-                                                                                            SubLObject _prev_bind_1 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
-                                                                                            try {
-                                                                                                ghl_link_iterators.$gt_relevant_pred$.bind(pred, thread);
-                                                                                                pred_relevance_macros.$relevant_pred_function$.bind($sym7$RELEVANT_PRED_WRT_GT_, thread);
-                                                                                                {
-                                                                                                    SubLObject pred_var = NIL;
-                                                                                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(node, gather_argnum, pred_var)) {
-                                                                                                        {
-                                                                                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(node, gather_argnum, pred_var);
-                                                                                                            SubLObject done_var = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                                                            SubLObject token_var = NIL;
-                                                                                                            while (NIL == done_var) {
-                                                                                                                {
-                                                                                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                                                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                                                                                    if (NIL != valid) {
-                                                                                                                        {
-                                                                                                                            SubLObject final_index_iterator = NIL;
-                                                                                                                            try {
-                                                                                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, truth, NIL);
-                                                                                                                                {
-                                                                                                                                    SubLObject done_var_111 = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                                                                                    SubLObject token_var_112 = NIL;
-                                                                                                                                    while (NIL == done_var_111) {
-                                                                                                                                        {
-                                                                                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_112);
-                                                                                                                                            SubLObject valid_113 = makeBoolean(token_var_112 != assertion);
-                                                                                                                                            if (NIL != valid_113) {
-                                                                                                                                                if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                                                                    {
-                                                                                                                                                        SubLObject link_node = cycl_utilities.formula_arg(assertion, index_argnum, UNPROVIDED);
-                                                                                                                                                        SubLObject assertion_114 = assertion;
-                                                                                                                                                        com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_depth_cutoff(v_search, link_node, new_depth);
-                                                                                                                                                        if (NIL != ghl_search_vars.ghl_add_unwind_edges_now_p(v_search)) {
-                                                                                                                                                            {
-                                                                                                                                                                SubLObject link_pred = ghl_link_iterators.get_ghl_link_pred();
-                                                                                                                                                                if (NIL != sbhl_module_utilities.sbhl_predicate_p(link_pred)) {
-                                                                                                                                                                    ghl_search_utilities.ghl_add_sbhl_assertion_to_result(v_search, sbhl_module_utilities.get_sbhl_link_pred(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), node, link_node, ghl_search_vars.ghl_direction(v_search), sbhl_link_vars.get_sbhl_link_mt());
-                                                                                                                                                                } else {
-                                                                                                                                                                    ghl_search_utilities.ghl_add_gt_assertion_to_result(v_search, assertion_114);
-                                                                                                                                                                }
-                                                                                                                                                            }
-                                                                                                                                                        }
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                            done_var_111 = makeBoolean((NIL == valid_113) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                                                                                        }
-                                                                                                                                    } 
-                                                                                                                                }
-                                                                                                                            } finally {
-                                                                                                                                {
-                                                                                                                                    SubLObject _prev_bind_0_115 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                                                                    try {
-                                                                                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                                                                        if (NIL != final_index_iterator) {
-                                                                                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                                                                                        }
-                                                                                                                                    } finally {
-                                                                                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_115, thread);
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                    done_var = makeBoolean((NIL == valid) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                                                                }
-                                                                                                            } 
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            } finally {
-                                                                                                pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_1, thread);
-                                                                                                ghl_link_iterators.$gt_relevant_pred$.rebind(_prev_bind_0_110, thread);
-                                                                                            }
-                                                                                        }
-                                                                                        if (NIL != gt_vars.gt_use_sksiP()) {
-                                                                                            {
-                                                                                                SubLObject _prev_bind_0_116 = ghl_search_vars.$sksi_gt_search_pred$.currentBinding(thread);
-                                                                                                try {
-                                                                                                    ghl_search_vars.$sksi_gt_search_pred$.bind(pred, thread);
-                                                                                                    {
-                                                                                                        SubLObject rest = NIL;
-                                                                                                        for (rest = sksi_sks_mapping_utilities.gather_sksi_gaf_arg_index_relevant_pred(node, gather_argnum, truth); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest)); rest = rest.rest()) {
-                                                                                                            {
-                                                                                                                SubLObject gather_sentence_mt_pair = rest.first();
-                                                                                                                SubLObject datum = gather_sentence_mt_pair;
-                                                                                                                SubLObject current = datum;
-                                                                                                                SubLObject assertion = NIL;
-                                                                                                                SubLObject var_mt = NIL;
-                                                                                                                destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                                                assertion = current.first();
-                                                                                                                current = current.rest();
-                                                                                                                destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                                                var_mt = current.first();
-                                                                                                                current = current.rest();
-                                                                                                                if (NIL == current) {
-                                                                                                                    if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                                        {
-                                                                                                                            SubLObject link_node = cycl_utilities.formula_arg(assertion, index_argnum, UNPROVIDED);
-                                                                                                                            SubLObject assertion_117 = assertion;
-                                                                                                                            com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_depth_cutoff(v_search, link_node, new_depth);
-                                                                                                                            if (NIL != ghl_search_vars.ghl_add_unwind_edges_now_p(v_search)) {
-                                                                                                                                {
-                                                                                                                                    SubLObject link_pred = ghl_link_iterators.get_ghl_link_pred();
-                                                                                                                                    if (NIL != sbhl_module_utilities.sbhl_predicate_p(link_pred)) {
-                                                                                                                                        ghl_search_utilities.ghl_add_sbhl_assertion_to_result(v_search, sbhl_module_utilities.get_sbhl_link_pred(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), node, link_node, ghl_search_vars.ghl_direction(v_search), sbhl_link_vars.get_sbhl_link_mt());
-                                                                                                                                    } else {
-                                                                                                                                        ghl_search_utilities.ghl_add_gt_assertion_to_result(v_search, assertion_117);
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                } else {
-                                                                                                                    cdestructuring_bind_error(datum, $list_alt9);
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                } finally {
-                                                                                                    ghl_search_vars.$sksi_gt_search_pred$.rebind(_prev_bind_0_116, thread);
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    } finally {
-                                                                                        ghl_search_vars.$gt_args_swapped_p$.rebind(_prev_bind_0_109, thread);
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        } finally {
-                                                            ghl_search_vars.$gt_args_swapped_p$.rebind(_prev_bind_0_100, thread);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    } finally {
-                                        ghl_link_iterators.$ghl_link_pred$.rebind(_prev_bind_0, thread);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                if (((NIL != reflexive_just) && (NIL != ghl_search_vars.ghl_add_edges_on_unwind_p(v_search))) && (NIL != ghl_search_vars.ghl_goal_found_p(v_search))) {
-                    ghl_search_utilities.ghl_add_reflexivity_justification(v_search, node, reflexive_just);
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject ghl_mark_and_sweep_depth_cutoff_initializer(final SubLObject v_search, final SubLObject node, final SubLObject depth) {
@@ -5100,507 +2616,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    public static final SubLObject ghl_mark_and_sweep_depth_cutoff_alt(SubLObject v_search, SubLObject node, SubLObject depth) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == ghl_search_vars.ghl_goal_found_p(v_search)) {
-                {
-                    SubLObject goal_foundP = ghl_search_utilities.ghl_goal_nodeP(v_search, node, UNPROVIDED);
-                    if (NIL != goal_foundP) {
-                        ghl_search_utilities.ghl_resolve_goal_found(v_search, node);
-                    } else {
-                        if (NIL == ghl_marking_utilities.ghl_node_with_equal_or_shallower_depth_p(v_search, node, depth)) {
-                            ghl_marking_utilities.ghl_mark_node(v_search, node, depth);
-                            if (NIL != ghl_search_vars.ghl_add_nodes_on_wind_p(v_search)) {
-                                ghl_search_vars.ghl_add_node_to_result(v_search, node);
-                            }
-                            {
-                                SubLObject new_depth = number_utilities.f_1_(depth);
-                                SubLObject preds = ghl_search_vars.ghl_relevant_predicates(v_search);
-                                SubLObject direction = ghl_search_vars.ghl_direction(v_search);
-                                if (!new_depth.numL(ZERO_INTEGER)) {
-                                    {
-                                        SubLObject cdolist_list_var = preds;
-                                        SubLObject pred = NIL;
-                                        for (pred = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pred = cdolist_list_var.first()) {
-                                            {
-                                                SubLObject _prev_bind_0 = ghl_link_iterators.$ghl_link_pred$.currentBinding(thread);
-                                                try {
-                                                    ghl_link_iterators.$ghl_link_pred$.bind(pred, thread);
-                                                    if (NIL != sbhl_module_utilities.sbhl_predicate_p(pred)) {
-                                                        {
-                                                            SubLObject node_118 = function_terms.naut_to_nart(node);
-                                                            {
-                                                                SubLObject _prev_bind_0_119 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
-                                                                SubLObject _prev_bind_1 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
-                                                                SubLObject _prev_bind_2 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
-                                                                SubLObject _prev_bind_3 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                                SubLObject _prev_bind_5 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                try {
-                                                                    sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_vars.get_sbhl_module(pred), thread);
-                                                                    sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_vars.get_sbhl_module(pred)), thread);
-                                                                    sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_vars.get_sbhl_module(pred)), thread);
-                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
-                                                                    sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module(pred), thread);
-                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
-                                                                    if (NIL != forts.fort_p(node_118)) {
-                                                                        {
-                                                                            SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node_118, sbhl_module_vars.get_sbhl_module(pred));
-                                                                            if (NIL != d_link) {
-                                                                                if (NIL == graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) {
-                                                                                    {
-                                                                                        SubLObject csome_list_var = graphl_search_vars.determine_graphl_relevant_directions(direction);
-                                                                                        SubLObject search_direction = NIL;
-                                                                                        for (search_direction = csome_list_var.first(); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , search_direction = csome_list_var.first()) {
-                                                                                            {
-                                                                                                SubLObject link_direction = sbhl_module_utilities.sbhl_search_direction_to_link_direction(search_direction, sbhl_module_vars.get_sbhl_module(pred));
-                                                                                                SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, link_direction, sbhl_module_vars.get_sbhl_module(pred));
-                                                                                                if (NIL != mt_links) {
-                                                                                                    {
-                                                                                                        SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
-                                                                                                        while (!((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL != dictionary_contents.do_dictionary_contents_doneP(iteration_state)))) {
-                                                                                                            thread.resetMultipleValues();
-                                                                                                            {
-                                                                                                                SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                                                                SubLObject tv_links = thread.secondMultipleValue();
-                                                                                                                thread.resetMultipleValues();
-                                                                                                                if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                                    {
-                                                                                                                        SubLObject _prev_bind_0_120 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                                        try {
-                                                                                                                            sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                            {
-                                                                                                                                SubLObject iteration_state_121 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
-                                                                                                                                while (!((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL != dictionary_contents.do_dictionary_contents_doneP(iteration_state_121)))) {
-                                                                                                                                    thread.resetMultipleValues();
-                                                                                                                                    {
-                                                                                                                                        SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_121);
-                                                                                                                                        SubLObject link_nodes_var = thread.secondMultipleValue();
-                                                                                                                                        thread.resetMultipleValues();
-                                                                                                                                        if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                            {
-                                                                                                                                                SubLObject _prev_bind_0_122 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                                try {
-                                                                                                                                                    sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                                    {
-                                                                                                                                                        SubLObject rest = NIL;
-                                                                                                                                                        for (rest = link_nodes_var; !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest)); rest = rest.rest()) {
-                                                                                                                                                            {
-                                                                                                                                                                SubLObject link_node = rest.first();
-                                                                                                                                                                SubLObject assertion = ghl_link_iterators.ghl_make_sbhl_support(pred, node, link_node, direction);
-                                                                                                                                                                com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_depth_cutoff(v_search, link_node, new_depth);
-                                                                                                                                                                if (NIL != ghl_search_vars.ghl_add_unwind_edges_now_p(v_search)) {
-                                                                                                                                                                    {
-                                                                                                                                                                        SubLObject link_pred = ghl_link_iterators.get_ghl_link_pred();
-                                                                                                                                                                        if (NIL != sbhl_module_utilities.sbhl_predicate_p(link_pred)) {
-                                                                                                                                                                            ghl_search_utilities.ghl_add_sbhl_assertion_to_result(v_search, sbhl_module_utilities.get_sbhl_link_pred(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), node, link_node, ghl_search_vars.ghl_direction(v_search), sbhl_link_vars.get_sbhl_link_mt());
-                                                                                                                                                                        } else {
-                                                                                                                                                                            ghl_search_utilities.ghl_add_gt_assertion_to_result(v_search, assertion);
-                                                                                                                                                                        }
-                                                                                                                                                                    }
-                                                                                                                                                                }
-                                                                                                                                                            }
-                                                                                                                                                        }
-                                                                                                                                                    }
-                                                                                                                                                } finally {
-                                                                                                                                                    sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_122, thread);
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                        iteration_state_121 = dictionary_contents.do_dictionary_contents_next(iteration_state_121);
-                                                                                                                                    }
-                                                                                                                                } 
-                                                                                                                                dictionary_contents.do_dictionary_contents_finalize(iteration_state_121);
-                                                                                                                            }
-                                                                                                                        } finally {
-                                                                                                                            sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_120, thread);
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                                iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                                                                            }
-                                                                                                        } 
-                                                                                                        dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            } else {
-                                                                                sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt5$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                            }
-                                                                        }
-                                                                    } else {
-                                                                        if (NIL != term.closed_nautP(node_118, UNPROVIDED)) {
-                                                                            if (NIL == graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) {
-                                                                                {
-                                                                                    SubLObject csome_list_var = graphl_search_vars.determine_graphl_relevant_directions(direction);
-                                                                                    SubLObject search_direction = NIL;
-                                                                                    for (search_direction = csome_list_var.first(); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , search_direction = csome_list_var.first()) {
-                                                                                        {
-                                                                                            SubLObject link_direction = sbhl_module_utilities.sbhl_search_direction_to_link_direction(search_direction, sbhl_module_vars.get_sbhl_module(pred));
-                                                                                            SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(link_direction, sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(pred))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(link_direction, sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(pred));
-                                                                                            SubLObject rest = NIL;
-                                                                                            for (rest = new_list; !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest)); rest = rest.rest()) {
-                                                                                                {
-                                                                                                    SubLObject generating_fn = rest.first();
-                                                                                                    {
-                                                                                                        SubLObject _prev_bind_0_123 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
-                                                                                                        try {
-                                                                                                            sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
-                                                                                                            {
-                                                                                                                SubLObject link_nodes_var = funcall(generating_fn, node_118);
-                                                                                                                SubLObject rest_124 = NIL;
-                                                                                                                for (rest_124 = link_nodes_var; !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest_124)); rest_124 = rest_124.rest()) {
-                                                                                                                    {
-                                                                                                                        SubLObject link_node = rest_124.first();
-                                                                                                                        SubLObject assertion = ghl_link_iterators.ghl_make_sbhl_support(pred, node, link_node, direction);
-                                                                                                                        com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_depth_cutoff(v_search, link_node, new_depth);
-                                                                                                                        if (NIL != ghl_search_vars.ghl_add_unwind_edges_now_p(v_search)) {
-                                                                                                                            {
-                                                                                                                                SubLObject link_pred = ghl_link_iterators.get_ghl_link_pred();
-                                                                                                                                if (NIL != sbhl_module_utilities.sbhl_predicate_p(link_pred)) {
-                                                                                                                                    ghl_search_utilities.ghl_add_sbhl_assertion_to_result(v_search, sbhl_module_utilities.get_sbhl_link_pred(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), node, link_node, ghl_search_vars.ghl_direction(v_search), sbhl_link_vars.get_sbhl_link_mt());
-                                                                                                                                } else {
-                                                                                                                                    ghl_search_utilities.ghl_add_gt_assertion_to_result(v_search, assertion);
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        } finally {
-                                                                                                            sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_123, thread);
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                } finally {
-                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_5, thread);
-                                                                    sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
-                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3, thread);
-                                                                    sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2, thread);
-                                                                    sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1, thread);
-                                                                    sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0_119, thread);
-                                                                }
-                                                            }
-                                                        }
-                                                    } else {
-                                                        if (NIL != ghl_link_iterators.gt_predicate_p(pred)) {
-                                                            {
-                                                                SubLObject truth = enumeration_types.tv_truth($TRUE_DEF);
-                                                                SubLObject strength = enumeration_types.tv_strength($TRUE_DEF);
-                                                                {
-                                                                    SubLObject _prev_bind_0_125 = ghl_search_vars.$gt_args_swapped_p$.currentBinding(thread);
-                                                                    try {
-                                                                        ghl_search_vars.$gt_args_swapped_p$.bind(NIL, thread);
-                                                                        if (NIL == graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) {
-                                                                            {
-                                                                                SubLObject csome_list_var = graphl_search_vars.determine_graphl_relevant_directions(direction);
-                                                                                SubLObject search_direction = NIL;
-                                                                                for (search_direction = csome_list_var.first(); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , search_direction = csome_list_var.first()) {
-                                                                                    {
-                                                                                        SubLObject index_argnum = ghl_link_iterators.gt_index_argnum_for_direction(search_direction);
-                                                                                        SubLObject gather_argnum = misc_utilities.other_binary_arg(index_argnum);
-                                                                                        {
-                                                                                            SubLObject _prev_bind_0_126 = ghl_link_iterators.$gt_relevant_pred$.currentBinding(thread);
-                                                                                            SubLObject _prev_bind_1 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
-                                                                                            try {
-                                                                                                ghl_link_iterators.$gt_relevant_pred$.bind(pred, thread);
-                                                                                                pred_relevance_macros.$relevant_pred_function$.bind($sym7$RELEVANT_PRED_WRT_GT_, thread);
-                                                                                                {
-                                                                                                    SubLObject pred_var = NIL;
-                                                                                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(node, index_argnum, pred_var)) {
-                                                                                                        {
-                                                                                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(node, index_argnum, pred_var);
-                                                                                                            SubLObject done_var = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                                                            SubLObject token_var = NIL;
-                                                                                                            while (NIL == done_var) {
-                                                                                                                {
-                                                                                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                                                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                                                                                    if (NIL != valid) {
-                                                                                                                        {
-                                                                                                                            SubLObject final_index_iterator = NIL;
-                                                                                                                            try {
-                                                                                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, truth, NIL);
-                                                                                                                                {
-                                                                                                                                    SubLObject done_var_127 = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                                                                                    SubLObject token_var_128 = NIL;
-                                                                                                                                    while (NIL == done_var_127) {
-                                                                                                                                        {
-                                                                                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_128);
-                                                                                                                                            SubLObject valid_129 = makeBoolean(token_var_128 != assertion);
-                                                                                                                                            if (NIL != valid_129) {
-                                                                                                                                                if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                                                                    {
-                                                                                                                                                        SubLObject link_node = cycl_utilities.formula_arg(assertion, gather_argnum, UNPROVIDED);
-                                                                                                                                                        SubLObject assertion_130 = assertion;
-                                                                                                                                                        com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_depth_cutoff(v_search, link_node, new_depth);
-                                                                                                                                                        if (NIL != ghl_search_vars.ghl_add_unwind_edges_now_p(v_search)) {
-                                                                                                                                                            {
-                                                                                                                                                                SubLObject link_pred = ghl_link_iterators.get_ghl_link_pred();
-                                                                                                                                                                if (NIL != sbhl_module_utilities.sbhl_predicate_p(link_pred)) {
-                                                                                                                                                                    ghl_search_utilities.ghl_add_sbhl_assertion_to_result(v_search, sbhl_module_utilities.get_sbhl_link_pred(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), node, link_node, ghl_search_vars.ghl_direction(v_search), sbhl_link_vars.get_sbhl_link_mt());
-                                                                                                                                                                } else {
-                                                                                                                                                                    ghl_search_utilities.ghl_add_gt_assertion_to_result(v_search, assertion_130);
-                                                                                                                                                                }
-                                                                                                                                                            }
-                                                                                                                                                        }
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                            done_var_127 = makeBoolean((NIL == valid_129) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                                                                                        }
-                                                                                                                                    } 
-                                                                                                                                }
-                                                                                                                            } finally {
-                                                                                                                                {
-                                                                                                                                    SubLObject _prev_bind_0_131 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                                                                    try {
-                                                                                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                                                                        if (NIL != final_index_iterator) {
-                                                                                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                                                                                        }
-                                                                                                                                    } finally {
-                                                                                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_131, thread);
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                    done_var = makeBoolean((NIL == valid) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                                                                }
-                                                                                                            } 
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            } finally {
-                                                                                                pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_1, thread);
-                                                                                                ghl_link_iterators.$gt_relevant_pred$.rebind(_prev_bind_0_126, thread);
-                                                                                            }
-                                                                                        }
-                                                                                        if (NIL != gt_vars.gt_use_sksiP()) {
-                                                                                            {
-                                                                                                SubLObject _prev_bind_0_132 = ghl_search_vars.$sksi_gt_search_pred$.currentBinding(thread);
-                                                                                                try {
-                                                                                                    ghl_search_vars.$sksi_gt_search_pred$.bind(pred, thread);
-                                                                                                    {
-                                                                                                        SubLObject rest = NIL;
-                                                                                                        for (rest = sksi_sks_mapping_utilities.gather_sksi_gaf_arg_index_relevant_pred(node, index_argnum, truth); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest)); rest = rest.rest()) {
-                                                                                                            {
-                                                                                                                SubLObject gather_sentence_mt_pair = rest.first();
-                                                                                                                SubLObject datum = gather_sentence_mt_pair;
-                                                                                                                SubLObject current = datum;
-                                                                                                                SubLObject assertion = NIL;
-                                                                                                                SubLObject var_mt = NIL;
-                                                                                                                destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                                                assertion = current.first();
-                                                                                                                current = current.rest();
-                                                                                                                destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                                                var_mt = current.first();
-                                                                                                                current = current.rest();
-                                                                                                                if (NIL == current) {
-                                                                                                                    if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                                        {
-                                                                                                                            SubLObject link_node = cycl_utilities.formula_arg(assertion, gather_argnum, UNPROVIDED);
-                                                                                                                            SubLObject assertion_133 = assertion;
-                                                                                                                            com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_depth_cutoff(v_search, link_node, new_depth);
-                                                                                                                            if (NIL != ghl_search_vars.ghl_add_unwind_edges_now_p(v_search)) {
-                                                                                                                                {
-                                                                                                                                    SubLObject link_pred = ghl_link_iterators.get_ghl_link_pred();
-                                                                                                                                    if (NIL != sbhl_module_utilities.sbhl_predicate_p(link_pred)) {
-                                                                                                                                        ghl_search_utilities.ghl_add_sbhl_assertion_to_result(v_search, sbhl_module_utilities.get_sbhl_link_pred(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), node, link_node, ghl_search_vars.ghl_direction(v_search), sbhl_link_vars.get_sbhl_link_mt());
-                                                                                                                                    } else {
-                                                                                                                                        ghl_search_utilities.ghl_add_gt_assertion_to_result(v_search, assertion_133);
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                } else {
-                                                                                                                    cdestructuring_bind_error(datum, $list_alt9);
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                } finally {
-                                                                                                    ghl_search_vars.$sksi_gt_search_pred$.rebind(_prev_bind_0_132, thread);
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                        if (NIL != ghl_search_vars.ghl_uses_spec_preds_p()) {
-                                                                                            {
-                                                                                                SubLObject _prev_bind_0_134 = ghl_search_vars.$gt_args_swapped_p$.currentBinding(thread);
-                                                                                                try {
-                                                                                                    ghl_search_vars.$gt_args_swapped_p$.bind(T, thread);
-                                                                                                    {
-                                                                                                        SubLObject _prev_bind_0_135 = ghl_link_iterators.$gt_relevant_pred$.currentBinding(thread);
-                                                                                                        SubLObject _prev_bind_1 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
-                                                                                                        try {
-                                                                                                            ghl_link_iterators.$gt_relevant_pred$.bind(pred, thread);
-                                                                                                            pred_relevance_macros.$relevant_pred_function$.bind($sym7$RELEVANT_PRED_WRT_GT_, thread);
-                                                                                                            {
-                                                                                                                SubLObject pred_var = NIL;
-                                                                                                                if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(node, gather_argnum, pred_var)) {
-                                                                                                                    {
-                                                                                                                        SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(node, gather_argnum, pred_var);
-                                                                                                                        SubLObject done_var = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                                                                        SubLObject token_var = NIL;
-                                                                                                                        while (NIL == done_var) {
-                                                                                                                            {
-                                                                                                                                SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                                                                                                SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                                                                                                if (NIL != valid) {
-                                                                                                                                    {
-                                                                                                                                        SubLObject final_index_iterator = NIL;
-                                                                                                                                        try {
-                                                                                                                                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, truth, NIL);
-                                                                                                                                            {
-                                                                                                                                                SubLObject done_var_136 = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                                                                                                SubLObject token_var_137 = NIL;
-                                                                                                                                                while (NIL == done_var_136) {
-                                                                                                                                                    {
-                                                                                                                                                        SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_137);
-                                                                                                                                                        SubLObject valid_138 = makeBoolean(token_var_137 != assertion);
-                                                                                                                                                        if (NIL != valid_138) {
-                                                                                                                                                            if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                                                                                {
-                                                                                                                                                                    SubLObject link_node = cycl_utilities.formula_arg(assertion, index_argnum, UNPROVIDED);
-                                                                                                                                                                    SubLObject assertion_139 = assertion;
-                                                                                                                                                                    com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_depth_cutoff(v_search, link_node, new_depth);
-                                                                                                                                                                    if (NIL != ghl_search_vars.ghl_add_unwind_edges_now_p(v_search)) {
-                                                                                                                                                                        {
-                                                                                                                                                                            SubLObject link_pred = ghl_link_iterators.get_ghl_link_pred();
-                                                                                                                                                                            if (NIL != sbhl_module_utilities.sbhl_predicate_p(link_pred)) {
-                                                                                                                                                                                ghl_search_utilities.ghl_add_sbhl_assertion_to_result(v_search, sbhl_module_utilities.get_sbhl_link_pred(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), node, link_node, ghl_search_vars.ghl_direction(v_search), sbhl_link_vars.get_sbhl_link_mt());
-                                                                                                                                                                            } else {
-                                                                                                                                                                                ghl_search_utilities.ghl_add_gt_assertion_to_result(v_search, assertion_139);
-                                                                                                                                                                            }
-                                                                                                                                                                        }
-                                                                                                                                                                    }
-                                                                                                                                                                }
-                                                                                                                                                            }
-                                                                                                                                                        }
-                                                                                                                                                        done_var_136 = makeBoolean((NIL == valid_138) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                                                                                                    }
-                                                                                                                                                } 
-                                                                                                                                            }
-                                                                                                                                        } finally {
-                                                                                                                                            {
-                                                                                                                                                SubLObject _prev_bind_0_140 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                                                                                try {
-                                                                                                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                                                                                    if (NIL != final_index_iterator) {
-                                                                                                                                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                                                                                                    }
-                                                                                                                                                } finally {
-                                                                                                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_140, thread);
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                                done_var = makeBoolean((NIL == valid) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                                                                            }
-                                                                                                                        } 
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        } finally {
-                                                                                                            pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_1, thread);
-                                                                                                            ghl_link_iterators.$gt_relevant_pred$.rebind(_prev_bind_0_135, thread);
-                                                                                                        }
-                                                                                                    }
-                                                                                                    if (NIL != gt_vars.gt_use_sksiP()) {
-                                                                                                        {
-                                                                                                            SubLObject _prev_bind_0_141 = ghl_search_vars.$sksi_gt_search_pred$.currentBinding(thread);
-                                                                                                            try {
-                                                                                                                ghl_search_vars.$sksi_gt_search_pred$.bind(pred, thread);
-                                                                                                                {
-                                                                                                                    SubLObject rest = NIL;
-                                                                                                                    for (rest = sksi_sks_mapping_utilities.gather_sksi_gaf_arg_index_relevant_pred(node, gather_argnum, truth); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest)); rest = rest.rest()) {
-                                                                                                                        {
-                                                                                                                            SubLObject gather_sentence_mt_pair = rest.first();
-                                                                                                                            SubLObject datum = gather_sentence_mt_pair;
-                                                                                                                            SubLObject current = datum;
-                                                                                                                            SubLObject assertion = NIL;
-                                                                                                                            SubLObject var_mt = NIL;
-                                                                                                                            destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                                                            assertion = current.first();
-                                                                                                                            current = current.rest();
-                                                                                                                            destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                                                            var_mt = current.first();
-                                                                                                                            current = current.rest();
-                                                                                                                            if (NIL == current) {
-                                                                                                                                if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                                                    {
-                                                                                                                                        SubLObject link_node = cycl_utilities.formula_arg(assertion, index_argnum, UNPROVIDED);
-                                                                                                                                        SubLObject assertion_142 = assertion;
-                                                                                                                                        com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_depth_cutoff(v_search, link_node, new_depth);
-                                                                                                                                        if (NIL != ghl_search_vars.ghl_add_unwind_edges_now_p(v_search)) {
-                                                                                                                                            {
-                                                                                                                                                SubLObject link_pred = ghl_link_iterators.get_ghl_link_pred();
-                                                                                                                                                if (NIL != sbhl_module_utilities.sbhl_predicate_p(link_pred)) {
-                                                                                                                                                    ghl_search_utilities.ghl_add_sbhl_assertion_to_result(v_search, sbhl_module_utilities.get_sbhl_link_pred(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), node, link_node, ghl_search_vars.ghl_direction(v_search), sbhl_link_vars.get_sbhl_link_mt());
-                                                                                                                                                } else {
-                                                                                                                                                    ghl_search_utilities.ghl_add_gt_assertion_to_result(v_search, assertion_142);
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            } else {
-                                                                                                                                cdestructuring_bind_error(datum, $list_alt9);
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            } finally {
-                                                                                                                ghl_search_vars.$sksi_gt_search_pred$.rebind(_prev_bind_0_141, thread);
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                } finally {
-                                                                                                    ghl_search_vars.$gt_args_swapped_p$.rebind(_prev_bind_0_134, thread);
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    } finally {
-                                                                        ghl_search_vars.$gt_args_swapped_p$.rebind(_prev_bind_0_125, thread);
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                } finally {
-                                                    ghl_link_iterators.$ghl_link_pred$.rebind(_prev_bind_0, thread);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject ghl_mark_and_sweep_depth_cutoff(final SubLObject v_search, final SubLObject node, final SubLObject depth) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL == ghl_search_vars.ghl_goal_found_p(v_search)) {
@@ -6101,79 +3116,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    public static final SubLObject ghl_all_edges_iterative_deepening_initializer_alt(SubLObject v_search, SubLObject node, SubLObject depth) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject already_resourcing_p = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.getDynamicValue(thread);
-                {
-                    SubLObject _prev_bind_0 = sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.currentBinding(thread);
-                    try {
-                        sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.bind(sbhl_marking_vars.determine_resource_limit(already_resourcing_p, SIX_INTEGER), thread);
-                        sbhl_marking_vars.$resourced_sbhl_marking_spaces$.bind(sbhl_marking_vars.possibly_new_marking_resource(already_resourcing_p), thread);
-                        sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.bind(T, thread);
-                        {
-                            SubLObject state = memoization_state.new_memoization_state(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                            SubLObject local_state = state;
-                            {
-                                SubLObject _prev_bind_0_143 = memoization_state.$memoization_state$.currentBinding(thread);
-                                try {
-                                    memoization_state.$memoization_state$.bind(local_state, thread);
-                                    {
-                                        SubLObject original_memoization_process = NIL;
-                                        if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                            original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                            {
-                                                SubLObject current_proc = current_process();
-                                                if (NIL == original_memoization_process) {
-                                                    memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                                } else {
-                                                    if (original_memoization_process != current_proc) {
-                                                        Errors.error($str_alt15$Invalid_attempt_to_reuse_memoizat);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        try {
-                                            {
-                                                SubLObject n = NIL;
-                                                for (n = ZERO_INTEGER; n.numL(depth); n = add(n, ONE_INTEGER)) {
-                                                    ghl_search_vars.reinitialize_ghl_spaces(v_search);
-                                                    com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_depth_cutoff_all_edges_unwound(v_search, node, number_utilities.f_1X(n));
-                                                }
-                                            }
-                                        } finally {
-                                            {
-                                                SubLObject _prev_bind_0_144 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                try {
-                                                    $is_thread_performing_cleanupP$.bind(T, thread);
-                                                    if ((NIL != local_state) && (NIL == original_memoization_process)) {
-                                                        memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
-                                                    }
-                                                } finally {
-                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_144, thread);
-                                                }
-                                            }
-                                        }
-                                    }
-                                } finally {
-                                    memoization_state.$memoization_state$.rebind(_prev_bind_0_143, thread);
-                                }
-                            }
-                        }
-                    } finally {
-                        sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.rebind(_prev_bind_2, thread);
-                        sbhl_marking_vars.$resourced_sbhl_marking_spaces$.rebind(_prev_bind_1, thread);
-                        sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject ghl_all_edges_iterative_deepening_initializer(final SubLObject v_search, final SubLObject node, final SubLObject depth) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject already_resourcing_p = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.getDynamicValue(thread);
@@ -6216,536 +3158,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
             sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.rebind(_prev_bind_0, thread);
         }
         return NIL;
-    }
-
-    public static final SubLObject ghl_mark_and_sweep_depth_cutoff_all_edges_unwound_alt(SubLObject v_search, SubLObject node, SubLObject depth) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if ((!depth.numE(ZERO_INTEGER)) && (NIL != ghl_marking_utilities.ghl_goal_node_with_equal_or_shallower_depth_p(v_search, node, depth))) {
-                return NIL;
-            } else {
-                {
-                    SubLObject goal_nodeP = ghl_search_utilities.ghl_goal_nodeP(v_search, node, UNPROVIDED);
-                    SubLObject unwind_from_goalP = NIL;
-                    SubLObject unwind_from_transitivityP = NIL;
-                    SubLObject unwind_nowP = NIL;
-                    SubLObject stop = NIL;
-                    if (NIL != goal_nodeP) {
-                        if ((NIL != ghl_search_vars.ghl_multiple_goals_p(v_search)) || (NIL != ghl_search_vars.ghl_goal_fn_p(v_search))) {
-                            unwind_from_goalP = T;
-                        } else {
-                            if (NIL != ghl_search_vars.ghl_single_goal_p(v_search)) {
-                                unwind_from_goalP = T;
-                                if (NIL == ghl_search_vars.ghl_return_all_justificationsP(v_search)) {
-                                    ghl_search_utilities.ghl_resolve_goal_found(v_search, node);
-                                }
-                                stop = T;
-                            }
-                        }
-                    }
-                    if ((NIL == ghl_search_vars.ghl_goal_search_p(v_search)) && (NIL != ghl_search_vars.ghl_return_all_justificationsP(v_search))) {
-                        unwind_from_goalP = T;
-                    }
-                    if (NIL == stop) {
-                        if (NIL == ghl_marking_utilities.ghl_node_with_equal_or_shallower_depth_p(v_search, node, depth)) {
-                            ghl_marking_utilities.ghl_mark_node(v_search, node, depth);
-                            {
-                                SubLObject new_depth = number_utilities.f_1_(depth);
-                                SubLObject preds = ghl_search_vars.ghl_relevant_predicates(v_search);
-                                SubLObject direction = ghl_search_vars.ghl_direction(v_search);
-                                if (!new_depth.numL(ZERO_INTEGER)) {
-                                    {
-                                        SubLObject cdolist_list_var = preds;
-                                        SubLObject pred = NIL;
-                                        for (pred = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pred = cdolist_list_var.first()) {
-                                            {
-                                                SubLObject _prev_bind_0 = ghl_link_iterators.$ghl_link_pred$.currentBinding(thread);
-                                                try {
-                                                    ghl_link_iterators.$ghl_link_pred$.bind(pred, thread);
-                                                    if (NIL != sbhl_module_utilities.sbhl_predicate_p(pred)) {
-                                                        {
-                                                            SubLObject node_145 = function_terms.naut_to_nart(node);
-                                                            {
-                                                                SubLObject _prev_bind_0_146 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
-                                                                SubLObject _prev_bind_1 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
-                                                                SubLObject _prev_bind_2 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
-                                                                SubLObject _prev_bind_3 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
-                                                                SubLObject _prev_bind_5 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
-                                                                try {
-                                                                    sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_vars.get_sbhl_module(pred), thread);
-                                                                    sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_vars.get_sbhl_module(pred)), thread);
-                                                                    sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_vars.get_sbhl_module(pred)), thread);
-                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
-                                                                    sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module(pred), thread);
-                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
-                                                                    if (NIL != forts.fort_p(node_145)) {
-                                                                        {
-                                                                            SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node_145, sbhl_module_vars.get_sbhl_module(pred));
-                                                                            if (NIL != d_link) {
-                                                                                if (NIL == graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) {
-                                                                                    {
-                                                                                        SubLObject csome_list_var = graphl_search_vars.determine_graphl_relevant_directions(direction);
-                                                                                        SubLObject search_direction = NIL;
-                                                                                        for (search_direction = csome_list_var.first(); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , search_direction = csome_list_var.first()) {
-                                                                                            {
-                                                                                                SubLObject link_direction = sbhl_module_utilities.sbhl_search_direction_to_link_direction(search_direction, sbhl_module_vars.get_sbhl_module(pred));
-                                                                                                SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, link_direction, sbhl_module_vars.get_sbhl_module(pred));
-                                                                                                if (NIL != mt_links) {
-                                                                                                    {
-                                                                                                        SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
-                                                                                                        while (!((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL != dictionary_contents.do_dictionary_contents_doneP(iteration_state)))) {
-                                                                                                            thread.resetMultipleValues();
-                                                                                                            {
-                                                                                                                SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                                                                SubLObject tv_links = thread.secondMultipleValue();
-                                                                                                                thread.resetMultipleValues();
-                                                                                                                if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                                                                                    {
-                                                                                                                        SubLObject _prev_bind_0_147 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
-                                                                                                                        try {
-                                                                                                                            sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
-                                                                                                                            {
-                                                                                                                                SubLObject iteration_state_148 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
-                                                                                                                                while (!((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL != dictionary_contents.do_dictionary_contents_doneP(iteration_state_148)))) {
-                                                                                                                                    thread.resetMultipleValues();
-                                                                                                                                    {
-                                                                                                                                        SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_148);
-                                                                                                                                        SubLObject link_nodes_var = thread.secondMultipleValue();
-                                                                                                                                        thread.resetMultipleValues();
-                                                                                                                                        if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
-                                                                                                                                            {
-                                                                                                                                                SubLObject _prev_bind_0_149 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
-                                                                                                                                                try {
-                                                                                                                                                    sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
-                                                                                                                                                    {
-                                                                                                                                                        SubLObject rest = NIL;
-                                                                                                                                                        for (rest = link_nodes_var; !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest)); rest = rest.rest()) {
-                                                                                                                                                            {
-                                                                                                                                                                SubLObject link_node = rest.first();
-                                                                                                                                                                SubLObject assertion = ghl_link_iterators.ghl_make_sbhl_support(pred, node, link_node, direction);
-                                                                                                                                                                unwind_nowP = com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_depth_cutoff_all_edges_unwound(v_search, link_node, new_depth);
-                                                                                                                                                                if (NIL != unwind_nowP) {
-                                                                                                                                                                    unwind_from_transitivityP = T;
-                                                                                                                                                                    ghl_marking_utilities.ghl_goal_mark_node(v_search, link_node, new_depth);
-                                                                                                                                                                    {
-                                                                                                                                                                        SubLObject link_pred = ghl_link_iterators.get_ghl_link_pred();
-                                                                                                                                                                        if (NIL != sbhl_module_utilities.sbhl_predicate_p(link_pred)) {
-                                                                                                                                                                            ghl_search_utilities.ghl_add_sbhl_assertion_to_result(v_search, ghl_link_iterators.get_ghl_link_pred(), node, link_node, ghl_search_vars.ghl_direction(v_search), sbhl_link_vars.get_sbhl_link_mt());
-                                                                                                                                                                        } else {
-                                                                                                                                                                            ghl_search_utilities.ghl_add_gt_assertion_to_result(v_search, assertion);
-                                                                                                                                                                        }
-                                                                                                                                                                    }
-                                                                                                                                                                }
-                                                                                                                                                            }
-                                                                                                                                                        }
-                                                                                                                                                    }
-                                                                                                                                                } finally {
-                                                                                                                                                    sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_149, thread);
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                        iteration_state_148 = dictionary_contents.do_dictionary_contents_next(iteration_state_148);
-                                                                                                                                    }
-                                                                                                                                } 
-                                                                                                                                dictionary_contents.do_dictionary_contents_finalize(iteration_state_148);
-                                                                                                                            }
-                                                                                                                        } finally {
-                                                                                                                            sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_147, thread);
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                                iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                                                                            }
-                                                                                                        } 
-                                                                                                        dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            } else {
-                                                                                sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt5$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                            }
-                                                                        }
-                                                                    } else {
-                                                                        if (NIL != term.closed_nautP(node_145, UNPROVIDED)) {
-                                                                            if (NIL == graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) {
-                                                                                {
-                                                                                    SubLObject csome_list_var = graphl_search_vars.determine_graphl_relevant_directions(direction);
-                                                                                    SubLObject search_direction = NIL;
-                                                                                    for (search_direction = csome_list_var.first(); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , search_direction = csome_list_var.first()) {
-                                                                                        {
-                                                                                            SubLObject link_direction = sbhl_module_utilities.sbhl_search_direction_to_link_direction(search_direction, sbhl_module_vars.get_sbhl_module(pred));
-                                                                                            SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(link_direction, sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(pred))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(link_direction, sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(pred));
-                                                                                            SubLObject rest = NIL;
-                                                                                            for (rest = new_list; !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest)); rest = rest.rest()) {
-                                                                                                {
-                                                                                                    SubLObject generating_fn = rest.first();
-                                                                                                    {
-                                                                                                        SubLObject _prev_bind_0_150 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
-                                                                                                        try {
-                                                                                                            sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
-                                                                                                            {
-                                                                                                                SubLObject link_nodes_var = funcall(generating_fn, node_145);
-                                                                                                                SubLObject rest_151 = NIL;
-                                                                                                                for (rest_151 = link_nodes_var; !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest_151)); rest_151 = rest_151.rest()) {
-                                                                                                                    {
-                                                                                                                        SubLObject link_node = rest_151.first();
-                                                                                                                        SubLObject assertion = ghl_link_iterators.ghl_make_sbhl_support(pred, node, link_node, direction);
-                                                                                                                        unwind_nowP = com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_depth_cutoff_all_edges_unwound(v_search, link_node, new_depth);
-                                                                                                                        if (NIL != unwind_nowP) {
-                                                                                                                            unwind_from_transitivityP = T;
-                                                                                                                            ghl_marking_utilities.ghl_goal_mark_node(v_search, link_node, new_depth);
-                                                                                                                            {
-                                                                                                                                SubLObject link_pred = ghl_link_iterators.get_ghl_link_pred();
-                                                                                                                                if (NIL != sbhl_module_utilities.sbhl_predicate_p(link_pred)) {
-                                                                                                                                    ghl_search_utilities.ghl_add_sbhl_assertion_to_result(v_search, ghl_link_iterators.get_ghl_link_pred(), node, link_node, ghl_search_vars.ghl_direction(v_search), sbhl_link_vars.get_sbhl_link_mt());
-                                                                                                                                } else {
-                                                                                                                                    ghl_search_utilities.ghl_add_gt_assertion_to_result(v_search, assertion);
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        } finally {
-                                                                                                            sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_150, thread);
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                } finally {
-                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_5, thread);
-                                                                    sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
-                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3, thread);
-                                                                    sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2, thread);
-                                                                    sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1, thread);
-                                                                    sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0_146, thread);
-                                                                }
-                                                            }
-                                                        }
-                                                    } else {
-                                                        if (NIL != ghl_link_iterators.gt_predicate_p(pred)) {
-                                                            {
-                                                                SubLObject truth = enumeration_types.tv_truth($TRUE_DEF);
-                                                                SubLObject strength = enumeration_types.tv_strength($TRUE_DEF);
-                                                                {
-                                                                    SubLObject _prev_bind_0_152 = ghl_search_vars.$gt_args_swapped_p$.currentBinding(thread);
-                                                                    try {
-                                                                        ghl_search_vars.$gt_args_swapped_p$.bind(NIL, thread);
-                                                                        if (NIL == graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) {
-                                                                            {
-                                                                                SubLObject csome_list_var = graphl_search_vars.determine_graphl_relevant_directions(direction);
-                                                                                SubLObject search_direction = NIL;
-                                                                                for (search_direction = csome_list_var.first(); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , search_direction = csome_list_var.first()) {
-                                                                                    {
-                                                                                        SubLObject index_argnum = ghl_link_iterators.gt_index_argnum_for_direction(search_direction);
-                                                                                        SubLObject gather_argnum = misc_utilities.other_binary_arg(index_argnum);
-                                                                                        {
-                                                                                            SubLObject _prev_bind_0_153 = ghl_link_iterators.$gt_relevant_pred$.currentBinding(thread);
-                                                                                            SubLObject _prev_bind_1 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
-                                                                                            try {
-                                                                                                ghl_link_iterators.$gt_relevant_pred$.bind(pred, thread);
-                                                                                                pred_relevance_macros.$relevant_pred_function$.bind($sym7$RELEVANT_PRED_WRT_GT_, thread);
-                                                                                                {
-                                                                                                    SubLObject pred_var = NIL;
-                                                                                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(node, index_argnum, pred_var)) {
-                                                                                                        {
-                                                                                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(node, index_argnum, pred_var);
-                                                                                                            SubLObject done_var = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                                                            SubLObject token_var = NIL;
-                                                                                                            while (NIL == done_var) {
-                                                                                                                {
-                                                                                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                                                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                                                                                    if (NIL != valid) {
-                                                                                                                        {
-                                                                                                                            SubLObject final_index_iterator = NIL;
-                                                                                                                            try {
-                                                                                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, truth, NIL);
-                                                                                                                                {
-                                                                                                                                    SubLObject done_var_154 = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                                                                                    SubLObject token_var_155 = NIL;
-                                                                                                                                    while (NIL == done_var_154) {
-                                                                                                                                        {
-                                                                                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_155);
-                                                                                                                                            SubLObject valid_156 = makeBoolean(token_var_155 != assertion);
-                                                                                                                                            if (NIL != valid_156) {
-                                                                                                                                                if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                                                                    {
-                                                                                                                                                        SubLObject link_node = cycl_utilities.formula_arg(assertion, gather_argnum, UNPROVIDED);
-                                                                                                                                                        SubLObject assertion_157 = assertion;
-                                                                                                                                                        unwind_nowP = com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_depth_cutoff_all_edges_unwound(v_search, link_node, new_depth);
-                                                                                                                                                        if (NIL != unwind_nowP) {
-                                                                                                                                                            unwind_from_transitivityP = T;
-                                                                                                                                                            ghl_marking_utilities.ghl_goal_mark_node(v_search, link_node, new_depth);
-                                                                                                                                                            {
-                                                                                                                                                                SubLObject link_pred = ghl_link_iterators.get_ghl_link_pred();
-                                                                                                                                                                if (NIL != sbhl_module_utilities.sbhl_predicate_p(link_pred)) {
-                                                                                                                                                                    ghl_search_utilities.ghl_add_sbhl_assertion_to_result(v_search, ghl_link_iterators.get_ghl_link_pred(), node, link_node, ghl_search_vars.ghl_direction(v_search), sbhl_link_vars.get_sbhl_link_mt());
-                                                                                                                                                                } else {
-                                                                                                                                                                    ghl_search_utilities.ghl_add_gt_assertion_to_result(v_search, assertion_157);
-                                                                                                                                                                }
-                                                                                                                                                            }
-                                                                                                                                                        }
-                                                                                                                                                    }
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                            done_var_154 = makeBoolean((NIL == valid_156) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                                                                                        }
-                                                                                                                                    } 
-                                                                                                                                }
-                                                                                                                            } finally {
-                                                                                                                                {
-                                                                                                                                    SubLObject _prev_bind_0_158 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                                                                    try {
-                                                                                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                                                                        if (NIL != final_index_iterator) {
-                                                                                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                                                                                        }
-                                                                                                                                    } finally {
-                                                                                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_158, thread);
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                    done_var = makeBoolean((NIL == valid) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                                                                }
-                                                                                                            } 
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            } finally {
-                                                                                                pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_1, thread);
-                                                                                                ghl_link_iterators.$gt_relevant_pred$.rebind(_prev_bind_0_153, thread);
-                                                                                            }
-                                                                                        }
-                                                                                        if (NIL != gt_vars.gt_use_sksiP()) {
-                                                                                            {
-                                                                                                SubLObject _prev_bind_0_159 = ghl_search_vars.$sksi_gt_search_pred$.currentBinding(thread);
-                                                                                                try {
-                                                                                                    ghl_search_vars.$sksi_gt_search_pred$.bind(pred, thread);
-                                                                                                    {
-                                                                                                        SubLObject rest = NIL;
-                                                                                                        for (rest = sksi_sks_mapping_utilities.gather_sksi_gaf_arg_index_relevant_pred(node, index_argnum, truth); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest)); rest = rest.rest()) {
-                                                                                                            {
-                                                                                                                SubLObject gather_sentence_mt_pair = rest.first();
-                                                                                                                SubLObject datum = gather_sentence_mt_pair;
-                                                                                                                SubLObject current = datum;
-                                                                                                                SubLObject assertion = NIL;
-                                                                                                                SubLObject var_mt = NIL;
-                                                                                                                destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                                                assertion = current.first();
-                                                                                                                current = current.rest();
-                                                                                                                destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                                                var_mt = current.first();
-                                                                                                                current = current.rest();
-                                                                                                                if (NIL == current) {
-                                                                                                                    if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                                        {
-                                                                                                                            SubLObject link_node = cycl_utilities.formula_arg(assertion, gather_argnum, UNPROVIDED);
-                                                                                                                            SubLObject assertion_160 = assertion;
-                                                                                                                            unwind_nowP = com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_depth_cutoff_all_edges_unwound(v_search, link_node, new_depth);
-                                                                                                                            if (NIL != unwind_nowP) {
-                                                                                                                                unwind_from_transitivityP = T;
-                                                                                                                                ghl_marking_utilities.ghl_goal_mark_node(v_search, link_node, new_depth);
-                                                                                                                                {
-                                                                                                                                    SubLObject link_pred = ghl_link_iterators.get_ghl_link_pred();
-                                                                                                                                    if (NIL != sbhl_module_utilities.sbhl_predicate_p(link_pred)) {
-                                                                                                                                        ghl_search_utilities.ghl_add_sbhl_assertion_to_result(v_search, ghl_link_iterators.get_ghl_link_pred(), node, link_node, ghl_search_vars.ghl_direction(v_search), sbhl_link_vars.get_sbhl_link_mt());
-                                                                                                                                    } else {
-                                                                                                                                        ghl_search_utilities.ghl_add_gt_assertion_to_result(v_search, assertion_160);
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                } else {
-                                                                                                                    cdestructuring_bind_error(datum, $list_alt9);
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                } finally {
-                                                                                                    ghl_search_vars.$sksi_gt_search_pred$.rebind(_prev_bind_0_159, thread);
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                        if (NIL != ghl_search_vars.ghl_uses_spec_preds_p()) {
-                                                                                            {
-                                                                                                SubLObject _prev_bind_0_161 = ghl_search_vars.$gt_args_swapped_p$.currentBinding(thread);
-                                                                                                try {
-                                                                                                    ghl_search_vars.$gt_args_swapped_p$.bind(T, thread);
-                                                                                                    {
-                                                                                                        SubLObject _prev_bind_0_162 = ghl_link_iterators.$gt_relevant_pred$.currentBinding(thread);
-                                                                                                        SubLObject _prev_bind_1 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
-                                                                                                        try {
-                                                                                                            ghl_link_iterators.$gt_relevant_pred$.bind(pred, thread);
-                                                                                                            pred_relevance_macros.$relevant_pred_function$.bind($sym7$RELEVANT_PRED_WRT_GT_, thread);
-                                                                                                            {
-                                                                                                                SubLObject pred_var = NIL;
-                                                                                                                if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(node, gather_argnum, pred_var)) {
-                                                                                                                    {
-                                                                                                                        SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(node, gather_argnum, pred_var);
-                                                                                                                        SubLObject done_var = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                                                                        SubLObject token_var = NIL;
-                                                                                                                        while (NIL == done_var) {
-                                                                                                                            {
-                                                                                                                                SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                                                                                                SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                                                                                                if (NIL != valid) {
-                                                                                                                                    {
-                                                                                                                                        SubLObject final_index_iterator = NIL;
-                                                                                                                                        try {
-                                                                                                                                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, truth, NIL);
-                                                                                                                                            {
-                                                                                                                                                SubLObject done_var_163 = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                                                                                                SubLObject token_var_164 = NIL;
-                                                                                                                                                while (NIL == done_var_163) {
-                                                                                                                                                    {
-                                                                                                                                                        SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_164);
-                                                                                                                                                        SubLObject valid_165 = makeBoolean(token_var_164 != assertion);
-                                                                                                                                                        if (NIL != valid_165) {
-                                                                                                                                                            if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                                                                                {
-                                                                                                                                                                    SubLObject link_node = cycl_utilities.formula_arg(assertion, index_argnum, UNPROVIDED);
-                                                                                                                                                                    SubLObject assertion_166 = assertion;
-                                                                                                                                                                    unwind_nowP = com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_depth_cutoff_all_edges_unwound(v_search, link_node, new_depth);
-                                                                                                                                                                    if (NIL != unwind_nowP) {
-                                                                                                                                                                        unwind_from_transitivityP = T;
-                                                                                                                                                                        ghl_marking_utilities.ghl_goal_mark_node(v_search, link_node, new_depth);
-                                                                                                                                                                        {
-                                                                                                                                                                            SubLObject link_pred = ghl_link_iterators.get_ghl_link_pred();
-                                                                                                                                                                            if (NIL != sbhl_module_utilities.sbhl_predicate_p(link_pred)) {
-                                                                                                                                                                                ghl_search_utilities.ghl_add_sbhl_assertion_to_result(v_search, ghl_link_iterators.get_ghl_link_pred(), node, link_node, ghl_search_vars.ghl_direction(v_search), sbhl_link_vars.get_sbhl_link_mt());
-                                                                                                                                                                            } else {
-                                                                                                                                                                                ghl_search_utilities.ghl_add_gt_assertion_to_result(v_search, assertion_166);
-                                                                                                                                                                            }
-                                                                                                                                                                        }
-                                                                                                                                                                    }
-                                                                                                                                                                }
-                                                                                                                                                            }
-                                                                                                                                                        }
-                                                                                                                                                        done_var_163 = makeBoolean((NIL == valid_165) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                                                                                                    }
-                                                                                                                                                } 
-                                                                                                                                            }
-                                                                                                                                        } finally {
-                                                                                                                                            {
-                                                                                                                                                SubLObject _prev_bind_0_167 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                                                                                try {
-                                                                                                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                                                                                    if (NIL != final_index_iterator) {
-                                                                                                                                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                                                                                                    }
-                                                                                                                                                } finally {
-                                                                                                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_167, thread);
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                                done_var = makeBoolean((NIL == valid) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                                                                            }
-                                                                                                                        } 
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        } finally {
-                                                                                                            pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_1, thread);
-                                                                                                            ghl_link_iterators.$gt_relevant_pred$.rebind(_prev_bind_0_162, thread);
-                                                                                                        }
-                                                                                                    }
-                                                                                                    if (NIL != gt_vars.gt_use_sksiP()) {
-                                                                                                        {
-                                                                                                            SubLObject _prev_bind_0_168 = ghl_search_vars.$sksi_gt_search_pred$.currentBinding(thread);
-                                                                                                            try {
-                                                                                                                ghl_search_vars.$sksi_gt_search_pred$.bind(pred, thread);
-                                                                                                                {
-                                                                                                                    SubLObject rest = NIL;
-                                                                                                                    for (rest = sksi_sks_mapping_utilities.gather_sksi_gaf_arg_index_relevant_pred(node, gather_argnum, truth); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest)); rest = rest.rest()) {
-                                                                                                                        {
-                                                                                                                            SubLObject gather_sentence_mt_pair = rest.first();
-                                                                                                                            SubLObject datum = gather_sentence_mt_pair;
-                                                                                                                            SubLObject current = datum;
-                                                                                                                            SubLObject assertion = NIL;
-                                                                                                                            SubLObject var_mt = NIL;
-                                                                                                                            destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                                                            assertion = current.first();
-                                                                                                                            current = current.rest();
-                                                                                                                            destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                                                            var_mt = current.first();
-                                                                                                                            current = current.rest();
-                                                                                                                            if (NIL == current) {
-                                                                                                                                if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                                                    {
-                                                                                                                                        SubLObject link_node = cycl_utilities.formula_arg(assertion, index_argnum, UNPROVIDED);
-                                                                                                                                        SubLObject assertion_169 = assertion;
-                                                                                                                                        unwind_nowP = com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep_depth_cutoff_all_edges_unwound(v_search, link_node, new_depth);
-                                                                                                                                        if (NIL != unwind_nowP) {
-                                                                                                                                            unwind_from_transitivityP = T;
-                                                                                                                                            ghl_marking_utilities.ghl_goal_mark_node(v_search, link_node, new_depth);
-                                                                                                                                            {
-                                                                                                                                                SubLObject link_pred = ghl_link_iterators.get_ghl_link_pred();
-                                                                                                                                                if (NIL != sbhl_module_utilities.sbhl_predicate_p(link_pred)) {
-                                                                                                                                                    ghl_search_utilities.ghl_add_sbhl_assertion_to_result(v_search, ghl_link_iterators.get_ghl_link_pred(), node, link_node, ghl_search_vars.ghl_direction(v_search), sbhl_link_vars.get_sbhl_link_mt());
-                                                                                                                                                } else {
-                                                                                                                                                    ghl_search_utilities.ghl_add_gt_assertion_to_result(v_search, assertion_169);
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            } else {
-                                                                                                                                cdestructuring_bind_error(datum, $list_alt9);
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            } finally {
-                                                                                                                ghl_search_vars.$sksi_gt_search_pred$.rebind(_prev_bind_0_168, thread);
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                } finally {
-                                                                                                    ghl_search_vars.$gt_args_swapped_p$.rebind(_prev_bind_0_161, thread);
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    } finally {
-                                                                        ghl_search_vars.$gt_args_swapped_p$.rebind(_prev_bind_0_152, thread);
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                } finally {
-                                                    ghl_link_iterators.$ghl_link_pred$.rebind(_prev_bind_0, thread);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    return makeBoolean((NIL != unwind_from_goalP) || (NIL != unwind_from_transitivityP));
-                }
-            }
-        }
     }
 
     public static SubLObject ghl_mark_and_sweep_depth_cutoff_all_edges_unwound(final SubLObject v_search, final SubLObject node, final SubLObject depth) {
@@ -7278,74 +3690,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         return makeBoolean((NIL != unwind_from_goalP) || (NIL != unwind_from_transitivityP));
     }
 
-    public static final SubLObject do_ghl_closure_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            destructuring_bind_must_consp(current, datum, $list_alt16);
-            {
-                SubLObject temp = current.rest();
-                current = current.first();
-                {
-                    SubLObject link_node = NIL;
-                    SubLObject pred = NIL;
-                    SubLObject node = NIL;
-                    SubLObject direction = NIL;
-                    destructuring_bind_must_consp(current, datum, $list_alt16);
-                    link_node = current.first();
-                    current = current.rest();
-                    destructuring_bind_must_consp(current, datum, $list_alt16);
-                    pred = current.first();
-                    current = current.rest();
-                    destructuring_bind_must_consp(current, datum, $list_alt16);
-                    node = current.first();
-                    current = current.rest();
-                    destructuring_bind_must_consp(current, datum, $list_alt16);
-                    direction = current.first();
-                    current = current.rest();
-                    {
-                        SubLObject allow_other_keys_p = NIL;
-                        SubLObject rest = current;
-                        SubLObject bad = NIL;
-                        SubLObject current_170 = NIL;
-                        for (; NIL != rest;) {
-                            destructuring_bind_must_consp(rest, datum, $list_alt16);
-                            current_170 = rest.first();
-                            rest = rest.rest();
-                            destructuring_bind_must_consp(rest, datum, $list_alt16);
-                            if (NIL == member(current_170, $list_alt17, UNPROVIDED, UNPROVIDED)) {
-                                bad = T;
-                            }
-                            if (current_170 == $ALLOW_OTHER_KEYS) {
-                                allow_other_keys_p = rest.first();
-                            }
-                            rest = rest.rest();
-                        }
-                        if ((NIL != bad) && (NIL == allow_other_keys_p)) {
-                            cdestructuring_bind_error(datum, $list_alt16);
-                        }
-                        {
-                            SubLObject mt_tail = property_list_member($MT, current);
-                            SubLObject mt = (NIL != mt_tail) ? ((SubLObject) (cadr(mt_tail))) : NIL;
-                            SubLObject tv_tail = property_list_member($TV, current);
-                            SubLObject tv = (NIL != tv_tail) ? ((SubLObject) (cadr(tv_tail))) : NIL;
-                            SubLObject done_tail = property_list_member($DONE, current);
-                            SubLObject done = (NIL != done_tail) ? ((SubLObject) (cadr(done_tail))) : NIL;
-                            SubLObject order_tail = property_list_member($ORDER, current);
-                            SubLObject order = (NIL != order_tail) ? ((SubLObject) (cadr(order_tail))) : $DEPTH_FIRST;
-                            current = temp;
-                            {
-                                SubLObject body = current;
-                                SubLObject iterator = $sym24$ITERATOR;
-                                return list(CLET, list(list(iterator, list(NEW_GHL_CLOSURE_ITERATOR, pred, node, direction, mt, tv, order))), listS(DO_ITERATOR, list(link_node, iterator, $DONE, done), append(body, NIL)));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     public static SubLObject do_ghl_closure(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -7400,26 +3744,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         current = body = temp;
         final SubLObject iterator = $sym24$ITERATOR;
         return list(CLET, list(list(iterator, list(NEW_GHL_CLOSURE_ITERATOR, pred, node, direction, mt, tv, order))), listS(DO_ITERATOR, list(link_node, iterator, $DONE, done), append(body, NIL)));
-    }
-
-    public static final SubLObject new_ghl_closure_iterator_alt(SubLObject pred, SubLObject node, SubLObject direction, SubLObject mt, SubLObject tv, SubLObject search_order, SubLObject return_non_transitive_resultsP) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (tv == UNPROVIDED) {
-            tv = NIL;
-        }
-        if (search_order == UNPROVIDED) {
-            search_order = $BREADTH_FIRST;
-        }
-        if (return_non_transitive_resultsP == UNPROVIDED) {
-            return_non_transitive_resultsP = T;
-        }
-        {
-            SubLObject v_search = ghl_search_vars.new_ghl_search(list(new SubLObject[]{ $PREDICATES, list(pred), $TYPE, $TRANSITIVE_REASONING, $ORDER, search_order, $DIRECTION, direction, $TV, tv, $MARKING, $SIMPLE, $MARKING_SPACE, ghl_marking_utilities.ghl_instantiate_new_space() }));
-            SubLObject reflexiveP = fort_types_interface.reflexive_binary_predicate_p(pred);
-            return com.cyc.cycjava.cycl.ghl_search_methods.new_ghl_closure_search_iterator(v_search, node, mt, reflexiveP, return_non_transitive_resultsP);
-        }
     }
 
     public static SubLObject new_ghl_closure_iterator(final SubLObject pred, final SubLObject node, final SubLObject direction, SubLObject mt, SubLObject tv, SubLObject search_order, SubLObject return_non_transitive_resultsP) {
@@ -7514,13 +3838,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         return new_ghl_closure_search_iterator(v_search, node, mt, reflexiveP, return_non_transitive_resultsP);
     }
 
-    public static final SubLObject new_removal_ghl_closure_iterator_alt(SubLObject pred, SubLObject node, SubLObject direction, SubLObject mt) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        return com.cyc.cycjava.cycl.ghl_search_methods.new_ghl_closure_iterator(pred, node, direction, mt, NIL, $BREADTH_FIRST, NIL);
-    }
-
     public static SubLObject new_removal_ghl_closure_iterator(final SubLObject pred, final SubLObject node, final SubLObject direction, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -7528,321 +3845,9 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         return new_ghl_closure_iterator(pred, node, direction, mt, NIL, $BREADTH_FIRST, NIL);
     }
 
-    public static final SubLObject new_ghl_closure_search_iterator_alt(SubLObject v_search, SubLObject start_node, SubLObject mt, SubLObject reflexiveP, SubLObject return_non_transitive_resultsP) {
-        {
-            SubLObject state = com.cyc.cycjava.cycl.ghl_search_methods.ghl_closure_search_iterator_state(v_search, start_node, mt, reflexiveP, return_non_transitive_resultsP);
-            return iteration.new_iterator(state, GHL_CLOSURE_SEARCH_ITERATOR_DONE, GHL_CLOSURE_SEARCH_ITERATOR_NEXT, GHL_CLOSURE_SEARCH_ITERATOR_FINALIZE);
-        }
-    }
-
     public static SubLObject new_ghl_closure_search_iterator(final SubLObject v_search, final SubLObject start_node, final SubLObject mt, final SubLObject reflexiveP, final SubLObject return_non_transitive_resultsP) {
         final SubLObject state = ghl_closure_search_iterator_state(v_search, start_node, mt, reflexiveP, return_non_transitive_resultsP);
         return iteration.new_iterator(state, GHL_CLOSURE_SEARCH_ITERATOR_DONE, GHL_CLOSURE_SEARCH_ITERATOR_NEXT, GHL_CLOSURE_SEARCH_ITERATOR_FINALIZE);
-    }
-
-    public static final SubLObject ghl_closure_search_iterator_state_alt(SubLObject v_search, SubLObject start_node, SubLObject mt, SubLObject reflexiveP, SubLObject return_non_transitive_resultsP) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject search_deck = (NIL != ghl_search_vars.ghl_depth_first_search_p(v_search)) ? ((SubLObject) (deck.create_deck($STACK))) : deck.create_deck($QUEUE);
-                if (NIL == return_non_transitive_resultsP) {
-                    {
-                        SubLObject mt_var = mt;
-                        {
-                            SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
-                            SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                            SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
-                            try {
-                                mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
-                                mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
-                                mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
-                                ghl_marking_utilities.ghl_mark_node(v_search, start_node, $START);
-                                {
-                                    SubLObject pred = ghl_search_vars.ghl_relevant_predicates(v_search).first();
-                                    SubLObject truth = enumeration_types.tv_truth(ghl_search_vars.ghl_tv(v_search));
-                                    SubLObject strength = enumeration_types.tv_strength(ghl_search_vars.ghl_tv(v_search));
-                                    {
-                                        SubLObject _prev_bind_0_171 = ghl_search_vars.$gt_args_swapped_p$.currentBinding(thread);
-                                        try {
-                                            ghl_search_vars.$gt_args_swapped_p$.bind(NIL, thread);
-                                            {
-                                                SubLObject csome_list_var = graphl_search_vars.determine_graphl_relevant_directions(ghl_search_vars.ghl_direction(v_search));
-                                                SubLObject search_direction = NIL;
-                                                for (search_direction = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , search_direction = csome_list_var.first()) {
-                                                    {
-                                                        SubLObject index_argnum = ghl_link_iterators.gt_index_argnum_for_direction(search_direction);
-                                                        SubLObject gather_argnum = misc_utilities.other_binary_arg(index_argnum);
-                                                        {
-                                                            SubLObject _prev_bind_0_172 = ghl_link_iterators.$gt_relevant_pred$.currentBinding(thread);
-                                                            SubLObject _prev_bind_1_173 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
-                                                            try {
-                                                                ghl_link_iterators.$gt_relevant_pred$.bind(pred, thread);
-                                                                pred_relevance_macros.$relevant_pred_function$.bind($sym7$RELEVANT_PRED_WRT_GT_, thread);
-                                                                {
-                                                                    SubLObject pred_var = NIL;
-                                                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(start_node, index_argnum, pred_var)) {
-                                                                        {
-                                                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(start_node, index_argnum, pred_var);
-                                                                            SubLObject done_var = NIL;
-                                                                            SubLObject token_var = NIL;
-                                                                            while (NIL == done_var) {
-                                                                                {
-                                                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                                                    if (NIL != valid) {
-                                                                                        {
-                                                                                            SubLObject final_index_iterator = NIL;
-                                                                                            try {
-                                                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, truth, NIL);
-                                                                                                {
-                                                                                                    SubLObject done_var_174 = NIL;
-                                                                                                    SubLObject token_var_175 = NIL;
-                                                                                                    while (NIL == done_var_174) {
-                                                                                                        {
-                                                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_175);
-                                                                                                            SubLObject valid_176 = makeBoolean(token_var_175 != assertion);
-                                                                                                            if (NIL != valid_176) {
-                                                                                                                if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                                    {
-                                                                                                                        SubLObject one_step_node = cycl_utilities.formula_arg(assertion, gather_argnum, UNPROVIDED);
-                                                                                                                        SubLObject assertion_177 = assertion;
-                                                                                                                        ghl_marking_utilities.ghl_mark_node(v_search, one_step_node, $START);
-                                                                                                                        com.cyc.cycjava.cycl.ghl_search_methods.ghl_add_accessible_link_nodes_to_deck(v_search, one_step_node, search_deck);
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                            done_var_174 = makeBoolean(NIL == valid_176);
-                                                                                                        }
-                                                                                                    } 
-                                                                                                }
-                                                                                            } finally {
-                                                                                                {
-                                                                                                    SubLObject _prev_bind_0_178 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                                    try {
-                                                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                                        if (NIL != final_index_iterator) {
-                                                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                                                        }
-                                                                                                    } finally {
-                                                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_178, thread);
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                    done_var = makeBoolean(NIL == valid);
-                                                                                }
-                                                                            } 
-                                                                        }
-                                                                    }
-                                                                }
-                                                            } finally {
-                                                                pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_1_173, thread);
-                                                                ghl_link_iterators.$gt_relevant_pred$.rebind(_prev_bind_0_172, thread);
-                                                            }
-                                                        }
-                                                        if (NIL != gt_vars.gt_use_sksiP()) {
-                                                            {
-                                                                SubLObject _prev_bind_0_179 = ghl_search_vars.$sksi_gt_search_pred$.currentBinding(thread);
-                                                                try {
-                                                                    ghl_search_vars.$sksi_gt_search_pred$.bind(pred, thread);
-                                                                    {
-                                                                        SubLObject cdolist_list_var = sksi_sks_mapping_utilities.gather_sksi_gaf_arg_index_relevant_pred(start_node, index_argnum, truth);
-                                                                        SubLObject gather_sentence_mt_pair = NIL;
-                                                                        for (gather_sentence_mt_pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , gather_sentence_mt_pair = cdolist_list_var.first()) {
-                                                                            {
-                                                                                SubLObject datum = gather_sentence_mt_pair;
-                                                                                SubLObject current = datum;
-                                                                                SubLObject assertion = NIL;
-                                                                                SubLObject var_mt = NIL;
-                                                                                destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                assertion = current.first();
-                                                                                current = current.rest();
-                                                                                destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                var_mt = current.first();
-                                                                                current = current.rest();
-                                                                                if (NIL == current) {
-                                                                                    if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                        {
-                                                                                            SubLObject one_step_node = cycl_utilities.formula_arg(assertion, gather_argnum, UNPROVIDED);
-                                                                                            SubLObject assertion_180 = assertion;
-                                                                                            ghl_marking_utilities.ghl_mark_node(v_search, one_step_node, $START);
-                                                                                            com.cyc.cycjava.cycl.ghl_search_methods.ghl_add_accessible_link_nodes_to_deck(v_search, one_step_node, search_deck);
-                                                                                        }
-                                                                                    }
-                                                                                } else {
-                                                                                    cdestructuring_bind_error(datum, $list_alt9);
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                } finally {
-                                                                    ghl_search_vars.$sksi_gt_search_pred$.rebind(_prev_bind_0_179, thread);
-                                                                }
-                                                            }
-                                                        }
-                                                        if (NIL != ghl_search_vars.ghl_uses_spec_preds_p()) {
-                                                            {
-                                                                SubLObject _prev_bind_0_181 = ghl_search_vars.$gt_args_swapped_p$.currentBinding(thread);
-                                                                try {
-                                                                    ghl_search_vars.$gt_args_swapped_p$.bind(T, thread);
-                                                                    {
-                                                                        SubLObject _prev_bind_0_182 = ghl_link_iterators.$gt_relevant_pred$.currentBinding(thread);
-                                                                        SubLObject _prev_bind_1_183 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
-                                                                        try {
-                                                                            ghl_link_iterators.$gt_relevant_pred$.bind(pred, thread);
-                                                                            pred_relevance_macros.$relevant_pred_function$.bind($sym7$RELEVANT_PRED_WRT_GT_, thread);
-                                                                            {
-                                                                                SubLObject pred_var = NIL;
-                                                                                if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(start_node, gather_argnum, pred_var)) {
-                                                                                    {
-                                                                                        SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(start_node, gather_argnum, pred_var);
-                                                                                        SubLObject done_var = NIL;
-                                                                                        SubLObject token_var = NIL;
-                                                                                        while (NIL == done_var) {
-                                                                                            {
-                                                                                                SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                                                                SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                                                                if (NIL != valid) {
-                                                                                                    {
-                                                                                                        SubLObject final_index_iterator = NIL;
-                                                                                                        try {
-                                                                                                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, truth, NIL);
-                                                                                                            {
-                                                                                                                SubLObject done_var_184 = NIL;
-                                                                                                                SubLObject token_var_185 = NIL;
-                                                                                                                while (NIL == done_var_184) {
-                                                                                                                    {
-                                                                                                                        SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_185);
-                                                                                                                        SubLObject valid_186 = makeBoolean(token_var_185 != assertion);
-                                                                                                                        if (NIL != valid_186) {
-                                                                                                                            if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                                                {
-                                                                                                                                    SubLObject one_step_node = cycl_utilities.formula_arg(assertion, index_argnum, UNPROVIDED);
-                                                                                                                                    SubLObject assertion_187 = assertion;
-                                                                                                                                    ghl_marking_utilities.ghl_mark_node(v_search, one_step_node, $START);
-                                                                                                                                    com.cyc.cycjava.cycl.ghl_search_methods.ghl_add_accessible_link_nodes_to_deck(v_search, one_step_node, search_deck);
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                        done_var_184 = makeBoolean(NIL == valid_186);
-                                                                                                                    }
-                                                                                                                } 
-                                                                                                            }
-                                                                                                        } finally {
-                                                                                                            {
-                                                                                                                SubLObject _prev_bind_0_188 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                                                try {
-                                                                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                                                    if (NIL != final_index_iterator) {
-                                                                                                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                                                                    }
-                                                                                                                } finally {
-                                                                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_188, thread);
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                                done_var = makeBoolean(NIL == valid);
-                                                                                            }
-                                                                                        } 
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        } finally {
-                                                                            pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_1_183, thread);
-                                                                            ghl_link_iterators.$gt_relevant_pred$.rebind(_prev_bind_0_182, thread);
-                                                                        }
-                                                                    }
-                                                                    if (NIL != gt_vars.gt_use_sksiP()) {
-                                                                        {
-                                                                            SubLObject _prev_bind_0_189 = ghl_search_vars.$sksi_gt_search_pred$.currentBinding(thread);
-                                                                            try {
-                                                                                ghl_search_vars.$sksi_gt_search_pred$.bind(pred, thread);
-                                                                                {
-                                                                                    SubLObject cdolist_list_var = sksi_sks_mapping_utilities.gather_sksi_gaf_arg_index_relevant_pred(start_node, gather_argnum, truth);
-                                                                                    SubLObject gather_sentence_mt_pair = NIL;
-                                                                                    for (gather_sentence_mt_pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , gather_sentence_mt_pair = cdolist_list_var.first()) {
-                                                                                        {
-                                                                                            SubLObject datum = gather_sentence_mt_pair;
-                                                                                            SubLObject current = datum;
-                                                                                            SubLObject assertion = NIL;
-                                                                                            SubLObject var_mt = NIL;
-                                                                                            destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                            assertion = current.first();
-                                                                                            current = current.rest();
-                                                                                            destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                            var_mt = current.first();
-                                                                                            current = current.rest();
-                                                                                            if (NIL == current) {
-                                                                                                if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                    {
-                                                                                                        SubLObject one_step_node = cycl_utilities.formula_arg(assertion, index_argnum, UNPROVIDED);
-                                                                                                        SubLObject assertion_190 = assertion;
-                                                                                                        ghl_marking_utilities.ghl_mark_node(v_search, one_step_node, $START);
-                                                                                                        com.cyc.cycjava.cycl.ghl_search_methods.ghl_add_accessible_link_nodes_to_deck(v_search, one_step_node, search_deck);
-                                                                                                    }
-                                                                                                }
-                                                                                            } else {
-                                                                                                cdestructuring_bind_error(datum, $list_alt9);
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            } finally {
-                                                                                ghl_search_vars.$sksi_gt_search_pred$.rebind(_prev_bind_0_189, thread);
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                } finally {
-                                                                    ghl_search_vars.$gt_args_swapped_p$.rebind(_prev_bind_0_181, thread);
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } finally {
-                                            ghl_search_vars.$gt_args_swapped_p$.rebind(_prev_bind_0_171, thread);
-                                        }
-                                    }
-                                }
-                            } finally {
-                                mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
-                                mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
-                                mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                } else {
-                    if (NIL == reflexiveP) {
-                        {
-                            SubLObject mt_var = mt;
-                            {
-                                SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
-                                SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                                SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
-                                try {
-                                    mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
-                                    mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
-                                    mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
-                                    ghl_marking_utilities.ghl_mark_node(v_search, start_node, $START);
-                                    com.cyc.cycjava.cycl.ghl_search_methods.ghl_add_accessible_link_nodes_to_deck(v_search, start_node, search_deck);
-                                } finally {
-                                    mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
-                                    mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
-                                    mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
-                                }
-                            }
-                        }
-                    } else {
-                        deck.deck_push(start_node, search_deck);
-                    }
-                }
-                return list(v_search, search_deck, mt);
-            }
-        }
     }
 
     public static SubLObject ghl_closure_search_iterator_state(final SubLObject v_search, final SubLObject start_node, final SubLObject mt, final SubLObject reflexiveP, final SubLObject return_non_transitive_resultsP) {
@@ -8096,31 +4101,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         return list(v_search, search_deck, mt);
     }
 
-    public static final SubLObject ghl_closure_search_iterator_done_alt(SubLObject state) {
-        {
-            SubLObject datum = state;
-            SubLObject current = datum;
-            SubLObject v_search = NIL;
-            SubLObject search_deck = NIL;
-            SubLObject mt = NIL;
-            destructuring_bind_must_consp(current, datum, $list_alt40);
-            v_search = current.first();
-            current = current.rest();
-            destructuring_bind_must_consp(current, datum, $list_alt40);
-            search_deck = current.first();
-            current = current.rest();
-            destructuring_bind_must_consp(current, datum, $list_alt40);
-            mt = current.first();
-            current = current.rest();
-            if (NIL == current) {
-                return deck.deck_empty_p(search_deck);
-            } else {
-                cdestructuring_bind_error(datum, $list_alt40);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject ghl_closure_search_iterator_done(final SubLObject state) {
         SubLObject v_search = NIL;
         SubLObject search_deck = NIL;
@@ -8139,70 +4119,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         }
         cdestructuring_bind_error(state, $list44);
         return NIL;
-    }
-
-    public static final SubLObject ghl_closure_search_iterator_next_alt(SubLObject state) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject datum = state;
-                SubLObject current = datum;
-                SubLObject v_search = NIL;
-                SubLObject search_deck = NIL;
-                SubLObject mt = NIL;
-                destructuring_bind_must_consp(current, datum, $list_alt40);
-                v_search = current.first();
-                current = current.rest();
-                destructuring_bind_must_consp(current, datum, $list_alt40);
-                search_deck = current.first();
-                current = current.rest();
-                destructuring_bind_must_consp(current, datum, $list_alt40);
-                mt = current.first();
-                current = current.rest();
-                if (NIL == current) {
-                    {
-                        SubLObject result = NIL;
-                        while (!((NIL != result) || (NIL != deck.deck_empty_p(search_deck)))) {
-                            {
-                                SubLObject node = deck.deck_pop(search_deck);
-                                SubLObject mark = ghl_marking_utilities.get_ghl_marking(v_search, node);
-                                if (NIL == mark) {
-                                    ghl_marking_utilities.ghl_mark_node(v_search, node, T);
-                                    {
-                                        SubLObject mt_var = mt;
-                                        {
-                                            SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
-                                            SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                                            SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
-                                            try {
-                                                mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
-                                                mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
-                                                mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
-                                                com.cyc.cycjava.cycl.ghl_search_methods.ghl_add_accessible_link_nodes_to_deck(v_search, node, search_deck);
-                                            } finally {
-                                                mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
-                                                mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
-                                                mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
-                                            }
-                                        }
-                                    }
-                                    result = node;
-                                } else {
-                                    if (mark == $START) {
-                                        ghl_marking_utilities.ghl_mark_node(v_search, node, T);
-                                        result = node;
-                                    }
-                                }
-                            }
-                        } 
-                        return values(result, state, sublisp_null(result));
-                    }
-                } else {
-                    cdestructuring_bind_error(datum, $list_alt40);
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject ghl_closure_search_iterator_next(final SubLObject state) {
@@ -8255,33 +4171,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    public static final SubLObject ghl_closure_search_iterator_finalize_alt(SubLObject state) {
-        {
-            SubLObject datum = state;
-            SubLObject current = datum;
-            SubLObject v_search = NIL;
-            SubLObject search_deck = NIL;
-            SubLObject mt = NIL;
-            destructuring_bind_must_consp(current, datum, $list_alt40);
-            v_search = current.first();
-            current = current.rest();
-            destructuring_bind_must_consp(current, datum, $list_alt40);
-            search_deck = current.first();
-            current = current.rest();
-            destructuring_bind_must_consp(current, datum, $list_alt40);
-            mt = current.first();
-            current = current.rest();
-            if (NIL == current) {
-                ghl_search_vars.destroy_ghl_search(v_search);
-                deck.clear_deck(search_deck);
-                return T;
-            } else {
-                cdestructuring_bind_error(datum, $list_alt40);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject ghl_closure_search_iterator_finalize(final SubLObject state) {
         SubLObject v_search = NIL;
         SubLObject search_deck = NIL;
@@ -8302,39 +4191,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         }
         cdestructuring_bind_error(state, $list44);
         return NIL;
-    }
-
-    public static final SubLObject ghl_closure_alt(SubLObject pred, SubLObject node, SubLObject direction, SubLObject mt, SubLObject tv) {
-        if (direction == UNPROVIDED) {
-            direction = ghl_search_vars.ghl_forward_direction();
-        }
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (tv == UNPROVIDED) {
-            tv = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                SubLObject iterator = com.cyc.cycjava.cycl.ghl_search_methods.new_ghl_closure_iterator(pred, node, direction, mt, tv, $BREADTH_FIRST, UNPROVIDED);
-                SubLObject done_var = NIL;
-                while (NIL == done_var) {
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject link_node = iteration.iteration_next(iterator);
-                        SubLObject valid = thread.secondMultipleValue();
-                        thread.resetMultipleValues();
-                        if (NIL != valid) {
-                            result = cons(link_node, result);
-                        }
-                        done_var = makeBoolean(NIL == valid);
-                    }
-                } 
-                return nreverse(result);
-            }
-        }
     }
 
     public static SubLObject ghl_closure(final SubLObject pred, final SubLObject node, SubLObject direction, SubLObject mt, SubLObject tv) {
@@ -8366,16 +4222,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         return nreverse(result);
     }
 
-    public static final SubLObject ghl_all_backward_true_nodes_alt(SubLObject pred, SubLObject node, SubLObject mt, SubLObject tv) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (tv == UNPROVIDED) {
-            tv = NIL;
-        }
-        return com.cyc.cycjava.cycl.ghl_search_methods.ghl_closure(pred, node, $BACKWARD, mt, tv);
-    }
-
     public static SubLObject ghl_all_backward_true_nodes(final SubLObject pred, final SubLObject node, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -8384,16 +4230,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
             tv = NIL;
         }
         return ghl_closure(pred, node, $BACKWARD, mt, tv);
-    }
-
-    public static final SubLObject ghl_all_forward_true_nodes_alt(SubLObject pred, SubLObject node, SubLObject mt, SubLObject tv) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (tv == UNPROVIDED) {
-            tv = NIL;
-        }
-        return com.cyc.cycjava.cycl.ghl_search_methods.ghl_closure(pred, node, $FORWARD, mt, tv);
     }
 
     public static SubLObject ghl_all_forward_true_nodes(final SubLObject pred, final SubLObject node, SubLObject mt, SubLObject tv) {
@@ -8406,47 +4242,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         return ghl_closure(pred, node, $FORWARD, mt, tv);
     }
 
-    /**
-     * Modifier. Records in *ghl-table* the closure of NODE wrt MODULE in direction DIRECTION.
-     */
-    @LispMethod(comment = "Modifier. Records in *ghl-table* the closure of NODE wrt MODULE in direction DIRECTION.")
-    public static final SubLObject ghl_record_closure_alt(SubLObject module, SubLObject node, SubLObject direction, SubLObject mt, SubLObject tv) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (tv == UNPROVIDED) {
-            tv = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject mt_var = mt;
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
-                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
-                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
-                        {
-                            SubLObject v_search = ghl_search_vars.new_ghl_search(list(new SubLObject[]{ $PREDICATES, list(module), $TYPE, $TRANSITIVE_REASONING, $ORDER, $DEPTH_FIRST, $DIRECTION, direction, $MARKING, $SIMPLE, $MARKING_SPACE, ghl_marking_utilities.$ghl_table$.getDynamicValue(thread) }));
-                            graphl_graph_utilities.reset_graphl_finished();
-                            com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_and_sweep(v_search, node);
-                            ghl_search_vars.destroy_ghl_search(v_search);
-                        }
-                    } finally {
-                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
-    @LispMethod(comment = "Modifier. Records in *ghl-table* the closure of NODE wrt MODULE in direction DIRECTION.")
     public static SubLObject ghl_record_closure(final SubLObject pred, final SubLObject node, final SubLObject direction, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -8473,27 +4268,8 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
             mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
         }
         return NIL;
-    }/**
-     * Modifier. Records in *ghl-table* the closure of NODE wrt MODULE in direction DIRECTION.
-     */
-
-
-    /**
-     * Modifier. Records in *ghl-table* the backward true closure of NODE in MODULE with relevance determined by MT and TV.
-     */
-    @LispMethod(comment = "Modifier. Records in *ghl-table* the backward true closure of NODE in MODULE with relevance determined by MT and TV.")
-    public static final SubLObject ghl_record_all_backward_true_nodes_alt(SubLObject module, SubLObject node, SubLObject mt, SubLObject tv) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (tv == UNPROVIDED) {
-            tv = NIL;
-        }
-        com.cyc.cycjava.cycl.ghl_search_methods.ghl_record_closure(module, node, $BACKWARD, mt, tv);
-        return NIL;
     }
 
-    @LispMethod(comment = "Modifier. Records in *ghl-table* the backward true closure of NODE in MODULE with relevance determined by MT and TV.")
     public static SubLObject ghl_record_all_backward_true_nodes(final SubLObject module, final SubLObject node, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -8503,27 +4279,8 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         }
         ghl_record_closure(module, node, $BACKWARD, mt, tv);
         return NIL;
-    }/**
-     * Modifier. Records in *ghl-table* the backward true closure of NODE in MODULE with relevance determined by MT and TV.
-     */
-
-
-    /**
-     * Modifier. Records in *ghl-table* the forward true closure of NODE in MODULE with relevance determined by MT and TV.
-     */
-    @LispMethod(comment = "Modifier. Records in *ghl-table* the forward true closure of NODE in MODULE with relevance determined by MT and TV.")
-    public static final SubLObject ghl_record_all_forward_true_nodes_alt(SubLObject module, SubLObject node, SubLObject mt, SubLObject tv) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (tv == UNPROVIDED) {
-            tv = NIL;
-        }
-        com.cyc.cycjava.cycl.ghl_search_methods.ghl_record_closure(module, node, $FORWARD, mt, tv);
-        return NIL;
     }
 
-    @LispMethod(comment = "Modifier. Records in *ghl-table* the forward true closure of NODE in MODULE with relevance determined by MT and TV.")
     public static SubLObject ghl_record_all_forward_true_nodes(final SubLObject module, final SubLObject node, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -8533,10 +4290,7 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         }
         ghl_record_closure(module, node, $FORWARD, mt, tv);
         return NIL;
-    }/**
-     * Modifier. Records in *ghl-table* the forward true closure of NODE in MODULE with relevance determined by MT and TV.
-     */
-
+    }
 
     public static SubLObject ghl_closures(final SubLObject preds, final SubLObject node, final SubLObject directions, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
@@ -8564,19 +4318,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         return nreverse(result);
     }
 
-    public static final SubLObject ghl_predicate_relation_p_alt(SubLObject pred, SubLObject node1, SubLObject node2, SubLObject mt, SubLObject tv, SubLObject return_non_transitive_resultsP) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (tv == UNPROVIDED) {
-            tv = NIL;
-        }
-        if (return_non_transitive_resultsP == UNPROVIDED) {
-            return_non_transitive_resultsP = NIL;
-        }
-        return NIL != sbhl_module_utilities.sbhl_predicate_p(pred) ? ((SubLObject) (sbhl_search_methods.sbhl_predicate_relation_p(sbhl_module_vars.get_sbhl_module(pred), node1, node2, mt, tv))) : com.cyc.cycjava.cycl.ghl_search_methods.gt_predicate_relation_p(pred, node1, node2, mt, tv, return_non_transitive_resultsP);
-    }
-
     public static SubLObject ghl_predicate_relation_p(final SubLObject pred, final SubLObject node1, final SubLObject node2, SubLObject mt, SubLObject tv, SubLObject return_non_transitive_resultsP) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -8588,83 +4329,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
             return_non_transitive_resultsP = NIL;
         }
         return NIL != sbhl_module_utilities.sbhl_predicate_p(pred) ? sbhl_search_methods.sbhl_predicate_relation_p(sbhl_module_vars.get_sbhl_module(pred), node1, node2, mt, tv) : gt_predicate_relation_p(pred, node1, node2, mt, tv, return_non_transitive_resultsP);
-    }
-
-    public static final SubLObject gt_predicate_relation_p_alt(SubLObject pred, SubLObject node1, SubLObject node2, SubLObject mt, SubLObject tv, SubLObject return_non_transitive_resultsP) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (tv == UNPROVIDED) {
-            tv = NIL;
-        }
-        if (return_non_transitive_resultsP == UNPROVIDED) {
-            return_non_transitive_resultsP = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                SubLObject mt_var = mt;
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
-                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
-                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
-                        if (node1.equal(node2) && (NIL != fort_types_interface.reflexive_binary_predicate_p(pred))) {
-                            result = T;
-                        } else {
-                            if (node1.equal(node2) && (NIL != fort_types_interface.irreflexive_binary_predicate_p(pred))) {
-                                result = NIL;
-                            } else {
-                                {
-                                    SubLObject direction = ghl_search_vars.ghl_direction_for_predicate_relation(pred);
-                                    SubLObject forwardP = ghl_search_vars.ghl_forward_direction_p(direction);
-                                    SubLObject start_node = (NIL != forwardP) ? ((SubLObject) (node1)) : node2;
-                                    SubLObject goal_node = (NIL != forwardP) ? ((SubLObject) (node2)) : node1;
-                                    SubLObject v_search = ghl_search_vars.new_ghl_search(list(new SubLObject[]{ $PREDICATES, list(pred), $ORDER, $BREADTH_FIRST, $TYPE, $TRANSITIVE_REASONING, $DIRECTION, direction, $TV, tv, $MARKING, $SIMPLE, $GOAL_SEARCH_P, T, $GOAL, list(goal_node) }));
-                                    graphl_graph_utilities.reset_graphl_finished();
-                                    {
-                                        SubLObject search_deck = (NIL != ghl_search_vars.ghl_depth_first_search_p(v_search)) ? ((SubLObject) (deck.create_deck($STACK))) : deck.create_deck($QUEUE);
-                                        SubLObject resolve_goal_nodeP = makeBoolean((NIL != return_non_transitive_resultsP) || (NIL != fort_types_interface.reflexive_binary_predicate_p(pred)));
-                                        ghl_marking_utilities.ghl_mark_node(v_search, start_node, $START);
-                                        com.cyc.cycjava.cycl.ghl_search_methods.gt_predicate_relation_p_add_accessible_link_nodes_to_deck(v_search, start_node, search_deck, resolve_goal_nodeP);
-                                        {
-                                            SubLObject node = deck.deck_pop(search_deck);
-                                            while (!((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == node))) {
-                                                {
-                                                    SubLObject mark = ghl_marking_utilities.get_ghl_marking(v_search, node);
-                                                    if (NIL == mark) {
-                                                        ghl_marking_utilities.ghl_mark_node(v_search, node, T);
-                                                        if (NIL == graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) {
-                                                            com.cyc.cycjava.cycl.ghl_search_methods.gt_predicate_relation_p_add_accessible_link_nodes_to_deck(v_search, node, search_deck, T);
-                                                        }
-                                                    } else {
-                                                        if (mark == $START) {
-                                                            ghl_marking_utilities.ghl_mark_node(v_search, node, T);
-                                                        }
-                                                    }
-                                                }
-                                                node = deck.deck_pop(search_deck);
-                                            } 
-                                        }
-                                    }
-                                    result = list_utilities.sublisp_boolean(ghl_search_vars.ghl_result(v_search));
-                                    ghl_search_vars.destroy_ghl_search(v_search);
-                                }
-                            }
-                        }
-                    } finally {
-                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return result;
-            }
-        }
     }
 
     public static SubLObject gt_predicate_relation_p(final SubLObject pred, final SubLObject node1, final SubLObject node2, SubLObject mt, SubLObject tv, SubLObject return_non_transitive_resultsP) {
@@ -8758,278 +4422,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
             mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
         }
         return result;
-    }
-
-    public static final SubLObject gt_predicate_relation_p_add_accessible_link_nodes_to_deck_alt(SubLObject v_search, SubLObject node, SubLObject v_deck, SubLObject resolve_goal_nodeP) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject pred = ghl_search_vars.ghl_relevant_predicates(v_search).first();
-                SubLObject truth = enumeration_types.tv_truth(ghl_search_vars.ghl_tv(v_search));
-                SubLObject strength = enumeration_types.tv_strength(ghl_search_vars.ghl_tv(v_search));
-                {
-                    SubLObject _prev_bind_0 = ghl_search_vars.$gt_args_swapped_p$.currentBinding(thread);
-                    try {
-                        ghl_search_vars.$gt_args_swapped_p$.bind(NIL, thread);
-                        if (NIL == graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) {
-                            {
-                                SubLObject csome_list_var = graphl_search_vars.determine_graphl_relevant_directions(ghl_search_vars.ghl_direction(v_search));
-                                SubLObject search_direction = NIL;
-                                for (search_direction = csome_list_var.first(); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , search_direction = csome_list_var.first()) {
-                                    {
-                                        SubLObject index_argnum = ghl_link_iterators.gt_index_argnum_for_direction(search_direction);
-                                        SubLObject gather_argnum = misc_utilities.other_binary_arg(index_argnum);
-                                        {
-                                            SubLObject _prev_bind_0_191 = ghl_link_iterators.$gt_relevant_pred$.currentBinding(thread);
-                                            SubLObject _prev_bind_1 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
-                                            try {
-                                                ghl_link_iterators.$gt_relevant_pred$.bind(pred, thread);
-                                                pred_relevance_macros.$relevant_pred_function$.bind($sym7$RELEVANT_PRED_WRT_GT_, thread);
-                                                {
-                                                    SubLObject pred_var = NIL;
-                                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(node, index_argnum, pred_var)) {
-                                                        {
-                                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(node, index_argnum, pred_var);
-                                                            SubLObject done_var = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                            SubLObject token_var = NIL;
-                                                            while (NIL == done_var) {
-                                                                {
-                                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                                    if (NIL != valid) {
-                                                                        {
-                                                                            SubLObject final_index_iterator = NIL;
-                                                                            try {
-                                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, truth, NIL);
-                                                                                {
-                                                                                    SubLObject done_var_192 = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                                    SubLObject token_var_193 = NIL;
-                                                                                    while (NIL == done_var_192) {
-                                                                                        {
-                                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_193);
-                                                                                            SubLObject valid_194 = makeBoolean(token_var_193 != assertion);
-                                                                                            if (NIL != valid_194) {
-                                                                                                if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                    {
-                                                                                                        SubLObject link_node = cycl_utilities.formula_arg(assertion, gather_argnum, UNPROVIDED);
-                                                                                                        SubLObject assertion_195 = assertion;
-                                                                                                        if ((NIL != ghl_search_utilities.ghl_goal_nodeP(v_search, link_node, UNPROVIDED)) && (NIL != resolve_goal_nodeP)) {
-                                                                                                            ghl_search_utilities.ghl_resolve_goal_found(v_search, link_node);
-                                                                                                        } else {
-                                                                                                            deck.deck_push(link_node, v_deck);
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                            done_var_192 = makeBoolean((NIL == valid_194) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                                        }
-                                                                                    } 
-                                                                                }
-                                                                            } finally {
-                                                                                {
-                                                                                    SubLObject _prev_bind_0_196 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                    try {
-                                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                        if (NIL != final_index_iterator) {
-                                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                                        }
-                                                                                    } finally {
-                                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_196, thread);
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                    done_var = makeBoolean((NIL == valid) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                }
-                                                            } 
-                                                        }
-                                                    }
-                                                }
-                                            } finally {
-                                                pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_1, thread);
-                                                ghl_link_iterators.$gt_relevant_pred$.rebind(_prev_bind_0_191, thread);
-                                            }
-                                        }
-                                        if (NIL != gt_vars.gt_use_sksiP()) {
-                                            {
-                                                SubLObject _prev_bind_0_197 = ghl_search_vars.$sksi_gt_search_pred$.currentBinding(thread);
-                                                try {
-                                                    ghl_search_vars.$sksi_gt_search_pred$.bind(pred, thread);
-                                                    {
-                                                        SubLObject rest = NIL;
-                                                        for (rest = sksi_sks_mapping_utilities.gather_sksi_gaf_arg_index_relevant_pred(node, index_argnum, truth); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest)); rest = rest.rest()) {
-                                                            {
-                                                                SubLObject gather_sentence_mt_pair = rest.first();
-                                                                SubLObject datum = gather_sentence_mt_pair;
-                                                                SubLObject current = datum;
-                                                                SubLObject assertion = NIL;
-                                                                SubLObject var_mt = NIL;
-                                                                destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                assertion = current.first();
-                                                                current = current.rest();
-                                                                destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                var_mt = current.first();
-                                                                current = current.rest();
-                                                                if (NIL == current) {
-                                                                    if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                        {
-                                                                            SubLObject link_node = cycl_utilities.formula_arg(assertion, gather_argnum, UNPROVIDED);
-                                                                            SubLObject assertion_198 = assertion;
-                                                                            if ((NIL != ghl_search_utilities.ghl_goal_nodeP(v_search, link_node, UNPROVIDED)) && (NIL != resolve_goal_nodeP)) {
-                                                                                ghl_search_utilities.ghl_resolve_goal_found(v_search, link_node);
-                                                                            } else {
-                                                                                deck.deck_push(link_node, v_deck);
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                } else {
-                                                                    cdestructuring_bind_error(datum, $list_alt9);
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                } finally {
-                                                    ghl_search_vars.$sksi_gt_search_pred$.rebind(_prev_bind_0_197, thread);
-                                                }
-                                            }
-                                        }
-                                        if (NIL != ghl_search_vars.ghl_uses_spec_preds_p()) {
-                                            {
-                                                SubLObject _prev_bind_0_199 = ghl_search_vars.$gt_args_swapped_p$.currentBinding(thread);
-                                                try {
-                                                    ghl_search_vars.$gt_args_swapped_p$.bind(T, thread);
-                                                    {
-                                                        SubLObject _prev_bind_0_200 = ghl_link_iterators.$gt_relevant_pred$.currentBinding(thread);
-                                                        SubLObject _prev_bind_1 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
-                                                        try {
-                                                            ghl_link_iterators.$gt_relevant_pred$.bind(pred, thread);
-                                                            pred_relevance_macros.$relevant_pred_function$.bind($sym7$RELEVANT_PRED_WRT_GT_, thread);
-                                                            {
-                                                                SubLObject pred_var = NIL;
-                                                                if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(node, gather_argnum, pred_var)) {
-                                                                    {
-                                                                        SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(node, gather_argnum, pred_var);
-                                                                        SubLObject done_var = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                        SubLObject token_var = NIL;
-                                                                        while (NIL == done_var) {
-                                                                            {
-                                                                                SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                                                SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                                                if (NIL != valid) {
-                                                                                    {
-                                                                                        SubLObject final_index_iterator = NIL;
-                                                                                        try {
-                                                                                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, truth, NIL);
-                                                                                            {
-                                                                                                SubLObject done_var_201 = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                                                SubLObject token_var_202 = NIL;
-                                                                                                while (NIL == done_var_201) {
-                                                                                                    {
-                                                                                                        SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_202);
-                                                                                                        SubLObject valid_203 = makeBoolean(token_var_202 != assertion);
-                                                                                                        if (NIL != valid_203) {
-                                                                                                            if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                                {
-                                                                                                                    SubLObject link_node = cycl_utilities.formula_arg(assertion, index_argnum, UNPROVIDED);
-                                                                                                                    SubLObject assertion_204 = assertion;
-                                                                                                                    if ((NIL != ghl_search_utilities.ghl_goal_nodeP(v_search, link_node, UNPROVIDED)) && (NIL != resolve_goal_nodeP)) {
-                                                                                                                        ghl_search_utilities.ghl_resolve_goal_found(v_search, link_node);
-                                                                                                                    } else {
-                                                                                                                        deck.deck_push(link_node, v_deck);
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                        done_var_201 = makeBoolean((NIL == valid_203) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                                                    }
-                                                                                                } 
-                                                                                            }
-                                                                                        } finally {
-                                                                                            {
-                                                                                                SubLObject _prev_bind_0_205 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                                try {
-                                                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                                    if (NIL != final_index_iterator) {
-                                                                                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                                                    }
-                                                                                                } finally {
-                                                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_205, thread);
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                                done_var = makeBoolean((NIL == valid) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                            }
-                                                                        } 
-                                                                    }
-                                                                }
-                                                            }
-                                                        } finally {
-                                                            pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_1, thread);
-                                                            ghl_link_iterators.$gt_relevant_pred$.rebind(_prev_bind_0_200, thread);
-                                                        }
-                                                    }
-                                                    if (NIL != gt_vars.gt_use_sksiP()) {
-                                                        {
-                                                            SubLObject _prev_bind_0_206 = ghl_search_vars.$sksi_gt_search_pred$.currentBinding(thread);
-                                                            try {
-                                                                ghl_search_vars.$sksi_gt_search_pred$.bind(pred, thread);
-                                                                {
-                                                                    SubLObject rest = NIL;
-                                                                    for (rest = sksi_sks_mapping_utilities.gather_sksi_gaf_arg_index_relevant_pred(node, gather_argnum, truth); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest)); rest = rest.rest()) {
-                                                                        {
-                                                                            SubLObject gather_sentence_mt_pair = rest.first();
-                                                                            SubLObject datum = gather_sentence_mt_pair;
-                                                                            SubLObject current = datum;
-                                                                            SubLObject assertion = NIL;
-                                                                            SubLObject var_mt = NIL;
-                                                                            destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                            assertion = current.first();
-                                                                            current = current.rest();
-                                                                            destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                            var_mt = current.first();
-                                                                            current = current.rest();
-                                                                            if (NIL == current) {
-                                                                                if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                    {
-                                                                                        SubLObject link_node = cycl_utilities.formula_arg(assertion, index_argnum, UNPROVIDED);
-                                                                                        SubLObject assertion_207 = assertion;
-                                                                                        if ((NIL != ghl_search_utilities.ghl_goal_nodeP(v_search, link_node, UNPROVIDED)) && (NIL != resolve_goal_nodeP)) {
-                                                                                            ghl_search_utilities.ghl_resolve_goal_found(v_search, link_node);
-                                                                                        } else {
-                                                                                            deck.deck_push(link_node, v_deck);
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            } else {
-                                                                                cdestructuring_bind_error(datum, $list_alt9);
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            } finally {
-                                                                ghl_search_vars.$sksi_gt_search_pred$.rebind(_prev_bind_0_206, thread);
-                                                            }
-                                                        }
-                                                    }
-                                                } finally {
-                                                    ghl_search_vars.$gt_args_swapped_p$.rebind(_prev_bind_0_199, thread);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        ghl_search_vars.$gt_args_swapped_p$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return v_deck;
-        }
     }
 
     public static SubLObject gt_predicate_relation_p_add_accessible_link_nodes_to_deck(final SubLObject v_search, final SubLObject node, final SubLObject v_deck, final SubLObject allow_reflexive_goalP) {
@@ -9268,68 +4660,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         return v_deck;
     }
 
-    public static final SubLObject ghl_predicate_relation_within_multiple_searches_p_alt(SubLObject pred, SubLObject node1, SubLObject node2, SubLObject fail_space, SubLObject goal_space, SubLObject mt, SubLObject tv) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (tv == UNPROVIDED) {
-            tv = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                SubLObject mt_var = mt;
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
-                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
-                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
-                        if (NIL != sbhl_module_utilities.sbhl_predicate_p(pred)) {
-                            result = sbhl_search_methods.sbhl_predicate_relation_within_multiple_searches_p(sbhl_module_vars.get_sbhl_module(pred), node1, node2, fail_space, goal_space);
-                        } else {
-                            if (node1.equal(node2) && (NIL != fort_types_interface.reflexive_binary_predicate_p(pred))) {
-                                result = node2;
-                            } else {
-                                if (node1.equal(node2) && (NIL != fort_types_interface.irreflexive_binary_predicate_p(pred))) {
-                                    result = NIL;
-                                } else {
-                                    {
-                                        SubLObject direction = ghl_search_vars.ghl_direction_for_predicate_relation(pred);
-                                        SubLObject opposite = ghl_search_vars.ghl_opposite_direction(direction);
-                                        SubLObject forwardP = ghl_search_vars.ghl_forward_direction_p(direction);
-                                        SubLObject start_node = (NIL != forwardP) ? ((SubLObject) (node1)) : node2;
-                                        SubLObject goal_node = (NIL != forwardP) ? ((SubLObject) (node2)) : node1;
-                                        result = com.cyc.cycjava.cycl.ghl_search_methods.ghl_path_from_node_to_node_within_previous_searches(pred, start_node, goal_node, direction, fail_space, goal_space);
-                                        if (NIL != result) {
-                                            if ((NIL != ghl_graph_utilities.ghl_node_p(result)) && (NIL != ghl_marking_utilities.ghl_node_marked_in_space_p(result, goal_space))) {
-                                                ghl_marking_utilities.ghl_mark_node_in_space(result, T, fail_space);
-                                            }
-                                            {
-                                                SubLObject v_search = ghl_search_vars.new_ghl_search(listS($PREDICATES, new SubLObject[]{ list(pred), $ORDER, $DEPTH_FIRST, $TYPE, $TRANSITIVE_REASONING, $DIRECTION, opposite, $MARKING, $SIMPLE, $MARKING_SPACE, fail_space, $GOAL_SPACE, goal_space, $list_alt46 }));
-                                                graphl_graph_utilities.reset_graphl_finished();
-                                                com.cyc.cycjava.cycl.ghl_search_methods.ghl_unmark_sweep_and_map(v_search, goal_node);
-                                                ghl_search_vars.destroy_ghl_search(v_search);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return result;
-            }
-        }
-    }
-
     public static SubLObject ghl_predicate_relation_within_multiple_searches_p(final SubLObject pred, final SubLObject node1, final SubLObject node2, final SubLObject fail_space, final SubLObject goal_space, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -9382,30 +4712,11 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         return result;
     }
 
-    public static final SubLObject ghl_path_from_node_to_node_within_previous_searches_alt(SubLObject pred, SubLObject start_node, SubLObject goal_node, SubLObject direction, SubLObject fail_space, SubLObject goal_space) {
-        {
-            SubLObject v_search = ghl_search_vars.new_ghl_search(list(new SubLObject[]{ $PREDICATES, list(pred), $ORDER, $DEPTH_FIRST, $TYPE, $TRANSITIVE_REASONING, $DIRECTION, direction, $MARKING, $SIMPLE, $MARKING_SPACE, fail_space, $GOAL_SEARCH_P, T, $GOAL, goal_node, $GOAL_FN, $sym48$GHL_GOAL_OR_MARKED_AS_GOAL_, $GOAL_SPACE, goal_space }));
-            graphl_graph_utilities.reset_graphl_finished();
-            com.cyc.cycjava.cycl.ghl_search_methods.ghl_mark_sweep_until_goal(v_search, start_node);
-            return ghl_search_vars.ghl_result(v_search);
-        }
-    }
-
     public static SubLObject ghl_path_from_node_to_node_within_previous_searches(final SubLObject pred, final SubLObject start_node, final SubLObject goal_node, final SubLObject direction, final SubLObject fail_space, final SubLObject goal_space) {
         final SubLObject v_search = ghl_search_vars.new_ghl_search(list(new SubLObject[]{ $PREDICATES, list(pred), $ORDER, $DEPTH_FIRST, $TYPE, $TRANSITIVE_REASONING, $DIRECTIONS, list(direction), $MARKING, $SIMPLE, $MARKING_SPACE, fail_space, $GOAL_SEARCH_P, T, $GOAL, goal_node, $GOAL_FN, $sym54$GHL_GOAL_OR_MARKED_AS_GOAL_, $GOAL_SPACE, goal_space }));
         graphl_graph_utilities.reset_graphl_finished();
         ghl_mark_sweep_until_goal(v_search, start_node);
         return ghl_search_vars.ghl_result(v_search);
-    }
-
-    public static final SubLObject ghl_unmark_closure_in_space_and_map_alt(SubLObject pred, SubLObject node, SubLObject direction, SubLObject space, SubLObject map_fn) {
-        {
-            SubLObject v_search = ghl_search_vars.new_ghl_search(list(new SubLObject[]{ $PREDICATES, list(pred), $ORDER, $DEPTH_FIRST, $TYPE, $TRANSITIVE_REASONING, $DIRECTION, direction, $MARKING, $SIMPLE, $MARKING_SPACE, space, $MAP_FN, map_fn }));
-            graphl_graph_utilities.reset_graphl_finished();
-            com.cyc.cycjava.cycl.ghl_search_methods.ghl_unmark_sweep_and_map(v_search, node);
-            ghl_search_vars.destroy_ghl_search(v_search);
-        }
-        return NIL;
     }
 
     public static SubLObject ghl_unmark_closure_in_space_and_map(final SubLObject pred, final SubLObject node, final SubLObject direction, final SubLObject space, final SubLObject map_fn) {
@@ -9416,16 +4727,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         return NIL;
     }
 
-    public static final SubLObject why_ghl_predicate_relation_p_alt(SubLObject pred, SubLObject node1, SubLObject node2, SubLObject mt, SubLObject tv) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (tv == UNPROVIDED) {
-            tv = NIL;
-        }
-        return NIL != sbhl_module_utilities.sbhl_predicate_p(pred) ? ((SubLObject) (sbhl_search_methods.why_sbhl_predicate_relation_p(sbhl_module_vars.get_sbhl_module(pred), node1, node2, mt, tv, UNPROVIDED))) : com.cyc.cycjava.cycl.ghl_search_methods.why_gt_predicate_relation_p(pred, node1, node2, mt, tv);
-    }
-
     public static SubLObject why_ghl_predicate_relation_p(final SubLObject pred, final SubLObject node1, final SubLObject node2, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -9434,96 +4735,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
             tv = NIL;
         }
         return NIL != sbhl_module_utilities.sbhl_predicate_p(pred) ? sbhl_search_methods.why_sbhl_predicate_relation_p(sbhl_module_vars.get_sbhl_module(pred), node1, node2, mt, tv, UNPROVIDED) : why_gt_predicate_relation_p(pred, node1, node2, mt, tv);
-    }
-
-    public static final SubLObject why_gt_predicate_relation_p_alt(SubLObject pred, SubLObject node1, SubLObject node2, SubLObject mt, SubLObject tv) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (tv == UNPROVIDED) {
-            tv = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                SubLObject mt_var = mt;
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
-                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
-                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
-                        if (node1.equal(node2) && (NIL != fort_types_interface.reflexive_binary_predicate_p(pred))) {
-                            result = list(arguments.make_hl_support($REFLEXIVE, make_binary_formula(pred, node1, node2), mt, tv));
-                        } else {
-                            if (node1.equal(node2) && (NIL != fort_types_interface.irreflexive_binary_predicate_p(pred))) {
-                                result = NIL;
-                            } else {
-                                {
-                                    SubLObject direction = ghl_search_vars.ghl_direction_for_predicate_relation(pred);
-                                    SubLObject forwardP = ghl_search_vars.ghl_forward_direction_p(direction);
-                                    SubLObject start_node = (NIL != forwardP) ? ((SubLObject) (node1)) : node2;
-                                    SubLObject goal_node = (NIL != forwardP) ? ((SubLObject) (node2)) : node1;
-                                    SubLObject v_search = ghl_search_vars.new_ghl_search(listS($PREDICATES, new SubLObject[]{ list(pred), $ORDER, $BREADTH_FIRST, $TYPE, $TRANSITIVE_REASONING, $DIRECTION, direction, $TV, tv, $MARKING, $SIMPLE, $GOAL_SEARCH_P, T, $GOAL, list(goal_node), $list_alt51 }));
-                                    graphl_graph_utilities.reset_graphl_finished();
-                                    {
-                                        SubLObject search_deck = (NIL != ghl_search_vars.ghl_depth_first_search_p(v_search)) ? ((SubLObject) (deck.create_deck($STACK))) : deck.create_deck($QUEUE);
-                                        ghl_marking_utilities.ghl_mark_node(v_search, start_node, $START);
-                                        com.cyc.cycjava.cycl.ghl_search_methods.gt_why_predicate_relation_p_add_accessible_link_nodes_to_deck(v_search, start_node, NIL, search_deck, T);
-                                        if (NIL == deck.deck_empty_p(search_deck)) {
-                                            {
-                                                SubLObject datum = deck.deck_pop(search_deck);
-                                                SubLObject current = datum;
-                                                SubLObject node = NIL;
-                                                SubLObject supports = NIL;
-                                                destructuring_bind_must_consp(current, datum, $list_alt52);
-                                                node = current.first();
-                                                current = current.rest();
-                                                destructuring_bind_must_consp(current, datum, $list_alt52);
-                                                supports = current.first();
-                                                current = current.rest();
-                                                if (NIL == current) {
-                                                    while (!((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == node))) {
-                                                        {
-                                                            SubLObject mark = ghl_marking_utilities.get_ghl_marking(v_search, node);
-                                                            if (NIL == mark) {
-                                                                ghl_marking_utilities.ghl_mark_node(v_search, node, T);
-                                                                com.cyc.cycjava.cycl.ghl_search_methods.gt_why_predicate_relation_p_add_accessible_link_nodes_to_deck(v_search, node, supports, search_deck, T);
-                                                            } else {
-                                                                if (mark == $START) {
-                                                                    ghl_marking_utilities.ghl_mark_node(v_search, node, T);
-                                                                }
-                                                            }
-                                                        }
-                                                        {
-                                                            SubLObject datum_evaluated_var = deck.deck_pop(search_deck);
-                                                            node = datum_evaluated_var.first();
-                                                            supports = cadr(datum_evaluated_var);
-                                                        }
-                                                    } 
-                                                } else {
-                                                    cdestructuring_bind_error(datum, $list_alt52);
-                                                }
-                                            }
-                                        }
-                                    }
-                                    result = ghl_search_vars.ghl_result(v_search);
-                                    ghl_search_vars.destroy_ghl_search(v_search);
-                                }
-                            }
-                        }
-                    } finally {
-                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return result;
-            }
-        }
     }
 
     public static SubLObject why_gt_predicate_relation_p(final SubLObject pred, final SubLObject node1, final SubLObject node2, SubLObject mt, SubLObject tv) {
@@ -9616,294 +4827,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
             mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
         }
         return result;
-    }
-
-    public static final SubLObject gt_why_predicate_relation_p_add_accessible_link_nodes_to_deck_alt(SubLObject v_search, SubLObject node, SubLObject supports, SubLObject v_deck, SubLObject resolve_goal_nodeP) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject pred = ghl_search_vars.ghl_relevant_predicates(v_search).first();
-                SubLObject truth = enumeration_types.tv_truth(ghl_search_vars.ghl_tv(v_search));
-                SubLObject strength = enumeration_types.tv_strength(ghl_search_vars.ghl_tv(v_search));
-                {
-                    SubLObject _prev_bind_0 = ghl_search_vars.$gt_args_swapped_p$.currentBinding(thread);
-                    try {
-                        ghl_search_vars.$gt_args_swapped_p$.bind(NIL, thread);
-                        if (NIL == graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) {
-                            {
-                                SubLObject csome_list_var = graphl_search_vars.determine_graphl_relevant_directions(ghl_search_vars.ghl_direction(v_search));
-                                SubLObject search_direction = NIL;
-                                for (search_direction = csome_list_var.first(); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , search_direction = csome_list_var.first()) {
-                                    {
-                                        SubLObject index_argnum = ghl_link_iterators.gt_index_argnum_for_direction(search_direction);
-                                        SubLObject gather_argnum = misc_utilities.other_binary_arg(index_argnum);
-                                        {
-                                            SubLObject _prev_bind_0_208 = ghl_link_iterators.$gt_relevant_pred$.currentBinding(thread);
-                                            SubLObject _prev_bind_1 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
-                                            try {
-                                                ghl_link_iterators.$gt_relevant_pred$.bind(pred, thread);
-                                                pred_relevance_macros.$relevant_pred_function$.bind($sym7$RELEVANT_PRED_WRT_GT_, thread);
-                                                {
-                                                    SubLObject pred_var = NIL;
-                                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(node, index_argnum, pred_var)) {
-                                                        {
-                                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(node, index_argnum, pred_var);
-                                                            SubLObject done_var = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                            SubLObject token_var = NIL;
-                                                            while (NIL == done_var) {
-                                                                {
-                                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                                    if (NIL != valid) {
-                                                                        {
-                                                                            SubLObject final_index_iterator = NIL;
-                                                                            try {
-                                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, truth, NIL);
-                                                                                {
-                                                                                    SubLObject done_var_209 = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                                    SubLObject token_var_210 = NIL;
-                                                                                    while (NIL == done_var_209) {
-                                                                                        {
-                                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_210);
-                                                                                            SubLObject valid_211 = makeBoolean(token_var_210 != assertion);
-                                                                                            if (NIL != valid_211) {
-                                                                                                if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                    {
-                                                                                                        SubLObject link_node = cycl_utilities.formula_arg(assertion, gather_argnum, UNPROVIDED);
-                                                                                                        SubLObject assertion_212 = assertion;
-                                                                                                        if ((NIL != ghl_search_utilities.ghl_goal_nodeP(v_search, link_node, UNPROVIDED)) && (NIL != resolve_goal_nodeP)) {
-                                                                                                            {
-                                                                                                                SubLObject justification = com.cyc.cycjava.cycl.ghl_search_methods.ghl_create_justification(v_search, cons(assertion_212, supports));
-                                                                                                                ghl_search_utilities.ghl_resolve_goal_found(v_search, link_node);
-                                                                                                                com.cyc.cycjava.cycl.ghl_search_methods.ghl_add_justification_to_result(v_search, justification);
-                                                                                                            }
-                                                                                                        } else {
-                                                                                                            deck.deck_push(list(link_node, cons(assertion_212, supports)), v_deck);
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                            done_var_209 = makeBoolean((NIL == valid_211) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                                        }
-                                                                                    } 
-                                                                                }
-                                                                            } finally {
-                                                                                {
-                                                                                    SubLObject _prev_bind_0_213 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                    try {
-                                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                        if (NIL != final_index_iterator) {
-                                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                                        }
-                                                                                    } finally {
-                                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_213, thread);
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                    done_var = makeBoolean((NIL == valid) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                }
-                                                            } 
-                                                        }
-                                                    }
-                                                }
-                                            } finally {
-                                                pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_1, thread);
-                                                ghl_link_iterators.$gt_relevant_pred$.rebind(_prev_bind_0_208, thread);
-                                            }
-                                        }
-                                        if (NIL != gt_vars.gt_use_sksiP()) {
-                                            {
-                                                SubLObject _prev_bind_0_214 = ghl_search_vars.$sksi_gt_search_pred$.currentBinding(thread);
-                                                try {
-                                                    ghl_search_vars.$sksi_gt_search_pred$.bind(pred, thread);
-                                                    {
-                                                        SubLObject rest = NIL;
-                                                        for (rest = sksi_sks_mapping_utilities.gather_sksi_gaf_arg_index_relevant_pred(node, index_argnum, truth); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest)); rest = rest.rest()) {
-                                                            {
-                                                                SubLObject gather_sentence_mt_pair = rest.first();
-                                                                SubLObject datum = gather_sentence_mt_pair;
-                                                                SubLObject current = datum;
-                                                                SubLObject assertion = NIL;
-                                                                SubLObject var_mt = NIL;
-                                                                destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                assertion = current.first();
-                                                                current = current.rest();
-                                                                destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                var_mt = current.first();
-                                                                current = current.rest();
-                                                                if (NIL == current) {
-                                                                    if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                        {
-                                                                            SubLObject link_node = cycl_utilities.formula_arg(assertion, gather_argnum, UNPROVIDED);
-                                                                            SubLObject assertion_215 = assertion;
-                                                                            if ((NIL != ghl_search_utilities.ghl_goal_nodeP(v_search, link_node, UNPROVIDED)) && (NIL != resolve_goal_nodeP)) {
-                                                                                {
-                                                                                    SubLObject justification = com.cyc.cycjava.cycl.ghl_search_methods.ghl_create_justification(v_search, cons(assertion_215, supports));
-                                                                                    ghl_search_utilities.ghl_resolve_goal_found(v_search, link_node);
-                                                                                    com.cyc.cycjava.cycl.ghl_search_methods.ghl_add_justification_to_result(v_search, justification);
-                                                                                }
-                                                                            } else {
-                                                                                deck.deck_push(list(link_node, cons(assertion_215, supports)), v_deck);
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                } else {
-                                                                    cdestructuring_bind_error(datum, $list_alt9);
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                } finally {
-                                                    ghl_search_vars.$sksi_gt_search_pred$.rebind(_prev_bind_0_214, thread);
-                                                }
-                                            }
-                                        }
-                                        if (NIL != ghl_search_vars.ghl_uses_spec_preds_p()) {
-                                            {
-                                                SubLObject _prev_bind_0_216 = ghl_search_vars.$gt_args_swapped_p$.currentBinding(thread);
-                                                try {
-                                                    ghl_search_vars.$gt_args_swapped_p$.bind(T, thread);
-                                                    {
-                                                        SubLObject _prev_bind_0_217 = ghl_link_iterators.$gt_relevant_pred$.currentBinding(thread);
-                                                        SubLObject _prev_bind_1 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
-                                                        try {
-                                                            ghl_link_iterators.$gt_relevant_pred$.bind(pred, thread);
-                                                            pred_relevance_macros.$relevant_pred_function$.bind($sym7$RELEVANT_PRED_WRT_GT_, thread);
-                                                            {
-                                                                SubLObject pred_var = NIL;
-                                                                if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(node, gather_argnum, pred_var)) {
-                                                                    {
-                                                                        SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(node, gather_argnum, pred_var);
-                                                                        SubLObject done_var = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                        SubLObject token_var = NIL;
-                                                                        while (NIL == done_var) {
-                                                                            {
-                                                                                SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                                                SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                                                if (NIL != valid) {
-                                                                                    {
-                                                                                        SubLObject final_index_iterator = NIL;
-                                                                                        try {
-                                                                                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, truth, NIL);
-                                                                                            {
-                                                                                                SubLObject done_var_218 = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                                                SubLObject token_var_219 = NIL;
-                                                                                                while (NIL == done_var_218) {
-                                                                                                    {
-                                                                                                        SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_219);
-                                                                                                        SubLObject valid_220 = makeBoolean(token_var_219 != assertion);
-                                                                                                        if (NIL != valid_220) {
-                                                                                                            if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                                {
-                                                                                                                    SubLObject link_node = cycl_utilities.formula_arg(assertion, index_argnum, UNPROVIDED);
-                                                                                                                    SubLObject assertion_221 = assertion;
-                                                                                                                    if ((NIL != ghl_search_utilities.ghl_goal_nodeP(v_search, link_node, UNPROVIDED)) && (NIL != resolve_goal_nodeP)) {
-                                                                                                                        {
-                                                                                                                            SubLObject justification = com.cyc.cycjava.cycl.ghl_search_methods.ghl_create_justification(v_search, cons(assertion_221, supports));
-                                                                                                                            ghl_search_utilities.ghl_resolve_goal_found(v_search, link_node);
-                                                                                                                            com.cyc.cycjava.cycl.ghl_search_methods.ghl_add_justification_to_result(v_search, justification);
-                                                                                                                        }
-                                                                                                                    } else {
-                                                                                                                        deck.deck_push(list(link_node, cons(assertion_221, supports)), v_deck);
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                        done_var_218 = makeBoolean((NIL == valid_220) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                                                    }
-                                                                                                } 
-                                                                                            }
-                                                                                        } finally {
-                                                                                            {
-                                                                                                SubLObject _prev_bind_0_222 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                                try {
-                                                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                                    if (NIL != final_index_iterator) {
-                                                                                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                                                    }
-                                                                                                } finally {
-                                                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_222, thread);
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                                done_var = makeBoolean((NIL == valid) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                            }
-                                                                        } 
-                                                                    }
-                                                                }
-                                                            }
-                                                        } finally {
-                                                            pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_1, thread);
-                                                            ghl_link_iterators.$gt_relevant_pred$.rebind(_prev_bind_0_217, thread);
-                                                        }
-                                                    }
-                                                    if (NIL != gt_vars.gt_use_sksiP()) {
-                                                        {
-                                                            SubLObject _prev_bind_0_223 = ghl_search_vars.$sksi_gt_search_pred$.currentBinding(thread);
-                                                            try {
-                                                                ghl_search_vars.$sksi_gt_search_pred$.bind(pred, thread);
-                                                                {
-                                                                    SubLObject rest = NIL;
-                                                                    for (rest = sksi_sks_mapping_utilities.gather_sksi_gaf_arg_index_relevant_pred(node, gather_argnum, truth); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest)); rest = rest.rest()) {
-                                                                        {
-                                                                            SubLObject gather_sentence_mt_pair = rest.first();
-                                                                            SubLObject datum = gather_sentence_mt_pair;
-                                                                            SubLObject current = datum;
-                                                                            SubLObject assertion = NIL;
-                                                                            SubLObject var_mt = NIL;
-                                                                            destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                            assertion = current.first();
-                                                                            current = current.rest();
-                                                                            destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                            var_mt = current.first();
-                                                                            current = current.rest();
-                                                                            if (NIL == current) {
-                                                                                if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                    {
-                                                                                        SubLObject link_node = cycl_utilities.formula_arg(assertion, index_argnum, UNPROVIDED);
-                                                                                        SubLObject assertion_224 = assertion;
-                                                                                        if ((NIL != ghl_search_utilities.ghl_goal_nodeP(v_search, link_node, UNPROVIDED)) && (NIL != resolve_goal_nodeP)) {
-                                                                                            {
-                                                                                                SubLObject justification = com.cyc.cycjava.cycl.ghl_search_methods.ghl_create_justification(v_search, cons(assertion_224, supports));
-                                                                                                ghl_search_utilities.ghl_resolve_goal_found(v_search, link_node);
-                                                                                                com.cyc.cycjava.cycl.ghl_search_methods.ghl_add_justification_to_result(v_search, justification);
-                                                                                            }
-                                                                                        } else {
-                                                                                            deck.deck_push(list(link_node, cons(assertion_224, supports)), v_deck);
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            } else {
-                                                                                cdestructuring_bind_error(datum, $list_alt9);
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            } finally {
-                                                                ghl_search_vars.$sksi_gt_search_pred$.rebind(_prev_bind_0_223, thread);
-                                                            }
-                                                        }
-                                                    }
-                                                } finally {
-                                                    ghl_search_vars.$gt_args_swapped_p$.rebind(_prev_bind_0_216, thread);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        ghl_search_vars.$gt_args_swapped_p$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return v_deck;
-        }
     }
 
     public static SubLObject gt_why_predicate_relation_p_add_accessible_link_nodes_to_deck(final SubLObject v_search, final SubLObject node, final SubLObject supports, final SubLObject v_deck, final SubLObject allow_reflexive_goalP) {
@@ -10152,101 +5075,11 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         return v_deck;
     }
 
-    public static final SubLObject ghl_max_floor_mts_of_predicate_paths_alt(SubLObject pred, SubLObject node1, SubLObject node2, SubLObject tv) {
-        if (tv == UNPROVIDED) {
-            tv = NIL;
-        }
-        return NIL != sbhl_module_utilities.sbhl_predicate_p(pred) ? ((SubLObject) (sbhl_search_what_mts.sbhl_max_floor_mts_of_predicate_paths(sbhl_module_vars.get_sbhl_module(pred), node1, node2, tv))) : com.cyc.cycjava.cycl.ghl_search_methods.gt_max_floor_mts_of_predicate_paths(pred, node1, node2, tv);
-    }
-
     public static SubLObject ghl_max_floor_mts_of_predicate_paths(final SubLObject pred, final SubLObject node1, final SubLObject node2, SubLObject tv) {
         if (tv == UNPROVIDED) {
             tv = NIL;
         }
         return NIL != sbhl_module_utilities.sbhl_predicate_p(pred) ? sbhl_search_what_mts.sbhl_max_floor_mts_of_predicate_paths(sbhl_module_vars.get_sbhl_module(pred), node1, node2, tv) : gt_max_floor_mts_of_predicate_paths(pred, node1, node2, tv);
-    }
-
-    public static final SubLObject gt_max_floor_mts_of_predicate_paths_alt(SubLObject pred, SubLObject node1, SubLObject node2, SubLObject tv) {
-        if (tv == UNPROVIDED) {
-            tv = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_ANY_MT, thread);
-                        mt_relevance_macros.$mt$.bind($$InferencePSC, thread);
-                        if (node1.equal(node2) && (NIL != fort_types_interface.reflexive_binary_predicate_p(pred))) {
-                            result = hl_supports.max_floor_mts_where_reflexive(make_binary_formula(pred, node1, node2), NIL);
-                        } else {
-                            if (node1.equal(node2) && (NIL != fort_types_interface.irreflexive_binary_predicate_p(pred))) {
-                                result = NIL;
-                            } else {
-                                {
-                                    SubLObject direction = ghl_search_vars.ghl_direction_for_predicate_relation(pred);
-                                    SubLObject forwardP = ghl_search_vars.ghl_forward_direction_p(direction);
-                                    SubLObject start_node = (NIL != forwardP) ? ((SubLObject) (node1)) : node2;
-                                    SubLObject goal_node = (NIL != forwardP) ? ((SubLObject) (node2)) : node1;
-                                    SubLObject v_search = ghl_search_vars.new_ghl_search(listS($PREDICATES, new SubLObject[]{ list(pred), $ORDER, $BREADTH_FIRST, $TYPE, $TRANSITIVE_REASONING, $DIRECTION, direction, $TV, tv, $MARKING, $SIMPLE, $GOAL_SEARCH_P, T, $GOAL, list(goal_node), $list_alt51 }));
-                                    graphl_graph_utilities.reset_graphl_finished();
-                                    {
-                                        SubLObject search_deck = (NIL != ghl_search_vars.ghl_depth_first_search_p(v_search)) ? ((SubLObject) (deck.create_deck($STACK))) : deck.create_deck($QUEUE);
-                                        ghl_marking_utilities.ghl_mark_node(v_search, start_node, $START);
-                                        com.cyc.cycjava.cycl.ghl_search_methods.gt_max_floor_mts_of_predicate_paths_add_accessible_link_nodes_to_deck(v_search, start_node, NIL, search_deck);
-                                        if (NIL == deck.deck_empty_p(search_deck)) {
-                                            {
-                                                SubLObject datum = deck.deck_pop(search_deck);
-                                                SubLObject current = datum;
-                                                SubLObject node = NIL;
-                                                SubLObject supports = NIL;
-                                                destructuring_bind_must_consp(current, datum, $list_alt52);
-                                                node = current.first();
-                                                current = current.rest();
-                                                destructuring_bind_must_consp(current, datum, $list_alt52);
-                                                supports = current.first();
-                                                current = current.rest();
-                                                if (NIL == current) {
-                                                    while (!((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == node))) {
-                                                        {
-                                                            SubLObject mark = ghl_marking_utilities.get_ghl_marking(v_search, node);
-                                                            if (NIL == mark) {
-                                                                ghl_marking_utilities.ghl_mark_node(v_search, node, T);
-                                                                com.cyc.cycjava.cycl.ghl_search_methods.gt_max_floor_mts_of_predicate_paths_add_accessible_link_nodes_to_deck(v_search, node, supports, search_deck);
-                                                            } else {
-                                                                if (mark == $START) {
-                                                                    ghl_marking_utilities.ghl_mark_node(v_search, node, T);
-                                                                }
-                                                            }
-                                                        }
-                                                        {
-                                                            SubLObject datum_evaluated_var = deck.deck_pop(search_deck);
-                                                            node = datum_evaluated_var.first();
-                                                            supports = cadr(datum_evaluated_var);
-                                                        }
-                                                    } 
-                                                } else {
-                                                    cdestructuring_bind_error(datum, $list_alt52);
-                                                }
-                                            }
-                                        }
-                                    }
-                                    result = ghl_search_vars.ghl_result(v_search);
-                                    ghl_search_vars.destroy_ghl_search(v_search);
-                                }
-                            }
-                        }
-                    } finally {
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return genl_mts.max_mts(result, UNPROVIDED);
-            }
-        }
     }
 
     public static SubLObject gt_max_floor_mts_of_predicate_paths(final SubLObject pred, final SubLObject node1, final SubLObject node2, SubLObject tv) {
@@ -10314,344 +5147,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
             mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
         }
         return genl_mts.max_mts(result, UNPROVIDED);
-    }
-
-    public static final SubLObject gt_max_floor_mts_of_predicate_paths_add_accessible_link_nodes_to_deck_alt(SubLObject v_search, SubLObject node, SubLObject supports, SubLObject v_deck) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != com.cyc.cycjava.cycl.ghl_search_methods.gt_max_floor_mts_of_predicate_paths_supports_still_relevantP(v_search, supports)) {
-                {
-                    SubLObject pred = ghl_search_vars.ghl_relevant_predicates(v_search).first();
-                    SubLObject truth = enumeration_types.tv_truth(ghl_search_vars.ghl_tv(v_search));
-                    SubLObject strength = enumeration_types.tv_strength(ghl_search_vars.ghl_tv(v_search));
-                    {
-                        SubLObject _prev_bind_0 = ghl_search_vars.$gt_args_swapped_p$.currentBinding(thread);
-                        try {
-                            ghl_search_vars.$gt_args_swapped_p$.bind(NIL, thread);
-                            if (NIL == graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) {
-                                {
-                                    SubLObject csome_list_var = graphl_search_vars.determine_graphl_relevant_directions(ghl_search_vars.ghl_direction(v_search));
-                                    SubLObject search_direction = NIL;
-                                    for (search_direction = csome_list_var.first(); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , search_direction = csome_list_var.first()) {
-                                        {
-                                            SubLObject index_argnum = ghl_link_iterators.gt_index_argnum_for_direction(search_direction);
-                                            SubLObject gather_argnum = misc_utilities.other_binary_arg(index_argnum);
-                                            {
-                                                SubLObject _prev_bind_0_225 = ghl_link_iterators.$gt_relevant_pred$.currentBinding(thread);
-                                                SubLObject _prev_bind_1 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
-                                                try {
-                                                    ghl_link_iterators.$gt_relevant_pred$.bind(pred, thread);
-                                                    pred_relevance_macros.$relevant_pred_function$.bind($sym7$RELEVANT_PRED_WRT_GT_, thread);
-                                                    {
-                                                        SubLObject pred_var = NIL;
-                                                        if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(node, index_argnum, pred_var)) {
-                                                            {
-                                                                SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(node, index_argnum, pred_var);
-                                                                SubLObject done_var = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                SubLObject token_var = NIL;
-                                                                while (NIL == done_var) {
-                                                                    {
-                                                                        SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                                        SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                                        if (NIL != valid) {
-                                                                            {
-                                                                                SubLObject final_index_iterator = NIL;
-                                                                                try {
-                                                                                    final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, truth, NIL);
-                                                                                    {
-                                                                                        SubLObject done_var_226 = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                                        SubLObject token_var_227 = NIL;
-                                                                                        while (NIL == done_var_226) {
-                                                                                            {
-                                                                                                SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_227);
-                                                                                                SubLObject valid_228 = makeBoolean(token_var_227 != assertion);
-                                                                                                if (NIL != valid_228) {
-                                                                                                    if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                        {
-                                                                                                            SubLObject link_node = cycl_utilities.formula_arg(assertion, gather_argnum, UNPROVIDED);
-                                                                                                            SubLObject support = assertion;
-                                                                                                            if (NIL != ghl_search_utilities.ghl_goal_nodeP(v_search, link_node, UNPROVIDED)) {
-                                                                                                                {
-                                                                                                                    SubLObject justification = com.cyc.cycjava.cycl.ghl_search_methods.ghl_create_justification(v_search, cons(support, supports));
-                                                                                                                    if (NIL == graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) {
-                                                                                                                        {
-                                                                                                                            SubLObject csome_list_var_229 = hl_supports.max_floor_mts_of_justification(justification);
-                                                                                                                            SubLObject mt = NIL;
-                                                                                                                            for (mt = csome_list_var_229.first(); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == csome_list_var_229)); csome_list_var_229 = csome_list_var_229.rest() , mt = csome_list_var_229.first()) {
-                                                                                                                                ghl_search_vars.ghl_add_to_result(v_search, mt, HLMT_EQUAL);
-                                                                                                                                if (NIL != mt_vars.core_microtheory_p(mt)) {
-                                                                                                                                    graphl_graph_utilities.$graphl_finishedP$.setDynamicValue(T, thread);
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            } else {
-                                                                                                                if (NIL != com.cyc.cycjava.cycl.ghl_search_methods.gt_max_floor_mts_of_predicate_paths_support_still_relevantP(v_search, support)) {
-                                                                                                                    deck.deck_push(list(link_node, cons(support, supports)), v_deck);
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                                done_var_226 = makeBoolean((NIL == valid_228) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                                            }
-                                                                                        } 
-                                                                                    }
-                                                                                } finally {
-                                                                                    {
-                                                                                        SubLObject _prev_bind_0_230 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                        try {
-                                                                                            $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                            if (NIL != final_index_iterator) {
-                                                                                                kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                                            }
-                                                                                        } finally {
-                                                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_230, thread);
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                        done_var = makeBoolean((NIL == valid) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                    }
-                                                                } 
-                                                            }
-                                                        }
-                                                    }
-                                                } finally {
-                                                    pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_1, thread);
-                                                    ghl_link_iterators.$gt_relevant_pred$.rebind(_prev_bind_0_225, thread);
-                                                }
-                                            }
-                                            if (NIL != gt_vars.gt_use_sksiP()) {
-                                                {
-                                                    SubLObject _prev_bind_0_231 = ghl_search_vars.$sksi_gt_search_pred$.currentBinding(thread);
-                                                    try {
-                                                        ghl_search_vars.$sksi_gt_search_pred$.bind(pred, thread);
-                                                        {
-                                                            SubLObject rest = NIL;
-                                                            for (rest = sksi_sks_mapping_utilities.gather_sksi_gaf_arg_index_relevant_pred(node, index_argnum, truth); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest)); rest = rest.rest()) {
-                                                                {
-                                                                    SubLObject gather_sentence_mt_pair = rest.first();
-                                                                    SubLObject datum = gather_sentence_mt_pair;
-                                                                    SubLObject current = datum;
-                                                                    SubLObject assertion = NIL;
-                                                                    SubLObject var_mt = NIL;
-                                                                    destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                    assertion = current.first();
-                                                                    current = current.rest();
-                                                                    destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                    var_mt = current.first();
-                                                                    current = current.rest();
-                                                                    if (NIL == current) {
-                                                                        if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                            {
-                                                                                SubLObject link_node = cycl_utilities.formula_arg(assertion, gather_argnum, UNPROVIDED);
-                                                                                SubLObject support = assertion;
-                                                                                if (NIL != ghl_search_utilities.ghl_goal_nodeP(v_search, link_node, UNPROVIDED)) {
-                                                                                    {
-                                                                                        SubLObject justification = com.cyc.cycjava.cycl.ghl_search_methods.ghl_create_justification(v_search, cons(support, supports));
-                                                                                        if (NIL == graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) {
-                                                                                            {
-                                                                                                SubLObject csome_list_var_232 = hl_supports.max_floor_mts_of_justification(justification);
-                                                                                                SubLObject mt = NIL;
-                                                                                                for (mt = csome_list_var_232.first(); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == csome_list_var_232)); csome_list_var_232 = csome_list_var_232.rest() , mt = csome_list_var_232.first()) {
-                                                                                                    ghl_search_vars.ghl_add_to_result(v_search, mt, HLMT_EQUAL);
-                                                                                                    if (NIL != mt_vars.core_microtheory_p(mt)) {
-                                                                                                        graphl_graph_utilities.$graphl_finishedP$.setDynamicValue(T, thread);
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                } else {
-                                                                                    if (NIL != com.cyc.cycjava.cycl.ghl_search_methods.gt_max_floor_mts_of_predicate_paths_support_still_relevantP(v_search, support)) {
-                                                                                        deck.deck_push(list(link_node, cons(support, supports)), v_deck);
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    } else {
-                                                                        cdestructuring_bind_error(datum, $list_alt9);
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    } finally {
-                                                        ghl_search_vars.$sksi_gt_search_pred$.rebind(_prev_bind_0_231, thread);
-                                                    }
-                                                }
-                                            }
-                                            if (NIL != ghl_search_vars.ghl_uses_spec_preds_p()) {
-                                                {
-                                                    SubLObject _prev_bind_0_233 = ghl_search_vars.$gt_args_swapped_p$.currentBinding(thread);
-                                                    try {
-                                                        ghl_search_vars.$gt_args_swapped_p$.bind(T, thread);
-                                                        {
-                                                            SubLObject _prev_bind_0_234 = ghl_link_iterators.$gt_relevant_pred$.currentBinding(thread);
-                                                            SubLObject _prev_bind_1 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
-                                                            try {
-                                                                ghl_link_iterators.$gt_relevant_pred$.bind(pred, thread);
-                                                                pred_relevance_macros.$relevant_pred_function$.bind($sym7$RELEVANT_PRED_WRT_GT_, thread);
-                                                                {
-                                                                    SubLObject pred_var = NIL;
-                                                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(node, gather_argnum, pred_var)) {
-                                                                        {
-                                                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(node, gather_argnum, pred_var);
-                                                                            SubLObject done_var = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                            SubLObject token_var = NIL;
-                                                                            while (NIL == done_var) {
-                                                                                {
-                                                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                                                    if (NIL != valid) {
-                                                                                        {
-                                                                                            SubLObject final_index_iterator = NIL;
-                                                                                            try {
-                                                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, truth, NIL);
-                                                                                                {
-                                                                                                    SubLObject done_var_235 = graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread);
-                                                                                                    SubLObject token_var_236 = NIL;
-                                                                                                    while (NIL == done_var_235) {
-                                                                                                        {
-                                                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_236);
-                                                                                                            SubLObject valid_237 = makeBoolean(token_var_236 != assertion);
-                                                                                                            if (NIL != valid_237) {
-                                                                                                                if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                                                    {
-                                                                                                                        SubLObject link_node = cycl_utilities.formula_arg(assertion, index_argnum, UNPROVIDED);
-                                                                                                                        SubLObject support = assertion;
-                                                                                                                        if (NIL != ghl_search_utilities.ghl_goal_nodeP(v_search, link_node, UNPROVIDED)) {
-                                                                                                                            {
-                                                                                                                                SubLObject justification = com.cyc.cycjava.cycl.ghl_search_methods.ghl_create_justification(v_search, cons(support, supports));
-                                                                                                                                if (NIL == graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) {
-                                                                                                                                    {
-                                                                                                                                        SubLObject csome_list_var_238 = hl_supports.max_floor_mts_of_justification(justification);
-                                                                                                                                        SubLObject mt = NIL;
-                                                                                                                                        for (mt = csome_list_var_238.first(); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == csome_list_var_238)); csome_list_var_238 = csome_list_var_238.rest() , mt = csome_list_var_238.first()) {
-                                                                                                                                            ghl_search_vars.ghl_add_to_result(v_search, mt, HLMT_EQUAL);
-                                                                                                                                            if (NIL != mt_vars.core_microtheory_p(mt)) {
-                                                                                                                                                graphl_graph_utilities.$graphl_finishedP$.setDynamicValue(T, thread);
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        } else {
-                                                                                                                            if (NIL != com.cyc.cycjava.cycl.ghl_search_methods.gt_max_floor_mts_of_predicate_paths_support_still_relevantP(v_search, support)) {
-                                                                                                                                deck.deck_push(list(link_node, cons(support, supports)), v_deck);
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                            done_var_235 = makeBoolean((NIL == valid_237) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                                                        }
-                                                                                                    } 
-                                                                                                }
-                                                                                            } finally {
-                                                                                                {
-                                                                                                    SubLObject _prev_bind_0_239 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                                    try {
-                                                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                                        if (NIL != final_index_iterator) {
-                                                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                                                        }
-                                                                                                    } finally {
-                                                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_239, thread);
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                    done_var = makeBoolean((NIL == valid) || (NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)));
-                                                                                }
-                                                                            } 
-                                                                        }
-                                                                    }
-                                                                }
-                                                            } finally {
-                                                                pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_1, thread);
-                                                                ghl_link_iterators.$gt_relevant_pred$.rebind(_prev_bind_0_234, thread);
-                                                            }
-                                                        }
-                                                        if (NIL != gt_vars.gt_use_sksiP()) {
-                                                            {
-                                                                SubLObject _prev_bind_0_240 = ghl_search_vars.$sksi_gt_search_pred$.currentBinding(thread);
-                                                                try {
-                                                                    ghl_search_vars.$sksi_gt_search_pred$.bind(pred, thread);
-                                                                    {
-                                                                        SubLObject rest = NIL;
-                                                                        for (rest = sksi_sks_mapping_utilities.gather_sksi_gaf_arg_index_relevant_pred(node, gather_argnum, truth); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == rest)); rest = rest.rest()) {
-                                                                            {
-                                                                                SubLObject gather_sentence_mt_pair = rest.first();
-                                                                                SubLObject datum = gather_sentence_mt_pair;
-                                                                                SubLObject current = datum;
-                                                                                SubLObject assertion = NIL;
-                                                                                SubLObject var_mt = NIL;
-                                                                                destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                assertion = current.first();
-                                                                                current = current.rest();
-                                                                                destructuring_bind_must_consp(current, datum, $list_alt9);
-                                                                                var_mt = current.first();
-                                                                                current = current.rest();
-                                                                                if (NIL == current) {
-                                                                                    if ((NIL == assertion_handles.assertion_p(assertion)) || (NIL != enumeration_types.el_strength_implies(assertions_high.assertion_strength(assertion), strength))) {
-                                                                                        {
-                                                                                            SubLObject link_node = cycl_utilities.formula_arg(assertion, index_argnum, UNPROVIDED);
-                                                                                            SubLObject support = assertion;
-                                                                                            if (NIL != ghl_search_utilities.ghl_goal_nodeP(v_search, link_node, UNPROVIDED)) {
-                                                                                                {
-                                                                                                    SubLObject justification = com.cyc.cycjava.cycl.ghl_search_methods.ghl_create_justification(v_search, cons(support, supports));
-                                                                                                    if (NIL == graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) {
-                                                                                                        {
-                                                                                                            SubLObject csome_list_var_241 = hl_supports.max_floor_mts_of_justification(justification);
-                                                                                                            SubLObject mt = NIL;
-                                                                                                            for (mt = csome_list_var_241.first(); !((NIL != graphl_graph_utilities.$graphl_finishedP$.getDynamicValue(thread)) || (NIL == csome_list_var_241)); csome_list_var_241 = csome_list_var_241.rest() , mt = csome_list_var_241.first()) {
-                                                                                                                ghl_search_vars.ghl_add_to_result(v_search, mt, HLMT_EQUAL);
-                                                                                                                if (NIL != mt_vars.core_microtheory_p(mt)) {
-                                                                                                                    graphl_graph_utilities.$graphl_finishedP$.setDynamicValue(T, thread);
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            } else {
-                                                                                                if (NIL != com.cyc.cycjava.cycl.ghl_search_methods.gt_max_floor_mts_of_predicate_paths_support_still_relevantP(v_search, support)) {
-                                                                                                    deck.deck_push(list(link_node, cons(support, supports)), v_deck);
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                } else {
-                                                                                    cdestructuring_bind_error(datum, $list_alt9);
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                } finally {
-                                                                    ghl_search_vars.$sksi_gt_search_pred$.rebind(_prev_bind_0_240, thread);
-                                                                }
-                                                            }
-                                                        }
-                                                    } finally {
-                                                        ghl_search_vars.$gt_args_swapped_p$.rebind(_prev_bind_0_233, thread);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        } finally {
-                            ghl_search_vars.$gt_args_swapped_p$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-            }
-            return v_deck;
-        }
     }
 
     public static SubLObject gt_max_floor_mts_of_predicate_paths_add_accessible_link_nodes_to_deck(final SubLObject v_search, final SubLObject node, final SubLObject supports, final SubLObject v_deck) {
@@ -10958,24 +5453,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         return v_deck;
     }
 
-    public static final SubLObject gt_max_floor_mts_of_predicate_paths_supports_still_relevantP_alt(SubLObject v_search, SubLObject supports) {
-        {
-            SubLObject irrelevant_supportP = NIL;
-            if (NIL == irrelevant_supportP) {
-                {
-                    SubLObject csome_list_var = supports;
-                    SubLObject support = NIL;
-                    for (support = csome_list_var.first(); !((NIL != irrelevant_supportP) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , support = csome_list_var.first()) {
-                        if (NIL == com.cyc.cycjava.cycl.ghl_search_methods.gt_max_floor_mts_of_predicate_paths_support_still_relevantP(v_search, support)) {
-                            irrelevant_supportP = T;
-                        }
-                    }
-                }
-            }
-            return makeBoolean(NIL == irrelevant_supportP);
-        }
-    }
-
     public static SubLObject gt_max_floor_mts_of_predicate_paths_supports_still_relevantP(final SubLObject v_search, final SubLObject supports) {
         SubLObject irrelevant_supportP = NIL;
         if (NIL == irrelevant_supportP) {
@@ -10991,18 +5468,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
             } 
         }
         return makeBoolean(NIL == irrelevant_supportP);
-    }
-
-    public static final SubLObject gt_max_floor_mts_of_predicate_paths_support_still_relevantP_alt(SubLObject v_search, SubLObject support) {
-        if (NIL != assertion_handles.assertion_p(support)) {
-            {
-                SubLObject assertion_mt = assertions_high.assertion_mt(support);
-                SubLObject mts_so_far = ghl_search_vars.ghl_result(v_search);
-                return makeBoolean((NIL == list_utilities.member_equalP(assertion_mt, mts_so_far)) && (NIL == memberP(assertion_mt, mts_so_far, $sym56$GENL_MT_, UNPROVIDED)));
-            }
-        } else {
-            return T;
-        }
     }
 
     public static SubLObject gt_max_floor_mts_of_predicate_paths_support_still_relevantP(final SubLObject v_search, final SubLObject support) {
@@ -12697,95 +7162,77 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
     }
 
     public static SubLObject declare_ghl_search_methods_file() {
-        declareFunction("ghl_search", "GHL-SEARCH", 2, 0, false);
-        declareFunction("transitive_ghl_search", "TRANSITIVE-GHL-SEARCH", 2, 0, false);
-        declareFunction("ghl_mark_and_sweep", "GHL-MARK-AND-SWEEP", 2, 0, false);
-        declareFunction("ghl_unmark_and_sweep", "GHL-UNMARK-AND-SWEEP", 2, 0, false);
-        declareFunction("ghl_mark_sweep_until_goal", "GHL-MARK-SWEEP-UNTIL-GOAL", 2, 0, false);
-        declareFunction("ghl_unmark_sweep_and_map", "GHL-UNMARK-SWEEP-AND-MAP", 2, 0, false);
-        declareFunction("ghl_mark_and_sweep_df", "GHL-MARK-AND-SWEEP-DF", 2, 0, false);
-        declareFunction("ghl_unmark_and_sweep_df", "GHL-UNMARK-AND-SWEEP-DF", 2, 0, false);
-        declareFunction("ghl_mark_and_sweep_bf", "GHL-MARK-AND-SWEEP-BF", 2, 0, false);
-        declareFunction("ghl_unmark_and_sweep_bf", "GHL-UNMARK-AND-SWEEP-BF", 2, 0, false);
-        declareFunction("ghl_mark_and_sweep_df_purely_recursive", "GHL-MARK-AND-SWEEP-DF-PURELY-RECURSIVE", 3, 0, false);
-        declareFunction("ghl_mark_and_sweep_df_hybrid", "GHL-MARK-AND-SWEEP-DF-HYBRID", 4, 0, false);
-        declareFunction("ghl_mark_and_sweep_recursive_df", "GHL-MARK-AND-SWEEP-RECURSIVE-DF", 4, 0, false);
-        declareFunction("ghl_mark_and_sweep_iterative_df", "GHL-MARK-AND-SWEEP-ITERATIVE-DF", 3, 0, false);
-        declareFunction("ghl_mark_and_sweep_iterative_bf", "GHL-MARK-AND-SWEEP-ITERATIVE-BF", 3, 0, false);
-        declareFunction("ghl_mark_and_sweep_iterative", "GHL-MARK-AND-SWEEP-ITERATIVE", 4, 0, false);
-        declareFunction("ghl_add_accessible_link_nodes_to_deck", "GHL-ADD-ACCESSIBLE-LINK-NODES-TO-DECK", 3, 0, false);
-        declareFunction("ghl_add_accessible_link_nodes_and_supports_to_deck", "GHL-ADD-ACCESSIBLE-LINK-NODES-AND-SUPPORTS-TO-DECK", 4, 0, false);
-        declareFunction("ghl_remove_unneeded_supports", "GHL-REMOVE-UNNEEDED-SUPPORTS", 1, 0, false);
-        declareFunction("ghl_add_support_to_result", "GHL-ADD-SUPPORT-TO-RESULT", 2, 0, false);
-        declareFunction("ghl_add_justification_to_result", "GHL-ADD-JUSTIFICATION-TO-RESULT", 2, 0, false);
-        declareFunction("ghl_create_justification", "GHL-CREATE-JUSTIFICATION", 2, 0, false);
-        declareFunction("ghl_mark_and_sweep_depth_cutoff_initializer", "GHL-MARK-AND-SWEEP-DEPTH-CUTOFF-INITIALIZER", 3, 0, false);
-        declareFunction("ghl_mark_and_sweep_depth_cutoff", "GHL-MARK-AND-SWEEP-DEPTH-CUTOFF", 3, 0, false);
-        declareFunction("ghl_all_edges_iterative_deepening_initializer", "GHL-ALL-EDGES-ITERATIVE-DEEPENING-INITIALIZER", 3, 0, false);
-        declareFunction("ghl_mark_and_sweep_depth_cutoff_all_edges_unwound", "GHL-MARK-AND-SWEEP-DEPTH-CUTOFF-ALL-EDGES-UNWOUND", 3, 0, false);
-        declareMacro("do_ghl_closure", "DO-GHL-CLOSURE");
-        declareFunction("new_ghl_closure_iterator", "NEW-GHL-CLOSURE-ITERATOR", 3, 4, false);
-        declareMacro("do_ghl_closures", "DO-GHL-CLOSURES");
-        declareFunction("new_ghl_closures_iterator", "NEW-GHL-CLOSURES-ITERATOR", 3, 4, false);
-        declareFunction("new_removal_ghl_closure_iterator", "NEW-REMOVAL-GHL-CLOSURE-ITERATOR", 3, 1, false);
-        declareFunction("new_ghl_closure_search_iterator", "NEW-GHL-CLOSURE-SEARCH-ITERATOR", 5, 0, false);
-        declareFunction("ghl_closure_search_iterator_state", "GHL-CLOSURE-SEARCH-ITERATOR-STATE", 5, 0, false);
-        declareFunction("ghl_closure_search_iterator_done", "GHL-CLOSURE-SEARCH-ITERATOR-DONE", 1, 0, false);
+        declareFunction(me, "ghl_search", "GHL-SEARCH", 2, 0, false);
+        declareFunction(me, "transitive_ghl_search", "TRANSITIVE-GHL-SEARCH", 2, 0, false);
+        declareFunction(me, "ghl_mark_and_sweep", "GHL-MARK-AND-SWEEP", 2, 0, false);
+        declareFunction(me, "ghl_unmark_and_sweep", "GHL-UNMARK-AND-SWEEP", 2, 0, false);
+        declareFunction(me, "ghl_mark_sweep_until_goal", "GHL-MARK-SWEEP-UNTIL-GOAL", 2, 0, false);
+        declareFunction(me, "ghl_unmark_sweep_and_map", "GHL-UNMARK-SWEEP-AND-MAP", 2, 0, false);
+        declareFunction(me, "ghl_mark_and_sweep_df", "GHL-MARK-AND-SWEEP-DF", 2, 0, false);
+        declareFunction(me, "ghl_unmark_and_sweep_df", "GHL-UNMARK-AND-SWEEP-DF", 2, 0, false);
+        declareFunction(me, "ghl_mark_and_sweep_bf", "GHL-MARK-AND-SWEEP-BF", 2, 0, false);
+        declareFunction(me, "ghl_unmark_and_sweep_bf", "GHL-UNMARK-AND-SWEEP-BF", 2, 0, false);
+        declareFunction(me, "ghl_mark_and_sweep_df_purely_recursive", "GHL-MARK-AND-SWEEP-DF-PURELY-RECURSIVE", 3, 0, false);
+        declareFunction(me, "ghl_mark_and_sweep_df_hybrid", "GHL-MARK-AND-SWEEP-DF-HYBRID", 4, 0, false);
+        declareFunction(me, "ghl_mark_and_sweep_recursive_df", "GHL-MARK-AND-SWEEP-RECURSIVE-DF", 4, 0, false);
+        declareFunction(me, "ghl_mark_and_sweep_iterative_df", "GHL-MARK-AND-SWEEP-ITERATIVE-DF", 3, 0, false);
+        declareFunction(me, "ghl_mark_and_sweep_iterative_bf", "GHL-MARK-AND-SWEEP-ITERATIVE-BF", 3, 0, false);
+        declareFunction(me, "ghl_mark_and_sweep_iterative", "GHL-MARK-AND-SWEEP-ITERATIVE", 4, 0, false);
+        declareFunction(me, "ghl_add_accessible_link_nodes_to_deck", "GHL-ADD-ACCESSIBLE-LINK-NODES-TO-DECK", 3, 0, false);
+        declareFunction(me, "ghl_add_accessible_link_nodes_and_supports_to_deck", "GHL-ADD-ACCESSIBLE-LINK-NODES-AND-SUPPORTS-TO-DECK", 4, 0, false);
+        declareFunction(me, "ghl_remove_unneeded_supports", "GHL-REMOVE-UNNEEDED-SUPPORTS", 1, 0, false);
+        declareFunction(me, "ghl_add_support_to_result", "GHL-ADD-SUPPORT-TO-RESULT", 2, 0, false);
+        declareFunction(me, "ghl_add_justification_to_result", "GHL-ADD-JUSTIFICATION-TO-RESULT", 2, 0, false);
+        declareFunction(me, "ghl_create_justification", "GHL-CREATE-JUSTIFICATION", 2, 0, false);
+        declareFunction(me, "ghl_mark_and_sweep_depth_cutoff_initializer", "GHL-MARK-AND-SWEEP-DEPTH-CUTOFF-INITIALIZER", 3, 0, false);
+        declareFunction(me, "ghl_mark_and_sweep_depth_cutoff", "GHL-MARK-AND-SWEEP-DEPTH-CUTOFF", 3, 0, false);
+        declareFunction(me, "ghl_all_edges_iterative_deepening_initializer", "GHL-ALL-EDGES-ITERATIVE-DEEPENING-INITIALIZER", 3, 0, false);
+        declareFunction(me, "ghl_mark_and_sweep_depth_cutoff_all_edges_unwound", "GHL-MARK-AND-SWEEP-DEPTH-CUTOFF-ALL-EDGES-UNWOUND", 3, 0, false);
+        declareMacro(me, "do_ghl_closure", "DO-GHL-CLOSURE");
+        declareFunction(me, "new_ghl_closure_iterator", "NEW-GHL-CLOSURE-ITERATOR", 3, 4, false);
+        declareMacro(me, "do_ghl_closures", "DO-GHL-CLOSURES");
+        declareFunction(me, "new_ghl_closures_iterator", "NEW-GHL-CLOSURES-ITERATOR", 3, 4, false);
+        declareFunction(me, "new_removal_ghl_closure_iterator", "NEW-REMOVAL-GHL-CLOSURE-ITERATOR", 3, 1, false);
+        declareFunction(me, "new_ghl_closure_search_iterator", "NEW-GHL-CLOSURE-SEARCH-ITERATOR", 5, 0, false);
+        declareFunction(me, "ghl_closure_search_iterator_state", "GHL-CLOSURE-SEARCH-ITERATOR-STATE", 5, 0, false);
+        declareFunction(me, "ghl_closure_search_iterator_done", "GHL-CLOSURE-SEARCH-ITERATOR-DONE", 1, 0, false);
         new ghl_search_methods.$ghl_closure_search_iterator_done$UnaryFunction();
-        declareFunction("ghl_closure_search_iterator_next", "GHL-CLOSURE-SEARCH-ITERATOR-NEXT", 1, 0, false);
+        declareFunction(me, "ghl_closure_search_iterator_next", "GHL-CLOSURE-SEARCH-ITERATOR-NEXT", 1, 0, false);
         new ghl_search_methods.$ghl_closure_search_iterator_next$UnaryFunction();
-        declareFunction("ghl_closure_search_iterator_finalize", "GHL-CLOSURE-SEARCH-ITERATOR-FINALIZE", 1, 0, false);
+        declareFunction(me, "ghl_closure_search_iterator_finalize", "GHL-CLOSURE-SEARCH-ITERATOR-FINALIZE", 1, 0, false);
         new ghl_search_methods.$ghl_closure_search_iterator_finalize$UnaryFunction();
-        declareFunction("ghl_closure", "GHL-CLOSURE", 2, 3, false);
-        declareFunction("ghl_all_backward_true_nodes", "GHL-ALL-BACKWARD-TRUE-NODES", 2, 2, false);
-        declareFunction("ghl_all_forward_true_nodes", "GHL-ALL-FORWARD-TRUE-NODES", 2, 2, false);
-        declareFunction("ghl_record_closure", "GHL-RECORD-CLOSURE", 3, 2, false);
-        declareFunction("ghl_record_all_backward_true_nodes", "GHL-RECORD-ALL-BACKWARD-TRUE-NODES", 2, 2, false);
-        declareFunction("ghl_record_all_forward_true_nodes", "GHL-RECORD-ALL-FORWARD-TRUE-NODES", 2, 2, false);
-        declareFunction("ghl_closures", "GHL-CLOSURES", 3, 2, false);
-        declareFunction("ghl_predicate_relation_p", "GHL-PREDICATE-RELATION-P", 3, 3, false);
-        declareFunction("gt_predicate_relation_p", "GT-PREDICATE-RELATION-P", 3, 3, false);
-        declareFunction("possibly_reverse_nodes_and_directions", "POSSIBLY-REVERSE-NODES-AND-DIRECTIONS", 4, 0, false);
-        declareFunction("gt_predicates_relation_p", "GT-PREDICATES-RELATION-P", 4, 3, false);
-        declareFunction("gt_predicate_relation_p_add_accessible_link_nodes_to_deck", "GT-PREDICATE-RELATION-P-ADD-ACCESSIBLE-LINK-NODES-TO-DECK", 4, 0, false);
-        declareFunction("ghl_predicate_relation_within_multiple_searches_p", "GHL-PREDICATE-RELATION-WITHIN-MULTIPLE-SEARCHES-P", 5, 2, false);
-        declareFunction("ghl_path_from_node_to_node_within_previous_searches", "GHL-PATH-FROM-NODE-TO-NODE-WITHIN-PREVIOUS-SEARCHES", 6, 0, false);
-        declareFunction("ghl_unmark_closure_in_space_and_map", "GHL-UNMARK-CLOSURE-IN-SPACE-AND-MAP", 5, 0, false);
-        declareFunction("why_ghl_predicate_relation_p", "WHY-GHL-PREDICATE-RELATION-P", 3, 2, false);
-        declareFunction("why_gt_predicate_relation_p", "WHY-GT-PREDICATE-RELATION-P", 3, 2, false);
-        declareFunction("why_gt_predicates_relation_p", "WHY-GT-PREDICATES-RELATION-P", 4, 2, false);
-        declareFunction("gt_why_predicate_relation_p_add_accessible_link_nodes_to_deck", "GT-WHY-PREDICATE-RELATION-P-ADD-ACCESSIBLE-LINK-NODES-TO-DECK", 5, 0, false);
-        declareFunction("ghl_max_floor_mts_of_predicate_paths", "GHL-MAX-FLOOR-MTS-OF-PREDICATE-PATHS", 3, 1, false);
-        declareFunction("gt_max_floor_mts_of_predicate_paths", "GT-MAX-FLOOR-MTS-OF-PREDICATE-PATHS", 3, 1, false);
-        declareFunction("gt_max_floor_mts_of_predicate_paths_add_accessible_link_nodes_to_deck", "GT-MAX-FLOOR-MTS-OF-PREDICATE-PATHS-ADD-ACCESSIBLE-LINK-NODES-TO-DECK", 4, 0, false);
-        declareFunction("gt_max_floor_mts_of_predicate_paths_supports_still_relevantP", "GT-MAX-FLOOR-MTS-OF-PREDICATE-PATHS-SUPPORTS-STILL-RELEVANT?", 2, 0, false);
-        declareFunction("gt_max_floor_mts_of_predicate_paths_support_still_relevantP", "GT-MAX-FLOOR-MTS-OF-PREDICATE-PATHS-SUPPORT-STILL-RELEVANT?", 2, 0, false);
-        declareFunction("ghl_min_superiors", "GHL-MIN-SUPERIORS", 2, 3, false);
-        declareFunction("ghl_max_inferiors", "GHL-MAX-INFERIORS", 2, 3, false);
-        declareFunction("ghl_direct_inferiors", "GHL-DIRECT-INFERIORS", 2, 3, false);
-        declareFunction("ghl_direct_superiors", "GHL-DIRECT-SUPERIORS", 2, 3, false);
-        declareFunction("ghl_max_terms_wrt", "GHL-MAX-TERMS-WRT", 2, 1, false);
-        declareFunction("ghl_min_terms_wrt", "GHL-MIN-TERMS-WRT", 2, 1, false);
+        declareFunction(me, "ghl_closure", "GHL-CLOSURE", 2, 3, false);
+        declareFunction(me, "ghl_all_backward_true_nodes", "GHL-ALL-BACKWARD-TRUE-NODES", 2, 2, false);
+        declareFunction(me, "ghl_all_forward_true_nodes", "GHL-ALL-FORWARD-TRUE-NODES", 2, 2, false);
+        declareFunction(me, "ghl_record_closure", "GHL-RECORD-CLOSURE", 3, 2, false);
+        declareFunction(me, "ghl_record_all_backward_true_nodes", "GHL-RECORD-ALL-BACKWARD-TRUE-NODES", 2, 2, false);
+        declareFunction(me, "ghl_record_all_forward_true_nodes", "GHL-RECORD-ALL-FORWARD-TRUE-NODES", 2, 2, false);
+        declareFunction(me, "ghl_closures", "GHL-CLOSURES", 3, 2, false);
+        declareFunction(me, "ghl_predicate_relation_p", "GHL-PREDICATE-RELATION-P", 3, 3, false);
+        declareFunction(me, "gt_predicate_relation_p", "GT-PREDICATE-RELATION-P", 3, 3, false);
+        declareFunction(me, "possibly_reverse_nodes_and_directions", "POSSIBLY-REVERSE-NODES-AND-DIRECTIONS", 4, 0, false);
+        declareFunction(me, "gt_predicates_relation_p", "GT-PREDICATES-RELATION-P", 4, 3, false);
+        declareFunction(me, "gt_predicate_relation_p_add_accessible_link_nodes_to_deck", "GT-PREDICATE-RELATION-P-ADD-ACCESSIBLE-LINK-NODES-TO-DECK", 4, 0, false);
+        declareFunction(me, "ghl_predicate_relation_within_multiple_searches_p", "GHL-PREDICATE-RELATION-WITHIN-MULTIPLE-SEARCHES-P", 5, 2, false);
+        declareFunction(me, "ghl_path_from_node_to_node_within_previous_searches", "GHL-PATH-FROM-NODE-TO-NODE-WITHIN-PREVIOUS-SEARCHES", 6, 0, false);
+        declareFunction(me, "ghl_unmark_closure_in_space_and_map", "GHL-UNMARK-CLOSURE-IN-SPACE-AND-MAP", 5, 0, false);
+        declareFunction(me, "why_ghl_predicate_relation_p", "WHY-GHL-PREDICATE-RELATION-P", 3, 2, false);
+        declareFunction(me, "why_gt_predicate_relation_p", "WHY-GT-PREDICATE-RELATION-P", 3, 2, false);
+        declareFunction(me, "why_gt_predicates_relation_p", "WHY-GT-PREDICATES-RELATION-P", 4, 2, false);
+        declareFunction(me, "gt_why_predicate_relation_p_add_accessible_link_nodes_to_deck", "GT-WHY-PREDICATE-RELATION-P-ADD-ACCESSIBLE-LINK-NODES-TO-DECK", 5, 0, false);
+        declareFunction(me, "ghl_max_floor_mts_of_predicate_paths", "GHL-MAX-FLOOR-MTS-OF-PREDICATE-PATHS", 3, 1, false);
+        declareFunction(me, "gt_max_floor_mts_of_predicate_paths", "GT-MAX-FLOOR-MTS-OF-PREDICATE-PATHS", 3, 1, false);
+        declareFunction(me, "gt_max_floor_mts_of_predicate_paths_add_accessible_link_nodes_to_deck", "GT-MAX-FLOOR-MTS-OF-PREDICATE-PATHS-ADD-ACCESSIBLE-LINK-NODES-TO-DECK", 4, 0, false);
+        declareFunction(me, "gt_max_floor_mts_of_predicate_paths_supports_still_relevantP", "GT-MAX-FLOOR-MTS-OF-PREDICATE-PATHS-SUPPORTS-STILL-RELEVANT?", 2, 0, false);
+        declareFunction(me, "gt_max_floor_mts_of_predicate_paths_support_still_relevantP", "GT-MAX-FLOOR-MTS-OF-PREDICATE-PATHS-SUPPORT-STILL-RELEVANT?", 2, 0, false);
+        declareFunction(me, "ghl_min_superiors", "GHL-MIN-SUPERIORS", 2, 3, false);
+        declareFunction(me, "ghl_max_inferiors", "GHL-MAX-INFERIORS", 2, 3, false);
+        declareFunction(me, "ghl_direct_inferiors", "GHL-DIRECT-INFERIORS", 2, 3, false);
+        declareFunction(me, "ghl_direct_superiors", "GHL-DIRECT-SUPERIORS", 2, 3, false);
+        declareFunction(me, "ghl_max_terms_wrt", "GHL-MAX-TERMS-WRT", 2, 1, false);
+        declareFunction(me, "ghl_min_terms_wrt", "GHL-MIN-TERMS-WRT", 2, 1, false);
         return NIL;
     }
-
-    // Internal Constants
-    @LispMethod(comment = "Internal Constants")
-    static private final SubLString $str_alt0$Unsupported_search_behavior______ = makeString("Unsupported search behavior. ~%~% ~A ~%");
-
-    static private final SubLString $str_alt1$Unsupported_search_conditions_ = makeString("Unsupported search conditions.");
-
-    static private final SubLString $str_alt5$attempting_to_bind_direction_link = makeString("attempting to bind direction link variable, to NIL. macro body not executed.");
-
-    static private final SubLSymbol $sym7$RELEVANT_PRED_WRT_GT_ = makeSymbol("RELEVANT-PRED-WRT-GT?");
-
-    static private final SubLList $list_alt9 = list(makeUninternedSymbol("ASSERTION"), makeUninternedSymbol("VAR-MT"));
-
-    static private final SubLString $str_alt15$Invalid_attempt_to_reuse_memoizat = makeString("Invalid attempt to reuse memoization state in multiple threads simultaneously.");
-
-    static private final SubLList $list_alt16 = list(list(new SubLObject[]{ makeSymbol("LINK-NODE"), makeSymbol("PRED"), makeSymbol("NODE"), makeSymbol("DIRECTION"), makeSymbol("&KEY"), makeSymbol("MT"), makeSymbol("TV"), makeSymbol("DONE"), list(makeSymbol("ORDER"), makeKeyword("DEPTH-FIRST")) }), makeSymbol("&BODY"), makeSymbol("BODY"));
-
-    static private final SubLList $list_alt17 = list(makeKeyword("MT"), makeKeyword("TV"), $DONE, makeKeyword("ORDER"));
 
     public static SubLObject init_ghl_search_methods_file() {
         defparameter("*GHL-MARK-AND-SWEEP-RECURSION-LIMIT*", $int$24);
@@ -12811,9 +7258,71 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         setup_ghl_search_methods_file();
     }
 
-    static private final SubLList $list_alt40 = list(makeSymbol("SEARCH"), makeSymbol("SEARCH-DECK"), makeSymbol("MT"));
-
     static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     public static final class $ghl_closure_search_iterator_done$UnaryFunction extends UnaryFunction {
@@ -12827,14 +7336,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
         }
     }
 
-    static private final SubLList $list_alt46 = list(makeKeyword("MAP-FN"), makeSymbol("GHL-GOAL-MARK-NODE-AS-SEARCHED"));
-
-    static private final SubLSymbol $sym48$GHL_GOAL_OR_MARKED_AS_GOAL_ = makeSymbol("GHL-GOAL-OR-MARKED-AS-GOAL?");
-
-    static private final SubLList $list_alt51 = list(makeKeyword("JUSTIFY?"), T);
-
-    static private final SubLList $list_alt52 = list(makeSymbol("NODE"), makeSymbol("SUPPORTS"));
-
     public static final class $ghl_closure_search_iterator_next$UnaryFunction extends UnaryFunction {
         public $ghl_closure_search_iterator_next$UnaryFunction() {
             super(extractFunctionNamed("GHL-CLOSURE-SEARCH-ITERATOR-NEXT"));
@@ -12845,8 +7346,6 @@ public final class ghl_search_methods extends SubLTranslatedFile implements V12 
             return ghl_closure_search_iterator_next(arg1);
         }
     }
-
-    static private final SubLSymbol $sym56$GENL_MT_ = makeSymbol("GENL-MT?");
 
     public static final class $ghl_closure_search_iterator_finalize$UnaryFunction extends UnaryFunction {
         public $ghl_closure_search_iterator_finalize$UnaryFunction() {

@@ -560,7 +560,7 @@ public final class uia_serialize extends SubLTranslatedFile implements V02 {
             SubLObject name = cfasl_input(stream, UNPROVIDED, UNPROVIDED);
             SubLObject constant = constants_high.find_constant_by_guid(guid);
             if (NIL == constant) {
-                name = constant_completion_high.uniquify_constant_name(name);
+                name = constant_completion_high.uniquify_constant_name(name, UNPROVIDED_SYM);
                 constant = fi.fi_create_int(name, guid);
             }
             return constant;

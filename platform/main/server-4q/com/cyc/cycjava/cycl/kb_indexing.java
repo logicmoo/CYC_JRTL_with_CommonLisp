@@ -1,171 +1,11 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.access_macros.define_obsolete_register;
-import static com.cyc.cycjava.cycl.assertion_handles.assertion_p;
-import static com.cyc.cycjava.cycl.assertion_handles.do_assertions_table;
-import static com.cyc.cycjava.cycl.assertion_handles.valid_assertion_handleP;
-import static com.cyc.cycjava.cycl.constant_handles.constant_count;
-import static com.cyc.cycjava.cycl.constant_handles.constant_p;
-import static com.cyc.cycjava.cycl.constant_handles.constant_suid;
-import static com.cyc.cycjava.cycl.constant_handles.valid_constantP;
-import static com.cyc.cycjava.cycl.control_vars.$candidate_assertion$;
-import static com.cyc.cycjava.cycl.control_vars.$cnf_matching_predicate$;
-import static com.cyc.cycjava.cycl.control_vars.$gaf_matching_predicate$;
-import static com.cyc.cycjava.cycl.control_vars.$mapping_answer$;
-import static com.cyc.cycjava.cycl.control_vars.$mapping_target$;
-import static com.cyc.cycjava.cycl.el_utilities.formula_with_sequence_termP;
-import static com.cyc.cycjava.cycl.el_utilities.ignore_sequence_vars;
-import static com.cyc.cycjava.cycl.el_utilities.ist_predicateP;
-import static com.cyc.cycjava.cycl.el_utilities.literal_predicate;
-import static com.cyc.cycjava.cycl.el_utilities.make_formula;
-import static com.cyc.cycjava.cycl.el_utilities.possibly_naut_p;
-import static com.cyc.cycjava.cycl.el_utilities.unmake_binary_formula;
-import static com.cyc.cycjava.cycl.fort_types_interface.broad_microtheory_p;
-import static com.cyc.cycjava.cycl.fort_types_interface.collectionP;
-import static com.cyc.cycjava.cycl.fort_types_interface.predicateP;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_empty_p;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_id_and_object_validP;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_next_id;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_next_state;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_state_object;
-import static com.cyc.cycjava.cycl.id_index.id_index_count;
-import static com.cyc.cycjava.cycl.id_index.id_index_dense_objects;
-import static com.cyc.cycjava.cycl.id_index.id_index_dense_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_next_id;
-import static com.cyc.cycjava.cycl.id_index.id_index_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_skip_tombstones_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_id_threshold;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_objects;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_tombstone_p;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.$current_complex_index_keys$;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.$current_complex_index_term$;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.assertion_indexing_store;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.clear_assertion_indexing;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.clear_term_index;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.complex_index_leaf_count;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.complex_index_p;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.do_final_index_valid_index_p;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.do_intermediate_index_valid_index_p;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.do_simple_index_term_assertion_list;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.final_index_set;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.final_sharded_index_p;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.final_sharded_index_shard_map;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.final_topn_index_p;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.final_unified_index_p;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.final_unified_index_set;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.fully_indexed_term_p;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.indexed_term_p;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.intermediate_index_delete;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.intermediate_index_delete_key;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.intermediate_index_dictionary;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.intermediate_index_insert;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.intermediate_index_keys;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.intermediate_index_leaf_count_reset;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.intermediate_index_leaves;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.intermediate_index_lookup;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.intermediate_index_map;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.intermediate_index_p;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.merge_complex_indices;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.new_final_topn_index_iterator;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.reset_term_index;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.simple_index_leaves;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.simple_index_p;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.simple_indexed_term_p;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.simple_num_index;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.subindex_leaf_count;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.subindex_lookup;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.term_complex_index_lookup;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.term_index;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.unindexed_syntax_constants;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.valid_indexed_termP;
-import static com.cyc.cycjava.cycl.set.do_set_internal;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.$catch_error_message_target$;
-import static com.cyc.cycjava.cycl.subl_promotions.memberP;
-import static com.cyc.cycjava.cycl.subl_promotions.positive_integer_p;
-import static com.cyc.cycjava.cycl.utilities_macros.$is_noting_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_index$;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_prediction$;
-import static com.cyc.cycjava.cycl.utilities_macros.$noting_progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$percent_progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_elapsed_seconds_for_notification$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_last_pacification_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_notification_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_pacifications_since_last_nl$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$silent_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$suppress_all_progress_faster_than_seconds$;
-import static com.cyc.cycjava.cycl.utilities_macros.$within_noting_percent_progress$;
-import static com.cyc.cycjava.cycl.utilities_macros.mapping_finished;
-import static com.cyc.cycjava.cycl.utilities_macros.note_funcall_helper_function;
-import static com.cyc.cycjava.cycl.utilities_macros.note_percent_progress;
-import static com.cyc.cycjava.cycl.utilities_macros.note_progress;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_percent_progress_postamble;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_percent_progress_preamble;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_progress_postamble;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_progress_preamble;
-import static com.cyc.cycjava.cycl.utilities_macros.register_cyc_api_function;
-import static com.cyc.cycjava.cycl.virtual_indexing.estimated_num_overlap_index_for_asent;
-import static com.cyc.cycjava.cycl.virtual_indexing.estimated_num_overlap_index_for_formula;
-import static com.cyc.cycjava.cycl.virtual_indexing.gather_overlap_index;
-import static com.cyc.cycjava.cycl.virtual_indexing.lookup_should_use_index_overlapP;
-import static com.cyc.cycjava.cycl.virtual_indexing.terms_for_overlap_index;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.append;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.apply;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.gethash_without_values;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.$most_positive_fixnum$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.integerDivide;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.min;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.multiply;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.numG;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.subtract;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.zerop;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.cconcatenate;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.delete;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.length;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.nreverse;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.get_universal_time;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.stringp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.arg2;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.multiple_value_list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.resetMultipleValues;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.values;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.aref;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.assoc;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.copy_list;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.getf;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.member;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.nset_difference;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.nunion;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.putf;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.second;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.union;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-
+import com.cyc.cycjava.cycl.control_vars;
+import com.cyc.cycjava.cycl.kb_indexing;
+import com.cyc.cycjava.cycl.kb_indexing_datastructures;
+import com.cyc.cycjava.cycl.subl_macro_promotions;
+import com.cyc.cycjava.cycl.utilities_macros;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
@@ -179,446 +19,79 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.id_index.*;
+import static com.cyc.cycjava.cycl.kb_indexing.*;
+import static com.cyc.cycjava.cycl.kb_indexing_datastructures.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.$most_positive_fixnum$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- * module:      KB-INDEXING
- * source file: /cyc/top/cycl/kb-indexing.lisp
- * created:     2019/07/03 17:37:23
- */
-public final class kb_indexing extends SubLTranslatedFile implements V12 {
-    /**
-     * Return T iff RULE is a rule assertion with some #$pragmaticRequirement anywhere
-     */
-    @LispMethod(comment = "Return T iff RULE is a rule assertion with some #$pragmaticRequirement anywhere")
-    public static final SubLObject rule_with_some_pragmatic_somewhereP(SubLObject rule) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                        result = com.cyc.cycjava.cycl.kb_indexing.rule_with_some_pragmaticP(rule, UNPROVIDED);
-                    } finally {
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return result;
-            }
-        }
-    }
 
-    /**
-     * Return T iff RULE is a rule assertion with some relevant #$pragmaticRequirement
-     */
-    @LispMethod(comment = "Return T iff RULE is a rule assertion with some relevant #$pragmaticRequirement")
-    public static final SubLObject rule_with_some_pragmaticP(SubLObject rule, SubLObject mt) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject pragmas_foundP = NIL;
-                if (NIL != assertions_high.rule_assertionP(rule)) {
-                    {
-                        SubLObject mt_var = mt;
-                        {
-                            SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
-                            SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                            SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
-                            try {
-                                mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
-                                mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
-                                mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
-                                if (NIL != kb_mapping_macros.do_pragma_rule_index_key_validator(rule, NIL)) {
-                                    {
-                                        SubLObject iterator_var = kb_mapping_macros.new_pragma_rule_final_index_spec_iterator(rule, NIL);
-                                        SubLObject done_var = pragmas_foundP;
-                                        SubLObject token_var = NIL;
-                                        while (NIL == done_var) {
-                                            {
-                                                SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                if (NIL != valid) {
-                                                    {
-                                                        SubLObject final_index_iterator = NIL;
-                                                        try {
-                                                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $RULE, NIL, NIL);
-                                                            {
-                                                                SubLObject done_var_1 = pragmas_foundP;
-                                                                SubLObject token_var_2 = NIL;
-                                                                while (NIL == done_var_1) {
-                                                                    {
-                                                                        SubLObject pragma = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_2);
-                                                                        SubLObject valid_3 = makeBoolean(token_var_2 != pragma);
-                                                                        if (NIL != valid_3) {
-                                                                            pragmas_foundP = T;
-                                                                        }
-                                                                        done_var_1 = makeBoolean((NIL == valid_3) || (NIL != pragmas_foundP));
-                                                                    }
-                                                                } 
-                                                            }
-                                                        } finally {
-                                                            {
-                                                                SubLObject _prev_bind_0_4 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                try {
-                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                    if (NIL != final_index_iterator) {
-                                                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                    }
-                                                                } finally {
-                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_4, thread);
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                done_var = makeBoolean((NIL == valid) || (NIL != pragmas_foundP));
-                                            }
-                                        } 
-                                    }
-                                }
-                            } finally {
-                                mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
-                                mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
-                                mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                }
-                return pragmas_foundP;
-            }
-        }
-    }
-
-    /**
-     * Return T iff RULE is a rule assertion with some relevant #$pragmaticRequirement
-     * involving #$assertedMoreSpecifically.
-     */
-    @LispMethod(comment = "Return T iff RULE is a rule assertion with some relevant #$pragmaticRequirement\r\ninvolving #$assertedMoreSpecifically.\nReturn T iff RULE is a rule assertion with some relevant #$pragmaticRequirement\ninvolving #$assertedMoreSpecifically.")
-    public static final SubLObject rule_with_some_asserted_more_specifically_pragmaticP(SubLObject rule, SubLObject mt) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject pragmas_foundP = NIL;
-                if (NIL != assertions_high.rule_assertionP(rule)) {
-                    {
-                        SubLObject mt_var = mt;
-                        {
-                            SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
-                            SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                            SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
-                            try {
-                                mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
-                                mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
-                                mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
-                                if (NIL != kb_mapping_macros.do_pragma_rule_index_key_validator(rule, NIL)) {
-                                    {
-                                        SubLObject iterator_var = kb_mapping_macros.new_pragma_rule_final_index_spec_iterator(rule, NIL);
-                                        SubLObject done_var = pragmas_foundP;
-                                        SubLObject token_var = NIL;
-                                        while (NIL == done_var) {
-                                            {
-                                                SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                if (NIL != valid) {
-                                                    {
-                                                        SubLObject final_index_iterator = NIL;
-                                                        try {
-                                                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $RULE, NIL, NIL);
-                                                            {
-                                                                SubLObject done_var_5 = pragmas_foundP;
-                                                                SubLObject token_var_6 = NIL;
-                                                                while (NIL == done_var_5) {
-                                                                    {
-                                                                        SubLObject pragma = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_6);
-                                                                        SubLObject valid_7 = makeBoolean(token_var_6 != pragma);
-                                                                        if (NIL != valid_7) {
-                                                                            pragmas_foundP = assertion_utilities.assertion_mentions_asserted_more_specificallyP(pragma);
-                                                                        }
-                                                                        done_var_5 = makeBoolean((NIL == valid_7) || (NIL != pragmas_foundP));
-                                                                    }
-                                                                } 
-                                                            }
-                                                        } finally {
-                                                            {
-                                                                SubLObject _prev_bind_0_8 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                try {
-                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                    if (NIL != final_index_iterator) {
-                                                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                    }
-                                                                } finally {
-                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_8, thread);
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                done_var = makeBoolean((NIL == valid) || (NIL != pragmas_foundP));
-                                            }
-                                        } 
-                                    }
-                                }
-                            } finally {
-                                mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
-                                mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
-                                mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                }
-                return pragmas_foundP;
-            }
-        }
-    }
-
-    /**
-     * The total number of assertions indexed from TERM.
-     */
-    @LispMethod(comment = "The total number of assertions indexed from TERM.")
-    public static final SubLObject num_index_slow(SubLObject v_term) {
-        if (NIL != simple_indexed_term_p(v_term)) {
-            return simple_num_index(v_term);
-        } else {
-            return add(new SubLObject[]{ com.cyc.cycjava.cycl.kb_indexing.num_gaf_arg_index(v_term, UNPROVIDED, UNPROVIDED, UNPROVIDED), com.cyc.cycjava.cycl.kb_indexing.num_nart_arg_index(v_term, UNPROVIDED, UNPROVIDED), com.cyc.cycjava.cycl.kb_indexing.num_predicate_extent_index(v_term, UNPROVIDED), com.cyc.cycjava.cycl.kb_indexing.num_function_extent_index(v_term), com.cyc.cycjava.cycl.kb_indexing.num_predicate_rule_index(v_term, UNPROVIDED, UNPROVIDED, UNPROVIDED), com.cyc.cycjava.cycl.kb_indexing.num_decontextualized_ist_predicate_rule_index(v_term, UNPROVIDED, UNPROVIDED), com.cyc.cycjava.cycl.kb_indexing.num_isa_rule_index(v_term, UNPROVIDED, UNPROVIDED, UNPROVIDED), com.cyc.cycjava.cycl.kb_indexing.num_quoted_isa_rule_index(v_term, UNPROVIDED, UNPROVIDED, UNPROVIDED), com.cyc.cycjava.cycl.kb_indexing.num_genls_rule_index(v_term, UNPROVIDED, UNPROVIDED, UNPROVIDED), com.cyc.cycjava.cycl.kb_indexing.num_genl_mt_rule_index(v_term, UNPROVIDED, UNPROVIDED, UNPROVIDED), com.cyc.cycjava.cycl.kb_indexing.num_function_rule_index(v_term, UNPROVIDED, UNPROVIDED), com.cyc.cycjava.cycl.kb_indexing.num_exception_rule_index(v_term, UNPROVIDED, UNPROVIDED), com.cyc.cycjava.cycl.kb_indexing.num_pragma_rule_index(v_term, UNPROVIDED, UNPROVIDED), com.cyc.cycjava.cycl.kb_indexing.num_mt_index(v_term), com.cyc.cycjava.cycl.kb_indexing.num_other_index(v_term) });
-        }
-    }
-
-    /**
-     * Find all assertions in all genl-mts of MT with CNF.  Return NIL if none are present.
-     */
-    @LispMethod(comment = "Find all assertions in all genl-mts of MT with CNF.  Return NIL if none are present.")
-    public static final SubLObject find_all_assertions_genl_mts(SubLObject cnf, SubLObject mt) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject all_assertions = com.cyc.cycjava.cycl.kb_indexing.find_all_assertions(cnf);
-                SubLObject visible_assertions = NIL;
-                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(mt);
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
-                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
-                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
-                        {
-                            SubLObject cdolist_list_var = all_assertions;
-                            SubLObject ass = NIL;
-                            for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                                if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                    visible_assertions = cons(ass, visible_assertions);
-                                }
-                            }
-                        }
-                    } finally {
-                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return nreverse(visible_assertions);
-            }
-        }
-    }
-
-    /**
-     * Return a list of all current NARTs which are are functions of FORT,
-     * or which have FORT as their functor.
-     */
-    @LispMethod(comment = "Return a list of all current NARTs which are are functions of FORT,\r\nor which have FORT as their functor.\nReturn a list of all current NARTs which are are functions of FORT,\nor which have FORT as their functor.")
-    public static final SubLObject dependent_narts(SubLObject fort) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(fort, FORT_P);
-            {
-                SubLObject v_answer = NIL;
-                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(mt_vars.$tou_mt$.getGlobalValue());
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
-                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
-                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
-                        if (NIL != kb_mapping_macros.do_nart_arg_index_key_validator(fort, NIL, NIL)) {
-                            {
-                                SubLObject iterator_var = kb_mapping_macros.new_nart_arg_final_index_spec_iterator(fort, NIL, NIL);
-                                SubLObject done_var = NIL;
-                                SubLObject token_var = NIL;
-                                while (NIL == done_var) {
-                                    {
-                                        SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                        SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                        if (NIL != valid) {
-                                            {
-                                                SubLObject final_index_iterator = NIL;
-                                                try {
-                                                    final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
-                                                    {
-                                                        SubLObject done_var_9 = NIL;
-                                                        SubLObject token_var_10 = NIL;
-                                                        while (NIL == done_var_9) {
-                                                            {
-                                                                SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_10);
-                                                                SubLObject valid_11 = makeBoolean(token_var_10 != assertion);
-                                                                if (NIL != valid_11) {
-                                                                    v_answer = cons(assertions_high.gaf_arg1(assertion), v_answer);
-                                                                }
-                                                                done_var_9 = makeBoolean(NIL == valid_11);
-                                                            }
-                                                        } 
-                                                    }
-                                                } finally {
-                                                    {
-                                                        SubLObject _prev_bind_0_12 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                        try {
-                                                            $is_thread_performing_cleanupP$.bind(T, thread);
-                                                            if (NIL != final_index_iterator) {
-                                                                kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                            }
-                                                        } finally {
-                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_12, thread);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        done_var = makeBoolean(NIL == valid);
-                                    }
-                                } 
-                            }
-                        }
-                        if (NIL != kb_mapping_macros.do_function_extent_index_key_validator(fort)) {
-                            {
-                                SubLObject final_index_spec = kb_mapping_macros.function_extent_final_index_spec(fort);
-                                SubLObject final_index_iterator = NIL;
-                                try {
-                                    final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
-                                    {
-                                        SubLObject done_var = NIL;
-                                        SubLObject token_var = NIL;
-                                        while (NIL == done_var) {
-                                            {
-                                                SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var);
-                                                SubLObject valid = makeBoolean(token_var != assertion);
-                                                if (NIL != valid) {
-                                                    v_answer = cons(assertions_high.gaf_arg1(assertion), v_answer);
-                                                }
-                                                done_var = makeBoolean(NIL == valid);
-                                            }
-                                        } 
-                                    }
-                                } finally {
-                                    {
-                                        SubLObject _prev_bind_0_13 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                        try {
-                                            $is_thread_performing_cleanupP$.bind(T, thread);
-                                            if (NIL != final_index_iterator) {
-                                                kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                            }
-                                        } finally {
-                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_13, thread);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        if (NIL != kb_mapping_macros.do_other_index_key_validator(fort, NIL)) {
-                            {
-                                SubLObject final_index_spec = kb_mapping_macros.other_final_index_spec(fort);
-                                SubLObject final_index_iterator = NIL;
-                                try {
-                                    final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, NIL, NIL, NIL);
-                                    {
-                                        SubLObject done_var = NIL;
-                                        SubLObject token_var = NIL;
-                                        while (NIL == done_var) {
-                                            {
-                                                SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var);
-                                                SubLObject valid = makeBoolean(token_var != assertion);
-                                                if (NIL != valid) {
-                                                    if (NIL != kb_mapping_macros.do_other_index_assertion_match_p(assertion)) {
-                                                        if ((NIL != function_terms.tou_assertionP(assertion)) && (NIL != cycl_utilities.expression_find(fort, assertions_high.gaf_arg2(assertion), T, UNPROVIDED, UNPROVIDED))) {
-                                                            v_answer = cons(assertions_high.gaf_arg1(assertion), v_answer);
-                                                        }
-                                                    }
-                                                }
-                                                done_var = makeBoolean(NIL == valid);
-                                            }
-                                        } 
-                                    }
-                                } finally {
-                                    {
-                                        SubLObject _prev_bind_0_14 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                        try {
-                                            $is_thread_performing_cleanupP$.bind(T, thread);
-                                            if (NIL != final_index_iterator) {
-                                                kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                            }
-                                        } finally {
-                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_14, thread);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return list_utilities.fast_delete_duplicates(v_answer, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            }
-        }
-    }
-
+public final class kb_indexing extends SubLTranslatedFile {
     public static final SubLFile me = new kb_indexing();
 
+    public static final String myName = "com.cyc.cycjava.cycl.kb_indexing";
 
+    public static final String myFingerPrint = "74f7ebb1dce868f3e0432f5ce53930aa1c652ec05d0194df88d0d32b1860146e";
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $indexing_good_enough_threshold$ = makeSymbol("*INDEXING-GOOD-ENOUGH-THRESHOLD*");
 
+
+
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $index_spec_preds_of_ist_in_ist_pred_indexP$ = makeSymbol("*INDEX-SPEC-PREDS-OF-IST-IN-IST-PRED-INDEX?*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $best_gaf_lookup_index_exact_num_predicate_extent_cutoff$ = makeSymbol("*BEST-GAF-LOOKUP-INDEX-EXACT-NUM-PREDICATE-EXTENT-CUTOFF*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $best_gaf_lookup_index_zero_num_predicate_extent_cutoff$ = makeSymbol("*BEST-GAF-LOOKUP-INDEX-ZERO-NUM-PREDICATE-EXTENT-CUTOFF*");
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $pred_heinous_mt_fanout_cutoff$ = makeSymbol("*PRED-HEINOUS-MT-FANOUT-CUTOFF*");
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $pred_has_heinous_mt_fanoutP_caching_state$ = makeSymbol("*PRED-HAS-HEINOUS-MT-FANOUT?-CACHING-STATE*");
 
     // deflexical
@@ -626,7 +99,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
      * When there are more than 10k constant, call (gc-full) to remove old indexes
      * from static space.
      */
-    @LispMethod(comment = "When there are more than 10k constant, call (gc-full) to remove old indexes\r\nfrom static space.\ndeflexical\nWhen there are more than 10k constant, call (gc-full) to remove old indexes\nfrom static space.")
     private static final SubLSymbol $reindex_all_assertions_full_gc_threshhold_constant_count$ = makeSymbol("*REINDEX-ALL-ASSERTIONS-FULL-GC-THRESHHOLD-CONSTANT-COUNT*");
 
     // defparameter
@@ -634,22 +106,18 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
      * Controls whether the reindexing process complains about the indexing errors
      * or just discards them silently.
      */
-    @LispMethod(comment = "Controls whether the reindexing process complains about the indexing errors\r\nor just discards them silently.\ndefparameter\nControls whether the reindexing process complains about the indexing errors\nor just discards them silently.")
     private static final SubLSymbol $warn_on_assertion_reindexing_errorsP$ = makeSymbol("*WARN-ON-ASSERTION-REINDEXING-ERRORS?*");
 
     // defparameter
     // the list of gathered rule assertions
-    /**
-     * the list of gathered rule assertions
-     */
-    @LispMethod(comment = "the list of gathered rule assertions\ndefparameter")
     private static final SubLSymbol $gathered_rule_assertions$ = makeSymbol("*GATHERED-RULE-ASSERTIONS*");
 
     // Internal Constants
-    @LispMethod(comment = "Internal Constants")
-    private static final SubLSymbol INTERMEDIATE_INDEX_P = makeSymbol("INTERMEDIATE-INDEX-P");
+    public static final SubLSymbol INTERMEDIATE_INDEX_P = makeSymbol("INTERMEDIATE-INDEX-P");
 
     private static final SubLList $list1 = list(makeSymbol("MT"), makeSymbol("SUBINDEX"));
+
+
 
     private static final SubLSymbol NUM_GAF_ARG_INDEX = makeSymbol("NUM-GAF-ARG-INDEX");
 
@@ -677,11 +145,13 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol CLEAR_KEY_GAF_ARG_INDEX_CACHED = makeSymbol("CLEAR-KEY-GAF-ARG-INDEX-CACHED");
 
-    static private final SubLString $str16$Return_a_list_of_the_keys_to_the_ = makeString("Return a list of the keys to the next index level below TERM ARGNUM PRED.\n   @note destructible");
+    public static final SubLString $str16$Return_a_list_of_the_keys_to_the_ = makeString("Return a list of the keys to the next index level below TERM ARGNUM PRED.\n   @note destructible");
 
-    static private final SubLList $list17 = list(makeSymbol("LISTP"));
+    public static final SubLList $list17 = list(makeSymbol("LISTP"));
 
     private static final SubLList $list18 = list(makeSymbol("ARGNUM"), makeSymbol("PRED-SUBINDEX"));
+
+
 
     private static final SubLSymbol NUM_NART_ARG_INDEX = makeSymbol("NUM-NART-ARG-INDEX");
 
@@ -696,6 +166,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
     private static final SubLSymbol KEY_NART_ARG_INDEX = makeSymbol("KEY-NART-ARG-INDEX");
 
     private static final SubLString $str26$Return_a_list_of_the_keys_to_the_ = makeString("Return a list of the keys to the next index level below TERM ARGNUM FUNC.");
+
+
 
     private static final SubLSymbol NUM_PREDICATE_EXTENT_INDEX = makeSymbol("NUM-PREDICATE-EXTENT-INDEX");
 
@@ -715,6 +187,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str36$Return_a_list_of_the_keys_to_the_ = makeString("Return a list of the keys to the next predicate-extent index level below PRED.");
 
+
+
     private static final SubLSymbol NUM_FUNCTION_EXTENT_INDEX = makeSymbol("NUM-FUNCTION-EXTENT-INDEX");
 
     private static final SubLList $list39 = list(makeSymbol("FUNC"));
@@ -724,6 +198,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
     private static final SubLSymbol RELEVANT_NUM_FUNCTION_EXTENT_INDEX = makeSymbol("RELEVANT-NUM-FUNCTION-EXTENT-INDEX");
 
     private static final SubLString $str42$Compute_the_function_extent_at_re = makeString("Compute the function extent at relevant mts under FUNC.\n   This will be the entire function extent if *tou-mt* is relevant,\n   and zero otherwise.");
+
+
 
     private static final SubLSymbol NUM_PREDICATE_RULE_INDEX = makeSymbol("NUM-PREDICATE-RULE-INDEX");
 
@@ -740,6 +216,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
     private static final SubLList $list50 = list(makeSymbol("PRED"), makeSymbol("&OPTIONAL"), makeSymbol("SENSE"), makeSymbol("MT"));
 
     private static final SubLString $str51$Return_a_list_of_the_keys_to_the_ = makeString("Return a list of the keys to the next index level below PRED SENSE MT.");
+
+
 
     private static final SubLSymbol NUM_DECONTEXTUALIZED_IST_PREDICATE_RULE_INDEX = makeSymbol("NUM-DECONTEXTUALIZED-IST-PREDICATE-RULE-INDEX");
 
@@ -771,6 +249,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str67$Return_a_list_of_the_keys_to_the_ = makeString("Return a list of the keys to the next index level below COL SENSE MT.");
 
+
+
     private static final SubLSymbol NUM_QUOTED_ISA_RULE_INDEX = makeSymbol("NUM-QUOTED-ISA-RULE-INDEX");
 
     private static final SubLSymbol KEY_QUOTED_ISA_RULE_INDEX = makeSymbol("KEY-QUOTED-ISA-RULE-INDEX");
@@ -788,6 +268,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
     private static final SubLSymbol RELEVANT_NUM_GENLS_RULE_INDEX = makeSymbol("RELEVANT-NUM-GENLS-RULE-INDEX");
 
     private static final SubLSymbol RELEVANT_NUM_GENLS_RULE_INDEX_WITH_CUTOFF = makeSymbol("RELEVANT-NUM-GENLS-RULE-INDEX-WITH-CUTOFF");
+
+
 
     private static final SubLSymbol NUM_GENL_MT_RULE_INDEX = makeSymbol("NUM-GENL-MT-RULE-INDEX");
 
@@ -815,6 +297,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str91$Return_a_list_of_the_keys_to_the_ = makeString("Return a list of the keys to the next index level below FUNC MT.");
 
+
+
     private static final SubLSymbol NUM_EXCEPTION_RULE_INDEX = makeSymbol("NUM-EXCEPTION-RULE-INDEX");
 
     private static final SubLList $list94 = list(makeSymbol("RULE"), makeSymbol("&OPTIONAL"), makeSymbol("MT"), makeSymbol("DIRECTION"));
@@ -831,6 +315,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str100$Return_a_list_of_the_keys_to_the_ = makeString("Return a list of the keys to the next index level below RULE MT.");
 
+
+
     private static final SubLSymbol NUM_PRAGMA_RULE_INDEX = makeSymbol("NUM-PRAGMA-RULE-INDEX");
 
     private static final SubLSymbol KEY_PRAGMA_RULE_INDEX = makeSymbol("KEY-PRAGMA-RULE-INDEX");
@@ -839,15 +325,31 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol RELEVANT_NUM_PRAGMA_RULE_INDEX_WITH_CUTOFF = makeSymbol("RELEVANT-NUM-PRAGMA-RULE-INDEX-WITH-CUTOFF");
 
+
+
     private static final SubLSymbol NUM_MT_INDEX = makeSymbol("NUM-MT-INDEX");
 
     private static final SubLList $list108 = list(makeSymbol("TERM"));
 
     private static final SubLString $str109$Return_the_number_of_assertions_a = makeString("Return the number of assertions at the mt index for TERM.");
 
+
+
+
+
     private static final SubLString $str112$do_broad_mt_index = makeString("do-broad-mt-index");
 
 
+
+
+
+
+
+
+
+
+
+    private static final SubLObject $$EverythingPSC = reader_make_constant_shell(makeString("EverythingPSC"));
 
     private static final SubLSymbol NUM_HLMT_INDEX = makeSymbol("NUM-HLMT-INDEX");
 
@@ -855,7 +357,7 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str121$Return_the_number_of_assertions_a = makeString("Return the number of assertions at the hlmt virtual index for TERM.");
 
-
+    private static final SubLObject $$BroadMicrotheory = reader_make_constant_shell(makeString("BroadMicrotheory"));
 
     private static final SubLSymbol REM_BROAD_MT_INDEX = makeSymbol("REM-BROAD-MT-INDEX");
 
@@ -867,6 +369,10 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol FINAL_INDEX_P = makeSymbol("FINAL-INDEX-P");
 
+
+
+
+
     private static final SubLString $str130$The_total_number_of_assertions_in = makeString("The total number of assertions indexed from TERM.");
 
     private static final SubLString $str131$Performing_indexing_cleanup___ = makeString("Performing indexing cleanup...");
@@ -875,13 +381,23 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol UNINDEXED_SYNTAX_CONSTANT_INDEX_CLEANUP_INTERNAL = makeSymbol("UNINDEXED-SYNTAX-CONSTANT-INDEX-CLEANUP-INTERNAL");
 
+
+
+
+
+
+
+
+
+
+
     private static final SubLSymbol $sym139$_ = makeSymbol(">");
 
+    private static final SubLObject $$isa = reader_make_constant_shell(makeString("isa"));
 
+    private static final SubLObject $$genls = reader_make_constant_shell(makeString("genls"));
 
-
-
-
+    private static final SubLObject $$termOfUnit = reader_make_constant_shell(makeString("termOfUnit"));
 
     private static final SubLString $str143$indexing_problem_while_removing__ = makeString("indexing problem while removing ~S");
 
@@ -891,11 +407,21 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
 
     private static final SubLList $list146 = list(makeSymbol("INDEXED-TERM-P"));
 
+
+
     private static final SubLSymbol VALID_FULLY_INDEXED_TERM_P = makeSymbol("VALID-FULLY-INDEXED-TERM-P");
+
+
 
     private static final SubLSymbol $sym150$_ = makeSymbol("<");
 
+
+
+
+
     private static final SubLSymbol $sym153$TERM_INDEX_SWAPPED_IN_ = makeSymbol("TERM-INDEX-SWAPPED-IN?");
+
+
 
     private static final SubLSymbol FULLY_INDEXED_HLMT_TERM_P = makeSymbol("FULLY-INDEXED-HLMT-TERM-P");
 
@@ -903,7 +429,7 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str157$Don_t_know_how_to_index__S = makeString("Don't know how to index ~S");
 
-    static private final SubLList $list158 = cons(makeSymbol("ARGNUM"), makeSymbol("ARG"));
+    public static final SubLList $list158 = cons(makeSymbol("ARGNUM"), makeSymbol("ARG"));
 
     private static final SubLList $list159 = cons(makeSymbol("F-ARGNUM"), makeSymbol("F-ARG"));
 
@@ -911,11 +437,31 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
 
 
 
+    private static final SubLObject $$quotedIsa = reader_make_constant_shell(makeString("quotedIsa"));
+
+
+
+
+
+    private static final SubLObject $$genlMt = reader_make_constant_shell(makeString("genlMt"));
+
+
+
+
+
+    private static final SubLObject $$abnormal = reader_make_constant_shell(makeString("abnormal"));
+
+
+
+    private static final SubLObject $$meetsPragmaticRequirement = reader_make_constant_shell(makeString("meetsPragmaticRequirement"));
+
 
 
 
 
     private static final SubLSymbol FULLY_INDEXED_TERM_P = makeSymbol("FULLY-INDEXED-TERM-P");
+
+
 
     private static final SubLList $list175 = list(makeSymbol("NEG-INDEXING-TYPE"), makeSymbol("NEG-TERM"));
 
@@ -935,11 +481,15 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str183$Can_t_remove_the_index_of_a_funct = makeString("Can't remove the index of a function rule as a pos-lit ~S");
 
-
+    private static final SubLObject $$ist = reader_make_constant_shell(makeString("ist"));
 
     private static final SubLString $str185$Enabling_spec_preds_of_ist_indexi = makeString("Enabling spec-preds of ist indexing (reindexing ");
 
     private static final SubLString $str186$_assertions_ = makeString(" assertions)");
+
+
+
+
 
     private static final SubLSymbol DECENT_NAT_INDEX = makeSymbol("DECENT-NAT-INDEX");
 
@@ -949,15 +499,27 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
 
     private static final SubLList $list192 = list(makeSymbol("NUM-BEST-NAT-LOOKUP-INDEX"));
 
+
+
     private static final SubLSymbol $IST_PRED_POS = makeKeyword("IST-PRED-POS");
+
+
 
     private static final SubLSymbol $QUOTED_ISA_POS = makeKeyword("QUOTED-ISA-POS");
 
+
+
     private static final SubLSymbol $GENL_MT_POS = makeKeyword("GENL-MT-POS");
+
+
 
     private static final SubLSymbol $IST_PRED_NEG = makeKeyword("IST-PRED-NEG");
 
+
+
     private static final SubLSymbol $QUOTED_ISA_NEG = makeKeyword("QUOTED-ISA-NEG");
+
+
 
     private static final SubLSymbol $GENL_MT_NEG = makeKeyword("GENL-MT-NEG");
 
@@ -965,13 +527,27 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
 
     private static final SubLList $list206 = list(makeSymbol("POS-INDEXING-TYPE"), makeSymbol("TERM"));
 
+
+
+
+
+
+
+
+
+
+
     private static final SubLInteger $int$500 = makeInteger(500);
 
     private static final SubLString $str213$__slow_overlap___S_for__S__ = makeString("~&slow overlap: ~S for ~S~&");
 
+
+
     private static final SubLInteger $int$212 = makeInteger(212);
 
     private static final SubLInteger $int$2120 = makeInteger(2120);
+
+
 
     private static final SubLSymbol $sym218$PRED_HAS_HEINOUS_MT_FANOUT_ = makeSymbol("PRED-HAS-HEINOUS-MT-FANOUT?");
 
@@ -987,9 +563,13 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $$$Clear_auxiliary_indexing = makeString("Clear auxiliary indexing");
 
+
+
     private static final SubLString $$$Clearing_FORT_indexing = makeString("Clearing FORT indexing");
 
     private static final SubLString $str227$Clearing_Unrepresented_Term_index = makeString("Clearing Unrepresented Term indexing");
+
+
 
     private static final SubLSymbol $IGNORE_ERRORS_TARGET = makeKeyword("IGNORE-ERRORS-TARGET");
 
@@ -1001,6 +581,10 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str233$Unexpected_index__S_when_merging_ = makeString("Unexpected index ~S when merging term indices for ~A.");
 
+
+
+
+
     private static final SubLSymbol FIND_ASSERTION = makeSymbol("FIND-ASSERTION");
 
     private static final SubLList $list237 = list(makeSymbol("CNF"), makeSymbol("MT"));
@@ -1010,6 +594,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
     private static final SubLList $list239 = list(list(makeSymbol("CNF"), makeSymbol("CNF-P")), list(makeSymbol("MT"), makeSymbol("POSSIBLY-HLMT-P")));
 
     private static final SubLList $list240 = list(list(makeSymbol("NIL-OR"), makeSymbol("ASSERTION-P")));
+
+
 
     private static final SubLSymbol FIND_ASSERTION_ANY_MT = makeSymbol("FIND-ASSERTION-ANY-MT");
 
@@ -1024,6 +610,10 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
     private static final SubLString $str247$Return_all_assertions_that_have_C = makeString("Return all assertions that have CNF or NIL if there aren\'t any.\n   @note destructible");
 
     private static final SubLList $list248 = list(list(makeSymbol("NIL-OR"), list(makeSymbol("LIST"), makeSymbol("ASSERTION-P"))));
+
+
+
+
 
     private static final SubLSymbol FIND_GAF = makeSymbol("FIND-GAF");
 
@@ -1041,13 +631,21 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
 
     private static final SubLList $list258 = list(list(makeSymbol("GAF-FORMULA"), makeSymbol("EL-FORMULA-P")));
 
+
+
     private static final SubLSymbol FIND_ALL_GAFS = makeSymbol("FIND-ALL-GAFS");
 
     private static final SubLString $str261$Return_all_assertions_of_GAF_FORM = makeString("Return all assertions of GAF-FORMULA or NIL if there aren\'t any.\n   @note destructible");
 
     private static final SubLList $list262 = list(makeSymbol("INDEX"), makeSymbol("TERM"));
 
+
+
     private static final SubLSymbol FIND_CNF_INTERNAL = makeSymbol("FIND-CNF-INTERNAL");
+
+
+
+
 
     private static final SubLSymbol $sym267$_EXIT = makeSymbol("%EXIT");
 
@@ -1057,24 +655,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
 
     private static final SubLList $list270 = list(makeKeyword("NEG"), makeKeyword("POS"));
 
+    private static final SubLObject $$implies = reader_make_constant_shell(makeString("implies"));
 
-
-    // Definitions
-    public static final SubLObject get_subindex_alt(SubLObject v_term, SubLObject keys) {
-        {
-            SubLObject subindex = term_index(v_term);
-            SubLObject cdolist_list_var = keys;
-            SubLObject key = NIL;
-            for (key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , key = cdolist_list_var.first()) {
-                if ((NIL != key) && (NIL != subindex)) {
-                    subindex = intermediate_index_lookup(subindex, key);
-                }
-            }
-            return subindex;
-        }
-    }
-
-    // Definitions
     public static SubLObject get_subindex(final SubLObject v_term, final SubLObject keys) {
         SubLObject subindex = term_index(v_term);
         SubLObject cdolist_list_var = keys;
@@ -1090,25 +672,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return subindex;
     }
 
-    /**
-     * Walks down the indexing for TERM by following successive elements of KEYS,
-     * and once it gets to the bottom, inserts LEAF.
-     */
-    @LispMethod(comment = "Walks down the indexing for TERM by following successive elements of KEYS,\r\nand once it gets to the bottom, inserts LEAF.\nWalks down the indexing for TERM by following successive elements of KEYS,\nand once it gets to the bottom, inserts LEAF.")
-    public static final SubLObject term_add_indexing_leaf_alt(SubLObject v_term, SubLObject keys, SubLObject leaf) {
-        com.cyc.cycjava.cycl.kb_indexing.mark_term_index_as_muted(v_term);
-        if (NIL != simple_indexed_term_p(v_term)) {
-            return simple_indexing.add_simple_index(v_term, leaf);
-        } else {
-            return intermediate_index_insert(term_index(v_term), keys, leaf);
-        }
-    }
-
-    /**
-     * Walks down the indexing for TERM by following successive elements of KEYS,
-     * and once it gets to the bottom, inserts LEAF.
-     */
-    @LispMethod(comment = "Walks down the indexing for TERM by following successive elements of KEYS,\r\nand once it gets to the bottom, inserts LEAF.\nWalks down the indexing for TERM by following successive elements of KEYS,\nand once it gets to the bottom, inserts LEAF.")
     public static SubLObject term_add_indexing_leaf(final SubLObject v_term, final SubLObject keys, final SubLObject leaf) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject result = NIL;
@@ -1131,27 +694,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return result;
     }
 
-    /**
-     * Walks down the indexing for TERM by following successive elements of KEYS,
-     * and once it gets to the bottom, deletes LEAF.
-     */
-    @LispMethod(comment = "Walks down the indexing for TERM by following successive elements of KEYS,\r\nand once it gets to the bottom, deletes LEAF.\nWalks down the indexing for TERM by following successive elements of KEYS,\nand once it gets to the bottom, deletes LEAF.")
-    public static final SubLObject term_rem_indexing_leaf_alt(SubLObject v_term, SubLObject keys, SubLObject leaf) {
-        com.cyc.cycjava.cycl.kb_indexing.mark_term_index_as_muted(v_term);
-        if (NIL != simple_indexed_term_p(v_term)) {
-            return simple_indexing.rem_simple_index(v_term, leaf);
-        } else {
-            intermediate_index_delete(term_index(v_term), keys, leaf);
-            simple_indexing.possibly_toggle_term_index_mode(v_term);
-            return leaf;
-        }
-    }
-
-    /**
-     * Walks down the indexing for TERM by following successive elements of KEYS,
-     * and once it gets to the bottom, deletes LEAF.
-     */
-    @LispMethod(comment = "Walks down the indexing for TERM by following successive elements of KEYS,\r\nand once it gets to the bottom, deletes LEAF.\nWalks down the indexing for TERM by following successive elements of KEYS,\nand once it gets to the bottom, deletes LEAF.")
     public static SubLObject term_rem_indexing_leaf(final SubLObject v_term, final SubLObject keys, final SubLObject leaf) {
         SubLObject result = NIL;
         final SubLObject index = term_index(v_term);
@@ -1166,59 +708,13 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return result;
     }
 
-    public static final SubLObject all_mt_subindex_keys_relevant_p_alt() {
-        return mt_relevance_macros.any_or_all_mts_are_relevantP();
-    }
-
     public static SubLObject all_mt_subindex_keys_relevant_p() {
         return mt_relevance_macros.any_or_all_mts_are_relevantP();
     }
 
-    public static final SubLObject relevant_mt_subindex_count_alt(SubLObject mt_subindex) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(mt_subindex, INTERMEDIATE_INDEX_P);
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                return subindex_leaf_count(mt_subindex);
-            } else {
-                if (NIL != mt_relevance_macros.only_specified_mt_is_relevantP()) {
-                    {
-                        SubLObject mt = mt_relevance_macros.current_mt_relevance_mt();
-                        SubLObject subindex = subindex_lookup(mt_subindex, mt);
-                        return NIL != subindex ? ((SubLObject) (subindex_leaf_count(subindex))) : ZERO_INTEGER;
-                    }
-                } else {
-                    {
-                        SubLObject count = ZERO_INTEGER;
-                        SubLObject index = mt_subindex;
-                        if (NIL != do_intermediate_index_valid_index_p(index)) {
-                            {
-                                SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(intermediate_index_dictionary(index)));
-                                while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                                    thread.resetMultipleValues();
-                                    {
-                                        SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                        SubLObject subindex = thread.secondMultipleValue();
-                                        thread.resetMultipleValues();
-                                        if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                            count = add(count, subindex_leaf_count(subindex));
-                                        }
-                                        iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                    }
-                                } 
-                                dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                            }
-                        }
-                        return count;
-                    }
-                }
-            }
-        }
-    }
-
     public static SubLObject relevant_mt_subindex_count(final SubLObject mt_subindex) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != intermediate_index_p(mt_subindex) : "! kb_indexing_datastructures.intermediate_index_p(mt_subindex) " + ("kb_indexing_datastructures.intermediate_index_p(mt_subindex) " + "CommonSymbols.NIL != kb_indexing_datastructures.intermediate_index_p(mt_subindex) ") + mt_subindex;
+        assert NIL != intermediate_index_p(mt_subindex) : "kb_indexing_datastructures.intermediate_index_p(mt_subindex) " + "CommonSymbols.NIL != kb_indexing_datastructures.intermediate_index_p(mt_subindex) " + mt_subindex;
         if (NIL != all_mt_subindex_keys_relevant_p()) {
             return subindex_leaf_count(mt_subindex);
         }
@@ -1260,58 +756,10 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return count;
     }
 
-    public static final SubLObject relevant_mt_subindex_count_with_cutoff_alt(SubLObject mt_subindex, SubLObject cutoff) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(mt_subindex, INTERMEDIATE_INDEX_P);
-            SubLTrampolineFile.checkType(cutoff, NON_NEGATIVE_INTEGER_P);
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                return min(cutoff, subindex_leaf_count(mt_subindex));
-            } else {
-                if (NIL != mt_relevance_macros.only_specified_mt_is_relevantP()) {
-                    {
-                        SubLObject mt = mt_relevance_macros.current_mt_relevance_mt();
-                        SubLObject subindex = subindex_lookup(mt_subindex, mt);
-                        return NIL != subindex ? ((SubLObject) (min(cutoff, subindex_leaf_count(subindex)))) : ZERO_INTEGER;
-                    }
-                } else {
-                    {
-                        SubLObject count = ZERO_INTEGER;
-                        SubLObject doneP = NIL;
-                        SubLObject index = mt_subindex;
-                        if (NIL != do_intermediate_index_valid_index_p(index)) {
-                            {
-                                SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(intermediate_index_dictionary(index)));
-                                while (!((NIL != doneP) || (NIL != dictionary_contents.do_dictionary_contents_doneP(iteration_state)))) {
-                                    thread.resetMultipleValues();
-                                    {
-                                        SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                        SubLObject subindex = thread.secondMultipleValue();
-                                        thread.resetMultipleValues();
-                                        if (NIL != kb_indexing_macros.number_has_reached_cutoffP(count, cutoff)) {
-                                            doneP = T;
-                                        } else {
-                                            if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                                count = add(count, subindex_leaf_count(subindex));
-                                            }
-                                        }
-                                        iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                    }
-                                } 
-                                dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                            }
-                        }
-                        return min(cutoff, count);
-                    }
-                }
-            }
-        }
-    }
-
     public static SubLObject relevant_mt_subindex_count_with_cutoff(final SubLObject mt_subindex, final SubLObject cutoff) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != intermediate_index_p(mt_subindex) : "! kb_indexing_datastructures.intermediate_index_p(mt_subindex) " + ("kb_indexing_datastructures.intermediate_index_p(mt_subindex) " + "CommonSymbols.NIL != kb_indexing_datastructures.intermediate_index_p(mt_subindex) ") + mt_subindex;
-        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "! subl_promotions.non_negative_integer_p(cutoff) " + ("subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) ") + cutoff;
+        assert NIL != intermediate_index_p(mt_subindex) : "kb_indexing_datastructures.intermediate_index_p(mt_subindex) " + "CommonSymbols.NIL != kb_indexing_datastructures.intermediate_index_p(mt_subindex) " + mt_subindex;
+        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) " + cutoff;
         if (NIL != all_mt_subindex_keys_relevant_p()) {
             return min(cutoff, subindex_leaf_count(mt_subindex));
         }
@@ -1358,51 +806,9 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return min(cutoff, count);
     }
 
-    public static final SubLObject relevant_mt_subindex_keys_alt(SubLObject mt_subindex) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(mt_subindex, INTERMEDIATE_INDEX_P);
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                return intermediate_index_keys(mt_subindex);
-            } else {
-                if (NIL != mt_relevance_macros.only_specified_mt_is_relevantP()) {
-                    {
-                        SubLObject mt = mt_relevance_macros.current_mt_relevance_mt();
-                        SubLObject subindex = subindex_lookup(mt_subindex, mt);
-                        return NIL != subindex ? ((SubLObject) (list(mt))) : NIL;
-                    }
-                } else {
-                    {
-                        SubLObject relevant_mts = NIL;
-                        SubLObject index = mt_subindex;
-                        if (NIL != do_intermediate_index_valid_index_p(index)) {
-                            {
-                                SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(intermediate_index_dictionary(index)));
-                                while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                                    thread.resetMultipleValues();
-                                    {
-                                        SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                        SubLObject subindex = thread.secondMultipleValue();
-                                        thread.resetMultipleValues();
-                                        if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
-                                            relevant_mts = cons(mt, relevant_mts);
-                                        }
-                                        iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                    }
-                                } 
-                                dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                            }
-                        }
-                        return relevant_mts;
-                    }
-                }
-            }
-        }
-    }
-
     public static SubLObject relevant_mt_subindex_keys(final SubLObject mt_subindex) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != intermediate_index_p(mt_subindex) : "! kb_indexing_datastructures.intermediate_index_p(mt_subindex) " + ("kb_indexing_datastructures.intermediate_index_p(mt_subindex) " + "CommonSymbols.NIL != kb_indexing_datastructures.intermediate_index_p(mt_subindex) ") + mt_subindex;
+        assert NIL != intermediate_index_p(mt_subindex) : "kb_indexing_datastructures.intermediate_index_p(mt_subindex) " + "CommonSymbols.NIL != kb_indexing_datastructures.intermediate_index_p(mt_subindex) " + mt_subindex;
         if (NIL != all_mt_subindex_keys_relevant_p()) {
             return intermediate_index_keys(mt_subindex);
         }
@@ -1444,36 +850,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return relevant_mts;
     }
 
-    public static final SubLObject mark_term_index_as_muted_alt(SubLObject v_term) {
-        if (NIL != constant_p(v_term)) {
-            {
-                SubLObject id = constant_suid(v_term);
-                if (NIL != id) {
-                    return constant_index_manager.mark_constant_index_as_muted(id);
-                }
-            }
-        } else {
-            if (NIL != nart_handles.nart_p(v_term)) {
-                {
-                    SubLObject id = nart_handles.nart_id(v_term);
-                    if (NIL != id) {
-                        return nart_index_manager.mark_nart_index_as_muted(id);
-                    }
-                }
-            } else {
-                if (NIL != unrepresented_terms.kb_unrepresented_term_p(v_term)) {
-                    {
-                        SubLObject id = unrepresented_terms.unrepresented_term_suid(v_term);
-                        if (NIL != id) {
-                            return unrepresented_term_index_manager.mark_unrepresented_term_index_as_muted(id);
-                        }
-                    }
-                }
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject mark_term_index_as_muted(final SubLObject v_term) {
         if (NIL != constant_p(v_term)) {
             final SubLObject id = constant_suid(v_term);
@@ -1498,48 +874,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     * Return the number of gafs indexed off of TERM ARGNUM PRED MT.
-     */
-    @LispMethod(comment = "Return the number of gafs indexed off of TERM ARGNUM PRED MT.")
-    public static final SubLObject num_gaf_arg_index_alt(SubLObject v_term, SubLObject argnum, SubLObject pred, SubLObject mt) {
-        if (argnum == UNPROVIDED) {
-            argnum = NIL;
-        }
-        if (pred == UNPROVIDED) {
-            pred = NIL;
-        }
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != simple_indexed_term_p(v_term)) {
-                {
-                    SubLObject count = ZERO_INTEGER;
-                    SubLObject cdolist_list_var = do_simple_index_term_assertion_list(v_term);
-                    SubLObject ass = NIL;
-                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                        if (NIL != simple_indexing.matches_gaf_arg_index(ass, v_term, argnum, pred, mt)) {
-                            count = add(count, ONE_INTEGER);
-                        }
-                    }
-                    num = count;
-                }
-            } else {
-                {
-                    SubLObject subindex = com.cyc.cycjava.cycl.kb_indexing.get_gaf_arg_subindex(v_term, argnum, pred, mt);
-                    num = (NIL != subindex) ? ((SubLObject) (subindex_leaf_count(subindex))) : ZERO_INTEGER;
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the number of gafs indexed off of TERM ARGNUM PRED MT.
-     */
-    @LispMethod(comment = "Return the number of gafs indexed off of TERM ARGNUM PRED MT.")
     public static SubLObject num_gaf_arg_index(final SubLObject v_term, SubLObject argnum, SubLObject pred, SubLObject mt) {
         if (argnum == UNPROVIDED) {
             argnum = NIL;
@@ -1571,66 +905,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Return the assertion count at relevant mts under TERM ARGNUM PRED.
-     */
-    @LispMethod(comment = "Return the assertion count at relevant mts under TERM ARGNUM PRED.")
-    public static final SubLObject relevant_num_gaf_arg_index_alt(SubLObject v_term, SubLObject argnum, SubLObject pred) {
-        if (argnum == UNPROVIDED) {
-            argnum = NIL;
-        }
-        if (pred == UNPROVIDED) {
-            pred = NIL;
-        }
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                num = com.cyc.cycjava.cycl.kb_indexing.num_gaf_arg_index(v_term, argnum, pred, UNPROVIDED);
-            } else {
-                if (NIL != simple_indexed_term_p(v_term)) {
-                    {
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(v_term);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL != simple_indexing.matches_gaf_arg_index(ass, v_term, argnum, pred, UNPROVIDED)) {
-                                if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                    num = add(num, ONE_INTEGER);
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(argnum, pred, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(THREE_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_gaf_arg_subindex(v_term, argnum, pred, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    num = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_count(mt_subindex);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, argnum, pred, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_GAF_ARG_INDEX, v_term, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    num = add(num, apply(RELEVANT_NUM_GAF_ARG_INDEX, v_term, append(good_keys, list(next_key))));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the assertion count at relevant mts under TERM ARGNUM PRED.
-     */
-    @LispMethod(comment = "Return the assertion count at relevant mts under TERM ARGNUM PRED.")
     public static SubLObject relevant_num_gaf_arg_index(final SubLObject v_term, SubLObject argnum, SubLObject pred) {
         if (argnum == UNPROVIDED) {
             argnum = NIL;
@@ -1677,80 +951,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Return the assertion count at relevant mts under TERM ARGNUM PRED.
-     *
-     * @param CUTOFF
-     * 		non-negative-integer-p; a number beyond which to stop counting relevant
-     * 		assertions and just return CUTOFF.
-     */
-    @LispMethod(comment = "Return the assertion count at relevant mts under TERM ARGNUM PRED.\r\n\r\n@param CUTOFF\r\n\t\tnon-negative-integer-p; a number beyond which to stop counting relevant\r\n\t\tassertions and just return CUTOFF.")
-    public static final SubLObject relevant_num_gaf_arg_index_with_cutoff_alt(SubLObject v_term, SubLObject cutoff, SubLObject argnum, SubLObject pred) {
-        if (argnum == UNPROVIDED) {
-            argnum = NIL;
-        }
-        if (pred == UNPROVIDED) {
-            pred = NIL;
-        }
-        SubLTrampolineFile.checkType(cutoff, NON_NEGATIVE_INTEGER_P);
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                num = com.cyc.cycjava.cycl.kb_indexing.num_gaf_arg_index(v_term, argnum, pred, UNPROVIDED);
-                if (NIL != kb_indexing_macros.number_has_reached_cutoffP(num, cutoff)) {
-                    num = cutoff;
-                }
-            } else {
-                if (NIL != simple_indexed_term_p(v_term)) {
-                    {
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(v_term);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL == kb_indexing_macros.number_has_reached_cutoffP(num, cutoff)) {
-                                if (NIL != simple_indexing.matches_gaf_arg_index(ass, v_term, argnum, pred, UNPROVIDED)) {
-                                    if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                        num = add(num, ONE_INTEGER);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(argnum, pred, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(THREE_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_gaf_arg_subindex(v_term, argnum, pred, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    num = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_count_with_cutoff(mt_subindex, cutoff);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, argnum, pred, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_GAF_ARG_INDEX, v_term, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    num = add(num, apply(RELEVANT_NUM_GAF_ARG_INDEX_WITH_CUTOFF, v_term, new SubLObject[]{ cutoff, append(good_keys, list(next_key)) }));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the assertion count at relevant mts under TERM ARGNUM PRED.
-     *
-     * @param CUTOFF
-     * 		non-negative-integer-p; a number beyond which to stop counting relevant
-     * 		assertions and just return CUTOFF.
-     */
-    @LispMethod(comment = "Return the assertion count at relevant mts under TERM ARGNUM PRED.\r\n\r\n@param CUTOFF\r\n\t\tnon-negative-integer-p; a number beyond which to stop counting relevant\r\n\t\tassertions and just return CUTOFF.")
     public static SubLObject relevant_num_gaf_arg_index_with_cutoff(final SubLObject v_term, final SubLObject cutoff, SubLObject argnum, SubLObject pred) {
         if (argnum == UNPROVIDED) {
             argnum = NIL;
@@ -1758,7 +958,7 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         if (pred == UNPROVIDED) {
             pred = NIL;
         }
-        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "! subl_promotions.non_negative_integer_p(cutoff) " + ("subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) ") + cutoff;
+        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) " + cutoff;
         SubLObject num = ZERO_INTEGER;
         if (NIL != all_mt_subindex_keys_relevant_p()) {
             num = num_gaf_arg_index(v_term, argnum, pred, UNPROVIDED);
@@ -1803,32 +1003,12 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    public static final SubLObject clear_key_gaf_arg_index_cached_alt() {
-        {
-            SubLObject cs = $key_gaf_arg_index_cached_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject clear_key_gaf_arg_index_cached() {
         final SubLObject cs = $key_gaf_arg_index_cached_caching_state$.getGlobalValue();
         if (NIL != cs) {
             memoization_state.caching_state_clear(cs);
         }
         return NIL;
-    }
-
-    public static final SubLObject remove_key_gaf_arg_index_cached_alt(SubLObject v_term, SubLObject argnum, SubLObject pred) {
-        if (argnum == UNPROVIDED) {
-            argnum = NIL;
-        }
-        if (pred == UNPROVIDED) {
-            pred = NIL;
-        }
-        return memoization_state.caching_state_remove_function_results_with_args($key_gaf_arg_index_cached_caching_state$.getGlobalValue(), list(v_term, argnum, pred), UNPROVIDED, UNPROVIDED);
     }
 
     public static SubLObject remove_key_gaf_arg_index_cached(final SubLObject v_term, SubLObject argnum, SubLObject pred) {
@@ -1841,66 +1021,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return memoization_state.caching_state_remove_function_results_with_args($key_gaf_arg_index_cached_caching_state$.getGlobalValue(), list(v_term, argnum, pred), UNPROVIDED, UNPROVIDED);
     }
 
-    /**
-     * Return a list of the keys to the next index level below TERM ARGNUM PRED.
-     */
-    @LispMethod(comment = "Return a list of the keys to the next index level below TERM ARGNUM PRED.")
-    public static final SubLObject key_gaf_arg_index_cached_internal_alt(SubLObject v_term, SubLObject argnum, SubLObject pred) {
-        return com.cyc.cycjava.cycl.kb_indexing.key_gaf_arg_index(v_term, argnum, pred);
-    }
-
-    /**
-     * Return a list of the keys to the next index level below TERM ARGNUM PRED.
-     */
-    @LispMethod(comment = "Return a list of the keys to the next index level below TERM ARGNUM PRED.")
     public static SubLObject key_gaf_arg_index_cached_internal(final SubLObject v_term, final SubLObject argnum, final SubLObject pred) {
         return key_gaf_arg_index(v_term, argnum, pred);
-    }
-
-    public static final SubLObject key_gaf_arg_index_cached_alt(SubLObject v_term, SubLObject argnum, SubLObject pred) {
-        if (argnum == UNPROVIDED) {
-            argnum = NIL;
-        }
-        if (pred == UNPROVIDED) {
-            pred = NIL;
-        }
-        {
-            SubLObject caching_state = $key_gaf_arg_index_cached_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(KEY_GAF_ARG_INDEX_CACHED, $key_gaf_arg_index_cached_caching_state$, $int$5000, EQ, THREE_INTEGER, ZERO_INTEGER);
-                memoization_state.register_hl_store_cache_clear_callback(CLEAR_KEY_GAF_ARG_INDEX_CACHED);
-            }
-            {
-                SubLObject sxhash = memoization_state.sxhash_calc_3(v_term, argnum, pred);
-                SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
-                if (collisions != $kw15$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    {
-                        SubLObject cdolist_list_var = collisions;
-                        SubLObject collision = NIL;
-                        for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
-                            {
-                                SubLObject cached_args = collision.first();
-                                SubLObject results2 = second(collision);
-                                if (v_term == cached_args.first()) {
-                                    cached_args = cached_args.rest();
-                                    if (argnum == cached_args.first()) {
-                                        cached_args = cached_args.rest();
-                                        if (((NIL != cached_args) && (NIL == cached_args.rest())) && (pred == cached_args.first())) {
-                                            return memoization_state.caching_results(results2);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                {
-                    SubLObject results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.kb_indexing.key_gaf_arg_index_cached_internal(v_term, argnum, pred)));
-                    memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(v_term, argnum, pred));
-                    return memoization_state.caching_results(results);
-                }
-            }
-        }
     }
 
     public static SubLObject key_gaf_arg_index_cached(final SubLObject v_term, SubLObject argnum, SubLObject pred) {
@@ -1942,47 +1064,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return memoization_state.caching_results(results3);
     }
 
-    /**
-     * Return a list of the keys to the next index level below TERM ARGNUM PRED.
-     *
-     * @unknown destructible
-     */
-    @LispMethod(comment = "Return a list of the keys to the next index level below TERM ARGNUM PRED.\r\n\r\n@unknown destructible")
-    public static final SubLObject key_gaf_arg_index_alt(SubLObject v_term, SubLObject argnum, SubLObject pred) {
-        if (argnum == UNPROVIDED) {
-            argnum = NIL;
-        }
-        if (pred == UNPROVIDED) {
-            pred = NIL;
-        }
-        {
-            SubLObject keys = NIL;
-            if (NIL != simple_indexed_term_p(v_term)) {
-                {
-                    SubLObject keys_accum = NIL;
-                    SubLObject cdolist_list_var = do_simple_index_term_assertion_list(v_term);
-                    SubLObject ass = NIL;
-                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                        keys_accum = simple_indexing.simple_key_gaf_arg_index(ass, keys_accum, v_term, argnum, pred);
-                    }
-                    keys = keys_accum;
-                }
-            } else {
-                {
-                    SubLObject next_level_subindex = com.cyc.cycjava.cycl.kb_indexing.get_gaf_arg_subindex(v_term, argnum, pred, UNPROVIDED);
-                    keys = (NIL != intermediate_index_p(next_level_subindex)) ? ((SubLObject) (intermediate_index_keys(next_level_subindex))) : NIL;
-                }
-            }
-            return keys;
-        }
-    }
-
-    /**
-     * Return a list of the keys to the next index level below TERM ARGNUM PRED.
-     *
-     * @unknown destructible
-     */
-    @LispMethod(comment = "Return a list of the keys to the next index level below TERM ARGNUM PRED.\r\n\r\n@unknown destructible")
     public static SubLObject key_gaf_arg_index(final SubLObject v_term, SubLObject argnum, SubLObject pred) {
         if (argnum == UNPROVIDED) {
             argnum = NIL;
@@ -2009,47 +1090,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return keys;
     }
 
-    /**
-     *
-     *
-     * @return listp; all the gaf arg intermediate indices for TERM.
-     */
-    @LispMethod(comment = "@return listp; all the gaf arg intermediate indices for TERM.")
-    public static final SubLObject gaf_arg_indices_alt(SubLObject v_term) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject predicate_subindices = NIL;
-                SubLObject index = kb_indexing_macros.term_gaf_arg_index(v_term);
-                if (NIL != do_intermediate_index_valid_index_p(index)) {
-                    {
-                        SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(intermediate_index_dictionary(index)));
-                        while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                            thread.resetMultipleValues();
-                            {
-                                SubLObject argnum = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                SubLObject pred_subindex = thread.secondMultipleValue();
-                                thread.resetMultipleValues();
-                                if (NIL != kb_indexing_macros.valid_gaf_arg_index_keyP(argnum)) {
-                                    predicate_subindices = cons(pred_subindex, predicate_subindices);
-                                }
-                                iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                            }
-                        } 
-                        dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                    }
-                }
-                return predicate_subindices;
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return listp; all the gaf arg intermediate indices for TERM.
-     */
-    @LispMethod(comment = "@return listp; all the gaf arg intermediate indices for TERM.")
     public static SubLObject gaf_arg_indices(final SubLObject v_term) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject predicate_subindices = NIL;
@@ -2110,70 +1150,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return relevant_key_gaf_arg_index(v_term, UNPROVIDED, UNPROVIDED);
     }
 
-    /**
-     * Return a list of the mt-relevant keys to the next index level below TERM ARGNUM PRED.
-     */
-    @LispMethod(comment = "Return a list of the mt-relevant keys to the next index level below TERM ARGNUM PRED.")
-    public static final SubLObject relevant_key_gaf_arg_index_alt(SubLObject v_term, SubLObject argnum, SubLObject pred) {
-        if (argnum == UNPROVIDED) {
-            argnum = NIL;
-        }
-        if (pred == UNPROVIDED) {
-            pred = NIL;
-        }
-        {
-            SubLObject keys = NIL;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                keys = com.cyc.cycjava.cycl.kb_indexing.key_gaf_arg_index(v_term, argnum, pred);
-            } else {
-                if (NIL != simple_indexed_term_p(v_term)) {
-                    {
-                        SubLObject keys_accum = NIL;
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(v_term);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL != simple_indexing.matches_gaf_arg_index(ass, v_term, argnum, pred, UNPROVIDED)) {
-                                if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                    keys_accum = simple_indexing.simple_key_gaf_arg_index(ass, keys_accum, v_term, argnum, pred);
-                                }
-                            }
-                        }
-                        keys = keys_accum;
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(argnum, pred, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(THREE_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_gaf_arg_subindex(v_term, argnum, pred, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    keys = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_keys(mt_subindex);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, argnum, pred, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_GAF_ARG_INDEX, v_term, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    if (apply(RELEVANT_NUM_GAF_ARG_INDEX, v_term, append(good_keys, list(next_key))).isPositive()) {
-                                        keys = cons(next_key, keys);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return keys;
-        }
-    }
-
-    /**
-     * Return a list of the mt-relevant keys to the next index level below TERM ARGNUM PRED.
-     */
-    @LispMethod(comment = "Return a list of the mt-relevant keys to the next index level below TERM ARGNUM PRED.")
     public static SubLObject relevant_key_gaf_arg_index(final SubLObject v_term, SubLObject argnum, SubLObject pred) {
         if (argnum == UNPROVIDED) {
             argnum = NIL;
@@ -2224,27 +1200,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return keys;
     }
 
-    /**
-     * Return a list of mts under which assertions are present indexed
-     * by TERM ARGNUM PRED.  Mts found are adjoined to ACCUMULATOR
-     */
-    @LispMethod(comment = "Return a list of mts under which assertions are present indexed\r\nby TERM ARGNUM PRED.  Mts found are adjoined to ACCUMULATOR\nReturn a list of mts under which assertions are present indexed\nby TERM ARGNUM PRED.  Mts found are adjoined to ACCUMULATOR")
-    public static final SubLObject mts_gaf_arg_index_alt(SubLObject v_term, SubLObject argnum, SubLObject pred, SubLObject accumulator) {
-        if (accumulator == UNPROVIDED) {
-            accumulator = NIL;
-        }
-        {
-            SubLObject keys = com.cyc.cycjava.cycl.kb_indexing.key_gaf_arg_index(v_term, argnum, pred);
-            accumulator = union(keys, accumulator, UNPROVIDED, UNPROVIDED);
-        }
-        return accumulator;
-    }
-
-    /**
-     * Return a list of mts under which assertions are present indexed
-     * by TERM ARGNUM PRED.  Mts found are adjoined to ACCUMULATOR
-     */
-    @LispMethod(comment = "Return a list of mts under which assertions are present indexed\r\nby TERM ARGNUM PRED.  Mts found are adjoined to ACCUMULATOR\nReturn a list of mts under which assertions are present indexed\nby TERM ARGNUM PRED.  Mts found are adjoined to ACCUMULATOR")
     public static SubLObject mts_gaf_arg_index(final SubLObject v_term, final SubLObject argnum, final SubLObject pred, SubLObject accumulator) {
         if (accumulator == UNPROVIDED) {
             accumulator = NIL;
@@ -2254,29 +1209,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return accumulator;
     }
 
-    /**
-     * Return T iff TERM, ARGNUM, PREDICATE and MT
-     * are valid keys for the :GAF-ARG INDEX.
-     */
-    @LispMethod(comment = "Return T iff TERM, ARGNUM, PREDICATE and MT\r\nare valid keys for the :GAF-ARG INDEX.\nReturn T iff TERM, ARGNUM, PREDICATE and MT\nare valid keys for the :GAF-ARG INDEX.")
-    public static final SubLObject gaf_arg_index_key_validator_alt(SubLObject v_term, SubLObject argnum, SubLObject predicate, SubLObject mt) {
-        if (argnum == UNPROVIDED) {
-            argnum = NIL;
-        }
-        if (predicate == UNPROVIDED) {
-            predicate = NIL;
-        }
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        return makeBoolean((((NIL != indexed_term_p(v_term)) && ((NIL == argnum) || (NIL != positive_integer_p(argnum)))) && ((NIL == predicate) || (NIL != forts.fort_p(predicate)))) && ((NIL == mt) || (NIL != hlmt.hlmt_p(mt))));
-    }
-
-    /**
-     * Return T iff TERM, ARGNUM, PREDICATE and MT
-     * are valid keys for the :GAF-ARG INDEX.
-     */
-    @LispMethod(comment = "Return T iff TERM, ARGNUM, PREDICATE and MT\r\nare valid keys for the :GAF-ARG INDEX.\nReturn T iff TERM, ARGNUM, PREDICATE and MT\nare valid keys for the :GAF-ARG INDEX.")
     public static SubLObject gaf_arg_index_key_validator(final SubLObject v_term, SubLObject argnum, SubLObject predicate, SubLObject mt) {
         if (argnum == UNPROVIDED) {
             argnum = NIL;
@@ -2290,29 +1222,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return makeBoolean((((NIL != indexed_term_p(v_term)) && ((NIL == argnum) || (NIL != subl_promotions.positive_integer_p(argnum)))) && ((NIL == predicate) || (NIL != forts.fort_p(predicate)))) && ((NIL == mt) || (NIL != hlmt.hlmt_p(mt))));
     }
 
-    /**
-     * Return the subindex at TERM ARGNUM PRED MT.
-     * Return NIL if none present.
-     */
-    @LispMethod(comment = "Return the subindex at TERM ARGNUM PRED MT.\r\nReturn NIL if none present.\nReturn the subindex at TERM ARGNUM PRED MT.\nReturn NIL if none present.")
-    public static final SubLObject get_gaf_arg_subindex_alt(SubLObject v_term, SubLObject argnum, SubLObject pred, SubLObject mt) {
-        if (argnum == UNPROVIDED) {
-            argnum = NIL;
-        }
-        if (pred == UNPROVIDED) {
-            pred = NIL;
-        }
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        return com.cyc.cycjava.cycl.kb_indexing.get_subindex(v_term, list($GAF_ARG, argnum, pred, mt));
-    }
-
-    /**
-     * Return the subindex at TERM ARGNUM PRED MT.
-     * Return NIL if none present.
-     */
-    @LispMethod(comment = "Return the subindex at TERM ARGNUM PRED MT.\r\nReturn NIL if none present.\nReturn the subindex at TERM ARGNUM PRED MT.\nReturn NIL if none present.")
     public static SubLObject get_gaf_arg_subindex(final SubLObject v_term, SubLObject argnum, SubLObject pred, SubLObject mt) {
         if (argnum == UNPROVIDED) {
             argnum = NIL;
@@ -2326,61 +1235,14 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return get_subindex(v_term, list($GAF_ARG, argnum, pred, mt));
     }
 
-    public static final SubLObject add_gaf_arg_index_alt(SubLObject v_term, SubLObject argnum, SubLObject pred, SubLObject mt, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_add_indexing_leaf(v_term, list($GAF_ARG, argnum, pred, mt), assertion);
-    }
-
     public static SubLObject add_gaf_arg_index(final SubLObject v_term, final SubLObject argnum, final SubLObject pred, final SubLObject mt, final SubLObject assertion) {
         return term_add_indexing_leaf(v_term, list($GAF_ARG, argnum, pred, mt), assertion);
-    }
-
-    public static final SubLObject rem_gaf_arg_index_alt(SubLObject v_term, SubLObject argnum, SubLObject pred, SubLObject mt, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_rem_indexing_leaf(v_term, list($GAF_ARG, argnum, pred, mt), assertion);
     }
 
     public static SubLObject rem_gaf_arg_index(final SubLObject v_term, final SubLObject argnum, final SubLObject pred, final SubLObject mt, final SubLObject assertion) {
         return term_rem_indexing_leaf(v_term, list($GAF_ARG, argnum, pred, mt), assertion);
     }
 
-    /**
-     * Return the number of #$termOfUnit gafs indexed off of TERM ARGNUM FUNC.
-     */
-    @LispMethod(comment = "Return the number of #$termOfUnit gafs indexed off of TERM ARGNUM FUNC.")
-    public static final SubLObject num_nart_arg_index_alt(SubLObject v_term, SubLObject argnum, SubLObject func) {
-        if (argnum == UNPROVIDED) {
-            argnum = NIL;
-        }
-        if (func == UNPROVIDED) {
-            func = NIL;
-        }
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != simple_indexed_term_p(v_term)) {
-                {
-                    SubLObject count = ZERO_INTEGER;
-                    SubLObject cdolist_list_var = do_simple_index_term_assertion_list(v_term);
-                    SubLObject ass = NIL;
-                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                        if (NIL != simple_indexing.matches_nart_arg_index(ass, v_term, argnum, func)) {
-                            count = add(count, ONE_INTEGER);
-                        }
-                    }
-                    num = count;
-                }
-            } else {
-                {
-                    SubLObject subindex = com.cyc.cycjava.cycl.kb_indexing.get_nart_arg_subindex(v_term, argnum, func);
-                    num = (NIL != subindex) ? ((SubLObject) (subindex_leaf_count(subindex))) : ZERO_INTEGER;
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the number of #$termOfUnit gafs indexed off of TERM ARGNUM FUNC.
-     */
-    @LispMethod(comment = "Return the number of #$termOfUnit gafs indexed off of TERM ARGNUM FUNC.")
     public static SubLObject num_nart_arg_index(final SubLObject v_term, SubLObject argnum, SubLObject func) {
         if (argnum == UNPROVIDED) {
             argnum = NIL;
@@ -2409,32 +1271,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Compute the assertion count at relevant mts under TERM ARGNUM FUNC.
-     * This will be the entire count extent if *tou-mt* is relevant,
-     * and zero otherwise.
-     */
-    @LispMethod(comment = "Compute the assertion count at relevant mts under TERM ARGNUM FUNC.\r\nThis will be the entire count extent if *tou-mt* is relevant,\r\nand zero otherwise.\nCompute the assertion count at relevant mts under TERM ARGNUM FUNC.\nThis will be the entire count extent if *tou-mt* is relevant,\nand zero otherwise.")
-    public static final SubLObject relevant_num_nart_arg_index_alt(SubLObject v_term, SubLObject argnum, SubLObject func) {
-        if (argnum == UNPROVIDED) {
-            argnum = NIL;
-        }
-        if (func == UNPROVIDED) {
-            func = NIL;
-        }
-        if (NIL != mt_relevance_macros.relevant_mtP(mt_vars.$tou_mt$.getGlobalValue())) {
-            return com.cyc.cycjava.cycl.kb_indexing.num_nart_arg_index(v_term, argnum, func);
-        } else {
-            return ZERO_INTEGER;
-        }
-    }
-
-    /**
-     * Compute the assertion count at relevant mts under TERM ARGNUM FUNC.
-     * This will be the entire count extent if *tou-mt* is relevant,
-     * and zero otherwise.
-     */
-    @LispMethod(comment = "Compute the assertion count at relevant mts under TERM ARGNUM FUNC.\r\nThis will be the entire count extent if *tou-mt* is relevant,\r\nand zero otherwise.\nCompute the assertion count at relevant mts under TERM ARGNUM FUNC.\nThis will be the entire count extent if *tou-mt* is relevant,\nand zero otherwise.")
     public static SubLObject relevant_num_nart_arg_index(final SubLObject v_term, SubLObject argnum, SubLObject func) {
         if (argnum == UNPROVIDED) {
             argnum = NIL;
@@ -2448,37 +1284,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return ZERO_INTEGER;
     }
 
-    /**
-     * Compute the assertion count at relevant mts under TERM ARGNUM FUNC.
-     * This will be the entire count extent if *tou-mt* is relevant,
-     * and zero otherwise.
-     *
-     * @param CUTOFF
-     * 		non-negative-integer-p; a number beyond which to stop counting relevant
-     * 		assertions and just return CUTOFF.
-     */
-    @LispMethod(comment = "Compute the assertion count at relevant mts under TERM ARGNUM FUNC.\r\nThis will be the entire count extent if *tou-mt* is relevant,\r\nand zero otherwise.\r\n\r\n@param CUTOFF\r\n\t\tnon-negative-integer-p; a number beyond which to stop counting relevant\r\n\t\tassertions and just return CUTOFF.\nCompute the assertion count at relevant mts under TERM ARGNUM FUNC.\nThis will be the entire count extent if *tou-mt* is relevant,\nand zero otherwise.")
-    public static final SubLObject relevant_num_nart_arg_index_with_cutoff_alt(SubLObject v_term, SubLObject cutoff, SubLObject argnum, SubLObject func) {
-        if (argnum == UNPROVIDED) {
-            argnum = NIL;
-        }
-        if (func == UNPROVIDED) {
-            func = NIL;
-        }
-        SubLTrampolineFile.checkType(cutoff, NON_NEGATIVE_INTEGER_P);
-        return min(cutoff, com.cyc.cycjava.cycl.kb_indexing.relevant_num_nart_arg_index(v_term, argnum, func));
-    }
-
-    /**
-     * Compute the assertion count at relevant mts under TERM ARGNUM FUNC.
-     * This will be the entire count extent if *tou-mt* is relevant,
-     * and zero otherwise.
-     *
-     * @param CUTOFF
-     * 		non-negative-integer-p; a number beyond which to stop counting relevant
-     * 		assertions and just return CUTOFF.
-     */
-    @LispMethod(comment = "Compute the assertion count at relevant mts under TERM ARGNUM FUNC.\r\nThis will be the entire count extent if *tou-mt* is relevant,\r\nand zero otherwise.\r\n\r\n@param CUTOFF\r\n\t\tnon-negative-integer-p; a number beyond which to stop counting relevant\r\n\t\tassertions and just return CUTOFF.\nCompute the assertion count at relevant mts under TERM ARGNUM FUNC.\nThis will be the entire count extent if *tou-mt* is relevant,\nand zero otherwise.")
     public static SubLObject relevant_num_nart_arg_index_with_cutoff(final SubLObject v_term, final SubLObject cutoff, SubLObject argnum, SubLObject func) {
         if (argnum == UNPROVIDED) {
             argnum = NIL;
@@ -2486,47 +1291,10 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         if (func == UNPROVIDED) {
             func = NIL;
         }
-        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "! subl_promotions.non_negative_integer_p(cutoff) " + ("subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) ") + cutoff;
+        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) " + cutoff;
         return min(cutoff, relevant_num_nart_arg_index(v_term, argnum, func));
     }
 
-    /**
-     * Return a list of the keys to the next index level below TERM ARGNUM FUNC.
-     */
-    @LispMethod(comment = "Return a list of the keys to the next index level below TERM ARGNUM FUNC.")
-    public static final SubLObject key_nart_arg_index_alt(SubLObject v_term, SubLObject argnum, SubLObject func) {
-        if (argnum == UNPROVIDED) {
-            argnum = NIL;
-        }
-        if (func == UNPROVIDED) {
-            func = NIL;
-        }
-        {
-            SubLObject keys = NIL;
-            if (NIL != simple_indexed_term_p(v_term)) {
-                {
-                    SubLObject keys_accum = NIL;
-                    SubLObject cdolist_list_var = do_simple_index_term_assertion_list(v_term);
-                    SubLObject ass = NIL;
-                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                        keys_accum = simple_indexing.simple_key_nart_arg_index(ass, keys_accum, v_term, argnum, func);
-                    }
-                    keys = keys_accum;
-                }
-            } else {
-                {
-                    SubLObject next_level_subindex = com.cyc.cycjava.cycl.kb_indexing.get_nart_arg_subindex(v_term, argnum, func);
-                    keys = (NIL != intermediate_index_p(next_level_subindex)) ? ((SubLObject) (intermediate_index_keys(next_level_subindex))) : NIL;
-                }
-            }
-            return keys;
-        }
-    }
-
-    /**
-     * Return a list of the keys to the next index level below TERM ARGNUM FUNC.
-     */
-    @LispMethod(comment = "Return a list of the keys to the next index level below TERM ARGNUM FUNC.")
     public static SubLObject key_nart_arg_index(final SubLObject v_term, SubLObject argnum, SubLObject func) {
         if (argnum == UNPROVIDED) {
             argnum = NIL;
@@ -2553,27 +1321,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return keys;
     }
 
-    /**
-     * Return a list of the mt-relevant keys to the next index level below TERM ARGNUM FUNC.
-     */
-    @LispMethod(comment = "Return a list of the mt-relevant keys to the next index level below TERM ARGNUM FUNC.")
-    public static final SubLObject relevant_key_nart_arg_index_alt(SubLObject v_term, SubLObject argnum, SubLObject func) {
-        if (argnum == UNPROVIDED) {
-            argnum = NIL;
-        }
-        if (func == UNPROVIDED) {
-            func = NIL;
-        }
-        if (NIL == mt_relevance_macros.relevant_mtP(mt_vars.$tou_mt$.getGlobalValue())) {
-            return NIL;
-        }
-        return com.cyc.cycjava.cycl.kb_indexing.key_nart_arg_index(v_term, argnum, func);
-    }
-
-    /**
-     * Return a list of the mt-relevant keys to the next index level below TERM ARGNUM FUNC.
-     */
-    @LispMethod(comment = "Return a list of the mt-relevant keys to the next index level below TERM ARGNUM FUNC.")
     public static SubLObject relevant_key_nart_arg_index(final SubLObject v_term, SubLObject argnum, SubLObject func) {
         if (argnum == UNPROVIDED) {
             argnum = NIL;
@@ -2587,27 +1334,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return key_nart_arg_index(v_term, argnum, func);
     }
 
-    /**
-     * Return a list of mts under which assertions are present indexed
-     * by TERM ARGNUM FUNC.  Mts found are adjoined to ACCUMULATOR
-     */
-    @LispMethod(comment = "Return a list of mts under which assertions are present indexed\r\nby TERM ARGNUM FUNC.  Mts found are adjoined to ACCUMULATOR\nReturn a list of mts under which assertions are present indexed\nby TERM ARGNUM FUNC.  Mts found are adjoined to ACCUMULATOR")
-    public static final SubLObject mts_nart_arg_index_alt(SubLObject v_term, SubLObject argnum, SubLObject func, SubLObject accumulator) {
-        if (accumulator == UNPROVIDED) {
-            accumulator = NIL;
-        }
-        {
-            SubLObject keys = com.cyc.cycjava.cycl.kb_indexing.key_nart_arg_index(v_term, argnum, func);
-            accumulator = union(keys, accumulator, UNPROVIDED, UNPROVIDED);
-        }
-        return accumulator;
-    }
-
-    /**
-     * Return a list of mts under which assertions are present indexed
-     * by TERM ARGNUM FUNC.  Mts found are adjoined to ACCUMULATOR
-     */
-    @LispMethod(comment = "Return a list of mts under which assertions are present indexed\r\nby TERM ARGNUM FUNC.  Mts found are adjoined to ACCUMULATOR\nReturn a list of mts under which assertions are present indexed\nby TERM ARGNUM FUNC.  Mts found are adjoined to ACCUMULATOR")
     public static SubLObject mts_nart_arg_index(final SubLObject v_term, final SubLObject argnum, final SubLObject func, SubLObject accumulator) {
         if (accumulator == UNPROVIDED) {
             accumulator = NIL;
@@ -2617,26 +1343,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return accumulator;
     }
 
-    /**
-     * Return the subindex at TERM ARGNUM FUNC MT.
-     * Return NIL if none present.
-     */
-    @LispMethod(comment = "Return the subindex at TERM ARGNUM FUNC MT.\r\nReturn NIL if none present.\nReturn the subindex at TERM ARGNUM FUNC MT.\nReturn NIL if none present.")
-    public static final SubLObject get_nart_arg_subindex_alt(SubLObject v_term, SubLObject argnum, SubLObject func) {
-        if (argnum == UNPROVIDED) {
-            argnum = NIL;
-        }
-        if (func == UNPROVIDED) {
-            func = NIL;
-        }
-        return com.cyc.cycjava.cycl.kb_indexing.get_subindex(v_term, list($NART_ARG, argnum, func));
-    }
-
-    /**
-     * Return the subindex at TERM ARGNUM FUNC MT.
-     * Return NIL if none present.
-     */
-    @LispMethod(comment = "Return the subindex at TERM ARGNUM FUNC MT.\r\nReturn NIL if none present.\nReturn the subindex at TERM ARGNUM FUNC MT.\nReturn NIL if none present.")
     public static SubLObject get_nart_arg_subindex(final SubLObject v_term, SubLObject argnum, SubLObject func) {
         if (argnum == UNPROVIDED) {
             argnum = NIL;
@@ -2647,58 +1353,14 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return get_subindex(v_term, list($NART_ARG, argnum, func));
     }
 
-    public static final SubLObject add_nart_arg_index_alt(SubLObject v_term, SubLObject argnum, SubLObject func, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_add_indexing_leaf(v_term, list($NART_ARG, argnum, func), assertion);
-    }
-
     public static SubLObject add_nart_arg_index(final SubLObject v_term, final SubLObject argnum, final SubLObject func, final SubLObject assertion) {
         return term_add_indexing_leaf(v_term, list($NART_ARG, argnum, func), assertion);
-    }
-
-    public static final SubLObject rem_nart_arg_index_alt(SubLObject v_term, SubLObject argnum, SubLObject func, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_rem_indexing_leaf(v_term, list($NART_ARG, argnum, func), assertion);
     }
 
     public static SubLObject rem_nart_arg_index(final SubLObject v_term, final SubLObject argnum, final SubLObject func, final SubLObject assertion) {
         return term_rem_indexing_leaf(v_term, list($NART_ARG, argnum, func), assertion);
     }
 
-    /**
-     * Return the assertion count at PRED MT.
-     */
-    @LispMethod(comment = "Return the assertion count at PRED MT.")
-    public static final SubLObject num_predicate_extent_index_alt(SubLObject pred, SubLObject mt) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != simple_indexed_term_p(pred)) {
-                {
-                    SubLObject count = ZERO_INTEGER;
-                    SubLObject cdolist_list_var = do_simple_index_term_assertion_list(pred);
-                    SubLObject ass = NIL;
-                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                        if (NIL != simple_indexing.matches_predicate_extent_index(ass, pred, mt)) {
-                            count = add(count, ONE_INTEGER);
-                        }
-                    }
-                    num = count;
-                }
-            } else {
-                {
-                    SubLObject subindex = com.cyc.cycjava.cycl.kb_indexing.get_predicate_extent_subindex(pred, mt);
-                    num = (NIL != subindex) ? ((SubLObject) (subindex_leaf_count(subindex))) : ZERO_INTEGER;
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the assertion count at PRED MT.
-     */
-    @LispMethod(comment = "Return the assertion count at PRED MT.")
     public static SubLObject num_predicate_extent_index(final SubLObject pred, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -2724,60 +1386,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Compute the assertion count at relevant mts under PRED.
-     */
-    @LispMethod(comment = "Compute the assertion count at relevant mts under PRED.")
-    public static final SubLObject relevant_num_predicate_extent_index_alt(SubLObject pred) {
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                num = com.cyc.cycjava.cycl.kb_indexing.num_predicate_extent_index(pred, UNPROVIDED);
-            } else {
-                if (NIL != simple_indexed_term_p(pred)) {
-                    {
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(pred);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL != simple_indexing.matches_predicate_extent_index(ass, pred, UNPROVIDED)) {
-                                if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                    num = add(num, ONE_INTEGER);
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(ONE_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_predicate_extent_subindex(pred, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    num = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_count(mt_subindex);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_PREDICATE_EXTENT_INDEX, pred, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    num = add(num, apply(RELEVANT_NUM_PREDICATE_EXTENT_INDEX, pred, append(good_keys, list(next_key))));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Compute the assertion count at relevant mts under PRED.
-     */
-    @LispMethod(comment = "Compute the assertion count at relevant mts under PRED.")
     public static SubLObject relevant_num_predicate_extent_index(final SubLObject pred) {
         SubLObject num = ZERO_INTEGER;
         if (NIL != all_mt_subindex_keys_relevant_p()) {
@@ -2818,76 +1426,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Compute the assertion count at relevant mts under PRED.
-     *
-     * @param CUTOFF
-     * 		non-negative-integer-p; a number beyond which to stop counting relevant
-     * 		assertions and just return CUTOFF.
-     */
-    @LispMethod(comment = "Compute the assertion count at relevant mts under PRED.\r\n\r\n@param CUTOFF\r\n\t\tnon-negative-integer-p; a number beyond which to stop counting relevant\r\n\t\tassertions and just return CUTOFF.")
-    public static final SubLObject relevant_num_predicate_extent_index_with_cutoff_alt(SubLObject pred, SubLObject cutoff) {
-        SubLTrampolineFile.checkType(cutoff, NON_NEGATIVE_INTEGER_P);
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                num = com.cyc.cycjava.cycl.kb_indexing.num_predicate_extent_index(pred, UNPROVIDED);
-                if (NIL != kb_indexing_macros.number_has_reached_cutoffP(num, cutoff)) {
-                    num = cutoff;
-                }
-            } else {
-                if (NIL != simple_indexed_term_p(pred)) {
-                    {
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(pred);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL == kb_indexing_macros.number_has_reached_cutoffP(num, cutoff)) {
-                                if (NIL != simple_indexing.matches_predicate_extent_index(ass, pred, UNPROVIDED)) {
-                                    if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                        num = add(num, ONE_INTEGER);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(ONE_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_predicate_extent_subindex(pred, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    num = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_count_with_cutoff(mt_subindex, cutoff);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_PREDICATE_EXTENT_INDEX, pred, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    num = add(num, apply(RELEVANT_NUM_PREDICATE_EXTENT_INDEX_WITH_CUTOFF, pred, new SubLObject[]{ cutoff, append(good_keys, list(next_key)) }));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Compute the assertion count at relevant mts under PRED.
-     *
-     * @param CUTOFF
-     * 		non-negative-integer-p; a number beyond which to stop counting relevant
-     * 		assertions and just return CUTOFF.
-     */
-    @LispMethod(comment = "Compute the assertion count at relevant mts under PRED.\r\n\r\n@param CUTOFF\r\n\t\tnon-negative-integer-p; a number beyond which to stop counting relevant\r\n\t\tassertions and just return CUTOFF.")
     public static SubLObject relevant_num_predicate_extent_index_with_cutoff(final SubLObject pred, final SubLObject cutoff) {
-        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "! subl_promotions.non_negative_integer_p(cutoff) " + ("subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) ") + cutoff;
+        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) " + cutoff;
         SubLObject num = ZERO_INTEGER;
         if (NIL != all_mt_subindex_keys_relevant_p()) {
             num = num_predicate_extent_index(pred, UNPROVIDED);
@@ -2931,57 +1471,10 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     *
-     *
-     * @return boolean; t iff PRED has no predicate extent in any mt.
-     */
-    @LispMethod(comment = "@return boolean; t iff PRED has no predicate extent in any mt.")
-    public static final SubLObject no_predicate_extent_p_alt(SubLObject pred) {
-        return zerop(com.cyc.cycjava.cycl.kb_indexing.num_predicate_extent_index(pred, UNPROVIDED));
-    }
-
-    /**
-     *
-     *
-     * @return boolean; t iff PRED has no predicate extent in any mt.
-     */
-    @LispMethod(comment = "@return boolean; t iff PRED has no predicate extent in any mt.")
     public static SubLObject no_predicate_extent_p(final SubLObject pred) {
         return zerop(num_predicate_extent_index(pred, UNPROVIDED));
     }
 
-    /**
-     * Return a list of the keys to the next predicate-extent index level below PRED.
-     */
-    @LispMethod(comment = "Return a list of the keys to the next predicate-extent index level below PRED.")
-    public static final SubLObject key_predicate_extent_index_alt(SubLObject pred) {
-        {
-            SubLObject keys = NIL;
-            if (NIL != simple_indexed_term_p(pred)) {
-                {
-                    SubLObject keys_accum = NIL;
-                    SubLObject cdolist_list_var = do_simple_index_term_assertion_list(pred);
-                    SubLObject ass = NIL;
-                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                        keys_accum = simple_indexing.simple_key_predicate_extent_index(ass, keys_accum, pred);
-                    }
-                    keys = keys_accum;
-                }
-            } else {
-                {
-                    SubLObject next_level_subindex = com.cyc.cycjava.cycl.kb_indexing.get_predicate_extent_subindex(pred, UNPROVIDED);
-                    keys = (NIL != intermediate_index_p(next_level_subindex)) ? ((SubLObject) (intermediate_index_keys(next_level_subindex))) : NIL;
-                }
-            }
-            return keys;
-        }
-    }
-
-    /**
-     * Return a list of the keys to the next predicate-extent index level below PRED.
-     */
-    @LispMethod(comment = "Return a list of the keys to the next predicate-extent index level below PRED.")
     public static SubLObject key_predicate_extent_index(final SubLObject pred) {
         SubLObject keys = NIL;
         if (NIL != simple_indexed_term_p(pred)) {
@@ -3002,64 +1495,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return keys;
     }
 
-    /**
-     * Return a list of the mt-relevant keys to the next predicate-extent index level below PRED
-     */
-    @LispMethod(comment = "Return a list of the mt-relevant keys to the next predicate-extent index level below PRED")
-    public static final SubLObject relevant_key_predicate_extent_index_alt(SubLObject pred) {
-        {
-            SubLObject keys = NIL;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                keys = com.cyc.cycjava.cycl.kb_indexing.key_predicate_extent_index(pred);
-            } else {
-                if (NIL != simple_indexed_term_p(pred)) {
-                    {
-                        SubLObject keys_accum = NIL;
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(pred);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL != simple_indexing.matches_predicate_extent_index(ass, pred, UNPROVIDED)) {
-                                if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                    keys_accum = simple_indexing.simple_key_predicate_extent_index(ass, keys_accum, pred);
-                                }
-                            }
-                        }
-                        keys = keys_accum;
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(ONE_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_predicate_extent_subindex(pred, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    keys = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_keys(mt_subindex);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_PREDICATE_EXTENT_INDEX, pred, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    if (apply(RELEVANT_NUM_PREDICATE_EXTENT_INDEX, pred, append(good_keys, list(next_key))).isPositive()) {
-                                        keys = cons(next_key, keys);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return keys;
-        }
-    }
-
-    /**
-     * Return a list of the mt-relevant keys to the next predicate-extent index level below PRED
-     */
-    @LispMethod(comment = "Return a list of the mt-relevant keys to the next predicate-extent index level below PRED")
     public static SubLObject relevant_key_predicate_extent_index(final SubLObject pred) {
         SubLObject keys = NIL;
         if (NIL != all_mt_subindex_keys_relevant_p()) {
@@ -3104,49 +1539,18 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return keys;
     }
 
-    public static final SubLObject predicate_extent_top_level_key_alt() {
-        return $PREDICATE_EXTENT;
-    }
-
     public static SubLObject predicate_extent_top_level_key() {
         return $PREDICATE_EXTENT;
-    }
-
-    public static final SubLObject add_predicate_extent_index_alt(SubLObject pred, SubLObject mt, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_add_indexing_leaf(pred, list(com.cyc.cycjava.cycl.kb_indexing.predicate_extent_top_level_key(), mt), assertion);
     }
 
     public static SubLObject add_predicate_extent_index(final SubLObject pred, final SubLObject mt, final SubLObject assertion) {
         return term_add_indexing_leaf(pred, list(predicate_extent_top_level_key(), mt), assertion);
     }
 
-    public static final SubLObject rem_predicate_extent_index_alt(SubLObject pred, SubLObject mt, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_rem_indexing_leaf(pred, list(com.cyc.cycjava.cycl.kb_indexing.predicate_extent_top_level_key(), mt), assertion);
-    }
-
     public static SubLObject rem_predicate_extent_index(final SubLObject pred, final SubLObject mt, final SubLObject assertion) {
         return term_rem_indexing_leaf(pred, list(predicate_extent_top_level_key(), mt), assertion);
     }
 
-    /**
-     *
-     *
-     * @return nil or subindex-p; Return the subindex at PRED MT, or NIL if none present
-     */
-    @LispMethod(comment = "@return nil or subindex-p; Return the subindex at PRED MT, or NIL if none present")
-    public static final SubLObject get_predicate_extent_subindex_alt(SubLObject pred, SubLObject mt) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        return com.cyc.cycjava.cycl.kb_indexing.get_subindex(pred, list(com.cyc.cycjava.cycl.kb_indexing.predicate_extent_top_level_key(), mt));
-    }
-
-    /**
-     *
-     *
-     * @return nil or subindex-p; Return the subindex at PRED MT, or NIL if none present
-     */
-    @LispMethod(comment = "@return nil or subindex-p; Return the subindex at PRED MT, or NIL if none present")
     public static SubLObject get_predicate_extent_subindex(final SubLObject pred, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -3154,39 +1558,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return get_subindex(pred, list(predicate_extent_top_level_key(), mt));
     }
 
-    /**
-     * Return the function extent of FUNC.
-     */
-    @LispMethod(comment = "Return the function extent of FUNC.")
-    public static final SubLObject num_function_extent_index_alt(SubLObject func) {
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != simple_indexed_term_p(func)) {
-                {
-                    SubLObject count = ZERO_INTEGER;
-                    SubLObject cdolist_list_var = do_simple_index_term_assertion_list(func);
-                    SubLObject ass = NIL;
-                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                        if (NIL != simple_indexing.matches_function_extent_index(ass, func)) {
-                            count = add(count, ONE_INTEGER);
-                        }
-                    }
-                    num = count;
-                }
-            } else {
-                {
-                    SubLObject subindex = com.cyc.cycjava.cycl.kb_indexing.get_function_extent_subindex(func);
-                    num = (NIL != subindex) ? ((SubLObject) (subindex_leaf_count(subindex))) : ZERO_INTEGER;
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the function extent of FUNC.
-     */
-    @LispMethod(comment = "Return the function extent of FUNC.")
     public static SubLObject num_function_extent_index(final SubLObject func) {
         SubLObject num = ZERO_INTEGER;
         if (NIL != simple_indexed_term_p(func)) {
@@ -3209,26 +1580,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Compute the function extent at relevant mts under FUNC.
-     * This will be the entire function extent if *tou-mt* is relevant,
-     * and zero otherwise.
-     */
-    @LispMethod(comment = "Compute the function extent at relevant mts under FUNC.\r\nThis will be the entire function extent if *tou-mt* is relevant,\r\nand zero otherwise.\nCompute the function extent at relevant mts under FUNC.\nThis will be the entire function extent if *tou-mt* is relevant,\nand zero otherwise.")
-    public static final SubLObject relevant_num_function_extent_index_alt(SubLObject func) {
-        if (NIL != mt_relevance_macros.relevant_mtP(mt_vars.$tou_mt$.getGlobalValue())) {
-            return com.cyc.cycjava.cycl.kb_indexing.num_function_extent_index(func);
-        } else {
-            return ZERO_INTEGER;
-        }
-    }
-
-    /**
-     * Compute the function extent at relevant mts under FUNC.
-     * This will be the entire function extent if *tou-mt* is relevant,
-     * and zero otherwise.
-     */
-    @LispMethod(comment = "Compute the function extent at relevant mts under FUNC.\r\nThis will be the entire function extent if *tou-mt* is relevant,\r\nand zero otherwise.\nCompute the function extent at relevant mts under FUNC.\nThis will be the entire function extent if *tou-mt* is relevant,\nand zero otherwise.")
     public static SubLObject relevant_num_function_extent_index(final SubLObject func) {
         if (NIL != mt_relevance_macros.relevant_mtP(mt_vars.$tou_mt$.getGlobalValue())) {
             return num_function_extent_index(func);
@@ -3236,122 +1587,27 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return ZERO_INTEGER;
     }
 
-    /**
-     * Compute the function extent at relevant mts under FUNC.
-     * This will be the entire function extent if *tou-mt* is relevant,
-     * and zero otherwise.
-     *
-     * @param CUTOFF
-     * 		non-negative-integer-p; a number beyond which to stop counting relevant
-     * 		assertions and just return CUTOFF.
-     */
-    @LispMethod(comment = "Compute the function extent at relevant mts under FUNC.\r\nThis will be the entire function extent if *tou-mt* is relevant,\r\nand zero otherwise.\r\n\r\n@param CUTOFF\r\n\t\tnon-negative-integer-p; a number beyond which to stop counting relevant\r\n\t\tassertions and just return CUTOFF.\nCompute the function extent at relevant mts under FUNC.\nThis will be the entire function extent if *tou-mt* is relevant,\nand zero otherwise.")
-    public static final SubLObject relevant_num_function_extent_index_with_cutoff_alt(SubLObject func, SubLObject cutoff) {
-        SubLTrampolineFile.checkType(cutoff, NON_NEGATIVE_INTEGER_P);
-        return min(cutoff, com.cyc.cycjava.cycl.kb_indexing.relevant_num_function_extent_index(func));
-    }
-
-    /**
-     * Compute the function extent at relevant mts under FUNC.
-     * This will be the entire function extent if *tou-mt* is relevant,
-     * and zero otherwise.
-     *
-     * @param CUTOFF
-     * 		non-negative-integer-p; a number beyond which to stop counting relevant
-     * 		assertions and just return CUTOFF.
-     */
-    @LispMethod(comment = "Compute the function extent at relevant mts under FUNC.\r\nThis will be the entire function extent if *tou-mt* is relevant,\r\nand zero otherwise.\r\n\r\n@param CUTOFF\r\n\t\tnon-negative-integer-p; a number beyond which to stop counting relevant\r\n\t\tassertions and just return CUTOFF.\nCompute the function extent at relevant mts under FUNC.\nThis will be the entire function extent if *tou-mt* is relevant,\nand zero otherwise.")
     public static SubLObject relevant_num_function_extent_index_with_cutoff(final SubLObject func, final SubLObject cutoff) {
-        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "! subl_promotions.non_negative_integer_p(cutoff) " + ("subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) ") + cutoff;
+        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) " + cutoff;
         return min(cutoff, relevant_num_function_extent_index(func));
     }
 
-    /**
-     *
-     *
-     * @return nil or subindex-p; Return the subindex at FUNC, or NIL if none present
-     */
-    @LispMethod(comment = "@return nil or subindex-p; Return the subindex at FUNC, or NIL if none present")
-    public static final SubLObject get_function_extent_subindex_alt(SubLObject func) {
-        return com.cyc.cycjava.cycl.kb_indexing.get_subindex(func, list(com.cyc.cycjava.cycl.kb_indexing.function_extent_top_level_key()));
-    }
-
-    /**
-     *
-     *
-     * @return nil or subindex-p; Return the subindex at FUNC, or NIL if none present
-     */
-    @LispMethod(comment = "@return nil or subindex-p; Return the subindex at FUNC, or NIL if none present")
     public static SubLObject get_function_extent_subindex(final SubLObject func) {
         return get_subindex(func, list(function_extent_top_level_key()));
-    }
-
-    public static final SubLObject add_function_extent_index_alt(SubLObject func, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_add_indexing_leaf(func, list(com.cyc.cycjava.cycl.kb_indexing.function_extent_top_level_key()), assertion);
     }
 
     public static SubLObject add_function_extent_index(final SubLObject func, final SubLObject assertion) {
         return term_add_indexing_leaf(func, list(function_extent_top_level_key()), assertion);
     }
 
-    public static final SubLObject rem_function_extent_index_alt(SubLObject func, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_rem_indexing_leaf(func, list(com.cyc.cycjava.cycl.kb_indexing.function_extent_top_level_key()), assertion);
-    }
-
     public static SubLObject rem_function_extent_index(final SubLObject func, final SubLObject assertion) {
         return term_rem_indexing_leaf(func, list(function_extent_top_level_key()), assertion);
-    }
-
-    public static final SubLObject function_extent_top_level_key_alt() {
-        return $FUNCTION_EXTENT;
     }
 
     public static SubLObject function_extent_top_level_key() {
         return $FUNCTION_EXTENT;
     }
 
-    /**
-     * Return the raw assertion count at PRED SENSE MT DIRECTION.
-     */
-    @LispMethod(comment = "Return the raw assertion count at PRED SENSE MT DIRECTION.")
-    public static final SubLObject num_predicate_rule_index_alt(SubLObject pred, SubLObject sense, SubLObject mt, SubLObject direction) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (direction == UNPROVIDED) {
-            direction = NIL;
-        }
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != simple_indexed_term_p(pred)) {
-                {
-                    SubLObject count = ZERO_INTEGER;
-                    SubLObject cdolist_list_var = do_simple_index_term_assertion_list(pred);
-                    SubLObject ass = NIL;
-                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                        if (NIL != simple_indexing.matches_predicate_rule_index(ass, pred, sense, mt, direction)) {
-                            count = add(count, ONE_INTEGER);
-                        }
-                    }
-                    num = count;
-                }
-            } else {
-                {
-                    SubLObject subindex = com.cyc.cycjava.cycl.kb_indexing.get_predicate_rule_subindex(pred, sense, mt, direction);
-                    num = (NIL != subindex) ? ((SubLObject) (subindex_leaf_count(subindex))) : ZERO_INTEGER;
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the raw assertion count at PRED SENSE MT DIRECTION.
-     */
-    @LispMethod(comment = "Return the raw assertion count at PRED SENSE MT DIRECTION.")
     public static SubLObject num_predicate_rule_index(final SubLObject pred, SubLObject sense, SubLObject mt, SubLObject direction) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -3383,63 +1639,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Return the raw assertion count at relevant mts under PRED SENSE.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under PRED SENSE.")
-    public static final SubLObject relevant_num_predicate_rule_index_alt(SubLObject pred, SubLObject sense) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                num = com.cyc.cycjava.cycl.kb_indexing.num_predicate_rule_index(pred, sense, UNPROVIDED, UNPROVIDED);
-            } else {
-                if (NIL != simple_indexed_term_p(pred)) {
-                    {
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(pred);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL != simple_indexing.matches_predicate_rule_index(ass, pred, sense, UNPROVIDED, UNPROVIDED)) {
-                                if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                    num = add(num, ONE_INTEGER);
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(TWO_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_predicate_rule_subindex(pred, sense, UNPROVIDED, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    num = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_count(mt_subindex);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_PREDICATE_RULE_INDEX, pred, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    num = add(num, apply(RELEVANT_NUM_PREDICATE_RULE_INDEX, pred, append(good_keys, list(next_key))));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the raw assertion count at relevant mts under PRED SENSE.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under PRED SENSE.")
     public static SubLObject relevant_num_predicate_rule_index(final SubLObject pred, SubLObject sense) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -3483,82 +1682,11 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Return the raw assertion count at relevant mts under PRED SENSE.
-     *
-     * @param CUTOFF
-     * 		non-negative-integer-p; a number beyond which to stop counting relevant
-     * 		assertions and just return CUTOFF.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under PRED SENSE.\r\n\r\n@param CUTOFF\r\n\t\tnon-negative-integer-p; a number beyond which to stop counting relevant\r\n\t\tassertions and just return CUTOFF.")
-    public static final SubLObject relevant_num_predicate_rule_index_with_cutoff_alt(SubLObject pred, SubLObject cutoff, SubLObject sense) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        SubLTrampolineFile.checkType(cutoff, NON_NEGATIVE_INTEGER_P);
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                num = com.cyc.cycjava.cycl.kb_indexing.num_predicate_rule_index(pred, sense, UNPROVIDED, UNPROVIDED);
-                if (NIL != kb_indexing_macros.number_has_reached_cutoffP(num, cutoff)) {
-                    num = cutoff;
-                }
-            } else {
-                if (NIL != simple_indexed_term_p(pred)) {
-                    {
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(pred);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL == kb_indexing_macros.number_has_reached_cutoffP(num, cutoff)) {
-                                if (NIL != simple_indexing.matches_predicate_rule_index(ass, pred, sense, UNPROVIDED, UNPROVIDED)) {
-                                    if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                        num = add(num, ONE_INTEGER);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(TWO_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_predicate_rule_subindex(pred, sense, UNPROVIDED, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    num = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_count_with_cutoff(mt_subindex, cutoff);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_PREDICATE_RULE_INDEX, pred, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    num = add(num, apply(RELEVANT_NUM_PREDICATE_RULE_INDEX_WITH_CUTOFF, pred, new SubLObject[]{ cutoff, append(good_keys, list(next_key)) }));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the raw assertion count at relevant mts under PRED SENSE.
-     *
-     * @param CUTOFF
-     * 		non-negative-integer-p; a number beyond which to stop counting relevant
-     * 		assertions and just return CUTOFF.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under PRED SENSE.\r\n\r\n@param CUTOFF\r\n\t\tnon-negative-integer-p; a number beyond which to stop counting relevant\r\n\t\tassertions and just return CUTOFF.")
     public static SubLObject relevant_num_predicate_rule_index_with_cutoff(final SubLObject pred, final SubLObject cutoff, SubLObject sense) {
         if (sense == UNPROVIDED) {
             sense = NIL;
         }
-        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "! subl_promotions.non_negative_integer_p(cutoff) " + ("subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) ") + cutoff;
+        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) " + cutoff;
         SubLObject num = ZERO_INTEGER;
         if (NIL != all_mt_subindex_keys_relevant_p()) {
             num = num_predicate_rule_index(pred, sense, UNPROVIDED, UNPROVIDED);
@@ -3601,43 +1729,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Return a list of the keys to the next index level below PRED SENSE MT.
-     */
-    @LispMethod(comment = "Return a list of the keys to the next index level below PRED SENSE MT.")
-    public static final SubLObject key_predicate_rule_index_alt(SubLObject pred, SubLObject sense, SubLObject mt) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        {
-            SubLObject keys = NIL;
-            if (NIL != simple_indexed_term_p(pred)) {
-                {
-                    SubLObject keys_accum = NIL;
-                    SubLObject cdolist_list_var = do_simple_index_term_assertion_list(pred);
-                    SubLObject ass = NIL;
-                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                        keys_accum = simple_indexing.simple_key_predicate_rule_index(ass, keys_accum, pred, sense, mt);
-                    }
-                    keys = keys_accum;
-                }
-            } else {
-                {
-                    SubLObject next_level_subindex = com.cyc.cycjava.cycl.kb_indexing.get_predicate_rule_subindex(pred, sense, mt, UNPROVIDED);
-                    keys = (NIL != intermediate_index_p(next_level_subindex)) ? ((SubLObject) (intermediate_index_keys(next_level_subindex))) : NIL;
-                }
-            }
-            return keys;
-        }
-    }
-
-    /**
-     * Return a list of the keys to the next index level below PRED SENSE MT.
-     */
-    @LispMethod(comment = "Return a list of the keys to the next index level below PRED SENSE MT.")
     public static SubLObject key_predicate_rule_index(final SubLObject pred, SubLObject sense, SubLObject mt) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -3664,67 +1755,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return keys;
     }
 
-    /**
-     * Return a list of the mt-relevant keys to the next index level below PRED SENSE.
-     */
-    @LispMethod(comment = "Return a list of the mt-relevant keys to the next index level below PRED SENSE.")
-    public static final SubLObject relevant_key_predicate_rule_index_alt(SubLObject pred, SubLObject sense) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        {
-            SubLObject keys = NIL;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                keys = com.cyc.cycjava.cycl.kb_indexing.key_predicate_rule_index(pred, sense, UNPROVIDED);
-            } else {
-                if (NIL != simple_indexed_term_p(pred)) {
-                    {
-                        SubLObject keys_accum = NIL;
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(pred);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL != simple_indexing.matches_predicate_rule_index(ass, pred, sense, UNPROVIDED, UNPROVIDED)) {
-                                if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                    keys_accum = simple_indexing.simple_key_predicate_rule_index(ass, keys_accum, pred, sense, UNPROVIDED);
-                                }
-                            }
-                        }
-                        keys = keys_accum;
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(TWO_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_predicate_rule_subindex(pred, sense, UNPROVIDED, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    keys = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_keys(mt_subindex);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_PREDICATE_RULE_INDEX, pred, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    if (apply(RELEVANT_NUM_PREDICATE_RULE_INDEX, pred, append(good_keys, list(next_key))).isPositive()) {
-                                        keys = cons(next_key, keys);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return keys;
-        }
-    }
-
-    /**
-     * Return a list of the mt-relevant keys to the next index level below PRED SENSE.
-     */
-    @LispMethod(comment = "Return a list of the mt-relevant keys to the next index level below PRED SENSE.")
     public static SubLObject relevant_key_predicate_rule_index(final SubLObject pred, SubLObject sense) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -3772,31 +1802,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return keys;
     }
 
-    /**
-     *
-     *
-     * @return nil or subindex-p
-     */
-    @LispMethod(comment = "@return nil or subindex-p")
-    public static final SubLObject get_predicate_rule_subindex_alt(SubLObject pred, SubLObject sense, SubLObject mt, SubLObject direction) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (direction == UNPROVIDED) {
-            direction = NIL;
-        }
-        return com.cyc.cycjava.cycl.kb_indexing.get_subindex(pred, list($PREDICATE_RULE, sense, mt, direction));
-    }
-
-    /**
-     *
-     *
-     * @return nil or subindex-p
-     */
-    @LispMethod(comment = "@return nil or subindex-p")
     public static SubLObject get_predicate_rule_subindex(final SubLObject pred, SubLObject sense, SubLObject mt, SubLObject direction) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -3810,61 +1815,14 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return get_subindex(pred, list($PREDICATE_RULE, sense, mt, direction));
     }
 
-    public static final SubLObject add_predicate_rule_index_alt(SubLObject pred, SubLObject sense, SubLObject mt, SubLObject direction, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_add_indexing_leaf(pred, list($PREDICATE_RULE, sense, mt, direction), assertion);
-    }
-
     public static SubLObject add_predicate_rule_index(final SubLObject pred, final SubLObject sense, final SubLObject mt, final SubLObject direction, final SubLObject assertion) {
         return term_add_indexing_leaf(pred, list($PREDICATE_RULE, sense, mt, direction), assertion);
-    }
-
-    public static final SubLObject rem_predicate_rule_index_alt(SubLObject pred, SubLObject sense, SubLObject mt, SubLObject direction, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_rem_indexing_leaf(pred, list($PREDICATE_RULE, sense, mt, direction), assertion);
     }
 
     public static SubLObject rem_predicate_rule_index(final SubLObject pred, final SubLObject sense, final SubLObject mt, final SubLObject direction, final SubLObject assertion) {
         return term_rem_indexing_leaf(pred, list($PREDICATE_RULE, sense, mt, direction), assertion);
     }
 
-    /**
-     * Return the raw assertion count at PRED SENSE DIRECTION.
-     */
-    @LispMethod(comment = "Return the raw assertion count at PRED SENSE DIRECTION.")
-    public static final SubLObject num_decontextualized_ist_predicate_rule_index_alt(SubLObject pred, SubLObject sense, SubLObject direction) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        if (direction == UNPROVIDED) {
-            direction = NIL;
-        }
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != simple_indexed_term_p(pred)) {
-                {
-                    SubLObject count = ZERO_INTEGER;
-                    SubLObject cdolist_list_var = do_simple_index_term_assertion_list(pred);
-                    SubLObject ass = NIL;
-                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                        if (NIL != simple_indexing.matches_decontextualized_ist_predicate_rule_index(ass, pred, sense, direction)) {
-                            count = add(count, ONE_INTEGER);
-                        }
-                    }
-                    num = count;
-                }
-            } else {
-                {
-                    SubLObject subindex = com.cyc.cycjava.cycl.kb_indexing.get_decontextualized_ist_predicate_rule_subindex(pred, sense, direction);
-                    num = (NIL != subindex) ? ((SubLObject) (subindex_leaf_count(subindex))) : ZERO_INTEGER;
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the raw assertion count at PRED SENSE DIRECTION.
-     */
-    @LispMethod(comment = "Return the raw assertion count at PRED SENSE DIRECTION.")
     public static SubLObject num_decontextualized_ist_predicate_rule_index(final SubLObject pred, SubLObject sense, SubLObject direction) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -3893,40 +1851,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Return a list of the keys to the next index level below PRED SENSE.
-     */
-    @LispMethod(comment = "Return a list of the keys to the next index level below PRED SENSE.")
-    public static final SubLObject key_decontextualized_ist_predicate_rule_index_alt(SubLObject pred, SubLObject sense) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        {
-            SubLObject keys = NIL;
-            if (NIL != simple_indexed_term_p(pred)) {
-                {
-                    SubLObject keys_accum = NIL;
-                    SubLObject cdolist_list_var = do_simple_index_term_assertion_list(pred);
-                    SubLObject ass = NIL;
-                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                        keys_accum = simple_indexing.simple_key_decontextualized_ist_predicate_rule_index(ass, keys_accum, pred, sense);
-                    }
-                    keys = keys_accum;
-                }
-            } else {
-                {
-                    SubLObject next_level_subindex = com.cyc.cycjava.cycl.kb_indexing.get_decontextualized_ist_predicate_rule_subindex(pred, sense, UNPROVIDED);
-                    keys = (NIL != intermediate_index_p(next_level_subindex)) ? ((SubLObject) (intermediate_index_keys(next_level_subindex))) : NIL;
-                }
-            }
-            return keys;
-        }
-    }
-
-    /**
-     * Return a list of the keys to the next index level below PRED SENSE.
-     */
-    @LispMethod(comment = "Return a list of the keys to the next index level below PRED SENSE.")
     public static SubLObject key_decontextualized_ist_predicate_rule_index(final SubLObject pred, SubLObject sense) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -3950,28 +1874,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return keys;
     }
 
-    /**
-     *
-     *
-     * @return nil or subindex-p
-     */
-    @LispMethod(comment = "@return nil or subindex-p")
-    public static final SubLObject get_decontextualized_ist_predicate_rule_subindex_alt(SubLObject pred, SubLObject sense, SubLObject direction) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        if (direction == UNPROVIDED) {
-            direction = NIL;
-        }
-        return com.cyc.cycjava.cycl.kb_indexing.get_subindex(pred, list($DECONTEXTUALIZED_IST_PREDICATE_RULE, sense, direction));
-    }
-
-    /**
-     *
-     *
-     * @return nil or subindex-p
-     */
-    @LispMethod(comment = "@return nil or subindex-p")
     public static SubLObject get_decontextualized_ist_predicate_rule_subindex(final SubLObject pred, SubLObject sense, SubLObject direction) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -3982,64 +1884,14 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return get_subindex(pred, list($DECONTEXTUALIZED_IST_PREDICATE_RULE, sense, direction));
     }
 
-    public static final SubLObject add_decontextualized_ist_predicate_rule_index_alt(SubLObject pred, SubLObject sense, SubLObject direction, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_add_indexing_leaf(pred, list($DECONTEXTUALIZED_IST_PREDICATE_RULE, sense, direction), assertion);
-    }
-
     public static SubLObject add_decontextualized_ist_predicate_rule_index(final SubLObject pred, final SubLObject sense, final SubLObject direction, final SubLObject assertion) {
         return term_add_indexing_leaf(pred, list($DECONTEXTUALIZED_IST_PREDICATE_RULE, sense, direction), assertion);
-    }
-
-    public static final SubLObject rem_decontextualized_ist_predicate_rule_index_alt(SubLObject pred, SubLObject sense, SubLObject direction, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_rem_indexing_leaf(pred, list($DECONTEXTUALIZED_IST_PREDICATE_RULE, sense, direction), assertion);
     }
 
     public static SubLObject rem_decontextualized_ist_predicate_rule_index(final SubLObject pred, final SubLObject sense, final SubLObject direction, final SubLObject assertion) {
         return term_rem_indexing_leaf(pred, list($DECONTEXTUALIZED_IST_PREDICATE_RULE, sense, direction), assertion);
     }
 
-    /**
-     * Return the raw assertion count at COL SENSE MT DIRECTION.
-     */
-    @LispMethod(comment = "Return the raw assertion count at COL SENSE MT DIRECTION.")
-    public static final SubLObject num_isa_rule_index_alt(SubLObject col, SubLObject sense, SubLObject mt, SubLObject direction) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (direction == UNPROVIDED) {
-            direction = NIL;
-        }
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != simple_indexed_term_p(col)) {
-                {
-                    SubLObject count = ZERO_INTEGER;
-                    SubLObject cdolist_list_var = do_simple_index_term_assertion_list(col);
-                    SubLObject ass = NIL;
-                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                        if (NIL != simple_indexing.matches_isa_rule_index(ass, col, sense, mt, direction)) {
-                            count = add(count, ONE_INTEGER);
-                        }
-                    }
-                    num = count;
-                }
-            } else {
-                {
-                    SubLObject subindex = com.cyc.cycjava.cycl.kb_indexing.get_isa_rule_subindex(col, sense, mt, direction);
-                    num = (NIL != subindex) ? ((SubLObject) (subindex_leaf_count(subindex))) : ZERO_INTEGER;
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the raw assertion count at COL SENSE MT DIRECTION.
-     */
-    @LispMethod(comment = "Return the raw assertion count at COL SENSE MT DIRECTION.")
     public static SubLObject num_isa_rule_index(final SubLObject col, SubLObject sense, SubLObject mt, SubLObject direction) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -4071,63 +1923,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Return the raw assertion count at relevant mts under COL SENSE.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under COL SENSE.")
-    public static final SubLObject relevant_num_isa_rule_index_alt(SubLObject col, SubLObject sense) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                num = com.cyc.cycjava.cycl.kb_indexing.num_isa_rule_index(col, sense, UNPROVIDED, UNPROVIDED);
-            } else {
-                if (NIL != simple_indexed_term_p(col)) {
-                    {
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(col);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL != simple_indexing.matches_isa_rule_index(ass, col, sense, UNPROVIDED, UNPROVIDED)) {
-                                if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                    num = add(num, ONE_INTEGER);
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(TWO_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_isa_rule_subindex(col, sense, UNPROVIDED, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    num = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_count(mt_subindex);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_ISA_RULE_INDEX, col, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    num = add(num, apply(RELEVANT_NUM_ISA_RULE_INDEX, col, append(good_keys, list(next_key))));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the raw assertion count at relevant mts under COL SENSE.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under COL SENSE.")
     public static SubLObject relevant_num_isa_rule_index(final SubLObject col, SubLObject sense) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -4171,82 +1966,11 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Return the raw assertion count at relevant mts under COL SENSE.
-     *
-     * @param CUTOFF
-     * 		non-negative-integer-p; a number beyond which to stop counting relevant
-     * 		assertions and just return CUTOFF.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under COL SENSE.\r\n\r\n@param CUTOFF\r\n\t\tnon-negative-integer-p; a number beyond which to stop counting relevant\r\n\t\tassertions and just return CUTOFF.")
-    public static final SubLObject relevant_num_isa_rule_index_with_cutoff_alt(SubLObject col, SubLObject cutoff, SubLObject sense) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        SubLTrampolineFile.checkType(cutoff, NON_NEGATIVE_INTEGER_P);
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                num = com.cyc.cycjava.cycl.kb_indexing.num_isa_rule_index(col, sense, UNPROVIDED, UNPROVIDED);
-                if (NIL != kb_indexing_macros.number_has_reached_cutoffP(num, cutoff)) {
-                    num = cutoff;
-                }
-            } else {
-                if (NIL != simple_indexed_term_p(col)) {
-                    {
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(col);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL == kb_indexing_macros.number_has_reached_cutoffP(num, cutoff)) {
-                                if (NIL != simple_indexing.matches_isa_rule_index(ass, col, sense, UNPROVIDED, UNPROVIDED)) {
-                                    if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                        num = add(num, ONE_INTEGER);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(TWO_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_isa_rule_subindex(col, sense, UNPROVIDED, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    num = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_count_with_cutoff(mt_subindex, cutoff);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_ISA_RULE_INDEX, col, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    num = add(num, apply(RELEVANT_NUM_ISA_RULE_INDEX_WITH_CUTOFF, col, new SubLObject[]{ cutoff, append(good_keys, list(next_key)) }));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the raw assertion count at relevant mts under COL SENSE.
-     *
-     * @param CUTOFF
-     * 		non-negative-integer-p; a number beyond which to stop counting relevant
-     * 		assertions and just return CUTOFF.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under COL SENSE.\r\n\r\n@param CUTOFF\r\n\t\tnon-negative-integer-p; a number beyond which to stop counting relevant\r\n\t\tassertions and just return CUTOFF.")
     public static SubLObject relevant_num_isa_rule_index_with_cutoff(final SubLObject col, final SubLObject cutoff, SubLObject sense) {
         if (sense == UNPROVIDED) {
             sense = NIL;
         }
-        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "! subl_promotions.non_negative_integer_p(cutoff) " + ("subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) ") + cutoff;
+        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) " + cutoff;
         SubLObject num = ZERO_INTEGER;
         if (NIL != all_mt_subindex_keys_relevant_p()) {
             num = num_isa_rule_index(col, sense, UNPROVIDED, UNPROVIDED);
@@ -4289,43 +2013,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Return a list of the keys to the next index level below COL SENSE MT.
-     */
-    @LispMethod(comment = "Return a list of the keys to the next index level below COL SENSE MT.")
-    public static final SubLObject key_isa_rule_index_alt(SubLObject col, SubLObject sense, SubLObject mt) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        {
-            SubLObject keys = NIL;
-            if (NIL != simple_indexed_term_p(col)) {
-                {
-                    SubLObject keys_accum = NIL;
-                    SubLObject cdolist_list_var = do_simple_index_term_assertion_list(col);
-                    SubLObject ass = NIL;
-                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                        keys_accum = simple_indexing.simple_key_isa_rule_index(ass, keys_accum, col, sense, mt);
-                    }
-                    keys = keys_accum;
-                }
-            } else {
-                {
-                    SubLObject next_level_subindex = com.cyc.cycjava.cycl.kb_indexing.get_isa_rule_subindex(col, sense, mt, UNPROVIDED);
-                    keys = (NIL != intermediate_index_p(next_level_subindex)) ? ((SubLObject) (intermediate_index_keys(next_level_subindex))) : NIL;
-                }
-            }
-            return keys;
-        }
-    }
-
-    /**
-     * Return a list of the keys to the next index level below COL SENSE MT.
-     */
-    @LispMethod(comment = "Return a list of the keys to the next index level below COL SENSE MT.")
     public static SubLObject key_isa_rule_index(final SubLObject col, SubLObject sense, SubLObject mt) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -4352,67 +2039,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return keys;
     }
 
-    /**
-     * Return a list of the mt-relevant keys to the next index level below COL SENSE.
-     */
-    @LispMethod(comment = "Return a list of the mt-relevant keys to the next index level below COL SENSE.")
-    public static final SubLObject relevant_key_isa_rule_index_alt(SubLObject col, SubLObject sense) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        {
-            SubLObject keys = NIL;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                keys = com.cyc.cycjava.cycl.kb_indexing.key_isa_rule_index(col, sense, UNPROVIDED);
-            } else {
-                if (NIL != simple_indexed_term_p(col)) {
-                    {
-                        SubLObject keys_accum = NIL;
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(col);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL != simple_indexing.matches_isa_rule_index(ass, col, sense, UNPROVIDED, UNPROVIDED)) {
-                                if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                    keys_accum = simple_indexing.simple_key_isa_rule_index(ass, keys_accum, col, sense, UNPROVIDED);
-                                }
-                            }
-                        }
-                        keys = keys_accum;
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(TWO_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_isa_rule_subindex(col, sense, UNPROVIDED, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    keys = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_keys(mt_subindex);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_ISA_RULE_INDEX, col, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    if (apply(RELEVANT_NUM_ISA_RULE_INDEX, col, append(good_keys, list(next_key))).isPositive()) {
-                                        keys = cons(next_key, keys);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return keys;
-        }
-    }
-
-    /**
-     * Return a list of the mt-relevant keys to the next index level below COL SENSE.
-     */
-    @LispMethod(comment = "Return a list of the mt-relevant keys to the next index level below COL SENSE.")
     public static SubLObject relevant_key_isa_rule_index(final SubLObject col, SubLObject sense) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -4460,31 +2086,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return keys;
     }
 
-    /**
-     *
-     *
-     * @return nil or subindex-p
-     */
-    @LispMethod(comment = "@return nil or subindex-p")
-    public static final SubLObject get_isa_rule_subindex_alt(SubLObject col, SubLObject sense, SubLObject mt, SubLObject direction) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (direction == UNPROVIDED) {
-            direction = NIL;
-        }
-        return com.cyc.cycjava.cycl.kb_indexing.get_subindex(col, list($ISA_RULE, sense, mt, direction));
-    }
-
-    /**
-     *
-     *
-     * @return nil or subindex-p
-     */
-    @LispMethod(comment = "@return nil or subindex-p")
     public static SubLObject get_isa_rule_subindex(final SubLObject col, SubLObject sense, SubLObject mt, SubLObject direction) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -4498,64 +2099,14 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return get_subindex(col, list($ISA_RULE, sense, mt, direction));
     }
 
-    public static final SubLObject add_isa_rule_index_alt(SubLObject col, SubLObject sense, SubLObject mt, SubLObject direction, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_add_indexing_leaf(col, list($ISA_RULE, sense, mt, direction), assertion);
-    }
-
     public static SubLObject add_isa_rule_index(final SubLObject col, final SubLObject sense, final SubLObject mt, final SubLObject direction, final SubLObject assertion) {
         return term_add_indexing_leaf(col, list($ISA_RULE, sense, mt, direction), assertion);
-    }
-
-    public static final SubLObject rem_isa_rule_index_alt(SubLObject col, SubLObject sense, SubLObject mt, SubLObject direction, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_rem_indexing_leaf(col, list($ISA_RULE, sense, mt, direction), assertion);
     }
 
     public static SubLObject rem_isa_rule_index(final SubLObject col, final SubLObject sense, final SubLObject mt, final SubLObject direction, final SubLObject assertion) {
         return term_rem_indexing_leaf(col, list($ISA_RULE, sense, mt, direction), assertion);
     }
 
-    /**
-     * Return the raw assertion count at COL SENSE MT DIRECTION.
-     */
-    @LispMethod(comment = "Return the raw assertion count at COL SENSE MT DIRECTION.")
-    public static final SubLObject num_quoted_isa_rule_index_alt(SubLObject col, SubLObject sense, SubLObject mt, SubLObject direction) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (direction == UNPROVIDED) {
-            direction = NIL;
-        }
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != simple_indexed_term_p(col)) {
-                {
-                    SubLObject count = ZERO_INTEGER;
-                    SubLObject cdolist_list_var = do_simple_index_term_assertion_list(col);
-                    SubLObject ass = NIL;
-                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                        if (NIL != simple_indexing.matches_quoted_isa_rule_index(ass, col, sense, mt, direction)) {
-                            count = add(count, ONE_INTEGER);
-                        }
-                    }
-                    num = count;
-                }
-            } else {
-                {
-                    SubLObject subindex = com.cyc.cycjava.cycl.kb_indexing.get_quoted_isa_rule_subindex(col, sense, mt, direction);
-                    num = (NIL != subindex) ? ((SubLObject) (subindex_leaf_count(subindex))) : ZERO_INTEGER;
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the raw assertion count at COL SENSE MT DIRECTION.
-     */
-    @LispMethod(comment = "Return the raw assertion count at COL SENSE MT DIRECTION.")
     public static SubLObject num_quoted_isa_rule_index(final SubLObject col, SubLObject sense, SubLObject mt, SubLObject direction) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -4587,63 +2138,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Return the raw assertion count at relevant mts under COL SENSE.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under COL SENSE.")
-    public static final SubLObject relevant_num_quoted_isa_rule_index_alt(SubLObject col, SubLObject sense) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                num = com.cyc.cycjava.cycl.kb_indexing.num_quoted_isa_rule_index(col, sense, UNPROVIDED, UNPROVIDED);
-            } else {
-                if (NIL != simple_indexed_term_p(col)) {
-                    {
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(col);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL != simple_indexing.matches_quoted_isa_rule_index(ass, col, sense, UNPROVIDED, UNPROVIDED)) {
-                                if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                    num = add(num, ONE_INTEGER);
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(TWO_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_quoted_isa_rule_subindex(col, sense, UNPROVIDED, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    num = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_count(mt_subindex);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_QUOTED_ISA_RULE_INDEX, col, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    num = add(num, apply(RELEVANT_NUM_QUOTED_ISA_RULE_INDEX, col, append(good_keys, list(next_key))));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the raw assertion count at relevant mts under COL SENSE.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under COL SENSE.")
     public static SubLObject relevant_num_quoted_isa_rule_index(final SubLObject col, SubLObject sense) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -4687,82 +2181,11 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Return the raw assertion count at relevant mts under COL SENSE.
-     *
-     * @param CUTOFF
-     * 		non-negative-integer-p; a number beyond which to stop counting relevant
-     * 		assertions and just return CUTOFF.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under COL SENSE.\r\n\r\n@param CUTOFF\r\n\t\tnon-negative-integer-p; a number beyond which to stop counting relevant\r\n\t\tassertions and just return CUTOFF.")
-    public static final SubLObject relevant_num_quoted_isa_rule_index_with_cutoff_alt(SubLObject col, SubLObject cutoff, SubLObject sense) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        SubLTrampolineFile.checkType(cutoff, NON_NEGATIVE_INTEGER_P);
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                num = com.cyc.cycjava.cycl.kb_indexing.num_quoted_isa_rule_index(col, sense, UNPROVIDED, UNPROVIDED);
-                if (NIL != kb_indexing_macros.number_has_reached_cutoffP(num, cutoff)) {
-                    num = cutoff;
-                }
-            } else {
-                if (NIL != simple_indexed_term_p(col)) {
-                    {
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(col);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL == kb_indexing_macros.number_has_reached_cutoffP(num, cutoff)) {
-                                if (NIL != simple_indexing.matches_quoted_isa_rule_index(ass, col, sense, UNPROVIDED, UNPROVIDED)) {
-                                    if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                        num = add(num, ONE_INTEGER);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(TWO_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_quoted_isa_rule_subindex(col, sense, UNPROVIDED, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    num = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_count_with_cutoff(mt_subindex, cutoff);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_QUOTED_ISA_RULE_INDEX, col, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    num = add(num, apply(RELEVANT_NUM_QUOTED_ISA_RULE_INDEX_WITH_CUTOFF, col, new SubLObject[]{ cutoff, append(good_keys, list(next_key)) }));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the raw assertion count at relevant mts under COL SENSE.
-     *
-     * @param CUTOFF
-     * 		non-negative-integer-p; a number beyond which to stop counting relevant
-     * 		assertions and just return CUTOFF.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under COL SENSE.\r\n\r\n@param CUTOFF\r\n\t\tnon-negative-integer-p; a number beyond which to stop counting relevant\r\n\t\tassertions and just return CUTOFF.")
     public static SubLObject relevant_num_quoted_isa_rule_index_with_cutoff(final SubLObject col, final SubLObject cutoff, SubLObject sense) {
         if (sense == UNPROVIDED) {
             sense = NIL;
         }
-        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "! subl_promotions.non_negative_integer_p(cutoff) " + ("subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) ") + cutoff;
+        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) " + cutoff;
         SubLObject num = ZERO_INTEGER;
         if (NIL != all_mt_subindex_keys_relevant_p()) {
             num = num_quoted_isa_rule_index(col, sense, UNPROVIDED, UNPROVIDED);
@@ -4805,43 +2228,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Return a list of the keys to the next index level below COL SENSE MT.
-     */
-    @LispMethod(comment = "Return a list of the keys to the next index level below COL SENSE MT.")
-    public static final SubLObject key_quoted_isa_rule_index_alt(SubLObject col, SubLObject sense, SubLObject mt) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        {
-            SubLObject keys = NIL;
-            if (NIL != simple_indexed_term_p(col)) {
-                {
-                    SubLObject keys_accum = NIL;
-                    SubLObject cdolist_list_var = do_simple_index_term_assertion_list(col);
-                    SubLObject ass = NIL;
-                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                        keys_accum = simple_indexing.simple_key_quoted_isa_rule_index(ass, keys_accum, col, sense, mt);
-                    }
-                    keys = keys_accum;
-                }
-            } else {
-                {
-                    SubLObject next_level_subindex = com.cyc.cycjava.cycl.kb_indexing.get_quoted_isa_rule_subindex(col, sense, mt, UNPROVIDED);
-                    keys = (NIL != intermediate_index_p(next_level_subindex)) ? ((SubLObject) (intermediate_index_keys(next_level_subindex))) : NIL;
-                }
-            }
-            return keys;
-        }
-    }
-
-    /**
-     * Return a list of the keys to the next index level below COL SENSE MT.
-     */
-    @LispMethod(comment = "Return a list of the keys to the next index level below COL SENSE MT.")
     public static SubLObject key_quoted_isa_rule_index(final SubLObject col, SubLObject sense, SubLObject mt) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -4868,67 +2254,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return keys;
     }
 
-    /**
-     * Return a list of the mt-relevant keys to the next index level below COL SENSE.
-     */
-    @LispMethod(comment = "Return a list of the mt-relevant keys to the next index level below COL SENSE.")
-    public static final SubLObject relevant_key_quoted_isa_rule_index_alt(SubLObject col, SubLObject sense) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        {
-            SubLObject keys = NIL;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                keys = com.cyc.cycjava.cycl.kb_indexing.key_quoted_isa_rule_index(col, sense, UNPROVIDED);
-            } else {
-                if (NIL != simple_indexed_term_p(col)) {
-                    {
-                        SubLObject keys_accum = NIL;
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(col);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL != simple_indexing.matches_quoted_isa_rule_index(ass, col, sense, UNPROVIDED, UNPROVIDED)) {
-                                if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                    keys_accum = simple_indexing.simple_key_quoted_isa_rule_index(ass, keys_accum, col, sense, UNPROVIDED);
-                                }
-                            }
-                        }
-                        keys = keys_accum;
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(TWO_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_quoted_isa_rule_subindex(col, sense, UNPROVIDED, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    keys = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_keys(mt_subindex);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_QUOTED_ISA_RULE_INDEX, col, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    if (apply(RELEVANT_NUM_QUOTED_ISA_RULE_INDEX, col, append(good_keys, list(next_key))).isPositive()) {
-                                        keys = cons(next_key, keys);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return keys;
-        }
-    }
-
-    /**
-     * Return a list of the mt-relevant keys to the next index level below COL SENSE.
-     */
-    @LispMethod(comment = "Return a list of the mt-relevant keys to the next index level below COL SENSE.")
     public static SubLObject relevant_key_quoted_isa_rule_index(final SubLObject col, SubLObject sense) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -4976,31 +2301,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return keys;
     }
 
-    /**
-     *
-     *
-     * @return nil or subindex-p
-     */
-    @LispMethod(comment = "@return nil or subindex-p")
-    public static final SubLObject get_quoted_isa_rule_subindex_alt(SubLObject col, SubLObject sense, SubLObject mt, SubLObject direction) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (direction == UNPROVIDED) {
-            direction = NIL;
-        }
-        return com.cyc.cycjava.cycl.kb_indexing.get_subindex(col, list($QUOTED_ISA_RULE, sense, mt, direction));
-    }
-
-    /**
-     *
-     *
-     * @return nil or subindex-p
-     */
-    @LispMethod(comment = "@return nil or subindex-p")
     public static SubLObject get_quoted_isa_rule_subindex(final SubLObject col, SubLObject sense, SubLObject mt, SubLObject direction) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -5014,64 +2314,14 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return get_subindex(col, list($QUOTED_ISA_RULE, sense, mt, direction));
     }
 
-    public static final SubLObject add_quoted_isa_rule_index_alt(SubLObject col, SubLObject sense, SubLObject mt, SubLObject direction, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_add_indexing_leaf(col, list($QUOTED_ISA_RULE, sense, mt, direction), assertion);
-    }
-
     public static SubLObject add_quoted_isa_rule_index(final SubLObject col, final SubLObject sense, final SubLObject mt, final SubLObject direction, final SubLObject assertion) {
         return term_add_indexing_leaf(col, list($QUOTED_ISA_RULE, sense, mt, direction), assertion);
-    }
-
-    public static final SubLObject rem_quoted_isa_rule_index_alt(SubLObject col, SubLObject sense, SubLObject mt, SubLObject direction, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_rem_indexing_leaf(col, list($QUOTED_ISA_RULE, sense, mt, direction), assertion);
     }
 
     public static SubLObject rem_quoted_isa_rule_index(final SubLObject col, final SubLObject sense, final SubLObject mt, final SubLObject direction, final SubLObject assertion) {
         return term_rem_indexing_leaf(col, list($QUOTED_ISA_RULE, sense, mt, direction), assertion);
     }
 
-    /**
-     * Return the raw assertion count at COL SENSE MT DIRECTION.
-     */
-    @LispMethod(comment = "Return the raw assertion count at COL SENSE MT DIRECTION.")
-    public static final SubLObject num_genls_rule_index_alt(SubLObject col, SubLObject sense, SubLObject mt, SubLObject direction) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (direction == UNPROVIDED) {
-            direction = NIL;
-        }
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != simple_indexed_term_p(col)) {
-                {
-                    SubLObject count = ZERO_INTEGER;
-                    SubLObject cdolist_list_var = do_simple_index_term_assertion_list(col);
-                    SubLObject ass = NIL;
-                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                        if (NIL != simple_indexing.matches_genls_rule_index(ass, col, sense, mt, direction)) {
-                            count = add(count, ONE_INTEGER);
-                        }
-                    }
-                    num = count;
-                }
-            } else {
-                {
-                    SubLObject subindex = com.cyc.cycjava.cycl.kb_indexing.get_genls_rule_subindex(col, sense, mt, direction);
-                    num = (NIL != subindex) ? ((SubLObject) (subindex_leaf_count(subindex))) : ZERO_INTEGER;
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the raw assertion count at COL SENSE MT DIRECTION.
-     */
-    @LispMethod(comment = "Return the raw assertion count at COL SENSE MT DIRECTION.")
     public static SubLObject num_genls_rule_index(final SubLObject col, SubLObject sense, SubLObject mt, SubLObject direction) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -5103,63 +2353,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Return the raw assertion count at relevant mts under COL SENSE.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under COL SENSE.")
-    public static final SubLObject relevant_num_genls_rule_index_alt(SubLObject col, SubLObject sense) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                num = com.cyc.cycjava.cycl.kb_indexing.num_genls_rule_index(col, sense, UNPROVIDED, UNPROVIDED);
-            } else {
-                if (NIL != simple_indexed_term_p(col)) {
-                    {
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(col);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL != simple_indexing.matches_genls_rule_index(ass, col, sense, UNPROVIDED, UNPROVIDED)) {
-                                if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                    num = add(num, ONE_INTEGER);
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(TWO_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_genls_rule_subindex(col, sense, UNPROVIDED, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    num = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_count(mt_subindex);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_GENLS_RULE_INDEX, col, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    num = add(num, apply(RELEVANT_NUM_GENLS_RULE_INDEX, col, append(good_keys, list(next_key))));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the raw assertion count at relevant mts under COL SENSE.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under COL SENSE.")
     public static SubLObject relevant_num_genls_rule_index(final SubLObject col, SubLObject sense) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -5203,82 +2396,11 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Return the raw assertion count at relevant mts under COL SENSE.
-     *
-     * @param CUTOFF
-     * 		non-negative-integer-p; a number beyond which to stop counting relevant
-     * 		assertions and just return CUTOFF.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under COL SENSE.\r\n\r\n@param CUTOFF\r\n\t\tnon-negative-integer-p; a number beyond which to stop counting relevant\r\n\t\tassertions and just return CUTOFF.")
-    public static final SubLObject relevant_num_genls_rule_index_with_cutoff_alt(SubLObject col, SubLObject cutoff, SubLObject sense) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        SubLTrampolineFile.checkType(cutoff, NON_NEGATIVE_INTEGER_P);
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                num = com.cyc.cycjava.cycl.kb_indexing.num_genls_rule_index(col, sense, UNPROVIDED, UNPROVIDED);
-                if (NIL != kb_indexing_macros.number_has_reached_cutoffP(num, cutoff)) {
-                    num = cutoff;
-                }
-            } else {
-                if (NIL != simple_indexed_term_p(col)) {
-                    {
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(col);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL == kb_indexing_macros.number_has_reached_cutoffP(num, cutoff)) {
-                                if (NIL != simple_indexing.matches_genls_rule_index(ass, col, sense, UNPROVIDED, UNPROVIDED)) {
-                                    if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                        num = add(num, ONE_INTEGER);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(TWO_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_genls_rule_subindex(col, sense, UNPROVIDED, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    num = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_count_with_cutoff(mt_subindex, cutoff);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_GENLS_RULE_INDEX, col, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    num = add(num, apply(RELEVANT_NUM_GENLS_RULE_INDEX_WITH_CUTOFF, col, new SubLObject[]{ cutoff, append(good_keys, list(next_key)) }));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the raw assertion count at relevant mts under COL SENSE.
-     *
-     * @param CUTOFF
-     * 		non-negative-integer-p; a number beyond which to stop counting relevant
-     * 		assertions and just return CUTOFF.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under COL SENSE.\r\n\r\n@param CUTOFF\r\n\t\tnon-negative-integer-p; a number beyond which to stop counting relevant\r\n\t\tassertions and just return CUTOFF.")
     public static SubLObject relevant_num_genls_rule_index_with_cutoff(final SubLObject col, final SubLObject cutoff, SubLObject sense) {
         if (sense == UNPROVIDED) {
             sense = NIL;
         }
-        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "! subl_promotions.non_negative_integer_p(cutoff) " + ("subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) ") + cutoff;
+        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) " + cutoff;
         SubLObject num = ZERO_INTEGER;
         if (NIL != all_mt_subindex_keys_relevant_p()) {
             num = num_genls_rule_index(col, sense, UNPROVIDED, UNPROVIDED);
@@ -5321,43 +2443,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Return a list of the keys to the next index level below COL SENSE MT.
-     */
-    @LispMethod(comment = "Return a list of the keys to the next index level below COL SENSE MT.")
-    public static final SubLObject key_genls_rule_index_alt(SubLObject col, SubLObject sense, SubLObject mt) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        {
-            SubLObject keys = NIL;
-            if (NIL != simple_indexed_term_p(col)) {
-                {
-                    SubLObject keys_accum = NIL;
-                    SubLObject cdolist_list_var = do_simple_index_term_assertion_list(col);
-                    SubLObject ass = NIL;
-                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                        keys_accum = simple_indexing.simple_key_genls_rule_index(ass, keys_accum, col, sense, mt);
-                    }
-                    keys = keys_accum;
-                }
-            } else {
-                {
-                    SubLObject next_level_subindex = com.cyc.cycjava.cycl.kb_indexing.get_genls_rule_subindex(col, sense, mt, UNPROVIDED);
-                    keys = (NIL != intermediate_index_p(next_level_subindex)) ? ((SubLObject) (intermediate_index_keys(next_level_subindex))) : NIL;
-                }
-            }
-            return keys;
-        }
-    }
-
-    /**
-     * Return a list of the keys to the next index level below COL SENSE MT.
-     */
-    @LispMethod(comment = "Return a list of the keys to the next index level below COL SENSE MT.")
     public static SubLObject key_genls_rule_index(final SubLObject col, SubLObject sense, SubLObject mt) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -5384,67 +2469,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return keys;
     }
 
-    /**
-     * Return a list of the mt-relevant keys to the next index level below COL SENSE.
-     */
-    @LispMethod(comment = "Return a list of the mt-relevant keys to the next index level below COL SENSE.")
-    public static final SubLObject relevant_key_genls_rule_index_alt(SubLObject col, SubLObject sense) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        {
-            SubLObject keys = NIL;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                keys = com.cyc.cycjava.cycl.kb_indexing.key_genls_rule_index(col, sense, UNPROVIDED);
-            } else {
-                if (NIL != simple_indexed_term_p(col)) {
-                    {
-                        SubLObject keys_accum = NIL;
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(col);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL != simple_indexing.matches_genls_rule_index(ass, col, sense, UNPROVIDED, UNPROVIDED)) {
-                                if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                    keys_accum = simple_indexing.simple_key_genls_rule_index(ass, keys_accum, col, sense, UNPROVIDED);
-                                }
-                            }
-                        }
-                        keys = keys_accum;
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(TWO_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_genls_rule_subindex(col, sense, UNPROVIDED, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    keys = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_keys(mt_subindex);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_GENLS_RULE_INDEX, col, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    if (apply(RELEVANT_NUM_GENLS_RULE_INDEX, col, append(good_keys, list(next_key))).isPositive()) {
-                                        keys = cons(next_key, keys);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return keys;
-        }
-    }
-
-    /**
-     * Return a list of the mt-relevant keys to the next index level below COL SENSE.
-     */
-    @LispMethod(comment = "Return a list of the mt-relevant keys to the next index level below COL SENSE.")
     public static SubLObject relevant_key_genls_rule_index(final SubLObject col, SubLObject sense) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -5492,31 +2516,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return keys;
     }
 
-    /**
-     *
-     *
-     * @return nil or subindex-p
-     */
-    @LispMethod(comment = "@return nil or subindex-p")
-    public static final SubLObject get_genls_rule_subindex_alt(SubLObject col, SubLObject sense, SubLObject mt, SubLObject direction) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (direction == UNPROVIDED) {
-            direction = NIL;
-        }
-        return com.cyc.cycjava.cycl.kb_indexing.get_subindex(col, list($GENLS_RULE, sense, mt, direction));
-    }
-
-    /**
-     *
-     *
-     * @return nil or subindex-p
-     */
-    @LispMethod(comment = "@return nil or subindex-p")
     public static SubLObject get_genls_rule_subindex(final SubLObject col, SubLObject sense, SubLObject mt, SubLObject direction) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -5530,64 +2529,14 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return get_subindex(col, list($GENLS_RULE, sense, mt, direction));
     }
 
-    public static final SubLObject add_genls_rule_index_alt(SubLObject col, SubLObject sense, SubLObject mt, SubLObject direction, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_add_indexing_leaf(col, list($GENLS_RULE, sense, mt, direction), assertion);
-    }
-
     public static SubLObject add_genls_rule_index(final SubLObject col, final SubLObject sense, final SubLObject mt, final SubLObject direction, final SubLObject assertion) {
         return term_add_indexing_leaf(col, list($GENLS_RULE, sense, mt, direction), assertion);
-    }
-
-    public static final SubLObject rem_genls_rule_index_alt(SubLObject col, SubLObject sense, SubLObject mt, SubLObject direction, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_rem_indexing_leaf(col, list($GENLS_RULE, sense, mt, direction), assertion);
     }
 
     public static SubLObject rem_genls_rule_index(final SubLObject col, final SubLObject sense, final SubLObject mt, final SubLObject direction, final SubLObject assertion) {
         return term_rem_indexing_leaf(col, list($GENLS_RULE, sense, mt, direction), assertion);
     }
 
-    /**
-     * Return the raw assertion count at COL SENSE MT DIRECTION.
-     */
-    @LispMethod(comment = "Return the raw assertion count at COL SENSE MT DIRECTION.")
-    public static final SubLObject num_genl_mt_rule_index_alt(SubLObject col, SubLObject sense, SubLObject mt, SubLObject direction) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (direction == UNPROVIDED) {
-            direction = NIL;
-        }
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != simple_indexed_term_p(col)) {
-                {
-                    SubLObject count = ZERO_INTEGER;
-                    SubLObject cdolist_list_var = do_simple_index_term_assertion_list(col);
-                    SubLObject ass = NIL;
-                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                        if (NIL != simple_indexing.matches_genl_mt_rule_index(ass, col, sense, mt, direction)) {
-                            count = add(count, ONE_INTEGER);
-                        }
-                    }
-                    num = count;
-                }
-            } else {
-                {
-                    SubLObject subindex = com.cyc.cycjava.cycl.kb_indexing.get_genl_mt_rule_subindex(col, sense, mt, direction);
-                    num = (NIL != subindex) ? ((SubLObject) (subindex_leaf_count(subindex))) : ZERO_INTEGER;
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the raw assertion count at COL SENSE MT DIRECTION.
-     */
-    @LispMethod(comment = "Return the raw assertion count at COL SENSE MT DIRECTION.")
     public static SubLObject num_genl_mt_rule_index(final SubLObject col, SubLObject sense, SubLObject mt, SubLObject direction) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -5619,63 +2568,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Return the raw assertion count at relevant mts under COL SENSE.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under COL SENSE.")
-    public static final SubLObject relevant_num_genl_mt_rule_index_alt(SubLObject col, SubLObject sense) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                num = com.cyc.cycjava.cycl.kb_indexing.num_genl_mt_rule_index(col, sense, UNPROVIDED, UNPROVIDED);
-            } else {
-                if (NIL != simple_indexed_term_p(col)) {
-                    {
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(col);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL != simple_indexing.matches_genl_mt_rule_index(ass, col, sense, UNPROVIDED, UNPROVIDED)) {
-                                if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                    num = add(num, ONE_INTEGER);
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(TWO_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_genl_mt_rule_subindex(col, sense, UNPROVIDED, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    num = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_count(mt_subindex);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_GENL_MT_RULE_INDEX, col, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    num = add(num, apply(RELEVANT_NUM_GENL_MT_RULE_INDEX, col, append(good_keys, list(next_key))));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the raw assertion count at relevant mts under COL SENSE.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under COL SENSE.")
     public static SubLObject relevant_num_genl_mt_rule_index(final SubLObject col, SubLObject sense) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -5719,82 +2611,11 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Return the raw assertion count at relevant mts under COL SENSE.
-     *
-     * @param CUTOFF
-     * 		non-negative-integer-p; a number beyond which to stop counting relevant
-     * 		assertions and just return CUTOFF.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under COL SENSE.\r\n\r\n@param CUTOFF\r\n\t\tnon-negative-integer-p; a number beyond which to stop counting relevant\r\n\t\tassertions and just return CUTOFF.")
-    public static final SubLObject relevant_num_genl_mt_rule_index_with_cutoff_alt(SubLObject col, SubLObject cutoff, SubLObject sense) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        SubLTrampolineFile.checkType(cutoff, NON_NEGATIVE_INTEGER_P);
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                num = com.cyc.cycjava.cycl.kb_indexing.num_genl_mt_rule_index(col, sense, UNPROVIDED, UNPROVIDED);
-                if (NIL != kb_indexing_macros.number_has_reached_cutoffP(num, cutoff)) {
-                    num = cutoff;
-                }
-            } else {
-                if (NIL != simple_indexed_term_p(col)) {
-                    {
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(col);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL == kb_indexing_macros.number_has_reached_cutoffP(num, cutoff)) {
-                                if (NIL != simple_indexing.matches_genl_mt_rule_index(ass, col, sense, UNPROVIDED, UNPROVIDED)) {
-                                    if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                        num = add(num, ONE_INTEGER);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(TWO_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_genl_mt_rule_subindex(col, sense, UNPROVIDED, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    num = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_count_with_cutoff(mt_subindex, cutoff);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_GENL_MT_RULE_INDEX, col, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    num = add(num, apply(RELEVANT_NUM_GENL_MT_RULE_INDEX_WITH_CUTOFF, col, new SubLObject[]{ cutoff, append(good_keys, list(next_key)) }));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the raw assertion count at relevant mts under COL SENSE.
-     *
-     * @param CUTOFF
-     * 		non-negative-integer-p; a number beyond which to stop counting relevant
-     * 		assertions and just return CUTOFF.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under COL SENSE.\r\n\r\n@param CUTOFF\r\n\t\tnon-negative-integer-p; a number beyond which to stop counting relevant\r\n\t\tassertions and just return CUTOFF.")
     public static SubLObject relevant_num_genl_mt_rule_index_with_cutoff(final SubLObject col, final SubLObject cutoff, SubLObject sense) {
         if (sense == UNPROVIDED) {
             sense = NIL;
         }
-        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "! subl_promotions.non_negative_integer_p(cutoff) " + ("subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) ") + cutoff;
+        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) " + cutoff;
         SubLObject num = ZERO_INTEGER;
         if (NIL != all_mt_subindex_keys_relevant_p()) {
             num = num_genl_mt_rule_index(col, sense, UNPROVIDED, UNPROVIDED);
@@ -5837,43 +2658,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Return a list of the keys to the next index level below COL SENSE MT.
-     */
-    @LispMethod(comment = "Return a list of the keys to the next index level below COL SENSE MT.")
-    public static final SubLObject key_genl_mt_rule_index_alt(SubLObject col, SubLObject sense, SubLObject mt) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        {
-            SubLObject keys = NIL;
-            if (NIL != simple_indexed_term_p(col)) {
-                {
-                    SubLObject keys_accum = NIL;
-                    SubLObject cdolist_list_var = do_simple_index_term_assertion_list(col);
-                    SubLObject ass = NIL;
-                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                        keys_accum = simple_indexing.simple_key_genl_mt_rule_index(ass, keys_accum, col, sense, mt);
-                    }
-                    keys = keys_accum;
-                }
-            } else {
-                {
-                    SubLObject next_level_subindex = com.cyc.cycjava.cycl.kb_indexing.get_genl_mt_rule_subindex(col, sense, mt, UNPROVIDED);
-                    keys = (NIL != intermediate_index_p(next_level_subindex)) ? ((SubLObject) (intermediate_index_keys(next_level_subindex))) : NIL;
-                }
-            }
-            return keys;
-        }
-    }
-
-    /**
-     * Return a list of the keys to the next index level below COL SENSE MT.
-     */
-    @LispMethod(comment = "Return a list of the keys to the next index level below COL SENSE MT.")
     public static SubLObject key_genl_mt_rule_index(final SubLObject col, SubLObject sense, SubLObject mt) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -5900,67 +2684,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return keys;
     }
 
-    /**
-     * Return a list of the mt-relevant keys to the next index level below COL SENSE.
-     */
-    @LispMethod(comment = "Return a list of the mt-relevant keys to the next index level below COL SENSE.")
-    public static final SubLObject relevant_key_genl_mt_rule_index_alt(SubLObject col, SubLObject sense) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        {
-            SubLObject keys = NIL;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                keys = com.cyc.cycjava.cycl.kb_indexing.key_genl_mt_rule_index(col, sense, UNPROVIDED);
-            } else {
-                if (NIL != simple_indexed_term_p(col)) {
-                    {
-                        SubLObject keys_accum = NIL;
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(col);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL != simple_indexing.matches_genl_mt_rule_index(ass, col, sense, UNPROVIDED, UNPROVIDED)) {
-                                if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                    keys_accum = simple_indexing.simple_key_genl_mt_rule_index(ass, keys_accum, col, sense, UNPROVIDED);
-                                }
-                            }
-                        }
-                        keys = keys_accum;
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(TWO_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_genl_mt_rule_subindex(col, sense, UNPROVIDED, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    keys = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_keys(mt_subindex);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, sense, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_GENL_MT_RULE_INDEX, col, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    if (apply(RELEVANT_NUM_GENL_MT_RULE_INDEX, col, append(good_keys, list(next_key))).isPositive()) {
-                                        keys = cons(next_key, keys);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return keys;
-        }
-    }
-
-    /**
-     * Return a list of the mt-relevant keys to the next index level below COL SENSE.
-     */
-    @LispMethod(comment = "Return a list of the mt-relevant keys to the next index level below COL SENSE.")
     public static SubLObject relevant_key_genl_mt_rule_index(final SubLObject col, SubLObject sense) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -6008,31 +2731,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return keys;
     }
 
-    /**
-     *
-     *
-     * @return nil or subindex-p
-     */
-    @LispMethod(comment = "@return nil or subindex-p")
-    public static final SubLObject get_genl_mt_rule_subindex_alt(SubLObject col, SubLObject sense, SubLObject mt, SubLObject direction) {
-        if (sense == UNPROVIDED) {
-            sense = NIL;
-        }
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (direction == UNPROVIDED) {
-            direction = NIL;
-        }
-        return com.cyc.cycjava.cycl.kb_indexing.get_subindex(col, list($GENL_MT_RULE, sense, mt, direction));
-    }
-
-    /**
-     *
-     *
-     * @return nil or subindex-p
-     */
-    @LispMethod(comment = "@return nil or subindex-p")
     public static SubLObject get_genl_mt_rule_subindex(final SubLObject col, SubLObject sense, SubLObject mt, SubLObject direction) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -6046,61 +2744,14 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return get_subindex(col, list($GENL_MT_RULE, sense, mt, direction));
     }
 
-    public static final SubLObject add_genl_mt_rule_index_alt(SubLObject col, SubLObject sense, SubLObject mt, SubLObject direction, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_add_indexing_leaf(col, list($GENL_MT_RULE, sense, mt, direction), assertion);
-    }
-
     public static SubLObject add_genl_mt_rule_index(final SubLObject col, final SubLObject sense, final SubLObject mt, final SubLObject direction, final SubLObject assertion) {
         return term_add_indexing_leaf(col, list($GENL_MT_RULE, sense, mt, direction), assertion);
-    }
-
-    public static final SubLObject rem_genl_mt_rule_index_alt(SubLObject col, SubLObject sense, SubLObject mt, SubLObject direction, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_rem_indexing_leaf(col, list($GENL_MT_RULE, sense, mt, direction), assertion);
     }
 
     public static SubLObject rem_genl_mt_rule_index(final SubLObject col, final SubLObject sense, final SubLObject mt, final SubLObject direction, final SubLObject assertion) {
         return term_rem_indexing_leaf(col, list($GENL_MT_RULE, sense, mt, direction), assertion);
     }
 
-    /**
-     * Return the raw assertion count at FUNC MT DIRECTION.
-     */
-    @LispMethod(comment = "Return the raw assertion count at FUNC MT DIRECTION.")
-    public static final SubLObject num_function_rule_index_alt(SubLObject func, SubLObject mt, SubLObject direction) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (direction == UNPROVIDED) {
-            direction = NIL;
-        }
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != simple_indexed_term_p(func)) {
-                {
-                    SubLObject count = ZERO_INTEGER;
-                    SubLObject cdolist_list_var = do_simple_index_term_assertion_list(func);
-                    SubLObject ass = NIL;
-                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                        if (NIL != simple_indexing.matches_function_rule_index(ass, func, mt, direction)) {
-                            count = add(count, ONE_INTEGER);
-                        }
-                    }
-                    num = count;
-                }
-            } else {
-                {
-                    SubLObject subindex = com.cyc.cycjava.cycl.kb_indexing.get_function_rule_subindex(func, mt, direction);
-                    num = (NIL != subindex) ? ((SubLObject) (subindex_leaf_count(subindex))) : ZERO_INTEGER;
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the raw assertion count at FUNC MT DIRECTION.
-     */
-    @LispMethod(comment = "Return the raw assertion count at FUNC MT DIRECTION.")
     public static SubLObject num_function_rule_index(final SubLObject func, SubLObject mt, SubLObject direction) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -6129,60 +2780,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Return the raw assertion count at relevant mts under FUNC.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under FUNC.")
-    public static final SubLObject relevant_num_function_rule_index_alt(SubLObject func) {
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                num = com.cyc.cycjava.cycl.kb_indexing.num_function_rule_index(func, UNPROVIDED, UNPROVIDED);
-            } else {
-                if (NIL != simple_indexed_term_p(func)) {
-                    {
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(func);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL != simple_indexing.matches_function_rule_index(ass, func, UNPROVIDED, UNPROVIDED)) {
-                                if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                    num = add(num, ONE_INTEGER);
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(ONE_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_function_rule_subindex(func, UNPROVIDED, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    num = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_count(mt_subindex);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_FUNCTION_RULE_INDEX, func, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    num = add(num, apply(RELEVANT_NUM_FUNCTION_RULE_INDEX, func, append(good_keys, list(next_key))));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the raw assertion count at relevant mts under FUNC.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under FUNC.")
     public static SubLObject relevant_num_function_rule_index(final SubLObject func) {
         SubLObject num = ZERO_INTEGER;
         if (NIL != all_mt_subindex_keys_relevant_p()) {
@@ -6223,76 +2820,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Return the raw assertion count at relevant mts under FUNC.
-     *
-     * @param CUTOFF
-     * 		non-negative-integer-p; a number beyond which to stop counting relevant
-     * 		assertions and just return CUTOFF.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under FUNC.\r\n\r\n@param CUTOFF\r\n\t\tnon-negative-integer-p; a number beyond which to stop counting relevant\r\n\t\tassertions and just return CUTOFF.")
-    public static final SubLObject relevant_num_function_rule_index_with_cutoff_alt(SubLObject func, SubLObject cutoff) {
-        SubLTrampolineFile.checkType(cutoff, NON_NEGATIVE_INTEGER_P);
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                num = com.cyc.cycjava.cycl.kb_indexing.num_function_rule_index(func, UNPROVIDED, UNPROVIDED);
-                if (NIL != kb_indexing_macros.number_has_reached_cutoffP(num, cutoff)) {
-                    num = cutoff;
-                }
-            } else {
-                if (NIL != simple_indexed_term_p(func)) {
-                    {
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(func);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL == kb_indexing_macros.number_has_reached_cutoffP(num, cutoff)) {
-                                if (NIL != simple_indexing.matches_function_rule_index(ass, func, UNPROVIDED, UNPROVIDED)) {
-                                    if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                        num = add(num, ONE_INTEGER);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(ONE_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_function_rule_subindex(func, UNPROVIDED, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    num = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_count_with_cutoff(mt_subindex, cutoff);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_FUNCTION_RULE_INDEX, func, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    num = add(num, apply(RELEVANT_NUM_FUNCTION_RULE_INDEX_WITH_CUTOFF, func, new SubLObject[]{ cutoff, append(good_keys, list(next_key)) }));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the raw assertion count at relevant mts under FUNC.
-     *
-     * @param CUTOFF
-     * 		non-negative-integer-p; a number beyond which to stop counting relevant
-     * 		assertions and just return CUTOFF.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under FUNC.\r\n\r\n@param CUTOFF\r\n\t\tnon-negative-integer-p; a number beyond which to stop counting relevant\r\n\t\tassertions and just return CUTOFF.")
     public static SubLObject relevant_num_function_rule_index_with_cutoff(final SubLObject func, final SubLObject cutoff) {
-        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "! subl_promotions.non_negative_integer_p(cutoff) " + ("subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) ") + cutoff;
+        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) " + cutoff;
         SubLObject num = ZERO_INTEGER;
         if (NIL != all_mt_subindex_keys_relevant_p()) {
             num = num_function_rule_index(func, UNPROVIDED, UNPROVIDED);
@@ -6335,40 +2864,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Return a list of the keys to the next index level below FUNC MT.
-     */
-    @LispMethod(comment = "Return a list of the keys to the next index level below FUNC MT.")
-    public static final SubLObject key_function_rule_index_alt(SubLObject func, SubLObject mt) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        {
-            SubLObject keys = NIL;
-            if (NIL != simple_indexed_term_p(func)) {
-                {
-                    SubLObject keys_accum = NIL;
-                    SubLObject cdolist_list_var = do_simple_index_term_assertion_list(func);
-                    SubLObject ass = NIL;
-                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                        keys_accum = simple_indexing.simple_key_function_rule_index(ass, keys_accum, func, mt);
-                    }
-                    keys = keys_accum;
-                }
-            } else {
-                {
-                    SubLObject next_level_subindex = com.cyc.cycjava.cycl.kb_indexing.get_function_rule_subindex(func, mt, UNPROVIDED);
-                    keys = (NIL != intermediate_index_p(next_level_subindex)) ? ((SubLObject) (intermediate_index_keys(next_level_subindex))) : NIL;
-                }
-            }
-            return keys;
-        }
-    }
-
-    /**
-     * Return a list of the keys to the next index level below FUNC MT.
-     */
-    @LispMethod(comment = "Return a list of the keys to the next index level below FUNC MT.")
     public static SubLObject key_function_rule_index(final SubLObject func, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -6392,64 +2887,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return keys;
     }
 
-    /**
-     * Return a list of the mt-relevant keys to the next index level below FUNC.
-     */
-    @LispMethod(comment = "Return a list of the mt-relevant keys to the next index level below FUNC.")
-    public static final SubLObject relevant_key_function_rule_index_alt(SubLObject func) {
-        {
-            SubLObject keys = NIL;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                keys = com.cyc.cycjava.cycl.kb_indexing.key_function_rule_index(func, UNPROVIDED);
-            } else {
-                if (NIL != simple_indexed_term_p(func)) {
-                    {
-                        SubLObject keys_accum = NIL;
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(func);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL != simple_indexing.matches_function_rule_index(ass, func, UNPROVIDED, UNPROVIDED)) {
-                                if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                    keys_accum = simple_indexing.simple_key_function_rule_index(ass, keys_accum, func, UNPROVIDED);
-                                }
-                            }
-                        }
-                        keys = keys_accum;
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(ONE_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_function_rule_subindex(func, UNPROVIDED, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    keys = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_keys(mt_subindex);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_FUNCTION_RULE_INDEX, func, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    if (apply(RELEVANT_NUM_FUNCTION_RULE_INDEX, func, append(good_keys, list(next_key))).isPositive()) {
-                                        keys = cons(next_key, keys);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return keys;
-        }
-    }
-
-    /**
-     * Return a list of the mt-relevant keys to the next index level below FUNC.
-     */
-    @LispMethod(comment = "Return a list of the mt-relevant keys to the next index level below FUNC.")
     public static SubLObject relevant_key_function_rule_index(final SubLObject func) {
         SubLObject keys = NIL;
         if (NIL != all_mt_subindex_keys_relevant_p()) {
@@ -6494,28 +2931,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return keys;
     }
 
-    /**
-     *
-     *
-     * @return nil or subindex-p
-     */
-    @LispMethod(comment = "@return nil or subindex-p")
-    public static final SubLObject get_function_rule_subindex_alt(SubLObject func, SubLObject mt, SubLObject direction) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (direction == UNPROVIDED) {
-            direction = NIL;
-        }
-        return com.cyc.cycjava.cycl.kb_indexing.get_subindex(func, list(com.cyc.cycjava.cycl.kb_indexing.function_rule_top_level_key(), mt, direction));
-    }
-
-    /**
-     *
-     *
-     * @return nil or subindex-p
-     */
-    @LispMethod(comment = "@return nil or subindex-p")
     public static SubLObject get_function_rule_subindex(final SubLObject func, SubLObject mt, SubLObject direction) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -6526,69 +2941,18 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return get_subindex(func, list(function_rule_top_level_key(), mt, direction));
     }
 
-    public static final SubLObject add_function_rule_index_alt(SubLObject func, SubLObject mt, SubLObject direction, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_add_indexing_leaf(func, list(com.cyc.cycjava.cycl.kb_indexing.function_rule_top_level_key(), mt, direction), assertion);
-    }
-
     public static SubLObject add_function_rule_index(final SubLObject func, final SubLObject mt, final SubLObject direction, final SubLObject assertion) {
         return term_add_indexing_leaf(func, list(function_rule_top_level_key(), mt, direction), assertion);
-    }
-
-    public static final SubLObject rem_function_rule_index_alt(SubLObject func, SubLObject mt, SubLObject direction, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_rem_indexing_leaf(func, list(com.cyc.cycjava.cycl.kb_indexing.function_rule_top_level_key(), mt, direction), assertion);
     }
 
     public static SubLObject rem_function_rule_index(final SubLObject func, final SubLObject mt, final SubLObject direction, final SubLObject assertion) {
         return term_rem_indexing_leaf(func, list(function_rule_top_level_key(), mt, direction), assertion);
     }
 
-    public static final SubLObject function_rule_top_level_key_alt() {
-        return $FUNCTION_RULE;
-    }
-
     public static SubLObject function_rule_top_level_key() {
         return $FUNCTION_RULE;
     }
 
-    /**
-     * Return the raw assertion count at RULE MT DIRECTION.
-     */
-    @LispMethod(comment = "Return the raw assertion count at RULE MT DIRECTION.")
-    public static final SubLObject num_exception_rule_index_alt(SubLObject rule, SubLObject mt, SubLObject direction) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (direction == UNPROVIDED) {
-            direction = NIL;
-        }
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != simple_indexed_term_p(rule)) {
-                {
-                    SubLObject count = ZERO_INTEGER;
-                    SubLObject cdolist_list_var = do_simple_index_term_assertion_list(rule);
-                    SubLObject ass = NIL;
-                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                        if (NIL != simple_indexing.matches_exception_rule_index(ass, rule, mt, direction)) {
-                            count = add(count, ONE_INTEGER);
-                        }
-                    }
-                    num = count;
-                }
-            } else {
-                {
-                    SubLObject subindex = com.cyc.cycjava.cycl.kb_indexing.get_exception_rule_subindex(rule, mt, direction);
-                    num = (NIL != subindex) ? ((SubLObject) (subindex_leaf_count(subindex))) : ZERO_INTEGER;
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the raw assertion count at RULE MT DIRECTION.
-     */
-    @LispMethod(comment = "Return the raw assertion count at RULE MT DIRECTION.")
     public static SubLObject num_exception_rule_index(final SubLObject rule, SubLObject mt, SubLObject direction) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -6617,60 +2981,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Return the raw assertion count at relevant mts under RULE.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under RULE.")
-    public static final SubLObject relevant_num_exception_rule_index_alt(SubLObject rule) {
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                num = com.cyc.cycjava.cycl.kb_indexing.num_exception_rule_index(rule, UNPROVIDED, UNPROVIDED);
-            } else {
-                if (NIL != simple_indexed_term_p(rule)) {
-                    {
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(rule);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL != simple_indexing.matches_exception_rule_index(ass, rule, UNPROVIDED, UNPROVIDED)) {
-                                if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                    num = add(num, ONE_INTEGER);
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(ONE_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_exception_rule_subindex(rule, UNPROVIDED, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    num = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_count(mt_subindex);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_EXCEPTION_RULE_INDEX, rule, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    num = add(num, apply(RELEVANT_NUM_EXCEPTION_RULE_INDEX, rule, append(good_keys, list(next_key))));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the raw assertion count at relevant mts under RULE.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under RULE.")
     public static SubLObject relevant_num_exception_rule_index(final SubLObject rule) {
         SubLObject num = ZERO_INTEGER;
         if (NIL != all_mt_subindex_keys_relevant_p()) {
@@ -6711,76 +3021,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Return the raw assertion count at relevant mts under RULE.
-     *
-     * @param CUTOFF
-     * 		non-negative-integer-p; a number beyond which to stop counting relevant
-     * 		assertions and just return CUTOFF.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under RULE.\r\n\r\n@param CUTOFF\r\n\t\tnon-negative-integer-p; a number beyond which to stop counting relevant\r\n\t\tassertions and just return CUTOFF.")
-    public static final SubLObject relevant_num_exception_rule_index_with_cutoff_alt(SubLObject rule, SubLObject cutoff) {
-        SubLTrampolineFile.checkType(cutoff, NON_NEGATIVE_INTEGER_P);
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                num = com.cyc.cycjava.cycl.kb_indexing.num_exception_rule_index(rule, UNPROVIDED, UNPROVIDED);
-                if (NIL != kb_indexing_macros.number_has_reached_cutoffP(num, cutoff)) {
-                    num = cutoff;
-                }
-            } else {
-                if (NIL != simple_indexed_term_p(rule)) {
-                    {
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(rule);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL == kb_indexing_macros.number_has_reached_cutoffP(num, cutoff)) {
-                                if (NIL != simple_indexing.matches_exception_rule_index(ass, rule, UNPROVIDED, UNPROVIDED)) {
-                                    if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                        num = add(num, ONE_INTEGER);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(ONE_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_exception_rule_subindex(rule, UNPROVIDED, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    num = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_count_with_cutoff(mt_subindex, cutoff);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_EXCEPTION_RULE_INDEX, rule, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    num = add(num, apply(RELEVANT_NUM_EXCEPTION_RULE_INDEX_WITH_CUTOFF, rule, new SubLObject[]{ cutoff, append(good_keys, list(next_key)) }));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the raw assertion count at relevant mts under RULE.
-     *
-     * @param CUTOFF
-     * 		non-negative-integer-p; a number beyond which to stop counting relevant
-     * 		assertions and just return CUTOFF.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under RULE.\r\n\r\n@param CUTOFF\r\n\t\tnon-negative-integer-p; a number beyond which to stop counting relevant\r\n\t\tassertions and just return CUTOFF.")
     public static SubLObject relevant_num_exception_rule_index_with_cutoff(final SubLObject rule, final SubLObject cutoff) {
-        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "! subl_promotions.non_negative_integer_p(cutoff) " + ("subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) ") + cutoff;
+        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) " + cutoff;
         SubLObject num = ZERO_INTEGER;
         if (NIL != all_mt_subindex_keys_relevant_p()) {
             num = num_exception_rule_index(rule, UNPROVIDED, UNPROVIDED);
@@ -6823,40 +3065,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Return a list of the keys to the next index level below RULE MT.
-     */
-    @LispMethod(comment = "Return a list of the keys to the next index level below RULE MT.")
-    public static final SubLObject key_exception_rule_index_alt(SubLObject rule, SubLObject mt) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        {
-            SubLObject keys = NIL;
-            if (NIL != simple_indexed_term_p(rule)) {
-                {
-                    SubLObject keys_accum = NIL;
-                    SubLObject cdolist_list_var = do_simple_index_term_assertion_list(rule);
-                    SubLObject ass = NIL;
-                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                        keys_accum = simple_indexing.simple_key_exception_rule_index(ass, keys_accum, rule, mt);
-                    }
-                    keys = keys_accum;
-                }
-            } else {
-                {
-                    SubLObject next_level_subindex = com.cyc.cycjava.cycl.kb_indexing.get_exception_rule_subindex(rule, mt, UNPROVIDED);
-                    keys = (NIL != intermediate_index_p(next_level_subindex)) ? ((SubLObject) (intermediate_index_keys(next_level_subindex))) : NIL;
-                }
-            }
-            return keys;
-        }
-    }
-
-    /**
-     * Return a list of the keys to the next index level below RULE MT.
-     */
-    @LispMethod(comment = "Return a list of the keys to the next index level below RULE MT.")
     public static SubLObject key_exception_rule_index(final SubLObject rule, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -6880,64 +3088,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return keys;
     }
 
-    /**
-     * Return a list of the mt-relevant keys to the next index level below RULE
-     */
-    @LispMethod(comment = "Return a list of the mt-relevant keys to the next index level below RULE")
-    public static final SubLObject relevant_key_exception_rule_index_alt(SubLObject rule) {
-        {
-            SubLObject keys = NIL;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                keys = com.cyc.cycjava.cycl.kb_indexing.key_exception_rule_index(rule, UNPROVIDED);
-            } else {
-                if (NIL != simple_indexed_term_p(rule)) {
-                    {
-                        SubLObject keys_accum = NIL;
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(rule);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL != simple_indexing.matches_exception_rule_index(ass, rule, UNPROVIDED, UNPROVIDED)) {
-                                if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                    keys_accum = simple_indexing.simple_key_exception_rule_index(ass, keys_accum, rule, UNPROVIDED);
-                                }
-                            }
-                        }
-                        keys = keys_accum;
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(ONE_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_exception_rule_subindex(rule, UNPROVIDED, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    keys = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_keys(mt_subindex);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_EXCEPTION_RULE_INDEX, rule, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    if (apply(RELEVANT_NUM_EXCEPTION_RULE_INDEX, rule, append(good_keys, list(next_key))).isPositive()) {
-                                        keys = cons(next_key, keys);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return keys;
-        }
-    }
-
-    /**
-     * Return a list of the mt-relevant keys to the next index level below RULE
-     */
-    @LispMethod(comment = "Return a list of the mt-relevant keys to the next index level below RULE")
     public static SubLObject relevant_key_exception_rule_index(final SubLObject rule) {
         SubLObject keys = NIL;
         if (NIL != all_mt_subindex_keys_relevant_p()) {
@@ -6982,36 +3132,10 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return keys;
     }
 
-    public static final SubLObject exception_rule_top_level_key_alt() {
-        return $EXCEPTION_RULE;
-    }
-
     public static SubLObject exception_rule_top_level_key() {
         return $EXCEPTION_RULE;
     }
 
-    /**
-     *
-     *
-     * @return nil or subindex-p
-     */
-    @LispMethod(comment = "@return nil or subindex-p")
-    public static final SubLObject get_exception_rule_subindex_alt(SubLObject rule, SubLObject mt, SubLObject direction) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (direction == UNPROVIDED) {
-            direction = NIL;
-        }
-        return com.cyc.cycjava.cycl.kb_indexing.get_subindex(rule, list(com.cyc.cycjava.cycl.kb_indexing.exception_rule_top_level_key(), mt, direction));
-    }
-
-    /**
-     *
-     *
-     * @return nil or subindex-p
-     */
-    @LispMethod(comment = "@return nil or subindex-p")
     public static SubLObject get_exception_rule_subindex(final SubLObject rule, SubLObject mt, SubLObject direction) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -7022,61 +3146,14 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return get_subindex(rule, list(exception_rule_top_level_key(), mt, direction));
     }
 
-    public static final SubLObject add_exception_rule_index_alt(SubLObject rule, SubLObject mt, SubLObject direction, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_add_indexing_leaf(rule, list(com.cyc.cycjava.cycl.kb_indexing.exception_rule_top_level_key(), mt, direction), assertion);
-    }
-
     public static SubLObject add_exception_rule_index(final SubLObject rule, final SubLObject mt, final SubLObject direction, final SubLObject assertion) {
         return term_add_indexing_leaf(rule, list(exception_rule_top_level_key(), mt, direction), assertion);
-    }
-
-    public static final SubLObject rem_exception_rule_index_alt(SubLObject rule, SubLObject mt, SubLObject direction, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_rem_indexing_leaf(rule, list(com.cyc.cycjava.cycl.kb_indexing.exception_rule_top_level_key(), mt, direction), assertion);
     }
 
     public static SubLObject rem_exception_rule_index(final SubLObject rule, final SubLObject mt, final SubLObject direction, final SubLObject assertion) {
         return term_rem_indexing_leaf(rule, list(exception_rule_top_level_key(), mt, direction), assertion);
     }
 
-    /**
-     * Return the raw assertion count at RULE MT DIRECTION.
-     */
-    @LispMethod(comment = "Return the raw assertion count at RULE MT DIRECTION.")
-    public static final SubLObject num_pragma_rule_index_alt(SubLObject rule, SubLObject mt, SubLObject direction) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (direction == UNPROVIDED) {
-            direction = NIL;
-        }
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != simple_indexed_term_p(rule)) {
-                {
-                    SubLObject count = ZERO_INTEGER;
-                    SubLObject cdolist_list_var = do_simple_index_term_assertion_list(rule);
-                    SubLObject ass = NIL;
-                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                        if (NIL != simple_indexing.matches_pragma_rule_index(ass, rule, mt, direction)) {
-                            count = add(count, ONE_INTEGER);
-                        }
-                    }
-                    num = count;
-                }
-            } else {
-                {
-                    SubLObject subindex = com.cyc.cycjava.cycl.kb_indexing.get_pragma_rule_subindex(rule, mt, direction);
-                    num = (NIL != subindex) ? ((SubLObject) (subindex_leaf_count(subindex))) : ZERO_INTEGER;
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the raw assertion count at RULE MT DIRECTION.
-     */
-    @LispMethod(comment = "Return the raw assertion count at RULE MT DIRECTION.")
     public static SubLObject num_pragma_rule_index(final SubLObject rule, SubLObject mt, SubLObject direction) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -7105,60 +3182,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Return the raw assertion count at relevant mts under RULE.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under RULE.")
-    public static final SubLObject relevant_num_pragma_rule_index_alt(SubLObject rule) {
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                num = com.cyc.cycjava.cycl.kb_indexing.num_pragma_rule_index(rule, UNPROVIDED, UNPROVIDED);
-            } else {
-                if (NIL != simple_indexed_term_p(rule)) {
-                    {
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(rule);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL != simple_indexing.matches_pragma_rule_index(ass, rule, UNPROVIDED, UNPROVIDED)) {
-                                if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                    num = add(num, ONE_INTEGER);
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(ONE_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_pragma_rule_subindex(rule, UNPROVIDED, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    num = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_count(mt_subindex);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_PRAGMA_RULE_INDEX, rule, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    num = add(num, apply(RELEVANT_NUM_PRAGMA_RULE_INDEX, rule, append(good_keys, list(next_key))));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the raw assertion count at relevant mts under RULE.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under RULE.")
     public static SubLObject relevant_num_pragma_rule_index(final SubLObject rule) {
         SubLObject num = ZERO_INTEGER;
         if (NIL != all_mt_subindex_keys_relevant_p()) {
@@ -7199,76 +3222,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Return the raw assertion count at relevant mts under RULE.
-     *
-     * @param CUTOFF
-     * 		non-negative-integer-p; a number beyond which to stop counting relevant
-     * 		assertions and just return CUTOFF.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under RULE.\r\n\r\n@param CUTOFF\r\n\t\tnon-negative-integer-p; a number beyond which to stop counting relevant\r\n\t\tassertions and just return CUTOFF.")
-    public static final SubLObject relevant_num_pragma_rule_index_with_cutoff_alt(SubLObject rule, SubLObject cutoff) {
-        SubLTrampolineFile.checkType(cutoff, NON_NEGATIVE_INTEGER_P);
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                num = com.cyc.cycjava.cycl.kb_indexing.num_pragma_rule_index(rule, UNPROVIDED, UNPROVIDED);
-                if (NIL != kb_indexing_macros.number_has_reached_cutoffP(num, cutoff)) {
-                    num = cutoff;
-                }
-            } else {
-                if (NIL != simple_indexed_term_p(rule)) {
-                    {
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(rule);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL == kb_indexing_macros.number_has_reached_cutoffP(num, cutoff)) {
-                                if (NIL != simple_indexing.matches_pragma_rule_index(ass, rule, UNPROVIDED, UNPROVIDED)) {
-                                    if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                        num = add(num, ONE_INTEGER);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(ONE_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_pragma_rule_subindex(rule, UNPROVIDED, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    num = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_count_with_cutoff(mt_subindex, cutoff);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_PRAGMA_RULE_INDEX, rule, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    num = add(num, apply(RELEVANT_NUM_PRAGMA_RULE_INDEX_WITH_CUTOFF, rule, new SubLObject[]{ cutoff, append(good_keys, list(next_key)) }));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return num;
-        }
-    }
-
-    /**
-     * Return the raw assertion count at relevant mts under RULE.
-     *
-     * @param CUTOFF
-     * 		non-negative-integer-p; a number beyond which to stop counting relevant
-     * 		assertions and just return CUTOFF.
-     */
-    @LispMethod(comment = "Return the raw assertion count at relevant mts under RULE.\r\n\r\n@param CUTOFF\r\n\t\tnon-negative-integer-p; a number beyond which to stop counting relevant\r\n\t\tassertions and just return CUTOFF.")
     public static SubLObject relevant_num_pragma_rule_index_with_cutoff(final SubLObject rule, final SubLObject cutoff) {
-        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "! subl_promotions.non_negative_integer_p(cutoff) " + ("subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) ") + cutoff;
+        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) " + cutoff;
         SubLObject num = ZERO_INTEGER;
         if (NIL != all_mt_subindex_keys_relevant_p()) {
             num = num_pragma_rule_index(rule, UNPROVIDED, UNPROVIDED);
@@ -7311,40 +3266,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return num;
     }
 
-    /**
-     * Return a list of the keys to the next index level below RULE MT.
-     */
-    @LispMethod(comment = "Return a list of the keys to the next index level below RULE MT.")
-    public static final SubLObject key_pragma_rule_index_alt(SubLObject rule, SubLObject mt) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        {
-            SubLObject keys = NIL;
-            if (NIL != simple_indexed_term_p(rule)) {
-                {
-                    SubLObject keys_accum = NIL;
-                    SubLObject cdolist_list_var = do_simple_index_term_assertion_list(rule);
-                    SubLObject ass = NIL;
-                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                        keys_accum = simple_indexing.simple_key_pragma_rule_index(ass, keys_accum, rule, mt);
-                    }
-                    keys = keys_accum;
-                }
-            } else {
-                {
-                    SubLObject next_level_subindex = com.cyc.cycjava.cycl.kb_indexing.get_pragma_rule_subindex(rule, mt, UNPROVIDED);
-                    keys = (NIL != intermediate_index_p(next_level_subindex)) ? ((SubLObject) (intermediate_index_keys(next_level_subindex))) : NIL;
-                }
-            }
-            return keys;
-        }
-    }
-
-    /**
-     * Return a list of the keys to the next index level below RULE MT.
-     */
-    @LispMethod(comment = "Return a list of the keys to the next index level below RULE MT.")
     public static SubLObject key_pragma_rule_index(final SubLObject rule, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -7366,69 +3287,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             keys = (NIL != intermediate_index_p(next_level_subindex)) ? intermediate_index_keys(next_level_subindex) : NIL;
         }
         return keys;
-    }/**
-     * Return a list of the keys to the next index level below RULE MT.
-     */
-
-
-    /**
-     * Return a list of the mt-relevant keys to the next index level below RULE
-     */
-    @LispMethod(comment = "Return a list of the mt-relevant keys to the next index level below RULE")
-    public static final SubLObject relevant_key_pragma_rule_index_alt(SubLObject rule) {
-        {
-            SubLObject keys = NIL;
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-                keys = com.cyc.cycjava.cycl.kb_indexing.key_pragma_rule_index(rule, UNPROVIDED);
-            } else {
-                if (NIL != simple_indexed_term_p(rule)) {
-                    {
-                        SubLObject keys_accum = NIL;
-                        SubLObject cdolist_list_var = do_simple_index_term_assertion_list(rule);
-                        SubLObject ass = NIL;
-                        for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                            if (NIL != simple_indexing.matches_pragma_rule_index(ass, rule, UNPROVIDED, UNPROVIDED)) {
-                                if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                    keys_accum = simple_indexing.simple_key_pragma_rule_index(ass, keys_accum, rule, UNPROVIDED);
-                                }
-                            }
-                        }
-                        keys = keys_accum;
-                    }
-                } else {
-                    {
-                        SubLObject good_key_count = kb_indexing_macros.number_of_non_null_args_in_order(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        if (good_key_count.numE(subtract(ONE_INTEGER, ONE_INTEGER))) {
-                            {
-                                SubLObject mt_subindex = com.cyc.cycjava.cycl.kb_indexing.get_pragma_rule_subindex(rule, UNPROVIDED, UNPROVIDED);
-                                if (NIL != mt_subindex) {
-                                    keys = com.cyc.cycjava.cycl.kb_indexing.relevant_mt_subindex_keys(mt_subindex);
-                                }
-                            }
-                        } else {
-                            {
-                                SubLObject good_keys = kb_indexing_macros.list_of_first_n_args(good_key_count, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject next_level_keys = apply(KEY_PRAGMA_RULE_INDEX, rule, good_keys);
-                                SubLObject cdolist_list_var = next_level_keys;
-                                SubLObject next_key = NIL;
-                                for (next_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , next_key = cdolist_list_var.first()) {
-                                    if (apply(RELEVANT_NUM_PRAGMA_RULE_INDEX, rule, append(good_keys, list(next_key))).isPositive()) {
-                                        keys = cons(next_key, keys);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return keys;
-        }
     }
 
-    /**
-     * Return a list of the mt-relevant keys to the next index level below RULE
-     */
-    @LispMethod(comment = "Return a list of the mt-relevant keys to the next index level below RULE")
     public static SubLObject relevant_key_pragma_rule_index(final SubLObject rule) {
         SubLObject keys = NIL;
         if (NIL != all_mt_subindex_keys_relevant_p()) {
@@ -7473,36 +3333,10 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return keys;
     }
 
-    public static final SubLObject pragma_rule_top_level_key_alt() {
-        return $PRAGMA_RULE;
-    }
-
     public static SubLObject pragma_rule_top_level_key() {
         return $PRAGMA_RULE;
     }
 
-    /**
-     *
-     *
-     * @return nil or subindex-p
-     */
-    @LispMethod(comment = "@return nil or subindex-p")
-    public static final SubLObject get_pragma_rule_subindex_alt(SubLObject rule, SubLObject mt, SubLObject direction) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        if (direction == UNPROVIDED) {
-            direction = NIL;
-        }
-        return com.cyc.cycjava.cycl.kb_indexing.get_subindex(rule, list(com.cyc.cycjava.cycl.kb_indexing.pragma_rule_top_level_key(), mt, direction));
-    }
-
-    /**
-     *
-     *
-     * @return nil or subindex-p
-     */
-    @LispMethod(comment = "@return nil or subindex-p")
     public static SubLObject get_pragma_rule_subindex(final SubLObject rule, SubLObject mt, SubLObject direction) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -7513,52 +3347,14 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return get_subindex(rule, list(pragma_rule_top_level_key(), mt, direction));
     }
 
-    public static final SubLObject add_pragma_rule_index_alt(SubLObject rule, SubLObject mt, SubLObject direction, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_add_indexing_leaf(rule, list(com.cyc.cycjava.cycl.kb_indexing.pragma_rule_top_level_key(), mt, direction), assertion);
-    }
-
     public static SubLObject add_pragma_rule_index(final SubLObject rule, final SubLObject mt, final SubLObject direction, final SubLObject assertion) {
         return term_add_indexing_leaf(rule, list(pragma_rule_top_level_key(), mt, direction), assertion);
-    }
-
-    public static final SubLObject rem_pragma_rule_index_alt(SubLObject rule, SubLObject mt, SubLObject direction, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_rem_indexing_leaf(rule, list(com.cyc.cycjava.cycl.kb_indexing.pragma_rule_top_level_key(), mt, direction), assertion);
     }
 
     public static SubLObject rem_pragma_rule_index(final SubLObject rule, final SubLObject mt, final SubLObject direction, final SubLObject assertion) {
         return term_rem_indexing_leaf(rule, list(pragma_rule_top_level_key(), mt, direction), assertion);
     }
 
-    /**
-     * Return the number of assertions at the mt index for TERM.
-     */
-    @LispMethod(comment = "Return the number of assertions at the mt index for TERM.")
-    public static final SubLObject num_mt_index_alt(SubLObject v_term) {
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != simple_indexed_term_p(v_term)) {
-                {
-                    SubLObject count = ZERO_INTEGER;
-                    SubLObject cdolist_list_var = do_simple_index_term_assertion_list(v_term);
-                    SubLObject ass = NIL;
-                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                        if (NIL != simple_indexing.matches_mt_index(ass, v_term)) {
-                            count = add(count, ONE_INTEGER);
-                        }
-                    }
-                    num = count;
-                }
-            } else {
-                {
-                    SubLObject subindex = com.cyc.cycjava.cycl.kb_indexing.get_mt_subindex(v_term);
-                    num = (NIL != subindex) ? ((SubLObject) (subindex_leaf_count(subindex))) : ZERO_INTEGER;
-                }
-            }
-            return num;
-        }
-    }
-
-    @LispMethod(comment = "Return the number of assertions at the mt index for TERM.")
     public static SubLObject num_mt_index(final SubLObject v_term) {
         SubLObject num = ZERO_INTEGER;
         if (NIL != simple_indexed_term_p(v_term)) {
@@ -7579,29 +3375,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             num = (NIL != subindex) ? subindex_leaf_count(subindex) : ZERO_INTEGER;
         }
         return num;
-    }/**
-     * Return the number of assertions at the mt index for TERM.
-     */
-
-
-    /**
-     * If TERM is a relevant mt, return its mt index count, else return 0.
-     */
-    @LispMethod(comment = "If TERM is a relevant mt, return its mt index count, else return 0.")
-    public static final SubLObject relevant_num_mt_index_alt(SubLObject v_term) {
-        if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-            return com.cyc.cycjava.cycl.kb_indexing.num_mt_index(v_term);
-        }
-        {
-            SubLObject mt_count = com.cyc.cycjava.cycl.kb_indexing.num_mt_index(v_term);
-            if (mt_count.isPositive() && (NIL != mt_relevance_macros.relevant_mtP(v_term))) {
-                return mt_count;
-            }
-        }
-        return ZERO_INTEGER;
     }
 
-    @LispMethod(comment = "If TERM is a relevant mt, return its mt index count, else return 0.")
     public static SubLObject relevant_num_mt_index(final SubLObject v_term) {
         if (NIL != all_mt_subindex_keys_relevant_p()) {
             return num_mt_index(v_term);
@@ -7611,36 +3386,10 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             return mt_count;
         }
         return ZERO_INTEGER;
-    }/**
-     * If TERM is a relevant mt, return its mt index count, else return 0.
-     */
-
-
-    /**
-     * If TERM is a relevant mt, return its mt index count, else return 0.
-     *
-     * @param CUTOFF
-     * 		non-negative-integer-p; a number beyond which to stop counting relevant
-     * 		assertions and just return CUTOFF.
-     */
-    @LispMethod(comment = "If TERM is a relevant mt, return its mt index count, else return 0.\r\n\r\n@param CUTOFF\r\n\t\tnon-negative-integer-p; a number beyond which to stop counting relevant\r\n\t\tassertions and just return CUTOFF.")
-    public static final SubLObject relevant_num_mt_index_with_cutoff_alt(SubLObject v_term, SubLObject cutoff) {
-        SubLTrampolineFile.checkType(cutoff, NON_NEGATIVE_INTEGER_P);
-        if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-            return min(cutoff, com.cyc.cycjava.cycl.kb_indexing.num_mt_index(v_term));
-        }
-        {
-            SubLObject mt_count = com.cyc.cycjava.cycl.kb_indexing.num_mt_index(v_term);
-            if (mt_count.isPositive() && (NIL != mt_relevance_macros.relevant_mtP(v_term))) {
-                return min(cutoff, mt_count);
-            }
-        }
-        return ZERO_INTEGER;
     }
 
-    @LispMethod(comment = "If TERM is a relevant mt, return its mt index count, else return 0.\r\n\r\n@param CUTOFF\r\n\t\tnon-negative-integer-p; a number beyond which to stop counting relevant\r\n\t\tassertions and just return CUTOFF.")
     public static SubLObject relevant_num_mt_index_with_cutoff(final SubLObject v_term, final SubLObject cutoff) {
-        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "! subl_promotions.non_negative_integer_p(cutoff) " + ("subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) ") + cutoff;
+        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) " + cutoff;
         if (NIL != all_mt_subindex_keys_relevant_p()) {
             return min(cutoff, num_mt_index(v_term));
         }
@@ -7649,14 +3398,7 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             return min(cutoff, mt_count);
         }
         return ZERO_INTEGER;
-    }/**
-     * If TERM is a relevant mt, return its mt index count, else return 0.
-     *
-     * @param CUTOFF
-     * 		non-negative-integer-p; a number beyond which to stop counting relevant
-     * 		assertions and just return CUTOFF.
-     */
-
+    }
 
     public static SubLObject num_mt_contents(final SubLObject mt) {
         if (NIL != fort_types_interface.broad_microtheory_p(mt)) {
@@ -7705,7 +3447,7 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
                 final SubLObject mess = $str112$do_broad_mt_index;
                 final SubLObject total_$1 = id_index_count(idx);
                 SubLObject sofar = ZERO_INTEGER;
-                assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
+                assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
                 final SubLObject _prev_bind_2 = $last_percent_progress_index$.currentBinding(thread);
                 final SubLObject _prev_bind_3 = $last_percent_progress_prediction$.currentBinding(thread);
                 final SubLObject _prev_bind_4 = $within_noting_percent_progress$.currentBinding(thread);
@@ -7816,31 +3558,13 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return integerDivide(multiply(total_assertions, samples_in_mt), sample_size);
     }
 
-    public static final SubLObject get_mt_subindex_alt(SubLObject v_term) {
-        return term_complex_index_lookup(v_term, com.cyc.cycjava.cycl.kb_indexing.mt_top_level_key());
-    }
-
     public static SubLObject get_mt_subindex(final SubLObject v_term) {
         return term_complex_index_lookup(v_term, mt_top_level_key());
-    }
-
-    public static final SubLObject add_mt_index_alt(SubLObject v_term, SubLObject assertion) {
-        if (NIL == com.cyc.cycjava.cycl.kb_indexing.broad_mtP(v_term)) {
-            com.cyc.cycjava.cycl.kb_indexing.add_mt_index_internal(v_term, assertion);
-        }
-        return assertion;
     }
 
     public static SubLObject add_mt_index(final SubLObject v_term, final SubLObject assertion) {
         if (NIL == broad_mtP(v_term)) {
             add_mt_index_internal(v_term, assertion);
-        }
-        return assertion;
-    }
-
-    public static final SubLObject rem_mt_index_alt(SubLObject v_term, SubLObject assertion) {
-        if (NIL == com.cyc.cycjava.cycl.kb_indexing.broad_mtP(v_term)) {
-            com.cyc.cycjava.cycl.kb_indexing.rem_mt_index_internal(v_term, assertion);
         }
         return assertion;
     }
@@ -7852,24 +3576,12 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return assertion;
     }
 
-    public static final SubLObject add_mt_index_internal_alt(SubLObject v_term, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_add_indexing_leaf(v_term, list(com.cyc.cycjava.cycl.kb_indexing.mt_top_level_key()), assertion);
-    }
-
     public static SubLObject add_mt_index_internal(final SubLObject v_term, final SubLObject assertion) {
         return term_add_indexing_leaf(v_term, list(mt_top_level_key()), assertion);
     }
 
-    public static final SubLObject rem_mt_index_internal_alt(SubLObject v_term, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_rem_indexing_leaf(v_term, list(com.cyc.cycjava.cycl.kb_indexing.mt_top_level_key()), assertion);
-    }
-
     public static SubLObject rem_mt_index_internal(final SubLObject v_term, final SubLObject assertion) {
         return term_rem_indexing_leaf(v_term, list(mt_top_level_key()), assertion);
-    }
-
-    public static final SubLObject mt_top_level_key_alt() {
-        return $IST;
     }
 
     public static SubLObject mt_top_level_key() {
@@ -7912,17 +3624,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return ZERO_INTEGER;
     }
 
-    public static final SubLObject broad_mtP_alt(SubLObject mt) {
-        {
-            SubLObject monad = hlmt.hlmt_monad_mt(mt);
-            SubLObject result = NIL;
-            if (NIL != forts.fort_p(monad)) {
-                result = broad_microtheory_p(monad);
-            }
-            return result;
-        }
-    }
-
     public static SubLObject broad_mtP(final SubLObject mt) {
         final SubLObject monad = hlmt.hlmt_monad_mt(mt);
         SubLObject result = NIL;
@@ -7930,40 +3631,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             result = fort_types_interface.broad_microtheory_p(monad);
         }
         return result;
-    }
-
-    public static final SubLObject broad_mt_index_cleanup_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != valid_constantP($$BroadMicrotheory, UNPROVIDED)) {
-                {
-                    SubLObject broad_mts = NIL;
-                    {
-                        SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                        SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                        try {
-                            mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                            mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                            broad_mts = isa.all_instances_via_indexing($$BroadMicrotheory, UNPROVIDED);
-                        } finally {
-                            mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                            mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    {
-                        SubLObject cdolist_list_var = broad_mts;
-                        SubLObject broad_mt = NIL;
-                        for (broad_mt = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , broad_mt = cdolist_list_var.first()) {
-                            if (NIL != forts.fort_p(broad_mt)) {
-                                com.cyc.cycjava.cycl.kb_indexing.rem_broad_mt_index(broad_mt);
-                            }
-                        }
-                    }
-                }
-                return NIL;
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject broad_mt_index_cleanup() {
@@ -7998,17 +3665,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return broad_mts;
     }
 
-    public static final SubLObject rem_broad_mt_index_alt(SubLObject v_term) {
-        if (NIL == simple_indexed_term_p(v_term)) {
-            {
-                SubLObject index = term_index(v_term);
-                intermediate_index_delete_key(term_index(v_term), com.cyc.cycjava.cycl.kb_indexing.mt_top_level_key());
-                intermediate_index_leaf_count_reset(index, length(intermediate_index_leaves(index)));
-            }
-        }
-        return v_term;
-    }
-
     public static SubLObject rem_broad_mt_index(final SubLObject v_term) {
         if (NIL == simple_indexed_term_p(v_term)) {
             final SubLObject index = term_index(v_term);
@@ -8018,36 +3674,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return v_term;
     }
 
-    /**
-     * Return the number of assertions at the other index for TERM.
-     */
-    @LispMethod(comment = "Return the number of assertions at the other index for TERM.")
-    public static final SubLObject num_other_index_alt(SubLObject v_term) {
-        {
-            SubLObject num = ZERO_INTEGER;
-            if (NIL != simple_indexed_term_p(v_term)) {
-                {
-                    SubLObject count = ZERO_INTEGER;
-                    SubLObject cdolist_list_var = do_simple_index_term_assertion_list(v_term);
-                    SubLObject ass = NIL;
-                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                        if (NIL != simple_indexing.matches_other_index(ass, v_term)) {
-                            count = add(count, ONE_INTEGER);
-                        }
-                    }
-                    num = count;
-                }
-            } else {
-                {
-                    SubLObject subindex = com.cyc.cycjava.cycl.kb_indexing.get_other_subindex(v_term);
-                    num = (NIL != subindex) ? ((SubLObject) (subindex_leaf_count(subindex))) : ZERO_INTEGER;
-                }
-            }
-            return num;
-        }
-    }
-
-    @LispMethod(comment = "Return the number of assertions at the other index for TERM.")
     public static SubLObject num_other_index(final SubLObject v_term) {
         SubLObject num = ZERO_INTEGER;
         if (NIL != simple_indexed_term_p(v_term)) {
@@ -8068,68 +3694,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             num = (NIL != subindex) ? subindex_leaf_count(subindex) : ZERO_INTEGER;
         }
         return num;
-    }/**
-     * Return the number of assertions at the other index for TERM.
-     */
-
-
-    /**
-     * Return the number of assertions in relevant mts at the other index for TERM.
-     */
-    @LispMethod(comment = "Return the number of assertions in relevant mts at the other index for TERM.")
-    public static final SubLObject relevant_num_other_index_alt(SubLObject v_term) {
-        if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-            return com.cyc.cycjava.cycl.kb_indexing.num_other_index(v_term);
-        }
-        {
-            SubLObject count = ZERO_INTEGER;
-            if (NIL != simple_indexed_term_p(v_term)) {
-                {
-                    SubLObject cdolist_list_var = do_simple_index_term_assertion_list(v_term);
-                    SubLObject ass = NIL;
-                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                        if (NIL != simple_indexing.matches_other_index(ass, v_term)) {
-                            if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                count = add(count, ONE_INTEGER);
-                            }
-                        }
-                    }
-                }
-            } else {
-                {
-                    SubLObject final_index = com.cyc.cycjava.cycl.kb_indexing.get_other_subindex(v_term);
-                    if (NIL != final_index) {
-                        {
-                            SubLObject index = final_index;
-                            if (NIL != do_final_index_valid_index_p(index)) {
-                                {
-                                    SubLObject set_contents_var = do_set_internal(final_index_set(index));
-                                    SubLObject basis_object = set_contents.do_set_contents_basis_object(set_contents_var);
-                                    SubLObject state = NIL;
-                                    for (state = set_contents.do_set_contents_initial_state(basis_object, set_contents_var); NIL == set_contents.do_set_contents_doneP(basis_object, state); state = set_contents.do_set_contents_update_state(state)) {
-                                        {
-                                            SubLObject ass = set_contents.do_set_contents_next(basis_object, state);
-                                            if (NIL != set_contents.do_set_contents_element_validP(state, ass)) {
-                                                if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                                    count = add(count, ONE_INTEGER);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return count;
-        }
     }
 
-    /**
-     * Return the number of assertions in relevant mts at the other index for TERM.
-     */
-    @LispMethod(comment = "Return the number of assertions in relevant mts at the other index for TERM.")
     public static SubLObject relevant_num_other_index(final SubLObject v_term) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != all_mt_subindex_keys_relevant_p()) {
@@ -8224,86 +3790,9 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return count;
     }
 
-    /**
-     * Return the number of assertions in relevant mts at the other index for TERM.
-     *
-     * @param CUTOFF
-     * 		non-negative-integer-p; a number beyond which to stop counting relevant
-     * 		assertions and just return CUTOFF.
-     */
-    @LispMethod(comment = "Return the number of assertions in relevant mts at the other index for TERM.\r\n\r\n@param CUTOFF\r\n\t\tnon-negative-integer-p; a number beyond which to stop counting relevant\r\n\t\tassertions and just return CUTOFF.")
-    public static final SubLObject relevant_num_other_index_with_cutoff_alt(SubLObject v_term, SubLObject cutoff) {
-        SubLTrampolineFile.checkType(cutoff, NON_NEGATIVE_INTEGER_P);
-        if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-            return min(cutoff, com.cyc.cycjava.cycl.kb_indexing.num_other_index(v_term));
-        }
-        {
-            SubLObject count = ZERO_INTEGER;
-            SubLObject doneP = NIL;
-            if (NIL != simple_indexed_term_p(v_term)) {
-                {
-                    SubLObject rest = NIL;
-                    for (rest = do_simple_index_term_assertion_list(v_term); !((NIL != doneP) || (NIL == rest)); rest = rest.rest()) {
-                        {
-                            SubLObject ass = rest.first();
-                            if (NIL != kb_indexing_macros.number_has_reached_cutoffP(count, cutoff)) {
-                                doneP = T;
-                            } else {
-                                if (NIL != simple_indexing.matches_other_index(ass, v_term)) {
-                                    if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                        count = add(count, ONE_INTEGER);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            } else {
-                {
-                    SubLObject final_index = com.cyc.cycjava.cycl.kb_indexing.get_other_subindex(v_term);
-                    if (NIL != final_index) {
-                        {
-                            SubLObject index = final_index;
-                            if (NIL != do_final_index_valid_index_p(index)) {
-                                {
-                                    SubLObject set_contents_var = do_set_internal(final_index_set(index));
-                                    SubLObject basis_object = set_contents.do_set_contents_basis_object(set_contents_var);
-                                    SubLObject state = NIL;
-                                    for (state = set_contents.do_set_contents_initial_state(basis_object, set_contents_var); !((NIL != doneP) || (NIL != set_contents.do_set_contents_doneP(basis_object, state))); state = set_contents.do_set_contents_update_state(state)) {
-                                        {
-                                            SubLObject ass = set_contents.do_set_contents_next(basis_object, state);
-                                            if (NIL != set_contents.do_set_contents_element_validP(state, ass)) {
-                                                if (NIL != kb_indexing_macros.number_has_reached_cutoffP(count, cutoff)) {
-                                                    doneP = T;
-                                                } else {
-                                                    if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                                                        count = add(count, ONE_INTEGER);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return min(cutoff, count);
-        }
-    }
-
-    /**
-     * Return the number of assertions in relevant mts at the other index for TERM.
-     *
-     * @param CUTOFF
-     * 		non-negative-integer-p; a number beyond which to stop counting relevant
-     * 		assertions and just return CUTOFF.
-     */
-    @LispMethod(comment = "Return the number of assertions in relevant mts at the other index for TERM.\r\n\r\n@param CUTOFF\r\n\t\tnon-negative-integer-p; a number beyond which to stop counting relevant\r\n\t\tassertions and just return CUTOFF.")
     public static SubLObject relevant_num_other_index_with_cutoff(final SubLObject v_term, final SubLObject cutoff) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "! subl_promotions.non_negative_integer_p(cutoff) " + ("subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) ") + cutoff;
+        assert NIL != subl_promotions.non_negative_integer_p(cutoff) : "subl_promotions.non_negative_integer_p(cutoff) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(cutoff) " + cutoff;
         if (NIL != all_mt_subindex_keys_relevant_p()) {
             return min(cutoff, num_other_index(v_term));
         }
@@ -8417,54 +3906,22 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return min(cutoff, count);
     }
 
-    public static final SubLObject get_other_subindex_alt(SubLObject v_term) {
-        return term_complex_index_lookup(v_term, com.cyc.cycjava.cycl.kb_indexing.other_top_level_key());
-    }
-
     public static SubLObject get_other_subindex(final SubLObject v_term) {
         return term_complex_index_lookup(v_term, other_top_level_key());
-    }
-
-    public static final SubLObject add_other_index_alt(SubLObject v_term, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_add_indexing_leaf(v_term, list(com.cyc.cycjava.cycl.kb_indexing.other_top_level_key()), assertion);
     }
 
     public static SubLObject add_other_index(final SubLObject v_term, final SubLObject assertion) {
         return term_add_indexing_leaf(v_term, list(other_top_level_key()), assertion);
     }
 
-    public static final SubLObject rem_other_index_alt(SubLObject v_term, SubLObject assertion) {
-        return com.cyc.cycjava.cycl.kb_indexing.term_rem_indexing_leaf(v_term, list(com.cyc.cycjava.cycl.kb_indexing.other_top_level_key()), assertion);
-    }
-
     public static SubLObject rem_other_index(final SubLObject v_term, final SubLObject assertion) {
         return term_rem_indexing_leaf(v_term, list(other_top_level_key()), assertion);
-    }
-
-    public static final SubLObject other_top_level_key_alt() {
-        return $OTHER;
     }
 
     public static SubLObject other_top_level_key() {
         return $OTHER;
     }
 
-    /**
-     * The total number of assertions indexed from TERM.
-     */
-    @LispMethod(comment = "The total number of assertions indexed from TERM.")
-    public static final SubLObject num_index_alt(SubLObject v_term) {
-        if (NIL != simple_indexed_term_p(v_term)) {
-            return simple_num_index(v_term);
-        } else {
-            return complex_index_leaf_count(term_index(v_term));
-        }
-    }
-
-    /**
-     * The total number of assertions indexed from TERM.
-     */
-    @LispMethod(comment = "The total number of assertions indexed from TERM.")
     public static SubLObject num_index(final SubLObject v_term) {
         if (NIL != simple_indexed_term_p(v_term)) {
             return simple_num_index(v_term);
@@ -8472,35 +3929,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return complex_index_leaf_count(term_index(v_term));
     }
 
-    /**
-     * The total number of assertions indexed from TERM in relevant mts.
-     */
-    @LispMethod(comment = "The total number of assertions indexed from TERM in relevant mts.")
-    public static final SubLObject relevant_num_index_alt(SubLObject v_term) {
-        if (NIL != com.cyc.cycjava.cycl.kb_indexing.all_mt_subindex_keys_relevant_p()) {
-            return com.cyc.cycjava.cycl.kb_indexing.num_index(v_term);
-        }
-        if (NIL != simple_indexed_term_p(v_term)) {
-            {
-                SubLObject count = ZERO_INTEGER;
-                SubLObject cdolist_list_var = do_simple_index_term_assertion_list(v_term);
-                SubLObject ass = NIL;
-                for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                    if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(ass))) {
-                        count = add(count, ONE_INTEGER);
-                    }
-                }
-                return count;
-            }
-        } else {
-            return add(new SubLObject[]{ com.cyc.cycjava.cycl.kb_indexing.relevant_num_gaf_arg_index(v_term, UNPROVIDED, UNPROVIDED), com.cyc.cycjava.cycl.kb_indexing.relevant_num_nart_arg_index(v_term, UNPROVIDED, UNPROVIDED), com.cyc.cycjava.cycl.kb_indexing.relevant_num_predicate_extent_index(v_term), com.cyc.cycjava.cycl.kb_indexing.relevant_num_function_extent_index(v_term), com.cyc.cycjava.cycl.kb_indexing.relevant_num_predicate_rule_index(v_term, UNPROVIDED), com.cyc.cycjava.cycl.kb_indexing.num_decontextualized_ist_predicate_rule_index(v_term, UNPROVIDED, UNPROVIDED), com.cyc.cycjava.cycl.kb_indexing.relevant_num_isa_rule_index(v_term, UNPROVIDED), com.cyc.cycjava.cycl.kb_indexing.relevant_num_quoted_isa_rule_index(v_term, UNPROVIDED), com.cyc.cycjava.cycl.kb_indexing.relevant_num_genls_rule_index(v_term, UNPROVIDED), com.cyc.cycjava.cycl.kb_indexing.relevant_num_genl_mt_rule_index(v_term, UNPROVIDED), com.cyc.cycjava.cycl.kb_indexing.relevant_num_function_rule_index(v_term), com.cyc.cycjava.cycl.kb_indexing.relevant_num_exception_rule_index(v_term), com.cyc.cycjava.cycl.kb_indexing.relevant_num_pragma_rule_index(v_term), com.cyc.cycjava.cycl.kb_indexing.relevant_num_mt_index(v_term), com.cyc.cycjava.cycl.kb_indexing.relevant_num_other_index(v_term) });
-        }
-    }
-
-    /**
-     * The total number of assertions indexed from TERM in relevant mts.
-     */
-    @LispMethod(comment = "The total number of assertions indexed from TERM in relevant mts.")
     public static SubLObject relevant_num_index(final SubLObject v_term) {
         if (NIL != all_mt_subindex_keys_relevant_p()) {
             return num_index(v_term);
@@ -8522,33 +3950,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return add(new SubLObject[]{ relevant_num_gaf_arg_index(v_term, UNPROVIDED, UNPROVIDED), relevant_num_nart_arg_index(v_term, UNPROVIDED, UNPROVIDED), relevant_num_predicate_extent_index(v_term), relevant_num_function_extent_index(v_term), relevant_num_predicate_rule_index(v_term, UNPROVIDED), num_decontextualized_ist_predicate_rule_index(v_term, UNPROVIDED, UNPROVIDED), relevant_num_isa_rule_index(v_term, UNPROVIDED), relevant_num_quoted_isa_rule_index(v_term, UNPROVIDED), relevant_num_genls_rule_index(v_term, UNPROVIDED), relevant_num_genl_mt_rule_index(v_term, UNPROVIDED), relevant_num_function_rule_index(v_term), relevant_num_exception_rule_index(v_term), relevant_num_pragma_rule_index(v_term), relevant_num_mt_index(v_term), relevant_num_other_index(v_term) });
     }
 
-    /**
-     * Miscellaneous indexing cleanups done before each KB dump
-     */
-    @LispMethod(comment = "Miscellaneous indexing cleanups done before each KB dump")
-    public static final SubLObject perform_indexing_pre_dump_cleanup_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject _prev_bind_0 = $noting_progress_start_time$.currentBinding(thread);
-                try {
-                    $noting_progress_start_time$.bind(get_universal_time(), thread);
-                    noting_progress_preamble($str_alt119$Performing_indexing_cleanup___);
-                    com.cyc.cycjava.cycl.kb_indexing.broad_mt_index_cleanup();
-                    com.cyc.cycjava.cycl.kb_indexing.unindexed_syntax_constant_index_cleanup();
-                    noting_progress_postamble();
-                } finally {
-                    $noting_progress_start_time$.rebind(_prev_bind_0, thread);
-                }
-            }
-            return NIL;
-        }
-    }
-
-    /**
-     * Miscellaneous indexing cleanups done before each KB dump
-     */
-    @LispMethod(comment = "Miscellaneous indexing cleanups done before each KB dump")
     public static SubLObject perform_indexing_pre_dump_cleanup() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject str = $str131$Performing_indexing_cleanup___;
@@ -8590,36 +3991,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return list(list(set_utilities.construct_set_from_list(get_broad_mts_for_index_cleanup(), UNPROVIDED, UNPROVIDED), REM_BROAD_MT_INDEX), list(set_utilities.construct_set_from_list(unindexed_syntax_constants(), UNPROVIDED, UNPROVIDED), UNINDEXED_SYNTAX_CONSTANT_CLEANUP_ONE_INDEX));
     }
 
-    public static final SubLObject unindexed_syntax_constant_index_cleanup_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject cdolist_list_var = unindexed_syntax_constants();
-                SubLObject constant = NIL;
-                for (constant = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , constant = cdolist_list_var.first()) {
-                    if (NIL == simple_indexed_term_p(constant)) {
-                        {
-                            SubLObject _prev_bind_0 = $mapping_target$.currentBinding(thread);
-                            SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                            SubLObject _prev_bind_2 = mt_relevance_macros.$mt$.currentBinding(thread);
-                            try {
-                                $mapping_target$.bind(constant, thread);
-                                mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                                mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                                kb_mapping.map_other_index(symbol_function(UNINDEXED_SYNTAX_CONSTANT_INDEX_CLEANUP_INTERNAL), constant, UNPROVIDED, UNPROVIDED);
-                            } finally {
-                                mt_relevance_macros.$mt$.rebind(_prev_bind_2, thread);
-                                mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
-                                $mapping_target$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject unindexed_syntax_constant_index_cleanup() {
         SubLObject cdolist_list_var = unindexed_syntax_constants();
         SubLObject constant = NIL;
@@ -8652,54 +4023,15 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return constant;
     }
 
-    public static final SubLObject unindexed_syntax_constant_index_cleanup_internal_alt(SubLObject assertion) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            com.cyc.cycjava.cycl.kb_indexing.rem_other_index($mapping_target$.getDynamicValue(thread), assertion);
-            return NIL;
-        }
-    }
-
     public static SubLObject unindexed_syntax_constant_index_cleanup_internal(final SubLObject assertion) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         rem_other_index($mapping_target$.getDynamicValue(thread), assertion);
         return NIL;
     }
 
-    public static final SubLObject term_mt_count_alt(SubLObject v_term) {
-        SubLTrampolineFile.checkType(v_term, INDEXED_TERM_P);
-        return length(com.cyc.cycjava.cycl.kb_indexing.mts_of_indexed_term(v_term));
-    }
-
     public static SubLObject term_mt_count(final SubLObject v_term) {
-        assert NIL != indexed_term_p(v_term) : "! kb_indexing_datastructures.indexed_term_p(v_term) " + ("kb_indexing_datastructures.indexed_term_p(v_term) " + "CommonSymbols.NIL != kb_indexing_datastructures.indexed_term_p(v_term) ") + v_term;
+        assert NIL != indexed_term_p(v_term) : "kb_indexing_datastructures.indexed_term_p(v_term) " + "CommonSymbols.NIL != kb_indexing_datastructures.indexed_term_p(v_term) " + v_term;
         return length(mts_of_indexed_term(v_term));
-    }
-
-    public static final SubLObject mts_of_indexed_term_alt(SubLObject v_term) {
-        if (NIL != simple_indexed_term_p(v_term)) {
-            {
-                SubLObject v_answer = NIL;
-                SubLObject cdolist_list_var = do_simple_index_term_assertion_list(v_term);
-                SubLObject ass = NIL;
-                for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
-                    {
-                        SubLObject item_var = assertions_high.assertion_mt(ass);
-                        if (NIL == member(item_var, v_answer, symbol_function(EQL), symbol_function(IDENTITY))) {
-                            v_answer = cons(item_var, v_answer);
-                        }
-                    }
-                }
-                return v_answer;
-            }
-        } else {
-            {
-                SubLObject all_assertions = intermediate_index_leaves(term_index(v_term));
-                SubLObject all_mts = list_utilities.nmapcar(ASSERTION_MT, all_assertions);
-                SubLObject unique_mts = list_utilities.fast_delete_duplicates(all_mts, EQUAL, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                return unique_mts;
-            }
-        }
     }
 
     public static SubLObject mts_of_indexed_term(final SubLObject v_term) {
@@ -8724,44 +4056,12 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return unique_mts;
     }
 
-    public static final SubLObject add_assertion_indices_alt(SubLObject assertion, SubLObject v_term) {
-        if (v_term == UNPROVIDED) {
-            v_term = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(assertion, ASSERTION_P);
-            {
-                SubLObject _prev_bind_0 = simple_indexing.$within_noting_terms_to_toggle_indexing_mode$.currentBinding(thread);
-                SubLObject _prev_bind_1 = simple_indexing.$terms_to_toggle_indexing_mode$.currentBinding(thread);
-                try {
-                    simple_indexing.$within_noting_terms_to_toggle_indexing_mode$.bind(T, thread);
-                    simple_indexing.$terms_to_toggle_indexing_mode$.bind(NIL, thread);
-                    if (NIL != valid_assertion_handleP(assertion)) {
-                        if (NIL != assertions_interface.kb_gaf_assertionP(assertion)) {
-                            com.cyc.cycjava.cycl.kb_indexing.add_gaf_indices(assertion, v_term);
-                        } else {
-                            com.cyc.cycjava.cycl.kb_indexing.add_rule_indices(assertion, v_term);
-                        }
-                    }
-                    if (NIL != simple_indexing.$terms_to_toggle_indexing_mode$.getDynamicValue(thread)) {
-                        simple_indexing.noting_terms_to_toggle_indexing_mode_internal();
-                    }
-                } finally {
-                    simple_indexing.$terms_to_toggle_indexing_mode$.rebind(_prev_bind_1, thread);
-                    simple_indexing.$within_noting_terms_to_toggle_indexing_mode$.rebind(_prev_bind_0, thread);
-                }
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject add_assertion_indices(final SubLObject assertion, SubLObject v_term) {
         if (v_term == UNPROVIDED) {
             v_term = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
+        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
         final SubLObject _prev_bind_0 = simple_indexing.$within_noting_terms_to_toggle_indexing_mode$.currentBinding(thread);
         final SubLObject _prev_bind_2 = simple_indexing.$terms_to_toggle_indexing_mode$.currentBinding(thread);
         try {
@@ -8784,41 +4084,11 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject remove_assertion_indices_alt(SubLObject assertion, SubLObject v_term) {
-        if (v_term == UNPROVIDED) {
-            v_term = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(assertion, ASSERTION_P);
-            {
-                SubLObject _prev_bind_0 = simple_indexing.$within_noting_terms_to_toggle_indexing_mode$.currentBinding(thread);
-                SubLObject _prev_bind_1 = simple_indexing.$terms_to_toggle_indexing_mode$.currentBinding(thread);
-                try {
-                    simple_indexing.$within_noting_terms_to_toggle_indexing_mode$.bind(T, thread);
-                    simple_indexing.$terms_to_toggle_indexing_mode$.bind(NIL, thread);
-                    if (NIL != assertions_high.gaf_assertionP(assertion)) {
-                        com.cyc.cycjava.cycl.kb_indexing.remove_gaf_indices(assertion, v_term);
-                    } else {
-                        com.cyc.cycjava.cycl.kb_indexing.remove_rule_indices(assertion, v_term);
-                    }
-                    if (NIL != simple_indexing.$terms_to_toggle_indexing_mode$.getDynamicValue(thread)) {
-                        simple_indexing.noting_terms_to_toggle_indexing_mode_internal();
-                    }
-                } finally {
-                    simple_indexing.$terms_to_toggle_indexing_mode$.rebind(_prev_bind_1, thread);
-                    simple_indexing.$within_noting_terms_to_toggle_indexing_mode$.rebind(_prev_bind_0, thread);
-                }
-            }
-            return assertion;
-        }
-    }
-
     public static SubLObject remove_assertion_indices(final SubLObject assertion, SubLObject v_term) {
         if (v_term == UNPROVIDED) {
             v_term = NIL;
         }
-        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
+        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
         if (NIL != assertions_high.gaf_assertionP(assertion)) {
             remove_gaf_indices(assertion, v_term);
         } else {
@@ -8827,107 +4097,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return assertion;
     }
 
-    /**
-     * Remove all assertions about TERM from the KB. Return the TERM.
-     */
-    @LispMethod(comment = "Remove all assertions about TERM from the KB. Return the TERM.")
-    public static final SubLObject remove_term_indices_alt(SubLObject v_term) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                SubLObject _prev_bind_2 = Errors.$ignore_warnsP$.currentBinding(thread);
-                try {
-                    mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                    mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                    Errors.$ignore_warnsP$.bind(T, thread);
-                    tms.tms_remove_assertion_list(kb_mapping.gather_other_index(v_term));
-                    if (NIL != hlmt.hlmt_p(v_term)) {
-                        tms.tms_remove_assertion_list(kb_mapping.gather_mt_index(v_term));
-                    }
-                    tms.tms_remove_assertion_list(kb_mapping.gather_predicate_rule_index(v_term, $POS, UNPROVIDED, UNPROVIDED));
-                    tms.tms_remove_assertion_list(kb_mapping.gather_predicate_rule_index(v_term, $NEG, UNPROVIDED, UNPROVIDED));
-                    tms.tms_remove_assertion_list(kb_mapping.gather_decontextualized_ist_predicate_rule_index(v_term, $POS, UNPROVIDED));
-                    tms.tms_remove_assertion_list(kb_mapping.gather_decontextualized_ist_predicate_rule_index(v_term, $NEG, UNPROVIDED));
-                    tms.tms_remove_assertion_list(kb_mapping.gather_isa_rule_index(v_term, $NEG, UNPROVIDED, UNPROVIDED));
-                    tms.tms_remove_assertion_list(kb_mapping.gather_isa_rule_index(v_term, $POS, UNPROVIDED, UNPROVIDED));
-                    tms.tms_remove_assertion_list(kb_mapping.gather_quoted_isa_rule_index(v_term, $NEG, UNPROVIDED, UNPROVIDED));
-                    tms.tms_remove_assertion_list(kb_mapping.gather_quoted_isa_rule_index(v_term, $POS, UNPROVIDED, UNPROVIDED));
-                    tms.tms_remove_assertion_list(kb_mapping.gather_genls_rule_index(v_term, $NEG, UNPROVIDED, UNPROVIDED));
-                    tms.tms_remove_assertion_list(kb_mapping.gather_genls_rule_index(v_term, $POS, UNPROVIDED, UNPROVIDED));
-                    tms.tms_remove_assertion_list(kb_mapping.gather_genl_mt_rule_index(v_term, $NEG, UNPROVIDED, UNPROVIDED));
-                    tms.tms_remove_assertion_list(kb_mapping.gather_genl_mt_rule_index(v_term, $POS, UNPROVIDED, UNPROVIDED));
-                    tms.tms_remove_assertion_list(kb_mapping.gather_function_rule_index(v_term, UNPROVIDED, UNPROVIDED));
-                    tms.tms_remove_assertion_list(kb_mapping.gather_exception_rule_index(v_term, UNPROVIDED, UNPROVIDED));
-                    tms.tms_remove_assertion_list(kb_mapping.gather_pragma_rule_index(v_term, UNPROVIDED, UNPROVIDED));
-                    if (NIL != forts.fort_p(v_term)) {
-                        tms.tms_remove_assertion_list(kb_mapping.gather_predicate_extent_index(v_term, NIL, NIL));
-                        tms.tms_remove_assertion_list(kb_mapping.gather_function_extent_index(v_term));
-                    }
-                    {
-                        SubLObject nart_indexed_argnums = com.cyc.cycjava.cycl.kb_indexing.key_nart_arg_index(v_term, UNPROVIDED, UNPROVIDED);
-                        nart_indexed_argnums = Sort.sort(nart_indexed_argnums, symbol_function($sym126$_), UNPROVIDED);
-                        {
-                            SubLObject cdolist_list_var = nart_indexed_argnums;
-                            SubLObject argnum = NIL;
-                            for (argnum = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , argnum = cdolist_list_var.first()) {
-                                tms.tms_remove_assertion_list(kb_mapping.gather_nart_arg_index(v_term, argnum, NIL));
-                            }
-                        }
-                    }
-                    {
-                        SubLObject gaf_indexed_argnums = com.cyc.cycjava.cycl.kb_indexing.key_gaf_arg_index(v_term, UNPROVIDED, UNPROVIDED);
-                        gaf_indexed_argnums = Sort.sort(gaf_indexed_argnums, symbol_function($sym126$_), UNPROVIDED);
-                        {
-                            SubLObject cdolist_list_var = gaf_indexed_argnums;
-                            SubLObject argnum = NIL;
-                            for (argnum = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , argnum = cdolist_list_var.first()) {
-                                if (!ONE_INTEGER.numE(argnum)) {
-                                    tms.tms_remove_assertion_list(kb_mapping.gather_gaf_arg_index(v_term, argnum, NIL, NIL, NIL));
-                                }
-                            }
-                        }
-                    }
-                    {
-                        SubLObject isa_assertions = kb_mapping.gather_gaf_arg_index(v_term, ONE_INTEGER, $$isa, NIL, NIL);
-                        SubLObject genls_assertions = kb_mapping.gather_gaf_arg_index(v_term, ONE_INTEGER, $$genls, NIL, NIL);
-                        SubLObject tou_assertions = kb_mapping.gather_gaf_arg_index(v_term, ONE_INTEGER, $$termOfUnit, NIL, NIL);
-                        SubLObject arg1_assertions = kb_mapping.gather_gaf_arg_index(v_term, ONE_INTEGER, NIL, NIL, NIL);
-                        SubLObject cdolist_list_var = arg1_assertions;
-                        SubLObject assertion = NIL;
-                        for (assertion = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , assertion = cdolist_list_var.first()) {
-                            if (NIL != assertions_high.valid_assertion(assertion, UNPROVIDED)) {
-                                if (!(((NIL != memberP(assertion, isa_assertions, UNPROVIDED, UNPROVIDED)) || (NIL != member(assertion, genls_assertions, UNPROVIDED, UNPROVIDED))) || (NIL != member(assertion, tou_assertions, UNPROVIDED, UNPROVIDED)))) {
-                                    tms.tms_remove_assertion(assertion);
-                                }
-                            }
-                        }
-                        tms.tms_remove_assertion_list(genls_assertions);
-                        tms.tms_remove_assertion_list(isa_assertions);
-                        tms.tms_remove_assertion_list(tou_assertions);
-                    }
-                    {
-                        SubLObject remaining_assertions = kb_accessors.all_term_assertions(v_term, T);
-                        if (NIL != remaining_assertions) {
-                            Errors.warn($str_alt130$indexing_problem_while_removing__, v_term);
-                        }
-                        tms.tms_remove_assertion_list(remaining_assertions);
-                    }
-                } finally {
-                    Errors.$ignore_warnsP$.rebind(_prev_bind_2, thread);
-                    mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                    mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                }
-            }
-            return v_term;
-        }
-    }
-
-    /**
-     * Remove all assertions about TERM from the KB. Return the TERM.
-     */
-    @LispMethod(comment = "Remove all assertions about TERM from the KB. Return the TERM.")
     public static SubLObject remove_term_indices(final SubLObject v_term) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
@@ -9011,57 +4180,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return v_term;
     }
 
-    /**
-     *
-     *
-     * @return 0 alist-p; a list of (argnum . term) pairs
-     * @return 1 listp; a list of terms not indexed by any other argnum
-     */
-    @LispMethod(comment = "@return 0 alist-p; a list of (argnum . term) pairs\r\n@return 1 listp; a list of terms not indexed by any other argnum")
-    public static final SubLObject determine_formula_indices_alt(SubLObject formula) {
-        formula = ignore_sequence_vars(formula);
-        {
-            SubLObject others = NIL;
-            SubLObject pairs = NIL;
-            SubLObject terms = cycl_utilities.formula_terms(formula, $IGNORE);
-            SubLObject list_var = NIL;
-            SubLObject arg = NIL;
-            SubLObject argnum = NIL;
-            for (list_var = terms, arg = list_var.first(), argnum = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , arg = list_var.first() , argnum = number_utilities.f_1X(argnum)) {
-                if (NIL != valid_indexed_termP(arg)) {
-                    {
-                        SubLObject pair = cons(argnum, arg);
-                        pairs = cons(pair, pairs);
-                    }
-                } else {
-                    others = nunion(list_utilities.tree_gather(arg, symbol_function(VALID_FULLY_INDEXED_TERM_P), UNPROVIDED, UNPROVIDED, UNPROVIDED), others, UNPROVIDED, UNPROVIDED);
-                }
-            }
-            if (NIL != others) {
-                others = list_utilities.fast_delete_duplicates(others, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                {
-                    SubLObject filtered_others = NIL;
-                    SubLObject cdolist_list_var = others;
-                    SubLObject other = NIL;
-                    for (other = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , other = cdolist_list_var.first()) {
-                        if (NIL == memberP(other, pairs, symbol_function(EQUAL), symbol_function(CDR))) {
-                            filtered_others = cons(other, filtered_others);
-                        }
-                    }
-                    others = filtered_others;
-                }
-            }
-            return values(nreverse(pairs), others);
-        }
-    }
-
-    /**
-     *
-     *
-     * @return 0 alist-p; a list of (argnum . term) pairs
-     * @return 1 listp; a list of terms not indexed by any other argnum
-     */
-    @LispMethod(comment = "@return 0 alist-p; a list of (argnum . term) pairs\r\n@return 1 listp; a list of terms not indexed by any other argnum")
     public static SubLObject determine_formula_indices(SubLObject formula) {
         formula = ignore_sequence_vars(formula);
         SubLObject others = NIL;
@@ -9107,37 +4225,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return argnum_pairs;
     }
 
-    /**
-     *
-     *
-     * @return 0 alist-p; a list of (argnum . term) pairs
-     * @return 1 listp; a list of terms not indexed by any other argnum
-     */
-    @LispMethod(comment = "@return 0 alist-p; a list of (argnum . term) pairs\r\n@return 1 listp; a list of terms not indexed by any other argnum")
-    public static final SubLObject determine_gaf_indices_alt(SubLObject formula, SubLObject mt) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject argnum_pairs = com.cyc.cycjava.cycl.kb_indexing.determine_formula_indices(formula);
-                SubLObject others = thread.secondMultipleValue();
-                thread.resetMultipleValues();
-                if (NIL != forts.fort_p(mt)) {
-                } else {
-                    others = nunion(cycl_utilities.formula_gather(mt, FULLY_INDEXED_HLMT_TERM_P, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), others, UNPROVIDED, UNPROVIDED);
-                }
-                return values(argnum_pairs, others);
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return 0 alist-p; a list of (argnum . term) pairs
-     * @return 1 listp; a list of terms not indexed by any other argnum
-     */
-    @LispMethod(comment = "@return 0 alist-p; a list of (argnum . term) pairs\r\n@return 1 listp; a list of terms not indexed by any other argnum")
     public static SubLObject determine_gaf_indices(final SubLObject formula, final SubLObject mt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -9148,73 +4235,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             others = nunion(cycl_utilities.formula_gather(mt, FULLY_INDEXED_HLMT_TERM_P, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), others, UNPROVIDED, UNPROVIDED);
         }
         return values(argnum_pairs, others);
-    }
-
-    public static final SubLObject add_gaf_indices_alt(SubLObject assertion, SubLObject v_term) {
-        if (v_term == UNPROVIDED) {
-            v_term = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject literal = assertions_high.gaf_formula(assertion);
-                SubLObject mt = assertions_high.assertion_mt(assertion);
-                thread.resetMultipleValues();
-                {
-                    SubLObject alist = com.cyc.cycjava.cycl.kb_indexing.determine_gaf_indices(literal, mt);
-                    SubLObject others = thread.secondMultipleValue();
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject pred = assoc(ZERO_INTEGER, alist, UNPROVIDED, UNPROVIDED).rest();
-                        if (!((NIL != hlmt.hlmt_p(mt)) && (NIL != forts.fort_p(pred)))) {
-                            Errors.cerror($str_alt138$So_don_t_, $str_alt139$Don_t_know_how_to_index__S, assertion);
-                            return NIL;
-                        }
-                        if ((NIL == v_term) || (NIL != hlmt.hlmt_equal(v_term, mt))) {
-                            com.cyc.cycjava.cycl.kb_indexing.add_mt_index(mt, assertion);
-                        }
-                        if ((NIL == v_term) || (v_term == pred)) {
-                            com.cyc.cycjava.cycl.kb_indexing.add_predicate_extent_index(pred, mt, assertion);
-                        }
-                        {
-                            SubLObject cdolist_list_var = alist;
-                            SubLObject pair = NIL;
-                            for (pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pair = cdolist_list_var.first()) {
-                                {
-                                    SubLObject datum = pair;
-                                    SubLObject current = datum;
-                                    SubLObject argnum = NIL;
-                                    SubLObject arg = NIL;
-                                    destructuring_bind_must_consp(current, datum, $list_alt140);
-                                    argnum = current.first();
-                                    current = current.rest();
-                                    arg = current;
-                                    if ((argnum.isPositive() && (NIL != arg)) && ((NIL == v_term) || v_term.equal(arg))) {
-                                        com.cyc.cycjava.cycl.kb_indexing.add_gaf_arg_index(arg, argnum, pred, mt, assertion);
-                                    }
-                                }
-                            }
-                        }
-                        if (pred == $$termOfUnit) {
-                            com.cyc.cycjava.cycl.kb_indexing.add_function_indices(assertion, v_term);
-                        } else {
-                            if (NIL != others) {
-                                {
-                                    SubLObject cdolist_list_var = others;
-                                    SubLObject fort = NIL;
-                                    for (fort = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , fort = cdolist_list_var.first()) {
-                                        if ((NIL != fully_indexed_term_p(fort)) && ((NIL == v_term) || v_term.equal(fort))) {
-                                            com.cyc.cycjava.cycl.kb_indexing.add_other_index(fort, assertion);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject add_gaf_indices(final SubLObject assertion, SubLObject v_term) {
@@ -9275,73 +4295,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject remove_gaf_indices_alt(SubLObject assertion, SubLObject v_term) {
-        if (v_term == UNPROVIDED) {
-            v_term = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject literal = assertions_high.gaf_formula(assertion);
-                SubLObject mt = assertions_high.assertion_mt(assertion);
-                thread.resetMultipleValues();
-                {
-                    SubLObject alist = com.cyc.cycjava.cycl.kb_indexing.determine_gaf_indices(literal, mt);
-                    SubLObject others = thread.secondMultipleValue();
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject pred = assoc(ZERO_INTEGER, alist, UNPROVIDED, UNPROVIDED).rest();
-                        if (!((NIL != hlmt.hlmt_p(mt)) && (NIL != forts.fort_p(pred)))) {
-                            Errors.cerror($str_alt138$So_don_t_, $str_alt139$Don_t_know_how_to_index__S, assertion);
-                            return NIL;
-                        }
-                        if ((NIL == v_term) || (NIL != hlmt.hlmt_equal(v_term, mt))) {
-                            com.cyc.cycjava.cycl.kb_indexing.rem_mt_index(mt, assertion);
-                        }
-                        if ((NIL == v_term) || (v_term == pred)) {
-                            com.cyc.cycjava.cycl.kb_indexing.rem_predicate_extent_index(pred, mt, assertion);
-                        }
-                        {
-                            SubLObject cdolist_list_var = alist;
-                            SubLObject pair = NIL;
-                            for (pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pair = cdolist_list_var.first()) {
-                                {
-                                    SubLObject datum = pair;
-                                    SubLObject current = datum;
-                                    SubLObject argnum = NIL;
-                                    SubLObject arg = NIL;
-                                    destructuring_bind_must_consp(current, datum, $list_alt140);
-                                    argnum = current.first();
-                                    current = current.rest();
-                                    arg = current;
-                                    if ((argnum.isPositive() && (NIL != arg)) && ((NIL == v_term) || v_term.equal(arg))) {
-                                        com.cyc.cycjava.cycl.kb_indexing.rem_gaf_arg_index(arg, argnum, pred, mt, assertion);
-                                    }
-                                }
-                            }
-                        }
-                        if (pred == $$termOfUnit) {
-                            com.cyc.cycjava.cycl.kb_indexing.rem_function_indices(assertion, v_term);
-                        } else {
-                            if (NIL != others) {
-                                {
-                                    SubLObject cdolist_list_var = others;
-                                    SubLObject fort = NIL;
-                                    for (fort = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , fort = cdolist_list_var.first()) {
-                                        if ((NIL != fully_indexed_term_p(fort)) && ((NIL == v_term) || v_term.equal(fort))) {
-                                            com.cyc.cycjava.cycl.kb_indexing.rem_other_index(fort, assertion);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject remove_gaf_indices(final SubLObject assertion, SubLObject v_term) {
         if (v_term == UNPROVIDED) {
             v_term = NIL;
@@ -9400,33 +4353,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     *
-     *
-     * @return 0 alist-p; a list of (argnum . term) pairs
-     * @return 1 listp; a list of terms not indexed by any other argnum
-     */
-    @LispMethod(comment = "@return 0 alist-p; a list of (argnum . term) pairs\r\n@return 1 listp; a list of terms not indexed by any other argnum")
-    public static final SubLObject determine_function_indices_alt(SubLObject naut) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject argnum_pairs = com.cyc.cycjava.cycl.kb_indexing.determine_formula_indices(naut);
-                SubLObject others = thread.secondMultipleValue();
-                thread.resetMultipleValues();
-                return values(argnum_pairs, others);
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return 0 alist-p; a list of (argnum . term) pairs
-     * @return 1 listp; a list of terms not indexed by any other argnum
-     */
-    @LispMethod(comment = "@return 0 alist-p; a list of (argnum . term) pairs\r\n@return 1 listp; a list of terms not indexed by any other argnum")
     public static SubLObject determine_function_indices(final SubLObject naut) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -9434,71 +4360,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         final SubLObject others = thread.secondMultipleValue();
         thread.resetMultipleValues();
         return values(argnum_pairs, others);
-    }
-
-    public static final SubLObject add_function_indices_alt(SubLObject assertion, SubLObject v_term) {
-        if (v_term == UNPROVIDED) {
-            v_term = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject term_of_unit = unmake_binary_formula(assertions_high.gaf_formula(assertion));
-                SubLObject nart = thread.secondMultipleValue();
-                SubLObject naut = thread.thirdMultipleValue();
-                thread.resetMultipleValues();
-                if (term_of_unit == $$termOfUnit) {
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject alist = com.cyc.cycjava.cycl.kb_indexing.determine_function_indices(naut);
-                        SubLObject others = thread.secondMultipleValue();
-                        thread.resetMultipleValues();
-                        {
-                            SubLObject function = assoc(ZERO_INTEGER, alist, UNPROVIDED, UNPROVIDED).rest();
-                            if (NIL == forts.fort_p(function)) {
-                                Errors.cerror($str_alt138$So_don_t_, $str_alt139$Don_t_know_how_to_index__S, assertion);
-                                return NIL;
-                            }
-                            if ((NIL == v_term) || (v_term == function)) {
-                                com.cyc.cycjava.cycl.kb_indexing.add_function_extent_index(function, assertion);
-                            }
-                            {
-                                SubLObject cdolist_list_var = alist;
-                                SubLObject pair = NIL;
-                                for (pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pair = cdolist_list_var.first()) {
-                                    {
-                                        SubLObject datum = pair;
-                                        SubLObject current = datum;
-                                        SubLObject f_argnum = NIL;
-                                        SubLObject f_arg = NIL;
-                                        destructuring_bind_must_consp(current, datum, $list_alt141);
-                                        f_argnum = current.first();
-                                        current = current.rest();
-                                        f_arg = current;
-                                        if ((f_argnum.isPositive() && (NIL != f_arg)) && ((NIL == v_term) || v_term.equal(f_arg))) {
-                                            com.cyc.cycjava.cycl.kb_indexing.add_nart_arg_index(f_arg, f_argnum, function, assertion);
-                                        }
-                                    }
-                                }
-                            }
-                            if (NIL != others) {
-                                {
-                                    SubLObject cdolist_list_var = others;
-                                    SubLObject fort = NIL;
-                                    for (fort = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , fort = cdolist_list_var.first()) {
-                                        if ((NIL != fully_indexed_term_p(fort)) && ((NIL == v_term) || v_term.equal(fort))) {
-                                            com.cyc.cycjava.cycl.kb_indexing.add_other_index(fort, assertion);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject add_function_indices(final SubLObject assertion, SubLObject v_term) {
@@ -9557,71 +4418,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject rem_function_indices_alt(SubLObject assertion, SubLObject v_term) {
-        if (v_term == UNPROVIDED) {
-            v_term = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject term_of_unit = unmake_binary_formula(assertions_high.gaf_formula(assertion));
-                SubLObject nart = thread.secondMultipleValue();
-                SubLObject naut = thread.thirdMultipleValue();
-                thread.resetMultipleValues();
-                if (term_of_unit == $$termOfUnit) {
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject alist = com.cyc.cycjava.cycl.kb_indexing.determine_function_indices(naut);
-                        SubLObject others = thread.secondMultipleValue();
-                        thread.resetMultipleValues();
-                        {
-                            SubLObject function = assoc(ZERO_INTEGER, alist, UNPROVIDED, UNPROVIDED).rest();
-                            if (NIL == forts.fort_p(function)) {
-                                Errors.cerror($str_alt138$So_don_t_, $str_alt139$Don_t_know_how_to_index__S, assertion);
-                                return NIL;
-                            }
-                            if ((NIL == v_term) || (v_term == function)) {
-                                com.cyc.cycjava.cycl.kb_indexing.rem_function_extent_index(function, assertion);
-                            }
-                            {
-                                SubLObject cdolist_list_var = alist;
-                                SubLObject pair = NIL;
-                                for (pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pair = cdolist_list_var.first()) {
-                                    {
-                                        SubLObject datum = pair;
-                                        SubLObject current = datum;
-                                        SubLObject f_argnum = NIL;
-                                        SubLObject f_arg = NIL;
-                                        destructuring_bind_must_consp(current, datum, $list_alt141);
-                                        f_argnum = current.first();
-                                        current = current.rest();
-                                        f_arg = current;
-                                        if ((f_argnum.isPositive() && (NIL != f_arg)) && ((NIL == v_term) || v_term.equal(f_arg))) {
-                                            com.cyc.cycjava.cycl.kb_indexing.rem_nart_arg_index(f_arg, f_argnum, function, assertion);
-                                        }
-                                    }
-                                }
-                            }
-                            if (NIL != others) {
-                                {
-                                    SubLObject cdolist_list_var = others;
-                                    SubLObject fort = NIL;
-                                    for (fort = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , fort = cdolist_list_var.first()) {
-                                        if ((NIL != fully_indexed_term_p(fort)) && ((NIL == v_term) || v_term.equal(fort))) {
-                                            com.cyc.cycjava.cycl.kb_indexing.rem_other_index(fort, assertion);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject rem_function_indices(final SubLObject assertion, SubLObject v_term) {
         if (v_term == UNPROVIDED) {
             v_term = NIL;
@@ -9678,224 +4474,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     *
-     *
-     * @return 0 a list of pairs.  The first element of each pair
-    is the type of indexing: :pred, :ist-pred, :func, :isa, :genls, :genl-mt, :exception, or :pragma.
-    and the second element of each pair is the term to be
-    indexed with that type of indexing.
-     * @return 1 a list of terms to be potentially indexed via 'other' indexing.
-     */
-    @LispMethod(comment = "@return 0 a list of pairs.  The first element of each pair\r\nis the type of indexing: :pred, :ist-pred, :func, :isa, :genls, :genl-mt, :exception, or :pragma.\r\nand the second element of each pair is the term to be\r\nindexed with that type of indexing.\r\n@return 1 a list of terms to be potentially indexed via \'other\' indexing.")
-    public static final SubLObject determine_rule_indices_int_alt(SubLObject asents, SubLObject sense) {
-        {
-            SubLObject pairs = NIL;
-            SubLObject other = NIL;
-            SubLObject cdolist_list_var = asents;
-            SubLObject asent = NIL;
-            for (asent = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , asent = cdolist_list_var.first()) {
-                {
-                    SubLObject pred = cycl_utilities.atomic_sentence_predicate(asent);
-                    if (pred == $$isa) {
-                        {
-                            SubLObject collection = cycl_utilities.sentence_arg2(asent, UNPROVIDED);
-                            if (NIL != forts.fort_p(collection)) {
-                                {
-                                    SubLObject item_var = list($ISA, collection);
-                                    if (NIL == member(item_var, pairs, symbol_function(EQUAL), symbol_function(IDENTITY))) {
-                                        pairs = cons(item_var, pairs);
-                                    }
-                                }
-                            } else {
-                                {
-                                    SubLObject item_var = list($PRED, $$isa);
-                                    if (NIL == member(item_var, pairs, symbol_function(EQUAL), symbol_function(IDENTITY))) {
-                                        pairs = cons(item_var, pairs);
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        if (pred == $$quotedIsa) {
-                            {
-                                SubLObject collection = cycl_utilities.sentence_arg2(asent, UNPROVIDED);
-                                if (NIL != forts.fort_p(collection)) {
-                                    {
-                                        SubLObject item_var = list($QUOTED_ISA, collection);
-                                        if (NIL == member(item_var, pairs, symbol_function(EQUAL), symbol_function(IDENTITY))) {
-                                            pairs = cons(item_var, pairs);
-                                        }
-                                    }
-                                } else {
-                                    {
-                                        SubLObject item_var = list($PRED, $$quotedIsa);
-                                        if (NIL == member(item_var, pairs, symbol_function(EQUAL), symbol_function(IDENTITY))) {
-                                            pairs = cons(item_var, pairs);
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            if (pred == $$genls) {
-                                {
-                                    SubLObject collection = cycl_utilities.sentence_arg2(asent, UNPROVIDED);
-                                    if (NIL != forts.fort_p(collection)) {
-                                        {
-                                            SubLObject item_var = list($GENLS, collection);
-                                            if (NIL == member(item_var, pairs, symbol_function(EQUAL), symbol_function(IDENTITY))) {
-                                                pairs = cons(item_var, pairs);
-                                            }
-                                        }
-                                    } else {
-                                        {
-                                            SubLObject item_var = list($PRED, $$genls);
-                                            if (NIL == member(item_var, pairs, symbol_function(EQUAL), symbol_function(IDENTITY))) {
-                                                pairs = cons(item_var, pairs);
-                                            }
-                                        }
-                                    }
-                                }
-                            } else {
-                                if (pred == $$genlMt) {
-                                    {
-                                        SubLObject genl_mt = cycl_utilities.sentence_arg2(asent, UNPROVIDED);
-                                        if (NIL != hlmt.hlmt_p(genl_mt)) {
-                                            {
-                                                SubLObject item_var = list($GENL_MT, genl_mt);
-                                                if (NIL == member(item_var, pairs, symbol_function(EQUAL), symbol_function(IDENTITY))) {
-                                                    pairs = cons(item_var, pairs);
-                                                }
-                                            }
-                                        } else {
-                                            {
-                                                SubLObject item_var = list($PRED, $$genlMt);
-                                                if (NIL == member(item_var, pairs, symbol_function(EQUAL), symbol_function(IDENTITY))) {
-                                                    pairs = cons(item_var, pairs);
-                                                }
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    if ((sense == $NEG) && (pred == $$termOfUnit)) {
-                                        {
-                                            SubLObject naut = cycl_utilities.sentence_arg2(asent, UNPROVIDED);
-                                            if (NIL != possibly_naut_p(naut)) {
-                                                {
-                                                    SubLObject function = cycl_utilities.nat_functor(naut);
-                                                    if (NIL != forts.fort_p(function)) {
-                                                        {
-                                                            SubLObject item_var = list($FUNC, function);
-                                                            if (NIL == member(item_var, pairs, symbol_function(EQUAL), symbol_function(IDENTITY))) {
-                                                                pairs = cons(item_var, pairs);
-                                                            }
-                                                        }
-                                                    } else {
-                                                        {
-                                                            SubLObject item_var = list($PRED, $$termOfUnit);
-                                                            if (NIL == member(item_var, pairs, symbol_function(EQUAL), symbol_function(IDENTITY))) {
-                                                                pairs = cons(item_var, pairs);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            } else {
-                                                {
-                                                    SubLObject item_var = list($PRED, $$termOfUnit);
-                                                    if (NIL == member(item_var, pairs, symbol_function(EQUAL), symbol_function(IDENTITY))) {
-                                                        pairs = cons(item_var, pairs);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    } else {
-                                        if ((sense == $POS) && (pred == $$abnormal)) {
-                                            {
-                                                SubLObject assertion = cycl_utilities.sentence_arg2(asent, UNPROVIDED);
-                                                if (NIL != assertion_p(assertion)) {
-                                                    {
-                                                        SubLObject item_var = list($EXCEPTION, assertion);
-                                                        if (NIL == member(item_var, pairs, symbol_function(EQUAL), symbol_function(IDENTITY))) {
-                                                            pairs = cons(item_var, pairs);
-                                                        }
-                                                    }
-                                                } else {
-                                                    {
-                                                        SubLObject item_var = list($PRED, $$abnormal);
-                                                        if (NIL == member(item_var, pairs, symbol_function(EQUAL), symbol_function(IDENTITY))) {
-                                                            pairs = cons(item_var, pairs);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } else {
-                                            if ((sense == $POS) && (pred == $$meetsPragmaticRequirement)) {
-                                                {
-                                                    SubLObject assertion = cycl_utilities.sentence_arg2(asent, UNPROVIDED);
-                                                    if (NIL != assertion_p(assertion)) {
-                                                        {
-                                                            SubLObject item_var = list($PRAGMA, assertion);
-                                                            if (NIL == member(item_var, pairs, symbol_function(EQUAL), symbol_function(IDENTITY))) {
-                                                                pairs = cons(item_var, pairs);
-                                                            }
-                                                        }
-                                                    } else {
-                                                        {
-                                                            SubLObject item_var = list($PRED, $$meetsPragmaticRequirement);
-                                                            if (NIL == member(item_var, pairs, symbol_function(EQUAL), symbol_function(IDENTITY))) {
-                                                                pairs = cons(item_var, pairs);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            } else {
-                                                if (pred == $$ist) {
-                                                    {
-                                                        SubLObject sub_sentence = cycl_utilities.sentence_arg2(asent, UNPROVIDED);
-                                                        SubLObject sub_pred = literal_predicate(sub_sentence, UNPROVIDED);
-                                                        if (NIL != forts.fort_p(sub_pred)) {
-                                                            {
-                                                                SubLObject item_var = list($IST_PRED, sub_pred);
-                                                                if (NIL == member(item_var, pairs, symbol_function(EQUAL), symbol_function(IDENTITY))) {
-                                                                    pairs = cons(item_var, pairs);
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                } else {
-                                                    if (NIL != forts.fort_p(pred)) {
-                                                        {
-                                                            SubLObject item_var = list($PRED, pred);
-                                                            if (NIL == member(item_var, pairs, symbol_function(EQUAL), symbol_function(IDENTITY))) {
-                                                                pairs = cons(item_var, pairs);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                other = nunion(other, list_utilities.tree_gather(cycl_utilities.sentence_args(asent, UNPROVIDED), symbol_function(FULLY_INDEXED_TERM_P), UNPROVIDED, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED);
-            }
-            return values(pairs, other);
-        }
-    }
-
-    /**
-     *
-     *
-     * @return 0 a list of pairs.  The first element of each pair
-    is the type of indexing: :pred, :ist-pred, :func, :isa, :genls, :genl-mt, :exception, or :pragma.
-    and the second element of each pair is the term to be
-    indexed with that type of indexing.
-     * @return 1 a list of terms to be potentially indexed via 'other' indexing.
-     */
-    @LispMethod(comment = "@return 0 a list of pairs.  The first element of each pair\r\nis the type of indexing: :pred, :ist-pred, :func, :isa, :genls, :genl-mt, :exception, or :pragma.\r\nand the second element of each pair is the term to be\r\nindexed with that type of indexing.\r\n@return 1 a list of terms to be potentially indexed via \'other\' indexing.")
     public static SubLObject determine_rule_indices_int(final SubLObject asents, final SubLObject sense) {
         SubLObject pairs = NIL;
         SubLObject other = NIL;
@@ -10041,55 +4619,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return values(pairs, other);
     }
 
-    /**
-     *
-     *
-     * @return 0 a list of pairs.  The first element of each pair
-    is the type of indexing: :pred, :func, :isa, :genls, :genl-mt, :exception, or :pragma.
-    and the second element of each pair is the term to be
-    indexed with that type of indexing.  All these pairs occurred
-    as neg-lits in CNF.
-     * @return 1 a list of pairs that occurred as pos-lits in CNF.
-     * @return 2 a list of terms to be indexed via 'other' indexing.
-     */
-    @LispMethod(comment = "@return 0 a list of pairs.  The first element of each pair\r\nis the type of indexing: :pred, :func, :isa, :genls, :genl-mt, :exception, or :pragma.\r\nand the second element of each pair is the term to be\r\nindexed with that type of indexing.  All these pairs occurred\r\nas neg-lits in CNF.\r\n@return 1 a list of pairs that occurred as pos-lits in CNF.\r\n@return 2 a list of terms to be indexed via \'other\' indexing.")
-    public static final SubLObject determine_rule_indices_alt(SubLObject cnf) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject neg_pairs = com.cyc.cycjava.cycl.kb_indexing.determine_rule_indices_int(clauses.neg_lits(cnf), $NEG);
-                SubLObject neg_other = thread.secondMultipleValue();
-                thread.resetMultipleValues();
-                thread.resetMultipleValues();
-                {
-                    SubLObject pos_pairs = com.cyc.cycjava.cycl.kb_indexing.determine_rule_indices_int(clauses.pos_lits(cnf), $POS);
-                    SubLObject pos_other = thread.secondMultipleValue();
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject neg_terms = Mapping.mapcar(symbol_function(SECOND), neg_pairs);
-                        SubLObject pos_terms = Mapping.mapcar(symbol_function(SECOND), pos_pairs);
-                        SubLObject other = list_utilities.fast_delete_duplicates(nunion(neg_other, pos_other, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        other = nset_difference(nset_difference(other, neg_terms, UNPROVIDED, UNPROVIDED), pos_terms, UNPROVIDED, UNPROVIDED);
-                        return values(neg_pairs, pos_pairs, other);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return 0 a list of pairs.  The first element of each pair
-    is the type of indexing: :pred, :func, :isa, :genls, :genl-mt, :exception, or :pragma.
-    and the second element of each pair is the term to be
-    indexed with that type of indexing.  All these pairs occurred
-    as neg-lits in CNF.
-     * @return 1 a list of pairs that occurred as pos-lits in CNF.
-     * @return 2 a list of terms to be indexed via 'other' indexing.
-     */
-    @LispMethod(comment = "@return 0 a list of pairs.  The first element of each pair\r\nis the type of indexing: :pred, :func, :isa, :genls, :genl-mt, :exception, or :pragma.\r\nand the second element of each pair is the term to be\r\nindexed with that type of indexing.  All these pairs occurred\r\nas neg-lits in CNF.\r\n@return 1 a list of pairs that occurred as pos-lits in CNF.\r\n@return 2 a list of terms to be indexed via \'other\' indexing.")
     public static SubLObject determine_rule_indices(final SubLObject cnf) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -10105,171 +4634,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         SubLObject other = list_utilities.fast_delete_duplicates(nunion(neg_other, pos_other, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         other = nset_difference(nset_difference(other, neg_terms, UNPROVIDED, UNPROVIDED), pos_terms, UNPROVIDED, UNPROVIDED);
         return values(neg_pairs, pos_pairs, other);
-    }
-
-    public static final SubLObject add_rule_indices_alt(SubLObject assertion, SubLObject v_term) {
-        if (v_term == UNPROVIDED) {
-            v_term = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject cnf = assertions_high.assertion_cnf(assertion);
-                SubLObject mt = assertions_high.assertion_mt(assertion);
-                SubLObject dir = assertions_high.assertion_direction(assertion);
-                thread.resetMultipleValues();
-                {
-                    SubLObject neg_pairs = com.cyc.cycjava.cycl.kb_indexing.determine_rule_indices(cnf);
-                    SubLObject pos_pairs = thread.secondMultipleValue();
-                    SubLObject other = thread.thirdMultipleValue();
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject cdolist_list_var = neg_pairs;
-                        SubLObject neg_pair = NIL;
-                        for (neg_pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , neg_pair = cdolist_list_var.first()) {
-                            {
-                                SubLObject datum = neg_pair;
-                                SubLObject current = datum;
-                                SubLObject neg_indexing_type = NIL;
-                                SubLObject neg_term = NIL;
-                                destructuring_bind_must_consp(current, datum, $list_alt158);
-                                neg_indexing_type = current.first();
-                                current = current.rest();
-                                destructuring_bind_must_consp(current, datum, $list_alt158);
-                                neg_term = current.first();
-                                current = current.rest();
-                                if (NIL == current) {
-                                    if ((NIL != fully_indexed_term_p(neg_term)) && ((NIL == v_term) || neg_term.equal(v_term))) {
-                                        {
-                                            SubLObject pcase_var = neg_indexing_type;
-                                            if (pcase_var.eql($PRED)) {
-                                                com.cyc.cycjava.cycl.kb_indexing.add_predicate_rule_index(neg_term, $NEG, mt, dir, assertion);
-                                            } else {
-                                                if (pcase_var.eql($IST_PRED)) {
-                                                    com.cyc.cycjava.cycl.kb_indexing.add_decontextualized_ist_predicate_rule_index(neg_term, $NEG, dir, assertion);
-                                                } else {
-                                                    if (pcase_var.eql($FUNC)) {
-                                                        com.cyc.cycjava.cycl.kb_indexing.add_function_rule_index(neg_term, mt, dir, assertion);
-                                                    } else {
-                                                        if (pcase_var.eql($ISA)) {
-                                                            com.cyc.cycjava.cycl.kb_indexing.add_isa_rule_index(neg_term, $NEG, mt, dir, assertion);
-                                                        } else {
-                                                            if (pcase_var.eql($QUOTED_ISA)) {
-                                                                com.cyc.cycjava.cycl.kb_indexing.add_quoted_isa_rule_index(neg_term, $NEG, mt, dir, assertion);
-                                                            } else {
-                                                                if (pcase_var.eql($GENLS)) {
-                                                                    com.cyc.cycjava.cycl.kb_indexing.add_genls_rule_index(neg_term, $NEG, mt, dir, assertion);
-                                                                } else {
-                                                                    if (pcase_var.eql($GENL_MT)) {
-                                                                        com.cyc.cycjava.cycl.kb_indexing.add_genl_mt_rule_index(neg_term, $NEG, mt, dir, assertion);
-                                                                    } else {
-                                                                        if (pcase_var.eql($PRAGMA)) {
-                                                                            Errors.cerror($str_alt138$So_don_t_, $str_alt159$Can_t_index_a_pragmatic_requireme, assertion);
-                                                                        } else {
-                                                                            if (pcase_var.eql($EXCEPTION)) {
-                                                                                Errors.cerror($str_alt138$So_don_t_, $str_alt160$Can_t_index_an_exception_as_a_neg, assertion);
-                                                                            } else {
-                                                                                Errors.cerror($str_alt138$So_don_t_, $str_alt161$Don_t_know_how_to_handle_indexing, neg_indexing_type);
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    cdestructuring_bind_error(datum, $list_alt158);
-                                }
-                            }
-                        }
-                    }
-                    {
-                        SubLObject cdolist_list_var = pos_pairs;
-                        SubLObject pos_pair = NIL;
-                        for (pos_pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pos_pair = cdolist_list_var.first()) {
-                            {
-                                SubLObject datum = pos_pair;
-                                SubLObject current = datum;
-                                SubLObject pos_indexing_type = NIL;
-                                SubLObject pos_term = NIL;
-                                destructuring_bind_must_consp(current, datum, $list_alt162);
-                                pos_indexing_type = current.first();
-                                current = current.rest();
-                                destructuring_bind_must_consp(current, datum, $list_alt162);
-                                pos_term = current.first();
-                                current = current.rest();
-                                if (NIL == current) {
-                                    if ((NIL != fully_indexed_term_p(pos_term)) && ((NIL == v_term) || pos_term.equal(v_term))) {
-                                        {
-                                            SubLObject pcase_var = pos_indexing_type;
-                                            if (pcase_var.eql($PRED)) {
-                                                com.cyc.cycjava.cycl.kb_indexing.add_predicate_rule_index(pos_term, $POS, mt, dir, assertion);
-                                            } else {
-                                                if (pcase_var.eql($IST_PRED)) {
-                                                    com.cyc.cycjava.cycl.kb_indexing.add_decontextualized_ist_predicate_rule_index(pos_term, $POS, dir, assertion);
-                                                } else {
-                                                    if (pcase_var.eql($ISA)) {
-                                                        com.cyc.cycjava.cycl.kb_indexing.add_isa_rule_index(pos_term, $POS, mt, dir, assertion);
-                                                    } else {
-                                                        if (pcase_var.eql($QUOTED_ISA)) {
-                                                            com.cyc.cycjava.cycl.kb_indexing.add_quoted_isa_rule_index(pos_term, $POS, mt, dir, assertion);
-                                                        } else {
-                                                            if (pcase_var.eql($GENLS)) {
-                                                                com.cyc.cycjava.cycl.kb_indexing.add_genls_rule_index(pos_term, $POS, mt, dir, assertion);
-                                                            } else {
-                                                                if (pcase_var.eql($GENL_MT)) {
-                                                                    com.cyc.cycjava.cycl.kb_indexing.add_genl_mt_rule_index(pos_term, $POS, mt, dir, assertion);
-                                                                } else {
-                                                                    if (pcase_var.eql($PRAGMA)) {
-                                                                        com.cyc.cycjava.cycl.kb_indexing.add_pragma_rule_index(pos_term, mt, dir, assertion);
-                                                                    } else {
-                                                                        if (pcase_var.eql($EXCEPTION)) {
-                                                                            com.cyc.cycjava.cycl.kb_indexing.add_exception_rule_index(pos_term, mt, dir, assertion);
-                                                                        } else {
-                                                                            if (pcase_var.eql($FUNC)) {
-                                                                                Errors.cerror($str_alt138$So_don_t_, $str_alt163$Can_t_index_a_function_rule_as_a_, assertion);
-                                                                            } else {
-                                                                                Errors.cerror($str_alt138$So_don_t_, $str_alt161$Don_t_know_how_to_handle_indexing, pos_indexing_type);
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    cdestructuring_bind_error(datum, $list_alt162);
-                                }
-                            }
-                        }
-                    }
-                    {
-                        SubLObject cdolist_list_var = other;
-                        SubLObject other_term = NIL;
-                        for (other_term = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , other_term = cdolist_list_var.first()) {
-                            if ((NIL != fully_indexed_term_p(other_term)) && ((NIL == v_term) || other_term.equal(v_term))) {
-                                com.cyc.cycjava.cycl.kb_indexing.add_other_index(other_term, assertion);
-                            }
-                        }
-                    }
-                    if ((NIL != hlmt.hlmt_p(mt)) && ((NIL == v_term) || (NIL != hlmt.hlmt_equal(mt, v_term)))) {
-                        com.cyc.cycjava.cycl.kb_indexing.add_mt_index(mt, assertion);
-                    }
-                }
-            }
-            if (NIL == v_term) {
-                auxiliary_indexing.add_unbound_rule_indices(assertion);
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject add_rule_indices(final SubLObject assertion, SubLObject v_term) {
@@ -10424,171 +4788,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             auxiliary_indexing.add_unbound_rule_indices(assertion);
         }
         return NIL;
-    }
-
-    public static final SubLObject remove_rule_indices_alt(SubLObject assertion, SubLObject v_term) {
-        if (v_term == UNPROVIDED) {
-            v_term = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject cnf = assertions_high.assertion_cnf(assertion);
-                SubLObject mt = assertions_high.assertion_mt(assertion);
-                SubLObject dir = assertions_high.assertion_direction(assertion);
-                thread.resetMultipleValues();
-                {
-                    SubLObject neg_pairs = com.cyc.cycjava.cycl.kb_indexing.determine_rule_indices(cnf);
-                    SubLObject pos_pairs = thread.secondMultipleValue();
-                    SubLObject other = thread.thirdMultipleValue();
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject cdolist_list_var = neg_pairs;
-                        SubLObject neg_pair = NIL;
-                        for (neg_pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , neg_pair = cdolist_list_var.first()) {
-                            {
-                                SubLObject datum = neg_pair;
-                                SubLObject current = datum;
-                                SubLObject neg_indexing_type = NIL;
-                                SubLObject neg_term = NIL;
-                                destructuring_bind_must_consp(current, datum, $list_alt158);
-                                neg_indexing_type = current.first();
-                                current = current.rest();
-                                destructuring_bind_must_consp(current, datum, $list_alt158);
-                                neg_term = current.first();
-                                current = current.rest();
-                                if (NIL == current) {
-                                    if ((NIL != fully_indexed_term_p(neg_term)) && ((NIL == v_term) || neg_term.equal(v_term))) {
-                                        {
-                                            SubLObject pcase_var = neg_indexing_type;
-                                            if (pcase_var.eql($PRED)) {
-                                                com.cyc.cycjava.cycl.kb_indexing.rem_predicate_rule_index(neg_term, $NEG, mt, dir, assertion);
-                                            } else {
-                                                if (pcase_var.eql($IST_PRED)) {
-                                                    com.cyc.cycjava.cycl.kb_indexing.rem_decontextualized_ist_predicate_rule_index(neg_term, $NEG, dir, assertion);
-                                                } else {
-                                                    if (pcase_var.eql($ISA)) {
-                                                        com.cyc.cycjava.cycl.kb_indexing.rem_isa_rule_index(neg_term, $NEG, mt, dir, assertion);
-                                                    } else {
-                                                        if (pcase_var.eql($QUOTED_ISA)) {
-                                                            com.cyc.cycjava.cycl.kb_indexing.rem_quoted_isa_rule_index(neg_term, $NEG, mt, dir, assertion);
-                                                        } else {
-                                                            if (pcase_var.eql($GENLS)) {
-                                                                com.cyc.cycjava.cycl.kb_indexing.rem_genls_rule_index(neg_term, $NEG, mt, dir, assertion);
-                                                            } else {
-                                                                if (pcase_var.eql($GENL_MT)) {
-                                                                    com.cyc.cycjava.cycl.kb_indexing.rem_genl_mt_rule_index(neg_term, $NEG, mt, dir, assertion);
-                                                                } else {
-                                                                    if (pcase_var.eql($FUNC)) {
-                                                                        com.cyc.cycjava.cycl.kb_indexing.rem_function_rule_index(neg_term, mt, dir, assertion);
-                                                                    } else {
-                                                                        if (pcase_var.eql($PRAGMA)) {
-                                                                            Errors.cerror($str_alt138$So_don_t_, $str_alt164$Can_t_remove_the_index_of_a_pragm, assertion);
-                                                                        } else {
-                                                                            if (pcase_var.eql($EXCEPTION)) {
-                                                                                Errors.cerror($str_alt138$So_don_t_, $str_alt165$Can_t_remove_the_index_of_an_exce, assertion);
-                                                                            } else {
-                                                                                Errors.cerror($str_alt138$So_don_t_, $str_alt161$Don_t_know_how_to_handle_indexing, neg_indexing_type);
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    cdestructuring_bind_error(datum, $list_alt158);
-                                }
-                            }
-                        }
-                    }
-                    {
-                        SubLObject cdolist_list_var = pos_pairs;
-                        SubLObject pos_pair = NIL;
-                        for (pos_pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pos_pair = cdolist_list_var.first()) {
-                            {
-                                SubLObject datum = pos_pair;
-                                SubLObject current = datum;
-                                SubLObject pos_indexing_type = NIL;
-                                SubLObject pos_term = NIL;
-                                destructuring_bind_must_consp(current, datum, $list_alt162);
-                                pos_indexing_type = current.first();
-                                current = current.rest();
-                                destructuring_bind_must_consp(current, datum, $list_alt162);
-                                pos_term = current.first();
-                                current = current.rest();
-                                if (NIL == current) {
-                                    if ((NIL != fully_indexed_term_p(pos_term)) && ((NIL == v_term) || pos_term.equal(v_term))) {
-                                        {
-                                            SubLObject pcase_var = pos_indexing_type;
-                                            if (pcase_var.eql($PRED)) {
-                                                com.cyc.cycjava.cycl.kb_indexing.rem_predicate_rule_index(pos_term, $POS, mt, dir, assertion);
-                                            } else {
-                                                if (pcase_var.eql($IST_PRED)) {
-                                                    com.cyc.cycjava.cycl.kb_indexing.rem_decontextualized_ist_predicate_rule_index(pos_term, $POS, dir, assertion);
-                                                } else {
-                                                    if (pcase_var.eql($ISA)) {
-                                                        com.cyc.cycjava.cycl.kb_indexing.rem_isa_rule_index(pos_term, $POS, mt, dir, assertion);
-                                                    } else {
-                                                        if (pcase_var.eql($QUOTED_ISA)) {
-                                                            com.cyc.cycjava.cycl.kb_indexing.rem_quoted_isa_rule_index(pos_term, $POS, mt, dir, assertion);
-                                                        } else {
-                                                            if (pcase_var.eql($GENLS)) {
-                                                                com.cyc.cycjava.cycl.kb_indexing.rem_genls_rule_index(pos_term, $POS, mt, dir, assertion);
-                                                            } else {
-                                                                if (pcase_var.eql($GENL_MT)) {
-                                                                    com.cyc.cycjava.cycl.kb_indexing.rem_genl_mt_rule_index(pos_term, $POS, mt, dir, assertion);
-                                                                } else {
-                                                                    if (pcase_var.eql($EXCEPTION)) {
-                                                                        com.cyc.cycjava.cycl.kb_indexing.rem_exception_rule_index(pos_term, mt, dir, assertion);
-                                                                    } else {
-                                                                        if (pcase_var.eql($PRAGMA)) {
-                                                                            com.cyc.cycjava.cycl.kb_indexing.rem_pragma_rule_index(pos_term, mt, dir, assertion);
-                                                                        } else {
-                                                                            if (pcase_var.eql($FUNC)) {
-                                                                                Errors.cerror($str_alt138$So_don_t_, $str_alt166$Can_t_remove_the_index_of_a_funct, assertion);
-                                                                            } else {
-                                                                                Errors.cerror($str_alt138$So_don_t_, $str_alt161$Don_t_know_how_to_handle_indexing, pos_indexing_type);
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    cdestructuring_bind_error(datum, $list_alt162);
-                                }
-                            }
-                        }
-                    }
-                    {
-                        SubLObject cdolist_list_var = other;
-                        SubLObject other_term = NIL;
-                        for (other_term = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , other_term = cdolist_list_var.first()) {
-                            if ((NIL != fully_indexed_term_p(other_term)) && ((NIL == v_term) || other_term.equal(v_term))) {
-                                com.cyc.cycjava.cycl.kb_indexing.rem_other_index(other_term, assertion);
-                            }
-                        }
-                    }
-                    if ((NIL != hlmt.hlmt_p(mt)) && ((NIL == v_term) || (NIL != hlmt.hlmt_equal(mt, v_term)))) {
-                        com.cyc.cycjava.cycl.kb_indexing.rem_mt_index(mt, assertion);
-                    }
-                }
-            }
-            if (NIL == v_term) {
-                auxiliary_indexing.rem_unbound_rule_indices(assertion);
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject remove_rule_indices(final SubLObject assertion, SubLObject v_term) {
@@ -10885,47 +5084,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return count;
     }
 
-    /**
-     *
-     *
-     * @return nil or property-list-p; a property list containing the property :index-type,
-    which identifies which type of index is best for lookup of NART-HL-FORMULA.
-    The remaining elements on the plist are additional information pertaining to
-    that type of index.  A nil return value means that no possible index was
-    found using the allowable methods.
-     * @param METHODS;
-     * 		the allowable methods (index-types) that the function can
-     * 		return.  If nil, all methods are allowed.
-     */
-    @LispMethod(comment = "@return nil or property-list-p; a property list containing the property :index-type,\r\nwhich identifies which type of index is best for lookup of NART-HL-FORMULA.\r\nThe remaining elements on the plist are additional information pertaining to\r\nthat type of index.  A nil return value means that no possible index was\r\nfound using the allowable methods.\r\n@param METHODS;\r\n\t\tthe allowable methods (index-types) that the function can\r\n\t\treturn.  If nil, all methods are allowed.")
-    public static final SubLObject best_nat_lookup_index_alt(SubLObject nart_hl_formula, SubLObject v_methods) {
-        if (v_methods == UNPROVIDED) {
-            v_methods = NIL;
-        }
-        if ((NIL != com.cyc.cycjava.cycl.kb_indexing.lookup_methods_includeP($FUNCTION_EXTENT, v_methods)) || (NIL != com.cyc.cycjava.cycl.kb_indexing.lookup_methods_includeP($NART_ARG, v_methods))) {
-            return com.cyc.cycjava.cycl.kb_indexing.best_nat_lookup_index_try_all_allowed(nart_hl_formula, v_methods);
-        } else {
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.lookup_methods_allow_onlyP($OVERLAP, v_methods)) {
-                return com.cyc.cycjava.cycl.kb_indexing.lookup_index_for_overlap(nart_hl_formula);
-            } else {
-                return NIL;
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return nil or property-list-p; a property list containing the property :index-type,
-    which identifies which type of index is best for lookup of NART-HL-FORMULA.
-    The remaining elements on the plist are additional information pertaining to
-    that type of index.  A nil return value means that no possible index was
-    found using the allowable methods.
-     * @param METHODS;
-     * 		the allowable methods (index-types) that the function can
-     * 		return.  If nil, all methods are allowed.
-     */
-    @LispMethod(comment = "@return nil or property-list-p; a property list containing the property :index-type,\r\nwhich identifies which type of index is best for lookup of NART-HL-FORMULA.\r\nThe remaining elements on the plist are additional information pertaining to\r\nthat type of index.  A nil return value means that no possible index was\r\nfound using the allowable methods.\r\n@param METHODS;\r\n\t\tthe allowable methods (index-types) that the function can\r\n\t\treturn.  If nil, all methods are allowed.")
     public static SubLObject best_nat_lookup_index(final SubLObject nart_hl_formula, SubLObject v_methods) {
         if (v_methods == UNPROVIDED) {
             v_methods = NIL;
@@ -10939,21 +5097,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject num_best_nat_lookup_index_alt(SubLObject nart_hl_formula, SubLObject v_methods) {
-        if (v_methods == UNPROVIDED) {
-            v_methods = NIL;
-        }
-        if ((NIL != com.cyc.cycjava.cycl.kb_indexing.lookup_methods_includeP($FUNCTION_EXTENT, v_methods)) || (NIL != com.cyc.cycjava.cycl.kb_indexing.lookup_methods_includeP($NART_ARG, v_methods))) {
-            return com.cyc.cycjava.cycl.kb_indexing.num_best_nat_lookup_index_try_all_allowed(nart_hl_formula, v_methods);
-        } else {
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.lookup_methods_allow_onlyP($OVERLAP, v_methods)) {
-                return estimated_num_overlap_index_for_formula(nart_hl_formula, UNPROVIDED);
-            } else {
-                return ZERO_INTEGER;
-            }
-        }
-    }
-
     public static SubLObject num_best_nat_lookup_index(final SubLObject nart_hl_formula, SubLObject v_methods) {
         if (v_methods == UNPROVIDED) {
             v_methods = NIL;
@@ -10965,50 +5108,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             return virtual_indexing.estimated_num_overlap_index_for_formula(nart_hl_formula, UNPROVIDED);
         }
         return ZERO_INTEGER;
-    }
-
-    public static final SubLObject best_nat_lookup_index_try_all_allowed_alt(SubLObject nart_hl_formula, SubLObject v_methods) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject lookup_index = NIL;
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                        thread.resetMultipleValues();
-                        {
-                            SubLObject best_fort = com.cyc.cycjava.cycl.kb_indexing.best_nat_lookup_index_wrt_methods(nart_hl_formula, v_methods);
-                            SubLObject best_index_argnum = thread.secondMultipleValue();
-                            SubLObject functor = thread.thirdMultipleValue();
-                            SubLObject best_count = thread.fourthMultipleValue();
-                            thread.resetMultipleValues();
-                            if ((NIL != com.cyc.cycjava.cycl.kb_indexing.lookup_methods_includeP($OVERLAP, v_methods)) && (NIL != lookup_should_use_index_overlapP(nart_hl_formula, best_count))) {
-                                lookup_index = com.cyc.cycjava.cycl.kb_indexing.lookup_index_for_overlap(nart_hl_formula);
-                            } else {
-                                if ((((NIL == best_fort) && (NIL == best_index_argnum)) && (NIL == functor)) && ZERO_INTEGER.eql(best_count)) {
-                                    lookup_index = NIL;
-                                } else {
-                                    if ((NIL != com.cyc.cycjava.cycl.kb_indexing.lookup_methods_includeP($FUNCTION_EXTENT, v_methods)) && ZERO_INTEGER.eql(best_index_argnum)) {
-                                        lookup_index = com.cyc.cycjava.cycl.kb_indexing.lookup_index_for_function_extent(best_fort);
-                                    } else {
-                                        if ((NIL != com.cyc.cycjava.cycl.kb_indexing.lookup_methods_includeP($NART_ARG, v_methods)) && (NIL != positive_integer_p(best_index_argnum))) {
-                                            lookup_index = com.cyc.cycjava.cycl.kb_indexing.lookup_index_for_nart_arg(best_fort, best_index_argnum, functor);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return lookup_index;
-            }
-        }
     }
 
     public static SubLObject best_nat_lookup_index_try_all_allowed(final SubLObject nart_hl_formula, final SubLObject v_methods) {
@@ -11047,25 +5146,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return lookup_index;
     }
 
-    public static final SubLObject num_best_nat_lookup_index_try_all_allowed_alt(SubLObject nart_hl_formula, SubLObject v_methods) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject best_fort = com.cyc.cycjava.cycl.kb_indexing.best_nat_lookup_index_wrt_methods(nart_hl_formula, v_methods);
-                SubLObject best_index_argnum = thread.secondMultipleValue();
-                SubLObject functor = thread.thirdMultipleValue();
-                SubLObject best_count = thread.fourthMultipleValue();
-                thread.resetMultipleValues();
-                if ((NIL != com.cyc.cycjava.cycl.kb_indexing.lookup_methods_includeP($OVERLAP, v_methods)) && (NIL != lookup_should_use_index_overlapP(nart_hl_formula, best_count))) {
-                    return estimated_num_overlap_index_for_formula(nart_hl_formula, UNPROVIDED);
-                } else {
-                    return best_count;
-                }
-            }
-        }
-    }
-
     public static SubLObject num_best_nat_lookup_index_try_all_allowed(final SubLObject nart_hl_formula, final SubLObject v_methods) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -11078,33 +5158,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             return virtual_indexing.estimated_num_overlap_index_for_formula(nart_hl_formula, UNPROVIDED);
         }
         return best_count;
-    }
-
-    public static final SubLObject best_nat_lookup_index_wrt_methods_alt(SubLObject nart_hl_formula, SubLObject v_methods) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject tweaked_formula = ((NIL != com.cyc.cycjava.cycl.kb_indexing.lookup_methods_includeP($FUNCTION_EXTENT, v_methods)) && (NIL == com.cyc.cycjava.cycl.kb_indexing.lookup_methods_includeP($NART_ARG, v_methods))) ? ((SubLObject) (make_formula(cycl_utilities.nat_functor(nart_hl_formula), NIL, UNPROVIDED))) : nart_hl_formula;
-                thread.resetMultipleValues();
-                {
-                    SubLObject best_term = com.cyc.cycjava.cycl.kb_indexing.best_nat_lookup_index_int(tweaked_formula);
-                    SubLObject best_index_argnum = thread.secondMultipleValue();
-                    SubLObject functor = thread.thirdMultipleValue();
-                    SubLObject best_count = thread.fourthMultipleValue();
-                    thread.resetMultipleValues();
-                    if ((NIL != com.cyc.cycjava.cycl.kb_indexing.lookup_methods_includeP($NART_ARG, v_methods)) && (NIL != positive_integer_p(best_index_argnum))) {
-                    } else {
-                        if ((NIL != com.cyc.cycjava.cycl.kb_indexing.lookup_methods_includeP($FUNCTION_EXTENT, v_methods)) && ZERO_INTEGER.eql(best_index_argnum)) {
-                        } else {
-                            if ((NIL != com.cyc.cycjava.cycl.kb_indexing.lookup_methods_includeP($NART_ARG, v_methods)) && ZERO_INTEGER.eql(best_index_argnum)) {
-                                return values(NIL, NIL, NIL, ZERO_INTEGER);
-                            }
-                        }
-                    }
-                    return values(best_term, best_index_argnum, functor, best_count);
-                }
-            }
-        }
     }
 
     public static SubLObject best_nat_lookup_index_wrt_methods(final SubLObject nart_hl_formula, final SubLObject v_methods) {
@@ -11126,24 +5179,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return values(best_term, best_index_argnum, functor, best_count);
     }
 
-    /**
-     * Determine the best nat lookup index of NART-HL-FORMULA.
-     */
-    @LispMethod(comment = "Determine the best nat lookup index of NART-HL-FORMULA.")
-    public static final SubLObject best_nat_lookup_index_int_alt(SubLObject nart_hl_formula) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject argnum_pairs = com.cyc.cycjava.cycl.kb_indexing.determine_function_indices(nart_hl_formula);
-                SubLObject others = thread.secondMultipleValue();
-                thread.resetMultipleValues();
-                return com.cyc.cycjava.cycl.kb_indexing.decent_nat_index_from_terms(argnum_pairs);
-            }
-        }
-    }
-
-    @LispMethod(comment = "Determine the best nat lookup index of NART-HL-FORMULA.")
     public static SubLObject best_nat_lookup_index_int(final SubLObject nart_hl_formula) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -11151,54 +5186,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         final SubLObject others = thread.secondMultipleValue();
         thread.resetMultipleValues();
         return decent_nat_index_from_terms(argnum_pairs);
-    }/**
-     * Determine the best nat lookup index of NART-HL-FORMULA.
-     */
-
-
-    public static final SubLObject decent_nat_index_from_terms_alt(SubLObject alist) {
-        {
-            SubLObject best_count = NIL;
-            SubLObject best_fort = NIL;
-            SubLObject best_argnum = NIL;
-            SubLObject functor = assoc(ZERO_INTEGER, alist, UNPROVIDED, UNPROVIDED).rest();
-            if (NIL == indexed_term_p(functor)) {
-                return values(NIL, NIL, NIL, NIL);
-            }
-            best_fort = functor;
-            best_count = com.cyc.cycjava.cycl.kb_indexing.num_function_extent_index(functor);
-            best_argnum = ZERO_INTEGER;
-            {
-                SubLObject cdolist_list_var = alist;
-                SubLObject cons = NIL;
-                for (cons = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , cons = cdolist_list_var.first()) {
-                    {
-                        SubLObject datum = cons;
-                        SubLObject current = datum;
-                        SubLObject argnum = NIL;
-                        SubLObject arg = NIL;
-                        destructuring_bind_must_consp(current, datum, $list_alt140);
-                        argnum = current.first();
-                        current = current.rest();
-                        arg = current;
-                        if (argnum.isPositive()) {
-                            {
-                                SubLObject num = NIL;
-                                if (NIL != indexed_term_p(arg)) {
-                                    num = com.cyc.cycjava.cycl.kb_indexing.num_nart_arg_index(arg, argnum, functor);
-                                    if ((NIL == best_fort) || num.numL(best_count)) {
-                                        best_count = num;
-                                        best_fort = arg;
-                                        best_argnum = argnum;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return values(best_fort, best_argnum, functor, best_count);
-        }
     }
 
     public static SubLObject decent_nat_index_from_terms(final SubLObject argnum_pairs) {
@@ -11246,20 +5233,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return values(best_fort, best_argnum, functor, best_count);
     }
 
-    public static final SubLObject decent_nat_index_alt(SubLObject nart_hl_formula) {
-        if (NIL != formula_with_sequence_termP(nart_hl_formula)) {
-            {
-                SubLObject chopped_nart_hl_formula = cycl_utilities.formula_terms(nart_hl_formula, $IGNORE);
-                return com.cyc.cycjava.cycl.kb_indexing.decent_nat_index(chopped_nart_hl_formula);
-            }
-        } else {
-            {
-                SubLObject alist = com.cyc.cycjava.cycl.kb_indexing.determine_function_indices(nart_hl_formula);
-                return com.cyc.cycjava.cycl.kb_indexing.decent_nat_index_from_terms(alist);
-            }
-        }
-    }
-
     public static SubLObject decent_nat_index(final SubLObject nart_hl_formula) {
         if (NIL != formula_with_sequence_termP(nart_hl_formula)) {
             final SubLObject chopped_nart_hl_formula = cycl_utilities.formula_terms(nart_hl_formula, $IGNORE);
@@ -11267,21 +5240,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         }
         final SubLObject alist = determine_function_indices(nart_hl_formula);
         return decent_nat_index_from_terms(alist);
-    }
-
-    public static final SubLObject best_nat_index_count_alt(SubLObject nart_hl_formula) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject best_fort = com.cyc.cycjava.cycl.kb_indexing.decent_nat_index(nart_hl_formula);
-                SubLObject best_index = thread.secondMultipleValue();
-                SubLObject arg0 = thread.thirdMultipleValue();
-                SubLObject best_count = thread.fourthMultipleValue();
-                thread.resetMultipleValues();
-                return best_count;
-            }
-        }
     }
 
     public static SubLObject best_nat_index_count(final SubLObject nart_hl_formula) {
@@ -11295,219 +5253,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return best_count;
     }
 
-    /**
-     *
-     *
-     * @return 0 keywordp; the type of indexing: :pred-neg, :pred-pos, :ist-pred-neg, :ist-pred-pos, :func, :isa-neg, :isa-pos,
-    :genls-neg, :genls-pos, :genl-mt-neg, :genl-mt-pos, :exception, :pragma, or :other.
-     * @return 1 indexed-term-p; the term to be indexed with that type of indexing.
-     */
-    @LispMethod(comment = "@return 0 keywordp; the type of indexing: :pred-neg, :pred-pos, :ist-pred-neg, :ist-pred-pos, :func, :isa-neg, :isa-pos,\r\n:genls-neg, :genls-pos, :genl-mt-neg, :genl-mt-pos, :exception, :pragma, or :other.\r\n@return 1 indexed-term-p; the term to be indexed with that type of indexing.")
-    public static final SubLObject decent_rule_index_alt(SubLObject rule_cnf) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject best_type = NIL;
-                SubLObject best_term = NIL;
-                SubLObject best_total = $most_positive_fixnum$.getGlobalValue();
-                thread.resetMultipleValues();
-                {
-                    SubLObject neg_pairs = com.cyc.cycjava.cycl.kb_indexing.determine_rule_indices(rule_cnf);
-                    SubLObject pos_pairs = thread.secondMultipleValue();
-                    SubLObject other = thread.thirdMultipleValue();
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject cdolist_list_var = pos_pairs;
-                        SubLObject pos_pair = NIL;
-                        for (pos_pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pos_pair = cdolist_list_var.first()) {
-                            {
-                                SubLObject pos_indexing_type = pos_pair.first();
-                                SubLObject pos_term = second(pos_pair);
-                                if (NIL != indexed_term_p(pos_term)) {
-                                    {
-                                        SubLObject total = $most_positive_fixnum$.getGlobalValue();
-                                        {
-                                            SubLObject pcase_var = pos_indexing_type;
-                                            if (pcase_var.eql($PRED)) {
-                                                total = com.cyc.cycjava.cycl.kb_indexing.num_predicate_rule_index(pos_term, $POS, UNPROVIDED, UNPROVIDED);
-                                            } else {
-                                                if (pcase_var.eql($IST_PRED)) {
-                                                    total = com.cyc.cycjava.cycl.kb_indexing.num_decontextualized_ist_predicate_rule_index(pos_term, $POS, UNPROVIDED);
-                                                } else {
-                                                    if (pcase_var.eql($ISA)) {
-                                                        total = com.cyc.cycjava.cycl.kb_indexing.num_isa_rule_index(pos_term, $POS, UNPROVIDED, UNPROVIDED);
-                                                    } else {
-                                                        if (pcase_var.eql($QUOTED_ISA)) {
-                                                            total = com.cyc.cycjava.cycl.kb_indexing.num_quoted_isa_rule_index(pos_term, $POS, UNPROVIDED, UNPROVIDED);
-                                                        } else {
-                                                            if (pcase_var.eql($GENLS)) {
-                                                                total = com.cyc.cycjava.cycl.kb_indexing.num_genls_rule_index(pos_term, $POS, UNPROVIDED, UNPROVIDED);
-                                                            } else {
-                                                                if (pcase_var.eql($GENL_MT)) {
-                                                                    total = com.cyc.cycjava.cycl.kb_indexing.num_genl_mt_rule_index(pos_term, $POS, UNPROVIDED, UNPROVIDED);
-                                                                } else {
-                                                                    if (pcase_var.eql($PRAGMA)) {
-                                                                        total = com.cyc.cycjava.cycl.kb_indexing.num_pragma_rule_index(pos_term, UNPROVIDED, UNPROVIDED);
-                                                                    } else {
-                                                                        if (pcase_var.eql($EXCEPTION)) {
-                                                                            total = com.cyc.cycjava.cycl.kb_indexing.num_exception_rule_index(pos_term, UNPROVIDED, UNPROVIDED);
-                                                                        } else {
-                                                                            Errors.cerror($str_alt138$So_don_t_, $str_alt161$Don_t_know_how_to_handle_indexing, pos_indexing_type);
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        if (total.numL(best_total)) {
-                                            best_total = total;
-                                            best_term = pos_term;
-                                            {
-                                                SubLObject pcase_var = pos_indexing_type;
-                                                if (pcase_var.eql($PRED)) {
-                                                    best_type = $PRED_POS;
-                                                } else {
-                                                    if (pcase_var.eql($IST_PRED)) {
-                                                        best_type = $IST_PRED_POS;
-                                                    } else {
-                                                        if (pcase_var.eql($ISA)) {
-                                                            best_type = $ISA_POS;
-                                                        } else {
-                                                            if (pcase_var.eql($QUOTED_ISA)) {
-                                                                best_type = $QUOTED_ISA_POS;
-                                                            } else {
-                                                                if (pcase_var.eql($GENLS)) {
-                                                                    best_type = $GENLS_POS;
-                                                                } else {
-                                                                    if (pcase_var.eql($GENL_MT)) {
-                                                                        best_type = $GENL_MT_POS;
-                                                                    } else {
-                                                                        best_type = pos_indexing_type;
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    {
-                        SubLObject cdolist_list_var = neg_pairs;
-                        SubLObject neg_pair = NIL;
-                        for (neg_pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , neg_pair = cdolist_list_var.first()) {
-                            {
-                                SubLObject neg_indexing_type = neg_pair.first();
-                                SubLObject neg_term = second(neg_pair);
-                                if (NIL != indexed_term_p(neg_term)) {
-                                    {
-                                        SubLObject total = $most_positive_fixnum$.getGlobalValue();
-                                        {
-                                            SubLObject pcase_var = neg_indexing_type;
-                                            if (pcase_var.eql($PRED)) {
-                                                total = com.cyc.cycjava.cycl.kb_indexing.num_predicate_rule_index(neg_term, $NEG, UNPROVIDED, UNPROVIDED);
-                                            } else {
-                                                if (pcase_var.eql($IST_PRED)) {
-                                                    total = com.cyc.cycjava.cycl.kb_indexing.num_decontextualized_ist_predicate_rule_index(neg_term, $NEG, UNPROVIDED);
-                                                } else {
-                                                    if (pcase_var.eql($ISA)) {
-                                                        total = com.cyc.cycjava.cycl.kb_indexing.num_isa_rule_index(neg_term, $NEG, UNPROVIDED, UNPROVIDED);
-                                                    } else {
-                                                        if (pcase_var.eql($QUOTED_ISA)) {
-                                                            total = com.cyc.cycjava.cycl.kb_indexing.num_quoted_isa_rule_index(neg_term, $NEG, UNPROVIDED, UNPROVIDED);
-                                                        } else {
-                                                            if (pcase_var.eql($GENLS)) {
-                                                                total = com.cyc.cycjava.cycl.kb_indexing.num_genls_rule_index(neg_term, $NEG, UNPROVIDED, UNPROVIDED);
-                                                            } else {
-                                                                if (pcase_var.eql($GENL_MT)) {
-                                                                    total = com.cyc.cycjava.cycl.kb_indexing.num_genl_mt_rule_index(neg_term, $NEG, UNPROVIDED, UNPROVIDED);
-                                                                } else {
-                                                                    if (pcase_var.eql($FUNC)) {
-                                                                        total = com.cyc.cycjava.cycl.kb_indexing.num_function_rule_index(neg_term, UNPROVIDED, UNPROVIDED);
-                                                                    } else {
-                                                                        Errors.cerror($str_alt138$So_don_t_, $str_alt161$Don_t_know_how_to_handle_indexing, neg_indexing_type);
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        if (total.numL(best_total)) {
-                                            best_total = total;
-                                            best_term = neg_term;
-                                            {
-                                                SubLObject pcase_var = neg_indexing_type;
-                                                if (pcase_var.eql($PRED)) {
-                                                    best_type = $PRED_NEG;
-                                                } else {
-                                                    if (pcase_var.eql($IST_PRED)) {
-                                                        best_type = $IST_PRED_NEG;
-                                                    } else {
-                                                        if (pcase_var.eql($ISA)) {
-                                                            best_type = $ISA_NEG;
-                                                        } else {
-                                                            if (pcase_var.eql($QUOTED_ISA)) {
-                                                                best_type = $QUOTED_ISA_NEG;
-                                                            } else {
-                                                                if (pcase_var.eql($GENLS)) {
-                                                                    best_type = $GENLS_NEG;
-                                                                } else {
-                                                                    if (pcase_var.eql($GENL_MT)) {
-                                                                        best_type = $GENL_MT_NEG;
-                                                                    } else {
-                                                                        best_type = neg_indexing_type;
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    {
-                        SubLObject cdolist_list_var = other;
-                        SubLObject other_term = NIL;
-                        for (other_term = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , other_term = cdolist_list_var.first()) {
-                            if (NIL != indexed_term_p(other_term)) {
-                                {
-                                    SubLObject total = com.cyc.cycjava.cycl.kb_indexing.num_other_index(other_term);
-                                    if (total.numL(best_total)) {
-                                        best_total = total;
-                                        best_term = other_term;
-                                        best_type = $OTHER;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                return values(best_type, best_term);
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return 0 keywordp; the type of indexing: :pred-neg, :pred-pos, :ist-pred-neg, :ist-pred-pos, :func, :isa-neg, :isa-pos,
-    :genls-neg, :genls-pos, :genl-mt-neg, :genl-mt-pos, :exception, :pragma, or :other.
-     * @return 1 indexed-term-p; the term to be indexed with that type of indexing.
-     */
-    @LispMethod(comment = "@return 0 keywordp; the type of indexing: :pred-neg, :pred-pos, :ist-pred-neg, :ist-pred-pos, :func, :isa-neg, :isa-pos,\r\n:genls-neg, :genls-pos, :genl-mt-neg, :genl-mt-pos, :exception, :pragma, or :other.\r\n@return 1 indexed-term-p; the term to be indexed with that type of indexing.")
     public static SubLObject decent_rule_index(final SubLObject rule_cnf) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject best_type = NIL;
@@ -11684,145 +5429,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return values(best_type, best_term);
     }
 
-    /**
-     * Return a list of rule-index-specs, which all the rule indices of RULE-CNF.
-     */
-    @LispMethod(comment = "Return a list of rule-index-specs, which all the rule indices of RULE-CNF.")
-    public static final SubLObject all_rule_indices_alt(SubLObject rule_cnf) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject all_rule_indices = NIL;
-                thread.resetMultipleValues();
-                {
-                    SubLObject neg_pairs = com.cyc.cycjava.cycl.kb_indexing.determine_rule_indices(rule_cnf);
-                    SubLObject pos_pairs = thread.secondMultipleValue();
-                    SubLObject other = thread.thirdMultipleValue();
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject cdolist_list_var = neg_pairs;
-                        SubLObject neg_pair = NIL;
-                        for (neg_pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , neg_pair = cdolist_list_var.first()) {
-                            {
-                                SubLObject datum = neg_pair;
-                                SubLObject current = datum;
-                                SubLObject neg_indexing_type = NIL;
-                                SubLObject v_term = NIL;
-                                destructuring_bind_must_consp(current, datum, $list_alt186);
-                                neg_indexing_type = current.first();
-                                current = current.rest();
-                                destructuring_bind_must_consp(current, datum, $list_alt186);
-                                v_term = current.first();
-                                current = current.rest();
-                                if (NIL == current) {
-                                    if (NIL != indexed_term_p(v_term)) {
-                                        {
-                                            SubLObject index_type = NIL;
-                                            SubLObject pcase_var = neg_indexing_type;
-                                            if (pcase_var.eql($PRED)) {
-                                                index_type = $PRED_NEG;
-                                            } else {
-                                                if (pcase_var.eql($IST_PRED)) {
-                                                    index_type = $IST_PRED_NEG;
-                                                } else {
-                                                    if (pcase_var.eql($ISA)) {
-                                                        index_type = $ISA_NEG;
-                                                    } else {
-                                                        if (pcase_var.eql($QUOTED_ISA)) {
-                                                            index_type = $QUOTED_ISA_NEG;
-                                                        } else {
-                                                            if (pcase_var.eql($GENLS)) {
-                                                                index_type = $GENLS_NEG;
-                                                            } else {
-                                                                if (pcase_var.eql($GENL_MT)) {
-                                                                    index_type = $GENL_MT_NEG;
-                                                                } else {
-                                                                    index_type = neg_indexing_type;
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            all_rule_indices = cons(list(index_type, v_term), all_rule_indices);
-                                        }
-                                    }
-                                } else {
-                                    cdestructuring_bind_error(datum, $list_alt186);
-                                }
-                            }
-                        }
-                    }
-                    {
-                        SubLObject cdolist_list_var = pos_pairs;
-                        SubLObject pos_pair = NIL;
-                        for (pos_pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pos_pair = cdolist_list_var.first()) {
-                            {
-                                SubLObject datum = pos_pair;
-                                SubLObject current = datum;
-                                SubLObject pos_indexing_type = NIL;
-                                SubLObject v_term = NIL;
-                                destructuring_bind_must_consp(current, datum, $list_alt187);
-                                pos_indexing_type = current.first();
-                                current = current.rest();
-                                destructuring_bind_must_consp(current, datum, $list_alt187);
-                                v_term = current.first();
-                                current = current.rest();
-                                if (NIL == current) {
-                                    if (NIL != indexed_term_p(v_term)) {
-                                        {
-                                            SubLObject index_type = NIL;
-                                            SubLObject pcase_var = pos_indexing_type;
-                                            if (pcase_var.eql($PRED)) {
-                                                index_type = $PRED_POS;
-                                            } else {
-                                                if (pcase_var.eql($IST_PRED)) {
-                                                    index_type = $IST_PRED_POS;
-                                                } else {
-                                                    if (pcase_var.eql($ISA)) {
-                                                        index_type = $ISA_POS;
-                                                    } else {
-                                                        if (pcase_var.eql($QUOTED_ISA)) {
-                                                            index_type = $QUOTED_ISA_POS;
-                                                        } else {
-                                                            if (pcase_var.eql($GENLS)) {
-                                                                index_type = $GENLS_POS;
-                                                            } else {
-                                                                if (pcase_var.eql($GENL_MT)) {
-                                                                    index_type = $GENL_MT_POS;
-                                                                } else {
-                                                                    index_type = pos_indexing_type;
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            all_rule_indices = cons(list(index_type, v_term), all_rule_indices);
-                                        }
-                                    }
-                                } else {
-                                    cdestructuring_bind_error(datum, $list_alt187);
-                                }
-                            }
-                        }
-                    }
-                    {
-                        SubLObject cdolist_list_var = other;
-                        SubLObject v_term = NIL;
-                        for (v_term = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_term = cdolist_list_var.first()) {
-                            if (NIL != indexed_term_p(v_term)) {
-                                all_rule_indices = cons(list($OTHER, v_term), all_rule_indices);
-                            }
-                        }
-                    }
-                }
-                return nreverse(all_rule_indices);
-            }
-        }
-    }
-
-    @LispMethod(comment = "Return a list of rule-index-specs, which all the rule indices of RULE-CNF.")
     public static SubLObject all_rule_indices(final SubLObject rule_cnf) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject all_rule_indices = NIL;
@@ -11944,24 +5550,10 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             v_term2 = cdolist_list_var.first();
         } 
         return nreverse(all_rule_indices);
-    }/**
-     * Return a list of rule-index-specs, which all the rule indices of RULE-CNF.
-     */
-
-
-    public static final SubLObject lookup_index_p_alt(SubLObject v_object) {
-        return list_utilities.property_list_p(v_object);
     }
 
     public static SubLObject lookup_index_p(final SubLObject v_object) {
         return list_utilities.property_list_p(v_object);
-    }
-
-    public static final SubLObject lookup_index_get_property_alt(SubLObject lookup_index, SubLObject indicator, SubLObject v_default) {
-        if (v_default == UNPROVIDED) {
-            v_default = NIL;
-        }
-        return getf(lookup_index, indicator, v_default);
     }
 
     public static SubLObject lookup_index_get_property(final SubLObject lookup_index, final SubLObject indicator, SubLObject v_default) {
@@ -11971,35 +5563,12 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return getf(lookup_index, indicator, v_default);
     }
 
-    /**
-     * Usage: (csetq li (lookup-index-set-property li :foo 212))
-     */
-    @LispMethod(comment = "Usage: (csetq li (lookup-index-set-property li :foo 212))")
-    public static final SubLObject lookup_index_set_property_alt(SubLObject lookup_index, SubLObject indicator, SubLObject value) {
-        return putf(lookup_index, indicator, value);
-    }
-
-    @LispMethod(comment = "Usage: (csetq li (lookup-index-set-property li :foo 212))")
     public static SubLObject lookup_index_set_property(final SubLObject lookup_index, final SubLObject indicator, final SubLObject value) {
         return putf(lookup_index, indicator, value);
-    }/**
-     * Usage: (csetq li (lookup-index-set-property li :foo 212))
-     */
-
-
-    public static final SubLObject lookup_index_get_type_alt(SubLObject lookup_index) {
-        return com.cyc.cycjava.cycl.kb_indexing.lookup_index_get_property(lookup_index, $INDEX_TYPE, UNPROVIDED);
     }
 
     public static SubLObject lookup_index_get_type(final SubLObject lookup_index) {
         return lookup_index_get_property(lookup_index, $INDEX_TYPE, UNPROVIDED);
-    }
-
-    public static final SubLObject lookup_index_predicate_extent_value_alt(SubLObject lookup_index) {
-        {
-            SubLObject predicate = com.cyc.cycjava.cycl.kb_indexing.lookup_index_get_property(lookup_index, $PREDICATE, UNPROVIDED);
-            return predicate;
-        }
     }
 
     public static SubLObject lookup_index_predicate_extent_value(final SubLObject lookup_index) {
@@ -12007,57 +5576,16 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return predicate;
     }
 
-    /**
-     * Assumes LOOKUP-INDEX is of type :gaf-arg.
-     *
-     * @return 0 term
-     * @return 1 argnum
-     * @return 2 predicate
-     */
-    @LispMethod(comment = "Assumes LOOKUP-INDEX is of type :gaf-arg.\r\n\r\n@return 0 term\r\n@return 1 argnum\r\n@return 2 predicate")
-    public static final SubLObject lookup_index_gaf_arg_values_alt(SubLObject lookup_index) {
-        {
-            SubLObject v_term = com.cyc.cycjava.cycl.kb_indexing.lookup_index_get_property(lookup_index, $TERM, UNPROVIDED);
-            SubLObject argnum = com.cyc.cycjava.cycl.kb_indexing.lookup_index_get_property(lookup_index, $ARGNUM, UNPROVIDED);
-            SubLObject predicate = com.cyc.cycjava.cycl.kb_indexing.lookup_index_get_property(lookup_index, $PREDICATE, UNPROVIDED);
-            return values(v_term, argnum, predicate);
-        }
-    }
-
-    @LispMethod(comment = "Assumes LOOKUP-INDEX is of type :gaf-arg.\r\n\r\n@return 0 term\r\n@return 1 argnum\r\n@return 2 predicate")
     public static SubLObject lookup_index_gaf_arg_values(final SubLObject lookup_index) {
         final SubLObject v_term = lookup_index_get_property(lookup_index, $TERM, UNPROVIDED);
         final SubLObject argnum = lookup_index_get_property(lookup_index, $ARGNUM, UNPROVIDED);
         final SubLObject predicate = lookup_index_get_property(lookup_index, $PREDICATE, UNPROVIDED);
         return values(v_term, argnum, predicate);
-    }/**
-     * Assumes LOOKUP-INDEX is of type :gaf-arg.
-     *
-     * @return 0 term
-     * @return 1 argnum
-     * @return 2 predicate
-     */
-
-
-    public static final SubLObject lookup_index_overlap_value_alt(SubLObject lookup_index) {
-        {
-            SubLObject terms = com.cyc.cycjava.cycl.kb_indexing.lookup_index_get_property(lookup_index, $TERMS, UNPROVIDED);
-            return terms;
-        }
     }
 
     public static SubLObject lookup_index_overlap_value(final SubLObject lookup_index) {
         final SubLObject terms = lookup_index_get_property(lookup_index, $TERMS, UNPROVIDED);
         return terms;
-    }
-
-    public static final SubLObject lookup_index_for_overlap_alt(SubLObject formula) {
-        {
-            SubLObject lookup_index = NIL;
-            lookup_index = com.cyc.cycjava.cycl.kb_indexing.lookup_index_set_property(lookup_index, $INDEX_TYPE, $OVERLAP);
-            lookup_index = com.cyc.cycjava.cycl.kb_indexing.lookup_index_set_property(lookup_index, $TERMS, terms_for_overlap_index(formula));
-            return lookup_index;
-        }
     }
 
     public static SubLObject lookup_index_for_overlap(final SubLObject formula) {
@@ -12074,15 +5602,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return lookup_index;
     }
 
-    public static final SubLObject lookup_index_for_predicate_extent_alt(SubLObject predicate) {
-        {
-            SubLObject lookup_index = NIL;
-            lookup_index = com.cyc.cycjava.cycl.kb_indexing.lookup_index_set_property(lookup_index, $INDEX_TYPE, $PREDICATE_EXTENT);
-            lookup_index = com.cyc.cycjava.cycl.kb_indexing.lookup_index_set_property(lookup_index, $PREDICATE, predicate);
-            return lookup_index;
-        }
-    }
-
     public static SubLObject lookup_index_for_predicate_extent(final SubLObject predicate) {
         SubLObject lookup_index = NIL;
         lookup_index = lookup_index_set_property(lookup_index, $INDEX_TYPE, $PREDICATE_EXTENT);
@@ -12090,31 +5609,11 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return lookup_index;
     }
 
-    public static final SubLObject lookup_index_for_function_extent_alt(SubLObject functor) {
-        {
-            SubLObject lookup_index = NIL;
-            lookup_index = com.cyc.cycjava.cycl.kb_indexing.lookup_index_set_property(lookup_index, $INDEX_TYPE, $FUNCTION_EXTENT);
-            lookup_index = com.cyc.cycjava.cycl.kb_indexing.lookup_index_set_property(lookup_index, $FUNCTOR, functor);
-            return lookup_index;
-        }
-    }
-
     public static SubLObject lookup_index_for_function_extent(final SubLObject functor) {
         SubLObject lookup_index = NIL;
         lookup_index = lookup_index_set_property(lookup_index, $INDEX_TYPE, $FUNCTION_EXTENT);
         lookup_index = lookup_index_set_property(lookup_index, $FUNCTOR, functor);
         return lookup_index;
-    }
-
-    public static final SubLObject lookup_index_for_gaf_arg_alt(SubLObject best_term, SubLObject best_index_argnum, SubLObject index_pred) {
-        {
-            SubLObject lookup_index = NIL;
-            lookup_index = com.cyc.cycjava.cycl.kb_indexing.lookup_index_set_property(lookup_index, $INDEX_TYPE, $GAF_ARG);
-            lookup_index = com.cyc.cycjava.cycl.kb_indexing.lookup_index_set_property(lookup_index, $TERM, best_term);
-            lookup_index = com.cyc.cycjava.cycl.kb_indexing.lookup_index_set_property(lookup_index, $ARGNUM, best_index_argnum);
-            lookup_index = com.cyc.cycjava.cycl.kb_indexing.lookup_index_set_property(lookup_index, $PREDICATE, index_pred);
-            return lookup_index;
-        }
     }
 
     public static SubLObject lookup_index_for_gaf_arg(final SubLObject best_term, final SubLObject best_index_argnum, final SubLObject index_pred) {
@@ -12126,17 +5625,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return lookup_index;
     }
 
-    public static final SubLObject lookup_index_for_nart_arg_alt(SubLObject best_term, SubLObject best_index_argnum, SubLObject functor) {
-        {
-            SubLObject lookup_index = NIL;
-            lookup_index = com.cyc.cycjava.cycl.kb_indexing.lookup_index_set_property(lookup_index, $INDEX_TYPE, $NART_ARG);
-            lookup_index = com.cyc.cycjava.cycl.kb_indexing.lookup_index_set_property(lookup_index, $TERM, best_term);
-            lookup_index = com.cyc.cycjava.cycl.kb_indexing.lookup_index_set_property(lookup_index, $ARGNUM, best_index_argnum);
-            lookup_index = com.cyc.cycjava.cycl.kb_indexing.lookup_index_set_property(lookup_index, $FUNCTOR, functor);
-            return lookup_index;
-        }
-    }
-
     public static SubLObject lookup_index_for_nart_arg(final SubLObject best_term, final SubLObject best_index_argnum, final SubLObject functor) {
         SubLObject lookup_index = NIL;
         lookup_index = lookup_index_set_property(lookup_index, $INDEX_TYPE, $NART_ARG);
@@ -12146,87 +5634,14 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return lookup_index;
     }
 
-    /**
-     *
-     *
-     * @return boolean; t iff INDEX-TYPE is allowable, according to METHODS.
-     */
-    @LispMethod(comment = "@return boolean; t iff INDEX-TYPE is allowable, according to METHODS.")
-    public static final SubLObject lookup_methods_includeP_alt(SubLObject index_type, SubLObject v_methods) {
-        return makeBoolean((NIL == v_methods) || (NIL != member(index_type, v_methods, UNPROVIDED, UNPROVIDED)));
-    }
-
-    /**
-     *
-     *
-     * @return boolean; t iff INDEX-TYPE is allowable, according to METHODS.
-     */
-    @LispMethod(comment = "@return boolean; t iff INDEX-TYPE is allowable, according to METHODS.")
     public static SubLObject lookup_methods_includeP(final SubLObject index_type, final SubLObject v_methods) {
         return makeBoolean((NIL == v_methods) || (NIL != member(index_type, v_methods, UNPROVIDED, UNPROVIDED)));
     }
 
-    /**
-     *
-     *
-     * @return boolean; t iff INDEX-TYPE is the only allowable method in METHODS.
-     */
-    @LispMethod(comment = "@return boolean; t iff INDEX-TYPE is the only allowable method in METHODS.")
-    public static final SubLObject lookup_methods_allow_onlyP_alt(SubLObject index_type, SubLObject v_methods) {
-        return makeBoolean((NIL != list_utilities.singletonP(v_methods)) && index_type.eql(v_methods.first()));
-    }
-
-    /**
-     *
-     *
-     * @return boolean; t iff INDEX-TYPE is the only allowable method in METHODS.
-     */
-    @LispMethod(comment = "@return boolean; t iff INDEX-TYPE is the only allowable method in METHODS.")
     public static SubLObject lookup_methods_allow_onlyP(final SubLObject index_type, final SubLObject v_methods) {
         return makeBoolean((NIL != list_utilities.singletonP(v_methods)) && index_type.eql(v_methods.first()));
     }
 
-    /**
-     *
-     *
-     * @return nil or property-list-p; a property list containing the property :index-type,
-    which identifies which type of index is best for lookup of ASENT with TRUTH.
-    The remaining elements on the plist are additional information pertaining to
-    that type of index.  A nil return value means that no possible index was
-    found using the allowable methods.
-     * @param METHODS;
-     * 		the allowable methods (index-types) that the function can
-     * 		return.  If nil, all methods are allowed.
-     */
-    @LispMethod(comment = "@return nil or property-list-p; a property list containing the property :index-type,\r\nwhich identifies which type of index is best for lookup of ASENT with TRUTH.\r\nThe remaining elements on the plist are additional information pertaining to\r\nthat type of index.  A nil return value means that no possible index was\r\nfound using the allowable methods.\r\n@param METHODS;\r\n\t\tthe allowable methods (index-types) that the function can\r\n\t\treturn.  If nil, all methods are allowed.")
-    public static final SubLObject best_gaf_lookup_index_alt(SubLObject asent, SubLObject truth, SubLObject v_methods) {
-        if (v_methods == UNPROVIDED) {
-            v_methods = NIL;
-        }
-        if ((NIL != com.cyc.cycjava.cycl.kb_indexing.lookup_methods_includeP($PREDICATE_EXTENT, v_methods)) || (NIL != com.cyc.cycjava.cycl.kb_indexing.lookup_methods_includeP($GAF_ARG, v_methods))) {
-            return com.cyc.cycjava.cycl.kb_indexing.best_gaf_lookup_index_try_all_allowed(asent, truth, v_methods);
-        } else {
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.lookup_methods_allow_onlyP($OVERLAP, v_methods)) {
-                return com.cyc.cycjava.cycl.kb_indexing.lookup_index_for_overlap(asent);
-            } else {
-                return NIL;
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @return nil or property-list-p; a property list containing the property :index-type,
-    which identifies which type of index is best for lookup of ASENT with TRUTH.
-    The remaining elements on the plist are additional information pertaining to
-    that type of index.  A nil return value means that no possible index was
-    found using the allowable methods.
-     * @param METHODS;
-     * 		the allowable methods (index-types) that the function can
-     * 		return.  If nil, all methods are allowed.
-     */
-    @LispMethod(comment = "@return nil or property-list-p; a property list containing the property :index-type,\r\nwhich identifies which type of index is best for lookup of ASENT with TRUTH.\r\nThe remaining elements on the plist are additional information pertaining to\r\nthat type of index.  A nil return value means that no possible index was\r\nfound using the allowable methods.\r\n@param METHODS;\r\n\t\tthe allowable methods (index-types) that the function can\r\n\t\treturn.  If nil, all methods are allowed.")
     public static SubLObject best_gaf_lookup_index(final SubLObject asent, final SubLObject truth, SubLObject v_methods) {
         if (v_methods == UNPROVIDED) {
             v_methods = NIL;
@@ -12240,21 +5655,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject num_best_gaf_lookup_index_alt(SubLObject asent, SubLObject truth, SubLObject v_methods) {
-        if (v_methods == UNPROVIDED) {
-            v_methods = NIL;
-        }
-        if ((NIL != com.cyc.cycjava.cycl.kb_indexing.lookup_methods_includeP($PREDICATE_EXTENT, v_methods)) || (NIL != com.cyc.cycjava.cycl.kb_indexing.lookup_methods_includeP($GAF_ARG, v_methods))) {
-            return com.cyc.cycjava.cycl.kb_indexing.num_best_gaf_lookup_index_try_all_allowed(asent, truth, v_methods);
-        } else {
-            if (NIL != com.cyc.cycjava.cycl.kb_indexing.lookup_methods_allow_onlyP($OVERLAP, v_methods)) {
-                return estimated_num_overlap_index_for_asent(asent, UNPROVIDED);
-            } else {
-                return ZERO_INTEGER;
-            }
-        }
-    }
-
     public static SubLObject num_best_gaf_lookup_index(final SubLObject asent, final SubLObject truth, SubLObject v_methods) {
         if (v_methods == UNPROVIDED) {
             v_methods = NIL;
@@ -12266,39 +5666,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             return virtual_indexing.estimated_num_overlap_index_for_asent(asent, UNPROVIDED);
         }
         return ZERO_INTEGER;
-    }
-
-    public static final SubLObject best_gaf_lookup_index_try_all_allowed_alt(SubLObject asent, SubLObject truth, SubLObject v_methods) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject lookup_index = NIL;
-                thread.resetMultipleValues();
-                {
-                    SubLObject best_fort = com.cyc.cycjava.cycl.kb_indexing.best_gaf_lookup_index_wrt_methods(asent, truth, v_methods);
-                    SubLObject best_index_argnum = thread.secondMultipleValue();
-                    SubLObject index_pred = thread.thirdMultipleValue();
-                    SubLObject best_count = thread.fourthMultipleValue();
-                    thread.resetMultipleValues();
-                    if ((NIL != com.cyc.cycjava.cycl.kb_indexing.lookup_methods_includeP($OVERLAP, v_methods)) && (NIL != lookup_should_use_index_overlapP(asent, best_count))) {
-                        lookup_index = com.cyc.cycjava.cycl.kb_indexing.lookup_index_for_overlap(asent);
-                    } else {
-                        if ((((NIL == best_fort) && (NIL == best_index_argnum)) && (NIL == index_pred)) && ZERO_INTEGER.eql(best_count)) {
-                            lookup_index = NIL;
-                        } else {
-                            if ((NIL != com.cyc.cycjava.cycl.kb_indexing.lookup_methods_includeP($PREDICATE_EXTENT, v_methods)) && ZERO_INTEGER.eql(best_index_argnum)) {
-                                lookup_index = com.cyc.cycjava.cycl.kb_indexing.lookup_index_for_predicate_extent(best_fort);
-                            } else {
-                                if ((NIL != com.cyc.cycjava.cycl.kb_indexing.lookup_methods_includeP($GAF_ARG, v_methods)) && (NIL != positive_integer_p(best_index_argnum))) {
-                                    lookup_index = com.cyc.cycjava.cycl.kb_indexing.lookup_index_for_gaf_arg(best_fort, best_index_argnum, index_pred);
-                                }
-                            }
-                        }
-                    }
-                }
-                return lookup_index;
-            }
-        }
     }
 
     public static SubLObject best_gaf_lookup_index_try_all_allowed(final SubLObject asent, final SubLObject truth, final SubLObject v_methods) {
@@ -12328,25 +5695,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return lookup_index;
     }
 
-    public static final SubLObject num_best_gaf_lookup_index_try_all_allowed_alt(SubLObject asent, SubLObject truth, SubLObject v_methods) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject best_fort = com.cyc.cycjava.cycl.kb_indexing.best_gaf_lookup_index_wrt_methods(asent, truth, v_methods);
-                SubLObject best_index_argnum = thread.secondMultipleValue();
-                SubLObject index_pred = thread.thirdMultipleValue();
-                SubLObject best_count = thread.fourthMultipleValue();
-                thread.resetMultipleValues();
-                if ((NIL != com.cyc.cycjava.cycl.kb_indexing.lookup_methods_includeP($OVERLAP, v_methods)) && (NIL != lookup_should_use_index_overlapP(asent, best_count))) {
-                    return estimated_num_overlap_index_for_asent(asent, UNPROVIDED);
-                } else {
-                    return best_count;
-                }
-            }
-        }
-    }
-
     public static SubLObject num_best_gaf_lookup_index_try_all_allowed(final SubLObject asent, final SubLObject truth, final SubLObject v_methods) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -12359,33 +5707,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             return virtual_indexing.estimated_num_overlap_index_for_asent(asent, UNPROVIDED);
         }
         return best_count;
-    }
-
-    public static final SubLObject best_gaf_lookup_index_wrt_methods_alt(SubLObject asent, SubLObject truth, SubLObject v_methods) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject tweaked_asent = ((NIL != com.cyc.cycjava.cycl.kb_indexing.lookup_methods_includeP($PREDICATE_EXTENT, v_methods)) && (NIL == com.cyc.cycjava.cycl.kb_indexing.lookup_methods_includeP($GAF_ARG, v_methods))) ? ((SubLObject) (make_formula(cycl_utilities.atomic_sentence_predicate(asent), NIL, UNPROVIDED))) : asent;
-                thread.resetMultipleValues();
-                {
-                    SubLObject best_term = com.cyc.cycjava.cycl.kb_indexing.best_gaf_lookup_index_int(tweaked_asent, truth);
-                    SubLObject best_index_argnum = thread.secondMultipleValue();
-                    SubLObject index_pred = thread.thirdMultipleValue();
-                    SubLObject best_count = thread.fourthMultipleValue();
-                    thread.resetMultipleValues();
-                    if ((NIL != com.cyc.cycjava.cycl.kb_indexing.lookup_methods_includeP($GAF_ARG, v_methods)) && (NIL != positive_integer_p(best_index_argnum))) {
-                    } else {
-                        if ((NIL != com.cyc.cycjava.cycl.kb_indexing.lookup_methods_includeP($PREDICATE_EXTENT, v_methods)) && ZERO_INTEGER.eql(best_index_argnum)) {
-                        } else {
-                            if ((NIL != com.cyc.cycjava.cycl.kb_indexing.lookup_methods_includeP($GAF_ARG, v_methods)) && ZERO_INTEGER.eql(best_index_argnum)) {
-                                return values(NIL, NIL, NIL, ZERO_INTEGER);
-                            }
-                        }
-                    }
-                    return values(best_term, best_index_argnum, index_pred, best_count);
-                }
-            }
-        }
     }
 
     public static SubLObject best_gaf_lookup_index_wrt_methods(final SubLObject asent, final SubLObject truth, final SubLObject v_methods) {
@@ -12407,117 +5728,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return subl_promotions.values4(best_term, best_index_argnum, index_pred, best_count);
     }
 
-    /**
-     * Determine the best gaf lookup index of ASENT with truth value TRUTH.
-     * First look for mt-insensitive counts,
-     * then, if not all mts are relevant, try to do better by finding a
-     * smaller mt-sensitive count, but use the min of the mt-insensitive
-     * counts as a cutoff so it won't waste time computing the relevance of
-     * things that aren't going to be any better.
-     */
-    @LispMethod(comment = "Determine the best gaf lookup index of ASENT with truth value TRUTH.\r\nFirst look for mt-insensitive counts,\r\nthen, if not all mts are relevant, try to do better by finding a\r\nsmaller mt-sensitive count, but use the min of the mt-insensitive\r\ncounts as a cutoff so it won\'t waste time computing the relevance of\r\nthings that aren\'t going to be any better.\nDetermine the best gaf lookup index of ASENT with truth value TRUTH.\nFirst look for mt-insensitive counts,\nthen, if not all mts are relevant, try to do better by finding a\nsmaller mt-sensitive count, but use the min of the mt-insensitive\ncounts as a cutoff so it won\'t waste time computing the relevance of\nthings that aren\'t going to be any better.")
-    public static final SubLObject best_gaf_lookup_index_int_alt(SubLObject asent, SubLObject truth) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject argnum_pairs = com.cyc.cycjava.cycl.kb_indexing.determine_formula_indices(asent);
-                SubLObject others = thread.secondMultipleValue();
-                thread.resetMultipleValues();
-                {
-                    SubLObject best_count = NIL;
-                    SubLObject best_fort = NIL;
-                    SubLObject best_argnum = NIL;
-                    SubLObject pred = assoc(ZERO_INTEGER, argnum_pairs, UNPROVIDED, UNPROVIDED).rest();
-                    if (NIL != forts.fort_p(pred)) {
-                        best_fort = pred;
-                        best_count = com.cyc.cycjava.cycl.kb_indexing.num_predicate_extent_index(pred, UNPROVIDED);
-                        best_argnum = ZERO_INTEGER;
-                    } else {
-                        pred = NIL;
-                    }
-                    {
-                        SubLObject cdolist_list_var = argnum_pairs;
-                        SubLObject cons = NIL;
-                        for (cons = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , cons = cdolist_list_var.first()) {
-                            {
-                                SubLObject datum = cons;
-                                SubLObject current = datum;
-                                SubLObject argnum = NIL;
-                                SubLObject arg = NIL;
-                                destructuring_bind_must_consp(current, datum, $list_alt140);
-                                argnum = current.first();
-                                current = current.rest();
-                                arg = current;
-                                if (argnum.isPositive()) {
-                                    {
-                                        SubLObject num = NIL;
-                                        if (NIL != indexed_term_p(arg)) {
-                                            if (NIL != pred) {
-                                                num = com.cyc.cycjava.cycl.kb_indexing.num_gaf_arg_index(arg, argnum, pred, UNPROVIDED);
-                                            } else {
-                                                num = com.cyc.cycjava.cycl.kb_indexing.num_gaf_arg_index(arg, argnum, UNPROVIDED, UNPROVIDED);
-                                            }
-                                            if ((NIL == best_fort) || num.numL(best_count)) {
-                                                best_count = num;
-                                                best_fort = arg;
-                                                best_argnum = argnum;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    if (NIL == mt_relevance_macros.any_or_all_mts_are_relevantP()) {
-                        if (NIL != pred) {
-                            {
-                                SubLObject cdolist_list_var = argnum_pairs;
-                                SubLObject cons = NIL;
-                                for (cons = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , cons = cdolist_list_var.first()) {
-                                    {
-                                        SubLObject datum = cons;
-                                        SubLObject current = datum;
-                                        SubLObject argnum = NIL;
-                                        SubLObject arg = NIL;
-                                        destructuring_bind_must_consp(current, datum, $list_alt140);
-                                        argnum = current.first();
-                                        current = current.rest();
-                                        arg = current;
-                                        if (argnum.isPositive()) {
-                                            if (NIL != indexed_term_p(arg)) {
-                                                {
-                                                    SubLObject arg_count = com.cyc.cycjava.cycl.kb_indexing.relevant_num_gaf_arg_index_with_cutoff(arg, best_count, argnum, pred);
-                                                    if (arg_count.numL(best_count)) {
-                                                        best_count = arg_count;
-                                                        best_fort = arg;
-                                                        best_argnum = argnum;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        if (NIL != forts.fort_p(pred)) {
-                            {
-                                SubLObject pred_count = com.cyc.cycjava.cycl.kb_indexing.relevant_num_predicate_extent_index_with_cutoff(pred, best_count);
-                                if (pred_count.numL(best_count)) {
-                                    best_fort = pred;
-                                    best_count = pred_count;
-                                    best_argnum = ZERO_INTEGER;
-                                }
-                            }
-                        }
-                    }
-                    return values(best_fort, best_argnum, pred, best_count);
-                }
-            }
-        }
-    }
-
-    @LispMethod(comment = "Determine the best gaf lookup index of ASENT with truth value TRUTH.\r\nFirst look for mt-insensitive counts,\r\nthen, if not all mts are relevant, try to do better by finding a\r\nsmaller mt-sensitive count, but use the min of the mt-insensitive\r\ncounts as a cutoff so it won\'t waste time computing the relevance of\r\nthings that aren\'t going to be any better.\nDetermine the best gaf lookup index of ASENT with truth value TRUTH.\nFirst look for mt-insensitive counts,\nthen, if not all mts are relevant, try to do better by finding a\nsmaller mt-sensitive count, but use the min of the mt-insensitive\ncounts as a cutoff so it won\'t waste time computing the relevance of\nthings that aren\'t going to be any better.")
     public static SubLObject best_gaf_lookup_index_int(final SubLObject asent, final SubLObject truth) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -12597,15 +5807,7 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             cons = cdolist_list_var.first();
         } 
         return subl_promotions.values4(best_fort, best_argnum, pred, best_count);
-    }/**
-     * Determine the best gaf lookup index of ASENT with truth value TRUTH.
-     * First look for mt-insensitive counts,
-     * then, if not all mts are relevant, try to do better by finding a
-     * smaller mt-sensitive count, but use the min of the mt-insensitive
-     * counts as a cutoff so it won't waste time computing the relevance of
-     * things that aren't going to be any better.
-     */
-
+    }
 
     public static SubLObject clear_pred_has_heinous_mt_fanoutP() {
         final SubLObject cs = $pred_has_heinous_mt_fanoutP_caching_state$.getGlobalValue();
@@ -12636,170 +5838,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return memoization_state.caching_results(results);
     }
 
-    /**
-     * Reindex all assertions in the KB.
-     */
-    @LispMethod(comment = "Reindex all assertions in the KB.")
-    public static final SubLObject reindex_all_assertions_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject assertions_were_indexedP = list_utilities.sublisp_boolean(assertion_indexing_store());
-                SubLObject constant_count = constant_count();
-                SubLObject message = $$$Clearing_FORT_indexing;
-                SubLObject total = forts.fort_count();
-                SubLObject sofar = ZERO_INTEGER;
-                {
-                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                    try {
-                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                        $last_percent_progress_prediction$.bind(NIL, thread);
-                        $within_noting_percent_progress$.bind(T, thread);
-                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                        noting_percent_progress_preamble(message);
-                        {
-                            SubLObject cdolist_list_var = forts.do_forts_tables();
-                            SubLObject table_var = NIL;
-                            for (table_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , table_var = cdolist_list_var.first()) {
-                                if (NIL == do_id_index_empty_p(table_var, $SKIP)) {
-                                    {
-                                        SubLObject id = do_id_index_next_id(table_var, T, NIL, NIL);
-                                        SubLObject state_var = do_id_index_next_state(table_var, T, id, NIL);
-                                        SubLObject fort = NIL;
-                                        while (NIL != id) {
-                                            fort = do_id_index_state_object(table_var, $SKIP, id, state_var);
-                                            if (NIL != do_id_index_id_and_object_validP(id, fort, $SKIP)) {
-                                                sofar = add(sofar, ONE_INTEGER);
-                                                note_percent_progress(sofar, total);
-                                                forts.clear_fort_index(fort);
-                                            }
-                                            id = do_id_index_next_id(table_var, T, id, state_var);
-                                            state_var = do_id_index_next_state(table_var, T, id, state_var);
-                                        } 
-                                    }
-                                }
-                            }
-                        }
-                        noting_percent_progress_postamble();
-                    } finally {
-                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                {
-                    SubLObject idx = do_assertions_table();
-                    SubLObject total_15 = id_index_count(idx);
-                    SubLObject sofar_16 = ZERO_INTEGER;
-                    SubLTrampolineFile.checkType($$$Clearing_Assertion_indexing, STRINGP);
-                    {
-                        SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                        SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                        SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                        SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                        try {
-                            $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                            $last_percent_progress_prediction$.bind(NIL, thread);
-                            $within_noting_percent_progress$.bind(T, thread);
-                            $percent_progress_start_time$.bind(get_universal_time(), thread);
-                            noting_percent_progress_preamble($$$Clearing_Assertion_indexing);
-                            if (NIL == do_id_index_empty_p(idx, $SKIP)) {
-                                {
-                                    SubLObject id = do_id_index_next_id(idx, T, NIL, NIL);
-                                    SubLObject state_var = do_id_index_next_state(idx, T, id, NIL);
-                                    SubLObject ass = NIL;
-                                    while (NIL != id) {
-                                        ass = do_id_index_state_object(idx, $SKIP, id, state_var);
-                                        if (NIL != do_id_index_id_and_object_validP(id, ass, $SKIP)) {
-                                            note_percent_progress(sofar_16, total_15);
-                                            sofar_16 = add(sofar_16, ONE_INTEGER);
-                                            assertions_low.clear_assertion_index(ass);
-                                        }
-                                        id = do_id_index_next_id(idx, T, id, state_var);
-                                        state_var = do_id_index_next_state(idx, T, id, state_var);
-                                    } 
-                                }
-                            }
-                            noting_percent_progress_postamble();
-                        } finally {
-                            $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                            $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                            $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                            $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                unrepresented_terms.clear_unrepresented_term_table();
-                {
-                    SubLObject cdolist_list_var = auxiliary_indexing.auxiliary_indices();
-                    SubLObject aux_index = NIL;
-                    for (aux_index = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , aux_index = cdolist_list_var.first()) {
-                        auxiliary_indexing.clear_auxiliary_index(aux_index);
-                    }
-                }
-                if ((NIL != assertions_were_indexedP) && constant_count.numG($reindex_all_assertions_full_gc_threshhold_constant_count$.getGlobalValue())) {
-                    Storage.gc_full();
-                }
-            }
-            {
-                SubLObject _prev_bind_0 = Errors.$continue_cerrorP$.currentBinding(thread);
-                try {
-                    Errors.$continue_cerrorP$.bind(T, thread);
-                    {
-                        SubLObject idx = do_assertions_table();
-                        SubLObject total = id_index_count(idx);
-                        SubLObject sofar = ZERO_INTEGER;
-                        SubLTrampolineFile.checkType($$$Reindexing_assertions, STRINGP);
-                        {
-                            SubLObject _prev_bind_0_17 = $last_percent_progress_index$.currentBinding(thread);
-                            SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                            SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                            SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                            try {
-                                $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                                $last_percent_progress_prediction$.bind(NIL, thread);
-                                $within_noting_percent_progress$.bind(T, thread);
-                                $percent_progress_start_time$.bind(get_universal_time(), thread);
-                                noting_percent_progress_preamble($$$Reindexing_assertions);
-                                if (NIL == do_id_index_empty_p(idx, $SKIP)) {
-                                    {
-                                        SubLObject id = do_id_index_next_id(idx, T, NIL, NIL);
-                                        SubLObject state_var = do_id_index_next_state(idx, T, id, NIL);
-                                        SubLObject ass = NIL;
-                                        while (NIL != id) {
-                                            ass = do_id_index_state_object(idx, $SKIP, id, state_var);
-                                            if (NIL != do_id_index_id_and_object_validP(id, ass, $SKIP)) {
-                                                note_percent_progress(sofar, total);
-                                                sofar = add(sofar, ONE_INTEGER);
-                                                com.cyc.cycjava.cycl.kb_indexing.reindex_one_of_all_assertions(ass);
-                                            }
-                                            id = do_id_index_next_id(idx, T, id, state_var);
-                                            state_var = do_id_index_next_state(idx, T, id, state_var);
-                                        } 
-                                    }
-                                }
-                                noting_percent_progress_postamble();
-                            } finally {
-                                $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                                $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                                $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                                $last_percent_progress_index$.rebind(_prev_bind_0_17, thread);
-                            }
-                        }
-                    }
-                } finally {
-                    Errors.$continue_cerrorP$.rebind(_prev_bind_0, thread);
-                }
-            }
-            return NIL;
-        }
-    }
-
-    @LispMethod(comment = "Reindex all assertions in the KB.")
     public static SubLObject reindex_all_assertions() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         clear_all_existing_indexing();
@@ -12810,7 +5848,7 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             final SubLObject mess = $$$Reindexing_assertions;
             final SubLObject total = id_index_count(idx);
             SubLObject sofar = ZERO_INTEGER;
-            assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
+            assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
             final SubLObject _prev_bind_0_$15 = $last_percent_progress_index$.currentBinding(thread);
             final SubLObject _prev_bind_2 = $last_percent_progress_prediction$.currentBinding(thread);
             final SubLObject _prev_bind_3 = $within_noting_percent_progress$.currentBinding(thread);
@@ -12886,10 +5924,7 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             Errors.$continue_cerrorP$.rebind(_prev_bind_0, thread);
         }
         return NIL;
-    }/**
-     * Reindex all assertions in the KB.
-     */
-
+    }
 
     public static SubLObject clear_all_existing_indexing() {
         final SubLThread thread = SubLProcess.currentSubLThread();
@@ -13117,78 +6152,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return $CLEARED;
     }
 
-    /**
-     * Perform reindexing of just one of all of the assertions.
-     */
-    @LispMethod(comment = "Perform reindexing of just one of all of the assertions.")
-    public static final SubLObject reindex_one_of_all_assertions_alt(SubLObject ass) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject err = NIL;
-                try {
-                    {
-                        SubLObject _prev_bind_0 = Errors.$error_handler$.currentBinding(thread);
-                        try {
-                            Errors.$error_handler$.bind(CATCH_ERROR_MESSAGE_HANDLER, thread);
-                            try {
-                                {
-                                    SubLObject success_var = NIL;
-                                    try {
-                                        com.cyc.cycjava.cycl.kb_indexing.add_assertion_indices(ass, UNPROVIDED);
-                                        success_var = T;
-                                    } finally {
-                                        {
-                                            SubLObject _prev_bind_0_18 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                            try {
-                                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                                if (NIL == success_var) {
-                                                    {
-                                                        SubLObject ignore_errors_tag = NIL;
-                                                        try {
-                                                            {
-                                                                SubLObject _prev_bind_0_19 = Errors.$error_handler$.currentBinding(thread);
-                                                                try {
-                                                                    Errors.$error_handler$.bind(symbol_function(IGNORE_ERRORS_HANDLER), thread);
-                                                                    try {
-                                                                        com.cyc.cycjava.cycl.kb_indexing.remove_assertion_indices(ass, UNPROVIDED);
-                                                                    } catch (Throwable catch_var) {
-                                                                        Errors.handleThrowable(catch_var, NIL);
-                                                                    }
-                                                                } finally {
-                                                                    Errors.$error_handler$.rebind(_prev_bind_0_19, thread);
-                                                                }
-                                                            }
-                                                        } catch (Throwable ccatch_env_var) {
-                                                            ignore_errors_tag = Errors.handleThrowable(ccatch_env_var, $IGNORE_ERRORS_TARGET);
-                                                        }
-                                                    }
-                                                }
-                                            } finally {
-                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_18, thread);
-                                            }
-                                        }
-                                    }
-                                }
-                            } catch (Throwable catch_var) {
-                                Errors.handleThrowable(catch_var, NIL);
-                            }
-                        } finally {
-                            Errors.$error_handler$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                } catch (Throwable ccatch_env_var) {
-                    err = Errors.handleThrowable(ccatch_env_var, $catch_error_message_target$.getGlobalValue());
-                }
-                if ((NIL != $warn_on_assertion_reindexing_errorsP$.getDynamicValue(thread)) && err.isString()) {
-                    Errors.warn($str_alt203$Error_when_indexing_assertion__A_, ass, err);
-                }
-            }
-            return ass;
-        }
-    }
-
-    @LispMethod(comment = "Perform reindexing of just one of all of the assertions.")
     public static SubLObject reindex_one_of_all_assertions(final SubLObject ass) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject err = NIL;
@@ -13248,37 +6211,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             Errors.warn($str231$Error_when_indexing_assertion__A_, ass, err);
         }
         return ass;
-    }/**
-     * Perform reindexing of just one of all of the assertions.
-     */
-
-
-    /**
-     * Reindex all the assertions currently indexed from TERM.
-     */
-    @LispMethod(comment = "Reindex all the assertions currently indexed from TERM.")
-    public static final SubLObject reindex_all_term_assertions_alt(SubLObject v_term) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject assertions = kb_accessors.all_term_assertions(v_term, T);
-                assertions = Sort.sort(assertions, symbol_function($sym204$_), symbol_function(ASSERTION_ID));
-                clear_term_index(v_term);
-                {
-                    SubLObject _prev_bind_0 = Errors.$continue_cerrorP$.currentBinding(thread);
-                    try {
-                        Errors.$continue_cerrorP$.bind(T, thread);
-                        com.cyc.cycjava.cycl.kb_indexing.reindex_assertions(assertions, v_term);
-                    } finally {
-                        Errors.$continue_cerrorP$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return length(assertions);
-            }
-        }
     }
 
-    @LispMethod(comment = "Reindex all the assertions currently indexed from TERM.")
     public static SubLObject reindex_all_term_assertions(final SubLObject v_term) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject assertions = kb_accessors.all_term_assertions(v_term, T);
@@ -13292,31 +6226,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             Errors.$continue_cerrorP$.rebind(_prev_bind_0, thread);
         }
         return length(assertions);
-    }/**
-     * Reindex all the assertions currently indexed from TERM.
-     */
-
-
-    /**
-     * Reindex all ASSERTIONS.
-     * If TERM is provided, only reindex ASSERTIONS off of TERM.
-     */
-    @LispMethod(comment = "Reindex all ASSERTIONS.\r\nIf TERM is provided, only reindex ASSERTIONS off of TERM.\nReindex all ASSERTIONS.\nIf TERM is provided, only reindex ASSERTIONS off of TERM.")
-    public static final SubLObject reindex_assertions_alt(SubLObject assertions, SubLObject v_term) {
-        if (v_term == UNPROVIDED) {
-            v_term = NIL;
-        }
-        {
-            SubLObject cdolist_list_var = assertions;
-            SubLObject assertion = NIL;
-            for (assertion = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , assertion = cdolist_list_var.first()) {
-                com.cyc.cycjava.cycl.kb_indexing.reindex_assertion(assertion, v_term);
-            }
-        }
-        return assertions;
     }
 
-    @LispMethod(comment = "Reindex all ASSERTIONS.\r\nIf TERM is provided, only reindex ASSERTIONS off of TERM.\nReindex all ASSERTIONS.\nIf TERM is provided, only reindex ASSERTIONS off of TERM.")
     public static SubLObject reindex_assertions(final SubLObject assertions, SubLObject v_term) {
         if (v_term == UNPROVIDED) {
             v_term = NIL;
@@ -13330,40 +6241,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             assertion = cdolist_list_var.first();
         } 
         return assertions;
-    }/**
-     * Reindex all ASSERTIONS.
-     * If TERM is provided, only reindex ASSERTIONS off of TERM.
-     */
-
-
-    /**
-     * Reindex ASSERTION.
-     * If TERM is provided, only reindex ASSERTION off of TERM.
-     */
-    @LispMethod(comment = "Reindex ASSERTION.\r\nIf TERM is provided, only reindex ASSERTION off of TERM.\nReindex ASSERTION.\nIf TERM is provided, only reindex ASSERTION off of TERM.")
-    public static final SubLObject reindex_assertion_alt(SubLObject assertion, SubLObject v_term) {
-        if (v_term == UNPROVIDED) {
-            v_term = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != assertions_high.valid_assertion(assertion, UNPROVIDED)) {
-                {
-                    SubLObject _prev_bind_0 = Errors.$continue_cerrorP$.currentBinding(thread);
-                    try {
-                        Errors.$continue_cerrorP$.bind(T, thread);
-                        com.cyc.cycjava.cycl.kb_indexing.remove_assertion_indices(assertion, v_term);
-                        com.cyc.cycjava.cycl.kb_indexing.add_assertion_indices(assertion, v_term);
-                    } finally {
-                        Errors.$continue_cerrorP$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return assertion;
-        }
     }
 
-    @LispMethod(comment = "Reindex ASSERTION.\r\nIf TERM is provided, only reindex ASSERTION off of TERM.\nReindex ASSERTION.\nIf TERM is provided, only reindex ASSERTION off of TERM.")
     public static SubLObject reindex_assertion(final SubLObject assertion, SubLObject v_term) {
         if (v_term == UNPROVIDED) {
             v_term = NIL;
@@ -13380,11 +6259,7 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             }
         }
         return assertion;
-    }/**
-     * Reindex ASSERTION.
-     * If TERM is provided, only reindex ASSERTION off of TERM.
-     */
-
+    }
 
     public static SubLObject merge_term_indices(final SubLObject v_term, SubLObject indices) {
         final SubLThread thread = SubLProcess.currentSubLThread();
@@ -13417,46 +6292,10 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return v_term;
     }
 
-    /**
-     * Find the assertion in MT with CNF.  Return NIL if not present.
-     */
-    @LispMethod(comment = "Find the assertion in MT with CNF.  Return NIL if not present.")
-    public static final SubLObject find_assertion_alt(SubLObject cnf, SubLObject mt) {
-        SubLTrampolineFile.checkType(cnf, CNF_P);
-        SubLTrampolineFile.checkType(mt, HLMT_P);
-        return assertions_interface.kb_lookup_assertion(cnf, mt);
-    }
-
-    @LispMethod(comment = "Find the assertion in MT with CNF.  Return NIL if not present.")
     public static SubLObject find_assertion(final SubLObject cnf, final SubLObject mt) {
         SubLTrampolineFile.enforceType(cnf, CNF_P);
         SubLTrampolineFile.enforceType(mt, POSSIBLY_HLMT_P);
         return assertions_interface.kb_lookup_assertion(cnf, mt);
-    }/**
-     * Find the assertion in MT with CNF.  Return NIL if not present.
-     */
-
-
-    public static final SubLObject find_assertion_internal_alt(SubLObject cnf, SubLObject mt) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject assertion = NIL;
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EQ, thread);
-                        mt_relevance_macros.$mt$.bind(mt, thread);
-                        assertion = com.cyc.cycjava.cycl.kb_indexing.find_cnf(cnf);
-                    } finally {
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return assertion;
-            }
-        }
     }
 
     public static SubLObject find_assertion_internal(final SubLObject cnf, final SubLObject mt) {
@@ -13475,34 +6314,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return assertion;
     }
 
-    /**
-     * Find any assertion in any mt with CNF.  Return NIL if none are present.
-     */
-    @LispMethod(comment = "Find any assertion in any mt with CNF.  Return NIL if none are present.")
-    public static final SubLObject find_assertion_any_mt_alt(SubLObject cnf) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(cnf, CNF_P);
-            {
-                SubLObject ans = NIL;
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                        ans = com.cyc.cycjava.cycl.kb_indexing.find_cnf(cnf);
-                    } finally {
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return ans;
-            }
-        }
-    }
-
-    @LispMethod(comment = "Find any assertion in any mt with CNF.  Return NIL if none are present.")
     public static SubLObject find_assertion_any_mt(final SubLObject cnf) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLTrampolineFile.enforceType(cnf, CNF_P);
@@ -13518,42 +6329,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
         }
         return ans;
-    }/**
-     * Find any assertion in any mt with CNF.  Return NIL if none are present.
-     */
-
-
-    /**
-     * Find any assertion in any genl-mt of MT with CNF.  Return NIL if none are present.
-     */
-    @LispMethod(comment = "Find any assertion in any genl-mt of MT with CNF.  Return NIL if none are present.")
-    public static final SubLObject find_assertion_genl_mts_alt(SubLObject cnf, SubLObject mt) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject ans = NIL;
-                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(mt);
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
-                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
-                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
-                        ans = com.cyc.cycjava.cycl.kb_indexing.find_cnf(cnf);
-                    } finally {
-                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return ans;
-            }
-        }
     }
 
-    @LispMethod(comment = "Find any assertion in any genl-mt of MT with CNF.  Return NIL if none are present.")
     public static SubLObject find_assertion_genl_mts(final SubLObject cnf, final SubLObject mt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject ans = NIL;
@@ -13572,37 +6349,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
         }
         return ans;
-    }/**
-     * Find any assertion in any genl-mt of MT with CNF.  Return NIL if none are present.
-     */
-
-
-    /**
-     * Return all assertions that have CNF or NIL if there aren't any.
-     *
-     * @unknown destructible
-     */
-    @LispMethod(comment = "Return all assertions that have CNF or NIL if there aren\'t any.\r\n\r\n@unknown destructible")
-    public static final SubLObject find_all_assertions_alt(SubLObject cnf) {
-        SubLTrampolineFile.checkType(cnf, CNF_P);
-        {
-            SubLObject assertion = com.cyc.cycjava.cycl.kb_indexing.find_assertion_any_mt(cnf);
-            if (NIL != assertion) {
-                {
-                    SubLObject clause_struc = assertions_low.assertion_clause_struc(assertion);
-                    if (NIL != clause_struc) {
-                        return copy_list(clause_strucs.clause_struc_assertions(clause_struc));
-                    } else {
-                        return list(assertion);
-                    }
-                }
-            } else {
-                return NIL;
-            }
-        }
     }
 
-    @LispMethod(comment = "Return all assertions that have CNF or NIL if there aren\'t any.\r\n\r\n@unknown destructible")
     public static SubLObject find_all_assertions(final SubLObject cnf) {
         SubLTrampolineFile.enforceType(cnf, CNF_P);
         final SubLObject assertion = find_assertion_any_mt(cnf);
@@ -13614,42 +6362,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             return copy_list(clause_strucs.clause_struc_assertions(clause_struc));
         }
         return list(assertion);
-    }/**
-     * Return all assertions that have CNF or NIL if there aren't any.
-     *
-     * @unknown destructible
-     */
-
-
-    /**
-     * Find the assertion in MT with GAF-FORMULA as its formula.  Return NIL if not present.
-     */
-    @LispMethod(comment = "Find the assertion in MT with GAF-FORMULA as its formula.  Return NIL if not present.")
-    public static final SubLObject find_gaf_alt(SubLObject gaf_formula, SubLObject mt) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(gaf_formula, EL_FORMULA_P);
-            SubLTrampolineFile.checkType(mt, HLMT_P);
-            {
-                SubLObject ans = NIL;
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EQ, thread);
-                        mt_relevance_macros.$mt$.bind(mt, thread);
-                        ans = com.cyc.cycjava.cycl.kb_indexing.find_gaf_formula(gaf_formula);
-                    } finally {
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return ans;
-            }
-        }
     }
 
-    @LispMethod(comment = "Find the assertion in MT with GAF-FORMULA as its formula.  Return NIL if not present.")
     public static SubLObject find_gaf(final SubLObject gaf_formula, final SubLObject mt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLTrampolineFile.enforceType(gaf_formula, EL_FORMULA_P);
@@ -13666,39 +6380,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
         }
         return ans;
-    }/**
-     * Find the assertion in MT with GAF-FORMULA as its formula.  Return NIL if not present.
-     */
-
-
-    /**
-     * Find any assertion in any mt with GAF-FORMULA as its formula.  Return NIL if not present.
-     */
-    @LispMethod(comment = "Find any assertion in any mt with GAF-FORMULA as its formula.  Return NIL if not present.")
-    public static final SubLObject find_gaf_any_mt_alt(SubLObject gaf_formula) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(gaf_formula, EL_FORMULA_P);
-            {
-                SubLObject ans = NIL;
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                        ans = com.cyc.cycjava.cycl.kb_indexing.find_gaf_formula(gaf_formula);
-                    } finally {
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return ans;
-            }
-        }
     }
 
-    @LispMethod(comment = "Find any assertion in any mt with GAF-FORMULA as its formula.  Return NIL if not present.")
     public static SubLObject find_gaf_any_mt(final SubLObject gaf_formula) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLTrampolineFile.enforceType(gaf_formula, EL_FORMULA_P);
@@ -13714,38 +6397,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
         }
         return ans;
-    }/**
-     * Find any assertion in any mt with GAF-FORMULA as its formula.  Return NIL if not present.
-     */
-
-
-    /**
-     * Find any assertion in any genl-mt of MT with GAF-FORMULA as its formula.  Return NIL if not present.
-     */
-    @LispMethod(comment = "Find any assertion in any genl-mt of MT with GAF-FORMULA as its formula.  Return NIL if not present.")
-    public static final SubLObject find_gaf_genl_mts_alt(SubLObject gaf_formula, SubLObject mt) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject ans = NIL;
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_GENL_MT, thread);
-                        mt_relevance_macros.$mt$.bind(mt, thread);
-                        ans = com.cyc.cycjava.cycl.kb_indexing.find_gaf_formula(gaf_formula);
-                    } finally {
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return ans;
-            }
-        }
     }
 
-    @LispMethod(comment = "Find any assertion in any genl-mt of MT with GAF-FORMULA as its formula.  Return NIL if not present.")
     public static SubLObject find_gaf_genl_mts(final SubLObject gaf_formula, final SubLObject mt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject ans = NIL;
@@ -13760,37 +6413,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
         }
         return ans;
-    }/**
-     * Find any assertion in any genl-mt of MT with GAF-FORMULA as its formula.  Return NIL if not present.
-     */
-
-
-    /**
-     * Return all assertions of GAF-FORMULA or NIL if there aren't any.
-     *
-     * @unknown destructible
-     */
-    @LispMethod(comment = "Return all assertions of GAF-FORMULA or NIL if there aren\'t any.\r\n\r\n@unknown destructible")
-    public static final SubLObject find_all_gafs_alt(SubLObject gaf_formula) {
-        SubLTrampolineFile.checkType(gaf_formula, EL_FORMULA_P);
-        {
-            SubLObject assertion = com.cyc.cycjava.cycl.kb_indexing.find_gaf_any_mt(gaf_formula);
-            if (NIL != assertion) {
-                {
-                    SubLObject clause_struc = assertions_low.assertion_clause_struc(assertion);
-                    if (NIL != clause_struc) {
-                        return copy_list(clause_strucs.clause_struc_assertions(clause_struc));
-                    } else {
-                        return list(assertion);
-                    }
-                }
-            } else {
-                return NIL;
-            }
-        }
     }
 
-    @LispMethod(comment = "Return all assertions of GAF-FORMULA or NIL if there aren\'t any.\r\n\r\n@unknown destructible")
     public static SubLObject find_all_gafs(final SubLObject gaf_formula) {
         SubLTrampolineFile.enforceType(gaf_formula, EL_FORMULA_P);
         final SubLObject assertion = find_gaf_any_mt(gaf_formula);
@@ -13802,12 +6426,7 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             return copy_list(clause_strucs.clause_struc_assertions(clause_struc));
         }
         return list(assertion);
-    }/**
-     * Return all assertions of GAF-FORMULA or NIL if there aren't any.
-     *
-     * @unknown destructible
-     */
-
+    }
 
     public static SubLObject count_all_gafs(final SubLObject gaf_formula) {
         final SubLObject assertion = find_gaf_any_mt(gaf_formula);
@@ -13817,53 +6436,10 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return ZERO_INTEGER;
     }
 
-    /**
-     * Find any assertion in any currently relevant with GAF-FORMULA as its formula.  Return NIL if not present.
-     */
-    @LispMethod(comment = "Find any assertion in any currently relevant with GAF-FORMULA as its formula.  Return NIL if not present.")
-    public static final SubLObject find_gaf_in_relevant_mt_alt(SubLObject gaf_formula) {
-        return com.cyc.cycjava.cycl.kb_indexing.find_gaf_formula(gaf_formula);
-    }
-
-    @LispMethod(comment = "Find any assertion in any currently relevant with GAF-FORMULA as its formula.  Return NIL if not present.")
     public static SubLObject find_gaf_in_relevant_mt(final SubLObject gaf_formula) {
         return find_gaf_formula(gaf_formula);
-    }/**
-     * Find any assertion in any currently relevant with GAF-FORMULA as its formula.  Return NIL if not present.
-     */
-
-
-    /**
-     * Find any assertion with GAF-FORMULA as its formula possibly in MT. Return NIL if not present
-     */
-    @LispMethod(comment = "Find any assertion with GAF-FORMULA as its formula possibly in MT. Return NIL if not present")
-    public static final SubLObject find_gaf_possibly_in_mt_alt(SubLObject gaf_formula, SubLObject mt) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject assertion = NIL;
-                SubLObject mt_var = mt;
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.possibly_in_mt_determine_function(mt_var), thread);
-                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.possibly_in_mt_determine_mt(mt_var), thread);
-                        assertion = com.cyc.cycjava.cycl.kb_indexing.find_gaf_in_relevant_mt(gaf_formula);
-                    } finally {
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return assertion;
-            }
-        }
     }
 
-    @LispMethod(comment = "Find any assertion with GAF-FORMULA as its formula possibly in MT. Return NIL if not present")
     public static SubLObject find_gaf_possibly_in_mt(final SubLObject gaf_formula, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -13882,13 +6458,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
         }
         return assertion;
-    }/**
-     * Find any assertion with GAF-FORMULA as its formula possibly in MT. Return NIL if not present
-     */
-
-
-    public static final SubLObject gaf_mts_alt(SubLObject gaf_formula) {
-        return Mapping.mapcar(symbol_function(ASSERTION_MT), com.cyc.cycjava.cycl.kb_indexing.find_all_gafs(gaf_formula));
     }
 
     public static SubLObject gaf_mts(final SubLObject gaf_formula) {
@@ -13918,72 +6487,23 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         if (exclusiveP == UNPROVIDED) {
             exclusiveP = T;
         }
-        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
+        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
         final SubLObject clause_struc = assertions_low.assertion_clause_struc(assertion);
         return NIL != clause_struc ? subtract(length(clause_strucs.clause_struc_assertions(clause_struc)), NIL != exclusiveP ? ONE_INTEGER : ZERO_INTEGER) : NIL != exclusiveP ? ZERO_INTEGER : ONE_INTEGER;
     }
 
-    /**
-     * Return an assertion which has CNF as its cnf or NIL if none present.
-     * Relevant mts are assumed scoped from the outside.
-     */
-    @LispMethod(comment = "Return an assertion which has CNF as its cnf or NIL if none present.\r\nRelevant mts are assumed scoped from the outside.\nReturn an assertion which has CNF as its cnf or NIL if none present.\nRelevant mts are assumed scoped from the outside.")
-    public static final SubLObject find_cnf_alt(SubLObject cnf) {
-        SubLTrampolineFile.checkType(cnf, CNF_P);
-        if (NIL != clauses.gaf_cnfP(cnf)) {
-            return com.cyc.cycjava.cycl.kb_indexing.find_gaf_cnf(cnf);
-        } else {
-            return com.cyc.cycjava.cycl.kb_indexing.find_rule_cnf(cnf);
-        }
-    }
-
-    @LispMethod(comment = "Return an assertion which has CNF as its cnf or NIL if none present.\r\nRelevant mts are assumed scoped from the outside.\nReturn an assertion which has CNF as its cnf or NIL if none present.\nRelevant mts are assumed scoped from the outside.")
     public static SubLObject find_cnf(final SubLObject cnf) {
-        assert NIL != clauses.cnf_p(cnf) : "! clauses.cnf_p(cnf) " + ("clauses.cnf_p(cnf) " + "CommonSymbols.NIL != clauses.cnf_p(cnf) ") + cnf;
+        assert NIL != clauses.cnf_p(cnf) : "clauses.cnf_p(cnf) " + "CommonSymbols.NIL != clauses.cnf_p(cnf) " + cnf;
         if (NIL != clauses.gaf_cnfP(cnf)) {
             return find_gaf_cnf(cnf);
         }
         return find_rule_cnf(cnf);
-    }/**
-     * Return an assertion which has CNF as its cnf or NIL if none present.
-     * Relevant mts are assumed scoped from the outside.
-     */
-
-
-    /**
-     * Use the gaf indexing to find any assertion whose hl-cnf is CNF
-     */
-    @LispMethod(comment = "Use the gaf indexing to find any assertion whose hl-cnf is CNF")
-    public static final SubLObject find_gaf_cnf_alt(SubLObject cnf) {
-        return com.cyc.cycjava.cycl.kb_indexing.find_gaf_formula(assertions_low.cnf_to_gaf_formula(cnf));
     }
 
-    @LispMethod(comment = "Use the gaf indexing to find any assertion whose hl-cnf is CNF")
     public static SubLObject find_gaf_cnf(final SubLObject cnf) {
         return find_gaf_formula(assertions_low.cnf_to_gaf_formula(cnf));
-    }/**
-     * Use the gaf indexing to find any assertion whose hl-cnf is CNF
-     */
-
-
-    /**
-     * Use the rule indexing to find any assertion whose hl-cnf is CNF
-     */
-    @LispMethod(comment = "Use the rule indexing to find any assertion whose hl-cnf is CNF")
-    public static final SubLObject find_rule_cnf_alt(SubLObject cnf) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject index = com.cyc.cycjava.cycl.kb_indexing.decent_rule_index(cnf);
-                SubLObject v_term = thread.secondMultipleValue();
-                thread.resetMultipleValues();
-                return com.cyc.cycjava.cycl.kb_indexing.find_rule_cnf_via_index_int(cnf, index, v_term);
-            }
-        }
     }
 
-    @LispMethod(comment = "Use the rule indexing to find any assertion whose hl-cnf is CNF")
     public static SubLObject find_rule_cnf(final SubLObject cnf) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -13991,38 +6511,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         final SubLObject v_term = thread.secondMultipleValue();
         thread.resetMultipleValues();
         return find_rule_cnf_via_index_int(cnf, index, v_term);
-    }/**
-     * Use the rule indexing to find any assertion whose hl-cnf is CNF
-     */
-
-
-    /**
-     * Return an assertion which has CNF as its cnf at the specified RULE-INDEX, or NIL if none present.
-     * RULE-INDEX-SEPC is an index-spec of the kind returned by ALL-RULE-INDICES.
-     */
-    @LispMethod(comment = "Return an assertion which has CNF as its cnf at the specified RULE-INDEX, or NIL if none present.\r\nRULE-INDEX-SEPC is an index-spec of the kind returned by ALL-RULE-INDICES.\nReturn an assertion which has CNF as its cnf at the specified RULE-INDEX, or NIL if none present.\nRULE-INDEX-SEPC is an index-spec of the kind returned by ALL-RULE-INDICES.")
-    public static final SubLObject find_rule_cnf_via_index_alt(SubLObject cnf, SubLObject rule_index_spec) {
-        {
-            SubLObject datum = rule_index_spec;
-            SubLObject current = datum;
-            SubLObject index = NIL;
-            SubLObject v_term = NIL;
-            destructuring_bind_must_consp(current, datum, $list_alt233);
-            index = current.first();
-            current = current.rest();
-            destructuring_bind_must_consp(current, datum, $list_alt233);
-            v_term = current.first();
-            current = current.rest();
-            if (NIL == current) {
-                return com.cyc.cycjava.cycl.kb_indexing.find_rule_cnf_via_index_int(cnf, index, v_term);
-            } else {
-                cdestructuring_bind_error(datum, $list_alt233);
-            }
-        }
-        return NIL;
     }
 
-    @LispMethod(comment = "Return an assertion which has CNF as its cnf at the specified RULE-INDEX, or NIL if none present.\r\nRULE-INDEX-SEPC is an index-spec of the kind returned by ALL-RULE-INDICES.\nReturn an assertion which has CNF as its cnf at the specified RULE-INDEX, or NIL if none present.\nRULE-INDEX-SEPC is an index-spec of the kind returned by ALL-RULE-INDICES.")
     public static SubLObject find_rule_cnf_via_index(final SubLObject cnf, final SubLObject rule_index_spec) {
         SubLObject index = NIL;
         SubLObject v_term = NIL;
@@ -14037,107 +6527,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         }
         cdestructuring_bind_error(rule_index_spec, $list262);
         return NIL;
-    }/**
-     * Return an assertion which has CNF as its cnf at the specified RULE-INDEX, or NIL if none present.
-     * RULE-INDEX-SEPC is an index-spec of the kind returned by ALL-RULE-INDICES.
-     */
-
-
-    public static final SubLObject find_rule_cnf_via_index_int_alt(SubLObject cnf, SubLObject index, SubLObject v_term) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject ans = NIL;
-                if (NIL != indexed_term_p(v_term)) {
-                    {
-                        SubLObject _prev_bind_0 = $mapping_target$.currentBinding(thread);
-                        SubLObject _prev_bind_1 = $mapping_answer$.currentBinding(thread);
-                        try {
-                            $mapping_target$.bind(cnf, thread);
-                            $mapping_answer$.bind(NIL, thread);
-                            {
-                                SubLObject catch_var = NIL;
-                                try {
-                                    {
-                                        SubLObject pcase_var = index;
-                                        if (pcase_var.eql($OTHER)) {
-                                            kb_mapping.map_other_index(symbol_function(FIND_CNF_INTERNAL), v_term, NIL, NIL);
-                                        } else {
-                                            if (pcase_var.eql($PRED_NEG)) {
-                                                kb_mapping.map_predicate_rule_index(symbol_function(FIND_CNF_INTERNAL), v_term, $NEG, UNPROVIDED, UNPROVIDED);
-                                            } else {
-                                                if (pcase_var.eql($PRED_POS)) {
-                                                    kb_mapping.map_predicate_rule_index(symbol_function(FIND_CNF_INTERNAL), v_term, $POS, UNPROVIDED, UNPROVIDED);
-                                                } else {
-                                                    if (pcase_var.eql($IST_PRED_NEG)) {
-                                                        kb_mapping.map_decontextualized_ist_predicate_rule_index(symbol_function(FIND_CNF_INTERNAL), v_term, $NEG, UNPROVIDED);
-                                                    } else {
-                                                        if (pcase_var.eql($IST_PRED_POS)) {
-                                                            kb_mapping.map_decontextualized_ist_predicate_rule_index(symbol_function(FIND_CNF_INTERNAL), v_term, $POS, UNPROVIDED);
-                                                        } else {
-                                                            if (pcase_var.eql($ISA_NEG)) {
-                                                                kb_mapping.map_isa_rule_index(symbol_function(FIND_CNF_INTERNAL), v_term, $NEG, UNPROVIDED, UNPROVIDED);
-                                                            } else {
-                                                                if (pcase_var.eql($ISA_POS)) {
-                                                                    kb_mapping.map_isa_rule_index(symbol_function(FIND_CNF_INTERNAL), v_term, $POS, UNPROVIDED, UNPROVIDED);
-                                                                } else {
-                                                                    if (pcase_var.eql($QUOTED_ISA_NEG)) {
-                                                                        kb_mapping.map_quoted_isa_rule_index(symbol_function(FIND_CNF_INTERNAL), v_term, $NEG, UNPROVIDED, UNPROVIDED);
-                                                                    } else {
-                                                                        if (pcase_var.eql($QUOTED_ISA_POS)) {
-                                                                            kb_mapping.map_quoted_isa_rule_index(symbol_function(FIND_CNF_INTERNAL), v_term, $POS, UNPROVIDED, UNPROVIDED);
-                                                                        } else {
-                                                                            if (pcase_var.eql($GENLS_NEG)) {
-                                                                                kb_mapping.map_genls_rule_index(symbol_function(FIND_CNF_INTERNAL), v_term, $NEG, UNPROVIDED, UNPROVIDED);
-                                                                            } else {
-                                                                                if (pcase_var.eql($GENLS_POS)) {
-                                                                                    kb_mapping.map_genls_rule_index(symbol_function(FIND_CNF_INTERNAL), v_term, $POS, UNPROVIDED, UNPROVIDED);
-                                                                                } else {
-                                                                                    if (pcase_var.eql($GENL_MT_NEG)) {
-                                                                                        kb_mapping.map_genl_mt_rule_index(symbol_function(FIND_CNF_INTERNAL), v_term, $NEG, UNPROVIDED, UNPROVIDED);
-                                                                                    } else {
-                                                                                        if (pcase_var.eql($GENL_MT_POS)) {
-                                                                                            kb_mapping.map_genl_mt_rule_index(symbol_function(FIND_CNF_INTERNAL), v_term, $POS, UNPROVIDED, UNPROVIDED);
-                                                                                        } else {
-                                                                                            if (pcase_var.eql($FUNC)) {
-                                                                                                kb_mapping.map_function_rule_index(symbol_function(FIND_CNF_INTERNAL), v_term, UNPROVIDED, UNPROVIDED);
-                                                                                            } else {
-                                                                                                if (pcase_var.eql($EXCEPTION)) {
-                                                                                                    kb_mapping.map_exception_rule_index(symbol_function(FIND_CNF_INTERNAL), v_term, UNPROVIDED, UNPROVIDED);
-                                                                                                } else {
-                                                                                                    if (pcase_var.eql($PRAGMA)) {
-                                                                                                        kb_mapping.map_pragma_rule_index(symbol_function(FIND_CNF_INTERNAL), v_term, UNPROVIDED, UNPROVIDED);
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                } catch (Throwable ccatch_env_var) {
-                                    catch_var = Errors.handleThrowable(ccatch_env_var, $MAPPING_DONE);
-                                }
-                                ans = $mapping_answer$.getDynamicValue(thread);
-                            }
-                        } finally {
-                            $mapping_answer$.rebind(_prev_bind_1, thread);
-                            $mapping_target$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                return ans;
-            }
-        }
     }
 
     public static SubLObject find_rule_cnf_via_index_int(final SubLObject cnf, final SubLObject index, final SubLObject v_term) {
@@ -14229,30 +6618,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return ans;
     }
 
-    public static final SubLObject find_cnf_internal_alt(SubLObject assertion) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if ((NIL != $mapping_target$.getDynamicValue(thread)) && (NIL != assertions_high.valid_assertion(assertion, UNPROVIDED))) {
-                {
-                    SubLObject cnf = assertions_high.assertion_cnf(assertion);
-                    {
-                        SubLObject _prev_bind_0 = $candidate_assertion$.currentBinding(thread);
-                        try {
-                            $candidate_assertion$.bind(assertion, thread);
-                            if (NIL != funcall($cnf_matching_predicate$.getDynamicValue(thread), cnf, $mapping_target$.getDynamicValue(thread))) {
-                                $mapping_answer$.setDynamicValue(assertion, thread);
-                                mapping_finished();
-                            }
-                        } finally {
-                            $candidate_assertion$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject find_cnf_internal(final SubLObject assertion) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL != $mapping_target$.getDynamicValue(thread)) && (NIL != assertions_high.valid_assertion(assertion, UNPROVIDED))) {
@@ -14271,344 +6636,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     * Use the gaf indexing to find any assertion whose gaf formula is GAF-FORMULA,
-     * regardless of truth.  If there are more than one, it will return
-     * an arbitrary one.
-     */
-    @LispMethod(comment = "Use the gaf indexing to find any assertion whose gaf formula is GAF-FORMULA,\r\nregardless of truth.  If there are more than one, it will return\r\nan arbitrary one.\nUse the gaf indexing to find any assertion whose gaf formula is GAF-FORMULA,\nregardless of truth.  If there are more than one, it will return\nan arbitrary one.")
-    public static final SubLObject find_gaf_formula_alt(SubLObject gaf_formula) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                SubLObject l_index = com.cyc.cycjava.cycl.kb_indexing.best_gaf_lookup_index(gaf_formula, NIL, NIL);
-                SubLObject method = kb_mapping_macros.do_gli_extract_method(l_index);
-                SubLObject pcase_var = method;
-                if (pcase_var.eql($GAF_ARG)) {
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject v_term = kb_mapping_macros.do_gli_vga_extract_keys(l_index);
-                        SubLObject argnum = thread.secondMultipleValue();
-                        SubLObject predicate = thread.thirdMultipleValue();
-                        thread.resetMultipleValues();
-                        if (NIL != argnum) {
-                            if (NIL != predicate) {
-                                {
-                                    SubLObject pred_var = predicate;
-                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, argnum, pred_var)) {
-                                        {
-                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, argnum, pred_var);
-                                            SubLObject done_var = result;
-                                            SubLObject token_var = NIL;
-                                            while (NIL == done_var) {
-                                                {
-                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                    if (NIL != valid) {
-                                                        {
-                                                            SubLObject final_index_iterator = NIL;
-                                                            try {
-                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
-                                                                {
-                                                                    SubLObject done_var_20 = result;
-                                                                    SubLObject token_var_21 = NIL;
-                                                                    while (NIL == done_var_20) {
-                                                                        {
-                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_21);
-                                                                            SubLObject valid_22 = makeBoolean(token_var_21 != assertion);
-                                                                            if (NIL != valid_22) {
-                                                                                {
-                                                                                    SubLObject possible_result = com.cyc.cycjava.cycl.kb_indexing.find_gaf_internal(assertion, gaf_formula);
-                                                                                    if (NIL != possible_result) {
-                                                                                        result = possible_result;
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                            done_var_20 = makeBoolean((NIL == valid_22) || (NIL != result));
-                                                                        }
-                                                                    } 
-                                                                }
-                                                            } finally {
-                                                                {
-                                                                    SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                    try {
-                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                        if (NIL != final_index_iterator) {
-                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                        }
-                                                                    } finally {
-                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    done_var = makeBoolean((NIL == valid) || (NIL != result));
-                                                }
-                                            } 
-                                        }
-                                    }
-                                }
-                            } else {
-                                {
-                                    SubLObject pred_var = NIL;
-                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, argnum, pred_var)) {
-                                        {
-                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, argnum, pred_var);
-                                            SubLObject done_var = result;
-                                            SubLObject token_var = NIL;
-                                            while (NIL == done_var) {
-                                                {
-                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                    if (NIL != valid) {
-                                                        {
-                                                            SubLObject final_index_iterator = NIL;
-                                                            try {
-                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
-                                                                {
-                                                                    SubLObject done_var_23 = result;
-                                                                    SubLObject token_var_24 = NIL;
-                                                                    while (NIL == done_var_23) {
-                                                                        {
-                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_24);
-                                                                            SubLObject valid_25 = makeBoolean(token_var_24 != assertion);
-                                                                            if (NIL != valid_25) {
-                                                                                {
-                                                                                    SubLObject possible_result = com.cyc.cycjava.cycl.kb_indexing.find_gaf_internal(assertion, gaf_formula);
-                                                                                    if (NIL != possible_result) {
-                                                                                        result = possible_result;
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                            done_var_23 = makeBoolean((NIL == valid_25) || (NIL != result));
-                                                                        }
-                                                                    } 
-                                                                }
-                                                            } finally {
-                                                                {
-                                                                    SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                    try {
-                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                        if (NIL != final_index_iterator) {
-                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                        }
-                                                                    } finally {
-                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    done_var = makeBoolean((NIL == valid) || (NIL != result));
-                                                }
-                                            } 
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            if (NIL != predicate) {
-                                {
-                                    SubLObject pred_var = predicate;
-                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, NIL, pred_var)) {
-                                        {
-                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, NIL, pred_var);
-                                            SubLObject done_var = result;
-                                            SubLObject token_var = NIL;
-                                            while (NIL == done_var) {
-                                                {
-                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                    if (NIL != valid) {
-                                                        {
-                                                            SubLObject final_index_iterator = NIL;
-                                                            try {
-                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
-                                                                {
-                                                                    SubLObject done_var_26 = result;
-                                                                    SubLObject token_var_27 = NIL;
-                                                                    while (NIL == done_var_26) {
-                                                                        {
-                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_27);
-                                                                            SubLObject valid_28 = makeBoolean(token_var_27 != assertion);
-                                                                            if (NIL != valid_28) {
-                                                                                {
-                                                                                    SubLObject possible_result = com.cyc.cycjava.cycl.kb_indexing.find_gaf_internal(assertion, gaf_formula);
-                                                                                    if (NIL != possible_result) {
-                                                                                        result = possible_result;
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                            done_var_26 = makeBoolean((NIL == valid_28) || (NIL != result));
-                                                                        }
-                                                                    } 
-                                                                }
-                                                            } finally {
-                                                                {
-                                                                    SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                    try {
-                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                        if (NIL != final_index_iterator) {
-                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                        }
-                                                                    } finally {
-                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    done_var = makeBoolean((NIL == valid) || (NIL != result));
-                                                }
-                                            } 
-                                        }
-                                    }
-                                }
-                            } else {
-                                {
-                                    SubLObject pred_var = NIL;
-                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, NIL, pred_var)) {
-                                        {
-                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, NIL, pred_var);
-                                            SubLObject done_var = result;
-                                            SubLObject token_var = NIL;
-                                            while (NIL == done_var) {
-                                                {
-                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                    if (NIL != valid) {
-                                                        {
-                                                            SubLObject final_index_iterator = NIL;
-                                                            try {
-                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
-                                                                {
-                                                                    SubLObject done_var_29 = result;
-                                                                    SubLObject token_var_30 = NIL;
-                                                                    while (NIL == done_var_29) {
-                                                                        {
-                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_30);
-                                                                            SubLObject valid_31 = makeBoolean(token_var_30 != assertion);
-                                                                            if (NIL != valid_31) {
-                                                                                {
-                                                                                    SubLObject possible_result = com.cyc.cycjava.cycl.kb_indexing.find_gaf_internal(assertion, gaf_formula);
-                                                                                    if (NIL != possible_result) {
-                                                                                        result = possible_result;
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                            done_var_29 = makeBoolean((NIL == valid_31) || (NIL != result));
-                                                                        }
-                                                                    } 
-                                                                }
-                                                            } finally {
-                                                                {
-                                                                    SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                    try {
-                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                        if (NIL != final_index_iterator) {
-                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                        }
-                                                                    } finally {
-                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    done_var = makeBoolean((NIL == valid) || (NIL != result));
-                                                }
-                                            } 
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    if (pcase_var.eql($PREDICATE_EXTENT)) {
-                        {
-                            SubLObject pred_var = kb_mapping_macros.do_gli_vpe_extract_key(l_index);
-                            if (NIL != kb_mapping_macros.do_predicate_extent_index_key_validator(pred_var)) {
-                                {
-                                    SubLObject iterator_var = kb_mapping_macros.new_predicate_extent_final_index_spec_iterator(pred_var);
-                                    SubLObject done_var = result;
-                                    SubLObject token_var = NIL;
-                                    while (NIL == done_var) {
-                                        {
-                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                            if (NIL != valid) {
-                                                {
-                                                    SubLObject final_index_iterator = NIL;
-                                                    try {
-                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
-                                                        {
-                                                            SubLObject done_var_32 = result;
-                                                            SubLObject token_var_33 = NIL;
-                                                            while (NIL == done_var_32) {
-                                                                {
-                                                                    SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_33);
-                                                                    SubLObject valid_34 = makeBoolean(token_var_33 != assertion);
-                                                                    if (NIL != valid_34) {
-                                                                        {
-                                                                            SubLObject possible_result = com.cyc.cycjava.cycl.kb_indexing.find_gaf_internal(assertion, gaf_formula);
-                                                                            if (NIL != possible_result) {
-                                                                                result = possible_result;
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                    done_var_32 = makeBoolean((NIL == valid_34) || (NIL != result));
-                                                                }
-                                                            } 
-                                                        }
-                                                    } finally {
-                                                        {
-                                                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                            try {
-                                                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                if (NIL != final_index_iterator) {
-                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                }
-                                                            } finally {
-                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            done_var = makeBoolean((NIL == valid) || (NIL != result));
-                                        }
-                                    } 
-                                }
-                            }
-                        }
-                    } else {
-                        if (pcase_var.eql($OVERLAP)) {
-                            {
-                                SubLObject rest = NIL;
-                                for (rest = gather_overlap_index(kb_mapping_macros.do_gli_vo_extract_key(l_index), UNPROVIDED); !((NIL != result) || (NIL == rest)); rest = rest.rest()) {
-                                    {
-                                        SubLObject assertion = rest.first();
-                                        SubLObject possible_result = com.cyc.cycjava.cycl.kb_indexing.find_gaf_internal(assertion, gaf_formula);
-                                        if (NIL != possible_result) {
-                                            result = possible_result;
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            kb_mapping_macros.do_gli_method_error(l_index, method);
-                        }
-                    }
-                }
-                return result;
-            }
-        }
-    }
-
-    @LispMethod(comment = "Use the gaf indexing to find any assertion whose gaf formula is GAF-FORMULA,\r\nregardless of truth.  If there are more than one, it will return\r\nan arbitrary one.\nUse the gaf indexing to find any assertion whose gaf formula is GAF-FORMULA,\nregardless of truth.  If there are more than one, it will return\nan arbitrary one.")
     public static SubLObject find_gaf_formula(final SubLObject gaf_formula) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject result = NIL;
@@ -14891,37 +6918,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
 
 
         return result;
-    }/**
-     * Use the gaf indexing to find any assertion whose gaf formula is GAF-FORMULA,
-     * regardless of truth.  If there are more than one, it will return
-     * an arbitrary one.
-     */
-
-
-    public static final SubLObject find_gaf_internal_alt(SubLObject assertion, SubLObject sentence) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                if (((NIL != sentence) && (NIL != assertions_high.valid_assertion(assertion, UNPROVIDED))) && (NIL != assertions_high.gaf_assertionP(assertion))) {
-                    {
-                        SubLObject gaf = assertions_high.assertion_gaf_hl_formula(assertion);
-                        {
-                            SubLObject _prev_bind_0 = $candidate_assertion$.currentBinding(thread);
-                            try {
-                                $candidate_assertion$.bind(assertion, thread);
-                                if (NIL != funcall($gaf_matching_predicate$.getDynamicValue(thread), gaf, sentence)) {
-                                    result = assertion;
-                                }
-                            } finally {
-                                $candidate_assertion$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                }
-                return result;
-            }
-        }
     }
 
     public static SubLObject find_gaf_internal(final SubLObject assertion, final SubLObject sentence) {
@@ -14940,328 +6936,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             }
         }
         return result;
-    }
-
-    /**
-     *
-     *
-     * @return nil or assertion-p;
-    Attempts to unify ASENT with a KB assertion in a relevant mt.
-     */
-    @LispMethod(comment = "@return nil or assertion-p;\r\nAttempts to unify ASENT with a KB assertion in a relevant mt.")
-    public static final SubLObject asent_kb_lookup(SubLObject asent) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                SubLObject l_index = com.cyc.cycjava.cycl.kb_indexing.best_gaf_lookup_index(asent, NIL, NIL);
-                SubLObject method = kb_mapping_macros.do_gli_extract_method(l_index);
-                SubLObject pcase_var = method;
-                if (pcase_var.eql($GAF_ARG)) {
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject v_term = kb_mapping_macros.do_gli_vga_extract_keys(l_index);
-                        SubLObject argnum = thread.secondMultipleValue();
-                        SubLObject predicate = thread.thirdMultipleValue();
-                        thread.resetMultipleValues();
-                        if (NIL != argnum) {
-                            if (NIL != predicate) {
-                                {
-                                    SubLObject pred_var = predicate;
-                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, argnum, pred_var)) {
-                                        {
-                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, argnum, pred_var);
-                                            SubLObject done_var = result;
-                                            SubLObject token_var = NIL;
-                                            while (NIL == done_var) {
-                                                {
-                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                    if (NIL != valid) {
-                                                        {
-                                                            SubLObject final_index_iterator = NIL;
-                                                            try {
-                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
-                                                                {
-                                                                    SubLObject done_var_35 = result;
-                                                                    SubLObject token_var_36 = NIL;
-                                                                    while (NIL == done_var_35) {
-                                                                        {
-                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_36);
-                                                                            SubLObject valid_37 = makeBoolean(token_var_36 != assertion);
-                                                                            if (NIL != valid_37) {
-                                                                                if (NIL != unification_utilities.asent_unify(asent, assertions_high.gaf_formula(assertion), UNPROVIDED, UNPROVIDED)) {
-                                                                                    result = assertion;
-                                                                                }
-                                                                            }
-                                                                            done_var_35 = makeBoolean((NIL == valid_37) || (NIL != result));
-                                                                        }
-                                                                    } 
-                                                                }
-                                                            } finally {
-                                                                {
-                                                                    SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                    try {
-                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                        if (NIL != final_index_iterator) {
-                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                        }
-                                                                    } finally {
-                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    done_var = makeBoolean((NIL == valid) || (NIL != result));
-                                                }
-                                            } 
-                                        }
-                                    }
-                                }
-                            } else {
-                                {
-                                    SubLObject pred_var = NIL;
-                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, argnum, pred_var)) {
-                                        {
-                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, argnum, pred_var);
-                                            SubLObject done_var = result;
-                                            SubLObject token_var = NIL;
-                                            while (NIL == done_var) {
-                                                {
-                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                    if (NIL != valid) {
-                                                        {
-                                                            SubLObject final_index_iterator = NIL;
-                                                            try {
-                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
-                                                                {
-                                                                    SubLObject done_var_38 = result;
-                                                                    SubLObject token_var_39 = NIL;
-                                                                    while (NIL == done_var_38) {
-                                                                        {
-                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_39);
-                                                                            SubLObject valid_40 = makeBoolean(token_var_39 != assertion);
-                                                                            if (NIL != valid_40) {
-                                                                                if (NIL != unification_utilities.asent_unify(asent, assertions_high.gaf_formula(assertion), UNPROVIDED, UNPROVIDED)) {
-                                                                                    result = assertion;
-                                                                                }
-                                                                            }
-                                                                            done_var_38 = makeBoolean((NIL == valid_40) || (NIL != result));
-                                                                        }
-                                                                    } 
-                                                                }
-                                                            } finally {
-                                                                {
-                                                                    SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                    try {
-                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                        if (NIL != final_index_iterator) {
-                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                        }
-                                                                    } finally {
-                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    done_var = makeBoolean((NIL == valid) || (NIL != result));
-                                                }
-                                            } 
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            if (NIL != predicate) {
-                                {
-                                    SubLObject pred_var = predicate;
-                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, NIL, pred_var)) {
-                                        {
-                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, NIL, pred_var);
-                                            SubLObject done_var = result;
-                                            SubLObject token_var = NIL;
-                                            while (NIL == done_var) {
-                                                {
-                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                    if (NIL != valid) {
-                                                        {
-                                                            SubLObject final_index_iterator = NIL;
-                                                            try {
-                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
-                                                                {
-                                                                    SubLObject done_var_41 = result;
-                                                                    SubLObject token_var_42 = NIL;
-                                                                    while (NIL == done_var_41) {
-                                                                        {
-                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_42);
-                                                                            SubLObject valid_43 = makeBoolean(token_var_42 != assertion);
-                                                                            if (NIL != valid_43) {
-                                                                                if (NIL != unification_utilities.asent_unify(asent, assertions_high.gaf_formula(assertion), UNPROVIDED, UNPROVIDED)) {
-                                                                                    result = assertion;
-                                                                                }
-                                                                            }
-                                                                            done_var_41 = makeBoolean((NIL == valid_43) || (NIL != result));
-                                                                        }
-                                                                    } 
-                                                                }
-                                                            } finally {
-                                                                {
-                                                                    SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                    try {
-                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                        if (NIL != final_index_iterator) {
-                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                        }
-                                                                    } finally {
-                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    done_var = makeBoolean((NIL == valid) || (NIL != result));
-                                                }
-                                            } 
-                                        }
-                                    }
-                                }
-                            } else {
-                                {
-                                    SubLObject pred_var = NIL;
-                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, NIL, pred_var)) {
-                                        {
-                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, NIL, pred_var);
-                                            SubLObject done_var = result;
-                                            SubLObject token_var = NIL;
-                                            while (NIL == done_var) {
-                                                {
-                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                    if (NIL != valid) {
-                                                        {
-                                                            SubLObject final_index_iterator = NIL;
-                                                            try {
-                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
-                                                                {
-                                                                    SubLObject done_var_44 = result;
-                                                                    SubLObject token_var_45 = NIL;
-                                                                    while (NIL == done_var_44) {
-                                                                        {
-                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_45);
-                                                                            SubLObject valid_46 = makeBoolean(token_var_45 != assertion);
-                                                                            if (NIL != valid_46) {
-                                                                                if (NIL != unification_utilities.asent_unify(asent, assertions_high.gaf_formula(assertion), UNPROVIDED, UNPROVIDED)) {
-                                                                                    result = assertion;
-                                                                                }
-                                                                            }
-                                                                            done_var_44 = makeBoolean((NIL == valid_46) || (NIL != result));
-                                                                        }
-                                                                    } 
-                                                                }
-                                                            } finally {
-                                                                {
-                                                                    SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                    try {
-                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                        if (NIL != final_index_iterator) {
-                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                        }
-                                                                    } finally {
-                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    done_var = makeBoolean((NIL == valid) || (NIL != result));
-                                                }
-                                            } 
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    if (pcase_var.eql($PREDICATE_EXTENT)) {
-                        {
-                            SubLObject pred_var = kb_mapping_macros.do_gli_vpe_extract_key(l_index);
-                            if (NIL != kb_mapping_macros.do_predicate_extent_index_key_validator(pred_var)) {
-                                {
-                                    SubLObject iterator_var = kb_mapping_macros.new_predicate_extent_final_index_spec_iterator(pred_var);
-                                    SubLObject done_var = result;
-                                    SubLObject token_var = NIL;
-                                    while (NIL == done_var) {
-                                        {
-                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                            if (NIL != valid) {
-                                                {
-                                                    SubLObject final_index_iterator = NIL;
-                                                    try {
-                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
-                                                        {
-                                                            SubLObject done_var_47 = result;
-                                                            SubLObject token_var_48 = NIL;
-                                                            while (NIL == done_var_47) {
-                                                                {
-                                                                    SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_48);
-                                                                    SubLObject valid_49 = makeBoolean(token_var_48 != assertion);
-                                                                    if (NIL != valid_49) {
-                                                                        if (NIL != unification_utilities.asent_unify(asent, assertions_high.gaf_formula(assertion), UNPROVIDED, UNPROVIDED)) {
-                                                                            result = assertion;
-                                                                        }
-                                                                    }
-                                                                    done_var_47 = makeBoolean((NIL == valid_49) || (NIL != result));
-                                                                }
-                                                            } 
-                                                        }
-                                                    } finally {
-                                                        {
-                                                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                            try {
-                                                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                if (NIL != final_index_iterator) {
-                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                }
-                                                            } finally {
-                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            done_var = makeBoolean((NIL == valid) || (NIL != result));
-                                        }
-                                    } 
-                                }
-                            }
-                        }
-                    } else {
-                        if (pcase_var.eql($OVERLAP)) {
-                            {
-                                SubLObject rest = NIL;
-                                for (rest = gather_overlap_index(kb_mapping_macros.do_gli_vo_extract_key(l_index), UNPROVIDED); !((NIL != result) || (NIL == rest)); rest = rest.rest()) {
-                                    {
-                                        SubLObject assertion = rest.first();
-                                        if (NIL != unification_utilities.asent_unify(asent, assertions_high.gaf_formula(assertion), UNPROVIDED, UNPROVIDED)) {
-                                            result = assertion;
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            kb_mapping_macros.do_gli_method_error(l_index, method);
-                        }
-                    }
-                }
-                return result;
-            }
-        }
     }
 
     public static SubLObject asent_kb_lookup(final SubLObject asent, SubLObject cutoff) {
@@ -15600,341 +7274,6 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return result;
     }
 
-    /**
-     *
-     *
-     * @return nil or assertion-p;
-    Attempts to unify ASENT with a KB assertion in any mt.
-     */
-    @LispMethod(comment = "@return nil or assertion-p;\r\nAttempts to unify ASENT with a KB assertion in any mt.")
-    public static final SubLObject asent_kb_lookup_in_any_mt(SubLObject asent) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                        {
-                            SubLObject l_index = com.cyc.cycjava.cycl.kb_indexing.best_gaf_lookup_index(asent, NIL, NIL);
-                            SubLObject method = kb_mapping_macros.do_gli_extract_method(l_index);
-                            SubLObject pcase_var = method;
-                            if (pcase_var.eql($GAF_ARG)) {
-                                thread.resetMultipleValues();
-                                {
-                                    SubLObject v_term = kb_mapping_macros.do_gli_vga_extract_keys(l_index);
-                                    SubLObject argnum = thread.secondMultipleValue();
-                                    SubLObject predicate = thread.thirdMultipleValue();
-                                    thread.resetMultipleValues();
-                                    if (NIL != argnum) {
-                                        if (NIL != predicate) {
-                                            {
-                                                SubLObject pred_var = predicate;
-                                                if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, argnum, pred_var)) {
-                                                    {
-                                                        SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, argnum, pred_var);
-                                                        SubLObject done_var = result;
-                                                        SubLObject token_var = NIL;
-                                                        while (NIL == done_var) {
-                                                            {
-                                                                SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                                SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                                if (NIL != valid) {
-                                                                    {
-                                                                        SubLObject final_index_iterator = NIL;
-                                                                        try {
-                                                                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
-                                                                            {
-                                                                                SubLObject done_var_50 = result;
-                                                                                SubLObject token_var_51 = NIL;
-                                                                                while (NIL == done_var_50) {
-                                                                                    {
-                                                                                        SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_51);
-                                                                                        SubLObject valid_52 = makeBoolean(token_var_51 != assertion);
-                                                                                        if (NIL != valid_52) {
-                                                                                            if (NIL != unification_utilities.asent_unify(asent, assertions_high.gaf_formula(assertion), UNPROVIDED, UNPROVIDED)) {
-                                                                                                result = assertion;
-                                                                                            }
-                                                                                        }
-                                                                                        done_var_50 = makeBoolean((NIL == valid_52) || (NIL != result));
-                                                                                    }
-                                                                                } 
-                                                                            }
-                                                                        } finally {
-                                                                            {
-                                                                                SubLObject _prev_bind_0_53 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                try {
-                                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                    if (NIL != final_index_iterator) {
-                                                                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                                    }
-                                                                                } finally {
-                                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_53, thread);
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                                done_var = makeBoolean((NIL == valid) || (NIL != result));
-                                                            }
-                                                        } 
-                                                    }
-                                                }
-                                            }
-                                        } else {
-                                            {
-                                                SubLObject pred_var = NIL;
-                                                if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, argnum, pred_var)) {
-                                                    {
-                                                        SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, argnum, pred_var);
-                                                        SubLObject done_var = result;
-                                                        SubLObject token_var = NIL;
-                                                        while (NIL == done_var) {
-                                                            {
-                                                                SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                                SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                                if (NIL != valid) {
-                                                                    {
-                                                                        SubLObject final_index_iterator = NIL;
-                                                                        try {
-                                                                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
-                                                                            {
-                                                                                SubLObject done_var_54 = result;
-                                                                                SubLObject token_var_55 = NIL;
-                                                                                while (NIL == done_var_54) {
-                                                                                    {
-                                                                                        SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_55);
-                                                                                        SubLObject valid_56 = makeBoolean(token_var_55 != assertion);
-                                                                                        if (NIL != valid_56) {
-                                                                                            if (NIL != unification_utilities.asent_unify(asent, assertions_high.gaf_formula(assertion), UNPROVIDED, UNPROVIDED)) {
-                                                                                                result = assertion;
-                                                                                            }
-                                                                                        }
-                                                                                        done_var_54 = makeBoolean((NIL == valid_56) || (NIL != result));
-                                                                                    }
-                                                                                } 
-                                                                            }
-                                                                        } finally {
-                                                                            {
-                                                                                SubLObject _prev_bind_0_57 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                try {
-                                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                    if (NIL != final_index_iterator) {
-                                                                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                                    }
-                                                                                } finally {
-                                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_57, thread);
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                                done_var = makeBoolean((NIL == valid) || (NIL != result));
-                                                            }
-                                                        } 
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    } else {
-                                        if (NIL != predicate) {
-                                            {
-                                                SubLObject pred_var = predicate;
-                                                if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, NIL, pred_var)) {
-                                                    {
-                                                        SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, NIL, pred_var);
-                                                        SubLObject done_var = result;
-                                                        SubLObject token_var = NIL;
-                                                        while (NIL == done_var) {
-                                                            {
-                                                                SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                                SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                                if (NIL != valid) {
-                                                                    {
-                                                                        SubLObject final_index_iterator = NIL;
-                                                                        try {
-                                                                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
-                                                                            {
-                                                                                SubLObject done_var_58 = result;
-                                                                                SubLObject token_var_59 = NIL;
-                                                                                while (NIL == done_var_58) {
-                                                                                    {
-                                                                                        SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_59);
-                                                                                        SubLObject valid_60 = makeBoolean(token_var_59 != assertion);
-                                                                                        if (NIL != valid_60) {
-                                                                                            if (NIL != unification_utilities.asent_unify(asent, assertions_high.gaf_formula(assertion), UNPROVIDED, UNPROVIDED)) {
-                                                                                                result = assertion;
-                                                                                            }
-                                                                                        }
-                                                                                        done_var_58 = makeBoolean((NIL == valid_60) || (NIL != result));
-                                                                                    }
-                                                                                } 
-                                                                            }
-                                                                        } finally {
-                                                                            {
-                                                                                SubLObject _prev_bind_0_61 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                try {
-                                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                    if (NIL != final_index_iterator) {
-                                                                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                                    }
-                                                                                } finally {
-                                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_61, thread);
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                                done_var = makeBoolean((NIL == valid) || (NIL != result));
-                                                            }
-                                                        } 
-                                                    }
-                                                }
-                                            }
-                                        } else {
-                                            {
-                                                SubLObject pred_var = NIL;
-                                                if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, NIL, pred_var)) {
-                                                    {
-                                                        SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, NIL, pred_var);
-                                                        SubLObject done_var = result;
-                                                        SubLObject token_var = NIL;
-                                                        while (NIL == done_var) {
-                                                            {
-                                                                SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                                SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                                if (NIL != valid) {
-                                                                    {
-                                                                        SubLObject final_index_iterator = NIL;
-                                                                        try {
-                                                                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
-                                                                            {
-                                                                                SubLObject done_var_62 = result;
-                                                                                SubLObject token_var_63 = NIL;
-                                                                                while (NIL == done_var_62) {
-                                                                                    {
-                                                                                        SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_63);
-                                                                                        SubLObject valid_64 = makeBoolean(token_var_63 != assertion);
-                                                                                        if (NIL != valid_64) {
-                                                                                            if (NIL != unification_utilities.asent_unify(asent, assertions_high.gaf_formula(assertion), UNPROVIDED, UNPROVIDED)) {
-                                                                                                result = assertion;
-                                                                                            }
-                                                                                        }
-                                                                                        done_var_62 = makeBoolean((NIL == valid_64) || (NIL != result));
-                                                                                    }
-                                                                                } 
-                                                                            }
-                                                                        } finally {
-                                                                            {
-                                                                                SubLObject _prev_bind_0_65 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                try {
-                                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                    if (NIL != final_index_iterator) {
-                                                                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                                    }
-                                                                                } finally {
-                                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_65, thread);
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                                done_var = makeBoolean((NIL == valid) || (NIL != result));
-                                                            }
-                                                        } 
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            } else {
-                                if (pcase_var.eql($PREDICATE_EXTENT)) {
-                                    {
-                                        SubLObject pred_var = kb_mapping_macros.do_gli_vpe_extract_key(l_index);
-                                        if (NIL != kb_mapping_macros.do_predicate_extent_index_key_validator(pred_var)) {
-                                            {
-                                                SubLObject iterator_var = kb_mapping_macros.new_predicate_extent_final_index_spec_iterator(pred_var);
-                                                SubLObject done_var = result;
-                                                SubLObject token_var = NIL;
-                                                while (NIL == done_var) {
-                                                    {
-                                                        SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                        SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                        if (NIL != valid) {
-                                                            {
-                                                                SubLObject final_index_iterator = NIL;
-                                                                try {
-                                                                    final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
-                                                                    {
-                                                                        SubLObject done_var_66 = result;
-                                                                        SubLObject token_var_67 = NIL;
-                                                                        while (NIL == done_var_66) {
-                                                                            {
-                                                                                SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_67);
-                                                                                SubLObject valid_68 = makeBoolean(token_var_67 != assertion);
-                                                                                if (NIL != valid_68) {
-                                                                                    if (NIL != unification_utilities.asent_unify(asent, assertions_high.gaf_formula(assertion), UNPROVIDED, UNPROVIDED)) {
-                                                                                        result = assertion;
-                                                                                    }
-                                                                                }
-                                                                                done_var_66 = makeBoolean((NIL == valid_68) || (NIL != result));
-                                                                            }
-                                                                        } 
-                                                                    }
-                                                                } finally {
-                                                                    {
-                                                                        SubLObject _prev_bind_0_69 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                        try {
-                                                                            $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                            if (NIL != final_index_iterator) {
-                                                                                kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                            }
-                                                                        } finally {
-                                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_69, thread);
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                        done_var = makeBoolean((NIL == valid) || (NIL != result));
-                                                    }
-                                                } 
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    if (pcase_var.eql($OVERLAP)) {
-                                        {
-                                            SubLObject rest = NIL;
-                                            for (rest = gather_overlap_index(kb_mapping_macros.do_gli_vo_extract_key(l_index), UNPROVIDED); !((NIL != result) || (NIL == rest)); rest = rest.rest()) {
-                                                {
-                                                    SubLObject assertion = rest.first();
-                                                    if (NIL != unification_utilities.asent_unify(asent, assertions_high.gaf_formula(assertion), UNPROVIDED, UNPROVIDED)) {
-                                                        result = assertion;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    } else {
-                                        kb_mapping_macros.do_gli_method_error(l_index, method);
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return result;
-            }
-        }
-    }
-
     public static SubLObject asent_kb_lookup_in_any_mt(final SubLObject asent, SubLObject cutoff) {
         if (cutoff == UNPROVIDED) {
             cutoff = NIL;
@@ -15952,29 +7291,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         }
     }
 
-    /**
-     * Find the clause-struc with CNF.  Return NIL if not present.
-     */
-    @LispMethod(comment = "Find the clause-struc with CNF.  Return NIL if not present.")
-    public static final SubLObject find_clause_struc_alt(SubLObject cnf) {
-        SubLTrampolineFile.checkType(cnf, CNF_P);
-        {
-            SubLObject assertion = com.cyc.cycjava.cycl.kb_indexing.find_assertion_any_mt(cnf);
-            if (NIL != assertion) {
-                {
-                    SubLObject clause_struc = assertions_low.assertion_clause_struc(assertion);
-                    if (NIL != clause_struc) {
-                        return clause_struc;
-                    }
-                }
-            }
-        }
-        return NIL;
-    }
-
-    @LispMethod(comment = "Find the clause-struc with CNF.  Return NIL if not present.")
     public static SubLObject find_clause_struc(final SubLObject cnf) {
-        assert NIL != clauses.cnf_p(cnf) : "! clauses.cnf_p(cnf) " + ("clauses.cnf_p(cnf) " + "CommonSymbols.NIL != clauses.cnf_p(cnf) ") + cnf;
+        assert NIL != clauses.cnf_p(cnf) : "clauses.cnf_p(cnf) " + "CommonSymbols.NIL != clauses.cnf_p(cnf) " + cnf;
         final SubLObject assertion = find_assertion_any_mt(cnf);
         if (NIL != assertion) {
             final SubLObject clause_struc = assertions_low.assertion_clause_struc(assertion);
@@ -15983,53 +7301,15 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             }
         }
         return NIL;
-    }/**
-     * Find the clause-struc with CNF.  Return NIL if not present.
-     */
-
-
-    /**
-     * Returns the list of EL rule assertions for the given TERM.
-     */
-    @LispMethod(comment = "Returns the list of EL rule assertions for the given TERM.")
-    public static final SubLObject gather_all_el_rule_assertions_for_term_alt(SubLObject v_term) {
-        SubLTrampolineFile.checkType(v_term, FORT_P);
-        return Mapping.mapcar(symbol_function(ASSERTION_EL_FORMULA), com.cyc.cycjava.cycl.kb_indexing.gather_all_rule_assertions_for_term(v_term));
     }
 
-    @LispMethod(comment = "Returns the list of EL rule assertions for the given TERM.")
     public static SubLObject gather_all_el_rule_assertions_for_term(final SubLObject v_term) {
-        assert NIL != forts.fort_p(v_term) : "! forts.fort_p(v_term) " + ("forts.fort_p(v_term) " + "CommonSymbols.NIL != forts.fort_p(v_term) ") + v_term;
+        assert NIL != forts.fort_p(v_term) : "forts.fort_p(v_term) " + "CommonSymbols.NIL != forts.fort_p(v_term) " + v_term;
         return Mapping.mapcar(symbol_function(ASSERTION_EL_FORMULA), gather_all_rule_assertions_for_term(v_term));
-    }/**
-     * Returns the list of EL rule assertions for the given TERM.
-     */
-
-
-    /**
-     * Returns the list of rule assertions for the given TERM.
-     */
-    @LispMethod(comment = "Returns the list of rule assertions for the given TERM.")
-    public static final SubLObject gather_all_rule_assertions_for_term_alt(SubLObject v_term) {
-        SubLTrampolineFile.checkType(v_term, FORT_P);
-        {
-            SubLObject assertions = NIL;
-            if (NIL != collectionP(v_term)) {
-                assertions = append(com.cyc.cycjava.cycl.kb_indexing.gather_all_isa_rule_assertions_for_col(v_term), com.cyc.cycjava.cycl.kb_indexing.gather_all_genls_rule_assertions_for_col(v_term), com.cyc.cycjava.cycl.kb_indexing.gather_all_other_rule_assertions_for_term(v_term));
-            } else {
-                if (NIL != predicateP(v_term)) {
-                    assertions = append(com.cyc.cycjava.cycl.kb_indexing.gather_all_rule_assertions_for_pred(v_term), com.cyc.cycjava.cycl.kb_indexing.gather_all_other_rule_assertions_for_term(v_term));
-                } else {
-                    assertions = com.cyc.cycjava.cycl.kb_indexing.gather_all_other_rule_assertions_for_term(v_term);
-                }
-            }
-            return assertions;
-        }
     }
 
-    @LispMethod(comment = "Returns the list of rule assertions for the given TERM.")
     public static SubLObject gather_all_rule_assertions_for_term(final SubLObject v_term) {
-        assert NIL != forts.fort_p(v_term) : "! forts.fort_p(v_term) " + ("forts.fort_p(v_term) " + "CommonSymbols.NIL != forts.fort_p(v_term) ") + v_term;
+        assert NIL != forts.fort_p(v_term) : "forts.fort_p(v_term) " + "CommonSymbols.NIL != forts.fort_p(v_term) " + v_term;
         SubLObject assertions = NIL;
         if (NIL != fort_types_interface.collectionP(v_term)) {
             assertions = append(gather_all_isa_rule_assertions_for_col(v_term), gather_all_genls_rule_assertions_for_col(v_term), gather_all_other_rule_assertions_for_term(v_term));
@@ -16041,56 +7321,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             }
 
         return assertions;
-    }/**
-     * Returns the list of rule assertions for the given TERM.
-     */
-
-
-    /**
-     * Returns a list of all rule assertions having PRED as a mentioned predicate.
-     */
-    @LispMethod(comment = "Returns a list of all rule assertions having PRED as a mentioned predicate.")
-    public static final SubLObject gather_all_rule_assertions_for_pred_alt(SubLObject pred) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject rules = NIL;
-                SubLObject cdolist_list_var = $list_alt238;
-                SubLObject sense = NIL;
-                for (sense = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , sense = cdolist_list_var.first()) {
-                    if (com.cyc.cycjava.cycl.kb_indexing.num_predicate_rule_index(pred, sense, UNPROVIDED, UNPROVIDED).numG(ZERO_INTEGER)) {
-                        {
-                            SubLObject mts = com.cyc.cycjava.cycl.kb_indexing.key_predicate_rule_index(pred, sense, UNPROVIDED);
-                            SubLObject cdolist_list_var_70 = mts;
-                            SubLObject mt = NIL;
-                            for (mt = cdolist_list_var_70.first(); NIL != cdolist_list_var_70; cdolist_list_var_70 = cdolist_list_var_70.rest() , mt = cdolist_list_var_70.first()) {
-                                {
-                                    SubLObject directions = com.cyc.cycjava.cycl.kb_indexing.key_predicate_rule_index(pred, sense, mt);
-                                    SubLObject cdolist_list_var_71 = directions;
-                                    SubLObject direction = NIL;
-                                    for (direction = cdolist_list_var_71.first(); NIL != cdolist_list_var_71; cdolist_list_var_71 = cdolist_list_var_71.rest() , direction = cdolist_list_var_71.first()) {
-                                        {
-                                            SubLObject _prev_bind_0 = $gathered_rule_assertions$.currentBinding(thread);
-                                            try {
-                                                $gathered_rule_assertions$.bind(NIL, thread);
-                                                kb_mapping.map_predicate_rule_index(symbol_function(GATHER_ONE_RULE_ASSERTION), pred, sense, direction, mt);
-                                                rules = append(rules, $gathered_rule_assertions$.getDynamicValue(thread));
-                                            } finally {
-                                                $gathered_rule_assertions$.rebind(_prev_bind_0, thread);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                return rules;
-            }
-        }
     }
 
-    @LispMethod(comment = "Returns a list of all rule assertions having PRED as a mentioned predicate.")
     public static SubLObject gather_all_rule_assertions_for_pred(final SubLObject pred) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject rules = NIL;
@@ -16128,84 +7360,17 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             sense = cdolist_list_var.first();
         } 
         return rules;
-    }/**
-     * Returns a list of all rule assertions having PRED as a mentioned predicate.
-     */
-
-
-    /**
-     * Mapped helper function for gathering the given ASSERTION.
-     */
-    @LispMethod(comment = "Mapped helper function for gathering the given ASSERTION.")
-    public static final SubLObject gather_one_rule_assertion_alt(SubLObject assertion) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(assertion, ASSERTION_P);
-            if (cycl_utilities.formula_arg0(assertion) == $$implies) {
-                $gathered_rule_assertions$.setDynamicValue(cons(assertion, $gathered_rule_assertions$.getDynamicValue(thread)), thread);
-            }
-            return NIL;
-        }
     }
 
-    @LispMethod(comment = "Mapped helper function for gathering the given ASSERTION.")
     public static SubLObject gather_one_rule_assertion(final SubLObject assertion) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
+        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
         if (cycl_utilities.formula_arg0(assertion).eql($$implies)) {
             $gathered_rule_assertions$.setDynamicValue(cons(assertion, $gathered_rule_assertions$.getDynamicValue(thread)), thread);
         }
         return NIL;
-    }/**
-     * Mapped helper function for gathering the given ASSERTION.
-     */
-
-
-    /**
-     * Returns a list of all rule assertions having COL as the arg2 of an isa literal.
-     */
-    @LispMethod(comment = "Returns a list of all rule assertions having COL as the arg2 of an isa literal.")
-    public static final SubLObject gather_all_isa_rule_assertions_for_col_alt(SubLObject col) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject rules = NIL;
-                SubLObject cdolist_list_var = $list_alt238;
-                SubLObject sense = NIL;
-                for (sense = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , sense = cdolist_list_var.first()) {
-                    if (com.cyc.cycjava.cycl.kb_indexing.num_isa_rule_index(col, sense, UNPROVIDED, UNPROVIDED).numG(ZERO_INTEGER)) {
-                        {
-                            SubLObject mts = com.cyc.cycjava.cycl.kb_indexing.key_isa_rule_index(col, sense, UNPROVIDED);
-                            SubLObject cdolist_list_var_72 = mts;
-                            SubLObject mt = NIL;
-                            for (mt = cdolist_list_var_72.first(); NIL != cdolist_list_var_72; cdolist_list_var_72 = cdolist_list_var_72.rest() , mt = cdolist_list_var_72.first()) {
-                                {
-                                    SubLObject directions = com.cyc.cycjava.cycl.kb_indexing.key_isa_rule_index(col, sense, mt);
-                                    SubLObject cdolist_list_var_73 = directions;
-                                    SubLObject direction = NIL;
-                                    for (direction = cdolist_list_var_73.first(); NIL != cdolist_list_var_73; cdolist_list_var_73 = cdolist_list_var_73.rest() , direction = cdolist_list_var_73.first()) {
-                                        {
-                                            SubLObject _prev_bind_0 = $gathered_rule_assertions$.currentBinding(thread);
-                                            try {
-                                                $gathered_rule_assertions$.bind(NIL, thread);
-                                                kb_mapping.map_isa_rule_index(symbol_function(GATHER_ONE_RULE_ASSERTION), col, sense, direction, mt);
-                                                rules = append(rules, $gathered_rule_assertions$.getDynamicValue(thread));
-                                            } finally {
-                                                $gathered_rule_assertions$.rebind(_prev_bind_0, thread);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                return rules;
-            }
-        }
     }
 
-    @LispMethod(comment = "Returns a list of all rule assertions having COL as the arg2 of an isa literal.")
     public static SubLObject gather_all_isa_rule_assertions_for_col(final SubLObject col) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject rules = NIL;
@@ -16243,56 +7408,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             sense = cdolist_list_var.first();
         } 
         return rules;
-    }/**
-     * Returns a list of all rule assertions having COL as the arg2 of an isa literal.
-     */
-
-
-    /**
-     * Returns a list of all rule assertions having COL as the arg2 of a genls literal.
-     */
-    @LispMethod(comment = "Returns a list of all rule assertions having COL as the arg2 of a genls literal.")
-    public static final SubLObject gather_all_genls_rule_assertions_for_col_alt(SubLObject col) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject rules = NIL;
-                SubLObject cdolist_list_var = $list_alt238;
-                SubLObject sense = NIL;
-                for (sense = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , sense = cdolist_list_var.first()) {
-                    if (com.cyc.cycjava.cycl.kb_indexing.num_genls_rule_index(col, sense, UNPROVIDED, UNPROVIDED).numG(ZERO_INTEGER)) {
-                        {
-                            SubLObject mts = com.cyc.cycjava.cycl.kb_indexing.key_genls_rule_index(col, sense, UNPROVIDED);
-                            SubLObject cdolist_list_var_74 = mts;
-                            SubLObject mt = NIL;
-                            for (mt = cdolist_list_var_74.first(); NIL != cdolist_list_var_74; cdolist_list_var_74 = cdolist_list_var_74.rest() , mt = cdolist_list_var_74.first()) {
-                                {
-                                    SubLObject directions = com.cyc.cycjava.cycl.kb_indexing.key_genls_rule_index(col, sense, mt);
-                                    SubLObject cdolist_list_var_75 = directions;
-                                    SubLObject direction = NIL;
-                                    for (direction = cdolist_list_var_75.first(); NIL != cdolist_list_var_75; cdolist_list_var_75 = cdolist_list_var_75.rest() , direction = cdolist_list_var_75.first()) {
-                                        {
-                                            SubLObject _prev_bind_0 = $gathered_rule_assertions$.currentBinding(thread);
-                                            try {
-                                                $gathered_rule_assertions$.bind(NIL, thread);
-                                                kb_mapping.map_genls_rule_index(symbol_function(GATHER_ONE_RULE_ASSERTION), col, sense, direction, mt);
-                                                rules = append(rules, $gathered_rule_assertions$.getDynamicValue(thread));
-                                            } finally {
-                                                $gathered_rule_assertions$.rebind(_prev_bind_0, thread);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                return rules;
-            }
-        }
     }
 
-    @LispMethod(comment = "Returns a list of all rule assertions having COL as the arg2 of a genls literal.")
     public static SubLObject gather_all_genls_rule_assertions_for_col(final SubLObject col) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject rules = NIL;
@@ -16330,47 +7447,8 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             sense = cdolist_list_var.first();
         } 
         return rules;
-    }/**
-     * Returns a list of all rule assertions having COL as the arg2 of a genls literal.
-     */
-
-
-    /**
-     * Returns a list of all rule assertions using the other index that mention TERM.
-     */
-    @LispMethod(comment = "Returns a list of all rule assertions using the other index that mention TERM.")
-    public static final SubLObject gather_all_other_rule_assertions_for_term_alt(SubLObject v_term) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject rules = NIL;
-                {
-                    SubLObject _prev_bind_0 = $gathered_rule_assertions$.currentBinding(thread);
-                    try {
-                        $gathered_rule_assertions$.bind(NIL, thread);
-                        {
-                            SubLObject _prev_bind_0_76 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                            SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                            try {
-                                mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                                mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                                kb_mapping.map_other_index(symbol_function(GATHER_ONE_RULE_ASSERTION), v_term, NIL, NIL);
-                            } finally {
-                                mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                                mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0_76, thread);
-                            }
-                        }
-                        rules = $gathered_rule_assertions$.getDynamicValue(thread);
-                    } finally {
-                        $gathered_rule_assertions$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return rules;
-            }
-        }
     }
 
-    @LispMethod(comment = "Returns a list of all rule assertions using the other index that mention TERM.")
     public static SubLObject gather_all_other_rule_assertions_for_term(final SubLObject v_term) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject rules = NIL;
@@ -16392,814 +7470,270 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
             $gathered_rule_assertions$.rebind(_prev_bind_0, thread);
         }
         return rules;
-    }/**
-     * Returns a list of all rule assertions using the other index that mention TERM.
-     */
-
-
-    public static final SubLObject declare_kb_indexing_file_alt() {
-        declareFunction("get_subindex", "GET-SUBINDEX", 2, 0, false);
-        declareFunction("term_add_indexing_leaf", "TERM-ADD-INDEXING-LEAF", 3, 0, false);
-        declareFunction("term_rem_indexing_leaf", "TERM-REM-INDEXING-LEAF", 3, 0, false);
-        declareFunction("all_mt_subindex_keys_relevant_p", "ALL-MT-SUBINDEX-KEYS-RELEVANT-P", 0, 0, false);
-        declareFunction("relevant_mt_subindex_count", "RELEVANT-MT-SUBINDEX-COUNT", 1, 0, false);
-        declareFunction("relevant_mt_subindex_count_with_cutoff", "RELEVANT-MT-SUBINDEX-COUNT-WITH-CUTOFF", 2, 0, false);
-        declareFunction("relevant_mt_subindex_keys", "RELEVANT-MT-SUBINDEX-KEYS", 1, 0, false);
-        declareFunction("mark_term_index_as_muted", "MARK-TERM-INDEX-AS-MUTED", 1, 0, false);
-        declareFunction("num_gaf_arg_index", "NUM-GAF-ARG-INDEX", 1, 3, false);
-        declareFunction("relevant_num_gaf_arg_index", "RELEVANT-NUM-GAF-ARG-INDEX", 1, 2, false);
-        declareFunction("relevant_num_gaf_arg_index_with_cutoff", "RELEVANT-NUM-GAF-ARG-INDEX-WITH-CUTOFF", 2, 2, false);
-        declareFunction("clear_key_gaf_arg_index_cached", "CLEAR-KEY-GAF-ARG-INDEX-CACHED", 0, 0, false);
-        new com.cyc.cycjava.cycl.kb_indexing.$clear_key_gaf_arg_index_cached$ZeroArityFunction();
-        declareFunction("remove_key_gaf_arg_index_cached", "REMOVE-KEY-GAF-ARG-INDEX-CACHED", 1, 2, false);
-        declareFunction("key_gaf_arg_index_cached_internal", "KEY-GAF-ARG-INDEX-CACHED-INTERNAL", 3, 0, false);
-        declareFunction("key_gaf_arg_index_cached", "KEY-GAF-ARG-INDEX-CACHED", 1, 2, false);
-        declareFunction("key_gaf_arg_index", "KEY-GAF-ARG-INDEX", 1, 2, false);
-        declareFunction("gaf_arg_indices", "GAF-ARG-INDICES", 1, 0, false);
-        declareFunction("relevant_key_gaf_arg_index", "RELEVANT-KEY-GAF-ARG-INDEX", 1, 2, false);
-        declareFunction("mts_gaf_arg_index", "MTS-GAF-ARG-INDEX", 3, 1, false);
-        declareFunction("gaf_arg_index_key_validator", "GAF-ARG-INDEX-KEY-VALIDATOR", 1, 3, false);
-        declareFunction("get_gaf_arg_subindex", "GET-GAF-ARG-SUBINDEX", 1, 3, false);
-        declareFunction("add_gaf_arg_index", "ADD-GAF-ARG-INDEX", 5, 0, false);
-        declareFunction("rem_gaf_arg_index", "REM-GAF-ARG-INDEX", 5, 0, false);
-        declareFunction("num_nart_arg_index", "NUM-NART-ARG-INDEX", 1, 2, false);
-        declareFunction("relevant_num_nart_arg_index", "RELEVANT-NUM-NART-ARG-INDEX", 1, 2, false);
-        declareFunction("relevant_num_nart_arg_index_with_cutoff", "RELEVANT-NUM-NART-ARG-INDEX-WITH-CUTOFF", 2, 2, false);
-        declareFunction("key_nart_arg_index", "KEY-NART-ARG-INDEX", 1, 2, false);
-        declareFunction("relevant_key_nart_arg_index", "RELEVANT-KEY-NART-ARG-INDEX", 1, 2, false);
-        declareFunction("mts_nart_arg_index", "MTS-NART-ARG-INDEX", 3, 1, false);
-        declareFunction("get_nart_arg_subindex", "GET-NART-ARG-SUBINDEX", 1, 2, false);
-        declareFunction("add_nart_arg_index", "ADD-NART-ARG-INDEX", 4, 0, false);
-        declareFunction("rem_nart_arg_index", "REM-NART-ARG-INDEX", 4, 0, false);
-        declareFunction("num_predicate_extent_index", "NUM-PREDICATE-EXTENT-INDEX", 1, 1, false);
-        new com.cyc.cycjava.cycl.kb_indexing.$num_predicate_extent_index$UnaryFunction();
-        new com.cyc.cycjava.cycl.kb_indexing.$num_predicate_extent_index$BinaryFunction();
-        declareFunction("relevant_num_predicate_extent_index", "RELEVANT-NUM-PREDICATE-EXTENT-INDEX", 1, 0, false);
-        declareFunction("relevant_num_predicate_extent_index_with_cutoff", "RELEVANT-NUM-PREDICATE-EXTENT-INDEX-WITH-CUTOFF", 2, 0, false);
-        declareFunction("no_predicate_extent_p", "NO-PREDICATE-EXTENT-P", 1, 0, false);
-        declareFunction("key_predicate_extent_index", "KEY-PREDICATE-EXTENT-INDEX", 1, 0, false);
-        declareFunction("relevant_key_predicate_extent_index", "RELEVANT-KEY-PREDICATE-EXTENT-INDEX", 1, 0, false);
-        declareFunction("predicate_extent_top_level_key", "PREDICATE-EXTENT-TOP-LEVEL-KEY", 0, 0, false);
-        declareFunction("add_predicate_extent_index", "ADD-PREDICATE-EXTENT-INDEX", 3, 0, false);
-        declareFunction("rem_predicate_extent_index", "REM-PREDICATE-EXTENT-INDEX", 3, 0, false);
-        declareFunction("get_predicate_extent_subindex", "GET-PREDICATE-EXTENT-SUBINDEX", 1, 1, false);
-        declareFunction("num_function_extent_index", "NUM-FUNCTION-EXTENT-INDEX", 1, 0, false);
-        declareFunction("relevant_num_function_extent_index", "RELEVANT-NUM-FUNCTION-EXTENT-INDEX", 1, 0, false);
-        declareFunction("relevant_num_function_extent_index_with_cutoff", "RELEVANT-NUM-FUNCTION-EXTENT-INDEX-WITH-CUTOFF", 2, 0, false);
-        declareFunction("get_function_extent_subindex", "GET-FUNCTION-EXTENT-SUBINDEX", 1, 0, false);
-        declareFunction("add_function_extent_index", "ADD-FUNCTION-EXTENT-INDEX", 2, 0, false);
-        declareFunction("rem_function_extent_index", "REM-FUNCTION-EXTENT-INDEX", 2, 0, false);
-        declareFunction("function_extent_top_level_key", "FUNCTION-EXTENT-TOP-LEVEL-KEY", 0, 0, false);
-        declareFunction("num_predicate_rule_index", "NUM-PREDICATE-RULE-INDEX", 1, 3, false);
-        declareFunction("relevant_num_predicate_rule_index", "RELEVANT-NUM-PREDICATE-RULE-INDEX", 1, 1, false);
-        declareFunction("relevant_num_predicate_rule_index_with_cutoff", "RELEVANT-NUM-PREDICATE-RULE-INDEX-WITH-CUTOFF", 2, 1, false);
-        declareFunction("key_predicate_rule_index", "KEY-PREDICATE-RULE-INDEX", 1, 2, false);
-        declareFunction("relevant_key_predicate_rule_index", "RELEVANT-KEY-PREDICATE-RULE-INDEX", 1, 1, false);
-        declareFunction("get_predicate_rule_subindex", "GET-PREDICATE-RULE-SUBINDEX", 1, 3, false);
-        declareFunction("add_predicate_rule_index", "ADD-PREDICATE-RULE-INDEX", 5, 0, false);
-        declareFunction("rem_predicate_rule_index", "REM-PREDICATE-RULE-INDEX", 5, 0, false);
-        declareFunction("num_decontextualized_ist_predicate_rule_index", "NUM-DECONTEXTUALIZED-IST-PREDICATE-RULE-INDEX", 1, 2, false);
-        declareFunction("key_decontextualized_ist_predicate_rule_index", "KEY-DECONTEXTUALIZED-IST-PREDICATE-RULE-INDEX", 1, 1, false);
-        declareFunction("get_decontextualized_ist_predicate_rule_subindex", "GET-DECONTEXTUALIZED-IST-PREDICATE-RULE-SUBINDEX", 1, 2, false);
-        declareFunction("add_decontextualized_ist_predicate_rule_index", "ADD-DECONTEXTUALIZED-IST-PREDICATE-RULE-INDEX", 4, 0, false);
-        declareFunction("rem_decontextualized_ist_predicate_rule_index", "REM-DECONTEXTUALIZED-IST-PREDICATE-RULE-INDEX", 4, 0, false);
-        declareFunction("num_isa_rule_index", "NUM-ISA-RULE-INDEX", 1, 3, false);
-        declareFunction("relevant_num_isa_rule_index", "RELEVANT-NUM-ISA-RULE-INDEX", 1, 1, false);
-        declareFunction("relevant_num_isa_rule_index_with_cutoff", "RELEVANT-NUM-ISA-RULE-INDEX-WITH-CUTOFF", 2, 1, false);
-        declareFunction("key_isa_rule_index", "KEY-ISA-RULE-INDEX", 1, 2, false);
-        declareFunction("relevant_key_isa_rule_index", "RELEVANT-KEY-ISA-RULE-INDEX", 1, 1, false);
-        declareFunction("get_isa_rule_subindex", "GET-ISA-RULE-SUBINDEX", 1, 3, false);
-        declareFunction("add_isa_rule_index", "ADD-ISA-RULE-INDEX", 5, 0, false);
-        declareFunction("rem_isa_rule_index", "REM-ISA-RULE-INDEX", 5, 0, false);
-        declareFunction("num_quoted_isa_rule_index", "NUM-QUOTED-ISA-RULE-INDEX", 1, 3, false);
-        declareFunction("relevant_num_quoted_isa_rule_index", "RELEVANT-NUM-QUOTED-ISA-RULE-INDEX", 1, 1, false);
-        declareFunction("relevant_num_quoted_isa_rule_index_with_cutoff", "RELEVANT-NUM-QUOTED-ISA-RULE-INDEX-WITH-CUTOFF", 2, 1, false);
-        declareFunction("key_quoted_isa_rule_index", "KEY-QUOTED-ISA-RULE-INDEX", 1, 2, false);
-        declareFunction("relevant_key_quoted_isa_rule_index", "RELEVANT-KEY-QUOTED-ISA-RULE-INDEX", 1, 1, false);
-        declareFunction("get_quoted_isa_rule_subindex", "GET-QUOTED-ISA-RULE-SUBINDEX", 1, 3, false);
-        declareFunction("add_quoted_isa_rule_index", "ADD-QUOTED-ISA-RULE-INDEX", 5, 0, false);
-        declareFunction("rem_quoted_isa_rule_index", "REM-QUOTED-ISA-RULE-INDEX", 5, 0, false);
-        declareFunction("num_genls_rule_index", "NUM-GENLS-RULE-INDEX", 1, 3, false);
-        declareFunction("relevant_num_genls_rule_index", "RELEVANT-NUM-GENLS-RULE-INDEX", 1, 1, false);
-        declareFunction("relevant_num_genls_rule_index_with_cutoff", "RELEVANT-NUM-GENLS-RULE-INDEX-WITH-CUTOFF", 2, 1, false);
-        declareFunction("key_genls_rule_index", "KEY-GENLS-RULE-INDEX", 1, 2, false);
-        declareFunction("relevant_key_genls_rule_index", "RELEVANT-KEY-GENLS-RULE-INDEX", 1, 1, false);
-        declareFunction("get_genls_rule_subindex", "GET-GENLS-RULE-SUBINDEX", 1, 3, false);
-        declareFunction("add_genls_rule_index", "ADD-GENLS-RULE-INDEX", 5, 0, false);
-        declareFunction("rem_genls_rule_index", "REM-GENLS-RULE-INDEX", 5, 0, false);
-        declareFunction("num_genl_mt_rule_index", "NUM-GENL-MT-RULE-INDEX", 1, 3, false);
-        declareFunction("relevant_num_genl_mt_rule_index", "RELEVANT-NUM-GENL-MT-RULE-INDEX", 1, 1, false);
-        declareFunction("relevant_num_genl_mt_rule_index_with_cutoff", "RELEVANT-NUM-GENL-MT-RULE-INDEX-WITH-CUTOFF", 2, 1, false);
-        declareFunction("key_genl_mt_rule_index", "KEY-GENL-MT-RULE-INDEX", 1, 2, false);
-        declareFunction("relevant_key_genl_mt_rule_index", "RELEVANT-KEY-GENL-MT-RULE-INDEX", 1, 1, false);
-        declareFunction("get_genl_mt_rule_subindex", "GET-GENL-MT-RULE-SUBINDEX", 1, 3, false);
-        declareFunction("add_genl_mt_rule_index", "ADD-GENL-MT-RULE-INDEX", 5, 0, false);
-        declareFunction("rem_genl_mt_rule_index", "REM-GENL-MT-RULE-INDEX", 5, 0, false);
-        declareFunction("num_function_rule_index", "NUM-FUNCTION-RULE-INDEX", 1, 2, false);
-        declareFunction("relevant_num_function_rule_index", "RELEVANT-NUM-FUNCTION-RULE-INDEX", 1, 0, false);
-        declareFunction("relevant_num_function_rule_index_with_cutoff", "RELEVANT-NUM-FUNCTION-RULE-INDEX-WITH-CUTOFF", 2, 0, false);
-        declareFunction("key_function_rule_index", "KEY-FUNCTION-RULE-INDEX", 1, 1, false);
-        declareFunction("relevant_key_function_rule_index", "RELEVANT-KEY-FUNCTION-RULE-INDEX", 1, 0, false);
-        declareFunction("get_function_rule_subindex", "GET-FUNCTION-RULE-SUBINDEX", 1, 2, false);
-        declareFunction("add_function_rule_index", "ADD-FUNCTION-RULE-INDEX", 4, 0, false);
-        declareFunction("rem_function_rule_index", "REM-FUNCTION-RULE-INDEX", 4, 0, false);
-        declareFunction("function_rule_top_level_key", "FUNCTION-RULE-TOP-LEVEL-KEY", 0, 0, false);
-        declareFunction("num_exception_rule_index", "NUM-EXCEPTION-RULE-INDEX", 1, 2, false);
-        declareFunction("relevant_num_exception_rule_index", "RELEVANT-NUM-EXCEPTION-RULE-INDEX", 1, 0, false);
-        declareFunction("relevant_num_exception_rule_index_with_cutoff", "RELEVANT-NUM-EXCEPTION-RULE-INDEX-WITH-CUTOFF", 2, 0, false);
-        declareFunction("key_exception_rule_index", "KEY-EXCEPTION-RULE-INDEX", 1, 1, false);
-        declareFunction("relevant_key_exception_rule_index", "RELEVANT-KEY-EXCEPTION-RULE-INDEX", 1, 0, false);
-        declareFunction("exception_rule_top_level_key", "EXCEPTION-RULE-TOP-LEVEL-KEY", 0, 0, false);
-        declareFunction("get_exception_rule_subindex", "GET-EXCEPTION-RULE-SUBINDEX", 1, 2, false);
-        declareFunction("add_exception_rule_index", "ADD-EXCEPTION-RULE-INDEX", 4, 0, false);
-        declareFunction("rem_exception_rule_index", "REM-EXCEPTION-RULE-INDEX", 4, 0, false);
-        declareFunction("num_pragma_rule_index", "NUM-PRAGMA-RULE-INDEX", 1, 2, false);
-        declareFunction("relevant_num_pragma_rule_index", "RELEVANT-NUM-PRAGMA-RULE-INDEX", 1, 0, false);
-        declareFunction("relevant_num_pragma_rule_index_with_cutoff", "RELEVANT-NUM-PRAGMA-RULE-INDEX-WITH-CUTOFF", 2, 0, false);
-        declareFunction("key_pragma_rule_index", "KEY-PRAGMA-RULE-INDEX", 1, 1, false);
-        declareFunction("relevant_key_pragma_rule_index", "RELEVANT-KEY-PRAGMA-RULE-INDEX", 1, 0, false);
-        declareFunction("pragma_rule_top_level_key", "PRAGMA-RULE-TOP-LEVEL-KEY", 0, 0, false);
-        declareFunction("get_pragma_rule_subindex", "GET-PRAGMA-RULE-SUBINDEX", 1, 2, false);
-        declareFunction("add_pragma_rule_index", "ADD-PRAGMA-RULE-INDEX", 4, 0, false);
-        declareFunction("rem_pragma_rule_index", "REM-PRAGMA-RULE-INDEX", 4, 0, false);
-        declareFunction("rule_with_some_pragmatic_somewhereP", "RULE-WITH-SOME-PRAGMATIC-SOMEWHERE?", 1, 0, false);
-        declareFunction("rule_with_some_pragmaticP", "RULE-WITH-SOME-PRAGMATIC?", 1, 1, false);
-        declareFunction("rule_with_some_asserted_more_specifically_pragmaticP", "RULE-WITH-SOME-ASSERTED-MORE-SPECIFICALLY-PRAGMATIC?", 1, 1, false);
-        declareFunction("num_mt_index", "NUM-MT-INDEX", 1, 0, false);
-        declareFunction("relevant_num_mt_index", "RELEVANT-NUM-MT-INDEX", 1, 0, false);
-        declareFunction("relevant_num_mt_index_with_cutoff", "RELEVANT-NUM-MT-INDEX-WITH-CUTOFF", 2, 0, false);
-        declareFunction("get_mt_subindex", "GET-MT-SUBINDEX", 1, 0, false);
-        declareFunction("add_mt_index", "ADD-MT-INDEX", 2, 0, false);
-        declareFunction("rem_mt_index", "REM-MT-INDEX", 2, 0, false);
-        declareFunction("add_mt_index_internal", "ADD-MT-INDEX-INTERNAL", 2, 0, false);
-        declareFunction("rem_mt_index_internal", "REM-MT-INDEX-INTERNAL", 2, 0, false);
-        declareFunction("mt_top_level_key", "MT-TOP-LEVEL-KEY", 0, 0, false);
-        declareFunction("broad_mtP", "BROAD-MT?", 1, 0, false);
-        declareFunction("broad_mt_index_cleanup", "BROAD-MT-INDEX-CLEANUP", 0, 0, false);
-        declareFunction("rem_broad_mt_index", "REM-BROAD-MT-INDEX", 1, 0, false);
-        declareFunction("num_other_index", "NUM-OTHER-INDEX", 1, 0, false);
-        declareFunction("relevant_num_other_index", "RELEVANT-NUM-OTHER-INDEX", 1, 0, false);
-        declareFunction("relevant_num_other_index_with_cutoff", "RELEVANT-NUM-OTHER-INDEX-WITH-CUTOFF", 2, 0, false);
-        declareFunction("get_other_subindex", "GET-OTHER-SUBINDEX", 1, 0, false);
-        declareFunction("add_other_index", "ADD-OTHER-INDEX", 2, 0, false);
-        declareFunction("rem_other_index", "REM-OTHER-INDEX", 2, 0, false);
-        declareFunction("other_top_level_key", "OTHER-TOP-LEVEL-KEY", 0, 0, false);
-        declareFunction("num_index", "NUM-INDEX", 1, 0, false);
-        new com.cyc.cycjava.cycl.kb_indexing.$num_index$UnaryFunction();
-        declareFunction("num_index_slow", "NUM-INDEX-SLOW", 1, 0, false);
-        declareFunction("relevant_num_index", "RELEVANT-NUM-INDEX", 1, 0, false);
-        declareFunction("perform_indexing_pre_dump_cleanup", "PERFORM-INDEXING-PRE-DUMP-CLEANUP", 0, 0, false);
-        declareFunction("unindexed_syntax_constant_index_cleanup", "UNINDEXED-SYNTAX-CONSTANT-INDEX-CLEANUP", 0, 0, false);
-        declareFunction("unindexed_syntax_constant_index_cleanup_internal", "UNINDEXED-SYNTAX-CONSTANT-INDEX-CLEANUP-INTERNAL", 1, 0, false);
-        declareFunction("term_mt_count", "TERM-MT-COUNT", 1, 0, false);
-        declareFunction("mts_of_indexed_term", "MTS-OF-INDEXED-TERM", 1, 0, false);
-        declareFunction("add_assertion_indices", "ADD-ASSERTION-INDICES", 1, 1, false);
-        declareFunction("remove_assertion_indices", "REMOVE-ASSERTION-INDICES", 1, 1, false);
-        declareFunction("remove_term_indices", "REMOVE-TERM-INDICES", 1, 0, false);
-        declareFunction("determine_formula_indices", "DETERMINE-FORMULA-INDICES", 1, 0, false);
-        declareFunction("determine_gaf_indices", "DETERMINE-GAF-INDICES", 2, 0, false);
-        declareFunction("add_gaf_indices", "ADD-GAF-INDICES", 1, 1, false);
-        declareFunction("remove_gaf_indices", "REMOVE-GAF-INDICES", 1, 1, false);
-        declareFunction("determine_function_indices", "DETERMINE-FUNCTION-INDICES", 1, 0, false);
-        declareFunction("add_function_indices", "ADD-FUNCTION-INDICES", 1, 1, false);
-        declareFunction("rem_function_indices", "REM-FUNCTION-INDICES", 1, 1, false);
-        declareFunction("determine_rule_indices_int", "DETERMINE-RULE-INDICES-INT", 2, 0, false);
-        declareFunction("determine_rule_indices", "DETERMINE-RULE-INDICES", 1, 0, false);
-        declareFunction("add_rule_indices", "ADD-RULE-INDICES", 1, 1, false);
-        declareFunction("remove_rule_indices", "REMOVE-RULE-INDICES", 1, 1, false);
-        declareFunction("best_nat_lookup_index", "BEST-NAT-LOOKUP-INDEX", 1, 1, false);
-        declareFunction("num_best_nat_lookup_index", "NUM-BEST-NAT-LOOKUP-INDEX", 1, 1, false);
-        declareFunction("best_nat_lookup_index_try_all_allowed", "BEST-NAT-LOOKUP-INDEX-TRY-ALL-ALLOWED", 2, 0, false);
-        declareFunction("num_best_nat_lookup_index_try_all_allowed", "NUM-BEST-NAT-LOOKUP-INDEX-TRY-ALL-ALLOWED", 2, 0, false);
-        declareFunction("best_nat_lookup_index_wrt_methods", "BEST-NAT-LOOKUP-INDEX-WRT-METHODS", 2, 0, false);
-        declareFunction("best_nat_lookup_index_int", "BEST-NAT-LOOKUP-INDEX-INT", 1, 0, false);
-        declareFunction("decent_nat_index_from_terms", "DECENT-NAT-INDEX-FROM-TERMS", 1, 0, false);
-        declareFunction("dependent_narts", "DEPENDENT-NARTS", 1, 0, false);
-        declareFunction("decent_nat_index", "DECENT-NAT-INDEX", 1, 0, false);
-        declareFunction("best_nat_index_count", "BEST-NAT-INDEX-COUNT", 1, 0, false);
-        declareFunction("decent_rule_index", "DECENT-RULE-INDEX", 1, 0, false);
-        declareFunction("all_rule_indices", "ALL-RULE-INDICES", 1, 0, false);
-        declareFunction("lookup_index_p", "LOOKUP-INDEX-P", 1, 0, false);
-        declareFunction("lookup_index_get_property", "LOOKUP-INDEX-GET-PROPERTY", 2, 1, false);
-        declareFunction("lookup_index_set_property", "LOOKUP-INDEX-SET-PROPERTY", 3, 0, false);
-        declareFunction("lookup_index_get_type", "LOOKUP-INDEX-GET-TYPE", 1, 0, false);
-        declareFunction("lookup_index_predicate_extent_value", "LOOKUP-INDEX-PREDICATE-EXTENT-VALUE", 1, 0, false);
-        declareFunction("lookup_index_gaf_arg_values", "LOOKUP-INDEX-GAF-ARG-VALUES", 1, 0, false);
-        declareFunction("lookup_index_overlap_value", "LOOKUP-INDEX-OVERLAP-VALUE", 1, 0, false);
-        declareFunction("lookup_index_for_overlap", "LOOKUP-INDEX-FOR-OVERLAP", 1, 0, false);
-        declareFunction("lookup_index_for_predicate_extent", "LOOKUP-INDEX-FOR-PREDICATE-EXTENT", 1, 0, false);
-        declareFunction("lookup_index_for_function_extent", "LOOKUP-INDEX-FOR-FUNCTION-EXTENT", 1, 0, false);
-        declareFunction("lookup_index_for_gaf_arg", "LOOKUP-INDEX-FOR-GAF-ARG", 3, 0, false);
-        declareFunction("lookup_index_for_nart_arg", "LOOKUP-INDEX-FOR-NART-ARG", 3, 0, false);
-        declareFunction("lookup_methods_includeP", "LOOKUP-METHODS-INCLUDE?", 2, 0, false);
-        declareFunction("lookup_methods_allow_onlyP", "LOOKUP-METHODS-ALLOW-ONLY?", 2, 0, false);
-        declareFunction("best_gaf_lookup_index", "BEST-GAF-LOOKUP-INDEX", 2, 1, false);
-        declareFunction("num_best_gaf_lookup_index", "NUM-BEST-GAF-LOOKUP-INDEX", 2, 1, false);
-        declareFunction("best_gaf_lookup_index_try_all_allowed", "BEST-GAF-LOOKUP-INDEX-TRY-ALL-ALLOWED", 3, 0, false);
-        declareFunction("num_best_gaf_lookup_index_try_all_allowed", "NUM-BEST-GAF-LOOKUP-INDEX-TRY-ALL-ALLOWED", 3, 0, false);
-        declareFunction("best_gaf_lookup_index_wrt_methods", "BEST-GAF-LOOKUP-INDEX-WRT-METHODS", 3, 0, false);
-        declareFunction("best_gaf_lookup_index_int", "BEST-GAF-LOOKUP-INDEX-INT", 2, 0, false);
-        declareFunction("reindex_all_assertions", "REINDEX-ALL-ASSERTIONS", 0, 0, false);
-        declareFunction("reindex_one_of_all_assertions", "REINDEX-ONE-OF-ALL-ASSERTIONS", 1, 0, false);
-        declareFunction("reindex_all_term_assertions", "REINDEX-ALL-TERM-ASSERTIONS", 1, 0, false);
-        declareFunction("reindex_assertions", "REINDEX-ASSERTIONS", 1, 1, false);
-        declareFunction("reindex_assertion", "REINDEX-ASSERTION", 1, 1, false);
-        declareFunction("find_assertion", "FIND-ASSERTION", 2, 0, false);
-        declareFunction("find_assertion_internal", "FIND-ASSERTION-INTERNAL", 2, 0, false);
-        declareFunction("find_assertion_any_mt", "FIND-ASSERTION-ANY-MT", 1, 0, false);
-        declareFunction("find_assertion_genl_mts", "FIND-ASSERTION-GENL-MTS", 2, 0, false);
-        declareFunction("find_all_assertions", "FIND-ALL-ASSERTIONS", 1, 0, false);
-        declareFunction("find_all_assertions_genl_mts", "FIND-ALL-ASSERTIONS-GENL-MTS", 2, 0, false);
-        declareFunction("find_gaf", "FIND-GAF", 2, 0, false);
-        declareFunction("find_gaf_any_mt", "FIND-GAF-ANY-MT", 1, 0, false);
-        declareFunction("find_gaf_genl_mts", "FIND-GAF-GENL-MTS", 2, 0, false);
-        declareFunction("find_all_gafs", "FIND-ALL-GAFS", 1, 0, false);
-        declareFunction("find_gaf_in_relevant_mt", "FIND-GAF-IN-RELEVANT-MT", 1, 0, false);
-        declareFunction("find_gaf_possibly_in_mt", "FIND-GAF-POSSIBLY-IN-MT", 1, 1, false);
-        declareFunction("gaf_mts", "GAF-MTS", 1, 0, false);
-        declareFunction("find_cnf", "FIND-CNF", 1, 0, false);
-        declareFunction("find_gaf_cnf", "FIND-GAF-CNF", 1, 0, false);
-        declareFunction("find_rule_cnf", "FIND-RULE-CNF", 1, 0, false);
-        declareFunction("find_rule_cnf_via_index", "FIND-RULE-CNF-VIA-INDEX", 2, 0, false);
-        declareFunction("find_rule_cnf_via_index_int", "FIND-RULE-CNF-VIA-INDEX-INT", 3, 0, false);
-        declareFunction("find_cnf_internal", "FIND-CNF-INTERNAL", 1, 0, false);
-        declareFunction("find_gaf_formula", "FIND-GAF-FORMULA", 1, 0, false);
-        declareFunction("find_gaf_internal", "FIND-GAF-INTERNAL", 2, 0, false);
-        declareFunction("asent_kb_lookup", "ASENT-KB-LOOKUP", 1, 0, false);
-        declareFunction("asent_kb_lookup_in_any_mt", "ASENT-KB-LOOKUP-IN-ANY-MT", 1, 0, false);
-        declareFunction("find_clause_struc", "FIND-CLAUSE-STRUC", 1, 0, false);
-        declareFunction("gather_all_el_rule_assertions_for_term", "GATHER-ALL-EL-RULE-ASSERTIONS-FOR-TERM", 1, 0, false);
-        declareFunction("gather_all_rule_assertions_for_term", "GATHER-ALL-RULE-ASSERTIONS-FOR-TERM", 1, 0, false);
-        declareFunction("gather_all_rule_assertions_for_pred", "GATHER-ALL-RULE-ASSERTIONS-FOR-PRED", 1, 0, false);
-        declareFunction("gather_one_rule_assertion", "GATHER-ONE-RULE-ASSERTION", 1, 0, false);
-        declareFunction("gather_all_isa_rule_assertions_for_col", "GATHER-ALL-ISA-RULE-ASSERTIONS-FOR-COL", 1, 0, false);
-        declareFunction("gather_all_genls_rule_assertions_for_col", "GATHER-ALL-GENLS-RULE-ASSERTIONS-FOR-COL", 1, 0, false);
-        declareFunction("gather_all_other_rule_assertions_for_term", "GATHER-ALL-OTHER-RULE-ASSERTIONS-FOR-TERM", 1, 0, false);
-        return NIL;
     }
 
     public static SubLObject declare_kb_indexing_file() {
-        if (SubLFiles.USE_V1) {
-            declareFunction("get_subindex", "GET-SUBINDEX", 2, 0, false);
-            declareFunction("term_add_indexing_leaf", "TERM-ADD-INDEXING-LEAF", 3, 0, false);
-            declareFunction("term_rem_indexing_leaf", "TERM-REM-INDEXING-LEAF", 3, 0, false);
-            declareFunction("all_mt_subindex_keys_relevant_p", "ALL-MT-SUBINDEX-KEYS-RELEVANT-P", 0, 0, false);
-            declareFunction("relevant_mt_subindex_count", "RELEVANT-MT-SUBINDEX-COUNT", 1, 0, false);
-            declareFunction("relevant_mt_subindex_count_with_cutoff", "RELEVANT-MT-SUBINDEX-COUNT-WITH-CUTOFF", 2, 0, false);
-            declareFunction("relevant_mt_subindex_keys", "RELEVANT-MT-SUBINDEX-KEYS", 1, 0, false);
-            declareFunction("mark_term_index_as_muted", "MARK-TERM-INDEX-AS-MUTED", 1, 0, false);
-            declareFunction("num_gaf_arg_index", "NUM-GAF-ARG-INDEX", 1, 3, false);
-            declareFunction("relevant_num_gaf_arg_index", "RELEVANT-NUM-GAF-ARG-INDEX", 1, 2, false);
-            declareFunction("relevant_num_gaf_arg_index_with_cutoff", "RELEVANT-NUM-GAF-ARG-INDEX-WITH-CUTOFF", 2, 2, false);
-            declareFunction("clear_key_gaf_arg_index_cached", "CLEAR-KEY-GAF-ARG-INDEX-CACHED", 0, 0, false);
-            new kb_indexing.$clear_key_gaf_arg_index_cached$ZeroArityFunction();
-            declareFunction("remove_key_gaf_arg_index_cached", "REMOVE-KEY-GAF-ARG-INDEX-CACHED", 1, 2, false);
-            declareFunction("key_gaf_arg_index_cached_internal", "KEY-GAF-ARG-INDEX-CACHED-INTERNAL", 3, 0, false);
-            declareFunction("key_gaf_arg_index_cached", "KEY-GAF-ARG-INDEX-CACHED", 1, 2, false);
-            declareFunction("key_gaf_arg_index", "KEY-GAF-ARG-INDEX", 1, 2, false);
-            declareFunction("gaf_arg_indices", "GAF-ARG-INDICES", 1, 0, false);
-            declareFunction("preds_from_gafs_mentioning_term_at_argnum_with_relevant_mt", "PREDS-FROM-GAFS-MENTIONING-TERM-AT-ARGNUM-WITH-RELEVANT-MT", 1, 1, false);
-            declareFunction("argnums_from_gafs_mentioning_term_with_relevant_mt", "ARGNUMS-FROM-GAFS-MENTIONING-TERM-WITH-RELEVANT-MT", 1, 0, false);
-            declareFunction("relevant_key_gaf_arg_index", "RELEVANT-KEY-GAF-ARG-INDEX", 1, 2, false);
-            declareFunction("mts_gaf_arg_index", "MTS-GAF-ARG-INDEX", 3, 1, false);
-            declareFunction("gaf_arg_index_key_validator", "GAF-ARG-INDEX-KEY-VALIDATOR", 1, 3, false);
-            declareFunction("get_gaf_arg_subindex", "GET-GAF-ARG-SUBINDEX", 1, 3, false);
-            declareFunction("add_gaf_arg_index", "ADD-GAF-ARG-INDEX", 5, 0, false);
-            declareFunction("rem_gaf_arg_index", "REM-GAF-ARG-INDEX", 5, 0, false);
-            declareFunction("num_nart_arg_index", "NUM-NART-ARG-INDEX", 1, 2, false);
-            declareFunction("relevant_num_nart_arg_index", "RELEVANT-NUM-NART-ARG-INDEX", 1, 2, false);
-            declareFunction("relevant_num_nart_arg_index_with_cutoff", "RELEVANT-NUM-NART-ARG-INDEX-WITH-CUTOFF", 2, 2, false);
-            declareFunction("key_nart_arg_index", "KEY-NART-ARG-INDEX", 1, 2, false);
-            declareFunction("relevant_key_nart_arg_index", "RELEVANT-KEY-NART-ARG-INDEX", 1, 2, false);
-            declareFunction("mts_nart_arg_index", "MTS-NART-ARG-INDEX", 3, 1, false);
-            declareFunction("get_nart_arg_subindex", "GET-NART-ARG-SUBINDEX", 1, 2, false);
-            declareFunction("add_nart_arg_index", "ADD-NART-ARG-INDEX", 4, 0, false);
-            declareFunction("rem_nart_arg_index", "REM-NART-ARG-INDEX", 4, 0, false);
-            declareFunction("num_predicate_extent_index", "NUM-PREDICATE-EXTENT-INDEX", 1, 1, false);
-            new kb_indexing.$num_predicate_extent_index$UnaryFunction();
-            new kb_indexing.$num_predicate_extent_index$BinaryFunction();
-            declareFunction("relevant_num_predicate_extent_index", "RELEVANT-NUM-PREDICATE-EXTENT-INDEX", 1, 0, false);
-            declareFunction("relevant_num_predicate_extent_index_with_cutoff", "RELEVANT-NUM-PREDICATE-EXTENT-INDEX-WITH-CUTOFF", 2, 0, false);
-            declareFunction("no_predicate_extent_p", "NO-PREDICATE-EXTENT-P", 1, 0, false);
-            declareFunction("key_predicate_extent_index", "KEY-PREDICATE-EXTENT-INDEX", 1, 0, false);
-            declareFunction("relevant_key_predicate_extent_index", "RELEVANT-KEY-PREDICATE-EXTENT-INDEX", 1, 0, false);
-            declareFunction("predicate_extent_top_level_key", "PREDICATE-EXTENT-TOP-LEVEL-KEY", 0, 0, false);
-            declareFunction("add_predicate_extent_index", "ADD-PREDICATE-EXTENT-INDEX", 3, 0, false);
-            declareFunction("rem_predicate_extent_index", "REM-PREDICATE-EXTENT-INDEX", 3, 0, false);
-            declareFunction("get_predicate_extent_subindex", "GET-PREDICATE-EXTENT-SUBINDEX", 1, 1, false);
-            declareFunction("num_function_extent_index", "NUM-FUNCTION-EXTENT-INDEX", 1, 0, false);
-            declareFunction("relevant_num_function_extent_index", "RELEVANT-NUM-FUNCTION-EXTENT-INDEX", 1, 0, false);
-            declareFunction("relevant_num_function_extent_index_with_cutoff", "RELEVANT-NUM-FUNCTION-EXTENT-INDEX-WITH-CUTOFF", 2, 0, false);
-            declareFunction("get_function_extent_subindex", "GET-FUNCTION-EXTENT-SUBINDEX", 1, 0, false);
-            declareFunction("add_function_extent_index", "ADD-FUNCTION-EXTENT-INDEX", 2, 0, false);
-            declareFunction("rem_function_extent_index", "REM-FUNCTION-EXTENT-INDEX", 2, 0, false);
-            declareFunction("function_extent_top_level_key", "FUNCTION-EXTENT-TOP-LEVEL-KEY", 0, 0, false);
-            declareFunction("num_predicate_rule_index", "NUM-PREDICATE-RULE-INDEX", 1, 3, false);
-            declareFunction("relevant_num_predicate_rule_index", "RELEVANT-NUM-PREDICATE-RULE-INDEX", 1, 1, false);
-            declareFunction("relevant_num_predicate_rule_index_with_cutoff", "RELEVANT-NUM-PREDICATE-RULE-INDEX-WITH-CUTOFF", 2, 1, false);
-            declareFunction("key_predicate_rule_index", "KEY-PREDICATE-RULE-INDEX", 1, 2, false);
-            declareFunction("relevant_key_predicate_rule_index", "RELEVANT-KEY-PREDICATE-RULE-INDEX", 1, 1, false);
-            declareFunction("get_predicate_rule_subindex", "GET-PREDICATE-RULE-SUBINDEX", 1, 3, false);
-            declareFunction("add_predicate_rule_index", "ADD-PREDICATE-RULE-INDEX", 5, 0, false);
-            declareFunction("rem_predicate_rule_index", "REM-PREDICATE-RULE-INDEX", 5, 0, false);
-            declareFunction("num_decontextualized_ist_predicate_rule_index", "NUM-DECONTEXTUALIZED-IST-PREDICATE-RULE-INDEX", 1, 2, false);
-            declareFunction("key_decontextualized_ist_predicate_rule_index", "KEY-DECONTEXTUALIZED-IST-PREDICATE-RULE-INDEX", 1, 1, false);
-            declareFunction("get_decontextualized_ist_predicate_rule_subindex", "GET-DECONTEXTUALIZED-IST-PREDICATE-RULE-SUBINDEX", 1, 2, false);
-            declareFunction("add_decontextualized_ist_predicate_rule_index", "ADD-DECONTEXTUALIZED-IST-PREDICATE-RULE-INDEX", 4, 0, false);
-            declareFunction("rem_decontextualized_ist_predicate_rule_index", "REM-DECONTEXTUALIZED-IST-PREDICATE-RULE-INDEX", 4, 0, false);
-            declareFunction("num_isa_rule_index", "NUM-ISA-RULE-INDEX", 1, 3, false);
-            declareFunction("relevant_num_isa_rule_index", "RELEVANT-NUM-ISA-RULE-INDEX", 1, 1, false);
-            declareFunction("relevant_num_isa_rule_index_with_cutoff", "RELEVANT-NUM-ISA-RULE-INDEX-WITH-CUTOFF", 2, 1, false);
-            declareFunction("key_isa_rule_index", "KEY-ISA-RULE-INDEX", 1, 2, false);
-            declareFunction("relevant_key_isa_rule_index", "RELEVANT-KEY-ISA-RULE-INDEX", 1, 1, false);
-            declareFunction("get_isa_rule_subindex", "GET-ISA-RULE-SUBINDEX", 1, 3, false);
-            declareFunction("add_isa_rule_index", "ADD-ISA-RULE-INDEX", 5, 0, false);
-            declareFunction("rem_isa_rule_index", "REM-ISA-RULE-INDEX", 5, 0, false);
-            declareFunction("num_quoted_isa_rule_index", "NUM-QUOTED-ISA-RULE-INDEX", 1, 3, false);
-            declareFunction("relevant_num_quoted_isa_rule_index", "RELEVANT-NUM-QUOTED-ISA-RULE-INDEX", 1, 1, false);
-            declareFunction("relevant_num_quoted_isa_rule_index_with_cutoff", "RELEVANT-NUM-QUOTED-ISA-RULE-INDEX-WITH-CUTOFF", 2, 1, false);
-            declareFunction("key_quoted_isa_rule_index", "KEY-QUOTED-ISA-RULE-INDEX", 1, 2, false);
-            declareFunction("relevant_key_quoted_isa_rule_index", "RELEVANT-KEY-QUOTED-ISA-RULE-INDEX", 1, 1, false);
-            declareFunction("get_quoted_isa_rule_subindex", "GET-QUOTED-ISA-RULE-SUBINDEX", 1, 3, false);
-            declareFunction("add_quoted_isa_rule_index", "ADD-QUOTED-ISA-RULE-INDEX", 5, 0, false);
-            declareFunction("rem_quoted_isa_rule_index", "REM-QUOTED-ISA-RULE-INDEX", 5, 0, false);
-            declareFunction("num_genls_rule_index", "NUM-GENLS-RULE-INDEX", 1, 3, false);
-            declareFunction("relevant_num_genls_rule_index", "RELEVANT-NUM-GENLS-RULE-INDEX", 1, 1, false);
-            declareFunction("relevant_num_genls_rule_index_with_cutoff", "RELEVANT-NUM-GENLS-RULE-INDEX-WITH-CUTOFF", 2, 1, false);
-            declareFunction("key_genls_rule_index", "KEY-GENLS-RULE-INDEX", 1, 2, false);
-            declareFunction("relevant_key_genls_rule_index", "RELEVANT-KEY-GENLS-RULE-INDEX", 1, 1, false);
-            declareFunction("get_genls_rule_subindex", "GET-GENLS-RULE-SUBINDEX", 1, 3, false);
-            declareFunction("add_genls_rule_index", "ADD-GENLS-RULE-INDEX", 5, 0, false);
-            declareFunction("rem_genls_rule_index", "REM-GENLS-RULE-INDEX", 5, 0, false);
-            declareFunction("num_genl_mt_rule_index", "NUM-GENL-MT-RULE-INDEX", 1, 3, false);
-            declareFunction("relevant_num_genl_mt_rule_index", "RELEVANT-NUM-GENL-MT-RULE-INDEX", 1, 1, false);
-            declareFunction("relevant_num_genl_mt_rule_index_with_cutoff", "RELEVANT-NUM-GENL-MT-RULE-INDEX-WITH-CUTOFF", 2, 1, false);
-            declareFunction("key_genl_mt_rule_index", "KEY-GENL-MT-RULE-INDEX", 1, 2, false);
-            declareFunction("relevant_key_genl_mt_rule_index", "RELEVANT-KEY-GENL-MT-RULE-INDEX", 1, 1, false);
-            declareFunction("get_genl_mt_rule_subindex", "GET-GENL-MT-RULE-SUBINDEX", 1, 3, false);
-            declareFunction("add_genl_mt_rule_index", "ADD-GENL-MT-RULE-INDEX", 5, 0, false);
-            declareFunction("rem_genl_mt_rule_index", "REM-GENL-MT-RULE-INDEX", 5, 0, false);
-            declareFunction("num_function_rule_index", "NUM-FUNCTION-RULE-INDEX", 1, 2, false);
-            declareFunction("relevant_num_function_rule_index", "RELEVANT-NUM-FUNCTION-RULE-INDEX", 1, 0, false);
-            declareFunction("relevant_num_function_rule_index_with_cutoff", "RELEVANT-NUM-FUNCTION-RULE-INDEX-WITH-CUTOFF", 2, 0, false);
-            declareFunction("key_function_rule_index", "KEY-FUNCTION-RULE-INDEX", 1, 1, false);
-            declareFunction("relevant_key_function_rule_index", "RELEVANT-KEY-FUNCTION-RULE-INDEX", 1, 0, false);
-            declareFunction("get_function_rule_subindex", "GET-FUNCTION-RULE-SUBINDEX", 1, 2, false);
-            declareFunction("add_function_rule_index", "ADD-FUNCTION-RULE-INDEX", 4, 0, false);
-            declareFunction("rem_function_rule_index", "REM-FUNCTION-RULE-INDEX", 4, 0, false);
-            declareFunction("function_rule_top_level_key", "FUNCTION-RULE-TOP-LEVEL-KEY", 0, 0, false);
-            declareFunction("num_exception_rule_index", "NUM-EXCEPTION-RULE-INDEX", 1, 2, false);
-            declareFunction("relevant_num_exception_rule_index", "RELEVANT-NUM-EXCEPTION-RULE-INDEX", 1, 0, false);
-            declareFunction("relevant_num_exception_rule_index_with_cutoff", "RELEVANT-NUM-EXCEPTION-RULE-INDEX-WITH-CUTOFF", 2, 0, false);
-            declareFunction("key_exception_rule_index", "KEY-EXCEPTION-RULE-INDEX", 1, 1, false);
-            declareFunction("relevant_key_exception_rule_index", "RELEVANT-KEY-EXCEPTION-RULE-INDEX", 1, 0, false);
-            declareFunction("exception_rule_top_level_key", "EXCEPTION-RULE-TOP-LEVEL-KEY", 0, 0, false);
-            declareFunction("get_exception_rule_subindex", "GET-EXCEPTION-RULE-SUBINDEX", 1, 2, false);
-            declareFunction("add_exception_rule_index", "ADD-EXCEPTION-RULE-INDEX", 4, 0, false);
-            declareFunction("rem_exception_rule_index", "REM-EXCEPTION-RULE-INDEX", 4, 0, false);
-            declareFunction("num_pragma_rule_index", "NUM-PRAGMA-RULE-INDEX", 1, 2, false);
-            declareFunction("relevant_num_pragma_rule_index", "RELEVANT-NUM-PRAGMA-RULE-INDEX", 1, 0, false);
-            declareFunction("relevant_num_pragma_rule_index_with_cutoff", "RELEVANT-NUM-PRAGMA-RULE-INDEX-WITH-CUTOFF", 2, 0, false);
-            declareFunction("key_pragma_rule_index", "KEY-PRAGMA-RULE-INDEX", 1, 1, false);
-            declareFunction("relevant_key_pragma_rule_index", "RELEVANT-KEY-PRAGMA-RULE-INDEX", 1, 0, false);
-            declareFunction("pragma_rule_top_level_key", "PRAGMA-RULE-TOP-LEVEL-KEY", 0, 0, false);
-            declareFunction("get_pragma_rule_subindex", "GET-PRAGMA-RULE-SUBINDEX", 1, 2, false);
-            declareFunction("add_pragma_rule_index", "ADD-PRAGMA-RULE-INDEX", 4, 0, false);
-            declareFunction("rem_pragma_rule_index", "REM-PRAGMA-RULE-INDEX", 4, 0, false);
-            declareFunction("num_mt_index", "NUM-MT-INDEX", 1, 0, false);
-            declareFunction("relevant_num_mt_index", "RELEVANT-NUM-MT-INDEX", 1, 0, false);
-            declareFunction("relevant_num_mt_index_with_cutoff", "RELEVANT-NUM-MT-INDEX-WITH-CUTOFF", 2, 0, false);
-            declareFunction("num_mt_contents", "NUM-MT-CONTENTS", 1, 0, false);
-            declareFunction("count_mt_contents", "COUNT-MT-CONTENTS", 1, 0, false);
-            declareFunction("estimated_num_mt_contents", "ESTIMATED-NUM-MT-CONTENTS", 1, 1, false);
-            declareFunction("estimated_count_mt_contents", "ESTIMATED-COUNT-MT-CONTENTS", 1, 1, false);
-            declareFunction("get_mt_subindex", "GET-MT-SUBINDEX", 1, 0, false);
-            declareFunction("add_mt_index", "ADD-MT-INDEX", 2, 0, false);
-            declareFunction("rem_mt_index", "REM-MT-INDEX", 2, 0, false);
-            declareFunction("add_mt_index_internal", "ADD-MT-INDEX-INTERNAL", 2, 0, false);
-            declareFunction("rem_mt_index_internal", "REM-MT-INDEX-INTERNAL", 2, 0, false);
-            declareFunction("mt_top_level_key", "MT-TOP-LEVEL-KEY", 0, 0, false);
-            declareFunction("num_hlmt_index", "NUM-HLMT-INDEX", 1, 0, false);
-            declareFunction("relevant_num_hlmt_index", "RELEVANT-NUM-HLMT-INDEX", 1, 0, false);
-            declareFunction("broad_mtP", "BROAD-MT?", 1, 0, false);
-            declareFunction("broad_mt_index_cleanup", "BROAD-MT-INDEX-CLEANUP", 0, 0, false);
-            declareFunction("get_broad_mts_for_index_cleanup", "GET-BROAD-MTS-FOR-INDEX-CLEANUP", 0, 0, false);
-            declareFunction("rem_broad_mt_index", "REM-BROAD-MT-INDEX", 1, 0, false);
-            declareFunction("num_other_index", "NUM-OTHER-INDEX", 1, 0, false);
-            declareFunction("relevant_num_other_index", "RELEVANT-NUM-OTHER-INDEX", 1, 0, false);
-            declareFunction("relevant_num_other_index_with_cutoff", "RELEVANT-NUM-OTHER-INDEX-WITH-CUTOFF", 2, 0, false);
-            declareFunction("get_other_subindex", "GET-OTHER-SUBINDEX", 1, 0, false);
-            declareFunction("add_other_index", "ADD-OTHER-INDEX", 2, 0, false);
-            declareFunction("rem_other_index", "REM-OTHER-INDEX", 2, 0, false);
-            declareFunction("other_top_level_key", "OTHER-TOP-LEVEL-KEY", 0, 0, false);
-            declareFunction("num_index", "NUM-INDEX", 1, 0, false);
-            new kb_indexing.$num_index$UnaryFunction();
-            declareFunction("relevant_num_index", "RELEVANT-NUM-INDEX", 1, 0, false);
-            declareFunction("perform_indexing_pre_dump_cleanup", "PERFORM-INDEXING-PRE-DUMP-CLEANUP", 0, 0, false);
-            declareFunction("get_indexing_pre_dump_cleanup_defs", "GET-INDEXING-PRE-DUMP-CLEANUP-DEFS", 0, 0, false);
-            declareFunction("unindexed_syntax_constant_index_cleanup", "UNINDEXED-SYNTAX-CONSTANT-INDEX-CLEANUP", 0, 0, false);
-            declareFunction("unindexed_syntax_constant_cleanup_one_index", "UNINDEXED-SYNTAX-CONSTANT-CLEANUP-ONE-INDEX", 1, 0, false);
-            declareFunction("unindexed_syntax_constant_index_cleanup_internal", "UNINDEXED-SYNTAX-CONSTANT-INDEX-CLEANUP-INTERNAL", 1, 0, false);
-            declareFunction("term_mt_count", "TERM-MT-COUNT", 1, 0, false);
-            declareFunction("mts_of_indexed_term", "MTS-OF-INDEXED-TERM", 1, 0, false);
-            declareFunction("add_assertion_indices", "ADD-ASSERTION-INDICES", 1, 1, false);
-            declareFunction("remove_assertion_indices", "REMOVE-ASSERTION-INDICES", 1, 1, false);
-            declareFunction("remove_term_indices", "REMOVE-TERM-INDICES", 1, 0, false);
-            declareFunction("determine_formula_indices", "DETERMINE-FORMULA-INDICES", 1, 0, false);
-            declareFunction("optimize_argnum_pairs", "OPTIMIZE-ARGNUM-PAIRS", 1, 0, false);
-            declareFunction("determine_gaf_indices", "DETERMINE-GAF-INDICES", 2, 0, false);
-            declareFunction("add_gaf_indices", "ADD-GAF-INDICES", 1, 1, false);
-            declareFunction("remove_gaf_indices", "REMOVE-GAF-INDICES", 1, 1, false);
-            declareFunction("determine_function_indices", "DETERMINE-FUNCTION-INDICES", 1, 0, false);
-            declareFunction("add_function_indices", "ADD-FUNCTION-INDICES", 1, 1, false);
-            declareFunction("rem_function_indices", "REM-FUNCTION-INDICES", 1, 1, false);
-            declareFunction("determine_rule_indices_int", "DETERMINE-RULE-INDICES-INT", 2, 0, false);
-            declareFunction("determine_rule_indices", "DETERMINE-RULE-INDICES", 1, 0, false);
-            declareFunction("add_rule_indices", "ADD-RULE-INDICES", 1, 1, false);
-            declareFunction("remove_rule_indices", "REMOVE-RULE-INDICES", 1, 1, false);
-            declareFunction("spec_preds_of_ist_indexing_enabledP", "SPEC-PREDS-OF-IST-INDEXING-ENABLED?", 0, 0, false);
-            declareFunction("spec_preds_of_ist_indexing_enabledP_robust", "SPEC-PREDS-OF-IST-INDEXING-ENABLED?-ROBUST", 0, 0, false);
-            declareFunction("spec_preds_of_ist_old_indexed_rule_count", "SPEC-PREDS-OF-IST-OLD-INDEXED-RULE-COUNT", 0, 0, false);
-            declareFunction("enable_spec_preds_of_ist_indexing", "ENABLE-SPEC-PREDS-OF-IST-INDEXING", 0, 0, false);
-            declareFunction("best_nat_lookup_index", "BEST-NAT-LOOKUP-INDEX", 1, 1, false);
-            declareFunction("num_best_nat_lookup_index", "NUM-BEST-NAT-LOOKUP-INDEX", 1, 1, false);
-            declareFunction("best_nat_lookup_index_try_all_allowed", "BEST-NAT-LOOKUP-INDEX-TRY-ALL-ALLOWED", 2, 0, false);
-            declareFunction("num_best_nat_lookup_index_try_all_allowed", "NUM-BEST-NAT-LOOKUP-INDEX-TRY-ALL-ALLOWED", 2, 0, false);
-            declareFunction("best_nat_lookup_index_wrt_methods", "BEST-NAT-LOOKUP-INDEX-WRT-METHODS", 2, 0, false);
-            declareFunction("best_nat_lookup_index_int", "BEST-NAT-LOOKUP-INDEX-INT", 1, 0, false);
-            declareFunction("decent_nat_index_from_terms", "DECENT-NAT-INDEX-FROM-TERMS", 1, 0, false);
-            declareFunction("decent_nat_index", "DECENT-NAT-INDEX", 1, 0, false);
-            declareFunction("best_nat_index_count", "BEST-NAT-INDEX-COUNT", 1, 0, false);
-            declareFunction("decent_rule_index", "DECENT-RULE-INDEX", 1, 0, false);
-            declareFunction("all_rule_indices", "ALL-RULE-INDICES", 1, 0, false);
-            declareFunction("lookup_index_p", "LOOKUP-INDEX-P", 1, 0, false);
-            declareFunction("lookup_index_get_property", "LOOKUP-INDEX-GET-PROPERTY", 2, 1, false);
-            declareFunction("lookup_index_set_property", "LOOKUP-INDEX-SET-PROPERTY", 3, 0, false);
-            declareFunction("lookup_index_get_type", "LOOKUP-INDEX-GET-TYPE", 1, 0, false);
-            declareFunction("lookup_index_predicate_extent_value", "LOOKUP-INDEX-PREDICATE-EXTENT-VALUE", 1, 0, false);
-            declareFunction("lookup_index_gaf_arg_values", "LOOKUP-INDEX-GAF-ARG-VALUES", 1, 0, false);
-            declareFunction("lookup_index_overlap_value", "LOOKUP-INDEX-OVERLAP-VALUE", 1, 0, false);
-            declareFunction("lookup_index_for_overlap", "LOOKUP-INDEX-FOR-OVERLAP", 1, 0, false);
-            declareFunction("lookup_index_for_predicate_extent", "LOOKUP-INDEX-FOR-PREDICATE-EXTENT", 1, 0, false);
-            declareFunction("lookup_index_for_function_extent", "LOOKUP-INDEX-FOR-FUNCTION-EXTENT", 1, 0, false);
-            declareFunction("lookup_index_for_gaf_arg", "LOOKUP-INDEX-FOR-GAF-ARG", 3, 0, false);
-            declareFunction("lookup_index_for_nart_arg", "LOOKUP-INDEX-FOR-NART-ARG", 3, 0, false);
-            declareFunction("lookup_methods_includeP", "LOOKUP-METHODS-INCLUDE?", 2, 0, false);
-            declareFunction("lookup_methods_allow_onlyP", "LOOKUP-METHODS-ALLOW-ONLY?", 2, 0, false);
-            declareFunction("best_gaf_lookup_index", "BEST-GAF-LOOKUP-INDEX", 2, 1, false);
-            declareFunction("num_best_gaf_lookup_index", "NUM-BEST-GAF-LOOKUP-INDEX", 2, 1, false);
-            declareFunction("best_gaf_lookup_index_try_all_allowed", "BEST-GAF-LOOKUP-INDEX-TRY-ALL-ALLOWED", 3, 0, false);
-            declareFunction("num_best_gaf_lookup_index_try_all_allowed", "NUM-BEST-GAF-LOOKUP-INDEX-TRY-ALL-ALLOWED", 3, 0, false);
-            declareFunction("best_gaf_lookup_index_wrt_methods", "BEST-GAF-LOOKUP-INDEX-WRT-METHODS", 3, 0, false);
-            declareFunction("best_gaf_lookup_index_int", "BEST-GAF-LOOKUP-INDEX-INT", 2, 0, false);
-            declareFunction("clear_pred_has_heinous_mt_fanoutP", "CLEAR-PRED-HAS-HEINOUS-MT-FANOUT?", 0, 0, false);
-            declareFunction("remove_pred_has_heinous_mt_fanoutP", "REMOVE-PRED-HAS-HEINOUS-MT-FANOUT?", 1, 0, false);
-            declareFunction("pred_has_heinous_mt_fanoutP_internal", "PRED-HAS-HEINOUS-MT-FANOUT?-INTERNAL", 1, 0, false);
-            declareFunction("pred_has_heinous_mt_fanoutP", "PRED-HAS-HEINOUS-MT-FANOUT?", 1, 0, false);
-            declareFunction("reindex_all_assertions", "REINDEX-ALL-ASSERTIONS", 0, 0, false);
-            declareFunction("clear_all_existing_indexing", "CLEAR-ALL-EXISTING-INDEXING", 0, 0, false);
-            declareFunction("clear_large_existing_indexing", "CLEAR-LARGE-EXISTING-INDEXING", 0, 0, false);
-            declareFunction("reindex_one_of_all_assertions", "REINDEX-ONE-OF-ALL-ASSERTIONS", 1, 0, false);
-            declareFunction("reindex_all_term_assertions", "REINDEX-ALL-TERM-ASSERTIONS", 1, 0, false);
-            declareFunction("reindex_assertions", "REINDEX-ASSERTIONS", 1, 1, false);
-            declareFunction("reindex_assertion", "REINDEX-ASSERTION", 1, 1, false);
-            declareFunction("merge_term_indices", "MERGE-TERM-INDICES", 2, 0, false);
-            declareFunction("find_assertion", "FIND-ASSERTION", 2, 0, false);
-            declareFunction("find_assertion_internal", "FIND-ASSERTION-INTERNAL", 2, 0, false);
-            declareFunction("find_assertion_any_mt", "FIND-ASSERTION-ANY-MT", 1, 0, false);
-            declareFunction("find_assertion_genl_mts", "FIND-ASSERTION-GENL-MTS", 2, 0, false);
-            declareFunction("find_all_assertions", "FIND-ALL-ASSERTIONS", 1, 0, false);
-            declareFunction("find_gaf", "FIND-GAF", 2, 0, false);
-            declareFunction("find_gaf_any_mt", "FIND-GAF-ANY-MT", 1, 0, false);
-            declareFunction("find_gaf_genl_mts", "FIND-GAF-GENL-MTS", 2, 0, false);
-            declareFunction("find_all_gafs", "FIND-ALL-GAFS", 1, 0, false);
-            declareFunction("count_all_gafs", "COUNT-ALL-GAFS", 1, 0, false);
-            declareFunction("find_gaf_in_relevant_mt", "FIND-GAF-IN-RELEVANT-MT", 1, 0, false);
-            declareFunction("find_gaf_possibly_in_mt", "FIND-GAF-POSSIBLY-IN-MT", 1, 1, false);
-            declareFunction("gaf_mts", "GAF-MTS", 1, 0, false);
-            declareFunction("sibling_mt_assertions", "SIBLING-MT-ASSERTIONS", 1, 1, false);
-            declareFunction("sibling_mt_assertion_count", "SIBLING-MT-ASSERTION-COUNT", 1, 1, false);
-            declareFunction("find_cnf", "FIND-CNF", 1, 0, false);
-            declareFunction("find_gaf_cnf", "FIND-GAF-CNF", 1, 0, false);
-            declareFunction("find_rule_cnf", "FIND-RULE-CNF", 1, 0, false);
-            declareFunction("find_rule_cnf_via_index", "FIND-RULE-CNF-VIA-INDEX", 2, 0, false);
-            declareFunction("find_rule_cnf_via_index_int", "FIND-RULE-CNF-VIA-INDEX-INT", 3, 0, false);
-            declareFunction("find_cnf_internal", "FIND-CNF-INTERNAL", 1, 0, false);
-            declareFunction("find_gaf_formula", "FIND-GAF-FORMULA", 1, 0, false);
-            declareFunction("find_gaf_internal", "FIND-GAF-INTERNAL", 2, 0, false);
-            declareFunction("asent_kb_lookup", "ASENT-KB-LOOKUP", 1, 1, false);
-            declareFunction("asent_kb_lookup_in_any_mt", "ASENT-KB-LOOKUP-IN-ANY-MT", 1, 1, false);
-            declareFunction("find_clause_struc", "FIND-CLAUSE-STRUC", 1, 0, false);
-            declareFunction("gather_all_el_rule_assertions_for_term", "GATHER-ALL-EL-RULE-ASSERTIONS-FOR-TERM", 1, 0, false);
-            declareFunction("gather_all_rule_assertions_for_term", "GATHER-ALL-RULE-ASSERTIONS-FOR-TERM", 1, 0, false);
-            declareFunction("gather_all_rule_assertions_for_pred", "GATHER-ALL-RULE-ASSERTIONS-FOR-PRED", 1, 0, false);
-            declareFunction("gather_one_rule_assertion", "GATHER-ONE-RULE-ASSERTION", 1, 0, false);
-            declareFunction("gather_all_isa_rule_assertions_for_col", "GATHER-ALL-ISA-RULE-ASSERTIONS-FOR-COL", 1, 0, false);
-            declareFunction("gather_all_genls_rule_assertions_for_col", "GATHER-ALL-GENLS-RULE-ASSERTIONS-FOR-COL", 1, 0, false);
-            declareFunction("gather_all_other_rule_assertions_for_term", "GATHER-ALL-OTHER-RULE-ASSERTIONS-FOR-TERM", 1, 0, false);
-        }
-        if (SubLFiles.USE_V2) {
-            declareFunction("rule_with_some_pragmatic_somewhereP", "RULE-WITH-SOME-PRAGMATIC-SOMEWHERE?", 1, 0, false);
-            declareFunction("rule_with_some_pragmaticP", "RULE-WITH-SOME-PRAGMATIC?", 1, 1, false);
-            declareFunction("rule_with_some_asserted_more_specifically_pragmaticP", "RULE-WITH-SOME-ASSERTED-MORE-SPECIFICALLY-PRAGMATIC?", 1, 1, false);
-            declareFunction("num_index_slow", "NUM-INDEX-SLOW", 1, 0, false);
-            declareFunction("dependent_narts", "DEPENDENT-NARTS", 1, 0, false);
-            declareFunction("find_all_assertions_genl_mts", "FIND-ALL-ASSERTIONS-GENL-MTS", 2, 0, false);
-            declareFunction("asent_kb_lookup", "ASENT-KB-LOOKUP", 1, 0, false);
-            declareFunction("asent_kb_lookup_in_any_mt", "ASENT-KB-LOOKUP-IN-ANY-MT", 1, 0, false);
-        }
-        return NIL;
-    }
-
-    public static SubLObject declare_kb_indexing_file_Previous() {
-        declareFunction("get_subindex", "GET-SUBINDEX", 2, 0, false);
-        declareFunction("term_add_indexing_leaf", "TERM-ADD-INDEXING-LEAF", 3, 0, false);
-        declareFunction("term_rem_indexing_leaf", "TERM-REM-INDEXING-LEAF", 3, 0, false);
-        declareFunction("all_mt_subindex_keys_relevant_p", "ALL-MT-SUBINDEX-KEYS-RELEVANT-P", 0, 0, false);
-        declareFunction("relevant_mt_subindex_count", "RELEVANT-MT-SUBINDEX-COUNT", 1, 0, false);
-        declareFunction("relevant_mt_subindex_count_with_cutoff", "RELEVANT-MT-SUBINDEX-COUNT-WITH-CUTOFF", 2, 0, false);
-        declareFunction("relevant_mt_subindex_keys", "RELEVANT-MT-SUBINDEX-KEYS", 1, 0, false);
-        declareFunction("mark_term_index_as_muted", "MARK-TERM-INDEX-AS-MUTED", 1, 0, false);
-        declareFunction("num_gaf_arg_index", "NUM-GAF-ARG-INDEX", 1, 3, false);
-        declareFunction("relevant_num_gaf_arg_index", "RELEVANT-NUM-GAF-ARG-INDEX", 1, 2, false);
-        declareFunction("relevant_num_gaf_arg_index_with_cutoff", "RELEVANT-NUM-GAF-ARG-INDEX-WITH-CUTOFF", 2, 2, false);
-        declareFunction("clear_key_gaf_arg_index_cached", "CLEAR-KEY-GAF-ARG-INDEX-CACHED", 0, 0, false);
+        declareFunction(me, "get_subindex", "GET-SUBINDEX", 2, 0, false);
+        declareFunction(me, "term_add_indexing_leaf", "TERM-ADD-INDEXING-LEAF", 3, 0, false);
+        declareFunction(me, "term_rem_indexing_leaf", "TERM-REM-INDEXING-LEAF", 3, 0, false);
+        declareFunction(me, "all_mt_subindex_keys_relevant_p", "ALL-MT-SUBINDEX-KEYS-RELEVANT-P", 0, 0, false);
+        declareFunction(me, "relevant_mt_subindex_count", "RELEVANT-MT-SUBINDEX-COUNT", 1, 0, false);
+        declareFunction(me, "relevant_mt_subindex_count_with_cutoff", "RELEVANT-MT-SUBINDEX-COUNT-WITH-CUTOFF", 2, 0, false);
+        declareFunction(me, "relevant_mt_subindex_keys", "RELEVANT-MT-SUBINDEX-KEYS", 1, 0, false);
+        declareFunction(me, "mark_term_index_as_muted", "MARK-TERM-INDEX-AS-MUTED", 1, 0, false);
+        declareFunction(me, "num_gaf_arg_index", "NUM-GAF-ARG-INDEX", 1, 3, false);
+        declareFunction(me, "relevant_num_gaf_arg_index", "RELEVANT-NUM-GAF-ARG-INDEX", 1, 2, false);
+        declareFunction(me, "relevant_num_gaf_arg_index_with_cutoff", "RELEVANT-NUM-GAF-ARG-INDEX-WITH-CUTOFF", 2, 2, false);
+        declareFunction(me, "clear_key_gaf_arg_index_cached", "CLEAR-KEY-GAF-ARG-INDEX-CACHED", 0, 0, false);
         new kb_indexing.$clear_key_gaf_arg_index_cached$ZeroArityFunction();
-        declareFunction("remove_key_gaf_arg_index_cached", "REMOVE-KEY-GAF-ARG-INDEX-CACHED", 1, 2, false);
-        declareFunction("key_gaf_arg_index_cached_internal", "KEY-GAF-ARG-INDEX-CACHED-INTERNAL", 3, 0, false);
-        declareFunction("key_gaf_arg_index_cached", "KEY-GAF-ARG-INDEX-CACHED", 1, 2, false);
-        declareFunction("key_gaf_arg_index", "KEY-GAF-ARG-INDEX", 1, 2, false);
-        declareFunction("gaf_arg_indices", "GAF-ARG-INDICES", 1, 0, false);
-        declareFunction("preds_from_gafs_mentioning_term_at_argnum_with_relevant_mt", "PREDS-FROM-GAFS-MENTIONING-TERM-AT-ARGNUM-WITH-RELEVANT-MT", 1, 1, false);
-        declareFunction("argnums_from_gafs_mentioning_term_with_relevant_mt", "ARGNUMS-FROM-GAFS-MENTIONING-TERM-WITH-RELEVANT-MT", 1, 0, false);
-        declareFunction("relevant_key_gaf_arg_index", "RELEVANT-KEY-GAF-ARG-INDEX", 1, 2, false);
-        declareFunction("mts_gaf_arg_index", "MTS-GAF-ARG-INDEX", 3, 1, false);
-        declareFunction("gaf_arg_index_key_validator", "GAF-ARG-INDEX-KEY-VALIDATOR", 1, 3, false);
-        declareFunction("get_gaf_arg_subindex", "GET-GAF-ARG-SUBINDEX", 1, 3, false);
-        declareFunction("add_gaf_arg_index", "ADD-GAF-ARG-INDEX", 5, 0, false);
-        declareFunction("rem_gaf_arg_index", "REM-GAF-ARG-INDEX", 5, 0, false);
-        declareFunction("num_nart_arg_index", "NUM-NART-ARG-INDEX", 1, 2, false);
-        declareFunction("relevant_num_nart_arg_index", "RELEVANT-NUM-NART-ARG-INDEX", 1, 2, false);
-        declareFunction("relevant_num_nart_arg_index_with_cutoff", "RELEVANT-NUM-NART-ARG-INDEX-WITH-CUTOFF", 2, 2, false);
-        declareFunction("key_nart_arg_index", "KEY-NART-ARG-INDEX", 1, 2, false);
-        declareFunction("relevant_key_nart_arg_index", "RELEVANT-KEY-NART-ARG-INDEX", 1, 2, false);
-        declareFunction("mts_nart_arg_index", "MTS-NART-ARG-INDEX", 3, 1, false);
-        declareFunction("get_nart_arg_subindex", "GET-NART-ARG-SUBINDEX", 1, 2, false);
-        declareFunction("add_nart_arg_index", "ADD-NART-ARG-INDEX", 4, 0, false);
-        declareFunction("rem_nart_arg_index", "REM-NART-ARG-INDEX", 4, 0, false);
-        declareFunction("num_predicate_extent_index", "NUM-PREDICATE-EXTENT-INDEX", 1, 1, false);
+        declareFunction(me, "remove_key_gaf_arg_index_cached", "REMOVE-KEY-GAF-ARG-INDEX-CACHED", 1, 2, false);
+        declareFunction(me, "key_gaf_arg_index_cached_internal", "KEY-GAF-ARG-INDEX-CACHED-INTERNAL", 3, 0, false);
+        declareFunction(me, "key_gaf_arg_index_cached", "KEY-GAF-ARG-INDEX-CACHED", 1, 2, false);
+        declareFunction(me, "key_gaf_arg_index", "KEY-GAF-ARG-INDEX", 1, 2, false);
+        declareFunction(me, "gaf_arg_indices", "GAF-ARG-INDICES", 1, 0, false);
+        declareFunction(me, "preds_from_gafs_mentioning_term_at_argnum_with_relevant_mt", "PREDS-FROM-GAFS-MENTIONING-TERM-AT-ARGNUM-WITH-RELEVANT-MT", 1, 1, false);
+        declareFunction(me, "argnums_from_gafs_mentioning_term_with_relevant_mt", "ARGNUMS-FROM-GAFS-MENTIONING-TERM-WITH-RELEVANT-MT", 1, 0, false);
+        declareFunction(me, "relevant_key_gaf_arg_index", "RELEVANT-KEY-GAF-ARG-INDEX", 1, 2, false);
+        declareFunction(me, "mts_gaf_arg_index", "MTS-GAF-ARG-INDEX", 3, 1, false);
+        declareFunction(me, "gaf_arg_index_key_validator", "GAF-ARG-INDEX-KEY-VALIDATOR", 1, 3, false);
+        declareFunction(me, "get_gaf_arg_subindex", "GET-GAF-ARG-SUBINDEX", 1, 3, false);
+        declareFunction(me, "add_gaf_arg_index", "ADD-GAF-ARG-INDEX", 5, 0, false);
+        declareFunction(me, "rem_gaf_arg_index", "REM-GAF-ARG-INDEX", 5, 0, false);
+        declareFunction(me, "num_nart_arg_index", "NUM-NART-ARG-INDEX", 1, 2, false);
+        declareFunction(me, "relevant_num_nart_arg_index", "RELEVANT-NUM-NART-ARG-INDEX", 1, 2, false);
+        declareFunction(me, "relevant_num_nart_arg_index_with_cutoff", "RELEVANT-NUM-NART-ARG-INDEX-WITH-CUTOFF", 2, 2, false);
+        declareFunction(me, "key_nart_arg_index", "KEY-NART-ARG-INDEX", 1, 2, false);
+        declareFunction(me, "relevant_key_nart_arg_index", "RELEVANT-KEY-NART-ARG-INDEX", 1, 2, false);
+        declareFunction(me, "mts_nart_arg_index", "MTS-NART-ARG-INDEX", 3, 1, false);
+        declareFunction(me, "get_nart_arg_subindex", "GET-NART-ARG-SUBINDEX", 1, 2, false);
+        declareFunction(me, "add_nart_arg_index", "ADD-NART-ARG-INDEX", 4, 0, false);
+        declareFunction(me, "rem_nart_arg_index", "REM-NART-ARG-INDEX", 4, 0, false);
+        declareFunction(me, "num_predicate_extent_index", "NUM-PREDICATE-EXTENT-INDEX", 1, 1, false);
         new kb_indexing.$num_predicate_extent_index$UnaryFunction();
         new kb_indexing.$num_predicate_extent_index$BinaryFunction();
-        declareFunction("relevant_num_predicate_extent_index", "RELEVANT-NUM-PREDICATE-EXTENT-INDEX", 1, 0, false);
-        declareFunction("relevant_num_predicate_extent_index_with_cutoff", "RELEVANT-NUM-PREDICATE-EXTENT-INDEX-WITH-CUTOFF", 2, 0, false);
-        declareFunction("no_predicate_extent_p", "NO-PREDICATE-EXTENT-P", 1, 0, false);
-        declareFunction("key_predicate_extent_index", "KEY-PREDICATE-EXTENT-INDEX", 1, 0, false);
-        declareFunction("relevant_key_predicate_extent_index", "RELEVANT-KEY-PREDICATE-EXTENT-INDEX", 1, 0, false);
-        declareFunction("predicate_extent_top_level_key", "PREDICATE-EXTENT-TOP-LEVEL-KEY", 0, 0, false);
-        declareFunction("add_predicate_extent_index", "ADD-PREDICATE-EXTENT-INDEX", 3, 0, false);
-        declareFunction("rem_predicate_extent_index", "REM-PREDICATE-EXTENT-INDEX", 3, 0, false);
-        declareFunction("get_predicate_extent_subindex", "GET-PREDICATE-EXTENT-SUBINDEX", 1, 1, false);
-        declareFunction("num_function_extent_index", "NUM-FUNCTION-EXTENT-INDEX", 1, 0, false);
-        declareFunction("relevant_num_function_extent_index", "RELEVANT-NUM-FUNCTION-EXTENT-INDEX", 1, 0, false);
-        declareFunction("relevant_num_function_extent_index_with_cutoff", "RELEVANT-NUM-FUNCTION-EXTENT-INDEX-WITH-CUTOFF", 2, 0, false);
-        declareFunction("get_function_extent_subindex", "GET-FUNCTION-EXTENT-SUBINDEX", 1, 0, false);
-        declareFunction("add_function_extent_index", "ADD-FUNCTION-EXTENT-INDEX", 2, 0, false);
-        declareFunction("rem_function_extent_index", "REM-FUNCTION-EXTENT-INDEX", 2, 0, false);
-        declareFunction("function_extent_top_level_key", "FUNCTION-EXTENT-TOP-LEVEL-KEY", 0, 0, false);
-        declareFunction("num_predicate_rule_index", "NUM-PREDICATE-RULE-INDEX", 1, 3, false);
-        declareFunction("relevant_num_predicate_rule_index", "RELEVANT-NUM-PREDICATE-RULE-INDEX", 1, 1, false);
-        declareFunction("relevant_num_predicate_rule_index_with_cutoff", "RELEVANT-NUM-PREDICATE-RULE-INDEX-WITH-CUTOFF", 2, 1, false);
-        declareFunction("key_predicate_rule_index", "KEY-PREDICATE-RULE-INDEX", 1, 2, false);
-        declareFunction("relevant_key_predicate_rule_index", "RELEVANT-KEY-PREDICATE-RULE-INDEX", 1, 1, false);
-        declareFunction("get_predicate_rule_subindex", "GET-PREDICATE-RULE-SUBINDEX", 1, 3, false);
-        declareFunction("add_predicate_rule_index", "ADD-PREDICATE-RULE-INDEX", 5, 0, false);
-        declareFunction("rem_predicate_rule_index", "REM-PREDICATE-RULE-INDEX", 5, 0, false);
-        declareFunction("num_decontextualized_ist_predicate_rule_index", "NUM-DECONTEXTUALIZED-IST-PREDICATE-RULE-INDEX", 1, 2, false);
-        declareFunction("key_decontextualized_ist_predicate_rule_index", "KEY-DECONTEXTUALIZED-IST-PREDICATE-RULE-INDEX", 1, 1, false);
-        declareFunction("get_decontextualized_ist_predicate_rule_subindex", "GET-DECONTEXTUALIZED-IST-PREDICATE-RULE-SUBINDEX", 1, 2, false);
-        declareFunction("add_decontextualized_ist_predicate_rule_index", "ADD-DECONTEXTUALIZED-IST-PREDICATE-RULE-INDEX", 4, 0, false);
-        declareFunction("rem_decontextualized_ist_predicate_rule_index", "REM-DECONTEXTUALIZED-IST-PREDICATE-RULE-INDEX", 4, 0, false);
-        declareFunction("num_isa_rule_index", "NUM-ISA-RULE-INDEX", 1, 3, false);
-        declareFunction("relevant_num_isa_rule_index", "RELEVANT-NUM-ISA-RULE-INDEX", 1, 1, false);
-        declareFunction("relevant_num_isa_rule_index_with_cutoff", "RELEVANT-NUM-ISA-RULE-INDEX-WITH-CUTOFF", 2, 1, false);
-        declareFunction("key_isa_rule_index", "KEY-ISA-RULE-INDEX", 1, 2, false);
-        declareFunction("relevant_key_isa_rule_index", "RELEVANT-KEY-ISA-RULE-INDEX", 1, 1, false);
-        declareFunction("get_isa_rule_subindex", "GET-ISA-RULE-SUBINDEX", 1, 3, false);
-        declareFunction("add_isa_rule_index", "ADD-ISA-RULE-INDEX", 5, 0, false);
-        declareFunction("rem_isa_rule_index", "REM-ISA-RULE-INDEX", 5, 0, false);
-        declareFunction("num_quoted_isa_rule_index", "NUM-QUOTED-ISA-RULE-INDEX", 1, 3, false);
-        declareFunction("relevant_num_quoted_isa_rule_index", "RELEVANT-NUM-QUOTED-ISA-RULE-INDEX", 1, 1, false);
-        declareFunction("relevant_num_quoted_isa_rule_index_with_cutoff", "RELEVANT-NUM-QUOTED-ISA-RULE-INDEX-WITH-CUTOFF", 2, 1, false);
-        declareFunction("key_quoted_isa_rule_index", "KEY-QUOTED-ISA-RULE-INDEX", 1, 2, false);
-        declareFunction("relevant_key_quoted_isa_rule_index", "RELEVANT-KEY-QUOTED-ISA-RULE-INDEX", 1, 1, false);
-        declareFunction("get_quoted_isa_rule_subindex", "GET-QUOTED-ISA-RULE-SUBINDEX", 1, 3, false);
-        declareFunction("add_quoted_isa_rule_index", "ADD-QUOTED-ISA-RULE-INDEX", 5, 0, false);
-        declareFunction("rem_quoted_isa_rule_index", "REM-QUOTED-ISA-RULE-INDEX", 5, 0, false);
-        declareFunction("num_genls_rule_index", "NUM-GENLS-RULE-INDEX", 1, 3, false);
-        declareFunction("relevant_num_genls_rule_index", "RELEVANT-NUM-GENLS-RULE-INDEX", 1, 1, false);
-        declareFunction("relevant_num_genls_rule_index_with_cutoff", "RELEVANT-NUM-GENLS-RULE-INDEX-WITH-CUTOFF", 2, 1, false);
-        declareFunction("key_genls_rule_index", "KEY-GENLS-RULE-INDEX", 1, 2, false);
-        declareFunction("relevant_key_genls_rule_index", "RELEVANT-KEY-GENLS-RULE-INDEX", 1, 1, false);
-        declareFunction("get_genls_rule_subindex", "GET-GENLS-RULE-SUBINDEX", 1, 3, false);
-        declareFunction("add_genls_rule_index", "ADD-GENLS-RULE-INDEX", 5, 0, false);
-        declareFunction("rem_genls_rule_index", "REM-GENLS-RULE-INDEX", 5, 0, false);
-        declareFunction("num_genl_mt_rule_index", "NUM-GENL-MT-RULE-INDEX", 1, 3, false);
-        declareFunction("relevant_num_genl_mt_rule_index", "RELEVANT-NUM-GENL-MT-RULE-INDEX", 1, 1, false);
-        declareFunction("relevant_num_genl_mt_rule_index_with_cutoff", "RELEVANT-NUM-GENL-MT-RULE-INDEX-WITH-CUTOFF", 2, 1, false);
-        declareFunction("key_genl_mt_rule_index", "KEY-GENL-MT-RULE-INDEX", 1, 2, false);
-        declareFunction("relevant_key_genl_mt_rule_index", "RELEVANT-KEY-GENL-MT-RULE-INDEX", 1, 1, false);
-        declareFunction("get_genl_mt_rule_subindex", "GET-GENL-MT-RULE-SUBINDEX", 1, 3, false);
-        declareFunction("add_genl_mt_rule_index", "ADD-GENL-MT-RULE-INDEX", 5, 0, false);
-        declareFunction("rem_genl_mt_rule_index", "REM-GENL-MT-RULE-INDEX", 5, 0, false);
-        declareFunction("num_function_rule_index", "NUM-FUNCTION-RULE-INDEX", 1, 2, false);
-        declareFunction("relevant_num_function_rule_index", "RELEVANT-NUM-FUNCTION-RULE-INDEX", 1, 0, false);
-        declareFunction("relevant_num_function_rule_index_with_cutoff", "RELEVANT-NUM-FUNCTION-RULE-INDEX-WITH-CUTOFF", 2, 0, false);
-        declareFunction("key_function_rule_index", "KEY-FUNCTION-RULE-INDEX", 1, 1, false);
-        declareFunction("relevant_key_function_rule_index", "RELEVANT-KEY-FUNCTION-RULE-INDEX", 1, 0, false);
-        declareFunction("get_function_rule_subindex", "GET-FUNCTION-RULE-SUBINDEX", 1, 2, false);
-        declareFunction("add_function_rule_index", "ADD-FUNCTION-RULE-INDEX", 4, 0, false);
-        declareFunction("rem_function_rule_index", "REM-FUNCTION-RULE-INDEX", 4, 0, false);
-        declareFunction("function_rule_top_level_key", "FUNCTION-RULE-TOP-LEVEL-KEY", 0, 0, false);
-        declareFunction("num_exception_rule_index", "NUM-EXCEPTION-RULE-INDEX", 1, 2, false);
-        declareFunction("relevant_num_exception_rule_index", "RELEVANT-NUM-EXCEPTION-RULE-INDEX", 1, 0, false);
-        declareFunction("relevant_num_exception_rule_index_with_cutoff", "RELEVANT-NUM-EXCEPTION-RULE-INDEX-WITH-CUTOFF", 2, 0, false);
-        declareFunction("key_exception_rule_index", "KEY-EXCEPTION-RULE-INDEX", 1, 1, false);
-        declareFunction("relevant_key_exception_rule_index", "RELEVANT-KEY-EXCEPTION-RULE-INDEX", 1, 0, false);
-        declareFunction("exception_rule_top_level_key", "EXCEPTION-RULE-TOP-LEVEL-KEY", 0, 0, false);
-        declareFunction("get_exception_rule_subindex", "GET-EXCEPTION-RULE-SUBINDEX", 1, 2, false);
-        declareFunction("add_exception_rule_index", "ADD-EXCEPTION-RULE-INDEX", 4, 0, false);
-        declareFunction("rem_exception_rule_index", "REM-EXCEPTION-RULE-INDEX", 4, 0, false);
-        declareFunction("num_pragma_rule_index", "NUM-PRAGMA-RULE-INDEX", 1, 2, false);
-        declareFunction("relevant_num_pragma_rule_index", "RELEVANT-NUM-PRAGMA-RULE-INDEX", 1, 0, false);
-        declareFunction("relevant_num_pragma_rule_index_with_cutoff", "RELEVANT-NUM-PRAGMA-RULE-INDEX-WITH-CUTOFF", 2, 0, false);
-        declareFunction("key_pragma_rule_index", "KEY-PRAGMA-RULE-INDEX", 1, 1, false);
-        declareFunction("relevant_key_pragma_rule_index", "RELEVANT-KEY-PRAGMA-RULE-INDEX", 1, 0, false);
-        declareFunction("pragma_rule_top_level_key", "PRAGMA-RULE-TOP-LEVEL-KEY", 0, 0, false);
-        declareFunction("get_pragma_rule_subindex", "GET-PRAGMA-RULE-SUBINDEX", 1, 2, false);
-        declareFunction("add_pragma_rule_index", "ADD-PRAGMA-RULE-INDEX", 4, 0, false);
-        declareFunction("rem_pragma_rule_index", "REM-PRAGMA-RULE-INDEX", 4, 0, false);
-        declareFunction("num_mt_index", "NUM-MT-INDEX", 1, 0, false);
-        declareFunction("relevant_num_mt_index", "RELEVANT-NUM-MT-INDEX", 1, 0, false);
-        declareFunction("relevant_num_mt_index_with_cutoff", "RELEVANT-NUM-MT-INDEX-WITH-CUTOFF", 2, 0, false);
-        declareFunction("num_mt_contents", "NUM-MT-CONTENTS", 1, 0, false);
-        declareFunction("count_mt_contents", "COUNT-MT-CONTENTS", 1, 0, false);
-        declareFunction("estimated_num_mt_contents", "ESTIMATED-NUM-MT-CONTENTS", 1, 1, false);
-        declareFunction("estimated_count_mt_contents", "ESTIMATED-COUNT-MT-CONTENTS", 1, 1, false);
-        declareFunction("get_mt_subindex", "GET-MT-SUBINDEX", 1, 0, false);
-        declareFunction("add_mt_index", "ADD-MT-INDEX", 2, 0, false);
-        declareFunction("rem_mt_index", "REM-MT-INDEX", 2, 0, false);
-        declareFunction("add_mt_index_internal", "ADD-MT-INDEX-INTERNAL", 2, 0, false);
-        declareFunction("rem_mt_index_internal", "REM-MT-INDEX-INTERNAL", 2, 0, false);
-        declareFunction("mt_top_level_key", "MT-TOP-LEVEL-KEY", 0, 0, false);
-        declareFunction("num_hlmt_index", "NUM-HLMT-INDEX", 1, 0, false);
-        declareFunction("relevant_num_hlmt_index", "RELEVANT-NUM-HLMT-INDEX", 1, 0, false);
-        declareFunction("broad_mtP", "BROAD-MT?", 1, 0, false);
-        declareFunction("broad_mt_index_cleanup", "BROAD-MT-INDEX-CLEANUP", 0, 0, false);
-        declareFunction("get_broad_mts_for_index_cleanup", "GET-BROAD-MTS-FOR-INDEX-CLEANUP", 0, 0, false);
-        declareFunction("rem_broad_mt_index", "REM-BROAD-MT-INDEX", 1, 0, false);
-        declareFunction("num_other_index", "NUM-OTHER-INDEX", 1, 0, false);
-        declareFunction("relevant_num_other_index", "RELEVANT-NUM-OTHER-INDEX", 1, 0, false);
-        declareFunction("relevant_num_other_index_with_cutoff", "RELEVANT-NUM-OTHER-INDEX-WITH-CUTOFF", 2, 0, false);
-        declareFunction("get_other_subindex", "GET-OTHER-SUBINDEX", 1, 0, false);
-        declareFunction("add_other_index", "ADD-OTHER-INDEX", 2, 0, false);
-        declareFunction("rem_other_index", "REM-OTHER-INDEX", 2, 0, false);
-        declareFunction("other_top_level_key", "OTHER-TOP-LEVEL-KEY", 0, 0, false);
-        declareFunction("num_index", "NUM-INDEX", 1, 0, false);
+        declareFunction(me, "relevant_num_predicate_extent_index", "RELEVANT-NUM-PREDICATE-EXTENT-INDEX", 1, 0, false);
+        declareFunction(me, "relevant_num_predicate_extent_index_with_cutoff", "RELEVANT-NUM-PREDICATE-EXTENT-INDEX-WITH-CUTOFF", 2, 0, false);
+        declareFunction(me, "no_predicate_extent_p", "NO-PREDICATE-EXTENT-P", 1, 0, false);
+        declareFunction(me, "key_predicate_extent_index", "KEY-PREDICATE-EXTENT-INDEX", 1, 0, false);
+        declareFunction(me, "relevant_key_predicate_extent_index", "RELEVANT-KEY-PREDICATE-EXTENT-INDEX", 1, 0, false);
+        declareFunction(me, "predicate_extent_top_level_key", "PREDICATE-EXTENT-TOP-LEVEL-KEY", 0, 0, false);
+        declareFunction(me, "add_predicate_extent_index", "ADD-PREDICATE-EXTENT-INDEX", 3, 0, false);
+        declareFunction(me, "rem_predicate_extent_index", "REM-PREDICATE-EXTENT-INDEX", 3, 0, false);
+        declareFunction(me, "get_predicate_extent_subindex", "GET-PREDICATE-EXTENT-SUBINDEX", 1, 1, false);
+        declareFunction(me, "num_function_extent_index", "NUM-FUNCTION-EXTENT-INDEX", 1, 0, false);
+        declareFunction(me, "relevant_num_function_extent_index", "RELEVANT-NUM-FUNCTION-EXTENT-INDEX", 1, 0, false);
+        declareFunction(me, "relevant_num_function_extent_index_with_cutoff", "RELEVANT-NUM-FUNCTION-EXTENT-INDEX-WITH-CUTOFF", 2, 0, false);
+        declareFunction(me, "get_function_extent_subindex", "GET-FUNCTION-EXTENT-SUBINDEX", 1, 0, false);
+        declareFunction(me, "add_function_extent_index", "ADD-FUNCTION-EXTENT-INDEX", 2, 0, false);
+        declareFunction(me, "rem_function_extent_index", "REM-FUNCTION-EXTENT-INDEX", 2, 0, false);
+        declareFunction(me, "function_extent_top_level_key", "FUNCTION-EXTENT-TOP-LEVEL-KEY", 0, 0, false);
+        declareFunction(me, "num_predicate_rule_index", "NUM-PREDICATE-RULE-INDEX", 1, 3, false);
+        declareFunction(me, "relevant_num_predicate_rule_index", "RELEVANT-NUM-PREDICATE-RULE-INDEX", 1, 1, false);
+        declareFunction(me, "relevant_num_predicate_rule_index_with_cutoff", "RELEVANT-NUM-PREDICATE-RULE-INDEX-WITH-CUTOFF", 2, 1, false);
+        declareFunction(me, "key_predicate_rule_index", "KEY-PREDICATE-RULE-INDEX", 1, 2, false);
+        declareFunction(me, "relevant_key_predicate_rule_index", "RELEVANT-KEY-PREDICATE-RULE-INDEX", 1, 1, false);
+        declareFunction(me, "get_predicate_rule_subindex", "GET-PREDICATE-RULE-SUBINDEX", 1, 3, false);
+        declareFunction(me, "add_predicate_rule_index", "ADD-PREDICATE-RULE-INDEX", 5, 0, false);
+        declareFunction(me, "rem_predicate_rule_index", "REM-PREDICATE-RULE-INDEX", 5, 0, false);
+        declareFunction(me, "num_decontextualized_ist_predicate_rule_index", "NUM-DECONTEXTUALIZED-IST-PREDICATE-RULE-INDEX", 1, 2, false);
+        declareFunction(me, "key_decontextualized_ist_predicate_rule_index", "KEY-DECONTEXTUALIZED-IST-PREDICATE-RULE-INDEX", 1, 1, false);
+        declareFunction(me, "get_decontextualized_ist_predicate_rule_subindex", "GET-DECONTEXTUALIZED-IST-PREDICATE-RULE-SUBINDEX", 1, 2, false);
+        declareFunction(me, "add_decontextualized_ist_predicate_rule_index", "ADD-DECONTEXTUALIZED-IST-PREDICATE-RULE-INDEX", 4, 0, false);
+        declareFunction(me, "rem_decontextualized_ist_predicate_rule_index", "REM-DECONTEXTUALIZED-IST-PREDICATE-RULE-INDEX", 4, 0, false);
+        declareFunction(me, "num_isa_rule_index", "NUM-ISA-RULE-INDEX", 1, 3, false);
+        declareFunction(me, "relevant_num_isa_rule_index", "RELEVANT-NUM-ISA-RULE-INDEX", 1, 1, false);
+        declareFunction(me, "relevant_num_isa_rule_index_with_cutoff", "RELEVANT-NUM-ISA-RULE-INDEX-WITH-CUTOFF", 2, 1, false);
+        declareFunction(me, "key_isa_rule_index", "KEY-ISA-RULE-INDEX", 1, 2, false);
+        declareFunction(me, "relevant_key_isa_rule_index", "RELEVANT-KEY-ISA-RULE-INDEX", 1, 1, false);
+        declareFunction(me, "get_isa_rule_subindex", "GET-ISA-RULE-SUBINDEX", 1, 3, false);
+        declareFunction(me, "add_isa_rule_index", "ADD-ISA-RULE-INDEX", 5, 0, false);
+        declareFunction(me, "rem_isa_rule_index", "REM-ISA-RULE-INDEX", 5, 0, false);
+        declareFunction(me, "num_quoted_isa_rule_index", "NUM-QUOTED-ISA-RULE-INDEX", 1, 3, false);
+        declareFunction(me, "relevant_num_quoted_isa_rule_index", "RELEVANT-NUM-QUOTED-ISA-RULE-INDEX", 1, 1, false);
+        declareFunction(me, "relevant_num_quoted_isa_rule_index_with_cutoff", "RELEVANT-NUM-QUOTED-ISA-RULE-INDEX-WITH-CUTOFF", 2, 1, false);
+        declareFunction(me, "key_quoted_isa_rule_index", "KEY-QUOTED-ISA-RULE-INDEX", 1, 2, false);
+        declareFunction(me, "relevant_key_quoted_isa_rule_index", "RELEVANT-KEY-QUOTED-ISA-RULE-INDEX", 1, 1, false);
+        declareFunction(me, "get_quoted_isa_rule_subindex", "GET-QUOTED-ISA-RULE-SUBINDEX", 1, 3, false);
+        declareFunction(me, "add_quoted_isa_rule_index", "ADD-QUOTED-ISA-RULE-INDEX", 5, 0, false);
+        declareFunction(me, "rem_quoted_isa_rule_index", "REM-QUOTED-ISA-RULE-INDEX", 5, 0, false);
+        declareFunction(me, "num_genls_rule_index", "NUM-GENLS-RULE-INDEX", 1, 3, false);
+        declareFunction(me, "relevant_num_genls_rule_index", "RELEVANT-NUM-GENLS-RULE-INDEX", 1, 1, false);
+        declareFunction(me, "relevant_num_genls_rule_index_with_cutoff", "RELEVANT-NUM-GENLS-RULE-INDEX-WITH-CUTOFF", 2, 1, false);
+        declareFunction(me, "key_genls_rule_index", "KEY-GENLS-RULE-INDEX", 1, 2, false);
+        declareFunction(me, "relevant_key_genls_rule_index", "RELEVANT-KEY-GENLS-RULE-INDEX", 1, 1, false);
+        declareFunction(me, "get_genls_rule_subindex", "GET-GENLS-RULE-SUBINDEX", 1, 3, false);
+        declareFunction(me, "add_genls_rule_index", "ADD-GENLS-RULE-INDEX", 5, 0, false);
+        declareFunction(me, "rem_genls_rule_index", "REM-GENLS-RULE-INDEX", 5, 0, false);
+        declareFunction(me, "num_genl_mt_rule_index", "NUM-GENL-MT-RULE-INDEX", 1, 3, false);
+        declareFunction(me, "relevant_num_genl_mt_rule_index", "RELEVANT-NUM-GENL-MT-RULE-INDEX", 1, 1, false);
+        declareFunction(me, "relevant_num_genl_mt_rule_index_with_cutoff", "RELEVANT-NUM-GENL-MT-RULE-INDEX-WITH-CUTOFF", 2, 1, false);
+        declareFunction(me, "key_genl_mt_rule_index", "KEY-GENL-MT-RULE-INDEX", 1, 2, false);
+        declareFunction(me, "relevant_key_genl_mt_rule_index", "RELEVANT-KEY-GENL-MT-RULE-INDEX", 1, 1, false);
+        declareFunction(me, "get_genl_mt_rule_subindex", "GET-GENL-MT-RULE-SUBINDEX", 1, 3, false);
+        declareFunction(me, "add_genl_mt_rule_index", "ADD-GENL-MT-RULE-INDEX", 5, 0, false);
+        declareFunction(me, "rem_genl_mt_rule_index", "REM-GENL-MT-RULE-INDEX", 5, 0, false);
+        declareFunction(me, "num_function_rule_index", "NUM-FUNCTION-RULE-INDEX", 1, 2, false);
+        declareFunction(me, "relevant_num_function_rule_index", "RELEVANT-NUM-FUNCTION-RULE-INDEX", 1, 0, false);
+        declareFunction(me, "relevant_num_function_rule_index_with_cutoff", "RELEVANT-NUM-FUNCTION-RULE-INDEX-WITH-CUTOFF", 2, 0, false);
+        declareFunction(me, "key_function_rule_index", "KEY-FUNCTION-RULE-INDEX", 1, 1, false);
+        declareFunction(me, "relevant_key_function_rule_index", "RELEVANT-KEY-FUNCTION-RULE-INDEX", 1, 0, false);
+        declareFunction(me, "get_function_rule_subindex", "GET-FUNCTION-RULE-SUBINDEX", 1, 2, false);
+        declareFunction(me, "add_function_rule_index", "ADD-FUNCTION-RULE-INDEX", 4, 0, false);
+        declareFunction(me, "rem_function_rule_index", "REM-FUNCTION-RULE-INDEX", 4, 0, false);
+        declareFunction(me, "function_rule_top_level_key", "FUNCTION-RULE-TOP-LEVEL-KEY", 0, 0, false);
+        declareFunction(me, "num_exception_rule_index", "NUM-EXCEPTION-RULE-INDEX", 1, 2, false);
+        declareFunction(me, "relevant_num_exception_rule_index", "RELEVANT-NUM-EXCEPTION-RULE-INDEX", 1, 0, false);
+        declareFunction(me, "relevant_num_exception_rule_index_with_cutoff", "RELEVANT-NUM-EXCEPTION-RULE-INDEX-WITH-CUTOFF", 2, 0, false);
+        declareFunction(me, "key_exception_rule_index", "KEY-EXCEPTION-RULE-INDEX", 1, 1, false);
+        declareFunction(me, "relevant_key_exception_rule_index", "RELEVANT-KEY-EXCEPTION-RULE-INDEX", 1, 0, false);
+        declareFunction(me, "exception_rule_top_level_key", "EXCEPTION-RULE-TOP-LEVEL-KEY", 0, 0, false);
+        declareFunction(me, "get_exception_rule_subindex", "GET-EXCEPTION-RULE-SUBINDEX", 1, 2, false);
+        declareFunction(me, "add_exception_rule_index", "ADD-EXCEPTION-RULE-INDEX", 4, 0, false);
+        declareFunction(me, "rem_exception_rule_index", "REM-EXCEPTION-RULE-INDEX", 4, 0, false);
+        declareFunction(me, "num_pragma_rule_index", "NUM-PRAGMA-RULE-INDEX", 1, 2, false);
+        declareFunction(me, "relevant_num_pragma_rule_index", "RELEVANT-NUM-PRAGMA-RULE-INDEX", 1, 0, false);
+        declareFunction(me, "relevant_num_pragma_rule_index_with_cutoff", "RELEVANT-NUM-PRAGMA-RULE-INDEX-WITH-CUTOFF", 2, 0, false);
+        declareFunction(me, "key_pragma_rule_index", "KEY-PRAGMA-RULE-INDEX", 1, 1, false);
+        declareFunction(me, "relevant_key_pragma_rule_index", "RELEVANT-KEY-PRAGMA-RULE-INDEX", 1, 0, false);
+        declareFunction(me, "pragma_rule_top_level_key", "PRAGMA-RULE-TOP-LEVEL-KEY", 0, 0, false);
+        declareFunction(me, "get_pragma_rule_subindex", "GET-PRAGMA-RULE-SUBINDEX", 1, 2, false);
+        declareFunction(me, "add_pragma_rule_index", "ADD-PRAGMA-RULE-INDEX", 4, 0, false);
+        declareFunction(me, "rem_pragma_rule_index", "REM-PRAGMA-RULE-INDEX", 4, 0, false);
+        declareFunction(me, "num_mt_index", "NUM-MT-INDEX", 1, 0, false);
+        declareFunction(me, "relevant_num_mt_index", "RELEVANT-NUM-MT-INDEX", 1, 0, false);
+        declareFunction(me, "relevant_num_mt_index_with_cutoff", "RELEVANT-NUM-MT-INDEX-WITH-CUTOFF", 2, 0, false);
+        declareFunction(me, "num_mt_contents", "NUM-MT-CONTENTS", 1, 0, false);
+        declareFunction(me, "count_mt_contents", "COUNT-MT-CONTENTS", 1, 0, false);
+        declareFunction(me, "estimated_num_mt_contents", "ESTIMATED-NUM-MT-CONTENTS", 1, 1, false);
+        declareFunction(me, "estimated_count_mt_contents", "ESTIMATED-COUNT-MT-CONTENTS", 1, 1, false);
+        declareFunction(me, "get_mt_subindex", "GET-MT-SUBINDEX", 1, 0, false);
+        declareFunction(me, "add_mt_index", "ADD-MT-INDEX", 2, 0, false);
+        declareFunction(me, "rem_mt_index", "REM-MT-INDEX", 2, 0, false);
+        declareFunction(me, "add_mt_index_internal", "ADD-MT-INDEX-INTERNAL", 2, 0, false);
+        declareFunction(me, "rem_mt_index_internal", "REM-MT-INDEX-INTERNAL", 2, 0, false);
+        declareFunction(me, "mt_top_level_key", "MT-TOP-LEVEL-KEY", 0, 0, false);
+        declareFunction(me, "num_hlmt_index", "NUM-HLMT-INDEX", 1, 0, false);
+        declareFunction(me, "relevant_num_hlmt_index", "RELEVANT-NUM-HLMT-INDEX", 1, 0, false);
+        declareFunction(me, "broad_mtP", "BROAD-MT?", 1, 0, false);
+        declareFunction(me, "broad_mt_index_cleanup", "BROAD-MT-INDEX-CLEANUP", 0, 0, false);
+        declareFunction(me, "get_broad_mts_for_index_cleanup", "GET-BROAD-MTS-FOR-INDEX-CLEANUP", 0, 0, false);
+        declareFunction(me, "rem_broad_mt_index", "REM-BROAD-MT-INDEX", 1, 0, false);
+        declareFunction(me, "num_other_index", "NUM-OTHER-INDEX", 1, 0, false);
+        declareFunction(me, "relevant_num_other_index", "RELEVANT-NUM-OTHER-INDEX", 1, 0, false);
+        declareFunction(me, "relevant_num_other_index_with_cutoff", "RELEVANT-NUM-OTHER-INDEX-WITH-CUTOFF", 2, 0, false);
+        declareFunction(me, "get_other_subindex", "GET-OTHER-SUBINDEX", 1, 0, false);
+        declareFunction(me, "add_other_index", "ADD-OTHER-INDEX", 2, 0, false);
+        declareFunction(me, "rem_other_index", "REM-OTHER-INDEX", 2, 0, false);
+        declareFunction(me, "other_top_level_key", "OTHER-TOP-LEVEL-KEY", 0, 0, false);
+        declareFunction(me, "num_index", "NUM-INDEX", 1, 0, false);
         new kb_indexing.$num_index$UnaryFunction();
-        declareFunction("relevant_num_index", "RELEVANT-NUM-INDEX", 1, 0, false);
-        declareFunction("perform_indexing_pre_dump_cleanup", "PERFORM-INDEXING-PRE-DUMP-CLEANUP", 0, 0, false);
-        declareFunction("get_indexing_pre_dump_cleanup_defs", "GET-INDEXING-PRE-DUMP-CLEANUP-DEFS", 0, 0, false);
-        declareFunction("unindexed_syntax_constant_index_cleanup", "UNINDEXED-SYNTAX-CONSTANT-INDEX-CLEANUP", 0, 0, false);
-        declareFunction("unindexed_syntax_constant_cleanup_one_index", "UNINDEXED-SYNTAX-CONSTANT-CLEANUP-ONE-INDEX", 1, 0, false);
-        declareFunction("unindexed_syntax_constant_index_cleanup_internal", "UNINDEXED-SYNTAX-CONSTANT-INDEX-CLEANUP-INTERNAL", 1, 0, false);
-        declareFunction("term_mt_count", "TERM-MT-COUNT", 1, 0, false);
-        declareFunction("mts_of_indexed_term", "MTS-OF-INDEXED-TERM", 1, 0, false);
-        declareFunction("add_assertion_indices", "ADD-ASSERTION-INDICES", 1, 1, false);
-        declareFunction("remove_assertion_indices", "REMOVE-ASSERTION-INDICES", 1, 1, false);
-        declareFunction("remove_term_indices", "REMOVE-TERM-INDICES", 1, 0, false);
-        declareFunction("determine_formula_indices", "DETERMINE-FORMULA-INDICES", 1, 0, false);
-        declareFunction("optimize_argnum_pairs", "OPTIMIZE-ARGNUM-PAIRS", 1, 0, false);
-        declareFunction("determine_gaf_indices", "DETERMINE-GAF-INDICES", 2, 0, false);
-        declareFunction("add_gaf_indices", "ADD-GAF-INDICES", 1, 1, false);
-        declareFunction("remove_gaf_indices", "REMOVE-GAF-INDICES", 1, 1, false);
-        declareFunction("determine_function_indices", "DETERMINE-FUNCTION-INDICES", 1, 0, false);
-        declareFunction("add_function_indices", "ADD-FUNCTION-INDICES", 1, 1, false);
-        declareFunction("rem_function_indices", "REM-FUNCTION-INDICES", 1, 1, false);
-        declareFunction("determine_rule_indices_int", "DETERMINE-RULE-INDICES-INT", 2, 0, false);
-        declareFunction("determine_rule_indices", "DETERMINE-RULE-INDICES", 1, 0, false);
-        declareFunction("add_rule_indices", "ADD-RULE-INDICES", 1, 1, false);
-        declareFunction("remove_rule_indices", "REMOVE-RULE-INDICES", 1, 1, false);
-        declareFunction("spec_preds_of_ist_indexing_enabledP", "SPEC-PREDS-OF-IST-INDEXING-ENABLED?", 0, 0, false);
-        declareFunction("spec_preds_of_ist_indexing_enabledP_robust", "SPEC-PREDS-OF-IST-INDEXING-ENABLED?-ROBUST", 0, 0, false);
-        declareFunction("spec_preds_of_ist_old_indexed_rule_count", "SPEC-PREDS-OF-IST-OLD-INDEXED-RULE-COUNT", 0, 0, false);
-        declareFunction("enable_spec_preds_of_ist_indexing", "ENABLE-SPEC-PREDS-OF-IST-INDEXING", 0, 0, false);
-        declareFunction("best_nat_lookup_index", "BEST-NAT-LOOKUP-INDEX", 1, 1, false);
-        declareFunction("num_best_nat_lookup_index", "NUM-BEST-NAT-LOOKUP-INDEX", 1, 1, false);
-        declareFunction("best_nat_lookup_index_try_all_allowed", "BEST-NAT-LOOKUP-INDEX-TRY-ALL-ALLOWED", 2, 0, false);
-        declareFunction("num_best_nat_lookup_index_try_all_allowed", "NUM-BEST-NAT-LOOKUP-INDEX-TRY-ALL-ALLOWED", 2, 0, false);
-        declareFunction("best_nat_lookup_index_wrt_methods", "BEST-NAT-LOOKUP-INDEX-WRT-METHODS", 2, 0, false);
-        declareFunction("best_nat_lookup_index_int", "BEST-NAT-LOOKUP-INDEX-INT", 1, 0, false);
-        declareFunction("decent_nat_index_from_terms", "DECENT-NAT-INDEX-FROM-TERMS", 1, 0, false);
-        declareFunction("decent_nat_index", "DECENT-NAT-INDEX", 1, 0, false);
-        declareFunction("best_nat_index_count", "BEST-NAT-INDEX-COUNT", 1, 0, false);
-        declareFunction("decent_rule_index", "DECENT-RULE-INDEX", 1, 0, false);
-        declareFunction("all_rule_indices", "ALL-RULE-INDICES", 1, 0, false);
-        declareFunction("lookup_index_p", "LOOKUP-INDEX-P", 1, 0, false);
-        declareFunction("lookup_index_get_property", "LOOKUP-INDEX-GET-PROPERTY", 2, 1, false);
-        declareFunction("lookup_index_set_property", "LOOKUP-INDEX-SET-PROPERTY", 3, 0, false);
-        declareFunction("lookup_index_get_type", "LOOKUP-INDEX-GET-TYPE", 1, 0, false);
-        declareFunction("lookup_index_predicate_extent_value", "LOOKUP-INDEX-PREDICATE-EXTENT-VALUE", 1, 0, false);
-        declareFunction("lookup_index_gaf_arg_values", "LOOKUP-INDEX-GAF-ARG-VALUES", 1, 0, false);
-        declareFunction("lookup_index_overlap_value", "LOOKUP-INDEX-OVERLAP-VALUE", 1, 0, false);
-        declareFunction("lookup_index_for_overlap", "LOOKUP-INDEX-FOR-OVERLAP", 1, 0, false);
-        declareFunction("lookup_index_for_predicate_extent", "LOOKUP-INDEX-FOR-PREDICATE-EXTENT", 1, 0, false);
-        declareFunction("lookup_index_for_function_extent", "LOOKUP-INDEX-FOR-FUNCTION-EXTENT", 1, 0, false);
-        declareFunction("lookup_index_for_gaf_arg", "LOOKUP-INDEX-FOR-GAF-ARG", 3, 0, false);
-        declareFunction("lookup_index_for_nart_arg", "LOOKUP-INDEX-FOR-NART-ARG", 3, 0, false);
-        declareFunction("lookup_methods_includeP", "LOOKUP-METHODS-INCLUDE?", 2, 0, false);
-        declareFunction("lookup_methods_allow_onlyP", "LOOKUP-METHODS-ALLOW-ONLY?", 2, 0, false);
-        declareFunction("best_gaf_lookup_index", "BEST-GAF-LOOKUP-INDEX", 2, 1, false);
-        declareFunction("num_best_gaf_lookup_index", "NUM-BEST-GAF-LOOKUP-INDEX", 2, 1, false);
-        declareFunction("best_gaf_lookup_index_try_all_allowed", "BEST-GAF-LOOKUP-INDEX-TRY-ALL-ALLOWED", 3, 0, false);
-        declareFunction("num_best_gaf_lookup_index_try_all_allowed", "NUM-BEST-GAF-LOOKUP-INDEX-TRY-ALL-ALLOWED", 3, 0, false);
-        declareFunction("best_gaf_lookup_index_wrt_methods", "BEST-GAF-LOOKUP-INDEX-WRT-METHODS", 3, 0, false);
-        declareFunction("best_gaf_lookup_index_int", "BEST-GAF-LOOKUP-INDEX-INT", 2, 0, false);
-        declareFunction("clear_pred_has_heinous_mt_fanoutP", "CLEAR-PRED-HAS-HEINOUS-MT-FANOUT?", 0, 0, false);
-        declareFunction("remove_pred_has_heinous_mt_fanoutP", "REMOVE-PRED-HAS-HEINOUS-MT-FANOUT?", 1, 0, false);
-        declareFunction("pred_has_heinous_mt_fanoutP_internal", "PRED-HAS-HEINOUS-MT-FANOUT?-INTERNAL", 1, 0, false);
-        declareFunction("pred_has_heinous_mt_fanoutP", "PRED-HAS-HEINOUS-MT-FANOUT?", 1, 0, false);
-        declareFunction("reindex_all_assertions", "REINDEX-ALL-ASSERTIONS", 0, 0, false);
-        declareFunction("clear_all_existing_indexing", "CLEAR-ALL-EXISTING-INDEXING", 0, 0, false);
-        declareFunction("clear_large_existing_indexing", "CLEAR-LARGE-EXISTING-INDEXING", 0, 0, false);
-        declareFunction("reindex_one_of_all_assertions", "REINDEX-ONE-OF-ALL-ASSERTIONS", 1, 0, false);
-        declareFunction("reindex_all_term_assertions", "REINDEX-ALL-TERM-ASSERTIONS", 1, 0, false);
-        declareFunction("reindex_assertions", "REINDEX-ASSERTIONS", 1, 1, false);
-        declareFunction("reindex_assertion", "REINDEX-ASSERTION", 1, 1, false);
-        declareFunction("merge_term_indices", "MERGE-TERM-INDICES", 2, 0, false);
-        declareFunction("find_assertion", "FIND-ASSERTION", 2, 0, false);
-        declareFunction("find_assertion_internal", "FIND-ASSERTION-INTERNAL", 2, 0, false);
-        declareFunction("find_assertion_any_mt", "FIND-ASSERTION-ANY-MT", 1, 0, false);
-        declareFunction("find_assertion_genl_mts", "FIND-ASSERTION-GENL-MTS", 2, 0, false);
-        declareFunction("find_all_assertions", "FIND-ALL-ASSERTIONS", 1, 0, false);
-        declareFunction("find_gaf", "FIND-GAF", 2, 0, false);
-        declareFunction("find_gaf_any_mt", "FIND-GAF-ANY-MT", 1, 0, false);
-        declareFunction("find_gaf_genl_mts", "FIND-GAF-GENL-MTS", 2, 0, false);
-        declareFunction("find_all_gafs", "FIND-ALL-GAFS", 1, 0, false);
-        declareFunction("count_all_gafs", "COUNT-ALL-GAFS", 1, 0, false);
-        declareFunction("find_gaf_in_relevant_mt", "FIND-GAF-IN-RELEVANT-MT", 1, 0, false);
-        declareFunction("find_gaf_possibly_in_mt", "FIND-GAF-POSSIBLY-IN-MT", 1, 1, false);
-        declareFunction("gaf_mts", "GAF-MTS", 1, 0, false);
-        declareFunction("sibling_mt_assertions", "SIBLING-MT-ASSERTIONS", 1, 1, false);
-        declareFunction("sibling_mt_assertion_count", "SIBLING-MT-ASSERTION-COUNT", 1, 1, false);
-        declareFunction("find_cnf", "FIND-CNF", 1, 0, false);
-        declareFunction("find_gaf_cnf", "FIND-GAF-CNF", 1, 0, false);
-        declareFunction("find_rule_cnf", "FIND-RULE-CNF", 1, 0, false);
-        declareFunction("find_rule_cnf_via_index", "FIND-RULE-CNF-VIA-INDEX", 2, 0, false);
-        declareFunction("find_rule_cnf_via_index_int", "FIND-RULE-CNF-VIA-INDEX-INT", 3, 0, false);
-        declareFunction("find_cnf_internal", "FIND-CNF-INTERNAL", 1, 0, false);
-        declareFunction("find_gaf_formula", "FIND-GAF-FORMULA", 1, 0, false);
-        declareFunction("find_gaf_internal", "FIND-GAF-INTERNAL", 2, 0, false);
-        declareFunction("asent_kb_lookup", "ASENT-KB-LOOKUP", 1, 1, false);
-        declareFunction("asent_kb_lookup_in_any_mt", "ASENT-KB-LOOKUP-IN-ANY-MT", 1, 1, false);
-        declareFunction("find_clause_struc", "FIND-CLAUSE-STRUC", 1, 0, false);
-        declareFunction("gather_all_el_rule_assertions_for_term", "GATHER-ALL-EL-RULE-ASSERTIONS-FOR-TERM", 1, 0, false);
-        declareFunction("gather_all_rule_assertions_for_term", "GATHER-ALL-RULE-ASSERTIONS-FOR-TERM", 1, 0, false);
-        declareFunction("gather_all_rule_assertions_for_pred", "GATHER-ALL-RULE-ASSERTIONS-FOR-PRED", 1, 0, false);
-        declareFunction("gather_one_rule_assertion", "GATHER-ONE-RULE-ASSERTION", 1, 0, false);
-        declareFunction("gather_all_isa_rule_assertions_for_col", "GATHER-ALL-ISA-RULE-ASSERTIONS-FOR-COL", 1, 0, false);
-        declareFunction("gather_all_genls_rule_assertions_for_col", "GATHER-ALL-GENLS-RULE-ASSERTIONS-FOR-COL", 1, 0, false);
-        declareFunction("gather_all_other_rule_assertions_for_term", "GATHER-ALL-OTHER-RULE-ASSERTIONS-FOR-TERM", 1, 0, false);
-        return NIL;
-    }
-
-    public static final SubLObject init_kb_indexing_file_alt() {
-        deflexical("*KEY-GAF-ARG-INDEX-CACHED-CACHING-STATE*", NIL);
-        deflexical("*REINDEX-ALL-ASSERTIONS-FULL-GC-THRESHHOLD-CONSTANT-COUNT*", $int$10000);
-        defparameter("*WARN-ON-ASSERTION-REINDEXING-ERRORS?*", T);
-        defparameter("*GATHERED-RULE-ASSERTIONS*", NIL);
+        declareFunction(me, "relevant_num_index", "RELEVANT-NUM-INDEX", 1, 0, false);
+        declareFunction(me, "perform_indexing_pre_dump_cleanup", "PERFORM-INDEXING-PRE-DUMP-CLEANUP", 0, 0, false);
+        declareFunction(me, "get_indexing_pre_dump_cleanup_defs", "GET-INDEXING-PRE-DUMP-CLEANUP-DEFS", 0, 0, false);
+        declareFunction(me, "unindexed_syntax_constant_index_cleanup", "UNINDEXED-SYNTAX-CONSTANT-INDEX-CLEANUP", 0, 0, false);
+        declareFunction(me, "unindexed_syntax_constant_cleanup_one_index", "UNINDEXED-SYNTAX-CONSTANT-CLEANUP-ONE-INDEX", 1, 0, false);
+        declareFunction(me, "unindexed_syntax_constant_index_cleanup_internal", "UNINDEXED-SYNTAX-CONSTANT-INDEX-CLEANUP-INTERNAL", 1, 0, false);
+        declareFunction(me, "term_mt_count", "TERM-MT-COUNT", 1, 0, false);
+        declareFunction(me, "mts_of_indexed_term", "MTS-OF-INDEXED-TERM", 1, 0, false);
+        declareFunction(me, "add_assertion_indices", "ADD-ASSERTION-INDICES", 1, 1, false);
+        declareFunction(me, "remove_assertion_indices", "REMOVE-ASSERTION-INDICES", 1, 1, false);
+        declareFunction(me, "remove_term_indices", "REMOVE-TERM-INDICES", 1, 0, false);
+        declareFunction(me, "determine_formula_indices", "DETERMINE-FORMULA-INDICES", 1, 0, false);
+        declareFunction(me, "optimize_argnum_pairs", "OPTIMIZE-ARGNUM-PAIRS", 1, 0, false);
+        declareFunction(me, "determine_gaf_indices", "DETERMINE-GAF-INDICES", 2, 0, false);
+        declareFunction(me, "add_gaf_indices", "ADD-GAF-INDICES", 1, 1, false);
+        declareFunction(me, "remove_gaf_indices", "REMOVE-GAF-INDICES", 1, 1, false);
+        declareFunction(me, "determine_function_indices", "DETERMINE-FUNCTION-INDICES", 1, 0, false);
+        declareFunction(me, "add_function_indices", "ADD-FUNCTION-INDICES", 1, 1, false);
+        declareFunction(me, "rem_function_indices", "REM-FUNCTION-INDICES", 1, 1, false);
+        declareFunction(me, "determine_rule_indices_int", "DETERMINE-RULE-INDICES-INT", 2, 0, false);
+        declareFunction(me, "determine_rule_indices", "DETERMINE-RULE-INDICES", 1, 0, false);
+        declareFunction(me, "add_rule_indices", "ADD-RULE-INDICES", 1, 1, false);
+        declareFunction(me, "remove_rule_indices", "REMOVE-RULE-INDICES", 1, 1, false);
+        declareFunction(me, "spec_preds_of_ist_indexing_enabledP", "SPEC-PREDS-OF-IST-INDEXING-ENABLED?", 0, 0, false);
+        declareFunction(me, "spec_preds_of_ist_indexing_enabledP_robust", "SPEC-PREDS-OF-IST-INDEXING-ENABLED?-ROBUST", 0, 0, false);
+        declareFunction(me, "spec_preds_of_ist_old_indexed_rule_count", "SPEC-PREDS-OF-IST-OLD-INDEXED-RULE-COUNT", 0, 0, false);
+        declareFunction(me, "enable_spec_preds_of_ist_indexing", "ENABLE-SPEC-PREDS-OF-IST-INDEXING", 0, 0, false);
+        declareFunction(me, "best_nat_lookup_index", "BEST-NAT-LOOKUP-INDEX", 1, 1, false);
+        declareFunction(me, "num_best_nat_lookup_index", "NUM-BEST-NAT-LOOKUP-INDEX", 1, 1, false);
+        declareFunction(me, "best_nat_lookup_index_try_all_allowed", "BEST-NAT-LOOKUP-INDEX-TRY-ALL-ALLOWED", 2, 0, false);
+        declareFunction(me, "num_best_nat_lookup_index_try_all_allowed", "NUM-BEST-NAT-LOOKUP-INDEX-TRY-ALL-ALLOWED", 2, 0, false);
+        declareFunction(me, "best_nat_lookup_index_wrt_methods", "BEST-NAT-LOOKUP-INDEX-WRT-METHODS", 2, 0, false);
+        declareFunction(me, "best_nat_lookup_index_int", "BEST-NAT-LOOKUP-INDEX-INT", 1, 0, false);
+        declareFunction(me, "decent_nat_index_from_terms", "DECENT-NAT-INDEX-FROM-TERMS", 1, 0, false);
+        declareFunction(me, "decent_nat_index", "DECENT-NAT-INDEX", 1, 0, false);
+        declareFunction(me, "best_nat_index_count", "BEST-NAT-INDEX-COUNT", 1, 0, false);
+        declareFunction(me, "decent_rule_index", "DECENT-RULE-INDEX", 1, 0, false);
+        declareFunction(me, "all_rule_indices", "ALL-RULE-INDICES", 1, 0, false);
+        declareFunction(me, "lookup_index_p", "LOOKUP-INDEX-P", 1, 0, false);
+        declareFunction(me, "lookup_index_get_property", "LOOKUP-INDEX-GET-PROPERTY", 2, 1, false);
+        declareFunction(me, "lookup_index_set_property", "LOOKUP-INDEX-SET-PROPERTY", 3, 0, false);
+        declareFunction(me, "lookup_index_get_type", "LOOKUP-INDEX-GET-TYPE", 1, 0, false);
+        declareFunction(me, "lookup_index_predicate_extent_value", "LOOKUP-INDEX-PREDICATE-EXTENT-VALUE", 1, 0, false);
+        declareFunction(me, "lookup_index_gaf_arg_values", "LOOKUP-INDEX-GAF-ARG-VALUES", 1, 0, false);
+        declareFunction(me, "lookup_index_overlap_value", "LOOKUP-INDEX-OVERLAP-VALUE", 1, 0, false);
+        declareFunction(me, "lookup_index_for_overlap", "LOOKUP-INDEX-FOR-OVERLAP", 1, 0, false);
+        declareFunction(me, "lookup_index_for_predicate_extent", "LOOKUP-INDEX-FOR-PREDICATE-EXTENT", 1, 0, false);
+        declareFunction(me, "lookup_index_for_function_extent", "LOOKUP-INDEX-FOR-FUNCTION-EXTENT", 1, 0, false);
+        declareFunction(me, "lookup_index_for_gaf_arg", "LOOKUP-INDEX-FOR-GAF-ARG", 3, 0, false);
+        declareFunction(me, "lookup_index_for_nart_arg", "LOOKUP-INDEX-FOR-NART-ARG", 3, 0, false);
+        declareFunction(me, "lookup_methods_includeP", "LOOKUP-METHODS-INCLUDE?", 2, 0, false);
+        declareFunction(me, "lookup_methods_allow_onlyP", "LOOKUP-METHODS-ALLOW-ONLY?", 2, 0, false);
+        declareFunction(me, "best_gaf_lookup_index", "BEST-GAF-LOOKUP-INDEX", 2, 1, false);
+        declareFunction(me, "num_best_gaf_lookup_index", "NUM-BEST-GAF-LOOKUP-INDEX", 2, 1, false);
+        declareFunction(me, "best_gaf_lookup_index_try_all_allowed", "BEST-GAF-LOOKUP-INDEX-TRY-ALL-ALLOWED", 3, 0, false);
+        declareFunction(me, "num_best_gaf_lookup_index_try_all_allowed", "NUM-BEST-GAF-LOOKUP-INDEX-TRY-ALL-ALLOWED", 3, 0, false);
+        declareFunction(me, "best_gaf_lookup_index_wrt_methods", "BEST-GAF-LOOKUP-INDEX-WRT-METHODS", 3, 0, false);
+        declareFunction(me, "best_gaf_lookup_index_int", "BEST-GAF-LOOKUP-INDEX-INT", 2, 0, false);
+        declareFunction(me, "clear_pred_has_heinous_mt_fanoutP", "CLEAR-PRED-HAS-HEINOUS-MT-FANOUT?", 0, 0, false);
+        declareFunction(me, "remove_pred_has_heinous_mt_fanoutP", "REMOVE-PRED-HAS-HEINOUS-MT-FANOUT?", 1, 0, false);
+        declareFunction(me, "pred_has_heinous_mt_fanoutP_internal", "PRED-HAS-HEINOUS-MT-FANOUT?-INTERNAL", 1, 0, false);
+        declareFunction(me, "pred_has_heinous_mt_fanoutP", "PRED-HAS-HEINOUS-MT-FANOUT?", 1, 0, false);
+        declareFunction(me, "reindex_all_assertions", "REINDEX-ALL-ASSERTIONS", 0, 0, false);
+        declareFunction(me, "clear_all_existing_indexing", "CLEAR-ALL-EXISTING-INDEXING", 0, 0, false);
+        declareFunction(me, "clear_large_existing_indexing", "CLEAR-LARGE-EXISTING-INDEXING", 0, 0, false);
+        declareFunction(me, "reindex_one_of_all_assertions", "REINDEX-ONE-OF-ALL-ASSERTIONS", 1, 0, false);
+        declareFunction(me, "reindex_all_term_assertions", "REINDEX-ALL-TERM-ASSERTIONS", 1, 0, false);
+        declareFunction(me, "reindex_assertions", "REINDEX-ASSERTIONS", 1, 1, false);
+        declareFunction(me, "reindex_assertion", "REINDEX-ASSERTION", 1, 1, false);
+        declareFunction(me, "merge_term_indices", "MERGE-TERM-INDICES", 2, 0, false);
+        declareFunction(me, "find_assertion", "FIND-ASSERTION", 2, 0, false);
+        declareFunction(me, "find_assertion_internal", "FIND-ASSERTION-INTERNAL", 2, 0, false);
+        declareFunction(me, "find_assertion_any_mt", "FIND-ASSERTION-ANY-MT", 1, 0, false);
+        declareFunction(me, "find_assertion_genl_mts", "FIND-ASSERTION-GENL-MTS", 2, 0, false);
+        declareFunction(me, "find_all_assertions", "FIND-ALL-ASSERTIONS", 1, 0, false);
+        declareFunction(me, "find_gaf", "FIND-GAF", 2, 0, false);
+        declareFunction(me, "find_gaf_any_mt", "FIND-GAF-ANY-MT", 1, 0, false);
+        declareFunction(me, "find_gaf_genl_mts", "FIND-GAF-GENL-MTS", 2, 0, false);
+        declareFunction(me, "find_all_gafs", "FIND-ALL-GAFS", 1, 0, false);
+        declareFunction(me, "count_all_gafs", "COUNT-ALL-GAFS", 1, 0, false);
+        declareFunction(me, "find_gaf_in_relevant_mt", "FIND-GAF-IN-RELEVANT-MT", 1, 0, false);
+        declareFunction(me, "find_gaf_possibly_in_mt", "FIND-GAF-POSSIBLY-IN-MT", 1, 1, false);
+        declareFunction(me, "gaf_mts", "GAF-MTS", 1, 0, false);
+        declareFunction(me, "sibling_mt_assertions", "SIBLING-MT-ASSERTIONS", 1, 1, false);
+        declareFunction(me, "sibling_mt_assertion_count", "SIBLING-MT-ASSERTION-COUNT", 1, 1, false);
+        declareFunction(me, "find_cnf", "FIND-CNF", 1, 0, false);
+        declareFunction(me, "find_gaf_cnf", "FIND-GAF-CNF", 1, 0, false);
+        declareFunction(me, "find_rule_cnf", "FIND-RULE-CNF", 1, 0, false);
+        declareFunction(me, "find_rule_cnf_via_index", "FIND-RULE-CNF-VIA-INDEX", 2, 0, false);
+        declareFunction(me, "find_rule_cnf_via_index_int", "FIND-RULE-CNF-VIA-INDEX-INT", 3, 0, false);
+        declareFunction(me, "find_cnf_internal", "FIND-CNF-INTERNAL", 1, 0, false);
+        declareFunction(me, "find_gaf_formula", "FIND-GAF-FORMULA", 1, 0, false);
+        declareFunction(me, "find_gaf_internal", "FIND-GAF-INTERNAL", 2, 0, false);
+        declareFunction(me, "asent_kb_lookup", "ASENT-KB-LOOKUP", 1, 1, false);
+        declareFunction(me, "asent_kb_lookup_in_any_mt", "ASENT-KB-LOOKUP-IN-ANY-MT", 1, 1, false);
+        declareFunction(me, "find_clause_struc", "FIND-CLAUSE-STRUC", 1, 0, false);
+        declareFunction(me, "gather_all_el_rule_assertions_for_term", "GATHER-ALL-EL-RULE-ASSERTIONS-FOR-TERM", 1, 0, false);
+        declareFunction(me, "gather_all_rule_assertions_for_term", "GATHER-ALL-RULE-ASSERTIONS-FOR-TERM", 1, 0, false);
+        declareFunction(me, "gather_all_rule_assertions_for_pred", "GATHER-ALL-RULE-ASSERTIONS-FOR-PRED", 1, 0, false);
+        declareFunction(me, "gather_one_rule_assertion", "GATHER-ONE-RULE-ASSERTION", 1, 0, false);
+        declareFunction(me, "gather_all_isa_rule_assertions_for_col", "GATHER-ALL-ISA-RULE-ASSERTIONS-FOR-COL", 1, 0, false);
+        declareFunction(me, "gather_all_genls_rule_assertions_for_col", "GATHER-ALL-GENLS-RULE-ASSERTIONS-FOR-COL", 1, 0, false);
+        declareFunction(me, "gather_all_other_rule_assertions_for_term", "GATHER-ALL-OTHER-RULE-ASSERTIONS-FOR-TERM", 1, 0, false);
         return NIL;
     }
 
     public static SubLObject init_kb_indexing_file() {
-        if (SubLFiles.USE_V1) {
-            defparameter("*INDEXING-GOOD-ENOUGH-THRESHOLD*", THREE_INTEGER);
-            deflexical("*KEY-GAF-ARG-INDEX-CACHED-CACHING-STATE*", NIL);
-            defparameter("*INDEX-SPEC-PREDS-OF-IST-IN-IST-PRED-INDEX?*", NIL);
-            defparameter("*BEST-GAF-LOOKUP-INDEX-EXACT-NUM-PREDICATE-EXTENT-CUTOFF*", $int$212);
-            defparameter("*BEST-GAF-LOOKUP-INDEX-ZERO-NUM-PREDICATE-EXTENT-CUTOFF*", $int$2120);
-            deflexical("*PRED-HEINOUS-MT-FANOUT-CUTOFF*", $int$100);
-            deflexical("*PRED-HAS-HEINOUS-MT-FANOUT?-CACHING-STATE*", NIL);
-            deflexical("*REINDEX-ALL-ASSERTIONS-FULL-GC-THRESHHOLD-CONSTANT-COUNT*", $int$10000);
-            defparameter("*WARN-ON-ASSERTION-REINDEXING-ERRORS?*", NIL);
-            defparameter("*GATHERED-RULE-ASSERTIONS*", NIL);
-        }
-        if (SubLFiles.USE_V2) {
-            defparameter("*WARN-ON-ASSERTION-REINDEXING-ERRORS?*", T);
-        }
-        return NIL;
-    }
-
-    public static SubLObject init_kb_indexing_file_Previous() {
         defparameter("*INDEXING-GOOD-ENOUGH-THRESHOLD*", THREE_INTEGER);
         deflexical("*KEY-GAF-ARG-INDEX-CACHED-CACHING-STATE*", NIL);
         defparameter("*INDEX-SPEC-PREDS-OF-IST-IN-IST-PRED-INDEX?*", NIL);
@@ -17213,148 +7747,7 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject setup_kb_indexing_file_alt() {
-        register_cyc_api_function(NUM_GAF_ARG_INDEX, $list_alt3, $str_alt4$Return_the_number_of_gafs_indexed, NIL, $list_alt5);
-        register_cyc_api_function(RELEVANT_NUM_GAF_ARG_INDEX, $list_alt8, $str_alt9$Return_the_assertion_count_at_rel, NIL, $list_alt5);
-        memoization_state.note_globally_cached_function(KEY_GAF_ARG_INDEX_CACHED);
-        register_cyc_api_function(KEY_GAF_ARG_INDEX, $list_alt8, $str_alt16$Return_a_list_of_the_keys_to_the_, NIL, $list_alt17);
-        register_cyc_api_function(NUM_NART_ARG_INDEX, $list_alt20, $str_alt21$Return_the_number_of___termOfUnit, NIL, $list_alt5);
-        register_cyc_api_function(RELEVANT_NUM_NART_ARG_INDEX, $list_alt20, $str_alt23$Compute_the_assertion_count_at_re, NIL, $list_alt5);
-        register_cyc_api_function(KEY_NART_ARG_INDEX, $list_alt20, $str_alt25$Return_a_list_of_the_keys_to_the_, NIL, $list_alt17);
-        register_cyc_api_function(NUM_PREDICATE_EXTENT_INDEX, $list_alt28, $str_alt29$Return_the_assertion_count_at_PRE, NIL, $list_alt5);
-        register_cyc_api_function(RELEVANT_NUM_PREDICATE_EXTENT_INDEX, $list_alt32, $str_alt33$Compute_the_assertion_count_at_re, NIL, $list_alt5);
-        register_cyc_api_function(KEY_PREDICATE_EXTENT_INDEX, $list_alt32, $str_alt35$Return_a_list_of_the_keys_to_the_, NIL, $list_alt17);
-        register_cyc_api_function(NUM_FUNCTION_EXTENT_INDEX, $list_alt38, $str_alt39$Return_the_function_extent_of_FUN, NIL, $list_alt5);
-        register_cyc_api_function(RELEVANT_NUM_FUNCTION_EXTENT_INDEX, $list_alt38, $str_alt41$Compute_the_function_extent_at_re, NIL, $list_alt5);
-        register_cyc_api_function(NUM_PREDICATE_RULE_INDEX, $list_alt44, $str_alt45$Return_the_raw_assertion_count_at, NIL, $list_alt5);
-        register_cyc_api_function(KEY_PREDICATE_RULE_INDEX, $list_alt49, $str_alt50$Return_a_list_of_the_keys_to_the_, NIL, $list_alt17);
-        register_cyc_api_function(NUM_DECONTEXTUALIZED_IST_PREDICATE_RULE_INDEX, $list_alt53, $str_alt54$Return_the_raw_assertion_count_at, NIL, $list_alt5);
-        register_cyc_api_function(KEY_DECONTEXTUALIZED_IST_PREDICATE_RULE_INDEX, $list_alt56, $str_alt57$Return_a_list_of_the_keys_to_the_, NIL, $list_alt17);
-        register_cyc_api_function(NUM_ISA_RULE_INDEX, $list_alt60, $str_alt61$Return_the_raw_assertion_count_at, NIL, $list_alt5);
-        register_cyc_api_function(KEY_ISA_RULE_INDEX, $list_alt65, $str_alt66$Return_a_list_of_the_keys_to_the_, NIL, $list_alt17);
-        register_cyc_api_function(NUM_QUOTED_ISA_RULE_INDEX, $list_alt60, $str_alt61$Return_the_raw_assertion_count_at, NIL, $list_alt5);
-        register_cyc_api_function(KEY_QUOTED_ISA_RULE_INDEX, $list_alt65, $str_alt66$Return_a_list_of_the_keys_to_the_, NIL, $list_alt17);
-        register_cyc_api_function(NUM_GENLS_RULE_INDEX, $list_alt60, $str_alt61$Return_the_raw_assertion_count_at, NIL, $list_alt5);
-        register_cyc_api_function(KEY_GENLS_RULE_INDEX, $list_alt65, $str_alt66$Return_a_list_of_the_keys_to_the_, NIL, $list_alt17);
-        register_cyc_api_function(NUM_GENL_MT_RULE_INDEX, $list_alt60, $str_alt61$Return_the_raw_assertion_count_at, NIL, $list_alt5);
-        register_cyc_api_function(KEY_GENL_MT_RULE_INDEX, $list_alt65, $str_alt66$Return_a_list_of_the_keys_to_the_, NIL, $list_alt17);
-        register_cyc_api_function(NUM_FUNCTION_RULE_INDEX, $list_alt84, $str_alt85$Return_the_raw_assertion_count_at, NIL, $list_alt5);
-        register_cyc_api_function(KEY_FUNCTION_RULE_INDEX, $list_alt89, $str_alt90$Return_a_list_of_the_keys_to_the_, NIL, $list_alt17);
-        register_cyc_api_function(NUM_EXCEPTION_RULE_INDEX, $list_alt93, $str_alt94$Return_the_raw_assertion_count_at, NIL, $list_alt5);
-        register_cyc_api_function(KEY_EXCEPTION_RULE_INDEX, $list_alt98, $str_alt99$Return_a_list_of_the_keys_to_the_, NIL, $list_alt17);
-        register_cyc_api_function(NUM_PRAGMA_RULE_INDEX, $list_alt93, $str_alt94$Return_the_raw_assertion_count_at, NIL, $list_alt5);
-        register_cyc_api_function(KEY_PRAGMA_RULE_INDEX, $list_alt98, $str_alt99$Return_a_list_of_the_keys_to_the_, NIL, $list_alt17);
-        register_cyc_api_function(NUM_MT_INDEX, $list_alt110, $str_alt111$Return_the_number_of_assertions_a, NIL, $list_alt5);
-        register_cyc_api_function(NUM_OTHER_INDEX, $list_alt110, $str_alt115$Return_the_number_of_assertions_a, NIL, $list_alt5);
-        register_cyc_api_function(NUM_INDEX, $list_alt110, $str_alt118$The_total_number_of_assertions_in, NIL, $list_alt5);
-        register_cyc_api_function(REMOVE_TERM_INDICES, $list_alt110, $str_alt132$Remove_all_assertions_about_TERM_, NIL, $list_alt133);
-        define_obsolete_register(DECENT_NAT_INDEX, $list_alt171);
-        define_obsolete_register(BEST_NAT_INDEX_COUNT, $list_alt173);
-        register_cyc_api_function(FIND_ASSERTION, $list_alt209, $str_alt210$Find_the_assertion_in_MT_with_CNF, $list_alt211, $list_alt212);
-        register_cyc_api_function(FIND_ASSERTION_ANY_MT, $list_alt215, $str_alt216$Find_any_assertion_in_any_mt_with, $list_alt217, $list_alt212);
-        register_cyc_api_function(FIND_ALL_ASSERTIONS, $list_alt215, $str_alt219$Return_all_assertions_that_have_C, $list_alt217, $list_alt220);
-        register_cyc_api_function(FIND_GAF, $list_alt223, $str_alt224$Find_the_assertion_in_MT_with_GAF, $list_alt225, $list_alt212);
-        register_cyc_api_function(FIND_GAF_ANY_MT, $list_alt227, $str_alt228$Find_any_assertion_in_any_mt_with, $list_alt229, $list_alt212);
-        register_cyc_api_function(FIND_ALL_GAFS, $list_alt227, $str_alt232$Return_all_assertions_of_GAF_FORM, $list_alt229, $list_alt220);
-        return NIL;
-    }
-
     public static SubLObject setup_kb_indexing_file() {
-        if (SubLFiles.USE_V1) {
-            register_cyc_api_function(NUM_GAF_ARG_INDEX, $list4, $str5$Return_the_number_of_gafs_indexed, NIL, $list6);
-            register_cyc_api_function(RELEVANT_NUM_GAF_ARG_INDEX, $list9, $str10$Return_the_assertion_count_at_rel, NIL, $list6);
-            memoization_state.note_globally_cached_function(KEY_GAF_ARG_INDEX_CACHED);
-            register_cyc_api_function(KEY_GAF_ARG_INDEX, $list9, $str16$Return_a_list_of_the_keys_to_the_, NIL, $list17);
-            register_cyc_api_function(NUM_NART_ARG_INDEX, $list21, $str22$Return_the_number_of___termOfUnit, NIL, $list6);
-            register_cyc_api_function(RELEVANT_NUM_NART_ARG_INDEX, $list21, $str24$Compute_the_assertion_count_at_re, NIL, $list6);
-            register_cyc_api_function(KEY_NART_ARG_INDEX, $list21, $str26$Return_a_list_of_the_keys_to_the_, NIL, $list17);
-            register_cyc_api_function(NUM_PREDICATE_EXTENT_INDEX, $list29, $str30$Return_the_assertion_count_at_PRE, NIL, $list6);
-            register_cyc_api_function(RELEVANT_NUM_PREDICATE_EXTENT_INDEX, $list33, $str34$Compute_the_assertion_count_at_re, NIL, $list6);
-            register_cyc_api_function(KEY_PREDICATE_EXTENT_INDEX, $list33, $str36$Return_a_list_of_the_keys_to_the_, NIL, $list17);
-            register_cyc_api_function(NUM_FUNCTION_EXTENT_INDEX, $list39, $str40$Return_the_function_extent_of_FUN, NIL, $list6);
-            register_cyc_api_function(RELEVANT_NUM_FUNCTION_EXTENT_INDEX, $list39, $str42$Compute_the_function_extent_at_re, NIL, $list6);
-            register_cyc_api_function(NUM_PREDICATE_RULE_INDEX, $list45, $str46$Return_the_raw_assertion_count_at, NIL, $list6);
-            register_cyc_api_function(KEY_PREDICATE_RULE_INDEX, $list50, $str51$Return_a_list_of_the_keys_to_the_, NIL, $list17);
-            register_cyc_api_function(NUM_DECONTEXTUALIZED_IST_PREDICATE_RULE_INDEX, $list54, $str55$Return_the_raw_assertion_count_at, NIL, $list6);
-            register_cyc_api_function(KEY_DECONTEXTUALIZED_IST_PREDICATE_RULE_INDEX, $list57, $str58$Return_a_list_of_the_keys_to_the_, NIL, $list17);
-            register_cyc_api_function(NUM_ISA_RULE_INDEX, $list61, $str62$Return_the_raw_assertion_count_at, NIL, $list6);
-            register_cyc_api_function(KEY_ISA_RULE_INDEX, $list66, $str67$Return_a_list_of_the_keys_to_the_, NIL, $list17);
-            register_cyc_api_function(NUM_QUOTED_ISA_RULE_INDEX, $list61, $str62$Return_the_raw_assertion_count_at, NIL, $list6);
-            register_cyc_api_function(KEY_QUOTED_ISA_RULE_INDEX, $list66, $str67$Return_a_list_of_the_keys_to_the_, NIL, $list17);
-            register_cyc_api_function(NUM_GENLS_RULE_INDEX, $list61, $str62$Return_the_raw_assertion_count_at, NIL, $list6);
-            register_cyc_api_function(KEY_GENLS_RULE_INDEX, $list66, $str67$Return_a_list_of_the_keys_to_the_, NIL, $list17);
-            register_cyc_api_function(NUM_GENL_MT_RULE_INDEX, $list61, $str62$Return_the_raw_assertion_count_at, NIL, $list6);
-            register_cyc_api_function(KEY_GENL_MT_RULE_INDEX, $list66, $str67$Return_a_list_of_the_keys_to_the_, NIL, $list17);
-            register_cyc_api_function(NUM_FUNCTION_RULE_INDEX, $list85, $str86$Return_the_raw_assertion_count_at, NIL, $list6);
-            register_cyc_api_function(KEY_FUNCTION_RULE_INDEX, $list90, $str91$Return_a_list_of_the_keys_to_the_, NIL, $list17);
-            register_cyc_api_function(NUM_EXCEPTION_RULE_INDEX, $list94, $str95$Return_the_raw_assertion_count_at, NIL, $list6);
-            register_cyc_api_function(KEY_EXCEPTION_RULE_INDEX, $list99, $str100$Return_a_list_of_the_keys_to_the_, NIL, $list17);
-            register_cyc_api_function(NUM_PRAGMA_RULE_INDEX, $list94, $str95$Return_the_raw_assertion_count_at, NIL, $list6);
-            register_cyc_api_function(KEY_PRAGMA_RULE_INDEX, $list99, $str100$Return_a_list_of_the_keys_to_the_, NIL, $list17);
-            register_cyc_api_function(NUM_MT_INDEX, $list108, $str109$Return_the_number_of_assertions_a, NIL, $list6);
-            register_cyc_api_function(NUM_HLMT_INDEX, $list120, $str121$Return_the_number_of_assertions_a, NIL, $list6);
-            note_funcall_helper_function(REM_BROAD_MT_INDEX);
-            register_cyc_api_function(NUM_OTHER_INDEX, $list108, $str125$Return_the_number_of_assertions_a, NIL, $list6);
-            register_cyc_api_function(NUM_INDEX, $list108, $str130$The_total_number_of_assertions_in, NIL, $list6);
-            note_funcall_helper_function(UNINDEXED_SYNTAX_CONSTANT_CLEANUP_ONE_INDEX);
-            register_cyc_api_function(REMOVE_TERM_INDICES, $list108, $str145$Remove_all_assertions_about_TERM_, NIL, $list146);
-            define_obsolete_register(DECENT_NAT_INDEX, $list190);
-            define_obsolete_register(BEST_NAT_INDEX_COUNT, $list192);
-            memoization_state.note_globally_cached_function($sym218$PRED_HAS_HEINOUS_MT_FANOUT_);
-            register_cyc_api_function(FIND_ASSERTION, $list237, $str238$Find_the_assertion_in_MT_with_CNF, $list239, $list240);
-            register_cyc_api_function(FIND_ASSERTION_ANY_MT, $list243, $str244$Find_any_assertion_in_any_mt_with, $list245, $list240);
-            register_cyc_api_function(FIND_ALL_ASSERTIONS, $list243, $str247$Return_all_assertions_that_have_C, $list245, $list248);
-            register_cyc_api_function(FIND_GAF, $list252, $str253$Find_the_assertion_in_MT_with_GAF, $list254, $list240);
-            register_cyc_api_function(FIND_GAF_ANY_MT, $list256, $str257$Find_any_assertion_in_any_mt_with, $list258, $list240);
-            register_cyc_api_function(FIND_ALL_GAFS, $list256, $str261$Return_all_assertions_of_GAF_FORM, $list258, $list248);
-        }
-        if (SubLFiles.USE_V2) {
-            register_cyc_api_function(NUM_GAF_ARG_INDEX, $list_alt3, $str_alt4$Return_the_number_of_gafs_indexed, NIL, $list_alt5);
-            register_cyc_api_function(RELEVANT_NUM_GAF_ARG_INDEX, $list_alt8, $str_alt9$Return_the_assertion_count_at_rel, NIL, $list_alt5);
-            register_cyc_api_function(KEY_GAF_ARG_INDEX, $list_alt8, $str_alt16$Return_a_list_of_the_keys_to_the_, NIL, $list_alt17);
-            register_cyc_api_function(NUM_NART_ARG_INDEX, $list_alt20, $str_alt21$Return_the_number_of___termOfUnit, NIL, $list_alt5);
-            register_cyc_api_function(RELEVANT_NUM_NART_ARG_INDEX, $list_alt20, $str_alt23$Compute_the_assertion_count_at_re, NIL, $list_alt5);
-            register_cyc_api_function(KEY_NART_ARG_INDEX, $list_alt20, $str_alt25$Return_a_list_of_the_keys_to_the_, NIL, $list_alt17);
-            register_cyc_api_function(NUM_PREDICATE_EXTENT_INDEX, $list_alt28, $str_alt29$Return_the_assertion_count_at_PRE, NIL, $list_alt5);
-            register_cyc_api_function(RELEVANT_NUM_PREDICATE_EXTENT_INDEX, $list_alt32, $str_alt33$Compute_the_assertion_count_at_re, NIL, $list_alt5);
-            register_cyc_api_function(KEY_PREDICATE_EXTENT_INDEX, $list_alt32, $str_alt35$Return_a_list_of_the_keys_to_the_, NIL, $list_alt17);
-            register_cyc_api_function(NUM_FUNCTION_EXTENT_INDEX, $list_alt38, $str_alt39$Return_the_function_extent_of_FUN, NIL, $list_alt5);
-            register_cyc_api_function(RELEVANT_NUM_FUNCTION_EXTENT_INDEX, $list_alt38, $str_alt41$Compute_the_function_extent_at_re, NIL, $list_alt5);
-            register_cyc_api_function(NUM_PREDICATE_RULE_INDEX, $list_alt44, $str_alt45$Return_the_raw_assertion_count_at, NIL, $list_alt5);
-            register_cyc_api_function(KEY_PREDICATE_RULE_INDEX, $list_alt49, $str_alt50$Return_a_list_of_the_keys_to_the_, NIL, $list_alt17);
-            register_cyc_api_function(NUM_DECONTEXTUALIZED_IST_PREDICATE_RULE_INDEX, $list_alt53, $str_alt54$Return_the_raw_assertion_count_at, NIL, $list_alt5);
-            register_cyc_api_function(KEY_DECONTEXTUALIZED_IST_PREDICATE_RULE_INDEX, $list_alt56, $str_alt57$Return_a_list_of_the_keys_to_the_, NIL, $list_alt17);
-            register_cyc_api_function(NUM_ISA_RULE_INDEX, $list_alt60, $str_alt61$Return_the_raw_assertion_count_at, NIL, $list_alt5);
-            register_cyc_api_function(KEY_ISA_RULE_INDEX, $list_alt65, $str_alt66$Return_a_list_of_the_keys_to_the_, NIL, $list_alt17);
-            register_cyc_api_function(NUM_QUOTED_ISA_RULE_INDEX, $list_alt60, $str_alt61$Return_the_raw_assertion_count_at, NIL, $list_alt5);
-            register_cyc_api_function(KEY_QUOTED_ISA_RULE_INDEX, $list_alt65, $str_alt66$Return_a_list_of_the_keys_to_the_, NIL, $list_alt17);
-            register_cyc_api_function(NUM_GENLS_RULE_INDEX, $list_alt60, $str_alt61$Return_the_raw_assertion_count_at, NIL, $list_alt5);
-            register_cyc_api_function(KEY_GENLS_RULE_INDEX, $list_alt65, $str_alt66$Return_a_list_of_the_keys_to_the_, NIL, $list_alt17);
-            register_cyc_api_function(NUM_GENL_MT_RULE_INDEX, $list_alt60, $str_alt61$Return_the_raw_assertion_count_at, NIL, $list_alt5);
-            register_cyc_api_function(KEY_GENL_MT_RULE_INDEX, $list_alt65, $str_alt66$Return_a_list_of_the_keys_to_the_, NIL, $list_alt17);
-            register_cyc_api_function(NUM_FUNCTION_RULE_INDEX, $list_alt84, $str_alt85$Return_the_raw_assertion_count_at, NIL, $list_alt5);
-            register_cyc_api_function(KEY_FUNCTION_RULE_INDEX, $list_alt89, $str_alt90$Return_a_list_of_the_keys_to_the_, NIL, $list_alt17);
-            register_cyc_api_function(NUM_EXCEPTION_RULE_INDEX, $list_alt93, $str_alt94$Return_the_raw_assertion_count_at, NIL, $list_alt5);
-            register_cyc_api_function(KEY_EXCEPTION_RULE_INDEX, $list_alt98, $str_alt99$Return_a_list_of_the_keys_to_the_, NIL, $list_alt17);
-            register_cyc_api_function(NUM_PRAGMA_RULE_INDEX, $list_alt93, $str_alt94$Return_the_raw_assertion_count_at, NIL, $list_alt5);
-            register_cyc_api_function(KEY_PRAGMA_RULE_INDEX, $list_alt98, $str_alt99$Return_a_list_of_the_keys_to_the_, NIL, $list_alt17);
-            register_cyc_api_function(NUM_MT_INDEX, $list_alt110, $str_alt111$Return_the_number_of_assertions_a, NIL, $list_alt5);
-            register_cyc_api_function(NUM_OTHER_INDEX, $list_alt110, $str_alt115$Return_the_number_of_assertions_a, NIL, $list_alt5);
-            register_cyc_api_function(NUM_INDEX, $list_alt110, $str_alt118$The_total_number_of_assertions_in, NIL, $list_alt5);
-            register_cyc_api_function(REMOVE_TERM_INDICES, $list_alt110, $str_alt132$Remove_all_assertions_about_TERM_, NIL, $list_alt133);
-            define_obsolete_register(DECENT_NAT_INDEX, $list_alt171);
-            define_obsolete_register(BEST_NAT_INDEX_COUNT, $list_alt173);
-            register_cyc_api_function(FIND_ASSERTION, $list_alt209, $str_alt210$Find_the_assertion_in_MT_with_CNF, $list_alt211, $list_alt212);
-            register_cyc_api_function(FIND_ASSERTION_ANY_MT, $list_alt215, $str_alt216$Find_any_assertion_in_any_mt_with, $list_alt217, $list_alt212);
-            register_cyc_api_function(FIND_ALL_ASSERTIONS, $list_alt215, $str_alt219$Return_all_assertions_that_have_C, $list_alt217, $list_alt220);
-            register_cyc_api_function(FIND_GAF, $list_alt223, $str_alt224$Find_the_assertion_in_MT_with_GAF, $list_alt225, $list_alt212);
-            register_cyc_api_function(FIND_GAF_ANY_MT, $list_alt227, $str_alt228$Find_any_assertion_in_any_mt_with, $list_alt229, $list_alt212);
-            register_cyc_api_function(FIND_ALL_GAFS, $list_alt227, $str_alt232$Return_all_assertions_of_GAF_FORM, $list_alt229, $list_alt220);
-        }
-        return NIL;
-    }
-
-    public static SubLObject setup_kb_indexing_file_Previous() {
         register_cyc_api_function(NUM_GAF_ARG_INDEX, $list4, $str5$Return_the_number_of_gafs_indexed, NIL, $list6);
         register_cyc_api_function(RELEVANT_NUM_GAF_ARG_INDEX, $list9, $str10$Return_the_assertion_count_at_rel, NIL, $list6);
         memoization_state.note_globally_cached_function(KEY_GAF_ARG_INDEX_CACHED);
@@ -17420,6 +7813,289 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
     }
 
     static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     public static final class $clear_key_gaf_arg_index_cached$ZeroArityFunction extends ZeroArityFunction {
@@ -17466,177 +8142,18 @@ public final class kb_indexing extends SubLTranslatedFile implements V12 {
         }
     }
 
-    static private final SubLList $list_alt3 = list(makeSymbol("TERM"), makeSymbol("&OPTIONAL"), makeSymbol("ARGNUM"), makeSymbol("PRED"), makeSymbol("MT"));
 
-    static private final SubLString $str_alt4$Return_the_number_of_gafs_indexed = makeString("Return the number of gafs indexed off of TERM ARGNUM PRED MT.");
-
-    static private final SubLList $list_alt5 = list(makeSymbol("INTEGERP"));
-
-    static private final SubLList $list_alt8 = list(makeSymbol("TERM"), makeSymbol("&OPTIONAL"), makeSymbol("ARGNUM"), makeSymbol("PRED"));
-
-    static private final SubLString $str_alt9$Return_the_assertion_count_at_rel = makeString("Return the assertion count at relevant mts under TERM ARGNUM PRED.");
-
-    public static final SubLSymbol $kw15$_MEMOIZED_ITEM_NOT_FOUND_ = makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
-
-    static private final SubLString $str_alt16$Return_a_list_of_the_keys_to_the_ = makeString("Return a list of the keys to the next index level below TERM ARGNUM PRED.\n   @note destructible");
-
-    static private final SubLList $list_alt17 = list(makeSymbol("LISTP"));
-
-    static private final SubLList $list_alt20 = list(makeSymbol("TERM"), makeSymbol("&OPTIONAL"), makeSymbol("ARGNUM"), makeSymbol("FUNC"));
-
-    static private final SubLString $str_alt21$Return_the_number_of___termOfUnit = makeString("Return the number of #$termOfUnit gafs indexed off of TERM ARGNUM FUNC.");
-
-    static private final SubLString $str_alt23$Compute_the_assertion_count_at_re = makeString("Compute the assertion count at relevant mts under TERM ARGNUM FUNC.\n   This will be the entire count extent if *tou-mt* is relevant,\n   and zero otherwise.");
-
-    static private final SubLString $str_alt25$Return_a_list_of_the_keys_to_the_ = makeString("Return a list of the keys to the next index level below TERM ARGNUM FUNC.");
-
-    static private final SubLList $list_alt28 = list(makeSymbol("PRED"), makeSymbol("&OPTIONAL"), makeSymbol("MT"));
-
-    static private final SubLString $str_alt29$Return_the_assertion_count_at_PRE = makeString("Return the assertion count at PRED MT.");
-
-    static private final SubLList $list_alt32 = list(makeSymbol("PRED"));
-
-    static private final SubLString $str_alt33$Compute_the_assertion_count_at_re = makeString("Compute the assertion count at relevant mts under PRED.");
-
-    static private final SubLString $str_alt35$Return_a_list_of_the_keys_to_the_ = makeString("Return a list of the keys to the next predicate-extent index level below PRED.");
-
-    static private final SubLList $list_alt38 = list(makeSymbol("FUNC"));
-
-    static private final SubLString $str_alt39$Return_the_function_extent_of_FUN = makeString("Return the function extent of FUNC.");
-
-    static private final SubLString $str_alt41$Compute_the_function_extent_at_re = makeString("Compute the function extent at relevant mts under FUNC.\n   This will be the entire function extent if *tou-mt* is relevant,\n   and zero otherwise.");
-
-    static private final SubLList $list_alt44 = list(makeSymbol("PRED"), makeSymbol("&OPTIONAL"), makeSymbol("SENSE"), makeSymbol("MT"), makeSymbol("DIRECTION"));
-
-    static private final SubLString $str_alt45$Return_the_raw_assertion_count_at = makeString("Return the raw assertion count at PRED SENSE MT DIRECTION.");
-
-    static private final SubLList $list_alt49 = list(makeSymbol("PRED"), makeSymbol("&OPTIONAL"), makeSymbol("SENSE"), makeSymbol("MT"));
-
-    static private final SubLString $str_alt50$Return_a_list_of_the_keys_to_the_ = makeString("Return a list of the keys to the next index level below PRED SENSE MT.");
-
-    static private final SubLList $list_alt53 = list(makeSymbol("PRED"), makeSymbol("&OPTIONAL"), makeSymbol("SENSE"), makeSymbol("DIRECTION"));
-
-    static private final SubLString $str_alt54$Return_the_raw_assertion_count_at = makeString("Return the raw assertion count at PRED SENSE DIRECTION.");
-
-    static private final SubLList $list_alt56 = list(makeSymbol("PRED"), makeSymbol("&OPTIONAL"), makeSymbol("SENSE"));
-
-    static private final SubLString $str_alt57$Return_a_list_of_the_keys_to_the_ = makeString("Return a list of the keys to the next index level below PRED SENSE.");
-
-    static private final SubLList $list_alt60 = list(makeSymbol("COL"), makeSymbol("&OPTIONAL"), makeSymbol("SENSE"), makeSymbol("MT"), makeSymbol("DIRECTION"));
-
-    static private final SubLString $str_alt61$Return_the_raw_assertion_count_at = makeString("Return the raw assertion count at COL SENSE MT DIRECTION.");
-
-    static private final SubLList $list_alt65 = list(makeSymbol("COL"), makeSymbol("&OPTIONAL"), makeSymbol("SENSE"), makeSymbol("MT"));
-
-    static private final SubLString $str_alt66$Return_a_list_of_the_keys_to_the_ = makeString("Return a list of the keys to the next index level below COL SENSE MT.");
-
-    static private final SubLList $list_alt84 = list(makeSymbol("FUNC"), makeSymbol("&OPTIONAL"), makeSymbol("MT"), makeSymbol("DIRECTION"));
-
-    static private final SubLString $str_alt85$Return_the_raw_assertion_count_at = makeString("Return the raw assertion count at FUNC MT DIRECTION.");
-
-    static private final SubLList $list_alt89 = list(makeSymbol("FUNC"), makeSymbol("&OPTIONAL"), makeSymbol("MT"));
-
-    static private final SubLString $str_alt90$Return_a_list_of_the_keys_to_the_ = makeString("Return a list of the keys to the next index level below FUNC MT.");
-
-    static private final SubLList $list_alt93 = list(makeSymbol("RULE"), makeSymbol("&OPTIONAL"), makeSymbol("MT"), makeSymbol("DIRECTION"));
-
-    static private final SubLString $str_alt94$Return_the_raw_assertion_count_at = makeString("Return the raw assertion count at RULE MT DIRECTION.");
-
-    static private final SubLList $list_alt98 = list(makeSymbol("RULE"), makeSymbol("&OPTIONAL"), makeSymbol("MT"));
-
-    static private final SubLString $str_alt99$Return_a_list_of_the_keys_to_the_ = makeString("Return a list of the keys to the next index level below RULE MT.");
-
-    static private final SubLList $list_alt110 = list(makeSymbol("TERM"));
-
-    static private final SubLString $str_alt111$Return_the_number_of_assertions_a = makeString("Return the number of assertions at the mt index for TERM.");
-
-    static private final SubLString $str_alt115$Return_the_number_of_assertions_a = makeString("Return the number of assertions at the other index for TERM.");
-
-    static private final SubLString $str_alt118$The_total_number_of_assertions_in = makeString("The total number of assertions indexed from TERM.");
-
-    static private final SubLString $str_alt119$Performing_indexing_cleanup___ = makeString("Performing indexing cleanup...");
-
-    static private final SubLSymbol $sym126$_ = makeSymbol(">");
-
-    static private final SubLString $str_alt130$indexing_problem_while_removing__ = makeString("indexing problem while removing ~S");
-
-    static private final SubLString $str_alt132$Remove_all_assertions_about_TERM_ = makeString("Remove all assertions about TERM from the KB. Return the TERM.");
-
-    static private final SubLList $list_alt133 = list(makeSymbol("INDEXED-TERM-P"));
-
-    static private final SubLString $str_alt138$So_don_t_ = makeString("So don't!");
-
-    static private final SubLString $str_alt139$Don_t_know_how_to_index__S = makeString("Don't know how to index ~S");
-
-    static private final SubLList $list_alt140 = cons(makeSymbol("ARGNUM"), makeSymbol("ARG"));
-
-    static private final SubLList $list_alt141 = cons(makeSymbol("F-ARGNUM"), makeSymbol("F-ARG"));
-
-    static private final SubLList $list_alt158 = list(makeSymbol("NEG-INDEXING-TYPE"), makeSymbol("NEG-TERM"));
-
-    static private final SubLString $str_alt159$Can_t_index_a_pragmatic_requireme = makeString("Can't index a pragmatic requirement as a neg-lit ~S");
-
-    static private final SubLString $str_alt160$Can_t_index_an_exception_as_a_neg = makeString("Can't index an exception as a neg-lit ~S");
-
-    static private final SubLString $str_alt161$Don_t_know_how_to_handle_indexing = makeString("Don't know how to handle indexing type ~S");
-
-    static private final SubLList $list_alt162 = list(makeSymbol("POS-INDEXING-TYPE"), makeSymbol("POS-TERM"));
-
-    static private final SubLString $str_alt163$Can_t_index_a_function_rule_as_a_ = makeString("Can't index a function rule as a pos-lit ~S");
-
-    static private final SubLString $str_alt164$Can_t_remove_the_index_of_a_pragm = makeString("Can't remove the index of a pragmatic requirement as a neg-lit ~S");
-
-    static private final SubLString $str_alt165$Can_t_remove_the_index_of_an_exce = makeString("Can't remove the index of an exception as a neg-lit ~S");
-
-    static private final SubLString $str_alt166$Can_t_remove_the_index_of_a_funct = makeString("Can't remove the index of a function rule as a pos-lit ~S");
-
-    static private final SubLList $list_alt171 = list(makeSymbol("BEST-NAT-LOOKUP-INDEX"));
-
-    static private final SubLList $list_alt173 = list(makeSymbol("NUM-BEST-NAT-LOOKUP-INDEX"));
-
-    static private final SubLList $list_alt186 = list(makeSymbol("NEG-INDEXING-TYPE"), makeSymbol("TERM"));
-
-    static private final SubLList $list_alt187 = list(makeSymbol("POS-INDEXING-TYPE"), makeSymbol("TERM"));
-
-    static private final SubLString $str_alt203$Error_when_indexing_assertion__A_ = makeString("Error when indexing assertion ~A: ~A.~%");
-
-    static private final SubLSymbol $sym204$_ = makeSymbol("<");
-
-    static private final SubLList $list_alt209 = list(makeSymbol("CNF"), makeSymbol("MT"));
-
-    static private final SubLString $str_alt210$Find_the_assertion_in_MT_with_CNF = makeString("Find the assertion in MT with CNF.  Return NIL if not present.");
-
-    static private final SubLList $list_alt211 = list(list(makeSymbol("CNF"), makeSymbol("CNF-P")), list(makeSymbol("MT"), makeSymbol("HLMT-P")));
-
-    static private final SubLList $list_alt212 = list(list(makeSymbol("NIL-OR"), makeSymbol("ASSERTION-P")));
-
-    static private final SubLList $list_alt215 = list(makeSymbol("CNF"));
-
-    static private final SubLString $str_alt216$Find_any_assertion_in_any_mt_with = makeString("Find any assertion in any mt with CNF.  Return NIL if none are present.");
-
-    static private final SubLList $list_alt217 = list(list(makeSymbol("CNF"), makeSymbol("CNF-P")));
-
-    static private final SubLString $str_alt219$Return_all_assertions_that_have_C = makeString("Return all assertions that have CNF or NIL if there aren\'t any.\n   @note destructible");
-
-    static private final SubLList $list_alt220 = list(list(makeSymbol("NIL-OR"), list(makeSymbol("LIST"), makeSymbol("ASSERTION-P"))));
-
-    static private final SubLList $list_alt223 = list(makeSymbol("GAF-FORMULA"), makeSymbol("MT"));
-
-    static private final SubLString $str_alt224$Find_the_assertion_in_MT_with_GAF = makeString("Find the assertion in MT with GAF-FORMULA as its formula.  Return NIL if not present.");
-
-    static private final SubLList $list_alt225 = list(list(makeSymbol("GAF-FORMULA"), makeSymbol("EL-FORMULA-P")), list(makeSymbol("MT"), makeSymbol("HLMT-P")));
-
-    static private final SubLList $list_alt227 = list(makeSymbol("GAF-FORMULA"));
-
-    static private final SubLString $str_alt228$Find_any_assertion_in_any_mt_with = makeString("Find any assertion in any mt with GAF-FORMULA as its formula.  Return NIL if not present.");
-
-    static private final SubLList $list_alt229 = list(list(makeSymbol("GAF-FORMULA"), makeSymbol("EL-FORMULA-P")));
-
-    static private final SubLString $str_alt232$Return_all_assertions_of_GAF_FORM = makeString("Return all assertions of GAF-FORMULA or NIL if there aren\'t any.\n   @note destructible");
-
-    static private final SubLList $list_alt233 = list(makeSymbol("INDEX"), makeSymbol("TERM"));
-
-    static private final SubLList $list_alt238 = list(makeKeyword("NEG"), makeKeyword("POS"));
+	/**
+	 * TODO Describe the purpose of this method.
+	 * @param rf
+	 * @return
+	 */
+	public static SubLObject dependent_narts(SubLObject rf) {
+		// TODO Auto-generated method stub
+		if (true)
+			Errors.unimplementedMethod(myName);
+		return null;
+	}
 }
 
 /**

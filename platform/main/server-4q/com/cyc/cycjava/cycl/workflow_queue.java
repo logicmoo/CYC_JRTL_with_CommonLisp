@@ -1457,7 +1457,7 @@ public final class workflow_queue extends SubLTranslatedFile implements V02 {
                 try {
                     if (NIL != cyc_fort) {
                         {
-                            SubLObject salient_gens = pph_utilities.pph_salient_generalizations(cyc_fort, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                            SubLObject salient_gens = pph_utilities.pph_salient_generalizations(cyc_fort, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED_SYM);
                             SubLObject string = pph_main.generate_phrase(salient_gens.first(), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
                             SubLObject cdolist_list_var = salient_gens.rest();
                             SubLObject item = NIL;

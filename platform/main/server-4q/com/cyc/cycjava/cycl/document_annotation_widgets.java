@@ -1,158 +1,13 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.access_macros.register_external_symbol;
-import static com.cyc.cycjava.cycl.cb_parameters.$cb_permit_robots_to_followP$;
-import static com.cyc.cycjava.cycl.cb_parameters.$cb_permit_robots_to_indexP$;
-import static com.cyc.cycjava.cycl.cb_parameters.cb_head_shortcut_icon;
-import static com.cyc.cycjava.cycl.cb_utilities.cb_form;
-import static com.cyc.cycjava.cycl.cb_utilities.cb_frame_name;
-import static com.cyc.cycjava.cycl.cb_utilities.cb_guess_term;
-import static com.cyc.cycjava.cycl.cfasl.$terse_guid_serialization_enabled_for_cfasl_encode_externalizedP$;
-import static com.cyc.cycjava.cycl.constant_handles.constant_p;
-import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
-import static com.cyc.cycjava.cycl.constant_handles.valid_constant;
-import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.define_test_case_table_int;
-import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.run_test_case_table;
-import static com.cyc.cycjava.cycl.el_utilities.el_formula_p;
-import static com.cyc.cycjava.cycl.el_utilities.variable_subst;
-import static com.cyc.cycjava.cycl.html_utilities.html_char;
-import static com.cyc.cycjava.cycl.html_utilities.html_color;
-import static com.cyc.cycjava.cycl.html_utilities.html_copyright_notice;
-import static com.cyc.cycjava.cycl.html_utilities.html_extract_input;
-import static com.cyc.cycjava.cycl.html_utilities.html_hidden_input;
-import static com.cyc.cycjava.cycl.html_utilities.html_indent;
-import static com.cyc.cycjava.cycl.html_utilities.html_markup;
-import static com.cyc.cycjava.cycl.html_utilities.html_meta_robot_instructions;
-import static com.cyc.cycjava.cycl.html_utilities.html_newline;
-import static com.cyc.cycjava.cycl.html_utilities.html_princ;
-import static com.cyc.cycjava.cycl.html_utilities.html_radio_input;
-import static com.cyc.cycjava.cycl.html_utilities.html_reset_input;
-import static com.cyc.cycjava.cycl.html_utilities.html_simple_attribute;
-import static com.cyc.cycjava.cycl.html_utilities.html_source_readability_terpri;
-import static com.cyc.cycjava.cycl.html_utilities.html_submit_input;
-import static com.cyc.cycjava.cycl.html_utilities.html_text_input;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_empty_p;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_id_and_object_validP;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_next_id;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_next_state;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_state_object;
-import static com.cyc.cycjava.cycl.id_index.id_index_dense_objects;
-import static com.cyc.cycjava.cycl.id_index.id_index_dense_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_next_id;
-import static com.cyc.cycjava.cycl.id_index.id_index_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_skip_tombstones_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_id_threshold;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_objects;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_tombstone_p;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.$catch_error_message_target$;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.declare_defglobal;
-import static com.cyc.cycjava.cycl.utilities_macros.$is_noting_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_index$;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_prediction$;
-import static com.cyc.cycjava.cycl.utilities_macros.$percent_progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_elapsed_seconds_for_notification$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_last_pacification_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_note$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_notification_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_pacifications_since_last_nl$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_sofar$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_total$;
-import static com.cyc.cycjava.cycl.utilities_macros.$silent_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$suppress_all_progress_faster_than_seconds$;
-import static com.cyc.cycjava.cycl.utilities_macros.$within_noting_percent_progress$;
-import static com.cyc.cycjava.cycl.utilities_macros.note_percent_progress;
-import static com.cyc.cycjava.cycl.utilities_macros.note_progress;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_percent_progress_postamble;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_percent_progress_preamble;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_progress_postamble;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_progress_preamble;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_backslash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_space;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.append;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.bind;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.currentBinding;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.rebind;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.eq;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.apply;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.gethash_without_values;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.subtract;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.zerop;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.write_to_string;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.cconcatenate;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.length;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.nreverse;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.remove;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.remove_if;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.search;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.subseq;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.boundp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.current_process;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.sleep;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.get_universal_time;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.stringp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.sublisp_null;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.arg2;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.multiple_value_list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.resetMultipleValues;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.values;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.aref;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_listp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.assoc;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.caar;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cadr;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cddr;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.copy_tree;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.fourth;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.getf;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.intersection;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.member;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.putf;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.rassoc;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.second;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.third;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.princ;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.bq_cons;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.read_from_string;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.read_from_string_ignoring_errors;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.close;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.get_output_stream_string;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.make_private_string_output_stream;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.read_line;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.terpri;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
-import static com.cyc.tool.subl.util.SubLFiles.defconstant;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-
+import com.cyc.cycjava.cycl.cb_parameters;
+import com.cyc.cycjava.cycl.cfasl;
+import com.cyc.cycjava.cycl.document_annotation_widgets;
 import com.cyc.cycjava.cycl.inference.ask_utilities;
 import com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars;
+import com.cyc.cycjava.cycl.subl_macro_promotions;
+import com.cyc.cycjava.cycl.utilities_macros;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Filesys;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
@@ -170,244 +25,121 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
+import java.util.function.Supplier;
+
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.cb_parameters.*;
+import static com.cyc.cycjava.cycl.cb_utilities.*;
+import static com.cyc.cycjava.cycl.cfasl.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
+import static com.cyc.cycjava.cycl.document_annotation_widgets.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.html_utilities.*;
+import static com.cyc.cycjava.cycl.id_index.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_backslash;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_space;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EIGHT_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUALP;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIFTEEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWENTY_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- * module:      DOCUMENT-ANNOTATION-WIDGETS
- * source file: /cyc/top/cycl/document-annotation-widgets.lisp
- * created:     2019/07/03 17:38:57
- */
-public final class document_annotation_widgets extends SubLTranslatedFile implements V12 {
-    public static final SubLObject test_steve_bendelackarian(SubLObject cyclist) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject _prev_bind_0 = api_control_vars.$the_cyclist$.currentBinding(thread);
-                try {
-                    api_control_vars.$the_cyclist$.bind(cyclist, thread);
-                    {
-                        SubLObject term_meanings = cure_api.term_learner_known_meanings_for_string($$$Steve_Bendelackarian, $str_alt112$, $$$full, cyclist);
-                        SubLObject new_term = second(term_meanings.first());
-                        SubLObject new_term_message = third(term_meanings.first());
-                        SubLObject isa_genls_sentence = listS($$isa, new_term, $list_alt455);
-                        SubLObject hl_id = fourth(term_meanings.first());
-                        try {
-                            if (!com.cyc.cycjava.cycl.document_annotation_widgets.term_learner_object_from_id(hl_id).equal(new_term)) {
-                                Errors.error($str_alt431$HL_ID__S_does_not_point_to__A, hl_id, new_term);
-                            }
-                            if (!new_term_message.equal($$$Currently_Unknown_to_Cyc)) {
-                                Errors.error($str_alt433$_A_is_not_a_new_term___Returned_g, new_term, new_term_message);
-                            }
-                            sleep(FIVE_INTEGER);
-                            {
-                                SubLObject known_types = cure_api.term_learner_ordered_types_for_tagged_term(hl_id, UNPROVIDED, UNPROVIDED);
-                                SubLObject justs = getf(known_types.first(), $JUSTIFICATIONS, UNPROVIDED);
-                                SubLObject unassert_result = cure_api.term_learner_user_choice($$$Individual, $$$Steve_Bendelackarian, hl_id, kb_utilities.compact_hl_external_id_string(isa_genls_sentence), NIL, $UNASSERT, justs, $str_alt458$http___en_wikipedia_org_wiki_Stev, $str_alt459$Steve_Bendelack___Wikipedia__the_, $$CycAdministrator);
-                                if (!getf(unassert_result, $STATUS_CODE, UNPROVIDED).equal(THREE_INTEGER)) {
-                                    Errors.error($str_alt450$Expected_3__but_got__A_as_status_, getf(unassert_result, $STATUS_CODE, UNPROVIDED), isa_genls_sentence);
-                                }
-                            }
-                        } finally {
-                            {
-                                SubLObject _prev_bind_0_167 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                try {
-                                    $is_thread_performing_cleanupP$.bind(T, thread);
-                                    api_widgets.kill_constant(new_term);
-                                } finally {
-                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_167, thread);
-                                }
-                            }
-                        }
-                    }
-                } finally {
-                    api_control_vars.$the_cyclist$.rebind(_prev_bind_0, thread);
-                }
-            }
-            return T;
-        }
-    }
-
-    public static final SubLObject test_m19_assertions(SubLObject cyclist) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject _prev_bind_0 = api_control_vars.$the_cyclist$.currentBinding(thread);
-                try {
-                    api_control_vars.$the_cyclist$.bind(cyclist, thread);
-                    cure_api.term_learner_ordered_types_for_term_in_document_string_merged_justifications($str_alt428$In_1983__she_served_as_a_member_o, $str_alt429$M_29, NIL, UNPROVIDED);
-                    {
-                        SubLObject term_meanings = cure_api.term_learner_known_meanings_for_string($str_alt429$M_29, $str_alt112$, UNPROVIDED, UNPROVIDED);
-                        SubLObject new_term = second(term_meanings.first());
-                        SubLObject new_term_message = third(term_meanings.first());
-                        SubLObject isa_genls_sentence = listS($$isa, new_term, $list_alt430);
-                        SubLObject hl_id = fourth(term_meanings.first());
-                        try {
-                            if (!com.cyc.cycjava.cycl.document_annotation_widgets.term_learner_object_from_id(hl_id).equal(new_term)) {
-                                Errors.error($str_alt431$HL_ID__S_does_not_point_to__A, hl_id, new_term);
-                            }
-                            if (!new_term_message.equal($$$Currently_Unknown_to_Cyc)) {
-                                Errors.error($str_alt433$_A_is_not_a_new_term___Returned_g, new_term, new_term_message);
-                            }
-                            {
-                                SubLObject user_types = cure_api.term_learner_ordered_types_for_user_added_type($$$guerilla_group, hl_id, $$$full, UNPROVIDED, UNPROVIDED);
-                                SubLObject successP = NIL;
-                                SubLObject cdolist_list_var = user_types;
-                                SubLObject user_type = NIL;
-                                for (user_type = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , user_type = cdolist_list_var.first()) {
-                                    if (getf(user_type, $CYCL, UNPROVIDED).equal(narts_high.nart_substitute(isa_genls_sentence)) && getf(user_type, $ASSERT_SENTENCE, UNPROVIDED).equal(narts_high.nart_substitute(isa_genls_sentence))) {
-                                        successP = T;
-                                    }
-                                }
-                                if (NIL == successP) {
-                                    Errors.error($str_alt437$_A_does_not_contain__A, user_types, narts_high.nart_substitute(isa_genls_sentence));
-                                }
-                            }
-                            {
-                                SubLObject assert_result = cure_api.term_learner_user_choice($str_alt438$_CollectionIntersection2Fn_Revolt, $str_alt439$the_M_19, hl_id, kb_utilities.compact_hl_external_id_string(isa_genls_sentence), $list_alt440, $REPLACE, $list_alt442, $str_alt443$http___en_wikipedia_org_wiki_Laur, $str_alt444$Laura_Restrepo___Wikipedia__the_f, api_control_vars.$the_cyclist$.getDynamicValue(thread));
-                                if (getf(assert_result, $STATUS_CODE, UNPROVIDED) != ONE_INTEGER) {
-                                    Errors.error($str_alt446$Didn_t_get_status_code_1_when_ass, isa_genls_sentence);
-                                }
-                            }
-                            {
-                                SubLObject fact_status = cure_api.term_learner_fact_status($str_alt439$the_M_19, hl_id, kb_utilities.compact_hl_external_id_string(isa_genls_sentence), $list_alt442, $str_alt443$http___en_wikipedia_org_wiki_Laur, $str_alt444$Laura_Restrepo___Wikipedia__the_f, cyclist);
-                                if (!fact_status.equal($list_alt447)) {
-                                    Errors.error($str_alt448$after_asserting__A__fact_status_s, isa_genls_sentence, $list_alt447, fact_status);
-                                }
-                            }
-                            sleep(FIVE_INTEGER);
-                            {
-                                SubLObject unassert_result = cure_api.term_learner_user_choice($str_alt438$_CollectionIntersection2Fn_Revolt, $str_alt439$the_M_19, hl_id, kb_utilities.compact_hl_external_id_string(isa_genls_sentence), $list_alt440, $UNASSERT, $list_alt442, $str_alt443$http___en_wikipedia_org_wiki_Laur, $str_alt444$Laura_Restrepo___Wikipedia__the_f, cyclist);
-                                if (!getf(unassert_result, $STATUS_CODE, UNPROVIDED).equal(THREE_INTEGER)) {
-                                    Errors.error($str_alt450$Expected_3__but_got__A_as_status_, getf(unassert_result, $STATUS_CODE, UNPROVIDED), isa_genls_sentence);
-                                }
-                            }
-                            {
-                                SubLObject fact_status = cure_api.term_learner_fact_status($str_alt439$the_M_19, hl_id, kb_utilities.compact_hl_external_id_string(isa_genls_sentence), $list_alt442, $str_alt443$http___en_wikipedia_org_wiki_Laur, $str_alt444$Laura_Restrepo___Wikipedia__the_f, cyclist);
-                                if (!fact_status.equal($list_alt451)) {
-                                    Errors.error($str_alt452$after_unasserting__A__fact_status, isa_genls_sentence, $list_alt451, fact_status);
-                                }
-                            }
-                        } finally {
-                            {
-                                SubLObject _prev_bind_0_166 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                try {
-                                    $is_thread_performing_cleanupP$.bind(T, thread);
-                                    api_widgets.kill_constant(new_term);
-                                } finally {
-                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_166, thread);
-                                }
-                            }
-                        }
-                    }
-                } finally {
-                    api_control_vars.$the_cyclist$.rebind(_prev_bind_0, thread);
-                }
-            }
-            return T;
-        }
-    }
-
-    public static final SubLObject test_find_concepts_for_document_segments(SubLObject input, SubLObject document_segment, SubLObject output_term) {
-        {
-            SubLObject concepts = com.cyc.cycjava.cycl.document_annotation_widgets.find_concepts_for_document_segments(input, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            SubLObject cdolist_list_var = concepts;
-            SubLObject segment = NIL;
-            for (segment = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , segment = cdolist_list_var.first()) {
-                if ((segment.first() == document_segment) && output_term.equal(com.cyc.cycjava.cycl.document_annotation_widgets.term_learner_object_from_id(fourth(segment)))) {
-                    return T;
-                }
-            }
-        }
-        return NIL;
-    }
-
-    public static final SubLObject run_doc_ingester_tests() {
-        {
-            SubLObject results = NIL;
-            results = cons(run_test_case_table(TEST_FIND_CONCEPTS_FOR_DOCUMENT_SEGMENTS, UNPROVIDED, UNPROVIDED, UNPROVIDED), results);
-            results = cons(run_test_case_table(TEST_M19_ASSERTIONS, UNPROVIDED, UNPROVIDED, UNPROVIDED), results);
-            results = cons(run_test_case_table(TEST_STEVE_BENDELACKARIAN, UNPROVIDED, UNPROVIDED, UNPROVIDED), results);
-            if (NIL != subl_promotions.memberP($FAILURE, results, UNPROVIDED, UNPROVIDED)) {
-                format(T, $str_alt424$Overall_Result_for_Doc_Ingester_T);
-            } else {
-                format(T, $str_alt425$Overall_Result_for_Doc_Ingester_T);
-            }
-            return makeBoolean(NIL == subl_promotions.memberP($FAILURE, results, UNPROVIDED, UNPROVIDED));
-        }
-    }
-
-    public static final SubLObject clear_default_document_ingester_annotation_lexicon() {
-        $default_document_ingester_annotation_lexicon$.setDynamicValue(NIL);
-        return NIL;
-    }
-
-    static private final SubLString $str_alt112$ = makeString("");
-
-    // defparameter
-    @LispMethod(comment = "defparameter")
-    public static final SubLSymbol $default_document_ingester_annotation_lexicon$ = makeSymbol("*DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEXICON*");
-
+public final class document_annotation_widgets extends SubLTranslatedFile {
     public static final SubLFile me = new document_annotation_widgets();
 
+    public static final String myName = "com.cyc.cycjava.cycl.document_annotation_widgets";
 
+    public static final String myFingerPrint = "0791c8f1a8ac8ee4e11d4c48871a2a23877fb45f04c6f9d4a0d9eceada695430";
 
     // defparameter
-    // Definitions
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $text_index$ = makeSymbol("*TEXT-INDEX*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $semantic_index$ = makeSymbol("*SEMANTIC-INDEX*");
 
     // defparameter
-    /**
-     * Setting a value for this will override any values that
-     * might be bound elsewhere (e.g. as part of a WAR file
-     */
-    @LispMethod(comment = "Setting a value for this will override any values that\r\nmight be bound elsewhere (e.g. as part of a WAR file\ndefparameter\nSetting a value for this will override any values that\nmight be bound elsewhere (e.g. as part of a WAR file")
     private static final SubLSymbol $text_index_override$ = makeSymbol("*TEXT-INDEX-OVERRIDE*");
 
     // defparameter
-    @LispMethod(comment = "Setting a value for this will override any values that\r\nmight be bound elsewhere (e.g. as part of a WAR file\ndefparameter\nSetting a value for this will override any values that\nmight be bound elsewhere (e.g. as part of a WAR file")
     private static final SubLSymbol $semantic_index_override$ = makeSymbol("*SEMANTIC-INDEX-OVERRIDE*");
+
+
+
+
 
     // defparameter
     /**
      * a table mapping indexing predicates to their compact string representation
      * used in the index
      */
-    @LispMethod(comment = "a table mapping indexing predicates to their compact string representation\r\nused in the index\ndefparameter\na table mapping indexing predicates to their compact string representation\nused in the index")
     public static final SubLSymbol $predicate_id_table$ = makeSymbol("*PREDICATE-ID-TABLE*");
 
     // defparameter
     // a table mapping predicates to their templates
-    /**
-     * a table mapping predicates to their templates
-     */
-    @LispMethod(comment = "a table mapping predicates to their templates\ndefparameter")
     private static final SubLSymbol $predicate_template_table$ = makeSymbol("*PREDICATE-TEMPLATE-TABLE*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $upwards_closure_justification_fbc$ = makeSymbol("*UPWARDS-CLOSURE-JUSTIFICATION-FBC*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $upwards_closure_justification_fht_path$ = makeSymbol("*UPWARDS-CLOSURE-JUSTIFICATION-FHT-PATH*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $doc_annotation_thcl_verboseP$ = makeSymbol("*DOC-ANNOTATION-THCL-VERBOSE?*");
 
+
+
+
+
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $upwards_closure_query_mt$ = makeSymbol("*UPWARDS-CLOSURE-QUERY-MT*");
+
+
 
     // defparameter
     /**
@@ -415,95 +147,84 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
      * KB won't change and we'll be computing the upwards closure for multiple
      * terms.
      */
-    @LispMethod(comment = "BOOLEANP; When non-NIL, make some optimizations for case where we assume the\r\nKB won\'t change and we\'ll be computing the upwards closure for multiple\r\nterms.\ndefparameter\nBOOLEANP; When non-NIL, make some optimizations for case where we assume the\nKB won\'t change and we\'ll be computing the upwards closure for multiple\nterms.")
     private static final SubLSymbol $caching_upwards_closure_justificationsP$ = makeSymbol("*CACHING-UPWARDS-CLOSURE-JUSTIFICATIONS?*");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // defparameter
     // The default location for storing xml documents that have been tagged
-    /**
-     * The default location for storing xml documents that have been tagged
-     */
-    @LispMethod(comment = "The default location for storing xml documents that have been tagged\ndefparameter")
     private static final SubLSymbol $tagged_xml_doc_directory$ = makeSymbol("*TAGGED-XML-DOC-DIRECTORY*");
 
     // defconstant
-    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $tagged_doc_title_name$ = makeSymbol("*TAGGED-DOC-TITLE-NAME*");
 
     // defconstant
-    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $tagged_doc_title_token$ = makeSymbol("*TAGGED-DOC-TITLE-TOKEN*");
 
     // defconstant
-    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $tagged_doc_title_close_token$ = makeSymbol("*TAGGED-DOC-TITLE-CLOSE-TOKEN*");
 
     // defconstant
-    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $tagged_doc_text_name$ = makeSymbol("*TAGGED-DOC-TEXT-NAME*");
 
     // defconstant
-    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $tagged_doc_text_token$ = makeSymbol("*TAGGED-DOC-TEXT-TOKEN*");
 
     // defconstant
-    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $tagged_doc_text_close_token$ = makeSymbol("*TAGGED-DOC-TEXT-CLOSE-TOKEN*");
 
     // defconstant
-    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $tagged_doc_keystring_name$ = makeSymbol("*TAGGED-DOC-KEYSTRING-NAME*");
 
     // defconstant
-    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $tagged_doc_keystring_token$ = makeSymbol("*TAGGED-DOC-KEYSTRING-TOKEN*");
 
     // defconstant
-    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $tagged_doc_confirmed_concepts_keystring_token$ = makeSymbol("*TAGGED-DOC-CONFIRMED-CONCEPTS-KEYSTRING-TOKEN*");
 
     // defconstant
-    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $tagged_doc_confirmed_concepts_keystring_name$ = makeSymbol("*TAGGED-DOC-CONFIRMED-CONCEPTS-KEYSTRING-NAME*");
 
     // defconstant
-    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $tagged_doc_original_filename_name$ = makeSymbol("*TAGGED-DOC-ORIGINAL-FILENAME-NAME*");
 
     // defconstant
-    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $tagged_doc_original_filename_token$ = makeSymbol("*TAGGED-DOC-ORIGINAL-FILENAME-TOKEN*");
 
     // defconstant
-    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $tagged_doc_url_name$ = makeSymbol("*TAGGED-DOC-URL-NAME*");
 
     // defconstant
-    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $tagged_doc_url_token$ = makeSymbol("*TAGGED-DOC-URL-TOKEN*");
 
     // defconstant
-    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $tagged_doc_url_close_token$ = makeSymbol("*TAGGED-DOC-URL-CLOSE-TOKEN*");
 
     // defconstant
-    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $tagged_doc_parent_filename_name$ = makeSymbol("*TAGGED-DOC-PARENT-FILENAME-NAME*");
 
     // defconstant
-    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $tagged_doc_parent_filename_token$ = makeSymbol("*TAGGED-DOC-PARENT-FILENAME-TOKEN*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $semantic_index_dir_name$ = makeSymbol("*SEMANTIC-INDEX-DIR-NAME*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $text_index_dir_name$ = makeSymbol("*TEXT-INDEX-DIR-NAME*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $annotated_document_format$ = makeSymbol("*ANNOTATED-DOCUMENT-FORMAT*");
 
     // defparameter
@@ -512,166 +233,175 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
      * should assume that each concept is listed individually in input/output, or if
      * multiple concepts can be munged together in an encoded list
      */
-    @LispMethod(comment = "A temporary control parameter that gates whether or not the doc-ingester\r\nshould assume that each concept is listed individually in input/output, or if\r\nmultiple concepts can be munged together in an encoded list\ndefparameter\nA temporary control parameter that gates whether or not the doc-ingester\nshould assume that each concept is listed individually in input/output, or if\nmultiple concepts can be munged together in an encoded list")
     public static final SubLSymbol $term_learner_keep_concepts_distinct$ = makeSymbol("*TERM-LEARNER-KEEP-CONCEPTS-DISTINCT*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $default_medical_tagging_lexicon$ = makeSymbol("*DEFAULT-MEDICAL-TAGGING-LEXICON*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $doc_annotation_use_hl_ids$ = makeSymbol("*DOC-ANNOTATION-USE-HL-IDS*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $doc_annotator_term_id_fbc_path$ = makeSymbol("*DOC-ANNOTATOR-TERM-ID-FBC-PATH*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $doc_annotator_id_term_fbc_path$ = makeSymbol("*DOC-ANNOTATOR-ID-TERM-FBC-PATH*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $doc_annotator_term_id_fbc$ = makeSymbol("*DOC-ANNOTATOR-TERM-ID-FBC*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $doc_annotator_id_term_fbc$ = makeSymbol("*DOC-ANNOTATOR-ID-TERM-FBC*");
 
-    // defparameter
-    @LispMethod(comment = "defparameter")
-    public static final SubLSymbol $default_document_ingester_annotation_learning_lexicons$ = makeSymbol("*DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEARNING-LEXICONS*");
+
+
+
 
     // defparameter
-    @LispMethod(comment = "defparameter")
+    public static final SubLSymbol $default_document_ingester_annotation_learning_lexicons$ = makeSymbol("*DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEARNING-LEXICONS*");
+
+
+
+    // defparameter
     public static final SubLSymbol $default_document_annotation_learning_lexicon$ = makeSymbol("*DEFAULT-DOCUMENT-ANNOTATION-LEARNING-LEXICON*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $default_document_annotation_lexicon$ = makeSymbol("*DEFAULT-DOCUMENT-ANNOTATION-LEXICON*");
 
+
+
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $default_document_annotation_rule_disambiguator$ = makeSymbol("*DEFAULT-DOCUMENT-ANNOTATION-RULE-DISAMBIGUATOR*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $remove_pictures_regexp$ = makeSymbol("*REMOVE-PICTURES-REGEXP*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $remove_hyphens_regexp$ = makeSymbol("*REMOVE-HYPHENS-REGEXP*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $remove_underscores_regexp$ = makeSymbol("*REMOVE-UNDERSCORES-REGEXP*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $remove_equals_regexp$ = makeSymbol("*REMOVE-EQUALS-REGEXP*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $remove_dots_regexp$ = makeSymbol("*REMOVE-DOTS-REGEXP*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $remove_unicode_regexp$ = makeSymbol("*REMOVE-UNICODE-REGEXP*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $cached_regexps$ = makeSymbol("*CACHED-REGEXPS*");
 
+
+
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $document_interpretation_default_elmt$ = makeSymbol("*DOCUMENT-INTERPRETATION-DEFAULT-ELMT*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $manual_document_annotation_instructions$ = makeSymbol("*MANUAL-DOCUMENT-ANNOTATION-INSTRUCTIONS*");
 
     // Internal Constants
-    @LispMethod(comment = "Internal Constants")
-    static private final SubLString $str0$_host_george_super_index_hezbolla = makeString("/host/george/super-index-hezbollah/text");
+    public static final SubLString $str0$_host_george_super_index_hezbolla = makeString("/host/george/super-index-hezbollah/text");
 
-    static private final SubLString $str1$_host_george_super_index_hezbolla = makeString("/host/george/super-index-hezbollah/sem");
+    public static final SubLString $str1$_host_george_super_index_hezbolla = makeString("/host/george/super-index-hezbollah/sem");
 
-    static private final SubLString $str2$_cyc_projects_ccf_document_search = makeString("/cyc/projects/ccf/document-search/doc-corpus/currently-installed-at-ccf/super-index/text");
+    public static final SubLString $str2$_cyc_projects_ccf_document_search = makeString("/cyc/projects/ccf/document-search/doc-corpus/currently-installed-at-ccf/super-index/text");
 
-    static private final SubLString $str3$_cyc_projects_ccf_document_search = makeString("/cyc/projects/ccf/document-search/doc-corpus/currently-installed-at-ccf/super-index/sem");
+    public static final SubLString $str3$_cyc_projects_ccf_document_search = makeString("/cyc/projects/ccf/document-search/doc-corpus/currently-installed-at-ccf/super-index/sem");
 
-    static private final SubLString $str4$_host_achernar_daves_ccf_lucene_t = makeString("/host/achernar/daves/ccf-lucene/text");
+    public static final SubLString $str4$_host_achernar_daves_ccf_lucene_t = makeString("/host/achernar/daves/ccf-lucene/text");
 
-    static private final SubLString $str5$_host_achernar_daves_ccf_lucene_s = makeString("/host/achernar/daves/ccf-lucene/sem-20070720");
+    public static final SubLString $str5$_host_achernar_daves_ccf_lucene_s = makeString("/host/achernar/daves/ccf-lucene/sem-20070720");
 
-    static private final SubLString $str6$_cyc_projects_ccf_document_search = makeString("/cyc/projects/ccf/document-search/doc-corpus/20091021-133607/super-index/sem/");
+    public static final SubLString $str6$_cyc_projects_ccf_document_search = makeString("/cyc/projects/ccf/document-search/doc-corpus/20091021-133607/super-index/sem/");
 
-    static private final SubLString $str7$_cyc_projects_ccf_document_search = makeString("/cyc/projects/ccf/document-search/doc-corpus/20091021-133607/super-index/text/");
+    public static final SubLString $str7$_cyc_projects_ccf_document_search = makeString("/cyc/projects/ccf/document-search/doc-corpus/20091021-133607/super-index/text/");
 
-    static private final SubLList $list8 = list(makeSymbol("LIST"));
+    public static final SubLList $list8 = list(makeSymbol("LIST"));
 
-    static private final SubLSymbol $sym9$OUT = makeUninternedSymbol("OUT");
+    public static final SubLSymbol $sym9$OUT = makeUninternedSymbol("OUT");
+
+
+
+
 
     public static final SubLSymbol $trace_doc_search_interface$ = makeSymbol("*TRACE-DOC-SEARCH-INTERFACE*");
 
+
+
     public static final SubLSymbol $trace_output$ = makeSymbol("*TRACE-OUTPUT*");
 
-    static private final SubLString $str15$___A__entering__S__ = makeString("~&~A: entering ~S~%");
+    public static final SubLString $str15$___A__entering__S__ = makeString("~&~A: entering ~S~%");
 
-    static private final SubLList $list16 = list(makeSymbol("TIMESTAMP-WITH-MILLISECONDS"));
+    public static final SubLList $list16 = list(makeSymbol("TIMESTAMP-WITH-MILLISECONDS"));
 
     public static final SubLSymbol $doc_search_trace_log_file$ = makeSymbol("*DOC-SEARCH-TRACE-LOG-FILE*");
 
-    static private final SubLList $list19 = list(makeSymbol("*DOC-SEARCH-TRACE-LOG-FILE*"), makeKeyword("APPEND"));
 
-    static private final SubLList $list20 = list(makeSymbol("WARN"), makeString("writing to ~S"), makeSymbol("*DOC-SEARCH-TRACE-LOG-FILE*"));
 
-    static private final SubLList $list21 = list(cons(reader_make_constant_shell("genls"), makeString("g")), cons(reader_make_constant_shell("isa"), makeString("i")), cons(reader_make_constant_shell("inRegion"), makeString("r")), cons(reader_make_constant_shell("hasLeaders"), makeString("l")), cons(reader_make_constant_shell("standardTreatmentTypeForConditionType"), makeString("c")), cons(reader_make_constant_shell("ailmentTypeAfflictsPartType"), makeString("a")), cons(reader_make_constant_shell("conditionsCommonlyCooccur"), makeString("o")));
+    public static final SubLList $list19 = list(makeSymbol("*DOC-SEARCH-TRACE-LOG-FILE*"), makeKeyword("APPEND"));
 
-    static private final SubLList $list22 = list(list(reader_make_constant_shell("isa"), reader_make_constant_shell("isa"), $SPEC, $GENL), list(reader_make_constant_shell("genls"), reader_make_constant_shell("genls"), $SPEC, $GENL), list(reader_make_constant_shell("inRegion"), reader_make_constant_shell("inRegion"), $SPEC, $GENL), list(reader_make_constant_shell("hasLeaders"), reader_make_constant_shell("hasLeaders"), $GENL, $SPEC), list(reader_make_constant_shell("standardTreatmentTypeForConditionType"), reader_make_constant_shell("standardTreatmentTypeForConditionType"), $SPEC, $GENL), list(reader_make_constant_shell("ailmentTypeAfflictsPartType"), reader_make_constant_shell("ailmentTypeAfflictsPartType"), $SPEC, $GENL), list(reader_make_constant_shell("conditionsCommonlyCooccur"), reader_make_constant_shell("conditionsCommonlyCooccur"), $SPEC, $GENL));
+    public static final SubLList $list20 = list(makeSymbol("WARN"), makeString("writing to ~S"), makeSymbol("*DOC-SEARCH-TRACE-LOG-FILE*"));
 
-    static private final SubLString $str23$data_doc_tagging_upwards_closure_ = makeString("data/doc-tagging/upwards-closure-justifications.fht");
+    public static final SubLList $list21 = list(cons(reader_make_constant_shell(makeString("genls")), makeString("g")), cons(reader_make_constant_shell(makeString("isa")), makeString("i")), cons(reader_make_constant_shell(makeString("inRegion")), makeString("r")), cons(reader_make_constant_shell(makeString("hasLeaders")), makeString("l")), cons(reader_make_constant_shell(makeString("standardTreatmentTypeForConditionType")), makeString("c")), cons(reader_make_constant_shell(makeString("ailmentTypeAfflictsPartType")), makeString("a")), cons(reader_make_constant_shell(makeString("conditionsCommonlyCooccur")), makeString("o")));
 
-    static private final SubLString $str25$_host_george_scratch_text_index = makeString("/host/george/scratch/text-index");
+    public static final SubLList $list22 = list(list(reader_make_constant_shell(makeString("isa")), reader_make_constant_shell(makeString("isa")), makeKeyword("SPEC"), makeKeyword("GENL")), list(reader_make_constant_shell(makeString("genls")), reader_make_constant_shell(makeString("genls")), makeKeyword("SPEC"), makeKeyword("GENL")), list(reader_make_constant_shell(makeString("inRegion")), reader_make_constant_shell(makeString("inRegion")), makeKeyword("SPEC"), makeKeyword("GENL")), list(reader_make_constant_shell(makeString("hasLeaders")), reader_make_constant_shell(makeString("hasLeaders")), makeKeyword("GENL"), makeKeyword("SPEC")), list(reader_make_constant_shell(makeString("standardTreatmentTypeForConditionType")), reader_make_constant_shell(makeString("standardTreatmentTypeForConditionType")), makeKeyword("SPEC"), makeKeyword("GENL")), list(reader_make_constant_shell(makeString("ailmentTypeAfflictsPartType")), reader_make_constant_shell(makeString("ailmentTypeAfflictsPartType")), makeKeyword("SPEC"), makeKeyword("GENL")), list(reader_make_constant_shell(makeString("conditionsCommonlyCooccur")), reader_make_constant_shell(makeString("conditionsCommonlyCooccur")), makeKeyword("SPEC"), makeKeyword("GENL")));
 
-    static private final SubLString $str26$_host_george_scratch_sem_index = makeString("/host/george/scratch/sem-index");
+    public static final SubLString $str23$data_doc_tagging_upwards_closure_ = makeString("data/doc-tagging/upwards-closure-justifications.fht");
 
-    static private final SubLString $str27$_host_george_simple_tagged_index_ = makeString("/host/george/simple-tagged-index/textual");
 
-    static private final SubLString $str28$_host_george_simple_tagged_index_ = makeString("/host/george/simple-tagged-index/semantic");
 
-    static private final SubLString $str29$_host_george_disambiguated_index_ = makeString("/host/george/disambiguated-index/text");
+    public static final SubLString $str25$_host_george_scratch_text_index = makeString("/host/george/scratch/text-index");
 
-    static private final SubLString $str30$_host_george_disambiguated_index_ = makeString("/host/george/disambiguated-index/sem");
+    public static final SubLString $str26$_host_george_scratch_sem_index = makeString("/host/george/scratch/sem-index");
 
-    private static final SubLSymbol TERM_LEARNER_OBJECT_FROM_ID = makeSymbol("TERM-LEARNER-OBJECT-FROM-ID");
+    public static final SubLString $str27$_host_george_simple_tagged_index_ = makeString("/host/george/simple-tagged-index/textual");
+
+    public static final SubLString $str28$_host_george_simple_tagged_index_ = makeString("/host/george/simple-tagged-index/semantic");
+
+    public static final SubLString $str29$_host_george_disambiguated_index_ = makeString("/host/george/disambiguated-index/text");
+
+    public static final SubLString $str30$_host_george_disambiguated_index_ = makeString("/host/george/disambiguated-index/sem");
+
+
+
+
+
+    public static final SubLSymbol TERM_LEARNER_OBJECT_FROM_ID = makeSymbol("TERM-LEARNER-OBJECT-FROM-ID");
 
     public static final SubLSymbol $term_learner_object_from_id_caching_state$ = makeSymbol("*TERM-LEARNER-OBJECT-FROM-ID-CACHING-STATE*");
+
+
+
+
 
     private static final SubLSymbol TERM_LEARNER_ID = makeSymbol("TERM-LEARNER-ID");
 
     private static final SubLSymbol $term_learner_id_caching_state$ = makeSymbol("*TERM-LEARNER-ID-CACHING-STATE*");
 
-    private static final SubLList $list39 = list(reader_make_constant_shell("MtUnionFn"), reader_make_constant_shell("CurrentWorldDataCollectorMt-NonHomocentric"), reader_make_constant_shell("CCF-CAEQueryMt"));
+    private static final SubLList $list39 = list(reader_make_constant_shell(makeString("MtUnionFn")), reader_make_constant_shell(makeString("CurrentWorldDataCollectorMt-NonHomocentric")), reader_make_constant_shell(makeString("CCF-CAEQueryMt")));
 
     private static final SubLSymbol GET_UPWARDS_CLOSURE_JUSTIFICATIONS = makeSymbol("GET-UPWARDS-CLOSURE-JUSTIFICATIONS");
 
+    private static final SubLObject $$genls = reader_make_constant_shell(makeString("genls"));
 
+    private static final SubLObject $const42$standardTreatmentTypeForCondition = reader_make_constant_shell(makeString("standardTreatmentTypeForConditionType"));
 
-    private static final SubLObject $const42$standardTreatmentTypeForCondition = reader_make_constant_shell("standardTreatmentTypeForConditionType");
+    private static final SubLObject $$ailmentTypeAfflictsPartType = reader_make_constant_shell(makeString("ailmentTypeAfflictsPartType"));
 
+    private static final SubLObject $$conditionsCommonlyCooccur = reader_make_constant_shell(makeString("conditionsCommonlyCooccur"));
 
+    private static final SubLObject $$isa = reader_make_constant_shell(makeString("isa"));
 
+    private static final SubLObject $$inRegion = reader_make_constant_shell(makeString("inRegion"));
 
-
-
-
-
-
-
+    private static final SubLObject $$hasLeaders = reader_make_constant_shell(makeString("hasLeaders"));
 
     private static final SubLSymbol GET_UPWARDS_CLOSURE_JUSTIFICATIONS_CACHED = makeSymbol("GET-UPWARDS-CLOSURE-JUSTIFICATIONS-CACHED");
+
+
 
     private static final SubLSymbol $get_upwards_closure_justifications_cached_caching_state$ = makeSymbol("*GET-UPWARDS-CLOSURE-JUSTIFICATIONS-CACHED-CACHING-STATE*");
 
@@ -681,21 +411,21 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
 
     private static final SubLString $str53$Caching_upwards_closure_justifica = makeString("Caching upwards-closure justifications");
 
+    private static final SubLObject $$MedicalDevice = reader_make_constant_shell(makeString("MedicalDevice"));
 
+    private static final SubLObject $$MedicalTreatmentEvent = reader_make_constant_shell(makeString("MedicalTreatmentEvent"));
 
+    private static final SubLObject $$AilmentCondition = reader_make_constant_shell(makeString("AilmentCondition"));
 
-
-
-
-
+    private static final SubLObject $$IntelligentAgent = reader_make_constant_shell(makeString("IntelligentAgent"));
 
     private static final SubLSymbol GET_TREATED_CONDITION = makeSymbol("GET-TREATED-CONDITION");
 
     private static final SubLSymbol $sym59$_X = makeSymbol("?X");
 
+    private static final SubLObject $$or = reader_make_constant_shell(makeString("or"));
 
-
-
+    private static final SubLObject $$deviceTypeTreatsConditionType = reader_make_constant_shell(makeString("deviceTypeTreatsConditionType"));
 
     private static final SubLList $list62 = list(makeSymbol("?X"));
 
@@ -725,7 +455,7 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
 
     private static final SubLSymbol $sym75$_GROUP = makeSymbol("?GROUP");
 
-
+    private static final SubLObject $$InferencePSC = reader_make_constant_shell(makeString("InferencePSC"));
 
     private static final SubLSymbol LEADERS_TO_GROUPS = makeSymbol("LEADERS-TO-GROUPS");
 
@@ -733,7 +463,7 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
 
     private static final SubLList $list79 = cons(makeSymbol("?LEADER"), makeSymbol("?GROUP"));
 
-    static private final SubLList $list80 = list(reader_make_constant_shell("hasLeaders"), makeSymbol("?GROUP"), makeSymbol("?LEADER"));
+    public static final SubLList $list80 = list(reader_make_constant_shell(makeString("hasLeaders")), makeSymbol("?GROUP"), makeSymbol("?LEADER"));
 
     private static final SubLSymbol $leaders_to_groups_caching_state$ = makeSymbol("*LEADERS-TO-GROUPS-CACHING-STATE*");
 
@@ -743,39 +473,45 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
 
     private static final SubLList $list84 = cons(makeSymbol("?CITY"), makeSymbol("?COUNTRY"));
 
-    private static final SubLList $list85 = list(reader_make_constant_shell("countryOfCity"), makeSymbol("?COUNTRY"), makeSymbol("?CITY"));
+    private static final SubLList $list85 = list(reader_make_constant_shell(makeString("countryOfCity")), makeSymbol("?COUNTRY"), makeSymbol("?CITY"));
 
-    static private final SubLList $list86 = cons(makeSymbol("CITY"), makeSymbol("COUNTRY"));
+    public static final SubLList $list86 = cons(makeSymbol("CITY"), makeSymbol("COUNTRY"));
 
     private static final SubLSymbol $cities_to_countries_caching_state$ = makeSymbol("*CITIES-TO-COUNTRIES-CACHING-STATE*");
 
     private static final SubLSymbol $sym88$_COUNTRY = makeSymbol("?COUNTRY");
 
-
+    private static final SubLObject $$countryOfCity = reader_make_constant_shell(makeString("countryOfCity"));
 
     private static final SubLSymbol $sym90$_REGION = makeSymbol("?REGION");
 
+    private static final SubLObject $$and = reader_make_constant_shell(makeString("and"));
 
-
-    private static final SubLList $list92 = list(reader_make_constant_shell("isa"), makeSymbol("?COUNTRYTYPE"), reader_make_constant_shell("CountryTypeByGeneralRegion"));
+    private static final SubLList $list92 = list(reader_make_constant_shell(makeString("isa")), makeSymbol("?COUNTRYTYPE"), reader_make_constant_shell(makeString("CountryTypeByGeneralRegion")));
 
     private static final SubLList $list93 = list(makeSymbol("?COUNTRYTYPE"));
 
-    static private final SubLList $list94 = list(list(reader_make_constant_shell("regionOfCountryTypeByGeneralRegion"), makeSymbol("?COUNTRYTYPE"), makeSymbol("?REGION")));
+    public static final SubLList $list94 = list(list(reader_make_constant_shell(makeString("regionOfCountryTypeByGeneralRegion")), makeSymbol("?COUNTRYTYPE"), makeSymbol("?REGION")));
 
     private static final SubLSymbol COUNTRIES_TO_REGIONS = makeSymbol("COUNTRIES-TO-REGIONS");
 
-    static private final SubLList $list96 = cons(makeSymbol("COUNTRY"), makeSymbol("REGION"));
+    public static final SubLList $list96 = cons(makeSymbol("COUNTRY"), makeSymbol("REGION"));
 
     private static final SubLList $list97 = cons(makeSymbol("?COUNTRY"), makeSymbol("?REGION"));
 
-    static private final SubLList $list98 = list(reader_make_constant_shell("and"), list(reader_make_constant_shell("isa"), makeSymbol("?COUNTRYTYPE"), reader_make_constant_shell("CountryTypeByGeneralRegion")), list(reader_make_constant_shell("isa"), makeSymbol("?COUNTRY"), makeSymbol("?COUNTRYTYPE")), list(reader_make_constant_shell("regionOfCountryTypeByGeneralRegion"), makeSymbol("?COUNTRYTYPE"), makeSymbol("?REGION")));
+    public static final SubLList $list98 = list(reader_make_constant_shell(makeString("and")), list(reader_make_constant_shell(makeString("isa")), makeSymbol("?COUNTRYTYPE"), reader_make_constant_shell(makeString("CountryTypeByGeneralRegion"))), list(reader_make_constant_shell(makeString("isa")), makeSymbol("?COUNTRY"), makeSymbol("?COUNTRYTYPE")), list(reader_make_constant_shell(makeString("regionOfCountryTypeByGeneralRegion")), makeSymbol("?COUNTRYTYPE"), makeSymbol("?REGION")));
 
     private static final SubLSymbol $countries_to_regions_caching_state$ = makeSymbol("*COUNTRIES-TO-REGIONS-CACHING-STATE*");
 
-    static private final SubLList $list100 = list(list(makeSymbol("SEMANTIC-SESSION"), makeSymbol("KEYWORD-SESSION"), makeSymbol("HOST"), makeSymbol("PORT"), makeSymbol("TEXT-INDEX-FILE"), makeSymbol("SEM-INDEX-FILE"), makeSymbol("OVERWRITE?")), makeSymbol("&BODY"), makeSymbol("BODY"));
+    public static final SubLList $list100 = list(list(makeSymbol("SEMANTIC-SESSION"), makeSymbol("KEYWORD-SESSION"), makeSymbol("HOST"), makeSymbol("PORT"), makeSymbol("TEXT-INDEX-FILE"), makeSymbol("SEM-INDEX-FILE"), makeSymbol("OVERWRITE?")), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+
 
     private static final SubLSymbol NEW_LUCENE_SESSION = makeSymbol("NEW-LUCENE-SESSION");
+
+
+
+
 
     private static final SubLSymbol LUCENE_OPTIMIZE = makeSymbol("LUCENE-OPTIMIZE");
 
@@ -783,11 +519,15 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
 
     private static final SubLString $str107$_indexed_docs_txt = makeString("/indexed-docs.txt");
 
+
+
     private static final SubLString $$$Indexing_files = makeString("Indexing files");
 
     private static final SubLString $$$cdolist = makeString("cdolist");
 
     private static final SubLString $str111$ = makeString("");
+
+
 
     private static final SubLString $str113$Unable_to_open__S = makeString("Unable to open ~S");
 
@@ -833,6 +573,10 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
 
     private static final SubLString $$$Tagging_files = makeString("Tagging files");
 
+
+
+
+
     private static final SubLList $list137 = list(makeSymbol("ORG-FILE"), makeSymbol("TEXT-FPATH"), makeSymbol("&OPTIONAL"), makeSymbol("THE-URL"), makeSymbol("THE-PARENT"));
 
     private static final SubLString $str138$_S_tagging__S__ = makeString("~S tagging ~S~%");
@@ -845,7 +589,9 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
 
     private static final SubLString $str142$_ = makeString("#");
 
-    static private final SubLString $str143$_ = makeString("^");
+    public static final SubLString $str143$_ = makeString("^");
+
+
 
     private static final SubLString $$$Doc = makeString("Doc");
 
@@ -853,7 +599,13 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
 
     private static final SubLString $str147$Couldn_t_find_source_file__S__Mov = makeString("Couldn't find source file ~S. Moving on to next file.");
 
+
+
+
+
     private static final SubLList $list150 = list(makeSymbol("IDX-FILE"), makeSymbol("TXT-FILE"));
+
+
 
     private static final SubLString $str152$problem_indexing__a_____moving_on = makeString("problem indexing ~a  ...moving on to next file: ~A");
 
@@ -867,9 +619,17 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
 
     private static final SubLSymbol LUCENE_ADD_DOCUMENT = makeSymbol("LUCENE-ADD-DOCUMENT");
 
+
+
     private static final SubLString $$$_ = makeString(" ");
 
     private static final SubLSymbol POS_TAGGING_CONCEPT_TAGGER = makeSymbol("POS-TAGGING-CONCEPT-TAGGER");
+
+
+
+
+
+
 
     private static final SubLSymbol $sym164$_EXIT = makeSymbol("%EXIT");
 
@@ -889,29 +649,35 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
 
     private static final SubLSymbol $sym172$_ = makeSymbol("<");
 
+
+
+
+
     private static final SubLList $list175 = list(makeSymbol("NODE-ID"), makeSymbol("OFFSET"));
 
-    private static final SubLObject $$InstanceNamedFn_Ternary = reader_make_constant_shell("InstanceNamedFn-Ternary");
+    private static final SubLObject $$InstanceNamedFn_Ternary = reader_make_constant_shell(makeString("InstanceNamedFn-Ternary"));
 
-    static private final SubLList $list177 = list(reader_make_constant_shell("Person"), reader_make_constant_shell("Organization"), reader_make_constant_shell("Place"));
+    public static final SubLList $list177 = list(reader_make_constant_shell(makeString("Person")), reader_make_constant_shell(makeString("Organization")), reader_make_constant_shell(makeString("Place")));
 
     private static final SubLSymbol FIND_INTERPS_FOR_DOCUMENT_SEGMENTS = makeSymbol("FIND-INTERPS-FOR-DOCUMENT-SEGMENTS");
 
     private static final SubLString $$$dogs_have_four_feet = makeString("dogs have four feet");
 
-    private static final SubLList $list180 = list(reader_make_constant_shell("relationAllExistsCount"), reader_make_constant_shell("physicalParts"), reader_make_constant_shell("Foot-AnimalBodyPart"), reader_make_constant_shell("Dog"), FOUR_INTEGER);
+    private static final SubLList $list180 = list(reader_make_constant_shell(makeString("relationAllExistsCount")), reader_make_constant_shell(makeString("physicalParts")), reader_make_constant_shell(makeString("Foot-AnimalBodyPart")), reader_make_constant_shell(makeString("Dog")), FOUR_INTEGER);
 
 
 
+    private static final SubLObject $$Verb = reader_make_constant_shell(makeString("Verb"));
 
+    private static final SubLObject $$Adjective = reader_make_constant_shell(makeString("Adjective"));
 
+    private static final SubLObject $$Adverb = reader_make_constant_shell(makeString("Adverb"));
 
-
-
+    private static final SubLObject $$Gerundive = reader_make_constant_shell(makeString("Gerundive"));
 
     private static final SubLSymbol ADD_CONCEPT_FILTER_SPEC = makeSymbol("ADD-CONCEPT-FILTER-SPEC");
 
-    private static final SubLList $list187 = list(reader_make_constant_shell("ConceptFilterSpecificationFn"), reader_make_constant_shell("CCFExplanationWorthyConceptFilter"), reader_make_constant_shell("ConceptAndInstancesFilterParameter"), reader_make_constant_shell("TriggerFromConceptOrInstance"));
+    private static final SubLList $list187 = list(reader_make_constant_shell(makeString("ConceptFilterSpecificationFn")), reader_make_constant_shell(makeString("CCFExplanationWorthyConceptFilter")), reader_make_constant_shell(makeString("ConceptAndInstancesFilterParameter")), reader_make_constant_shell(makeString("TriggerFromConceptOrInstance")));
 
     private static final SubLString $str188$_tagged_html = makeString("-tagged.html");
 
@@ -957,9 +723,13 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
 
 
 
-    private static final SubLObject $$CCF_CAE_QueryMt = reader_make_constant_shell("CCF-CAE-QueryMt");
+    private static final SubLObject $$userDocComment = reader_make_constant_shell(makeString("userDocComment"));
 
-    private static final SubLList $list213 = list(makeKeyword("PPH-AGREEMENT"), list(reader_make_constant_shell("nonPlural-Generic")), makeKeyword("PPH-GENERATION-COUNT"), EIGHT_INTEGER);
+    private static final SubLObject $$CCF_CAE_QueryMt = reader_make_constant_shell(makeString("CCF-CAE-QueryMt"));
+
+
+
+    private static final SubLList $list213 = list(makeKeyword("PPH-AGREEMENT"), list(reader_make_constant_shell(makeString("nonPlural-Generic"))), makeKeyword("PPH-GENERATION-COUNT"), EIGHT_INTEGER);
 
     private static final SubLString $str214$_b_Synonyms__b___ = makeString("<b>Synonyms</b>: ");
 
@@ -973,15 +743,15 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
 
     private static final SubLString $str219$__div_ = makeString("</div>");
 
+    private static final SubLObject $$SurgicalProcedure = reader_make_constant_shell(makeString("SurgicalProcedure"));
 
-
-
+    private static final SubLObject $$Surgery = reader_make_constant_shell(makeString("Surgery"));
 
     private static final SubLSymbol $sym222$_DOC = makeSymbol("?DOC");
 
+    private static final SubLObject $$expertAtSkill = reader_make_constant_shell(makeString("expertAtSkill"));
 
-
-
+    private static final SubLObject $$CCFPersonnelDataMt = reader_make_constant_shell(makeString("CCFPersonnelDataMt"));
 
     private static final SubLString $str225$_b_Specialists____b_ = makeString("<b>Specialists: </b>");
 
@@ -997,11 +767,15 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
 
     private static final SubLInteger $int$5000 = makeInteger(5000);
 
+    private static final SubLObject $$PredicateTaxonomy = reader_make_constant_shell(makeString("PredicateTaxonomy"));
 
-
-    private static final SubLList $list233 = list(reader_make_constant_shell("ConceptFilterSpecificationFn"), reader_make_constant_shell("PredicateTaxonomy"), reader_make_constant_shell("ConceptOnlyFilterParameter"), reader_make_constant_shell("TriggerFromConcept"));
+    private static final SubLList $list233 = list(reader_make_constant_shell(makeString("ConceptFilterSpecificationFn")), reader_make_constant_shell(makeString("PredicateTaxonomy")), reader_make_constant_shell(makeString("ConceptOnlyFilterParameter")), reader_make_constant_shell(makeString("TriggerFromConcept")));
 
     private static final SubLString $$$vocabMarking = makeString("vocabMarking");
+
+
+
+
 
     private static final SubLSymbol GET_DEFAULT_DOCUMENT_INGESTER_ANNOTATION_LEXICON = makeSymbol("GET-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEXICON");
 
@@ -1009,9 +783,15 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
 
 
 
+
+
+    private static final SubLObject $$countryCodeTrigraph = reader_make_constant_shell(makeString("countryCodeTrigraph"));
+
+    private static final SubLObject $$countryCodeDigraph = reader_make_constant_shell(makeString("countryCodeDigraph"));
+
     private static final SubLSymbol ALLOW_POS = makeSymbol("ALLOW-POS");
 
-
+    private static final SubLObject $$ClosedClassWord = reader_make_constant_shell(makeString("ClosedClassWord"));
 
     private static final SubLSymbol SCALAR_INTERVAL_LEARN = makeSymbol("SCALAR-INTERVAL-LEARN");
 
@@ -1031,29 +811,51 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
 
 
 
+    private static final SubLObject $$preferredNameString = reader_make_constant_shell(makeString("preferredNameString"));
 
+    private static final SubLObject $$ksTermString = reader_make_constant_shell(makeString("ksTermString"));
 
+    private static final SubLObject $$alias = reader_make_constant_shell(makeString("alias"));
 
+    private static final SubLObject $$programStrings = reader_make_constant_shell(makeString("programStrings"));
+
+    private static final SubLObject $$airportHasIATACode = reader_make_constant_shell(makeString("airportHasIATACode"));
+
+    private static final SubLObject $$airportHasICAOCode = reader_make_constant_shell(makeString("airportHasICAOCode"));
 
     private static final SubLSymbol SET_BASE_MT = makeSymbol("SET-BASE-MT");
 
 
 
+    private static final SubLObject $$TechnicalEnglishLexicalMt = reader_make_constant_shell(makeString("TechnicalEnglishLexicalMt"));
 
+    private static final SubLObject $$MedicalLexicalMt = reader_make_constant_shell(makeString("MedicalLexicalMt"));
 
     private static final SubLString $$$CCFLexicalMt = makeString("CCFLexicalMt");
 
+    private static final SubLObject $$CCFLexicalMt = reader_make_constant_shell(makeString("CCFLexicalMt"));
+
+    private static final SubLList $list266 = list(reader_make_constant_shell(makeString("ConceptFilterSpecificationFn")), reader_make_constant_shell(makeString("TaxonomyOfEasilyUnderstandableConcepts")), reader_make_constant_shell(makeString("ConceptOnlyFilterParameter")), reader_make_constant_shell(makeString("TriggerFromConcept")));
 
 
-    private static final SubLList $list266 = list(reader_make_constant_shell("ConceptFilterSpecificationFn"), reader_make_constant_shell("TaxonomyOfEasilyUnderstandableConcepts"), reader_make_constant_shell("ConceptOnlyFilterParameter"), reader_make_constant_shell("TriggerFromConcept"));
 
     private static final SubLString $str268$rebuilding_term_id_FHT = makeString("rebuilding term-id FHT");
+
+
 
     private static final SubLString $str270$Rebuilding_id__term_map = makeString("Rebuilding id->term map");
 
     private static final SubLString $str271$Augmenting_term_id_FHT = makeString("Augmenting term-id FHT");
 
-    private static final SubLList $list274 = list(makeKeyword("SEARCH-TYPE"), $TEXT);
+
+
+
+
+    private static final SubLList $list274 = list(makeKeyword("SEARCH-TYPE"), makeKeyword("TEXT"));
+
+
+
+
 
     private static final SubLSymbol LUCENE_DOUBLE_QUERY = makeSymbol("LUCENE-DOUBLE-QUERY");
 
@@ -1079,6 +881,8 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
 
     private static final SubLString $str288$0_0_s = makeString("0#0#s");
 
+
+
     private static final SubLSymbol TERMS_FOR_FOCUSED_CYC_SEMANTIC_QUERY = makeSymbol("TERMS-FOR-FOCUSED-CYC-SEMANTIC-QUERY");
 
     private static final SubLList $list291 = list(makeSymbol("WORD"), makeSymbol("DETAILS"));
@@ -1095,17 +899,33 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
 
     private static final SubLString $str297$__0_9a_fA_F___ = makeString("&[0-9a-fA-F]+;");
 
+
+
+
+
     private static final SubLList $list300 = list(list(makeSymbol("FORT"), makeSymbol("LEXICON")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
     private static final SubLSymbol $sym301$SEEN_ = makeUninternedSymbol("SEEN?");
 
-    private static final SubLList $list302 = list(list(makeSymbol("MAKE-HASH-TABLE"), makeInteger(1024), list(QUOTE, EQUAL)));
+    private static final SubLList $list302 = list(list(makeSymbol("MAKE-HASH-TABLE"), makeInteger(1024), list(makeSymbol("QUOTE"), EQUAL)));
 
     private static final SubLSymbol DO_LEXICON = makeSymbol("DO-LEXICON");
 
+
+
+
+
     private static final SubLList $list306 = list(makeSymbol("IGNORE"), makeSymbol("STRING"));
 
-    private static final SubLList $list308 = list(list(makeSymbol("FIM"), makeSymbol("LEX"), list(QUOTE, makeSymbol("GET")), makeKeyword("DENOT")));
+
+
+    private static final SubLList $list308 = list(list(makeSymbol("FIM"), makeSymbol("LEX"), list(makeSymbol("QUOTE"), makeSymbol("GET")), makeKeyword("DENOT")));
+
+
+
+
+
+
 
     private static final SubLList $list312 = list(T);
 
@@ -1119,6 +939,18 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
 
     private static final SubLSymbol REMOVE_PICTURES_REGEXP_TEST = makeSymbol("REMOVE-PICTURES-REGEXP-TEST");
 
+
+
+
+
+
+
+
+
+
+
+
+
     private static final SubLList $list324 = list(list(list(makeString("some text and [a_picture.png] followed by some other stuff")), list(makeString("[a_picture.png]"))));
 
     private static final SubLSymbol GET_DOC_STRING_FROM_NODE_IDS_AND_STRINGS_VALUES = makeSymbol("GET-DOC-STRING-FROM-NODE-IDS-AND-STRINGS-VALUES");
@@ -1127,9 +959,13 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
 
     private static final SubLSymbol $document_interpretation_rules_by_mt$ = makeSymbol("*DOCUMENT-INTERPRETATION-RULES-BY-MT*");
 
-
+    private static final SubLObject $$PiracyReportInterpretationMt = reader_make_constant_shell(makeString("PiracyReportInterpretationMt"));
 
     private static final SubLList $list329 = list(list(makeSymbol("RULE"), makeSymbol("RULE-SET")), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+
+
+
 
     private static final SubLString $str332$Dont_know_yet_how_to_unify_a_sent = makeString("Dont know yet how to unify a sentence with the sentence bag.");
 
@@ -1137,11 +973,27 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
 
 
 
-    private static final SubLObject $$containsProposition_CW = reader_make_constant_shell("containsProposition-CW");
+
+
+    private static final SubLObject $$interpretationSuggestion = reader_make_constant_shell(makeString("interpretationSuggestion"));
 
 
 
 
+
+
+
+
+
+
+
+
+
+    private static final SubLObject $$containsProposition_CW = reader_make_constant_shell(makeString("containsProposition-CW"));
+
+    private static final SubLObject $$thingDescribed = reader_make_constant_shell(makeString("thingDescribed"));
+
+    private static final SubLObject $$The = reader_make_constant_shell(makeString("The"));
 
     private static final SubLString $str346$Invalid_THE_expression__A___ = makeString("Invalid THE expression ~A.~%");
 
@@ -1159,7 +1011,11 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
 
     private static final SubLString $str353$_meta_http_equiv__X_UA_Compatible = makeString("<meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\" >");
 
+
+
     private static final SubLSymbol $SAM_AUTOCOMPLETE_CSS = makeKeyword("SAM-AUTOCOMPLETE-CSS");
+
+
 
     private static final SubLString $str357$yui_skin_sam = makeString("yui-skin-sam");
 
@@ -1185,11 +1041,11 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
 
     private static final SubLString $str368$Rule_Mt__ = makeString("Rule Mt: ");
 
-
+    private static final SubLInteger $int$40 = makeInteger(40);
 
     private static final SubLString $$$Complete = makeString("Complete");
 
-
+    private static final SubLObject $$Microtheory = reader_make_constant_shell(makeString("Microtheory"));
 
     private static final SubLString $$$Identified_Concepts = makeString("Identified Concepts");
 
@@ -1201,6 +1057,8 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
 
     private static final SubLSymbol CB_DOCUMENT_INTERPRETATION_SUGGESTIONS = makeSymbol("CB-DOCUMENT-INTERPRETATION-SUGGESTIONS");
 
+
+
     private static final SubLString $str378$For_each_string____concept_mappin = makeString("For each string -> concept mapping, rate the mapping. <ul><li>\'Primary Meaning\' means that, acontextually, this is what one would think of when seeing the string.  Most words will only have one primary meaning.\n<li>\'Contextually Dependent\' means that this is a reasonable mapping, but would not be the primary mapping.  It would really only be used when there is something else in the context to license the meaning.\n<li>\'Rare\' means that, while the string could mean this, it\'s fairly hard to imagine contexts in which it would mean this, and we could effectively treat this as not being mapped.\n<li>\'Indecipherable\' means that this concept is not something that a user is ever likely to be able to understand, and should suppress the entire concept when interacting with end users.\n<li>\'Merge away\' should be used when the concept itself should not exist.   For example, when we have both  #$EducationalOrganization-Rutgers-University and #$RutgersUniversity, one of them should be merged away, and the other should be the primary meaning.\n<li>\'Invalid\' means that the mapping between the string and the concept is faulty, and should likely be eliminated.</ul>");
 
     private static final SubLString $str379$previous_input_file = makeString("previous-input-file");
@@ -1211,7 +1069,7 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
 
     private static final SubLString $$$0 = makeString("0");
 
-
+    private static final SubLInteger $int$30 = makeInteger(30);
 
     private static final SubLString $$$Manual_Concept_Annotation = makeString("Manual Concept Annotation");
 
@@ -1275,11 +1133,13 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
 
     private static final SubLString $str414$_A__A__A__ = makeString("~A ~A ~A~%");
 
+
+
     private static final SubLString $str416$_ = makeString(".");
 
     private static final SubLString $str417$_cyc_projects_sabre_data_july_200 = makeString("/cyc/projects/sabre/data/july-2007-questions-answers-profiles-activities/combined-sabre-local-for-manual-annotation.txt.out");
 
-    static private final SubLList $list418 = list(CHAR_space);
+    public static final SubLList $list418 = list(CHAR_space);
 
     private static final SubLString $str419$_ = makeString("\"");
 
@@ -1303,33 +1163,13 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
 
     private static final SubLString $str429$kill__ = makeString("kill: ");
 
-    static private final SubLList $list430 = list(makeSymbol("ID"), makeSymbol("URL"), makeSymbol("FILEDIR"), makeSymbol("TIME-STAMP"));
+    public static final SubLList $list430 = list(makeSymbol("ID"), makeSymbol("URL"), makeSymbol("FILEDIR"), makeSymbol("TIME-STAMP"));
 
     private static final SubLString $str431$input_file_line___S__ = makeString("input-file-line: ~S~%");
 
-    private static final SubLList $list432 = list(list(reader_make_constant_shell("ConceptFilterSpecificationFn"), reader_make_constant_shell("TaxonomyOfEasilyUnderstandableConcepts"), reader_make_constant_shell("ConceptOnlyFilterParameter"), reader_make_constant_shell("TriggerFromConcept")));
+    private static final SubLList $list432 = list(list(reader_make_constant_shell(makeString("ConceptFilterSpecificationFn")), reader_make_constant_shell(makeString("TaxonomyOfEasilyUnderstandableConcepts")), reader_make_constant_shell(makeString("ConceptOnlyFilterParameter")), reader_make_constant_shell(makeString("TriggerFromConcept"))));
 
     private static final SubLString $str433$__S__S__S___ = makeString("(~S ~S ~S)~%");
-
-    public static final SubLObject trace_doc_search_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            SubLObject list = NIL;
-            destructuring_bind_must_consp(current, datum, $list_alt8);
-            list = current.first();
-            current = current.rest();
-            if (NIL == current) {
-                {
-                    SubLObject out = $sym9$OUT;
-                    return list(PROGN, list(PWHEN, $trace_doc_search_interface$, list(FORMAT, $trace_output$, $str_alt15$___A__entering__S__, $list_alt16, list)), list(PWHEN, $doc_search_trace_log_file$, list(WITH_PRIVATE_TEXT_FILE, bq_cons(out, $list_alt19), $list_alt20, list(FORMAT, out, $str_alt15$___A__entering__S__, $list_alt16, list))));
-                }
-            } else {
-                cdestructuring_bind_error(datum, $list_alt8);
-            }
-        }
-        return NIL;
-    }
 
     public static SubLObject trace_doc_search(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
@@ -1346,23 +1186,9 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return NIL;
     }
 
-    public static final SubLObject get_text_index_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return NIL != $text_index_override$.getDynamicValue(thread) ? ((SubLObject) ($text_index_override$.getDynamicValue(thread))) : $text_index$.getDynamicValue(thread);
-        }
-    }
-
     public static SubLObject get_text_index() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return NIL != $text_index_override$.getDynamicValue(thread) ? $text_index_override$.getDynamicValue(thread) : $text_index$.getDynamicValue(thread);
-    }
-
-    public static final SubLObject get_semantic_index_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return NIL != $semantic_index_override$.getDynamicValue(thread) ? ((SubLObject) ($semantic_index_override$.getDynamicValue(thread))) : $semantic_index$.getDynamicValue(thread);
-        }
     }
 
     public static SubLObject get_semantic_index() {
@@ -1370,33 +1196,14 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return NIL != $semantic_index_override$.getDynamicValue(thread) ? $semantic_index_override$.getDynamicValue(thread) : $semantic_index$.getDynamicValue(thread);
     }
 
-    public static final SubLObject semantic_index_initializedP_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return $semantic_index$.getDynamicValue(thread) == $UNINITIALIZED ? ((SubLObject) (NIL)) : T;
-        }
-    }
-
     public static SubLObject semantic_index_initializedP() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return $semantic_index$.getDynamicValue(thread) == $UNINITIALIZED ? NIL : T;
     }
 
-    public static final SubLObject use_daves_temp_indexes_alt() {
-        $text_index$.setDynamicValue($str_alt25$_host_george_scratch_text_index);
-        $semantic_index$.setDynamicValue($str_alt26$_host_george_scratch_sem_index);
-        return NIL;
-    }
-
     public static SubLObject use_daves_temp_indexes() {
         $text_index$.setDynamicValue($str25$_host_george_scratch_text_index);
         $semantic_index$.setDynamicValue($str26$_host_george_scratch_sem_index);
-        return NIL;
-    }
-
-    public static final SubLObject use_development_indexes_alt() {
-        $text_index$.setDynamicValue($str_alt27$_host_george_simple_tagged_index_);
-        $semantic_index$.setDynamicValue($str_alt28$_host_george_simple_tagged_index_);
         return NIL;
     }
 
@@ -1406,21 +1213,9 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return NIL;
     }
 
-    public static final SubLObject use_development_disambiguated_indexes_alt() {
-        $text_index$.setDynamicValue($str_alt29$_host_george_disambiguated_index_);
-        $semantic_index$.setDynamicValue($str_alt30$_host_george_disambiguated_index_);
-        return NIL;
-    }
-
     public static SubLObject use_development_disambiguated_indexes() {
         $text_index$.setDynamicValue($str29$_host_george_disambiguated_index_);
         $semantic_index$.setDynamicValue($str30$_host_george_disambiguated_index_);
-        return NIL;
-    }
-
-    public static final SubLObject use_hezbollah_indexes_alt() {
-        $text_index$.setDynamicValue($str_alt0$_host_george_super_index_hezbolla);
-        $semantic_index$.setDynamicValue($str_alt1$_host_george_super_index_hezbolla);
         return NIL;
     }
 
@@ -1430,138 +1225,42 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return NIL;
     }
 
-    public static final SubLObject new_closure_justification_alt(SubLObject template, SubLObject spec, SubLObject genl) {
-        return list(template, spec, genl);
-    }
-
     public static SubLObject new_closure_justification(final SubLObject template, final SubLObject spec, final SubLObject genl) {
         return list(template, spec, genl);
-    }
-
-    public static final SubLObject get_closure_justification_gaf_alt(SubLObject cj) {
-        return cj.first();
     }
 
     public static SubLObject get_closure_justification_gaf(final SubLObject cj) {
         return cj.first();
     }
 
-    public static final SubLObject get_closure_justification_spec_alt(SubLObject cj) {
-        return second(cj);
-    }
-
     public static SubLObject get_closure_justification_spec(final SubLObject cj) {
         return second(cj);
-    }
-
-    public static final SubLObject get_closure_justification_genl_alt(SubLObject cj) {
-        return third(cj);
     }
 
     public static SubLObject get_closure_justification_genl(final SubLObject cj) {
         return third(cj);
     }
 
-    /**
-     * returns the predicate used in JUSTIFICATION
-     */
-    @LispMethod(comment = "returns the predicate used in JUSTIFICATION")
-    public static final SubLObject closure_justification_predicate_alt(SubLObject justification) {
-        return cycl_utilities.formula_operator(com.cyc.cycjava.cycl.document_annotation_widgets.get_closure_justification_gaf(justification));
-    }
-
-    /**
-     * returns the predicate used in JUSTIFICATION
-     */
-    @LispMethod(comment = "returns the predicate used in JUSTIFICATION")
     public static SubLObject closure_justification_predicate(final SubLObject justification) {
         return cycl_utilities.formula_operator(get_closure_justification_gaf(justification));
     }
 
-    /**
-     * returns the predicate id of JUSTIFICATION
-     */
-    @LispMethod(comment = "returns the predicate id of JUSTIFICATION")
-    public static final SubLObject closure_justification_pred_id_alt(SubLObject justification) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return assoc(com.cyc.cycjava.cycl.document_annotation_widgets.closure_justification_predicate(justification), $predicate_id_table$.getDynamicValue(thread), EQUAL, UNPROVIDED).rest();
-        }
-    }
-
-    /**
-     * returns the predicate id of JUSTIFICATION
-     */
-    @LispMethod(comment = "returns the predicate id of JUSTIFICATION")
     public static SubLObject closure_justification_pred_id(final SubLObject justification) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return assoc(closure_justification_predicate(justification), $predicate_id_table$.getDynamicValue(thread), EQUAL, UNPROVIDED).rest();
     }
 
-    /**
-     * returns a version of TEMPLATE with SPEC and GENL substituted in
-     */
-    @LispMethod(comment = "returns a version of TEMPLATE with SPEC and GENL substituted in")
-    public static final SubLObject substitute_template_alt(SubLObject template, SubLObject spec, SubLObject genl) {
-        {
-            SubLObject formula = variable_subst(spec, $SPEC, template);
-            formula = variable_subst(genl, $GENL, formula);
-            return formula;
-        }
-    }
-
-    /**
-     * returns a version of TEMPLATE with SPEC and GENL substituted in
-     */
-    @LispMethod(comment = "returns a version of TEMPLATE with SPEC and GENL substituted in")
     public static SubLObject substitute_template(final SubLObject template, final SubLObject spec, final SubLObject genl) {
         SubLObject formula = variable_subst(spec, $SPEC, template);
         formula = variable_subst(genl, $GENL, formula);
         return formula;
     }
 
-    /**
-     * returns the template for PREDICATE
-     */
-    @LispMethod(comment = "returns the template for PREDICATE")
-    public static final SubLObject predicate_template_alt(SubLObject predicate) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return assoc(predicate, $predicate_template_table$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED).rest();
-        }
-    }
-
-    /**
-     * returns the template for PREDICATE
-     */
-    @LispMethod(comment = "returns the template for PREDICATE")
     public static SubLObject predicate_template(final SubLObject predicate) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return assoc(predicate, $predicate_template_table$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED).rest();
     }
 
-    /**
-     * returns a list of justifications for TERM with its formula modelled after TEMPLATE for each relevant genl in GENLS
-     */
-    @LispMethod(comment = "returns a list of justifications for TERM with its formula modelled after TEMPLATE for each relevant genl in GENLS")
-    public static final SubLObject make_justifications_alt(SubLObject template, SubLObject v_term, SubLObject v_genls) {
-        {
-            SubLObject justifications = NIL;
-            SubLObject cdolist_list_var = v_genls;
-            SubLObject genl = NIL;
-            for (genl = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , genl = cdolist_list_var.first()) {
-                if (NIL == com.cyc.cycjava.cycl.document_annotation_widgets.doc_annotation_irrelevant_term(genl)) {
-                    justifications = cons(com.cyc.cycjava.cycl.document_annotation_widgets.new_closure_justification(template, v_term, genl), justifications);
-                }
-            }
-            return justifications;
-        }
-    }
-
-    /**
-     * returns a list of justifications for TERM with its formula modelled after TEMPLATE for each relevant genl in GENLS
-     */
-    @LispMethod(comment = "returns a list of justifications for TERM with its formula modelled after TEMPLATE for each relevant genl in GENLS")
     public static SubLObject make_justifications(final SubLObject template, final SubLObject v_term, final SubLObject v_genls) {
         SubLObject justifications = NIL;
         SubLObject cdolist_list_var = v_genls;
@@ -1577,26 +1276,9 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return justifications;
     }
 
-    public static final SubLObject doc_annotation_irrelevant_term_alt(SubLObject v_term) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return makeBoolean(NIL == thcl.thcl_fortP(v_term, $doc_annotation_thcl_verboseP$.getDynamicValue(thread)));
-        }
-    }
-
     public static SubLObject doc_annotation_irrelevant_term(final SubLObject v_term) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return makeBoolean(NIL == thcl.thcl_fortP(v_term, $doc_annotation_thcl_verboseP$.getDynamicValue(thread)));
-    }
-
-    public static final SubLObject clear_term_learner_object_from_id_alt() {
-        {
-            SubLObject cs = $term_learner_object_from_id_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
-        }
-        return NIL;
     }
 
     public static SubLObject clear_term_learner_object_from_id() {
@@ -1607,19 +1289,8 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return NIL;
     }
 
-    public static final SubLObject remove_term_learner_object_from_id_alt(SubLObject id_string) {
-        return memoization_state.caching_state_remove_function_results_with_args($term_learner_object_from_id_caching_state$.getGlobalValue(), list(id_string), UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject remove_term_learner_object_from_id(final SubLObject id_string) {
         return memoization_state.caching_state_remove_function_results_with_args($term_learner_object_from_id_caching_state$.getGlobalValue(), list(id_string), UNPROVIDED, UNPROVIDED);
-    }
-
-    public static final SubLObject term_learner_object_from_id_internal_alt(SubLObject id_string) {
-        if (NIL == id_string) {
-            return NIL;
-        }
-        return kb_utilities.find_object_by_compact_hl_external_id_string(id_string);
     }
 
     public static SubLObject term_learner_object_from_id_internal(final SubLObject id_string) {
@@ -1627,23 +1298,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             return NIL;
         }
         return kb_utilities.maybe_find_object_by_compact_hl_external_id_string(id_string);
-    }
-
-    public static final SubLObject term_learner_object_from_id_alt(SubLObject id_string) {
-        {
-            SubLObject caching_state = $term_learner_object_from_id_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(TERM_LEARNER_OBJECT_FROM_ID, $term_learner_object_from_id_caching_state$, $int$4096, EQUAL, ONE_INTEGER, ZERO_INTEGER);
-            }
-            {
-                SubLObject results = memoization_state.caching_state_lookup(caching_state, id_string, $kw36$_MEMOIZED_ITEM_NOT_FOUND_);
-                if (results == $kw36$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.document_annotation_widgets.term_learner_object_from_id_internal(id_string)));
-                    memoization_state.caching_state_put(caching_state, id_string, results, UNPROVIDED);
-                }
-                return memoization_state.caching_results(results);
-            }
-        }
     }
 
     public static SubLObject term_learner_object_from_id(final SubLObject id_string) {
@@ -1659,16 +1313,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return memoization_state.caching_results(results);
     }
 
-    public static final SubLObject maybe_term_learner_object_from_id_alt(SubLObject id_string) {
-        {
-            SubLObject v_object = com.cyc.cycjava.cycl.document_annotation_widgets.term_learner_object_from_id(id_string);
-            if (NIL != cycl_grammar.cycl_represented_term_p(v_object)) {
-                return v_object;
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject maybe_term_learner_object_from_id(final SubLObject id_string) {
         final SubLObject v_object = term_learner_object_from_id(id_string);
         if (NIL != cycl_grammar.cycl_represented_term_p(v_object)) {
@@ -1677,37 +1321,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return NIL;
     }
 
-    /**
-     *
-     *
-     * @param STRING
-     * 		string; a string that might be readable as CycL
-     * @return stringp or NIL; if STRING is readable as CycL, returns the term-learner id for the CycL, otherwise
-    returns NIL.
-     */
-    @LispMethod(comment = "@param STRING\r\n\t\tstring; a string that might be readable as CycL\r\n@return stringp or NIL; if STRING is readable as CycL, returns the term-learner id for the CycL, otherwise\r\nreturns NIL.")
-    public static final SubLObject get_term_learner_id_for_cycl_string_alt(SubLObject string) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject cycl = read_from_string_ignoring_errors(string, NIL, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                SubLObject error = thread.secondMultipleValue();
-                thread.resetMultipleValues();
-                return error == $ERROR ? ((SubLObject) (NIL)) : com.cyc.cycjava.cycl.document_annotation_widgets.term_learner_id(cycl);
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @param STRING
-     * 		string; a string that might be readable as CycL
-     * @return stringp or NIL; if STRING is readable as CycL, returns the term-learner id for the CycL, otherwise
-    returns NIL.
-     */
-    @LispMethod(comment = "@param STRING\r\n\t\tstring; a string that might be readable as CycL\r\n@return stringp or NIL; if STRING is readable as CycL, returns the term-learner id for the CycL, otherwise\r\nreturns NIL.")
     public static SubLObject get_term_learner_id_for_cycl_string(final SubLObject string) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -1715,16 +1328,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         final SubLObject error = thread.secondMultipleValue();
         thread.resetMultipleValues();
         return error == $ERROR ? NIL : term_learner_id(cycl);
-    }
-
-    public static final SubLObject clear_term_learner_id_alt() {
-        {
-            SubLObject cs = $term_learner_id_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
-        }
-        return NIL;
     }
 
     public static SubLObject clear_term_learner_id() {
@@ -1735,37 +1338,12 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return NIL;
     }
 
-    public static final SubLObject remove_term_learner_id_alt(SubLObject v_object) {
-        return memoization_state.caching_state_remove_function_results_with_args($term_learner_id_caching_state$.getGlobalValue(), list(v_object), UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject remove_term_learner_id(final SubLObject v_object) {
         return memoization_state.caching_state_remove_function_results_with_args($term_learner_id_caching_state$.getGlobalValue(), list(v_object), UNPROVIDED, UNPROVIDED);
     }
 
-    public static final SubLObject term_learner_id_internal_alt(SubLObject v_object) {
-        return kb_utilities.compact_hl_external_id_string(v_object);
-    }
-
     public static SubLObject term_learner_id_internal(final SubLObject v_object) {
         return kb_utilities.compact_hl_external_id_string(v_object);
-    }
-
-    public static final SubLObject term_learner_id_alt(SubLObject v_object) {
-        {
-            SubLObject caching_state = $term_learner_id_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(TERM_LEARNER_ID, $term_learner_id_caching_state$, $int$4096, EQUAL, ONE_INTEGER, ZERO_INTEGER);
-            }
-            {
-                SubLObject results = memoization_state.caching_state_lookup(caching_state, v_object, $kw36$_MEMOIZED_ITEM_NOT_FOUND_);
-                if (results == $kw36$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.document_annotation_widgets.term_learner_id_internal(v_object)));
-                    memoization_state.caching_state_put(caching_state, v_object, results, UNPROVIDED);
-                }
-                return memoization_state.caching_results(results);
-            }
-        }
     }
 
     public static SubLObject term_learner_id(final SubLObject v_object) {
@@ -1781,72 +1359,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return memoization_state.caching_results(results);
     }
 
-    /**
-     * returns a list of gafs/justifications relating TERM to more general concepts of TERM
-     */
-    @LispMethod(comment = "returns a list of gafs/justifications relating TERM to more general concepts of TERM")
-    public static final SubLObject get_upwards_closure_justifications_internal_alt(SubLObject v_term) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                SubLObject fortified_term = narts_high.nart_substitute(v_term);
-                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate($upwards_closure_query_mt$.getDynamicValue(thread));
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
-                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
-                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
-                        if (NIL != fort_types_interface.collectionP(fortified_term)) {
-                            result = com.cyc.cycjava.cycl.document_annotation_widgets.make_justifications(com.cyc.cycjava.cycl.document_annotation_widgets.predicate_template($$genls), fortified_term, remove(fortified_term, genls.all_genls(fortified_term, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED));
-                            if (NIL != com.cyc.cycjava.cycl.document_annotation_widgets.treatment_for_somethingP(fortified_term)) {
-                                result = cconcatenate(result, com.cyc.cycjava.cycl.document_annotation_widgets.make_justifications(com.cyc.cycjava.cycl.document_annotation_widgets.predicate_template($const43$standardTreatmentTypeForCondition), fortified_term, com.cyc.cycjava.cycl.document_annotation_widgets.get_treated_condition(fortified_term)));
-                            }
-                            if (NIL != com.cyc.cycjava.cycl.document_annotation_widgets.ailmentP(fortified_term)) {
-                                result = cconcatenate(result, com.cyc.cycjava.cycl.document_annotation_widgets.make_justifications(com.cyc.cycjava.cycl.document_annotation_widgets.predicate_template($$ailmentTypeAfflictsPartType), fortified_term, com.cyc.cycjava.cycl.document_annotation_widgets.get_affected_parts(fortified_term)));
-                                result = cconcatenate(result, com.cyc.cycjava.cycl.document_annotation_widgets.make_justifications(com.cyc.cycjava.cycl.document_annotation_widgets.predicate_template($$conditionsCommonlyCooccur), fortified_term, com.cyc.cycjava.cycl.document_annotation_widgets.get_cooccurring_conditions(fortified_term)));
-                                {
-                                    SubLObject cdolist_list_var = com.cyc.cycjava.cycl.document_annotation_widgets.get_treatments_for_condition(fortified_term);
-                                    SubLObject treatment = NIL;
-                                    for (treatment = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , treatment = cdolist_list_var.first()) {
-                                        result = cconcatenate(com.cyc.cycjava.cycl.document_annotation_widgets.make_justifications(com.cyc.cycjava.cycl.document_annotation_widgets.predicate_template($const43$standardTreatmentTypeForCondition), treatment, list(fortified_term)), result);
-                                    }
-                                }
-                            }
-                        } else {
-                            if (NIL != kb_accessors.individualP(fortified_term)) {
-                                result = com.cyc.cycjava.cycl.document_annotation_widgets.make_justifications(com.cyc.cycjava.cycl.document_annotation_widgets.predicate_template($$isa), fortified_term, isa.all_isa(fortified_term, UNPROVIDED, UNPROVIDED));
-                                if (NIL != fort_types_interface.city_in_any_mtP(fortified_term)) {
-                                    result = append(result, com.cyc.cycjava.cycl.document_annotation_widgets.make_justifications(com.cyc.cycjava.cycl.document_annotation_widgets.predicate_template($$inRegion), fortified_term, com.cyc.cycjava.cycl.document_annotation_widgets.get_city_regions(fortified_term)));
-                                } else {
-                                    if (NIL != fort_types_interface.country_in_any_mtP(fortified_term)) {
-                                        result = append(result, com.cyc.cycjava.cycl.document_annotation_widgets.make_justifications(com.cyc.cycjava.cycl.document_annotation_widgets.predicate_template($$inRegion), fortified_term, com.cyc.cycjava.cycl.document_annotation_widgets.get_country_regions(fortified_term)));
-                                    } else {
-                                        if (NIL != com.cyc.cycjava.cycl.document_annotation_widgets.agentP(fortified_term)) {
-                                            result = append(result, com.cyc.cycjava.cycl.document_annotation_widgets.make_justifications(com.cyc.cycjava.cycl.document_annotation_widgets.predicate_template($$hasLeaders), fortified_term, com.cyc.cycjava.cycl.document_annotation_widgets.get_groups(fortified_term)));
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return result;
-            }
-        }
-    }
-
-    /**
-     * returns a list of gafs/justifications relating TERM to more general concepts of TERM
-     */
-    @LispMethod(comment = "returns a list of gafs/justifications relating TERM to more general concepts of TERM")
     public static SubLObject get_upwards_closure_justifications_internal(final SubLObject v_term) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject result = NIL;
@@ -1900,32 +1412,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return result;
     }
 
-    public static final SubLObject get_upwards_closure_justifications_alt(SubLObject v_term) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
-                SubLObject caching_state = NIL;
-                if (NIL == v_memoization_state) {
-                    return com.cyc.cycjava.cycl.document_annotation_widgets.get_upwards_closure_justifications_internal(v_term);
-                }
-                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, GET_UPWARDS_CLOSURE_JUSTIFICATIONS, UNPROVIDED);
-                if (NIL == caching_state) {
-                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), GET_UPWARDS_CLOSURE_JUSTIFICATIONS, ONE_INTEGER, NIL, EQUAL, UNPROVIDED);
-                    memoization_state.memoization_state_put(v_memoization_state, GET_UPWARDS_CLOSURE_JUSTIFICATIONS, caching_state);
-                }
-                {
-                    SubLObject results = memoization_state.caching_state_lookup(caching_state, v_term, $kw36$_MEMOIZED_ITEM_NOT_FOUND_);
-                    if (results == $kw36$_MEMOIZED_ITEM_NOT_FOUND_) {
-                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.document_annotation_widgets.get_upwards_closure_justifications_internal(v_term)));
-                        memoization_state.caching_state_put(caching_state, v_term, results, UNPROVIDED);
-                    }
-                    return memoization_state.caching_results(results);
-                }
-            }
-        }
-    }
-
     public static SubLObject get_upwards_closure_justifications(final SubLObject v_term) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
@@ -1946,26 +1432,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return memoization_state.caching_results(results);
     }
 
-    /**
-     * returns all terms more general (in some sense) than TERM
-     */
-    @LispMethod(comment = "returns all terms more general (in some sense) than TERM")
-    public static final SubLObject get_upwards_closure_alt(SubLObject v_term) {
-        {
-            SubLObject closure = NIL;
-            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.document_annotation_widgets.get_upwards_closure_justifications_cached(v_term);
-            SubLObject justification = NIL;
-            for (justification = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , justification = cdolist_list_var.first()) {
-                closure = cons(com.cyc.cycjava.cycl.document_annotation_widgets.get_closure_justification_genl(justification), closure);
-            }
-            return closure;
-        }
-    }
-
-    /**
-     * returns all terms more general (in some sense) than TERM
-     */
-    @LispMethod(comment = "returns all terms more general (in some sense) than TERM")
     public static SubLObject get_upwards_closure(final SubLObject v_term) {
         SubLObject closure = NIL;
         SubLObject cdolist_list_var = get_upwards_closure_justifications_cached(v_term);
@@ -1979,16 +1445,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return closure;
     }
 
-    public static final SubLObject clear_get_upwards_closure_justifications_cached_alt() {
-        {
-            SubLObject cs = $get_upwards_closure_justifications_cached_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject clear_get_upwards_closure_justifications_cached() {
         final SubLObject cs = $get_upwards_closure_justifications_cached_caching_state$.getGlobalValue();
         if (NIL != cs) {
@@ -1997,29 +1453,8 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return NIL;
     }
 
-    public static final SubLObject remove_get_upwards_closure_justifications_cached_alt(SubLObject v_term) {
-        return memoization_state.caching_state_remove_function_results_with_args($get_upwards_closure_justifications_cached_caching_state$.getGlobalValue(), list(v_term), UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject remove_get_upwards_closure_justifications_cached(final SubLObject v_term) {
         return memoization_state.caching_state_remove_function_results_with_args($get_upwards_closure_justifications_cached_caching_state$.getGlobalValue(), list(v_term), UNPROVIDED, UNPROVIDED);
-    }
-
-    public static final SubLObject get_upwards_closure_justifications_cached_internal_alt(SubLObject v_term) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == file_backed_cache.file_backed_cache_p($upwards_closure_justification_fbc$.getDynamicValue(thread))) {
-                $upwards_closure_justification_fbc$.setDynamicValue(file_backed_cache.file_backed_cache_create($upwards_closure_justification_fht_path$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), thread);
-            }
-            {
-                SubLObject result = NIL;
-                result = file_backed_cache.file_backed_cache_lookup(v_term, $upwards_closure_justification_fbc$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED);
-                if (result == $NOT_FOUND) {
-                    result = com.cyc.cycjava.cycl.document_annotation_widgets.get_upwards_closure_justifications(v_term);
-                }
-                return result;
-            }
-        }
     }
 
     public static SubLObject get_upwards_closure_justifications_cached_internal(final SubLObject v_term) {
@@ -2035,23 +1470,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return result;
     }
 
-    public static final SubLObject get_upwards_closure_justifications_cached_alt(SubLObject v_term) {
-        {
-            SubLObject caching_state = $get_upwards_closure_justifications_cached_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(GET_UPWARDS_CLOSURE_JUSTIFICATIONS_CACHED, $get_upwards_closure_justifications_cached_caching_state$, NIL, EQUAL, ONE_INTEGER, ZERO_INTEGER);
-            }
-            {
-                SubLObject results = memoization_state.caching_state_lookup(caching_state, v_term, $kw36$_MEMOIZED_ITEM_NOT_FOUND_);
-                if (results == $kw36$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.document_annotation_widgets.get_upwards_closure_justifications_cached_internal(v_term)));
-                    memoization_state.caching_state_put(caching_state, v_term, results, UNPROVIDED);
-                }
-                return memoization_state.caching_results(results);
-            }
-        }
-    }
-
     public static SubLObject get_upwards_closure_justifications_cached(final SubLObject v_term) {
         SubLObject caching_state = $get_upwards_closure_justifications_cached_caching_state$.getGlobalValue();
         if (NIL == caching_state) {
@@ -2065,152 +1483,9 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return memoization_state.caching_results(results);
     }
 
-    public static final SubLObject caching_upwards_closure_justificationsP_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return $caching_upwards_closure_justificationsP$.getDynamicValue(thread);
-        }
-    }
-
     public static SubLObject caching_upwards_closure_justificationsP() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return $caching_upwards_closure_justificationsP$.getDynamicValue(thread);
-    }
-
-    public static final SubLObject cache_upwards_closure_justifications_alt(SubLObject cache_file) {
-        if (cache_file == UNPROVIDED) {
-            cache_file = $str_alt52$_cyc_top_data_doc_tagging_upwards;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject already_resourcing_p = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.getDynamicValue(thread);
-                {
-                    SubLObject _prev_bind_0 = sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.currentBinding(thread);
-                    try {
-                        sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.bind(sbhl_marking_vars.determine_resource_limit(already_resourcing_p, SIX_INTEGER), thread);
-                        sbhl_marking_vars.$resourced_sbhl_marking_spaces$.bind(sbhl_marking_vars.possibly_new_marking_resource(already_resourcing_p), thread);
-                        sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.bind(T, thread);
-                        {
-                            SubLObject state = memoization_state.possibly_new_memoization_state();
-                            SubLObject local_state = state;
-                            {
-                                SubLObject _prev_bind_0_1 = memoization_state.$memoization_state$.currentBinding(thread);
-                                try {
-                                    memoization_state.$memoization_state$.bind(local_state, thread);
-                                    {
-                                        SubLObject original_memoization_process = NIL;
-                                        if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                            original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                            {
-                                                SubLObject current_proc = current_process();
-                                                if (NIL == original_memoization_process) {
-                                                    memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                                } else {
-                                                    if (original_memoization_process != current_proc) {
-                                                        Errors.error($str_alt53$Invalid_attempt_to_reuse_memoizat);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        try {
-                                            {
-                                                SubLObject v_cache = file_hash_table.create_file_hash_table(cache_file, forts.fort_count(), UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                {
-                                                    SubLObject _prev_bind_0_2 = $caching_upwards_closure_justificationsP$.currentBinding(thread);
-                                                    try {
-                                                        $caching_upwards_closure_justificationsP$.bind(T, thread);
-                                                        {
-                                                            SubLObject term_fht = file_hash_table.open_file_hash_table($doc_annotator_term_id_fbc_path$.getDynamicValue(thread), file_hash_table.$default_fht_test_function$.getGlobalValue(), $IMAGE_INDEPENDENT_CFASL);
-                                                            SubLObject table_var = term_fht;
-                                                            $progress_note$.setDynamicValue($str_alt55$Caching_upwards_closure_justifica, thread);
-                                                            $progress_start_time$.setDynamicValue(get_universal_time(), thread);
-                                                            $progress_total$.setDynamicValue(file_hash_table.file_hash_table_count(table_var), thread);
-                                                            $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
-                                                            {
-                                                                SubLObject _prev_bind_0_3 = $last_percent_progress_index$.currentBinding(thread);
-                                                                SubLObject _prev_bind_1_4 = $last_percent_progress_prediction$.currentBinding(thread);
-                                                                SubLObject _prev_bind_2_5 = $within_noting_percent_progress$.currentBinding(thread);
-                                                                SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                                                                try {
-                                                                    $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                                                                    $last_percent_progress_prediction$.bind(NIL, thread);
-                                                                    $within_noting_percent_progress$.bind(T, thread);
-                                                                    $percent_progress_start_time$.bind(get_universal_time(), thread);
-                                                                    noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
-                                                                    {
-                                                                        SubLObject continuation = NIL;
-                                                                        SubLObject completeP = NIL;
-                                                                        while (NIL == completeP) {
-                                                                            thread.resetMultipleValues();
-                                                                            {
-                                                                                SubLObject the_key = file_hash_table.get_file_hash_table_any(table_var, continuation, NIL);
-                                                                                SubLObject the_value = thread.secondMultipleValue();
-                                                                                SubLObject next = thread.thirdMultipleValue();
-                                                                                thread.resetMultipleValues();
-                                                                                if (NIL != next) {
-                                                                                    {
-                                                                                        SubLObject fort = the_key;
-                                                                                        SubLObject id = the_value;
-                                                                                        note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
-                                                                                        $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
-                                                                                        {
-                                                                                            SubLObject value = com.cyc.cycjava.cycl.document_annotation_widgets.get_upwards_closure_justifications(fort);
-                                                                                            file_hash_table.put_file_hash_table(fort, v_cache, value);
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                                continuation = next;
-                                                                                completeP = sublisp_null(next);
-                                                                            }
-                                                                        } 
-                                                                    }
-                                                                    noting_percent_progress_postamble();
-                                                                } finally {
-                                                                    $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                                                                    $within_noting_percent_progress$.rebind(_prev_bind_2_5, thread);
-                                                                    $last_percent_progress_prediction$.rebind(_prev_bind_1_4, thread);
-                                                                    $last_percent_progress_index$.rebind(_prev_bind_0_3, thread);
-                                                                }
-                                                            }
-                                                            file_hash_table.finalize_file_hash_table(v_cache);
-                                                            file_hash_table.finalize_file_hash_table(term_fht);
-                                                        }
-                                                    } finally {
-                                                        $caching_upwards_closure_justificationsP$.rebind(_prev_bind_0_2, thread);
-                                                    }
-                                                }
-                                            }
-                                        } finally {
-                                            {
-                                                SubLObject _prev_bind_0_6 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                try {
-                                                    $is_thread_performing_cleanupP$.bind(T, thread);
-                                                    if ((NIL != local_state) && (NIL == original_memoization_process)) {
-                                                        memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
-                                                    }
-                                                } finally {
-                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_6, thread);
-                                                }
-                                            }
-                                        }
-                                    }
-                                } finally {
-                                    memoization_state.$memoization_state$.rebind(_prev_bind_0_1, thread);
-                                }
-                            }
-                        }
-                    } finally {
-                        sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.rebind(_prev_bind_2, thread);
-                        sbhl_marking_vars.$resourced_sbhl_marking_spaces$.rebind(_prev_bind_1, thread);
-                        sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return cache_file;
-        }
     }
 
     public static SubLObject cache_upwards_closure_justifications(SubLObject cache_file) {
@@ -2316,51 +1591,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return cache_file;
     }
 
-    /**
-     * Intended to be used for spot-fixes to the justification tables
-     */
-    @LispMethod(comment = "Intended to be used for spot-fixes to the justification tables")
-    public static final SubLObject cache_upwards_closure_justification_alt(SubLObject v_term) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject fht = NIL;
-                try {
-                    fht = file_hash_table.open_file_hash_table($upwards_closure_justification_fht_path$.getDynamicValue(thread), file_hash_table.$default_fht_test_function$.getGlobalValue(), $IMAGE_INDEPENDENT_CFASL);
-                    {
-                        SubLObject _prev_bind_0 = $caching_upwards_closure_justificationsP$.currentBinding(thread);
-                        try {
-                            $caching_upwards_closure_justificationsP$.bind(T, thread);
-                            {
-                                SubLObject value = com.cyc.cycjava.cycl.document_annotation_widgets.get_upwards_closure_justifications(v_term);
-                                file_hash_table.put_file_hash_table(v_term, fht, value);
-                            }
-                        } finally {
-                            $caching_upwards_closure_justificationsP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            if (NIL != file_hash_table.file_hash_table_p(fht)) {
-                                file_hash_table.finalize_file_hash_table(fht);
-                            }
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-            }
-            return v_term;
-        }
-    }
-
-    /**
-     * Intended to be used for spot-fixes to the justification tables
-     */
-    @LispMethod(comment = "Intended to be used for spot-fixes to the justification tables")
     public static SubLObject cache_upwards_closure_justification(final SubLObject v_term) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject fht = NIL;
@@ -2390,38 +1620,16 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return v_term;
     }
 
-    public static final SubLObject treatment_for_somethingP_alt(SubLObject v_term) {
-        return makeBoolean((NIL != genls.genl_in_any_mtP(v_term, $$MedicalDevice)) || (NIL != genls.genl_in_any_mtP(v_term, $$MedicalTreatmentEvent)));
-    }
-
     public static SubLObject treatment_for_somethingP(final SubLObject v_term) {
         return makeBoolean((NIL != genls.genl_in_any_mtP(v_term, $$MedicalDevice)) || (NIL != genls.genl_in_any_mtP(v_term, $$MedicalTreatmentEvent)));
-    }
-
-    public static final SubLObject ailmentP_alt(SubLObject v_term) {
-        return genls.genl_in_any_mtP(v_term, $$AilmentCondition);
     }
 
     public static SubLObject ailmentP(final SubLObject v_term) {
         return genls.genl_in_any_mtP(v_term, $$AilmentCondition);
     }
 
-    public static final SubLObject agentP_alt(SubLObject v_term) {
-        return isa.isa_in_any_mtP(v_term, $$IntelligentAgent);
-    }
-
     public static SubLObject agentP(final SubLObject v_term) {
         return isa.isa_in_any_mtP(v_term, $$IntelligentAgent);
-    }
-
-    public static final SubLObject clear_get_treated_condition_alt() {
-        {
-            SubLObject cs = $get_treated_condition_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
-        }
-        return NIL;
     }
 
     public static SubLObject clear_get_treated_condition() {
@@ -2432,42 +1640,13 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return NIL;
     }
 
-    public static final SubLObject remove_get_treated_condition_alt(SubLObject device_or_treatment) {
-        return memoization_state.caching_state_remove_function_results_with_args($get_treated_condition_caching_state$.getGlobalValue(), list(device_or_treatment), UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject remove_get_treated_condition(final SubLObject device_or_treatment) {
         return memoization_state.caching_state_remove_function_results_with_args($get_treated_condition_caching_state$.getGlobalValue(), list(device_or_treatment), UNPROVIDED, UNPROVIDED);
-    }
-
-    public static final SubLObject get_treated_condition_internal_alt(SubLObject device_or_treatment) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return ask_utilities.query_variable($sym61$_X, list($$or, listS($$deviceTypeTreatsConditionType, device_or_treatment, $list_alt64), listS($const43$standardTreatmentTypeForCondition, device_or_treatment, $list_alt64)), mt_relevance_macros.$mt$.getDynamicValue(thread), $list_alt65);
-        }
     }
 
     public static SubLObject get_treated_condition_internal(final SubLObject device_or_treatment) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return ask_utilities.query_variable($sym59$_X, list($$or, listS($$deviceTypeTreatsConditionType, device_or_treatment, $list62), listS($const42$standardTreatmentTypeForCondition, device_or_treatment, $list62)), mt_relevance_macros.$mt$.getDynamicValue(thread), $list63);
-    }
-
-    public static final SubLObject get_treated_condition_alt(SubLObject device_or_treatment) {
-        {
-            SubLObject caching_state = $get_treated_condition_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(GET_TREATED_CONDITION, $get_treated_condition_caching_state$, NIL, EQL, ONE_INTEGER, ZERO_INTEGER);
-                memoization_state.register_hl_store_cache_clear_callback(CLEAR_GET_TREATED_CONDITION);
-            }
-            {
-                SubLObject results = memoization_state.caching_state_lookup(caching_state, device_or_treatment, $kw36$_MEMOIZED_ITEM_NOT_FOUND_);
-                if (results == $kw36$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.document_annotation_widgets.get_treated_condition_internal(device_or_treatment)));
-                    memoization_state.caching_state_put(caching_state, device_or_treatment, results, UNPROVIDED);
-                }
-                return memoization_state.caching_results(results);
-            }
-        }
     }
 
     public static SubLObject get_treated_condition(final SubLObject device_or_treatment) {
@@ -2484,16 +1663,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return memoization_state.caching_results(results);
     }
 
-    public static final SubLObject clear_get_treatments_for_condition_alt() {
-        {
-            SubLObject cs = $get_treatments_for_condition_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject clear_get_treatments_for_condition() {
         final SubLObject cs = $get_treatments_for_condition_caching_state$.getGlobalValue();
         if (NIL != cs) {
@@ -2502,42 +1671,13 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return NIL;
     }
 
-    public static final SubLObject remove_get_treatments_for_condition_alt(SubLObject ailment) {
-        return memoization_state.caching_state_remove_function_results_with_args($get_treatments_for_condition_caching_state$.getGlobalValue(), list(ailment), UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject remove_get_treatments_for_condition(final SubLObject ailment) {
         return memoization_state.caching_state_remove_function_results_with_args($get_treatments_for_condition_caching_state$.getGlobalValue(), list(ailment), UNPROVIDED, UNPROVIDED);
-    }
-
-    public static final SubLObject get_treatments_for_condition_internal_alt(SubLObject ailment) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return ask_utilities.query_variable($sym61$_X, list($$or, list($$deviceTypeTreatsConditionType, $sym61$_X, ailment), list($const43$standardTreatmentTypeForCondition, $sym61$_X, ailment)), mt_relevance_macros.$mt$.getDynamicValue(thread), $list_alt65);
-        }
     }
 
     public static SubLObject get_treatments_for_condition_internal(final SubLObject ailment) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return ask_utilities.query_variable($sym59$_X, list($$or, list($$deviceTypeTreatsConditionType, $sym59$_X, ailment), list($const42$standardTreatmentTypeForCondition, $sym59$_X, ailment)), mt_relevance_macros.$mt$.getDynamicValue(thread), $list63);
-    }
-
-    public static final SubLObject get_treatments_for_condition_alt(SubLObject ailment) {
-        {
-            SubLObject caching_state = $get_treatments_for_condition_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(GET_TREATMENTS_FOR_CONDITION, $get_treatments_for_condition_caching_state$, NIL, EQL, ONE_INTEGER, ZERO_INTEGER);
-                memoization_state.register_hl_store_cache_clear_callback(CLEAR_GET_TREATMENTS_FOR_CONDITION);
-            }
-            {
-                SubLObject results = memoization_state.caching_state_lookup(caching_state, ailment, $kw36$_MEMOIZED_ITEM_NOT_FOUND_);
-                if (results == $kw36$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.document_annotation_widgets.get_treatments_for_condition_internal(ailment)));
-                    memoization_state.caching_state_put(caching_state, ailment, results, UNPROVIDED);
-                }
-                return memoization_state.caching_results(results);
-            }
-        }
     }
 
     public static SubLObject get_treatments_for_condition(final SubLObject ailment) {
@@ -2554,16 +1694,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return memoization_state.caching_results(results);
     }
 
-    public static final SubLObject clear_get_affected_parts_alt() {
-        {
-            SubLObject cs = $get_affected_parts_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject clear_get_affected_parts() {
         final SubLObject cs = $get_affected_parts_caching_state$.getGlobalValue();
         if (NIL != cs) {
@@ -2572,42 +1702,13 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return NIL;
     }
 
-    public static final SubLObject remove_get_affected_parts_alt(SubLObject ailment) {
-        return memoization_state.caching_state_remove_function_results_with_args($get_affected_parts_caching_state$.getGlobalValue(), list(ailment), UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject remove_get_affected_parts(final SubLObject ailment) {
         return memoization_state.caching_state_remove_function_results_with_args($get_affected_parts_caching_state$.getGlobalValue(), list(ailment), UNPROVIDED, UNPROVIDED);
-    }
-
-    public static final SubLObject get_affected_parts_internal_alt(SubLObject ailment) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return ask_utilities.query_variable($sym61$_X, listS($$ailmentTypeAfflictsPartType, ailment, $list_alt64), mt_relevance_macros.$mt$.getDynamicValue(thread), UNPROVIDED);
-        }
     }
 
     public static SubLObject get_affected_parts_internal(final SubLObject ailment) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return ask_utilities.query_variable($sym59$_X, listS($$ailmentTypeAfflictsPartType, ailment, $list62), mt_relevance_macros.$mt$.getDynamicValue(thread), UNPROVIDED);
-    }
-
-    public static final SubLObject get_affected_parts_alt(SubLObject ailment) {
-        {
-            SubLObject caching_state = $get_affected_parts_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(GET_AFFECTED_PARTS, $get_affected_parts_caching_state$, NIL, EQL, ONE_INTEGER, ZERO_INTEGER);
-                memoization_state.register_hl_store_cache_clear_callback(CLEAR_GET_AFFECTED_PARTS);
-            }
-            {
-                SubLObject results = memoization_state.caching_state_lookup(caching_state, ailment, $kw36$_MEMOIZED_ITEM_NOT_FOUND_);
-                if (results == $kw36$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.document_annotation_widgets.get_affected_parts_internal(ailment)));
-                    memoization_state.caching_state_put(caching_state, ailment, results, UNPROVIDED);
-                }
-                return memoization_state.caching_results(results);
-            }
-        }
     }
 
     public static SubLObject get_affected_parts(final SubLObject ailment) {
@@ -2624,16 +1725,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return memoization_state.caching_results(results);
     }
 
-    public static final SubLObject clear_get_cooccurring_conditions_alt() {
-        {
-            SubLObject cs = $get_cooccurring_conditions_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject clear_get_cooccurring_conditions() {
         final SubLObject cs = $get_cooccurring_conditions_caching_state$.getGlobalValue();
         if (NIL != cs) {
@@ -2642,42 +1733,13 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return NIL;
     }
 
-    public static final SubLObject remove_get_cooccurring_conditions_alt(SubLObject ailment) {
-        return memoization_state.caching_state_remove_function_results_with_args($get_cooccurring_conditions_caching_state$.getGlobalValue(), list(ailment), UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject remove_get_cooccurring_conditions(final SubLObject ailment) {
         return memoization_state.caching_state_remove_function_results_with_args($get_cooccurring_conditions_caching_state$.getGlobalValue(), list(ailment), UNPROVIDED, UNPROVIDED);
-    }
-
-    public static final SubLObject get_cooccurring_conditions_internal_alt(SubLObject ailment) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return ask_utilities.query_variable($sym61$_X, listS($$conditionsCommonlyCooccur, ailment, $list_alt64), mt_relevance_macros.$mt$.getDynamicValue(thread), UNPROVIDED);
-        }
     }
 
     public static SubLObject get_cooccurring_conditions_internal(final SubLObject ailment) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return ask_utilities.query_variable($sym59$_X, listS($$conditionsCommonlyCooccur, ailment, $list62), mt_relevance_macros.$mt$.getDynamicValue(thread), UNPROVIDED);
-    }
-
-    public static final SubLObject get_cooccurring_conditions_alt(SubLObject ailment) {
-        {
-            SubLObject caching_state = $get_cooccurring_conditions_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(GET_COOCCURRING_CONDITIONS, $get_cooccurring_conditions_caching_state$, NIL, EQL, ONE_INTEGER, ZERO_INTEGER);
-                memoization_state.register_hl_store_cache_clear_callback(CLEAR_GET_COOCCURRING_CONDITIONS);
-            }
-            {
-                SubLObject results = memoization_state.caching_state_lookup(caching_state, ailment, $kw36$_MEMOIZED_ITEM_NOT_FOUND_);
-                if (results == $kw36$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.document_annotation_widgets.get_cooccurring_conditions_internal(ailment)));
-                    memoization_state.caching_state_put(caching_state, ailment, results, UNPROVIDED);
-                }
-                return memoization_state.caching_results(results);
-            }
-        }
     }
 
     public static SubLObject get_cooccurring_conditions(final SubLObject ailment) {
@@ -2694,14 +1756,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return memoization_state.caching_results(results);
     }
 
-    public static final SubLObject get_groups_alt(SubLObject agent) {
-        if (NIL != com.cyc.cycjava.cycl.document_annotation_widgets.caching_upwards_closure_justificationsP()) {
-            return list_utilities.alist_lookup_without_values(com.cyc.cycjava.cycl.document_annotation_widgets.leaders_to_groups(), agent, UNPROVIDED, UNPROVIDED);
-        } else {
-            return com.cyc.cycjava.cycl.document_annotation_widgets.get_groups_non_cached(agent);
-        }
-    }
-
     public static SubLObject get_groups(final SubLObject agent) {
         if (NIL != caching_upwards_closure_justificationsP()) {
             return list_utilities.alist_lookup_without_values(leaders_to_groups(), agent, UNPROVIDED, UNPROVIDED);
@@ -2709,28 +1763,11 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return get_groups_non_cached(agent);
     }
 
-    public static final SubLObject get_groups_non_cached_alt(SubLObject agent) {
-        if (NIL == forts.fort_p(narts_high.nart_substitute(agent))) {
-            return NIL;
-        }
-        return ask_utilities.query_template($sym77$_GROUP, list($$hasLeaders, $sym77$_GROUP, agent), $$InferencePSC, UNPROVIDED);
-    }
-
     public static SubLObject get_groups_non_cached(final SubLObject agent) {
         if (NIL == forts.fort_p(narts_high.nart_substitute(agent))) {
             return NIL;
         }
         return ask_utilities.query_template($sym75$_GROUP, list($$hasLeaders, $sym75$_GROUP, agent), $$InferencePSC, UNPROVIDED);
-    }
-
-    public static final SubLObject clear_leaders_to_groups_alt() {
-        {
-            SubLObject cs = $leaders_to_groups_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
-        }
-        return NIL;
     }
 
     public static SubLObject clear_leaders_to_groups() {
@@ -2741,34 +1778,8 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return NIL;
     }
 
-    public static final SubLObject remove_leaders_to_groups_alt() {
-        return memoization_state.caching_state_remove_function_results_with_args($leaders_to_groups_caching_state$.getGlobalValue(), list(EMPTY_SUBL_OBJECT_ARRAY), UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject remove_leaders_to_groups() {
         return memoization_state.caching_state_remove_function_results_with_args($leaders_to_groups_caching_state$.getGlobalValue(), list(EMPTY_SUBL_OBJECT_ARRAY), UNPROVIDED, UNPROVIDED);
-    }
-
-    public static final SubLObject leaders_to_groups_internal_alt() {
-        {
-            SubLObject alist = NIL;
-            SubLObject cdolist_list_var = ask_utilities.query_template($list_alt81, $list_alt82, $$InferencePSC, UNPROVIDED);
-            SubLObject pair = NIL;
-            for (pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pair = cdolist_list_var.first()) {
-                {
-                    SubLObject datum = pair;
-                    SubLObject current = datum;
-                    SubLObject leader = NIL;
-                    SubLObject group = NIL;
-                    destructuring_bind_must_consp(current, datum, $list_alt80);
-                    leader = current.first();
-                    current = current.rest();
-                    group = current;
-                    alist = list_utilities.alist_pushnew(alist, leader, group, UNPROVIDED, UNPROVIDED);
-                }
-            }
-            return alist;
-        }
     }
 
     public static SubLObject leaders_to_groups_internal() {
@@ -2791,23 +1802,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return alist;
     }
 
-    public static final SubLObject leaders_to_groups_alt() {
-        {
-            SubLObject caching_state = $leaders_to_groups_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(LEADERS_TO_GROUPS, $leaders_to_groups_caching_state$, NIL, EQL, ZERO_INTEGER, ZERO_INTEGER);
-            }
-            {
-                SubLObject results = memoization_state.caching_state_get_zero_arg_results(caching_state, UNPROVIDED);
-                if (results == $kw36$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.document_annotation_widgets.leaders_to_groups_internal()));
-                    memoization_state.caching_state_set_zero_arg_results(caching_state, results, UNPROVIDED);
-                }
-                return memoization_state.caching_results(results);
-            }
-        }
-    }
-
     public static SubLObject leaders_to_groups() {
         SubLObject caching_state = $leaders_to_groups_caching_state$.getGlobalValue();
         if (NIL == caching_state) {
@@ -2819,19 +1813,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             memoization_state.caching_state_set_zero_arg_results(caching_state, results, UNPROVIDED);
         }
         return memoization_state.caching_results(results);
-    }
-
-    public static final SubLObject get_city_regions_alt(SubLObject city) {
-        {
-            SubLObject regions = NIL;
-            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.document_annotation_widgets.get_city_countries(city);
-            SubLObject country = NIL;
-            for (country = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , country = cdolist_list_var.first()) {
-                regions = cons(country, regions);
-                regions = append(com.cyc.cycjava.cycl.document_annotation_widgets.get_country_regions(country), regions);
-            }
-            return regions;
-        }
     }
 
     public static SubLObject get_city_regions(final SubLObject city) {
@@ -2848,29 +1829,11 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return regions;
     }
 
-    public static final SubLObject get_city_countries_alt(SubLObject city) {
-        if (NIL != com.cyc.cycjava.cycl.document_annotation_widgets.caching_upwards_closure_justificationsP()) {
-            return list_utilities.alist_lookup_without_values(com.cyc.cycjava.cycl.document_annotation_widgets.cities_to_countries(), city, UNPROVIDED, UNPROVIDED);
-        } else {
-            return com.cyc.cycjava.cycl.document_annotation_widgets.get_city_countries_non_cached(city);
-        }
-    }
-
     public static SubLObject get_city_countries(final SubLObject city) {
         if (NIL != caching_upwards_closure_justificationsP()) {
             return list_utilities.alist_lookup_without_values(cities_to_countries(), city, UNPROVIDED, UNPROVIDED);
         }
         return get_city_countries_non_cached(city);
-    }
-
-    public static final SubLObject clear_cities_to_countries_alt() {
-        {
-            SubLObject cs = $cities_to_countries_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
-        }
-        return NIL;
     }
 
     public static SubLObject clear_cities_to_countries() {
@@ -2881,61 +1844,8 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return NIL;
     }
 
-    public static final SubLObject remove_cities_to_countries_alt() {
-        return memoization_state.caching_state_remove_function_results_with_args($cities_to_countries_caching_state$.getGlobalValue(), list(EMPTY_SUBL_OBJECT_ARRAY), UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject remove_cities_to_countries() {
         return memoization_state.caching_state_remove_function_results_with_args($cities_to_countries_caching_state$.getGlobalValue(), list(EMPTY_SUBL_OBJECT_ARRAY), UNPROVIDED, UNPROVIDED);
-    }
-
-    public static final SubLObject cities_to_countries_internal_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject alist = NIL;
-                {
-                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                    try {
-                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                        $last_percent_progress_prediction$.bind(NIL, thread);
-                        $within_noting_percent_progress$.bind(T, thread);
-                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                        noting_percent_progress_preamble($str_alt85$Caching_countries_of_all_cities__);
-                        {
-                            SubLObject template = $list_alt86;
-                            SubLObject sentence = $list_alt87;
-                            SubLObject pairs = ask_utilities.query_template(template, sentence, $$InferencePSC, UNPROVIDED);
-                            SubLObject cdolist_list_var = pairs;
-                            SubLObject pair = NIL;
-                            for (pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pair = cdolist_list_var.first()) {
-                                {
-                                    SubLObject datum = pair;
-                                    SubLObject current = datum;
-                                    SubLObject city = NIL;
-                                    SubLObject country = NIL;
-                                    destructuring_bind_must_consp(current, datum, $list_alt88);
-                                    city = current.first();
-                                    current = current.rest();
-                                    country = current;
-                                    alist = list_utilities.alist_pushnew(alist, city, country, UNPROVIDED, UNPROVIDED);
-                                }
-                            }
-                        }
-                        noting_percent_progress_postamble();
-                    } finally {
-                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return alist;
-            }
-        }
     }
 
     public static SubLObject cities_to_countries_internal() {
@@ -2990,23 +1900,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return alist;
     }
 
-    public static final SubLObject cities_to_countries_alt() {
-        {
-            SubLObject caching_state = $cities_to_countries_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(CITIES_TO_COUNTRIES, $cities_to_countries_caching_state$, NIL, EQL, ZERO_INTEGER, ZERO_INTEGER);
-            }
-            {
-                SubLObject results = memoization_state.caching_state_get_zero_arg_results(caching_state, UNPROVIDED);
-                if (results == $kw36$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.document_annotation_widgets.cities_to_countries_internal()));
-                    memoization_state.caching_state_set_zero_arg_results(caching_state, results, UNPROVIDED);
-                }
-                return memoization_state.caching_results(results);
-            }
-        }
-    }
-
     public static SubLObject cities_to_countries() {
         SubLObject caching_state = $cities_to_countries_caching_state$.getGlobalValue();
         if (NIL == caching_state) {
@@ -3020,26 +1913,11 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return memoization_state.caching_results(results);
     }
 
-    public static final SubLObject get_city_countries_non_cached_alt(SubLObject city) {
-        if (NIL != forts.fort_p(narts_high.nart_substitute(city))) {
-            return ask_utilities.query_template($sym90$_COUNTRY, list($$countryOfCity, $sym90$_COUNTRY, city), $$InferencePSC, UNPROVIDED);
-        }
-        return NIL;
-    }
-
     public static SubLObject get_city_countries_non_cached(final SubLObject city) {
         if (NIL != forts.fort_p(narts_high.nart_substitute(city))) {
             return ask_utilities.query_template($sym88$_COUNTRY, list($$countryOfCity, $sym88$_COUNTRY, city), $$InferencePSC, UNPROVIDED);
         }
         return NIL;
-    }
-
-    public static final SubLObject get_country_regions_alt(SubLObject country) {
-        if (NIL != com.cyc.cycjava.cycl.document_annotation_widgets.caching_upwards_closure_justificationsP()) {
-            return list_utilities.alist_lookup_without_values(com.cyc.cycjava.cycl.document_annotation_widgets.countries_to_regions(), country, UNPROVIDED, UNPROVIDED);
-        } else {
-            return com.cyc.cycjava.cycl.document_annotation_widgets.get_country_regions_non_cached(country);
-        }
     }
 
     public static SubLObject get_country_regions(final SubLObject country) {
@@ -3049,26 +1927,9 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return get_country_regions_non_cached(country);
     }
 
-    public static final SubLObject get_country_regions_non_cached_alt(SubLObject country) {
-        if (NIL != forts.fort_p(narts_high.nart_substitute(country))) {
-            return ask_utilities.query_template($sym92$_REGION, listS($$and, $list_alt94, listS($$isa, country, $list_alt95), $list_alt96), $$InferencePSC, UNPROVIDED);
-        }
-        return NIL;
-    }
-
     public static SubLObject get_country_regions_non_cached(final SubLObject country) {
         if (NIL != forts.fort_p(narts_high.nart_substitute(country))) {
             return ask_utilities.query_template($sym90$_REGION, listS($$and, $list92, listS($$isa, country, $list93), $list94), $$InferencePSC, UNPROVIDED);
-        }
-        return NIL;
-    }
-
-    public static final SubLObject clear_countries_to_regions_alt() {
-        {
-            SubLObject cs = $countries_to_regions_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
         }
         return NIL;
     }
@@ -3081,34 +1942,8 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return NIL;
     }
 
-    public static final SubLObject remove_countries_to_regions_alt() {
-        return memoization_state.caching_state_remove_function_results_with_args($countries_to_regions_caching_state$.getGlobalValue(), list(EMPTY_SUBL_OBJECT_ARRAY), UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject remove_countries_to_regions() {
         return memoization_state.caching_state_remove_function_results_with_args($countries_to_regions_caching_state$.getGlobalValue(), list(EMPTY_SUBL_OBJECT_ARRAY), UNPROVIDED, UNPROVIDED);
-    }
-
-    public static final SubLObject countries_to_regions_internal_alt() {
-        {
-            SubLObject alist = NIL;
-            SubLObject cdolist_list_var = ask_utilities.query_template($list_alt99, $list_alt100, $$InferencePSC, UNPROVIDED);
-            SubLObject pair = NIL;
-            for (pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pair = cdolist_list_var.first()) {
-                {
-                    SubLObject datum = pair;
-                    SubLObject current = datum;
-                    SubLObject country = NIL;
-                    SubLObject region = NIL;
-                    destructuring_bind_must_consp(current, datum, $list_alt98);
-                    country = current.first();
-                    current = current.rest();
-                    region = current;
-                    alist = list_utilities.alist_pushnew(alist, country, region, UNPROVIDED, UNPROVIDED);
-                }
-            }
-            return alist;
-        }
     }
 
     public static SubLObject countries_to_regions_internal() {
@@ -3131,23 +1966,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return alist;
     }
 
-    public static final SubLObject countries_to_regions_alt() {
-        {
-            SubLObject caching_state = $countries_to_regions_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(COUNTRIES_TO_REGIONS, $countries_to_regions_caching_state$, NIL, EQL, ZERO_INTEGER, ZERO_INTEGER);
-            }
-            {
-                SubLObject results = memoization_state.caching_state_get_zero_arg_results(caching_state, UNPROVIDED);
-                if (results == $kw36$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.document_annotation_widgets.countries_to_regions_internal()));
-                    memoization_state.caching_state_set_zero_arg_results(caching_state, results, UNPROVIDED);
-                }
-                return memoization_state.caching_results(results);
-            }
-        }
-    }
-
     public static SubLObject countries_to_regions() {
         SubLObject caching_state = $countries_to_regions_caching_state$.getGlobalValue();
         if (NIL == caching_state) {
@@ -3159,58 +1977,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             memoization_state.caching_state_set_zero_arg_results(caching_state, results, UNPROVIDED);
         }
         return memoization_state.caching_results(results);
-    }
-
-    public static final SubLObject with_dual_lucene_sessions_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            destructuring_bind_must_consp(current, datum, $list_alt102);
-            {
-                SubLObject temp = current.rest();
-                current = current.first();
-                {
-                    SubLObject semantic_session = NIL;
-                    SubLObject keyword_session = NIL;
-                    SubLObject host = NIL;
-                    SubLObject port = NIL;
-                    SubLObject text_index_file = NIL;
-                    SubLObject sem_index_file = NIL;
-                    SubLObject overwriteP = NIL;
-                    destructuring_bind_must_consp(current, datum, $list_alt102);
-                    semantic_session = current.first();
-                    current = current.rest();
-                    destructuring_bind_must_consp(current, datum, $list_alt102);
-                    keyword_session = current.first();
-                    current = current.rest();
-                    destructuring_bind_must_consp(current, datum, $list_alt102);
-                    host = current.first();
-                    current = current.rest();
-                    destructuring_bind_must_consp(current, datum, $list_alt102);
-                    port = current.first();
-                    current = current.rest();
-                    destructuring_bind_must_consp(current, datum, $list_alt102);
-                    text_index_file = current.first();
-                    current = current.rest();
-                    destructuring_bind_must_consp(current, datum, $list_alt102);
-                    sem_index_file = current.first();
-                    current = current.rest();
-                    destructuring_bind_must_consp(current, datum, $list_alt102);
-                    overwriteP = current.first();
-                    current = current.rest();
-                    if (NIL == current) {
-                        current = temp;
-                        {
-                            SubLObject body = current;
-                            return listS(CLET, list(list(keyword_session, list(NEW_LUCENE_SESSION, host, port, text_index_file, $TEXT, overwriteP)), list(semantic_session, list(NEW_LUCENE_SESSION, host, port, sem_index_file, $CYC, overwriteP))), append(body, list(list(LUCENE_OPTIMIZE, keyword_session), list(LUCENE_OPTIMIZE, semantic_session), list(LUCENE_FINALIZE, keyword_session), list(LUCENE_FINALIZE, semantic_session))));
-                        }
-                    } else {
-                        cdestructuring_bind_error(datum, $list_alt102);
-                    }
-                }
-            }
-        }
-        return NIL;
     }
 
     public static SubLObject with_dual_lucene_sessions(final SubLObject macroform, final SubLObject environment) {
@@ -3256,168 +2022,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return NIL;
     }
 
-    public static final SubLObject add_fully_indexed_documents_from_dir_alt(SubLObject directory, SubLObject host, SubLObject port, SubLObject text_index_file, SubLObject sem_index_file, SubLObject overwriteP) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject already_resourcing_p = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.getDynamicValue(thread);
-                {
-                    SubLObject _prev_bind_0 = sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.currentBinding(thread);
-                    try {
-                        sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.bind(sbhl_marking_vars.determine_resource_limit(already_resourcing_p, SIX_INTEGER), thread);
-                        sbhl_marking_vars.$resourced_sbhl_marking_spaces$.bind(sbhl_marking_vars.possibly_new_marking_resource(already_resourcing_p), thread);
-                        sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.bind(T, thread);
-                        {
-                            SubLObject keyword_session = lucene_session.new_lucene_session(host, port, text_index_file, $TEXT, overwriteP);
-                            SubLObject semantic_session = lucene_session.new_lucene_session(host, port, sem_index_file, $CYC, overwriteP);
-                            if (NIL != overwriteP) {
-                                file_utilities.delete_file_if_exists(cconcatenate(lucene_session.lucene_index(semantic_session), $str_alt109$_indexed_docs_txt));
-                                file_utilities.delete_file_if_exists(cconcatenate(lucene_session.lucene_index(keyword_session), $str_alt109$_indexed_docs_txt));
-                            }
-                            SubLTrampolineFile.checkType(directory, DIRECTORY_P);
-                            {
-                                SubLObject directory_contents_var = Filesys.directory(directory, T);
-                                SubLObject progress_message_var = $$$Indexing_files;
-                                {
-                                    SubLObject _prev_bind_0_7 = $silent_progressP$.currentBinding(thread);
-                                    try {
-                                        $silent_progressP$.bind(makeBoolean(!progress_message_var.isString()), thread);
-                                        {
-                                            SubLObject list_var = directory_contents_var;
-                                            $progress_note$.setDynamicValue(progress_message_var, thread);
-                                            $progress_start_time$.setDynamicValue(get_universal_time(), thread);
-                                            $progress_total$.setDynamicValue(length(list_var), thread);
-                                            $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
-                                            {
-                                                SubLObject _prev_bind_0_8 = $last_percent_progress_index$.currentBinding(thread);
-                                                SubLObject _prev_bind_1_9 = $last_percent_progress_prediction$.currentBinding(thread);
-                                                SubLObject _prev_bind_2_10 = $within_noting_percent_progress$.currentBinding(thread);
-                                                SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                                                try {
-                                                    $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                                                    $last_percent_progress_prediction$.bind(NIL, thread);
-                                                    $within_noting_percent_progress$.bind(T, thread);
-                                                    $percent_progress_start_time$.bind(get_universal_time(), thread);
-                                                    noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
-                                                    {
-                                                        SubLObject csome_list_var = list_var;
-                                                        SubLObject file = NIL;
-                                                        for (file = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , file = csome_list_var.first()) {
-                                                            note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
-                                                            $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
-                                                            if (NIL == Filesys.directory_p(file)) {
-                                                                {
-                                                                    SubLObject state = memoization_state.possibly_new_memoization_state();
-                                                                    SubLObject local_state = state;
-                                                                    {
-                                                                        SubLObject _prev_bind_0_11 = memoization_state.$memoization_state$.currentBinding(thread);
-                                                                        try {
-                                                                            memoization_state.$memoization_state$.bind(local_state, thread);
-                                                                            {
-                                                                                SubLObject original_memoization_process = NIL;
-                                                                                if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                                                                    original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                                                                    {
-                                                                                        SubLObject current_proc = current_process();
-                                                                                        if (NIL == original_memoization_process) {
-                                                                                            memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                                                                        } else {
-                                                                                            if (original_memoization_process != current_proc) {
-                                                                                                Errors.error($str_alt53$Invalid_attempt_to_reuse_memoizat);
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                                try {
-                                                                                    {
-                                                                                        SubLObject doc_string = string_utilities.read_string_from_file(file, UNPROVIDED, UNPROVIDED);
-                                                                                        com.cyc.cycjava.cycl.document_annotation_widgets.add_fully_indexed_document(doc_string, file, $str_alt112$, semantic_session, keyword_session);
-                                                                                        {
-                                                                                            SubLObject cdolist_list_var = list(keyword_session, semantic_session);
-                                                                                            SubLObject session = NIL;
-                                                                                            for (session = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , session = cdolist_list_var.first()) {
-                                                                                                {
-                                                                                                    SubLObject stream = NIL;
-                                                                                                    try {
-                                                                                                        stream = compatibility.open_text(cconcatenate(lucene_session.lucene_index(session), $str_alt109$_indexed_docs_txt), $APPEND, NIL);
-                                                                                                        if (!stream.isStream()) {
-                                                                                                            Errors.error($str_alt114$Unable_to_open__S, cconcatenate(lucene_session.lucene_index(session), $str_alt109$_indexed_docs_txt));
-                                                                                                        }
-                                                                                                        {
-                                                                                                            SubLObject s = stream;
-                                                                                                            format(s, $str_alt115$_A__, file);
-                                                                                                        }
-                                                                                                    } finally {
-                                                                                                        {
-                                                                                                            SubLObject _prev_bind_0_12 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                                            try {
-                                                                                                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                                                if (stream.isStream()) {
-                                                                                                                    close(stream, UNPROVIDED);
-                                                                                                                }
-                                                                                                            } finally {
-                                                                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_12, thread);
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                } finally {
-                                                                                    {
-                                                                                        SubLObject _prev_bind_0_13 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                        try {
-                                                                                            $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                            if ((NIL != local_state) && (NIL == original_memoization_process)) {
-                                                                                                memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
-                                                                                            }
-                                                                                        } finally {
-                                                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_13, thread);
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        } finally {
-                                                                            memoization_state.$memoization_state$.rebind(_prev_bind_0_11, thread);
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    noting_percent_progress_postamble();
-                                                } finally {
-                                                    $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                                                    $within_noting_percent_progress$.rebind(_prev_bind_2_10, thread);
-                                                    $last_percent_progress_prediction$.rebind(_prev_bind_1_9, thread);
-                                                    $last_percent_progress_index$.rebind(_prev_bind_0_8, thread);
-                                                }
-                                            }
-                                        }
-                                    } finally {
-                                        $silent_progressP$.rebind(_prev_bind_0_7, thread);
-                                    }
-                                }
-                            }
-                            lucene_session.lucene_optimize(keyword_session);
-                            lucene_session.lucene_optimize(semantic_session);
-                            lucene_session.lucene_finalize(keyword_session);
-                            lucene_session.lucene_finalize(semantic_session);
-                        }
-                    } finally {
-                        sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.rebind(_prev_bind_2, thread);
-                        sbhl_marking_vars.$resourced_sbhl_marking_spaces$.rebind(_prev_bind_1, thread);
-                        sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return T;
-        }
-    }
-
     public static SubLObject add_fully_indexed_documents_from_dir(final SubLObject directory, final SubLObject host, final SubLObject port, final SubLObject text_index_file, final SubLObject sem_index_file, final SubLObject overwriteP) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject already_resourcing_p = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.getDynamicValue(thread);
@@ -3434,7 +2038,7 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
                 file_utilities.delete_file_if_exists(cconcatenate(lucene_session.lucene_index(semantic_session), $str107$_indexed_docs_txt));
                 file_utilities.delete_file_if_exists(cconcatenate(lucene_session.lucene_index(keyword_session), $str107$_indexed_docs_txt));
             }
-            assert NIL != Filesys.directory_p(directory) : "! Filesys.directory_p(directory) " + ("Filesys.directory_p(directory) " + "CommonSymbols.NIL != Filesys.directory_p(directory) ") + directory;
+            assert NIL != Filesys.directory_p(directory) : "Filesys.directory_p(directory) " + "CommonSymbols.NIL != Filesys.directory_p(directory) " + directory;
             SubLObject directory_contents_var = Filesys.directory(directory, T);
             final SubLObject progress_message_var = $$$Indexing_files;
             final SubLObject _prev_bind_0_$9 = $silent_progressP$.currentBinding(thread);
@@ -3561,68 +2165,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return T;
     }
 
-    public static final SubLObject add_fully_indexed_documents_alt(SubLObject doc_strings, SubLObject host, SubLObject port, SubLObject text_index_file, SubLObject sem_index_file, SubLObject overwriteP) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject keyword_session = lucene_session.new_lucene_session(host, port, text_index_file, $TEXT, overwriteP);
-                SubLObject semantic_session = lucene_session.new_lucene_session(host, port, sem_index_file, $CYC, overwriteP);
-                SubLObject cdolist_list_var = doc_strings;
-                SubLObject doc_string = NIL;
-                for (doc_string = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , doc_string = cdolist_list_var.first()) {
-                    {
-                        SubLObject state = memoization_state.possibly_new_memoization_state();
-                        SubLObject local_state = state;
-                        {
-                            SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
-                            try {
-                                memoization_state.$memoization_state$.bind(local_state, thread);
-                                {
-                                    SubLObject original_memoization_process = NIL;
-                                    if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                        original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                        {
-                                            SubLObject current_proc = current_process();
-                                            if (NIL == original_memoization_process) {
-                                                memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                            } else {
-                                                if (original_memoization_process != current_proc) {
-                                                    Errors.error($str_alt53$Invalid_attempt_to_reuse_memoizat);
-                                                }
-                                            }
-                                        }
-                                    }
-                                    try {
-                                        com.cyc.cycjava.cycl.document_annotation_widgets.add_fully_indexed_document(doc_string, $str_alt112$, $str_alt112$, semantic_session, keyword_session);
-                                    } finally {
-                                        {
-                                            SubLObject _prev_bind_0_14 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                            try {
-                                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                                if ((NIL != local_state) && (NIL == original_memoization_process)) {
-                                                    memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
-                                                }
-                                            } finally {
-                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_14, thread);
-                                            }
-                                        }
-                                    }
-                                }
-                            } finally {
-                                memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                }
-                lucene_session.lucene_optimize(keyword_session);
-                lucene_session.lucene_optimize(semantic_session);
-                lucene_session.lucene_finalize(keyword_session);
-                lucene_session.lucene_finalize(semantic_session);
-            }
-            return T;
-        }
-    }
-
     public static SubLObject add_fully_indexed_documents(final SubLObject doc_strings, final SubLObject host, final SubLObject port, final SubLObject text_index_file, final SubLObject sem_index_file, final SubLObject overwriteP) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject keyword_session = lucene_session.new_lucene_session(host, port, text_index_file, $TEXT, overwriteP);
@@ -3663,144 +2205,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return T;
     }
 
-    /**
-     *
-     *
-     * @param FILESPECS
-     * 		listp; a list of filespecs of documents that should be
-     * 		tagged.  If filespec is a string, a url will be made up for it.  Otherwise,
-     * 		file-spec is assumed to be a location for the full document, followed by
-     * 		the path to the corresponding xml document.
-     * @param OVERWRITE?
-     * 		booleanp; if documents have already been tagged, should
-     * 		they be overwritten with freshly tagged versions?
-     * @param OUT-DIRECTORY
-     * 		string; where should the tagged documents be stored
-     */
-    @LispMethod(comment = "@param FILESPECS\r\n\t\tlistp; a list of filespecs of documents that should be\r\n\t\ttagged.  If filespec is a string, a url will be made up for it.  Otherwise,\r\n\t\tfile-spec is assumed to be a location for the full document, followed by\r\n\t\tthe path to the corresponding xml document.\r\n@param OVERWRITE?\r\n\t\tbooleanp; if documents have already been tagged, should\r\n\t\tthey be overwritten with freshly tagged versions?\r\n@param OUT-DIRECTORY\r\n\t\tstring; where should the tagged documents be stored")
-    public static final SubLObject tag_xml_documents_with_urls_alt(SubLObject filespecs, SubLObject overwriteP, SubLObject out_directory) {
-        if (overwriteP == UNPROVIDED) {
-            overwriteP = NIL;
-        }
-        if (out_directory == UNPROVIDED) {
-            out_directory = $str_alt134$_host_george_scratch_tagged_docs_;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject state = memoization_state.possibly_new_memoization_state();
-                SubLObject local_state = state;
-                {
-                    SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
-                    try {
-                        memoization_state.$memoization_state$.bind(local_state, thread);
-                        {
-                            SubLObject original_memoization_process = NIL;
-                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                {
-                                    SubLObject current_proc = current_process();
-                                    if (NIL == original_memoization_process) {
-                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                    } else {
-                                        if (original_memoization_process != current_proc) {
-                                            Errors.error($str_alt53$Invalid_attempt_to_reuse_memoizat);
-                                        }
-                                    }
-                                }
-                            }
-                            try {
-                                {
-                                    SubLObject already_resourcing_p = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.getDynamicValue(thread);
-                                    {
-                                        SubLObject _prev_bind_0_15 = sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.currentBinding(thread);
-                                        SubLObject _prev_bind_1 = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.currentBinding(thread);
-                                        SubLObject _prev_bind_2 = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.currentBinding(thread);
-                                        try {
-                                            sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.bind(sbhl_marking_vars.determine_resource_limit(already_resourcing_p, SIX_INTEGER), thread);
-                                            sbhl_marking_vars.$resourced_sbhl_marking_spaces$.bind(sbhl_marking_vars.possibly_new_marking_resource(already_resourcing_p), thread);
-                                            sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.bind(T, thread);
-                                            {
-                                                SubLObject disambiguator = rule_disambiguation.new_rule_disambiguator(UNPROVIDED, UNPROVIDED);
-                                                SubLObject list_var = filespecs;
-                                                $progress_note$.setDynamicValue($$$Tagging_files, thread);
-                                                $progress_start_time$.setDynamicValue(get_universal_time(), thread);
-                                                $progress_total$.setDynamicValue(length(list_var), thread);
-                                                $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
-                                                {
-                                                    SubLObject _prev_bind_0_16 = $last_percent_progress_index$.currentBinding(thread);
-                                                    SubLObject _prev_bind_1_17 = $last_percent_progress_prediction$.currentBinding(thread);
-                                                    SubLObject _prev_bind_2_18 = $within_noting_percent_progress$.currentBinding(thread);
-                                                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                                                    try {
-                                                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                                                        $last_percent_progress_prediction$.bind(NIL, thread);
-                                                        $within_noting_percent_progress$.bind(T, thread);
-                                                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                                                        noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
-                                                        {
-                                                            SubLObject csome_list_var = list_var;
-                                                            SubLObject filespec = NIL;
-                                                            for (filespec = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , filespec = csome_list_var.first()) {
-                                                                note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
-                                                                $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
-                                                                com.cyc.cycjava.cycl.document_annotation_widgets.tag_xml_document_filespec(filespec, overwriteP, out_directory, disambiguator);
-                                                            }
-                                                        }
-                                                        noting_percent_progress_postamble();
-                                                    } finally {
-                                                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                                                        $within_noting_percent_progress$.rebind(_prev_bind_2_18, thread);
-                                                        $last_percent_progress_prediction$.rebind(_prev_bind_1_17, thread);
-                                                        $last_percent_progress_index$.rebind(_prev_bind_0_16, thread);
-                                                    }
-                                                }
-                                            }
-                                        } finally {
-                                            sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.rebind(_prev_bind_2, thread);
-                                            sbhl_marking_vars.$resourced_sbhl_marking_spaces$.rebind(_prev_bind_1, thread);
-                                            sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.rebind(_prev_bind_0_15, thread);
-                                        }
-                                    }
-                                }
-                            } finally {
-                                {
-                                    SubLObject _prev_bind_0_19 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                    try {
-                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                        if ((NIL != local_state) && (NIL == original_memoization_process)) {
-                                            memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
-                                        }
-                                    } finally {
-                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_19, thread);
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return $DONE;
-        }
-    }
-
-    /**
-     *
-     *
-     * @param FILESPECS
-     * 		listp; a list of filespecs of documents that should be
-     * 		tagged.  If filespec is a string, a url will be made up for it.  Otherwise,
-     * 		file-spec is assumed to be a location for the full document, followed by
-     * 		the path to the corresponding xml document.
-     * @param OVERWRITE?
-     * 		booleanp; if documents have already been tagged, should
-     * 		they be overwritten with freshly tagged versions?
-     * @param OUT-DIRECTORY
-     * 		string; where should the tagged documents be stored
-     */
-    @LispMethod(comment = "@param FILESPECS\r\n\t\tlistp; a list of filespecs of documents that should be\r\n\t\ttagged.  If filespec is a string, a url will be made up for it.  Otherwise,\r\n\t\tfile-spec is assumed to be a location for the full document, followed by\r\n\t\tthe path to the corresponding xml document.\r\n@param OVERWRITE?\r\n\t\tbooleanp; if documents have already been tagged, should\r\n\t\tthey be overwritten with freshly tagged versions?\r\n@param OUT-DIRECTORY\r\n\t\tstring; where should the tagged documents be stored")
     public static SubLObject tag_xml_documents_with_urls(final SubLObject filespecs, SubLObject overwriteP, SubLObject out_directory) {
         if (overwriteP == UNPROVIDED) {
             overwriteP = NIL;
@@ -3895,284 +2299,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
         }
         return $DONE;
-    }
-
-    public static final SubLObject tag_xml_document_filespec_alt(SubLObject filespec, SubLObject overwriteP, SubLObject out_directory, SubLObject disambiguator) {
-        if (disambiguator == UNPROVIDED) {
-            disambiguator = $NEW;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject new_disambiguator = eq(disambiguator, $NEW);
-                SubLObject original_file = NIL;
-                SubLObject text_file_path = NIL;
-                SubLObject url = NIL;
-                SubLObject parent_file = NIL;
-                if (NIL != new_disambiguator) {
-                    disambiguator = rule_disambiguation.new_rule_disambiguator(UNPROVIDED, UNPROVIDED);
-                }
-                if (filespec.isString()) {
-                    original_file = filespec;
-                    text_file_path = filespec;
-                }
-                if (filespec.isList()) {
-                    {
-                        SubLObject datum = filespec;
-                        SubLObject current = datum;
-                        SubLObject org_file = NIL;
-                        SubLObject text_fpath = NIL;
-                        destructuring_bind_must_consp(current, datum, $list_alt138);
-                        org_file = current.first();
-                        current = current.rest();
-                        destructuring_bind_must_consp(current, datum, $list_alt138);
-                        text_fpath = current.first();
-                        current = current.rest();
-                        {
-                            SubLObject the_url = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
-                            destructuring_bind_must_listp(current, datum, $list_alt138);
-                            current = current.rest();
-                            {
-                                SubLObject the_parent = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
-                                destructuring_bind_must_listp(current, datum, $list_alt138);
-                                current = current.rest();
-                                if (NIL == current) {
-                                    original_file = org_file;
-                                    text_file_path = text_fpath;
-                                    url = the_url;
-                                    parent_file = the_parent;
-                                } else {
-                                    cdestructuring_bind_error(datum, $list_alt138);
-                                }
-                            }
-                        }
-                    }
-                }
-                Errors.warn($str_alt139$_S_tagging__S__, numeric_date_utilities.timestamp(UNPROVIDED, UNPROVIDED), text_file_path);
-                thread.resetMultipleValues();
-                {
-                    SubLObject path = file_utilities.deconstruct_path(text_file_path);
-                    SubLObject filename = thread.secondMultipleValue();
-                    SubLObject type = thread.thirdMultipleValue();
-                    thread.resetMultipleValues();
-                    if (NIL != Filesys.probe_file(text_file_path)) {
-                        {
-                            SubLObject out_file = cconcatenate(out_directory, new SubLObject[]{ string_utilities.post_remove(filename, $str_alt140$_txt, UNPROVIDED), $str_alt141$_cyc_idx });
-                            if (NIL == string_utilities.ends_with(original_file, $str_alt141$_cyc_idx, UNPROVIDED)) {
-                                if ((NIL != overwriteP) || (NIL == Filesys.probe_file(out_file))) {
-                                    {
-                                        SubLObject state = memoization_state.possibly_new_memoization_state();
-                                        SubLObject local_state = state;
-                                        {
-                                            SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
-                                            try {
-                                                memoization_state.$memoization_state$.bind(local_state, thread);
-                                                {
-                                                    SubLObject original_memoization_process = NIL;
-                                                    if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                                        original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                                        {
-                                                            SubLObject current_proc = current_process();
-                                                            if (NIL == original_memoization_process) {
-                                                                memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                                            } else {
-                                                                if (original_memoization_process != current_proc) {
-                                                                    Errors.error($str_alt53$Invalid_attempt_to_reuse_memoizat);
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    try {
-                                                        {
-                                                            SubLObject datum = com.cyc.cycjava.cycl.document_annotation_widgets.read_original_doc(text_file_path);
-                                                            SubLObject current = datum;
-                                                            SubLObject title = NIL;
-                                                            SubLObject doc_text = NIL;
-                                                            destructuring_bind_must_consp(current, datum, $list_alt142);
-                                                            title = current.first();
-                                                            current = current.rest();
-                                                            destructuring_bind_must_consp(current, datum, $list_alt142);
-                                                            doc_text = current.first();
-                                                            current = current.rest();
-                                                            if (NIL == current) {
-                                                                if (NIL != doc_text) {
-                                                                    if ((NIL != search($str_alt143$_, doc_text, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED)) || (NIL != search($str_alt144$_, doc_text, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED))) {
-                                                                        doc_text = string_utilities.remove_substring(string_utilities.remove_substring(doc_text, $str_alt143$_), $str_alt144$_);
-                                                                    }
-                                                                    {
-                                                                        SubLObject stream = NIL;
-                                                                        try {
-                                                                            stream = compatibility.open_text(text_file_path, $OUTPUT, NIL);
-                                                                            if (!stream.isStream()) {
-                                                                                Errors.error($str_alt114$Unable_to_open__S, text_file_path);
-                                                                            }
-                                                                            {
-                                                                                SubLObject s = stream;
-                                                                                {
-                                                                                    SubLObject _prev_bind_0_20 = xml_vars.$xml_stream$.currentBinding(thread);
-                                                                                    try {
-                                                                                        xml_vars.$xml_stream$.bind(s, thread);
-                                                                                        {
-                                                                                            SubLObject name_var = $$$Doc;
-                                                                                            xml_utilities.xml_start_tag_internal(name_var, NIL, NIL);
-                                                                                            {
-                                                                                                SubLObject name_var_21 = $tagged_doc_title_name$.getGlobalValue();
-                                                                                                xml_utilities.xml_start_tag_internal(name_var_21, NIL, NIL);
-                                                                                                xml_utilities.xml_markup(title);
-                                                                                                xml_utilities.xml_end_tag_internal(name_var_21);
-                                                                                            }
-                                                                                            {
-                                                                                                SubLObject name_var_22 = $tagged_doc_text_name$.getGlobalValue();
-                                                                                                xml_utilities.xml_start_tag_internal(name_var_22, NIL, NIL);
-                                                                                                xml_utilities.xml_markup(doc_text);
-                                                                                                xml_utilities.xml_end_tag_internal(name_var_22);
-                                                                                            }
-                                                                                            if (parent_file.isString()) {
-                                                                                                {
-                                                                                                    SubLObject name_var_23 = $tagged_doc_parent_filename_name$.getGlobalValue();
-                                                                                                    xml_utilities.xml_start_tag_internal(name_var_23, NIL, NIL);
-                                                                                                    xml_utilities.xml_markup(parent_file);
-                                                                                                    xml_utilities.xml_end_tag_internal(name_var_23);
-                                                                                                }
-                                                                                            }
-                                                                                            xml_utilities.xml_end_tag_internal(name_var);
-                                                                                        }
-                                                                                    } finally {
-                                                                                        xml_vars.$xml_stream$.rebind(_prev_bind_0_20, thread);
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        } finally {
-                                                                            {
-                                                                                SubLObject _prev_bind_0_24 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                try {
-                                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                    if (stream.isStream()) {
-                                                                                        close(stream, UNPROVIDED);
-                                                                                    }
-                                                                                } finally {
-                                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_24, thread);
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                    {
-                                                                        SubLObject stream = NIL;
-                                                                        try {
-                                                                            stream = compatibility.open_text(out_file, $OUTPUT, NIL);
-                                                                            if (!stream.isStream()) {
-                                                                                Errors.error($str_alt114$Unable_to_open__S, out_file);
-                                                                            }
-                                                                            {
-                                                                                SubLObject out = stream;
-                                                                                {
-                                                                                    SubLObject _prev_bind_0_25 = xml_vars.$xml_stream$.currentBinding(thread);
-                                                                                    try {
-                                                                                        xml_vars.$xml_stream$.bind(out, thread);
-                                                                                        {
-                                                                                            SubLObject tagged_doc_text = com.cyc.cycjava.cycl.document_annotation_widgets.tag_document_for_indexing_with_offsets(doc_text, disambiguator, UNPROVIDED, UNPROVIDED);
-                                                                                            if (NIL == tagged_doc_text) {
-                                                                                                mail_utilities.mail_message($str_alt147$daves_cyc_com, $str_alt147$daves_cyc_com, cconcatenate($str_alt148$There_is_no_text_in_the_body_of_t, new SubLObject[]{ format_nil.format_nil_s_no_copy(text_file_path), $str_alt149$_, format_nil.$format_nil_percent$.getGlobalValue(), $str_alt150$Please_remove_it_from_the_corpus_ }), $str_alt151$Semantic_Search__Empty_file, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                                                                tagged_doc_text = $str_alt112$;
-                                                                                            }
-                                                                                            {
-                                                                                                SubLObject name_var = $$$Doc;
-                                                                                                xml_utilities.xml_start_tag_internal(name_var, NIL, NIL);
-                                                                                                {
-                                                                                                    SubLObject name_var_26 = $tagged_doc_title_name$.getGlobalValue();
-                                                                                                    xml_utilities.xml_start_tag_internal(name_var_26, NIL, NIL);
-                                                                                                    xml_utilities.xml_markup(title);
-                                                                                                    xml_utilities.xml_end_tag_internal(name_var_26);
-                                                                                                }
-                                                                                                {
-                                                                                                    SubLObject name_var_27 = $tagged_doc_original_filename_name$.getGlobalValue();
-                                                                                                    xml_utilities.xml_start_tag_internal(name_var_27, NIL, NIL);
-                                                                                                    xml_utilities.xml_markup(original_file);
-                                                                                                    xml_utilities.xml_end_tag_internal(name_var_27);
-                                                                                                }
-                                                                                                if (NIL != url) {
-                                                                                                    {
-                                                                                                        SubLObject name_var_28 = $tagged_doc_url_name$.getGlobalValue();
-                                                                                                        xml_utilities.xml_start_tag_internal(name_var_28, NIL, NIL);
-                                                                                                        xml_utilities.xml_markup(url);
-                                                                                                        xml_utilities.xml_end_tag_internal(name_var_28);
-                                                                                                    }
-                                                                                                }
-                                                                                                xml_utilities.xml_terpri();
-                                                                                                if (parent_file.isString()) {
-                                                                                                    {
-                                                                                                        SubLObject name_var_29 = $tagged_doc_parent_filename_name$.getGlobalValue();
-                                                                                                        xml_utilities.xml_start_tag_internal(name_var_29, NIL, NIL);
-                                                                                                        xml_utilities.xml_markup(parent_file);
-                                                                                                        xml_utilities.xml_end_tag_internal(name_var_29);
-                                                                                                    }
-                                                                                                    xml_utilities.xml_terpri();
-                                                                                                }
-                                                                                                {
-                                                                                                    SubLObject name_var_30 = $tagged_doc_keystring_name$.getGlobalValue();
-                                                                                                    xml_utilities.xml_start_tag_internal(name_var_30, NIL, NIL);
-                                                                                                    xml_utilities.xml_write_string(tagged_doc_text, UNPROVIDED, UNPROVIDED);
-                                                                                                    xml_utilities.xml_end_tag_internal(name_var_30);
-                                                                                                }
-                                                                                                xml_utilities.xml_end_tag_internal(name_var);
-                                                                                            }
-                                                                                        }
-                                                                                    } finally {
-                                                                                        xml_vars.$xml_stream$.rebind(_prev_bind_0_25, thread);
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        } finally {
-                                                                            {
-                                                                                SubLObject _prev_bind_0_31 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                try {
-                                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                    if (stream.isStream()) {
-                                                                                        close(stream, UNPROVIDED);
-                                                                                    }
-                                                                                } finally {
-                                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_31, thread);
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            } else {
-                                                                cdestructuring_bind_error(datum, $list_alt142);
-                                                            }
-                                                        }
-                                                    } finally {
-                                                        {
-                                                            SubLObject _prev_bind_0_32 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                            try {
-                                                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                if ((NIL != local_state) && (NIL == original_memoization_process)) {
-                                                                    memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
-                                                                }
-                                                            } finally {
-                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_32, thread);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            } finally {
-                                                memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        mail_utilities.mail_message($str_alt147$daves_cyc_com, $str_alt147$daves_cyc_com, cconcatenate($str_alt152$Couldn_t_find_file__, format_nil.format_nil_s_no_copy(text_file_path)), $str_alt153$Semantic_Search__PROBE_FILE_failu, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    }
-                }
-                if (NIL != new_disambiguator) {
-                    rule_disambiguation.finalize_rule_disambiguator(disambiguator);
-                }
-            }
-            return T;
-        }
     }
 
     public static SubLObject tag_xml_document_filespec(final SubLObject filespec, final SubLObject overwriteP, final SubLObject out_directory, SubLObject disambiguator) {
@@ -4378,73 +2504,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return T;
     }
 
-    public static final SubLObject read_original_doc_alt(SubLObject path) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject doc_string = $str_alt112$;
-                SubLObject title = $str_alt112$;
-                SubLObject stream = NIL;
-                try {
-                    {
-                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                        try {
-                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                            stream = compatibility.open_text(path, $INPUT, NIL);
-                        } finally {
-                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    if (!stream.isStream()) {
-                        Errors.error($str_alt114$Unable_to_open__S, path);
-                    }
-                    {
-                        SubLObject s = stream;
-                        SubLObject tokens = web_utilities.xml_tokenize(s, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        while (NIL != tokens) {
-                            {
-                                SubLObject token_head = tokens.first();
-                                if (NIL != web_utilities.xml_token_matches(token_head, $tagged_doc_title_token$.getGlobalValue())) {
-                                    if (NIL != web_utilities.xml_token_matches(second(tokens), $tagged_doc_title_close_token$.getGlobalValue())) {
-                                        tokens = web_utilities.advance_xml_tokens(tokens, TWO_INTEGER);
-                                    } else {
-                                        title = second(tokens);
-                                        tokens = web_utilities.advance_xml_tokens(tokens, THREE_INTEGER);
-                                    }
-                                } else {
-                                    if (NIL != web_utilities.xml_token_matches(token_head, $tagged_doc_text_token$.getGlobalValue())) {
-                                        {
-                                            SubLObject close_tag_location = web_utilities.next_xml_token_position(tokens, $tagged_doc_text_close_token$.getGlobalValue(), UNPROVIDED);
-                                            SubLObject text_tokens = subseq(tokens, ONE_INTEGER, close_tag_location);
-                                            SubLObject text = apply(CCONCATENATE, text_tokens);
-                                            doc_string = text;
-                                            tokens = web_utilities.advance_xml_tokens(tokens, close_tag_location);
-                                        }
-                                    } else {
-                                        tokens = web_utilities.advance_xml_tokens(tokens, UNPROVIDED);
-                                    }
-                                }
-                            }
-                        } 
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            if (stream.isStream()) {
-                                close(stream, UNPROVIDED);
-                            }
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                return list(title, doc_string);
-            }
-        }
-    }
-
     public static SubLObject read_original_doc(final SubLObject path) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject doc_string = $str111$;
@@ -4499,86 +2558,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return list(title, doc_string);
     }
 
-    /**
-     *
-     *
-     * @param FILENAME
-     * 		stringp; a pathname of either:
-     * 		- a mapfile that contains a record of the format:
-     * 		("html-file" "xml-text-file") or ("html-file" "xml-text-file" "url") on each line, or
-     * 		- a file containing filenames (within double-quotes and one per line) of
-     * 		xml-text-docs that should be tagged
-     * @param OVERWRITE?
-     * 		booleanp; if documents have already been tagged, should
-     * 		they be overwritten with freshly tagged versions?
-     * @param OUT-DIRECTORY
-     * 		string; where should the tagged documents be stored.
-     */
-    @LispMethod(comment = "@param FILENAME\r\n\t\tstringp; a pathname of either:\r\n\t\t- a mapfile that contains a record of the format:\r\n\t\t(\"html-file\" \"xml-text-file\") or (\"html-file\" \"xml-text-file\" \"url\") on each line, or\r\n\t\t- a file containing filenames (within double-quotes and one per line) of\r\n\t\txml-text-docs that should be tagged\r\n@param OVERWRITE?\r\n\t\tbooleanp; if documents have already been tagged, should\r\n\t\tthey be overwritten with freshly tagged versions?\r\n@param OUT-DIRECTORY\r\n\t\tstring; where should the tagged documents be stored.")
-    public static final SubLObject tag_xml_doc_set_with_urls_alt(SubLObject filename, SubLObject overwriteP, SubLObject out_directory) {
-        if (overwriteP == UNPROVIDED) {
-            overwriteP = NIL;
-        }
-        if (out_directory == UNPROVIDED) {
-            out_directory = $tagged_xml_doc_directory$.getDynamicValue();
-        }
-        {
-            SubLObject file_list = NIL;
-            SubLObject stream = NIL;
-            try {
-                stream = compatibility.open_text(filename, $INPUT, NIL);
-                if (!stream.isStream()) {
-                    Errors.error($str_alt114$Unable_to_open__S, filename);
-                }
-                {
-                    SubLObject infile = stream;
-                    if (infile.isStream()) {
-                        {
-                            SubLObject in_file = NIL;
-                            for (in_file = read_line(infile, NIL, NIL, UNPROVIDED); NIL != in_file; in_file = read_line(infile, NIL, NIL, UNPROVIDED)) {
-                                {
-                                    SubLObject line = read_from_string_ignoring_errors(in_file, NIL, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                    if (line.isList()) {
-                                        file_list = cons(line, file_list);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            } finally {
-                {
-                    SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
-                    try {
-                        bind($is_thread_performing_cleanupP$, T);
-                        if (stream.isStream()) {
-                            close(stream, UNPROVIDED);
-                        }
-                    } finally {
-                        rebind($is_thread_performing_cleanupP$, _prev_bind_0);
-                    }
-                }
-            }
-            return com.cyc.cycjava.cycl.document_annotation_widgets.tag_xml_documents_with_urls(file_list, overwriteP, out_directory);
-        }
-    }
-
-    /**
-     *
-     *
-     * @param FILENAME
-     * 		stringp; a pathname of either:
-     * 		- a mapfile that contains a record of the format:
-     * 		("html-file" "xml-text-file") or ("html-file" "xml-text-file" "url") on each line, or
-     * 		- a file containing filenames (within double-quotes and one per line) of
-     * 		xml-text-docs that should be tagged
-     * @param OVERWRITE?
-     * 		booleanp; if documents have already been tagged, should
-     * 		they be overwritten with freshly tagged versions?
-     * @param OUT-DIRECTORY
-     * 		string; where should the tagged documents be stored.
-     */
-    @LispMethod(comment = "@param FILENAME\r\n\t\tstringp; a pathname of either:\r\n\t\t- a mapfile that contains a record of the format:\r\n\t\t(\"html-file\" \"xml-text-file\") or (\"html-file\" \"xml-text-file\" \"url\") on each line, or\r\n\t\t- a file containing filenames (within double-quotes and one per line) of\r\n\t\txml-text-docs that should be tagged\r\n@param OVERWRITE?\r\n\t\tbooleanp; if documents have already been tagged, should\r\n\t\tthey be overwritten with freshly tagged versions?\r\n@param OUT-DIRECTORY\r\n\t\tstring; where should the tagged documents be stored.")
     public static SubLObject tag_xml_doc_set_with_urls(final SubLObject filename, SubLObject overwriteP, SubLObject out_directory) {
         if (overwriteP == UNPROVIDED) {
             overwriteP = NIL;
@@ -4627,107 +2606,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return tag_xml_documents_with_urls(file_list, overwriteP, out_directory);
     }
 
-    /**
-     * This function indexes a number of pre-tagged documents into a pair of indexes
-     * at OUT-DIR
-     *
-     * @param FILENAME
-     * 		stringp; the name of a file that contains lists of the form
-     * 		(html-file txt-file) one per line, fully-qualified paths).  This assumes that
-     * 		txt-file is a text file, and automatically finds the corresponding indexed
-     * 		file
-     * @param OUT-DIR
-     * 		stringp; the location where the two indexes should be created
-     * @param OVERWRITE?
-     * 		booleanp; should any current indices in OUT-DIR be
-     * 		overwritten?
-     */
-    @LispMethod(comment = "This function indexes a number of pre-tagged documents into a pair of indexes\r\nat OUT-DIR\r\n\r\n@param FILENAME\r\n\t\tstringp; the name of a file that contains lists of the form\r\n\t\t(html-file txt-file) one per line, fully-qualified paths).  This assumes that\r\n\t\ttxt-file is a text file, and automatically finds the corresponding indexed\r\n\t\tfile\r\n@param OUT-DIR\r\n\t\tstringp; the location where the two indexes should be created\r\n@param OVERWRITE?\r\n\t\tbooleanp; should any current indices in OUT-DIR be\r\n\t\toverwritten?\nThis function indexes a number of pre-tagged documents into a pair of indexes\nat OUT-DIR")
-    public static final SubLObject index_xml_doc_set_from_map_file_alt(SubLObject filename, SubLObject out_dir, SubLObject overwriteP, SubLObject port, SubLObject tagged_doc_directory, SubLObject lucene_host) {
-        if (overwriteP == UNPROVIDED) {
-            overwriteP = T;
-        }
-        if (port == UNPROVIDED) {
-            port = lucene_session.get_lucene_port();
-        }
-        if (tagged_doc_directory == UNPROVIDED) {
-            tagged_doc_directory = $tagged_xml_doc_directory$.getDynamicValue();
-        }
-        if (lucene_host == UNPROVIDED) {
-            lucene_host = lucene_session.get_lucene_host();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject text_index_file = cconcatenate(out_dir, $text_index_dir_name$.getDynamicValue(thread));
-                SubLObject sem_index_file = cconcatenate(out_dir, $semantic_index_dir_name$.getDynamicValue(thread));
-                SubLObject file_list = NIL;
-                SubLObject stream = NIL;
-                try {
-                    stream = compatibility.open_text(filename, $INPUT, NIL);
-                    if (!stream.isStream()) {
-                        Errors.error($str_alt114$Unable_to_open__S, filename);
-                    }
-                    {
-                        SubLObject infile = stream;
-                        if (infile.isStream()) {
-                            {
-                                SubLObject line = NIL;
-                                for (line = read_line(infile, NIL, NIL, UNPROVIDED); NIL != line; line = read_line(infile, NIL, NIL, UNPROVIDED)) {
-                                    {
-                                        SubLObject file_line_as_list = read_from_string_ignoring_errors(line, NIL, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                        if (file_line_as_list.isList()) {
-                                            {
-                                                SubLObject txt_file = second(file_line_as_list);
-                                                thread.resetMultipleValues();
-                                                {
-                                                    SubLObject path = file_utilities.deconstruct_path(txt_file);
-                                                    SubLObject simple_filename = thread.secondMultipleValue();
-                                                    SubLObject type = thread.thirdMultipleValue();
-                                                    thread.resetMultipleValues();
-                                                    file_list = cons(list(cconcatenate(tagged_doc_directory, new SubLObject[]{ string_utilities.post_remove(simple_filename, $str_alt140$_txt, UNPROVIDED), $str_alt141$_cyc_idx }), txt_file), file_list);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            if (stream.isStream()) {
-                                close(stream, UNPROVIDED);
-                            }
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                return com.cyc.cycjava.cycl.document_annotation_widgets.index_pre_tagged_xml_docs(file_list, lucene_host, port, text_index_file, sem_index_file, overwriteP);
-            }
-        }
-    }
-
-    /**
-     * This function indexes a number of pre-tagged documents into a pair of indexes
-     * at OUT-DIR
-     *
-     * @param FILENAME
-     * 		stringp; the name of a file that contains lists of the form
-     * 		(html-file txt-file) one per line, fully-qualified paths).  This assumes that
-     * 		txt-file is a text file, and automatically finds the corresponding indexed
-     * 		file
-     * @param OUT-DIR
-     * 		stringp; the location where the two indexes should be created
-     * @param OVERWRITE?
-     * 		booleanp; should any current indices in OUT-DIR be
-     * 		overwritten?
-     */
-    @LispMethod(comment = "This function indexes a number of pre-tagged documents into a pair of indexes\r\nat OUT-DIR\r\n\r\n@param FILENAME\r\n\t\tstringp; the name of a file that contains lists of the form\r\n\t\t(html-file txt-file) one per line, fully-qualified paths).  This assumes that\r\n\t\ttxt-file is a text file, and automatically finds the corresponding indexed\r\n\t\tfile\r\n@param OUT-DIR\r\n\t\tstringp; the location where the two indexes should be created\r\n@param OVERWRITE?\r\n\t\tbooleanp; should any current indices in OUT-DIR be\r\n\t\toverwritten?\nThis function indexes a number of pre-tagged documents into a pair of indexes\nat OUT-DIR")
     public static SubLObject index_xml_doc_set_from_map_file(final SubLObject filename, final SubLObject out_dir, SubLObject overwriteP, SubLObject port, SubLObject tagged_doc_directory, SubLObject lucene_host) {
         if (overwriteP == UNPROVIDED) {
             overwriteP = T;
@@ -4794,144 +2672,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return index_pre_tagged_xml_docs(file_list, lucene_host, port, text_index_file, sem_index_file, overwriteP);
     }
 
-    /**
-     *
-     *
-     * @param FILENAMES
-     * 		listp; a list of pairs of fully-qualified files
-     * 		(file.cyc-idx file.txt) that should be indexed.  This assumes that these
-     * 		files have already been tagged using a function like @xref TAG-DOCUMENTS
-     * @param HOST
-     * 		stringp; the name of the machine running the lucene server
-     * @param PORT
-     * 		integerp; the port on HOST that is running the lucene server
-     * @param TEXT-INDEX-FILE
-     * 		stringp; the location of the text-based index for
-     * 		Lucene to use
-     * @param SEM-INDEX-FILE
-     * 		stringp; the location of the CycL-based index for
-     * 		Lucene to use
-     * @param OVERWRITE?
-     * 		booleanp; should the index be overwritten?
-     */
-    @LispMethod(comment = "@param FILENAMES\r\n\t\tlistp; a list of pairs of fully-qualified files\r\n\t\t(file.cyc-idx file.txt) that should be indexed.  This assumes that these\r\n\t\tfiles have already been tagged using a function like @xref TAG-DOCUMENTS\r\n@param HOST\r\n\t\tstringp; the name of the machine running the lucene server\r\n@param PORT\r\n\t\tintegerp; the port on HOST that is running the lucene server\r\n@param TEXT-INDEX-FILE\r\n\t\tstringp; the location of the text-based index for\r\n\t\tLucene to use\r\n@param SEM-INDEX-FILE\r\n\t\tstringp; the location of the CycL-based index for\r\n\t\tLucene to use\r\n@param OVERWRITE?\r\n\t\tbooleanp; should the index be overwritten?")
-    public static final SubLObject index_pre_tagged_xml_docs_alt(SubLObject filenames, SubLObject host, SubLObject port, SubLObject text_index_file, SubLObject sem_index_file, SubLObject overwriteP) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject keyword_session = lucene_session.new_lucene_session(host, port, text_index_file, $TEXT, overwriteP);
-                SubLObject semantic_session = lucene_session.new_lucene_session(host, port, sem_index_file, $CYC, overwriteP);
-                if (NIL != overwriteP) {
-                    file_utilities.delete_file_if_exists(cconcatenate(lucene_session.lucene_index(semantic_session), $str_alt109$_indexed_docs_txt));
-                    file_utilities.delete_file_if_exists(cconcatenate(lucene_session.lucene_index(keyword_session), $str_alt109$_indexed_docs_txt));
-                }
-                {
-                    SubLObject list_var = filenames;
-                    $progress_note$.setDynamicValue($$$Indexing_files, thread);
-                    $progress_start_time$.setDynamicValue(get_universal_time(), thread);
-                    $progress_total$.setDynamicValue(length(list_var), thread);
-                    $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
-                    {
-                        SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                        SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                        SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                        SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                        try {
-                            $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                            $last_percent_progress_prediction$.bind(NIL, thread);
-                            $within_noting_percent_progress$.bind(T, thread);
-                            $percent_progress_start_time$.bind(get_universal_time(), thread);
-                            noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
-                            {
-                                SubLObject csome_list_var = list_var;
-                                SubLObject file = NIL;
-                                for (file = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , file = csome_list_var.first()) {
-                                    note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
-                                    $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
-                                    {
-                                        SubLObject datum = file;
-                                        SubLObject current = datum;
-                                        SubLObject idx_file = NIL;
-                                        SubLObject txt_file = NIL;
-                                        destructuring_bind_must_consp(current, datum, $list_alt156);
-                                        idx_file = current.first();
-                                        current = current.rest();
-                                        destructuring_bind_must_consp(current, datum, $list_alt156);
-                                        txt_file = current.first();
-                                        current = current.rest();
-                                        if (NIL == current) {
-                                            if (NIL == Filesys.directory_p(idx_file)) {
-                                                if (NIL != string_utilities.ends_with(idx_file, $str_alt141$_cyc_idx, UNPROVIDED)) {
-                                                    {
-                                                        SubLObject error_message = NIL;
-                                                        try {
-                                                            {
-                                                                SubLObject _prev_bind_0_33 = Errors.$error_handler$.currentBinding(thread);
-                                                                try {
-                                                                    Errors.$error_handler$.bind(CATCH_ERROR_MESSAGE_HANDLER, thread);
-                                                                    try {
-                                                                        com.cyc.cycjava.cycl.document_annotation_widgets.index_pre_tagged_xml_doc(idx_file, txt_file, keyword_session, semantic_session);
-                                                                    } catch (Throwable catch_var) {
-                                                                        Errors.handleThrowable(catch_var, NIL);
-                                                                    }
-                                                                } finally {
-                                                                    Errors.$error_handler$.rebind(_prev_bind_0_33, thread);
-                                                                }
-                                                            }
-                                                        } catch (Throwable ccatch_env_var) {
-                                                            error_message = Errors.handleThrowable(ccatch_env_var, $catch_error_message_target$.getGlobalValue());
-                                                        }
-                                                        if (NIL != error_message) {
-                                                            Errors.warn($str_alt158$problem_indexing__a_____moving_on, file, error_message);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } else {
-                                            cdestructuring_bind_error(datum, $list_alt156);
-                                        }
-                                    }
-                                }
-                            }
-                            noting_percent_progress_postamble();
-                        } finally {
-                            $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                            $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                            $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                            $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                lucene_session.lucene_optimize(keyword_session);
-                lucene_session.lucene_optimize(semantic_session);
-                lucene_session.lucene_finalize(keyword_session);
-                lucene_session.lucene_finalize(semantic_session);
-            }
-            return T;
-        }
-    }
-
-    /**
-     *
-     *
-     * @param FILENAMES
-     * 		listp; a list of pairs of fully-qualified files
-     * 		(file.cyc-idx file.txt) that should be indexed.  This assumes that these
-     * 		files have already been tagged using a function like @xref TAG-DOCUMENTS
-     * @param HOST
-     * 		stringp; the name of the machine running the lucene server
-     * @param PORT
-     * 		integerp; the port on HOST that is running the lucene server
-     * @param TEXT-INDEX-FILE
-     * 		stringp; the location of the text-based index for
-     * 		Lucene to use
-     * @param SEM-INDEX-FILE
-     * 		stringp; the location of the CycL-based index for
-     * 		Lucene to use
-     * @param OVERWRITE?
-     * 		booleanp; should the index be overwritten?
-     */
-    @LispMethod(comment = "@param FILENAMES\r\n\t\tlistp; a list of pairs of fully-qualified files\r\n\t\t(file.cyc-idx file.txt) that should be indexed.  This assumes that these\r\n\t\tfiles have already been tagged using a function like @xref TAG-DOCUMENTS\r\n@param HOST\r\n\t\tstringp; the name of the machine running the lucene server\r\n@param PORT\r\n\t\tintegerp; the port on HOST that is running the lucene server\r\n@param TEXT-INDEX-FILE\r\n\t\tstringp; the location of the text-based index for\r\n\t\tLucene to use\r\n@param SEM-INDEX-FILE\r\n\t\tstringp; the location of the CycL-based index for\r\n\t\tLucene to use\r\n@param OVERWRITE?\r\n\t\tbooleanp; should the index be overwritten?")
     public static SubLObject index_pre_tagged_xml_docs(final SubLObject filenames, final SubLObject host, final SubLObject port, final SubLObject text_index_file, final SubLObject sem_index_file, final SubLObject overwriteP) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject keyword_session = lucene_session.new_lucene_session(host, port, text_index_file, $TEXT, overwriteP);
@@ -5032,149 +2772,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         lucene_session.lucene_finalize(keyword_session);
         lucene_session.lucene_finalize(semantic_session);
         return T;
-    }
-
-    public static final SubLObject index_pre_tagged_xml_doc_alt(SubLObject idx_doc_name, SubLObject txt_xml_doc_name, SubLObject keyword_session, SubLObject semantic_session) {
-        {
-            SubLObject original_filename = $str_alt112$;
-            SubLObject key_string = $str_alt112$;
-            SubLObject confirmed_concepts_key_string = $str_alt112$;
-            SubLObject title = $str_alt112$;
-            SubLObject text_xml = string_utilities.read_string_from_file(txt_xml_doc_name, UNPROVIDED, UNPROVIDED);
-            SubLObject tokens = web_utilities.xml_string_tokenize(text_xml, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            SubLObject url = $str_alt112$;
-            SubLObject parent_file = NIL;
-            SubLObject text = NIL;
-            while (NIL != tokens) {
-                {
-                    SubLObject token_head = tokens.first();
-                    if (NIL != web_utilities.xml_token_matches(token_head, $tagged_doc_original_filename_token$.getGlobalValue())) {
-                        original_filename = second(tokens);
-                        tokens = web_utilities.advance_xml_tokens(tokens, THREE_INTEGER);
-                    } else {
-                        if (NIL != web_utilities.xml_token_matches(token_head, $tagged_doc_parent_filename_token$.getGlobalValue())) {
-                            parent_file = second(tokens);
-                            tokens = web_utilities.advance_xml_tokens(tokens, THREE_INTEGER);
-                        } else {
-                            if (NIL != web_utilities.xml_token_matches(token_head, $tagged_doc_keystring_token$.getGlobalValue())) {
-                                key_string = second(tokens);
-                                tokens = web_utilities.advance_xml_tokens(tokens, THREE_INTEGER);
-                            } else {
-                                if (NIL != web_utilities.xml_token_matches(token_head, $tagged_doc_url_token$.getGlobalValue())) {
-                                    url = second(tokens);
-                                    tokens = web_utilities.advance_xml_tokens(tokens, THREE_INTEGER);
-                                } else {
-                                    if (NIL != web_utilities.xml_token_matches(token_head, $tagged_doc_title_token$.getGlobalValue())) {
-                                        if (NIL != web_utilities.xml_token_matches(second(tokens), $tagged_doc_title_close_token$.getGlobalValue())) {
-                                            tokens = web_utilities.advance_xml_tokens(tokens, TWO_INTEGER);
-                                        } else {
-                                            title = second(tokens);
-                                            tokens = web_utilities.advance_xml_tokens(tokens, THREE_INTEGER);
-                                        }
-                                    } else {
-                                        if (NIL != web_utilities.xml_token_matches(token_head, $tagged_doc_text_token$.getGlobalValue())) {
-                                            text = second(tokens);
-                                            tokens = web_utilities.advance_xml_tokens(tokens, THREE_INTEGER);
-                                        } else {
-                                            tokens = web_utilities.advance_xml_tokens(tokens, UNPROVIDED);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            } 
-            {
-                SubLObject idx_xml = string_utilities.read_string_from_file(idx_doc_name, UNPROVIDED, UNPROVIDED);
-                SubLObject tokens_34 = web_utilities.xml_string_tokenize(idx_xml, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                while (NIL != tokens_34) {
-                    {
-                        SubLObject token_head = tokens_34.first();
-                        if (NIL != web_utilities.xml_token_matches(token_head, $tagged_doc_original_filename_token$.getGlobalValue())) {
-                            original_filename = second(tokens_34);
-                            tokens_34 = web_utilities.advance_xml_tokens(tokens_34, THREE_INTEGER);
-                        } else {
-                            if (NIL != web_utilities.xml_token_matches(token_head, $tagged_doc_keystring_token$.getGlobalValue())) {
-                                key_string = second(tokens_34);
-                                tokens_34 = web_utilities.advance_xml_tokens(tokens_34, THREE_INTEGER);
-                            } else {
-                                if (NIL != web_utilities.xml_token_matches(token_head, $tagged_doc_confirmed_concepts_keystring_token$.getGlobalValue())) {
-                                    confirmed_concepts_key_string = second(tokens_34);
-                                    tokens_34 = web_utilities.advance_xml_tokens(tokens_34, THREE_INTEGER);
-                                } else {
-                                    if (NIL != web_utilities.xml_token_matches(token_head, $tagged_doc_title_token$.getGlobalValue())) {
-                                        if (NIL != web_utilities.xml_token_matches(second(tokens_34), $tagged_doc_title_close_token$.getGlobalValue())) {
-                                            tokens_34 = web_utilities.advance_xml_tokens(tokens_34, TWO_INTEGER);
-                                        } else {
-                                            title = second(tokens_34);
-                                            tokens_34 = web_utilities.advance_xml_tokens(tokens_34, THREE_INTEGER);
-                                        }
-                                    } else {
-                                        if (NIL != web_utilities.xml_token_matches(token_head, $tagged_doc_text_token$.getGlobalValue())) {
-                                            text = second(tokens_34);
-                                            tokens_34 = web_utilities.advance_xml_tokens(tokens_34, THREE_INTEGER);
-                                        } else {
-                                            if (NIL != web_utilities.xml_token_matches(token_head, $tagged_doc_url_token$.getGlobalValue())) {
-                                                url = second(tokens_34);
-                                                tokens_34 = web_utilities.advance_xml_tokens(tokens_34, THREE_INTEGER);
-                                            } else {
-                                                tokens_34 = web_utilities.advance_xml_tokens(tokens_34, UNPROVIDED);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } 
-            }
-            if (NIL != string_utilities.empty_string_p(url)) {
-                url = cconcatenate($str_alt159$http___doc_cyc_com_, format_nil.format_nil_a_no_copy(string_utilities.pre_remove(original_filename, $str_alt160$_cyc_, UNPROVIDED)));
-            }
-            Errors.warn($str_alt161$title___S__, title);
-            Errors.warn($str_alt162$url___S__, url);
-            {
-                SubLObject semantics = list(semantic_session, text, key_string, confirmed_concepts_key_string, url, title, lucene_session.default_lucene_confirmed_terms_boost());
-                if (parent_file.isString()) {
-                    semantics = append(semantics, list(parent_file));
-                }
-                apply(LUCENE_ADD_DOCUMENT, semantics);
-            }
-            lucene_session.lucene_add_document(keyword_session, text, text, $str_alt112$, url, title, UNPROVIDED, UNPROVIDED);
-            {
-                SubLObject cdolist_list_var = list(keyword_session, semantic_session);
-                SubLObject session = NIL;
-                for (session = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , session = cdolist_list_var.first()) {
-                    {
-                        SubLObject stream = NIL;
-                        try {
-                            stream = compatibility.open_text(cconcatenate(lucene_session.lucene_index(session), $str_alt109$_indexed_docs_txt), $APPEND, NIL);
-                            if (!stream.isStream()) {
-                                Errors.error($str_alt114$Unable_to_open__S, cconcatenate(lucene_session.lucene_index(session), $str_alt109$_indexed_docs_txt));
-                            }
-                            {
-                                SubLObject s = stream;
-                                format(s, $str_alt115$_A__, idx_doc_name);
-                            }
-                        } finally {
-                            {
-                                SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
-                                try {
-                                    bind($is_thread_performing_cleanupP$, T);
-                                    if (stream.isStream()) {
-                                        close(stream, UNPROVIDED);
-                                    }
-                                } finally {
-                                    rebind($is_thread_performing_cleanupP$, _prev_bind_0);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return $DONE;
     }
 
     public static SubLObject index_pre_tagged_xml_doc(final SubLObject idx_doc_name, final SubLObject txt_xml_doc_name, final SubLObject keyword_session, final SubLObject semantic_session) {
@@ -5307,35 +2904,12 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return $DONE;
     }
 
-    public static final SubLObject lucene_add_document_semantic_alt(SubLObject session, SubLObject text, SubLObject keystring, SubLObject confirmed_term_keystring, SubLObject url, SubLObject title) {
-        return lucene_session.lucene_add_document(session, text, keystring, confirmed_term_keystring, url, title, UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject lucene_add_document_semantic(final SubLObject session, final SubLObject text, final SubLObject keystring, final SubLObject confirmed_term_keystring, final SubLObject url, final SubLObject title) {
         return lucene_session.lucene_add_document(session, text, keystring, confirmed_term_keystring, url, title, UNPROVIDED, UNPROVIDED);
     }
 
-    public static final SubLObject lucene_add_document_keyword_alt(SubLObject session, SubLObject text, SubLObject url, SubLObject title) {
-        return lucene_session.lucene_add_document(session, text, text, $str_alt112$, url, title, UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject lucene_add_document_keyword(final SubLObject session, final SubLObject text, final SubLObject url, final SubLObject title) {
         return lucene_session.lucene_add_document(session, text, text, $str111$, url, title, UNPROVIDED, UNPROVIDED);
-    }
-
-    public static final SubLObject add_fully_indexed_document_alt(SubLObject doc_string, SubLObject url, SubLObject title, SubLObject sem_session, SubLObject keyword_session) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject keystring = com.cyc.cycjava.cycl.document_annotation_widgets.tag_document_for_indexing_with_offsets(doc_string, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                SubLObject confirmed_term_keystring = thread.secondMultipleValue();
-                thread.resetMultipleValues();
-                com.cyc.cycjava.cycl.document_annotation_widgets.lucene_add_document_semantic(sem_session, doc_string, keystring, confirmed_term_keystring, url, title);
-                com.cyc.cycjava.cycl.document_annotation_widgets.lucene_add_document_keyword(keyword_session, doc_string, url, title);
-            }
-            return T;
-        }
     }
 
     public static SubLObject add_fully_indexed_document(final SubLObject doc_string, final SubLObject url, final SubLObject title, final SubLObject sem_session, final SubLObject keyword_session) {
@@ -5349,14 +2923,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return T;
     }
 
-    public static final SubLObject print_offset_info_alt(SubLObject stream, SubLObject offset, SubLObject end) {
-        princ(offset, stream);
-        princ($str_alt143$_, stream);
-        princ(end, stream);
-        princ($str_alt143$_, stream);
-        return NIL;
-    }
-
     public static SubLObject print_offset_info(final SubLObject stream, final SubLObject offset, final SubLObject end) {
         princ(offset, stream);
         princ($str142$_, stream);
@@ -5365,32 +2931,11 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return NIL;
     }
 
-    public static final SubLObject print_term_and_reln_alt(SubLObject stream, SubLObject v_term, SubLObject reln) {
-        princ(reln, stream);
-        princ($str_alt144$_, stream);
-        princ(v_term, stream);
-        princ($str_alt143$_, stream);
-        return NIL;
-    }
-
     public static SubLObject print_term_and_reln(final SubLObject stream, final SubLObject v_term, final SubLObject reln) {
         princ(reln, stream);
         princ($str143$_, stream);
         princ(v_term, stream);
         princ($str142$_, stream);
-        return NIL;
-    }
-
-    public static final SubLObject print_token_alt(SubLObject stream, SubLObject offset, SubLObject end, SubLObject term_reln_pairs) {
-        com.cyc.cycjava.cycl.document_annotation_widgets.print_offset_info(stream, offset, end);
-        {
-            SubLObject cdolist_list_var = term_reln_pairs;
-            SubLObject term_reln_pair = NIL;
-            for (term_reln_pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , term_reln_pair = cdolist_list_var.first()) {
-                com.cyc.cycjava.cycl.document_annotation_widgets.print_term_and_reln(stream, term_reln_pair.first(), second(term_reln_pair));
-            }
-        }
-        princ($str_alt165$_, stream);
         return NIL;
     }
 
@@ -5408,43 +2953,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return NIL;
     }
 
-    public static final SubLObject new_tagged_document(SubLObject doc_string, SubLObject lexicon, SubLObject disambiguateP) {
-        if (lexicon == UNPROVIDED) {
-            lexicon = com.cyc.cycjava.cycl.document_annotation_widgets.get_default_document_annotation_lexicon();
-        }
-        if (disambiguateP == UNPROVIDED) {
-            disambiguateP = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(doc_string, STRINGP);
-            {
-                SubLObject doc = document.new_document(doc_string, UNPROVIDED);
-                SubLObject si = concept_tagger.tag_concepts(doc, list($LEXICON, lexicon));
-                SubLObject done_var = NIL;
-                while (NIL == done_var) {
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject sentence = iteration.iteration_next(si);
-                        SubLObject valid = thread.secondMultipleValue();
-                        thread.resetMultipleValues();
-                        if (NIL != valid) {
-                        }
-                        done_var = makeBoolean(NIL == valid);
-                    }
-                } 
-                if (NIL != disambiguateP) {
-                    {
-                        SubLObject rdis = rule_disambiguation.new_rule_disambiguator(UNPROVIDED, UNPROVIDED);
-                        rule_disambiguation.rdis_disambiguate(rdis, doc, UNPROVIDED);
-                        rule_disambiguation.finalize_rule_disambiguator(rdis);
-                    }
-                }
-                return doc;
-            }
-        }
-    }
-
     public static SubLObject new_tagged_document(final SubLObject doc_string, SubLObject lexicon, SubLObject disambiguateP, SubLObject tagger, SubLObject sentencifyP) {
         if (lexicon == UNPROVIDED) {
             lexicon = get_default_document_annotation_lexicon(UNPROVIDED);
@@ -5459,7 +2967,7 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             sentencifyP = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != stringp(doc_string) : "! stringp(doc_string) " + ("Types.stringp(doc_string) " + "CommonSymbols.NIL != Types.stringp(doc_string) ") + doc_string;
+        assert NIL != stringp(doc_string) : "Types.stringp(doc_string) " + "CommonSymbols.NIL != Types.stringp(doc_string) " + doc_string;
         final SubLObject _prev_bind_0 = document.$perform_dot_analysis_on_docs$.currentBinding(thread);
         try {
             document.$perform_dot_analysis_on_docs$.bind(T, thread);
@@ -5482,64 +2990,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             return doc;
         } finally {
             document.$perform_dot_analysis_on_docs$.rebind(_prev_bind_0, thread);
-        }
-    }
-
-    public static final SubLObject find_concepts_for_document_segments_alt(SubLObject node_ids_and_strings, SubLObject app_type, SubLObject filter_spec_id, SubLObject user) {
-        if (app_type == UNPROVIDED) {
-            app_type = NIL;
-        }
-        if (filter_spec_id == UNPROVIDED) {
-            filter_spec_id = $$$Mww;
-        }
-        if (user == UNPROVIDED) {
-            user = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == filter_spec_id) {
-                filter_spec_id = $$$Mww;
-            }
-            if (NIL != $trace_doc_search_interface$.getDynamicValue(thread)) {
-                format(StreamsLow.$trace_output$.getDynamicValue(thread), $str_alt15$___A__entering__S__, numeric_date_utilities.timestamp_with_milliseconds(UNPROVIDED, UNPROVIDED), list(FIND_CONCEPTS_FOR_DOCUMENT_SEGMENTS, node_ids_and_strings, app_type, filter_spec_id, user));
-            }
-            if (NIL != $doc_search_trace_log_file$.getDynamicValue(thread)) {
-                {
-                    SubLObject stream = NIL;
-                    try {
-                        {
-                            SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                            try {
-                                stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                                stream = compatibility.open_text($doc_search_trace_log_file$.getDynamicValue(thread), $APPEND, NIL);
-                            } finally {
-                                stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                        if (!stream.isStream()) {
-                            Errors.error($str_alt114$Unable_to_open__S, $doc_search_trace_log_file$.getDynamicValue(thread));
-                        }
-                        {
-                            SubLObject out = stream;
-                            Errors.warn($str_alt170$writing_to__S, $doc_search_trace_log_file$.getDynamicValue(thread));
-                            format(out, $str_alt15$___A__entering__S__, numeric_date_utilities.timestamp_with_milliseconds(UNPROVIDED, UNPROVIDED), list(FIND_CONCEPTS_FOR_DOCUMENT_SEGMENTS, node_ids_and_strings, app_type, filter_spec_id, user));
-                        }
-                    } finally {
-                        {
-                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                            try {
-                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                if (stream.isStream()) {
-                                    close(stream, UNPROVIDED);
-                                }
-                            } finally {
-                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                }
-            }
-            return com.cyc.cycjava.cycl.document_annotation_widgets.tag_document_nodes_for_display(node_ids_and_strings, app_type, com.cyc.cycjava.cycl.document_annotation_widgets.term_learner_object_from_id(filter_spec_id), NIL, user);
         }
     }
 
@@ -5593,109 +3043,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return tag_document_nodes_for_display(node_ids_and_strings, app_type, term_learner_object_from_id(filter_spec_id), NIL, user);
     }
 
-    /**
-     *
-     *
-     * @param NODES-IDS-AND-STRINGS
-     * 		listp; a list, each element of which takes the form
-     * 		(node-id string).  The strings are turned into a single string for tagging, and the
-     * 		result is a list of concepts (with offsets) for each of the nodes.  Each element
-     * 		of the return value looks like this: (NODE-ID OFFSET LENGTH ID-STRING KNOWN?)
-     * 		where NODE-ID is the NODE-ID of the node the concept was originally refered to from;
-     * 		OFFSET is the 0-indexed offset into the string of that NODE
-     * 		LENGTH is the number of characters for this concepts in the original strings
-     * 		ID-STRING is a TERM-LEARNER-ID-P containing the list of
-     * 		concepts found for the strings
-     * 		KNOWN? is a boolean indicating whether or not Cyc already knew the meanings for
-     * 		this string
-     */
-    @LispMethod(comment = "@param NODES-IDS-AND-STRINGS\r\n\t\tlistp; a list, each element of which takes the form\r\n\t\t(node-id string).  The strings are turned into a single string for tagging, and the\r\n\t\tresult is a list of concepts (with offsets) for each of the nodes.  Each element\r\n\t\tof the return value looks like this: (NODE-ID OFFSET LENGTH ID-STRING KNOWN?)\r\n\t\twhere NODE-ID is the NODE-ID of the node the concept was originally refered to from;\r\n\t\tOFFSET is the 0-indexed offset into the string of that NODE\r\n\t\tLENGTH is the number of characters for this concepts in the original strings\r\n\t\tID-STRING is a TERM-LEARNER-ID-P containing the list of\r\n\t\tconcepts found for the strings\r\n\t\tKNOWN? is a boolean indicating whether or not Cyc already knew the meanings for\r\n\t\tthis string")
-    public static final SubLObject tag_document_nodes_for_display_alt(SubLObject node_ids_and_strings, SubLObject app_type, SubLObject filter_spec, SubLObject lexicon, SubLObject user) {
-        if (app_type == UNPROVIDED) {
-            app_type = $$$full;
-        }
-        if (filter_spec == UNPROVIDED) {
-            filter_spec = NIL;
-        }
-        if (lexicon == UNPROVIDED) {
-            lexicon = NIL;
-        }
-        if (user == UNPROVIDED) {
-            user = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == lexicon) {
-                {
-                    SubLObject task = (NIL != user) ? ((SubLObject) (cure_api.default_task_for_user(user))) : NIL;
-                    SubLObject nl_mt = (NIL != task) ? ((SubLObject) (cure_api.parsing_mt_for_task(task))) : NIL;
-                    lexicon = com.cyc.cycjava.cycl.document_annotation_widgets.get_default_document_ingester_annotation_learning_lexicon(app_type, filter_spec, nl_mt);
-                }
-            }
-            thread.resetMultipleValues();
-            {
-                SubLObject doc_string = com.cyc.cycjava.cycl.document_annotation_widgets.get_doc_string_from_node_ids_and_strings(node_ids_and_strings);
-                SubLObject offset_list = thread.secondMultipleValue();
-                thread.resetMultipleValues();
-                {
-                    SubLObject doc = com.cyc.cycjava.cycl.document_annotation_widgets.new_tagged_document(doc_string, lexicon, T);
-                    SubLObject output = NIL;
-                    SubLObject vector_var = document.document_paragraphs(doc);
-                    SubLObject backwardP_var = NIL;
-                    SubLObject length = length(vector_var);
-                    SubLObject v_iteration = NIL;
-                    for (v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = add(v_iteration, ONE_INTEGER)) {
-                        {
-                            SubLObject element_num = (NIL != backwardP_var) ? ((SubLObject) (subtract(length, v_iteration, ONE_INTEGER))) : v_iteration;
-                            SubLObject paragraph = aref(vector_var, element_num);
-                            SubLObject vector_var_35 = document.paragraph_sentences(paragraph);
-                            SubLObject backwardP_var_36 = NIL;
-                            SubLObject length_37 = length(vector_var_35);
-                            SubLObject v_iteration_38 = NIL;
-                            for (v_iteration_38 = ZERO_INTEGER; v_iteration_38.numL(length_37); v_iteration_38 = add(v_iteration_38, ONE_INTEGER)) {
-                                {
-                                    SubLObject element_num_39 = (NIL != backwardP_var_36) ? ((SubLObject) (subtract(length_37, v_iteration_38, ONE_INTEGER))) : v_iteration_38;
-                                    SubLObject sentence = aref(vector_var_35, element_num_39);
-                                    SubLObject vector_var_40 = document.sentence_yield(sentence);
-                                    SubLObject backwardP_var_41 = NIL;
-                                    SubLObject length_42 = length(vector_var_40);
-                                    SubLObject v_iteration_43 = NIL;
-                                    for (v_iteration_43 = ZERO_INTEGER; v_iteration_43.numL(length_42); v_iteration_43 = add(v_iteration_43, ONE_INTEGER)) {
-                                        {
-                                            SubLObject element_num_44 = (NIL != backwardP_var_41) ? ((SubLObject) (subtract(length_42, v_iteration_43, ONE_INTEGER))) : v_iteration_43;
-                                            SubLObject word = aref(vector_var_40, element_num_44);
-                                            if (NIL != document.word_cycls(word)) {
-                                                output = cconcatenate(com.cyc.cycjava.cycl.document_annotation_widgets.get_output_lists_for_word(word, offset_list, UNPROVIDED), output);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    return nreverse(output);
-                }
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @param NODES-IDS-AND-STRINGS
-     * 		listp; a list, each element of which takes the form
-     * 		(node-id string).  The strings are turned into a single string for tagging, and the
-     * 		result is a list of concepts (with offsets) for each of the nodes.  Each element
-     * 		of the return value looks like this: (NODE-ID OFFSET LENGTH ID-STRING KNOWN?)
-     * 		where NODE-ID is the NODE-ID of the node the concept was originally refered to from;
-     * 		OFFSET is the 0-indexed offset into the string of that NODE
-     * 		LENGTH is the number of characters for this concepts in the original strings
-     * 		ID-STRING is a TERM-LEARNER-ID-P containing the list of
-     * 		concepts found for the strings
-     * 		KNOWN? is a boolean indicating whether or not Cyc already knew the meanings for
-     * 		this string
-     */
-    @LispMethod(comment = "@param NODES-IDS-AND-STRINGS\r\n\t\tlistp; a list, each element of which takes the form\r\n\t\t(node-id string).  The strings are turned into a single string for tagging, and the\r\n\t\tresult is a list of concepts (with offsets) for each of the nodes.  Each element\r\n\t\tof the return value looks like this: (NODE-ID OFFSET LENGTH ID-STRING KNOWN?)\r\n\t\twhere NODE-ID is the NODE-ID of the node the concept was originally refered to from;\r\n\t\tOFFSET is the 0-indexed offset into the string of that NODE\r\n\t\tLENGTH is the number of characters for this concepts in the original strings\r\n\t\tID-STRING is a TERM-LEARNER-ID-P containing the list of\r\n\t\tconcepts found for the strings\r\n\t\tKNOWN? is a boolean indicating whether or not Cyc already knew the meanings for\r\n\t\tthis string")
     public static SubLObject tag_document_nodes_for_display(final SubLObject node_ids_and_strings, SubLObject app_type, SubLObject filter_spec, SubLObject lexicon, SubLObject user) {
         if (app_type == UNPROVIDED) {
             app_type = $$$full;
@@ -5758,62 +3105,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return nreverse(output);
     }
 
-    public static final SubLObject get_doc_string_from_node_ids_and_strings_alt(SubLObject node_ids_and_strings) {
-        {
-            SubLObject doc_string = NIL;
-            SubLObject offset_list = NIL;
-            SubLObject current_offset = ZERO_INTEGER;
-            SubLObject s = NIL;
-            try {
-                s = make_private_string_output_stream();
-                {
-                    SubLObject cdolist_list_var = Sort.sort(node_ids_and_strings, $sym175$_, FIRST);
-                    SubLObject node_id_and_string = NIL;
-                    for (node_id_and_string = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , node_id_and_string = cdolist_list_var.first()) {
-                        {
-                            SubLObject datum = node_id_and_string;
-                            SubLObject current = datum;
-                            SubLObject node_id = NIL;
-                            SubLObject string = NIL;
-                            destructuring_bind_must_consp(current, datum, $list_alt173);
-                            node_id = current.first();
-                            current = current.rest();
-                            destructuring_bind_must_consp(current, datum, $list_alt173);
-                            string = current.first();
-                            current = current.rest();
-                            if (NIL == current) {
-                                if (NIL != unicode_nauts.unicode_naut_p(string)) {
-                                    string = cycl_utilities.formula_arg1(string, UNPROVIDED);
-                                }
-                                string = string_utilities.string_substitute($str_alt165$_, $str_alt174$_ua0_, string, symbol_function(EQUALP));
-                                {
-                                    SubLObject ascii_string = unicode_strings.display_to_subl_string(string, UNPROVIDED, UNPROVIDED);
-                                    princ(ascii_string, s);
-                                    offset_list = cons(list(node_id, current_offset), offset_list);
-                                    current_offset = add(current_offset, length(ascii_string));
-                                }
-                            } else {
-                                cdestructuring_bind_error(datum, $list_alt173);
-                            }
-                        }
-                    }
-                }
-                doc_string = get_output_stream_string(s);
-            } finally {
-                {
-                    SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
-                    try {
-                        bind($is_thread_performing_cleanupP$, T);
-                        close(s, UNPROVIDED);
-                    } finally {
-                        rebind($is_thread_performing_cleanupP$, _prev_bind_0);
-                    }
-                }
-            }
-            return values(doc_string, nreverse(offset_list));
-        }
-    }
-
     public static SubLObject get_doc_string_from_node_ids_and_strings(final SubLObject node_ids_and_strings) {
         SubLObject doc_string = NIL;
         SubLObject offset_list = NIL;
@@ -5865,27 +3156,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return values(doc_string, nreverse(offset_list));
     }
 
-    public static final SubLObject get_output_lists_for_word_alt(SubLObject word, SubLObject offset_list, SubLObject return_individual_idsP) {
-        if (return_individual_idsP == UNPROVIDED) {
-            return_individual_idsP = $term_learner_keep_concepts_distinct$.getDynamicValue();
-        }
-        {
-            SubLObject cycls_id = (NIL != return_individual_idsP) ? ((SubLObject) (Mapping.mapcar(TERM_LEARNER_ID, document.word_cycls(word)))) : list(com.cyc.cycjava.cycl.document_annotation_widgets.term_learner_id(document.word_cycls(word)));
-            SubLObject length = document.word_length(word);
-            SubLObject node_num_and_node_offset = com.cyc.cycjava.cycl.document_annotation_widgets.node_and_node_offset(word, offset_list);
-            SubLObject node_num = node_num_and_node_offset.first();
-            SubLObject offset = second(node_num_and_node_offset);
-            SubLObject existing_conceptP = makeBoolean(NIL == com.cyc.cycjava.cycl.document_annotation_widgets.new_named_entity_wordP(word));
-            SubLObject result = NIL;
-            SubLObject cdolist_list_var = cycls_id;
-            SubLObject cycl_id = NIL;
-            for (cycl_id = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , cycl_id = cdolist_list_var.first()) {
-                result = cons(list(node_num, offset, length, cycl_id, existing_conceptP), result);
-            }
-            return result;
-        }
-    }
-
     public static SubLObject get_output_lists_for_word(final SubLObject word, final SubLObject offset_list, SubLObject return_individual_idsP) {
         if (return_individual_idsP == UNPROVIDED) {
             return_individual_idsP = $term_learner_keep_concepts_distinct$.getDynamicValue();
@@ -5906,40 +3176,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             cycl_id = cdolist_list_var.first();
         } 
         return result;
-    }
-
-    public static final SubLObject node_and_node_offset_alt(SubLObject word, SubLObject offset_list) {
-        {
-            SubLObject word_offset = document.word_offset(word);
-            SubLObject previous_node_id = ZERO_INTEGER;
-            SubLObject previous_node_start = ZERO_INTEGER;
-            SubLObject cdolist_list_var = offset_list;
-            SubLObject node_and_offset = NIL;
-            for (node_and_offset = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , node_and_offset = cdolist_list_var.first()) {
-                {
-                    SubLObject datum = node_and_offset;
-                    SubLObject current = datum;
-                    SubLObject node_id = NIL;
-                    SubLObject offset = NIL;
-                    destructuring_bind_must_consp(current, datum, $list_alt177);
-                    node_id = current.first();
-                    current = current.rest();
-                    destructuring_bind_must_consp(current, datum, $list_alt177);
-                    offset = current.first();
-                    current = current.rest();
-                    if (NIL == current) {
-                        if (offset.numG(word_offset)) {
-                            return list(previous_node_id, subtract(word_offset, previous_node_start));
-                        }
-                        previous_node_id = node_id;
-                        previous_node_start = offset;
-                    } else {
-                        cdestructuring_bind_error(datum, $list_alt177);
-                    }
-                }
-            }
-            return list(previous_node_id, subtract(word_offset, previous_node_start));
-        }
     }
 
     public static SubLObject node_and_node_offset(final SubLObject global_offset, final SubLObject offset_list) {
@@ -5974,33 +3210,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return list(previous_node_id, subtract(global_offset, previous_node_start));
     }
 
-    /**
-     * Does word represent a just-found named-entity that needs to be further explained to Cyc?
-     */
-    @LispMethod(comment = "Does word represent a just-found named-entity that needs to be further explained to Cyc?")
-    public static final SubLObject new_named_entity_wordP_alt(SubLObject word) {
-        {
-            SubLObject cycls = document.word_cycls(word);
-            if (NIL != list_utilities.lengthG(cycls, ONE_INTEGER, UNPROVIDED)) {
-                return NIL;
-            } else {
-                if (NIL != constant_p(cycls.first())) {
-                    return NIL;
-                } else {
-                    if ((((NIL != cycl_grammar.cycl_nat_p(cycls.first())) && (cycl_utilities.nat_functor(cycls.first()) == $$InstanceNamedFn_Ternary)) && (NIL != subl_promotions.memberP(cycl_utilities.nat_arg2(cycls.first(), UNPROVIDED), $list_alt179, UNPROVIDED, UNPROVIDED))) && ((NIL == narts_high.find_nart(cycls.first())) || (NIL != com.cyc.cycjava.cycl.document_annotation_widgets.nart_has_non_derived_assertionsP(cycls.first())))) {
-                        return T;
-                    } else {
-                        return NIL;
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Does word represent a just-found named-entity that needs to be further explained to Cyc?
-     */
-    @LispMethod(comment = "Does word represent a just-found named-entity that needs to be further explained to Cyc?")
     public static SubLObject new_named_entity_wordP(final SubLObject word) {
         final SubLObject cycls = document.word_cycls(word);
         if (NIL != list_utilities.lengthG(cycls, ONE_INTEGER, UNPROVIDED)) {
@@ -6013,10 +3222,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             return T;
         }
         return NIL;
-    }
-
-    public static final SubLObject nart_has_non_derived_assertionsP_alt(SubLObject cycl) {
-        return makeBoolean(NIL == narts_high.useless_nartP(czer_main.canonicalize_term(cycl, UNPROVIDED)));
     }
 
     public static SubLObject nart_has_non_derived_assertionsP(final SubLObject cycl) {
@@ -6091,21 +3296,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return NIL;
     }
 
-    public static final SubLObject get_default_medical_tagging_lexicon_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == abstract_lexicon.abstract_lexicon_p($default_medical_tagging_lexicon$.getDynamicValue(thread))) {
-                $default_medical_tagging_lexicon$.setDynamicValue(com.cyc.cycjava.cycl.document_annotation_widgets.make_default_document_annotation_lexicon(UNPROVIDED), thread);
-                methods.funcall_instance_method_with_1_args($default_medical_tagging_lexicon$.getDynamicValue(thread), EXCLUDE_POS, $$Verb);
-                methods.funcall_instance_method_with_1_args($default_medical_tagging_lexicon$.getDynamicValue(thread), EXCLUDE_POS, $$Adjective);
-                methods.funcall_instance_method_with_1_args($default_medical_tagging_lexicon$.getDynamicValue(thread), EXCLUDE_POS, $$Adverb);
-                methods.funcall_instance_method_with_1_args($default_medical_tagging_lexicon$.getDynamicValue(thread), EXCLUDE_POS, $$Gerundive);
-                methods.funcall_instance_method_with_1_args($default_medical_tagging_lexicon$.getDynamicValue(thread), ADD_CONCEPT_FILTER_SPEC, $list_alt186);
-            }
-            return $default_medical_tagging_lexicon$.getDynamicValue(thread);
-        }
-    }
-
     public static SubLObject get_default_medical_tagging_lexicon() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL == abstract_lexicon.abstract_lexicon_p($default_medical_tagging_lexicon$.getDynamicValue(thread))) {
@@ -6119,59 +3309,9 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return $default_medical_tagging_lexicon$.getDynamicValue(thread);
     }
 
-    public static final SubLObject clear_default_medical_tagging_lexicon_alt() {
-        $default_medical_tagging_lexicon$.setDynamicValue(NIL);
-        return NIL;
-    }
-
     public static SubLObject clear_default_medical_tagging_lexicon() {
         $default_medical_tagging_lexicon$.setDynamicValue(NIL);
         return NIL;
-    }
-
-    public static final SubLObject augment_medical_html_file_with_cyc_terms_alt(SubLObject filepath, SubLObject lexicon) {
-        if (lexicon == UNPROVIDED) {
-            lexicon = com.cyc.cycjava.cycl.document_annotation_widgets.get_default_medical_tagging_lexicon();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject in_string = file_utilities.slurp_file(filepath);
-                SubLObject out_path = cconcatenate(filepath, $str_alt187$_tagged_html);
-                SubLObject stream = NIL;
-                try {
-                    {
-                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                        try {
-                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                            stream = compatibility.open_text(out_path, $OUTPUT, NIL);
-                        } finally {
-                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    if (!stream.isStream()) {
-                        Errors.error($str_alt114$Unable_to_open__S, out_path);
-                    }
-                    {
-                        SubLObject s = stream;
-                        princ(com.cyc.cycjava.cycl.document_annotation_widgets.augment_html_document_with_cyc_terms(in_string, lexicon), s);
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            if (stream.isStream()) {
-                                close(stream, UNPROVIDED);
-                            }
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                return out_path;
-            }
-        }
     }
 
     public static SubLObject augment_medical_html_file_with_cyc_terms(final SubLObject filepath, SubLObject lexicon) {
@@ -6209,205 +3349,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             }
         }
         return out_path;
-    }
-
-    public static final SubLObject augment_html_document_with_cyc_terms_alt(SubLObject html_string, SubLObject lexicon) {
-        if (lexicon == UNPROVIDED) {
-            lexicon = com.cyc.cycjava.cycl.document_annotation_widgets.get_default_document_ingester_annotation_lexicon();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject html_tokens = web_utilities.xml_string_tokenize(html_string, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                SubLObject id_num = ZERO_INTEGER;
-                SubLObject output_string = NIL;
-                thread.resetMultipleValues();
-                {
-                    SubLObject text_string = com.cyc.cycjava.cycl.document_annotation_widgets.get_text_string_from_tokens(html_tokens, UNPROVIDED);
-                    SubLObject tokens_to_text_string_mappings = thread.secondMultipleValue();
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject tag_locations = NIL;
-                        SubLObject vector_var = document.document_paragraphs(com.cyc.cycjava.cycl.document_annotation_widgets.new_tagged_document(text_string, lexicon, UNPROVIDED));
-                        SubLObject backwardP_var = NIL;
-                        SubLObject length = length(vector_var);
-                        SubLObject v_iteration = NIL;
-                        for (v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = add(v_iteration, ONE_INTEGER)) {
-                            {
-                                SubLObject element_num = (NIL != backwardP_var) ? ((SubLObject) (subtract(length, v_iteration, ONE_INTEGER))) : v_iteration;
-                                SubLObject paragraph = aref(vector_var, element_num);
-                                SubLObject vector_var_45 = document.paragraph_sentences(paragraph);
-                                SubLObject backwardP_var_46 = NIL;
-                                SubLObject length_47 = length(vector_var_45);
-                                SubLObject v_iteration_48 = NIL;
-                                for (v_iteration_48 = ZERO_INTEGER; v_iteration_48.numL(length_47); v_iteration_48 = add(v_iteration_48, ONE_INTEGER)) {
-                                    {
-                                        SubLObject element_num_49 = (NIL != backwardP_var_46) ? ((SubLObject) (subtract(length_47, v_iteration_48, ONE_INTEGER))) : v_iteration_48;
-                                        SubLObject sentence = aref(vector_var_45, element_num_49);
-                                        SubLObject vector_var_50 = document.sentence_yield(sentence);
-                                        SubLObject backwardP_var_51 = NIL;
-                                        SubLObject length_52 = length(vector_var_50);
-                                        SubLObject v_iteration_53 = NIL;
-                                        for (v_iteration_53 = ZERO_INTEGER; v_iteration_53.numL(length_52); v_iteration_53 = add(v_iteration_53, ONE_INTEGER)) {
-                                            {
-                                                SubLObject element_num_54 = (NIL != backwardP_var_51) ? ((SubLObject) (subtract(length_52, v_iteration_53, ONE_INTEGER))) : v_iteration_53;
-                                                SubLObject word = aref(vector_var_50, element_num_54);
-                                                SubLObject cycls = document.word_cycls(word);
-                                                SubLObject word_start = document.word_offset(word);
-                                                SubLObject word_end = add(word_start, document.word_length(word));
-                                                if (NIL != cycls) {
-                                                    {
-                                                        SubLObject start_tag = $str_alt112$;
-                                                        SubLObject end_tag = $str_alt112$;
-                                                        SubLObject cdolist_list_var = cycls;
-                                                        SubLObject cycl = NIL;
-                                                        for (cycl = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , cycl = cdolist_list_var.first()) {
-                                                            if (NIL != forts.fort_p(cycl)) {
-                                                                start_tag = cconcatenate(start_tag, cconcatenate($str_alt188$_span_property__cyc_termName__con, new SubLObject[]{ format_nil.format_nil_a_no_copy(com.cyc.cycjava.cycl.document_annotation_widgets.doc_tagger_rdf_name(cycl)), $str_alt189$___span_class__cycTerm__id__cycTe, format_nil.format_nil_a_no_copy(id_num), $str_alt190$__property__cyc_termId__content__, format_nil.format_nil_a_no_copy(com.cyc.cycjava.cycl.document_annotation_widgets.doc_tagger_rdf_id(cycl)), $str_alt191$__ }));
-                                                                end_tag = cconcatenate(end_tag, $str_alt192$__span___span_);
-                                                                id_num = add(id_num, ONE_INTEGER);
-                                                            }
-                                                        }
-                                                        tag_locations = cons(list(word_start, start_tag), tag_locations);
-                                                        tag_locations = cons(list(word_end, end_tag), tag_locations);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        tag_locations = nreverse(tag_locations);
-                        {
-                            SubLObject s = NIL;
-                            try {
-                                s = make_private_string_output_stream();
-                                {
-                                    SubLObject current_location = ZERO_INTEGER;
-                                    SubLObject tag_index = NIL;
-                                    SubLObject tag = NIL;
-                                    if (NIL != tag_locations) {
-                                        {
-                                            SubLObject datum_evaluated_var = tag_locations.first();
-                                            tag_index = datum_evaluated_var.first();
-                                            tag = cadr(datum_evaluated_var);
-                                        }
-                                    }
-                                    {
-                                        SubLObject datum = com.cyc.cycjava.cycl.document_annotation_widgets.mapping_first_elt_info(tokens_to_text_string_mappings);
-                                        SubLObject current = datum;
-                                        SubLObject map_string_index = NIL;
-                                        SubLObject map_string_end_index = NIL;
-                                        destructuring_bind_must_consp(current, datum, $list_alt193);
-                                        map_string_index = current.first();
-                                        current = current.rest();
-                                        destructuring_bind_must_consp(current, datum, $list_alt193);
-                                        map_string_end_index = current.first();
-                                        current = current.rest();
-                                        if (NIL == current) {
-                                            {
-                                                SubLObject list_var = NIL;
-                                                SubLObject token = NIL;
-                                                SubLObject token_index = NIL;
-                                                for (list_var = html_tokens, token = list_var.first(), token_index = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , token = list_var.first() , token_index = add(ONE_INTEGER, token_index)) {
-                                                    if ((NIL == tag_locations) || (NIL != web_utilities.xml_tagP(token))) {
-                                                        princ(token, s);
-                                                    } else {
-                                                        if (map_string_end_index.numLE(tag_index)) {
-                                                            princ(token, s);
-                                                            tokens_to_text_string_mappings = tokens_to_text_string_mappings.rest();
-                                                            current_location = map_string_end_index;
-                                                            if (NIL != tokens_to_text_string_mappings) {
-                                                                {
-                                                                    SubLObject datum_evaluated_var = com.cyc.cycjava.cycl.document_annotation_widgets.mapping_first_elt_info(tokens_to_text_string_mappings);
-                                                                    map_string_index = datum_evaluated_var.first();
-                                                                    map_string_end_index = cadr(datum_evaluated_var);
-                                                                }
-                                                            }
-                                                        } else {
-                                                            {
-                                                                SubLObject current_location_in_token = ZERO_INTEGER;
-                                                                SubLObject tag_offset_into_current_token = subtract(tag_index, map_string_index);
-                                                                while (current_location_in_token.numL(length(token))) {
-                                                                    {
-                                                                        SubLObject next_tag_not_in_this_token = NIL;
-                                                                        if (tag_offset_into_current_token.numG(length(token))) {
-                                                                            next_tag_not_in_this_token = T;
-                                                                        }
-                                                                        {
-                                                                            SubLObject next_string_to_print = subseq(token, current_location_in_token, NIL != next_tag_not_in_this_token ? ((SubLObject) (NIL)) : tag_offset_into_current_token);
-                                                                            princ(next_string_to_print, s);
-                                                                            current_location_in_token = add(current_location_in_token, length(next_string_to_print));
-                                                                            current_location = add(current_location, length(next_string_to_print));
-                                                                            if (current_location.numGE(map_string_end_index)) {
-                                                                                tokens_to_text_string_mappings = tokens_to_text_string_mappings.rest();
-                                                                                if (NIL != tokens_to_text_string_mappings) {
-                                                                                    {
-                                                                                        SubLObject datum_evaluated_var = com.cyc.cycjava.cycl.document_annotation_widgets.mapping_first_elt_info(tokens_to_text_string_mappings);
-                                                                                        map_string_index = datum_evaluated_var.first();
-                                                                                        map_string_end_index = cadr(datum_evaluated_var);
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                        if (NIL == next_tag_not_in_this_token) {
-                                                                            princ(tag, s);
-                                                                            tag_locations = tag_locations.rest();
-                                                                        }
-                                                                        if (NIL == tag_locations) {
-                                                                            {
-                                                                                SubLObject next_string_to_print = subseq(token, current_location_in_token, UNPROVIDED);
-                                                                                princ(next_string_to_print, s);
-                                                                                current_location = add(current_location, length(next_string_to_print));
-                                                                                current_location_in_token = add(current_location_in_token, length(next_string_to_print));
-                                                                            }
-                                                                            if (current_location.numGE(map_string_end_index)) {
-                                                                                tokens_to_text_string_mappings = tokens_to_text_string_mappings.rest();
-                                                                                if (NIL != tokens_to_text_string_mappings) {
-                                                                                    {
-                                                                                        SubLObject datum_evaluated_var = com.cyc.cycjava.cycl.document_annotation_widgets.mapping_first_elt_info(tokens_to_text_string_mappings);
-                                                                                        map_string_index = datum_evaluated_var.first();
-                                                                                        map_string_end_index = cadr(datum_evaluated_var);
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                            tag_index = NIL;
-                                                                        } else {
-                                                                            tag_index = tag_locations.first().first();
-                                                                            tag = second(tag_locations.first());
-                                                                            tag_offset_into_current_token = subtract(tag_index, map_string_index);
-                                                                        }
-                                                                    }
-                                                                } 
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } else {
-                                            cdestructuring_bind_error(datum, $list_alt193);
-                                        }
-                                    }
-                                }
-                                output_string = get_output_stream_string(s);
-                            } finally {
-                                {
-                                    SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                    try {
-                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                        close(s, UNPROVIDED);
-                                    } finally {
-                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    return output_string;
-                }
-            }
-        }
     }
 
     public static SubLObject augment_html_document_with_cyc_terms(final SubLObject html_string, SubLObject lexicon) {
@@ -6588,14 +3529,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return output_string;
     }
 
-    public static final SubLObject doc_tagger_rdf_name_alt(SubLObject cycl) {
-        if (NIL != forts.fort_p(cycl)) {
-            return web_utilities.html_url_encode(string_utilities.fort_print_name(cycl), UNPROVIDED);
-        } else {
-            return web_utilities.html_url_encode(string_utilities.stringify_terms(cycl, UNPROVIDED, UNPROVIDED), UNPROVIDED);
-        }
-    }
-
     public static SubLObject doc_tagger_rdf_name(final SubLObject cycl) {
         if (NIL != forts.fort_p(cycl)) {
             return web_utilities.html_url_encode(string_utilities.fort_print_name(cycl), UNPROVIDED);
@@ -6603,24 +3536,8 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return web_utilities.html_url_encode(string_utilities.stringify_terms(cycl, UNPROVIDED, UNPROVIDED), UNPROVIDED);
     }
 
-    public static final SubLObject doc_tagger_rdf_id_alt(SubLObject cycl) {
-        return cconcatenate($str_alt194$http___sw_cyc_com_concept_, kb_utilities.compact_hl_external_id_string(cycl));
-    }
-
     public static SubLObject doc_tagger_rdf_id(final SubLObject cycl) {
         return cconcatenate($str195$http___sw_cyc_com_concept_, kb_utilities.compact_hl_external_id_string(cycl));
-    }
-
-    public static final SubLObject mapping_first_elt_info_alt(SubLObject tokens_to_text_string_mappings) {
-        if (NIL == tokens_to_text_string_mappings) {
-            return list(ZERO_INTEGER, ZERO_INTEGER);
-        }
-        {
-            SubLObject mapping = tokens_to_text_string_mappings.first();
-            SubLObject mapping_string_index = second(mapping);
-            SubLObject mapping_string_length = third(mapping);
-            return list(mapping_string_index, add(mapping_string_index, mapping_string_length));
-        }
     }
 
     public static SubLObject mapping_first_elt_info(final SubLObject tokens_to_text_string_mappings) {
@@ -6633,85 +3550,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return list(mapping_string_index, add(mapping_string_index, mapping_string_length));
     }
 
-    /**
-     *
-     *
-     * @param HTML-TOKENS
-     * 		listp; a list of strings that have been xml-tokenized
-     * @param TOKENS-TO-IGNORE
-     * 		listp of stringp; any text within the scope of any of these tags should be ignored
-     * @unknown stringp; the 'text' string from the list of tokens
-     * @unknown listp; a list of mappings from the tokens into the text string.
-    each mapping is of the form (<token-number> <index-of-token-start-into-string> <token-length>
-     */
-    @LispMethod(comment = "@param HTML-TOKENS\r\n\t\tlistp; a list of strings that have been xml-tokenized\r\n@param TOKENS-TO-IGNORE\r\n\t\tlistp of stringp; any text within the scope of any of these tags should be ignored\r\n@unknown stringp; the \'text\' string from the list of tokens\r\n@unknown listp; a list of mappings from the tokens into the text string.\r\neach mapping is of the form (<token-number> <index-of-token-start-into-string> <token-length>")
-    public static final SubLObject get_text_string_from_tokens_alt(SubLObject html_tokens, SubLObject tokens_to_ignore) {
-        if (tokens_to_ignore == UNPROVIDED) {
-            tokens_to_ignore = $list_alt195;
-        }
-        {
-            SubLObject tokens_to_text_string_mappings = NIL;
-            SubLObject text_string = NIL;
-            SubLObject ignore_stack = NIL;
-            SubLObject text_string_length = ZERO_INTEGER;
-            SubLObject s = NIL;
-            try {
-                s = make_private_string_output_stream();
-                {
-                    SubLObject list_var = NIL;
-                    SubLObject token = NIL;
-                    SubLObject token_index = NIL;
-                    for (list_var = html_tokens, token = list_var.first(), token_index = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , token = list_var.first() , token_index = add(ONE_INTEGER, token_index)) {
-                        if (((NIL != web_utilities.xml_opening_tag_p(token)) && (NIL == web_utilities.xml_closing_tag_p(token))) && (NIL != string_utilities.starts_with_one_of(subseq(token, ONE_INTEGER, UNPROVIDED), tokens_to_ignore))) {
-                            ignore_stack = cons(web_utilities.parse_html_token(token).first(), ignore_stack);
-                        } else {
-                            if ((NIL != web_utilities.xml_closing_tag_p(token)) && web_utilities.parse_html_token(token).first().equal(tokens_to_ignore.first())) {
-                                ignore_stack = ignore_stack.rest();
-                            } else {
-                                if (NIL != web_utilities.xml_tagP(token)) {
-                                } else {
-                                    if (NIL != web_utilities.xml_comment_p(token)) {
-                                    } else {
-                                        if (NIL != ignore_stack) {
-                                        } else {
-                                            princ(token, s);
-                                            tokens_to_text_string_mappings = cons(list(token_index, text_string_length, length(token)), tokens_to_text_string_mappings);
-                                            text_string_length = add(text_string_length, length(token));
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                text_string = get_output_stream_string(s);
-            } finally {
-                {
-                    SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
-                    try {
-                        bind($is_thread_performing_cleanupP$, T);
-                        close(s, UNPROVIDED);
-                    } finally {
-                        rebind($is_thread_performing_cleanupP$, _prev_bind_0);
-                    }
-                }
-            }
-            return values(text_string, nreverse(tokens_to_text_string_mappings));
-        }
-    }
-
-    /**
-     *
-     *
-     * @param HTML-TOKENS
-     * 		listp; a list of strings that have been xml-tokenized
-     * @param TOKENS-TO-IGNORE
-     * 		listp of stringp; any text within the scope of any of these tags should be ignored
-     * @unknown stringp; the 'text' string from the list of tokens
-     * @unknown listp; a list of mappings from the tokens into the text string.
-    each mapping is of the form (<token-number> <index-of-token-start-into-string> <token-length>
-     */
-    @LispMethod(comment = "@param HTML-TOKENS\r\n\t\tlistp; a list of strings that have been xml-tokenized\r\n@param TOKENS-TO-IGNORE\r\n\t\tlistp of stringp; any text within the scope of any of these tags should be ignored\r\n@unknown stringp; the \'text\' string from the list of tokens\r\n@unknown listp; a list of mappings from the tokens into the text string.\r\neach mapping is of the form (<token-number> <index-of-token-start-into-string> <token-length>")
     public static SubLObject get_text_string_from_tokens(final SubLObject html_tokens, SubLObject tokens_to_ignore) {
         if (tokens_to_ignore == UNPROVIDED) {
             tokens_to_ignore = $list196;
@@ -6762,247 +3600,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return values(text_string, nreverse(tokens_to_text_string_mappings));
     }
 
-    /**
-     * In ORIGINAL-DOC-STRING, replaces strings that are interpreted as Cyc concepts
-     * by the special representation that encapsulates the term and its
-     * upwards-closure.  It also filters out some concepts using
-     * rule-disambiguation.
-     *
-     * @param ORIGINAL-DOC-STRING
-    stringp;
-     * 		
-     * @return stringp; a string that contains the representations of the
-    interpreted Cyc concepts
-     */
-    @LispMethod(comment = "In ORIGINAL-DOC-STRING, replaces strings that are interpreted as Cyc concepts\r\nby the special representation that encapsulates the term and its\r\nupwards-closure.  It also filters out some concepts using\r\nrule-disambiguation.\r\n\r\n@param ORIGINAL-DOC-STRING\nstringp;\r\n\t\t\r\n@return stringp; a string that contains the representations of the\r\ninterpreted Cyc concepts\nIn ORIGINAL-DOC-STRING, replaces strings that are interpreted as Cyc concepts\nby the special representation that encapsulates the term and its\nupwards-closure.  It also filters out some concepts using\nrule-disambiguation.")
-    public static final SubLObject tag_document_for_indexing_with_offsets_alt(SubLObject original_doc_string, SubLObject disambiguator, SubLObject lexicon, SubLObject include_stringsP) {
-        if (disambiguator == UNPROVIDED) {
-            disambiguator = $NEW;
-        }
-        if (lexicon == UNPROVIDED) {
-            lexicon = com.cyc.cycjava.cycl.document_annotation_widgets.get_default_document_annotation_lexicon();
-        }
-        if (include_stringsP == UNPROVIDED) {
-            include_stringsP = T;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject new_disambiguator = eq(disambiguator, $NEW);
-                SubLObject v_document = com.cyc.cycjava.cycl.document_annotation_widgets.new_tagged_document(original_doc_string, lexicon, UNPROVIDED);
-                SubLObject concepts_string = $str_alt112$;
-                if (NIL != new_disambiguator) {
-                    disambiguator = rule_disambiguation.new_rule_disambiguator(UNPROVIDED, UNPROVIDED);
-                }
-                {
-                    SubLObject s = NIL;
-                    try {
-                        s = make_private_string_output_stream();
-                        {
-                            SubLObject _prev_bind_0 = lexicon_macros.$nl_trie_assumed_validP$.currentBinding(thread);
-                            try {
-                                lexicon_macros.$nl_trie_assumed_validP$.bind(T, thread);
-                                {
-                                    SubLObject already_resourcing_p = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.getDynamicValue(thread);
-                                    {
-                                        SubLObject _prev_bind_0_55 = sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.currentBinding(thread);
-                                        SubLObject _prev_bind_1 = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.currentBinding(thread);
-                                        SubLObject _prev_bind_2 = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.currentBinding(thread);
-                                        try {
-                                            sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.bind(sbhl_marking_vars.determine_resource_limit(already_resourcing_p, SIX_INTEGER), thread);
-                                            sbhl_marking_vars.$resourced_sbhl_marking_spaces$.bind(sbhl_marking_vars.possibly_new_marking_resource(already_resourcing_p), thread);
-                                            sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.bind(T, thread);
-                                            {
-                                                SubLObject state = memoization_state.possibly_new_memoization_state();
-                                                SubLObject local_state = state;
-                                                {
-                                                    SubLObject _prev_bind_0_56 = memoization_state.$memoization_state$.currentBinding(thread);
-                                                    try {
-                                                        memoization_state.$memoization_state$.bind(local_state, thread);
-                                                        {
-                                                            SubLObject original_memoization_process = NIL;
-                                                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                                                {
-                                                                    SubLObject current_proc = current_process();
-                                                                    if (NIL == original_memoization_process) {
-                                                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                                                    } else {
-                                                                        if (original_memoization_process != current_proc) {
-                                                                            Errors.error($str_alt53$Invalid_attempt_to_reuse_memoizat);
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                            try {
-                                                                rule_disambiguation.rdis_disambiguate(disambiguator, v_document, UNPROVIDED);
-                                                            } finally {
-                                                                {
-                                                                    SubLObject _prev_bind_0_57 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                    try {
-                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                        {
-                                                                            SubLObject vector_var = document.document_paragraphs(v_document);
-                                                                            SubLObject backwardP_var = NIL;
-                                                                            SubLObject length = length(vector_var);
-                                                                            SubLObject v_iteration = NIL;
-                                                                            for (v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = add(v_iteration, ONE_INTEGER)) {
-                                                                                {
-                                                                                    SubLObject element_num = (NIL != backwardP_var) ? ((SubLObject) (subtract(length, v_iteration, ONE_INTEGER))) : v_iteration;
-                                                                                    SubLObject paragraph = aref(vector_var, element_num);
-                                                                                    SubLObject vector_var_58 = document.paragraph_sentences(paragraph);
-                                                                                    SubLObject backwardP_var_59 = NIL;
-                                                                                    SubLObject length_60 = length(vector_var_58);
-                                                                                    SubLObject v_iteration_61 = NIL;
-                                                                                    for (v_iteration_61 = ZERO_INTEGER; v_iteration_61.numL(length_60); v_iteration_61 = add(v_iteration_61, ONE_INTEGER)) {
-                                                                                        {
-                                                                                            SubLObject element_num_62 = (NIL != backwardP_var_59) ? ((SubLObject) (subtract(length_60, v_iteration_61, ONE_INTEGER))) : v_iteration_61;
-                                                                                            SubLObject sentence = aref(vector_var_58, element_num_62);
-                                                                                            SubLObject vector_var_63 = document.sentence_yield(sentence);
-                                                                                            SubLObject backwardP_var_64 = NIL;
-                                                                                            SubLObject length_65 = length(vector_var_63);
-                                                                                            SubLObject v_iteration_66 = NIL;
-                                                                                            for (v_iteration_66 = ZERO_INTEGER; v_iteration_66.numL(length_65); v_iteration_66 = add(v_iteration_66, ONE_INTEGER)) {
-                                                                                                {
-                                                                                                    SubLObject element_num_67 = (NIL != backwardP_var_64) ? ((SubLObject) (subtract(length_65, v_iteration_66, ONE_INTEGER))) : v_iteration_66;
-                                                                                                    SubLObject word = aref(vector_var_63, element_num_67);
-                                                                                                    SubLObject word_string = document.word_string(word);
-                                                                                                    SubLObject word_start = document.word_offset(word);
-                                                                                                    SubLObject word_end = add(word_start, document.word_length(word));
-                                                                                                    SubLObject string_words = string_utilities.split_string(word_string, UNPROVIDED);
-                                                                                                    SubLObject term_reln_pairs = NIL;
-                                                                                                    if (NIL != include_stringsP) {
-                                                                                                        if (NIL == list_utilities.lengthG(string_words, ONE_INTEGER, UNPROVIDED)) {
-                                                                                                            term_reln_pairs = cons(list(word_string, $$$s), term_reln_pairs);
-                                                                                                        }
-                                                                                                    }
-                                                                                                    {
-                                                                                                        SubLObject list_var = NIL;
-                                                                                                        SubLObject interp = NIL;
-                                                                                                        SubLObject interp_num = NIL;
-                                                                                                        for (list_var = document.word_interps(word), interp = list_var.first(), interp_num = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , interp = list_var.first() , interp_num = add(ONE_INTEGER, interp_num)) {
-                                                                                                            {
-                                                                                                                SubLObject v_term = nl_api_datastructures.get_nl_interp_cycl(interp);
-                                                                                                                SubLObject term_id = com.cyc.cycjava.cycl.document_annotation_widgets.document_annotation_term_id(v_term, UNPROVIDED);
-                                                                                                                if (term_id.isString()) {
-                                                                                                                    {
-                                                                                                                        SubLObject item_var = list(term_id, $$$t);
-                                                                                                                        if (NIL == member(item_var, term_reln_pairs, symbol_function(EQUAL), symbol_function(IDENTITY))) {
-                                                                                                                            term_reln_pairs = cons(item_var, term_reln_pairs);
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                    {
-                                                                                                                        SubLObject justifications = com.cyc.cycjava.cycl.document_annotation_widgets.get_upwards_closure_justifications_cached(v_term);
-                                                                                                                        SubLObject cdolist_list_var = justifications;
-                                                                                                                        SubLObject justification = NIL;
-                                                                                                                        for (justification = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , justification = cdolist_list_var.first()) {
-                                                                                                                            {
-                                                                                                                                SubLObject genl = com.cyc.cycjava.cycl.document_annotation_widgets.get_closure_justification_genl(justification);
-                                                                                                                                SubLObject genl_id = com.cyc.cycjava.cycl.document_annotation_widgets.document_annotation_term_id(genl, UNPROVIDED);
-                                                                                                                                if (genl_id.isString()) {
-                                                                                                                                    {
-                                                                                                                                        SubLObject item_var = list(genl_id, com.cyc.cycjava.cycl.document_annotation_widgets.closure_justification_pred_id(justification));
-                                                                                                                                        if (NIL == member(item_var, term_reln_pairs, EQUAL, symbol_function(IDENTITY))) {
-                                                                                                                                            term_reln_pairs = cons(item_var, term_reln_pairs);
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                    if (NIL != term_reln_pairs) {
-                                                                                                        com.cyc.cycjava.cycl.document_annotation_widgets.print_token(s, word_start, word_end, nreverse(term_reln_pairs));
-                                                                                                    }
-                                                                                                    if (NIL != include_stringsP) {
-                                                                                                        if (NIL != search($str_alt165$_, word_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
-                                                                                                            {
-                                                                                                                SubLObject prev_partial_words_length = ZERO_INTEGER;
-                                                                                                                SubLObject cdolist_list_var = string_words;
-                                                                                                                SubLObject partial_word_string = NIL;
-                                                                                                                for (partial_word_string = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , partial_word_string = cdolist_list_var.first()) {
-                                                                                                                    if (NIL == string_utilities.empty_string_p(partial_word_string)) {
-                                                                                                                        {
-                                                                                                                            SubLObject partial_word_start = add(word_start, prev_partial_words_length);
-                                                                                                                            SubLObject partial_word_length = length(partial_word_string);
-                                                                                                                            SubLObject partial_word_end = add(partial_word_start, partial_word_length);
-                                                                                                                            com.cyc.cycjava.cycl.document_annotation_widgets.print_token(s, partial_word_start, partial_word_end, list(list(partial_word_string, $$$s)));
-                                                                                                                            prev_partial_words_length = add(prev_partial_words_length, partial_word_length, ONE_INTEGER);
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                        if ((NIL != local_state) && (NIL == original_memoization_process)) {
-                                                                            memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
-                                                                        }
-                                                                    } finally {
-                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_57, thread);
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    } finally {
-                                                        memoization_state.$memoization_state$.rebind(_prev_bind_0_56, thread);
-                                                    }
-                                                }
-                                            }
-                                        } finally {
-                                            sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.rebind(_prev_bind_2, thread);
-                                            sbhl_marking_vars.$resourced_sbhl_marking_spaces$.rebind(_prev_bind_1, thread);
-                                            sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.rebind(_prev_bind_0_55, thread);
-                                        }
-                                    }
-                                }
-                            } finally {
-                                lexicon_macros.$nl_trie_assumed_validP$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                        concepts_string = get_output_stream_string(s);
-                    } finally {
-                        {
-                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                            try {
-                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                close(s, UNPROVIDED);
-                            } finally {
-                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                }
-                if (NIL != new_disambiguator) {
-                    rule_disambiguation.finalize_rule_disambiguator(disambiguator);
-                }
-                return values(string_utilities.strip_final(concepts_string, UNPROVIDED), $str_alt112$);
-            }
-        }
-    }
-
-    /**
-     * In ORIGINAL-DOC-STRING, replaces strings that are interpreted as Cyc concepts
-     * by the special representation that encapsulates the term and its
-     * upwards-closure.  It also filters out some concepts using
-     * rule-disambiguation.
-     *
-     * @param ORIGINAL-DOC-STRING
-    		stringp;
-     * 		
-     * @return stringp; a string that contains the representations of the
-    interpreted Cyc concepts
-     */
-    @LispMethod(comment = "In ORIGINAL-DOC-STRING, replaces strings that are interpreted as Cyc concepts\r\nby the special representation that encapsulates the term and its\r\nupwards-closure.  It also filters out some concepts using\r\nrule-disambiguation.\r\n\r\n@param ORIGINAL-DOC-STRING\n\t\tstringp;\r\n\t\t\r\n@return stringp; a string that contains the representations of the\r\ninterpreted Cyc concepts\nIn ORIGINAL-DOC-STRING, replaces strings that are interpreted as Cyc concepts\nby the special representation that encapsulates the term and its\nupwards-closure.  It also filters out some concepts using\nrule-disambiguation.")
     public static SubLObject tag_document_for_indexing_with_offsets(final SubLObject original_doc_string, SubLObject disambiguator, SubLObject lexicon, SubLObject include_stringsP) {
         if (disambiguator == UNPROVIDED) {
             disambiguator = $NEW;
@@ -7194,62 +3791,11 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return values(string_utilities.strip_final(concepts_string, UNPROVIDED), $str111$);
     }
 
-    public static final SubLObject document_annotation_relation_from_id_alt(SubLObject id) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return rassoc(id, $predicate_id_table$.getDynamicValue(thread), EQUAL, UNPROVIDED).first();
-        }
-    }
-
     public static SubLObject document_annotation_relation_from_id(final SubLObject id) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return rassoc(id, $predicate_id_table$.getDynamicValue(thread), EQUAL, UNPROVIDED).first();
     }
 
-    /**
-     * Generates a simple English justification stating that the relation
-     * corresponding to RELATION-ID holds between the term corresponding to SPEC-ID
-     * and the term corresponding to GENL-ID
-     *
-     * @param SPEC-ID
-     * 		positive-integer-p; the id of the more specific term
-     * @param RELATION-ID;
-     * 		the string indicating the relation
-     * @param GENL-ID
-     * 		positive-integer-p; the id of the more general term
-     * @return stringp; a (possibly partial) justification
-     */
-    @LispMethod(comment = "Generates a simple English justification stating that the relation\r\ncorresponding to RELATION-ID holds between the term corresponding to SPEC-ID\r\nand the term corresponding to GENL-ID\r\n\r\n@param SPEC-ID\r\n\t\tpositive-integer-p; the id of the more specific term\r\n@param RELATION-ID;\r\n\t\tthe string indicating the relation\r\n@param GENL-ID\r\n\t\tpositive-integer-p; the id of the more general term\r\n@return stringp; a (possibly partial) justification\nGenerates a simple English justification stating that the relation\ncorresponding to RELATION-ID holds between the term corresponding to SPEC-ID\nand the term corresponding to GENL-ID")
-    public static final SubLObject generate_retrieval_justification_alt(SubLObject spec_id, SubLObject relation_id, SubLObject genl_id) {
-        {
-            SubLObject spec_term = com.cyc.cycjava.cycl.document_annotation_widgets.document_annotation_term_from_id(spec_id);
-            SubLObject genl_term = com.cyc.cycjava.cycl.document_annotation_widgets.document_annotation_term_from_id(genl_id);
-            SubLObject relation = com.cyc.cycjava.cycl.document_annotation_widgets.document_annotation_relation_from_id(relation_id);
-            if (relation_id.equal($$$t)) {
-                return cconcatenate($str_alt200$Meaning__, format_nil.format_nil_a_no_copy(pph_main.generate_phrase(spec_term, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED)));
-            }
-            if ((spec_term.isKeyword() || genl_term.isKeyword()) || (NIL == relation)) {
-                return cconcatenate($str_alt201$_, new SubLObject[]{ format_nil.format_nil_a_no_copy(NIL != relation ? ((SubLObject) (relation)) : relation_id), $str_alt165$_, format_nil.format_nil_a_no_copy(NIL != spec_term ? ((SubLObject) (spec_term)) : spec_id), $str_alt202$__, format_nil.format_nil_a_no_copy(NIL != genl_term ? ((SubLObject) (genl_term)) : genl_id), $str_alt203$_ });
-            } else {
-                return pph_main.generate_phrase(com.cyc.cycjava.cycl.document_annotation_widgets.substitute_template(com.cyc.cycjava.cycl.document_annotation_widgets.predicate_template(relation), spec_term, genl_term), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            }
-        }
-    }
-
-    /**
-     * Generates a simple English justification stating that the relation
-     * corresponding to RELATION-ID holds between the term corresponding to SPEC-ID
-     * and the term corresponding to GENL-ID
-     *
-     * @param SPEC-ID
-     * 		positive-integer-p; the id of the more specific term
-     * @param RELATION-ID;
-     * 		the string indicating the relation
-     * @param GENL-ID
-     * 		positive-integer-p; the id of the more general term
-     * @return stringp; a (possibly partial) justification
-     */
-    @LispMethod(comment = "Generates a simple English justification stating that the relation\r\ncorresponding to RELATION-ID holds between the term corresponding to SPEC-ID\r\nand the term corresponding to GENL-ID\r\n\r\n@param SPEC-ID\r\n\t\tpositive-integer-p; the id of the more specific term\r\n@param RELATION-ID;\r\n\t\tthe string indicating the relation\r\n@param GENL-ID\r\n\t\tpositive-integer-p; the id of the more general term\r\n@return stringp; a (possibly partial) justification\nGenerates a simple English justification stating that the relation\ncorresponding to RELATION-ID holds between the term corresponding to SPEC-ID\nand the term corresponding to GENL-ID")
     public static SubLObject generate_retrieval_justification(final SubLObject spec_id, final SubLObject relation_id, final SubLObject genl_id) {
         final SubLObject spec_term = document_annotation_term_from_id(spec_id);
         final SubLObject genl_term = document_annotation_term_from_id(genl_id);
@@ -7261,93 +3807,8 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             return cconcatenate($str202$_, new SubLObject[]{ format_nil.format_nil_a_no_copy(NIL != relation ? relation : relation_id), $$$_, format_nil.format_nil_a_no_copy(NIL != spec_term ? spec_term : spec_id), $str203$__, format_nil.format_nil_a_no_copy(NIL != genl_term ? genl_term : genl_id), $str204$_ });
         }
         return pph_main.generate_phrase(substitute_template(predicate_template(relation), spec_term, genl_term), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-    }/**
-     * Generates a simple English justification stating that the relation
-     * corresponding to RELATION-ID holds between the term corresponding to SPEC-ID
-     * and the term corresponding to GENL-ID
-     *
-     * @param SPEC-ID
-     * 		positive-integer-p; the id of the more specific term
-     * @param RELATION-ID;
-     * 		the string indicating the relation
-     * @param GENL-ID
-     * 		positive-integer-p; the id of the more general term
-     * @return stringp; a (possibly partial) justification
-     */
-
-
-    /**
-     * A wrapper for GENERATE-RETRIEVAL-JUSTIFICATION.  The input string contains
-     * the arguments for GENERATE-RETRIEVAL-JUSTIFICATION separated by a space.
-     */
-    @LispMethod(comment = "A wrapper for GENERATE-RETRIEVAL-JUSTIFICATION.  The input string contains\r\nthe arguments for GENERATE-RETRIEVAL-JUSTIFICATION separated by a space.\nA wrapper for GENERATE-RETRIEVAL-JUSTIFICATION.  The input string contains\nthe arguments for GENERATE-RETRIEVAL-JUSTIFICATION separated by a space.")
-    public static final SubLObject generate_retrieval_justification_from_justification_string_alt(SubLObject justification_string) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != $trace_doc_search_interface$.getDynamicValue(thread)) {
-                format(StreamsLow.$trace_output$.getDynamicValue(thread), $str_alt15$___A__entering__S__, numeric_date_utilities.timestamp_with_milliseconds(UNPROVIDED, UNPROVIDED), list(GENERATE_RETRIEVAL_JUSTIFICATION_FROM_JUSTIFICATION_STRING, justification_string));
-            }
-            if (NIL != $doc_search_trace_log_file$.getDynamicValue(thread)) {
-                {
-                    SubLObject stream = NIL;
-                    try {
-                        {
-                            SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                            try {
-                                stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                                stream = compatibility.open_text($doc_search_trace_log_file$.getDynamicValue(thread), $APPEND, NIL);
-                            } finally {
-                                stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                        if (!stream.isStream()) {
-                            Errors.error($str_alt114$Unable_to_open__S, $doc_search_trace_log_file$.getDynamicValue(thread));
-                        }
-                        {
-                            SubLObject out = stream;
-                            Errors.warn($str_alt170$writing_to__S, $doc_search_trace_log_file$.getDynamicValue(thread));
-                            format(out, $str_alt15$___A__entering__S__, numeric_date_utilities.timestamp_with_milliseconds(UNPROVIDED, UNPROVIDED), list(GENERATE_RETRIEVAL_JUSTIFICATION_FROM_JUSTIFICATION_STRING, justification_string));
-                        }
-                    } finally {
-                        {
-                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                            try {
-                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                if (stream.isStream()) {
-                                    close(stream, UNPROVIDED);
-                                }
-                            } finally {
-                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                }
-            }
-            SubLTrampolineFile.checkType(justification_string, STRINGP);
-            {
-                SubLObject justification_ids = string_utilities.split_string(justification_string, UNPROVIDED);
-                if (NIL != list_utilities.lengthGE(justification_ids, THREE_INTEGER, UNPROVIDED)) {
-                    {
-                        SubLObject justification_args = com.cyc.cycjava.cycl.document_annotation_widgets.get_best_justifications_from_arg_list(justification_ids);
-                        return com.cyc.cycjava.cycl.document_annotation_widgets.generate_retrieval_justification(justification_args.first(), second(justification_args), third(justification_args));
-                    }
-                } else {
-                    if ((NIL != list_utilities.lengthE(justification_ids, TWO_INTEGER, UNPROVIDED)) && (NIL != Strings.string_equal(justification_ids.first(), $$$s, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED))) {
-                        return cconcatenate($str_alt205$Text_Match__, format_nil.format_nil_a_no_copy(second(justification_ids)));
-                    } else {
-                        Errors.warn($str_alt206$Invalid_justification_string___S, justification_string);
-                        return NIL;
-                    }
-                }
-            }
-        }
     }
 
-    /**
-     * A wrapper for GENERATE-RETRIEVAL-JUSTIFICATION.  The input string contains
-     * the arguments for GENERATE-RETRIEVAL-JUSTIFICATION separated by a space.
-     */
-    @LispMethod(comment = "A wrapper for GENERATE-RETRIEVAL-JUSTIFICATION.  The input string contains\r\nthe arguments for GENERATE-RETRIEVAL-JUSTIFICATION separated by a space.\nA wrapper for GENERATE-RETRIEVAL-JUSTIFICATION.  The input string contains\nthe arguments for GENERATE-RETRIEVAL-JUSTIFICATION separated by a space.")
     public static SubLObject generate_retrieval_justification_from_justification_string(final SubLObject justification_string) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != $trace_doc_search_interface$.getDynamicValue(thread)) {
@@ -7383,7 +3844,7 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
                 }
             }
         }
-        assert NIL != stringp(justification_string) : "! stringp(justification_string) " + ("Types.stringp(justification_string) " + "CommonSymbols.NIL != Types.stringp(justification_string) ") + justification_string;
+        assert NIL != stringp(justification_string) : "Types.stringp(justification_string) " + "CommonSymbols.NIL != Types.stringp(justification_string) " + justification_string;
         final SubLObject justification_ids = string_utilities.split_string(justification_string, UNPROVIDED);
         if (NIL != list_utilities.lengthGE(justification_ids, THREE_INTEGER, UNPROVIDED)) {
             final SubLObject justification_args = get_best_justifications_from_arg_list(justification_ids);
@@ -7394,31 +3855,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         }
         Errors.warn($str207$Invalid_justification_string___S, justification_string);
         return NIL;
-    }/**
-     * A wrapper for GENERATE-RETRIEVAL-JUSTIFICATION.  The input string contains
-     * the arguments for GENERATE-RETRIEVAL-JUSTIFICATION separated by a space.
-     */
-
-
-    public static final SubLObject get_best_justifications_from_arg_list_alt(SubLObject justification_id_list) {
-        if (NIL != list_utilities.lengthE(justification_id_list, THREE_INTEGER, UNPROVIDED)) {
-            return justification_id_list;
-        }
-        {
-            SubLObject best_pred = second(justification_id_list);
-            SubLObject best_arg = third(justification_id_list);
-            SubLObject pred = NIL;
-            SubLObject pred_68 = NIL;
-            SubLObject arg = NIL;
-            SubLObject arg_69 = NIL;
-            for (pred = list_utilities.every_nth(TWO_INTEGER, justification_id_list.rest()), pred_68 = pred.first(), arg = list_utilities.every_nth(TWO_INTEGER, cddr(justification_id_list)), arg_69 = arg.first(); !((NIL == arg) && (NIL == pred)); pred = pred.rest() , pred_68 = pred.first() , arg = arg.rest() , arg_69 = arg.first()) {
-                if (NIL != com.cyc.cycjava.cycl.document_annotation_widgets.better_justification_pred(com.cyc.cycjava.cycl.document_annotation_widgets.document_annotation_relation_from_id(pred_68), com.cyc.cycjava.cycl.document_annotation_widgets.document_annotation_relation_from_id(best_pred))) {
-                    best_pred = pred_68;
-                    best_arg = arg_69;
-                }
-            }
-            return list(justification_id_list.first(), best_pred, best_arg);
-        }
     }
 
     public static SubLObject get_best_justifications_from_arg_list(final SubLObject justification_id_list) {
@@ -7448,87 +3884,11 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return list(justification_id_list.first(), best_pred, best_arg);
     }
 
-    /**
-     *
-     *
-     * @unknown ensure that conditionsCommonlyCooccur is preferred over ailmentAfflictsPartType
-     */
-    @LispMethod(comment = "@unknown ensure that conditionsCommonlyCooccur is preferred over ailmentAfflictsPartType")
-    public static final SubLObject better_justification_pred_alt(SubLObject pred1, SubLObject pred2) {
-        if (pred1 == $$conditionsCommonlyCooccur) {
-            return T;
-        }
-        return NIL;
-    }
-
-    /**
-     *
-     *
-     * @unknown ensure that conditionsCommonlyCooccur is preferred over ailmentAfflictsPartType
-     */
-    @LispMethod(comment = "@unknown ensure that conditionsCommonlyCooccur is preferred over ailmentAfflictsPartType")
     public static SubLObject better_justification_pred(final SubLObject pred1, final SubLObject pred2) {
         if (pred1.eql($$conditionsCommonlyCooccur)) {
             return T;
         }
         return NIL;
-    }
-
-    public static final SubLObject generate_term_explanation_alt(SubLObject term_id_string) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != $trace_doc_search_interface$.getDynamicValue(thread)) {
-                format(StreamsLow.$trace_output$.getDynamicValue(thread), $str_alt15$___A__entering__S__, numeric_date_utilities.timestamp_with_milliseconds(UNPROVIDED, UNPROVIDED), list(GENERATE_TERM_EXPLANATION, term_id_string));
-            }
-            if (NIL != $doc_search_trace_log_file$.getDynamicValue(thread)) {
-                {
-                    SubLObject stream = NIL;
-                    try {
-                        {
-                            SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                            try {
-                                stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                                stream = compatibility.open_text($doc_search_trace_log_file$.getDynamicValue(thread), $APPEND, NIL);
-                            } finally {
-                                stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                        if (!stream.isStream()) {
-                            Errors.error($str_alt114$Unable_to_open__S, $doc_search_trace_log_file$.getDynamicValue(thread));
-                        }
-                        {
-                            SubLObject out = stream;
-                            Errors.warn($str_alt170$writing_to__S, $doc_search_trace_log_file$.getDynamicValue(thread));
-                            format(out, $str_alt15$___A__entering__S__, numeric_date_utilities.timestamp_with_milliseconds(UNPROVIDED, UNPROVIDED), list(GENERATE_TERM_EXPLANATION, term_id_string));
-                        }
-                    } finally {
-                        {
-                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                            try {
-                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                if (stream.isStream()) {
-                                    close(stream, UNPROVIDED);
-                                }
-                            } finally {
-                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                }
-            }
-            SubLTrampolineFile.checkType(term_id_string, STRINGP);
-            {
-                SubLObject v_term = com.cyc.cycjava.cycl.document_annotation_widgets.document_annotation_term_from_id(term_id_string);
-                SubLObject canonical_phrase = nl_generation_api.cycl_term_to_nl_string_internal(v_term, $DEFAULT).first();
-                SubLObject userdoccomment = backward.removal_ask_variable($sym61$_X, listS($$userDocComment, v_term, $list_alt64), $$CCF_CAE_QueryMt, UNPROVIDED, UNPROVIDED).first();
-                SubLObject pph_params = nl_generation_api.new_pph_parameters(listS($DEMERIT_CUTOFF, pph_vars.$pph_suggested_demerit_cutoff$.getGlobalValue(), $list_alt212));
-                SubLObject other_strings = com.cyc.cycjava.cycl.document_annotation_widgets.get_other_explanatory_strings_for_term(v_term);
-                SubLObject synonyms = nl_generation_api.cycl_term_to_nl_string_internal(v_term, pph_params).rest();
-                SubLObject synonym_string = (NIL != synonyms) ? ((SubLObject) (cconcatenate($str_alt213$_b_Synonyms__b___, string_utilities.join_strings(synonyms, UNPROVIDED)))) : $str_alt112$;
-                SubLObject result_string = cconcatenate($str_alt214$_b_, new SubLObject[]{ canonical_phrase, $str_alt215$__b___, NIL != userdoccomment ? ((SubLObject) (userdoccomment)) : $str_alt112$, $str_alt216$_br_, other_strings, synonym_string });
-                return cconcatenate($str_alt217$_div_style__background_color__whi, new SubLObject[]{ result_string, $str_alt218$__div_ });
-            }
-        }
     }
 
     public static SubLObject generate_term_explanation(final SubLObject term_id_string) {
@@ -7566,7 +3926,7 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
                 }
             }
         }
-        assert NIL != stringp(term_id_string) : "! stringp(term_id_string) " + ("Types.stringp(term_id_string) " + "CommonSymbols.NIL != Types.stringp(term_id_string) ") + term_id_string;
+        assert NIL != stringp(term_id_string) : "Types.stringp(term_id_string) " + "CommonSymbols.NIL != Types.stringp(term_id_string) " + term_id_string;
         final SubLObject v_term = document_annotation_term_from_id(term_id_string);
         final SubLObject canonical_phrase = nl_generation_api.cycl_term_to_nl_string_internal(v_term, $DEFAULT).first();
         final SubLObject userdoccomment = backward.removal_ask_variable($sym59$_X, listS($$userDocComment, v_term, $list62), $$CCF_CAE_QueryMt, UNPROVIDED, UNPROVIDED).first();
@@ -7576,45 +3936,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         final SubLObject synonym_string = (NIL != synonyms) ? cconcatenate($str214$_b_Synonyms__b___, string_utilities.join_strings(synonyms, UNPROVIDED)) : $str111$;
         final SubLObject result_string = cconcatenate($str215$_b_, new SubLObject[]{ canonical_phrase, $str216$__b___, NIL != userdoccomment ? userdoccomment : $str111$, $str217$_br_, other_strings, synonym_string });
         return cconcatenate($str218$_div_style__background_color__whi, new SubLObject[]{ result_string, $str219$__div_ });
-    }
-
-    public static final SubLObject get_other_explanatory_strings_for_term_alt(SubLObject v_term) {
-        {
-            SubLObject output_string = NIL;
-            SubLObject stream = NIL;
-            try {
-                stream = make_private_string_output_stream();
-                if ((NIL != genls.genlsP(v_term, $$SurgicalProcedure, $$InferencePSC, UNPROVIDED)) || (NIL != genls.genlsP(v_term, $$Surgery, $$InferencePSC, UNPROVIDED))) {
-                    {
-                        SubLObject experts = backward.removal_ask_variable($sym221$_DOC, list($$expertAtSkill, $sym221$_DOC, v_term), $$CCFPersonnelDataMt, UNPROVIDED, UNPROVIDED);
-                        SubLObject sentences = NIL;
-                        SubLObject cdolist_list_var = experts;
-                        SubLObject expert = NIL;
-                        for (expert = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , expert = cdolist_list_var.first()) {
-                            sentences = cons(list($$expertAtSkill, expert, v_term), sentences);
-                        }
-                        if (NIL != sentences) {
-                            princ($str_alt224$_b_Specialists____b_, stream);
-                            princ(pph_document.pph_summarize_term(v_term, sentences, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), stream);
-                            princ($str_alt216$_br_, stream);
-                            terpri(stream);
-                        }
-                    }
-                }
-                output_string = get_output_stream_string(stream);
-            } finally {
-                {
-                    SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
-                    try {
-                        bind($is_thread_performing_cleanupP$, T);
-                        close(stream, UNPROVIDED);
-                    } finally {
-                        rebind($is_thread_performing_cleanupP$, _prev_bind_0);
-                    }
-                }
-            }
-            return output_string;
-        }
     }
 
     public static SubLObject get_other_explanatory_strings_for_term(final SubLObject v_term) {
@@ -7655,29 +3976,12 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return output_string;
     }
 
-    public static final SubLObject clear_document_annotation_term_id_alt() {
-        {
-            SubLObject cs = $document_annotation_term_id_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject clear_document_annotation_term_id() {
         final SubLObject cs = $document_annotation_term_id_caching_state$.getGlobalValue();
         if (NIL != cs) {
             memoization_state.caching_state_clear(cs);
         }
         return NIL;
-    }
-
-    public static final SubLObject remove_document_annotation_term_id_alt(SubLObject v_term, SubLObject hl_idsP) {
-        if (hl_idsP == UNPROVIDED) {
-            hl_idsP = $doc_annotation_use_hl_ids$.getDynamicValue();
-        }
-        return memoization_state.caching_state_remove_function_results_with_args($document_annotation_term_id_caching_state$.getGlobalValue(), list(v_term, hl_idsP), UNPROVIDED, UNPROVIDED);
     }
 
     public static SubLObject remove_document_annotation_term_id(final SubLObject v_term, SubLObject hl_idsP) {
@@ -7687,67 +3991,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return memoization_state.caching_state_remove_function_results_with_args($document_annotation_term_id_caching_state$.getGlobalValue(), list(v_term, hl_idsP), UNPROVIDED, UNPROVIDED);
     }
 
-    /**
-     *
-     *
-     * @param TERM
-    cycl-denotational-term-p
-     * 		
-     * @param HL-IDS?
-     * 		booleanp; should the system always use HL-IDs?
-     * @return stringp; the id used by the document-annotator for a given CycL term
-     */
-    @LispMethod(comment = "@param TERM\ncycl-denotational-term-p\r\n\t\t\r\n@param HL-IDS?\r\n\t\tbooleanp; should the system always use HL-IDs?\r\n@return stringp; the id used by the document-annotator for a given CycL term")
-    public static final SubLObject document_annotation_term_id_internal_alt(SubLObject v_term, SubLObject hl_idsP) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject ret_value = NIL;
-                {
-                    SubLObject _prev_bind_0 = $terse_guid_serialization_enabled_for_cfasl_encode_externalizedP$.currentBinding(thread);
-                    try {
-                        $terse_guid_serialization_enabled_for_cfasl_encode_externalizedP$.bind(NIL, thread);
-                        if (NIL != hl_idsP) {
-                            ret_value = kb_utilities.hl_external_id_string(cycl_utilities.hl_to_el(v_term));
-                        } else {
-                            if ((NIL != nart_handles.nart_p(v_term)) && (com.cyc.cycjava.cycl.document_annotation_widgets.get_cached_term_id(v_term) != $NOT_FOUND)) {
-                                ret_value = com.cyc.cycjava.cycl.document_annotation_widgets.get_cached_term_id(v_term);
-                            } else {
-                                {
-                                    SubLObject el_term = cycl_utilities.hl_to_el(v_term);
-                                    SubLObject el_id = com.cyc.cycjava.cycl.document_annotation_widgets.get_cached_term_id(el_term);
-                                    if ((el_id == $NOT_FOUND) && v_term.isNumber()) {
-                                        ret_value = v_term;
-                                    } else {
-                                        if (el_id == $NOT_FOUND) {
-                                            ret_value = kb_utilities.hl_external_id_string(el_term);
-                                        } else {
-                                            ret_value = el_id;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        $terse_guid_serialization_enabled_for_cfasl_encode_externalizedP$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return ret_value;
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @param TERM
-    cycl-denotational-term-p
-     * 		
-     * @param HL-IDS?
-     * 		booleanp; should the system always use HL-IDs?
-     * @return stringp; the id used by the document-annotator for a given CycL term
-     */
-    @LispMethod(comment = "@param TERM\ncycl-denotational-term-p\r\n\t\t\r\n@param HL-IDS?\r\n\t\tbooleanp; should the system always use HL-IDs?\r\n@return stringp; the id used by the document-annotator for a given CycL term")
     public static SubLObject document_annotation_term_id_internal(final SubLObject v_term, final SubLObject hl_idsP) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject ret_value = NIL;
@@ -7777,45 +4020,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             $terse_guid_serialization_enabled_for_cfasl_encode_externalizedP$.rebind(_prev_bind_0, thread);
         }
         return ret_value;
-    }
-
-    public static final SubLObject document_annotation_term_id_alt(SubLObject v_term, SubLObject hl_idsP) {
-        if (hl_idsP == UNPROVIDED) {
-            hl_idsP = $doc_annotation_use_hl_ids$.getDynamicValue();
-        }
-        {
-            SubLObject caching_state = $document_annotation_term_id_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(DOCUMENT_ANNOTATION_TERM_ID, $document_annotation_term_id_caching_state$, $int$25000, EQUAL, TWO_INTEGER, ZERO_INTEGER);
-            }
-            {
-                SubLObject sxhash = memoization_state.sxhash_calc_2(v_term, hl_idsP);
-                SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
-                if (collisions != $kw36$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    {
-                        SubLObject cdolist_list_var = collisions;
-                        SubLObject collision = NIL;
-                        for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
-                            {
-                                SubLObject cached_args = collision.first();
-                                SubLObject results2 = second(collision);
-                                if (v_term.equal(cached_args.first())) {
-                                    cached_args = cached_args.rest();
-                                    if (((NIL != cached_args) && (NIL == cached_args.rest())) && hl_idsP.equal(cached_args.first())) {
-                                        return memoization_state.caching_results(results2);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                {
-                    SubLObject results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.document_annotation_widgets.document_annotation_term_id_internal(v_term, hl_idsP)));
-                    memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(v_term, hl_idsP));
-                    return memoization_state.caching_results(results);
-                }
-            }
-        }
     }
 
     public static SubLObject document_annotation_term_id(final SubLObject v_term, SubLObject hl_idsP) {
@@ -7850,16 +4054,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return memoization_state.caching_results(results3);
     }
 
-    public static final SubLObject clear_document_annotation_term_from_id_alt() {
-        {
-            SubLObject cs = $document_annotation_term_from_id_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject clear_document_annotation_term_from_id() {
         final SubLObject cs = $document_annotation_term_from_id_caching_state$.getGlobalValue();
         if (NIL != cs) {
@@ -7868,55 +4062,12 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return NIL;
     }
 
-    public static final SubLObject remove_document_annotation_term_from_id_alt(SubLObject id) {
-        return memoization_state.caching_state_remove_function_results_with_args($document_annotation_term_from_id_caching_state$.getGlobalValue(), list(id), UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject remove_document_annotation_term_from_id(final SubLObject id) {
         return memoization_state.caching_state_remove_function_results_with_args($document_annotation_term_from_id_caching_state$.getGlobalValue(), list(id), UNPROVIDED, UNPROVIDED);
     }
 
-    /**
-     *
-     *
-     * @param ID
-    stringp
-     * 		
-     * @return cycl-denotational-term-p; the Cyc term denoted by ID
-     */
-    @LispMethod(comment = "@param ID\nstringp\r\n\t\t\r\n@return cycl-denotational-term-p; the Cyc term denoted by ID")
-    public static final SubLObject document_annotation_term_from_id_internal_alt(SubLObject id) {
-        return com.cyc.cycjava.cycl.document_annotation_widgets.get_term_from_cached_id(id);
-    }
-
-    /**
-     *
-     *
-     * @param ID
-    stringp
-     * 		
-     * @return cycl-denotational-term-p; the Cyc term denoted by ID
-     */
-    @LispMethod(comment = "@param ID\nstringp\r\n\t\t\r\n@return cycl-denotational-term-p; the Cyc term denoted by ID")
     public static SubLObject document_annotation_term_from_id_internal(final SubLObject id) {
         return get_term_from_cached_id(id);
-    }
-
-    public static final SubLObject document_annotation_term_from_id_alt(SubLObject id) {
-        {
-            SubLObject caching_state = $document_annotation_term_from_id_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(DOCUMENT_ANNOTATION_TERM_FROM_ID, $document_annotation_term_from_id_caching_state$, $int$5000, EQUAL, ONE_INTEGER, ZERO_INTEGER);
-            }
-            {
-                SubLObject results = memoization_state.caching_state_lookup(caching_state, id, $kw36$_MEMOIZED_ITEM_NOT_FOUND_);
-                if (results == $kw36$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.document_annotation_widgets.document_annotation_term_from_id_internal(id)));
-                    memoization_state.caching_state_put(caching_state, id, results, UNPROVIDED);
-                }
-                return memoization_state.caching_results(results);
-            }
-        }
     }
 
     public static SubLObject document_annotation_term_from_id(final SubLObject id) {
@@ -7932,21 +4083,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return memoization_state.caching_results(results);
     }
 
-    public static final SubLObject get_cached_term_id_alt(SubLObject v_term) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            com.cyc.cycjava.cycl.document_annotation_widgets.maybe_initialize_doc_annotator_term_id_fbc(UNPROVIDED);
-            {
-                SubLObject cached_id = file_backed_cache.file_backed_cache_lookup(v_term, $doc_annotator_term_id_fbc$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED);
-                if (cached_id.isNumber()) {
-                    return write_to_string(cached_id, EMPTY_SUBL_OBJECT_ARRAY);
-                } else {
-                    return cached_id;
-                }
-            }
-        }
-    }
-
     public static SubLObject get_cached_term_id(final SubLObject v_term) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         maybe_initialize_doc_annotator_term_id_fbc(UNPROVIDED);
@@ -7955,20 +4091,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             return write_to_string(cached_id, EMPTY_SUBL_OBJECT_ARRAY);
         }
         return cached_id;
-    }
-
-    public static final SubLObject get_term_from_cached_id_alt(SubLObject id) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            com.cyc.cycjava.cycl.document_annotation_widgets.maybe_initialize_doc_annotator_id_term_fbc(UNPROVIDED);
-            {
-                SubLObject v_term = file_backed_cache.file_backed_cache_lookup(NIL != number_utilities.number_string_p(id) ? ((SubLObject) (read_from_string(id, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED))) : id, $doc_annotator_id_term_fbc$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED);
-                if (v_term == $NOT_FOUND) {
-                    v_term = kb_utilities.find_object_by_hl_external_id_string(id);
-                }
-                return NIL != v_term ? ((SubLObject) (v_term)) : $NOT_FOUND;
-            }
-        }
     }
 
     public static SubLObject get_term_from_cached_id(final SubLObject id) {
@@ -7981,51 +4103,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return NIL != v_term ? v_term : $NOT_FOUND;
     }
 
-    /**
-     * The lexicon used for tagging documents.  Depending on the APP-TYPE, it may or may not actually have learners
-     * enabled
-     */
-    @LispMethod(comment = "The lexicon used for tagging documents.  Depending on the APP-TYPE, it may or may not actually have learners\r\nenabled\nThe lexicon used for tagging documents.  Depending on the APP-TYPE, it may or may not actually have learners\nenabled")
-    public static final SubLObject get_default_document_ingester_annotation_learning_lexicon_alt(SubLObject app_type, SubLObject filter_spec, SubLObject nl_mt) {
-        if (app_type == UNPROVIDED) {
-            app_type = NIL;
-        }
-        if (filter_spec == UNPROVIDED) {
-            filter_spec = NIL;
-        }
-        if (nl_mt == UNPROVIDED) {
-            nl_mt = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == abstract_lexicon.abstract_lexicon_p(dictionary.dictionary_lookup($default_document_ingester_annotation_learning_lexicons$.getDynamicValue(thread), list(app_type, filter_spec, nl_mt), UNPROVIDED))) {
-                {
-                    SubLObject lex = com.cyc.cycjava.cycl.document_annotation_widgets.make_default_document_annotation_lexicon(nl_mt);
-                    methods.funcall_instance_method_with_1_args(lex, EXCLUDE_POS, $$Verb);
-                    methods.funcall_instance_method_with_1_args(lex, EXCLUDE_POS, $$Adjective);
-                    methods.funcall_instance_method_with_1_args(lex, EXCLUDE_POS, $$Adverb);
-                    methods.funcall_instance_method_with_1_args(lex, EXCLUDE_POS, $$Gerundive);
-                    if (NIL != valid_constant($$PredicateTaxonomy, UNPROVIDED)) {
-                        methods.funcall_instance_method_with_1_args(lex, ADD_CONCEPT_FILTER_SPEC, $list_alt232);
-                    }
-                    if (NIL != filter_spec) {
-                        methods.funcall_instance_method_with_1_args(lex, ADD_CONCEPT_FILTER_SPEC, filter_spec);
-                    }
-                    if ((NIL != named_entity_recognizer.stanford_ner_ping(UNPROVIDED, UNPROVIDED)) && (!app_type.equal($$$vocabMarking))) {
-                        methods.funcall_instance_method_with_1_args(lex, ADD_LEARNER, STANFORD_NER_LEARN);
-                    }
-                    dictionary.dictionary_enter($default_document_ingester_annotation_learning_lexicons$.getDynamicValue(thread), list(app_type, filter_spec), lex);
-                }
-            }
-            return dictionary.dictionary_lookup($default_document_ingester_annotation_learning_lexicons$.getDynamicValue(thread), list(app_type, filter_spec), UNPROVIDED);
-        }
-    }
-
-    /**
-     * The lexicon used for tagging documents.  Depending on the APP-TYPE, it may or may not actually have learners
-     * enabled
-     */
-    @LispMethod(comment = "The lexicon used for tagging documents.  Depending on the APP-TYPE, it may or may not actually have learners\r\nenabled\nThe lexicon used for tagging documents.  Depending on the APP-TYPE, it may or may not actually have learners\nenabled")
     public static SubLObject get_default_document_ingester_annotation_learning_lexicon(SubLObject app_type, SubLObject filter_spec, SubLObject nl_mt) {
         if (app_type == UNPROVIDED) {
             app_type = NIL;
@@ -8055,25 +4132,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             dictionary.dictionary_enter($default_document_ingester_annotation_learning_lexicons$.getDynamicValue(thread), list(app_type, filter_spec), lex);
         }
         return dictionary.dictionary_lookup($default_document_ingester_annotation_learning_lexicons$.getDynamicValue(thread), list(app_type, filter_spec), UNPROVIDED);
-    }/**
-     * The lexicon used for tagging documents.  Depending on the APP-TYPE, it may or may not actually have learners
-     * enabled
-     */
-
-
-    public static final SubLObject clear_default_document_ingester_annotation_learning_lexicon_alt(SubLObject app_type) {
-        if (app_type == UNPROVIDED) {
-            app_type = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == app_type) {
-                dictionary.clear_dictionary($default_document_ingester_annotation_learning_lexicons$.getDynamicValue(thread));
-            } else {
-                dictionary.dictionary_enter($default_document_ingester_annotation_learning_lexicons$.getDynamicValue(thread), app_type, NIL);
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject clear_default_document_ingester_annotation_learning_lexicon(SubLObject app_type) {
@@ -8124,34 +4182,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return lex;
     }
 
-    /**
-     * This returns a lexicon that will be used for understanding simple phrases that a user enters into a
-     * type-in box.  It will not be used on the text of the document--that's the learning-lexicon
-     */
-    @LispMethod(comment = "This returns a lexicon that will be used for understanding simple phrases that a user enters into a\r\ntype-in box.  It will not be used on the text of the document--that\'s the learning-lexicon\nThis returns a lexicon that will be used for understanding simple phrases that a user enters into a\ntype-in box.  It will not be used on the text of the document--that\'s the learning-lexicon")
-    public static final SubLObject get_default_document_ingester_annotation_lexicon() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == abstract_lexicon.abstract_lexicon_p($default_document_ingester_annotation_lexicon$.getDynamicValue(thread))) {
-                $default_document_ingester_annotation_lexicon$.setDynamicValue(com.cyc.cycjava.cycl.document_annotation_widgets.make_default_document_annotation_lexicon(UNPROVIDED), thread);
-                methods.funcall_instance_method_with_1_args($default_document_ingester_annotation_lexicon$.getDynamicValue(thread), SET_CASE_SENSITIVITY, $OFF);
-                methods.funcall_instance_method_with_1_args($default_document_ingester_annotation_lexicon$.getDynamicValue(thread), EXCLUDE_POS, $$Verb);
-                methods.funcall_instance_method_with_1_args($default_document_ingester_annotation_lexicon$.getDynamicValue(thread), EXCLUDE_POS, $$Adjective);
-                methods.funcall_instance_method_with_1_args($default_document_ingester_annotation_lexicon$.getDynamicValue(thread), EXCLUDE_POS, $$Adverb);
-                methods.funcall_instance_method_with_1_args($default_document_ingester_annotation_lexicon$.getDynamicValue(thread), EXCLUDE_POS, $$Gerundive);
-                methods.funcall_instance_method_with_1_args($default_document_ingester_annotation_lexicon$.getDynamicValue(thread), EXCLUDE_PREDICATE, $$countryCodeTrigraph);
-                methods.funcall_instance_method_with_1_args($default_document_ingester_annotation_lexicon$.getDynamicValue(thread), EXCLUDE_PREDICATE, $$countryCodeDigraph);
-                methods.funcall_instance_method_with_1_args($default_document_ingester_annotation_lexicon$.getDynamicValue(thread), ALLOW_POS, $$ClosedClassWord);
-                methods.funcall_instance_method_with_1_args($default_document_ingester_annotation_lexicon$.getDynamicValue(thread), ADD_LEARNER, SCALAR_INTERVAL_LEARN);
-                methods.funcall_instance_method_with_1_args($default_document_ingester_annotation_lexicon$.getDynamicValue(thread), ADD_LEARNER, DATE_LEARN);
-                if (NIL != valid_constant($$PredicateTaxonomy, UNPROVIDED)) {
-                    methods.funcall_instance_method_with_1_args($default_document_ingester_annotation_lexicon$.getDynamicValue(thread), ADD_CONCEPT_FILTER_SPEC, $list_alt232);
-                }
-            }
-            return $default_document_ingester_annotation_lexicon$.getDynamicValue(thread);
-        }
-    }
-
     public static SubLObject get_default_document_ingester_annotation_lexicon(SubLObject nl_mt) {
         if (nl_mt == UNPROVIDED) {
             nl_mt = NIL;
@@ -8172,19 +4202,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return memoization_state.caching_state_remove_function_results_with_args($get_default_document_ingester_annotation_lexicon_caching_state$.getGlobalValue(), list(mt), UNPROVIDED, UNPROVIDED);
     }
 
-    public static final SubLObject get_default_document_annotation_learning_lexicon_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == abstract_lexicon.abstract_lexicon_p($default_document_annotation_learning_lexicon$.getDynamicValue(thread))) {
-                $default_document_annotation_learning_lexicon$.setDynamicValue(com.cyc.cycjava.cycl.document_annotation_widgets.make_default_document_annotation_lexicon(UNPROVIDED), thread);
-                if (NIL != named_entity_recognizer.stanford_ner_ping(UNPROVIDED, UNPROVIDED)) {
-                    methods.funcall_instance_method_with_1_args($default_document_annotation_learning_lexicon$.getDynamicValue(thread), ADD_LEARNER, STANFORD_NER_LEARN);
-                }
-            }
-            return $default_document_annotation_learning_lexicon$.getDynamicValue(thread);
-        }
-    }
-
     public static SubLObject get_default_document_annotation_learning_lexicon() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL == abstract_lexicon.abstract_lexicon_p($default_document_annotation_learning_lexicon$.getDynamicValue(thread))) {
@@ -8196,18 +4213,8 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return $default_document_annotation_learning_lexicon$.getDynamicValue(thread);
     }
 
-    public static final SubLObject clear_default_document_annotation_learning_lexicon_alt() {
-        $default_document_annotation_learning_lexicon$.setDynamicValue(NIL);
-        return NIL;
-    }
-
     public static SubLObject clear_default_document_annotation_learning_lexicon() {
         $default_document_annotation_learning_lexicon$.setDynamicValue(NIL);
-        return NIL;
-    }
-
-    public static final SubLObject clear_default_document_annotation_lexicon_alt() {
-        $default_document_annotation_lexicon$.setDynamicValue(NIL);
         return NIL;
     }
 
@@ -8235,16 +4242,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return make_default_document_annotation_lexicon(nl_mt);
     }
 
-    public static final SubLObject get_default_document_annotation_lexicon() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == abstract_lexicon.abstract_lexicon_p($default_document_annotation_lexicon$.getDynamicValue(thread))) {
-                $default_document_annotation_lexicon$.setDynamicValue(com.cyc.cycjava.cycl.document_annotation_widgets.make_default_document_annotation_lexicon(UNPROVIDED), thread);
-            }
-            return $default_document_annotation_lexicon$.getDynamicValue(thread);
-        }
-    }
-
     public static SubLObject get_default_document_annotation_lexicon(SubLObject nl_mt) {
         if (nl_mt == UNPROVIDED) {
             nl_mt = NIL;
@@ -8259,35 +4256,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             memoization_state.caching_state_put(caching_state, nl_mt, results, UNPROVIDED);
         }
         return memoization_state.caching_results(results);
-    }
-
-    public static final SubLObject make_default_document_annotation_lexicon_alt(SubLObject base_mt) {
-        if (base_mt == UNPROVIDED) {
-            base_mt = NIL;
-        }
-        {
-            SubLObject lexicon = object.new_class_instance(TERM_LEXICON);
-            methods.funcall_instance_method_with_0_args(lexicon, IGNORE_CACHE);
-            methods.funcall_instance_method_with_1_args(lexicon, SET_CASE_SENSITIVITY, $PREFERRED);
-            methods.funcall_instance_method_with_1_args(lexicon, ALLOW_PREDICATE, $$preferredNameString);
-            methods.funcall_instance_method_with_1_args(lexicon, EXCLUDE_PREDICATE, $$ksTermString);
-            methods.funcall_instance_method_with_1_args(lexicon, EXCLUDE_PREDICATE, $$alias);
-            methods.funcall_instance_method_with_1_args(lexicon, EXCLUDE_PREDICATE, $$programStrings);
-            methods.funcall_instance_method_with_1_args(lexicon, EXCLUDE_PREDICATE, $$airportHasIATACode);
-            methods.funcall_instance_method_with_1_args(lexicon, EXCLUDE_PREDICATE, $$airportHasICAOCode);
-            methods.funcall_instance_method_with_1_args(lexicon, EXCLUDE_POS, $$ClosedClassWord);
-            if (NIL != base_mt) {
-                methods.funcall_instance_method_with_1_args(lexicon, SET_BASE_MT, base_mt);
-            } else {
-                methods.funcall_instance_method_with_1_args(lexicon, ALLOW_MT, $$TechnicalEnglishLexicalMt);
-                methods.funcall_instance_method_with_1_args(lexicon, ALLOW_MT, $$MedicalLexicalMt);
-                if (NIL != valid_constant(constants_high.find_constant($$$CCFLexicalMt), UNPROVIDED)) {
-                    methods.funcall_instance_method_with_1_args(lexicon, ALLOW_MT, $$CCFLexicalMt);
-                }
-            }
-            methods.funcall_instance_method_with_1_args(lexicon, ADD_CONCEPT_FILTER_SPEC, $list_alt261);
-            return lexicon;
-        }
     }
 
     public static SubLObject make_default_document_annotation_lexicon(SubLObject base_mt) {
@@ -8317,35 +4285,12 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return lexicon;
     }
 
-    public static final SubLObject get_default_document_annotation_rule_disambiguator_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == rule_disambiguation.rule_disambiguator_p($default_document_annotation_rule_disambiguator$.getDynamicValue(thread))) {
-                $default_document_annotation_rule_disambiguator$.setDynamicValue(rule_disambiguation.new_rule_disambiguator(UNPROVIDED, UNPROVIDED), thread);
-            }
-            return $default_document_annotation_rule_disambiguator$.getDynamicValue(thread);
-        }
-    }
-
     public static SubLObject get_default_document_annotation_rule_disambiguator() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL == rule_disambiguation.rule_disambiguator_p($default_document_annotation_rule_disambiguator$.getDynamicValue(thread))) {
             $default_document_annotation_rule_disambiguator$.setDynamicValue(rule_disambiguation.new_rule_disambiguator(UNPROVIDED, UNPROVIDED), thread);
         }
         return $default_document_annotation_rule_disambiguator$.getDynamicValue(thread);
-    }
-
-    public static final SubLObject maybe_initialize_doc_annotator_term_id_fbc_alt(SubLObject file_path) {
-        if (file_path == UNPROVIDED) {
-            file_path = $doc_annotator_term_id_fbc_path$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == file_backed_cache.file_backed_cache_p($doc_annotator_term_id_fbc$.getDynamicValue(thread))) {
-                $doc_annotator_term_id_fbc$.setDynamicValue(file_backed_cache.file_backed_cache_create(file_path, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), thread);
-            }
-            return $doc_annotator_term_id_fbc$.getDynamicValue(thread);
-        }
     }
 
     public static SubLObject maybe_initialize_doc_annotator_term_id_fbc(SubLObject file_path) {
@@ -8359,19 +4304,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return $doc_annotator_term_id_fbc$.getDynamicValue(thread);
     }
 
-    public static final SubLObject maybe_initialize_doc_annotator_id_term_fbc_alt(SubLObject file_path) {
-        if (file_path == UNPROVIDED) {
-            file_path = $doc_annotator_id_term_fbc_path$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == file_backed_cache.file_backed_cache_p($doc_annotator_id_term_fbc$.getDynamicValue(thread))) {
-                $doc_annotator_id_term_fbc$.setDynamicValue(file_backed_cache.file_backed_cache_create(file_path, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), thread);
-            }
-            return $doc_annotator_id_term_fbc$.getDynamicValue(thread);
-        }
-    }
-
     public static SubLObject maybe_initialize_doc_annotator_id_term_fbc(SubLObject file_path) {
         if (file_path == UNPROVIDED) {
             file_path = $doc_annotator_id_term_fbc_path$.getDynamicValue();
@@ -8381,73 +4313,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             $doc_annotator_id_term_fbc$.setDynamicValue(file_backed_cache.file_backed_cache_create(file_path, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), thread);
         }
         return $doc_annotator_id_term_fbc$.getDynamicValue(thread);
-    }
-
-    public static final SubLObject rebuild_doc_annotator_term_id_fbc_alt(SubLObject overwrite, SubLObject path) {
-        if (overwrite == UNPROVIDED) {
-            overwrite = NIL;
-        }
-        if (path == UNPROVIDED) {
-            path = $doc_annotator_term_id_fbc_path$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == overwrite) {
-                return $NOTHING_DONE;
-            }
-            {
-                SubLObject fht = file_hash_table.create_file_hash_table(path, forts.fort_count(), TEN_INTEGER, EQUAL, $IMAGE_INDEPENDENT_CFASL);
-                SubLObject id = ZERO_INTEGER;
-                SubLObject message = $str_alt263$rebuilding_term_id_FHT;
-                SubLObject total = forts.fort_count();
-                SubLObject sofar = ZERO_INTEGER;
-                {
-                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                    try {
-                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                        $last_percent_progress_prediction$.bind(NIL, thread);
-                        $within_noting_percent_progress$.bind(T, thread);
-                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                        noting_percent_progress_preamble(message);
-                        {
-                            SubLObject cdolist_list_var = forts.do_forts_tables();
-                            SubLObject table_var = NIL;
-                            for (table_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , table_var = cdolist_list_var.first()) {
-                                if (NIL == do_id_index_empty_p(table_var, $SKIP)) {
-                                    {
-                                        SubLObject id_70 = do_id_index_next_id(table_var, T, NIL, NIL);
-                                        SubLObject state_var = do_id_index_next_state(table_var, T, id_70, NIL);
-                                        SubLObject fort = NIL;
-                                        while (NIL != id_70) {
-                                            fort = do_id_index_state_object(table_var, $SKIP, id_70, state_var);
-                                            if (NIL != do_id_index_id_and_object_validP(id_70, fort, $SKIP)) {
-                                                sofar = add(sofar, ONE_INTEGER);
-                                                note_percent_progress(sofar, total);
-                                                file_hash_table.put_file_hash_table(cycl_utilities.hl_to_el(fort), fht, id);
-                                                id = add(id, ONE_INTEGER);
-                                            }
-                                            id_70 = do_id_index_next_id(table_var, T, id_70, state_var);
-                                            state_var = do_id_index_next_state(table_var, T, id_70, state_var);
-                                        } 
-                                    }
-                                }
-                            }
-                        }
-                        noting_percent_progress_postamble();
-                    } finally {
-                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                file_hash_table.finalize_file_hash_table(fht);
-                return path;
-            }
-        }
     }
 
     public static SubLObject rebuild_doc_annotator_term_id_fbc(SubLObject overwrite, SubLObject path) {
@@ -8547,71 +4412,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return path;
     }
 
-    public static final SubLObject build_id_to_term_fbc_alt(SubLObject path, SubLObject term_to_id_path) {
-        if (path == UNPROVIDED) {
-            path = $doc_annotator_id_term_fbc_path$.getDynamicValue();
-        }
-        if (term_to_id_path == UNPROVIDED) {
-            term_to_id_path = $doc_annotator_term_id_fbc_path$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject fht = file_hash_table.create_file_hash_table(path, TEN_INTEGER, TEN_INTEGER, EQUAL, $IMAGE_INDEPENDENT_CFASL);
-                SubLObject term_id_fht = file_hash_table.open_file_hash_table(term_to_id_path, UNPROVIDED, UNPROVIDED);
-                SubLObject table_var = term_id_fht;
-                $progress_note$.setDynamicValue($str_alt265$Rebuilding_id__term_map, thread);
-                $progress_start_time$.setDynamicValue(get_universal_time(), thread);
-                $progress_total$.setDynamicValue(file_hash_table.file_hash_table_count(table_var), thread);
-                $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
-                {
-                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                    try {
-                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                        $last_percent_progress_prediction$.bind(NIL, thread);
-                        $within_noting_percent_progress$.bind(T, thread);
-                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                        noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
-                        {
-                            SubLObject continuation = NIL;
-                            SubLObject completeP = NIL;
-                            while (NIL == completeP) {
-                                thread.resetMultipleValues();
-                                {
-                                    SubLObject the_key = file_hash_table.get_file_hash_table_any(table_var, continuation, NIL);
-                                    SubLObject the_value = thread.secondMultipleValue();
-                                    SubLObject next = thread.thirdMultipleValue();
-                                    thread.resetMultipleValues();
-                                    if (NIL != next) {
-                                        {
-                                            SubLObject v_term = the_key;
-                                            SubLObject id = the_value;
-                                            note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
-                                            $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
-                                            file_hash_table.put_file_hash_table(id, fht, v_term);
-                                        }
-                                    }
-                                    continuation = next;
-                                    completeP = sublisp_null(next);
-                                }
-                            } 
-                        }
-                        noting_percent_progress_postamble();
-                    } finally {
-                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return $DONE;
-        }
-    }
-
     public static SubLObject build_id_to_term_fbc(SubLObject path, SubLObject term_to_id_path) {
         if (path == UNPROVIDED) {
             path = $doc_annotator_id_term_fbc_path$.getDynamicValue();
@@ -8673,84 +4473,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             $last_percent_progress_index$.rebind(_prev_bind_0, thread);
         }
         return $DONE;
-    }
-
-    public static final SubLObject augment_doc_annotator_term_fht_alt(SubLObject path) {
-        if (path == UNPROVIDED) {
-            path = $doc_annotator_term_id_fbc_path$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject fht = file_hash_table.open_file_hash_table(path, EQUAL, UNPROVIDED);
-                SubLObject biggest_id = ZERO_INTEGER;
-                SubLObject new_terms = NIL;
-                SubLObject message = $str_alt266$Augmenting_term_id_FHT;
-                SubLObject total = forts.fort_count();
-                SubLObject sofar = ZERO_INTEGER;
-                {
-                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                    try {
-                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                        $last_percent_progress_prediction$.bind(NIL, thread);
-                        $within_noting_percent_progress$.bind(T, thread);
-                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                        noting_percent_progress_preamble(message);
-                        {
-                            SubLObject cdolist_list_var = forts.do_forts_tables();
-                            SubLObject table_var = NIL;
-                            for (table_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , table_var = cdolist_list_var.first()) {
-                                if (NIL == do_id_index_empty_p(table_var, $SKIP)) {
-                                    {
-                                        SubLObject id = do_id_index_next_id(table_var, T, NIL, NIL);
-                                        SubLObject state_var = do_id_index_next_state(table_var, T, id, NIL);
-                                        SubLObject fort = NIL;
-                                        while (NIL != id) {
-                                            fort = do_id_index_state_object(table_var, $SKIP, id, state_var);
-                                            if (NIL != do_id_index_id_and_object_validP(id, fort, $SKIP)) {
-                                                sofar = add(sofar, ONE_INTEGER);
-                                                note_percent_progress(sofar, total);
-                                                {
-                                                    SubLObject id_71 = file_hash_table.get_file_hash_table(fort, fht, $NO_ID);
-                                                    if (id_71.isNumber() && id_71.numG(biggest_id)) {
-                                                        biggest_id = id_71;
-                                                    } else {
-                                                        if (id_71 == $NO_ID) {
-                                                            new_terms = cons(fort, new_terms);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            id = do_id_index_next_id(table_var, T, id, state_var);
-                                            state_var = do_id_index_next_state(table_var, T, id, state_var);
-                                        } 
-                                    }
-                                }
-                            }
-                        }
-                        noting_percent_progress_postamble();
-                    } finally {
-                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                {
-                    SubLObject cdolist_list_var = new_terms;
-                    SubLObject new_fort = NIL;
-                    for (new_fort = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , new_fort = cdolist_list_var.first()) {
-                        biggest_id = add(biggest_id, ONE_INTEGER);
-                        file_hash_table.put_file_hash_table(new_fort, fht, biggest_id);
-                    }
-                }
-                file_hash_table.finalize_file_hash_table(fht);
-                return biggest_id;
-            }
-        }
     }
 
     public static SubLObject augment_doc_annotator_term_fht(SubLObject path) {
@@ -8867,24 +4589,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return biggest_id;
     }
 
-    public static final SubLObject document_query_alt(SubLObject text_query) {
-        {
-            SubLObject ids = NIL;
-            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.document_annotation_widgets.terms_for_cyc_semantic_query(text_query);
-            SubLObject record = NIL;
-            for (record = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , record = cdolist_list_var.first()) {
-                {
-                    SubLObject cdolist_list_var_72 = record.rest();
-                    SubLObject interps = NIL;
-                    for (interps = cdolist_list_var_72.first(); NIL != cdolist_list_var_72; cdolist_list_var_72 = cdolist_list_var_72.rest() , interps = cdolist_list_var_72.first()) {
-                        ids = cons(getf(interps, $INTERP_ID, UNPROVIDED), ids);
-                    }
-                }
-            }
-            return com.cyc.cycjava.cycl.document_annotation_widgets.lucene_double_query(text_query, string_utilities.bunge(nreverse(ids), UNPROVIDED), UNPROVIDED);
-        }
-    }
-
     public static SubLObject document_query(final SubLObject text_query) {
         SubLObject ids = NIL;
         SubLObject cdolist_list_var = terms_for_cyc_semantic_query(text_query);
@@ -8905,67 +4609,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return lucene_double_query(text_query, string_utilities.bunge(nreverse(ids), UNPROVIDED), UNPROVIDED);
     }
 
-    /**
-     * Performs a search in the text-index.
-     *
-     * @param TEXT-QUERY
-     * 		stringp; the search-string
-     * @param MAX-ANS-COUNT
-    positive-integer-p
-     * 		
-     */
-    @LispMethod(comment = "Performs a search in the text-index.\r\n\r\n@param TEXT-QUERY\r\n\t\tstringp; the search-string\r\n@param MAX-ANS-COUNT\npositive-integer-p")
-    public static final SubLObject lucene_text_query_alt(SubLObject text_query, SubLObject max_ans_count) {
-        if (max_ans_count == UNPROVIDED) {
-            max_ans_count = TEN_INTEGER;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject hits = NIL;
-                SubLObject text_session = NIL;
-                try {
-                    text_session = lucene_session.new_lucene_session(lucene_session.get_lucene_host(), lucene_session.get_lucene_port(), com.cyc.cycjava.cycl.document_annotation_widgets.get_text_index(), $TEXT, UNPROVIDED);
-                    {
-                        SubLObject text_hits = lucene_session.lucene_query(text_session, text_query, max_ans_count);
-                        SubLObject cdolist_list_var = text_hits;
-                        SubLObject hit = NIL;
-                        for (hit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , hit = cdolist_list_var.first()) {
-                            if ($annotated_document_format$.getDynamicValue(thread) == $SIMPLE) {
-                                hits = cons(append(hit, $list_alt269), hits);
-                            } else {
-                                hits = cons(list($DOC_TEXT, hit, $SEARCH_TYPE, $TEXT), hits);
-                            }
-                        }
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            if (NIL != lucene_session.lucene_session_p(text_session)) {
-                                lucene_session.lucene_finalize(text_session);
-                            }
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                return nreverse(hits);
-            }
-        }
-    }
-
-    /**
-     * Performs a search in the text-index.
-     *
-     * @param TEXT-QUERY
-     * 		stringp; the search-string
-     * @param MAX-ANS-COUNT
-    		positive-integer-p
-     * 		
-     */
-    @LispMethod(comment = "Performs a search in the text-index.\r\n\r\n@param TEXT-QUERY\r\n\t\tstringp; the search-string\r\n@param MAX-ANS-COUNT\n\t\tpositive-integer-p")
     public static SubLObject lucene_text_query(final SubLObject text_query, SubLObject max_ans_count) {
         if (max_ans_count == UNPROVIDED) {
             max_ans_count = TEN_INTEGER;
@@ -9002,80 +4645,8 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             }
         }
         return nreverse(hits);
-    }/**
-     * Performs a search in the text-index.
-     *
-     * @param TEXT-QUERY
-     * 		stringp; the search-string
-     * @param MAX-ANS-COUNT
-    		positive-integer-p
-     * 		
-     */
-
-
-    /**
-     * Performs a search in the semantic-index.
-     *
-     * @param SEM-QUERY
-     * 		stringp; search-string of the form that the Semantic
-     * 		Analyzer understands
-     * @param MAX-ANS-COUNT
-    positive-integer-p
-     * 		
-     */
-    @LispMethod(comment = "Performs a search in the semantic-index.\r\n\r\n@param SEM-QUERY\r\n\t\tstringp; search-string of the form that the Semantic\r\n\t\tAnalyzer understands\r\n@param MAX-ANS-COUNT\npositive-integer-p")
-    public static final SubLObject lucene_sem_query_with_sem_search_string_alt(SubLObject sem_query, SubLObject max_ans_count) {
-        if (max_ans_count == UNPROVIDED) {
-            max_ans_count = TEN_INTEGER;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject hits = NIL;
-                SubLObject sem_session = NIL;
-                try {
-                    sem_session = lucene_session.new_lucene_session(lucene_session.get_lucene_host(), lucene_session.get_lucene_port(), com.cyc.cycjava.cycl.document_annotation_widgets.get_semantic_index(), $CYC, UNPROVIDED);
-                    {
-                        SubLObject cdolist_list_var = lucene_session.lucene_query(sem_session, sem_query, max_ans_count);
-                        SubLObject hit = NIL;
-                        for (hit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , hit = cdolist_list_var.first()) {
-                            if ($annotated_document_format$.getDynamicValue(thread) == $SIMPLE) {
-                                hits = cons(putf(hit, $SEARCH_TYPE, $CYC), hits);
-                            } else {
-                                hits = cons(list($DOC_TEXT, hit, $SEARCH_TYPE, $CYC), hits);
-                            }
-                        }
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            if (NIL != lucene_session.lucene_session_p(sem_session)) {
-                                lucene_session.lucene_finalize(sem_session);
-                            }
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                hits = com.cyc.cycjava.cycl.document_annotation_widgets.clean_semantic_search_hits(hits);
-                return nreverse(hits);
-            }
-        }
     }
 
-    /**
-     * Performs a search in the semantic-index.
-     *
-     * @param SEM-QUERY
-     * 		stringp; search-string of the form that the Semantic
-     * 		Analyzer understands
-     * @param MAX-ANS-COUNT
-    		positive-integer-p
-     * 		
-     */
-    @LispMethod(comment = "Performs a search in the semantic-index.\r\n\r\n@param SEM-QUERY\r\n\t\tstringp; search-string of the form that the Semantic\r\n\t\tAnalyzer understands\r\n@param MAX-ANS-COUNT\n\t\tpositive-integer-p")
     public static SubLObject lucene_sem_query_with_sem_search_string(final SubLObject sem_query, SubLObject max_ans_count) {
         if (max_ans_count == UNPROVIDED) {
             max_ans_count = TEN_INTEGER;
@@ -9112,61 +4683,8 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         }
         hits = clean_semantic_search_hits(hits);
         return nreverse(hits);
-    }/**
-     * Performs a search in the semantic-index.
-     *
-     * @param SEM-QUERY
-     * 		stringp; search-string of the form that the Semantic
-     * 		Analyzer understands
-     * @param MAX-ANS-COUNT
-    		positive-integer-p
-     * 		
-     */
-
-
-    /**
-     * Performs a search in the semantic-index after converting the input
-     * search-string into a format that the Lucene Semantic Analyzer understands.
-     *
-     * @param TEXT-QUERY
-     * 		stringp; search-string in normal NL form
-     * @param MAX-ANS-COUNT
-    positive-integer-p
-     * 		
-     */
-    @LispMethod(comment = "Performs a search in the semantic-index after converting the input\r\nsearch-string into a format that the Lucene Semantic Analyzer understands.\r\n\r\n@param TEXT-QUERY\r\n\t\tstringp; search-string in normal NL form\r\n@param MAX-ANS-COUNT\npositive-integer-p\nPerforms a search in the semantic-index after converting the input\nsearch-string into a format that the Lucene Semantic Analyzer understands.")
-    public static final SubLObject lucene_sem_query_alt(SubLObject text_query, SubLObject max_ans_count) {
-        if (max_ans_count == UNPROVIDED) {
-            max_ans_count = TEN_INTEGER;
-        }
-        {
-            SubLObject ids = NIL;
-            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.document_annotation_widgets.terms_for_cyc_semantic_query(text_query);
-            SubLObject record = NIL;
-            for (record = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , record = cdolist_list_var.first()) {
-                {
-                    SubLObject cdolist_list_var_73 = record.rest();
-                    SubLObject interps = NIL;
-                    for (interps = cdolist_list_var_73.first(); NIL != cdolist_list_var_73; cdolist_list_var_73 = cdolist_list_var_73.rest() , interps = cdolist_list_var_73.first()) {
-                        ids = cons(getf(interps, $INTERP_ID, UNPROVIDED), ids);
-                    }
-                }
-            }
-            return com.cyc.cycjava.cycl.document_annotation_widgets.lucene_sem_query_with_sem_search_string(string_utilities.bunge(nreverse(ids), UNPROVIDED), max_ans_count);
-        }
     }
 
-    /**
-     * Performs a search in the semantic-index after converting the input
-     * search-string into a format that the Lucene Semantic Analyzer understands.
-     *
-     * @param TEXT-QUERY
-     * 		stringp; search-string in normal NL form
-     * @param MAX-ANS-COUNT
-    		positive-integer-p
-     * 		
-     */
-    @LispMethod(comment = "Performs a search in the semantic-index after converting the input\r\nsearch-string into a format that the Lucene Semantic Analyzer understands.\r\n\r\n@param TEXT-QUERY\r\n\t\tstringp; search-string in normal NL form\r\n@param MAX-ANS-COUNT\n\t\tpositive-integer-p\nPerforms a search in the semantic-index after converting the input\nsearch-string into a format that the Lucene Semantic Analyzer understands.")
     public static SubLObject lucene_sem_query(final SubLObject text_query, SubLObject max_ans_count) {
         if (max_ans_count == UNPROVIDED) {
             max_ans_count = TEN_INTEGER;
@@ -9188,65 +4706,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             record = cdolist_list_var.first();
         } 
         return lucene_sem_query_with_sem_search_string(string_utilities.bunge(nreverse(ids), UNPROVIDED), max_ans_count);
-    }/**
-     * Performs a search in the semantic-index after converting the input
-     * search-string into a format that the Lucene Semantic Analyzer understands.
-     *
-     * @param TEXT-QUERY
-     * 		stringp; search-string in normal NL form
-     * @param MAX-ANS-COUNT
-    		positive-integer-p
-     * 		
-     */
-
-
-    public static final SubLObject lucene_double_query_alt(SubLObject text_query, SubLObject sem_query, SubLObject max_answer_count) {
-        if (max_answer_count == UNPROVIDED) {
-            max_answer_count = TEN_INTEGER;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != $trace_doc_search_interface$.getDynamicValue(thread)) {
-                format(StreamsLow.$trace_output$.getDynamicValue(thread), $str_alt15$___A__entering__S__, numeric_date_utilities.timestamp_with_milliseconds(UNPROVIDED, UNPROVIDED), list(LUCENE_DOUBLE_QUERY, text_query, sem_query, max_answer_count));
-            }
-            if (NIL != $doc_search_trace_log_file$.getDynamicValue(thread)) {
-                {
-                    SubLObject stream = NIL;
-                    try {
-                        {
-                            SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                            try {
-                                stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                                stream = compatibility.open_text($doc_search_trace_log_file$.getDynamicValue(thread), $APPEND, NIL);
-                            } finally {
-                                stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                        if (!stream.isStream()) {
-                            Errors.error($str_alt114$Unable_to_open__S, $doc_search_trace_log_file$.getDynamicValue(thread));
-                        }
-                        {
-                            SubLObject out = stream;
-                            Errors.warn($str_alt170$writing_to__S, $doc_search_trace_log_file$.getDynamicValue(thread));
-                            format(out, $str_alt15$___A__entering__S__, numeric_date_utilities.timestamp_with_milliseconds(UNPROVIDED, UNPROVIDED), list(LUCENE_DOUBLE_QUERY, text_query, sem_query, max_answer_count));
-                        }
-                    } finally {
-                        {
-                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                            try {
-                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                if (stream.isStream()) {
-                                    close(stream, UNPROVIDED);
-                                }
-                            } finally {
-                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                }
-            }
-            return append(com.cyc.cycjava.cycl.document_annotation_widgets.lucene_text_query(text_query, max_answer_count), com.cyc.cycjava.cycl.document_annotation_widgets.lucene_sem_query_with_sem_search_string(sem_query, max_answer_count));
-        }
     }
 
     public static SubLObject lucene_double_query(final SubLObject text_query, final SubLObject sem_query, SubLObject max_answer_count) {
@@ -9290,14 +4749,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return append(lucene_text_query(text_query, max_answer_count), lucene_sem_query_with_sem_search_string(sem_query, max_answer_count));
     }
 
-    public static final SubLObject cyc_semantic_search_token_alt(SubLObject token, SubLObject interp) {
-        if ((NIL != cycl_grammar.cycl_nat_p(interp)) || (NIL != forts.fort_p(interp))) {
-            return cconcatenate($str_alt273$0_0_t___, new SubLObject[]{ format_nil.format_nil_a_no_copy(com.cyc.cycjava.cycl.document_annotation_widgets.document_annotation_term_id(interp, UNPROVIDED)), $str_alt143$_ });
-        } else {
-            return cconcatenate($str_alt274$0_0_s___, new SubLObject[]{ format_nil.format_nil_a_no_copy(token), $str_alt143$_ });
-        }
-    }
-
     public static SubLObject cyc_semantic_search_token(final SubLObject token, final SubLObject interp) {
         if ((NIL != cycl_grammar.cycl_nat_p(interp)) || (NIL != forts.fort_p(interp))) {
             return cconcatenate($str278$0_0_t___, new SubLObject[]{ format_nil.format_nil_a_no_copy(document_annotation_term_id(interp, UNPROVIDED)), $str142$_ });
@@ -9305,161 +4756,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return cconcatenate($str279$0_0_s___, new SubLObject[]{ format_nil.format_nil_a_no_copy(token), $str142$_ });
     }
 
-    /**
-     * Returns an ALIST of (search-word -> interp), in the same order as the query string.
-     *
-     * @param QUERY-STRING
-    stringp
-     * 		
-     */
-    @LispMethod(comment = "Returns an ALIST of (search-word -> interp), in the same order as the query string.\r\n\r\n@param QUERY-STRING\nstringp")
-    public static final SubLObject terms_for_cyc_semantic_query_alt(SubLObject query_string) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != $trace_doc_search_interface$.getDynamicValue(thread)) {
-                format(StreamsLow.$trace_output$.getDynamicValue(thread), $str_alt15$___A__entering__S__, numeric_date_utilities.timestamp_with_milliseconds(UNPROVIDED, UNPROVIDED), list(TERMS_FOR_CYC_SEMANTIC_QUERY, query_string));
-            }
-            if (NIL != $doc_search_trace_log_file$.getDynamicValue(thread)) {
-                {
-                    SubLObject stream = NIL;
-                    try {
-                        {
-                            SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                            try {
-                                stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                                stream = compatibility.open_text($doc_search_trace_log_file$.getDynamicValue(thread), $APPEND, NIL);
-                            } finally {
-                                stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                        if (!stream.isStream()) {
-                            Errors.error($str_alt114$Unable_to_open__S, $doc_search_trace_log_file$.getDynamicValue(thread));
-                        }
-                        {
-                            SubLObject out = stream;
-                            Errors.warn($str_alt170$writing_to__S, $doc_search_trace_log_file$.getDynamicValue(thread));
-                            format(out, $str_alt15$___A__entering__S__, numeric_date_utilities.timestamp_with_milliseconds(UNPROVIDED, UNPROVIDED), list(TERMS_FOR_CYC_SEMANTIC_QUERY, query_string));
-                        }
-                    } finally {
-                        {
-                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                            try {
-                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                if (stream.isStream()) {
-                                    close(stream, UNPROVIDED);
-                                }
-                            } finally {
-                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                }
-            }
-            {
-                SubLObject ignore_errors_tag = NIL;
-                try {
-                    {
-                        SubLObject _prev_bind_0 = Errors.$error_handler$.currentBinding(thread);
-                        try {
-                            Errors.$error_handler$.bind(symbol_function(IGNORE_ERRORS_HANDLER), thread);
-                            try {
-                                {
-                                    SubLObject stream = NIL;
-                                    try {
-                                        stream = compatibility.open_text($str_alt278$_cyc_projects_doc_annotation_quer, $APPEND, NIL);
-                                        if (!stream.isStream()) {
-                                            Errors.error($str_alt114$Unable_to_open__S, $str_alt278$_cyc_projects_doc_annotation_quer);
-                                        }
-                                        {
-                                            SubLObject log = stream;
-                                            format(log, $str_alt279$_A___S__, numeric_date_utilities.timestamp(UNPROVIDED, UNPROVIDED), query_string);
-                                        }
-                                    } finally {
-                                        {
-                                            SubLObject _prev_bind_0_74 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                            try {
-                                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                                if (stream.isStream()) {
-                                                    close(stream, UNPROVIDED);
-                                                }
-                                            } finally {
-                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_74, thread);
-                                            }
-                                        }
-                                    }
-                                }
-                            } catch (Throwable catch_var) {
-                                Errors.handleThrowable(catch_var, NIL);
-                            }
-                        } finally {
-                            Errors.$error_handler$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                } catch (Throwable ccatch_env_var) {
-                    ignore_errors_tag = Errors.handleThrowable(ccatch_env_var, $IGNORE_ERRORS_TARGET);
-                }
-            }
-            {
-                SubLObject word_interp_map = NIL;
-                {
-                    SubLObject _prev_bind_0 = lexicon_macros.$nl_trie_assumed_validP$.currentBinding(thread);
-                    try {
-                        lexicon_macros.$nl_trie_assumed_validP$.bind(T, thread);
-                        {
-                            SubLObject tokenizations = qua_query.get_tokenizations_for_aq_string(query_string, UNPROVIDED);
-                            SubLObject remove_stopwordsP = NIL;
-                            SubLObject cdolist_list_var = tokenizations;
-                            SubLObject tokenization = NIL;
-                            for (tokenization = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , tokenization = cdolist_list_var.first()) {
-                                {
-                                    SubLObject list_var = NIL;
-                                    SubLObject token = NIL;
-                                    SubLObject token_num = NIL;
-                                    for (list_var = tokenization, token = list_var.first(), token_num = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , token = list_var.first() , token_num = add(ONE_INTEGER, token_num)) {
-                                        {
-                                            SubLObject string = qua_query.aq_term_original_string(token);
-                                            SubLObject interps = qua_query.aq_term_raw_meanings(token);
-                                            if (length(interps).numG(ONE_INTEGER)) {
-                                                interps = remove_if(STRINGP, interps, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                            }
-                                            {
-                                                SubLObject cdolist_list_var_75 = interps;
-                                                SubLObject interp_cycl = NIL;
-                                                for (interp_cycl = cdolist_list_var_75.first(); NIL != cdolist_list_var_75; cdolist_list_var_75 = cdolist_list_var_75.rest() , interp_cycl = cdolist_list_var_75.first()) {
-                                                    if (NIL == list_utilities.every_in_list(STRINGP, interps, UNPROVIDED)) {
-                                                        remove_stopwordsP = T;
-                                                    }
-                                                    {
-                                                        SubLObject word = com.cyc.cycjava.cycl.document_annotation_widgets.encode_word_for_semantic_query(string, interp_cycl);
-                                                        word_interp_map = list_utilities.alist_push(word_interp_map, list(string, token_num), word, EQUAL);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            if (NIL != remove_stopwordsP) {
-                                word_interp_map = remove_if($sym280$STOPWORD_IN_SEM_QUERY_, word_interp_map, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                            }
-                        }
-                    } finally {
-                        lexicon_macros.$nl_trie_assumed_validP$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return Mapping.mapcar(REMOVE_CDAR, Sort.sort(word_interp_map, $sym175$_, CADAR));
-            }
-        }
-    }
-
-    /**
-     * Returns an ALIST of (search-word -> interp), in the same order as the query string.
-     *
-     * @param QUERY-STRING
-    		stringp
-     * 		
-     */
-    @LispMethod(comment = "Returns an ALIST of (search-word -> interp), in the same order as the query string.\r\n\r\n@param QUERY-STRING\n\t\tstringp")
     public static SubLObject terms_for_cyc_semantic_query(final SubLObject query_string) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != $trace_doc_search_interface$.getDynamicValue(thread)) {
@@ -9578,92 +4874,20 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             lexicon_macros.$nl_trie_assumed_validP$.rebind(_prev_bind_0, thread);
         }
         return Mapping.mapcar(REMOVE_CDAR, Sort.sort(word_interp_map, $sym172$_, CADAR));
-    }/**
-     * Returns an ALIST of (search-word -> interp), in the same order as the query string.
-     *
-     * @param QUERY-STRING
-    		stringp
-     * 		
-     */
-
-
-    public static final SubLObject remove_cdar_alt(SubLObject item) {
-        return cons(caar(item), item.rest());
     }
 
     public static SubLObject remove_cdar(final SubLObject item) {
         return cons(caar(item), item.rest());
     }
 
-    public static final SubLObject stopword_in_sem_queryP_alt(SubLObject encoded_word) {
-        return makeBoolean((NIL != lexicon_utilities.denots_of_string_stop_word(caar(encoded_word))) && (NIL != string_utilities.starts_with(getf(second(encoded_word), $INTERP_ID, UNPROVIDED), $str_alt283$0_0_s)));
-    }
-
     public static SubLObject stopword_in_sem_queryP(final SubLObject encoded_word) {
         return makeBoolean((NIL != lexicon_utilities.denots_of_string_stop_word(caar(encoded_word))) && (NIL != string_utilities.starts_with(getf(second(encoded_word), $INTERP_ID, UNPROVIDED), $str288$0_0_s)));
-    }
-
-    public static final SubLObject encode_word_for_semantic_query_alt(SubLObject string, SubLObject interp_cycl) {
-        return list($INTERP, interp_cycl, $INTERP_ID, com.cyc.cycjava.cycl.document_annotation_widgets.cyc_semantic_search_token(string, interp_cycl));
     }
 
     public static SubLObject encode_word_for_semantic_query(final SubLObject string, final SubLObject interp_cycl) {
         return list($INTERP, interp_cycl, $INTERP_ID, cyc_semantic_search_token(string, interp_cycl));
     }
 
-    /**
-     * Returns an ALIST in compliance with the format returned by TERMS-FOR-CYC-SEMANTIC-QUERY
-     * but expects the term-ID to already be an HL external ID string.
-     */
-    @LispMethod(comment = "Returns an ALIST in compliance with the format returned by TERMS-FOR-CYC-SEMANTIC-QUERY\r\nbut expects the term-ID to already be an HL external ID string.\nReturns an ALIST in compliance with the format returned by TERMS-FOR-CYC-SEMANTIC-QUERY\nbut expects the term-ID to already be an HL external ID string.")
-    public static final SubLObject terms_for_focused_cyc_semantic_query_alt(SubLObject query_string, SubLObject term_id) {
-        {
-            SubLObject interp_cycl = kb_utilities.find_object_by_hl_external_id_string(term_id);
-            if ((NIL != forts.fort_p(interp_cycl)) || (NIL != cycl_grammar.cycl_nat_p(interp_cycl))) {
-                {
-                    SubLObject interpretations = com.cyc.cycjava.cycl.document_annotation_widgets.terms_for_cyc_semantic_query(query_string);
-                    SubLObject results = NIL;
-                    SubLObject cdolist_list_var = interpretations;
-                    SubLObject interpretation = NIL;
-                    for (interpretation = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , interpretation = cdolist_list_var.first()) {
-                        {
-                            SubLObject datum = interpretation;
-                            SubLObject current = datum;
-                            SubLObject word = NIL;
-                            SubLObject details = NIL;
-                            destructuring_bind_must_consp(current, datum, $list_alt286);
-                            word = current.first();
-                            current = current.rest();
-                            destructuring_bind_must_consp(current, datum, $list_alt286);
-                            details = current.first();
-                            current = current.rest();
-                            if (NIL == current) {
-                                {
-                                    SubLObject cycl_interpretation = getf(details, $INTERP, NIL);
-                                    if (cycl_interpretation.equal(interp_cycl)) {
-                                        results = cons(interpretation, results);
-                                    }
-                                }
-                            } else {
-                                cdestructuring_bind_error(datum, $list_alt286);
-                            }
-                        }
-                    }
-                    if (NIL == results) {
-                        results = cons(list(query_string, com.cyc.cycjava.cycl.document_annotation_widgets.encode_word_for_semantic_query(query_string, interp_cycl)), results);
-                    }
-                    return results;
-                }
-            }
-        }
-        return NIL;
-    }
-
-    /**
-     * Returns an ALIST in compliance with the format returned by TERMS-FOR-CYC-SEMANTIC-QUERY
-     * but expects the term-ID to already be an HL external ID string.
-     */
-    @LispMethod(comment = "Returns an ALIST in compliance with the format returned by TERMS-FOR-CYC-SEMANTIC-QUERY\r\nbut expects the term-ID to already be an HL external ID string.\nReturns an ALIST in compliance with the format returned by TERMS-FOR-CYC-SEMANTIC-QUERY\nbut expects the term-ID to already be an HL external ID string.")
     public static SubLObject terms_for_focused_cyc_semantic_query(final SubLObject query_string, final SubLObject term_id) {
         final SubLObject interp_cycl = kb_utilities.maybe_find_object_by_compact_hl_external_id_string(term_id);
         if ((NIL != forts.fort_p(interp_cycl)) || (NIL != cycl_grammar.cycl_nat_p(interp_cycl))) {
@@ -9700,64 +4924,8 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             return results;
         }
         return NIL;
-    }/**
-     * Returns an ALIST in compliance with the format returned by TERMS-FOR-CYC-SEMANTIC-QUERY
-     * but expects the term-ID to already be an HL external ID string.
-     */
-
-
-    /**
-     * A testing function to return the words and the CycL for a given query string
-     */
-    @LispMethod(comment = "A testing function to return the words and the CycL for a given query string")
-    public static final SubLObject simple_terms_for_cyc_semantic_query_alt(SubLObject query_string) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject word_interp_map = dictionary.new_dictionary(symbol_function(EQUALP), TWENTY_INTEGER);
-                {
-                    SubLObject _prev_bind_0 = lexicon_macros.$nl_trie_assumed_validP$.currentBinding(thread);
-                    try {
-                        lexicon_macros.$nl_trie_assumed_validP$.bind(T, thread);
-                        {
-                            SubLObject tokenizations = qua_query.get_tokenizations_for_aq_string(query_string, UNPROVIDED);
-                            SubLObject cdolist_list_var = tokenizations;
-                            SubLObject tokenization = NIL;
-                            for (tokenization = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , tokenization = cdolist_list_var.first()) {
-                                {
-                                    SubLObject cdolist_list_var_76 = tokenization;
-                                    SubLObject token = NIL;
-                                    for (token = cdolist_list_var_76.first(); NIL != cdolist_list_var_76; cdolist_list_var_76 = cdolist_list_var_76.rest() , token = cdolist_list_var_76.first()) {
-                                        {
-                                            SubLObject string = qua_query.aq_term_original_string(token);
-                                            SubLObject cdolist_list_var_77 = qua_query.aq_term_raw_meanings(token);
-                                            SubLObject interp_cycl = NIL;
-                                            for (interp_cycl = cdolist_list_var_77.first(); NIL != cdolist_list_var_77; cdolist_list_var_77 = cdolist_list_var_77.rest() , interp_cycl = cdolist_list_var_77.first()) {
-                                                if (!interp_cycl.isString()) {
-                                                    {
-                                                        SubLObject word = interp_cycl;
-                                                        dictionary_utilities.dictionary_push(word_interp_map, string, word);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        lexicon_macros.$nl_trie_assumed_validP$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return dictionary_utilities.dictionary_to_alist(word_interp_map);
-            }
-        }
     }
 
-    /**
-     * A testing function to return the words and the CycL for a given query string
-     */
-    @LispMethod(comment = "A testing function to return the words and the CycL for a given query string")
     public static SubLObject simple_terms_for_cyc_semantic_query(final SubLObject query_string) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject word_interp_map = dictionary.new_dictionary(symbol_function(EQUALP), TWENTY_INTEGER);
@@ -9795,23 +4963,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             lexicon_macros.$nl_trie_assumed_validP$.rebind(_prev_bind_0, thread);
         }
         return dictionary_utilities.dictionary_to_alist(word_interp_map);
-    }/**
-     * A testing function to return the words and the CycL for a given query string
-     */
-
-
-    public static final SubLObject get_compiled_regexp_alt(SubLObject regexp) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject cached_version = list_utilities.alist_lookup($cached_regexps$.getDynamicValue(thread), regexp, EQUAL, UNPROVIDED);
-                if (NIL != regular_expressions.regular_expression_p(cached_version)) {
-                    return cached_version;
-                }
-                $cached_regexps$.setDynamicValue(list_utilities.alist_enter($cached_regexps$.getDynamicValue(thread), regexp, regular_expressions.compile_regular_expression(regexp, UNPROVIDED), UNPROVIDED), thread);
-                return list_utilities.alist_lookup($cached_regexps$.getDynamicValue(thread), regexp, EQUAL, UNPROVIDED);
-            }
-        }
     }
 
     public static SubLObject get_compiled_regexp(final SubLObject regexp) {
@@ -9824,49 +4975,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return list_utilities.alist_lookup($cached_regexps$.getDynamicValue(thread), regexp, EQUAL, UNPROVIDED);
     }
 
-    /**
-     *
-     *
-     * @unknown this should really be done before the index is built, not this late in the process
-     */
-    @LispMethod(comment = "@unknown this should really be done before the index is built, not this late in the process")
-    public static final SubLObject clean_semantic_search_hits_alt(SubLObject hit_list) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject output = NIL;
-                SubLObject cdolist_list_var = hit_list;
-                SubLObject hit = NIL;
-                for (hit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , hit = cdolist_list_var.first()) {
-                    {
-                        SubLObject snippet = getf(hit, $SNIPPET, UNPROVIDED);
-                        SubLObject title = getf(hit, $TITLE, UNPROVIDED);
-                        SubLObject cdolist_list_var_78 = list($remove_pictures_regexp$.getDynamicValue(thread), $remove_hyphens_regexp$.getDynamicValue(thread), $remove_underscores_regexp$.getDynamicValue(thread), $remove_dots_regexp$.getDynamicValue(thread), $remove_equals_regexp$.getDynamicValue(thread), $remove_unicode_regexp$.getDynamicValue(thread));
-                        SubLObject regexp = NIL;
-                        for (regexp = cdolist_list_var_78.first(); NIL != cdolist_list_var_78; cdolist_list_var_78 = cdolist_list_var_78.rest() , regexp = cdolist_list_var_78.first()) {
-                            if (title.isString()) {
-                                title = regular_expression_utilities.regex_subst(com.cyc.cycjava.cycl.document_annotation_widgets.get_compiled_regexp(regexp), $str_alt112$, title, UNPROVIDED);
-                            }
-                            if (snippet.isString()) {
-                                snippet = regular_expression_utilities.regex_subst(com.cyc.cycjava.cycl.document_annotation_widgets.get_compiled_regexp(regexp), $str_alt112$, snippet, UNPROVIDED);
-                            }
-                        }
-                        hit = putf(hit, $TITLE, title);
-                        hit = putf(hit, $SNIPPET, snippet);
-                    }
-                    output = cons(hit, output);
-                }
-                return nreverse(output);
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @unknown this should really be done before the index is built, not this late in the process
-     */
-    @LispMethod(comment = "@unknown this should really be done before the index is built, not this late in the process")
     public static SubLObject clean_semantic_search_hits(final SubLObject hit_list) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject output = NIL;
@@ -9898,47 +5006,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return nreverse(output);
     }
 
-    /**
-     * Execute BODY with FORT successively bound to each fort in LEXICON's lexical entries
-     */
-    @LispMethod(comment = "Execute BODY with FORT successively bound to each fort in LEXICON\'s lexical entries")
-    public static final SubLObject do_lexified_forts_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            destructuring_bind_must_consp(current, datum, $list_alt295);
-            {
-                SubLObject temp = current.rest();
-                current = current.first();
-                {
-                    SubLObject fort = NIL;
-                    SubLObject lexicon = NIL;
-                    destructuring_bind_must_consp(current, datum, $list_alt295);
-                    fort = current.first();
-                    current = current.rest();
-                    destructuring_bind_must_consp(current, datum, $list_alt295);
-                    lexicon = current.first();
-                    current = current.rest();
-                    if (NIL == current) {
-                        current = temp;
-                        {
-                            SubLObject body = current;
-                            SubLObject seenP = $sym296$SEEN_;
-                            return list(CLET, list(fort, bq_cons(seenP, $list_alt297)), list(DO_LEXICON, list(STRING, LEX, lexicon), $list_alt301, listS(CSETQ, fort, $list_alt303), listS(PUNLESS, list(GETHASH_WITHOUT_VALUES, fort, seenP), append(body, list(listS(SETHASH, fort, seenP, $list_alt307))))));
-                        }
-                    } else {
-                        cdestructuring_bind_error(datum, $list_alt295);
-                    }
-                }
-            }
-        }
-        return NIL;
-    }
-
-    /**
-     * Execute BODY with FORT successively bound to each fort in LEXICON's lexical entries
-     */
-    @LispMethod(comment = "Execute BODY with FORT successively bound to each fort in LEXICON\'s lexical entries")
     public static SubLObject do_lexified_forts(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -9961,136 +5028,8 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         }
         cdestructuring_bind_error(datum, $list300);
         return NIL;
-    }/**
-     * Execute BODY with FORT successively bound to each fort in LEXICON's lexical entries
-     */
-
-
-    /**
-     * given a document (as a string), return a list showing what strings were interpreted as what cyc terms
-     */
-    @LispMethod(comment = "given a document (as a string), return a list showing what strings were interpreted as what cyc terms")
-    public static final SubLObject simple_document_tagging_results_alt(SubLObject doc_string) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_document = com.cyc.cycjava.cycl.document_annotation_widgets.new_tagged_document(doc_string, UNPROVIDED, UNPROVIDED);
-                SubLObject disambiguator = rule_disambiguation.new_rule_disambiguator(UNPROVIDED, UNPROVIDED);
-                SubLObject result = NIL;
-                SubLObject already_resourcing_p = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.getDynamicValue(thread);
-                {
-                    SubLObject _prev_bind_0 = sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.currentBinding(thread);
-                    try {
-                        sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.bind(sbhl_marking_vars.determine_resource_limit(already_resourcing_p, SIX_INTEGER), thread);
-                        sbhl_marking_vars.$resourced_sbhl_marking_spaces$.bind(sbhl_marking_vars.possibly_new_marking_resource(already_resourcing_p), thread);
-                        sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.bind(T, thread);
-                        {
-                            SubLObject state = memoization_state.possibly_new_memoization_state();
-                            SubLObject local_state = state;
-                            {
-                                SubLObject _prev_bind_0_79 = memoization_state.$memoization_state$.currentBinding(thread);
-                                try {
-                                    memoization_state.$memoization_state$.bind(local_state, thread);
-                                    {
-                                        SubLObject original_memoization_process = NIL;
-                                        if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                            original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                            {
-                                                SubLObject current_proc = current_process();
-                                                if (NIL == original_memoization_process) {
-                                                    memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                                } else {
-                                                    if (original_memoization_process != current_proc) {
-                                                        Errors.error($str_alt53$Invalid_attempt_to_reuse_memoizat);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        try {
-                                            rule_disambiguation.rdis_disambiguate(disambiguator, v_document, UNPROVIDED);
-                                        } finally {
-                                            {
-                                                SubLObject _prev_bind_0_80 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                try {
-                                                    $is_thread_performing_cleanupP$.bind(T, thread);
-                                                    {
-                                                        SubLObject vector_var = document.document_paragraphs(v_document);
-                                                        SubLObject backwardP_var = NIL;
-                                                        SubLObject length = length(vector_var);
-                                                        SubLObject v_iteration = NIL;
-                                                        for (v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = add(v_iteration, ONE_INTEGER)) {
-                                                            {
-                                                                SubLObject element_num = (NIL != backwardP_var) ? ((SubLObject) (subtract(length, v_iteration, ONE_INTEGER))) : v_iteration;
-                                                                SubLObject paragraph = aref(vector_var, element_num);
-                                                                SubLObject vector_var_81 = document.paragraph_sentences(paragraph);
-                                                                SubLObject backwardP_var_82 = NIL;
-                                                                SubLObject length_83 = length(vector_var_81);
-                                                                SubLObject v_iteration_84 = NIL;
-                                                                for (v_iteration_84 = ZERO_INTEGER; v_iteration_84.numL(length_83); v_iteration_84 = add(v_iteration_84, ONE_INTEGER)) {
-                                                                    {
-                                                                        SubLObject element_num_85 = (NIL != backwardP_var_82) ? ((SubLObject) (subtract(length_83, v_iteration_84, ONE_INTEGER))) : v_iteration_84;
-                                                                        SubLObject sentence = aref(vector_var_81, element_num_85);
-                                                                        SubLObject vector_var_86 = document.sentence_yield(sentence);
-                                                                        SubLObject backwardP_var_87 = NIL;
-                                                                        SubLObject length_88 = length(vector_var_86);
-                                                                        SubLObject v_iteration_89 = NIL;
-                                                                        for (v_iteration_89 = ZERO_INTEGER; v_iteration_89.numL(length_88); v_iteration_89 = add(v_iteration_89, ONE_INTEGER)) {
-                                                                            {
-                                                                                SubLObject element_num_90 = (NIL != backwardP_var_87) ? ((SubLObject) (subtract(length_88, v_iteration_89, ONE_INTEGER))) : v_iteration_89;
-                                                                                SubLObject word = aref(vector_var_86, element_num_90);
-                                                                                SubLObject word_string = document.word_string(word);
-                                                                                SubLObject word_result = list(word_string);
-                                                                                SubLObject interps = document.word_interps(word);
-                                                                                SubLObject list_var = NIL;
-                                                                                SubLObject interp = NIL;
-                                                                                SubLObject interp_num = NIL;
-                                                                                for (list_var = interps, interp = list_var.first(), interp_num = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , interp = list_var.first() , interp_num = add(ONE_INTEGER, interp_num)) {
-                                                                                    {
-                                                                                        SubLObject v_term = nl_api_datastructures.get_nl_interp_cycl(interp);
-                                                                                        word_result = cons(v_term, word_result);
-                                                                                    }
-                                                                                }
-                                                                                if (NIL != interps) {
-                                                                                    result = cons(nreverse(word_result), result);
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    if ((NIL != local_state) && (NIL == original_memoization_process)) {
-                                                        memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
-                                                    }
-                                                } finally {
-                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_80, thread);
-                                                }
-                                            }
-                                        }
-                                    }
-                                } finally {
-                                    memoization_state.$memoization_state$.rebind(_prev_bind_0_79, thread);
-                                }
-                            }
-                        }
-                    } finally {
-                        sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.rebind(_prev_bind_2, thread);
-                        sbhl_marking_vars.$resourced_sbhl_marking_spaces$.rebind(_prev_bind_1, thread);
-                        sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return result;
-            }
-        }
     }
 
-    /**
-     * given a document (as a string), return a list showing what strings were interpreted as what cyc terms
-     */
-    @LispMethod(comment = "given a document (as a string), return a list showing what strings were interpreted as what cyc terms")
     public static SubLObject simple_document_tagging_results(final SubLObject doc_string) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_document = new_tagged_document(doc_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -10185,57 +5124,8 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.rebind(_prev_bind_0, thread);
         }
         return result;
-    }/**
-     * given a document (as a string), return a list showing what strings were interpreted as what cyc terms
-     */
-
-
-    /**
-     * given a document (as a string), return a list showing what strings were interpreted as what cyc terms
-     * (where the Cyc terms are rendered as English strings rather than as plain Cyc terms
-     */
-    @LispMethod(comment = "given a document (as a string), return a list showing what strings were interpreted as what cyc terms\r\n(where the Cyc terms are rendered as English strings rather than as plain Cyc terms\ngiven a document (as a string), return a list showing what strings were interpreted as what cyc terms\n(where the Cyc terms are rendered as English strings rather than as plain Cyc terms")
-    public static final SubLObject show_document_tagging_results_alt(SubLObject doc_string, SubLObject strings_per_concept) {
-        if (strings_per_concept == UNPROVIDED) {
-            strings_per_concept = ONE_INTEGER;
-        }
-        {
-            SubLObject result = NIL;
-            SubLObject doc_tagging_result = com.cyc.cycjava.cycl.document_annotation_widgets.simple_document_tagging_results(doc_string);
-            SubLObject generation_params = nl_generation_api.new_pph_parameters(UNPROVIDED);
-            SubLObject params = generation_params;
-            pph_parameter_declarations.set_pph_generation_count_internal(params, strings_per_concept);
-            {
-                SubLObject cdolist_list_var = doc_tagging_result;
-                SubLObject word_result = NIL;
-                for (word_result = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , word_result = cdolist_list_var.first()) {
-                    {
-                        SubLObject concepts = word_result.rest();
-                        SubLObject new_word_result = list(word_result.first());
-                        SubLObject cdolist_list_var_91 = concepts;
-                        SubLObject concept = NIL;
-                        for (concept = cdolist_list_var_91.first(); NIL != cdolist_list_var_91; cdolist_list_var_91 = cdolist_list_var_91.rest() , concept = cdolist_list_var_91.first()) {
-                            {
-                                SubLObject cdolist_list_var_92 = nl_generation_api.cycl_term_to_nl_internal(concept, generation_params);
-                                SubLObject map = NIL;
-                                for (map = cdolist_list_var_92.first(); NIL != cdolist_list_var_92; cdolist_list_var_92 = cdolist_list_var_92.rest() , map = cdolist_list_var_92.first()) {
-                                    new_word_result = cons(nl_generation_api.pph_output_map_to_text_internal(map, NIL, ZERO_INTEGER, NIL, NIL), new_word_result);
-                                }
-                            }
-                        }
-                        result = cons(nreverse(new_word_result), result);
-                    }
-                }
-            }
-            return result;
-        }
     }
 
-    /**
-     * given a document (as a string), return a list showing what strings were interpreted as what cyc terms
-     * (where the Cyc terms are rendered as English strings rather than as plain Cyc terms
-     */
-    @LispMethod(comment = "given a document (as a string), return a list showing what strings were interpreted as what cyc terms\r\n(where the Cyc terms are rendered as English strings rather than as plain Cyc terms\ngiven a document (as a string), return a list showing what strings were interpreted as what cyc terms\n(where the Cyc terms are rendered as English strings rather than as plain Cyc terms")
     public static SubLObject show_document_tagging_results(final SubLObject doc_string, SubLObject strings_per_concept) {
         if (strings_per_concept == UNPROVIDED) {
             strings_per_concept = ONE_INTEGER;
@@ -10271,140 +5161,8 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             word_result = cdolist_list_var.first();
         } 
         return result;
-    }/**
-     * given a document (as a string), return a list showing what strings were interpreted as what cyc terms
-     * (where the Cyc terms are rendered as English strings rather than as plain Cyc terms
-     */
-
-
-    /**
-     * given a document (as a string), return a list showing what strings were interpreted as what cyc terms
-     */
-    @LispMethod(comment = "given a document (as a string), return a list showing what strings were interpreted as what cyc terms")
-    public static final SubLObject document_tagging_results_for_human_review_alt(SubLObject doc_string, SubLObject stream) {
-        if (stream == UNPROVIDED) {
-            stream = T;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_document = com.cyc.cycjava.cycl.document_annotation_widgets.new_tagged_document(doc_string, UNPROVIDED, UNPROVIDED);
-                SubLObject disambiguator = rule_disambiguation.new_rule_disambiguator(UNPROVIDED, UNPROVIDED);
-                SubLObject sentence_count = ZERO_INTEGER;
-                SubLObject already_resourcing_p = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.getDynamicValue(thread);
-                {
-                    SubLObject _prev_bind_0 = sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.currentBinding(thread);
-                    try {
-                        sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.bind(sbhl_marking_vars.determine_resource_limit(already_resourcing_p, SIX_INTEGER), thread);
-                        sbhl_marking_vars.$resourced_sbhl_marking_spaces$.bind(sbhl_marking_vars.possibly_new_marking_resource(already_resourcing_p), thread);
-                        sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.bind(T, thread);
-                        {
-                            SubLObject state = memoization_state.possibly_new_memoization_state();
-                            SubLObject local_state = state;
-                            {
-                                SubLObject _prev_bind_0_93 = memoization_state.$memoization_state$.currentBinding(thread);
-                                try {
-                                    memoization_state.$memoization_state$.bind(local_state, thread);
-                                    {
-                                        SubLObject original_memoization_process = NIL;
-                                        if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                            original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                            {
-                                                SubLObject current_proc = current_process();
-                                                if (NIL == original_memoization_process) {
-                                                    memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                                } else {
-                                                    if (original_memoization_process != current_proc) {
-                                                        Errors.error($str_alt53$Invalid_attempt_to_reuse_memoizat);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        try {
-                                            rule_disambiguation.rdis_disambiguate(disambiguator, v_document, UNPROVIDED);
-                                        } finally {
-                                            {
-                                                SubLObject _prev_bind_0_94 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                try {
-                                                    $is_thread_performing_cleanupP$.bind(T, thread);
-                                                    {
-                                                        SubLObject vector_var = document.document_paragraphs(v_document);
-                                                        SubLObject backwardP_var = NIL;
-                                                        SubLObject length = length(vector_var);
-                                                        SubLObject v_iteration = NIL;
-                                                        for (v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = add(v_iteration, ONE_INTEGER)) {
-                                                            {
-                                                                SubLObject element_num = (NIL != backwardP_var) ? ((SubLObject) (subtract(length, v_iteration, ONE_INTEGER))) : v_iteration;
-                                                                SubLObject paragraph = aref(vector_var, element_num);
-                                                                SubLObject vector_var_95 = document.paragraph_sentences(paragraph);
-                                                                SubLObject backwardP_var_96 = NIL;
-                                                                SubLObject length_97 = length(vector_var_95);
-                                                                SubLObject v_iteration_98 = NIL;
-                                                                for (v_iteration_98 = ZERO_INTEGER; v_iteration_98.numL(length_97); v_iteration_98 = add(v_iteration_98, ONE_INTEGER)) {
-                                                                    {
-                                                                        SubLObject element_num_99 = (NIL != backwardP_var_96) ? ((SubLObject) (subtract(length_97, v_iteration_98, ONE_INTEGER))) : v_iteration_98;
-                                                                        SubLObject sentence = aref(vector_var_95, element_num_99);
-                                                                        sentence_count = add(sentence_count, ONE_INTEGER);
-                                                                        format(stream, $str_alt308$_A___A__, sentence_count, document.sentence_string(sentence));
-                                                                        {
-                                                                            SubLObject vector_var_100 = document.sentence_yield(sentence);
-                                                                            SubLObject backwardP_var_101 = NIL;
-                                                                            SubLObject length_102 = length(vector_var_100);
-                                                                            SubLObject v_iteration_103 = NIL;
-                                                                            for (v_iteration_103 = ZERO_INTEGER; v_iteration_103.numL(length_102); v_iteration_103 = add(v_iteration_103, ONE_INTEGER)) {
-                                                                                {
-                                                                                    SubLObject element_num_104 = (NIL != backwardP_var_101) ? ((SubLObject) (subtract(length_102, v_iteration_103, ONE_INTEGER))) : v_iteration_103;
-                                                                                    SubLObject word = aref(vector_var_100, element_num_104);
-                                                                                    SubLObject word_string = document.word_string(word);
-                                                                                    SubLObject interps = document.word_cycls(word);
-                                                                                    format(stream, $str_alt309$____A__, word_string);
-                                                                                    {
-                                                                                        SubLObject cdolist_list_var = interps;
-                                                                                        SubLObject interp = NIL;
-                                                                                        for (interp = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , interp = cdolist_list_var.first()) {
-                                                                                            format(stream, $str_alt310$_A_, interp);
-                                                                                        }
-                                                                                    }
-                                                                                    format(stream, $str_alt311$__);
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    if ((NIL != local_state) && (NIL == original_memoization_process)) {
-                                                        memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
-                                                    }
-                                                } finally {
-                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_94, thread);
-                                                }
-                                            }
-                                        }
-                                    }
-                                } finally {
-                                    memoization_state.$memoization_state$.rebind(_prev_bind_0_93, thread);
-                                }
-                            }
-                        }
-                    } finally {
-                        sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.rebind(_prev_bind_2, thread);
-                        sbhl_marking_vars.$resourced_sbhl_marking_spaces$.rebind(_prev_bind_1, thread);
-                        sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return $DONE;
-        }
     }
 
-    /**
-     * given a document (as a string), return a list showing what strings were interpreted as what cyc terms
-     */
-    @LispMethod(comment = "given a document (as a string), return a list showing what strings were interpreted as what cyc terms")
     public static SubLObject document_tagging_results_for_human_review(final SubLObject doc_string, SubLObject stream) {
         if (stream == UNPROVIDED) {
             stream = T;
@@ -10498,16 +5256,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.rebind(_prev_bind_0, thread);
         }
         return $DONE;
-    }/**
-     * given a document (as a string), return a list showing what strings were interpreted as what cyc terms
-     */
-
-
-    public static final SubLObject remove_pictures_regexp_test_alt(SubLObject string) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return regular_expression_utilities.find_all_matches_for_regular_expression($remove_pictures_regexp$.getDynamicValue(thread), string, UNPROVIDED, UNPROVIDED);
-        }
     }
 
     public static SubLObject remove_pictures_regexp_test(final SubLObject string) {
@@ -10515,26 +5263,8 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return regular_expression_utilities.find_all_matches_for_regular_expression($remove_pictures_regexp$.getDynamicValue(thread), string, UNPROVIDED, UNPROVIDED);
     }
 
-    public static final SubLObject get_doc_string_from_node_ids_and_strings_values_alt(SubLObject arg) {
-        return arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.document_annotation_widgets.get_doc_string_from_node_ids_and_strings(arg)));
-    }
-
     public static SubLObject get_doc_string_from_node_ids_and_strings_values(final SubLObject arg) {
         return arg2(resetMultipleValues(), multiple_value_list(get_doc_string_from_node_ids_and_strings(arg)));
-    }
-
-    public static final SubLObject get_interpretation_rules_for_mt_alt(SubLObject mt) {
-        if (mt == UNPROVIDED) {
-            mt = $document_interpretation_default_elmt$.getDynamicValue();
-        }
-        {
-            SubLObject known_rules = dictionary.dictionary_lookup($document_interpretation_rules_by_mt$.getGlobalValue(), mt, UNPROVIDED);
-            if (NIL != known_rules) {
-                return known_rules;
-            }
-            known_rules = com.cyc.cycjava.cycl.document_annotation_widgets.initialize_interpretation_rules(mt);
-            return known_rules;
-        }
     }
 
     public static SubLObject get_interpretation_rules_for_mt(SubLObject mt) {
@@ -10549,75 +5279,12 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return known_rules;
     }
 
-    /**
-     * Tag the document as a string, tag it and disambiguate it.
-     */
-    @LispMethod(comment = "Tag the document as a string, tag it and disambiguate it.")
-    public static final SubLObject tag_document_for_interpretation_alt(SubLObject document_as_string, SubLObject lexicon) {
-        if (lexicon == UNPROVIDED) {
-            lexicon = com.cyc.cycjava.cycl.document_annotation_widgets.get_default_document_annotation_lexicon();
-        }
-        {
-            SubLObject v_document = com.cyc.cycjava.cycl.document_annotation_widgets.new_tagged_document(document_as_string, lexicon, UNPROVIDED);
-            return v_document;
-        }
-    }
-
-    /**
-     * Tag the document as a string, tag it and disambiguate it.
-     */
-    @LispMethod(comment = "Tag the document as a string, tag it and disambiguate it.")
     public static SubLObject tag_document_for_interpretation(final SubLObject document_as_string, SubLObject lexicon) {
         if (lexicon == UNPROVIDED) {
             lexicon = get_default_document_annotation_lexicon(UNPROVIDED);
         }
         final SubLObject v_document = new_tagged_document(document_as_string, lexicon, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         return v_document;
-    }/**
-     * Tag the document as a string, tag it and disambiguate it.
-     */
-
-
-    public static final SubLObject get_concept_bag_from_document_alt(SubLObject v_document) {
-        {
-            SubLObject concept_bag = bag.new_bag(UNPROVIDED, UNPROVIDED);
-            SubLObject vector_var = document.document_paragraphs(v_document);
-            SubLObject backwardP_var = NIL;
-            SubLObject length = length(vector_var);
-            SubLObject v_iteration = NIL;
-            for (v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = add(v_iteration, ONE_INTEGER)) {
-                {
-                    SubLObject element_num = (NIL != backwardP_var) ? ((SubLObject) (subtract(length, v_iteration, ONE_INTEGER))) : v_iteration;
-                    SubLObject paragraph = aref(vector_var, element_num);
-                    SubLObject vector_var_105 = document.paragraph_sentences(paragraph);
-                    SubLObject backwardP_var_106 = NIL;
-                    SubLObject length_107 = length(vector_var_105);
-                    SubLObject v_iteration_108 = NIL;
-                    for (v_iteration_108 = ZERO_INTEGER; v_iteration_108.numL(length_107); v_iteration_108 = add(v_iteration_108, ONE_INTEGER)) {
-                        {
-                            SubLObject element_num_109 = (NIL != backwardP_var_106) ? ((SubLObject) (subtract(length_107, v_iteration_108, ONE_INTEGER))) : v_iteration_108;
-                            SubLObject sentence = aref(vector_var_105, element_num_109);
-                            SubLObject vector_var_110 = document.sentence_yield(sentence);
-                            SubLObject backwardP_var_111 = NIL;
-                            SubLObject length_112 = length(vector_var_110);
-                            SubLObject v_iteration_113 = NIL;
-                            for (v_iteration_113 = ZERO_INTEGER; v_iteration_113.numL(length_112); v_iteration_113 = add(v_iteration_113, ONE_INTEGER)) {
-                                {
-                                    SubLObject element_num_114 = (NIL != backwardP_var_111) ? ((SubLObject) (subtract(length_112, v_iteration_113, ONE_INTEGER))) : v_iteration_113;
-                                    SubLObject word = aref(vector_var_110, element_num_114);
-                                    SubLObject cdolist_list_var = document.word_cycls(word);
-                                    SubLObject interpretation = NIL;
-                                    for (interpretation = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , interpretation = cdolist_list_var.first()) {
-                                        bag.bag_add(czer_main.canonicalize_term(interpretation, UNPROVIDED), concept_bag);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return concept_bag;
-        }
     }
 
     public static SubLObject get_concept_bag_from_document(final SubLObject v_document) {
@@ -10666,38 +5333,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return concept_bag;
     }
 
-    public static final SubLObject do_interpretation_rules_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            destructuring_bind_must_consp(current, datum, $list_alt325);
-            {
-                SubLObject temp = current.rest();
-                current = current.first();
-                {
-                    SubLObject rule = NIL;
-                    SubLObject rule_set = NIL;
-                    destructuring_bind_must_consp(current, datum, $list_alt325);
-                    rule = current.first();
-                    current = current.rest();
-                    destructuring_bind_must_consp(current, datum, $list_alt325);
-                    rule_set = current.first();
-                    current = current.rest();
-                    if (NIL == current) {
-                        current = temp;
-                        {
-                            SubLObject body = current;
-                            return listS(DO_SET, list(rule, rule_set), append(body, NIL));
-                        }
-                    } else {
-                        cdestructuring_bind_error(datum, $list_alt325);
-                    }
-                }
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject do_interpretation_rules(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -10721,79 +5356,10 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return NIL;
     }
 
-    public static final SubLObject interpret_document_via_suggestions_alt(SubLObject document_as_string) {
-        {
-            SubLObject v_document = com.cyc.cycjava.cycl.document_annotation_widgets.tag_document_for_interpretation(document_as_string, UNPROVIDED);
-            SubLObject raw_concept_bag = com.cyc.cycjava.cycl.document_annotation_widgets.get_concept_bag_from_document(v_document);
-            return com.cyc.cycjava.cycl.document_annotation_widgets.suggest_interpretations(raw_concept_bag, UNPROVIDED, UNPROVIDED);
-        }
-    }
-
     public static SubLObject interpret_document_via_suggestions(final SubLObject document_as_string) {
         final SubLObject v_document = tag_document_for_interpretation(document_as_string, UNPROVIDED);
         final SubLObject raw_concept_bag = get_concept_bag_from_document(v_document);
         return suggest_interpretations(raw_concept_bag, UNPROVIDED, UNPROVIDED);
-    }
-
-    public static final SubLObject suggest_interpretations_alt(SubLObject original_concept_bag, SubLObject rule_set, SubLObject elmt) {
-        if (rule_set == UNPROVIDED) {
-            rule_set = com.cyc.cycjava.cycl.document_annotation_widgets.get_interpretation_rules_for_mt(UNPROVIDED);
-        }
-        if (elmt == UNPROVIDED) {
-            elmt = $document_interpretation_default_elmt$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject concept_bag = bag.copy_bag(original_concept_bag);
-                SubLObject sentence_bag = bag.new_bag(symbol_function(EQUAL), UNPROVIDED);
-                SubLObject justifications = NIL;
-                SubLObject quiescentP = NIL;
-                while (NIL == quiescentP) {
-                    {
-                        SubLObject changes = ZERO_INTEGER;
-                        SubLObject set_contents_var = set.do_set_internal(rule_set);
-                        SubLObject basis_object = set_contents.do_set_contents_basis_object(set_contents_var);
-                        SubLObject state = NIL;
-                        for (state = set_contents.do_set_contents_initial_state(basis_object, set_contents_var); NIL == set_contents.do_set_contents_doneP(basis_object, state); state = set_contents.do_set_contents_update_state(state)) {
-                            {
-                                SubLObject rule = set_contents.do_set_contents_next(basis_object, state);
-                                if (NIL != set_contents.do_set_contents_element_validP(state, rule)) {
-                                    {
-                                        SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                                        SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                                        try {
-                                            mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_GENL_MT, thread);
-                                            mt_relevance_macros.$mt$.bind(elmt, thread);
-                                            thread.resetMultipleValues();
-                                            {
-                                                SubLObject applies_p = com.cyc.cycjava.cycl.document_annotation_widgets.interpretation_rule_appliesP(rule, concept_bag, sentence_bag);
-                                                SubLObject v_bindings = thread.secondMultipleValue();
-                                                thread.resetMultipleValues();
-                                                if (NIL != applies_p) {
-                                                    {
-                                                        SubLObject insights = com.cyc.cycjava.cycl.document_annotation_widgets.update_interpretation_with_rule(rule, concept_bag, sentence_bag, v_bindings);
-                                                        if (!insights.isZero()) {
-                                                            justifications = cons(rule, justifications);
-                                                            changes = add(changes, ONE_INTEGER);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } finally {
-                                            mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                                            mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        quiescentP = zerop(changes);
-                    }
-                } 
-                return values(concept_bag, sentence_bag, nreverse(justifications));
-            }
-        }
     }
 
     public static SubLObject suggest_interpretations(final SubLObject original_concept_bag, SubLObject rule_set, SubLObject elmt) {
@@ -10848,49 +5414,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return values(concept_bag, sentence_bag, nreverse(justifications));
     }
 
-    public static final SubLObject interpretation_rule_appliesP_alt(SubLObject rule, SubLObject concept_bag, SubLObject sentence_bag) {
-        {
-            SubLObject preconditions = com.cyc.cycjava.cycl.document_annotation_widgets.interpretation_rule_description_preconditions(rule);
-            SubLObject logical_operator = cycl_utilities.formula_arg0(preconditions);
-            SubLObject tests = cycl_utilities.formula_args(preconditions, UNPROVIDED);
-            SubLObject v_bindings = NIL;
-            SubLObject concepts = NIL;
-            SubLObject cdolist_list_var = tests;
-            SubLObject test = NIL;
-            for (test = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , test = cdolist_list_var.first()) {
-                {
-                    SubLObject test_result = NIL;
-                    if (NIL != forts.fort_p(test)) {
-                        if (NIL == concepts) {
-                            concepts = bag.bag_unique_element_list(concept_bag);
-                        }
-                        {
-                            SubLObject candidates = genls.all_specs_among(test, concepts, UNPROVIDED, UNPROVIDED);
-                            test_result = list_utilities.sublisp_boolean(candidates);
-                            if (NIL != test_result) {
-                                v_bindings = cons(cons(test, candidates), v_bindings);
-                            }
-                        }
-                    } else {
-                        if (NIL != el_formula_p(test)) {
-                            Errors.error($str_alt328$Dont_know_yet_how_to_unify_a_sent);
-                        } else {
-                            Errors.error($str_alt329$Dont_know_how_to_deal_with_test__, test);
-                        }
-                    }
-                    if ((NIL != test_result) && (logical_operator == $$or)) {
-                        return values(T, v_bindings);
-                    } else {
-                        if ((NIL == test_result) && (logical_operator == $$and)) {
-                            return values(NIL, NIL);
-                        }
-                    }
-                }
-            }
-            return values(logical_operator == $$or ? ((SubLObject) (NIL)) : logical_operator == $$and ? ((SubLObject) (T)) : NIL, v_bindings);
-        }
-    }
-
     public static SubLObject interpretation_rule_appliesP(final SubLObject rule, final SubLObject concept_bag, final SubLObject sentence_bag) {
         final SubLObject preconditions = interpretation_rule_description_preconditions(rule);
         final SubLObject logical_operator = cycl_utilities.formula_arg0(preconditions);
@@ -10928,56 +5451,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             test = cdolist_list_var.first();
         } 
         return values(logical_operator.eql($$or) ? NIL : logical_operator.eql($$and) ? T : NIL, v_bindings);
-    }
-
-    public static final SubLObject update_interpretation_with_rule_alt(SubLObject rule, SubLObject concept_bag, SubLObject sentence_bag, SubLObject v_bindings) {
-        {
-            SubLObject suggestions = com.cyc.cycjava.cycl.document_annotation_widgets.interpretation_rule_description_suggestions(rule);
-            SubLObject changes = ZERO_INTEGER;
-            SubLObject cdolist_list_var = suggestions;
-            SubLObject suggestion = NIL;
-            for (suggestion = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , suggestion = cdolist_list_var.first()) {
-                if ($ADD_CONCEPT == cycl_utilities.formula_arg0(suggestion)) {
-                    {
-                        SubLObject concept = cycl_utilities.formula_arg1(suggestion, UNPROVIDED);
-                        if (NIL == bag.bag_memberP(concept, concept_bag)) {
-                            changes = add(changes, ONE_INTEGER);
-                            bag.bag_add(concept, concept_bag);
-                        }
-                    }
-                } else {
-                    if ($ADD_SENTENCE == cycl_utilities.formula_arg0(suggestion)) {
-                        {
-                            SubLObject sentence_template = cycl_utilities.formula_arg1(suggestion, UNPROVIDED);
-                            SubLObject cdolist_list_var_115 = v_bindings;
-                            SubLObject binding = NIL;
-                            for (binding = cdolist_list_var_115.first(); NIL != cdolist_list_var_115; cdolist_list_var_115 = cdolist_list_var_115.rest() , binding = cdolist_list_var_115.first()) {
-                                {
-                                    SubLObject concept = binding.first();
-                                    SubLObject mentioned_concepts = binding.rest();
-                                    if (NIL != list_utilities.tree_find(concept, sentence_template, UNPROVIDED, UNPROVIDED)) {
-                                        {
-                                            SubLObject cdolist_list_var_116 = mentioned_concepts;
-                                            SubLObject mentioned_concept = NIL;
-                                            for (mentioned_concept = cdolist_list_var_116.first(); NIL != cdolist_list_var_116; cdolist_list_var_116 = cdolist_list_var_116.rest() , mentioned_concept = cdolist_list_var_116.first()) {
-                                                {
-                                                    SubLObject sentence = list_utilities.tree_substitute(copy_tree(sentence_template), concept, mentioned_concept);
-                                                    if (NIL == bag.bag_memberP(sentence, sentence_bag)) {
-                                                        changes = add(changes, ONE_INTEGER);
-                                                        bag.bag_add(sentence, sentence_bag);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return changes;
-        }
     }
 
     public static SubLObject update_interpretation_with_rule(final SubLObject rule, final SubLObject concept_bag, final SubLObject sentence_bag, final SubLObject v_bindings) {
@@ -11025,82 +5498,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             suggestion = cdolist_list_var.first();
         } 
         return changes;
-    }
-
-    public static final SubLObject initialize_interpretation_rules_alt(SubLObject elmt) {
-        if (elmt == UNPROVIDED) {
-            elmt = $document_interpretation_default_elmt$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject interp_rules = set.new_set(EQUAL, UNPROVIDED);
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_GENL_MT, thread);
-                        mt_relevance_macros.$mt$.bind(elmt, thread);
-                        {
-                            SubLObject pred_var = $$interpretationSuggestion;
-                            if (NIL != kb_mapping_macros.do_predicate_extent_index_key_validator(pred_var)) {
-                                {
-                                    SubLObject iterator_var = kb_mapping_macros.new_predicate_extent_final_index_spec_iterator(pred_var);
-                                    SubLObject done_var = NIL;
-                                    SubLObject token_var = NIL;
-                                    while (NIL == done_var) {
-                                        {
-                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                            if (NIL != valid) {
-                                                {
-                                                    SubLObject final_index_iterator = NIL;
-                                                    try {
-                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
-                                                        {
-                                                            SubLObject done_var_117 = NIL;
-                                                            SubLObject token_var_118 = NIL;
-                                                            while (NIL == done_var_117) {
-                                                                {
-                                                                    SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_118);
-                                                                    SubLObject valid_119 = makeBoolean(token_var_118 != assertion);
-                                                                    if (NIL != valid_119) {
-                                                                        com.cyc.cycjava.cycl.document_annotation_widgets.add_interpretation_rule(assertion, interp_rules);
-                                                                    }
-                                                                    done_var_117 = makeBoolean(NIL == valid_119);
-                                                                }
-                                                            } 
-                                                        }
-                                                    } finally {
-                                                        {
-                                                            SubLObject _prev_bind_0_120 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                            try {
-                                                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                if (NIL != final_index_iterator) {
-                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                }
-                                                            } finally {
-                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_120, thread);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            done_var = makeBoolean(NIL == valid);
-                                        }
-                                    } 
-                                }
-                            }
-                        }
-                    } finally {
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                dictionary.dictionary_enter($document_interpretation_rules_by_mt$.getGlobalValue(), elmt, interp_rules);
-                return elmt;
-            }
-        }
     }
 
     public static SubLObject initialize_interpretation_rules(SubLObject elmt) {
@@ -11192,30 +5589,11 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return elmt;
     }
 
-    public static final SubLObject add_interpretation_rule_alt(SubLObject assertion, SubLObject rule_set) {
-        {
-            SubLObject antecedent = assertions_high.gaf_arg1(assertion);
-            SubLObject consequent = assertions_high.gaf_arg2(assertion);
-            com.cyc.cycjava.cycl.document_annotation_widgets.add_interpretation_rule_clauses(rule_set, antecedent, consequent);
-        }
-        return assertion;
-    }
-
     public static SubLObject add_interpretation_rule(final SubLObject assertion, final SubLObject rule_set) {
         final SubLObject antecedent = assertions_high.gaf_arg1(assertion);
         final SubLObject consequent = assertions_high.gaf_arg2(assertion);
         add_interpretation_rule_clauses(rule_set, antecedent, consequent);
         return assertion;
-    }
-
-    public static final SubLObject add_interpretation_rule_clauses_alt(SubLObject rule_set, SubLObject antecedent, SubLObject consequent) {
-        {
-            SubLObject preconditions = com.cyc.cycjava.cycl.document_annotation_widgets.extract_interpretation_rule_preconditions(antecedent);
-            SubLObject suggestions = com.cyc.cycjava.cycl.document_annotation_widgets.extract_interpretation_rule_suggestions(consequent);
-            SubLObject rule = com.cyc.cycjava.cycl.document_annotation_widgets.make_interpretation_rule_description(antecedent, consequent, preconditions, suggestions);
-            com.cyc.cycjava.cycl.document_annotation_widgets.store_interpretation_rule(rule_set, rule);
-        }
-        return com.cyc.cycjava.cycl.document_annotation_widgets.interpretation_rules_count(rule_set);
     }
 
     public static SubLObject add_interpretation_rule_clauses(final SubLObject rule_set, final SubLObject antecedent, final SubLObject consequent) {
@@ -11226,106 +5604,36 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return interpretation_rules_count(rule_set);
     }
 
-    public static final SubLObject interpretation_rules_count_alt(SubLObject rule_set) {
-        return set.set_size(rule_set);
-    }
-
     public static SubLObject interpretation_rules_count(final SubLObject rule_set) {
         return set.set_size(rule_set);
-    }
-
-    public static final SubLObject clear_interpretation_rules_alt() {
-        return set.clear_set(com.cyc.cycjava.cycl.document_annotation_widgets.get_interpretation_rules_for_mt(UNPROVIDED));
     }
 
     public static SubLObject clear_interpretation_rules() {
         return set.clear_set(get_interpretation_rules_for_mt(UNPROVIDED));
     }
 
-    public static final SubLObject store_interpretation_rule_alt(SubLObject rule_set, SubLObject rule) {
-        return set.set_add(rule, rule_set);
-    }
-
     public static SubLObject store_interpretation_rule(final SubLObject rule_set, final SubLObject rule) {
         return set.set_add(rule, rule_set);
-    }
-
-    public static final SubLObject make_interpretation_rule_description_alt(SubLObject antecedent, SubLObject consequent, SubLObject preconditions, SubLObject suggestions) {
-        return list($ANTECEDENT, antecedent, $CONSEQUENT, consequent, $PRECONDITIONS, preconditions, $SUGGESTIONS, suggestions);
     }
 
     public static SubLObject make_interpretation_rule_description(final SubLObject antecedent, final SubLObject consequent, final SubLObject preconditions, final SubLObject suggestions) {
         return list($ANTECEDENT, antecedent, $CONSEQUENT, consequent, $PRECONDITIONS, preconditions, $SUGGESTIONS, suggestions);
     }
 
-    public static final SubLObject interpretation_rule_description_antecedent_alt(SubLObject description) {
-        return getf(description, $ANTECEDENT, UNPROVIDED);
-    }
-
     public static SubLObject interpretation_rule_description_antecedent(final SubLObject description) {
         return getf(description, $ANTECEDENT, UNPROVIDED);
-    }
-
-    public static final SubLObject interpretation_rule_description_consequent_alt(SubLObject description) {
-        return getf(description, $CONSEQUENT, UNPROVIDED);
     }
 
     public static SubLObject interpretation_rule_description_consequent(final SubLObject description) {
         return getf(description, $CONSEQUENT, UNPROVIDED);
     }
 
-    public static final SubLObject interpretation_rule_description_preconditions_alt(SubLObject description) {
-        return getf(description, $PRECONDITIONS, UNPROVIDED);
-    }
-
     public static SubLObject interpretation_rule_description_preconditions(final SubLObject description) {
         return getf(description, $PRECONDITIONS, UNPROVIDED);
     }
 
-    public static final SubLObject interpretation_rule_description_suggestions_alt(SubLObject description) {
-        return getf(description, $SUGGESTIONS, UNPROVIDED);
-    }
-
     public static SubLObject interpretation_rule_description_suggestions(final SubLObject description) {
         return getf(description, $SUGGESTIONS, UNPROVIDED);
-    }
-
-    public static final SubLObject extract_interpretation_rule_preconditions_alt(SubLObject antecedent) {
-        if ($$and == cycl_utilities.formula_arg0(antecedent)) {
-            {
-                SubLObject precondition = NIL;
-                SubLObject operator = cycl_utilities.formula_arg0(antecedent);
-                SubLObject v_clauses = cycl_utilities.formula_args(antecedent, UNPROVIDED);
-                SubLObject cdolist_list_var = v_clauses;
-                SubLObject clause = NIL;
-                for (clause = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , clause = cdolist_list_var.first()) {
-                    precondition = cons(com.cyc.cycjava.cycl.document_annotation_widgets.extract_interpretation_rule_precondition(clause), precondition);
-                }
-                precondition = cons(operator, precondition);
-                return precondition;
-            }
-        } else {
-            if ($$or == cycl_utilities.formula_arg0(antecedent)) {
-                {
-                    SubLObject precondition = NIL;
-                    SubLObject operator = cycl_utilities.formula_arg0(antecedent);
-                    SubLObject v_clauses = cycl_utilities.formula_args(antecedent, UNPROVIDED);
-                    SubLObject cdolist_list_var = v_clauses;
-                    SubLObject clause = NIL;
-                    for (clause = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , clause = cdolist_list_var.first()) {
-                        precondition = cons(com.cyc.cycjava.cycl.document_annotation_widgets.extract_interpretation_rule_precondition(clause), precondition);
-                    }
-                    precondition = cons(operator, precondition);
-                    return precondition;
-                }
-            } else {
-                {
-                    SubLObject clause = antecedent;
-                    SubLObject precondition = com.cyc.cycjava.cycl.document_annotation_widgets.extract_interpretation_rule_precondition(clause);
-                    return list($$and, precondition);
-                }
-            }
-        }
     }
 
     public static SubLObject extract_interpretation_rule_preconditions(final SubLObject antecedent) {
@@ -11361,49 +5669,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         }
         final SubLObject precondition2 = extract_interpretation_rule_precondition(antecedent);
         return list($$and, precondition2);
-    }
-
-    public static final SubLObject extract_interpretation_rule_suggestions_alt(SubLObject consequent) {
-        if ($$and == cycl_utilities.formula_arg0(consequent)) {
-            {
-                SubLObject suggestions = NIL;
-                SubLObject v_clauses = cycl_utilities.formula_args(consequent, UNPROVIDED);
-                SubLObject cdolist_list_var = v_clauses;
-                SubLObject clause = NIL;
-                for (clause = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , clause = cdolist_list_var.first()) {
-                    suggestions = cons(com.cyc.cycjava.cycl.document_annotation_widgets.extract_interpretation_rule_suggestion(clause), suggestions);
-                }
-                suggestions = nreverse(suggestions);
-                return suggestions;
-            }
-        } else {
-            if ($$or == cycl_utilities.formula_arg0(consequent)) {
-                {
-                    SubLObject suggestions = NIL;
-                    SubLObject v_clauses = cycl_utilities.formula_args(consequent, UNPROVIDED);
-                    SubLObject cdolist_list_var = v_clauses;
-                    SubLObject clause = NIL;
-                    for (clause = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , clause = cdolist_list_var.first()) {
-                        suggestions = cons(com.cyc.cycjava.cycl.document_annotation_widgets.extract_interpretation_rule_suggestion(clause), suggestions);
-                    }
-                    suggestions = nreverse(suggestions);
-                    return suggestions;
-                }
-            } else {
-                if ($$containsProposition_CW == cycl_utilities.formula_arg0(consequent)) {
-                    {
-                        SubLObject sub_consequent = cycl_utilities.formula_arg2(consequent, UNPROVIDED);
-                        return com.cyc.cycjava.cycl.document_annotation_widgets.extract_interpretation_rule_suggestions(sub_consequent);
-                    }
-                } else {
-                    {
-                        SubLObject clause = consequent;
-                        SubLObject suggestion = com.cyc.cycjava.cycl.document_annotation_widgets.extract_interpretation_rule_suggestion(clause);
-                        return list(suggestion);
-                    }
-                }
-            }
-        }
     }
 
     public static SubLObject extract_interpretation_rule_suggestions(final SubLObject consequent) {
@@ -11443,29 +5708,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return list(suggestion);
     }
 
-    public static final SubLObject extract_interpretation_rule_precondition_alt(SubLObject clause) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject operator = cycl_utilities.formula_arg0(clause);
-                if ($$thingDescribed == operator) {
-                    {
-                        SubLObject the_expression = cycl_utilities.formula_arg2(clause, UNPROVIDED);
-                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                            if (cycl_utilities.formula_arg0(the_expression) != $$The) {
-                                Errors.error($str_alt342$Invalid_THE_expression__A___, the_expression);
-                            }
-                        }
-                        return cycl_utilities.formula_arg1(the_expression, UNPROVIDED);
-                    }
-                } else {
-                    Errors.error($str_alt343$Dont_know_how_to_handle_precondit, operator, clause);
-                }
-            }
-            return clause;
-        }
-    }
-
     public static SubLObject extract_interpretation_rule_precondition(final SubLObject clause) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject operator = cycl_utilities.formula_arg0(clause);
@@ -11478,31 +5720,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         }
         Errors.error($str347$Dont_know_how_to_handle_precondit, operator, clause);
         return clause;
-    }
-
-    public static final SubLObject extract_interpretation_rule_suggestion_alt(SubLObject clause) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject operator = cycl_utilities.formula_arg0(clause);
-                if ($$thingDescribed == operator) {
-                    {
-                        SubLObject the_expression = cycl_utilities.formula_arg2(clause, UNPROVIDED);
-                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                            if (cycl_utilities.formula_arg0(the_expression) != $$The) {
-                                Errors.error($str_alt342$Invalid_THE_expression__A___, the_expression);
-                            }
-                        }
-                        {
-                            SubLObject concept = cycl_utilities.formula_arg1(the_expression, UNPROVIDED);
-                            return list($ADD_CONCEPT, concept);
-                        }
-                    }
-                } else {
-                    return list($ADD_SENTENCE, clause);
-                }
-            }
-        }
     }
 
     public static SubLObject extract_interpretation_rule_suggestion(final SubLObject clause) {
@@ -11519,21 +5736,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return list($ADD_SENTENCE, clause);
     }
 
-    public static final SubLObject cb_document_interpretation_show_concept_alt(SubLObject concept, SubLObject count) {
-        if (count == UNPROVIDED) {
-            count = ONE_INTEGER;
-        }
-        cb_form(concept, UNPROVIDED, UNPROVIDED);
-        html_indent(UNPROVIDED);
-        if (ONE_INTEGER.numG(count)) {
-            html_princ($str_alt201$_);
-            html_princ(count);
-            html_princ($str_alt203$_);
-            html_indent(UNPROVIDED);
-        }
-        return concept;
-    }
-
     public static SubLObject cb_document_interpretation_show_concept(final SubLObject concept, SubLObject count) {
         if (count == UNPROVIDED) {
             count = ONE_INTEGER;
@@ -11547,28 +5749,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             html_indent(UNPROVIDED);
         }
         return concept;
-    }
-
-    public static final SubLObject cb_document_interpretation_show_sentence_alt(SubLObject sentence, SubLObject count) {
-        if (count == UNPROVIDED) {
-            count = ONE_INTEGER;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            html_markup(html_macros.$html_list_item_head$.getGlobalValue());
-            html_char(CHAR_greater, UNPROVIDED);
-            {
-                SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
-                try {
-                    html_macros.$html_safe_print$.bind(T, thread);
-                    cb_form(sentence, UNPROVIDED, UNPROVIDED);
-                } finally {
-                    html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
-                }
-            }
-            html_markup(html_macros.$html_list_item_tail$.getGlobalValue());
-            return sentence;
-        }
     }
 
     public static SubLObject cb_document_interpretation_show_sentence(final SubLObject sentence, SubLObject count) {
@@ -11587,35 +5767,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         }
         html_markup(html_macros.$html_list_item_tail$.getGlobalValue());
         return sentence;
-    }
-
-    public static final SubLObject cb_document_interpretation_show_rule_alt(SubLObject rule) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            html_markup(html_macros.$html_list_item_head$.getGlobalValue());
-            html_char(CHAR_greater, UNPROVIDED);
-            {
-                SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
-                try {
-                    html_macros.$html_safe_print$.bind(T, thread);
-                    {
-                        SubLObject antecedent = com.cyc.cycjava.cycl.document_annotation_widgets.interpretation_rule_description_antecedent(rule);
-                        SubLObject consequent = com.cyc.cycjava.cycl.document_annotation_widgets.interpretation_rule_description_consequent(rule);
-                        html_princ($str_alt344$If_it_is_the_case_that__);
-                        html_newline(UNPROVIDED);
-                        cb_form(antecedent, ZERO_INTEGER, T);
-                        html_newline(UNPROVIDED);
-                        html_princ($str_alt345$then_one_might_conclude_that__);
-                        html_newline(UNPROVIDED);
-                        cb_form(consequent, ZERO_INTEGER, T);
-                    }
-                } finally {
-                    html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
-                }
-            }
-            html_markup(html_macros.$html_list_item_tail$.getGlobalValue());
-            return rule;
-        }
     }
 
     public static SubLObject cb_document_interpretation_show_rule(final SubLObject rule) {
@@ -11639,331 +5790,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         }
         html_markup(html_macros.$html_list_item_tail$.getGlobalValue());
         return rule;
-    }
-
-    public static final SubLObject cb_document_interpretation_suggestions_alt(SubLObject args) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject text = html_extract_input($$$text, args);
-                SubLObject mt_string = (NIL != html_extract_input($$$mt, args)) ? ((SubLObject) (html_extract_input($$$mt, args))) : string_utilities.string_remove_constant_reader_prefixes(format_cycl_expression.format_cycl_expression_to_string($document_interpretation_default_elmt$.getDynamicValue(thread), UNPROVIDED));
-                SubLObject mt = cb_guess_term(mt_string, UNPROVIDED);
-                SubLObject title_var = $str_alt347$Document_Interpretation_Suggestio;
-                {
-                    SubLObject _prev_bind_0 = html_macros.$html_id_space_id_generator$.currentBinding(thread);
-                    try {
-                        html_macros.$html_id_space_id_generator$.bind(NIL != integer_sequence_generator.integer_sequence_generator_p(html_macros.$html_id_space_id_generator$.getDynamicValue(thread)) ? ((SubLObject) (html_macros.$html_id_space_id_generator$.getDynamicValue(thread))) : integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED), thread);
-                        html_markup(html_macros.$html_html_head$.getGlobalValue());
-                        html_markup(html_macros.$html_head_head$.getGlobalValue());
-                        html_macros.html_head_content_type();
-                        cb_head_shortcut_icon();
-                        html_meta_robot_instructions($cb_permit_robots_to_indexP$.getDynamicValue(thread), $cb_permit_robots_to_followP$.getDynamicValue(thread));
-                        if (NIL != title_var) {
-                            html_source_readability_terpri(UNPROVIDED);
-                            html_markup(html_macros.$html_title_head$.getGlobalValue());
-                            html_princ(title_var);
-                            html_markup(html_macros.$html_title_tail$.getGlobalValue());
-                        }
-                        html_markup(html_macros.$html_head_tail$.getGlobalValue());
-                        html_source_readability_terpri(UNPROVIDED);
-                        {
-                            SubLObject _prev_bind_0_121 = html_macros.$html_inside_bodyP$.currentBinding(thread);
-                            try {
-                                html_macros.$html_inside_bodyP$.bind(T, thread);
-                                html_markup(html_macros.$html_body_head$.getGlobalValue());
-                                if (NIL != html_macros.$html_default_bgcolor$.getDynamicValue(thread)) {
-                                    html_markup(html_macros.$html_body_bgcolor$.getGlobalValue());
-                                    html_char(CHAR_quotation, UNPROVIDED);
-                                    html_markup(html_color(html_macros.$html_default_bgcolor$.getDynamicValue(thread)));
-                                    html_char(CHAR_quotation, UNPROVIDED);
-                                }
-                                if (true) {
-                                    html_markup(html_macros.$html_body_class$.getGlobalValue());
-                                    html_char(CHAR_quotation, UNPROVIDED);
-                                    html_markup($str_alt350$yui_skin_sam);
-                                    html_char(CHAR_quotation, UNPROVIDED);
-                                }
-                                html_char(CHAR_greater, UNPROVIDED);
-                                {
-                                    SubLObject _prev_bind_0_122 = html_macros.$html_safe_print$.currentBinding(thread);
-                                    try {
-                                        html_macros.$html_safe_print$.bind(T, thread);
-                                        if (NIL != title_var) {
-                                            html_markup(html_macros.$html_heading_head$.getGlobalValue());
-                                            html_markup(TWO_INTEGER);
-                                            html_char(CHAR_greater, UNPROVIDED);
-                                            html_princ(title_var);
-                                            html_markup(html_macros.$html_heading_tail$.getGlobalValue());
-                                            html_markup(TWO_INTEGER);
-                                            html_char(CHAR_greater, UNPROVIDED);
-                                        }
-                                        html_markup(html_macros.$html_paragraph_head$.getGlobalValue());
-                                        html_princ($str_alt351$Enter_the_text_to_interpret_);
-                                        html_markup(html_macros.$html_paragraph_tail$.getGlobalValue());
-                                        {
-                                            SubLObject frame_name_var = cb_frame_name(NIL);
-                                            html_markup(html_macros.$html_form_head$.getGlobalValue());
-                                            html_markup(html_macros.$html_form_action$.getGlobalValue());
-                                            html_char(CHAR_quotation, UNPROVIDED);
-                                            html_markup(system_parameters.$cyc_cgi_program$.getDynamicValue(thread));
-                                            html_char(CHAR_quotation, UNPROVIDED);
-                                            if (NIL != html_macros.$html_form_method_post$.getGlobalValue()) {
-                                                html_markup(html_macros.$html_form_method$.getGlobalValue());
-                                                html_char(CHAR_quotation, UNPROVIDED);
-                                                html_markup(html_macros.$html_form_method_post$.getGlobalValue());
-                                                html_char(CHAR_quotation, UNPROVIDED);
-                                            }
-                                            if (NIL != frame_name_var) {
-                                                html_markup(html_macros.$html_form_target$.getGlobalValue());
-                                                html_char(CHAR_quotation, UNPROVIDED);
-                                                html_markup(frame_name_var);
-                                                html_char(CHAR_quotation, UNPROVIDED);
-                                            }
-                                            html_char(CHAR_greater, UNPROVIDED);
-                                            {
-                                                SubLObject _prev_bind_0_123 = html_macros.$html_safe_print$.currentBinding(thread);
-                                                SubLObject _prev_bind_1 = html_macros.$within_html_form$.currentBinding(thread);
-                                                SubLObject _prev_bind_2 = html_macros.$html_form_field_uniquifier_code$.currentBinding(thread);
-                                                try {
-                                                    html_macros.$html_safe_print$.bind(T, thread);
-                                                    html_macros.$within_html_form$.bind(T, thread);
-                                                    html_macros.$html_form_field_uniquifier_code$.bind(html_macros.next_html_form_field_uniquifier_code(), thread);
-                                                    html_hidden_input($str_alt352$cb_document_interpretation_sugges, T, UNPROVIDED);
-                                                    html_submit_input($$$Submit, UNPROVIDED, UNPROVIDED);
-                                                    html_indent(TWO_INTEGER);
-                                                    html_reset_input($$$Clear);
-                                                    html_newline(TWO_INTEGER);
-                                                    {
-                                                        SubLObject current_text = (text.isString()) ? ((SubLObject) (text)) : $str_alt112$;
-                                                        html_markup(html_macros.$html_textarea_head$.getGlobalValue());
-                                                        html_markup(html_macros.$html_textarea_name$.getGlobalValue());
-                                                        html_char(CHAR_quotation, UNPROVIDED);
-                                                        html_markup($$$text);
-                                                        html_char(CHAR_quotation, UNPROVIDED);
-                                                        if (true) {
-                                                            html_markup(html_macros.$html_textarea_cols$.getGlobalValue());
-                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                            html_markup($int$80);
-                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                        }
-                                                        if (true) {
-                                                            html_markup(html_macros.$html_textarea_rows$.getGlobalValue());
-                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                            html_markup(FIFTEEN_INTEGER);
-                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                        }
-                                                        html_char(CHAR_greater, UNPROVIDED);
-                                                        {
-                                                            SubLObject _prev_bind_0_124 = html_macros.$html_safe_print$.currentBinding(thread);
-                                                            try {
-                                                                html_macros.$html_safe_print$.bind(T, thread);
-                                                                html_princ(current_text);
-                                                            } finally {
-                                                                html_macros.$html_safe_print$.rebind(_prev_bind_0_124, thread);
-                                                            }
-                                                        }
-                                                        html_markup(html_macros.$html_textarea_tail$.getGlobalValue());
-                                                    }
-                                                    html_newline(UNPROVIDED);
-                                                    html_princ($str_alt356$Rule_Mt__);
-                                                    html_text_input($$$mt, mt_string, $int$40);
-                                                    html_complete.html_complete_button(mt_string, $$$Complete, $$Microtheory, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                                    html_macros.embed_form_field_code(html_macros.$html_form_field_uniquifier_code$.getDynamicValue(thread));
-                                                } finally {
-                                                    html_macros.$html_form_field_uniquifier_code$.rebind(_prev_bind_2, thread);
-                                                    html_macros.$within_html_form$.rebind(_prev_bind_1, thread);
-                                                    html_macros.$html_safe_print$.rebind(_prev_bind_0_123, thread);
-                                                }
-                                            }
-                                            html_markup(html_macros.$html_form_tail$.getGlobalValue());
-                                        }
-                                        if (NIL != text) {
-                                            {
-                                                SubLObject v_document = com.cyc.cycjava.cycl.document_annotation_widgets.tag_document_for_interpretation(text, UNPROVIDED);
-                                                SubLObject raw_concept_bag = com.cyc.cycjava.cycl.document_annotation_widgets.get_concept_bag_from_document(v_document);
-                                                html_markup(html_macros.$html_heading_head$.getGlobalValue());
-                                                html_markup(THREE_INTEGER);
-                                                html_char(CHAR_greater, UNPROVIDED);
-                                                html_princ($$$Identified_Concepts);
-                                                html_markup(html_macros.$html_heading_tail$.getGlobalValue());
-                                                html_markup(THREE_INTEGER);
-                                                html_char(CHAR_greater, UNPROVIDED);
-                                                html_markup(html_macros.$html_paragraph_head$.getGlobalValue());
-                                                {
-                                                    SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(bag.do_bag_repeat_internal(raw_concept_bag));
-                                                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                                                        thread.resetMultipleValues();
-                                                        {
-                                                            SubLObject concept = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                            SubLObject count = thread.secondMultipleValue();
-                                                            thread.resetMultipleValues();
-                                                            com.cyc.cycjava.cycl.document_annotation_widgets.cb_document_interpretation_show_concept(concept, count);
-                                                            iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                        }
-                                                    } 
-                                                    dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                    {
-                                                        SubLObject count = ONE_INTEGER;
-                                                        SubLObject set_contents_var = bag.do_bag_unique_internal(raw_concept_bag);
-                                                        SubLObject basis_object = set_contents.do_set_contents_basis_object(set_contents_var);
-                                                        SubLObject state = NIL;
-                                                        for (state = set_contents.do_set_contents_initial_state(basis_object, set_contents_var); NIL == set_contents.do_set_contents_doneP(basis_object, state); state = set_contents.do_set_contents_update_state(state)) {
-                                                            {
-                                                                SubLObject concept = set_contents.do_set_contents_next(basis_object, state);
-                                                                if (NIL != set_contents.do_set_contents_element_validP(state, concept)) {
-                                                                    com.cyc.cycjava.cycl.document_annotation_widgets.cb_document_interpretation_show_concept(concept, count);
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                html_markup(html_macros.$html_paragraph_tail$.getGlobalValue());
-                                                thread.resetMultipleValues();
-                                                {
-                                                    SubLObject concept_bag = com.cyc.cycjava.cycl.document_annotation_widgets.suggest_interpretations(raw_concept_bag, com.cyc.cycjava.cycl.document_annotation_widgets.get_interpretation_rules_for_mt(mt), mt);
-                                                    SubLObject sentence_bag = thread.secondMultipleValue();
-                                                    SubLObject justifications = thread.thirdMultipleValue();
-                                                    thread.resetMultipleValues();
-                                                    if (!bag.bag_size(concept_bag).numE(bag.bag_size(raw_concept_bag))) {
-                                                        html_markup(html_macros.$html_heading_head$.getGlobalValue());
-                                                        html_markup(THREE_INTEGER);
-                                                        html_char(CHAR_greater, UNPROVIDED);
-                                                        html_princ($$$Suggested_Concepts);
-                                                        html_markup(html_macros.$html_heading_tail$.getGlobalValue());
-                                                        html_markup(THREE_INTEGER);
-                                                        html_char(CHAR_greater, UNPROVIDED);
-                                                        {
-                                                            SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(bag.do_bag_repeat_internal(concept_bag));
-                                                            while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                                                                thread.resetMultipleValues();
-                                                                {
-                                                                    SubLObject concept = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                    SubLObject count = thread.secondMultipleValue();
-                                                                    thread.resetMultipleValues();
-                                                                    if (NIL == bag.bag_memberP(concept, raw_concept_bag)) {
-                                                                        com.cyc.cycjava.cycl.document_annotation_widgets.cb_document_interpretation_show_concept(concept, count);
-                                                                    }
-                                                                    iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                                }
-                                                            } 
-                                                            dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                            {
-                                                                SubLObject count = ONE_INTEGER;
-                                                                SubLObject set_contents_var = bag.do_bag_unique_internal(concept_bag);
-                                                                SubLObject basis_object = set_contents.do_set_contents_basis_object(set_contents_var);
-                                                                SubLObject state = NIL;
-                                                                for (state = set_contents.do_set_contents_initial_state(basis_object, set_contents_var); NIL == set_contents.do_set_contents_doneP(basis_object, state); state = set_contents.do_set_contents_update_state(state)) {
-                                                                    {
-                                                                        SubLObject concept = set_contents.do_set_contents_next(basis_object, state);
-                                                                        if (NIL != set_contents.do_set_contents_element_validP(state, concept)) {
-                                                                            if (NIL == bag.bag_memberP(concept, raw_concept_bag)) {
-                                                                                com.cyc.cycjava.cycl.document_annotation_widgets.cb_document_interpretation_show_concept(concept, count);
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    if (NIL == bag.bag_emptyP(sentence_bag)) {
-                                                        html_markup(html_macros.$html_heading_head$.getGlobalValue());
-                                                        html_markup(THREE_INTEGER);
-                                                        html_char(CHAR_greater, UNPROVIDED);
-                                                        html_princ($$$Suggested_Sentences);
-                                                        html_markup(html_macros.$html_heading_tail$.getGlobalValue());
-                                                        html_markup(THREE_INTEGER);
-                                                        html_char(CHAR_greater, UNPROVIDED);
-                                                        html_markup(html_macros.$html_unordered_list_head$.getGlobalValue());
-                                                        html_char(CHAR_greater, UNPROVIDED);
-                                                        {
-                                                            SubLObject _prev_bind_0_125 = html_macros.$html_safe_print$.currentBinding(thread);
-                                                            try {
-                                                                html_macros.$html_safe_print$.bind(T, thread);
-                                                                {
-                                                                    SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(bag.do_bag_repeat_internal(sentence_bag));
-                                                                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
-                                                                        thread.resetMultipleValues();
-                                                                        {
-                                                                            SubLObject sentence = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
-                                                                            SubLObject count = thread.secondMultipleValue();
-                                                                            thread.resetMultipleValues();
-                                                                            com.cyc.cycjava.cycl.document_annotation_widgets.cb_document_interpretation_show_sentence(sentence, count);
-                                                                            iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
-                                                                        }
-                                                                    } 
-                                                                    dictionary_contents.do_dictionary_contents_finalize(iteration_state);
-                                                                    {
-                                                                        SubLObject count = ONE_INTEGER;
-                                                                        SubLObject set_contents_var = bag.do_bag_unique_internal(sentence_bag);
-                                                                        SubLObject basis_object = set_contents.do_set_contents_basis_object(set_contents_var);
-                                                                        SubLObject state = NIL;
-                                                                        for (state = set_contents.do_set_contents_initial_state(basis_object, set_contents_var); NIL == set_contents.do_set_contents_doneP(basis_object, state); state = set_contents.do_set_contents_update_state(state)) {
-                                                                            {
-                                                                                SubLObject sentence = set_contents.do_set_contents_next(basis_object, state);
-                                                                                if (NIL != set_contents.do_set_contents_element_validP(state, sentence)) {
-                                                                                    com.cyc.cycjava.cycl.document_annotation_widgets.cb_document_interpretation_show_sentence(sentence, count);
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            } finally {
-                                                                html_macros.$html_safe_print$.rebind(_prev_bind_0_125, thread);
-                                                            }
-                                                        }
-                                                        html_markup(html_macros.$html_unordered_list_tail$.getGlobalValue());
-                                                    }
-                                                    if (NIL != justifications) {
-                                                        html_markup(html_macros.$html_heading_head$.getGlobalValue());
-                                                        html_markup(THREE_INTEGER);
-                                                        html_char(CHAR_greater, UNPROVIDED);
-                                                        html_princ($$$Applied_Rules);
-                                                        html_markup(html_macros.$html_heading_tail$.getGlobalValue());
-                                                        html_markup(THREE_INTEGER);
-                                                        html_char(CHAR_greater, UNPROVIDED);
-                                                        html_markup(html_macros.$html_unordered_list_head$.getGlobalValue());
-                                                        html_char(CHAR_greater, UNPROVIDED);
-                                                        {
-                                                            SubLObject _prev_bind_0_126 = html_macros.$html_safe_print$.currentBinding(thread);
-                                                            try {
-                                                                html_macros.$html_safe_print$.bind(T, thread);
-                                                                {
-                                                                    SubLObject cdolist_list_var = justifications;
-                                                                    SubLObject rule = NIL;
-                                                                    for (rule = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , rule = cdolist_list_var.first()) {
-                                                                        com.cyc.cycjava.cycl.document_annotation_widgets.cb_document_interpretation_show_rule(rule);
-                                                                    }
-                                                                }
-                                                            } finally {
-                                                                html_macros.$html_safe_print$.rebind(_prev_bind_0_126, thread);
-                                                            }
-                                                        }
-                                                        html_markup(html_macros.$html_unordered_list_tail$.getGlobalValue());
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        html_source_readability_terpri(UNPROVIDED);
-                                        html_copyright_notice();
-                                    } finally {
-                                        html_macros.$html_safe_print$.rebind(_prev_bind_0_122, thread);
-                                    }
-                                }
-                                html_markup(html_macros.$html_body_tail$.getGlobalValue());
-                                html_source_readability_terpri(UNPROVIDED);
-                            } finally {
-                                html_macros.$html_inside_bodyP$.rebind(_prev_bind_0_121, thread);
-                            }
-                        }
-                        html_markup(html_macros.$html_html_tail$.getGlobalValue());
-                        html_source_readability_terpri(UNPROVIDED);
-                    } finally {
-                        html_macros.$html_id_space_id_generator$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return $DONE;
-        }
     }
 
     public static SubLObject cb_document_interpretation_suggestions(final SubLObject args) {
@@ -12274,394 +6100,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             html_macros.$html_id_space_id_generator$.rebind(_prev_bind_0, thread);
         }
         return $DONE;
-    }
-
-    public static final SubLObject cb_annotate_tagged_concepts_alt(SubLObject args) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject previous_input_file = html_extract_input($str_alt366$previous_input_file, args);
-                SubLObject filename = (NIL != html_extract_input($str_alt367$input_file, args)) ? ((SubLObject) (html_extract_input($str_alt367$input_file, args))) : $str_alt112$;
-                SubLObject next_index_from_page = read_from_string(NIL != html_extract_input($str_alt368$next_index, args) ? ((SubLObject) (html_extract_input($str_alt368$next_index, args))) : $$$0, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                SubLObject next_index = (filename.equal(previous_input_file)) ? ((SubLObject) (next_index_from_page)) : ZERO_INTEGER;
-                SubLObject count = $int$30;
-                SubLObject data = com.cyc.cycjava.cycl.document_annotation_widgets.annotation_data_from_file(filename, next_index, count);
-                com.cyc.cycjava.cycl.document_annotation_widgets.handle_submitted_manual_annotation_data(args);
-                {
-                    SubLObject title_var = $$$Manual_Concept_Annotation;
-                    {
-                        SubLObject _prev_bind_0 = html_macros.$html_id_space_id_generator$.currentBinding(thread);
-                        try {
-                            html_macros.$html_id_space_id_generator$.bind(NIL != integer_sequence_generator.integer_sequence_generator_p(html_macros.$html_id_space_id_generator$.getDynamicValue(thread)) ? ((SubLObject) (html_macros.$html_id_space_id_generator$.getDynamicValue(thread))) : integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED), thread);
-                            html_markup(html_macros.$html_html_head$.getGlobalValue());
-                            html_markup(html_macros.$html_head_head$.getGlobalValue());
-                            html_macros.html_head_content_type();
-                            cb_head_shortcut_icon();
-                            html_meta_robot_instructions($cb_permit_robots_to_indexP$.getDynamicValue(thread), $cb_permit_robots_to_followP$.getDynamicValue(thread));
-                            if (NIL != title_var) {
-                                html_source_readability_terpri(UNPROVIDED);
-                                html_markup(html_macros.$html_title_head$.getGlobalValue());
-                                html_princ(title_var);
-                                html_markup(html_macros.$html_title_tail$.getGlobalValue());
-                            }
-                            html_markup(html_macros.$html_head_tail$.getGlobalValue());
-                            html_source_readability_terpri(UNPROVIDED);
-                            {
-                                SubLObject _prev_bind_0_127 = html_macros.$html_inside_bodyP$.currentBinding(thread);
-                                try {
-                                    html_macros.$html_inside_bodyP$.bind(T, thread);
-                                    html_markup(html_macros.$html_body_head$.getGlobalValue());
-                                    if (NIL != html_macros.$html_default_bgcolor$.getDynamicValue(thread)) {
-                                        html_markup(html_macros.$html_body_bgcolor$.getGlobalValue());
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                        html_markup(html_color(html_macros.$html_default_bgcolor$.getDynamicValue(thread)));
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                    }
-                                    if (true) {
-                                        html_markup(html_macros.$html_body_class$.getGlobalValue());
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                        html_markup($str_alt350$yui_skin_sam);
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                    }
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_128 = html_macros.$html_safe_print$.currentBinding(thread);
-                                        try {
-                                            html_macros.$html_safe_print$.bind(T, thread);
-                                            if (NIL != title_var) {
-                                                html_markup(html_macros.$html_heading_head$.getGlobalValue());
-                                                html_markup(TWO_INTEGER);
-                                                html_char(CHAR_greater, UNPROVIDED);
-                                                html_princ(title_var);
-                                                html_markup(html_macros.$html_heading_tail$.getGlobalValue());
-                                                html_markup(TWO_INTEGER);
-                                                html_char(CHAR_greater, UNPROVIDED);
-                                            }
-                                            html_script_utilities.cb_hoverover_page_init();
-                                            {
-                                                SubLObject frame_name_var = cb_frame_name(NIL);
-                                                html_markup(html_macros.$html_form_head$.getGlobalValue());
-                                                html_markup(html_macros.$html_form_action$.getGlobalValue());
-                                                html_char(CHAR_quotation, UNPROVIDED);
-                                                html_markup(system_parameters.$cyc_cgi_program$.getDynamicValue(thread));
-                                                html_char(CHAR_quotation, UNPROVIDED);
-                                                if (NIL != html_macros.$html_form_method_post$.getGlobalValue()) {
-                                                    html_markup(html_macros.$html_form_method$.getGlobalValue());
-                                                    html_char(CHAR_quotation, UNPROVIDED);
-                                                    html_markup(html_macros.$html_form_method_post$.getGlobalValue());
-                                                    html_char(CHAR_quotation, UNPROVIDED);
-                                                }
-                                                if (NIL != frame_name_var) {
-                                                    html_markup(html_macros.$html_form_target$.getGlobalValue());
-                                                    html_char(CHAR_quotation, UNPROVIDED);
-                                                    html_markup(frame_name_var);
-                                                    html_char(CHAR_quotation, UNPROVIDED);
-                                                }
-                                                html_char(CHAR_greater, UNPROVIDED);
-                                                {
-                                                    SubLObject _prev_bind_0_129 = html_macros.$html_safe_print$.currentBinding(thread);
-                                                    SubLObject _prev_bind_1 = html_macros.$within_html_form$.currentBinding(thread);
-                                                    SubLObject _prev_bind_2 = html_macros.$html_form_field_uniquifier_code$.currentBinding(thread);
-                                                    try {
-                                                        html_macros.$html_safe_print$.bind(T, thread);
-                                                        html_macros.$within_html_form$.bind(T, thread);
-                                                        html_macros.$html_form_field_uniquifier_code$.bind(html_macros.next_html_form_field_uniquifier_code(), thread);
-                                                        html_hidden_input($str_alt372$cb_annotate_tagged_concepts, T, UNPROVIDED);
-                                                        html_source_readability_terpri(UNPROVIDED);
-                                                        html_markup(html_macros.$html_style_head$.getGlobalValue());
-                                                        html_princ(concept_tagger.$doc_tagger_default_style$.getDynamicValue(thread));
-                                                        html_markup(html_macros.$html_style_tail$.getGlobalValue());
-                                                        html_hidden_input($str_alt366$previous_input_file, filename, UNPROVIDED);
-                                                        format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt373$Tagging_File_Name__);
-                                                        html_markup(html_macros.$html_input_head$.getGlobalValue());
-                                                        html_markup(html_macros.$html_input_type$.getGlobalValue());
-                                                        html_char(CHAR_quotation, UNPROVIDED);
-                                                        html_markup($$$text);
-                                                        html_char(CHAR_quotation, UNPROVIDED);
-                                                        if (true) {
-                                                            html_markup(html_macros.$html_input_name$.getGlobalValue());
-                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                            html_markup($str_alt367$input_file);
-                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                        }
-                                                        if (NIL != filename) {
-                                                            html_markup(html_macros.$html_input_value$.getGlobalValue());
-                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                            html_princ(filename);
-                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                        }
-                                                        if (true) {
-                                                            html_markup(html_macros.$html_input_size$.getGlobalValue());
-                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                            html_markup($int$40);
-                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                        }
-                                                        html_char(CHAR_greater, UNPROVIDED);
-                                                        html_newline(UNPROVIDED);
-                                                        html_source_readability_terpri(UNPROVIDED);
-                                                        html_markup(html_macros.$html_style_head$.getGlobalValue());
-                                                        html_princ($str_alt374$tr__border_color__black__________);
-                                                        html_markup(html_macros.$html_style_tail$.getGlobalValue());
-                                                        if (NIL != data) {
-                                                            {
-                                                                SubLObject datum = data;
-                                                                SubLObject current = datum;
-                                                                SubLObject text = NIL;
-                                                                destructuring_bind_must_consp(current, datum, $list_alt375);
-                                                                text = current.first();
-                                                                current = current.rest();
-                                                                {
-                                                                    SubLObject strings_and_concepts = current;
-                                                                    next_index = add(next_index, length(strings_and_concepts));
-                                                                    html_hidden_input($str_alt368$next_index, next_index, UNPROVIDED);
-                                                                    html_markup($manual_document_annotation_instructions$.getDynamicValue(thread));
-                                                                    html_newline(UNPROVIDED);
-                                                                    html_markup(html_macros.$html_table_head$.getGlobalValue());
-                                                                    if (true) {
-                                                                        html_markup(html_macros.$html_table_border$.getGlobalValue());
-                                                                        html_char(CHAR_quotation, UNPROVIDED);
-                                                                        html_markup(ONE_INTEGER);
-                                                                        html_char(CHAR_quotation, UNPROVIDED);
-                                                                    }
-                                                                    html_char(CHAR_greater, UNPROVIDED);
-                                                                    {
-                                                                        SubLObject _prev_bind_0_130 = html_macros.$html_safe_print$.currentBinding(thread);
-                                                                        try {
-                                                                            html_macros.$html_safe_print$.bind(T, thread);
-                                                                            {
-                                                                                SubLObject cdolist_list_var = strings_and_concepts;
-                                                                                SubLObject string_and_concepts = NIL;
-                                                                                for (string_and_concepts = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , string_and_concepts = cdolist_list_var.first()) {
-                                                                                    {
-                                                                                        SubLObject string_frequency = string_and_concepts.first();
-                                                                                        SubLObject string = second(string_and_concepts);
-                                                                                        SubLObject concepts = string_and_concepts.rest().rest();
-                                                                                        SubLObject concept_count = length(concepts);
-                                                                                        SubLObject list_var = NIL;
-                                                                                        SubLObject concept = NIL;
-                                                                                        SubLObject concept_number = NIL;
-                                                                                        for (list_var = concepts, concept = list_var.first(), concept_number = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , concept = list_var.first() , concept_number = add(ONE_INTEGER, concept_number)) {
-                                                                                            {
-                                                                                                SubLObject v_class = (concept_number == ZERO_INTEGER) ? ((SubLObject) ($$$first)) : $$$other;
-                                                                                                html_markup(html_macros.$html_table_row_head$.getGlobalValue());
-                                                                                                if (NIL != v_class) {
-                                                                                                    html_markup(html_macros.$html_attribute_class$.getGlobalValue());
-                                                                                                    html_char(CHAR_quotation, UNPROVIDED);
-                                                                                                    html_markup(v_class);
-                                                                                                    html_char(CHAR_quotation, UNPROVIDED);
-                                                                                                }
-                                                                                                html_char(CHAR_greater, UNPROVIDED);
-                                                                                                {
-                                                                                                    SubLObject _prev_bind_0_131 = html_macros.$html_safe_print$.currentBinding(thread);
-                                                                                                    try {
-                                                                                                        html_macros.$html_safe_print$.bind(T, thread);
-                                                                                                        if (concept_number == ZERO_INTEGER) {
-                                                                                                            html_markup(html_macros.$html_table_data_head$.getGlobalValue());
-                                                                                                            if (NIL != concept_count) {
-                                                                                                                html_markup(html_macros.$html_table_data_rowspan$.getGlobalValue());
-                                                                                                                html_char(CHAR_quotation, UNPROVIDED);
-                                                                                                                html_markup(concept_count);
-                                                                                                                html_char(CHAR_quotation, UNPROVIDED);
-                                                                                                            }
-                                                                                                            html_char(CHAR_greater, UNPROVIDED);
-                                                                                                            {
-                                                                                                                SubLObject _prev_bind_0_132 = html_macros.$html_safe_print$.currentBinding(thread);
-                                                                                                                try {
-                                                                                                                    html_macros.$html_safe_print$.bind(T, thread);
-                                                                                                                    format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt378$_S, string);
-                                                                                                                    html_newline(UNPROVIDED);
-                                                                                                                    html_markup(html_macros.$html_small_head$.getGlobalValue());
-                                                                                                                    format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt379$frequency___S__, string_frequency);
-                                                                                                                    html_markup(html_macros.$html_small_tail$.getGlobalValue());
-                                                                                                                } finally {
-                                                                                                                    html_macros.$html_safe_print$.rebind(_prev_bind_0_132, thread);
-                                                                                                                }
-                                                                                                            }
-                                                                                                            html_markup(html_macros.$html_table_data_tail$.getGlobalValue());
-                                                                                                        }
-                                                                                                        html_markup(html_macros.$html_table_data_head$.getGlobalValue());
-                                                                                                        if (true) {
-                                                                                                            html_markup(html_macros.$html_table_data_width$.getGlobalValue());
-                                                                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                                                                            html_markup($str_alt380$30_);
-                                                                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                                                                        }
-                                                                                                        html_char(CHAR_greater, UNPROVIDED);
-                                                                                                        {
-                                                                                                            SubLObject _prev_bind_0_133 = html_macros.$html_safe_print$.currentBinding(thread);
-                                                                                                            try {
-                                                                                                                html_macros.$html_safe_print$.bind(T, thread);
-                                                                                                                cb_form(concept, UNPROVIDED, UNPROVIDED);
-                                                                                                            } finally {
-                                                                                                                html_macros.$html_safe_print$.rebind(_prev_bind_0_133, thread);
-                                                                                                            }
-                                                                                                        }
-                                                                                                        html_markup(html_macros.$html_table_data_tail$.getGlobalValue());
-                                                                                                        html_markup(html_macros.$html_table_data_head$.getGlobalValue());
-                                                                                                        if (true) {
-                                                                                                            html_markup(html_macros.$html_table_data_bgcolor$.getGlobalValue());
-                                                                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                                                                            html_markup($str_alt381$_CCFFCC);
-                                                                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                                                                        }
-                                                                                                        html_char(CHAR_greater, UNPROVIDED);
-                                                                                                        {
-                                                                                                            SubLObject _prev_bind_0_134 = html_macros.$html_safe_print$.currentBinding(thread);
-                                                                                                            try {
-                                                                                                                html_macros.$html_safe_print$.bind(T, thread);
-                                                                                                                html_radio_input(kb_utilities.compact_hl_internal_id_string(concept), $$$primary, NIL);
-                                                                                                                format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt383$Primary_Meaning___);
-                                                                                                            } finally {
-                                                                                                                html_macros.$html_safe_print$.rebind(_prev_bind_0_134, thread);
-                                                                                                            }
-                                                                                                        }
-                                                                                                        html_markup(html_macros.$html_table_data_tail$.getGlobalValue());
-                                                                                                        html_markup(html_macros.$html_table_data_head$.getGlobalValue());
-                                                                                                        if (true) {
-                                                                                                            html_markup(html_macros.$html_table_data_bgcolor$.getGlobalValue());
-                                                                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                                                                            html_markup($str_alt384$_CCFFFF);
-                                                                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                                                                        }
-                                                                                                        html_char(CHAR_greater, UNPROVIDED);
-                                                                                                        {
-                                                                                                            SubLObject _prev_bind_0_135 = html_macros.$html_safe_print$.currentBinding(thread);
-                                                                                                            try {
-                                                                                                                html_macros.$html_safe_print$.bind(T, thread);
-                                                                                                                html_radio_input(kb_utilities.compact_hl_internal_id_string(concept), $$$contextual, NIL);
-                                                                                                                format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt386$Contextually_Dependent___);
-                                                                                                            } finally {
-                                                                                                                html_macros.$html_safe_print$.rebind(_prev_bind_0_135, thread);
-                                                                                                            }
-                                                                                                        }
-                                                                                                        html_markup(html_macros.$html_table_data_tail$.getGlobalValue());
-                                                                                                        html_markup(html_macros.$html_table_data_head$.getGlobalValue());
-                                                                                                        if (true) {
-                                                                                                            html_markup(html_macros.$html_table_data_bgcolor$.getGlobalValue());
-                                                                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                                                                            html_markup($str_alt387$_FFCCFF);
-                                                                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                                                                        }
-                                                                                                        html_char(CHAR_greater, UNPROVIDED);
-                                                                                                        {
-                                                                                                            SubLObject _prev_bind_0_136 = html_macros.$html_safe_print$.currentBinding(thread);
-                                                                                                            try {
-                                                                                                                html_macros.$html_safe_print$.bind(T, thread);
-                                                                                                                html_radio_input(kb_utilities.compact_hl_internal_id_string(concept), $str_alt388$very_rare, NIL);
-                                                                                                                format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt389$Rare___);
-                                                                                                            } finally {
-                                                                                                                html_macros.$html_safe_print$.rebind(_prev_bind_0_136, thread);
-                                                                                                            }
-                                                                                                        }
-                                                                                                        html_markup(html_macros.$html_table_data_tail$.getGlobalValue());
-                                                                                                        html_markup(html_macros.$html_table_data_head$.getGlobalValue());
-                                                                                                        if (true) {
-                                                                                                            html_markup(html_macros.$html_table_data_bgcolor$.getGlobalValue());
-                                                                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                                                                            html_markup($str_alt390$_FFCCCC);
-                                                                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                                                                        }
-                                                                                                        html_char(CHAR_greater, UNPROVIDED);
-                                                                                                        {
-                                                                                                            SubLObject _prev_bind_0_137 = html_macros.$html_safe_print$.currentBinding(thread);
-                                                                                                            try {
-                                                                                                                html_macros.$html_safe_print$.bind(T, thread);
-                                                                                                                html_radio_input(kb_utilities.compact_hl_internal_id_string(concept), $$$indecipherable, NIL);
-                                                                                                                format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt392$Indecipherable__);
-                                                                                                            } finally {
-                                                                                                                html_macros.$html_safe_print$.rebind(_prev_bind_0_137, thread);
-                                                                                                            }
-                                                                                                        }
-                                                                                                        html_markup(html_macros.$html_table_data_tail$.getGlobalValue());
-                                                                                                        html_markup(html_macros.$html_table_data_head$.getGlobalValue());
-                                                                                                        if (true) {
-                                                                                                            html_markup(html_macros.$html_table_data_bgcolor$.getGlobalValue());
-                                                                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                                                                            html_markup($str_alt393$_FFFFCC);
-                                                                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                                                                        }
-                                                                                                        html_char(CHAR_greater, UNPROVIDED);
-                                                                                                        {
-                                                                                                            SubLObject _prev_bind_0_138 = html_macros.$html_safe_print$.currentBinding(thread);
-                                                                                                            try {
-                                                                                                                html_macros.$html_safe_print$.bind(T, thread);
-                                                                                                                html_radio_input(kb_utilities.compact_hl_internal_id_string(concept), $str_alt394$merge_candidate, NIL);
-                                                                                                                format(html_macros.$html_stream$.getDynamicValue(thread), $$$Merge_away);
-                                                                                                            } finally {
-                                                                                                                html_macros.$html_safe_print$.rebind(_prev_bind_0_138, thread);
-                                                                                                            }
-                                                                                                        }
-                                                                                                        html_markup(html_macros.$html_table_data_tail$.getGlobalValue());
-                                                                                                        html_markup(html_macros.$html_table_data_head$.getGlobalValue());
-                                                                                                        if (true) {
-                                                                                                            html_markup(html_macros.$html_table_data_bgcolor$.getGlobalValue());
-                                                                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                                                                            html_markup($str_alt396$_CCCCFF);
-                                                                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                                                                        }
-                                                                                                        html_char(CHAR_greater, UNPROVIDED);
-                                                                                                        {
-                                                                                                            SubLObject _prev_bind_0_139 = html_macros.$html_safe_print$.currentBinding(thread);
-                                                                                                            try {
-                                                                                                                html_macros.$html_safe_print$.bind(T, thread);
-                                                                                                                html_radio_input(kb_utilities.compact_hl_internal_id_string(concept), $str_alt397$kill_candidate, NIL);
-                                                                                                                format(html_macros.$html_stream$.getDynamicValue(thread), $$$Invalid);
-                                                                                                            } finally {
-                                                                                                                html_macros.$html_safe_print$.rebind(_prev_bind_0_139, thread);
-                                                                                                            }
-                                                                                                        }
-                                                                                                        html_markup(html_macros.$html_table_data_tail$.getGlobalValue());
-                                                                                                    } finally {
-                                                                                                        html_macros.$html_safe_print$.rebind(_prev_bind_0_131, thread);
-                                                                                                    }
-                                                                                                }
-                                                                                                html_markup(html_macros.$html_table_row_tail$.getGlobalValue());
-                                                                                                html_source_readability_terpri(UNPROVIDED);
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        } finally {
-                                                                            html_macros.$html_safe_print$.rebind(_prev_bind_0_130, thread);
-                                                                        }
-                                                                    }
-                                                                    html_markup(html_macros.$html_table_tail$.getGlobalValue());
-                                                                }
-                                                            }
-                                                        }
-                                                        html_submit_input($$$Submit, UNPROVIDED, UNPROVIDED);
-                                                        html_macros.embed_form_field_code(html_macros.$html_form_field_uniquifier_code$.getDynamicValue(thread));
-                                                    } finally {
-                                                        html_macros.$html_form_field_uniquifier_code$.rebind(_prev_bind_2, thread);
-                                                        html_macros.$within_html_form$.rebind(_prev_bind_1, thread);
-                                                        html_macros.$html_safe_print$.rebind(_prev_bind_0_129, thread);
-                                                    }
-                                                }
-                                                html_markup(html_macros.$html_form_tail$.getGlobalValue());
-                                            }
-                                            html_source_readability_terpri(UNPROVIDED);
-                                            html_copyright_notice();
-                                        } finally {
-                                            html_macros.$html_safe_print$.rebind(_prev_bind_0_128, thread);
-                                        }
-                                    }
-                                    html_markup(html_macros.$html_body_tail$.getGlobalValue());
-                                    html_source_readability_terpri(UNPROVIDED);
-                                } finally {
-                                    html_macros.$html_inside_bodyP$.rebind(_prev_bind_0_127, thread);
-                                }
-                            }
-                            html_markup(html_macros.$html_html_tail$.getGlobalValue());
-                            html_source_readability_terpri(UNPROVIDED);
-                        } finally {
-                            html_macros.$html_id_space_id_generator$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject cb_annotate_tagged_concepts(final SubLObject args) {
@@ -13034,64 +6472,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return NIL;
     }
 
-    public static final SubLObject handle_submitted_manual_annotation_data_alt(SubLObject args) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject input_file = html_extract_input($str_alt367$input_file, args);
-                SubLObject output_file_name = cconcatenate(NIL != input_file ? ((SubLObject) (input_file)) : $str_alt112$, $str_alt400$_out);
-                if (NIL == input_file) {
-                    return NIL;
-                }
-                {
-                    SubLObject stream = NIL;
-                    try {
-                        {
-                            SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                            try {
-                                stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                                stream = compatibility.open_text(output_file_name, $APPEND, NIL);
-                            } finally {
-                                stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                        if (!stream.isStream()) {
-                            Errors.error($str_alt114$Unable_to_open__S, output_file_name);
-                        }
-                        {
-                            SubLObject s = stream;
-                            SubLObject cdolist_list_var = args;
-                            SubLObject arg = NIL;
-                            for (arg = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , arg = cdolist_list_var.first()) {
-                                if ((arg.isList() && (NIL != kb_utilities.compact_hl_external_id_string_p(arg.first()))) && (NIL != list_utilities.lengthE(arg, TWO_INTEGER, UNPROVIDED))) {
-                                    {
-                                        SubLObject v_term = kb_utilities.find_object_by_compact_hl_internal_id_string(arg.first());
-                                        if (NIL != v_term) {
-                                            format(s, $str_alt401$_A__A__A__, new SubLObject[]{ kb_utilities.compact_hl_external_id_string(v_term), second(arg), v_term });
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        {
-                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                            try {
-                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                if (stream.isStream()) {
-                                    close(stream, UNPROVIDED);
-                                }
-                            } finally {
-                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject handle_submitted_manual_annotation_data(final SubLObject args) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject input_file = html_extract_input($str380$input_file, args);
@@ -13141,72 +6521,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return NIL;
     }
 
-    /**
-     * each line of the datafile is expected to be of the form:
-     * (CONTEXT-STRING (STRING CONCEPTS) (STRING CONCEPTS) ...)
-     */
-    @LispMethod(comment = "each line of the datafile is expected to be of the form:\r\n(CONTEXT-STRING (STRING CONCEPTS) (STRING CONCEPTS) ...)\neach line of the datafile is expected to be of the form:\n(CONTEXT-STRING (STRING CONCEPTS) (STRING CONCEPTS) ...)")
-    public static final SubLObject annotation_data_from_file_alt(SubLObject filename, SubLObject next_index, SubLObject desired_count) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (!((NIL != string_utilities.non_empty_string_p(filename)) && (NIL != Filesys.probe_file(filename)))) {
-                return NIL;
-            }
-            {
-                SubLObject result = NIL;
-                SubLObject read_result = NIL;
-                SubLObject count = ZERO_INTEGER;
-                SubLObject doneP = NIL;
-                SubLObject final_index = subtract(add(next_index, desired_count), ONE_INTEGER);
-                SubLObject file_string = file_utilities.slurp_file(filename);
-                SubLObject error = NIL;
-                while (!(((NIL != error) || read_result.equal($EOF)) || (NIL != doneP))) {
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject read_result_140 = read_from_string(file_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        SubLObject error_141 = thread.secondMultipleValue();
-                        thread.resetMultipleValues();
-                        read_result = read_result_140;
-                        error = error_141;
-                    }
-                    format(T, $str_alt149$_);
-                    {
-                        SubLObject context_string = read_result.first();
-                        SubLObject concept_pairs = read_result.rest();
-                        if (count.numGE(next_index)) {
-                            result = cons(context_string, result);
-                        }
-                        if (NIL == doneP) {
-                            {
-                                SubLObject csome_list_var = concept_pairs;
-                                SubLObject concept_pair = NIL;
-                                for (concept_pair = csome_list_var.first(); !((NIL != doneP) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , concept_pair = csome_list_var.first()) {
-                                    if (count.numG(final_index)) {
-                                        doneP = T;
-                                    } else {
-                                        if (count.numGE(next_index)) {
-                                            result = cons(concept_pair, result);
-                                        }
-                                    }
-                                    count = add(count, ONE_INTEGER);
-                                }
-                            }
-                        }
-                        if (count.numG(next_index)) {
-                            doneP = T;
-                        }
-                    }
-                } 
-                return nreverse(result);
-            }
-        }
-    }
-
-    /**
-     * each line of the datafile is expected to be of the form:
-     * (CONTEXT-STRING (STRING CONCEPTS) (STRING CONCEPTS) ...)
-     */
-    @LispMethod(comment = "each line of the datafile is expected to be of the form:\r\n(CONTEXT-STRING (STRING CONCEPTS) (STRING CONCEPTS) ...)\neach line of the datafile is expected to be of the form:\n(CONTEXT-STRING (STRING CONCEPTS) (STRING CONCEPTS) ...)")
     public static SubLObject annotation_data_from_file(final SubLObject filename, final SubLObject next_index, final SubLObject desired_count) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == string_utilities.non_empty_string_p(filename)) || (NIL == Filesys.probe_file(filename))) {
@@ -13252,81 +6566,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             }
         }
         return nreverse(result);
-    }/**
-     * each line of the datafile is expected to be of the form:
-     * (CONTEXT-STRING (STRING CONCEPTS) (STRING CONCEPTS) ...)
-     */
-
-
-    public static final SubLObject get_manual_annotations_alt(SubLObject filename) {
-        if (filename == UNPROVIDED) {
-            filename = $str_alt403$_cyc_projects_sabre_data_july_200;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                SubLObject file_var = filename;
-                SubLObject stream = NIL;
-                try {
-                    {
-                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                        try {
-                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                            stream = compatibility.open_text(file_var, $INPUT, NIL);
-                        } finally {
-                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    if (!stream.isStream()) {
-                        Errors.error($str_alt114$Unable_to_open__S, file_var);
-                    }
-                    {
-                        SubLObject stream_var = stream;
-                        if (stream_var.isStream()) {
-                            {
-                                SubLObject stream_var_142 = stream_var;
-                                SubLObject line_number_var = NIL;
-                                SubLObject line = NIL;
-                                for (line_number_var = ZERO_INTEGER, line = read_line(stream_var_142, NIL, NIL, UNPROVIDED); NIL != line; line_number_var = number_utilities.f_1X(line_number_var) , line = read_line(stream_var_142, NIL, NIL, UNPROVIDED)) {
-                                    {
-                                        SubLObject line_143 = string_utilities.string_tokenize(line, $list_alt404, list(list($str_alt405$_, $str_alt405$_)), NIL, NIL, list(CHAR_backslash), UNPROVIDED);
-                                        SubLObject datum = line_143;
-                                        SubLObject current = datum;
-                                        SubLObject hl_id = NIL;
-                                        SubLObject judgment = NIL;
-                                        destructuring_bind_must_consp(current, datum, $list_alt406);
-                                        hl_id = current.first();
-                                        current = current.rest();
-                                        destructuring_bind_must_consp(current, datum, $list_alt406);
-                                        judgment = current.first();
-                                        current = current.rest();
-                                        {
-                                            SubLObject ignore = current;
-                                            SubLObject v_term = kb_utilities.find_object_by_compact_hl_internal_id_string(hl_id);
-                                            result = cons(list(v_term, judgment), result);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            if (stream.isStream()) {
-                                close(stream, UNPROVIDED);
-                            }
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                return result;
-            }
-        }
     }
 
     public static SubLObject get_manual_annotations(SubLObject filename) {
@@ -13386,112 +6625,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             }
         }
         return result;
-    }
-
-    public static final SubLObject get_manual_annotations_with_strings_alt(SubLObject filename) {
-        if (filename == UNPROVIDED) {
-            filename = $str_alt407$_cyc_projects_sabre_data_july_200;
-        }
-        {
-            SubLObject result = NIL;
-            SubLObject intermed_result = NIL;
-            SubLObject previous_strings = NIL;
-            SubLObject concept_to_strings_map = com.cyc.cycjava.cycl.document_annotation_widgets.get_concept_to_strings_map_from_input_data(filename);
-            SubLObject annotated_filename = cconcatenate(filename, $str_alt400$_out);
-            {
-                SubLObject cdolist_list_var = com.cyc.cycjava.cycl.document_annotation_widgets.get_manual_annotations(annotated_filename);
-                SubLObject annotation = NIL;
-                for (annotation = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , annotation = cdolist_list_var.first()) {
-                    {
-                        SubLObject datum = annotation;
-                        SubLObject current = datum;
-                        SubLObject v_term = NIL;
-                        SubLObject judgment = NIL;
-                        destructuring_bind_must_consp(current, datum, $list_alt408);
-                        v_term = current.first();
-                        current = current.rest();
-                        destructuring_bind_must_consp(current, datum, $list_alt408);
-                        judgment = current.first();
-                        current = current.rest();
-                        if (NIL == current) {
-                            if (NIL != intersection(previous_strings, dictionary.dictionary_lookup(concept_to_strings_map, v_term, UNPROVIDED), EQUAL, UNPROVIDED)) {
-                                previous_strings = intersection(previous_strings, dictionary.dictionary_lookup(concept_to_strings_map, v_term, UNPROVIDED), EQUAL, UNPROVIDED);
-                                intermed_result = cons(annotation, intermed_result);
-                            } else {
-                                if (NIL == previous_strings) {
-                                    previous_strings = dictionary.dictionary_lookup(concept_to_strings_map, v_term, UNPROVIDED);
-                                    intermed_result = list(annotation);
-                                } else {
-                                    {
-                                        SubLObject cdolist_list_var_144 = intermed_result;
-                                        SubLObject intermed_annotation = NIL;
-                                        for (intermed_annotation = cdolist_list_var_144.first(); NIL != cdolist_list_var_144; cdolist_list_var_144 = cdolist_list_var_144.rest() , intermed_annotation = cdolist_list_var_144.first()) {
-                                            {
-                                                SubLObject datum_145 = intermed_annotation;
-                                                SubLObject current_146 = datum_145;
-                                                SubLObject intermed_term = NIL;
-                                                SubLObject intermed_judgment = NIL;
-                                                destructuring_bind_must_consp(current_146, datum_145, $list_alt409);
-                                                intermed_term = current_146.first();
-                                                current_146 = current_146.rest();
-                                                destructuring_bind_must_consp(current_146, datum_145, $list_alt409);
-                                                intermed_judgment = current_146.first();
-                                                current_146 = current_146.rest();
-                                                if (NIL == current_146) {
-                                                    {
-                                                        SubLObject cdolist_list_var_147 = previous_strings;
-                                                        SubLObject string = NIL;
-                                                        for (string = cdolist_list_var_147.first(); NIL != cdolist_list_var_147; cdolist_list_var_147 = cdolist_list_var_147.rest() , string = cdolist_list_var_147.first()) {
-                                                            result = cons(list(intermed_term, intermed_judgment, string), result);
-                                                        }
-                                                    }
-                                                } else {
-                                                    cdestructuring_bind_error(datum_145, $list_alt409);
-                                                }
-                                            }
-                                        }
-                                    }
-                                    previous_strings = dictionary.dictionary_lookup(concept_to_strings_map, v_term, UNPROVIDED);
-                                    intermed_result = list(annotation);
-                                }
-                            }
-                        } else {
-                            cdestructuring_bind_error(datum, $list_alt408);
-                        }
-                    }
-                }
-            }
-            {
-                SubLObject cdolist_list_var = intermed_result;
-                SubLObject intermed_annotation = NIL;
-                for (intermed_annotation = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , intermed_annotation = cdolist_list_var.first()) {
-                    {
-                        SubLObject datum = intermed_annotation;
-                        SubLObject current = datum;
-                        SubLObject v_term = NIL;
-                        SubLObject judgment = NIL;
-                        destructuring_bind_must_consp(current, datum, $list_alt408);
-                        v_term = current.first();
-                        current = current.rest();
-                        destructuring_bind_must_consp(current, datum, $list_alt408);
-                        judgment = current.first();
-                        current = current.rest();
-                        if (NIL == current) {
-                            {
-                                SubLObject cdolist_list_var_148 = previous_strings;
-                                SubLObject string = NIL;
-                                for (string = cdolist_list_var_148.first(); NIL != cdolist_list_var_148; cdolist_list_var_148 = cdolist_list_var_148.rest() , string = cdolist_list_var_148.first()) {
-                                    result = cons(list(v_term, judgment, string), result);
-                                }
-                            }
-                        } else {
-                            cdestructuring_bind_error(datum, $list_alt408);
-                        }
-                    }
-                }
-            }
-            return result;
-        }
     }
 
     public static SubLObject get_manual_annotations_with_strings(SubLObject filename) {
@@ -13597,48 +6730,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return result;
     }
 
-    public static final SubLObject get_concept_to_strings_map_from_input_data_alt(SubLObject filename) {
-        if (filename == UNPROVIDED) {
-            filename = $str_alt407$_cyc_projects_sabre_data_july_200;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject file_string = file_utilities.slurp_file(filename);
-                SubLObject string_to_concepts_map = dictionary.new_dictionary(EQUAL, UNPROVIDED);
-                SubLObject read_result = NIL;
-                SubLObject error = NIL;
-                while (!((NIL != error) || read_result.equal($EOF))) {
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject read_result_149 = read_from_string_ignoring_errors(file_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        SubLObject error_150 = thread.secondMultipleValue();
-                        thread.resetMultipleValues();
-                        read_result = read_result_149;
-                        error = error_150;
-                    }
-                    {
-                        SubLObject weight_string_concepts_tuples = read_result.rest();
-                        SubLObject cdolist_list_var = weight_string_concepts_tuples;
-                        SubLObject concept_pair = NIL;
-                        for (concept_pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , concept_pair = cdolist_list_var.first()) {
-                            {
-                                SubLObject string = second(concept_pair);
-                                SubLObject concepts = cddr(concept_pair);
-                                SubLObject cdolist_list_var_151 = concepts;
-                                SubLObject concept = NIL;
-                                for (concept = cdolist_list_var_151.first(); NIL != cdolist_list_var_151; cdolist_list_var_151 = cdolist_list_var_151.rest() , concept = cdolist_list_var_151.first()) {
-                                    dictionary_utilities.dictionary_push(string_to_concepts_map, concept, string);
-                                }
-                            }
-                        }
-                    }
-                } 
-                return string_to_concepts_map;
-            }
-        }
-    }
-
     public static SubLObject get_concept_to_strings_map_from_input_data(SubLObject filename) {
         if (filename == UNPROVIDED) {
             filename = $str421$_cyc_projects_sabre_data_july_200;
@@ -13677,33 +6768,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return string_to_concepts_map;
     }
 
-    public static final SubLObject get_assertions_for_concept_and_string_alt(SubLObject concept, SubLObject string) {
-        {
-            SubLObject assertions = NIL;
-            SubLObject cdolist_list_var = nl_trie.nl_trie_search(string, UNPROVIDED, UNPROVIDED);
-            SubLObject trie_entry = NIL;
-            for (trie_entry = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , trie_entry = cdolist_list_var.first()) {
-                if (NIL != subl_promotions.memberP(concept, nl_trie.nl_trie_entry_denots(trie_entry), UNPROVIDED, UNPROVIDED)) {
-                    {
-                        SubLObject cdolist_list_var_152 = nl_trie.nl_trie_entry_semantic_support_list(trie_entry);
-                        SubLObject v_assert = NIL;
-                        for (v_assert = cdolist_list_var_152.first(); NIL != cdolist_list_var_152; cdolist_list_var_152 = cdolist_list_var_152.rest() , v_assert = cdolist_list_var_152.first()) {
-                            if ((NIL != assertion_handles.assertion_p(v_assert)) && lexicon_accessors.assertion_denotation(v_assert).equal(concept)) {
-                                {
-                                    SubLObject item_var = v_assert;
-                                    if (NIL == member(item_var, assertions, symbol_function(EQL), symbol_function(IDENTITY))) {
-                                        assertions = cons(item_var, assertions);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return assertions;
-        }
-    }
-
     public static SubLObject get_assertions_for_concept_and_string(final SubLObject concept, final SubLObject string) {
         SubLObject assertions = NIL;
         SubLObject cdolist_list_var = nl_trie.nl_trie_search(string, UNPROVIDED, UNPROVIDED);
@@ -13729,96 +6793,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             trie_entry = cdolist_list_var.first();
         } 
         return assertions;
-    }
-
-    public static final SubLObject ke_text_from_manual_annotations_alt(SubLObject filename) {
-        if (filename == UNPROVIDED) {
-            filename = $str_alt407$_cyc_projects_sabre_data_july_200;
-        }
-        {
-            SubLObject annotations = com.cyc.cycjava.cycl.document_annotation_widgets.get_manual_annotations_with_strings(filename);
-            SubLObject result_items = NIL;
-            SubLObject result_string = NIL;
-            {
-                SubLObject cdolist_list_var = annotations;
-                SubLObject annotation = NIL;
-                for (annotation = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , annotation = cdolist_list_var.first()) {
-                    {
-                        SubLObject datum = annotation;
-                        SubLObject current = datum;
-                        SubLObject v_term = NIL;
-                        SubLObject judgment = NIL;
-                        SubLObject string = NIL;
-                        destructuring_bind_must_consp(current, datum, $list_alt410);
-                        v_term = current.first();
-                        current = current.rest();
-                        destructuring_bind_must_consp(current, datum, $list_alt410);
-                        judgment = current.first();
-                        current = current.rest();
-                        destructuring_bind_must_consp(current, datum, $list_alt410);
-                        string = current.first();
-                        current = current.rest();
-                        if (NIL == current) {
-                            {
-                                SubLObject cdolist_list_var_153 = com.cyc.cycjava.cycl.document_annotation_widgets.get_assertions_for_concept_and_string(v_term, string);
-                                SubLObject v_assert = NIL;
-                                for (v_assert = cdolist_list_var_153.first(); NIL != cdolist_list_var_153; cdolist_list_var_153 = cdolist_list_var_153.rest() , v_assert = cdolist_list_var_153.first()) {
-                                    {
-                                        SubLObject assert_formula = assertions_high.assertion_ist_formula(v_assert);
-                                        if (judgment.equal($$$primary)) {
-                                            {
-                                                SubLObject item_var = cconcatenate($str_alt411$f_____strengthOfLexicalMapping_, new SubLObject[]{ format_nil.format_nil_s_no_copy(assert_formula), $str_alt412$___PrimaryLexicalMapping__ });
-                                                if (NIL == member(item_var, result_items, EQUAL, symbol_function(IDENTITY))) {
-                                                    result_items = cons(item_var, result_items);
-                                                }
-                                            }
-                                        } else {
-                                            if (judgment.equal($str_alt388$very_rare)) {
-                                                {
-                                                    SubLObject item_var = cconcatenate($str_alt411$f_____strengthOfLexicalMapping_, new SubLObject[]{ format_nil.format_nil_s_no_copy(assert_formula), $str_alt413$___VanishinglyRareLexicalMapping_ });
-                                                    if (NIL == member(item_var, result_items, EQUAL, symbol_function(IDENTITY))) {
-                                                        result_items = cons(item_var, result_items);
-                                                    }
-                                                }
-                                            } else {
-                                                if (judgment.equal($$$contextual)) {
-                                                    {
-                                                        SubLObject item_var = cconcatenate($str_alt411$f_____strengthOfLexicalMapping_, new SubLObject[]{ format_nil.format_nil_s_no_copy(assert_formula), $str_alt414$___ContextuallyDependentLexicalMa });
-                                                        if (NIL == member(item_var, result_items, EQUAL, symbol_function(IDENTITY))) {
-                                                            result_items = cons(item_var, result_items);
-                                                        }
-                                                    }
-                                                } else {
-                                                    if (judgment.equal($str_alt397$kill_candidate)) {
-                                                        {
-                                                            SubLObject item_var = cconcatenate($str_alt415$kill__, new SubLObject[]{ format_nil.format_nil_s_no_copy(v_term), $str_alt149$_ });
-                                                            if (NIL == member(item_var, result_items, EQUAL, symbol_function(IDENTITY))) {
-                                                                result_items = cons(item_var, result_items);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            cdestructuring_bind_error(datum, $list_alt410);
-                        }
-                    }
-                }
-            }
-            {
-                SubLObject cdolist_list_var = result_items;
-                SubLObject result_item = NIL;
-                for (result_item = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , result_item = cdolist_list_var.first()) {
-                    princ(result_item, T);
-                    terpri(UNPROVIDED);
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject ke_text_from_manual_annotations(SubLObject filename) {
@@ -13897,155 +6871,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             result_item = cdolist_list_var.first();
         } 
         return NIL;
-    }
-
-    public static final SubLObject output_webgame_qs_alt(SubLObject doc_index_file) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject output_files = NIL;
-                SubLObject file_var = doc_index_file;
-                SubLObject stream = NIL;
-                try {
-                    {
-                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                        try {
-                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                            stream = compatibility.open_text(file_var, $INPUT, NIL);
-                        } finally {
-                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    if (!stream.isStream()) {
-                        Errors.error($str_alt114$Unable_to_open__S, file_var);
-                    }
-                    {
-                        SubLObject stream_var = stream;
-                        if (stream_var.isStream()) {
-                            {
-                                SubLObject stream_var_154 = stream_var;
-                                SubLObject line_number_var = NIL;
-                                SubLObject line = NIL;
-                                for (line_number_var = ZERO_INTEGER, line = read_line(stream_var_154, NIL, NIL, UNPROVIDED); NIL != line; line_number_var = number_utilities.f_1X(line_number_var) , line = read_line(stream_var_154, NIL, NIL, UNPROVIDED)) {
-                                    {
-                                        SubLObject line_elts = string_utilities.string_tokenize(line, $list_alt404, list(list($str_alt405$_, $str_alt405$_)), NIL, NIL, list(CHAR_backslash), UNPROVIDED);
-                                        SubLObject datum = line_elts;
-                                        SubLObject current = datum;
-                                        SubLObject id = NIL;
-                                        SubLObject url = NIL;
-                                        SubLObject filedir = NIL;
-                                        SubLObject time_stamp = NIL;
-                                        destructuring_bind_must_consp(current, datum, $list_alt416);
-                                        id = current.first();
-                                        current = current.rest();
-                                        destructuring_bind_must_consp(current, datum, $list_alt416);
-                                        url = current.first();
-                                        current = current.rest();
-                                        destructuring_bind_must_consp(current, datum, $list_alt416);
-                                        filedir = current.first();
-                                        current = current.rest();
-                                        destructuring_bind_must_consp(current, datum, $list_alt416);
-                                        time_stamp = current.first();
-                                        current = current.rest();
-                                        if (NIL == current) {
-                                            Errors.warn($str_alt417$input_file_line___S__, line_elts);
-                                            {
-                                                SubLObject filename = cconcatenate(filedir, time_stamp);
-                                                SubLObject output_file = cconcatenate(filename, $str_alt400$_out);
-                                                SubLObject file_string = file_utilities.slurp_file(filename);
-                                                SubLObject plain_doc = com.cyc.cycjava.cycl.document_annotation_widgets.new_tagged_document(file_string, concept_tagger.get_browser_tagging_lexicon(NIL, $list_alt418), UNPROVIDED);
-                                                SubLObject disambiguated_doc = rule_disambiguation.rdis_disambiguate(rule_disambiguation.new_rule_disambiguator(UNPROVIDED, UNPROVIDED), plain_doc, UNPROVIDED);
-                                                SubLObject stream_155 = NIL;
-                                                try {
-                                                    {
-                                                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                                                        try {
-                                                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                                                            stream_155 = compatibility.open_text(output_file, $OUTPUT, NIL);
-                                                        } finally {
-                                                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
-                                                        }
-                                                    }
-                                                    if (!stream_155.isStream()) {
-                                                        Errors.error($str_alt114$Unable_to_open__S, output_file);
-                                                    }
-                                                    {
-                                                        SubLObject s = stream_155;
-                                                        SubLObject vector_var = document.document_paragraphs(disambiguated_doc);
-                                                        SubLObject backwardP_var = NIL;
-                                                        SubLObject length = length(vector_var);
-                                                        SubLObject v_iteration = NIL;
-                                                        for (v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = add(v_iteration, ONE_INTEGER)) {
-                                                            {
-                                                                SubLObject element_num = (NIL != backwardP_var) ? ((SubLObject) (subtract(length, v_iteration, ONE_INTEGER))) : v_iteration;
-                                                                SubLObject paragraph = aref(vector_var, element_num);
-                                                                SubLObject vector_var_156 = document.paragraph_sentences(paragraph);
-                                                                SubLObject backwardP_var_157 = NIL;
-                                                                SubLObject length_158 = length(vector_var_156);
-                                                                SubLObject v_iteration_159 = NIL;
-                                                                for (v_iteration_159 = ZERO_INTEGER; v_iteration_159.numL(length_158); v_iteration_159 = add(v_iteration_159, ONE_INTEGER)) {
-                                                                    {
-                                                                        SubLObject element_num_160 = (NIL != backwardP_var_157) ? ((SubLObject) (subtract(length_158, v_iteration_159, ONE_INTEGER))) : v_iteration_159;
-                                                                        SubLObject sent = aref(vector_var_156, element_num_160);
-                                                                        SubLObject vector_var_161 = document.sentence_yield(sent);
-                                                                        SubLObject backwardP_var_162 = NIL;
-                                                                        SubLObject length_163 = length(vector_var_161);
-                                                                        SubLObject v_iteration_164 = NIL;
-                                                                        for (v_iteration_164 = ZERO_INTEGER; v_iteration_164.numL(length_163); v_iteration_164 = add(v_iteration_164, ONE_INTEGER)) {
-                                                                            {
-                                                                                SubLObject element_num_165 = (NIL != backwardP_var_162) ? ((SubLObject) (subtract(length_163, v_iteration_164, ONE_INTEGER))) : v_iteration_164;
-                                                                                SubLObject word = aref(vector_var_161, element_num_165);
-                                                                                SubLObject cdolist_list_var = document.word_cycls(word);
-                                                                                SubLObject cycl = NIL;
-                                                                                for (cycl = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , cycl = cdolist_list_var.first()) {
-                                                                                    format(s, $str_alt419$__S__S__S___, new SubLObject[]{ document.word_string(word), cycl, document.sentence_string(sent) });
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                } finally {
-                                                    {
-                                                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                        try {
-                                                            $is_thread_performing_cleanupP$.bind(T, thread);
-                                                            if (stream_155.isStream()) {
-                                                                close(stream_155, UNPROVIDED);
-                                                            }
-                                                        } finally {
-                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                                                        }
-                                                    }
-                                                }
-                                                output_files = cons(output_file, output_files);
-                                            }
-                                        } else {
-                                            cdestructuring_bind_error(datum, $list_alt416);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            if (stream.isStream()) {
-                                close(stream, UNPROVIDED);
-                            }
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                return output_files;
-            }
-        }
     }
 
     public static SubLObject output_webgame_qs(final SubLObject doc_index_file) {
@@ -14186,827 +7011,219 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return output_files;
     }
 
-    public static final SubLObject declare_document_annotation_widgets_file_alt() {
-        declareMacro("trace_doc_search", "TRACE-DOC-SEARCH");
-        declareFunction("get_text_index", "GET-TEXT-INDEX", 0, 0, false);
-        declareFunction("get_semantic_index", "GET-SEMANTIC-INDEX", 0, 0, false);
-        declareFunction("semantic_index_initializedP", "SEMANTIC-INDEX-INITIALIZED?", 0, 0, false);
-        declareFunction("use_daves_temp_indexes", "USE-DAVES-TEMP-INDEXES", 0, 0, false);
-        declareFunction("use_development_indexes", "USE-DEVELOPMENT-INDEXES", 0, 0, false);
-        declareFunction("use_development_disambiguated_indexes", "USE-DEVELOPMENT-DISAMBIGUATED-INDEXES", 0, 0, false);
-        declareFunction("use_hezbollah_indexes", "USE-HEZBOLLAH-INDEXES", 0, 0, false);
-        declareFunction("new_closure_justification", "NEW-CLOSURE-JUSTIFICATION", 3, 0, false);
-        declareFunction("get_closure_justification_gaf", "GET-CLOSURE-JUSTIFICATION-GAF", 1, 0, false);
-        declareFunction("get_closure_justification_spec", "GET-CLOSURE-JUSTIFICATION-SPEC", 1, 0, false);
-        declareFunction("get_closure_justification_genl", "GET-CLOSURE-JUSTIFICATION-GENL", 1, 0, false);
-        declareFunction("closure_justification_predicate", "CLOSURE-JUSTIFICATION-PREDICATE", 1, 0, false);
-        declareFunction("closure_justification_pred_id", "CLOSURE-JUSTIFICATION-PRED-ID", 1, 0, false);
-        declareFunction("substitute_template", "SUBSTITUTE-TEMPLATE", 3, 0, false);
-        declareFunction("predicate_template", "PREDICATE-TEMPLATE", 1, 0, false);
-        declareFunction("make_justifications", "MAKE-JUSTIFICATIONS", 3, 0, false);
-        declareFunction("doc_annotation_irrelevant_term", "DOC-ANNOTATION-IRRELEVANT-TERM", 1, 0, false);
-        declareFunction("clear_term_learner_object_from_id", "CLEAR-TERM-LEARNER-OBJECT-FROM-ID", 0, 0, false);
-        declareFunction("remove_term_learner_object_from_id", "REMOVE-TERM-LEARNER-OBJECT-FROM-ID", 1, 0, false);
-        declareFunction("term_learner_object_from_id_internal", "TERM-LEARNER-OBJECT-FROM-ID-INTERNAL", 1, 0, false);
-        declareFunction("term_learner_object_from_id", "TERM-LEARNER-OBJECT-FROM-ID", 1, 0, false);
-        declareFunction("maybe_term_learner_object_from_id", "MAYBE-TERM-LEARNER-OBJECT-FROM-ID", 1, 0, false);
-        declareFunction("get_term_learner_id_for_cycl_string", "GET-TERM-LEARNER-ID-FOR-CYCL-STRING", 1, 0, false);
-        declareFunction("clear_term_learner_id", "CLEAR-TERM-LEARNER-ID", 0, 0, false);
-        declareFunction("remove_term_learner_id", "REMOVE-TERM-LEARNER-ID", 1, 0, false);
-        declareFunction("term_learner_id_internal", "TERM-LEARNER-ID-INTERNAL", 1, 0, false);
-        declareFunction("term_learner_id", "TERM-LEARNER-ID", 1, 0, false);
-        declareFunction("get_upwards_closure_justifications_internal", "GET-UPWARDS-CLOSURE-JUSTIFICATIONS-INTERNAL", 1, 0, false);
-        declareFunction("get_upwards_closure_justifications", "GET-UPWARDS-CLOSURE-JUSTIFICATIONS", 1, 0, false);
-        declareFunction("get_upwards_closure", "GET-UPWARDS-CLOSURE", 1, 0, false);
-        declareFunction("clear_get_upwards_closure_justifications_cached", "CLEAR-GET-UPWARDS-CLOSURE-JUSTIFICATIONS-CACHED", 0, 0, false);
-        declareFunction("remove_get_upwards_closure_justifications_cached", "REMOVE-GET-UPWARDS-CLOSURE-JUSTIFICATIONS-CACHED", 1, 0, false);
-        declareFunction("get_upwards_closure_justifications_cached_internal", "GET-UPWARDS-CLOSURE-JUSTIFICATIONS-CACHED-INTERNAL", 1, 0, false);
-        declareFunction("get_upwards_closure_justifications_cached", "GET-UPWARDS-CLOSURE-JUSTIFICATIONS-CACHED", 1, 0, false);
-        declareFunction("caching_upwards_closure_justificationsP", "CACHING-UPWARDS-CLOSURE-JUSTIFICATIONS?", 0, 0, false);
-        declareFunction("cache_upwards_closure_justifications", "CACHE-UPWARDS-CLOSURE-JUSTIFICATIONS", 0, 1, false);
-        declareFunction("cache_upwards_closure_justification", "CACHE-UPWARDS-CLOSURE-JUSTIFICATION", 1, 0, false);
-        declareFunction("treatment_for_somethingP", "TREATMENT-FOR-SOMETHING?", 1, 0, false);
-        declareFunction("ailmentP", "AILMENT?", 1, 0, false);
-        declareFunction("agentP", "AGENT?", 1, 0, false);
-        declareFunction("clear_get_treated_condition", "CLEAR-GET-TREATED-CONDITION", 0, 0, false);
-        new com.cyc.cycjava.cycl.document_annotation_widgets.$clear_get_treated_condition$ZeroArityFunction();
-        declareFunction("remove_get_treated_condition", "REMOVE-GET-TREATED-CONDITION", 1, 0, false);
-        declareFunction("get_treated_condition_internal", "GET-TREATED-CONDITION-INTERNAL", 1, 0, false);
-        declareFunction("get_treated_condition", "GET-TREATED-CONDITION", 1, 0, false);
-        declareFunction("clear_get_treatments_for_condition", "CLEAR-GET-TREATMENTS-FOR-CONDITION", 0, 0, false);
-        new com.cyc.cycjava.cycl.document_annotation_widgets.$clear_get_treatments_for_condition$ZeroArityFunction();
-        declareFunction("remove_get_treatments_for_condition", "REMOVE-GET-TREATMENTS-FOR-CONDITION", 1, 0, false);
-        declareFunction("get_treatments_for_condition_internal", "GET-TREATMENTS-FOR-CONDITION-INTERNAL", 1, 0, false);
-        declareFunction("get_treatments_for_condition", "GET-TREATMENTS-FOR-CONDITION", 1, 0, false);
-        declareFunction("clear_get_affected_parts", "CLEAR-GET-AFFECTED-PARTS", 0, 0, false);
-        new com.cyc.cycjava.cycl.document_annotation_widgets.$clear_get_affected_parts$ZeroArityFunction();
-        declareFunction("remove_get_affected_parts", "REMOVE-GET-AFFECTED-PARTS", 1, 0, false);
-        declareFunction("get_affected_parts_internal", "GET-AFFECTED-PARTS-INTERNAL", 1, 0, false);
-        declareFunction("get_affected_parts", "GET-AFFECTED-PARTS", 1, 0, false);
-        declareFunction("clear_get_cooccurring_conditions", "CLEAR-GET-COOCCURRING-CONDITIONS", 0, 0, false);
-        new com.cyc.cycjava.cycl.document_annotation_widgets.$clear_get_cooccurring_conditions$ZeroArityFunction();
-        declareFunction("remove_get_cooccurring_conditions", "REMOVE-GET-COOCCURRING-CONDITIONS", 1, 0, false);
-        declareFunction("get_cooccurring_conditions_internal", "GET-COOCCURRING-CONDITIONS-INTERNAL", 1, 0, false);
-        declareFunction("get_cooccurring_conditions", "GET-COOCCURRING-CONDITIONS", 1, 0, false);
-        declareFunction("get_groups", "GET-GROUPS", 1, 0, false);
-        declareFunction("get_groups_non_cached", "GET-GROUPS-NON-CACHED", 1, 0, false);
-        declareFunction("clear_leaders_to_groups", "CLEAR-LEADERS-TO-GROUPS", 0, 0, false);
-        declareFunction("remove_leaders_to_groups", "REMOVE-LEADERS-TO-GROUPS", 0, 0, false);
-        declareFunction("leaders_to_groups_internal", "LEADERS-TO-GROUPS-INTERNAL", 0, 0, false);
-        declareFunction("leaders_to_groups", "LEADERS-TO-GROUPS", 0, 0, false);
-        declareFunction("get_city_regions", "GET-CITY-REGIONS", 1, 0, false);
-        declareFunction("get_city_countries", "GET-CITY-COUNTRIES", 1, 0, false);
-        declareFunction("clear_cities_to_countries", "CLEAR-CITIES-TO-COUNTRIES", 0, 0, false);
-        declareFunction("remove_cities_to_countries", "REMOVE-CITIES-TO-COUNTRIES", 0, 0, false);
-        declareFunction("cities_to_countries_internal", "CITIES-TO-COUNTRIES-INTERNAL", 0, 0, false);
-        declareFunction("cities_to_countries", "CITIES-TO-COUNTRIES", 0, 0, false);
-        declareFunction("get_city_countries_non_cached", "GET-CITY-COUNTRIES-NON-CACHED", 1, 0, false);
-        declareFunction("get_country_regions", "GET-COUNTRY-REGIONS", 1, 0, false);
-        declareFunction("get_country_regions_non_cached", "GET-COUNTRY-REGIONS-NON-CACHED", 1, 0, false);
-        declareFunction("clear_countries_to_regions", "CLEAR-COUNTRIES-TO-REGIONS", 0, 0, false);
-        declareFunction("remove_countries_to_regions", "REMOVE-COUNTRIES-TO-REGIONS", 0, 0, false);
-        declareFunction("countries_to_regions_internal", "COUNTRIES-TO-REGIONS-INTERNAL", 0, 0, false);
-        declareFunction("countries_to_regions", "COUNTRIES-TO-REGIONS", 0, 0, false);
-        declareMacro("with_dual_lucene_sessions", "WITH-DUAL-LUCENE-SESSIONS");
-        declareFunction("add_fully_indexed_documents_from_dir", "ADD-FULLY-INDEXED-DOCUMENTS-FROM-DIR", 6, 0, false);
-        declareFunction("add_fully_indexed_documents", "ADD-FULLY-INDEXED-DOCUMENTS", 6, 0, false);
-        declareFunction("tag_xml_documents_with_urls", "TAG-XML-DOCUMENTS-WITH-URLS", 1, 2, false);
-        declareFunction("tag_xml_document_filespec", "TAG-XML-DOCUMENT-FILESPEC", 3, 1, false);
-        declareFunction("read_original_doc", "READ-ORIGINAL-DOC", 1, 0, false);
-        declareFunction("tag_xml_doc_set_with_urls", "TAG-XML-DOC-SET-WITH-URLS", 1, 2, false);
-        declareFunction("index_xml_doc_set_from_map_file", "INDEX-XML-DOC-SET-FROM-MAP-FILE", 2, 4, false);
-        declareFunction("index_pre_tagged_xml_docs", "INDEX-PRE-TAGGED-XML-DOCS", 6, 0, false);
-        declareFunction("index_pre_tagged_xml_doc", "INDEX-PRE-TAGGED-XML-DOC", 4, 0, false);
-        declareFunction("lucene_add_document_semantic", "LUCENE-ADD-DOCUMENT-SEMANTIC", 6, 0, false);
-        declareFunction("lucene_add_document_keyword", "LUCENE-ADD-DOCUMENT-KEYWORD", 4, 0, false);
-        declareFunction("add_fully_indexed_document", "ADD-FULLY-INDEXED-DOCUMENT", 5, 0, false);
-        declareFunction("print_offset_info", "PRINT-OFFSET-INFO", 3, 0, false);
-        declareFunction("print_term_and_reln", "PRINT-TERM-AND-RELN", 3, 0, false);
-        declareFunction("print_token", "PRINT-TOKEN", 4, 0, false);
-        declareFunction("new_tagged_document", "NEW-TAGGED-DOCUMENT", 1, 2, false);
-        declareFunction("find_concepts_for_document_segments", "FIND-CONCEPTS-FOR-DOCUMENT-SEGMENTS", 1, 3, false);
-        declareFunction("tag_document_nodes_for_display", "TAG-DOCUMENT-NODES-FOR-DISPLAY", 1, 4, false);
-        declareFunction("get_doc_string_from_node_ids_and_strings", "GET-DOC-STRING-FROM-NODE-IDS-AND-STRINGS", 1, 0, false);
-        declareFunction("get_output_lists_for_word", "GET-OUTPUT-LISTS-FOR-WORD", 2, 1, false);
-        declareFunction("node_and_node_offset", "NODE-AND-NODE-OFFSET", 2, 0, false);
-        declareFunction("new_named_entity_wordP", "NEW-NAMED-ENTITY-WORD?", 1, 0, false);
-        declareFunction("nart_has_non_derived_assertionsP", "NART-HAS-NON-DERIVED-ASSERTIONS?", 1, 0, false);
-        declareFunction("get_default_medical_tagging_lexicon", "GET-DEFAULT-MEDICAL-TAGGING-LEXICON", 0, 0, false);
-        declareFunction("clear_default_medical_tagging_lexicon", "CLEAR-DEFAULT-MEDICAL-TAGGING-LEXICON", 0, 0, false);
-        declareFunction("augment_medical_html_file_with_cyc_terms", "AUGMENT-MEDICAL-HTML-FILE-WITH-CYC-TERMS", 1, 1, false);
-        declareFunction("augment_html_document_with_cyc_terms", "AUGMENT-HTML-DOCUMENT-WITH-CYC-TERMS", 1, 1, false);
-        declareFunction("doc_tagger_rdf_name", "DOC-TAGGER-RDF-NAME", 1, 0, false);
-        declareFunction("doc_tagger_rdf_id", "DOC-TAGGER-RDF-ID", 1, 0, false);
-        declareFunction("mapping_first_elt_info", "MAPPING-FIRST-ELT-INFO", 1, 0, false);
-        declareFunction("get_text_string_from_tokens", "GET-TEXT-STRING-FROM-TOKENS", 1, 1, false);
-        declareFunction("tag_document_for_indexing_with_offsets", "TAG-DOCUMENT-FOR-INDEXING-WITH-OFFSETS", 1, 3, false);
-        declareFunction("document_annotation_relation_from_id", "DOCUMENT-ANNOTATION-RELATION-FROM-ID", 1, 0, false);
-        declareFunction("generate_retrieval_justification", "GENERATE-RETRIEVAL-JUSTIFICATION", 3, 0, false);
-        declareFunction("generate_retrieval_justification_from_justification_string", "GENERATE-RETRIEVAL-JUSTIFICATION-FROM-JUSTIFICATION-STRING", 1, 0, false);
-        declareFunction("get_best_justifications_from_arg_list", "GET-BEST-JUSTIFICATIONS-FROM-ARG-LIST", 1, 0, false);
-        declareFunction("better_justification_pred", "BETTER-JUSTIFICATION-PRED", 2, 0, false);
-        declareFunction("generate_term_explanation", "GENERATE-TERM-EXPLANATION", 1, 0, false);
-        declareFunction("get_other_explanatory_strings_for_term", "GET-OTHER-EXPLANATORY-STRINGS-FOR-TERM", 1, 0, false);
-        declareFunction("clear_document_annotation_term_id", "CLEAR-DOCUMENT-ANNOTATION-TERM-ID", 0, 0, false);
-        declareFunction("remove_document_annotation_term_id", "REMOVE-DOCUMENT-ANNOTATION-TERM-ID", 1, 1, false);
-        declareFunction("document_annotation_term_id_internal", "DOCUMENT-ANNOTATION-TERM-ID-INTERNAL", 2, 0, false);
-        declareFunction("document_annotation_term_id", "DOCUMENT-ANNOTATION-TERM-ID", 1, 1, false);
-        declareFunction("clear_document_annotation_term_from_id", "CLEAR-DOCUMENT-ANNOTATION-TERM-FROM-ID", 0, 0, false);
-        declareFunction("remove_document_annotation_term_from_id", "REMOVE-DOCUMENT-ANNOTATION-TERM-FROM-ID", 1, 0, false);
-        declareFunction("document_annotation_term_from_id_internal", "DOCUMENT-ANNOTATION-TERM-FROM-ID-INTERNAL", 1, 0, false);
-        declareFunction("document_annotation_term_from_id", "DOCUMENT-ANNOTATION-TERM-FROM-ID", 1, 0, false);
-        declareFunction("get_cached_term_id", "GET-CACHED-TERM-ID", 1, 0, false);
-        declareFunction("get_term_from_cached_id", "GET-TERM-FROM-CACHED-ID", 1, 0, false);
-        declareFunction("get_default_document_ingester_annotation_learning_lexicon", "GET-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEARNING-LEXICON", 0, 3, false);
-        declareFunction("clear_default_document_ingester_annotation_learning_lexicon", "CLEAR-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEARNING-LEXICON", 0, 1, false);
-        declareFunction("get_default_document_ingester_annotation_lexicon", "GET-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEXICON", 0, 0, false);
-        declareFunction("clear_default_document_ingester_annotation_lexicon", "CLEAR-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEXICON", 0, 0, false);
-        declareFunction("get_default_document_annotation_learning_lexicon", "GET-DEFAULT-DOCUMENT-ANNOTATION-LEARNING-LEXICON", 0, 0, false);
-        declareFunction("clear_default_document_annotation_learning_lexicon", "CLEAR-DEFAULT-DOCUMENT-ANNOTATION-LEARNING-LEXICON", 0, 0, false);
-        declareFunction("clear_default_document_annotation_lexicon", "CLEAR-DEFAULT-DOCUMENT-ANNOTATION-LEXICON", 0, 0, false);
-        declareFunction("get_default_document_annotation_lexicon", "GET-DEFAULT-DOCUMENT-ANNOTATION-LEXICON", 0, 0, false);
-        declareFunction("make_default_document_annotation_lexicon", "MAKE-DEFAULT-DOCUMENT-ANNOTATION-LEXICON", 0, 1, false);
-        declareFunction("get_default_document_annotation_rule_disambiguator", "GET-DEFAULT-DOCUMENT-ANNOTATION-RULE-DISAMBIGUATOR", 0, 0, false);
-        declareFunction("maybe_initialize_doc_annotator_term_id_fbc", "MAYBE-INITIALIZE-DOC-ANNOTATOR-TERM-ID-FBC", 0, 1, false);
-        declareFunction("maybe_initialize_doc_annotator_id_term_fbc", "MAYBE-INITIALIZE-DOC-ANNOTATOR-ID-TERM-FBC", 0, 1, false);
-        declareFunction("rebuild_doc_annotator_term_id_fbc", "REBUILD-DOC-ANNOTATOR-TERM-ID-FBC", 0, 2, false);
-        declareFunction("build_id_to_term_fbc", "BUILD-ID-TO-TERM-FBC", 0, 2, false);
-        declareFunction("augment_doc_annotator_term_fht", "AUGMENT-DOC-ANNOTATOR-TERM-FHT", 0, 1, false);
-        declareFunction("document_query", "DOCUMENT-QUERY", 1, 0, false);
-        declareFunction("lucene_text_query", "LUCENE-TEXT-QUERY", 1, 1, false);
-        declareFunction("lucene_sem_query_with_sem_search_string", "LUCENE-SEM-QUERY-WITH-SEM-SEARCH-STRING", 1, 1, false);
-        declareFunction("lucene_sem_query", "LUCENE-SEM-QUERY", 1, 1, false);
-        declareFunction("lucene_double_query", "LUCENE-DOUBLE-QUERY", 2, 1, false);
-        declareFunction("cyc_semantic_search_token", "CYC-SEMANTIC-SEARCH-TOKEN", 2, 0, false);
-        declareFunction("terms_for_cyc_semantic_query", "TERMS-FOR-CYC-SEMANTIC-QUERY", 1, 0, false);
-        declareFunction("remove_cdar", "REMOVE-CDAR", 1, 0, false);
-        declareFunction("stopword_in_sem_queryP", "STOPWORD-IN-SEM-QUERY?", 1, 0, false);
-        declareFunction("encode_word_for_semantic_query", "ENCODE-WORD-FOR-SEMANTIC-QUERY", 2, 0, false);
-        declareFunction("terms_for_focused_cyc_semantic_query", "TERMS-FOR-FOCUSED-CYC-SEMANTIC-QUERY", 2, 0, false);
-        declareFunction("simple_terms_for_cyc_semantic_query", "SIMPLE-TERMS-FOR-CYC-SEMANTIC-QUERY", 1, 0, false);
-        declareFunction("get_compiled_regexp", "GET-COMPILED-REGEXP", 1, 0, false);
-        declareFunction("clean_semantic_search_hits", "CLEAN-SEMANTIC-SEARCH-HITS", 1, 0, false);
-        declareMacro("do_lexified_forts", "DO-LEXIFIED-FORTS");
-        declareFunction("simple_document_tagging_results", "SIMPLE-DOCUMENT-TAGGING-RESULTS", 1, 0, false);
-        declareFunction("show_document_tagging_results", "SHOW-DOCUMENT-TAGGING-RESULTS", 1, 1, false);
-        declareFunction("document_tagging_results_for_human_review", "DOCUMENT-TAGGING-RESULTS-FOR-HUMAN-REVIEW", 1, 1, false);
-        declareFunction("remove_pictures_regexp_test", "REMOVE-PICTURES-REGEXP-TEST", 1, 0, false);
-        declareFunction("get_doc_string_from_node_ids_and_strings_values", "GET-DOC-STRING-FROM-NODE-IDS-AND-STRINGS-VALUES", 1, 0, false);
-        declareFunction("get_interpretation_rules_for_mt", "GET-INTERPRETATION-RULES-FOR-MT", 0, 1, false);
-        declareFunction("tag_document_for_interpretation", "TAG-DOCUMENT-FOR-INTERPRETATION", 1, 1, false);
-        declareFunction("get_concept_bag_from_document", "GET-CONCEPT-BAG-FROM-DOCUMENT", 1, 0, false);
-        declareMacro("do_interpretation_rules", "DO-INTERPRETATION-RULES");
-        declareFunction("interpret_document_via_suggestions", "INTERPRET-DOCUMENT-VIA-SUGGESTIONS", 1, 0, false);
-        declareFunction("suggest_interpretations", "SUGGEST-INTERPRETATIONS", 1, 2, false);
-        declareFunction("interpretation_rule_appliesP", "INTERPRETATION-RULE-APPLIES?", 3, 0, false);
-        declareFunction("update_interpretation_with_rule", "UPDATE-INTERPRETATION-WITH-RULE", 4, 0, false);
-        declareFunction("initialize_interpretation_rules", "INITIALIZE-INTERPRETATION-RULES", 0, 1, false);
-        declareFunction("add_interpretation_rule", "ADD-INTERPRETATION-RULE", 2, 0, false);
-        declareFunction("add_interpretation_rule_clauses", "ADD-INTERPRETATION-RULE-CLAUSES", 3, 0, false);
-        declareFunction("interpretation_rules_count", "INTERPRETATION-RULES-COUNT", 1, 0, false);
-        declareFunction("clear_interpretation_rules", "CLEAR-INTERPRETATION-RULES", 0, 0, false);
-        declareFunction("store_interpretation_rule", "STORE-INTERPRETATION-RULE", 2, 0, false);
-        declareFunction("make_interpretation_rule_description", "MAKE-INTERPRETATION-RULE-DESCRIPTION", 4, 0, false);
-        declareFunction("interpretation_rule_description_antecedent", "INTERPRETATION-RULE-DESCRIPTION-ANTECEDENT", 1, 0, false);
-        declareFunction("interpretation_rule_description_consequent", "INTERPRETATION-RULE-DESCRIPTION-CONSEQUENT", 1, 0, false);
-        declareFunction("interpretation_rule_description_preconditions", "INTERPRETATION-RULE-DESCRIPTION-PRECONDITIONS", 1, 0, false);
-        declareFunction("interpretation_rule_description_suggestions", "INTERPRETATION-RULE-DESCRIPTION-SUGGESTIONS", 1, 0, false);
-        declareFunction("extract_interpretation_rule_preconditions", "EXTRACT-INTERPRETATION-RULE-PRECONDITIONS", 1, 0, false);
-        declareFunction("extract_interpretation_rule_suggestions", "EXTRACT-INTERPRETATION-RULE-SUGGESTIONS", 1, 0, false);
-        declareFunction("extract_interpretation_rule_precondition", "EXTRACT-INTERPRETATION-RULE-PRECONDITION", 1, 0, false);
-        declareFunction("extract_interpretation_rule_suggestion", "EXTRACT-INTERPRETATION-RULE-SUGGESTION", 1, 0, false);
-        declareFunction("cb_document_interpretation_show_concept", "CB-DOCUMENT-INTERPRETATION-SHOW-CONCEPT", 1, 1, false);
-        declareFunction("cb_document_interpretation_show_sentence", "CB-DOCUMENT-INTERPRETATION-SHOW-SENTENCE", 1, 1, false);
-        declareFunction("cb_document_interpretation_show_rule", "CB-DOCUMENT-INTERPRETATION-SHOW-RULE", 1, 0, false);
-        declareFunction("cb_document_interpretation_suggestions", "CB-DOCUMENT-INTERPRETATION-SUGGESTIONS", 1, 0, false);
-        declareFunction("cb_annotate_tagged_concepts", "CB-ANNOTATE-TAGGED-CONCEPTS", 1, 0, false);
-        declareFunction("handle_submitted_manual_annotation_data", "HANDLE-SUBMITTED-MANUAL-ANNOTATION-DATA", 1, 0, false);
-        declareFunction("annotation_data_from_file", "ANNOTATION-DATA-FROM-FILE", 3, 0, false);
-        declareFunction("get_manual_annotations", "GET-MANUAL-ANNOTATIONS", 0, 1, false);
-        declareFunction("get_manual_annotations_with_strings", "GET-MANUAL-ANNOTATIONS-WITH-STRINGS", 0, 1, false);
-        declareFunction("get_concept_to_strings_map_from_input_data", "GET-CONCEPT-TO-STRINGS-MAP-FROM-INPUT-DATA", 0, 1, false);
-        declareFunction("get_assertions_for_concept_and_string", "GET-ASSERTIONS-FOR-CONCEPT-AND-STRING", 2, 0, false);
-        declareFunction("ke_text_from_manual_annotations", "KE-TEXT-FROM-MANUAL-ANNOTATIONS", 0, 1, false);
-        declareFunction("output_webgame_qs", "OUTPUT-WEBGAME-QS", 1, 0, false);
-        declareFunction("run_doc_ingester_tests", "RUN-DOC-INGESTER-TESTS", 0, 0, false);
-        declareFunction("test_find_concepts_for_document_segments", "TEST-FIND-CONCEPTS-FOR-DOCUMENT-SEGMENTS", 3, 0, false);
-        declareFunction("test_m19_assertions", "TEST-M19-ASSERTIONS", 1, 0, false);
-        declareFunction("test_steve_bendelackarian", "TEST-STEVE-BENDELACKARIAN", 1, 0, false);
-        return NIL;
-    }
-
     public static SubLObject declare_document_annotation_widgets_file() {
-        if (SubLFiles.USE_V1) {
-            declareMacro("trace_doc_search", "TRACE-DOC-SEARCH");
-            declareFunction("get_text_index", "GET-TEXT-INDEX", 0, 0, false);
-            declareFunction("get_semantic_index", "GET-SEMANTIC-INDEX", 0, 0, false);
-            declareFunction("semantic_index_initializedP", "SEMANTIC-INDEX-INITIALIZED?", 0, 0, false);
-            declareFunction("use_daves_temp_indexes", "USE-DAVES-TEMP-INDEXES", 0, 0, false);
-            declareFunction("use_development_indexes", "USE-DEVELOPMENT-INDEXES", 0, 0, false);
-            declareFunction("use_development_disambiguated_indexes", "USE-DEVELOPMENT-DISAMBIGUATED-INDEXES", 0, 0, false);
-            declareFunction("use_hezbollah_indexes", "USE-HEZBOLLAH-INDEXES", 0, 0, false);
-            declareFunction("new_closure_justification", "NEW-CLOSURE-JUSTIFICATION", 3, 0, false);
-            declareFunction("get_closure_justification_gaf", "GET-CLOSURE-JUSTIFICATION-GAF", 1, 0, false);
-            declareFunction("get_closure_justification_spec", "GET-CLOSURE-JUSTIFICATION-SPEC", 1, 0, false);
-            declareFunction("get_closure_justification_genl", "GET-CLOSURE-JUSTIFICATION-GENL", 1, 0, false);
-            declareFunction("closure_justification_predicate", "CLOSURE-JUSTIFICATION-PREDICATE", 1, 0, false);
-            declareFunction("closure_justification_pred_id", "CLOSURE-JUSTIFICATION-PRED-ID", 1, 0, false);
-            declareFunction("substitute_template", "SUBSTITUTE-TEMPLATE", 3, 0, false);
-            declareFunction("predicate_template", "PREDICATE-TEMPLATE", 1, 0, false);
-            declareFunction("make_justifications", "MAKE-JUSTIFICATIONS", 3, 0, false);
-            declareFunction("doc_annotation_irrelevant_term", "DOC-ANNOTATION-IRRELEVANT-TERM", 1, 0, false);
-            declareFunction("clear_term_learner_object_from_id", "CLEAR-TERM-LEARNER-OBJECT-FROM-ID", 0, 0, false);
-            declareFunction("remove_term_learner_object_from_id", "REMOVE-TERM-LEARNER-OBJECT-FROM-ID", 1, 0, false);
-            declareFunction("term_learner_object_from_id_internal", "TERM-LEARNER-OBJECT-FROM-ID-INTERNAL", 1, 0, false);
-            declareFunction("term_learner_object_from_id", "TERM-LEARNER-OBJECT-FROM-ID", 1, 0, false);
-            declareFunction("maybe_term_learner_object_from_id", "MAYBE-TERM-LEARNER-OBJECT-FROM-ID", 1, 0, false);
-            declareFunction("get_term_learner_id_for_cycl_string", "GET-TERM-LEARNER-ID-FOR-CYCL-STRING", 1, 0, false);
-            declareFunction("clear_term_learner_id", "CLEAR-TERM-LEARNER-ID", 0, 0, false);
-            declareFunction("remove_term_learner_id", "REMOVE-TERM-LEARNER-ID", 1, 0, false);
-            declareFunction("term_learner_id_internal", "TERM-LEARNER-ID-INTERNAL", 1, 0, false);
-            declareFunction("term_learner_id", "TERM-LEARNER-ID", 1, 0, false);
-            declareFunction("get_upwards_closure_justifications_internal", "GET-UPWARDS-CLOSURE-JUSTIFICATIONS-INTERNAL", 1, 0, false);
-            declareFunction("get_upwards_closure_justifications", "GET-UPWARDS-CLOSURE-JUSTIFICATIONS", 1, 0, false);
-            declareFunction("get_upwards_closure", "GET-UPWARDS-CLOSURE", 1, 0, false);
-            declareFunction("clear_get_upwards_closure_justifications_cached", "CLEAR-GET-UPWARDS-CLOSURE-JUSTIFICATIONS-CACHED", 0, 0, false);
-            declareFunction("remove_get_upwards_closure_justifications_cached", "REMOVE-GET-UPWARDS-CLOSURE-JUSTIFICATIONS-CACHED", 1, 0, false);
-            declareFunction("get_upwards_closure_justifications_cached_internal", "GET-UPWARDS-CLOSURE-JUSTIFICATIONS-CACHED-INTERNAL", 1, 0, false);
-            declareFunction("get_upwards_closure_justifications_cached", "GET-UPWARDS-CLOSURE-JUSTIFICATIONS-CACHED", 1, 0, false);
-            declareFunction("caching_upwards_closure_justificationsP", "CACHING-UPWARDS-CLOSURE-JUSTIFICATIONS?", 0, 0, false);
-            declareFunction("cache_upwards_closure_justifications", "CACHE-UPWARDS-CLOSURE-JUSTIFICATIONS", 0, 1, false);
-            declareFunction("cache_upwards_closure_justification", "CACHE-UPWARDS-CLOSURE-JUSTIFICATION", 1, 0, false);
-            declareFunction("treatment_for_somethingP", "TREATMENT-FOR-SOMETHING?", 1, 0, false);
-            declareFunction("ailmentP", "AILMENT?", 1, 0, false);
-            declareFunction("agentP", "AGENT?", 1, 0, false);
-            declareFunction("clear_get_treated_condition", "CLEAR-GET-TREATED-CONDITION", 0, 0, false);
-            new document_annotation_widgets.$clear_get_treated_condition$ZeroArityFunction();
-            declareFunction("remove_get_treated_condition", "REMOVE-GET-TREATED-CONDITION", 1, 0, false);
-            declareFunction("get_treated_condition_internal", "GET-TREATED-CONDITION-INTERNAL", 1, 0, false);
-            declareFunction("get_treated_condition", "GET-TREATED-CONDITION", 1, 0, false);
-            declareFunction("clear_get_treatments_for_condition", "CLEAR-GET-TREATMENTS-FOR-CONDITION", 0, 0, false);
-            new document_annotation_widgets.$clear_get_treatments_for_condition$ZeroArityFunction();
-            declareFunction("remove_get_treatments_for_condition", "REMOVE-GET-TREATMENTS-FOR-CONDITION", 1, 0, false);
-            declareFunction("get_treatments_for_condition_internal", "GET-TREATMENTS-FOR-CONDITION-INTERNAL", 1, 0, false);
-            declareFunction("get_treatments_for_condition", "GET-TREATMENTS-FOR-CONDITION", 1, 0, false);
-            declareFunction("clear_get_affected_parts", "CLEAR-GET-AFFECTED-PARTS", 0, 0, false);
-            new document_annotation_widgets.$clear_get_affected_parts$ZeroArityFunction();
-            declareFunction("remove_get_affected_parts", "REMOVE-GET-AFFECTED-PARTS", 1, 0, false);
-            declareFunction("get_affected_parts_internal", "GET-AFFECTED-PARTS-INTERNAL", 1, 0, false);
-            declareFunction("get_affected_parts", "GET-AFFECTED-PARTS", 1, 0, false);
-            declareFunction("clear_get_cooccurring_conditions", "CLEAR-GET-COOCCURRING-CONDITIONS", 0, 0, false);
-            new document_annotation_widgets.$clear_get_cooccurring_conditions$ZeroArityFunction();
-            declareFunction("remove_get_cooccurring_conditions", "REMOVE-GET-COOCCURRING-CONDITIONS", 1, 0, false);
-            declareFunction("get_cooccurring_conditions_internal", "GET-COOCCURRING-CONDITIONS-INTERNAL", 1, 0, false);
-            declareFunction("get_cooccurring_conditions", "GET-COOCCURRING-CONDITIONS", 1, 0, false);
-            declareFunction("get_groups", "GET-GROUPS", 1, 0, false);
-            declareFunction("get_groups_non_cached", "GET-GROUPS-NON-CACHED", 1, 0, false);
-            declareFunction("clear_leaders_to_groups", "CLEAR-LEADERS-TO-GROUPS", 0, 0, false);
-            declareFunction("remove_leaders_to_groups", "REMOVE-LEADERS-TO-GROUPS", 0, 0, false);
-            declareFunction("leaders_to_groups_internal", "LEADERS-TO-GROUPS-INTERNAL", 0, 0, false);
-            declareFunction("leaders_to_groups", "LEADERS-TO-GROUPS", 0, 0, false);
-            declareFunction("get_city_regions", "GET-CITY-REGIONS", 1, 0, false);
-            declareFunction("get_city_countries", "GET-CITY-COUNTRIES", 1, 0, false);
-            declareFunction("clear_cities_to_countries", "CLEAR-CITIES-TO-COUNTRIES", 0, 0, false);
-            declareFunction("remove_cities_to_countries", "REMOVE-CITIES-TO-COUNTRIES", 0, 0, false);
-            declareFunction("cities_to_countries_internal", "CITIES-TO-COUNTRIES-INTERNAL", 0, 0, false);
-            declareFunction("cities_to_countries", "CITIES-TO-COUNTRIES", 0, 0, false);
-            declareFunction("get_city_countries_non_cached", "GET-CITY-COUNTRIES-NON-CACHED", 1, 0, false);
-            declareFunction("get_country_regions", "GET-COUNTRY-REGIONS", 1, 0, false);
-            declareFunction("get_country_regions_non_cached", "GET-COUNTRY-REGIONS-NON-CACHED", 1, 0, false);
-            declareFunction("clear_countries_to_regions", "CLEAR-COUNTRIES-TO-REGIONS", 0, 0, false);
-            declareFunction("remove_countries_to_regions", "REMOVE-COUNTRIES-TO-REGIONS", 0, 0, false);
-            declareFunction("countries_to_regions_internal", "COUNTRIES-TO-REGIONS-INTERNAL", 0, 0, false);
-            declareFunction("countries_to_regions", "COUNTRIES-TO-REGIONS", 0, 0, false);
-            declareMacro("with_dual_lucene_sessions", "WITH-DUAL-LUCENE-SESSIONS");
-            declareFunction("add_fully_indexed_documents_from_dir", "ADD-FULLY-INDEXED-DOCUMENTS-FROM-DIR", 6, 0, false);
-            declareFunction("add_fully_indexed_documents", "ADD-FULLY-INDEXED-DOCUMENTS", 6, 0, false);
-            declareFunction("tag_xml_documents_with_urls", "TAG-XML-DOCUMENTS-WITH-URLS", 1, 2, false);
-            declareFunction("tag_xml_document_filespec", "TAG-XML-DOCUMENT-FILESPEC", 3, 1, false);
-            declareFunction("read_original_doc", "READ-ORIGINAL-DOC", 1, 0, false);
-            declareFunction("tag_xml_doc_set_with_urls", "TAG-XML-DOC-SET-WITH-URLS", 1, 2, false);
-            declareFunction("index_xml_doc_set_from_map_file", "INDEX-XML-DOC-SET-FROM-MAP-FILE", 2, 4, false);
-            declareFunction("index_pre_tagged_xml_docs", "INDEX-PRE-TAGGED-XML-DOCS", 6, 0, false);
-            declareFunction("index_pre_tagged_xml_doc", "INDEX-PRE-TAGGED-XML-DOC", 4, 0, false);
-            declareFunction("lucene_add_document_semantic", "LUCENE-ADD-DOCUMENT-SEMANTIC", 6, 0, false);
-            declareFunction("lucene_add_document_keyword", "LUCENE-ADD-DOCUMENT-KEYWORD", 4, 0, false);
-            declareFunction("add_fully_indexed_document", "ADD-FULLY-INDEXED-DOCUMENT", 5, 0, false);
-            declareFunction("print_offset_info", "PRINT-OFFSET-INFO", 3, 0, false);
-            declareFunction("print_term_and_reln", "PRINT-TERM-AND-RELN", 3, 0, false);
-            declareFunction("print_token", "PRINT-TOKEN", 4, 0, false);
-            declareFunction("new_tagged_document", "NEW-TAGGED-DOCUMENT", 1, 4, false);
-            declareFunction("find_concepts_for_document_segments", "FIND-CONCEPTS-FOR-DOCUMENT-SEGMENTS", 1, 3, false);
-            declareFunction("tag_document_nodes_for_display", "TAG-DOCUMENT-NODES-FOR-DISPLAY", 1, 4, false);
-            declareFunction("get_doc_string_from_node_ids_and_strings", "GET-DOC-STRING-FROM-NODE-IDS-AND-STRINGS", 1, 0, false);
-            declareFunction("get_output_lists_for_word", "GET-OUTPUT-LISTS-FOR-WORD", 2, 1, false);
-            declareFunction("node_and_node_offset", "NODE-AND-NODE-OFFSET", 2, 0, false);
-            declareFunction("new_named_entity_wordP", "NEW-NAMED-ENTITY-WORD?", 1, 0, false);
-            declareFunction("nart_has_non_derived_assertionsP", "NART-HAS-NON-DERIVED-ASSERTIONS?", 1, 0, false);
-            declareFunction("find_interps_for_document_segments", "FIND-INTERPS-FOR-DOCUMENT-SEGMENTS", 1, 3, false);
-            declareFunction("get_default_medical_tagging_lexicon", "GET-DEFAULT-MEDICAL-TAGGING-LEXICON", 0, 0, false);
-            declareFunction("clear_default_medical_tagging_lexicon", "CLEAR-DEFAULT-MEDICAL-TAGGING-LEXICON", 0, 0, false);
-            declareFunction("augment_medical_html_file_with_cyc_terms", "AUGMENT-MEDICAL-HTML-FILE-WITH-CYC-TERMS", 1, 1, false);
-            declareFunction("augment_html_document_with_cyc_terms", "AUGMENT-HTML-DOCUMENT-WITH-CYC-TERMS", 1, 1, false);
-            declareFunction("doc_tagger_rdf_name", "DOC-TAGGER-RDF-NAME", 1, 0, false);
-            declareFunction("doc_tagger_rdf_id", "DOC-TAGGER-RDF-ID", 1, 0, false);
-            declareFunction("mapping_first_elt_info", "MAPPING-FIRST-ELT-INFO", 1, 0, false);
-            declareFunction("get_text_string_from_tokens", "GET-TEXT-STRING-FROM-TOKENS", 1, 1, false);
-            declareFunction("tag_document_for_indexing_with_offsets", "TAG-DOCUMENT-FOR-INDEXING-WITH-OFFSETS", 1, 3, false);
-            declareFunction("document_annotation_relation_from_id", "DOCUMENT-ANNOTATION-RELATION-FROM-ID", 1, 0, false);
-            declareFunction("generate_retrieval_justification", "GENERATE-RETRIEVAL-JUSTIFICATION", 3, 0, false);
-            declareFunction("generate_retrieval_justification_from_justification_string", "GENERATE-RETRIEVAL-JUSTIFICATION-FROM-JUSTIFICATION-STRING", 1, 0, false);
-            declareFunction("get_best_justifications_from_arg_list", "GET-BEST-JUSTIFICATIONS-FROM-ARG-LIST", 1, 0, false);
-            declareFunction("better_justification_pred", "BETTER-JUSTIFICATION-PRED", 2, 0, false);
-            declareFunction("generate_term_explanation", "GENERATE-TERM-EXPLANATION", 1, 0, false);
-            declareFunction("get_other_explanatory_strings_for_term", "GET-OTHER-EXPLANATORY-STRINGS-FOR-TERM", 1, 0, false);
-            declareFunction("clear_document_annotation_term_id", "CLEAR-DOCUMENT-ANNOTATION-TERM-ID", 0, 0, false);
-            declareFunction("remove_document_annotation_term_id", "REMOVE-DOCUMENT-ANNOTATION-TERM-ID", 1, 1, false);
-            declareFunction("document_annotation_term_id_internal", "DOCUMENT-ANNOTATION-TERM-ID-INTERNAL", 2, 0, false);
-            declareFunction("document_annotation_term_id", "DOCUMENT-ANNOTATION-TERM-ID", 1, 1, false);
-            declareFunction("clear_document_annotation_term_from_id", "CLEAR-DOCUMENT-ANNOTATION-TERM-FROM-ID", 0, 0, false);
-            declareFunction("remove_document_annotation_term_from_id", "REMOVE-DOCUMENT-ANNOTATION-TERM-FROM-ID", 1, 0, false);
-            declareFunction("document_annotation_term_from_id_internal", "DOCUMENT-ANNOTATION-TERM-FROM-ID-INTERNAL", 1, 0, false);
-            declareFunction("document_annotation_term_from_id", "DOCUMENT-ANNOTATION-TERM-FROM-ID", 1, 0, false);
-            declareFunction("get_cached_term_id", "GET-CACHED-TERM-ID", 1, 0, false);
-            declareFunction("get_term_from_cached_id", "GET-TERM-FROM-CACHED-ID", 1, 0, false);
-            declareFunction("get_default_document_ingester_annotation_learning_lexicon", "GET-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEARNING-LEXICON", 0, 3, false);
-            declareFunction("clear_default_document_ingester_annotation_learning_lexicon", "CLEAR-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEARNING-LEXICON", 0, 1, false);
-            declareFunction("clear_get_default_document_ingester_annotation_lexicon", "CLEAR-GET-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEXICON", 0, 0, false);
-            declareFunction("remove_get_default_document_ingester_annotation_lexicon", "REMOVE-GET-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEXICON", 0, 1, false);
-            declareFunction("get_default_document_ingester_annotation_lexicon_internal", "GET-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEXICON-INTERNAL", 1, 0, false);
-            declareFunction("get_default_document_ingester_annotation_lexicon", "GET-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEXICON", 0, 1, false);
-            declareFunction("clear_default_document_ingester_annotation_lexicon_for_mt", "CLEAR-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEXICON-FOR-MT", 1, 0, false);
-            declareFunction("get_default_document_annotation_learning_lexicon", "GET-DEFAULT-DOCUMENT-ANNOTATION-LEARNING-LEXICON", 0, 0, false);
-            declareFunction("clear_default_document_annotation_learning_lexicon", "CLEAR-DEFAULT-DOCUMENT-ANNOTATION-LEARNING-LEXICON", 0, 0, false);
-            declareFunction("clear_default_document_annotation_lexicon", "CLEAR-DEFAULT-DOCUMENT-ANNOTATION-LEXICON", 0, 0, false);
-            declareFunction("clear_get_default_document_annotation_lexicon", "CLEAR-GET-DEFAULT-DOCUMENT-ANNOTATION-LEXICON", 0, 0, false);
-            declareFunction("remove_get_default_document_annotation_lexicon", "REMOVE-GET-DEFAULT-DOCUMENT-ANNOTATION-LEXICON", 0, 1, false);
-            declareFunction("get_default_document_annotation_lexicon_internal", "GET-DEFAULT-DOCUMENT-ANNOTATION-LEXICON-INTERNAL", 1, 0, false);
-            declareFunction("get_default_document_annotation_lexicon", "GET-DEFAULT-DOCUMENT-ANNOTATION-LEXICON", 0, 1, false);
-            declareFunction("make_default_document_annotation_lexicon", "MAKE-DEFAULT-DOCUMENT-ANNOTATION-LEXICON", 0, 1, false);
-            declareFunction("get_default_document_annotation_rule_disambiguator", "GET-DEFAULT-DOCUMENT-ANNOTATION-RULE-DISAMBIGUATOR", 0, 0, false);
-            declareFunction("maybe_initialize_doc_annotator_term_id_fbc", "MAYBE-INITIALIZE-DOC-ANNOTATOR-TERM-ID-FBC", 0, 1, false);
-            declareFunction("maybe_initialize_doc_annotator_id_term_fbc", "MAYBE-INITIALIZE-DOC-ANNOTATOR-ID-TERM-FBC", 0, 1, false);
-            declareFunction("rebuild_doc_annotator_term_id_fbc", "REBUILD-DOC-ANNOTATOR-TERM-ID-FBC", 0, 2, false);
-            declareFunction("build_id_to_term_fbc", "BUILD-ID-TO-TERM-FBC", 0, 2, false);
-            declareFunction("augment_doc_annotator_term_fht", "AUGMENT-DOC-ANNOTATOR-TERM-FHT", 0, 1, false);
-            declareFunction("document_query", "DOCUMENT-QUERY", 1, 0, false);
-            declareFunction("lucene_text_query", "LUCENE-TEXT-QUERY", 1, 1, false);
-            declareFunction("lucene_sem_query_with_sem_search_string", "LUCENE-SEM-QUERY-WITH-SEM-SEARCH-STRING", 1, 1, false);
-            declareFunction("lucene_sem_query", "LUCENE-SEM-QUERY", 1, 1, false);
-            declareFunction("lucene_double_query", "LUCENE-DOUBLE-QUERY", 2, 1, false);
-            declareFunction("cyc_semantic_search_token", "CYC-SEMANTIC-SEARCH-TOKEN", 2, 0, false);
-            declareFunction("terms_for_cyc_semantic_query", "TERMS-FOR-CYC-SEMANTIC-QUERY", 1, 0, false);
-            declareFunction("remove_cdar", "REMOVE-CDAR", 1, 0, false);
-            declareFunction("stopword_in_sem_queryP", "STOPWORD-IN-SEM-QUERY?", 1, 0, false);
-            declareFunction("encode_word_for_semantic_query", "ENCODE-WORD-FOR-SEMANTIC-QUERY", 2, 0, false);
-            declareFunction("terms_for_focused_cyc_semantic_query", "TERMS-FOR-FOCUSED-CYC-SEMANTIC-QUERY", 2, 0, false);
-            declareFunction("simple_terms_for_cyc_semantic_query", "SIMPLE-TERMS-FOR-CYC-SEMANTIC-QUERY", 1, 0, false);
-            declareFunction("get_compiled_regexp", "GET-COMPILED-REGEXP", 1, 0, false);
-            declareFunction("clean_semantic_search_hits", "CLEAN-SEMANTIC-SEARCH-HITS", 1, 0, false);
-            declareMacro("do_lexified_forts", "DO-LEXIFIED-FORTS");
-            declareFunction("simple_document_tagging_results", "SIMPLE-DOCUMENT-TAGGING-RESULTS", 1, 0, false);
-            declareFunction("show_document_tagging_results", "SHOW-DOCUMENT-TAGGING-RESULTS", 1, 1, false);
-            declareFunction("document_tagging_results_for_human_review", "DOCUMENT-TAGGING-RESULTS-FOR-HUMAN-REVIEW", 1, 1, false);
-            declareFunction("remove_pictures_regexp_test", "REMOVE-PICTURES-REGEXP-TEST", 1, 0, false);
-            declareFunction("get_doc_string_from_node_ids_and_strings_values", "GET-DOC-STRING-FROM-NODE-IDS-AND-STRINGS-VALUES", 1, 0, false);
-            declareFunction("get_interpretation_rules_for_mt", "GET-INTERPRETATION-RULES-FOR-MT", 0, 1, false);
-            declareFunction("tag_document_for_interpretation", "TAG-DOCUMENT-FOR-INTERPRETATION", 1, 1, false);
-            declareFunction("get_concept_bag_from_document", "GET-CONCEPT-BAG-FROM-DOCUMENT", 1, 0, false);
-            declareMacro("do_interpretation_rules", "DO-INTERPRETATION-RULES");
-            declareFunction("interpret_document_via_suggestions", "INTERPRET-DOCUMENT-VIA-SUGGESTIONS", 1, 0, false);
-            declareFunction("suggest_interpretations", "SUGGEST-INTERPRETATIONS", 1, 2, false);
-            declareFunction("interpretation_rule_appliesP", "INTERPRETATION-RULE-APPLIES?", 3, 0, false);
-            declareFunction("update_interpretation_with_rule", "UPDATE-INTERPRETATION-WITH-RULE", 4, 0, false);
-            declareFunction("initialize_interpretation_rules", "INITIALIZE-INTERPRETATION-RULES", 0, 1, false);
-            declareFunction("add_interpretation_rule", "ADD-INTERPRETATION-RULE", 2, 0, false);
-            declareFunction("add_interpretation_rule_clauses", "ADD-INTERPRETATION-RULE-CLAUSES", 3, 0, false);
-            declareFunction("interpretation_rules_count", "INTERPRETATION-RULES-COUNT", 1, 0, false);
-            declareFunction("clear_interpretation_rules", "CLEAR-INTERPRETATION-RULES", 0, 0, false);
-            declareFunction("store_interpretation_rule", "STORE-INTERPRETATION-RULE", 2, 0, false);
-            declareFunction("make_interpretation_rule_description", "MAKE-INTERPRETATION-RULE-DESCRIPTION", 4, 0, false);
-            declareFunction("interpretation_rule_description_antecedent", "INTERPRETATION-RULE-DESCRIPTION-ANTECEDENT", 1, 0, false);
-            declareFunction("interpretation_rule_description_consequent", "INTERPRETATION-RULE-DESCRIPTION-CONSEQUENT", 1, 0, false);
-            declareFunction("interpretation_rule_description_preconditions", "INTERPRETATION-RULE-DESCRIPTION-PRECONDITIONS", 1, 0, false);
-            declareFunction("interpretation_rule_description_suggestions", "INTERPRETATION-RULE-DESCRIPTION-SUGGESTIONS", 1, 0, false);
-            declareFunction("extract_interpretation_rule_preconditions", "EXTRACT-INTERPRETATION-RULE-PRECONDITIONS", 1, 0, false);
-            declareFunction("extract_interpretation_rule_suggestions", "EXTRACT-INTERPRETATION-RULE-SUGGESTIONS", 1, 0, false);
-            declareFunction("extract_interpretation_rule_precondition", "EXTRACT-INTERPRETATION-RULE-PRECONDITION", 1, 0, false);
-            declareFunction("extract_interpretation_rule_suggestion", "EXTRACT-INTERPRETATION-RULE-SUGGESTION", 1, 0, false);
-            declareFunction("cb_document_interpretation_show_concept", "CB-DOCUMENT-INTERPRETATION-SHOW-CONCEPT", 1, 1, false);
-            declareFunction("cb_document_interpretation_show_sentence", "CB-DOCUMENT-INTERPRETATION-SHOW-SENTENCE", 1, 1, false);
-            declareFunction("cb_document_interpretation_show_rule", "CB-DOCUMENT-INTERPRETATION-SHOW-RULE", 1, 0, false);
-            declareFunction("cb_document_interpretation_suggestions", "CB-DOCUMENT-INTERPRETATION-SUGGESTIONS", 1, 0, false);
-            declareFunction("cb_annotate_tagged_concepts", "CB-ANNOTATE-TAGGED-CONCEPTS", 1, 0, false);
-            declareFunction("handle_submitted_manual_annotation_data", "HANDLE-SUBMITTED-MANUAL-ANNOTATION-DATA", 1, 0, false);
-            declareFunction("annotation_data_from_file", "ANNOTATION-DATA-FROM-FILE", 3, 0, false);
-            declareFunction("get_manual_annotations", "GET-MANUAL-ANNOTATIONS", 0, 1, false);
-            declareFunction("get_manual_annotations_with_strings", "GET-MANUAL-ANNOTATIONS-WITH-STRINGS", 0, 1, false);
-            declareFunction("get_concept_to_strings_map_from_input_data", "GET-CONCEPT-TO-STRINGS-MAP-FROM-INPUT-DATA", 0, 1, false);
-            declareFunction("get_assertions_for_concept_and_string", "GET-ASSERTIONS-FOR-CONCEPT-AND-STRING", 2, 0, false);
-            declareFunction("ke_text_from_manual_annotations", "KE-TEXT-FROM-MANUAL-ANNOTATIONS", 0, 1, false);
-            declareFunction("output_webgame_qs", "OUTPUT-WEBGAME-QS", 1, 0, false);
-        }
-        if (SubLFiles.USE_V2) {
-            declareFunction("new_tagged_document", "NEW-TAGGED-DOCUMENT", 1, 2, false);
-            declareFunction("get_default_document_ingester_annotation_lexicon", "GET-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEXICON", 0, 0, false);
-            declareFunction("clear_default_document_ingester_annotation_lexicon", "CLEAR-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEXICON", 0, 0, false);
-            declareFunction("get_default_document_annotation_lexicon", "GET-DEFAULT-DOCUMENT-ANNOTATION-LEXICON", 0, 0, false);
-            declareFunction("run_doc_ingester_tests", "RUN-DOC-INGESTER-TESTS", 0, 0, false);
-            declareFunction("test_find_concepts_for_document_segments", "TEST-FIND-CONCEPTS-FOR-DOCUMENT-SEGMENTS", 3, 0, false);
-            declareFunction("test_m19_assertions", "TEST-M19-ASSERTIONS", 1, 0, false);
-            declareFunction("test_steve_bendelackarian", "TEST-STEVE-BENDELACKARIAN", 1, 0, false);
-        }
-        return NIL;
-    }
-
-    public static SubLObject declare_document_annotation_widgets_file_Previous() {
-        declareMacro("trace_doc_search", "TRACE-DOC-SEARCH");
-        declareFunction("get_text_index", "GET-TEXT-INDEX", 0, 0, false);
-        declareFunction("get_semantic_index", "GET-SEMANTIC-INDEX", 0, 0, false);
-        declareFunction("semantic_index_initializedP", "SEMANTIC-INDEX-INITIALIZED?", 0, 0, false);
-        declareFunction("use_daves_temp_indexes", "USE-DAVES-TEMP-INDEXES", 0, 0, false);
-        declareFunction("use_development_indexes", "USE-DEVELOPMENT-INDEXES", 0, 0, false);
-        declareFunction("use_development_disambiguated_indexes", "USE-DEVELOPMENT-DISAMBIGUATED-INDEXES", 0, 0, false);
-        declareFunction("use_hezbollah_indexes", "USE-HEZBOLLAH-INDEXES", 0, 0, false);
-        declareFunction("new_closure_justification", "NEW-CLOSURE-JUSTIFICATION", 3, 0, false);
-        declareFunction("get_closure_justification_gaf", "GET-CLOSURE-JUSTIFICATION-GAF", 1, 0, false);
-        declareFunction("get_closure_justification_spec", "GET-CLOSURE-JUSTIFICATION-SPEC", 1, 0, false);
-        declareFunction("get_closure_justification_genl", "GET-CLOSURE-JUSTIFICATION-GENL", 1, 0, false);
-        declareFunction("closure_justification_predicate", "CLOSURE-JUSTIFICATION-PREDICATE", 1, 0, false);
-        declareFunction("closure_justification_pred_id", "CLOSURE-JUSTIFICATION-PRED-ID", 1, 0, false);
-        declareFunction("substitute_template", "SUBSTITUTE-TEMPLATE", 3, 0, false);
-        declareFunction("predicate_template", "PREDICATE-TEMPLATE", 1, 0, false);
-        declareFunction("make_justifications", "MAKE-JUSTIFICATIONS", 3, 0, false);
-        declareFunction("doc_annotation_irrelevant_term", "DOC-ANNOTATION-IRRELEVANT-TERM", 1, 0, false);
-        declareFunction("clear_term_learner_object_from_id", "CLEAR-TERM-LEARNER-OBJECT-FROM-ID", 0, 0, false);
-        declareFunction("remove_term_learner_object_from_id", "REMOVE-TERM-LEARNER-OBJECT-FROM-ID", 1, 0, false);
-        declareFunction("term_learner_object_from_id_internal", "TERM-LEARNER-OBJECT-FROM-ID-INTERNAL", 1, 0, false);
-        declareFunction("term_learner_object_from_id", "TERM-LEARNER-OBJECT-FROM-ID", 1, 0, false);
-        declareFunction("maybe_term_learner_object_from_id", "MAYBE-TERM-LEARNER-OBJECT-FROM-ID", 1, 0, false);
-        declareFunction("get_term_learner_id_for_cycl_string", "GET-TERM-LEARNER-ID-FOR-CYCL-STRING", 1, 0, false);
-        declareFunction("clear_term_learner_id", "CLEAR-TERM-LEARNER-ID", 0, 0, false);
-        declareFunction("remove_term_learner_id", "REMOVE-TERM-LEARNER-ID", 1, 0, false);
-        declareFunction("term_learner_id_internal", "TERM-LEARNER-ID-INTERNAL", 1, 0, false);
-        declareFunction("term_learner_id", "TERM-LEARNER-ID", 1, 0, false);
-        declareFunction("get_upwards_closure_justifications_internal", "GET-UPWARDS-CLOSURE-JUSTIFICATIONS-INTERNAL", 1, 0, false);
-        declareFunction("get_upwards_closure_justifications", "GET-UPWARDS-CLOSURE-JUSTIFICATIONS", 1, 0, false);
-        declareFunction("get_upwards_closure", "GET-UPWARDS-CLOSURE", 1, 0, false);
-        declareFunction("clear_get_upwards_closure_justifications_cached", "CLEAR-GET-UPWARDS-CLOSURE-JUSTIFICATIONS-CACHED", 0, 0, false);
-        declareFunction("remove_get_upwards_closure_justifications_cached", "REMOVE-GET-UPWARDS-CLOSURE-JUSTIFICATIONS-CACHED", 1, 0, false);
-        declareFunction("get_upwards_closure_justifications_cached_internal", "GET-UPWARDS-CLOSURE-JUSTIFICATIONS-CACHED-INTERNAL", 1, 0, false);
-        declareFunction("get_upwards_closure_justifications_cached", "GET-UPWARDS-CLOSURE-JUSTIFICATIONS-CACHED", 1, 0, false);
-        declareFunction("caching_upwards_closure_justificationsP", "CACHING-UPWARDS-CLOSURE-JUSTIFICATIONS?", 0, 0, false);
-        declareFunction("cache_upwards_closure_justifications", "CACHE-UPWARDS-CLOSURE-JUSTIFICATIONS", 0, 1, false);
-        declareFunction("cache_upwards_closure_justification", "CACHE-UPWARDS-CLOSURE-JUSTIFICATION", 1, 0, false);
-        declareFunction("treatment_for_somethingP", "TREATMENT-FOR-SOMETHING?", 1, 0, false);
-        declareFunction("ailmentP", "AILMENT?", 1, 0, false);
-        declareFunction("agentP", "AGENT?", 1, 0, false);
-        declareFunction("clear_get_treated_condition", "CLEAR-GET-TREATED-CONDITION", 0, 0, false);
+        declareMacro(me, "trace_doc_search", "TRACE-DOC-SEARCH");
+        declareFunction(me, "get_text_index", "GET-TEXT-INDEX", 0, 0, false);
+        declareFunction(me, "get_semantic_index", "GET-SEMANTIC-INDEX", 0, 0, false);
+        declareFunction(me, "semantic_index_initializedP", "SEMANTIC-INDEX-INITIALIZED?", 0, 0, false);
+        declareFunction(me, "use_daves_temp_indexes", "USE-DAVES-TEMP-INDEXES", 0, 0, false);
+        declareFunction(me, "use_development_indexes", "USE-DEVELOPMENT-INDEXES", 0, 0, false);
+        declareFunction(me, "use_development_disambiguated_indexes", "USE-DEVELOPMENT-DISAMBIGUATED-INDEXES", 0, 0, false);
+        declareFunction(me, "use_hezbollah_indexes", "USE-HEZBOLLAH-INDEXES", 0, 0, false);
+        declareFunction(me, "new_closure_justification", "NEW-CLOSURE-JUSTIFICATION", 3, 0, false);
+        declareFunction(me, "get_closure_justification_gaf", "GET-CLOSURE-JUSTIFICATION-GAF", 1, 0, false);
+        declareFunction(me, "get_closure_justification_spec", "GET-CLOSURE-JUSTIFICATION-SPEC", 1, 0, false);
+        declareFunction(me, "get_closure_justification_genl", "GET-CLOSURE-JUSTIFICATION-GENL", 1, 0, false);
+        declareFunction(me, "closure_justification_predicate", "CLOSURE-JUSTIFICATION-PREDICATE", 1, 0, false);
+        declareFunction(me, "closure_justification_pred_id", "CLOSURE-JUSTIFICATION-PRED-ID", 1, 0, false);
+        declareFunction(me, "substitute_template", "SUBSTITUTE-TEMPLATE", 3, 0, false);
+        declareFunction(me, "predicate_template", "PREDICATE-TEMPLATE", 1, 0, false);
+        declareFunction(me, "make_justifications", "MAKE-JUSTIFICATIONS", 3, 0, false);
+        declareFunction(me, "doc_annotation_irrelevant_term", "DOC-ANNOTATION-IRRELEVANT-TERM", 1, 0, false);
+        declareFunction(me, "clear_term_learner_object_from_id", "CLEAR-TERM-LEARNER-OBJECT-FROM-ID", 0, 0, false);
+        declareFunction(me, "remove_term_learner_object_from_id", "REMOVE-TERM-LEARNER-OBJECT-FROM-ID", 1, 0, false);
+        declareFunction(me, "term_learner_object_from_id_internal", "TERM-LEARNER-OBJECT-FROM-ID-INTERNAL", 1, 0, false);
+        declareFunction(me, "term_learner_object_from_id", "TERM-LEARNER-OBJECT-FROM-ID", 1, 0, false);
+        declareFunction(me, "maybe_term_learner_object_from_id", "MAYBE-TERM-LEARNER-OBJECT-FROM-ID", 1, 0, false);
+        declareFunction(me, "get_term_learner_id_for_cycl_string", "GET-TERM-LEARNER-ID-FOR-CYCL-STRING", 1, 0, false);
+        declareFunction(me, "clear_term_learner_id", "CLEAR-TERM-LEARNER-ID", 0, 0, false);
+        declareFunction(me, "remove_term_learner_id", "REMOVE-TERM-LEARNER-ID", 1, 0, false);
+        declareFunction(me, "term_learner_id_internal", "TERM-LEARNER-ID-INTERNAL", 1, 0, false);
+        declareFunction(me, "term_learner_id", "TERM-LEARNER-ID", 1, 0, false);
+        declareFunction(me, "get_upwards_closure_justifications_internal", "GET-UPWARDS-CLOSURE-JUSTIFICATIONS-INTERNAL", 1, 0, false);
+        declareFunction(me, "get_upwards_closure_justifications", "GET-UPWARDS-CLOSURE-JUSTIFICATIONS", 1, 0, false);
+        declareFunction(me, "get_upwards_closure", "GET-UPWARDS-CLOSURE", 1, 0, false);
+        declareFunction(me, "clear_get_upwards_closure_justifications_cached", "CLEAR-GET-UPWARDS-CLOSURE-JUSTIFICATIONS-CACHED", 0, 0, false);
+        declareFunction(me, "remove_get_upwards_closure_justifications_cached", "REMOVE-GET-UPWARDS-CLOSURE-JUSTIFICATIONS-CACHED", 1, 0, false);
+        declareFunction(me, "get_upwards_closure_justifications_cached_internal", "GET-UPWARDS-CLOSURE-JUSTIFICATIONS-CACHED-INTERNAL", 1, 0, false);
+        declareFunction(me, "get_upwards_closure_justifications_cached", "GET-UPWARDS-CLOSURE-JUSTIFICATIONS-CACHED", 1, 0, false);
+        declareFunction(me, "caching_upwards_closure_justificationsP", "CACHING-UPWARDS-CLOSURE-JUSTIFICATIONS?", 0, 0, false);
+        declareFunction(me, "cache_upwards_closure_justifications", "CACHE-UPWARDS-CLOSURE-JUSTIFICATIONS", 0, 1, false);
+        declareFunction(me, "cache_upwards_closure_justification", "CACHE-UPWARDS-CLOSURE-JUSTIFICATION", 1, 0, false);
+        declareFunction(me, "treatment_for_somethingP", "TREATMENT-FOR-SOMETHING?", 1, 0, false);
+        declareFunction(me, "ailmentP", "AILMENT?", 1, 0, false);
+        declareFunction(me, "agentP", "AGENT?", 1, 0, false);
+        declareFunction(me, "clear_get_treated_condition", "CLEAR-GET-TREATED-CONDITION", 0, 0, false);
         new document_annotation_widgets.$clear_get_treated_condition$ZeroArityFunction();
-        declareFunction("remove_get_treated_condition", "REMOVE-GET-TREATED-CONDITION", 1, 0, false);
-        declareFunction("get_treated_condition_internal", "GET-TREATED-CONDITION-INTERNAL", 1, 0, false);
-        declareFunction("get_treated_condition", "GET-TREATED-CONDITION", 1, 0, false);
-        declareFunction("clear_get_treatments_for_condition", "CLEAR-GET-TREATMENTS-FOR-CONDITION", 0, 0, false);
+        declareFunction(me, "remove_get_treated_condition", "REMOVE-GET-TREATED-CONDITION", 1, 0, false);
+        declareFunction(me, "get_treated_condition_internal", "GET-TREATED-CONDITION-INTERNAL", 1, 0, false);
+        declareFunction(me, "get_treated_condition", "GET-TREATED-CONDITION", 1, 0, false);
+        declareFunction(me, "clear_get_treatments_for_condition", "CLEAR-GET-TREATMENTS-FOR-CONDITION", 0, 0, false);
         new document_annotation_widgets.$clear_get_treatments_for_condition$ZeroArityFunction();
-        declareFunction("remove_get_treatments_for_condition", "REMOVE-GET-TREATMENTS-FOR-CONDITION", 1, 0, false);
-        declareFunction("get_treatments_for_condition_internal", "GET-TREATMENTS-FOR-CONDITION-INTERNAL", 1, 0, false);
-        declareFunction("get_treatments_for_condition", "GET-TREATMENTS-FOR-CONDITION", 1, 0, false);
-        declareFunction("clear_get_affected_parts", "CLEAR-GET-AFFECTED-PARTS", 0, 0, false);
+        declareFunction(me, "remove_get_treatments_for_condition", "REMOVE-GET-TREATMENTS-FOR-CONDITION", 1, 0, false);
+        declareFunction(me, "get_treatments_for_condition_internal", "GET-TREATMENTS-FOR-CONDITION-INTERNAL", 1, 0, false);
+        declareFunction(me, "get_treatments_for_condition", "GET-TREATMENTS-FOR-CONDITION", 1, 0, false);
+        declareFunction(me, "clear_get_affected_parts", "CLEAR-GET-AFFECTED-PARTS", 0, 0, false);
         new document_annotation_widgets.$clear_get_affected_parts$ZeroArityFunction();
-        declareFunction("remove_get_affected_parts", "REMOVE-GET-AFFECTED-PARTS", 1, 0, false);
-        declareFunction("get_affected_parts_internal", "GET-AFFECTED-PARTS-INTERNAL", 1, 0, false);
-        declareFunction("get_affected_parts", "GET-AFFECTED-PARTS", 1, 0, false);
-        declareFunction("clear_get_cooccurring_conditions", "CLEAR-GET-COOCCURRING-CONDITIONS", 0, 0, false);
+        declareFunction(me, "remove_get_affected_parts", "REMOVE-GET-AFFECTED-PARTS", 1, 0, false);
+        declareFunction(me, "get_affected_parts_internal", "GET-AFFECTED-PARTS-INTERNAL", 1, 0, false);
+        declareFunction(me, "get_affected_parts", "GET-AFFECTED-PARTS", 1, 0, false);
+        declareFunction(me, "clear_get_cooccurring_conditions", "CLEAR-GET-COOCCURRING-CONDITIONS", 0, 0, false);
         new document_annotation_widgets.$clear_get_cooccurring_conditions$ZeroArityFunction();
-        declareFunction("remove_get_cooccurring_conditions", "REMOVE-GET-COOCCURRING-CONDITIONS", 1, 0, false);
-        declareFunction("get_cooccurring_conditions_internal", "GET-COOCCURRING-CONDITIONS-INTERNAL", 1, 0, false);
-        declareFunction("get_cooccurring_conditions", "GET-COOCCURRING-CONDITIONS", 1, 0, false);
-        declareFunction("get_groups", "GET-GROUPS", 1, 0, false);
-        declareFunction("get_groups_non_cached", "GET-GROUPS-NON-CACHED", 1, 0, false);
-        declareFunction("clear_leaders_to_groups", "CLEAR-LEADERS-TO-GROUPS", 0, 0, false);
-        declareFunction("remove_leaders_to_groups", "REMOVE-LEADERS-TO-GROUPS", 0, 0, false);
-        declareFunction("leaders_to_groups_internal", "LEADERS-TO-GROUPS-INTERNAL", 0, 0, false);
-        declareFunction("leaders_to_groups", "LEADERS-TO-GROUPS", 0, 0, false);
-        declareFunction("get_city_regions", "GET-CITY-REGIONS", 1, 0, false);
-        declareFunction("get_city_countries", "GET-CITY-COUNTRIES", 1, 0, false);
-        declareFunction("clear_cities_to_countries", "CLEAR-CITIES-TO-COUNTRIES", 0, 0, false);
-        declareFunction("remove_cities_to_countries", "REMOVE-CITIES-TO-COUNTRIES", 0, 0, false);
-        declareFunction("cities_to_countries_internal", "CITIES-TO-COUNTRIES-INTERNAL", 0, 0, false);
-        declareFunction("cities_to_countries", "CITIES-TO-COUNTRIES", 0, 0, false);
-        declareFunction("get_city_countries_non_cached", "GET-CITY-COUNTRIES-NON-CACHED", 1, 0, false);
-        declareFunction("get_country_regions", "GET-COUNTRY-REGIONS", 1, 0, false);
-        declareFunction("get_country_regions_non_cached", "GET-COUNTRY-REGIONS-NON-CACHED", 1, 0, false);
-        declareFunction("clear_countries_to_regions", "CLEAR-COUNTRIES-TO-REGIONS", 0, 0, false);
-        declareFunction("remove_countries_to_regions", "REMOVE-COUNTRIES-TO-REGIONS", 0, 0, false);
-        declareFunction("countries_to_regions_internal", "COUNTRIES-TO-REGIONS-INTERNAL", 0, 0, false);
-        declareFunction("countries_to_regions", "COUNTRIES-TO-REGIONS", 0, 0, false);
-        declareMacro("with_dual_lucene_sessions", "WITH-DUAL-LUCENE-SESSIONS");
-        declareFunction("add_fully_indexed_documents_from_dir", "ADD-FULLY-INDEXED-DOCUMENTS-FROM-DIR", 6, 0, false);
-        declareFunction("add_fully_indexed_documents", "ADD-FULLY-INDEXED-DOCUMENTS", 6, 0, false);
-        declareFunction("tag_xml_documents_with_urls", "TAG-XML-DOCUMENTS-WITH-URLS", 1, 2, false);
-        declareFunction("tag_xml_document_filespec", "TAG-XML-DOCUMENT-FILESPEC", 3, 1, false);
-        declareFunction("read_original_doc", "READ-ORIGINAL-DOC", 1, 0, false);
-        declareFunction("tag_xml_doc_set_with_urls", "TAG-XML-DOC-SET-WITH-URLS", 1, 2, false);
-        declareFunction("index_xml_doc_set_from_map_file", "INDEX-XML-DOC-SET-FROM-MAP-FILE", 2, 4, false);
-        declareFunction("index_pre_tagged_xml_docs", "INDEX-PRE-TAGGED-XML-DOCS", 6, 0, false);
-        declareFunction("index_pre_tagged_xml_doc", "INDEX-PRE-TAGGED-XML-DOC", 4, 0, false);
-        declareFunction("lucene_add_document_semantic", "LUCENE-ADD-DOCUMENT-SEMANTIC", 6, 0, false);
-        declareFunction("lucene_add_document_keyword", "LUCENE-ADD-DOCUMENT-KEYWORD", 4, 0, false);
-        declareFunction("add_fully_indexed_document", "ADD-FULLY-INDEXED-DOCUMENT", 5, 0, false);
-        declareFunction("print_offset_info", "PRINT-OFFSET-INFO", 3, 0, false);
-        declareFunction("print_term_and_reln", "PRINT-TERM-AND-RELN", 3, 0, false);
-        declareFunction("print_token", "PRINT-TOKEN", 4, 0, false);
-        declareFunction("new_tagged_document", "NEW-TAGGED-DOCUMENT", 1, 4, false);
-        declareFunction("find_concepts_for_document_segments", "FIND-CONCEPTS-FOR-DOCUMENT-SEGMENTS", 1, 3, false);
-        declareFunction("tag_document_nodes_for_display", "TAG-DOCUMENT-NODES-FOR-DISPLAY", 1, 4, false);
-        declareFunction("get_doc_string_from_node_ids_and_strings", "GET-DOC-STRING-FROM-NODE-IDS-AND-STRINGS", 1, 0, false);
-        declareFunction("get_output_lists_for_word", "GET-OUTPUT-LISTS-FOR-WORD", 2, 1, false);
-        declareFunction("node_and_node_offset", "NODE-AND-NODE-OFFSET", 2, 0, false);
-        declareFunction("new_named_entity_wordP", "NEW-NAMED-ENTITY-WORD?", 1, 0, false);
-        declareFunction("nart_has_non_derived_assertionsP", "NART-HAS-NON-DERIVED-ASSERTIONS?", 1, 0, false);
-        declareFunction("find_interps_for_document_segments", "FIND-INTERPS-FOR-DOCUMENT-SEGMENTS", 1, 3, false);
-        declareFunction("get_default_medical_tagging_lexicon", "GET-DEFAULT-MEDICAL-TAGGING-LEXICON", 0, 0, false);
-        declareFunction("clear_default_medical_tagging_lexicon", "CLEAR-DEFAULT-MEDICAL-TAGGING-LEXICON", 0, 0, false);
-        declareFunction("augment_medical_html_file_with_cyc_terms", "AUGMENT-MEDICAL-HTML-FILE-WITH-CYC-TERMS", 1, 1, false);
-        declareFunction("augment_html_document_with_cyc_terms", "AUGMENT-HTML-DOCUMENT-WITH-CYC-TERMS", 1, 1, false);
-        declareFunction("doc_tagger_rdf_name", "DOC-TAGGER-RDF-NAME", 1, 0, false);
-        declareFunction("doc_tagger_rdf_id", "DOC-TAGGER-RDF-ID", 1, 0, false);
-        declareFunction("mapping_first_elt_info", "MAPPING-FIRST-ELT-INFO", 1, 0, false);
-        declareFunction("get_text_string_from_tokens", "GET-TEXT-STRING-FROM-TOKENS", 1, 1, false);
-        declareFunction("tag_document_for_indexing_with_offsets", "TAG-DOCUMENT-FOR-INDEXING-WITH-OFFSETS", 1, 3, false);
-        declareFunction("document_annotation_relation_from_id", "DOCUMENT-ANNOTATION-RELATION-FROM-ID", 1, 0, false);
-        declareFunction("generate_retrieval_justification", "GENERATE-RETRIEVAL-JUSTIFICATION", 3, 0, false);
-        declareFunction("generate_retrieval_justification_from_justification_string", "GENERATE-RETRIEVAL-JUSTIFICATION-FROM-JUSTIFICATION-STRING", 1, 0, false);
-        declareFunction("get_best_justifications_from_arg_list", "GET-BEST-JUSTIFICATIONS-FROM-ARG-LIST", 1, 0, false);
-        declareFunction("better_justification_pred", "BETTER-JUSTIFICATION-PRED", 2, 0, false);
-        declareFunction("generate_term_explanation", "GENERATE-TERM-EXPLANATION", 1, 0, false);
-        declareFunction("get_other_explanatory_strings_for_term", "GET-OTHER-EXPLANATORY-STRINGS-FOR-TERM", 1, 0, false);
-        declareFunction("clear_document_annotation_term_id", "CLEAR-DOCUMENT-ANNOTATION-TERM-ID", 0, 0, false);
-        declareFunction("remove_document_annotation_term_id", "REMOVE-DOCUMENT-ANNOTATION-TERM-ID", 1, 1, false);
-        declareFunction("document_annotation_term_id_internal", "DOCUMENT-ANNOTATION-TERM-ID-INTERNAL", 2, 0, false);
-        declareFunction("document_annotation_term_id", "DOCUMENT-ANNOTATION-TERM-ID", 1, 1, false);
-        declareFunction("clear_document_annotation_term_from_id", "CLEAR-DOCUMENT-ANNOTATION-TERM-FROM-ID", 0, 0, false);
-        declareFunction("remove_document_annotation_term_from_id", "REMOVE-DOCUMENT-ANNOTATION-TERM-FROM-ID", 1, 0, false);
-        declareFunction("document_annotation_term_from_id_internal", "DOCUMENT-ANNOTATION-TERM-FROM-ID-INTERNAL", 1, 0, false);
-        declareFunction("document_annotation_term_from_id", "DOCUMENT-ANNOTATION-TERM-FROM-ID", 1, 0, false);
-        declareFunction("get_cached_term_id", "GET-CACHED-TERM-ID", 1, 0, false);
-        declareFunction("get_term_from_cached_id", "GET-TERM-FROM-CACHED-ID", 1, 0, false);
-        declareFunction("get_default_document_ingester_annotation_learning_lexicon", "GET-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEARNING-LEXICON", 0, 3, false);
-        declareFunction("clear_default_document_ingester_annotation_learning_lexicon", "CLEAR-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEARNING-LEXICON", 0, 1, false);
-        declareFunction("clear_get_default_document_ingester_annotation_lexicon", "CLEAR-GET-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEXICON", 0, 0, false);
-        declareFunction("remove_get_default_document_ingester_annotation_lexicon", "REMOVE-GET-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEXICON", 0, 1, false);
-        declareFunction("get_default_document_ingester_annotation_lexicon_internal", "GET-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEXICON-INTERNAL", 1, 0, false);
-        declareFunction("get_default_document_ingester_annotation_lexicon", "GET-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEXICON", 0, 1, false);
-        declareFunction("clear_default_document_ingester_annotation_lexicon_for_mt", "CLEAR-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEXICON-FOR-MT", 1, 0, false);
-        declareFunction("get_default_document_annotation_learning_lexicon", "GET-DEFAULT-DOCUMENT-ANNOTATION-LEARNING-LEXICON", 0, 0, false);
-        declareFunction("clear_default_document_annotation_learning_lexicon", "CLEAR-DEFAULT-DOCUMENT-ANNOTATION-LEARNING-LEXICON", 0, 0, false);
-        declareFunction("clear_default_document_annotation_lexicon", "CLEAR-DEFAULT-DOCUMENT-ANNOTATION-LEXICON", 0, 0, false);
-        declareFunction("clear_get_default_document_annotation_lexicon", "CLEAR-GET-DEFAULT-DOCUMENT-ANNOTATION-LEXICON", 0, 0, false);
-        declareFunction("remove_get_default_document_annotation_lexicon", "REMOVE-GET-DEFAULT-DOCUMENT-ANNOTATION-LEXICON", 0, 1, false);
-        declareFunction("get_default_document_annotation_lexicon_internal", "GET-DEFAULT-DOCUMENT-ANNOTATION-LEXICON-INTERNAL", 1, 0, false);
-        declareFunction("get_default_document_annotation_lexicon", "GET-DEFAULT-DOCUMENT-ANNOTATION-LEXICON", 0, 1, false);
-        declareFunction("make_default_document_annotation_lexicon", "MAKE-DEFAULT-DOCUMENT-ANNOTATION-LEXICON", 0, 1, false);
-        declareFunction("get_default_document_annotation_rule_disambiguator", "GET-DEFAULT-DOCUMENT-ANNOTATION-RULE-DISAMBIGUATOR", 0, 0, false);
-        declareFunction("maybe_initialize_doc_annotator_term_id_fbc", "MAYBE-INITIALIZE-DOC-ANNOTATOR-TERM-ID-FBC", 0, 1, false);
-        declareFunction("maybe_initialize_doc_annotator_id_term_fbc", "MAYBE-INITIALIZE-DOC-ANNOTATOR-ID-TERM-FBC", 0, 1, false);
-        declareFunction("rebuild_doc_annotator_term_id_fbc", "REBUILD-DOC-ANNOTATOR-TERM-ID-FBC", 0, 2, false);
-        declareFunction("build_id_to_term_fbc", "BUILD-ID-TO-TERM-FBC", 0, 2, false);
-        declareFunction("augment_doc_annotator_term_fht", "AUGMENT-DOC-ANNOTATOR-TERM-FHT", 0, 1, false);
-        declareFunction("document_query", "DOCUMENT-QUERY", 1, 0, false);
-        declareFunction("lucene_text_query", "LUCENE-TEXT-QUERY", 1, 1, false);
-        declareFunction("lucene_sem_query_with_sem_search_string", "LUCENE-SEM-QUERY-WITH-SEM-SEARCH-STRING", 1, 1, false);
-        declareFunction("lucene_sem_query", "LUCENE-SEM-QUERY", 1, 1, false);
-        declareFunction("lucene_double_query", "LUCENE-DOUBLE-QUERY", 2, 1, false);
-        declareFunction("cyc_semantic_search_token", "CYC-SEMANTIC-SEARCH-TOKEN", 2, 0, false);
-        declareFunction("terms_for_cyc_semantic_query", "TERMS-FOR-CYC-SEMANTIC-QUERY", 1, 0, false);
-        declareFunction("remove_cdar", "REMOVE-CDAR", 1, 0, false);
-        declareFunction("stopword_in_sem_queryP", "STOPWORD-IN-SEM-QUERY?", 1, 0, false);
-        declareFunction("encode_word_for_semantic_query", "ENCODE-WORD-FOR-SEMANTIC-QUERY", 2, 0, false);
-        declareFunction("terms_for_focused_cyc_semantic_query", "TERMS-FOR-FOCUSED-CYC-SEMANTIC-QUERY", 2, 0, false);
-        declareFunction("simple_terms_for_cyc_semantic_query", "SIMPLE-TERMS-FOR-CYC-SEMANTIC-QUERY", 1, 0, false);
-        declareFunction("get_compiled_regexp", "GET-COMPILED-REGEXP", 1, 0, false);
-        declareFunction("clean_semantic_search_hits", "CLEAN-SEMANTIC-SEARCH-HITS", 1, 0, false);
-        declareMacro("do_lexified_forts", "DO-LEXIFIED-FORTS");
-        declareFunction("simple_document_tagging_results", "SIMPLE-DOCUMENT-TAGGING-RESULTS", 1, 0, false);
-        declareFunction("show_document_tagging_results", "SHOW-DOCUMENT-TAGGING-RESULTS", 1, 1, false);
-        declareFunction("document_tagging_results_for_human_review", "DOCUMENT-TAGGING-RESULTS-FOR-HUMAN-REVIEW", 1, 1, false);
-        declareFunction("remove_pictures_regexp_test", "REMOVE-PICTURES-REGEXP-TEST", 1, 0, false);
-        declareFunction("get_doc_string_from_node_ids_and_strings_values", "GET-DOC-STRING-FROM-NODE-IDS-AND-STRINGS-VALUES", 1, 0, false);
-        declareFunction("get_interpretation_rules_for_mt", "GET-INTERPRETATION-RULES-FOR-MT", 0, 1, false);
-        declareFunction("tag_document_for_interpretation", "TAG-DOCUMENT-FOR-INTERPRETATION", 1, 1, false);
-        declareFunction("get_concept_bag_from_document", "GET-CONCEPT-BAG-FROM-DOCUMENT", 1, 0, false);
-        declareMacro("do_interpretation_rules", "DO-INTERPRETATION-RULES");
-        declareFunction("interpret_document_via_suggestions", "INTERPRET-DOCUMENT-VIA-SUGGESTIONS", 1, 0, false);
-        declareFunction("suggest_interpretations", "SUGGEST-INTERPRETATIONS", 1, 2, false);
-        declareFunction("interpretation_rule_appliesP", "INTERPRETATION-RULE-APPLIES?", 3, 0, false);
-        declareFunction("update_interpretation_with_rule", "UPDATE-INTERPRETATION-WITH-RULE", 4, 0, false);
-        declareFunction("initialize_interpretation_rules", "INITIALIZE-INTERPRETATION-RULES", 0, 1, false);
-        declareFunction("add_interpretation_rule", "ADD-INTERPRETATION-RULE", 2, 0, false);
-        declareFunction("add_interpretation_rule_clauses", "ADD-INTERPRETATION-RULE-CLAUSES", 3, 0, false);
-        declareFunction("interpretation_rules_count", "INTERPRETATION-RULES-COUNT", 1, 0, false);
-        declareFunction("clear_interpretation_rules", "CLEAR-INTERPRETATION-RULES", 0, 0, false);
-        declareFunction("store_interpretation_rule", "STORE-INTERPRETATION-RULE", 2, 0, false);
-        declareFunction("make_interpretation_rule_description", "MAKE-INTERPRETATION-RULE-DESCRIPTION", 4, 0, false);
-        declareFunction("interpretation_rule_description_antecedent", "INTERPRETATION-RULE-DESCRIPTION-ANTECEDENT", 1, 0, false);
-        declareFunction("interpretation_rule_description_consequent", "INTERPRETATION-RULE-DESCRIPTION-CONSEQUENT", 1, 0, false);
-        declareFunction("interpretation_rule_description_preconditions", "INTERPRETATION-RULE-DESCRIPTION-PRECONDITIONS", 1, 0, false);
-        declareFunction("interpretation_rule_description_suggestions", "INTERPRETATION-RULE-DESCRIPTION-SUGGESTIONS", 1, 0, false);
-        declareFunction("extract_interpretation_rule_preconditions", "EXTRACT-INTERPRETATION-RULE-PRECONDITIONS", 1, 0, false);
-        declareFunction("extract_interpretation_rule_suggestions", "EXTRACT-INTERPRETATION-RULE-SUGGESTIONS", 1, 0, false);
-        declareFunction("extract_interpretation_rule_precondition", "EXTRACT-INTERPRETATION-RULE-PRECONDITION", 1, 0, false);
-        declareFunction("extract_interpretation_rule_suggestion", "EXTRACT-INTERPRETATION-RULE-SUGGESTION", 1, 0, false);
-        declareFunction("cb_document_interpretation_show_concept", "CB-DOCUMENT-INTERPRETATION-SHOW-CONCEPT", 1, 1, false);
-        declareFunction("cb_document_interpretation_show_sentence", "CB-DOCUMENT-INTERPRETATION-SHOW-SENTENCE", 1, 1, false);
-        declareFunction("cb_document_interpretation_show_rule", "CB-DOCUMENT-INTERPRETATION-SHOW-RULE", 1, 0, false);
-        declareFunction("cb_document_interpretation_suggestions", "CB-DOCUMENT-INTERPRETATION-SUGGESTIONS", 1, 0, false);
-        declareFunction("cb_annotate_tagged_concepts", "CB-ANNOTATE-TAGGED-CONCEPTS", 1, 0, false);
-        declareFunction("handle_submitted_manual_annotation_data", "HANDLE-SUBMITTED-MANUAL-ANNOTATION-DATA", 1, 0, false);
-        declareFunction("annotation_data_from_file", "ANNOTATION-DATA-FROM-FILE", 3, 0, false);
-        declareFunction("get_manual_annotations", "GET-MANUAL-ANNOTATIONS", 0, 1, false);
-        declareFunction("get_manual_annotations_with_strings", "GET-MANUAL-ANNOTATIONS-WITH-STRINGS", 0, 1, false);
-        declareFunction("get_concept_to_strings_map_from_input_data", "GET-CONCEPT-TO-STRINGS-MAP-FROM-INPUT-DATA", 0, 1, false);
-        declareFunction("get_assertions_for_concept_and_string", "GET-ASSERTIONS-FOR-CONCEPT-AND-STRING", 2, 0, false);
-        declareFunction("ke_text_from_manual_annotations", "KE-TEXT-FROM-MANUAL-ANNOTATIONS", 0, 1, false);
-        declareFunction("output_webgame_qs", "OUTPUT-WEBGAME-QS", 1, 0, false);
-        return NIL;
-    }
-
-    public static final SubLObject init_document_annotation_widgets_file_alt() {
-        defparameter("*TEXT-INDEX*", $str_alt0$_host_george_super_index_hezbolla);
-        defparameter("*SEMANTIC-INDEX*", $str_alt1$_host_george_super_index_hezbolla);
-        defparameter("*TEXT-INDEX-OVERRIDE*", NIL);
-        defparameter("*SEMANTIC-INDEX-OVERRIDE*", NIL);
-        defparameter("*TRACE-DOC-SEARCH-INTERFACE*", NIL);
-        defparameter("*DOC-SEARCH-TRACE-LOG-FILE*", NIL);
-        defparameter("*PREDICATE-ID-TABLE*", $list_alt21);
-        defparameter("*PREDICATE-TEMPLATE-TABLE*", $list_alt22);
-        defparameter("*UPWARDS-CLOSURE-JUSTIFICATION-FBC*", NIL);
-        defparameter("*UPWARDS-CLOSURE-JUSTIFICATION-FHT-PATH*", $str_alt23$data_doc_tagging_upwards_closure_);
-        defparameter("*DOC-ANNOTATION-THCL-VERBOSE?*", NIL);
-        deflexical("*TERM-LEARNER-OBJECT-FROM-ID-CACHING-STATE*", NIL);
-        deflexical("*TERM-LEARNER-ID-CACHING-STATE*", NIL);
-        defparameter("*UPWARDS-CLOSURE-QUERY-MT*", $list_alt40);
-        deflexical("*GET-UPWARDS-CLOSURE-JUSTIFICATIONS-CACHED-CACHING-STATE*", NIL);
-        defparameter("*CACHING-UPWARDS-CLOSURE-JUSTIFICATIONS?*", NIL);
-        deflexical("*GET-TREATED-CONDITION-CACHING-STATE*", NIL);
-        deflexical("*GET-TREATMENTS-FOR-CONDITION-CACHING-STATE*", NIL);
-        deflexical("*GET-AFFECTED-PARTS-CACHING-STATE*", NIL);
-        deflexical("*GET-COOCCURRING-CONDITIONS-CACHING-STATE*", NIL);
-        deflexical("*LEADERS-TO-GROUPS-CACHING-STATE*", NIL);
-        deflexical("*CITIES-TO-COUNTRIES-CACHING-STATE*", NIL);
-        deflexical("*COUNTRIES-TO-REGIONS-CACHING-STATE*", NIL);
-        defparameter("*TAGGED-XML-DOC-DIRECTORY*", $str_alt116$_host_george_scratch_tagged_xml_d);
-        defconstant("*TAGGED-DOC-TITLE-NAME*", $$$title);
-        defconstant("*TAGGED-DOC-TITLE-TOKEN*", $str_alt118$_title_);
-        defconstant("*TAGGED-DOC-TITLE-CLOSE-TOKEN*", $str_alt119$__title_);
-        defconstant("*TAGGED-DOC-TEXT-NAME*", $$$text);
-        defconstant("*TAGGED-DOC-TEXT-TOKEN*", $str_alt121$_text_);
-        defconstant("*TAGGED-DOC-TEXT-CLOSE-TOKEN*", $str_alt122$__text_);
-        defconstant("*TAGGED-DOC-KEYSTRING-NAME*", $$$keystring);
-        defconstant("*TAGGED-DOC-KEYSTRING-TOKEN*", $str_alt124$_keystring_);
-        defconstant("*TAGGED-DOC-CONFIRMED-CONCEPTS-KEYSTRING-TOKEN*", $str_alt125$_confirmed_concept_keystring_);
-        defconstant("*TAGGED-DOC-CONFIRMED-CONCEPTS-KEYSTRING-NAME*", $str_alt125$_confirmed_concept_keystring_);
-        defconstant("*TAGGED-DOC-ORIGINAL-FILENAME-NAME*", $str_alt126$original_filename);
-        defconstant("*TAGGED-DOC-ORIGINAL-FILENAME-TOKEN*", $str_alt127$_original_filename_);
-        defconstant("*TAGGED-DOC-URL-NAME*", $$$url);
-        defconstant("*TAGGED-DOC-URL-TOKEN*", $str_alt129$_url_);
-        defconstant("*TAGGED-DOC-URL-CLOSE-TOKEN*", $str_alt130$__url_);
-        defconstant("*TAGGED-DOC-PARENT-FILENAME-NAME*", $str_alt131$parent_filename);
-        defconstant("*TAGGED-DOC-PARENT-FILENAME-TOKEN*", $str_alt132$_parent_filename_);
-        defparameter("*SEMANTIC-INDEX-DIR-NAME*", $$$sem);
-        defparameter("*TEXT-INDEX-DIR-NAME*", $$$text);
-        defparameter("*ANNOTATED-DOCUMENT-FORMAT*", $SIMPLE);
-        defparameter("*TERM-LEARNER-KEEP-CONCEPTS-DISTINCT*", T);
-        defparameter("*DEFAULT-MEDICAL-TAGGING-LEXICON*", NIL);
-        defparameter("*DOC-ANNOTATION-USE-HL-IDS*", NIL);
-        defparameter("*DOC-ANNOTATOR-TERM-ID-FBC-PATH*", $str_alt198$data_doc_tagging_term_id_fht);
-        defparameter("*DOC-ANNOTATOR-ID-TERM-FBC-PATH*", $str_alt199$data_doc_tagging_id_term_fht);
-        defparameter("*DOC-ANNOTATOR-TERM-ID-FBC*", NIL);
-        defparameter("*DOC-ANNOTATOR-ID-TERM-FBC*", NIL);
-        deflexical("*DOCUMENT-ANNOTATION-TERM-ID-CACHING-STATE*", NIL);
-        deflexical("*DOCUMENT-ANNOTATION-TERM-FROM-ID-CACHING-STATE*", NIL);
-        defparameter("*DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEARNING-LEXICONS*", dictionary.new_dictionary(EQUAL, UNPROVIDED));
-        defparameter("*DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEXICON*", NIL);
-        defparameter("*DEFAULT-DOCUMENT-ANNOTATION-LEARNING-LEXICON*", NIL);
-        defparameter("*DEFAULT-DOCUMENT-ANNOTATION-LEXICON*", NIL);
-        defparameter("*DEFAULT-DOCUMENT-ANNOTATION-RULE-DISAMBIGUATOR*", NIL);
-        defparameter("*REMOVE-PICTURES-REGEXP*", $str_alt287$_____a_z0_9A_Z_________);
-        defparameter("*REMOVE-HYPHENS-REGEXP*", $str_alt288$__);
-        defparameter("*REMOVE-UNDERSCORES-REGEXP*", $str_alt289$__);
-        defparameter("*REMOVE-EQUALS-REGEXP*", $str_alt290$__);
-        defparameter("*REMOVE-DOTS-REGEXP*", $str_alt291$_____________);
-        defparameter("*REMOVE-UNICODE-REGEXP*", $str_alt292$__0_9a_fA_F___);
-        defparameter("*CACHED-REGEXPS*", NIL);
-        deflexical("*DOCUMENT-INTERPRETATION-RULES-BY-MT*", NIL != boundp($document_interpretation_rules_by_mt$) ? ((SubLObject) ($document_interpretation_rules_by_mt$.getGlobalValue())) : dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED));
-        defparameter("*DOCUMENT-INTERPRETATION-DEFAULT-ELMT*", $$PiracyReportInterpretationMt);
-        defparameter("*MANUAL-DOCUMENT-ANNOTATION-INSTRUCTIONS*", $str_alt365$For_each_string____concept_mappin);
+        declareFunction(me, "remove_get_cooccurring_conditions", "REMOVE-GET-COOCCURRING-CONDITIONS", 1, 0, false);
+        declareFunction(me, "get_cooccurring_conditions_internal", "GET-COOCCURRING-CONDITIONS-INTERNAL", 1, 0, false);
+        declareFunction(me, "get_cooccurring_conditions", "GET-COOCCURRING-CONDITIONS", 1, 0, false);
+        declareFunction(me, "get_groups", "GET-GROUPS", 1, 0, false);
+        declareFunction(me, "get_groups_non_cached", "GET-GROUPS-NON-CACHED", 1, 0, false);
+        declareFunction(me, "clear_leaders_to_groups", "CLEAR-LEADERS-TO-GROUPS", 0, 0, false);
+        declareFunction(me, "remove_leaders_to_groups", "REMOVE-LEADERS-TO-GROUPS", 0, 0, false);
+        declareFunction(me, "leaders_to_groups_internal", "LEADERS-TO-GROUPS-INTERNAL", 0, 0, false);
+        declareFunction(me, "leaders_to_groups", "LEADERS-TO-GROUPS", 0, 0, false);
+        declareFunction(me, "get_city_regions", "GET-CITY-REGIONS", 1, 0, false);
+        declareFunction(me, "get_city_countries", "GET-CITY-COUNTRIES", 1, 0, false);
+        declareFunction(me, "clear_cities_to_countries", "CLEAR-CITIES-TO-COUNTRIES", 0, 0, false);
+        declareFunction(me, "remove_cities_to_countries", "REMOVE-CITIES-TO-COUNTRIES", 0, 0, false);
+        declareFunction(me, "cities_to_countries_internal", "CITIES-TO-COUNTRIES-INTERNAL", 0, 0, false);
+        declareFunction(me, "cities_to_countries", "CITIES-TO-COUNTRIES", 0, 0, false);
+        declareFunction(me, "get_city_countries_non_cached", "GET-CITY-COUNTRIES-NON-CACHED", 1, 0, false);
+        declareFunction(me, "get_country_regions", "GET-COUNTRY-REGIONS", 1, 0, false);
+        declareFunction(me, "get_country_regions_non_cached", "GET-COUNTRY-REGIONS-NON-CACHED", 1, 0, false);
+        declareFunction(me, "clear_countries_to_regions", "CLEAR-COUNTRIES-TO-REGIONS", 0, 0, false);
+        declareFunction(me, "remove_countries_to_regions", "REMOVE-COUNTRIES-TO-REGIONS", 0, 0, false);
+        declareFunction(me, "countries_to_regions_internal", "COUNTRIES-TO-REGIONS-INTERNAL", 0, 0, false);
+        declareFunction(me, "countries_to_regions", "COUNTRIES-TO-REGIONS", 0, 0, false);
+        declareMacro(me, "with_dual_lucene_sessions", "WITH-DUAL-LUCENE-SESSIONS");
+        declareFunction(me, "add_fully_indexed_documents_from_dir", "ADD-FULLY-INDEXED-DOCUMENTS-FROM-DIR", 6, 0, false);
+        declareFunction(me, "add_fully_indexed_documents", "ADD-FULLY-INDEXED-DOCUMENTS", 6, 0, false);
+        declareFunction(me, "tag_xml_documents_with_urls", "TAG-XML-DOCUMENTS-WITH-URLS", 1, 2, false);
+        declareFunction(me, "tag_xml_document_filespec", "TAG-XML-DOCUMENT-FILESPEC", 3, 1, false);
+        declareFunction(me, "read_original_doc", "READ-ORIGINAL-DOC", 1, 0, false);
+        declareFunction(me, "tag_xml_doc_set_with_urls", "TAG-XML-DOC-SET-WITH-URLS", 1, 2, false);
+        declareFunction(me, "index_xml_doc_set_from_map_file", "INDEX-XML-DOC-SET-FROM-MAP-FILE", 2, 4, false);
+        declareFunction(me, "index_pre_tagged_xml_docs", "INDEX-PRE-TAGGED-XML-DOCS", 6, 0, false);
+        declareFunction(me, "index_pre_tagged_xml_doc", "INDEX-PRE-TAGGED-XML-DOC", 4, 0, false);
+        declareFunction(me, "lucene_add_document_semantic", "LUCENE-ADD-DOCUMENT-SEMANTIC", 6, 0, false);
+        declareFunction(me, "lucene_add_document_keyword", "LUCENE-ADD-DOCUMENT-KEYWORD", 4, 0, false);
+        declareFunction(me, "add_fully_indexed_document", "ADD-FULLY-INDEXED-DOCUMENT", 5, 0, false);
+        declareFunction(me, "print_offset_info", "PRINT-OFFSET-INFO", 3, 0, false);
+        declareFunction(me, "print_term_and_reln", "PRINT-TERM-AND-RELN", 3, 0, false);
+        declareFunction(me, "print_token", "PRINT-TOKEN", 4, 0, false);
+        declareFunction(me, "new_tagged_document", "NEW-TAGGED-DOCUMENT", 1, 4, false);
+        declareFunction(me, "find_concepts_for_document_segments", "FIND-CONCEPTS-FOR-DOCUMENT-SEGMENTS", 1, 3, false);
+        declareFunction(me, "tag_document_nodes_for_display", "TAG-DOCUMENT-NODES-FOR-DISPLAY", 1, 4, false);
+        declareFunction(me, "get_doc_string_from_node_ids_and_strings", "GET-DOC-STRING-FROM-NODE-IDS-AND-STRINGS", 1, 0, false);
+        declareFunction(me, "get_output_lists_for_word", "GET-OUTPUT-LISTS-FOR-WORD", 2, 1, false);
+        declareFunction(me, "node_and_node_offset", "NODE-AND-NODE-OFFSET", 2, 0, false);
+        declareFunction(me, "new_named_entity_wordP", "NEW-NAMED-ENTITY-WORD?", 1, 0, false);
+        declareFunction(me, "nart_has_non_derived_assertionsP", "NART-HAS-NON-DERIVED-ASSERTIONS?", 1, 0, false);
+        declareFunction(me, "find_interps_for_document_segments", "FIND-INTERPS-FOR-DOCUMENT-SEGMENTS", 1, 3, false);
+        declareFunction(me, "get_default_medical_tagging_lexicon", "GET-DEFAULT-MEDICAL-TAGGING-LEXICON", 0, 0, false);
+        declareFunction(me, "clear_default_medical_tagging_lexicon", "CLEAR-DEFAULT-MEDICAL-TAGGING-LEXICON", 0, 0, false);
+        declareFunction(me, "augment_medical_html_file_with_cyc_terms", "AUGMENT-MEDICAL-HTML-FILE-WITH-CYC-TERMS", 1, 1, false);
+        declareFunction(me, "augment_html_document_with_cyc_terms", "AUGMENT-HTML-DOCUMENT-WITH-CYC-TERMS", 1, 1, false);
+        declareFunction(me, "doc_tagger_rdf_name", "DOC-TAGGER-RDF-NAME", 1, 0, false);
+        declareFunction(me, "doc_tagger_rdf_id", "DOC-TAGGER-RDF-ID", 1, 0, false);
+        declareFunction(me, "mapping_first_elt_info", "MAPPING-FIRST-ELT-INFO", 1, 0, false);
+        declareFunction(me, "get_text_string_from_tokens", "GET-TEXT-STRING-FROM-TOKENS", 1, 1, false);
+        declareFunction(me, "tag_document_for_indexing_with_offsets", "TAG-DOCUMENT-FOR-INDEXING-WITH-OFFSETS", 1, 3, false);
+        declareFunction(me, "document_annotation_relation_from_id", "DOCUMENT-ANNOTATION-RELATION-FROM-ID", 1, 0, false);
+        declareFunction(me, "generate_retrieval_justification", "GENERATE-RETRIEVAL-JUSTIFICATION", 3, 0, false);
+        declareFunction(me, "generate_retrieval_justification_from_justification_string", "GENERATE-RETRIEVAL-JUSTIFICATION-FROM-JUSTIFICATION-STRING", 1, 0, false);
+        declareFunction(me, "get_best_justifications_from_arg_list", "GET-BEST-JUSTIFICATIONS-FROM-ARG-LIST", 1, 0, false);
+        declareFunction(me, "better_justification_pred", "BETTER-JUSTIFICATION-PRED", 2, 0, false);
+        declareFunction(me, "generate_term_explanation", "GENERATE-TERM-EXPLANATION", 1, 0, false);
+        declareFunction(me, "get_other_explanatory_strings_for_term", "GET-OTHER-EXPLANATORY-STRINGS-FOR-TERM", 1, 0, false);
+        declareFunction(me, "clear_document_annotation_term_id", "CLEAR-DOCUMENT-ANNOTATION-TERM-ID", 0, 0, false);
+        declareFunction(me, "remove_document_annotation_term_id", "REMOVE-DOCUMENT-ANNOTATION-TERM-ID", 1, 1, false);
+        declareFunction(me, "document_annotation_term_id_internal", "DOCUMENT-ANNOTATION-TERM-ID-INTERNAL", 2, 0, false);
+        declareFunction(me, "document_annotation_term_id", "DOCUMENT-ANNOTATION-TERM-ID", 1, 1, false);
+        declareFunction(me, "clear_document_annotation_term_from_id", "CLEAR-DOCUMENT-ANNOTATION-TERM-FROM-ID", 0, 0, false);
+        declareFunction(me, "remove_document_annotation_term_from_id", "REMOVE-DOCUMENT-ANNOTATION-TERM-FROM-ID", 1, 0, false);
+        declareFunction(me, "document_annotation_term_from_id_internal", "DOCUMENT-ANNOTATION-TERM-FROM-ID-INTERNAL", 1, 0, false);
+        declareFunction(me, "document_annotation_term_from_id", "DOCUMENT-ANNOTATION-TERM-FROM-ID", 1, 0, false);
+        declareFunction(me, "get_cached_term_id", "GET-CACHED-TERM-ID", 1, 0, false);
+        declareFunction(me, "get_term_from_cached_id", "GET-TERM-FROM-CACHED-ID", 1, 0, false);
+        declareFunction(me, "get_default_document_ingester_annotation_learning_lexicon", "GET-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEARNING-LEXICON", 0, 3, false);
+        declareFunction(me, "clear_default_document_ingester_annotation_learning_lexicon", "CLEAR-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEARNING-LEXICON", 0, 1, false);
+        declareFunction(me, "clear_get_default_document_ingester_annotation_lexicon", "CLEAR-GET-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEXICON", 0, 0, false);
+        declareFunction(me, "remove_get_default_document_ingester_annotation_lexicon", "REMOVE-GET-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEXICON", 0, 1, false);
+        declareFunction(me, "get_default_document_ingester_annotation_lexicon_internal", "GET-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEXICON-INTERNAL", 1, 0, false);
+        declareFunction(me, "get_default_document_ingester_annotation_lexicon", "GET-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEXICON", 0, 1, false);
+        declareFunction(me, "clear_default_document_ingester_annotation_lexicon_for_mt", "CLEAR-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEXICON-FOR-MT", 1, 0, false);
+        declareFunction(me, "get_default_document_annotation_learning_lexicon", "GET-DEFAULT-DOCUMENT-ANNOTATION-LEARNING-LEXICON", 0, 0, false);
+        declareFunction(me, "clear_default_document_annotation_learning_lexicon", "CLEAR-DEFAULT-DOCUMENT-ANNOTATION-LEARNING-LEXICON", 0, 0, false);
+        declareFunction(me, "clear_default_document_annotation_lexicon", "CLEAR-DEFAULT-DOCUMENT-ANNOTATION-LEXICON", 0, 0, false);
+        declareFunction(me, "clear_get_default_document_annotation_lexicon", "CLEAR-GET-DEFAULT-DOCUMENT-ANNOTATION-LEXICON", 0, 0, false);
+        declareFunction(me, "remove_get_default_document_annotation_lexicon", "REMOVE-GET-DEFAULT-DOCUMENT-ANNOTATION-LEXICON", 0, 1, false);
+        declareFunction(me, "get_default_document_annotation_lexicon_internal", "GET-DEFAULT-DOCUMENT-ANNOTATION-LEXICON-INTERNAL", 1, 0, false);
+        declareFunction(me, "get_default_document_annotation_lexicon", "GET-DEFAULT-DOCUMENT-ANNOTATION-LEXICON", 0, 1, false);
+        declareFunction(me, "make_default_document_annotation_lexicon", "MAKE-DEFAULT-DOCUMENT-ANNOTATION-LEXICON", 0, 1, false);
+        declareFunction(me, "get_default_document_annotation_rule_disambiguator", "GET-DEFAULT-DOCUMENT-ANNOTATION-RULE-DISAMBIGUATOR", 0, 0, false);
+        declareFunction(me, "maybe_initialize_doc_annotator_term_id_fbc", "MAYBE-INITIALIZE-DOC-ANNOTATOR-TERM-ID-FBC", 0, 1, false);
+        declareFunction(me, "maybe_initialize_doc_annotator_id_term_fbc", "MAYBE-INITIALIZE-DOC-ANNOTATOR-ID-TERM-FBC", 0, 1, false);
+        declareFunction(me, "rebuild_doc_annotator_term_id_fbc", "REBUILD-DOC-ANNOTATOR-TERM-ID-FBC", 0, 2, false);
+        declareFunction(me, "build_id_to_term_fbc", "BUILD-ID-TO-TERM-FBC", 0, 2, false);
+        declareFunction(me, "augment_doc_annotator_term_fht", "AUGMENT-DOC-ANNOTATOR-TERM-FHT", 0, 1, false);
+        declareFunction(me, "document_query", "DOCUMENT-QUERY", 1, 0, false);
+        declareFunction(me, "lucene_text_query", "LUCENE-TEXT-QUERY", 1, 1, false);
+        declareFunction(me, "lucene_sem_query_with_sem_search_string", "LUCENE-SEM-QUERY-WITH-SEM-SEARCH-STRING", 1, 1, false);
+        declareFunction(me, "lucene_sem_query", "LUCENE-SEM-QUERY", 1, 1, false);
+        declareFunction(me, "lucene_double_query", "LUCENE-DOUBLE-QUERY", 2, 1, false);
+        declareFunction(me, "cyc_semantic_search_token", "CYC-SEMANTIC-SEARCH-TOKEN", 2, 0, false);
+        declareFunction(me, "terms_for_cyc_semantic_query", "TERMS-FOR-CYC-SEMANTIC-QUERY", 1, 0, false);
+        declareFunction(me, "remove_cdar", "REMOVE-CDAR", 1, 0, false);
+        declareFunction(me, "stopword_in_sem_queryP", "STOPWORD-IN-SEM-QUERY?", 1, 0, false);
+        declareFunction(me, "encode_word_for_semantic_query", "ENCODE-WORD-FOR-SEMANTIC-QUERY", 2, 0, false);
+        declareFunction(me, "terms_for_focused_cyc_semantic_query", "TERMS-FOR-FOCUSED-CYC-SEMANTIC-QUERY", 2, 0, false);
+        declareFunction(me, "simple_terms_for_cyc_semantic_query", "SIMPLE-TERMS-FOR-CYC-SEMANTIC-QUERY", 1, 0, false);
+        declareFunction(me, "get_compiled_regexp", "GET-COMPILED-REGEXP", 1, 0, false);
+        declareFunction(me, "clean_semantic_search_hits", "CLEAN-SEMANTIC-SEARCH-HITS", 1, 0, false);
+        declareMacro(me, "do_lexified_forts", "DO-LEXIFIED-FORTS");
+        declareFunction(me, "simple_document_tagging_results", "SIMPLE-DOCUMENT-TAGGING-RESULTS", 1, 0, false);
+        declareFunction(me, "show_document_tagging_results", "SHOW-DOCUMENT-TAGGING-RESULTS", 1, 1, false);
+        declareFunction(me, "document_tagging_results_for_human_review", "DOCUMENT-TAGGING-RESULTS-FOR-HUMAN-REVIEW", 1, 1, false);
+        declareFunction(me, "remove_pictures_regexp_test", "REMOVE-PICTURES-REGEXP-TEST", 1, 0, false);
+        declareFunction(me, "get_doc_string_from_node_ids_and_strings_values", "GET-DOC-STRING-FROM-NODE-IDS-AND-STRINGS-VALUES", 1, 0, false);
+        declareFunction(me, "get_interpretation_rules_for_mt", "GET-INTERPRETATION-RULES-FOR-MT", 0, 1, false);
+        declareFunction(me, "tag_document_for_interpretation", "TAG-DOCUMENT-FOR-INTERPRETATION", 1, 1, false);
+        declareFunction(me, "get_concept_bag_from_document", "GET-CONCEPT-BAG-FROM-DOCUMENT", 1, 0, false);
+        declareMacro(me, "do_interpretation_rules", "DO-INTERPRETATION-RULES");
+        declareFunction(me, "interpret_document_via_suggestions", "INTERPRET-DOCUMENT-VIA-SUGGESTIONS", 1, 0, false);
+        declareFunction(me, "suggest_interpretations", "SUGGEST-INTERPRETATIONS", 1, 2, false);
+        declareFunction(me, "interpretation_rule_appliesP", "INTERPRETATION-RULE-APPLIES?", 3, 0, false);
+        declareFunction(me, "update_interpretation_with_rule", "UPDATE-INTERPRETATION-WITH-RULE", 4, 0, false);
+        declareFunction(me, "initialize_interpretation_rules", "INITIALIZE-INTERPRETATION-RULES", 0, 1, false);
+        declareFunction(me, "add_interpretation_rule", "ADD-INTERPRETATION-RULE", 2, 0, false);
+        declareFunction(me, "add_interpretation_rule_clauses", "ADD-INTERPRETATION-RULE-CLAUSES", 3, 0, false);
+        declareFunction(me, "interpretation_rules_count", "INTERPRETATION-RULES-COUNT", 1, 0, false);
+        declareFunction(me, "clear_interpretation_rules", "CLEAR-INTERPRETATION-RULES", 0, 0, false);
+        declareFunction(me, "store_interpretation_rule", "STORE-INTERPRETATION-RULE", 2, 0, false);
+        declareFunction(me, "make_interpretation_rule_description", "MAKE-INTERPRETATION-RULE-DESCRIPTION", 4, 0, false);
+        declareFunction(me, "interpretation_rule_description_antecedent", "INTERPRETATION-RULE-DESCRIPTION-ANTECEDENT", 1, 0, false);
+        declareFunction(me, "interpretation_rule_description_consequent", "INTERPRETATION-RULE-DESCRIPTION-CONSEQUENT", 1, 0, false);
+        declareFunction(me, "interpretation_rule_description_preconditions", "INTERPRETATION-RULE-DESCRIPTION-PRECONDITIONS", 1, 0, false);
+        declareFunction(me, "interpretation_rule_description_suggestions", "INTERPRETATION-RULE-DESCRIPTION-SUGGESTIONS", 1, 0, false);
+        declareFunction(me, "extract_interpretation_rule_preconditions", "EXTRACT-INTERPRETATION-RULE-PRECONDITIONS", 1, 0, false);
+        declareFunction(me, "extract_interpretation_rule_suggestions", "EXTRACT-INTERPRETATION-RULE-SUGGESTIONS", 1, 0, false);
+        declareFunction(me, "extract_interpretation_rule_precondition", "EXTRACT-INTERPRETATION-RULE-PRECONDITION", 1, 0, false);
+        declareFunction(me, "extract_interpretation_rule_suggestion", "EXTRACT-INTERPRETATION-RULE-SUGGESTION", 1, 0, false);
+        declareFunction(me, "cb_document_interpretation_show_concept", "CB-DOCUMENT-INTERPRETATION-SHOW-CONCEPT", 1, 1, false);
+        declareFunction(me, "cb_document_interpretation_show_sentence", "CB-DOCUMENT-INTERPRETATION-SHOW-SENTENCE", 1, 1, false);
+        declareFunction(me, "cb_document_interpretation_show_rule", "CB-DOCUMENT-INTERPRETATION-SHOW-RULE", 1, 0, false);
+        declareFunction(me, "cb_document_interpretation_suggestions", "CB-DOCUMENT-INTERPRETATION-SUGGESTIONS", 1, 0, false);
+        declareFunction(me, "cb_annotate_tagged_concepts", "CB-ANNOTATE-TAGGED-CONCEPTS", 1, 0, false);
+        declareFunction(me, "handle_submitted_manual_annotation_data", "HANDLE-SUBMITTED-MANUAL-ANNOTATION-DATA", 1, 0, false);
+        declareFunction(me, "annotation_data_from_file", "ANNOTATION-DATA-FROM-FILE", 3, 0, false);
+        declareFunction(me, "get_manual_annotations", "GET-MANUAL-ANNOTATIONS", 0, 1, false);
+        declareFunction(me, "get_manual_annotations_with_strings", "GET-MANUAL-ANNOTATIONS-WITH-STRINGS", 0, 1, false);
+        declareFunction(me, "get_concept_to_strings_map_from_input_data", "GET-CONCEPT-TO-STRINGS-MAP-FROM-INPUT-DATA", 0, 1, false);
+        declareFunction(me, "get_assertions_for_concept_and_string", "GET-ASSERTIONS-FOR-CONCEPT-AND-STRING", 2, 0, false);
+        declareFunction(me, "ke_text_from_manual_annotations", "KE-TEXT-FROM-MANUAL-ANNOTATIONS", 0, 1, false);
+        declareFunction(me, "output_webgame_qs", "OUTPUT-WEBGAME-QS", 1, 0, false);
         return NIL;
     }
 
     public static SubLObject init_document_annotation_widgets_file() {
-        if (SubLFiles.USE_V1) {
-            defparameter("*TEXT-INDEX*", $str0$_host_george_super_index_hezbolla);
-            defparameter("*SEMANTIC-INDEX*", $str1$_host_george_super_index_hezbolla);
-            defparameter("*TEXT-INDEX-OVERRIDE*", NIL);
-            defparameter("*SEMANTIC-INDEX-OVERRIDE*", NIL);
-            defparameter("*TRACE-DOC-SEARCH-INTERFACE*", NIL);
-            defparameter("*DOC-SEARCH-TRACE-LOG-FILE*", NIL);
-            defparameter("*PREDICATE-ID-TABLE*", $list21);
-            defparameter("*PREDICATE-TEMPLATE-TABLE*", $list22);
-            defparameter("*UPWARDS-CLOSURE-JUSTIFICATION-FBC*", NIL);
-            defparameter("*UPWARDS-CLOSURE-JUSTIFICATION-FHT-PATH*", $str23$data_doc_tagging_upwards_closure_);
-            defparameter("*DOC-ANNOTATION-THCL-VERBOSE?*", NIL);
-            deflexical("*TERM-LEARNER-OBJECT-FROM-ID-CACHING-STATE*", NIL);
-            deflexical("*TERM-LEARNER-ID-CACHING-STATE*", NIL);
-            defparameter("*UPWARDS-CLOSURE-QUERY-MT*", $list39);
-            deflexical("*GET-UPWARDS-CLOSURE-JUSTIFICATIONS-CACHED-CACHING-STATE*", NIL);
-            defparameter("*CACHING-UPWARDS-CLOSURE-JUSTIFICATIONS?*", NIL);
-            deflexical("*GET-TREATED-CONDITION-CACHING-STATE*", NIL);
-            deflexical("*GET-TREATMENTS-FOR-CONDITION-CACHING-STATE*", NIL);
-            deflexical("*GET-AFFECTED-PARTS-CACHING-STATE*", NIL);
-            deflexical("*GET-COOCCURRING-CONDITIONS-CACHING-STATE*", NIL);
-            deflexical("*LEADERS-TO-GROUPS-CACHING-STATE*", NIL);
-            deflexical("*CITIES-TO-COUNTRIES-CACHING-STATE*", NIL);
-            deflexical("*COUNTRIES-TO-REGIONS-CACHING-STATE*", NIL);
-            defparameter("*TAGGED-XML-DOC-DIRECTORY*", $str115$_host_george_scratch_tagged_xml_d);
-            defconstant("*TAGGED-DOC-TITLE-NAME*", $$$title);
-            defconstant("*TAGGED-DOC-TITLE-TOKEN*", $str117$_title_);
-            defconstant("*TAGGED-DOC-TITLE-CLOSE-TOKEN*", $str118$__title_);
-            defconstant("*TAGGED-DOC-TEXT-NAME*", $$$text);
-            defconstant("*TAGGED-DOC-TEXT-TOKEN*", $str120$_text_);
-            defconstant("*TAGGED-DOC-TEXT-CLOSE-TOKEN*", $str121$__text_);
-            defconstant("*TAGGED-DOC-KEYSTRING-NAME*", $$$keystring);
-            defconstant("*TAGGED-DOC-KEYSTRING-TOKEN*", $str123$_keystring_);
-            defconstant("*TAGGED-DOC-CONFIRMED-CONCEPTS-KEYSTRING-TOKEN*", $str124$_confirmed_concept_keystring_);
-            defconstant("*TAGGED-DOC-CONFIRMED-CONCEPTS-KEYSTRING-NAME*", $str124$_confirmed_concept_keystring_);
-            defconstant("*TAGGED-DOC-ORIGINAL-FILENAME-NAME*", $str125$original_filename);
-            defconstant("*TAGGED-DOC-ORIGINAL-FILENAME-TOKEN*", $str126$_original_filename_);
-            defconstant("*TAGGED-DOC-URL-NAME*", $$$url);
-            defconstant("*TAGGED-DOC-URL-TOKEN*", $str128$_url_);
-            defconstant("*TAGGED-DOC-URL-CLOSE-TOKEN*", $str129$__url_);
-            defconstant("*TAGGED-DOC-PARENT-FILENAME-NAME*", $str130$parent_filename);
-            defconstant("*TAGGED-DOC-PARENT-FILENAME-TOKEN*", $str131$_parent_filename_);
-            defparameter("*SEMANTIC-INDEX-DIR-NAME*", $$$sem);
-            defparameter("*TEXT-INDEX-DIR-NAME*", $$$text);
-            defparameter("*ANNOTATED-DOCUMENT-FORMAT*", $SIMPLE);
-            defparameter("*TERM-LEARNER-KEEP-CONCEPTS-DISTINCT*", T);
-            defparameter("*DEFAULT-MEDICAL-TAGGING-LEXICON*", NIL);
-            defparameter("*DOC-ANNOTATION-USE-HL-IDS*", NIL);
-            defparameter("*DOC-ANNOTATOR-TERM-ID-FBC-PATH*", $str199$data_doc_tagging_term_id_fht);
-            defparameter("*DOC-ANNOTATOR-ID-TERM-FBC-PATH*", $str200$data_doc_tagging_id_term_fht);
-            defparameter("*DOC-ANNOTATOR-TERM-ID-FBC*", NIL);
-            defparameter("*DOC-ANNOTATOR-ID-TERM-FBC*", NIL);
-            deflexical("*DOCUMENT-ANNOTATION-TERM-ID-CACHING-STATE*", NIL);
-            deflexical("*DOCUMENT-ANNOTATION-TERM-FROM-ID-CACHING-STATE*", NIL);
-            defparameter("*DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEARNING-LEXICONS*", dictionary.new_dictionary(EQUAL, UNPROVIDED));
-            deflexical("*GET-DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEXICON-CACHING-STATE*", NIL);
-            defparameter("*DEFAULT-DOCUMENT-ANNOTATION-LEARNING-LEXICON*", NIL);
-            defparameter("*DEFAULT-DOCUMENT-ANNOTATION-LEXICON*", NIL);
-            deflexical("*GET-DEFAULT-DOCUMENT-ANNOTATION-LEXICON-CACHING-STATE*", NIL);
-            defparameter("*DEFAULT-DOCUMENT-ANNOTATION-RULE-DISAMBIGUATOR*", NIL);
-            defparameter("*REMOVE-PICTURES-REGEXP*", $str292$_____a_z0_9A_Z_________);
-            defparameter("*REMOVE-HYPHENS-REGEXP*", $str293$__);
-            defparameter("*REMOVE-UNDERSCORES-REGEXP*", $str294$__);
-            defparameter("*REMOVE-EQUALS-REGEXP*", $str295$__);
-            defparameter("*REMOVE-DOTS-REGEXP*", $str296$_____________);
-            defparameter("*REMOVE-UNICODE-REGEXP*", $str297$__0_9a_fA_F___);
-            defparameter("*CACHED-REGEXPS*", NIL);
-            deflexical("*DOCUMENT-INTERPRETATION-RULES-BY-MT*", SubLTrampolineFile.maybeDefault($document_interpretation_rules_by_mt$, $document_interpretation_rules_by_mt$, () -> dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED)));
-            defparameter("*DOCUMENT-INTERPRETATION-DEFAULT-ELMT*", $$PiracyReportInterpretationMt);
-            defparameter("*MANUAL-DOCUMENT-ANNOTATION-INSTRUCTIONS*", $str378$For_each_string____concept_mappin);
-        }
-        if (SubLFiles.USE_V2) {
-            defparameter("*UPWARDS-CLOSURE-QUERY-MT*", $list_alt40);
-            defparameter("*TAGGED-XML-DOC-DIRECTORY*", $str_alt116$_host_george_scratch_tagged_xml_d);
-            defconstant("*TAGGED-DOC-TITLE-TOKEN*", $str_alt118$_title_);
-            defconstant("*TAGGED-DOC-TITLE-CLOSE-TOKEN*", $str_alt119$__title_);
-            defconstant("*TAGGED-DOC-TEXT-TOKEN*", $str_alt121$_text_);
-            defconstant("*TAGGED-DOC-TEXT-CLOSE-TOKEN*", $str_alt122$__text_);
-            defconstant("*TAGGED-DOC-KEYSTRING-TOKEN*", $str_alt124$_keystring_);
-            defconstant("*TAGGED-DOC-CONFIRMED-CONCEPTS-KEYSTRING-TOKEN*", $str_alt125$_confirmed_concept_keystring_);
-            defconstant("*TAGGED-DOC-CONFIRMED-CONCEPTS-KEYSTRING-NAME*", $str_alt125$_confirmed_concept_keystring_);
-            defconstant("*TAGGED-DOC-ORIGINAL-FILENAME-NAME*", $str_alt126$original_filename);
-            defconstant("*TAGGED-DOC-ORIGINAL-FILENAME-TOKEN*", $str_alt127$_original_filename_);
-            defconstant("*TAGGED-DOC-URL-TOKEN*", $str_alt129$_url_);
-            defconstant("*TAGGED-DOC-URL-CLOSE-TOKEN*", $str_alt130$__url_);
-            defconstant("*TAGGED-DOC-PARENT-FILENAME-NAME*", $str_alt131$parent_filename);
-            defconstant("*TAGGED-DOC-PARENT-FILENAME-TOKEN*", $str_alt132$_parent_filename_);
-            defparameter("*DOC-ANNOTATOR-TERM-ID-FBC-PATH*", $str_alt198$data_doc_tagging_term_id_fht);
-            defparameter("*DOC-ANNOTATOR-ID-TERM-FBC-PATH*", $str_alt199$data_doc_tagging_id_term_fht);
-            defparameter("*DEFAULT-DOCUMENT-INGESTER-ANNOTATION-LEXICON*", NIL);
-            defparameter("*REMOVE-PICTURES-REGEXP*", $str_alt287$_____a_z0_9A_Z_________);
-            defparameter("*REMOVE-HYPHENS-REGEXP*", $str_alt288$__);
-            defparameter("*REMOVE-UNDERSCORES-REGEXP*", $str_alt289$__);
-            defparameter("*REMOVE-EQUALS-REGEXP*", $str_alt290$__);
-            defparameter("*REMOVE-DOTS-REGEXP*", $str_alt291$_____________);
-            defparameter("*REMOVE-UNICODE-REGEXP*", $str_alt292$__0_9a_fA_F___);
-            deflexical("*DOCUMENT-INTERPRETATION-RULES-BY-MT*", NIL != boundp($document_interpretation_rules_by_mt$) ? ((SubLObject) ($document_interpretation_rules_by_mt$.getGlobalValue())) : dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED));
-            defparameter("*MANUAL-DOCUMENT-ANNOTATION-INSTRUCTIONS*", $str_alt365$For_each_string____concept_mappin);
-        }
-        return NIL;
-    }
-
-    public static SubLObject init_document_annotation_widgets_file_Previous() {
         defparameter("*TEXT-INDEX*", $str0$_host_george_super_index_hezbolla);
         defparameter("*SEMANTIC-INDEX*", $str1$_host_george_super_index_hezbolla);
         defparameter("*TEXT-INDEX-OVERRIDE*", NIL);
@@ -15079,90 +7296,7 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
         return NIL;
     }
 
-    public static final SubLObject setup_document_annotation_widgets_file_alt() {
-        $text_index_override$.setDynamicValue($str_alt2$_cyc_projects_ccf_document_search);
-        $semantic_index_override$.setDynamicValue($str_alt3$_cyc_projects_ccf_document_search);
-        $text_index_override$.setDynamicValue($str_alt4$_host_achernar_daves_ccf_lucene_t);
-        $semantic_index_override$.setDynamicValue($str_alt5$_host_achernar_daves_ccf_lucene_s);
-        $semantic_index_override$.setDynamicValue($str_alt6$_cyc_projects_ccf_document_search);
-        $text_index_override$.setDynamicValue($str_alt7$_cyc_projects_ccf_document_search);
-        memoization_state.note_globally_cached_function(TERM_LEARNER_OBJECT_FROM_ID);
-        memoization_state.note_globally_cached_function(TERM_LEARNER_ID);
-        memoization_state.note_memoized_function(GET_UPWARDS_CLOSURE_JUSTIFICATIONS);
-        memoization_state.note_globally_cached_function(GET_UPWARDS_CLOSURE_JUSTIFICATIONS_CACHED);
-        memoization_state.note_globally_cached_function(GET_TREATED_CONDITION);
-        memoization_state.note_globally_cached_function(GET_TREATMENTS_FOR_CONDITION);
-        memoization_state.note_globally_cached_function(GET_AFFECTED_PARTS);
-        memoization_state.note_globally_cached_function(GET_COOCCURRING_CONDITIONS);
-        memoization_state.note_globally_cached_function(LEADERS_TO_GROUPS);
-        memoization_state.note_globally_cached_function(CITIES_TO_COUNTRIES);
-        memoization_state.note_globally_cached_function(COUNTRIES_TO_REGIONS);
-        register_external_symbol(FIND_CONCEPTS_FOR_DOCUMENT_SEGMENTS);
-        register_external_symbol(TAG_DOCUMENT_NODES_FOR_DISPLAY);
-        register_external_symbol(GENERATE_RETRIEVAL_JUSTIFICATION_FROM_JUSTIFICATION_STRING);
-        register_external_symbol(GENERATE_TERM_EXPLANATION);
-        memoization_state.note_globally_cached_function(DOCUMENT_ANNOTATION_TERM_ID);
-        memoization_state.note_globally_cached_function(DOCUMENT_ANNOTATION_TERM_FROM_ID);
-        register_external_symbol(TERMS_FOR_FOCUSED_CYC_SEMANTIC_QUERY);
-        define_test_case_table_int(REMOVE_PICTURES_REGEXP_TEST, list(new SubLObject[]{ $TEST, NIL, $OWNER, $$$daves, $CLASSES, NIL, $KB, $TINY, $WORKING_, T }), $list_alt320);
-        define_test_case_table_int(GET_DOC_STRING_FROM_NODE_IDS_AND_STRINGS_VALUES, list(new SubLObject[]{ $TEST, NIL, $OWNER, $$$daves, $CLASSES, NIL, $KB, $TINY, $WORKING_, T }), $list_alt322);
-        declare_defglobal($document_interpretation_rules_by_mt$);
-        html_macros.note_html_handler_function(CB_DOCUMENT_INTERPRETATION_SUGGESTIONS);
-        html_macros.note_html_handler_function(CB_ANNOTATE_TAGGED_CONCEPTS);
-        define_test_case_table_int(TEST_FIND_CONCEPTS_FOR_DOCUMENT_SEGMENTS, list(new SubLObject[]{ $TEST, NIL, $OWNER, $$$daves, $CLASSES, NIL, $KB, $FULL, $WORKING_, T }), $list_alt427);
-        define_test_case_table_int(TEST_M19_ASSERTIONS, list(new SubLObject[]{ $TEST, NIL, $OWNER, $$$daves, $CLASSES, NIL, $KB, $FULL, $WORKING_, T }), $list_alt453);
-        define_test_case_table_int(TEST_STEVE_BENDELACKARIAN, list(new SubLObject[]{ $TEST, NIL, $OWNER, $$$daves, $CLASSES, NIL, $KB, $FULL, $WORKING_, T }), $list_alt453);
-        return NIL;
-    }
-
     public static SubLObject setup_document_annotation_widgets_file() {
-        if (SubLFiles.USE_V1) {
-            $text_index_override$.setDynamicValue($str2$_cyc_projects_ccf_document_search);
-            $semantic_index_override$.setDynamicValue($str3$_cyc_projects_ccf_document_search);
-            $text_index_override$.setDynamicValue($str4$_host_achernar_daves_ccf_lucene_t);
-            $semantic_index_override$.setDynamicValue($str5$_host_achernar_daves_ccf_lucene_s);
-            $semantic_index_override$.setDynamicValue($str6$_cyc_projects_ccf_document_search);
-            $text_index_override$.setDynamicValue($str7$_cyc_projects_ccf_document_search);
-            memoization_state.note_globally_cached_function(TERM_LEARNER_OBJECT_FROM_ID);
-            memoization_state.note_globally_cached_function(TERM_LEARNER_ID);
-            memoization_state.note_memoized_function(GET_UPWARDS_CLOSURE_JUSTIFICATIONS);
-            memoization_state.note_globally_cached_function(GET_UPWARDS_CLOSURE_JUSTIFICATIONS_CACHED);
-            memoization_state.note_globally_cached_function(GET_TREATED_CONDITION);
-            memoization_state.note_globally_cached_function(GET_TREATMENTS_FOR_CONDITION);
-            memoization_state.note_globally_cached_function(GET_AFFECTED_PARTS);
-            memoization_state.note_globally_cached_function(GET_COOCCURRING_CONDITIONS);
-            memoization_state.note_globally_cached_function(LEADERS_TO_GROUPS);
-            memoization_state.note_globally_cached_function(CITIES_TO_COUNTRIES);
-            memoization_state.note_globally_cached_function(COUNTRIES_TO_REGIONS);
-            register_external_symbol(FIND_CONCEPTS_FOR_DOCUMENT_SEGMENTS);
-            register_external_symbol(TAG_DOCUMENT_NODES_FOR_DISPLAY);
-            register_external_symbol(FIND_INTERPS_FOR_DOCUMENT_SEGMENTS);
-            register_external_symbol(GENERATE_RETRIEVAL_JUSTIFICATION_FROM_JUSTIFICATION_STRING);
-            register_external_symbol(GENERATE_TERM_EXPLANATION);
-            memoization_state.note_globally_cached_function(DOCUMENT_ANNOTATION_TERM_ID);
-            memoization_state.note_globally_cached_function(DOCUMENT_ANNOTATION_TERM_FROM_ID);
-            memoization_state.note_globally_cached_function(GET_DEFAULT_DOCUMENT_INGESTER_ANNOTATION_LEXICON);
-            memoization_state.note_globally_cached_function(GET_DEFAULT_DOCUMENT_ANNOTATION_LEXICON);
-            register_external_symbol(TERMS_FOR_FOCUSED_CYC_SEMANTIC_QUERY);
-            define_test_case_table_int(REMOVE_PICTURES_REGEXP_TEST, list(new SubLObject[]{ $TEST, NIL, $OWNER, NIL, $CLASSES, NIL, $KB, $TINY, $WORKING_, T }), $list324);
-            define_test_case_table_int(GET_DOC_STRING_FROM_NODE_IDS_AND_STRINGS_VALUES, list(new SubLObject[]{ $TEST, NIL, $OWNER, NIL, $CLASSES, NIL, $KB, $TINY, $WORKING_, T }), $list326);
-            declare_defglobal($document_interpretation_rules_by_mt$);
-            html_macros.note_cgi_handler_function(CB_DOCUMENT_INTERPRETATION_SUGGESTIONS, $HTML_HANDLER);
-            html_macros.note_cgi_handler_function(CB_ANNOTATE_TAGGED_CONCEPTS, $HTML_HANDLER);
-        }
-        if (SubLFiles.USE_V2) {
-            define_test_case_table_int(REMOVE_PICTURES_REGEXP_TEST, list(new SubLObject[]{ $TEST, NIL, $OWNER, $$$daves, $CLASSES, NIL, $KB, $TINY, $WORKING_, T }), $list_alt320);
-            define_test_case_table_int(GET_DOC_STRING_FROM_NODE_IDS_AND_STRINGS_VALUES, list(new SubLObject[]{ $TEST, NIL, $OWNER, $$$daves, $CLASSES, NIL, $KB, $TINY, $WORKING_, T }), $list_alt322);
-            html_macros.note_html_handler_function(CB_DOCUMENT_INTERPRETATION_SUGGESTIONS);
-            html_macros.note_html_handler_function(CB_ANNOTATE_TAGGED_CONCEPTS);
-            define_test_case_table_int(TEST_FIND_CONCEPTS_FOR_DOCUMENT_SEGMENTS, list(new SubLObject[]{ $TEST, NIL, $OWNER, $$$daves, $CLASSES, NIL, $KB, $FULL, $WORKING_, T }), $list_alt427);
-            define_test_case_table_int(TEST_M19_ASSERTIONS, list(new SubLObject[]{ $TEST, NIL, $OWNER, $$$daves, $CLASSES, NIL, $KB, $FULL, $WORKING_, T }), $list_alt453);
-            define_test_case_table_int(TEST_STEVE_BENDELACKARIAN, list(new SubLObject[]{ $TEST, NIL, $OWNER, $$$daves, $CLASSES, NIL, $KB, $FULL, $WORKING_, T }), $list_alt453);
-        }
-        return NIL;
-    }
-
-    public static SubLObject setup_document_annotation_widgets_file_Previous() {
         $text_index_override$.setDynamicValue($str2$_cyc_projects_ccf_document_search);
         $semantic_index_override$.setDynamicValue($str3$_cyc_projects_ccf_document_search);
         $text_index_override$.setDynamicValue($str4$_host_achernar_daves_ccf_lucene_t);
@@ -15214,6 +7348,510 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
     }
 
     static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     public static final class $clear_get_treated_condition$ZeroArityFunction extends ZeroArityFunction {
@@ -15259,488 +7897,6 @@ public final class document_annotation_widgets extends SubLTranslatedFile implem
             return clear_get_cooccurring_conditions();
         }
     }
-
-    // Internal Constants
-    @LispMethod(comment = "Internal Constants")
-    static private final SubLString $str_alt0$_host_george_super_index_hezbolla = makeString("/host/george/super-index-hezbollah/text");
-
-    static private final SubLString $str_alt1$_host_george_super_index_hezbolla = makeString("/host/george/super-index-hezbollah/sem");
-
-    static private final SubLString $str_alt2$_cyc_projects_ccf_document_search = makeString("/cyc/projects/ccf/document-search/doc-corpus/currently-installed-at-ccf/super-index/text");
-
-    static private final SubLString $str_alt3$_cyc_projects_ccf_document_search = makeString("/cyc/projects/ccf/document-search/doc-corpus/currently-installed-at-ccf/super-index/sem");
-
-    static private final SubLString $str_alt4$_host_achernar_daves_ccf_lucene_t = makeString("/host/achernar/daves/ccf-lucene/text");
-
-    static private final SubLString $str_alt5$_host_achernar_daves_ccf_lucene_s = makeString("/host/achernar/daves/ccf-lucene/sem-20070720");
-
-    static private final SubLString $str_alt6$_cyc_projects_ccf_document_search = makeString("/cyc/projects/ccf/document-search/doc-corpus/20091021-133607/super-index/sem/");
-
-    static private final SubLString $str_alt7$_cyc_projects_ccf_document_search = makeString("/cyc/projects/ccf/document-search/doc-corpus/20091021-133607/super-index/text/");
-
-    static private final SubLList $list_alt8 = list(makeSymbol("LIST"));
-
-    static private final SubLString $str_alt15$___A__entering__S__ = makeString("~&~A: entering ~S~%");
-
-    static private final SubLList $list_alt16 = list(makeSymbol("TIMESTAMP-WITH-MILLISECONDS"));
-
-    static private final SubLList $list_alt19 = list(makeSymbol("*DOC-SEARCH-TRACE-LOG-FILE*"), makeKeyword("APPEND"));
-
-    static private final SubLList $list_alt20 = list(makeSymbol("WARN"), makeString("writing to ~S"), makeSymbol("*DOC-SEARCH-TRACE-LOG-FILE*"));
-
-    static private final SubLList $list_alt21 = list(cons(reader_make_constant_shell("genls"), makeString("g")), cons(reader_make_constant_shell("isa"), makeString("i")), cons(reader_make_constant_shell("inRegion"), makeString("r")), cons(reader_make_constant_shell("hasLeaders"), makeString("l")), cons(reader_make_constant_shell("standardTreatmentTypeForConditionType"), makeString("c")), cons(reader_make_constant_shell("ailmentTypeAfflictsPartType"), makeString("a")), cons(reader_make_constant_shell("conditionsCommonlyCooccur"), makeString("o")));
-
-    static private final SubLList $list_alt22 = list(list(reader_make_constant_shell("isa"), reader_make_constant_shell("isa"), $SPEC, $GENL), list(reader_make_constant_shell("genls"), reader_make_constant_shell("genls"), $SPEC, $GENL), list(reader_make_constant_shell("inRegion"), reader_make_constant_shell("inRegion"), $SPEC, $GENL), list(reader_make_constant_shell("hasLeaders"), reader_make_constant_shell("hasLeaders"), $GENL, $SPEC), list(reader_make_constant_shell("standardTreatmentTypeForConditionType"), reader_make_constant_shell("standardTreatmentTypeForConditionType"), $SPEC, $GENL), list(reader_make_constant_shell("ailmentTypeAfflictsPartType"), reader_make_constant_shell("ailmentTypeAfflictsPartType"), $SPEC, $GENL), list(reader_make_constant_shell("conditionsCommonlyCooccur"), reader_make_constant_shell("conditionsCommonlyCooccur"), $SPEC, $GENL));
-
-    static private final SubLString $str_alt23$data_doc_tagging_upwards_closure_ = makeString("data/doc-tagging/upwards-closure-justifications.fht");
-
-    static private final SubLString $str_alt25$_host_george_scratch_text_index = makeString("/host/george/scratch/text-index");
-
-    static private final SubLString $str_alt26$_host_george_scratch_sem_index = makeString("/host/george/scratch/sem-index");
-
-    static private final SubLString $str_alt27$_host_george_simple_tagged_index_ = makeString("/host/george/simple-tagged-index/textual");
-
-    static private final SubLString $str_alt28$_host_george_simple_tagged_index_ = makeString("/host/george/simple-tagged-index/semantic");
-
-    static private final SubLString $str_alt29$_host_george_disambiguated_index_ = makeString("/host/george/disambiguated-index/text");
-
-    static private final SubLString $str_alt30$_host_george_disambiguated_index_ = makeString("/host/george/disambiguated-index/sem");
-
-    public static final SubLSymbol $kw36$_MEMOIZED_ITEM_NOT_FOUND_ = makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
-
-    static private final SubLList $list_alt40 = list(reader_make_constant_shell("MtUnionFn"), reader_make_constant_shell("CurrentWorldDataCollectorMt-NonHomocentric"), reader_make_constant_shell("CCF-CAEQueryMt"));
-
-    public static final SubLObject $const43$standardTreatmentTypeForCondition = reader_make_constant_shell("standardTreatmentTypeForConditionType");
-
-    static private final SubLString $str_alt52$_cyc_top_data_doc_tagging_upwards = makeString("/cyc/top/data/doc-tagging/upwards-closure-justifications.fht");
-
-    static private final SubLString $str_alt53$Invalid_attempt_to_reuse_memoizat = makeString("Invalid attempt to reuse memoization state in multiple threads simultaneously.");
-
-    static private final SubLString $str_alt55$Caching_upwards_closure_justifica = makeString("Caching upwards-closure justifications");
-
-    static private final SubLSymbol $sym61$_X = makeSymbol("?X");
-
-    static private final SubLList $list_alt64 = list(makeSymbol("?X"));
-
-    static private final SubLList $list_alt65 = list(makeKeyword("TRANSITIVE-CLOSURE-MODE"), makeKeyword("ALL"));
-
-    static private final SubLSymbol $sym77$_GROUP = makeSymbol("?GROUP");
-
-    static private final SubLList $list_alt80 = cons(makeSymbol("LEADER"), makeSymbol("GROUP"));
-
-    static private final SubLList $list_alt81 = cons(makeSymbol("?LEADER"), makeSymbol("?GROUP"));
-
-    static private final SubLList $list_alt82 = list(reader_make_constant_shell("hasLeaders"), makeSymbol("?GROUP"), makeSymbol("?LEADER"));
-
-    static private final SubLString $str_alt85$Caching_countries_of_all_cities__ = makeString("Caching countries of all cities...");
-
-    static private final SubLList $list_alt86 = cons(makeSymbol("?CITY"), makeSymbol("?COUNTRY"));
-
-    static private final SubLList $list_alt87 = list(reader_make_constant_shell("countryOfCity"), makeSymbol("?COUNTRY"), makeSymbol("?CITY"));
-
-    static private final SubLList $list_alt88 = cons(makeSymbol("CITY"), makeSymbol("COUNTRY"));
-
-    static private final SubLSymbol $sym90$_COUNTRY = makeSymbol("?COUNTRY");
-
-    static private final SubLSymbol $sym92$_REGION = makeSymbol("?REGION");
-
-    static private final SubLList $list_alt94 = list(reader_make_constant_shell("isa"), makeSymbol("?COUNTRYTYPE"), reader_make_constant_shell("CountryTypeByGeneralRegion"));
-
-    static private final SubLList $list_alt95 = list(makeSymbol("?COUNTRYTYPE"));
-
-    static private final SubLList $list_alt96 = list(list(reader_make_constant_shell("regionOfCountryTypeByGeneralRegion"), makeSymbol("?COUNTRYTYPE"), makeSymbol("?REGION")));
-
-    static private final SubLList $list_alt98 = cons(makeSymbol("COUNTRY"), makeSymbol("REGION"));
-
-    static private final SubLList $list_alt99 = cons(makeSymbol("?COUNTRY"), makeSymbol("?REGION"));
-
-    static private final SubLList $list_alt100 = list(reader_make_constant_shell("and"), list(reader_make_constant_shell("isa"), makeSymbol("?COUNTRYTYPE"), reader_make_constant_shell("CountryTypeByGeneralRegion")), list(reader_make_constant_shell("isa"), makeSymbol("?COUNTRY"), makeSymbol("?COUNTRYTYPE")), list(reader_make_constant_shell("regionOfCountryTypeByGeneralRegion"), makeSymbol("?COUNTRYTYPE"), makeSymbol("?REGION")));
-
-    static private final SubLList $list_alt102 = list(list(makeSymbol("SEMANTIC-SESSION"), makeSymbol("KEYWORD-SESSION"), makeSymbol("HOST"), makeSymbol("PORT"), makeSymbol("TEXT-INDEX-FILE"), makeSymbol("SEM-INDEX-FILE"), makeSymbol("OVERWRITE?")), makeSymbol("&BODY"), makeSymbol("BODY"));
-
-    static private final SubLString $str_alt109$_indexed_docs_txt = makeString("/indexed-docs.txt");
-
-    static private final SubLString $str_alt114$Unable_to_open__S = makeString("Unable to open ~S");
-
-    static private final SubLString $str_alt115$_A__ = makeString("~A~%");
-
-    static private final SubLString $str_alt116$_host_george_scratch_tagged_xml_d = makeString("/host/george/scratch/tagged-xml-docs/");
-
-    static private final SubLString $str_alt118$_title_ = makeString("<title>");
-
-    static private final SubLString $str_alt119$__title_ = makeString("</title>");
-
-    static private final SubLString $str_alt121$_text_ = makeString("<text>");
-
-    static private final SubLString $str_alt122$__text_ = makeString("</text>");
-
-    static private final SubLString $str_alt124$_keystring_ = makeString("<keystring>");
-
-    static private final SubLString $str_alt125$_confirmed_concept_keystring_ = makeString("<confirmed_concept_keystring>");
-
-    static private final SubLString $str_alt126$original_filename = makeString("original_filename");
-
-    static private final SubLString $str_alt127$_original_filename_ = makeString("<original_filename>");
-
-    static private final SubLString $str_alt129$_url_ = makeString("<url>");
-
-    static private final SubLString $str_alt130$__url_ = makeString("</url>");
-
-    static private final SubLString $str_alt131$parent_filename = makeString("parent_filename");
-
-    static private final SubLString $str_alt132$_parent_filename_ = makeString("<parent_filename>");
-
-    static private final SubLString $str_alt134$_host_george_scratch_tagged_docs_ = makeString("/host/george/scratch/tagged-docs/");
-
-    static private final SubLList $list_alt138 = list(makeSymbol("ORG-FILE"), makeSymbol("TEXT-FPATH"), makeSymbol("&OPTIONAL"), makeSymbol("THE-URL"), makeSymbol("THE-PARENT"));
-
-    static private final SubLString $str_alt139$_S_tagging__S__ = makeString("~S tagging ~S~%");
-
-    static private final SubLString $str_alt140$_txt = makeString(".txt");
-
-    static private final SubLString $str_alt141$_cyc_idx = makeString(".cyc-idx");
-
-    static private final SubLList $list_alt142 = list(makeSymbol("TITLE"), makeSymbol("DOC-TEXT"));
-
-    static private final SubLString $str_alt143$_ = makeString("#");
-
-    static private final SubLString $str_alt144$_ = makeString("^");
-
-    static private final SubLString $str_alt147$daves_cyc_com = makeString("daves@cyc.com");
-
-    static private final SubLString $str_alt148$There_is_no_text_in_the_body_of_t = makeString("There is no text in the body of this file: ");
-
-    static private final SubLString $str_alt149$_ = makeString(".");
-
-    static private final SubLString $str_alt150$Please_remove_it_from_the_corpus_ = makeString("Please remove it from the corpus.");
-
-    static private final SubLString $str_alt151$Semantic_Search__Empty_file = makeString("Semantic Search: Empty file");
-
-    static private final SubLString $str_alt152$Couldn_t_find_file__ = makeString("Couldn't find file: ");
-
-    static private final SubLString $str_alt153$Semantic_Search__PROBE_FILE_failu = makeString("Semantic Search: PROBE-FILE failure");
-
-    static private final SubLList $list_alt156 = list(makeSymbol("IDX-FILE"), makeSymbol("TXT-FILE"));
-
-    static private final SubLString $str_alt158$problem_indexing__a_____moving_on = makeString("problem indexing ~a  ...moving on to next file: ~A");
-
-    static private final SubLString $str_alt159$http___doc_cyc_com_ = makeString("http://doc.cyc.com/");
-
-    static private final SubLString $str_alt160$_cyc_ = makeString("/cyc/");
-
-    static private final SubLString $str_alt161$title___S__ = makeString("title: ~S~%");
-
-    static private final SubLString $str_alt162$url___S__ = makeString("url: ~S~%");
-
-    static private final SubLString $str_alt165$_ = makeString(" ");
-
-    static private final SubLString $str_alt170$writing_to__S = makeString("writing to ~S");
-
-    static private final SubLList $list_alt173 = list(makeSymbol("NODE-ID"), makeSymbol("STRING"));
-
-    static private final SubLString $str_alt174$_ua0_ = makeString("&ua0;");
-
-    static private final SubLSymbol $sym175$_ = makeSymbol("<");
-
-    static private final SubLList $list_alt177 = list(makeSymbol("NODE-ID"), makeSymbol("OFFSET"));
-
-    static private final SubLList $list_alt179 = list(reader_make_constant_shell("Person"), reader_make_constant_shell("Organization"), reader_make_constant_shell("Place"));
-
-    static private final SubLList $list_alt186 = list(reader_make_constant_shell("ConceptFilterSpecificationFn"), reader_make_constant_shell("CCFExplanationWorthyConceptFilter"), reader_make_constant_shell("ConceptAndInstancesFilterParameter"), reader_make_constant_shell("TriggerFromConceptOrInstance"));
-
-    static private final SubLString $str_alt187$_tagged_html = makeString("-tagged.html");
-
-    static private final SubLString $str_alt188$_span_property__cyc_termName__con = makeString("<span property='cyc:termName' content='");
-
-    static private final SubLString $str_alt189$___span_class__cycTerm__id__cycTe = makeString("'><span class='cycTerm' id='cycTerm");
-
-    static private final SubLString $str_alt190$__property__cyc_termId__content__ = makeString("' property='cyc:termId' content='");
-
-    static private final SubLString $str_alt191$__ = makeString("'>");
-
-    static private final SubLString $str_alt192$__span___span_ = makeString("</span></span>");
-
-    static private final SubLList $list_alt193 = list(makeSymbol("MAP-STRING-INDEX"), makeSymbol("MAP-STRING-END-INDEX"));
-
-    static private final SubLString $str_alt194$http___sw_cyc_com_concept_ = makeString("http://sw.cyc.com/concept/");
-
-    static private final SubLList $list_alt195 = list(makeString("script"), makeString("style"), makeString("iframe"), makeString("select"), makeString("noscript"), makeString("pre"), makeString("code"));
-
-    static private final SubLString $str_alt198$data_doc_tagging_term_id_fht = makeString("data/doc-tagging/term-id.fht");
-
-    static private final SubLString $str_alt199$data_doc_tagging_id_term_fht = makeString("data/doc-tagging/id-term.fht");
-
-    static private final SubLString $str_alt200$Meaning__ = makeString("Meaning: ");
-
-    static private final SubLString $str_alt201$_ = makeString("(");
-
-    static private final SubLString $str_alt202$__ = makeString(", ");
-
-    static private final SubLString $str_alt203$_ = makeString(")");
-
-    static private final SubLString $str_alt205$Text_Match__ = makeString("Text Match: ");
-
-    static private final SubLString $str_alt206$Invalid_justification_string___S = makeString("Invalid justification string: ~S");
-
-    static private final SubLList $list_alt212 = list(makeKeyword("PPH-AGREEMENT"), list(reader_make_constant_shell("nonPlural-Generic")), makeKeyword("PPH-GENERATION-COUNT"), EIGHT_INTEGER);
-
-    static private final SubLString $str_alt213$_b_Synonyms__b___ = makeString("<b>Synonyms</b>: ");
-
-    static private final SubLString $str_alt214$_b_ = makeString("<b>");
-
-    static private final SubLString $str_alt215$__b___ = makeString("</b>: ");
-
-    static private final SubLString $str_alt216$_br_ = makeString("<br>");
-
-    static private final SubLString $str_alt217$_div_style__background_color__whi = makeString("<div style=\"background-color: white; margin-left: 3em; margin-right: 3em\">");
-
-    static private final SubLString $str_alt218$__div_ = makeString("</div>");
-
-    static private final SubLSymbol $sym221$_DOC = makeSymbol("?DOC");
-
-    static private final SubLString $str_alt224$_b_Specialists____b_ = makeString("<b>Specialists: </b>");
-
-    static private final SubLList $list_alt232 = list(reader_make_constant_shell("ConceptFilterSpecificationFn"), reader_make_constant_shell("PredicateTaxonomy"), reader_make_constant_shell("ConceptOnlyFilterParameter"), reader_make_constant_shell("TriggerFromConcept"));
-
-    static private final SubLList $list_alt261 = list(reader_make_constant_shell("ConceptFilterSpecificationFn"), reader_make_constant_shell("TaxonomyOfEasilyUnderstandableConcepts"), reader_make_constant_shell("ConceptOnlyFilterParameter"), reader_make_constant_shell("TriggerFromConcept"));
-
-    static private final SubLString $str_alt263$rebuilding_term_id_FHT = makeString("rebuilding term-id FHT");
-
-    static private final SubLString $str_alt265$Rebuilding_id__term_map = makeString("Rebuilding id->term map");
-
-    static private final SubLString $str_alt266$Augmenting_term_id_FHT = makeString("Augmenting term-id FHT");
-
-    static private final SubLList $list_alt269 = list(makeKeyword("SEARCH-TYPE"), $TEXT);
-
-    static private final SubLString $str_alt273$0_0_t___ = makeString("0#0#t\\\\^");
-
-    static private final SubLString $str_alt274$0_0_s___ = makeString("0#0#s\\\\^");
-
-    static private final SubLString $str_alt278$_cyc_projects_doc_annotation_quer = makeString("/cyc/projects/doc-annotation/query-logs/log.txt");
-
-    static private final SubLString $str_alt279$_A___S__ = makeString("~A: ~S~%");
-
-    static private final SubLSymbol $sym280$STOPWORD_IN_SEM_QUERY_ = makeSymbol("STOPWORD-IN-SEM-QUERY?");
-
-    static private final SubLString $str_alt283$0_0_s = makeString("0#0#s");
-
-    static private final SubLList $list_alt286 = list(makeSymbol("WORD"), makeSymbol("DETAILS"));
-
-    static private final SubLString $str_alt287$_____a_z0_9A_Z_________ = makeString("[\\[][a-z0-9A-Z._:]*[\\]]");
-
-    static private final SubLString $str_alt288$__ = makeString("--");
-
-    static private final SubLString $str_alt289$__ = makeString("__");
-
-    static private final SubLString $str_alt290$__ = makeString("==");
-
-    static private final SubLString $str_alt291$_____________ = makeString("[.][.][.][.]+");
-
-    static private final SubLString $str_alt292$__0_9a_fA_F___ = makeString("&[0-9a-fA-F]+;");
-
-    static private final SubLList $list_alt295 = list(list(makeSymbol("FORT"), makeSymbol("LEXICON")), makeSymbol("&BODY"), makeSymbol("BODY"));
-
-    static private final SubLSymbol $sym296$SEEN_ = makeUninternedSymbol("SEEN?");
-
-    static private final SubLList $list_alt297 = list(list(makeSymbol("MAKE-HASH-TABLE"), makeInteger(1024), list(QUOTE, EQUAL)));
-
-    static private final SubLList $list_alt301 = list(makeSymbol("IGNORE"), makeSymbol("STRING"));
-
-    static private final SubLList $list_alt303 = list(list(makeSymbol("FIM"), makeSymbol("LEX"), list(QUOTE, makeSymbol("GET")), makeKeyword("DENOT")));
-
-    static private final SubLList $list_alt307 = list(T);
-
-    static private final SubLString $str_alt308$_A___A__ = makeString("~A. ~A~%");
-
-    static private final SubLString $str_alt309$____A__ = makeString("   ~A: ");
-
-    static private final SubLString $str_alt310$_A_ = makeString("~A ");
-
-    static private final SubLString $str_alt311$__ = makeString("~%");
-
-    static private final SubLString $$$daves = makeString("daves");
-
-    static private final SubLList $list_alt320 = list(list(list(makeString("some text and [a_picture.png] followed by some other stuff")), list(makeString("[a_picture.png]"))));
-
-    static private final SubLList $list_alt322 = list(list(list(list(list(ZERO_INTEGER, makeString("this")), list(ONE_INTEGER, makeString(" is ")), list(TWO_INTEGER, makeString("a ")), list(THREE_INTEGER, makeString("cat")))), list(makeString("this is a cat"), list(list(ZERO_INTEGER, ZERO_INTEGER), list(ONE_INTEGER, FOUR_INTEGER), list(TWO_INTEGER, EIGHT_INTEGER), list(THREE_INTEGER, TEN_INTEGER)))), list(list(list(list(ZERO_INTEGER, makeString("this")), list(ONE_INTEGER, makeString(" is ")), list(TWO_INTEGER, makeString("a cat")))), list(makeString("this is a cat"), list(list(ZERO_INTEGER, ZERO_INTEGER), list(ONE_INTEGER, FOUR_INTEGER), list(TWO_INTEGER, EIGHT_INTEGER)))));
-
-    static private final SubLList $list_alt325 = list(list(makeSymbol("RULE"), makeSymbol("RULE-SET")), makeSymbol("&BODY"), makeSymbol("BODY"));
-
-    static private final SubLString $str_alt328$Dont_know_yet_how_to_unify_a_sent = makeString("Dont know yet how to unify a sentence with the sentence bag.");
-
-    static private final SubLString $str_alt329$Dont_know_how_to_deal_with_test__ = makeString("Dont know how to deal with test ~A.");
-
-    static private final SubLString $str_alt342$Invalid_THE_expression__A___ = makeString("Invalid THE expression ~A.~%");
-
-    static private final SubLString $str_alt343$Dont_know_how_to_handle_precondit = makeString("Dont know how to handle precondition operator ~A in ~A.");
-
-    static private final SubLString $str_alt344$If_it_is_the_case_that__ = makeString("If it is the case that: ");
-
-    static private final SubLString $str_alt345$then_one_might_conclude_that__ = makeString("then one might conclude that: ");
-
-    static private final SubLString $str_alt347$Document_Interpretation_Suggestio = makeString("Document Interpretation Suggestions");
-
-    static private final SubLString $str_alt349$text_javascript = makeString("text/javascript");
-
-    static private final SubLString $str_alt350$yui_skin_sam = makeString("yui-skin-sam");
-
-    static private final SubLString $str_alt351$Enter_the_text_to_interpret_ = makeString("Enter the text to interpret.");
-
-    static private final SubLString $str_alt352$cb_document_interpretation_sugges = makeString("cb-document-interpretation-suggestions");
-
-    static private final SubLString $str_alt356$Rule_Mt__ = makeString("Rule Mt: ");
-
-    static private final SubLString $str_alt365$For_each_string____concept_mappin = makeString("For each string -> concept mapping, rate the mapping. <ul><li>\'Primary Meaning\' means that, acontextually, this is what one would think of when seeing the string.  Most words will only have one primary meaning.\n<li>\'Contextually Dependent\' means that this is a reasonable mapping, but would not be the primary mapping.  It would really only be used when there is something else in the context to license the meaning.\n<li>\'Rare\' means that, while the string could mean this, it\'s fairly hard to imagine contexts in which it would mean this, and we could effectively treat this as not being mapped.\n<li>\'Indecipherable\' means that this concept is not something that a user is ever likely to be able to understand, and should suppress the entire concept when interacting with end users.\n<li>\'Merge away\' should be used when the concept itself should not exist.   For example, when we have both  #$EducationalOrganization-Rutgers-University and #$RutgersUniversity, one of them should be merged away, and the other should be the primary meaning.\n<li>\'Invalid\' means that the mapping between the string and the concept is faulty, and should likely be eliminated.</ul>");
-
-    static private final SubLString $str_alt366$previous_input_file = makeString("previous-input-file");
-
-    static private final SubLString $str_alt367$input_file = makeString("input-file");
-
-    static private final SubLString $str_alt368$next_index = makeString("next-index");
-
-    static private final SubLString $str_alt372$cb_annotate_tagged_concepts = makeString("cb-annotate-tagged-concepts");
-
-    static private final SubLString $str_alt373$Tagging_File_Name__ = makeString("Tagging File Name: ");
-
-    static private final SubLString $str_alt374$tr__border_color__black__________ = makeString("tr {border-color: black}\n                                .first {border-top-width: 10}\n                                .first td {border-top-width: 5; border-top-color: gray}");
-
-    static private final SubLList $list_alt375 = list(makeSymbol("TEXT"), makeSymbol("&REST"), makeSymbol("STRINGS-AND-CONCEPTS"));
-
-    static private final SubLString $str_alt378$_S = makeString("~S");
-
-    static private final SubLString $str_alt379$frequency___S__ = makeString("frequency: ~S~%");
-
-    static private final SubLString $str_alt380$30_ = makeString("30%");
-
-    static private final SubLString $str_alt381$_CCFFCC = makeString("#CCFFCC");
-
-    static private final SubLString $str_alt383$Primary_Meaning___ = makeString("Primary Meaning   ");
-
-    static private final SubLString $str_alt384$_CCFFFF = makeString("#CCFFFF");
-
-    static private final SubLString $str_alt386$Contextually_Dependent___ = makeString("Contextually Dependent   ");
-
-    static private final SubLString $str_alt387$_FFCCFF = makeString("#FFCCFF");
-
-    static private final SubLString $str_alt388$very_rare = makeString("very-rare");
-
-    static private final SubLString $str_alt389$Rare___ = makeString("Rare   ");
-
-    static private final SubLString $str_alt390$_FFCCCC = makeString("#FFCCCC");
-
-    static private final SubLString $str_alt392$Indecipherable__ = makeString("Indecipherable  ");
-
-    static private final SubLString $str_alt393$_FFFFCC = makeString("#FFFFCC");
-
-    static private final SubLString $str_alt394$merge_candidate = makeString("merge-candidate");
-
-    static private final SubLString $str_alt396$_CCCCFF = makeString("#CCCCFF");
-
-    static private final SubLString $str_alt397$kill_candidate = makeString("kill-candidate");
-
-    static private final SubLString $str_alt400$_out = makeString(".out");
-
-    static private final SubLString $str_alt401$_A__A__A__ = makeString("~A ~A ~A~%");
-
-    static private final SubLString $str_alt403$_cyc_projects_sabre_data_july_200 = makeString("/cyc/projects/sabre/data/july-2007-questions-answers-profiles-activities/combined-sabre-local-for-manual-annotation.txt.out");
-
-    static private final SubLList $list_alt404 = list(CHAR_space);
-
-    static private final SubLString $str_alt405$_ = makeString("\"");
-
-    static private final SubLList $list_alt406 = list(makeSymbol("HL-ID"), makeSymbol("JUDGMENT"), makeSymbol("&REST"), makeSymbol("IGNORE"));
-
-    static private final SubLString $str_alt407$_cyc_projects_sabre_data_july_200 = makeString("/cyc/projects/sabre/data/july-2007-questions-answers-profiles-activities/combined-sabre-local-for-manual-annotation.txt");
-
-    static private final SubLList $list_alt408 = list(makeSymbol("TERM"), makeSymbol("JUDGMENT"));
-
-    static private final SubLList $list_alt409 = list(makeSymbol("INTERMED-TERM"), makeSymbol("INTERMED-JUDGMENT"));
-
-    static private final SubLList $list_alt410 = list(makeSymbol("TERM"), makeSymbol("JUDGMENT"), makeSymbol("STRING"));
-
-    static private final SubLString $str_alt411$f_____strengthOfLexicalMapping_ = makeString("f: (#$strengthOfLexicalMapping ");
-
-    static private final SubLString $str_alt412$___PrimaryLexicalMapping__ = makeString(" #$PrimaryLexicalMapping).");
-
-    static private final SubLString $str_alt413$___VanishinglyRareLexicalMapping_ = makeString(" #$VanishinglyRareLexicalMapping).");
-
-    static private final SubLString $str_alt414$___ContextuallyDependentLexicalMa = makeString(" #$ContextuallyDependentLexicalMapping).");
-
-    static private final SubLString $str_alt415$kill__ = makeString("kill: ");
-
-    static private final SubLList $list_alt416 = list(makeSymbol("ID"), makeSymbol("URL"), makeSymbol("FILEDIR"), makeSymbol("TIME-STAMP"));
-
-    static private final SubLString $str_alt417$input_file_line___S__ = makeString("input-file-line: ~S~%");
-
-    static private final SubLList $list_alt418 = list(list(reader_make_constant_shell("ConceptFilterSpecificationFn"), reader_make_constant_shell("TaxonomyOfEasilyUnderstandableConcepts"), reader_make_constant_shell("ConceptOnlyFilterParameter"), reader_make_constant_shell("TriggerFromConcept")));
-
-    static private final SubLString $str_alt419$__S__S__S___ = makeString("(~S ~S ~S)~%");
-
-    private static final SubLSymbol TEST_FIND_CONCEPTS_FOR_DOCUMENT_SEGMENTS = makeSymbol("TEST-FIND-CONCEPTS-FOR-DOCUMENT-SEGMENTS");
-
-    private static final SubLSymbol TEST_M19_ASSERTIONS = makeSymbol("TEST-M19-ASSERTIONS");
-
-    private static final SubLSymbol TEST_STEVE_BENDELACKARIAN = makeSymbol("TEST-STEVE-BENDELACKARIAN");
-
-    static private final SubLString $str_alt424$Overall_Result_for_Doc_Ingester_T = makeString("Overall Result for Doc Ingester Tests: Failure");
-
-    static private final SubLString $str_alt425$Overall_Result_for_Doc_Ingester_T = makeString("Overall Result for Doc Ingester Tests: Success");
-
-    static private final SubLList $list_alt427 = list(list(list(list(list(makeInteger(99), makeString("Spain")), list(makeInteger(102), makeString("+where+she+was+part+of+the+underground+resistance."))), makeInteger(99), reader_make_constant_shell("Spain")), T));
-
-    static private final SubLString $str_alt428$In_1983__she_served_as_a_member_o = makeString("In 1983, she served as a member of the commission that neogiated for peace with the guerrilla movement M-29. Her first book, Historia de un entusiasmo (1986), relates the inability of the government and rebels to come to terms. This led to her self-imposed exile to Spain and Mexico until 1989 when The M-29 agreed to disarm. She treats themes of exile in her first novel, Isla de pasi&uf3;n, which is based on historical events at Clipperton Island.");
-
-    static private final SubLString $str_alt429$M_29 = makeString("M-29");
-
-    static private final SubLList $list_alt430 = list(list(reader_make_constant_shell("CollectionIntersection2Fn"), reader_make_constant_shell("RevoltOrganization"), reader_make_constant_shell("GuerillaForce")));
-
-    static private final SubLString $str_alt431$HL_ID__S_does_not_point_to__A = makeString("HL ID ~S does not point to ~A");
-
-    static private final SubLString $$$Currently_Unknown_to_Cyc = makeString("Currently Unknown to Cyc");
-
-    static private final SubLString $str_alt433$_A_is_not_a_new_term___Returned_g = makeString("~A is not a new term.  Returned generation: ~S");
-
-    static private final SubLString $$$guerilla_group = makeString("guerilla group");
-
-    static private final SubLString $str_alt437$_A_does_not_contain__A = makeString("~A does not contain ~A");
-
-    static private final SubLString $str_alt438$_CollectionIntersection2Fn_Revolt = makeString("(CollectionIntersection2Fn RevoltOrganization GuerillaForce)");
-
-    static private final SubLString $str_alt439$the_M_19 = makeString("the M-19");
-
-    static private final SubLList $list_alt440 = list(list(makeString("(2)"), makeString("Mw2DHivARwYLnCkRsZ2tw3ljb3JwHiu9ZVtInCkRsZ2tw3ljb3JwHiu_cg3KnCkRsZ2tw3ljb3Jw"), makeKeyword("CYCL-ID")));
-
-    static private final SubLList $list_alt442 = list(list(makeKeyword("STRING"), makeString("guerilla group"), makeKeyword("CONTEXT-STRING"), makeString(""), $TOOL, $USER));
-
-    static private final SubLString $str_alt443$http___en_wikipedia_org_wiki_Laur = makeString("http://en.wikipedia.org/wiki/Laura_Restrepo");
-
-    static private final SubLString $str_alt444$Laura_Restrepo___Wikipedia__the_f = makeString("Laura Restrepo - Wikipedia, the free encyclopedia");
-
-    static private final SubLString $str_alt446$Didn_t_get_status_code_1_when_ass = makeString("Didn't get status-code 1 when asserting ~A");
-
-    static private final SubLList $list_alt447 = list(ONE_INTEGER, makeString(""));
-
-    static private final SubLString $str_alt448$after_asserting__A__fact_status_s = makeString("after asserting ~A, fact-status should be ~A, was ~A");
-
-    static private final SubLString $str_alt450$Expected_3__but_got__A_as_status_ = makeString("Expected 3, but got ~A as status code while unasserting ~A");
-
-    static private final SubLList $list_alt451 = list(THREE_INTEGER, makeString(""));
-
-    static private final SubLString $str_alt452$after_unasserting__A__fact_status = makeString("after unasserting ~A, fact-status should be ~A, was ~A");
-
-    static private final SubLList $list_alt453 = list(list(list(reader_make_constant_shell("DaveS")), T));
-
-    static private final SubLString $$$Steve_Bendelackarian = makeString("Steve Bendelackarian");
-
-    static private final SubLList $list_alt455 = list(reader_make_constant_shell("Individual"));
-
-    static private final SubLString $$$Individual = makeString("Individual");
-
-    static private final SubLString $str_alt458$http___en_wikipedia_org_wiki_Stev = makeString("http://en.wikipedia.org/wiki/Steve_Bendelack");
-
-    static private final SubLString $str_alt459$Steve_Bendelack___Wikipedia__the_ = makeString("Steve Bendelack - Wikipedia, the free encyclopedia");
-
-
 }
 
 /**

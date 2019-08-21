@@ -1,111 +1,6 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl.owl;
 
 
-import static com.cyc.cycjava.cycl.access_macros.define_obsolete_register;
-import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
-import static com.cyc.cycjava.cycl.dictionary.dictionary_contents;
-import static com.cyc.cycjava.cycl.dictionary_contents.do_dictionary_contents_doneP;
-import static com.cyc.cycjava.cycl.dictionary_contents.do_dictionary_contents_finalize;
-import static com.cyc.cycjava.cycl.dictionary_contents.do_dictionary_contents_key_value;
-import static com.cyc.cycjava.cycl.dictionary_contents.do_dictionary_contents_next;
-import static com.cyc.cycjava.cycl.dictionary_contents.do_dictionary_contents_state;
-import static com.cyc.cycjava.cycl.el_utilities.el_formula_with_operator_p;
-import static com.cyc.cycjava.cycl.el_utilities.make_binary_formula;
-import static com.cyc.cycjava.cycl.forts.fort_p;
-import static com.cyc.cycjava.cycl.forts.new_forts_iterator;
-import static com.cyc.cycjava.cycl.isa.all_instances_in_all_mts;
-import static com.cyc.cycjava.cycl.isa.all_isa_among;
-import static com.cyc.cycjava.cycl.list_utilities.alist_keys;
-import static com.cyc.cycjava.cycl.list_utilities.alist_lookup;
-import static com.cyc.cycjava.cycl.list_utilities.delete_if_not;
-import static com.cyc.cycjava.cycl.list_utilities.empty_list_p;
-import static com.cyc.cycjava.cycl.list_utilities.find_if_not;
-import static com.cyc.cycjava.cycl.list_utilities.lengthE;
-import static com.cyc.cycjava.cycl.list_utilities.member_equalP;
-import static com.cyc.cycjava.cycl.list_utilities.non_empty_list_p;
-import static com.cyc.cycjava.cycl.list_utilities.remove_if_not;
-import static com.cyc.cycjava.cycl.list_utilities.sublisp_boolean;
-import static com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars.$resourced_sbhl_marking_space_limit$;
-import static com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars.$resourced_sbhl_marking_spaces$;
-import static com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$;
-import static com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars.determine_resource_limit;
-import static com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars.possibly_new_marking_resource;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.$catch_error_message_target$;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_index$;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_prediction$;
-import static com.cyc.cycjava.cycl.utilities_macros.$percent_progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$within_noting_percent_progress$;
-import static com.cyc.cycjava.cycl.utilities_macros.note_percent_progress;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_percent_progress_postamble;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_percent_progress_preamble;
-import static com.cyc.cycjava.cycl.xml_vars.$xml_document_entity_names$;
-import static com.cyc.cycjava.cycl.xml_vars.$xml_stream$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_backslash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_comma;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_hash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_less;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_slash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.append;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.bind;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.currentBinding;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.rebind;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.multiply;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.subtract;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.cconcatenate;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.count_if;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.delete_duplicates;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.delete_if;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.find;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.length;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.nreverse;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.remove_duplicates;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.search;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.current_process;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.get_universal_time;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.arg2;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.multiple_value_list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.resetMultipleValues;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.values;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.aref;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_listp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.copy_list;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.member;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.putf;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.second;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.princ;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.princ_to_string;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.bq_cons;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.read_from_string;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.close;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.get_output_stream_string;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.make_private_string_output_stream;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.read_line;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-
-import com.cyc.cycjava.cycl.V12;
 import com.cyc.cycjava.cycl.assertions_high;
 import com.cyc.cycjava.cycl.cycl_utilities;
 import com.cyc.cycjava.cycl.deck;
@@ -117,6 +12,7 @@ import com.cyc.cycjava.cycl.fort_types_interface;
 import com.cyc.cycjava.cycl.forts;
 import com.cyc.cycjava.cycl.function_terms;
 import com.cyc.cycjava.cycl.genls;
+import com.cyc.cycjava.cycl.inference.kb_query;
 import com.cyc.cycjava.cycl.isa;
 import com.cyc.cycjava.cycl.iteration;
 import com.cyc.cycjava.cycl.kb_accessors;
@@ -131,25 +27,16 @@ import com.cyc.cycjava.cycl.nart_handles;
 import com.cyc.cycjava.cycl.number_utilities;
 import com.cyc.cycjava.cycl.numeric_date_utilities;
 import com.cyc.cycjava.cycl.obsolete;
+import com.cyc.cycjava.cycl.owl.owl_cycl_to_xml;
 import com.cyc.cycjava.cycl.pph_macros;
 import com.cyc.cycjava.cycl.pph_main;
 import com.cyc.cycjava.cycl.pph_utilities;
 import com.cyc.cycjava.cycl.queues;
+import com.cyc.cycjava.cycl.rdf.rdf_uri;
+import com.cyc.cycjava.cycl.rdf.rdf_utilities;
 import com.cyc.cycjava.cycl.regular_expression_utilities;
 import com.cyc.cycjava.cycl.regular_expressions;
 import com.cyc.cycjava.cycl.rkf_concept_clarifier;
-import com.cyc.cycjava.cycl.set;
-import com.cyc.cycjava.cycl.set_contents;
-import com.cyc.cycjava.cycl.set_utilities;
-import com.cyc.cycjava.cycl.string_utilities;
-import com.cyc.cycjava.cycl.subl_promotions;
-import com.cyc.cycjava.cycl.unicode_strings;
-import com.cyc.cycjava.cycl.web_utilities;
-import com.cyc.cycjava.cycl.xml_utilities;
-import com.cyc.cycjava.cycl.xml_vars;
-import com.cyc.cycjava.cycl.inference.kb_query;
-import com.cyc.cycjava.cycl.rdf.rdf_uri;
-import com.cyc.cycjava.cycl.rdf.rdf_utilities;
 import com.cyc.cycjava.cycl.sbhl.sbhl_graphs;
 import com.cyc.cycjava.cycl.sbhl.sbhl_link_vars;
 import com.cyc.cycjava.cycl.sbhl.sbhl_links;
@@ -160,6 +47,15 @@ import com.cyc.cycjava.cycl.sbhl.sbhl_module_utilities;
 import com.cyc.cycjava.cycl.sbhl.sbhl_module_vars;
 import com.cyc.cycjava.cycl.sbhl.sbhl_paranoia;
 import com.cyc.cycjava.cycl.sbhl.sbhl_search_vars;
+import com.cyc.cycjava.cycl.set;
+import com.cyc.cycjava.cycl.set_contents;
+import com.cyc.cycjava.cycl.set_utilities;
+import com.cyc.cycjava.cycl.string_utilities;
+import com.cyc.cycjava.cycl.subl_promotions;
+import com.cyc.cycjava.cycl.unicode_strings;
+import com.cyc.cycjava.cycl.web_utilities;
+import com.cyc.cycjava.cycl.xml_utilities;
+import com.cyc.cycjava.cycl.xml_vars;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Filesys;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
@@ -174,159 +70,127 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.$catch_error_message_target$;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_index$;
+import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_prediction$;
+import static com.cyc.cycjava.cycl.utilities_macros.$percent_progress_start_time$;
+import static com.cyc.cycjava.cycl.utilities_macros.$within_noting_percent_progress$;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_backslash;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_comma;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_hash;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_less;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_slash;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUALP;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- * module:      OWL-CYCL-TO-XML
- * source file: /cyc/top/cycl/owl/owl-cycl-to-xml.lisp
- * created:     2019/07/03 17:38:28
- */
-public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
-    public static final SubLObject owl_opencyc_uri_for_fort_internal(SubLObject fort, SubLObject use_entity_referencesP, SubLObject use_external_ids_for_namesP, SubLObject version_date) {
-        if (use_entity_referencesP == UNPROVIDED) {
-            use_entity_referencesP = owlification.$owl_use_entity_referencesP$.getDynamicValue();
-        }
-        if (use_external_ids_for_namesP == UNPROVIDED) {
-            use_external_ids_for_namesP = owlification.$owl_use_external_ids_for_namesP$.getDynamicValue();
-        }
-        if (version_date == UNPROVIDED) {
-            version_date = owl_uris_and_prefixes.$owl_export_version_date$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(fort, FORT_P);
-            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                if (!((NIL != use_external_ids_for_namesP) || (NIL != numeric_date_utilities.universal_date_p(version_date)))) {
-                    Errors.error($str_alt27$OpenCyc_URIs_must_either_use_a_ve);
-                }
-            }
-            {
-                SubLObject uri = NIL;
-                {
-                    SubLObject _prev_bind_0 = owlification.$owl_use_external_ids_for_namesP$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = owl_uris_and_prefixes.$owl_export_base_uri$.currentBinding(thread);
-                    try {
-                        owlification.$owl_use_external_ids_for_namesP$.bind(use_external_ids_for_namesP, thread);
-                        owl_uris_and_prefixes.$owl_export_base_uri$.bind(misc_utilities.uninitialized(), thread);
-                        uri = cconcatenate(NIL != use_entity_referencesP ? ((SubLObject) ($str_alt28$_opencyc_)) : NIL != use_external_ids_for_namesP ? ((SubLObject) (owl_uris_and_prefixes.owl_opencyc_base_uri(version_date))) : owl_uris_and_prefixes.owl_english_opencyc_base_uri(version_date), owlification.owl_term_string(fort, T));
-                    } finally {
-                        owl_uris_and_prefixes.$owl_export_base_uri$.rebind(_prev_bind_1, thread);
-                        owlification.$owl_use_external_ids_for_namesP$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return uri;
-            }
-        }
-    }
 
-    public static final SubLObject owl_cyc_uri_for_fort_internal(SubLObject fort, SubLObject use_entity_referencesP, SubLObject use_external_ids_for_namesP, SubLObject version_date) {
-        if (use_entity_referencesP == UNPROVIDED) {
-            use_entity_referencesP = owlification.$owl_use_entity_referencesP$.getDynamicValue();
-        }
-        if (use_external_ids_for_namesP == UNPROVIDED) {
-            use_external_ids_for_namesP = owlification.$owl_use_external_ids_for_namesP$.getDynamicValue();
-        }
-        if (version_date == UNPROVIDED) {
-            version_date = owl_uris_and_prefixes.$owl_export_version_date$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(fort, FORT_P);
-            {
-                SubLObject uri = NIL;
-                {
-                    SubLObject _prev_bind_0 = owlification.$owl_use_external_ids_for_namesP$.currentBinding(thread);
-                    try {
-                        owlification.$owl_use_external_ids_for_namesP$.bind(use_external_ids_for_namesP, thread);
-                        uri = cconcatenate(NIL != use_entity_referencesP ? ((SubLObject) ($str_alt24$_cyc_)) : owl_uris_and_prefixes.owl_cyc_base_uri(version_date), owlification.owl_term_string(fort, T));
-                    } finally {
-                        owlification.$owl_use_external_ids_for_namesP$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return uri;
-            }
-        }
-    }
-
+public final class owl_cycl_to_xml extends SubLTranslatedFile {
     public static final SubLFile me = new owl_cycl_to_xml();
 
+    public static final String myName = "com.cyc.cycjava.cycl.owl.owl_cycl_to_xml";
 
+    public static final String myFingerPrint = "53c72cf363c18234e6d30827ef09768a243b871032960abeffc4ed44fa832953";
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     public static final SubLSymbol $owl_ontology_comment_file$ = makeSymbol("*OWL-ONTOLOGY-COMMENT-FILE*");
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $owl_xml_footer$ = makeSymbol("*OWL-XML-FOOTER*");
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $owl_xml_spacer$ = makeSymbol("*OWL-XML-SPACER*");
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $owl_xml_spacer_2$ = makeSymbol("*OWL-XML-SPACER-2*");
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $owl_xml_spacer_3$ = makeSymbol("*OWL-XML-SPACER-3*");
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $owl_xml_spacer_4$ = makeSymbol("*OWL-XML-SPACER-4*");
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $owl_xml_spacer_5$ = makeSymbol("*OWL-XML-SPACER-5*");
 
+
+
     // deflexical
-    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $owl_standalone_resource_tags$ = makeSymbol("*OWL-STANDALONE-RESOURCE-TAGS*");
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $opencyc_uri_pattern_def$ = makeSymbol("*OPENCYC-URI-PATTERN-DEF*");
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $cyc_uri_pattern_def$ = makeSymbol("*CYC-URI-PATTERN-DEF*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $opencyc_uri_pattern$ = makeSymbol("*OPENCYC-URI-PATTERN*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $cyc_uri_pattern$ = makeSymbol("*CYC-URI-PATTERN*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $all_uri_patterns$ = makeSymbol("*ALL-URI-PATTERNS*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $owl_opencyc_fort_owl_names_filename$ = makeSymbol("*OWL-OPENCYC-FORT-OWL-NAMES-FILENAME*");
 
-    // defparameter
-    @LispMethod(comment = "defparameter")
-    private static final SubLSymbol $owl_collection_types_for_export$ = makeSymbol("*OWL-COLLECTION-TYPES-FOR-EXPORT*");
+
+
+
 
     // defparameter
-    @LispMethod(comment = "defparameter")
+    private static final SubLSymbol $owl_collection_types_for_export$ = makeSymbol("*OWL-COLLECTION-TYPES-FOR-EXPORT*");
+
+
+
+    // defparameter
     public static final SubLSymbol $owl_export_version_string$ = makeSymbol("*OWL-EXPORT-VERSION-STRING*");
 
     // deflexical
     // Format: (NAME COMMENT FUNCTIONAL?)
-    /**
-     * Format: (NAME COMMENT FUNCTIONAL?)
-     */
-    @LispMethod(comment = "Format: (NAME COMMENT FUNCTIONAL?)\ndeflexical")
     public static final SubLSymbol $cyc_annotation_properties$ = makeSymbol("*CYC-ANNOTATION-PROPERTIES*");
 
     // deflexical
@@ -334,14 +198,12 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
      * A subset of the keys in *OWL-EXPORT-ENTITY-MAP*, used to define our
      * annotation properties.
      */
-    @LispMethod(comment = "A subset of the keys in *OWL-EXPORT-ENTITY-MAP*, used to define our\r\nannotation properties.\ndeflexical\nA subset of the keys in *OWL-EXPORT-ENTITY-MAP*, used to define our\nannotation properties.")
     private static final SubLSymbol $cyc_annotation_external_prefixes$ = makeSymbol("*CYC-ANNOTATION-EXTERNAL-PREFIXES*");
 
     // Internal Constants
-    @LispMethod(comment = "Internal Constants")
-    static private final SubLString $str0$____rdfs_comment_xml_lang__en__ = makeString("   <rdfs:comment xml:lang=\"en\">");
+    public static final SubLString $str0$____rdfs_comment_xml_lang__en__ = makeString("   <rdfs:comment xml:lang=\"en\">");
 
-    static private final SubLString $str1$___________rdfs_comment________ow = makeString("\n        </rdfs:comment>\n    </owl:Ontology>\n");
+    public static final SubLString $str1$___________rdfs_comment________ow = makeString("\n        </rdfs:comment>\n    </owl:Ontology>\n");
 
     private static final SubLString $$$opencyc = makeString("opencyc");
 
@@ -353,25 +215,25 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
 
     private static final SubLList $list6 = list(makeString("rdfs:label"), makeString("xml:lang"), makeString("en"));
 
-    static private final SubLList $list7 = list(makeString("skos:prefLabel"), makeString("xml:lang"), makeString("en"));
+    public static final SubLList $list7 = list(makeString("skos:prefLabel"), makeString("xml:lang"), makeString("en"));
 
-    static private final SubLList $list8 = list(makeString("skos:altLabel"), makeString("xml:lang"), makeString("en"));
+    public static final SubLList $list8 = list(makeString("skos:altLabel"), makeString("xml:lang"), makeString("en"));
 
-    static private final SubLList $list9 = list(makeString("prettyString"), makeString("xml:lang"), makeString("en"));
+    public static final SubLList $list9 = list(makeString("prettyString"), makeString("xml:lang"), makeString("en"));
 
-
+    private static final SubLObject $$prettyString = reader_make_constant_shell(makeString("prettyString"));
 
     private static final SubLList $list11 = list(makeString("xml:lang"), makeString("en"));
 
-    static private final SubLList $list12 = list(makeString("nameString"), makeString("xml:lang"), makeString("en"));
+    public static final SubLList $list12 = list(makeString("nameString"), makeString("xml:lang"), makeString("en"));
 
-
+    private static final SubLObject $$nameString = reader_make_constant_shell(makeString("nameString"));
 
     private static final SubLList $list14 = list(makeString("rdfs:comment"), makeString("xml:lang"), makeString("en"));
 
-    static private final SubLList $list15 = list(makeString("skos:definition"), makeString("xml:lang"), makeString("en"));
+    public static final SubLList $list15 = list(makeString("skos:definition"), makeString("xml:lang"), makeString("en"));
 
-    static private final SubLList $list16 = list(makeString("owl:intersectionOf"), makeString("rdf:parseType"), makeString("Collection"));
+    public static final SubLList $list16 = list(makeString("owl:intersectionOf"), makeString("rdf:parseType"), makeString("Collection"));
 
     private static final SubLString $str17$_label = makeString(":label");
 
@@ -387,7 +249,13 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str23$http___sw_cyc_com = makeString("http://sw.cyc.com");
 
+
+
+
+
     private static final SubLSymbol OWL_CYC_URI_FOR_CYC_TERM = makeSymbol("OWL-CYC-URI-FOR-CYC-TERM");
+
+
 
     private static final SubLSymbol OWL_OPENCYC_URI_FOR_TERM = makeSymbol("OWL-OPENCYC-URI-FOR-TERM");
 
@@ -407,6 +275,8 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
 
     private static final SubLInteger $int$200000 = makeInteger(200000);
 
+
+
     private static final SubLString $str38$Unable_to_open__S = makeString("Unable to open ~S");
 
     private static final SubLString $str39$_ = makeString("\"");
@@ -417,11 +287,13 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol $compact_hl_external_id_strings_with_exported_owl_opencyc_content_caching_state$ = makeSymbol("*COMPACT-HL-EXTERNAL-ID-STRINGS-WITH-EXPORTED-OWL-OPENCYC-CONTENT-CACHING-STATE*");
 
+    private static final SubLObject $$termTypeForOntology = reader_make_constant_shell(makeString("termTypeForOntology"));
 
+    private static final SubLObject $$contextOfPCW = reader_make_constant_shell(makeString("contextOfPCW"));
 
+    private static final SubLObject $$synonymousExternalConcept = reader_make_constant_shell(makeString("synonymousExternalConcept"));
 
-
-
+    private static final SubLObject $$overlappingExternalConcept = reader_make_constant_shell(makeString("overlappingExternalConcept"));
 
 
 
@@ -429,7 +301,7 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str49$No_asents_for__S_ = makeString("No asents for ~S.");
 
-    private static final SubLList $list50 = list(reader_make_constant_shell("ExistingObjectType"), reader_make_constant_shell("ExistingStuffType"), reader_make_constant_shell("TemporalObjectType"), reader_make_constant_shell("TemporalStuffType"), reader_make_constant_shell("ObjectType"), reader_make_constant_shell("StuffType"), reader_make_constant_shell("Collection"));
+    private static final SubLList $list50 = list(reader_make_constant_shell(makeString("ExistingObjectType")), reader_make_constant_shell(makeString("ExistingStuffType")), reader_make_constant_shell(makeString("TemporalObjectType")), reader_make_constant_shell(makeString("TemporalStuffType")), reader_make_constant_shell(makeString("ObjectType")), reader_make_constant_shell(makeString("StuffType")), reader_make_constant_shell(makeString("Collection")));
 
     private static final SubLSymbol OWL_PREDICATE_TYPES_FOR_EXPORT = makeSymbol("OWL-PREDICATE-TYPES-FOR-EXPORT");
 
@@ -437,9 +309,9 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol $sym53$VALID_FORT_ = makeSymbol("VALID-FORT?");
 
-    private static final SubLObject $const54$BinaryPredicateTypeByLogicalFeatu = reader_make_constant_shell("BinaryPredicateTypeByLogicalFeature");
+    private static final SubLObject $const54$BinaryPredicateTypeByLogicalFeatu = reader_make_constant_shell(makeString("BinaryPredicateTypeByLogicalFeature"));
 
-    private static final SubLList $list55 = list(reader_make_constant_shell("CoexistingObjectsPredicate"), reader_make_constant_shell("BinaryRolePredicate"), reader_make_constant_shell("ComplexTemporalPredicate"), reader_make_constant_shell("BinaryPredicate"), reader_make_constant_shell("Predicate"));
+    private static final SubLList $list55 = list(reader_make_constant_shell(makeString("CoexistingObjectsPredicate")), reader_make_constant_shell(makeString("BinaryRolePredicate")), reader_make_constant_shell(makeString("ComplexTemporalPredicate")), reader_make_constant_shell(makeString("BinaryPredicate")), reader_make_constant_shell(makeString("Predicate")));
 
     private static final SubLSymbol $owl_predicate_types_for_export_caching_state$ = makeSymbol("*OWL-PREDICATE-TYPES-FOR-EXPORT-CACHING-STATE*");
 
@@ -447,17 +319,27 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
 
 
 
-    private static final SubLList $list62 = list(reader_make_constant_shell("isa"), reader_make_constant_shell("genlPreds"), reader_make_constant_shell("arg1Isa"), reader_make_constant_shell("arg2Isa"), reader_make_constant_shell("arg1SometimesIsa"), reader_make_constant_shell("arg2SometimesIsa"));
+    private static final SubLObject $$EverythingPSC = reader_make_constant_shell(makeString("EverythingPSC"));
 
 
 
 
+
+    private static final SubLList $list62 = list(reader_make_constant_shell(makeString("isa")), reader_make_constant_shell(makeString("genlPreds")), reader_make_constant_shell(makeString("arg1Isa")), reader_make_constant_shell(makeString("arg2Isa")), reader_make_constant_shell(makeString("arg1SometimesIsa")), reader_make_constant_shell(makeString("arg2SometimesIsa")));
+
+    private static final SubLObject $$isa = reader_make_constant_shell(makeString("isa"));
+
+
+
+    private static final SubLObject $$genls = reader_make_constant_shell(makeString("genls"));
 
     private static final SubLSymbol $sym66$OWLIFIABLE_SENTENCE_ = makeSymbol("OWLIFIABLE-SENTENCE?");
 
     private static final SubLSymbol ATOMIC_SENTENCE_ARG1 = makeSymbol("ATOMIC-SENTENCE-ARG1");
 
     private static final SubLString $str68$__Extracted__D_subject_terms_from = makeString("~&Extracted ~D subject terms from ~D asents.~%");
+
+
 
     private static final SubLString $str70$_ = makeString("/");
 
@@ -491,19 +373,37 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $$$oc = makeString("oc");
 
+
+
     private static final SubLString $str87$ = makeString("");
 
     private static final SubLString $str88$_A_A__ = makeString("~A~A~%");
 
     private static final SubLString $$$_ = makeString(" ");
 
+
+
+
+
+
+
+
+
+
+
     private static final SubLString $str95$_A_is_not_a__A = makeString("~A is not a ~A");
+
+
+
+
 
     private static final SubLString $$$continue_anyway = makeString("continue anyway");
 
+
+
     private static final SubLString $str100$_A_is_not_a_valid__sbhl_type_erro = makeString("~A is not a valid *sbhl-type-error-action* value");
 
-
+    private static final SubLObject $$genlPreds = reader_make_constant_shell(makeString("genlPreds"));
 
     private static final SubLString $str102$_A_is_neither_SET_P_nor_LISTP_ = makeString("~A is neither SET-P nor LISTP.");
 
@@ -511,7 +411,9 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str104$Node__a_does_not_pass_sbhl_type_t = makeString("Node ~a does not pass sbhl-type-test ~a~%");
 
-    private static final SubLList $list105 = list(reader_make_constant_shell("genls"), reader_make_constant_shell("isa"), reader_make_constant_shell("geographicalSubRegions"), reader_make_constant_shell("geopoliticalSubdivision"));
+    private static final SubLList $list105 = list(reader_make_constant_shell(makeString("genls")), reader_make_constant_shell(makeString("isa")), reader_make_constant_shell(makeString("geographicalSubRegions")), reader_make_constant_shell(makeString("geopoliticalSubdivision")));
+
+
 
     private static final SubLString $str107$__Exporting__D_Terms_from_iterato = makeString("~&Exporting ~D Terms from iterator.~%");
 
@@ -520,6 +422,8 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
     private static final SubLString $$$_terms_to_OWL = makeString(" terms to OWL");
 
     private static final SubLString $str110$__Exported__D_Terms_and__D_senten = makeString("~&Exported ~D Terms and ~D sentences.~%");
+
+
 
     private static final SubLString $str112$___S___D_sentences___ = makeString("~&~S: ~D sentences.~%");
 
@@ -575,9 +479,9 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str138$rdf_resource = makeString("rdf:resource");
 
+    private static final SubLObject $$OWLURIFn = reader_make_constant_shell(makeString("OWLURIFn"));
 
-
-
+    private static final SubLObject $$OWLDatatypeFn = reader_make_constant_shell(makeString("OWLDatatypeFn"));
 
     private static final SubLString $str141$rdf_datatype = makeString("rdf:datatype");
 
@@ -585,7 +489,9 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol $sym143$XML_SPECIAL_CHAR_ = makeSymbol("XML-SPECIAL-CHAR?");
 
-    static private final SubLList $list144 = list(list(makeSymbol("&OPTIONAL"), list(makeSymbol("LEVEL"), ONE_INTEGER)), makeSymbol("&BODY"), makeSymbol("BODY"));
+    public static final SubLList $list144 = list(list(makeSymbol("&OPTIONAL"), list(makeSymbol("LEVEL"), ONE_INTEGER)), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+
 
     private static final SubLList $list146 = list(makeSymbol("*XML-INDENTATION-AMOUNT*"), list(makeSymbol("LENGTH"), makeSymbol("*OWL-XML-SPACER*")));
 
@@ -596,6 +502,8 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
     private static final SubLList $list149 = list(makeSymbol("*XML-INDENTATION-AMOUNT*"));
 
     private static final SubLList $list150 = list(makeSymbol("OWL-INTERSECTION-FN"), makeSymbol("CLASS-TERM"), list(makeSymbol("OWL-RESTRICTION-FN"), makeSymbol("OWL-RESTRICTION"), makeSymbol("OWL-ON-PROPERTY"), makeSymbol("PROPERTY"), makeSymbol("OWL-HAS-VALUE"), makeSymbol("VALUE")));
+
+
 
     private static final SubLString $$$OWL_indent_level_too_high = makeString("OWL indent level too high");
 
@@ -609,6 +517,8 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol CYC_ANNOTATION_EXTERNAL_PREFIX_P = makeSymbol("CYC-ANNOTATION-EXTERNAL-PREFIX-P");
 
+
+
     private static final SubLString $str159$xmlns_ = makeString("xmlns:");
 
     private static final SubLString $str160$rdf_RDF = makeString("rdf:RDF");
@@ -621,6 +531,8 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str164$____ = makeString(" [~%");
 
+
+
     private static final SubLString $str166$_______ENTITY__ = makeString("     <!ENTITY ~");
 
     private static final SubLString $str167$A__S____ = makeString("A ~S >~%");
@@ -628,6 +540,8 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
     private static final SubLString $str168$____ = makeString("   ]");
 
     private static final SubLList $list169 = cons(makeSymbol("CYCL"), makeSymbol("PREFIXED-NAME"));
+
+
 
     private static final SubLList $list171 = list(makeSymbol("LOCAL-NAME"), makeSymbol("COMMENT"), makeSymbol("FUNCTIONAL?"));
 
@@ -647,27 +561,8 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $$$FunctionalProperty = makeString("FunctionalProperty");
 
-    // Definitions
-    public static final SubLObject owl_xml_ontology_comment_and_close_tag_alt(SubLObject comment) {
-        return cconcatenate($str_alt0$____rdfs_comment_xml_lang__en__, new SubLObject[]{ comment, $str_alt1$___________rdfs_comment________ow });
-    }
-
-    // Definitions
     public static SubLObject owl_xml_ontology_comment_and_close_tag(final SubLObject comment) {
         return cconcatenate($str0$____rdfs_comment_xml_lang__en__, new SubLObject[]{ comment, $str1$___________rdfs_comment________ow });
-    }
-
-    public static final SubLObject get_owl_ontology_comment_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject comment = NIL;
-                if ((((NIL != owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.getDynamicValue(thread)) && (NIL != search($$$opencyc, owl_uris_and_prefixes.owl_export_base_uri(UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED))) && (NIL != file_utilities.file_existsP($owl_ontology_comment_file$.getGlobalValue()))) && (NIL == owl_uris_and_prefixes.$owl_export_suppress_ontology_nodeP$.getDynamicValue(thread))) {
-                    comment = string_utilities.read_string_from_file($owl_ontology_comment_file$.getGlobalValue(), UNPROVIDED, UNPROVIDED);
-                }
-                return comment;
-            }
-        }
     }
 
     public static SubLObject get_owl_ontology_comment() {
@@ -679,16 +574,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return comment;
     }
 
-    public static final SubLObject clear_owl_tag_attributes_alt() {
-        {
-            SubLObject cs = $owl_tag_attributes_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject clear_owl_tag_attributes() {
         final SubLObject cs = $owl_tag_attributes_caching_state$.getGlobalValue();
         if (NIL != cs) {
@@ -697,37 +582,12 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject remove_owl_tag_attributes_alt() {
-        return memoization_state.caching_state_remove_function_results_with_args($owl_tag_attributes_caching_state$.getGlobalValue(), list(EMPTY_SUBL_OBJECT_ARRAY), UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject remove_owl_tag_attributes() {
         return memoization_state.caching_state_remove_function_results_with_args($owl_tag_attributes_caching_state$.getGlobalValue(), list(EMPTY_SUBL_OBJECT_ARRAY), UNPROVIDED, UNPROVIDED);
     }
 
-    public static final SubLObject owl_tag_attributes_internal_alt() {
-        return list(new SubLObject[]{ $list_alt7, $list_alt8, $list_alt9, $list_alt10, bq_cons(kb_utilities.compact_hl_external_id_string($$prettyString), $list_alt12), $list_alt13, bq_cons(kb_utilities.compact_hl_external_id_string($$nameString), $list_alt12), $list_alt15, $list_alt16, $list_alt17, bq_cons(cconcatenate(owl_uris_and_prefixes.cyc_annotation_prefix(), $str_alt18$_label), $list_alt12) });
-    }
-
     public static SubLObject owl_tag_attributes_internal() {
         return list(new SubLObject[]{ $list6, $list7, $list8, $list9, bq_cons(kb_utilities.compact_hl_external_id_string($$prettyString), $list11), $list12, bq_cons(kb_utilities.compact_hl_external_id_string($$nameString), $list11), $list14, $list15, $list16, bq_cons(cconcatenate(owl_uris_and_prefixes.cyc_annotation_prefix(), $str17$_label), $list11) });
-    }
-
-    public static final SubLObject owl_tag_attributes_alt() {
-        {
-            SubLObject caching_state = $owl_tag_attributes_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(OWL_TAG_ATTRIBUTES, $owl_tag_attributes_caching_state$, NIL, EQL, ZERO_INTEGER, ZERO_INTEGER);
-            }
-            {
-                SubLObject results = memoization_state.caching_state_get_zero_arg_results(caching_state, UNPROVIDED);
-                if (results == $kw20$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_tag_attributes_internal()));
-                    memoization_state.caching_state_set_zero_arg_results(caching_state, results, UNPROVIDED);
-                }
-                return memoization_state.caching_results(results);
-            }
-        }
     }
 
     public static SubLObject owl_tag_attributes() {
@@ -845,66 +705,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return values(list_utilities.sublisp_boolean(values), values);
     }
 
-    public static final SubLObject owl_cyc_uri_for_fort_alt(SubLObject fort, SubLObject use_entity_referencesP, SubLObject use_external_ids_for_namesP, SubLObject version_date) {
-        if (use_entity_referencesP == UNPROVIDED) {
-            use_entity_referencesP = owlification.$owl_use_entity_referencesP$.getDynamicValue();
-        }
-        if (use_external_ids_for_namesP == UNPROVIDED) {
-            use_external_ids_for_namesP = owlification.$owl_use_external_ids_for_namesP$.getDynamicValue();
-        }
-        if (version_date == UNPROVIDED) {
-            version_date = owl_uris_and_prefixes.$owl_export_version_date$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
-                SubLObject caching_state = NIL;
-                if (NIL == v_memoization_state) {
-                    return com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_cyc_uri_for_fort_internal(fort, use_entity_referencesP, use_external_ids_for_namesP, version_date);
-                }
-                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, OWL_CYC_URI_FOR_FORT, UNPROVIDED);
-                if (NIL == caching_state) {
-                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), OWL_CYC_URI_FOR_FORT, FOUR_INTEGER, $int$256, EQL, UNPROVIDED);
-                    memoization_state.memoization_state_put(v_memoization_state, OWL_CYC_URI_FOR_FORT, caching_state);
-                }
-                {
-                    SubLObject sxhash = memoization_state.sxhash_calc_4(fort, use_entity_referencesP, use_external_ids_for_namesP, version_date);
-                    SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
-                    if (collisions != $kw20$_MEMOIZED_ITEM_NOT_FOUND_) {
-                        {
-                            SubLObject cdolist_list_var = collisions;
-                            SubLObject collision = NIL;
-                            for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
-                                {
-                                    SubLObject cached_args = collision.first();
-                                    SubLObject results2 = second(collision);
-                                    if (fort.eql(cached_args.first())) {
-                                        cached_args = cached_args.rest();
-                                        if (use_entity_referencesP.eql(cached_args.first())) {
-                                            cached_args = cached_args.rest();
-                                            if (use_external_ids_for_namesP.eql(cached_args.first())) {
-                                                cached_args = cached_args.rest();
-                                                if (((NIL != cached_args) && (NIL == cached_args.rest())) && version_date.eql(cached_args.first())) {
-                                                    return memoization_state.caching_results(results2);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    {
-                        SubLObject results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_cyc_uri_for_fort_internal(fort, use_entity_referencesP, use_external_ids_for_namesP, version_date)));
-                        memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(fort, use_entity_referencesP, use_external_ids_for_namesP, version_date));
-                        return memoization_state.caching_results(results);
-                    }
-                }
-            }
-        }
-    }
-
     public static SubLObject owl_cyc_uri_for_fort(final SubLObject fort, SubLObject use_entity_referencesP, SubLObject use_external_ids_for_namesP, SubLObject version_date) {
         if (use_entity_referencesP == UNPROVIDED) {
             use_entity_referencesP = owlification.$owl_use_entity_referencesP$.getDynamicValue();
@@ -915,7 +715,7 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         if (version_date == UNPROVIDED) {
             version_date = owl_uris_and_prefixes.$owl_export_version_date$.getDynamicValue();
         }
-        assert NIL != forts.fort_p(fort) : "! forts.fort_p(fort) " + ("forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) ") + fort;
+        assert NIL != forts.fort_p(fort) : "forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) " + fort;
         return owl_cyc_uri_for_cyc_term(fort, use_entity_referencesP, use_external_ids_for_namesP, version_date);
     }
 
@@ -993,66 +793,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return memoization_state.caching_results(results3);
     }
 
-    public static final SubLObject owl_opencyc_uri_for_fort_alt(SubLObject fort, SubLObject use_entity_referencesP, SubLObject use_external_ids_for_namesP, SubLObject version_date) {
-        if (use_entity_referencesP == UNPROVIDED) {
-            use_entity_referencesP = owlification.$owl_use_entity_referencesP$.getDynamicValue();
-        }
-        if (use_external_ids_for_namesP == UNPROVIDED) {
-            use_external_ids_for_namesP = owlification.$owl_use_external_ids_for_namesP$.getDynamicValue();
-        }
-        if (version_date == UNPROVIDED) {
-            version_date = owl_uris_and_prefixes.$owl_export_version_date$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
-                SubLObject caching_state = NIL;
-                if (NIL == v_memoization_state) {
-                    return com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_opencyc_uri_for_fort_internal(fort, use_entity_referencesP, use_external_ids_for_namesP, version_date);
-                }
-                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, OWL_OPENCYC_URI_FOR_FORT, UNPROVIDED);
-                if (NIL == caching_state) {
-                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), OWL_OPENCYC_URI_FOR_FORT, FOUR_INTEGER, $int$256, EQL, UNPROVIDED);
-                    memoization_state.memoization_state_put(v_memoization_state, OWL_OPENCYC_URI_FOR_FORT, caching_state);
-                }
-                {
-                    SubLObject sxhash = memoization_state.sxhash_calc_4(fort, use_entity_referencesP, use_external_ids_for_namesP, version_date);
-                    SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
-                    if (collisions != $kw20$_MEMOIZED_ITEM_NOT_FOUND_) {
-                        {
-                            SubLObject cdolist_list_var = collisions;
-                            SubLObject collision = NIL;
-                            for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
-                                {
-                                    SubLObject cached_args = collision.first();
-                                    SubLObject results2 = second(collision);
-                                    if (fort.eql(cached_args.first())) {
-                                        cached_args = cached_args.rest();
-                                        if (use_entity_referencesP.eql(cached_args.first())) {
-                                            cached_args = cached_args.rest();
-                                            if (use_external_ids_for_namesP.eql(cached_args.first())) {
-                                                cached_args = cached_args.rest();
-                                                if (((NIL != cached_args) && (NIL == cached_args.rest())) && version_date.eql(cached_args.first())) {
-                                                    return memoization_state.caching_results(results2);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    {
-                        SubLObject results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_opencyc_uri_for_fort_internal(fort, use_entity_referencesP, use_external_ids_for_namesP, version_date)));
-                        memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(fort, use_entity_referencesP, use_external_ids_for_namesP, version_date));
-                        return memoization_state.caching_results(results);
-                    }
-                }
-            }
-        }
-    }
-
     public static SubLObject owl_opencyc_uri_for_fort(final SubLObject fort, SubLObject use_entity_referencesP, SubLObject use_external_ids_for_namesP, SubLObject version_date) {
         if (use_entity_referencesP == UNPROVIDED) {
             use_entity_referencesP = owlification.$owl_use_entity_referencesP$.getDynamicValue();
@@ -1063,7 +803,7 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         if (version_date == UNPROVIDED) {
             version_date = owl_uris_and_prefixes.$owl_export_version_date$.getDynamicValue();
         }
-        assert NIL != forts.fort_p(fort) : "! forts.fort_p(fort) " + ("forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) ") + fort;
+        assert NIL != forts.fort_p(fort) : "forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) " + fort;
         return owl_opencyc_uri_for_term(fort, use_entity_referencesP, use_external_ids_for_namesP, version_date);
     }
 
@@ -1178,43 +918,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return result;
     }
 
-    public static final SubLObject owl_opencyc_latest_uri_for_fort_alt(SubLObject fort) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                {
-                    SubLObject _prev_bind_0 = owlification.$owl_use_pretty_stringsP$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = owlification.$owl_use_external_ids_for_namesP$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = owl_uris_and_prefixes.$owl_export_version_date$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = owlification.$owl_use_entity_referencesP$.currentBinding(thread);
-                    SubLObject _prev_bind_4 = owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.currentBinding(thread);
-                    SubLObject _prev_bind_5 = owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.currentBinding(thread);
-                    SubLObject _prev_bind_6 = owlification.$owl_export_from_opencyc_kbP$.currentBinding(thread);
-                    try {
-                        owlification.$owl_use_pretty_stringsP$.bind(T, thread);
-                        owlification.$owl_use_external_ids_for_namesP$.bind(T, thread);
-                        owl_uris_and_prefixes.$owl_export_version_date$.bind(NIL, thread);
-                        owlification.$owl_use_entity_referencesP$.bind(NIL, thread);
-                        owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.bind(T, thread);
-                        owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.bind(T, thread);
-                        owlification.$owl_export_from_opencyc_kbP$.bind(T, thread);
-                        result = com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_opencyc_uri_for_fort(fort, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    } finally {
-                        owlification.$owl_export_from_opencyc_kbP$.rebind(_prev_bind_6, thread);
-                        owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.rebind(_prev_bind_5, thread);
-                        owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.rebind(_prev_bind_4, thread);
-                        owlification.$owl_use_entity_referencesP$.rebind(_prev_bind_3, thread);
-                        owl_uris_and_prefixes.$owl_export_version_date$.rebind(_prev_bind_2, thread);
-                        owlification.$owl_use_external_ids_for_namesP$.rebind(_prev_bind_1, thread);
-                        owlification.$owl_use_pretty_stringsP$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return result;
-            }
-        }
-    }
-
     public static SubLObject owl_opencyc_latest_uri_for_fort(final SubLObject fort) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject result = NIL;
@@ -1244,46 +947,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
             owlification.$owl_use_pretty_stringsP$.rebind(_prev_bind_0, thread);
         }
         return result;
-    }
-
-    public static final SubLObject owl_opencyc_versioned_uri_for_fort_alt(SubLObject fort, SubLObject date) {
-        if (date == UNPROVIDED) {
-            date = owl_uris_and_prefixes.$owl_export_version_date$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                {
-                    SubLObject _prev_bind_0 = owlification.$owl_use_pretty_stringsP$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = owlification.$owl_use_external_ids_for_namesP$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = owl_uris_and_prefixes.$owl_export_version_date$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = owlification.$owl_use_entity_referencesP$.currentBinding(thread);
-                    SubLObject _prev_bind_4 = owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.currentBinding(thread);
-                    SubLObject _prev_bind_5 = owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.currentBinding(thread);
-                    SubLObject _prev_bind_6 = owlification.$owl_export_from_opencyc_kbP$.currentBinding(thread);
-                    try {
-                        owlification.$owl_use_pretty_stringsP$.bind(T, thread);
-                        owlification.$owl_use_external_ids_for_namesP$.bind(T, thread);
-                        owl_uris_and_prefixes.$owl_export_version_date$.bind(date, thread);
-                        owlification.$owl_use_entity_referencesP$.bind(NIL, thread);
-                        owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.bind(T, thread);
-                        owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.bind(T, thread);
-                        owlification.$owl_export_from_opencyc_kbP$.bind(T, thread);
-                        result = com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_opencyc_uri_for_fort(fort, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    } finally {
-                        owlification.$owl_export_from_opencyc_kbP$.rebind(_prev_bind_6, thread);
-                        owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.rebind(_prev_bind_5, thread);
-                        owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.rebind(_prev_bind_4, thread);
-                        owlification.$owl_use_entity_referencesP$.rebind(_prev_bind_3, thread);
-                        owl_uris_and_prefixes.$owl_export_version_date$.rebind(_prev_bind_2, thread);
-                        owlification.$owl_use_external_ids_for_namesP$.rebind(_prev_bind_1, thread);
-                        owlification.$owl_use_pretty_stringsP$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return result;
-            }
-        }
     }
 
     public static SubLObject owl_opencyc_versioned_uri_for_fort(final SubLObject fort, SubLObject date) {
@@ -1318,57 +981,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
             owlification.$owl_use_pretty_stringsP$.rebind(_prev_bind_0, thread);
         }
         return result;
-    }
-
-    public static final SubLObject owl_opencyc_readable_uri_for_fort_alt(SubLObject fort, SubLObject date) {
-        if (date == UNPROVIDED) {
-            date = owl_uris_and_prefixes.$owl_export_version_date$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                {
-                    SubLObject _prev_bind_0 = owlification.$owl_use_pretty_stringsP$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = owlification.$owl_use_external_ids_for_namesP$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = owl_uris_and_prefixes.$owl_export_version_date$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = owlification.$owl_use_entity_referencesP$.currentBinding(thread);
-                    SubLObject _prev_bind_4 = owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.currentBinding(thread);
-                    SubLObject _prev_bind_5 = owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.currentBinding(thread);
-                    SubLObject _prev_bind_6 = owlification.$owl_export_from_opencyc_kbP$.currentBinding(thread);
-                    SubLObject _prev_bind_7 = owlification.$owl_use_external_ids_for_namesP$.currentBinding(thread);
-                    SubLObject _prev_bind_8 = owl_uris_and_prefixes.$owl_export_version_date$.currentBinding(thread);
-                    try {
-                        owlification.$owl_use_pretty_stringsP$.bind(T, thread);
-                        owlification.$owl_use_external_ids_for_namesP$.bind(T, thread);
-                        owl_uris_and_prefixes.$owl_export_version_date$.bind(date, thread);
-                        owlification.$owl_use_entity_referencesP$.bind(NIL, thread);
-                        owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.bind(T, thread);
-                        owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.bind(T, thread);
-                        owlification.$owl_export_from_opencyc_kbP$.bind(T, thread);
-                        owlification.$owl_use_external_ids_for_namesP$.bind(NIL, thread);
-                        owl_uris_and_prefixes.$owl_export_version_date$.bind(date, thread);
-                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                            if (NIL == numeric_date_utilities.universal_date_p(date)) {
-                                Errors.error($str_alt29$Human_readable_OWL_export_require, date);
-                            }
-                        }
-                        result = com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_opencyc_uri_for_fort(fort, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    } finally {
-                        owl_uris_and_prefixes.$owl_export_version_date$.rebind(_prev_bind_8, thread);
-                        owlification.$owl_use_external_ids_for_namesP$.rebind(_prev_bind_7, thread);
-                        owlification.$owl_export_from_opencyc_kbP$.rebind(_prev_bind_6, thread);
-                        owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.rebind(_prev_bind_5, thread);
-                        owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.rebind(_prev_bind_4, thread);
-                        owlification.$owl_use_entity_referencesP$.rebind(_prev_bind_3, thread);
-                        owl_uris_and_prefixes.$owl_export_version_date$.rebind(_prev_bind_2, thread);
-                        owlification.$owl_use_external_ids_for_namesP$.rebind(_prev_bind_1, thread);
-                        owlification.$owl_use_pretty_stringsP$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return result;
-            }
-        }
     }
 
     public static SubLObject owl_opencyc_readable_uri_for_fort(final SubLObject fort, SubLObject date) {
@@ -1412,43 +1024,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
             owlification.$owl_use_pretty_stringsP$.rebind(_prev_bind_0, thread);
         }
         return result;
-    }
-
-    public static final SubLObject owl_cyc_latest_uri_for_fort_alt(SubLObject fort) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                {
-                    SubLObject _prev_bind_0 = owlification.$owl_use_pretty_stringsP$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = owlification.$owl_use_external_ids_for_namesP$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = owl_uris_and_prefixes.$owl_export_version_date$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = owlification.$owl_use_entity_referencesP$.currentBinding(thread);
-                    SubLObject _prev_bind_4 = owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.currentBinding(thread);
-                    SubLObject _prev_bind_5 = owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.currentBinding(thread);
-                    SubLObject _prev_bind_6 = owlification.$owl_export_from_opencyc_kbP$.currentBinding(thread);
-                    try {
-                        owlification.$owl_use_pretty_stringsP$.bind(T, thread);
-                        owlification.$owl_use_external_ids_for_namesP$.bind(T, thread);
-                        owl_uris_and_prefixes.$owl_export_version_date$.bind(NIL, thread);
-                        owlification.$owl_use_entity_referencesP$.bind(NIL, thread);
-                        owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.bind(T, thread);
-                        owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.bind(T, thread);
-                        owlification.$owl_export_from_opencyc_kbP$.bind(T, thread);
-                        result = com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_cyc_uri_for_fort(fort, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    } finally {
-                        owlification.$owl_export_from_opencyc_kbP$.rebind(_prev_bind_6, thread);
-                        owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.rebind(_prev_bind_5, thread);
-                        owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.rebind(_prev_bind_4, thread);
-                        owlification.$owl_use_entity_referencesP$.rebind(_prev_bind_3, thread);
-                        owl_uris_and_prefixes.$owl_export_version_date$.rebind(_prev_bind_2, thread);
-                        owlification.$owl_use_external_ids_for_namesP$.rebind(_prev_bind_1, thread);
-                        owlification.$owl_use_pretty_stringsP$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return result;
-            }
-        }
     }
 
     public static SubLObject owl_cyc_latest_uri_for_fort(final SubLObject fort) {
@@ -1501,46 +1076,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         }
     }
 
-    public static final SubLObject owl_cyc_versioned_uri_for_fort_alt(SubLObject fort, SubLObject date) {
-        if (date == UNPROVIDED) {
-            date = owl_uris_and_prefixes.$owl_export_version_date$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                {
-                    SubLObject _prev_bind_0 = owlification.$owl_use_pretty_stringsP$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = owlification.$owl_use_external_ids_for_namesP$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = owl_uris_and_prefixes.$owl_export_version_date$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = owlification.$owl_use_entity_referencesP$.currentBinding(thread);
-                    SubLObject _prev_bind_4 = owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.currentBinding(thread);
-                    SubLObject _prev_bind_5 = owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.currentBinding(thread);
-                    SubLObject _prev_bind_6 = owlification.$owl_export_from_opencyc_kbP$.currentBinding(thread);
-                    try {
-                        owlification.$owl_use_pretty_stringsP$.bind(T, thread);
-                        owlification.$owl_use_external_ids_for_namesP$.bind(T, thread);
-                        owl_uris_and_prefixes.$owl_export_version_date$.bind(date, thread);
-                        owlification.$owl_use_entity_referencesP$.bind(NIL, thread);
-                        owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.bind(T, thread);
-                        owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.bind(T, thread);
-                        owlification.$owl_export_from_opencyc_kbP$.bind(T, thread);
-                        result = com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_cyc_uri_for_fort(fort, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    } finally {
-                        owlification.$owl_export_from_opencyc_kbP$.rebind(_prev_bind_6, thread);
-                        owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.rebind(_prev_bind_5, thread);
-                        owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.rebind(_prev_bind_4, thread);
-                        owlification.$owl_use_entity_referencesP$.rebind(_prev_bind_3, thread);
-                        owl_uris_and_prefixes.$owl_export_version_date$.rebind(_prev_bind_2, thread);
-                        owlification.$owl_use_external_ids_for_namesP$.rebind(_prev_bind_1, thread);
-                        owlification.$owl_use_pretty_stringsP$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return result;
-            }
-        }
-    }
-
     public static SubLObject owl_cyc_versioned_uri_for_fort(final SubLObject fort, SubLObject date) {
         if (date == UNPROVIDED) {
             date = owl_uris_and_prefixes.$owl_export_version_date$.getDynamicValue();
@@ -1573,57 +1108,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
             owlification.$owl_use_pretty_stringsP$.rebind(_prev_bind_0, thread);
         }
         return result;
-    }
-
-    public static final SubLObject owl_cyc_readable_uri_for_fort_alt(SubLObject fort, SubLObject date) {
-        if (date == UNPROVIDED) {
-            date = owl_uris_and_prefixes.$owl_export_version_date$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                {
-                    SubLObject _prev_bind_0 = owlification.$owl_use_pretty_stringsP$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = owlification.$owl_use_external_ids_for_namesP$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = owl_uris_and_prefixes.$owl_export_version_date$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = owlification.$owl_use_entity_referencesP$.currentBinding(thread);
-                    SubLObject _prev_bind_4 = owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.currentBinding(thread);
-                    SubLObject _prev_bind_5 = owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.currentBinding(thread);
-                    SubLObject _prev_bind_6 = owlification.$owl_export_from_opencyc_kbP$.currentBinding(thread);
-                    SubLObject _prev_bind_7 = owlification.$owl_use_external_ids_for_namesP$.currentBinding(thread);
-                    SubLObject _prev_bind_8 = owl_uris_and_prefixes.$owl_export_version_date$.currentBinding(thread);
-                    try {
-                        owlification.$owl_use_pretty_stringsP$.bind(T, thread);
-                        owlification.$owl_use_external_ids_for_namesP$.bind(T, thread);
-                        owl_uris_and_prefixes.$owl_export_version_date$.bind(date, thread);
-                        owlification.$owl_use_entity_referencesP$.bind(NIL, thread);
-                        owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.bind(T, thread);
-                        owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.bind(T, thread);
-                        owlification.$owl_export_from_opencyc_kbP$.bind(T, thread);
-                        owlification.$owl_use_external_ids_for_namesP$.bind(NIL, thread);
-                        owl_uris_and_prefixes.$owl_export_version_date$.bind(date, thread);
-                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                            if (NIL == numeric_date_utilities.universal_date_p(date)) {
-                                Errors.error($str_alt29$Human_readable_OWL_export_require, date);
-                            }
-                        }
-                        result = com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_cyc_uri_for_fort(fort, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    } finally {
-                        owl_uris_and_prefixes.$owl_export_version_date$.rebind(_prev_bind_8, thread);
-                        owlification.$owl_use_external_ids_for_namesP$.rebind(_prev_bind_7, thread);
-                        owlification.$owl_export_from_opencyc_kbP$.rebind(_prev_bind_6, thread);
-                        owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.rebind(_prev_bind_5, thread);
-                        owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.rebind(_prev_bind_4, thread);
-                        owlification.$owl_use_entity_referencesP$.rebind(_prev_bind_3, thread);
-                        owl_uris_and_prefixes.$owl_export_version_date$.rebind(_prev_bind_2, thread);
-                        owlification.$owl_use_external_ids_for_namesP$.rebind(_prev_bind_1, thread);
-                        owlification.$owl_use_pretty_stringsP$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return result;
-            }
-        }
     }
 
     public static SubLObject owl_cyc_readable_uri_for_fort(final SubLObject fort, SubLObject date) {
@@ -1669,16 +1153,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return result;
     }
 
-    public static final SubLObject clear_forts_with_exported_owl_opencyc_content_alt() {
-        {
-            SubLObject cs = $forts_with_exported_owl_opencyc_content_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject clear_forts_with_exported_owl_opencyc_content() {
         final SubLObject cs = $forts_with_exported_owl_opencyc_content_caching_state$.getGlobalValue();
         if (NIL != cs) {
@@ -1687,70 +1161,8 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject remove_forts_with_exported_owl_opencyc_content_alt() {
-        return memoization_state.caching_state_remove_function_results_with_args($forts_with_exported_owl_opencyc_content_caching_state$.getGlobalValue(), list(EMPTY_SUBL_OBJECT_ARRAY), UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject remove_forts_with_exported_owl_opencyc_content() {
         return memoization_state.caching_state_remove_function_results_with_args($forts_with_exported_owl_opencyc_content_caching_state$.getGlobalValue(), list(EMPTY_SUBL_OBJECT_ARRAY), UNPROVIDED, UNPROVIDED);
-    }
-
-    public static final SubLObject forts_with_exported_owl_opencyc_content_internal_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_forts = set.new_set(symbol_function(EQL), $int$100000);
-                SubLObject file_var = $str_alt32$_cyc_projects_opencyc_owl_export_;
-                SubLObject stream = NIL;
-                try {
-                    {
-                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                        try {
-                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                            stream = compatibility.open_text(file_var, $INPUT, NIL);
-                        } finally {
-                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    if (!stream.isStream()) {
-                        Errors.error($str_alt34$Unable_to_open__S, file_var);
-                    }
-                    {
-                        SubLObject stream_var = stream;
-                        if (stream_var.isStream()) {
-                            {
-                                SubLObject stream_var_1 = stream_var;
-                                SubLObject line_number_var = NIL;
-                                SubLObject line = NIL;
-                                for (line_number_var = ZERO_INTEGER, line = read_line(stream_var_1, NIL, NIL, UNPROVIDED); NIL != line; line_number_var = number_utilities.f_1X(line_number_var) , line = read_line(stream_var_1, NIL, NIL, UNPROVIDED)) {
-                                    {
-                                        SubLObject tokens = string_utilities.string_tokenize(line, list(CHAR_comma), list(list($str_alt35$_, $str_alt35$_)), NIL, NIL, list(CHAR_backslash), UNPROVIDED);
-                                        SubLObject id_string = read_from_string(tokens.first(), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                        SubLObject fort = kb_utilities.find_object_by_compact_hl_external_id_string(id_string);
-                                        if (NIL != fort_p(fort)) {
-                                            set.set_add(fort, v_forts);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            if (stream.isStream()) {
-                                close(stream, UNPROVIDED);
-                            }
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                return v_forts;
-            }
-        }
     }
 
     public static SubLObject forts_with_exported_owl_opencyc_content_internal() {
@@ -1799,23 +1211,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
             }
         }
         return v_forts;
-    }
-
-    public static final SubLObject forts_with_exported_owl_opencyc_content_alt() {
-        {
-            SubLObject caching_state = $forts_with_exported_owl_opencyc_content_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(FORTS_WITH_EXPORTED_OWL_OPENCYC_CONTENT, $forts_with_exported_owl_opencyc_content_caching_state$, NIL, EQL, ZERO_INTEGER, ZERO_INTEGER);
-            }
-            {
-                SubLObject results = memoization_state.caching_state_get_zero_arg_results(caching_state, UNPROVIDED);
-                if (results == $kw20$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.forts_with_exported_owl_opencyc_content_internal()));
-                    memoization_state.caching_state_set_zero_arg_results(caching_state, results, UNPROVIDED);
-                }
-                return memoization_state.caching_results(results);
-            }
-        }
     }
 
     public static SubLObject forts_with_exported_owl_opencyc_content() {
@@ -1901,10 +1296,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return memoization_state.caching_results(results);
     }
 
-    public static final SubLObject fort_has_exported_owl_opencyc_contentP_alt(SubLObject fort) {
-        return set.set_memberP(fort, com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.forts_with_exported_owl_opencyc_content());
-    }
-
     public static SubLObject fort_has_exported_owl_opencyc_contentP(final SubLObject fort) {
         return set.set_memberP(kb_utilities.compact_hl_external_id_string(fort), compact_hl_external_id_strings_with_exported_owl_opencyc_content());
     }
@@ -1971,30 +1362,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         }
     }
 
-    /**
-     * Export all FORTs to STREAM.
-     */
-    @LispMethod(comment = "Export all FORTs to STREAM.")
-    public static final SubLObject owl_export_alt(SubLObject stream) {
-        if (stream == UNPROVIDED) {
-            stream = $xml_stream$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject fort_iterator = owlification.new_owl_export_term_iterator(new_forts_iterator());
-                SubLObject fort_count = thread.secondMultipleValue();
-                thread.resetMultipleValues();
-                return com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_export_terms_from_iterator(fort_iterator, fort_count, stream, UNPROVIDED);
-            }
-        }
-    }
-
-    /**
-     * Export all FORTs to STREAM.
-     */
-    @LispMethod(comment = "Export all FORTs to STREAM.")
     public static SubLObject owl_export(SubLObject stream) {
         if (stream == UNPROVIDED) {
             stream = xml_vars.$xml_stream$.getDynamicValue();
@@ -2007,85 +1374,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return owl_export_terms_from_iterator(fort_iterator, fort_count, stream, UNPROVIDED);
     }
 
-    /**
-     * Export TERMS to STREAM.
-     */
-    @LispMethod(comment = "Export TERMS to STREAM.")
-    public static final SubLObject owl_export_terms_alt(SubLObject terms, SubLObject stream, SubLObject asent_retrieval_fn) {
-        if (stream == UNPROVIDED) {
-            stream = $xml_stream$.getDynamicValue();
-        }
-        if (asent_retrieval_fn == UNPROVIDED) {
-            asent_retrieval_fn = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject list_var = terms;
-                SubLTrampolineFile.checkType(list_var, NON_DOTTED_LIST_P);
-                {
-                    SubLObject cdolist_list_var = list_var;
-                    SubLObject elem = NIL;
-                    for (elem = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , elem = cdolist_list_var.first()) {
-                        SubLTrampolineFile.checkType(elem, $sym38$OWLIFIABLE_ARG1_);
-                    }
-                }
-            }
-            if (asent_retrieval_fn.isFunctionSpec()) {
-                {
-                    SubLObject asents = NIL;
-                    {
-                        SubLObject _prev_bind_0 = owlification.$owl_export_terms$.currentBinding(thread);
-                        try {
-                            owlification.$owl_export_terms$.bind(set_utilities.construct_set_from_list(remove_if_not(FORT_P, terms, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED), thread);
-                            {
-                                SubLObject cdolist_list_var = terms;
-                                SubLObject v_term = NIL;
-                                for (v_term = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_term = cdolist_list_var.first()) {
-                                    {
-                                        SubLObject my_asents = funcall(asent_retrieval_fn, v_term);
-                                        if (NIL != empty_list_p(my_asents)) {
-                                            Errors.sublisp_break($str_alt39$No_asents_for__S_, new SubLObject[]{ v_term });
-                                        }
-                                        {
-                                            SubLObject cdolist_list_var_2 = my_asents;
-                                            SubLObject asent = NIL;
-                                            for (asent = cdolist_list_var_2.first(); NIL != cdolist_list_var_2; cdolist_list_var_2 = cdolist_list_var_2.rest() , asent = cdolist_list_var_2.first()) {
-                                                {
-                                                    SubLObject item_var = asent;
-                                                    if (NIL == member(item_var, asents, symbol_function(EQUAL), symbol_function(IDENTITY))) {
-                                                        asents = cons(item_var, asents);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                owlification.add_owl_asent_forts_to_export_terms(asents);
-                                com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_export_asents(asents, owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.getDynamicValue(thread), stream, UNPROVIDED, UNPROVIDED);
-                            }
-                        } finally {
-                            owlification.$owl_export_terms$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-            } else {
-                thread.resetMultipleValues();
-                {
-                    SubLObject owl_iterator = owlification.new_owl_export_term_iterator(iteration.new_list_iterator(terms));
-                    SubLObject term_count = thread.secondMultipleValue();
-                    thread.resetMultipleValues();
-                    com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_export_terms_from_iterator(owl_iterator, term_count, stream, UNPROVIDED);
-                }
-            }
-            return NIL;
-        }
-    }
-
-    /**
-     * Export TERMS to STREAM.
-     */
-    @LispMethod(comment = "Export TERMS to STREAM.")
     public static SubLObject owl_export_terms(final SubLObject terms, SubLObject stream, SubLObject asent_retrieval_fn) {
         if (stream == UNPROVIDED) {
             stream = xml_vars.$xml_stream$.getDynamicValue();
@@ -2094,12 +1382,12 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
             asent_retrieval_fn = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != list_utilities.non_dotted_list_p(terms) : "! list_utilities.non_dotted_list_p(terms) " + ("list_utilities.non_dotted_list_p(terms) " + "CommonSymbols.NIL != list_utilities.non_dotted_list_p(terms) ") + terms;
+        assert NIL != list_utilities.non_dotted_list_p(terms) : "list_utilities.non_dotted_list_p(terms) " + "CommonSymbols.NIL != list_utilities.non_dotted_list_p(terms) " + terms;
         SubLObject cdolist_list_var = terms;
         SubLObject elem = NIL;
         elem = cdolist_list_var.first();
         while (NIL != cdolist_list_var) {
-            assert NIL != owlification.owlifiable_arg1P(elem) : "! owlification.owlifiable_arg1P(elem) " + ("owlification.owlifiable_arg1P(elem) " + "CommonSymbols.NIL != owlification.owlifiable_arg1P(elem) ") + elem;
+            assert NIL != owlification.owlifiable_arg1P(elem) : "owlification.owlifiable_arg1P(elem) " + "CommonSymbols.NIL != owlification.owlifiable_arg1P(elem) " + elem;
             cdolist_list_var = cdolist_list_var.rest();
             elem = cdolist_list_var.first();
         } 
@@ -2145,16 +1433,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject clear_owl_predicate_types_for_export_alt() {
-        {
-            SubLObject cs = $owl_predicate_types_for_export_caching_state$.getGlobalValue();
-            if (NIL != cs) {
-                memoization_state.caching_state_clear(cs);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject clear_owl_predicate_types_for_export() {
         final SubLObject cs = $owl_predicate_types_for_export_caching_state$.getGlobalValue();
         if (NIL != cs) {
@@ -2163,38 +1441,12 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject remove_owl_predicate_types_for_export_alt() {
-        return memoization_state.caching_state_remove_function_results_with_args($owl_predicate_types_for_export_caching_state$.getGlobalValue(), list(EMPTY_SUBL_OBJECT_ARRAY), UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject remove_owl_predicate_types_for_export() {
         return memoization_state.caching_state_remove_function_results_with_args($owl_predicate_types_for_export_caching_state$.getGlobalValue(), list(EMPTY_SUBL_OBJECT_ARRAY), UNPROVIDED, UNPROVIDED);
     }
 
-    public static final SubLObject owl_predicate_types_for_export_internal_alt() {
-        return delete_duplicates(delete_if($sym42$HL_PROTOTYPICAL_INSTANCE_, delete_if_not($sym43$VALID_FORT_, append(all_instances_in_all_mts($const44$BinaryPredicateTypeByLogicalFeatu), $list_alt45), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject owl_predicate_types_for_export_internal() {
         return delete_duplicates(delete_if($sym52$HL_PROTOTYPICAL_INSTANCE_, list_utilities.delete_if_not($sym53$VALID_FORT_, append(isa.all_instances_in_all_mts($const54$BinaryPredicateTypeByLogicalFeatu), $list55), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-    }
-
-    public static final SubLObject owl_predicate_types_for_export_alt() {
-        {
-            SubLObject caching_state = $owl_predicate_types_for_export_caching_state$.getGlobalValue();
-            if (NIL == caching_state) {
-                caching_state = memoization_state.create_global_caching_state_for_name(OWL_PREDICATE_TYPES_FOR_EXPORT, $owl_predicate_types_for_export_caching_state$, NIL, EQL, ZERO_INTEGER, ZERO_INTEGER);
-                memoization_state.register_isa_dependent_cache_clear_callback(CLEAR_OWL_PREDICATE_TYPES_FOR_EXPORT);
-            }
-            {
-                SubLObject results = memoization_state.caching_state_get_zero_arg_results(caching_state, UNPROVIDED);
-                if (results == $kw20$_MEMOIZED_ITEM_NOT_FOUND_) {
-                    results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_predicate_types_for_export_internal()));
-                    memoization_state.caching_state_set_zero_arg_results(caching_state, results, UNPROVIDED);
-                }
-                return memoization_state.caching_results(results);
-            }
-        }
     }
 
     public static SubLObject owl_predicate_types_for_export() {
@@ -2209,121 +1461,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
             memoization_state.caching_state_set_zero_arg_results(caching_state, results, UNPROVIDED);
         }
         return memoization_state.caching_results(results);
-    }
-
-    public static final SubLObject fort_definitional_asents_for_owl_export_alt(SubLObject fort) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject asents = NIL;
-                {
-                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
-                    try {
-                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-                        {
-                            SubLObject cdolist_list_var = $list_alt52;
-                            SubLObject pred = NIL;
-                            for (pred = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pred = cdolist_list_var.first()) {
-                                {
-                                    SubLObject pred_var = pred;
-                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(fort, ONE_INTEGER, pred_var)) {
-                                        {
-                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(fort, ONE_INTEGER, pred_var);
-                                            SubLObject done_var = NIL;
-                                            SubLObject token_var = NIL;
-                                            while (NIL == done_var) {
-                                                {
-                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                                    if (NIL != valid) {
-                                                        {
-                                                            SubLObject final_index_iterator = NIL;
-                                                            try {
-                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
-                                                                {
-                                                                    SubLObject done_var_3 = NIL;
-                                                                    SubLObject token_var_4 = NIL;
-                                                                    while (NIL == done_var_3) {
-                                                                        {
-                                                                            SubLObject gaf = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_4);
-                                                                            SubLObject valid_5 = makeBoolean(token_var_4 != gaf);
-                                                                            if (NIL != valid_5) {
-                                                                                if (NIL == com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.bad_owl_definitional_gafP(gaf)) {
-                                                                                    {
-                                                                                        SubLObject item_var = assertions_high.gaf_formula(gaf);
-                                                                                        if (NIL == member(item_var, asents, symbol_function(EQUAL), symbol_function(IDENTITY))) {
-                                                                                            asents = cons(item_var, asents);
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                            done_var_3 = makeBoolean(NIL == valid_5);
-                                                                        }
-                                                                    } 
-                                                                }
-                                                            } finally {
-                                                                {
-                                                                    SubLObject _prev_bind_0_6 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                    try {
-                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                        if (NIL != final_index_iterator) {
-                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                        }
-                                                                    } finally {
-                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_6, thread);
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    done_var = makeBoolean(NIL == valid);
-                                                }
-                                            } 
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        if (NIL != fort_types_interface.collection_p(fort)) {
-                            {
-                                SubLObject cdolist_list_var = genls.min_cols(all_isa_among(fort, $owl_collection_types_for_export$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED);
-                                SubLObject v_isa = NIL;
-                                for (v_isa = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_isa = cdolist_list_var.first()) {
-                                    {
-                                        SubLObject item_var = make_binary_formula($$isa, fort, v_isa);
-                                        if (NIL == member(item_var, asents, symbol_function(EQUAL), symbol_function(IDENTITY))) {
-                                            asents = cons(item_var, asents);
-                                        }
-                                    }
-                                }
-                            }
-                            asents = delete_duplicates(append(asents, com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.fort_genls_asents_for_owl_export(fort)), symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                        } else {
-                            if (NIL != fort_types_interface.predicate_p(fort)) {
-                                {
-                                    SubLObject cdolist_list_var = genls.min_cols(all_isa_among(fort, com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_predicate_types_for_export(), UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED);
-                                    SubLObject v_isa = NIL;
-                                    for (v_isa = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_isa = cdolist_list_var.first()) {
-                                        {
-                                            SubLObject item_var = make_binary_formula($$isa, fort, v_isa);
-                                            if (NIL == member(item_var, asents, symbol_function(EQUAL), symbol_function(IDENTITY))) {
-                                                asents = cons(item_var, asents);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
-                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return asents;
-            }
-        }
     }
 
     public static SubLObject fort_definitional_asents_for_owl_export(final SubLObject fort) {
@@ -2418,25 +1555,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return asents;
     }
 
-    public static final SubLObject fort_genls_asents_for_owl_export_alt(SubLObject fort) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == fort_types_interface.collection_p(fort)) {
-                return NIL;
-            }
-            {
-                SubLObject v_genls = rkf_concept_clarifier.rkf_salient_generalizations(fort, mt_relevance_macros.$mt$.getDynamicValue(thread), T, NIL, FIVE_INTEGER, T, $GENLS);
-                SubLObject asents = NIL;
-                SubLObject cdolist_list_var = v_genls;
-                SubLObject genl = NIL;
-                for (genl = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , genl = cdolist_list_var.first()) {
-                    asents = cons(list($$genls, fort, genl), asents);
-                }
-                return asents;
-            }
-        }
-    }
-
     public static SubLObject fort_genls_asents_for_owl_export(final SubLObject fort) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL == fort_types_interface.collection_p(fort)) {
@@ -2455,25 +1573,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return asents;
     }
 
-    public static final SubLObject bad_owl_definitional_gafP_alt(SubLObject gaf) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != find_if_not(FORT_P, assertions_high.gaf_args(gaf), UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
-                return T;
-            } else {
-                if (((NIL != fort_types_interface.collection_p(assertions_high.gaf_arg1(gaf))) && $$isa.eql(assertions_high.gaf_arg0(gaf))) && (NIL == member(assertions_high.gaf_arg2(gaf), $owl_collection_types_for_export$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED))) {
-                    return T;
-                } else {
-                    if (NIL != fort_types_interface.predicate_p(assertions_high.gaf_arg1(gaf))) {
-                        return makeBoolean(($$isa.eql(assertions_high.gaf_arg0(gaf)) && (NIL == member(assertions_high.gaf_arg2(gaf), com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_predicate_types_for_export(), UNPROVIDED, UNPROVIDED))) || ((NIL != fort_types_interface.predicate_p(assertions_high.gaf_arg2(gaf))) && (NIL != nart_handles.nart_p(assertions_high.gaf_arg2(gaf)))));
-                    } else {
-                        return NIL;
-                    }
-                }
-            }
-        }
-    }
-
     public static SubLObject bad_owl_definitional_gafP(final SubLObject gaf) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != list_utilities.find_if_not(FORT_P, assertions_high.gaf_args(gaf), UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
@@ -2486,61 +1585,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
             return makeBoolean(($$isa.eql(assertions_high.gaf_arg0(gaf)) && (NIL == member(assertions_high.gaf_arg2(gaf), owl_predicate_types_for_export(), UNPROVIDED, UNPROVIDED))) || ((NIL != fort_types_interface.predicate_p(assertions_high.gaf_arg2(gaf))) && (NIL != nart_handles.nart_p(assertions_high.gaf_arg2(gaf)))));
         }
         return NIL;
-    }
-
-    public static final SubLObject augment_with_transitive_closure_alt(SubLObject v_forts) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject closure = set.new_set(symbol_function(EQL), length(v_forts));
-                SubLObject queue = queues.create_queue();
-                {
-                    SubLObject cdolist_list_var = v_forts;
-                    SubLObject fort = NIL;
-                    for (fort = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , fort = cdolist_list_var.first()) {
-                        queues.enqueue(fort, queue);
-                    }
-                }
-                while (NIL == queues.queue_empty_p(queue)) {
-                    {
-                        SubLObject fort = queues.dequeue(queue);
-                        set.set_add(fort, closure);
-                        if (NIL != fort_types_interface.collection_p(fort)) {
-                            thread.resetMultipleValues();
-                            {
-                                SubLObject okP = owlification.valid_collection_fort_for_owl_exportP(fort);
-                                SubLObject binary_preds = thread.secondMultipleValue();
-                                thread.resetMultipleValues();
-                                if (NIL != okP) {
-                                    {
-                                        SubLObject cdolist_list_var = binary_preds;
-                                        SubLObject binary_pred = NIL;
-                                        for (binary_pred = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , binary_pred = cdolist_list_var.first()) {
-                                            if (NIL != set.set_add(binary_pred, closure)) {
-                                                queues.enqueue(binary_pred, queue);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        {
-                            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.fort_definitional_asents_for_owl_export(fort);
-                            SubLObject asent = NIL;
-                            for (asent = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , asent = cdolist_list_var.first()) {
-                                {
-                                    SubLObject new_fort = cycl_utilities.atomic_sentence_arg2(asent, UNPROVIDED);
-                                    if (NIL != set.set_add(new_fort, closure)) {
-                                        queues.enqueue(new_fort, queue);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } 
-                return set.set_element_list(closure);
-            }
-        }
     }
 
     public static SubLObject augment_with_transitive_closure(final SubLObject v_forts) {
@@ -2591,108 +1635,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return set.set_element_list(closure);
     }
 
-    /**
-     * Export asents to STREAM.
-     */
-    @LispMethod(comment = "Export asents to STREAM.")
-    public static final SubLObject owl_export_asents_alt(SubLObject asents, SubLObject opencyc_contentP, SubLObject stream, SubLObject log_stream, SubLObject base_uri) {
-        if (opencyc_contentP == UNPROVIDED) {
-            opencyc_contentP = owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.getDynamicValue();
-        }
-        if (stream == UNPROVIDED) {
-            stream = $xml_stream$.getDynamicValue();
-        }
-        if (log_stream == UNPROVIDED) {
-            log_stream = StreamsLow.$standard_output$.getDynamicValue();
-        }
-        if (base_uri == UNPROVIDED) {
-            base_uri = owl_uris_and_prefixes.owl_export_base_uri(UNPROVIDED);
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject state = memoization_state.possibly_new_memoization_state();
-                SubLObject local_state = state;
-                {
-                    SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
-                    try {
-                        memoization_state.$memoization_state$.bind(local_state, thread);
-                        {
-                            SubLObject original_memoization_process = NIL;
-                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                {
-                                    SubLObject current_proc = current_process();
-                                    if (NIL == original_memoization_process) {
-                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                    } else {
-                                        if (original_memoization_process != current_proc) {
-                                            Errors.error($str_alt56$Invalid_attempt_to_reuse_memoizat);
-                                        }
-                                    }
-                                }
-                            }
-                            try {
-                                {
-                                    SubLObject list_var = asents;
-                                    SubLTrampolineFile.checkType(list_var, NON_DOTTED_LIST_P);
-                                    {
-                                        SubLObject cdolist_list_var = list_var;
-                                        SubLObject elem = NIL;
-                                        for (elem = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , elem = cdolist_list_var.first()) {
-                                            SubLTrampolineFile.checkType(elem, $sym57$OWLIFIABLE_SENTENCE_);
-                                        }
-                                    }
-                                }
-                            } finally {
-                                {
-                                    SubLObject _prev_bind_0_7 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                    try {
-                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                        if (CHAR_hash.eql(string_utilities.last_char(base_uri))) {
-                                            base_uri = string_utilities.remove_last_char(base_uri, UNPROVIDED);
-                                        }
-                                        {
-                                            SubLObject terms = remove_duplicates(Mapping.mapcar(ATOMIC_SENTENCE_ARG1, asents), symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                            format(log_stream, $str_alt59$__Extracted__D_subject_terms_from, length(terms), length(asents));
-                                            {
-                                                SubLObject _prev_bind_0_8 = owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.currentBinding(thread);
-                                                SubLObject _prev_bind_1 = owl_uris_and_prefixes.$owl_export_base_uri$.currentBinding(thread);
-                                                SubLObject _prev_bind_2 = owlification.$owl_asents_to_export$.currentBinding(thread);
-                                                try {
-                                                    owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.bind(opencyc_contentP, thread);
-                                                    owl_uris_and_prefixes.$owl_export_base_uri$.bind(base_uri, thread);
-                                                    owlification.$owl_asents_to_export$.bind(owlification.index_owl_asents_by_arg1(asents), thread);
-                                                    com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_export_terms(terms, stream, UNPROVIDED);
-                                                } finally {
-                                                    owlification.$owl_asents_to_export$.rebind(_prev_bind_2, thread);
-                                                    owl_uris_and_prefixes.$owl_export_base_uri$.rebind(_prev_bind_1, thread);
-                                                    owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.rebind(_prev_bind_0_8, thread);
-                                                }
-                                            }
-                                        }
-                                        if ((NIL != local_state) && (NIL == original_memoization_process)) {
-                                            memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
-                                        }
-                                    } finally {
-                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_7, thread);
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return stream;
-        }
-    }
-
-    /**
-     * Export asents to STREAM.
-     */
-    @LispMethod(comment = "Export asents to STREAM.")
     public static SubLObject owl_export_asents(final SubLObject asents, SubLObject opencyc_contentP, SubLObject stream, SubLObject log_stream, SubLObject base_uri) {
         if (opencyc_contentP == UNPROVIDED) {
             opencyc_contentP = owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.getDynamicValue();
@@ -2714,12 +1656,12 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
             memoization_state.$memoization_state$.bind(local_state, thread);
             final SubLObject original_memoization_process = memoization_state.memoization_state_original_process(local_state);
             try {
-                assert NIL != list_utilities.non_dotted_list_p(asents) : "! list_utilities.non_dotted_list_p(asents) " + ("list_utilities.non_dotted_list_p(asents) " + "CommonSymbols.NIL != list_utilities.non_dotted_list_p(asents) ") + asents;
+                assert NIL != list_utilities.non_dotted_list_p(asents) : "list_utilities.non_dotted_list_p(asents) " + "CommonSymbols.NIL != list_utilities.non_dotted_list_p(asents) " + asents;
                 SubLObject cdolist_list_var = asents;
                 SubLObject elem = NIL;
                 elem = cdolist_list_var.first();
                 while (NIL != cdolist_list_var) {
-                    assert NIL != owlification.owlifiable_sentenceP(elem) : "! owlification.owlifiable_sentenceP(elem) " + ("owlification.owlifiable_sentenceP(elem) " + "CommonSymbols.NIL != owlification.owlifiable_sentenceP(elem) ") + elem;
+                    assert NIL != owlification.owlifiable_sentenceP(elem) : "owlification.owlifiable_sentenceP(elem) " + "CommonSymbols.NIL != owlification.owlifiable_sentenceP(elem) " + elem;
                     cdolist_list_var = cdolist_list_var.rest();
                     elem = cdolist_list_var.first();
                 } 
@@ -2758,46 +1700,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return stream;
     }
 
-    public static final SubLObject owl_export_to_file_alt(SubLObject filename) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject stream = NIL;
-                try {
-                    {
-                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                        try {
-                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                            stream = compatibility.open_text(filename, $OUTPUT, NIL);
-                        } finally {
-                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    if (!stream.isStream()) {
-                        Errors.error($str_alt34$Unable_to_open__S, filename);
-                    }
-                    {
-                        SubLObject stream_9 = stream;
-                        com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_export(stream_9);
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            if (stream.isStream()) {
-                                close(stream, UNPROVIDED);
-                            }
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-            }
-            return filename;
-        }
-    }
-
     public static SubLObject owl_export_to_file(final SubLObject filename) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject stream = NIL;
@@ -2828,307 +1730,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
             }
         }
         return filename;
-    }
-
-    public static final SubLObject owl_export_opencyc_alt(SubLObject directory) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            opencyc_diagnostics.perform_pre_opencyc_export_tests();
-            if (NIL == Filesys.directory_p(directory)) {
-                Filesys.make_directory(directory, UNPROVIDED, UNPROVIDED);
-            }
-            if (!string_utilities.last_char(directory).eql(CHAR_slash)) {
-                directory = cconcatenate(directory, $str_alt61$_);
-            }
-            {
-                SubLObject stream = NIL;
-                try {
-                    {
-                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                        try {
-                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                            stream = compatibility.open_text(cconcatenate(directory, $str_alt62$log_txt), $OUTPUT, NIL);
-                        } finally {
-                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    if (!stream.isStream()) {
-                        Errors.error($str_alt34$Unable_to_open__S, cconcatenate(directory, $str_alt62$log_txt));
-                    }
-                    {
-                        SubLObject log_stream = stream;
-                        {
-                            SubLObject _prev_bind_0 = StreamsLow.$error_output$.currentBinding(thread);
-                            try {
-                                StreamsLow.$error_output$.bind(log_stream, thread);
-                                thread.resetMultipleValues();
-                                {
-                                    SubLObject fort_iterator = owlification.new_owl_export_term_iterator(new_forts_iterator());
-                                    SubLObject fort_count = thread.secondMultipleValue();
-                                    thread.resetMultipleValues();
-                                    {
-                                        SubLObject v_forts = NIL;
-                                        SubLObject done_var = NIL;
-                                        while (NIL == done_var) {
-                                            thread.resetMultipleValues();
-                                            {
-                                                SubLObject fort = iteration.iteration_next(fort_iterator);
-                                                SubLObject valid = thread.secondMultipleValue();
-                                                thread.resetMultipleValues();
-                                                if (NIL != valid) {
-                                                    v_forts = cons(fort, v_forts);
-                                                }
-                                                done_var = makeBoolean(NIL == valid);
-                                            }
-                                        } 
-                                        v_forts = nreverse(v_forts);
-                                        {
-                                            SubLObject stream_10 = NIL;
-                                            try {
-                                                {
-                                                    SubLObject _prev_bind_0_11 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                                                    try {
-                                                        stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                                                        stream_10 = compatibility.open_text(cconcatenate(directory, $str_alt63$owl_export_human_readable_owl), $OUTPUT, NIL);
-                                                    } finally {
-                                                        stream_macros.$stream_requires_locking$.rebind(_prev_bind_0_11, thread);
-                                                    }
-                                                }
-                                                if (!stream_10.isStream()) {
-                                                    Errors.error($str_alt34$Unable_to_open__S, cconcatenate(directory, $str_alt63$owl_export_human_readable_owl));
-                                                }
-                                                {
-                                                    SubLObject stream_12 = stream_10;
-                                                    {
-                                                        SubLObject _prev_bind_0_13 = owlification.$fort_owl_name_table$.currentBinding(thread);
-                                                        try {
-                                                            owlification.$fort_owl_name_table$.bind(misc_utilities.uninitialized(), thread);
-                                                            format(T, $str_alt64$__Starting_human_readable_export_);
-                                                            {
-                                                                SubLObject _prev_bind_0_14 = owlification.$owl_use_pretty_stringsP$.currentBinding(thread);
-                                                                SubLObject _prev_bind_1 = owlification.$owl_use_external_ids_for_namesP$.currentBinding(thread);
-                                                                SubLObject _prev_bind_2 = owl_uris_and_prefixes.$owl_export_version_date$.currentBinding(thread);
-                                                                SubLObject _prev_bind_3 = owlification.$owl_use_entity_referencesP$.currentBinding(thread);
-                                                                SubLObject _prev_bind_4 = owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.currentBinding(thread);
-                                                                SubLObject _prev_bind_5 = owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.currentBinding(thread);
-                                                                SubLObject _prev_bind_6 = owlification.$owl_export_from_opencyc_kbP$.currentBinding(thread);
-                                                                SubLObject _prev_bind_7 = owlification.$owl_use_external_ids_for_namesP$.currentBinding(thread);
-                                                                SubLObject _prev_bind_8 = owl_uris_and_prefixes.$owl_export_version_date$.currentBinding(thread);
-                                                                try {
-                                                                    owlification.$owl_use_pretty_stringsP$.bind(T, thread);
-                                                                    owlification.$owl_use_external_ids_for_namesP$.bind(T, thread);
-                                                                    owl_uris_and_prefixes.$owl_export_version_date$.bind(owl_uris_and_prefixes.$owl_export_version_date$.getDynamicValue(thread), thread);
-                                                                    owlification.$owl_use_entity_referencesP$.bind(NIL, thread);
-                                                                    owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.bind(T, thread);
-                                                                    owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.bind(T, thread);
-                                                                    owlification.$owl_export_from_opencyc_kbP$.bind(T, thread);
-                                                                    owlification.$owl_use_external_ids_for_namesP$.bind(NIL, thread);
-                                                                    owl_uris_and_prefixes.$owl_export_version_date$.bind(owl_uris_and_prefixes.$owl_export_version_date$.getDynamicValue(thread), thread);
-                                                                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                                                                        if (NIL == numeric_date_utilities.universal_date_p(owl_uris_and_prefixes.$owl_export_version_date$.getDynamicValue(thread))) {
-                                                                            Errors.error($str_alt29$Human_readable_OWL_export_require, owl_uris_and_prefixes.$owl_export_version_date$.getDynamicValue(thread));
-                                                                        }
-                                                                    }
-                                                                    com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_export_terms_from_iterator(iteration.new_list_iterator(v_forts), fort_count, stream_12, log_stream);
-                                                                } finally {
-                                                                    owl_uris_and_prefixes.$owl_export_version_date$.rebind(_prev_bind_8, thread);
-                                                                    owlification.$owl_use_external_ids_for_namesP$.rebind(_prev_bind_7, thread);
-                                                                    owlification.$owl_export_from_opencyc_kbP$.rebind(_prev_bind_6, thread);
-                                                                    owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.rebind(_prev_bind_5, thread);
-                                                                    owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.rebind(_prev_bind_4, thread);
-                                                                    owlification.$owl_use_entity_referencesP$.rebind(_prev_bind_3, thread);
-                                                                    owl_uris_and_prefixes.$owl_export_version_date$.rebind(_prev_bind_2, thread);
-                                                                    owlification.$owl_use_external_ids_for_namesP$.rebind(_prev_bind_1, thread);
-                                                                    owlification.$owl_use_pretty_stringsP$.rebind(_prev_bind_0_14, thread);
-                                                                }
-                                                            }
-                                                            if (NIL != Filesys.directory_p(directory)) {
-                                                                owlification.write_fort_owl_name_table(directory);
-                                                            }
-                                                        } finally {
-                                                            owlification.$fort_owl_name_table$.rebind(_prev_bind_0_13, thread);
-                                                        }
-                                                    }
-                                                }
-                                            } finally {
-                                                {
-                                                    SubLObject _prev_bind_0_15 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                    try {
-                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                        if (stream_10.isStream()) {
-                                                            close(stream_10, UNPROVIDED);
-                                                        }
-                                                    } finally {
-                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_15, thread);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        {
-                                            SubLObject stream_16 = NIL;
-                                            try {
-                                                {
-                                                    SubLObject _prev_bind_0_17 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                                                    try {
-                                                        stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                                                        stream_16 = compatibility.open_text(cconcatenate(directory, $str_alt65$owl_export_versioned_owl), $OUTPUT, NIL);
-                                                    } finally {
-                                                        stream_macros.$stream_requires_locking$.rebind(_prev_bind_0_17, thread);
-                                                    }
-                                                }
-                                                if (!stream_16.isStream()) {
-                                                    Errors.error($str_alt34$Unable_to_open__S, cconcatenate(directory, $str_alt65$owl_export_versioned_owl));
-                                                }
-                                                {
-                                                    SubLObject stream_18 = stream_16;
-                                                    {
-                                                        SubLObject _prev_bind_0_19 = owlification.$fort_owl_name_table$.currentBinding(thread);
-                                                        try {
-                                                            owlification.$fort_owl_name_table$.bind(misc_utilities.uninitialized(), thread);
-                                                            format(T, $str_alt66$__Starting_versioned_export_____);
-                                                            {
-                                                                SubLObject _prev_bind_0_20 = owlification.$owl_use_pretty_stringsP$.currentBinding(thread);
-                                                                SubLObject _prev_bind_1 = owlification.$owl_use_external_ids_for_namesP$.currentBinding(thread);
-                                                                SubLObject _prev_bind_2 = owl_uris_and_prefixes.$owl_export_version_date$.currentBinding(thread);
-                                                                SubLObject _prev_bind_3 = owlification.$owl_use_entity_referencesP$.currentBinding(thread);
-                                                                SubLObject _prev_bind_4 = owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.currentBinding(thread);
-                                                                SubLObject _prev_bind_5 = owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.currentBinding(thread);
-                                                                SubLObject _prev_bind_6 = owlification.$owl_export_from_opencyc_kbP$.currentBinding(thread);
-                                                                try {
-                                                                    owlification.$owl_use_pretty_stringsP$.bind(T, thread);
-                                                                    owlification.$owl_use_external_ids_for_namesP$.bind(T, thread);
-                                                                    owl_uris_and_prefixes.$owl_export_version_date$.bind(owl_uris_and_prefixes.$owl_export_version_date$.getDynamicValue(thread), thread);
-                                                                    owlification.$owl_use_entity_referencesP$.bind(NIL, thread);
-                                                                    owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.bind(T, thread);
-                                                                    owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.bind(T, thread);
-                                                                    owlification.$owl_export_from_opencyc_kbP$.bind(T, thread);
-                                                                    com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_export_terms_from_iterator(iteration.new_list_iterator(v_forts), fort_count, stream_18, log_stream);
-                                                                } finally {
-                                                                    owlification.$owl_export_from_opencyc_kbP$.rebind(_prev_bind_6, thread);
-                                                                    owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.rebind(_prev_bind_5, thread);
-                                                                    owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.rebind(_prev_bind_4, thread);
-                                                                    owlification.$owl_use_entity_referencesP$.rebind(_prev_bind_3, thread);
-                                                                    owl_uris_and_prefixes.$owl_export_version_date$.rebind(_prev_bind_2, thread);
-                                                                    owlification.$owl_use_external_ids_for_namesP$.rebind(_prev_bind_1, thread);
-                                                                    owlification.$owl_use_pretty_stringsP$.rebind(_prev_bind_0_20, thread);
-                                                                }
-                                                            }
-                                                            if (NIL != Filesys.directory_p(NIL)) {
-                                                                owlification.write_fort_owl_name_table(NIL);
-                                                            }
-                                                        } finally {
-                                                            owlification.$fort_owl_name_table$.rebind(_prev_bind_0_19, thread);
-                                                        }
-                                                    }
-                                                }
-                                            } finally {
-                                                {
-                                                    SubLObject _prev_bind_0_21 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                    try {
-                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                        if (stream_16.isStream()) {
-                                                            close(stream_16, UNPROVIDED);
-                                                        }
-                                                    } finally {
-                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_21, thread);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        {
-                                            SubLObject stream_22 = NIL;
-                                            try {
-                                                {
-                                                    SubLObject _prev_bind_0_23 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                                                    try {
-                                                        stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                                                        stream_22 = compatibility.open_text(cconcatenate(directory, $str_alt67$owl_export_unversioned_owl), $OUTPUT, NIL);
-                                                    } finally {
-                                                        stream_macros.$stream_requires_locking$.rebind(_prev_bind_0_23, thread);
-                                                    }
-                                                }
-                                                if (!stream_22.isStream()) {
-                                                    Errors.error($str_alt34$Unable_to_open__S, cconcatenate(directory, $str_alt67$owl_export_unversioned_owl));
-                                                }
-                                                {
-                                                    SubLObject stream_24 = stream_22;
-                                                    {
-                                                        SubLObject _prev_bind_0_25 = owlification.$fort_owl_name_table$.currentBinding(thread);
-                                                        try {
-                                                            owlification.$fort_owl_name_table$.bind(misc_utilities.uninitialized(), thread);
-                                                            format(T, $str_alt68$__Starting_unversioned_export____);
-                                                            {
-                                                                SubLObject _prev_bind_0_26 = owlification.$owl_use_pretty_stringsP$.currentBinding(thread);
-                                                                SubLObject _prev_bind_1 = owlification.$owl_use_external_ids_for_namesP$.currentBinding(thread);
-                                                                SubLObject _prev_bind_2 = owl_uris_and_prefixes.$owl_export_version_date$.currentBinding(thread);
-                                                                SubLObject _prev_bind_3 = owlification.$owl_use_entity_referencesP$.currentBinding(thread);
-                                                                SubLObject _prev_bind_4 = owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.currentBinding(thread);
-                                                                SubLObject _prev_bind_5 = owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.currentBinding(thread);
-                                                                SubLObject _prev_bind_6 = owlification.$owl_export_from_opencyc_kbP$.currentBinding(thread);
-                                                                try {
-                                                                    owlification.$owl_use_pretty_stringsP$.bind(T, thread);
-                                                                    owlification.$owl_use_external_ids_for_namesP$.bind(T, thread);
-                                                                    owl_uris_and_prefixes.$owl_export_version_date$.bind(NIL, thread);
-                                                                    owlification.$owl_use_entity_referencesP$.bind(NIL, thread);
-                                                                    owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.bind(T, thread);
-                                                                    owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.bind(T, thread);
-                                                                    owlification.$owl_export_from_opencyc_kbP$.bind(T, thread);
-                                                                    com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_export_terms_from_iterator(iteration.new_list_iterator(v_forts), fort_count, stream_24, log_stream);
-                                                                } finally {
-                                                                    owlification.$owl_export_from_opencyc_kbP$.rebind(_prev_bind_6, thread);
-                                                                    owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.rebind(_prev_bind_5, thread);
-                                                                    owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.rebind(_prev_bind_4, thread);
-                                                                    owlification.$owl_use_entity_referencesP$.rebind(_prev_bind_3, thread);
-                                                                    owl_uris_and_prefixes.$owl_export_version_date$.rebind(_prev_bind_2, thread);
-                                                                    owlification.$owl_use_external_ids_for_namesP$.rebind(_prev_bind_1, thread);
-                                                                    owlification.$owl_use_pretty_stringsP$.rebind(_prev_bind_0_26, thread);
-                                                                }
-                                                            }
-                                                            if (NIL != Filesys.directory_p(NIL)) {
-                                                                owlification.write_fort_owl_name_table(NIL);
-                                                            }
-                                                        } finally {
-                                                            owlification.$fort_owl_name_table$.rebind(_prev_bind_0_25, thread);
-                                                        }
-                                                    }
-                                                }
-                                            } finally {
-                                                {
-                                                    SubLObject _prev_bind_0_27 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                    try {
-                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                        if (stream_22.isStream()) {
-                                                            close(stream_22, UNPROVIDED);
-                                                        }
-                                                    } finally {
-                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_27, thread);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            } finally {
-                                StreamsLow.$error_output$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            if (stream.isStream()) {
-                                close(stream, UNPROVIDED);
-                            }
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-            }
-            return directory;
-        }
     }
 
     public static SubLObject owl_export_opencyc(SubLObject directory) {
@@ -3382,154 +1983,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return directory;
     }
 
-    public static final SubLObject owl_export_opencyc_unversioned_alt(SubLObject directory) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            opencyc_diagnostics.perform_pre_opencyc_export_tests();
-            if (NIL == Filesys.directory_p(directory)) {
-                Filesys.make_directory(directory, UNPROVIDED, UNPROVIDED);
-            }
-            if (!string_utilities.last_char(directory).eql(CHAR_slash)) {
-                directory = cconcatenate(directory, $str_alt61$_);
-            }
-            {
-                SubLObject stream = NIL;
-                try {
-                    {
-                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                        try {
-                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                            stream = compatibility.open_text(cconcatenate(directory, $str_alt69$log_unversioned_txt), $OUTPUT, NIL);
-                        } finally {
-                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    if (!stream.isStream()) {
-                        Errors.error($str_alt34$Unable_to_open__S, cconcatenate(directory, $str_alt69$log_unversioned_txt));
-                    }
-                    {
-                        SubLObject log_stream = stream;
-                        {
-                            SubLObject _prev_bind_0 = StreamsLow.$error_output$.currentBinding(thread);
-                            try {
-                                StreamsLow.$error_output$.bind(log_stream, thread);
-                                thread.resetMultipleValues();
-                                {
-                                    SubLObject fort_iterator = owlification.new_owl_export_term_iterator(new_forts_iterator());
-                                    SubLObject fort_count = thread.secondMultipleValue();
-                                    thread.resetMultipleValues();
-                                    {
-                                        SubLObject v_forts = NIL;
-                                        SubLObject done_var = NIL;
-                                        while (NIL == done_var) {
-                                            thread.resetMultipleValues();
-                                            {
-                                                SubLObject fort = iteration.iteration_next(fort_iterator);
-                                                SubLObject valid = thread.secondMultipleValue();
-                                                thread.resetMultipleValues();
-                                                if (NIL != valid) {
-                                                    v_forts = cons(fort, v_forts);
-                                                }
-                                                done_var = makeBoolean(NIL == valid);
-                                            }
-                                        } 
-                                        v_forts = nreverse(v_forts);
-                                        {
-                                            SubLObject stream_28 = NIL;
-                                            try {
-                                                {
-                                                    SubLObject _prev_bind_0_29 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                                                    try {
-                                                        stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                                                        stream_28 = compatibility.open_text(cconcatenate(directory, $str_alt67$owl_export_unversioned_owl), $OUTPUT, NIL);
-                                                    } finally {
-                                                        stream_macros.$stream_requires_locking$.rebind(_prev_bind_0_29, thread);
-                                                    }
-                                                }
-                                                if (!stream_28.isStream()) {
-                                                    Errors.error($str_alt34$Unable_to_open__S, cconcatenate(directory, $str_alt67$owl_export_unversioned_owl));
-                                                }
-                                                {
-                                                    SubLObject stream_30 = stream_28;
-                                                    {
-                                                        SubLObject _prev_bind_0_31 = owlification.$fort_owl_name_table$.currentBinding(thread);
-                                                        try {
-                                                            owlification.$fort_owl_name_table$.bind(misc_utilities.uninitialized(), thread);
-                                                            format(T, $str_alt68$__Starting_unversioned_export____);
-                                                            {
-                                                                SubLObject _prev_bind_0_32 = owlification.$owl_use_pretty_stringsP$.currentBinding(thread);
-                                                                SubLObject _prev_bind_1 = owlification.$owl_use_external_ids_for_namesP$.currentBinding(thread);
-                                                                SubLObject _prev_bind_2 = owl_uris_and_prefixes.$owl_export_version_date$.currentBinding(thread);
-                                                                SubLObject _prev_bind_3 = owlification.$owl_use_entity_referencesP$.currentBinding(thread);
-                                                                SubLObject _prev_bind_4 = owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.currentBinding(thread);
-                                                                SubLObject _prev_bind_5 = owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.currentBinding(thread);
-                                                                SubLObject _prev_bind_6 = owlification.$owl_export_from_opencyc_kbP$.currentBinding(thread);
-                                                                try {
-                                                                    owlification.$owl_use_pretty_stringsP$.bind(T, thread);
-                                                                    owlification.$owl_use_external_ids_for_namesP$.bind(T, thread);
-                                                                    owl_uris_and_prefixes.$owl_export_version_date$.bind(NIL, thread);
-                                                                    owlification.$owl_use_entity_referencesP$.bind(NIL, thread);
-                                                                    owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.bind(T, thread);
-                                                                    owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.bind(T, thread);
-                                                                    owlification.$owl_export_from_opencyc_kbP$.bind(T, thread);
-                                                                    com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_export_terms_from_iterator(iteration.new_list_iterator(v_forts), fort_count, stream_30, log_stream);
-                                                                } finally {
-                                                                    owlification.$owl_export_from_opencyc_kbP$.rebind(_prev_bind_6, thread);
-                                                                    owl_uris_and_prefixes.$owl_export_include_sameas_links_to_cyc_urisP$.rebind(_prev_bind_5, thread);
-                                                                    owl_uris_and_prefixes.$owl_export_limited_to_opencyc_contentP$.rebind(_prev_bind_4, thread);
-                                                                    owlification.$owl_use_entity_referencesP$.rebind(_prev_bind_3, thread);
-                                                                    owl_uris_and_prefixes.$owl_export_version_date$.rebind(_prev_bind_2, thread);
-                                                                    owlification.$owl_use_external_ids_for_namesP$.rebind(_prev_bind_1, thread);
-                                                                    owlification.$owl_use_pretty_stringsP$.rebind(_prev_bind_0_32, thread);
-                                                                }
-                                                            }
-                                                            if (NIL != Filesys.directory_p(NIL)) {
-                                                                owlification.write_fort_owl_name_table(NIL);
-                                                            }
-                                                        } finally {
-                                                            owlification.$fort_owl_name_table$.rebind(_prev_bind_0_31, thread);
-                                                        }
-                                                    }
-                                                }
-                                            } finally {
-                                                {
-                                                    SubLObject _prev_bind_0_33 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                    try {
-                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                        if (stream_28.isStream()) {
-                                                            close(stream_28, UNPROVIDED);
-                                                        }
-                                                    } finally {
-                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_33, thread);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            } finally {
-                                StreamsLow.$error_output$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            if (stream.isStream()) {
-                                close(stream, UNPROVIDED);
-                            }
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-            }
-            return directory;
-        }
-    }
-
     public static SubLObject owl_export_opencyc_unversioned(SubLObject directory) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL == Filesys.directory_p(directory)) {
@@ -3650,143 +2103,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return directory;
     }
 
-    public static final SubLObject owl_export_full_cyc_alt(SubLObject directory) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Filesys.directory_p(directory)) {
-                Filesys.make_directory(directory, UNPROVIDED, UNPROVIDED);
-            }
-            if (!string_utilities.last_char(directory).eql(CHAR_slash)) {
-                directory = cconcatenate(directory, $str_alt61$_);
-            }
-            {
-                SubLObject stream = NIL;
-                try {
-                    {
-                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                        try {
-                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                            stream = compatibility.open_text(cconcatenate(directory, $str_alt62$log_txt), $OUTPUT, NIL);
-                        } finally {
-                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    if (!stream.isStream()) {
-                        Errors.error($str_alt34$Unable_to_open__S, cconcatenate(directory, $str_alt62$log_txt));
-                    }
-                    {
-                        SubLObject log_stream = stream;
-                        {
-                            SubLObject _prev_bind_0 = StreamsLow.$error_output$.currentBinding(thread);
-                            try {
-                                StreamsLow.$error_output$.bind(log_stream, thread);
-                                thread.resetMultipleValues();
-                                {
-                                    SubLObject fort_iterator = owlification.new_owl_export_term_iterator(new_forts_iterator());
-                                    SubLObject fort_count = thread.secondMultipleValue();
-                                    thread.resetMultipleValues();
-                                    {
-                                        SubLObject v_forts = NIL;
-                                        SubLObject done_var = NIL;
-                                        while (NIL == done_var) {
-                                            thread.resetMultipleValues();
-                                            {
-                                                SubLObject fort = iteration.iteration_next(fort_iterator);
-                                                SubLObject valid = thread.secondMultipleValue();
-                                                thread.resetMultipleValues();
-                                                if (NIL != valid) {
-                                                    v_forts = cons(fort, v_forts);
-                                                }
-                                                done_var = makeBoolean(NIL == valid);
-                                            }
-                                        } 
-                                        v_forts = nreverse(v_forts);
-                                        {
-                                            SubLObject stream_34 = NIL;
-                                            try {
-                                                {
-                                                    SubLObject _prev_bind_0_35 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                                                    try {
-                                                        stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                                                        stream_34 = compatibility.open_text(cconcatenate(directory, $str_alt63$owl_export_human_readable_owl), $OUTPUT, NIL);
-                                                    } finally {
-                                                        stream_macros.$stream_requires_locking$.rebind(_prev_bind_0_35, thread);
-                                                    }
-                                                }
-                                                if (!stream_34.isStream()) {
-                                                    Errors.error($str_alt34$Unable_to_open__S, cconcatenate(directory, $str_alt63$owl_export_human_readable_owl));
-                                                }
-                                                {
-                                                    SubLObject stream_36 = stream_34;
-                                                    {
-                                                        SubLObject _prev_bind_0_37 = owlification.$fort_owl_name_table$.currentBinding(thread);
-                                                        try {
-                                                            owlification.$fort_owl_name_table$.bind(misc_utilities.uninitialized(), thread);
-                                                            format(T, $str_alt64$__Starting_human_readable_export_);
-                                                            {
-                                                                SubLObject _prev_bind_0_38 = owlification.$owl_use_external_ids_for_namesP$.currentBinding(thread);
-                                                                SubLObject _prev_bind_1 = owl_uris_and_prefixes.$owl_export_version_date$.currentBinding(thread);
-                                                                try {
-                                                                    owlification.$owl_use_external_ids_for_namesP$.bind(NIL, thread);
-                                                                    owl_uris_and_prefixes.$owl_export_version_date$.bind(owl_uris_and_prefixes.$owl_export_version_date$.getDynamicValue(thread), thread);
-                                                                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                                                                        if (NIL == numeric_date_utilities.universal_date_p(owl_uris_and_prefixes.$owl_export_version_date$.getDynamicValue(thread))) {
-                                                                            Errors.error($str_alt29$Human_readable_OWL_export_require, owl_uris_and_prefixes.$owl_export_version_date$.getDynamicValue(thread));
-                                                                        }
-                                                                    }
-                                                                    com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_export_terms_from_iterator(iteration.new_list_iterator(v_forts), fort_count, stream_36, log_stream);
-                                                                } finally {
-                                                                    owl_uris_and_prefixes.$owl_export_version_date$.rebind(_prev_bind_1, thread);
-                                                                    owlification.$owl_use_external_ids_for_namesP$.rebind(_prev_bind_0_38, thread);
-                                                                }
-                                                            }
-                                                            if (NIL != Filesys.directory_p(directory)) {
-                                                                owlification.write_fort_owl_name_table(directory);
-                                                            }
-                                                        } finally {
-                                                            owlification.$fort_owl_name_table$.rebind(_prev_bind_0_37, thread);
-                                                        }
-                                                    }
-                                                }
-                                            } finally {
-                                                {
-                                                    SubLObject _prev_bind_0_39 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                    try {
-                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                        if (stream_34.isStream()) {
-                                                            close(stream_34, UNPROVIDED);
-                                                        }
-                                                    } finally {
-                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_39, thread);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            } finally {
-                                StreamsLow.$error_output$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            if (stream.isStream()) {
-                                close(stream, UNPROVIDED);
-                            }
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-            }
-            return directory;
-        }
-    }
-
     public static SubLObject owl_export_full_cyc(SubLObject directory) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL == Filesys.directory_p(directory)) {
@@ -3893,195 +2209,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
             }
         }
         return directory;
-    }
-
-    public static final SubLObject export_skos_taxonomy_alt(SubLObject taxonomy_kbq, SubLObject directory, SubLObject filename_root) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject rdf_file = cconcatenate(format_nil.format_nil_a_no_copy(directory), new SubLObject[]{ format_nil.format_nil_a_no_copy(filename_root), $str_alt70$_rdf });
-                SubLObject log_file = cconcatenate(format_nil.format_nil_a_no_copy(directory), new SubLObject[]{ format_nil.format_nil_a_no_copy(filename_root), $str_alt71$_log });
-                {
-                    SubLObject _prev_bind_0 = owl_uris_and_prefixes.$owl_export_version_date$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = owlification.$owl_use_external_ids_for_namesP$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = owl_uris_and_prefixes.$owl_export_suppress_ontology_nodeP$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = owl_uris_and_prefixes.$owl_export_default_namespace$.currentBinding(thread);
-                    SubLObject _prev_bind_4 = owl_uris_and_prefixes.$owl_export_entity_map$.currentBinding(thread);
-                    try {
-                        owl_uris_and_prefixes.$owl_export_version_date$.bind(NIL, thread);
-                        owlification.$owl_use_external_ids_for_namesP$.bind(T, thread);
-                        owl_uris_and_prefixes.$owl_export_suppress_ontology_nodeP$.bind(T, thread);
-                        owl_uris_and_prefixes.$owl_export_default_namespace$.bind(owl_uris_and_prefixes.owl_opencyc_base_uri(UNPROVIDED), thread);
-                        owl_uris_and_prefixes.$owl_export_entity_map$.bind(list(bq_cons($$$skos, rdf_utilities.skos_core_namespace()), bq_cons($$$rdf, rdf_utilities.rdf_namespace()), bq_cons($$$rdfs, rdf_utilities.rdfs_namespace()), bq_cons($$$cyc, owl_uris_and_prefixes.owl_cyc_base_uri(UNPROVIDED)), bq_cons($$$oc, owl_uris_and_prefixes.owl_opencyc_base_uri(UNPROVIDED))), thread);
-                        {
-                            SubLObject stream = NIL;
-                            try {
-                                {
-                                    SubLObject _prev_bind_0_40 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                                    try {
-                                        stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                                        stream = compatibility.open_text(rdf_file, $OUTPUT, NIL);
-                                    } finally {
-                                        stream_macros.$stream_requires_locking$.rebind(_prev_bind_0_40, thread);
-                                    }
-                                }
-                                if (!stream.isStream()) {
-                                    Errors.error($str_alt34$Unable_to_open__S, rdf_file);
-                                }
-                                {
-                                    SubLObject stream_41 = stream;
-                                    SubLObject stream_42 = NIL;
-                                    try {
-                                        {
-                                            SubLObject _prev_bind_0_43 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                                            try {
-                                                stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                                                stream_42 = compatibility.open_text(log_file, $OUTPUT, NIL);
-                                            } finally {
-                                                stream_macros.$stream_requires_locking$.rebind(_prev_bind_0_43, thread);
-                                            }
-                                        }
-                                        if (!stream_42.isStream()) {
-                                            Errors.error($str_alt34$Unable_to_open__S, log_file);
-                                        }
-                                        {
-                                            SubLObject log_stream = stream_42;
-                                            thread.resetMultipleValues();
-                                            {
-                                                SubLObject _prev_bind_0_44 = pph_macros.$pph_problem_store_pointer$.currentBinding(thread);
-                                                try {
-                                                    pph_macros.$pph_problem_store_pointer$.bind(pph_macros.find_or_create_pph_problem_store_pointer(), thread);
-                                                    {
-                                                        SubLObject reuseP = thread.secondMultipleValue();
-                                                        thread.resetMultipleValues();
-                                                        try {
-                                                            thread.resetMultipleValues();
-                                                            {
-                                                                SubLObject _prev_bind_0_45 = pph_macros.$pph_memoization_state$.currentBinding(thread);
-                                                                try {
-                                                                    pph_macros.$pph_memoization_state$.bind(pph_macros.find_or_create_pph_memoization_state(), thread);
-                                                                    {
-                                                                        SubLObject new_or_reused = thread.secondMultipleValue();
-                                                                        thread.resetMultipleValues();
-                                                                        {
-                                                                            SubLObject _prev_bind_0_46 = pph_macros.$pph_external_memoization_state$.currentBinding(thread);
-                                                                            try {
-                                                                                pph_macros.$pph_external_memoization_state$.bind(pph_macros.find_or_create_pph_external_memoization_state(), thread);
-                                                                                {
-                                                                                    SubLObject local_state = pph_macros.$pph_memoization_state$.getDynamicValue(thread);
-                                                                                    {
-                                                                                        SubLObject _prev_bind_0_47 = memoization_state.$memoization_state$.currentBinding(thread);
-                                                                                        try {
-                                                                                            memoization_state.$memoization_state$.bind(local_state, thread);
-                                                                                            {
-                                                                                                SubLObject original_memoization_process = NIL;
-                                                                                                if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                                                                                    original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                                                                                    {
-                                                                                                        SubLObject current_proc = current_process();
-                                                                                                        if (NIL == original_memoization_process) {
-                                                                                                            memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                                                                                        } else {
-                                                                                                            if (original_memoization_process != current_proc) {
-                                                                                                                Errors.error($str_alt56$Invalid_attempt_to_reuse_memoizat);
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                                try {
-                                                                                                    {
-                                                                                                        SubLObject asents = kb_query.new_cyc_query_from_kbq(taxonomy_kbq, UNPROVIDED);
-                                                                                                        com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_export_asents(asents, NIL, stream_41, log_stream, owl_uris_and_prefixes.owl_opencyc_base_uri(UNPROVIDED));
-                                                                                                    }
-                                                                                                } finally {
-                                                                                                    {
-                                                                                                        SubLObject _prev_bind_0_48 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                                        try {
-                                                                                                            $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                                            if ((NIL != local_state) && (NIL == original_memoization_process)) {
-                                                                                                                memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
-                                                                                                            }
-                                                                                                        } finally {
-                                                                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_48, thread);
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        } finally {
-                                                                                            memoization_state.$memoization_state$.rebind(_prev_bind_0_47, thread);
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            } finally {
-                                                                                pph_macros.$pph_external_memoization_state$.rebind(_prev_bind_0_46, thread);
-                                                                            }
-                                                                        }
-                                                                        if ((new_or_reused == $NEW) && (NIL != memoization_state.memoization_state_p(pph_macros.$pph_memoization_state$.getDynamicValue(thread)))) {
-                                                                            memoization_state.clear_all_memoization(pph_macros.$pph_memoization_state$.getDynamicValue(thread));
-                                                                        }
-                                                                    }
-                                                                } finally {
-                                                                    pph_macros.$pph_memoization_state$.rebind(_prev_bind_0_45, thread);
-                                                                }
-                                                            }
-                                                        } finally {
-                                                            {
-                                                                SubLObject _prev_bind_0_49 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                try {
-                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                    if (NIL == reuseP) {
-                                                                        pph_macros.free_pph_problem_store_pointer(pph_macros.$pph_problem_store_pointer$.getDynamicValue(thread));
-                                                                    }
-                                                                } finally {
-                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_49, thread);
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                } finally {
-                                                    pph_macros.$pph_problem_store_pointer$.rebind(_prev_bind_0_44, thread);
-                                                }
-                                            }
-                                        }
-                                    } finally {
-                                        {
-                                            SubLObject _prev_bind_0_50 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                            try {
-                                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                                if (stream_42.isStream()) {
-                                                    close(stream_42, UNPROVIDED);
-                                                }
-                                            } finally {
-                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_50, thread);
-                                            }
-                                        }
-                                    }
-                                }
-                            } finally {
-                                {
-                                    SubLObject _prev_bind_0_51 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                    try {
-                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                        if (stream.isStream()) {
-                                            close(stream, UNPROVIDED);
-                                        }
-                                    } finally {
-                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_51, thread);
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        owl_uris_and_prefixes.$owl_export_entity_map$.rebind(_prev_bind_4, thread);
-                        owl_uris_and_prefixes.$owl_export_default_namespace$.rebind(_prev_bind_3, thread);
-                        owl_uris_and_prefixes.$owl_export_suppress_ontology_nodeP$.rebind(_prev_bind_2, thread);
-                        owlification.$owl_use_external_ids_for_namesP$.rebind(_prev_bind_1, thread);
-                        owl_uris_and_prefixes.$owl_export_version_date$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return rdf_file;
-            }
-        }
     }
 
     public static SubLObject export_skos_taxonomy(final SubLObject taxonomy_kbq, final SubLObject directory, final SubLObject filename_root) {
@@ -4947,100 +3074,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return assertions;
     }
 
-    public static final SubLObject export_skos_taxonomy_from_asents_alt(SubLObject asents, SubLObject directory, SubLObject filename_root) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject rdf_file = cconcatenate(format_nil.format_nil_a_no_copy(directory), new SubLObject[]{ format_nil.format_nil_a_no_copy(filename_root), $str_alt70$_rdf });
-                SubLObject log_file = cconcatenate(format_nil.format_nil_a_no_copy(directory), new SubLObject[]{ format_nil.format_nil_a_no_copy(filename_root), $str_alt71$_log });
-                {
-                    SubLObject _prev_bind_0 = owl_uris_and_prefixes.$owl_export_version_date$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = owlification.$owl_use_external_ids_for_namesP$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = owl_uris_and_prefixes.$owl_export_suppress_ontology_nodeP$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = owl_uris_and_prefixes.$owl_export_default_namespace$.currentBinding(thread);
-                    SubLObject _prev_bind_4 = owl_uris_and_prefixes.$owl_export_entity_map$.currentBinding(thread);
-                    try {
-                        owl_uris_and_prefixes.$owl_export_version_date$.bind(NIL, thread);
-                        owlification.$owl_use_external_ids_for_namesP$.bind(T, thread);
-                        owl_uris_and_prefixes.$owl_export_suppress_ontology_nodeP$.bind(T, thread);
-                        owl_uris_and_prefixes.$owl_export_default_namespace$.bind(owl_uris_and_prefixes.owl_opencyc_base_uri(UNPROVIDED), thread);
-                        owl_uris_and_prefixes.$owl_export_entity_map$.bind(list(bq_cons($$$skos, rdf_utilities.skos_core_namespace()), bq_cons($$$rdf, rdf_utilities.rdf_namespace()), bq_cons($$$rdfs, rdf_utilities.rdfs_namespace()), bq_cons($$$cyc, owl_uris_and_prefixes.owl_cyc_base_uri(UNPROVIDED)), bq_cons($$$oc, owl_uris_and_prefixes.owl_opencyc_base_uri(UNPROVIDED))), thread);
-                        {
-                            SubLObject stream = NIL;
-                            try {
-                                {
-                                    SubLObject _prev_bind_0_52 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                                    try {
-                                        stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                                        stream = compatibility.open_text(rdf_file, $OUTPUT, NIL);
-                                    } finally {
-                                        stream_macros.$stream_requires_locking$.rebind(_prev_bind_0_52, thread);
-                                    }
-                                }
-                                if (!stream.isStream()) {
-                                    Errors.error($str_alt34$Unable_to_open__S, rdf_file);
-                                }
-                                {
-                                    SubLObject stream_53 = stream;
-                                    SubLObject stream_54 = NIL;
-                                    try {
-                                        {
-                                            SubLObject _prev_bind_0_55 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                                            try {
-                                                stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                                                stream_54 = compatibility.open_text(log_file, $OUTPUT, NIL);
-                                            } finally {
-                                                stream_macros.$stream_requires_locking$.rebind(_prev_bind_0_55, thread);
-                                            }
-                                        }
-                                        if (!stream_54.isStream()) {
-                                            Errors.error($str_alt34$Unable_to_open__S, log_file);
-                                        }
-                                        {
-                                            SubLObject log_stream = stream_54;
-                                            com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_export_asents(asents, NIL, stream_53, log_stream, owl_uris_and_prefixes.owl_opencyc_base_uri(UNPROVIDED));
-                                        }
-                                    } finally {
-                                        {
-                                            SubLObject _prev_bind_0_56 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                            try {
-                                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                                if (stream_54.isStream()) {
-                                                    close(stream_54, UNPROVIDED);
-                                                }
-                                            } finally {
-                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_56, thread);
-                                            }
-                                        }
-                                    }
-                                }
-                            } finally {
-                                {
-                                    SubLObject _prev_bind_0_57 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                    try {
-                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                        if (stream.isStream()) {
-                                            close(stream, UNPROVIDED);
-                                        }
-                                    } finally {
-                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_57, thread);
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        owl_uris_and_prefixes.$owl_export_entity_map$.rebind(_prev_bind_4, thread);
-                        owl_uris_and_prefixes.$owl_export_default_namespace$.rebind(_prev_bind_3, thread);
-                        owl_uris_and_prefixes.$owl_export_suppress_ontology_nodeP$.rebind(_prev_bind_2, thread);
-                        owlification.$owl_use_external_ids_for_namesP$.rebind(_prev_bind_1, thread);
-                        owl_uris_and_prefixes.$owl_export_version_date$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return rdf_file;
-            }
-        }
-    }
-
     public static SubLObject export_skos_taxonomy_from_asents(final SubLObject asents, final SubLObject directory, final SubLObject filename_root) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject rdf_file = cconcatenate(format_nil.format_nil_a_no_copy(directory), new SubLObject[]{ format_nil.format_nil_a_no_copy(filename_root), $str79$_rdf });
@@ -5117,174 +3150,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
             owl_uris_and_prefixes.$owl_export_version_date$.rebind(_prev_bind_0, thread);
         }
         return rdf_file;
-    }
-
-    public static final SubLObject owl_export_terms_from_iterator_alt(SubLObject term_iterator, SubLObject term_count, SubLObject stream, SubLObject log_stream) {
-        if (stream == UNPROVIDED) {
-            stream = $xml_stream$.getDynamicValue();
-        }
-        if (log_stream == UNPROVIDED) {
-            log_stream = StreamsLow.$standard_output$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            format(log_stream, $str_alt78$__Exporting__D_Terms_from_iterato, term_count);
-            {
-                SubLObject state = memoization_state.new_memoization_state(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                SubLObject local_state = state;
-                {
-                    SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
-                    try {
-                        memoization_state.$memoization_state$.bind(local_state, thread);
-                        {
-                            SubLObject original_memoization_process = NIL;
-                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                {
-                                    SubLObject current_proc = current_process();
-                                    if (NIL == original_memoization_process) {
-                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                    } else {
-                                        if (original_memoization_process != current_proc) {
-                                            Errors.error($str_alt56$Invalid_attempt_to_reuse_memoizat);
-                                        }
-                                    }
-                                }
-                            }
-                            try {
-                                {
-                                    SubLObject already_resourcing_p = $resourcing_sbhl_marking_spaces_p$.getDynamicValue(thread);
-                                    {
-                                        SubLObject _prev_bind_0_58 = $resourced_sbhl_marking_space_limit$.currentBinding(thread);
-                                        SubLObject _prev_bind_1 = $resourced_sbhl_marking_spaces$.currentBinding(thread);
-                                        SubLObject _prev_bind_2 = $resourcing_sbhl_marking_spaces_p$.currentBinding(thread);
-                                        SubLObject _prev_bind_3 = StreamsLow.$error_output$.currentBinding(thread);
-                                        try {
-                                            $resourced_sbhl_marking_space_limit$.bind(determine_resource_limit(already_resourcing_p, FOUR_INTEGER), thread);
-                                            $resourced_sbhl_marking_spaces$.bind(possibly_new_marking_resource(already_resourcing_p), thread);
-                                            $resourcing_sbhl_marking_spaces_p$.bind(T, thread);
-                                            StreamsLow.$error_output$.bind(log_stream, thread);
-                                            com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.write_owl_header(stream);
-                                            com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.write_cyc_annotation_property_definitions(stream, UNPROVIDED);
-                                            {
-                                                SubLObject _prev_bind_0_59 = $xml_stream$.currentBinding(thread);
-                                                try {
-                                                    $xml_stream$.bind(stream, thread);
-                                                    xml_utilities.xml_terpri();
-                                                } finally {
-                                                    $xml_stream$.rebind(_prev_bind_0_59, thread);
-                                                }
-                                            }
-                                            {
-                                                SubLObject done_term_count = ZERO_INTEGER;
-                                                SubLObject asent_count = ZERO_INTEGER;
-                                                {
-                                                    SubLObject _prev_bind_0_60 = StreamsLow.$standard_output$.currentBinding(thread);
-                                                    try {
-                                                        StreamsLow.$standard_output$.bind(log_stream, thread);
-                                                        {
-                                                            SubLObject progress_message = cconcatenate($str_alt79$exporting_, new SubLObject[]{ format_nil.format_nil_a_no_copy(term_count), $str_alt80$_terms_to_OWL });
-                                                            {
-                                                                SubLObject _prev_bind_0_61 = $last_percent_progress_index$.currentBinding(thread);
-                                                                SubLObject _prev_bind_1_62 = $last_percent_progress_prediction$.currentBinding(thread);
-                                                                SubLObject _prev_bind_2_63 = $within_noting_percent_progress$.currentBinding(thread);
-                                                                SubLObject _prev_bind_3_64 = $percent_progress_start_time$.currentBinding(thread);
-                                                                try {
-                                                                    $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                                                                    $last_percent_progress_prediction$.bind(NIL, thread);
-                                                                    $within_noting_percent_progress$.bind(T, thread);
-                                                                    $percent_progress_start_time$.bind(get_universal_time(), thread);
-                                                                    noting_percent_progress_preamble(progress_message);
-                                                                    {
-                                                                        SubLObject _prev_bind_0_65 = owlification.$owl_export_terms$.currentBinding(thread);
-                                                                        try {
-                                                                            owlification.$owl_export_terms$.bind(set.new_set(symbol_function(EQUAL), term_count), thread);
-                                                                            {
-                                                                                SubLObject term_list = NIL;
-                                                                                {
-                                                                                    SubLObject done_var = NIL;
-                                                                                    while (NIL == done_var) {
-                                                                                        thread.resetMultipleValues();
-                                                                                        {
-                                                                                            SubLObject v_term = iteration.iteration_next(term_iterator);
-                                                                                            SubLObject valid = thread.secondMultipleValue();
-                                                                                            thread.resetMultipleValues();
-                                                                                            if (NIL != valid) {
-                                                                                                set.set_add(v_term, owlification.$owl_export_terms$.getDynamicValue(thread));
-                                                                                                term_list = cons(v_term, term_list);
-                                                                                            }
-                                                                                            done_var = makeBoolean(NIL == valid);
-                                                                                        }
-                                                                                    } 
-                                                                                }
-                                                                                {
-                                                                                    SubLObject iterator_var = iteration.new_list_iterator(nreverse(term_list));
-                                                                                    SubLObject done_var = NIL;
-                                                                                    while (NIL == done_var) {
-                                                                                        thread.resetMultipleValues();
-                                                                                        {
-                                                                                            SubLObject fort = iteration.iteration_next(iterator_var);
-                                                                                            SubLObject valid = thread.secondMultipleValue();
-                                                                                            thread.resetMultipleValues();
-                                                                                            if (NIL != valid) {
-                                                                                                asent_count = add(asent_count, com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_export_one_term(fort, stream, log_stream));
-                                                                                                done_term_count = add(done_term_count, ONE_INTEGER);
-                                                                                                note_percent_progress(done_term_count, term_count);
-                                                                                            }
-                                                                                            done_var = makeBoolean(NIL == valid);
-                                                                                        }
-                                                                                    } 
-                                                                                }
-                                                                            }
-                                                                        } finally {
-                                                                            owlification.$owl_export_terms$.rebind(_prev_bind_0_65, thread);
-                                                                        }
-                                                                    }
-                                                                    noting_percent_progress_postamble();
-                                                                } finally {
-                                                                    $percent_progress_start_time$.rebind(_prev_bind_3_64, thread);
-                                                                    $within_noting_percent_progress$.rebind(_prev_bind_2_63, thread);
-                                                                    $last_percent_progress_prediction$.rebind(_prev_bind_1_62, thread);
-                                                                    $last_percent_progress_index$.rebind(_prev_bind_0_61, thread);
-                                                                }
-                                                            }
-                                                            format(log_stream, $str_alt81$__Exported__D_Terms_and__D_senten, done_term_count, asent_count);
-                                                        }
-                                                    } finally {
-                                                        StreamsLow.$standard_output$.rebind(_prev_bind_0_60, thread);
-                                                    }
-                                                }
-                                            }
-                                            com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.write_owl_footer(stream);
-                                        } finally {
-                                            StreamsLow.$error_output$.rebind(_prev_bind_3, thread);
-                                            $resourcing_sbhl_marking_spaces_p$.rebind(_prev_bind_2, thread);
-                                            $resourced_sbhl_marking_spaces$.rebind(_prev_bind_1, thread);
-                                            $resourced_sbhl_marking_space_limit$.rebind(_prev_bind_0_58, thread);
-                                        }
-                                    }
-                                }
-                            } finally {
-                                {
-                                    SubLObject _prev_bind_0_66 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                    try {
-                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                        if ((NIL != local_state) && (NIL == original_memoization_process)) {
-                                            memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
-                                        }
-                                    } finally {
-                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_66, thread);
-                                    }
-                                }
-                            }
-                        }
-                    } finally {
-                        memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject owl_export_terms_from_iterator(final SubLObject term_iterator, final SubLObject term_count, SubLObject stream, SubLObject log_stream) {
@@ -5415,113 +3280,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    // Internal Constants
-    @LispMethod(comment = "Internal Constants")
-    static private final SubLString $str_alt0$____rdfs_comment_xml_lang__en__ = makeString("   <rdfs:comment xml:lang=\"en\">");
-
-    static private final SubLString $str_alt1$___________rdfs_comment________ow = makeString("\n        </rdfs:comment>\n    </owl:Ontology>\n");
-
-    static private final SubLString $str_alt2$_cyc_projects_opencyc_owl_export_ = makeString("/cyc/projects/opencyc/owl-export/ontology-comment.txt");
-
-    static private final SubLString $str_alt4$__rdf_RDF__ = makeString("</rdf:RDF>\n");
-
-    static private final SubLString $str_alt5$____ = makeString("    ");
-
-    static private final SubLList $list_alt7 = list(makeString("rdfs:label"), makeString("xml:lang"), makeString("en"));
-
-    static private final SubLList $list_alt8 = list(makeString("skos:prefLabel"), makeString("xml:lang"), makeString("en"));
-
-    static private final SubLList $list_alt9 = list(makeString("skos:altLabel"), makeString("xml:lang"), makeString("en"));
-
-    static private final SubLList $list_alt10 = list(makeString("prettyString"), makeString("xml:lang"), makeString("en"));
-
-    static private final SubLList $list_alt12 = list(makeString("xml:lang"), makeString("en"));
-
-    static private final SubLList $list_alt13 = list(makeString("nameString"), makeString("xml:lang"), makeString("en"));
-
-    static private final SubLList $list_alt15 = list(makeString("rdfs:comment"), makeString("xml:lang"), makeString("en"));
-
-    static private final SubLList $list_alt16 = list(makeString("skos:definition"), makeString("xml:lang"), makeString("en"));
-
-    static private final SubLList $list_alt17 = list(makeString("owl:intersectionOf"), makeString("rdf:parseType"), makeString("Collection"));
-
-    static private final SubLString $str_alt18$_label = makeString(":label");
-
-    public static final SubLSymbol $kw20$_MEMOIZED_ITEM_NOT_FOUND_ = makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
-
-    static private final SubLList $list_alt21 = list(new SubLObject[]{ makeString("broaderThan"), makeString("Mx4rZOAVeiYGEdqAAAACs2IMmw"), makeString("broaderTerm"), makeString("hasWikipediaArticle"), makeString("Mx4rI7tMQs31R_6Nz85QD-I0Fg"), makeString("rdf:type"), makeString("rdfs:subClassOf"), makeString("rdfs:subPropertyOf"), makeString("rdfs:domain"), makeString("rdfs:range"), makeString("owl:sameAs") });
-
-    private static final SubLSymbol OWL_CYC_URI_FOR_FORT = makeSymbol("OWL-CYC-URI-FOR-FORT");
-
-    static private final SubLString $str_alt24$_cyc_ = makeString("&cyc;");
-
-    private static final SubLSymbol OWL_OPENCYC_URI_FOR_FORT = makeSymbol("OWL-OPENCYC-URI-FOR-FORT");
-
-    static private final SubLString $str_alt27$OpenCyc_URIs_must_either_use_a_ve = makeString("OpenCyc URIs must either use a version date or external ID.");
-
-    static private final SubLString $str_alt28$_opencyc_ = makeString("&opencyc;");
-
-    static private final SubLString $str_alt29$Human_readable_OWL_export_require = makeString("Human-readable OWL export requires a valid (UNIVERSAL-DATE-P) version date. Got ~S");
-
-    public static final SubLInteger $int$100000 = makeInteger(100000);
-
-    static private final SubLString $str_alt32$_cyc_projects_opencyc_owl_export_ = makeString("/cyc/projects/opencyc/owl-export/latest/fort-owl-names.csv");
-
-    static private final SubLString $str_alt34$Unable_to_open__S = makeString("Unable to open ~S");
-
-    static private final SubLString $str_alt35$_ = makeString("\"");
-
-    static private final SubLSymbol $sym38$OWLIFIABLE_ARG1_ = makeSymbol("OWLIFIABLE-ARG1?");
-
-    static private final SubLString $str_alt39$No_asents_for__S_ = makeString("No asents for ~S.");
-
-    static private final SubLList $list_alt40 = list(reader_make_constant_shell("ExistingObjectType"), reader_make_constant_shell("ExistingStuffType"), reader_make_constant_shell("TemporalObjectType"), reader_make_constant_shell("TemporalStuffType"), reader_make_constant_shell("ObjectType"), reader_make_constant_shell("StuffType"), reader_make_constant_shell("Collection"));
-
-    static private final SubLSymbol $sym42$HL_PROTOTYPICAL_INSTANCE_ = makeSymbol("HL-PROTOTYPICAL-INSTANCE?");
-
-    static private final SubLSymbol $sym43$VALID_FORT_ = makeSymbol("VALID-FORT?");
-
-    public static final SubLObject $const44$BinaryPredicateTypeByLogicalFeatu = reader_make_constant_shell("BinaryPredicateTypeByLogicalFeature");
-
-    static private final SubLList $list_alt45 = list(reader_make_constant_shell("CoexistingObjectsPredicate"), reader_make_constant_shell("BinaryRolePredicate"), reader_make_constant_shell("ComplexTemporalPredicate"), reader_make_constant_shell("BinaryPredicate"), reader_make_constant_shell("Predicate"));
-
-    static private final SubLList $list_alt52 = list(reader_make_constant_shell("isa"), reader_make_constant_shell("genlPreds"), reader_make_constant_shell("arg1Isa"), reader_make_constant_shell("arg2Isa"), reader_make_constant_shell("arg1SometimesIsa"), reader_make_constant_shell("arg2SometimesIsa"));
-
-    static private final SubLString $str_alt56$Invalid_attempt_to_reuse_memoizat = makeString("Invalid attempt to reuse memoization state in multiple threads simultaneously.");
-
-    public static final SubLObject owl_export_one_term_alt(SubLObject v_term, SubLObject stream, SubLObject log_stream) {
-        if (stream == UNPROVIDED) {
-            stream = $xml_stream$.getDynamicValue();
-        }
-        if (log_stream == UNPROVIDED) {
-            log_stream = StreamsLow.$standard_output$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject term_chunk = NIL;
-                SubLObject emptyP = NIL;
-                {
-                    SubLObject _prev_bind_0 = StreamsLow.$error_output$.currentBinding(thread);
-                    try {
-                        StreamsLow.$error_output$.bind(log_stream, thread);
-                        term_chunk = owlification.owl_cyclify_term(v_term);
-                        emptyP = com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.empty_owl_term_chunk_p(term_chunk);
-                        if (NIL != subl_promotions.positive_integer_p(owlification.$owl_export_cap_per_category$.getDynamicValue(thread))) {
-                            format(log_stream, $str_alt82$___S___D_sentences___, v_term, length(term_chunk));
-                        }
-                        if (NIL == emptyP) {
-                            com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.write_owl_term_chunk(term_chunk, stream);
-                        }
-                    } finally {
-                        StreamsLow.$error_output$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return NIL != emptyP ? ((SubLObject) (ZERO_INTEGER)) : length(term_chunk);
-            }
-        }
-    }
-
     public static SubLObject owl_export_one_term(final SubLObject v_term, SubLObject stream, SubLObject log_stream) {
         if (stream == UNPROVIDED) {
             stream = xml_vars.$xml_stream$.getDynamicValue();
@@ -5570,65 +3328,8 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return NIL != emptyP ? ZERO_INTEGER : length(term_chunk);
     }
 
-    static private final SubLSymbol $sym57$OWLIFIABLE_SENTENCE_ = makeSymbol("OWLIFIABLE-SENTENCE?");
-
-    static private final SubLString $str_alt59$__Extracted__D_subject_terms_from = makeString("~&Extracted ~D subject terms from ~D asents.~%");
-
-    static private final SubLString $str_alt61$_ = makeString("/");
-
-    static private final SubLString $str_alt62$log_txt = makeString("log.txt");
-
-    static private final SubLString $str_alt63$owl_export_human_readable_owl = makeString("owl-export-human-readable.owl");
-
-    static private final SubLString $str_alt64$__Starting_human_readable_export_ = makeString("~&Starting human-readable export...~%");
-
-    static private final SubLString $str_alt65$owl_export_versioned_owl = makeString("owl-export-versioned.owl");
-
-    static private final SubLString $str_alt66$__Starting_versioned_export_____ = makeString("~&Starting versioned export...~%");
-
-    static private final SubLString $str_alt67$owl_export_unversioned_owl = makeString("owl-export-unversioned.owl");
-
-    static private final SubLString $str_alt68$__Starting_unversioned_export____ = makeString("~&Starting unversioned export...~%");
-
-    static private final SubLString $str_alt69$log_unversioned_txt = makeString("log-unversioned.txt");
-
-    static private final SubLString $str_alt70$_rdf = makeString(".rdf");
-
-    static private final SubLString $str_alt71$_log = makeString(".log");
-
-    static private final SubLString $str_alt78$__Exporting__D_Terms_from_iterato = makeString("~&Exporting ~D Terms from iterator.~%");
-
-    static private final SubLString $str_alt79$exporting_ = makeString("exporting ");
-
-    static private final SubLString $str_alt80$_terms_to_OWL = makeString(" terms to OWL");
-
-    static private final SubLString $str_alt81$__Exported__D_Terms_and__D_senten = makeString("~&Exported ~D Terms and ~D sentences.~%");
-
-    static private final SubLString $str_alt82$___S___D_sentences___ = makeString("~&~S: ~D sentences.~%");
-
-    public static final SubLObject empty_owl_term_chunk_p_alt(SubLObject term_chunk) {
-        return makeBoolean((NIL != empty_list_p(term_chunk)) || ((NIL != lengthE(term_chunk, ONE_INTEGER, UNPROVIDED)) && rdf_utilities.rdf_name($$$Description).equal(second(term_chunk.first()))));
-    }
-
     public static SubLObject empty_owl_term_chunk_p(final SubLObject term_chunk) {
         return makeBoolean((NIL != list_utilities.empty_list_p(term_chunk)) || ((NIL != list_utilities.lengthE(term_chunk, ONE_INTEGER, UNPROVIDED)) && rdf_utilities.rdf_name($$$Description).equal(second(term_chunk.first()))));
-    }
-
-    static private final SubLString $str_alt84$_a = makeString("~a");
-
-    static private final SubLString $str_alt85$2_0_0 = makeString("2.0.0");
-
-    static private final SubLString $str_alt86$_________owl_versionInfo_Version_ = makeString("        <owl:versionInfo>Version ");
-
-    public static final SubLObject owl_export_term_chunk_alt(SubLObject fort, SubLObject stream) {
-        if (stream == UNPROVIDED) {
-            stream = $xml_stream$.getDynamicValue();
-        }
-        {
-            SubLObject term_chunk = owlification.owl_cyclify_term(fort);
-            com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.write_owl_term_chunk(term_chunk, stream);
-        }
-        return NIL;
     }
 
     public static SubLObject owl_export_term_chunk(final SubLObject fort, SubLObject stream) {
@@ -5637,27 +3338,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         }
         final SubLObject term_chunk = owlification.owl_cyclify_term(fort);
         write_owl_term_chunk(term_chunk, stream);
-        return NIL;
-    }
-
-    static private final SubLString $str_alt87$__owl_versionInfo_______ = makeString("</owl:versionInfo>\n     ");
-
-    static private final SubLString $str_alt88$__xml_version__1_0__encoding__UTF = makeString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-
-    static private final SubLString $str_alt89$_rdf_RDF_xml_base__ = makeString("<rdf:RDF xml:base=\"");
-
-    public static final SubLObject write_owl_header_alt(SubLObject stream) {
-        if (stream == UNPROVIDED) {
-            stream = $xml_stream$.getDynamicValue();
-        }
-        {
-            SubLObject comment = com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.get_owl_ontology_comment();
-            princ(com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_xml_header_first_half(sublisp_boolean(comment)), stream);
-            if (NIL != string_utilities.non_empty_string_p(comment)) {
-                princ(com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_export_version_info(), stream);
-                princ(com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_xml_ontology_comment_and_close_tag(comment), stream);
-            }
-        }
         return NIL;
     }
 
@@ -5674,25 +3354,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    static private final SubLString $str_alt90$____xmlns__ = makeString("    xmlns=\"");
-
-    static private final SubLList $list_alt91 = cons(makeSymbol("PREFIX"), makeSymbol("URI"));
-
-    static private final SubLString $str_alt92$______xmlns__A__S = makeString("~%    xmlns:~A=~S");
-
-    static private final SubLString $str_alt93$_ = makeString("&");
-
-    static private final SubLString $str_alt94$_ = makeString(";");
-
-    static private final SubLString $str_alt95$_____ = makeString(">~%~%");
-
-    public static final SubLObject write_owl_footer_alt(SubLObject stream) {
-        if (stream == UNPROVIDED) {
-            stream = $xml_stream$.getDynamicValue();
-        }
-        return format(stream, $str_alt84$_a, $owl_xml_footer$.getGlobalValue());
-    }
-
     public static SubLObject write_owl_footer(SubLObject stream) {
         if (stream == UNPROVIDED) {
             stream = xml_vars.$xml_stream$.getDynamicValue();
@@ -5700,69 +3361,9 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return format(stream, $str114$_a, $owl_xml_footer$.getGlobalValue());
     }
 
-    static private final SubLString $str_alt96$_____owl_Ontology_rdf_about______ = makeString("    <owl:Ontology rdf:about=\"\">~%");
-
-    static private final SubLList $list_alt98 = cons(makeSymbol("TERM"), makeSymbol("OWL-CYCL-ASENTS"));
-
-    public static final SubLObject owl_export_version_info_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return cconcatenate($str_alt86$_________owl_versionInfo_Version_, new SubLObject[]{ format_nil.format_nil_a_no_copy($owl_export_version_string$.getDynamicValue(thread)), $str_alt87$__owl_versionInfo_______ });
-        }
-    }
-
     public static SubLObject owl_export_version_info() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return cconcatenate($str116$_________owl_versionInfo_Version_, new SubLObject[]{ format_nil.format_nil_a_no_copy($owl_export_version_string$.getDynamicValue(thread)), $str117$__owl_versionInfo_______ });
-    }
-
-    static private final SubLString $str_alt102$Invalid_XML_name___S = makeString("Invalid XML name: ~S");
-
-    public static final SubLObject owl_xml_header_first_half_alt(SubLObject include_ontology_headerP) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject output_string = NIL;
-                SubLObject stream = NIL;
-                try {
-                    stream = make_private_string_output_stream();
-                    princ(cconcatenate($str_alt88$__xml_version__1_0__encoding__UTF, new SubLObject[]{ string_utilities.$new_line_string$.getGlobalValue(), com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_export_doctype_element(), $str_alt89$_rdf_RDF_xml_base__, owl_uris_and_prefixes.owl_export_base_uri(UNPROVIDED), $str_alt35$_, string_utilities.$new_line_string$.getGlobalValue(), $str_alt90$____xmlns__, owl_uris_and_prefixes.possibly_use_entity_reference(owl_uris_and_prefixes.owl_export_default_namespace()), $str_alt35$_ }), stream);
-                    {
-                        SubLObject cdolist_list_var = owl_uris_and_prefixes.$owl_export_entity_map$.getDynamicValue(thread);
-                        SubLObject cons = NIL;
-                        for (cons = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , cons = cdolist_list_var.first()) {
-                            {
-                                SubLObject datum = cons;
-                                SubLObject current = datum;
-                                SubLObject prefix = NIL;
-                                SubLObject uri = NIL;
-                                destructuring_bind_must_consp(current, datum, $list_alt91);
-                                prefix = current.first();
-                                current = current.rest();
-                                uri = current;
-                                format(stream, $str_alt92$______xmlns__A__S, prefix, NIL != owlification.$owl_use_entity_referencesP$.getDynamicValue(thread) ? ((SubLObject) (cconcatenate($str_alt93$_, new SubLObject[]{ prefix, $str_alt94$_ }))) : uri);
-                            }
-                        }
-                    }
-                    format(stream, $str_alt95$_____);
-                    if (NIL != include_ontology_headerP) {
-                        format(stream, $str_alt96$_____owl_Ontology_rdf_about______);
-                    }
-                    output_string = get_output_stream_string(stream);
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            close(stream, UNPROVIDED);
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                return output_string;
-            }
-        }
     }
 
     public static SubLObject owl_xml_header_first_half(final SubLObject include_ontology_headerP) {
@@ -5806,76 +3407,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return output_string;
     }
 
-    static private final SubLString $str_alt103$__ = makeString("</");
-
-    static private final SubLString $str_alt104$_ = makeString(">");
-
-    static private final SubLString $str_alt105$_u = makeString("&u");
-
-    static private final SubLString $str_alt106$_p__ = makeString("<p/>");
-
-    static private final SubLString $str_alt107$_p_ = makeString("<p>");
-
-    static private final SubLString $str_alt108$rdf_resource = makeString("rdf:resource");
-
-    static private final SubLString $str_alt111$rdf_datatype = makeString("rdf:datatype");
-
-    static private final SubLString $str_alt112$owl_intersectionOf = makeString("owl:intersectionOf");
-
-    static private final SubLSymbol $sym113$XML_SPECIAL_CHAR_ = makeSymbol("XML-SPECIAL-CHAR?");
-
-    static private final SubLList $list_alt114 = list(list(makeSymbol("&OPTIONAL"), list(makeSymbol("LEVEL"), ONE_INTEGER)), makeSymbol("&BODY"), makeSymbol("BODY"));
-
-    static private final SubLList $list_alt116 = list(makeSymbol("*XML-INDENTATION-AMOUNT*"), list(makeSymbol("LENGTH"), makeSymbol("*OWL-XML-SPACER*")));
-
-    static private final SubLSymbol $sym118$_ = makeSymbol("*");
-
-    static private final SubLList $list_alt119 = list(makeSymbol("*XML-INDENTATION-AMOUNT*"));
-
-    static private final SubLList $list_alt120 = list(makeSymbol("OWL-INTERSECTION-FN"), makeSymbol("CLASS-TERM"), list(makeSymbol("OWL-RESTRICTION-FN"), makeSymbol("OWL-RESTRICTION"), makeSymbol("OWL-ON-PROPERTY"), makeSymbol("PROPERTY"), makeSymbol("OWL-HAS-VALUE"), makeSymbol("VALUE")));
-
-    static private final SubLString $str_alt123$Assuming__S_is_OK_to_export = makeString("Assuming ~S is OK to export");
-
-    static private final SubLList $list_alt124 = list(list(makeString("externalID"), makeString("A unique, language-neutral, variable-sized identifier for a concept that can be used to refer unambiguously to that concept across OWL exports or across Cyc inference engines."), T), list(makeString("label"), makeString("A natural-language representation for a concept that is both human readable and readable by the Cyc inference engine. These terms are not guaranteed to refer to the same concept across time but are guaranteed to be consistent within a particular OWL export. Use \"cycAnnot:externalID\" for unambiguously referring to a concept across OWL exports or across Cyc inference engines."), NIL));
-
-    public static final SubLObject owl_export_doctype_element_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != owlification.$owl_use_entity_referencesP$.getDynamicValue(thread)) {
-                {
-                    SubLObject output_string = NIL;
-                    SubLObject stream = NIL;
-                    try {
-                        stream = make_private_string_output_stream();
-                        {
-                            SubLObject _prev_bind_0 = $xml_stream$.currentBinding(thread);
-                            try {
-                                $xml_stream$.bind(stream, thread);
-                                com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.write_rdf_doctype_declaration(owl_uris_and_prefixes.$owl_export_entity_map$.getDynamicValue(thread));
-                            } finally {
-                                $xml_stream$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                        output_string = get_output_stream_string(stream);
-                    } finally {
-                        {
-                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                            try {
-                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                close(stream, UNPROVIDED);
-                            } finally {
-                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                    return output_string;
-                }
-            } else {
-                return string_utilities.$empty_string$.getGlobalValue();
-            }
-        }
-    }
-
     public static SubLObject owl_export_doctype_element() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != owlification.$owl_use_entity_referencesP$.getDynamicValue(thread)) {
@@ -5907,107 +3438,12 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return string_utilities.$empty_string$.getGlobalValue();
     }
 
-    static private final SubLList $list_alt125 = list(makeString("owl"), makeString("rdfs"), makeString("rdf"));
-
-    static private final SubLString $str_alt128$xmlns_ = makeString("xmlns:");
-
-    static private final SubLString $str_alt129$rdf_RDF = makeString("rdf:RDF");
-
-    static private final SubLString $str_alt130$xml_base = makeString("xml:base");
-
-    static private final SubLString $str_alt132$__DOCTYPE_rdf_RDF = makeString("<!DOCTYPE rdf:RDF");
-
-    static private final SubLString $str_alt133$____ = makeString(" [~%");
-
-    static private final SubLString $str_alt135$_______ENTITY__ = makeString("     <!ENTITY ~");
-
-    static private final SubLString $str_alt136$A__S____ = makeString("A ~S >~%");
-
-    static private final SubLString $str_alt137$____ = makeString("   ]");
-
-    static private final SubLList $list_alt138 = cons(makeSymbol("CYCL"), makeSymbol("PREFIXED-NAME"));
-
-    /**
-     *
-     *
-     * @param OWL-CYCL-TERM-CHUNK
-     * 		listp; ((#$OWLTermOfTypeFn <term-type> <term-name>) . OWL-CYCL-ASENTS)
-     */
-    @LispMethod(comment = "@param OWL-CYCL-TERM-CHUNK\r\n\t\tlistp; ((#$OWLTermOfTypeFn <term-type> <term-name>) . OWL-CYCL-ASENTS)")
-    public static final SubLObject write_owl_term_chunk_alt(SubLObject owl_cycl_term_chunk, SubLObject stream) {
-        if (stream == UNPROVIDED) {
-            stream = $xml_stream$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(owl_cycl_term_chunk, NON_EMPTY_LIST_P);
-            {
-                SubLObject _prev_bind_0 = $xml_document_entity_names$.currentBinding(thread);
-                try {
-                    $xml_document_entity_names$.bind(alist_keys(owl_uris_and_prefixes.$owl_export_entity_map$.getDynamicValue(thread)), thread);
-                    {
-                        SubLObject datum = owl_cycl_term_chunk;
-                        SubLObject current = datum;
-                        SubLObject v_term = NIL;
-                        SubLObject owl_cycl_asents = NIL;
-                        destructuring_bind_must_consp(current, datum, $list_alt98);
-                        v_term = current.first();
-                        current = current.rest();
-                        owl_cycl_asents = current;
-                        {
-                            SubLObject _prev_bind_0_67 = $xml_stream$.currentBinding(thread);
-                            try {
-                                $xml_stream$.bind(stream, thread);
-                                xml_utilities.xml_terpri();
-                                {
-                                    SubLObject atomicP = empty_list_p(owl_cycl_asents);
-                                    com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.xml_write_owl_term_open_tag(v_term, ONE_INTEGER, atomicP, UNPROVIDED);
-                                    xml_utilities.xml_terpri();
-                                    {
-                                        SubLObject cdolist_list_var = owl_cycl_asents;
-                                        SubLObject owl_cycl_asent = NIL;
-                                        for (owl_cycl_asent = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , owl_cycl_asent = cdolist_list_var.first()) {
-                                            {
-                                                SubLObject pred = cycl_utilities.formula_operator(owl_cycl_asent);
-                                                SubLObject pred_name = cycl_utilities.formula_arg1(pred, UNPROVIDED);
-                                                SubLObject element_name = com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.xml_element_name_from_uri(pred_name);
-                                                SubLObject arg2 = cycl_utilities.formula_arg2(owl_cycl_asent, UNPROVIDED);
-                                                format($xml_stream$.getDynamicValue(thread), $str_alt84$_a, com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_space(TWO_INTEGER));
-                                                com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.xml_write_owl_asent(element_name, arg2, UNPROVIDED);
-                                                xml_utilities.xml_terpri();
-                                            }
-                                        }
-                                    }
-                                    if (NIL == atomicP) {
-                                        format($xml_stream$.getDynamicValue(thread), $str_alt84$_a, com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_term_close_tag(v_term, ONE_INTEGER));
-                                    }
-                                }
-                            } finally {
-                                $xml_stream$.rebind(_prev_bind_0_67, thread);
-                            }
-                        }
-                    }
-                } finally {
-                    $xml_document_entity_names$.rebind(_prev_bind_0, thread);
-                }
-            }
-            return NIL;
-        }
-    }
-
-    /**
-     *
-     *
-     * @param OWL-CYCL-TERM-CHUNK
-     * 		listp; ((#$OWLTermOfTypeFn <term-type> <term-name>) . OWL-CYCL-ASENTS)
-     */
-    @LispMethod(comment = "@param OWL-CYCL-TERM-CHUNK\r\n\t\tlistp; ((#$OWLTermOfTypeFn <term-type> <term-name>) . OWL-CYCL-ASENTS)")
     public static SubLObject write_owl_term_chunk(final SubLObject owl_cycl_term_chunk, SubLObject stream) {
         if (stream == UNPROVIDED) {
             stream = xml_vars.$xml_stream$.getDynamicValue();
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != list_utilities.non_empty_list_p(owl_cycl_term_chunk) : "! list_utilities.non_empty_list_p(owl_cycl_term_chunk) " + ("list_utilities.non_empty_list_p(owl_cycl_term_chunk) " + "CommonSymbols.NIL != list_utilities.non_empty_list_p(owl_cycl_term_chunk) ") + owl_cycl_term_chunk;
+        assert NIL != list_utilities.non_empty_list_p(owl_cycl_term_chunk) : "list_utilities.non_empty_list_p(owl_cycl_term_chunk) " + "CommonSymbols.NIL != list_utilities.non_empty_list_p(owl_cycl_term_chunk) " + owl_cycl_term_chunk;
         final SubLObject _prev_bind_0 = xml_vars.$xml_document_entity_names$.currentBinding(thread);
         try {
             xml_vars.$xml_document_entity_names$.bind(list_utilities.alist_keys(owl_uris_and_prefixes.$owl_export_entity_map$.getDynamicValue(thread)), thread);
@@ -6049,48 +3485,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    static private final SubLList $list_alt140 = list(makeSymbol("LOCAL-NAME"), makeSymbol("COMMENT"), makeSymbol("FUNCTIONAL?"));
-
-    static private final SubLList $list_alt144 = list(makeString("en"));
-
-    public static final SubLObject xml_write_owl_term_open_tag_alt(SubLObject v_term, SubLObject indent_level, SubLObject standalone_tagP, SubLObject stream) {
-        if (stream == UNPROVIDED) {
-            stream = $xml_stream$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject _prev_bind_0 = $xml_stream$.currentBinding(thread);
-                try {
-                    $xml_stream$.bind(stream, thread);
-                    {
-                        SubLObject term_type = cycl_utilities.formula_arg1(v_term, UNPROVIDED);
-                        SubLObject element_name = com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.xml_element_name_from_uri(term_type);
-                        SubLObject term_name = cycl_utilities.formula_arg2(v_term, UNPROVIDED);
-                        SubLObject attributes = NIL;
-                        if ((NIL != string_utilities.starts_with(term_name, owl_uris_and_prefixes.owl_export_default_namespace())) && CHAR_hash.eql(string_utilities.last_char(owl_uris_and_prefixes.owl_export_default_namespace()))) {
-                            attributes = list(rdf_utilities.rdf_name($$$ID), string_utilities.pre_remove(term_name, owl_uris_and_prefixes.owl_export_default_namespace(), UNPROVIDED));
-                        } else {
-                            if ((NIL == web_utilities.uri_p(term_name, UNPROVIDED)) && CHAR_hash.eql(string_utilities.last_char(owl_uris_and_prefixes.owl_export_default_namespace()))) {
-                                attributes = list(rdf_utilities.rdf_name($$$ID), term_name);
-                            } else {
-                                attributes = list(rdf_utilities.rdf_name($$$about), com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.possibly_abbreviate_attribute_value_uri(term_name));
-                            }
-                        }
-                        if (attributes.first().equal(rdf_utilities.rdf_name($$$ID))) {
-                            SubLTrampolineFile.enforceType(second(attributes), VALID_XML_NAME_P);
-                        }
-                        xml_utilities.xml_write_string(com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_space(indent_level), UNPROVIDED, UNPROVIDED);
-                        xml_utilities.xml_start_tag_internal(element_name, attributes, standalone_tagP);
-                    }
-                } finally {
-                    $xml_stream$.rebind(_prev_bind_0, thread);
-                }
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject xml_write_owl_term_open_tag(final SubLObject v_term, final SubLObject indent_level, final SubLObject standalone_tagP, SubLObject stream) {
         if (stream == UNPROVIDED) {
             stream = xml_vars.$xml_stream$.getDynamicValue();
@@ -6123,19 +3517,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject xml_element_name_from_uri_alt(SubLObject term_type) {
-        if (NIL != string_utilities.starts_with(term_type, owl_uris_and_prefixes.owl_export_default_namespace())) {
-            return string_utilities.pre_remove(term_type, owl_uris_and_prefixes.owl_export_default_namespace(), UNPROVIDED);
-        } else {
-            if (NIL == xml_utilities.valid_xml_name_p(term_type)) {
-                Errors.error($str_alt102$Invalid_XML_name___S, term_type);
-            } else {
-                return term_type;
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject xml_element_name_from_uri(final SubLObject term_type) {
         if (NIL != string_utilities.starts_with(term_type, owl_uris_and_prefixes.owl_export_default_namespace())) {
             return string_utilities.pre_remove(term_type, owl_uris_and_prefixes.owl_export_default_namespace(), UNPROVIDED);
@@ -6147,19 +3528,8 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return term_type;
     }
 
-    public static final SubLObject possibly_abbreviate_attribute_value_uri_alt(SubLObject uri) {
-        return NIL != string_utilities.starts_with(uri, owl_uris_and_prefixes.owl_export_base_uri(UNPROVIDED)) ? ((SubLObject) (string_utilities.pre_remove(uri, owl_uris_and_prefixes.owl_export_base_uri(UNPROVIDED), UNPROVIDED))) : owl_uris_and_prefixes.possibly_use_entity_reference(uri);
-    }
-
     public static SubLObject possibly_abbreviate_attribute_value_uri(final SubLObject uri) {
         return NIL != string_utilities.starts_with(uri, owl_uris_and_prefixes.owl_export_base_uri(UNPROVIDED)) ? string_utilities.pre_remove(uri, owl_uris_and_prefixes.owl_export_base_uri(UNPROVIDED), UNPROVIDED) : owl_uris_and_prefixes.possibly_use_entity_reference(uri);
-    }
-
-    public static final SubLObject owl_term_close_tag_alt(SubLObject v_term, SubLObject indent_level) {
-        {
-            SubLObject term_type = cycl_utilities.formula_arg1(v_term, UNPROVIDED);
-            return cconcatenate(format_nil.format_nil_a_no_copy(com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_space(indent_level)), new SubLObject[]{ $str_alt103$__, format_nil.format_nil_a_no_copy(com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.xml_element_name_from_uri(term_type)), $str_alt104$_, format_nil.$format_nil_percent$.getGlobalValue() });
-        }
     }
 
     public static SubLObject owl_term_close_tag(final SubLObject v_term, final SubLObject indent_level) {
@@ -6167,45 +3537,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return cconcatenate(format_nil.format_nil_a_no_copy(owl_space(indent_level)), new SubLObject[]{ $str133$__, format_nil.format_nil_a_no_copy(xml_element_name_from_uri(term_type)), $str134$_, format_nil.$format_nil_percent$.getGlobalValue() });
     }
 
-    /**
-     * Write XML for TAG: VALUE to STREAM
-     */
-    @LispMethod(comment = "Write XML for TAG: VALUE to STREAM")
-    public static final SubLObject xml_write_owl_asent_alt(SubLObject tag, SubLObject value, SubLObject stream) {
-        if (stream == UNPROVIDED) {
-            stream = $xml_stream$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.enforceType(tag, VALID_XML_NAME_P);
-            if (value.isString() && (NIL != search($str_alt105$_u, value, symbol_function(EQUALP), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED))) {
-                {
-                    SubLObject utf8 = unicode_strings.display_to_utf8_string(value);
-                    if (NIL != utf8) {
-                        value = utf8;
-                    }
-                }
-            }
-            if (value.isString() && (NIL != find(CHAR_less, value, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED))) {
-                value = string_utilities.string_substitute($str_alt106$_p__, $str_alt107$_p_, value, symbol_function(EQUALP));
-            }
-            {
-                SubLObject _prev_bind_0 = $xml_stream$.currentBinding(thread);
-                try {
-                    $xml_stream$.bind(stream, thread);
-                    com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.xml_write_owl_element(tag, value);
-                } finally {
-                    $xml_stream$.rebind(_prev_bind_0, thread);
-                }
-            }
-            return NIL;
-        }
-    }
-
-    /**
-     * Write XML for TAG: VALUE to STREAM
-     */
-    @LispMethod(comment = "Write XML for TAG: VALUE to STREAM")
     public static SubLObject xml_write_owl_asent(final SubLObject tag, SubLObject value, SubLObject stream) {
         if (stream == UNPROVIDED) {
             stream = xml_vars.$xml_stream$.getDynamicValue();
@@ -6227,45 +3558,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
             xml_write_owl_element(tag, value);
         } finally {
             xml_vars.$xml_stream$.rebind(_prev_bind_0, thread);
-        }
-        return NIL;
-    }
-
-    public static final SubLObject xml_write_owl_element_alt(SubLObject tag, SubLObject value) {
-        {
-            SubLObject attributes = copy_list(alist_lookup(com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.owl_tag_attributes(), tag, symbol_function(EQUAL), UNPROVIDED));
-            if (value.isString() && (NIL != member_equalP(tag, $owl_standalone_resource_tags$.getGlobalValue()))) {
-                xml_utilities.xml_start_tag_internal(tag, list($str_alt108$rdf_resource, value), T);
-            } else {
-                if (NIL != el_formula_with_operator_p(value, $$OWLURIFn)) {
-                    xml_utilities.xml_start_tag_internal(tag, list($str_alt108$rdf_resource, com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.possibly_abbreviate_attribute_value_uri(cycl_utilities.nat_arg1(value, UNPROVIDED))), T);
-                } else {
-                    if (NIL != el_formula_with_operator_p(value, $$OWLDatatypeFn)) {
-                        attributes = putf(attributes, $str_alt111$rdf_datatype, cycl_utilities.nat_arg1(value, UNPROVIDED));
-                        {
-                            SubLObject name_var = tag;
-                            xml_utilities.xml_start_tag_internal(name_var, attributes, NIL);
-                            xml_utilities.xml_write_wXescaped_special_chars(cycl_utilities.nat_arg2(value, UNPROVIDED));
-                            xml_utilities.xml_end_tag_internal(name_var);
-                        }
-                    } else {
-                        {
-                            SubLObject name_var = tag;
-                            xml_utilities.xml_start_tag_internal(name_var, attributes, NIL);
-                            if (tag.equal($str_alt112$owl_intersectionOf)) {
-                                com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.xml_write_owl_intersection_value_string(value, UNPROVIDED);
-                            } else {
-                                if (count_if($sym113$XML_SPECIAL_CHAR_, value, UNPROVIDED, UNPROVIDED, UNPROVIDED).numG(FOUR_INTEGER)) {
-                                    xml_utilities.xml_cdata(value);
-                                } else {
-                                    xml_utilities.xml_write_wXescaped_special_chars(value);
-                                }
-                            }
-                            xml_utilities.xml_end_tag_internal(name_var);
-                        }
-                    }
-                }
-            }
         }
         return NIL;
     }
@@ -6301,33 +3593,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject with_owl_export_indentation_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            destructuring_bind_must_consp(current, datum, $list_alt114);
-            {
-                SubLObject temp = current.rest();
-                current = current.first();
-                {
-                    SubLObject level = (current.isCons()) ? ((SubLObject) (current.first())) : ONE_INTEGER;
-                    destructuring_bind_must_listp(current, datum, $list_alt114);
-                    current = current.rest();
-                    if (NIL == current) {
-                        current = temp;
-                        {
-                            SubLObject body = current;
-                            return listS(CLET, list($list_alt116, list($xml_indentation_level$, listS($sym118$_, level, $list_alt119))), append(body, NIL));
-                        }
-                    } else {
-                        cdestructuring_bind_error(datum, $list_alt114);
-                    }
-                }
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject with_owl_export_indentation(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -6344,120 +3609,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         }
         cdestructuring_bind_error(datum, $list144);
         return NIL;
-    }
-
-    public static final SubLObject xml_write_owl_intersection_value_string_alt(SubLObject intersection_naut, SubLObject stream) {
-        if (stream == UNPROVIDED) {
-            stream = $xml_stream$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject datum = intersection_naut;
-                SubLObject current = datum;
-                SubLObject owl_intersection_fn = NIL;
-                SubLObject class_term = NIL;
-                destructuring_bind_must_consp(current, datum, $list_alt120);
-                owl_intersection_fn = current.first();
-                current = current.rest();
-                destructuring_bind_must_consp(current, datum, $list_alt120);
-                class_term = current.first();
-                current = current.rest();
-                destructuring_bind_must_consp(current, datum, $list_alt120);
-                {
-                    SubLObject temp = current.rest();
-                    current = current.first();
-                    {
-                        SubLObject owl_restriction_fn = NIL;
-                        SubLObject owl_restriction = NIL;
-                        SubLObject owl_on_property = NIL;
-                        SubLObject property = NIL;
-                        SubLObject owl_has_value = NIL;
-                        SubLObject value = NIL;
-                        destructuring_bind_must_consp(current, datum, $list_alt120);
-                        owl_restriction_fn = current.first();
-                        current = current.rest();
-                        destructuring_bind_must_consp(current, datum, $list_alt120);
-                        owl_restriction = current.first();
-                        current = current.rest();
-                        destructuring_bind_must_consp(current, datum, $list_alt120);
-                        owl_on_property = current.first();
-                        current = current.rest();
-                        destructuring_bind_must_consp(current, datum, $list_alt120);
-                        property = current.first();
-                        current = current.rest();
-                        destructuring_bind_must_consp(current, datum, $list_alt120);
-                        owl_has_value = current.first();
-                        current = current.rest();
-                        destructuring_bind_must_consp(current, datum, $list_alt120);
-                        value = current.first();
-                        current = current.rest();
-                        if (NIL == current) {
-                            current = temp;
-                            if (NIL == current) {
-                                {
-                                    SubLObject _prev_bind_0 = $xml_stream$.currentBinding(thread);
-                                    try {
-                                        $xml_stream$.bind(stream, thread);
-                                        xml_utilities.xml_terpri();
-                                        com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.xml_write_owl_term_open_tag(class_term, THREE_INTEGER, T, UNPROVIDED);
-                                        {
-                                            SubLObject _prev_bind_0_68 = xml_utilities.$xml_indentation_amount$.currentBinding(thread);
-                                            SubLObject _prev_bind_1 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                            try {
-                                                xml_utilities.$xml_indentation_amount$.bind(length($owl_xml_spacer$.getGlobalValue()), thread);
-                                                xml_utilities.$xml_indentation_level$.bind(multiply(TWO_INTEGER, xml_utilities.$xml_indentation_amount$.getDynamicValue(thread)), thread);
-                                                {
-                                                    SubLObject _prev_bind_0_69 = xml_utilities.$xml_indentation_amount$.currentBinding(thread);
-                                                    SubLObject _prev_bind_1_70 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                    try {
-                                                        xml_utilities.$xml_indentation_amount$.bind(length($owl_xml_spacer$.getGlobalValue()), thread);
-                                                        xml_utilities.$xml_indentation_level$.bind(multiply(THREE_INTEGER, xml_utilities.$xml_indentation_amount$.getDynamicValue(thread)), thread);
-                                                        xml_utilities.xml_terpri();
-                                                        {
-                                                            SubLObject _prev_bind_0_71 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                                            SubLObject _prev_bind_1_72 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                                            try {
-                                                                xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                                                xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                                                xml_utilities.xml_start_tag_internal(owl_restriction, NIL, NIL);
-                                                                xml_utilities.xml_terpri();
-                                                                com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.xml_write_owl_element(owl_on_property, property);
-                                                                xml_utilities.xml_terpri();
-                                                                com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.xml_write_owl_element(owl_has_value, value);
-                                                            } finally {
-                                                                xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_72, thread);
-                                                                xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_71, thread);
-                                                            }
-                                                        }
-                                                        xml_utilities.xml_terpri();
-                                                        xml_utilities.xml_end_tag_internal(owl_restriction);
-                                                    } finally {
-                                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_1_70, thread);
-                                                        xml_utilities.$xml_indentation_amount$.rebind(_prev_bind_0_69, thread);
-                                                    }
-                                                }
-                                                xml_utilities.xml_terpri();
-                                            } finally {
-                                                xml_utilities.$xml_indentation_level$.rebind(_prev_bind_1, thread);
-                                                xml_utilities.$xml_indentation_amount$.rebind(_prev_bind_0_68, thread);
-                                            }
-                                        }
-                                    } finally {
-                                        $xml_stream$.rebind(_prev_bind_0, thread);
-                                    }
-                                }
-                            } else {
-                                cdestructuring_bind_error(datum, $list_alt120);
-                            }
-                        } else {
-                            cdestructuring_bind_error(datum, $list_alt120);
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject xml_write_owl_intersection_value_string(final SubLObject intersection_naut, SubLObject stream) {
@@ -6573,41 +3724,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     * Return a string consisting of N XML 'tabs'
-     */
-    @LispMethod(comment = "Return a string consisting of N XML \'tabs\'")
-    public static final SubLObject owl_space_alt(SubLObject n) {
-        {
-            SubLObject pcase_var = n;
-            if (pcase_var.eql(ONE_INTEGER)) {
-                return $owl_xml_spacer$.getGlobalValue();
-            } else {
-                if (pcase_var.eql(TWO_INTEGER)) {
-                    return $owl_xml_spacer_2$.getGlobalValue();
-                } else {
-                    if (pcase_var.eql(THREE_INTEGER)) {
-                        return $owl_xml_spacer_3$.getGlobalValue();
-                    } else {
-                        if (pcase_var.eql(FOUR_INTEGER)) {
-                            return $owl_xml_spacer_4$.getGlobalValue();
-                        } else {
-                            if (pcase_var.eql(FIVE_INTEGER)) {
-                                return $owl_xml_spacer_5$.getGlobalValue();
-                            } else {
-                                return Errors.error($$$OWL_indent_level_too_high);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Return a string consisting of N XML 'tabs'
-     */
-    @LispMethod(comment = "Return a string consisting of N XML \'tabs\'")
     public static SubLObject owl_space(final SubLObject n) {
         if (n.eql(ONE_INTEGER)) {
             return $owl_xml_spacer$.getGlobalValue();
@@ -6627,36 +3743,8 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return Errors.error($$$OWL_indent_level_too_high);
     }
 
-    public static final SubLObject owl_reference_alt(SubLObject string) {
-        return string;
-    }
-
     public static SubLObject owl_reference(final SubLObject string) {
         return string;
-    }
-
-    public static final SubLObject fort_in_owl_exportP_alt(SubLObject fort) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == fort_p(fort)) {
-                return NIL;
-            } else {
-                if ((NIL != set.set_p(owlification.$owl_export_terms$.getDynamicValue(thread))) && (NIL != set.set_memberP(fort, owlification.$owl_export_terms$.getDynamicValue(thread)))) {
-                    return T;
-                } else {
-                    if (NIL != set.set_p(owlification.$owl_export_terms$.getDynamicValue(thread))) {
-                        return NIL;
-                    } else {
-                        if (NIL != fort_p(fort)) {
-                            com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.warn_exporting_unverified_fort(fort);
-                            return T;
-                        } else {
-                            return NIL;
-                        }
-                    }
-                }
-            }
-        }
     }
 
     public static SubLObject fort_in_owl_exportP(final SubLObject fort) {
@@ -6677,40 +3765,9 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject warn_exporting_unverified_fort_internal_alt(SubLObject fort) {
-        Errors.warn($str_alt123$Assuming__S_is_OK_to_export, fort);
-        return NIL;
-    }
-
     public static SubLObject warn_exporting_unverified_fort_internal(final SubLObject fort) {
         Errors.warn($str154$Assuming__S_is_OK_to_export, fort);
         return NIL;
-    }
-
-    public static final SubLObject warn_exporting_unverified_fort_alt(SubLObject fort) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
-                SubLObject caching_state = NIL;
-                if (NIL == v_memoization_state) {
-                    return com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.warn_exporting_unverified_fort_internal(fort);
-                }
-                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, WARN_EXPORTING_UNVERIFIED_FORT, UNPROVIDED);
-                if (NIL == caching_state) {
-                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), WARN_EXPORTING_UNVERIFIED_FORT, ONE_INTEGER, NIL, EQL, UNPROVIDED);
-                    memoization_state.memoization_state_put(v_memoization_state, WARN_EXPORTING_UNVERIFIED_FORT, caching_state);
-                }
-                {
-                    SubLObject results = memoization_state.caching_state_lookup(caching_state, fort, $kw20$_MEMOIZED_ITEM_NOT_FOUND_);
-                    if (results == $kw20$_MEMOIZED_ITEM_NOT_FOUND_) {
-                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.warn_exporting_unverified_fort_internal(fort)));
-                        memoization_state.caching_state_put(caching_state, fort, results, UNPROVIDED);
-                    }
-                    return memoization_state.caching_results(results);
-                }
-            }
-        }
     }
 
     public static SubLObject warn_exporting_unverified_fort(final SubLObject fort) {
@@ -6733,37 +3790,13 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return memoization_state.caching_results(results);
     }
 
-    public static final SubLObject cyc_annotation_external_prefix_p_alt(SubLObject obj) {
-        return find(obj, $cyc_annotation_external_prefixes$.getGlobalValue(), symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject cyc_annotation_external_prefix_p(final SubLObject obj) {
         return find(obj, $cyc_annotation_external_prefixes$.getGlobalValue(), symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED);
-    }
-
-    public static final SubLObject make_cyc_annotation_entity_map_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return remove_if_not(CYC_ANNOTATION_EXTERNAL_PREFIX_P, owl_uris_and_prefixes.$owl_export_entity_map$.getDynamicValue(thread), symbol_function(CAR), UNPROVIDED, UNPROVIDED, UNPROVIDED);
-        }
     }
 
     public static SubLObject make_cyc_annotation_entity_map() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return list_utilities.remove_if_not(CYC_ANNOTATION_EXTERNAL_PREFIX_P, owl_uris_and_prefixes.$owl_export_entity_map$.getDynamicValue(thread), symbol_function(CAR), UNPROVIDED, UNPROVIDED, UNPROVIDED);
-    }
-
-    public static final SubLObject cyc_annotation_namespace_pairs_alt() {
-        {
-            SubLObject pairs = NIL;
-            SubLObject cdolist_list_var = $cyc_annotation_external_prefixes$.getGlobalValue();
-            SubLObject prefix = NIL;
-            for (prefix = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , prefix = cdolist_list_var.first()) {
-                pairs = cons(cconcatenate($str_alt128$xmlns_, prefix), pairs);
-                pairs = cons(cconcatenate($str_alt93$_, new SubLObject[]{ prefix, $str_alt94$_ }), pairs);
-            }
-            return nreverse(pairs);
-        }
     }
 
     public static SubLObject cyc_annotation_namespace_pairs() {
@@ -6778,46 +3811,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
             prefix = cdolist_list_var.first();
         } 
         return nreverse(pairs);
-    }
-
-    public static final SubLObject write_cyc_annotation_file_alt(SubLObject filename) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject stream = NIL;
-                try {
-                    {
-                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                        try {
-                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                            stream = compatibility.open_text(filename, $OUTPUT, NIL);
-                        } finally {
-                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    if (!stream.isStream()) {
-                        Errors.error($str_alt34$Unable_to_open__S, filename);
-                    }
-                    {
-                        SubLObject stream_73 = stream;
-                        com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.write_cyc_annotation_document(stream_73);
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            if (stream.isStream()) {
-                                close(stream, UNPROVIDED);
-                            }
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-            }
-            return filename;
-        }
     }
 
     public static SubLObject write_cyc_annotation_file(final SubLObject filename) {
@@ -6850,44 +3843,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
             }
         }
         return filename;
-    }
-
-    public static final SubLObject write_cyc_annotation_document_alt(SubLObject stream) {
-        if (stream == UNPROVIDED) {
-            stream = $xml_stream$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject _prev_bind_0 = $xml_stream$.currentBinding(thread);
-                try {
-                    $xml_stream$.bind(stream, thread);
-                    xml_utilities.xml_header(UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    {
-                        SubLObject map = com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.make_cyc_annotation_entity_map();
-                        com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.write_rdf_doctype_declaration(map);
-                        {
-                            SubLObject _prev_bind_0_74 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                            SubLObject _prev_bind_1 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                            try {
-                                xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                xml_utilities.xml_start_tag_internal($str_alt129$rdf_RDF, listS($str_alt130$xml_base, owl_uris_and_prefixes.cyc_annotation_base_uri(), $$$xmlns, owl_uris_and_prefixes.cyc_annotation_base_uri(), com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.cyc_annotation_namespace_pairs()), NIL);
-                                com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.write_cyc_annotation_property_definitions(stream, T);
-                            } finally {
-                                xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1, thread);
-                                xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_74, thread);
-                            }
-                        }
-                        xml_utilities.xml_terpri();
-                        xml_utilities.xml_end_tag_internal($str_alt129$rdf_RDF);
-                    }
-                } finally {
-                    $xml_stream$.rebind(_prev_bind_0, thread);
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject write_cyc_annotation_document(SubLObject stream) {
@@ -6937,42 +3892,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject write_rdf_doctype_declaration_alt(SubLObject entity_map) {
-        if (entity_map == UNPROVIDED) {
-            entity_map = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            xml_utilities.xml_write_string($str_alt132$__DOCTYPE_rdf_RDF, UNPROVIDED, UNPROVIDED);
-            if (NIL != non_empty_list_p(entity_map)) {
-                format($xml_stream$.getDynamicValue(thread), $str_alt133$____);
-                {
-                    SubLObject longest_prefix = number_utilities.maximum(alist_keys(entity_map), symbol_function(LENGTH));
-                    SubLObject format_string = cconcatenate($str_alt135$_______ENTITY__, new SubLObject[]{ princ_to_string(length(longest_prefix)), $str_alt136$A__S____ });
-                    SubLObject cdolist_list_var = entity_map;
-                    SubLObject cons = NIL;
-                    for (cons = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , cons = cdolist_list_var.first()) {
-                        {
-                            SubLObject datum = cons;
-                            SubLObject current = datum;
-                            SubLObject prefix = NIL;
-                            SubLObject uri = NIL;
-                            destructuring_bind_must_consp(current, datum, $list_alt91);
-                            prefix = current.first();
-                            current = current.rest();
-                            uri = current;
-                            format($xml_stream$.getDynamicValue(thread), format_string, prefix, uri);
-                        }
-                    }
-                }
-                xml_utilities.xml_write_string($str_alt137$____, UNPROVIDED, UNPROVIDED);
-            }
-            xml_utilities.xml_write_string($str_alt104$_, UNPROVIDED, UNPROVIDED);
-            xml_utilities.xml_terpri();
-            return NIL;
-        }
-    }
-
     public static SubLObject write_rdf_doctype_declaration(SubLObject entity_map) {
         if (entity_map == UNPROVIDED) {
             entity_map = NIL;
@@ -7007,36 +3926,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject write_cyc_annotation_property_definitions_alt(SubLObject stream, SubLObject standaloneP) {
-        if (stream == UNPROVIDED) {
-            stream = $xml_stream$.getDynamicValue();
-        }
-        if (standaloneP == UNPROVIDED) {
-            standaloneP = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject _prev_bind_0 = $xml_stream$.currentBinding(thread);
-                try {
-                    $xml_stream$.bind(stream, thread);
-                    {
-                        SubLObject cdolist_list_var = $cyc_annotation_properties$.getGlobalValue();
-                        SubLObject spec = NIL;
-                        for (spec = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , spec = cdolist_list_var.first()) {
-                            if (NIL == com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.annotation_property_definitely_not_in_exportP(spec.first())) {
-                                com.cyc.cycjava.cycl.owl.owl_cycl_to_xml.write_cyc_annotation_property_definition(spec, standaloneP);
-                            }
-                        }
-                    }
-                } finally {
-                    $xml_stream$.rebind(_prev_bind_0, thread);
-                }
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject write_cyc_annotation_property_definitions(SubLObject stream, SubLObject standaloneP) {
         if (stream == UNPROVIDED) {
             stream = xml_vars.$xml_stream$.getDynamicValue();
@@ -7062,56 +3951,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
             xml_vars.$xml_stream$.rebind(_prev_bind_0, thread);
         }
         return NIL;
-    }
-
-    public static final SubLObject annotation_property_definitely_not_in_exportP_alt(SubLObject property_name) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject ans = NIL;
-                if (NIL != misc_utilities.initialized_p(owlification.$owl_asents_to_export$.getDynamicValue(thread))) {
-                    {
-                        SubLObject foundP = NIL;
-                        SubLObject rest = NIL;
-                        for (rest = owlification.owl_cycl_predicate_table(UNPROVIDED); !((NIL != foundP) || (NIL == rest)); rest = rest.rest()) {
-                            {
-                                SubLObject cons = rest.first();
-                                SubLObject datum = cons;
-                                SubLObject current = datum;
-                                SubLObject cycl = NIL;
-                                SubLObject prefixed_name = NIL;
-                                destructuring_bind_must_consp(current, datum, $list_alt138);
-                                cycl = current.first();
-                                current = current.rest();
-                                prefixed_name = current;
-                                if (((NIL != string_utilities.ends_with(prefixed_name, property_name, UNPROVIDED)) && (NIL != string_utilities.starts_with(prefixed_name, owl_uris_and_prefixes.cyc_annotation_prefix()))) && (NIL != lengthE(prefixed_name, add(length(property_name), length(owl_uris_and_prefixes.cyc_annotation_prefix()), ONE_INTEGER), UNPROVIDED))) {
-                                    {
-                                        SubLObject iteration_state = do_dictionary_contents_state(dictionary_contents(owlification.$owl_asents_to_export$.getDynamicValue(thread)));
-                                        while (!((NIL != foundP) || (NIL != do_dictionary_contents_doneP(iteration_state)))) {
-                                            thread.resetMultipleValues();
-                                            {
-                                                SubLObject key = do_dictionary_contents_key_value(iteration_state);
-                                                SubLObject asents = thread.secondMultipleValue();
-                                                thread.resetMultipleValues();
-                                                if (NIL != find(cycl, asents, symbol_function(EQUAL), symbol_function(ATOMIC_SENTENCE_PREDICATE), UNPROVIDED, UNPROVIDED)) {
-                                                    foundP = T;
-                                                }
-                                                iteration_state = do_dictionary_contents_next(iteration_state);
-                                            }
-                                        } 
-                                        do_dictionary_contents_finalize(iteration_state);
-                                    }
-                                }
-                            }
-                        }
-                        if (NIL == foundP) {
-                            ans = T;
-                        }
-                    }
-                }
-                return ans;
-            }
-        }
     }
 
     public static SubLObject annotation_property_definitely_not_in_exportP(final SubLObject property_name) {
@@ -7154,83 +3993,6 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
             }
         }
         return ans;
-    }
-
-    public static final SubLObject write_cyc_annotation_property_definition_alt(SubLObject spec, SubLObject standaloneP) {
-        if (standaloneP == UNPROVIDED) {
-            standaloneP = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject datum = spec;
-                SubLObject current = datum;
-                SubLObject local_name = NIL;
-                SubLObject comment = NIL;
-                SubLObject functionalP = NIL;
-                destructuring_bind_must_consp(current, datum, $list_alt140);
-                local_name = current.first();
-                current = current.rest();
-                destructuring_bind_must_consp(current, datum, $list_alt140);
-                comment = current.first();
-                current = current.rest();
-                destructuring_bind_must_consp(current, datum, $list_alt140);
-                functionalP = current.first();
-                current = current.rest();
-                if (NIL == current) {
-                    {
-                        SubLObject name = (NIL != standaloneP) ? ((SubLObject) (local_name)) : NIL != owlification.$owl_use_entity_referencesP$.getDynamicValue(thread) ? ((SubLObject) (cconcatenate($str_alt93$_, new SubLObject[]{ owl_uris_and_prefixes.cyc_annotation_prefix(), $str_alt94$_, local_name }))) : cconcatenate(owl_uris_and_prefixes.cyc_annotation_base_uri(), local_name);
-                        {
-                            SubLObject _prev_bind_0 = xml_utilities.$xml_indentation_amount$.currentBinding(thread);
-                            SubLObject _prev_bind_1 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                            try {
-                                xml_utilities.$xml_indentation_amount$.bind(length($owl_xml_spacer$.getGlobalValue()), thread);
-                                xml_utilities.$xml_indentation_level$.bind(multiply(ONE_INTEGER, xml_utilities.$xml_indentation_amount$.getDynamicValue(thread)), thread);
-                                xml_utilities.xml_terpri();
-                                {
-                                    SubLObject _prev_bind_0_75 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
-                                    SubLObject _prev_bind_1_76 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
-                                    try {
-                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
-                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                                        xml_utilities.xml_start_tag_internal(owl_utilities.owl_name($$$AnnotationProperty), list(rdf_utilities.rdf_name(NIL != standaloneP ? ((SubLObject) ($$$ID)) : $$$about), name), NIL);
-                                        xml_utilities.xml_terpri();
-                                        {
-                                            SubLObject name_var = rdf_utilities.rdfs_name($$$label);
-                                            xml_utilities.xml_start_tag_internal(name_var, bq_cons(owl_to_cycl.xml_name($$$lang), $list_alt144), NIL);
-                                            xml_utilities.xml_print(local_name, UNPROVIDED);
-                                            xml_utilities.xml_end_tag_internal(name_var);
-                                        }
-                                        xml_utilities.xml_terpri();
-                                        {
-                                            SubLObject name_var = rdf_utilities.rdfs_name($$$comment);
-                                            xml_utilities.xml_start_tag_internal(name_var, bq_cons(owl_to_cycl.xml_name($$$lang), $list_alt144), NIL);
-                                            xml_utilities.xml_print(comment, UNPROVIDED);
-                                            xml_utilities.xml_end_tag_internal(name_var);
-                                        }
-                                        if (NIL != functionalP) {
-                                            xml_utilities.xml_terpri();
-                                            xml_utilities.xml_start_tag_internal(rdf_utilities.rdf_name($$$type), list(rdf_utilities.rdf_name($$$resource), owl_utilities.owl_name($$$FunctionalProperty)), T);
-                                        }
-                                    } finally {
-                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_76, thread);
-                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_75, thread);
-                                    }
-                                }
-                                xml_utilities.xml_terpri();
-                                xml_utilities.xml_end_tag_internal(owl_utilities.owl_name($$$AnnotationProperty));
-                            } finally {
-                                xml_utilities.$xml_indentation_level$.rebind(_prev_bind_1, thread);
-                                xml_utilities.$xml_indentation_amount$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                } else {
-                    cdestructuring_bind_error(datum, $list_alt140);
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject write_cyc_annotation_property_definition(final SubLObject spec, SubLObject standaloneP) {
@@ -7311,330 +4073,100 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject declare_owl_cycl_to_xml_file_alt() {
-        declareFunction("owl_xml_ontology_comment_and_close_tag", "OWL-XML-ONTOLOGY-COMMENT-AND-CLOSE-TAG", 1, 0, false);
-        declareFunction("get_owl_ontology_comment", "GET-OWL-ONTOLOGY-COMMENT", 0, 0, false);
-        declareFunction("clear_owl_tag_attributes", "CLEAR-OWL-TAG-ATTRIBUTES", 0, 0, false);
-        declareFunction("remove_owl_tag_attributes", "REMOVE-OWL-TAG-ATTRIBUTES", 0, 0, false);
-        declareFunction("owl_tag_attributes_internal", "OWL-TAG-ATTRIBUTES-INTERNAL", 0, 0, false);
-        declareFunction("owl_tag_attributes", "OWL-TAG-ATTRIBUTES", 0, 0, false);
-        declareFunction("owl_cyc_uri_for_fort_internal", "OWL-CYC-URI-FOR-FORT-INTERNAL", 1, 3, false);
-        declareFunction("owl_cyc_uri_for_fort", "OWL-CYC-URI-FOR-FORT", 1, 3, false);
-        declareFunction("owl_opencyc_uri_for_fort_internal", "OWL-OPENCYC-URI-FOR-FORT-INTERNAL", 1, 3, false);
-        declareFunction("owl_opencyc_uri_for_fort", "OWL-OPENCYC-URI-FOR-FORT", 1, 3, false);
-        declareFunction("owl_opencyc_latest_uri_for_fort", "OWL-OPENCYC-LATEST-URI-FOR-FORT", 1, 0, false);
-        declareFunction("owl_opencyc_versioned_uri_for_fort", "OWL-OPENCYC-VERSIONED-URI-FOR-FORT", 1, 1, false);
-        declareFunction("owl_opencyc_readable_uri_for_fort", "OWL-OPENCYC-READABLE-URI-FOR-FORT", 1, 1, false);
-        declareFunction("owl_cyc_latest_uri_for_fort", "OWL-CYC-LATEST-URI-FOR-FORT", 1, 0, false);
-        declareFunction("owl_cyc_versioned_uri_for_fort", "OWL-CYC-VERSIONED-URI-FOR-FORT", 1, 1, false);
-        declareFunction("owl_cyc_readable_uri_for_fort", "OWL-CYC-READABLE-URI-FOR-FORT", 1, 1, false);
-        declareFunction("clear_forts_with_exported_owl_opencyc_content", "CLEAR-FORTS-WITH-EXPORTED-OWL-OPENCYC-CONTENT", 0, 0, false);
-        declareFunction("remove_forts_with_exported_owl_opencyc_content", "REMOVE-FORTS-WITH-EXPORTED-OWL-OPENCYC-CONTENT", 0, 0, false);
-        declareFunction("forts_with_exported_owl_opencyc_content_internal", "FORTS-WITH-EXPORTED-OWL-OPENCYC-CONTENT-INTERNAL", 0, 0, false);
-        declareFunction("forts_with_exported_owl_opencyc_content", "FORTS-WITH-EXPORTED-OWL-OPENCYC-CONTENT", 0, 0, false);
-        declareFunction("fort_has_exported_owl_opencyc_contentP", "FORT-HAS-EXPORTED-OWL-OPENCYC-CONTENT?", 1, 0, false);
-        declareFunction("owl_export", "OWL-EXPORT", 0, 1, false);
-        declareFunction("owl_export_terms", "OWL-EXPORT-TERMS", 1, 2, false);
-        declareFunction("clear_owl_predicate_types_for_export", "CLEAR-OWL-PREDICATE-TYPES-FOR-EXPORT", 0, 0, false);
-        declareFunction("remove_owl_predicate_types_for_export", "REMOVE-OWL-PREDICATE-TYPES-FOR-EXPORT", 0, 0, false);
-        declareFunction("owl_predicate_types_for_export_internal", "OWL-PREDICATE-TYPES-FOR-EXPORT-INTERNAL", 0, 0, false);
-        declareFunction("owl_predicate_types_for_export", "OWL-PREDICATE-TYPES-FOR-EXPORT", 0, 0, false);
-        declareFunction("fort_definitional_asents_for_owl_export", "FORT-DEFINITIONAL-ASENTS-FOR-OWL-EXPORT", 1, 0, false);
-        declareFunction("fort_genls_asents_for_owl_export", "FORT-GENLS-ASENTS-FOR-OWL-EXPORT", 1, 0, false);
-        declareFunction("bad_owl_definitional_gafP", "BAD-OWL-DEFINITIONAL-GAF?", 1, 0, false);
-        declareFunction("augment_with_transitive_closure", "AUGMENT-WITH-TRANSITIVE-CLOSURE", 1, 0, false);
-        declareFunction("owl_export_asents", "OWL-EXPORT-ASENTS", 1, 4, false);
-        declareFunction("owl_export_to_file", "OWL-EXPORT-TO-FILE", 1, 0, false);
-        declareFunction("owl_export_opencyc", "OWL-EXPORT-OPENCYC", 1, 0, false);
-        declareFunction("owl_export_opencyc_unversioned", "OWL-EXPORT-OPENCYC-UNVERSIONED", 1, 0, false);
-        declareFunction("owl_export_full_cyc", "OWL-EXPORT-FULL-CYC", 1, 0, false);
-        declareFunction("export_skos_taxonomy", "EXPORT-SKOS-TAXONOMY", 3, 0, false);
-        declareFunction("export_skos_taxonomy_from_asents", "EXPORT-SKOS-TAXONOMY-FROM-ASENTS", 3, 0, false);
-        declareFunction("owl_export_terms_from_iterator", "OWL-EXPORT-TERMS-FROM-ITERATOR", 2, 2, false);
-        declareFunction("owl_export_one_term", "OWL-EXPORT-ONE-TERM", 1, 2, false);
-        declareFunction("empty_owl_term_chunk_p", "EMPTY-OWL-TERM-CHUNK-P", 1, 0, false);
-        declareFunction("owl_export_term_chunk", "OWL-EXPORT-TERM-CHUNK", 1, 1, false);
-        declareFunction("write_owl_header", "WRITE-OWL-HEADER", 0, 1, false);
-        declareFunction("write_owl_footer", "WRITE-OWL-FOOTER", 0, 1, false);
-        declareFunction("owl_export_version_info", "OWL-EXPORT-VERSION-INFO", 0, 0, false);
-        declareFunction("owl_xml_header_first_half", "OWL-XML-HEADER-FIRST-HALF", 1, 0, false);
-        declareFunction("owl_export_doctype_element", "OWL-EXPORT-DOCTYPE-ELEMENT", 0, 0, false);
-        declareFunction("write_owl_term_chunk", "WRITE-OWL-TERM-CHUNK", 1, 1, false);
-        declareFunction("xml_write_owl_term_open_tag", "XML-WRITE-OWL-TERM-OPEN-TAG", 3, 1, false);
-        declareFunction("xml_element_name_from_uri", "XML-ELEMENT-NAME-FROM-URI", 1, 0, false);
-        declareFunction("possibly_abbreviate_attribute_value_uri", "POSSIBLY-ABBREVIATE-ATTRIBUTE-VALUE-URI", 1, 0, false);
-        declareFunction("owl_term_close_tag", "OWL-TERM-CLOSE-TAG", 2, 0, false);
-        declareFunction("xml_write_owl_asent", "XML-WRITE-OWL-ASENT", 2, 1, false);
-        declareFunction("xml_write_owl_element", "XML-WRITE-OWL-ELEMENT", 2, 0, false);
-        declareMacro("with_owl_export_indentation", "WITH-OWL-EXPORT-INDENTATION");
-        declareFunction("xml_write_owl_intersection_value_string", "XML-WRITE-OWL-INTERSECTION-VALUE-STRING", 1, 1, false);
-        declareFunction("owl_space", "OWL-SPACE", 1, 0, false);
-        declareFunction("owl_reference", "OWL-REFERENCE", 1, 0, false);
-        declareFunction("fort_in_owl_exportP", "FORT-IN-OWL-EXPORT?", 1, 0, false);
-        declareFunction("warn_exporting_unverified_fort_internal", "WARN-EXPORTING-UNVERIFIED-FORT-INTERNAL", 1, 0, false);
-        declareFunction("warn_exporting_unverified_fort", "WARN-EXPORTING-UNVERIFIED-FORT", 1, 0, false);
-        declareFunction("cyc_annotation_external_prefix_p", "CYC-ANNOTATION-EXTERNAL-PREFIX-P", 1, 0, false);
-        declareFunction("make_cyc_annotation_entity_map", "MAKE-CYC-ANNOTATION-ENTITY-MAP", 0, 0, false);
-        declareFunction("cyc_annotation_namespace_pairs", "CYC-ANNOTATION-NAMESPACE-PAIRS", 0, 0, false);
-        declareFunction("write_cyc_annotation_file", "WRITE-CYC-ANNOTATION-FILE", 1, 0, false);
-        declareFunction("write_cyc_annotation_document", "WRITE-CYC-ANNOTATION-DOCUMENT", 0, 1, false);
-        declareFunction("write_rdf_doctype_declaration", "WRITE-RDF-DOCTYPE-DECLARATION", 0, 1, false);
-        declareFunction("write_cyc_annotation_property_definitions", "WRITE-CYC-ANNOTATION-PROPERTY-DEFINITIONS", 0, 2, false);
-        declareFunction("annotation_property_definitely_not_in_exportP", "ANNOTATION-PROPERTY-DEFINITELY-NOT-IN-EXPORT?", 1, 0, false);
-        declareFunction("write_cyc_annotation_property_definition", "WRITE-CYC-ANNOTATION-PROPERTY-DEFINITION", 1, 1, false);
-        return NIL;
-    }
-
     public static SubLObject declare_owl_cycl_to_xml_file() {
-        if (SubLFiles.USE_V1) {
-            declareFunction("owl_xml_ontology_comment_and_close_tag", "OWL-XML-ONTOLOGY-COMMENT-AND-CLOSE-TAG", 1, 0, false);
-            declareFunction("get_owl_ontology_comment", "GET-OWL-ONTOLOGY-COMMENT", 0, 0, false);
-            declareFunction("clear_owl_tag_attributes", "CLEAR-OWL-TAG-ATTRIBUTES", 0, 0, false);
-            declareFunction("remove_owl_tag_attributes", "REMOVE-OWL-TAG-ATTRIBUTES", 0, 0, false);
-            declareFunction("owl_tag_attributes_internal", "OWL-TAG-ATTRIBUTES-INTERNAL", 0, 0, false);
-            declareFunction("owl_tag_attributes", "OWL-TAG-ATTRIBUTES", 0, 0, false);
-            declareFunction("get_opencyc_uri_pattern", "GET-OPENCYC-URI-PATTERN", 0, 0, false);
-            declareFunction("get_cyc_uri_pattern", "GET-CYC-URI-PATTERN", 0, 0, false);
-            declareFunction("get_all_uri_patterns", "GET-ALL-URI-PATTERNS", 0, 0, false);
-            declareFunction("cyc_uri_p", "CYC-URI-P", 1, 0, false);
-            declareFunction("owl_cyc_uri_for_fort", "OWL-CYC-URI-FOR-FORT", 1, 3, false);
-            declareFunction("owl_cyc_uri_for_cyc_term_internal", "OWL-CYC-URI-FOR-CYC-TERM-INTERNAL", 1, 3, false);
-            declareFunction("owl_cyc_uri_for_cyc_term", "OWL-CYC-URI-FOR-CYC-TERM", 1, 3, false);
-            declareFunction("owl_opencyc_uri_for_fort", "OWL-OPENCYC-URI-FOR-FORT", 1, 3, false);
-            declareFunction("owl_opencyc_uri_for_term_internal", "OWL-OPENCYC-URI-FOR-TERM-INTERNAL", 1, 3, false);
-            declareFunction("owl_opencyc_uri_for_term", "OWL-OPENCYC-URI-FOR-TERM", 1, 3, false);
-            declareFunction("owl_opencyc_latest_uri_for_term", "OWL-OPENCYC-LATEST-URI-FOR-TERM", 1, 0, false);
-            declareFunction("owl_opencyc_latest_uri_for_fort", "OWL-OPENCYC-LATEST-URI-FOR-FORT", 1, 0, false);
-            declareFunction("owl_opencyc_versioned_uri_for_fort", "OWL-OPENCYC-VERSIONED-URI-FOR-FORT", 1, 1, false);
-            declareFunction("owl_opencyc_readable_uri_for_fort", "OWL-OPENCYC-READABLE-URI-FOR-FORT", 1, 1, false);
-            declareFunction("owl_cyc_latest_uri_for_fort", "OWL-CYC-LATEST-URI-FOR-FORT", 1, 0, false);
-            declareFunction("owl_cyc_latest_readable_uri_for_fort", "OWL-CYC-LATEST-READABLE-URI-FOR-FORT", 1, 0, false);
-            declareFunction("owl_cyc_versioned_uri_for_fort", "OWL-CYC-VERSIONED-URI-FOR-FORT", 1, 1, false);
-            declareFunction("owl_cyc_readable_uri_for_fort", "OWL-CYC-READABLE-URI-FOR-FORT", 1, 1, false);
-            declareFunction("clear_forts_with_exported_owl_opencyc_content", "CLEAR-FORTS-WITH-EXPORTED-OWL-OPENCYC-CONTENT", 0, 0, false);
-            declareFunction("remove_forts_with_exported_owl_opencyc_content", "REMOVE-FORTS-WITH-EXPORTED-OWL-OPENCYC-CONTENT", 0, 0, false);
-            declareFunction("forts_with_exported_owl_opencyc_content_internal", "FORTS-WITH-EXPORTED-OWL-OPENCYC-CONTENT-INTERNAL", 0, 0, false);
-            declareFunction("forts_with_exported_owl_opencyc_content", "FORTS-WITH-EXPORTED-OWL-OPENCYC-CONTENT", 0, 0, false);
-            declareFunction("clear_compact_hl_external_id_strings_with_exported_owl_opencyc_content", "CLEAR-COMPACT-HL-EXTERNAL-ID-STRINGS-WITH-EXPORTED-OWL-OPENCYC-CONTENT", 0, 0, false);
-            declareFunction("remove_compact_hl_external_id_strings_with_exported_owl_opencyc_content", "REMOVE-COMPACT-HL-EXTERNAL-ID-STRINGS-WITH-EXPORTED-OWL-OPENCYC-CONTENT", 0, 0, false);
-            declareFunction("compact_hl_external_id_strings_with_exported_owl_opencyc_content_internal", "COMPACT-HL-EXTERNAL-ID-STRINGS-WITH-EXPORTED-OWL-OPENCYC-CONTENT-INTERNAL", 0, 0, false);
-            declareFunction("compact_hl_external_id_strings_with_exported_owl_opencyc_content", "COMPACT-HL-EXTERNAL-ID-STRINGS-WITH-EXPORTED-OWL-OPENCYC-CONTENT", 0, 0, false);
-            declareFunction("fort_has_exported_owl_opencyc_contentP", "FORT-HAS-EXPORTED-OWL-OPENCYC-CONTENT?", 1, 0, false);
-            declareFunction("owl_export_ontology", "OWL-EXPORT-ONTOLOGY", 2, 1, false);
-            declareFunction("owl_export", "OWL-EXPORT", 0, 1, false);
-            declareFunction("owl_export_terms", "OWL-EXPORT-TERMS", 1, 2, false);
-            declareFunction("clear_owl_predicate_types_for_export", "CLEAR-OWL-PREDICATE-TYPES-FOR-EXPORT", 0, 0, false);
-            declareFunction("remove_owl_predicate_types_for_export", "REMOVE-OWL-PREDICATE-TYPES-FOR-EXPORT", 0, 0, false);
-            declareFunction("owl_predicate_types_for_export_internal", "OWL-PREDICATE-TYPES-FOR-EXPORT-INTERNAL", 0, 0, false);
-            declareFunction("owl_predicate_types_for_export", "OWL-PREDICATE-TYPES-FOR-EXPORT", 0, 0, false);
-            declareFunction("fort_definitional_asents_for_owl_export", "FORT-DEFINITIONAL-ASENTS-FOR-OWL-EXPORT", 1, 0, false);
-            declareFunction("fort_genls_asents_for_owl_export", "FORT-GENLS-ASENTS-FOR-OWL-EXPORT", 1, 0, false);
-            declareFunction("bad_owl_definitional_gafP", "BAD-OWL-DEFINITIONAL-GAF?", 1, 0, false);
-            declareFunction("augment_with_transitive_closure", "AUGMENT-WITH-TRANSITIVE-CLOSURE", 1, 0, false);
-            declareFunction("owl_export_asents", "OWL-EXPORT-ASENTS", 1, 4, false);
-            declareFunction("owl_export_to_file", "OWL-EXPORT-TO-FILE", 1, 0, false);
-            declareFunction("owl_export_opencyc", "OWL-EXPORT-OPENCYC", 1, 0, false);
-            declareFunction("owl_export_opencyc_unversioned", "OWL-EXPORT-OPENCYC-UNVERSIONED", 1, 0, false);
-            declareFunction("owl_export_full_cyc", "OWL-EXPORT-FULL-CYC", 1, 0, false);
-            declareFunction("export_skos_taxonomy", "EXPORT-SKOS-TAXONOMY", 3, 0, false);
-            declareFunction("print_taxonomy", "PRINT-TAXONOMY", 2, 1, false);
-            declareFunction("print_taxonomy_internal", "PRINT-TAXONOMY-INTERNAL", 3, 0, false);
-            declareFunction("gather_taxonomy_terms", "GATHER-TAXONOMY-TERMS", 2, 0, false);
-            declareFunction("gather_taxonomy_terms_internal", "GATHER-TAXONOMY-TERMS-INTERNAL", 2, 0, false);
-            declareFunction("gather_assertions_for_terms", "GATHER-ASSERTIONS-FOR-TERMS", 2, 0, false);
-            declareFunction("gather_assertions_for_term_wrt_terms", "GATHER-ASSERTIONS-FOR-TERM-WRT-TERMS", 3, 0, false);
-            declareFunction("export_skos_taxonomy_from_asents", "EXPORT-SKOS-TAXONOMY-FROM-ASENTS", 3, 0, false);
-            declareFunction("owl_export_terms_from_iterator", "OWL-EXPORT-TERMS-FROM-ITERATOR", 2, 2, false);
-            declareFunction("owl_export_one_term", "OWL-EXPORT-ONE-TERM", 1, 2, false);
-            declareFunction("empty_owl_term_chunk_p", "EMPTY-OWL-TERM-CHUNK-P", 1, 0, false);
-            declareFunction("owl_export_term_chunk", "OWL-EXPORT-TERM-CHUNK", 1, 1, false);
-            declareFunction("write_owl_header", "WRITE-OWL-HEADER", 0, 1, false);
-            declareFunction("write_owl_footer", "WRITE-OWL-FOOTER", 0, 1, false);
-            declareFunction("owl_export_version_info", "OWL-EXPORT-VERSION-INFO", 0, 0, false);
-            declareFunction("owl_xml_header_first_half", "OWL-XML-HEADER-FIRST-HALF", 1, 0, false);
-            declareFunction("owl_export_doctype_element", "OWL-EXPORT-DOCTYPE-ELEMENT", 0, 0, false);
-            declareFunction("write_owl_term_chunk", "WRITE-OWL-TERM-CHUNK", 1, 1, false);
-            declareFunction("xml_write_owl_term_open_tag", "XML-WRITE-OWL-TERM-OPEN-TAG", 3, 1, false);
-            declareFunction("xml_element_name_from_uri", "XML-ELEMENT-NAME-FROM-URI", 1, 0, false);
-            declareFunction("possibly_abbreviate_attribute_value_uri", "POSSIBLY-ABBREVIATE-ATTRIBUTE-VALUE-URI", 1, 0, false);
-            declareFunction("owl_term_close_tag", "OWL-TERM-CLOSE-TAG", 2, 0, false);
-            declareFunction("xml_write_owl_asent", "XML-WRITE-OWL-ASENT", 2, 1, false);
-            declareFunction("xml_write_owl_element", "XML-WRITE-OWL-ELEMENT", 2, 0, false);
-            declareMacro("with_owl_export_indentation", "WITH-OWL-EXPORT-INDENTATION");
-            declareFunction("xml_write_owl_intersection_value_string", "XML-WRITE-OWL-INTERSECTION-VALUE-STRING", 1, 1, false);
-            declareFunction("owl_space", "OWL-SPACE", 1, 0, false);
-            declareFunction("owl_reference", "OWL-REFERENCE", 1, 0, false);
-            declareFunction("fort_in_owl_exportP", "FORT-IN-OWL-EXPORT?", 1, 0, false);
-            declareFunction("warn_exporting_unverified_fort_internal", "WARN-EXPORTING-UNVERIFIED-FORT-INTERNAL", 1, 0, false);
-            declareFunction("warn_exporting_unverified_fort", "WARN-EXPORTING-UNVERIFIED-FORT", 1, 0, false);
-            declareFunction("cyc_annotation_external_prefix_p", "CYC-ANNOTATION-EXTERNAL-PREFIX-P", 1, 0, false);
-            declareFunction("make_cyc_annotation_entity_map", "MAKE-CYC-ANNOTATION-ENTITY-MAP", 0, 0, false);
-            declareFunction("cyc_annotation_namespace_pairs", "CYC-ANNOTATION-NAMESPACE-PAIRS", 0, 0, false);
-            declareFunction("write_cyc_annotation_file", "WRITE-CYC-ANNOTATION-FILE", 1, 0, false);
-            declareFunction("write_cyc_annotation_document", "WRITE-CYC-ANNOTATION-DOCUMENT", 0, 1, false);
-            declareFunction("write_rdf_doctype_declaration", "WRITE-RDF-DOCTYPE-DECLARATION", 0, 1, false);
-            declareFunction("write_cyc_annotation_property_definitions", "WRITE-CYC-ANNOTATION-PROPERTY-DEFINITIONS", 0, 2, false);
-            declareFunction("annotation_property_definitely_not_in_exportP", "ANNOTATION-PROPERTY-DEFINITELY-NOT-IN-EXPORT?", 1, 0, false);
-            declareFunction("write_cyc_annotation_property_definition", "WRITE-CYC-ANNOTATION-PROPERTY-DEFINITION", 1, 1, false);
-        }
-        if (SubLFiles.USE_V2) {
-            declareFunction("owl_cyc_uri_for_fort_internal", "OWL-CYC-URI-FOR-FORT-INTERNAL", 1, 3, false);
-            declareFunction("owl_opencyc_uri_for_fort_internal", "OWL-OPENCYC-URI-FOR-FORT-INTERNAL", 1, 3, false);
-        }
-        return NIL;
-    }
-
-    public static SubLObject declare_owl_cycl_to_xml_file_Previous() {
-        declareFunction("owl_xml_ontology_comment_and_close_tag", "OWL-XML-ONTOLOGY-COMMENT-AND-CLOSE-TAG", 1, 0, false);
-        declareFunction("get_owl_ontology_comment", "GET-OWL-ONTOLOGY-COMMENT", 0, 0, false);
-        declareFunction("clear_owl_tag_attributes", "CLEAR-OWL-TAG-ATTRIBUTES", 0, 0, false);
-        declareFunction("remove_owl_tag_attributes", "REMOVE-OWL-TAG-ATTRIBUTES", 0, 0, false);
-        declareFunction("owl_tag_attributes_internal", "OWL-TAG-ATTRIBUTES-INTERNAL", 0, 0, false);
-        declareFunction("owl_tag_attributes", "OWL-TAG-ATTRIBUTES", 0, 0, false);
-        declareFunction("get_opencyc_uri_pattern", "GET-OPENCYC-URI-PATTERN", 0, 0, false);
-        declareFunction("get_cyc_uri_pattern", "GET-CYC-URI-PATTERN", 0, 0, false);
-        declareFunction("get_all_uri_patterns", "GET-ALL-URI-PATTERNS", 0, 0, false);
-        declareFunction("cyc_uri_p", "CYC-URI-P", 1, 0, false);
-        declareFunction("owl_cyc_uri_for_fort", "OWL-CYC-URI-FOR-FORT", 1, 3, false);
-        declareFunction("owl_cyc_uri_for_cyc_term_internal", "OWL-CYC-URI-FOR-CYC-TERM-INTERNAL", 1, 3, false);
-        declareFunction("owl_cyc_uri_for_cyc_term", "OWL-CYC-URI-FOR-CYC-TERM", 1, 3, false);
-        declareFunction("owl_opencyc_uri_for_fort", "OWL-OPENCYC-URI-FOR-FORT", 1, 3, false);
-        declareFunction("owl_opencyc_uri_for_term_internal", "OWL-OPENCYC-URI-FOR-TERM-INTERNAL", 1, 3, false);
-        declareFunction("owl_opencyc_uri_for_term", "OWL-OPENCYC-URI-FOR-TERM", 1, 3, false);
-        declareFunction("owl_opencyc_latest_uri_for_term", "OWL-OPENCYC-LATEST-URI-FOR-TERM", 1, 0, false);
-        declareFunction("owl_opencyc_latest_uri_for_fort", "OWL-OPENCYC-LATEST-URI-FOR-FORT", 1, 0, false);
-        declareFunction("owl_opencyc_versioned_uri_for_fort", "OWL-OPENCYC-VERSIONED-URI-FOR-FORT", 1, 1, false);
-        declareFunction("owl_opencyc_readable_uri_for_fort", "OWL-OPENCYC-READABLE-URI-FOR-FORT", 1, 1, false);
-        declareFunction("owl_cyc_latest_uri_for_fort", "OWL-CYC-LATEST-URI-FOR-FORT", 1, 0, false);
-        declareFunction("owl_cyc_latest_readable_uri_for_fort", "OWL-CYC-LATEST-READABLE-URI-FOR-FORT", 1, 0, false);
-        declareFunction("owl_cyc_versioned_uri_for_fort", "OWL-CYC-VERSIONED-URI-FOR-FORT", 1, 1, false);
-        declareFunction("owl_cyc_readable_uri_for_fort", "OWL-CYC-READABLE-URI-FOR-FORT", 1, 1, false);
-        declareFunction("clear_forts_with_exported_owl_opencyc_content", "CLEAR-FORTS-WITH-EXPORTED-OWL-OPENCYC-CONTENT", 0, 0, false);
-        declareFunction("remove_forts_with_exported_owl_opencyc_content", "REMOVE-FORTS-WITH-EXPORTED-OWL-OPENCYC-CONTENT", 0, 0, false);
-        declareFunction("forts_with_exported_owl_opencyc_content_internal", "FORTS-WITH-EXPORTED-OWL-OPENCYC-CONTENT-INTERNAL", 0, 0, false);
-        declareFunction("forts_with_exported_owl_opencyc_content", "FORTS-WITH-EXPORTED-OWL-OPENCYC-CONTENT", 0, 0, false);
-        declareFunction("clear_compact_hl_external_id_strings_with_exported_owl_opencyc_content", "CLEAR-COMPACT-HL-EXTERNAL-ID-STRINGS-WITH-EXPORTED-OWL-OPENCYC-CONTENT", 0, 0, false);
-        declareFunction("remove_compact_hl_external_id_strings_with_exported_owl_opencyc_content", "REMOVE-COMPACT-HL-EXTERNAL-ID-STRINGS-WITH-EXPORTED-OWL-OPENCYC-CONTENT", 0, 0, false);
-        declareFunction("compact_hl_external_id_strings_with_exported_owl_opencyc_content_internal", "COMPACT-HL-EXTERNAL-ID-STRINGS-WITH-EXPORTED-OWL-OPENCYC-CONTENT-INTERNAL", 0, 0, false);
-        declareFunction("compact_hl_external_id_strings_with_exported_owl_opencyc_content", "COMPACT-HL-EXTERNAL-ID-STRINGS-WITH-EXPORTED-OWL-OPENCYC-CONTENT", 0, 0, false);
-        declareFunction("fort_has_exported_owl_opencyc_contentP", "FORT-HAS-EXPORTED-OWL-OPENCYC-CONTENT?", 1, 0, false);
-        declareFunction("owl_export_ontology", "OWL-EXPORT-ONTOLOGY", 2, 1, false);
-        declareFunction("owl_export", "OWL-EXPORT", 0, 1, false);
-        declareFunction("owl_export_terms", "OWL-EXPORT-TERMS", 1, 2, false);
-        declareFunction("clear_owl_predicate_types_for_export", "CLEAR-OWL-PREDICATE-TYPES-FOR-EXPORT", 0, 0, false);
-        declareFunction("remove_owl_predicate_types_for_export", "REMOVE-OWL-PREDICATE-TYPES-FOR-EXPORT", 0, 0, false);
-        declareFunction("owl_predicate_types_for_export_internal", "OWL-PREDICATE-TYPES-FOR-EXPORT-INTERNAL", 0, 0, false);
-        declareFunction("owl_predicate_types_for_export", "OWL-PREDICATE-TYPES-FOR-EXPORT", 0, 0, false);
-        declareFunction("fort_definitional_asents_for_owl_export", "FORT-DEFINITIONAL-ASENTS-FOR-OWL-EXPORT", 1, 0, false);
-        declareFunction("fort_genls_asents_for_owl_export", "FORT-GENLS-ASENTS-FOR-OWL-EXPORT", 1, 0, false);
-        declareFunction("bad_owl_definitional_gafP", "BAD-OWL-DEFINITIONAL-GAF?", 1, 0, false);
-        declareFunction("augment_with_transitive_closure", "AUGMENT-WITH-TRANSITIVE-CLOSURE", 1, 0, false);
-        declareFunction("owl_export_asents", "OWL-EXPORT-ASENTS", 1, 4, false);
-        declareFunction("owl_export_to_file", "OWL-EXPORT-TO-FILE", 1, 0, false);
-        declareFunction("owl_export_opencyc", "OWL-EXPORT-OPENCYC", 1, 0, false);
-        declareFunction("owl_export_opencyc_unversioned", "OWL-EXPORT-OPENCYC-UNVERSIONED", 1, 0, false);
-        declareFunction("owl_export_full_cyc", "OWL-EXPORT-FULL-CYC", 1, 0, false);
-        declareFunction("export_skos_taxonomy", "EXPORT-SKOS-TAXONOMY", 3, 0, false);
-        declareFunction("print_taxonomy", "PRINT-TAXONOMY", 2, 1, false);
-        declareFunction("print_taxonomy_internal", "PRINT-TAXONOMY-INTERNAL", 3, 0, false);
-        declareFunction("gather_taxonomy_terms", "GATHER-TAXONOMY-TERMS", 2, 0, false);
-        declareFunction("gather_taxonomy_terms_internal", "GATHER-TAXONOMY-TERMS-INTERNAL", 2, 0, false);
-        declareFunction("gather_assertions_for_terms", "GATHER-ASSERTIONS-FOR-TERMS", 2, 0, false);
-        declareFunction("gather_assertions_for_term_wrt_terms", "GATHER-ASSERTIONS-FOR-TERM-WRT-TERMS", 3, 0, false);
-        declareFunction("export_skos_taxonomy_from_asents", "EXPORT-SKOS-TAXONOMY-FROM-ASENTS", 3, 0, false);
-        declareFunction("owl_export_terms_from_iterator", "OWL-EXPORT-TERMS-FROM-ITERATOR", 2, 2, false);
-        declareFunction("owl_export_one_term", "OWL-EXPORT-ONE-TERM", 1, 2, false);
-        declareFunction("empty_owl_term_chunk_p", "EMPTY-OWL-TERM-CHUNK-P", 1, 0, false);
-        declareFunction("owl_export_term_chunk", "OWL-EXPORT-TERM-CHUNK", 1, 1, false);
-        declareFunction("write_owl_header", "WRITE-OWL-HEADER", 0, 1, false);
-        declareFunction("write_owl_footer", "WRITE-OWL-FOOTER", 0, 1, false);
-        declareFunction("owl_export_version_info", "OWL-EXPORT-VERSION-INFO", 0, 0, false);
-        declareFunction("owl_xml_header_first_half", "OWL-XML-HEADER-FIRST-HALF", 1, 0, false);
-        declareFunction("owl_export_doctype_element", "OWL-EXPORT-DOCTYPE-ELEMENT", 0, 0, false);
-        declareFunction("write_owl_term_chunk", "WRITE-OWL-TERM-CHUNK", 1, 1, false);
-        declareFunction("xml_write_owl_term_open_tag", "XML-WRITE-OWL-TERM-OPEN-TAG", 3, 1, false);
-        declareFunction("xml_element_name_from_uri", "XML-ELEMENT-NAME-FROM-URI", 1, 0, false);
-        declareFunction("possibly_abbreviate_attribute_value_uri", "POSSIBLY-ABBREVIATE-ATTRIBUTE-VALUE-URI", 1, 0, false);
-        declareFunction("owl_term_close_tag", "OWL-TERM-CLOSE-TAG", 2, 0, false);
-        declareFunction("xml_write_owl_asent", "XML-WRITE-OWL-ASENT", 2, 1, false);
-        declareFunction("xml_write_owl_element", "XML-WRITE-OWL-ELEMENT", 2, 0, false);
-        declareMacro("with_owl_export_indentation", "WITH-OWL-EXPORT-INDENTATION");
-        declareFunction("xml_write_owl_intersection_value_string", "XML-WRITE-OWL-INTERSECTION-VALUE-STRING", 1, 1, false);
-        declareFunction("owl_space", "OWL-SPACE", 1, 0, false);
-        declareFunction("owl_reference", "OWL-REFERENCE", 1, 0, false);
-        declareFunction("fort_in_owl_exportP", "FORT-IN-OWL-EXPORT?", 1, 0, false);
-        declareFunction("warn_exporting_unverified_fort_internal", "WARN-EXPORTING-UNVERIFIED-FORT-INTERNAL", 1, 0, false);
-        declareFunction("warn_exporting_unverified_fort", "WARN-EXPORTING-UNVERIFIED-FORT", 1, 0, false);
-        declareFunction("cyc_annotation_external_prefix_p", "CYC-ANNOTATION-EXTERNAL-PREFIX-P", 1, 0, false);
-        declareFunction("make_cyc_annotation_entity_map", "MAKE-CYC-ANNOTATION-ENTITY-MAP", 0, 0, false);
-        declareFunction("cyc_annotation_namespace_pairs", "CYC-ANNOTATION-NAMESPACE-PAIRS", 0, 0, false);
-        declareFunction("write_cyc_annotation_file", "WRITE-CYC-ANNOTATION-FILE", 1, 0, false);
-        declareFunction("write_cyc_annotation_document", "WRITE-CYC-ANNOTATION-DOCUMENT", 0, 1, false);
-        declareFunction("write_rdf_doctype_declaration", "WRITE-RDF-DOCTYPE-DECLARATION", 0, 1, false);
-        declareFunction("write_cyc_annotation_property_definitions", "WRITE-CYC-ANNOTATION-PROPERTY-DEFINITIONS", 0, 2, false);
-        declareFunction("annotation_property_definitely_not_in_exportP", "ANNOTATION-PROPERTY-DEFINITELY-NOT-IN-EXPORT?", 1, 0, false);
-        declareFunction("write_cyc_annotation_property_definition", "WRITE-CYC-ANNOTATION-PROPERTY-DEFINITION", 1, 1, false);
-        return NIL;
-    }
-
-    public static final SubLObject init_owl_cycl_to_xml_file_alt() {
-        deflexical("*OWL-ONTOLOGY-COMMENT-FILE*", $str_alt2$_cyc_projects_opencyc_owl_export_);
-        deflexical("*OWL-XML-FOOTER*", $str_alt4$__rdf_RDF__);
-        deflexical("*OWL-XML-SPACER*", $str_alt5$____);
-        deflexical("*OWL-XML-SPACER-2*", cconcatenate($owl_xml_spacer$.getGlobalValue(), $owl_xml_spacer$.getGlobalValue()));
-        deflexical("*OWL-XML-SPACER-3*", cconcatenate($owl_xml_spacer_2$.getGlobalValue(), $owl_xml_spacer$.getGlobalValue()));
-        deflexical("*OWL-XML-SPACER-4*", cconcatenate($owl_xml_spacer_3$.getGlobalValue(), $owl_xml_spacer$.getGlobalValue()));
-        deflexical("*OWL-XML-SPACER-5*", cconcatenate($owl_xml_spacer_4$.getGlobalValue(), $owl_xml_spacer$.getGlobalValue()));
-        deflexical("*OWL-TAG-ATTRIBUTES-CACHING-STATE*", NIL);
-        deflexical("*OWL-STANDALONE-RESOURCE-TAGS*", $list_alt21);
-        deflexical("*FORTS-WITH-EXPORTED-OWL-OPENCYC-CONTENT-CACHING-STATE*", NIL);
-        defparameter("*OWL-COLLECTION-TYPES-FOR-EXPORT*", $list_alt40);
-        deflexical("*OWL-PREDICATE-TYPES-FOR-EXPORT-CACHING-STATE*", NIL);
-        defparameter("*OWL-EXPORT-VERSION-STRING*", $str_alt85$2_0_0);
-        deflexical("*CYC-ANNOTATION-PROPERTIES*", $list_alt124);
-        deflexical("*CYC-ANNOTATION-EXTERNAL-PREFIXES*", $list_alt125);
+        declareFunction(me, "owl_xml_ontology_comment_and_close_tag", "OWL-XML-ONTOLOGY-COMMENT-AND-CLOSE-TAG", 1, 0, false);
+        declareFunction(me, "get_owl_ontology_comment", "GET-OWL-ONTOLOGY-COMMENT", 0, 0, false);
+        declareFunction(me, "clear_owl_tag_attributes", "CLEAR-OWL-TAG-ATTRIBUTES", 0, 0, false);
+        declareFunction(me, "remove_owl_tag_attributes", "REMOVE-OWL-TAG-ATTRIBUTES", 0, 0, false);
+        declareFunction(me, "owl_tag_attributes_internal", "OWL-TAG-ATTRIBUTES-INTERNAL", 0, 0, false);
+        declareFunction(me, "owl_tag_attributes", "OWL-TAG-ATTRIBUTES", 0, 0, false);
+        declareFunction(me, "get_opencyc_uri_pattern", "GET-OPENCYC-URI-PATTERN", 0, 0, false);
+        declareFunction(me, "get_cyc_uri_pattern", "GET-CYC-URI-PATTERN", 0, 0, false);
+        declareFunction(me, "get_all_uri_patterns", "GET-ALL-URI-PATTERNS", 0, 0, false);
+        declareFunction(me, "cyc_uri_p", "CYC-URI-P", 1, 0, false);
+        declareFunction(me, "owl_cyc_uri_for_fort", "OWL-CYC-URI-FOR-FORT", 1, 3, false);
+        declareFunction(me, "owl_cyc_uri_for_cyc_term_internal", "OWL-CYC-URI-FOR-CYC-TERM-INTERNAL", 1, 3, false);
+        declareFunction(me, "owl_cyc_uri_for_cyc_term", "OWL-CYC-URI-FOR-CYC-TERM", 1, 3, false);
+        declareFunction(me, "owl_opencyc_uri_for_fort", "OWL-OPENCYC-URI-FOR-FORT", 1, 3, false);
+        declareFunction(me, "owl_opencyc_uri_for_term_internal", "OWL-OPENCYC-URI-FOR-TERM-INTERNAL", 1, 3, false);
+        declareFunction(me, "owl_opencyc_uri_for_term", "OWL-OPENCYC-URI-FOR-TERM", 1, 3, false);
+        declareFunction(me, "owl_opencyc_latest_uri_for_term", "OWL-OPENCYC-LATEST-URI-FOR-TERM", 1, 0, false);
+        declareFunction(me, "owl_opencyc_latest_uri_for_fort", "OWL-OPENCYC-LATEST-URI-FOR-FORT", 1, 0, false);
+        declareFunction(me, "owl_opencyc_versioned_uri_for_fort", "OWL-OPENCYC-VERSIONED-URI-FOR-FORT", 1, 1, false);
+        declareFunction(me, "owl_opencyc_readable_uri_for_fort", "OWL-OPENCYC-READABLE-URI-FOR-FORT", 1, 1, false);
+        declareFunction(me, "owl_cyc_latest_uri_for_fort", "OWL-CYC-LATEST-URI-FOR-FORT", 1, 0, false);
+        declareFunction(me, "owl_cyc_latest_readable_uri_for_fort", "OWL-CYC-LATEST-READABLE-URI-FOR-FORT", 1, 0, false);
+        declareFunction(me, "owl_cyc_versioned_uri_for_fort", "OWL-CYC-VERSIONED-URI-FOR-FORT", 1, 1, false);
+        declareFunction(me, "owl_cyc_readable_uri_for_fort", "OWL-CYC-READABLE-URI-FOR-FORT", 1, 1, false);
+        declareFunction(me, "clear_forts_with_exported_owl_opencyc_content", "CLEAR-FORTS-WITH-EXPORTED-OWL-OPENCYC-CONTENT", 0, 0, false);
+        declareFunction(me, "remove_forts_with_exported_owl_opencyc_content", "REMOVE-FORTS-WITH-EXPORTED-OWL-OPENCYC-CONTENT", 0, 0, false);
+        declareFunction(me, "forts_with_exported_owl_opencyc_content_internal", "FORTS-WITH-EXPORTED-OWL-OPENCYC-CONTENT-INTERNAL", 0, 0, false);
+        declareFunction(me, "forts_with_exported_owl_opencyc_content", "FORTS-WITH-EXPORTED-OWL-OPENCYC-CONTENT", 0, 0, false);
+        declareFunction(me, "clear_compact_hl_external_id_strings_with_exported_owl_opencyc_content", "CLEAR-COMPACT-HL-EXTERNAL-ID-STRINGS-WITH-EXPORTED-OWL-OPENCYC-CONTENT", 0, 0, false);
+        declareFunction(me, "remove_compact_hl_external_id_strings_with_exported_owl_opencyc_content", "REMOVE-COMPACT-HL-EXTERNAL-ID-STRINGS-WITH-EXPORTED-OWL-OPENCYC-CONTENT", 0, 0, false);
+        declareFunction(me, "compact_hl_external_id_strings_with_exported_owl_opencyc_content_internal", "COMPACT-HL-EXTERNAL-ID-STRINGS-WITH-EXPORTED-OWL-OPENCYC-CONTENT-INTERNAL", 0, 0, false);
+        declareFunction(me, "compact_hl_external_id_strings_with_exported_owl_opencyc_content", "COMPACT-HL-EXTERNAL-ID-STRINGS-WITH-EXPORTED-OWL-OPENCYC-CONTENT", 0, 0, false);
+        declareFunction(me, "fort_has_exported_owl_opencyc_contentP", "FORT-HAS-EXPORTED-OWL-OPENCYC-CONTENT?", 1, 0, false);
+        declareFunction(me, "owl_export_ontology", "OWL-EXPORT-ONTOLOGY", 2, 1, false);
+        declareFunction(me, "owl_export", "OWL-EXPORT", 0, 1, false);
+        declareFunction(me, "owl_export_terms", "OWL-EXPORT-TERMS", 1, 2, false);
+        declareFunction(me, "clear_owl_predicate_types_for_export", "CLEAR-OWL-PREDICATE-TYPES-FOR-EXPORT", 0, 0, false);
+        declareFunction(me, "remove_owl_predicate_types_for_export", "REMOVE-OWL-PREDICATE-TYPES-FOR-EXPORT", 0, 0, false);
+        declareFunction(me, "owl_predicate_types_for_export_internal", "OWL-PREDICATE-TYPES-FOR-EXPORT-INTERNAL", 0, 0, false);
+        declareFunction(me, "owl_predicate_types_for_export", "OWL-PREDICATE-TYPES-FOR-EXPORT", 0, 0, false);
+        declareFunction(me, "fort_definitional_asents_for_owl_export", "FORT-DEFINITIONAL-ASENTS-FOR-OWL-EXPORT", 1, 0, false);
+        declareFunction(me, "fort_genls_asents_for_owl_export", "FORT-GENLS-ASENTS-FOR-OWL-EXPORT", 1, 0, false);
+        declareFunction(me, "bad_owl_definitional_gafP", "BAD-OWL-DEFINITIONAL-GAF?", 1, 0, false);
+        declareFunction(me, "augment_with_transitive_closure", "AUGMENT-WITH-TRANSITIVE-CLOSURE", 1, 0, false);
+        declareFunction(me, "owl_export_asents", "OWL-EXPORT-ASENTS", 1, 4, false);
+        declareFunction(me, "owl_export_to_file", "OWL-EXPORT-TO-FILE", 1, 0, false);
+        declareFunction(me, "owl_export_opencyc", "OWL-EXPORT-OPENCYC", 1, 0, false);
+        declareFunction(me, "owl_export_opencyc_unversioned", "OWL-EXPORT-OPENCYC-UNVERSIONED", 1, 0, false);
+        declareFunction(me, "owl_export_full_cyc", "OWL-EXPORT-FULL-CYC", 1, 0, false);
+        declareFunction(me, "export_skos_taxonomy", "EXPORT-SKOS-TAXONOMY", 3, 0, false);
+        declareFunction(me, "print_taxonomy", "PRINT-TAXONOMY", 2, 1, false);
+        declareFunction(me, "print_taxonomy_internal", "PRINT-TAXONOMY-INTERNAL", 3, 0, false);
+        declareFunction(me, "gather_taxonomy_terms", "GATHER-TAXONOMY-TERMS", 2, 0, false);
+        declareFunction(me, "gather_taxonomy_terms_internal", "GATHER-TAXONOMY-TERMS-INTERNAL", 2, 0, false);
+        declareFunction(me, "gather_assertions_for_terms", "GATHER-ASSERTIONS-FOR-TERMS", 2, 0, false);
+        declareFunction(me, "gather_assertions_for_term_wrt_terms", "GATHER-ASSERTIONS-FOR-TERM-WRT-TERMS", 3, 0, false);
+        declareFunction(me, "export_skos_taxonomy_from_asents", "EXPORT-SKOS-TAXONOMY-FROM-ASENTS", 3, 0, false);
+        declareFunction(me, "owl_export_terms_from_iterator", "OWL-EXPORT-TERMS-FROM-ITERATOR", 2, 2, false);
+        declareFunction(me, "owl_export_one_term", "OWL-EXPORT-ONE-TERM", 1, 2, false);
+        declareFunction(me, "empty_owl_term_chunk_p", "EMPTY-OWL-TERM-CHUNK-P", 1, 0, false);
+        declareFunction(me, "owl_export_term_chunk", "OWL-EXPORT-TERM-CHUNK", 1, 1, false);
+        declareFunction(me, "write_owl_header", "WRITE-OWL-HEADER", 0, 1, false);
+        declareFunction(me, "write_owl_footer", "WRITE-OWL-FOOTER", 0, 1, false);
+        declareFunction(me, "owl_export_version_info", "OWL-EXPORT-VERSION-INFO", 0, 0, false);
+        declareFunction(me, "owl_xml_header_first_half", "OWL-XML-HEADER-FIRST-HALF", 1, 0, false);
+        declareFunction(me, "owl_export_doctype_element", "OWL-EXPORT-DOCTYPE-ELEMENT", 0, 0, false);
+        declareFunction(me, "write_owl_term_chunk", "WRITE-OWL-TERM-CHUNK", 1, 1, false);
+        declareFunction(me, "xml_write_owl_term_open_tag", "XML-WRITE-OWL-TERM-OPEN-TAG", 3, 1, false);
+        declareFunction(me, "xml_element_name_from_uri", "XML-ELEMENT-NAME-FROM-URI", 1, 0, false);
+        declareFunction(me, "possibly_abbreviate_attribute_value_uri", "POSSIBLY-ABBREVIATE-ATTRIBUTE-VALUE-URI", 1, 0, false);
+        declareFunction(me, "owl_term_close_tag", "OWL-TERM-CLOSE-TAG", 2, 0, false);
+        declareFunction(me, "xml_write_owl_asent", "XML-WRITE-OWL-ASENT", 2, 1, false);
+        declareFunction(me, "xml_write_owl_element", "XML-WRITE-OWL-ELEMENT", 2, 0, false);
+        declareMacro(me, "with_owl_export_indentation", "WITH-OWL-EXPORT-INDENTATION");
+        declareFunction(me, "xml_write_owl_intersection_value_string", "XML-WRITE-OWL-INTERSECTION-VALUE-STRING", 1, 1, false);
+        declareFunction(me, "owl_space", "OWL-SPACE", 1, 0, false);
+        declareFunction(me, "owl_reference", "OWL-REFERENCE", 1, 0, false);
+        declareFunction(me, "fort_in_owl_exportP", "FORT-IN-OWL-EXPORT?", 1, 0, false);
+        declareFunction(me, "warn_exporting_unverified_fort_internal", "WARN-EXPORTING-UNVERIFIED-FORT-INTERNAL", 1, 0, false);
+        declareFunction(me, "warn_exporting_unverified_fort", "WARN-EXPORTING-UNVERIFIED-FORT", 1, 0, false);
+        declareFunction(me, "cyc_annotation_external_prefix_p", "CYC-ANNOTATION-EXTERNAL-PREFIX-P", 1, 0, false);
+        declareFunction(me, "make_cyc_annotation_entity_map", "MAKE-CYC-ANNOTATION-ENTITY-MAP", 0, 0, false);
+        declareFunction(me, "cyc_annotation_namespace_pairs", "CYC-ANNOTATION-NAMESPACE-PAIRS", 0, 0, false);
+        declareFunction(me, "write_cyc_annotation_file", "WRITE-CYC-ANNOTATION-FILE", 1, 0, false);
+        declareFunction(me, "write_cyc_annotation_document", "WRITE-CYC-ANNOTATION-DOCUMENT", 0, 1, false);
+        declareFunction(me, "write_rdf_doctype_declaration", "WRITE-RDF-DOCTYPE-DECLARATION", 0, 1, false);
+        declareFunction(me, "write_cyc_annotation_property_definitions", "WRITE-CYC-ANNOTATION-PROPERTY-DEFINITIONS", 0, 2, false);
+        declareFunction(me, "annotation_property_definitely_not_in_exportP", "ANNOTATION-PROPERTY-DEFINITELY-NOT-IN-EXPORT?", 1, 0, false);
+        declareFunction(me, "write_cyc_annotation_property_definition", "WRITE-CYC-ANNOTATION-PROPERTY-DEFINITION", 1, 1, false);
         return NIL;
     }
 
     public static SubLObject init_owl_cycl_to_xml_file() {
-        if (SubLFiles.USE_V1) {
-            deflexical("*OWL-ONTOLOGY-COMMENT-FILE*", NIL);
-            deflexical("*OWL-XML-FOOTER*", $str3$__rdf_RDF__);
-            deflexical("*OWL-XML-SPACER*", $$$____);
-            deflexical("*OWL-XML-SPACER-2*", cconcatenate($owl_xml_spacer$.getGlobalValue(), $owl_xml_spacer$.getGlobalValue()));
-            deflexical("*OWL-XML-SPACER-3*", cconcatenate($owl_xml_spacer_2$.getGlobalValue(), $owl_xml_spacer$.getGlobalValue()));
-            deflexical("*OWL-XML-SPACER-4*", cconcatenate($owl_xml_spacer_3$.getGlobalValue(), $owl_xml_spacer$.getGlobalValue()));
-            deflexical("*OWL-XML-SPACER-5*", cconcatenate($owl_xml_spacer_4$.getGlobalValue(), $owl_xml_spacer$.getGlobalValue()));
-            deflexical("*OWL-TAG-ATTRIBUTES-CACHING-STATE*", NIL);
-            deflexical("*OWL-STANDALONE-RESOURCE-TAGS*", $list19);
-            deflexical("*OPENCYC-URI-PATTERN-DEF*", $str20$http___sw_opencyc_org__0_9____con);
-            deflexical("*CYC-URI-PATTERN-DEF*", $str21$http___sw_cyc_com__0_9____concept);
-            defparameter("*OPENCYC-URI-PATTERN*", NIL);
-            defparameter("*CYC-URI-PATTERN*", NIL);
-            defparameter("*ALL-URI-PATTERNS*", NIL);
-            defparameter("*OWL-OPENCYC-FORT-OWL-NAMES-FILENAME*", $str34$data_caches_5022_fort_owl_names_c);
-            deflexical("*FORTS-WITH-EXPORTED-OWL-OPENCYC-CONTENT-CACHING-STATE*", NIL);
-            deflexical("*COMPACT-HL-EXTERNAL-ID-STRINGS-WITH-EXPORTED-OWL-OPENCYC-CONTENT-CACHING-STATE*", NIL);
-            defparameter("*OWL-COLLECTION-TYPES-FOR-EXPORT*", $list50);
-            deflexical("*OWL-PREDICATE-TYPES-FOR-EXPORT-CACHING-STATE*", NIL);
-            defparameter("*OWL-EXPORT-VERSION-STRING*", $str115$2_0_0);
-            deflexical("*CYC-ANNOTATION-PROPERTIES*", $list155);
-            deflexical("*CYC-ANNOTATION-EXTERNAL-PREFIXES*", $list156);
-        }
-        if (SubLFiles.USE_V2) {
-            deflexical("*OWL-ONTOLOGY-COMMENT-FILE*", $str_alt2$_cyc_projects_opencyc_owl_export_);
-            deflexical("*OWL-XML-FOOTER*", $str_alt4$__rdf_RDF__);
-            deflexical("*OWL-XML-SPACER*", $str_alt5$____);
-            deflexical("*OWL-STANDALONE-RESOURCE-TAGS*", $list_alt21);
-            defparameter("*OWL-COLLECTION-TYPES-FOR-EXPORT*", $list_alt40);
-            defparameter("*OWL-EXPORT-VERSION-STRING*", $str_alt85$2_0_0);
-            deflexical("*CYC-ANNOTATION-PROPERTIES*", $list_alt124);
-            deflexical("*CYC-ANNOTATION-EXTERNAL-PREFIXES*", $list_alt125);
-        }
-        return NIL;
-    }
-
-    public static SubLObject init_owl_cycl_to_xml_file_Previous() {
         deflexical("*OWL-ONTOLOGY-COMMENT-FILE*", NIL);
         deflexical("*OWL-XML-FOOTER*", $str3$__rdf_RDF__);
         deflexical("*OWL-XML-SPACER*", $$$____);
@@ -7660,35 +4192,7 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject setup_owl_cycl_to_xml_file_alt() {
-        memoization_state.note_globally_cached_function(OWL_TAG_ATTRIBUTES);
-        memoization_state.note_memoized_function(OWL_CYC_URI_FOR_FORT);
-        memoization_state.note_memoized_function(OWL_OPENCYC_URI_FOR_FORT);
-        memoization_state.note_globally_cached_function(FORTS_WITH_EXPORTED_OWL_OPENCYC_CONTENT);
-        memoization_state.note_globally_cached_function(OWL_PREDICATE_TYPES_FOR_EXPORT);
-        memoization_state.note_memoized_function(WARN_EXPORTING_UNVERIFIED_FORT);
-        return NIL;
-    }
-
     public static SubLObject setup_owl_cycl_to_xml_file() {
-        if (SubLFiles.USE_V1) {
-            memoization_state.note_globally_cached_function(OWL_TAG_ATTRIBUTES);
-            memoization_state.note_memoized_function(OWL_CYC_URI_FOR_CYC_TERM);
-            memoization_state.note_memoized_function(OWL_OPENCYC_URI_FOR_TERM);
-            define_obsolete_register(OWL_OPENCYC_LATEST_URI_FOR_FORT, $list31);
-            memoization_state.note_globally_cached_function(FORTS_WITH_EXPORTED_OWL_OPENCYC_CONTENT);
-            memoization_state.note_globally_cached_function(COMPACT_HL_EXTERNAL_ID_STRINGS_WITH_EXPORTED_OWL_OPENCYC_CONTENT);
-            memoization_state.note_globally_cached_function(OWL_PREDICATE_TYPES_FOR_EXPORT);
-            memoization_state.note_memoized_function(WARN_EXPORTING_UNVERIFIED_FORT);
-        }
-        if (SubLFiles.USE_V2) {
-            memoization_state.note_memoized_function(OWL_CYC_URI_FOR_FORT);
-            memoization_state.note_memoized_function(OWL_OPENCYC_URI_FOR_FORT);
-        }
-        return NIL;
-    }
-
-    public static SubLObject setup_owl_cycl_to_xml_file_Previous() {
         memoization_state.note_globally_cached_function(OWL_TAG_ATTRIBUTES);
         memoization_state.note_memoized_function(OWL_CYC_URI_FOR_CYC_TERM);
         memoization_state.note_memoized_function(OWL_OPENCYC_URI_FOR_TERM);
@@ -7716,6 +4220,209 @@ public final class owl_cycl_to_xml extends SubLTranslatedFile implements V12 {
     }
 
     static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
 

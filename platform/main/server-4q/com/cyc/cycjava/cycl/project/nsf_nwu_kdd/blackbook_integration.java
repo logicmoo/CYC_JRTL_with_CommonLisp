@@ -167,7 +167,7 @@ public final class blackbook_integration extends SubLTranslatedFile implements V
                 try {
                     xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
                     xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
-                    xml_utilities.xml_start_tag_internal($$$entityTypes, NIL, NIL);
+                    xml_utilities.xml_start_tag_internal($$$entityTypes, NIL, NIL, UNPROVIDED_SYM, UNPROVIDED_SYM);
                     {
                         SubLObject cdolist_list_var = entity_descriptions;
                         SubLObject entity_description = NIL;

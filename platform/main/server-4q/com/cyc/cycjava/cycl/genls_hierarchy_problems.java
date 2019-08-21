@@ -1,145 +1,60 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.id_index.do_id_index_empty_p;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_id_and_object_validP;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_next_id;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_next_state;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_state_object;
-import static com.cyc.cycjava.cycl.id_index.id_index_dense_objects;
-import static com.cyc.cycjava.cycl.id_index.id_index_dense_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_next_id;
-import static com.cyc.cycjava.cycl.id_index.id_index_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_skip_tombstones_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_id_threshold;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_objects;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_tombstone_p;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_index$;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_prediction$;
-import static com.cyc.cycjava.cycl.utilities_macros.$percent_progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$within_noting_percent_progress$;
-import static com.cyc.cycjava.cycl.utilities_macros.note_percent_progress;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_percent_progress_postamble;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_percent_progress_preamble;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.gethash_without_values;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.subtract;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.length;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.get_universal_time;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.aref;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-
+import com.cyc.cycjava.cycl.genls_hierarchy_problems;
+import com.cyc.cycjava.cycl.utilities_macros;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.genls_hierarchy_problems.*;
+import static com.cyc.cycjava.cycl.id_index.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- * module:      GENLS-HIERARCHY-PROBLEMS
- * source file: /cyc/top/cycl/genls-hierarchy-problems.lisp
- * created:     2019/07/03 17:37:50
- */
-public final class genls_hierarchy_problems extends SubLTranslatedFile implements V12 {
+
+public final class genls_hierarchy_problems extends SubLTranslatedFile {
     public static final SubLFile me = new genls_hierarchy_problems();
 
+    public static final String myName = "com.cyc.cycjava.cycl.genls_hierarchy_problems";
 
+    public static final String myFingerPrint = "16ab13d6460d342c092b84088b9bbcb6a1fbd67bd5d99088b9894380941ff26f";
 
     // Internal Constants
-    @LispMethod(comment = "Internal Constants")
-    static private final SubLString $$$mapping_Cyc_FORTs = makeString("mapping Cyc FORTs");
+    public static final SubLString $$$mapping_Cyc_FORTs = makeString("mapping Cyc FORTs");
 
 
 
 
 
-    // Definitions
-    /**
-     *
-     *
-     * @return listp of fort-p; All FORTs that pass the test PRED
-     */
-    @LispMethod(comment = "@return listp of fort-p; All FORTs that pass the test PRED")
-    public static final SubLObject forts_meeting_criterion_alt(SubLObject pred) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                SubLObject message = $$$mapping_Cyc_FORTs;
-                SubLObject total = forts.fort_count();
-                SubLObject sofar = ZERO_INTEGER;
-                {
-                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                    try {
-                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                        $last_percent_progress_prediction$.bind(NIL, thread);
-                        $within_noting_percent_progress$.bind(T, thread);
-                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                        noting_percent_progress_preamble(message);
-                        {
-                            SubLObject cdolist_list_var = forts.do_forts_tables();
-                            SubLObject table_var = NIL;
-                            for (table_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , table_var = cdolist_list_var.first()) {
-                                if (NIL == do_id_index_empty_p(table_var, $SKIP)) {
-                                    {
-                                        SubLObject id = do_id_index_next_id(table_var, T, NIL, NIL);
-                                        SubLObject state_var = do_id_index_next_state(table_var, T, id, NIL);
-                                        SubLObject fort = NIL;
-                                        while (NIL != id) {
-                                            fort = do_id_index_state_object(table_var, $SKIP, id, state_var);
-                                            if (NIL != do_id_index_id_and_object_validP(id, fort, $SKIP)) {
-                                                sofar = add(sofar, ONE_INTEGER);
-                                                note_percent_progress(sofar, total);
-                                                if (NIL != funcall(pred, fort)) {
-                                                    result = cons(fort, result);
-                                                }
-                                            }
-                                            id = do_id_index_next_id(table_var, T, id, state_var);
-                                            state_var = do_id_index_next_state(table_var, T, id, state_var);
-                                        } 
-                                    }
-                                }
-                            }
-                        }
-                        noting_percent_progress_postamble();
-                    } finally {
-                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return result;
-            }
-        }
-    }
+    private static final SubLObject $$Thing = reader_make_constant_shell(makeString("Thing"));
 
-    // Definitions
-    /**
-     *
-     *
-     * @return listp of fort-p; All FORTs that pass the test PRED
-     */
-    @LispMethod(comment = "@return listp of fort-p; All FORTs that pass the test PRED")
+    private static final SubLObject $$genls = reader_make_constant_shell(makeString("genls"));
+
     public static SubLObject forts_meeting_criterion(final SubLObject pred) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject result = NIL;
@@ -228,93 +143,38 @@ public final class genls_hierarchy_problems extends SubLTranslatedFile implement
         return result;
     }
 
-    public static final SubLObject fort_not_a_thingP_alt(SubLObject fort) {
-        SubLTrampolineFile.checkType(fort, FORT_P);
-        return makeBoolean(NIL == kb_accessors.kb_thing_p(fort));
-    }
-
     public static SubLObject fort_not_a_thingP(final SubLObject fort) {
-        assert NIL != forts.fort_p(fort) : "! forts.fort_p(fort) " + ("forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) ") + fort;
+        assert NIL != forts.fort_p(fort) : "forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) " + fort;
         return makeBoolean(NIL == kb_accessors.kb_thing_p(fort));
-    }
-
-    public static final SubLObject fort_isa_collection_but_not_a_spec_of_thingP_alt(SubLObject fort) {
-        SubLTrampolineFile.checkType(fort, FORT_P);
-        return makeBoolean((NIL != fort_types_interface.collection_p(fort)) && (NIL == genls.genl_in_any_mtP(fort, $$Thing)));
     }
 
     public static SubLObject fort_isa_collection_but_not_a_spec_of_thingP(final SubLObject fort) {
-        assert NIL != forts.fort_p(fort) : "! forts.fort_p(fort) " + ("forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) ") + fort;
+        assert NIL != forts.fort_p(fort) : "forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) " + fort;
         return makeBoolean((NIL != fort_types_interface.collection_p(fort)) && (NIL == genls.genl_in_any_mtP(fort, $$Thing)));
     }
 
-    public static final SubLObject fort_not_a_collection_but_has_specs_or_genlsP_alt(SubLObject fort) {
-        SubLTrampolineFile.checkType(fort, FORT_P);
-        return makeBoolean((NIL == fort_types_interface.collection_p(fort)) && ((NIL != kb_mapping_utilities.some_pred_value_in_any_mt(fort, $$genls, ONE_INTEGER, UNPROVIDED)) || (NIL != kb_mapping_utilities.some_pred_value_in_any_mt(fort, $$genls, TWO_INTEGER, UNPROVIDED))));
-    }
-
     public static SubLObject fort_not_a_collection_but_has_specs_or_genlsP(final SubLObject fort) {
-        assert NIL != forts.fort_p(fort) : "! forts.fort_p(fort) " + ("forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) ") + fort;
+        assert NIL != forts.fort_p(fort) : "forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) " + fort;
         return makeBoolean((NIL == fort_types_interface.collection_p(fort)) && ((NIL != kb_mapping_utilities.some_pred_value_in_any_mt(fort, $$genls, ONE_INTEGER, UNPROVIDED)) || (NIL != kb_mapping_utilities.some_pred_value_in_any_mt(fort, $$genls, TWO_INTEGER, UNPROVIDED))));
-    }
-
-    public static final SubLObject fort_isa_thing_but_neither_a_set_or_collection_nor_individualP_alt(SubLObject fort) {
-        SubLTrampolineFile.checkType(fort, FORT_P);
-        return makeBoolean(((NIL != kb_accessors.kb_thing_p(fort)) && (NIL == kb_accessors.kb_set_or_collection_p(fort))) && (NIL == kb_accessors.kb_individual_p(fort)));
     }
 
     public static SubLObject fort_isa_thing_but_neither_a_set_or_collection_nor_individualP(final SubLObject fort) {
-        assert NIL != forts.fort_p(fort) : "! forts.fort_p(fort) " + ("forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) ") + fort;
+        assert NIL != forts.fort_p(fort) : "forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) " + fort;
         return makeBoolean(((NIL != kb_accessors.kb_thing_p(fort)) && (NIL == kb_accessors.kb_set_or_collection_p(fort))) && (NIL == kb_accessors.kb_individual_p(fort)));
     }
 
-    public static final SubLObject fort_neither_a_set_or_collection_nor_individualP_alt(SubLObject fort) {
-        SubLTrampolineFile.checkType(fort, FORT_P);
-        return makeBoolean((NIL == kb_accessors.kb_set_or_collection_p(fort)) && (NIL == kb_accessors.kb_individual_p(fort)));
-    }
-
     public static SubLObject fort_neither_a_set_or_collection_nor_individualP(final SubLObject fort) {
-        assert NIL != forts.fort_p(fort) : "! forts.fort_p(fort) " + ("forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) ") + fort;
+        assert NIL != forts.fort_p(fort) : "forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) " + fort;
         return makeBoolean((NIL == kb_accessors.kb_set_or_collection_p(fort)) && (NIL == kb_accessors.kb_individual_p(fort)));
-    }
-
-    public static final SubLObject fort_both_a_set_or_collection_and_individualP_alt(SubLObject fort) {
-        SubLTrampolineFile.checkType(fort, FORT_P);
-        return makeBoolean((NIL != kb_accessors.kb_set_or_collection_p(fort)) && (NIL != kb_accessors.kb_individual_p(fort)));
     }
 
     public static SubLObject fort_both_a_set_or_collection_and_individualP(final SubLObject fort) {
-        assert NIL != forts.fort_p(fort) : "! forts.fort_p(fort) " + ("forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) ") + fort;
+        assert NIL != forts.fort_p(fort) : "forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) " + fort;
         return makeBoolean((NIL != kb_accessors.kb_set_or_collection_p(fort)) && (NIL != kb_accessors.kb_individual_p(fort)));
     }
 
-    /**
-     * This test subsumes all those above.
-     */
-    @LispMethod(comment = "This test subsumes all those above.")
-    public static final SubLObject fort_not_properly_in_genls_hierarchyP_alt(SubLObject fort) {
-        SubLTrampolineFile.checkType(fort, FORT_P);
-        if (NIL != fort_types_interface.collection_p(fort)) {
-            return makeBoolean(NIL == genls.genl_in_any_mtP(fort, $$Thing));
-        } else {
-            if (NIL != kb_accessors.kb_individual_p(fort)) {
-                return makeBoolean((NIL != kb_mapping_utilities.some_pred_value_in_any_mt(fort, $$genls, ONE_INTEGER, UNPROVIDED)) || (NIL != kb_mapping_utilities.some_pred_value_in_any_mt(fort, $$genls, TWO_INTEGER, UNPROVIDED)));
-            } else {
-                if (NIL != kb_accessors.kb_set_mathematical_p(fort)) {
-                    return NIL;
-                } else {
-                    return T;
-                }
-            }
-        }
-    }
-
-    /**
-     * This test subsumes all those above.
-     */
-    @LispMethod(comment = "This test subsumes all those above.")
     public static SubLObject fort_not_properly_in_genls_hierarchyP(final SubLObject fort) {
-        assert NIL != forts.fort_p(fort) : "! forts.fort_p(fort) " + ("forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) ") + fort;
+        assert NIL != forts.fort_p(fort) : "forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) " + fort;
         if (NIL != fort_types_interface.collection_p(fort)) {
             return makeBoolean(NIL == genls.genl_in_any_mtP(fort, $$Thing));
         }
@@ -328,14 +188,14 @@ public final class genls_hierarchy_problems extends SubLTranslatedFile implement
     }
 
     public static SubLObject declare_genls_hierarchy_problems_file() {
-        declareFunction("forts_meeting_criterion", "FORTS-MEETING-CRITERION", 1, 0, false);
-        declareFunction("fort_not_a_thingP", "FORT-NOT-A-THING?", 1, 0, false);
-        declareFunction("fort_isa_collection_but_not_a_spec_of_thingP", "FORT-ISA-COLLECTION-BUT-NOT-A-SPEC-OF-THING?", 1, 0, false);
-        declareFunction("fort_not_a_collection_but_has_specs_or_genlsP", "FORT-NOT-A-COLLECTION-BUT-HAS-SPECS-OR-GENLS?", 1, 0, false);
-        declareFunction("fort_isa_thing_but_neither_a_set_or_collection_nor_individualP", "FORT-ISA-THING-BUT-NEITHER-A-SET-OR-COLLECTION-NOR-INDIVIDUAL?", 1, 0, false);
-        declareFunction("fort_neither_a_set_or_collection_nor_individualP", "FORT-NEITHER-A-SET-OR-COLLECTION-NOR-INDIVIDUAL?", 1, 0, false);
-        declareFunction("fort_both_a_set_or_collection_and_individualP", "FORT-BOTH-A-SET-OR-COLLECTION-AND-INDIVIDUAL?", 1, 0, false);
-        declareFunction("fort_not_properly_in_genls_hierarchyP", "FORT-NOT-PROPERLY-IN-GENLS-HIERARCHY?", 1, 0, false);
+        declareFunction(me, "forts_meeting_criterion", "FORTS-MEETING-CRITERION", 1, 0, false);
+        declareFunction(me, "fort_not_a_thingP", "FORT-NOT-A-THING?", 1, 0, false);
+        declareFunction(me, "fort_isa_collection_but_not_a_spec_of_thingP", "FORT-ISA-COLLECTION-BUT-NOT-A-SPEC-OF-THING?", 1, 0, false);
+        declareFunction(me, "fort_not_a_collection_but_has_specs_or_genlsP", "FORT-NOT-A-COLLECTION-BUT-HAS-SPECS-OR-GENLS?", 1, 0, false);
+        declareFunction(me, "fort_isa_thing_but_neither_a_set_or_collection_nor_individualP", "FORT-ISA-THING-BUT-NEITHER-A-SET-OR-COLLECTION-NOR-INDIVIDUAL?", 1, 0, false);
+        declareFunction(me, "fort_neither_a_set_or_collection_nor_individualP", "FORT-NEITHER-A-SET-OR-COLLECTION-NOR-INDIVIDUAL?", 1, 0, false);
+        declareFunction(me, "fort_both_a_set_or_collection_and_individualP", "FORT-BOTH-A-SET-OR-COLLECTION-AND-INDIVIDUAL?", 1, 0, false);
+        declareFunction(me, "fort_not_properly_in_genls_hierarchyP", "FORT-NOT-PROPERLY-IN-GENLS-HIERARCHY?", 1, 0, false);
         return NIL;
     }
 
@@ -363,6 +223,12 @@ public final class genls_hierarchy_problems extends SubLTranslatedFile implement
     }
 
     static {
+
+
+
+
+
+
     }
 }
 

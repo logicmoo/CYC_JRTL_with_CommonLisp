@@ -2120,7 +2120,7 @@ public final class kbi_utilities extends SubLTranslatedFile implements V02 {
 
     public static final SubLObject public_structureP(SubLObject structure) {
         if (NIL != assertion_handles.assertion_p(structure)) {
-            return cb_browser.public_assertionP(structure);
+            return T;//cb_browser.public_assertionP(structure);
         } else
             if (NIL != clause_strucs.clause_struc_p(structure)) {
                 return public_axiomP(structure);
@@ -2129,7 +2129,7 @@ public final class kbi_utilities extends SubLTranslatedFile implements V02 {
                     return public_natP(structure);
                 } else
                     if (NIL != forts.fort_p(structure)) {
-                        return cb_browser.public_fortP(structure);
+                        return T;//cb_browser.public_fortP(structure);
                     }
 
 

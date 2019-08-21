@@ -355,20 +355,7 @@ public final class sksi_conjunctive_removal_module_generation extends SubLTransl
                     try {
                         memoization_state.$memoization_state$.bind(local_state, thread);
                         {
-                            SubLObject original_memoization_process = NIL;
-                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                {
-                                    SubLObject current_proc = current_process();
-                                    if (NIL == original_memoization_process) {
-                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                    } else {
-                                        if (original_memoization_process != current_proc) {
-                                            Errors.error($str_alt10$Invalid_attempt_to_reuse_memoizat);
-                                        }
-                                    }
-                                }
-                            }
+                            SubLObject original_memoization_process = memoization_state.aquireMemoStateLock(local_state);
                             try {
                                 if (NIL == mapping_mt) {
                                     mapping_mt = sksi_kb_accessors.sk_source_mapping_mt(sks);
@@ -512,20 +499,7 @@ public final class sksi_conjunctive_removal_module_generation extends SubLTransl
                         try {
                             memoization_state.$memoization_state$.bind(local_state, thread);
                             {
-                                SubLObject original_memoization_process = NIL;
-                                if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                    original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                    {
-                                        SubLObject current_proc = current_process();
-                                        if (NIL == original_memoization_process) {
-                                            memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                        } else {
-                                            if (original_memoization_process != current_proc) {
-                                                Errors.error($str_alt10$Invalid_attempt_to_reuse_memoizat);
-                                            }
-                                        }
-                                    }
-                                }
+                                final SubLObject original_memoization_process = memoization_state.aquireMemoStateLock(local_state);
                                 try {
                                     if (NIL != com.cyc.cycjava.cycl.sksi.query_sks.sksi_conjunctive_removal_module_generation.register_sksi_conjunctive_removal_module_for_just_sks_int(sks, mapping_mt)) {
                                         count = ONE_INTEGER;

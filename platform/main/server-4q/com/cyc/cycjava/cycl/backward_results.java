@@ -1,21 +1,8 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl;
 
 
-import static com.cyc.cycjava.cycl.control_vars.$inference_debugP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.sublisp_throw;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.apply;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_listp;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-
+import com.cyc.cycjava.cycl.backward_results;
+import com.cyc.cycjava.cycl.control_vars;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
@@ -24,93 +11,55 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
+import static com.cyc.cycjava.cycl.backward_results.*;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-public final class backward_results extends SubLTranslatedFile implements V12 {
+
+public final class backward_results extends SubLTranslatedFile {
     public static final SubLFile me = new backward_results();
 
+    public static final String myName = "com.cyc.cycjava.cycl.backward_results";
 
+    public static final String myFingerPrint = "7de194988eca5038911999c80d9b181503da81fcb46454efbfc11a8c58df3c9b";
 
     // defparameter
     /**
      * The level of semantic validation performed for intermediate steps of
      * successful inferences. Can be one of :all :arg-type :minimal :none
      */
-    @LispMethod(comment = "The level of semantic validation performed for intermediate steps of\r\nsuccessful inferences. Can be one of :all :arg-type :minimal :none\ndefparameter\nThe level of semantic validation performed for intermediate steps of\nsuccessful inferences. Can be one of :all :arg-type :minimal :none")
     public static final SubLSymbol $inference_intermediate_step_validation_level$ = makeSymbol("*INFERENCE-INTERMEDIATE-STEP-VALIDATION-LEVEL*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $inference_answer_template$ = makeSymbol("*INFERENCE-ANSWER-TEMPLATE*");
 
-    static private final SubLList $list1 = list(makeSymbol("TYPE"), makeSymbol("&OPTIONAL"), makeSymbol("FORMAT-STRING"), makeSymbol("&REST"), makeSymbol("FORMAT-ARGS"));
 
-    static private final SubLString $str3$Inference_rejected____S = makeString("Inference rejected : ~S");
 
-    // Definitions
-    /**
-     * Reject inference for REASON.
-     * REASON has the form:  (type &optional format-string &rest format-args)
-     */
-    @LispMethod(comment = "Reject inference for REASON.\r\nREASON has the form:  (type &optional format-string &rest format-args)\nReject inference for REASON.\nREASON has the form:  (type &optional format-string &rest format-args)")
-    public static final SubLObject reject_inference_alt(SubLObject reason) {
-        com.cyc.cycjava.cycl.backward_results.note_inference_rejected(reason);
-        return sublisp_throw($INFERENCE_REJECTED, T);
-    }
+    public static final SubLList $list1 = list(makeSymbol("TYPE"), makeSymbol("&OPTIONAL"), makeSymbol("FORMAT-STRING"), makeSymbol("&REST"), makeSymbol("FORMAT-ARGS"));
 
-    // Definitions
-    /**
-     * Reject inference for REASON.
-     * REASON has the form:  (type &optional format-string &rest format-args)
-     */
-    @LispMethod(comment = "Reject inference for REASON.\r\nREASON has the form:  (type &optional format-string &rest format-args)\nReject inference for REASON.\nREASON has the form:  (type &optional format-string &rest format-args)")
+
+
+    public static final SubLString $str3$Inference_rejected____S = makeString("Inference rejected : ~S");
+
+
+
     public static SubLObject reject_inference(final SubLObject reason) {
         note_inference_rejected(reason);
         return sublisp_throw($INFERENCE_REJECTED, T);
     }
 
-    /**
-     * Note that inference was rejected for REASON.
-     * REASON has the form:  (type &optional format-string &rest format-args)
-     */
-    @LispMethod(comment = "Note that inference was rejected for REASON.\r\nREASON has the form:  (type &optional format-string &rest format-args)\nNote that inference was rejected for REASON.\nREASON has the form:  (type &optional format-string &rest format-args)")
-    public static final SubLObject note_inference_rejected_alt(SubLObject reason) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != $inference_debugP$.getDynamicValue(thread)) {
-                {
-                    SubLObject datum = reason;
-                    SubLObject current = datum;
-                    SubLObject type = NIL;
-                    destructuring_bind_must_consp(current, datum, $list_alt1);
-                    type = current.first();
-                    current = current.rest();
-                    {
-                        SubLObject format_string = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
-                        destructuring_bind_must_listp(current, datum, $list_alt1);
-                        current = current.rest();
-                        {
-                            SubLObject format_args = current;
-                            if (NIL != format_string) {
-                                apply(symbol_function(WARN), format_string, format_args);
-                            } else {
-                                Errors.warn($str_alt3$Inference_rejected____S, type);
-                            }
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
-    /**
-     * Note that inference was rejected for REASON.
-     * REASON has the form:  (type &optional format-string &rest format-args)
-     */
-    @LispMethod(comment = "Note that inference was rejected for REASON.\r\nREASON has the form:  (type &optional format-string &rest format-args)\nNote that inference was rejected for REASON.\nREASON has the form:  (type &optional format-string &rest format-args)")
     public static SubLObject note_inference_rejected(final SubLObject reason) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != $inference_debugP$.getDynamicValue(thread)) {
@@ -132,8 +81,8 @@ public final class backward_results extends SubLTranslatedFile implements V12 {
     }
 
     public static SubLObject declare_backward_results_file() {
-        declareFunction("reject_inference", "REJECT-INFERENCE", 1, 0, false);
-        declareFunction("note_inference_rejected", "NOTE-INFERENCE-REJECTED", 1, 0, false);
+        declareFunction(me, "reject_inference", "REJECT-INFERENCE", 1, 0, false);
+        declareFunction(me, "note_inference_rejected", "NOTE-INFERENCE-REJECTED", 1, 0, false);
         return NIL;
     }
 
@@ -163,11 +112,15 @@ public final class backward_results extends SubLTranslatedFile implements V12 {
     }
 
     static {
+
+
+
+
+
+
+
+
     }
-
-    static private final SubLList $list_alt1 = list(makeSymbol("TYPE"), makeSymbol("&OPTIONAL"), makeSymbol("FORMAT-STRING"), makeSymbol("&REST"), makeSymbol("FORMAT-ARGS"));
-
-    static private final SubLString $str_alt3$Inference_rejected____S = makeString("Inference rejected : ~S");
 }
 
 /**

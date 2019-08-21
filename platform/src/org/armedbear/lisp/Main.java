@@ -298,6 +298,8 @@ public final class Main {
 			argsList.add(0, "--lisp");
 		}
 		if (argsList.remove("--lisp")) {
+			isSublispDefault = false;
+			Main.setSubLisp(false);
 			argsList.add(0, "--nocyc");
 			argsList.add(0, "--noprolog");
 		}

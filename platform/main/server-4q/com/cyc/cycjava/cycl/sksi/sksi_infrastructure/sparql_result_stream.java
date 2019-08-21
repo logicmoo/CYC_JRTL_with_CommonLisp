@@ -1,66 +1,16 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl.sksi.sksi_infrastructure;
 
 
-import static com.cyc.cycjava.cycl.iteration.iteration_done;
-import static com.cyc.cycjava.cycl.iteration.iteration_finalize;
-import static com.cyc.cycjava.cycl.iteration.iteration_next;
-import static com.cyc.cycjava.cycl.iteration.iteration_next_without_values;
-import static com.cyc.cycjava.cycl.iteration.new_iterator;
-import static com.cyc.cycjava.cycl.iteration.new_null_iterator;
-import static com.cyc.cycjava.cycl.number_utilities.f_1X;
-import static com.cyc.cycjava.cycl.number_utilities.f_1_;
-import static com.cyc.cycjava.cycl.utilities_macros.note_funcall_helper_function;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_colon;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_less;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_slash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_underbar;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.make_list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.rplaca;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.set_nth;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.sublisp_throw;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.subtract;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.find;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.length;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.nreverse;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.replace;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.search;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.sublisp_null;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.values;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.print;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.close;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.force_output;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.write_string;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.defvar;
-
-import com.cyc.cycjava.cycl.V12;
 import com.cyc.cycjava.cycl.format_nil;
 import com.cyc.cycjava.cycl.iteration;
 import com.cyc.cycjava.cycl.list_utilities;
 import com.cyc.cycjava.cycl.number_utilities;
-import com.cyc.cycjava.cycl.stream_buffer;
-import com.cyc.cycjava.cycl.string_utilities;
-import com.cyc.cycjava.cycl.web_utilities;
-import com.cyc.cycjava.cycl.xml_parsing_utilities;
 import com.cyc.cycjava.cycl.rdf.rdf_literal;
 import com.cyc.cycjava.cycl.rdf.sparql_utilities;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sparql_result_stream;
+import com.cyc.cycjava.cycl.stream_buffer;
+import com.cyc.cycjava.cycl.string_utilities;
+import com.cyc.cycjava.cycl.xml_parsing_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
@@ -73,30 +23,57 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
+import static com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sparql_result_stream.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_colon;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_less;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_slash;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_underbar;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIFTEEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- * module:      SPARQL-RESULT-STREAM
- * source file: /cyc/top/cycl/sksi/sksi-infrastructure/sparql-result-stream.lisp
- * created:     2019/07/03 17:37:54
- */
-public final class sparql_result_stream extends SubLTranslatedFile implements V12 {
+
+public final class sparql_result_stream extends SubLTranslatedFile {
     public static final SubLFile me = new sparql_result_stream();
 
+    public static final String myName = "com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sparql_result_stream";
 
+    public static final String myFingerPrint = "68c145ef82c00430e136ba9cd3cef83ace704cffc4df26e1a4b37fec45515984";
 
     // defvar
-    @LispMethod(comment = "defvar")
     private static final SubLSymbol $sparql_result_trace_stream$ = makeSymbol("*SPARQL-RESULT-TRACE-STREAM*");
 
     private static final SubLString $str0$___A = makeString("~%~A");
 
-    @LispMethod(comment = "Internal Constants")
-    // Internal Constants
     private static final SubLInteger $int$1024 = makeInteger(1024);
 
     private static final SubLString $str2$Empty_SPARQL_result_stream_iterat = makeString("Empty SPARQL result stream iterator on ~a with ~a ~a");
@@ -155,16 +132,14 @@ public final class sparql_result_stream extends SubLTranslatedFile implements V1
 
     private static final SubLString $str29$__bnode_ = makeString("</bnode>");
 
+
+
     private static final SubLString $str31$Unable_to_open__S = makeString("Unable to open ~S");
+
+
 
     private static final SubLString $str33$__result = makeString("</result");
 
-    // Definitions
-    public static final SubLObject string_buffer_current_string_alt(SubLObject string_buffer) {
-        return string_utilities.substring(stream_buffer.string_buffer_string(string_buffer), ZERO_INTEGER, stream_buffer.string_buffer_position(string_buffer));
-    }
-
-    // Definitions
     public static SubLObject string_buffer_current_string(final SubLObject string_buffer) {
         return string_utilities.substring(stream_buffer.string_buffer_string(string_buffer), ZERO_INTEGER, stream_buffer.string_buffer_position(string_buffer));
     }
@@ -176,24 +151,6 @@ public final class sparql_result_stream extends SubLTranslatedFile implements V1
             format_nil.force_format($sparql_result_trace_stream$.getDynamicValue(thread), $str0$___A, string_buffer_current_string(line_buffer), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         }
         return line_buffer;
-    }
-
-    public static final SubLObject new_sparql_result_stream_iterator(SubLObject stream, SubLObject variable_names, SubLObject prefix_map) {
-        {
-            SubLObject line_iterator = stream_buffer.new_stream_line_iterator(stream, $int$1024);
-            SubLObject line_buffer = iteration_next_without_values(line_iterator, UNPROVIDED);
-            while (NIL == com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sparql_result_stream.string_buffer_containsP(line_buffer, $str_alt1$_results)) {
-                line_buffer = iteration_next_without_values(line_iterator, UNPROVIDED);
-            } 
-            if (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sparql_result_stream.string_buffer_containsP(line_buffer, $str_alt2$__)) {
-                iteration_finalize(line_iterator);
-                return new_null_iterator();
-            }
-            {
-                SubLObject state = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sparql_result_stream.make_sparql_result_stream_iterator_state(line_buffer, line_iterator, variable_names, prefix_map);
-                return new_iterator(state, $sym3$SPARQL_RESULT_STREAM_ITERATOR_DONE_, SPARQL_RESULT_STREAM_ITERATOR_NEXT, SPARQL_RESULT_STREAM_ITERATOR_FINALIZE);
-            }
-        }
     }
 
     public static SubLObject new_sparql_result_stream_iterator(final SubLObject stream, final SubLObject variable_names, final SubLObject prefix_map, SubLObject extract_rdf_literalsP) {
@@ -226,47 +183,6 @@ public final class sparql_result_stream extends SubLTranslatedFile implements V1
         }
         final SubLObject state = make_sparql_result_stream_iterator_state(line_buffer, line_iterator, variable_names, prefix_map, extract_rdf_literalsP);
         return iteration.new_iterator(state, $sym9$SPARQL_RESULT_STREAM_ITERATOR_DONE_, SPARQL_RESULT_STREAM_ITERATOR_NEXT, SPARQL_RESULT_STREAM_ITERATOR_FINALIZE);
-    }
-
-    public static final SubLObject batch_process_sparql_result_stream(SubLObject stream, SubLObject variable_names, SubLObject prefix_map) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result_set = NIL;
-                SubLObject result_iterator = NIL;
-                try {
-                    result_iterator = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sparql_result_stream.new_sparql_result_stream_iterator(stream, variable_names, prefix_map);
-                    {
-                        SubLObject done_var = NIL;
-                        while (NIL == done_var) {
-                            thread.resetMultipleValues();
-                            {
-                                SubLObject result = iteration_next(result_iterator);
-                                SubLObject valid = thread.secondMultipleValue();
-                                thread.resetMultipleValues();
-                                if (NIL != valid) {
-                                    result_set = cons(result, result_set);
-                                }
-                                done_var = makeBoolean(NIL == valid);
-                            }
-                        } 
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            if (NIL != result_iterator) {
-                                iteration_finalize(result_iterator);
-                            }
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                return nreverse(result_set);
-            }
-        }
     }
 
     public static SubLObject batch_process_sparql_result_stream(final SubLObject stream, final SubLObject variable_names, final SubLObject prefix_map, final SubLObject booleanP, SubLObject extract_rdf_literalsP) {
@@ -328,29 +244,9 @@ public final class sparql_result_stream extends SubLTranslatedFile implements V1
         return NIL;
     }
 
-    public static final SubLObject make_sparql_result_stream_iterator_state(SubLObject line_buffer, SubLObject line_iterator, SubLObject variable_names, SubLObject prefix_map) {
-        line_buffer = iteration_next_without_values(line_iterator, UNPROVIDED);
-        return list(line_buffer, line_iterator, variable_names, prefix_map);
-    }
-
     public static SubLObject make_sparql_result_stream_iterator_state(SubLObject line_buffer, final SubLObject line_iterator, final SubLObject variable_names, final SubLObject prefix_map, final SubLObject extract_rdf_literalsP) {
         line_buffer = sparql_line_iterator_next(line_iterator);
         return list(line_buffer, line_iterator, variable_names, prefix_map, extract_rdf_literalsP);
-    }
-
-    public static final SubLObject sparql_result_stream_iterator_doneP_alt(SubLObject state) {
-        {
-            SubLObject datum = state;
-            SubLObject current = datum;
-            SubLObject line_buffer = NIL;
-            destructuring_bind_must_consp(current, datum, $list_alt6);
-            line_buffer = current.first();
-            current = current.rest();
-            {
-                SubLObject rest = current;
-                return sublisp_null(line_buffer);
-            }
-        }
     }
 
     public static SubLObject sparql_result_stream_iterator_doneP(final SubLObject state) {
@@ -360,46 +256,6 @@ public final class sparql_result_stream extends SubLTranslatedFile implements V1
         final SubLObject rest;
         final SubLObject current = rest = state.rest();
         return sublisp_null(line_buffer);
-    }
-
-    public static final SubLObject sparql_result_stream_iterator_next_alt(SubLObject state) {
-        {
-            SubLObject datum = state;
-            SubLObject current = datum;
-            SubLObject line_buffer = NIL;
-            SubLObject line_iterator = NIL;
-            SubLObject variable_names = NIL;
-            SubLObject prefix_map = NIL;
-            destructuring_bind_must_consp(current, datum, $list_alt7);
-            line_buffer = current.first();
-            current = current.rest();
-            destructuring_bind_must_consp(current, datum, $list_alt7);
-            line_iterator = current.first();
-            current = current.rest();
-            destructuring_bind_must_consp(current, datum, $list_alt7);
-            variable_names = current.first();
-            current = current.rest();
-            destructuring_bind_must_consp(current, datum, $list_alt7);
-            prefix_map = current.first();
-            current = current.rest();
-            if (NIL == current) {
-                while ((NIL == iteration_done(line_iterator)) && (NIL == com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sparql_result_stream.string_buffer_containsP(line_buffer, $str_alt8$_result))) {
-                    line_buffer = iteration_next_without_values(line_iterator, UNPROVIDED);
-                } 
-                if (NIL != iteration_done(line_iterator)) {
-                    line_buffer = NIL;
-                    rplaca(state, line_buffer);
-                    return values(NIL, state, T);
-                }
-                {
-                    SubLObject result = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sparql_result_stream.process_sparql_file_line_buffer_result(line_iterator, line_buffer, variable_names, prefix_map);
-                    return values(result, state, NIL);
-                }
-            } else {
-                cdestructuring_bind_error(datum, $list_alt7);
-            }
-        }
-        return NIL;
     }
 
     public static SubLObject sparql_result_stream_iterator_next(final SubLObject state) {
@@ -439,25 +295,6 @@ public final class sparql_result_stream extends SubLTranslatedFile implements V1
         return values(result, state, NIL);
     }
 
-    public static final SubLObject sparql_result_stream_iterator_finalize_alt(SubLObject state) {
-        {
-            SubLObject datum = state;
-            SubLObject current = datum;
-            SubLObject line_buffer = NIL;
-            SubLObject line_iterator = NIL;
-            destructuring_bind_must_consp(current, datum, $list_alt9);
-            line_buffer = current.first();
-            current = current.rest();
-            destructuring_bind_must_consp(current, datum, $list_alt9);
-            line_iterator = current.first();
-            current = current.rest();
-            {
-                SubLObject rest = current;
-                return iteration_finalize(line_iterator);
-            }
-        }
-    }
-
     public static SubLObject sparql_result_stream_iterator_finalize(final SubLObject state) {
         SubLObject line_buffer = NIL;
         SubLObject line_iterator = NIL;
@@ -471,34 +308,8 @@ public final class sparql_result_stream extends SubLTranslatedFile implements V1
         return iteration.iteration_finalize(line_iterator);
     }
 
-    public static final SubLObject string_buffer_containsP_alt(SubLObject string_buffer, SubLObject string) {
-        return search(string, stream_buffer.string_buffer_string(string_buffer), symbol_function(EQL), symbol_function(IDENTITY), ZERO_INTEGER, NIL, ZERO_INTEGER, stream_buffer.string_buffer_position(string_buffer));
-    }
-
     public static SubLObject string_buffer_containsP(final SubLObject string_buffer, final SubLObject string) {
         return search(string, stream_buffer.string_buffer_string(string_buffer), symbol_function(EQL), symbol_function(IDENTITY), ZERO_INTEGER, NIL, ZERO_INTEGER, stream_buffer.string_buffer_position(string_buffer));
-    }
-
-    public static final SubLObject process_sparql_file_line_buffer_result(SubLObject iterator, SubLObject line_buffer, SubLObject variable_names, SubLObject prefix_map) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = make_list(length(variable_names), NIL);
-                line_buffer = iteration_next_without_values(iterator, UNPROVIDED);
-                while (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sparql_result_stream.string_buffer_containsP(line_buffer, $str_alt10$_binding)) {
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject binding_index = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sparql_result_stream.sparql_extract_binding_value_from_line_buffer(iterator, line_buffer, variable_names, prefix_map);
-                        SubLObject binding_value = thread.secondMultipleValue();
-                        thread.resetMultipleValues();
-                        if (binding_index.isInteger()) {
-                            set_nth(binding_index, result, binding_value);
-                        }
-                    }
-                } 
-                return result;
-            }
-        }
     }
 
     public static SubLObject process_sparql_file_line_buffer_result(final SubLObject iterator, SubLObject line_buffer, final SubLObject variable_names, final SubLObject prefix_map, SubLObject extract_rdf_literalsP) {
@@ -518,30 +329,6 @@ public final class sparql_result_stream extends SubLTranslatedFile implements V1
             }
         } 
         return result;
-    }
-
-    public static final SubLObject sparql_extract_binding_value_from_line_buffer(SubLObject iterator, SubLObject line_buffer, SubLObject variable_names, SubLObject prefix_map) {
-        {
-            SubLObject index = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sparql_result_stream.sparql_line_buffer_variable_index(line_buffer, variable_names);
-            SubLObject value = NIL;
-            line_buffer = iteration_next_without_values(iterator, UNPROVIDED);
-            if (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sparql_result_stream.string_buffer_containsP(line_buffer, $str_alt11$_uri)) {
-                value = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sparql_result_stream.sparql_extract_uri_from_line_buffer(line_buffer, prefix_map);
-            } else {
-                if (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sparql_result_stream.string_buffer_containsP(line_buffer, $str_alt12$_literal)) {
-                    value = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sparql_result_stream.sparql_extract_literal_from_line_buffer(line_buffer);
-                } else {
-                    if (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sparql_result_stream.string_buffer_containsP(line_buffer, $str_alt13$_bnode)) {
-                        value = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sparql_result_stream.sparql_extract_bnode_from_line_buffer(line_buffer);
-                    } else {
-                        return Errors.error($str_alt14$Unexpected_line__S, com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sparql_result_stream.string_buffer_current_string(line_buffer));
-                    }
-                }
-            }
-            line_buffer = iteration_next_without_values(iterator, UNPROVIDED);
-            line_buffer = iteration_next_without_values(iterator, UNPROVIDED);
-            return values(index, value);
-        }
     }
 
     public static SubLObject sparql_extract_binding_value_from_line_buffer(final SubLObject iterator, SubLObject line_buffer, final SubLObject variable_names, final SubLObject prefix_map, SubLObject extract_rdf_literalsP) {
@@ -573,31 +360,6 @@ public final class sparql_result_stream extends SubLTranslatedFile implements V1
         return values(index, value);
     }
 
-    public static final SubLObject sparql_line_buffer_variable_index_alt(SubLObject line_buffer, SubLObject variable_names) {
-        {
-            SubLObject string = stream_buffer.string_buffer_string(line_buffer);
-            SubLObject end = stream_buffer.string_buffer_position(line_buffer);
-            SubLObject binding_start = search($str_alt15$_binding_name_, string, symbol_function(EQL), symbol_function(IDENTITY), ZERO_INTEGER, NIL, ZERO_INTEGER, end);
-            if (NIL != binding_start) {
-                binding_start = add(binding_start, ONE_INTEGER);
-                {
-                    SubLObject variable_name_start = add(binding_start, ONE_INTEGER, FOURTEEN_INTEGER);
-                    SubLObject variable_name_end = search($str_alt16$_, string, symbol_function(EQL), symbol_function(IDENTITY), ZERO_INTEGER, NIL, variable_name_start, UNPROVIDED);
-                    SubLObject variable_length = subtract(variable_name_end, variable_name_start, ONE_INTEGER);
-                    SubLObject list_var = NIL;
-                    SubLObject variable_name = NIL;
-                    SubLObject index = NIL;
-                    for (list_var = variable_names, variable_name = list_var.first(), index = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , variable_name = list_var.first() , index = add(ONE_INTEGER, index)) {
-                        if (length(variable_name).numE(variable_length) && (NIL != search(variable_name, string, symbol_function(EQL), symbol_function(IDENTITY), ZERO_INTEGER, NIL, variable_name_start, variable_name_end))) {
-                            return index;
-                        }
-                    }
-                }
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject sparql_line_buffer_variable_index(final SubLObject line_buffer, final SubLObject variable_names) {
         final SubLObject string = stream_buffer.string_buffer_string(line_buffer);
         final SubLObject end = stream_buffer.string_buffer_position(line_buffer);
@@ -614,24 +376,6 @@ public final class sparql_result_stream extends SubLTranslatedFile implements V1
             for (index = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , variable_name = list_var.first() , index = add(ONE_INTEGER, index)) {
                 if (length(variable_name).numE(variable_length) && (NIL != search(variable_name, string, symbol_function(EQL), symbol_function(IDENTITY), ZERO_INTEGER, NIL, variable_name_start, variable_name_end))) {
                     return index;
-                }
-            }
-        }
-        return NIL;
-    }
-
-    public static final SubLObject sparql_extract_literal_from_line_buffer(SubLObject line_buffer) {
-        {
-            SubLObject string = stream_buffer.string_buffer_string(line_buffer);
-            SubLObject end = stream_buffer.string_buffer_position(line_buffer);
-            SubLObject literal_tag_start = search($str_alt12$_literal, string, symbol_function(EQL), symbol_function(IDENTITY), ZERO_INTEGER, NIL, ZERO_INTEGER, end);
-            if (NIL != literal_tag_start) {
-                {
-                    SubLObject literal_tag_end = search($str_alt16$_, string, symbol_function(EQL), symbol_function(IDENTITY), ZERO_INTEGER, NIL, literal_tag_start, end);
-                    SubLObject literal_start = f_1X(literal_tag_end);
-                    SubLObject literal_end = search($str_alt17$__literal_, string, symbol_function(EQL), symbol_function(IDENTITY), ZERO_INTEGER, NIL, literal_start, end);
-                    SubLObject literal = string_utilities.substring(string, literal_start, literal_end);
-                    return literal;
                 }
             }
         }
@@ -669,61 +413,6 @@ public final class sparql_result_stream extends SubLTranslatedFile implements V1
             final SubLObject literal_end = search($str26$__literal_, string, symbol_function(EQL), symbol_function(IDENTITY), ZERO_INTEGER, NIL, literal_start, end);
             final SubLObject literal_element = string_utilities.substring(string, literal_tag_start, add(TEN_INTEGER, literal_end));
             return rdf_literal.new_rdf_literal_from_sparql_results_xml(literal_element);
-        }
-        return NIL;
-    }
-
-    public static final SubLObject sparql_extract_uri_from_line_buffer_alt(SubLObject line_buffer, SubLObject prefix_map) {
-        {
-            SubLObject string = stream_buffer.string_buffer_string(line_buffer);
-            SubLObject end = stream_buffer.string_buffer_position(line_buffer);
-            SubLObject uri_tag_start = search($str_alt11$_uri, string, symbol_function(EQL), symbol_function(IDENTITY), ZERO_INTEGER, NIL, ZERO_INTEGER, end);
-            if (NIL != uri_tag_start) {
-                {
-                    SubLObject uri_tag_end = search($str_alt16$_, string, symbol_function(EQL), symbol_function(IDENTITY), ZERO_INTEGER, NIL, uri_tag_start, end);
-                    SubLObject uri_start = f_1X(uri_tag_end);
-                    SubLObject uri_end = search($str_alt18$__uri_, string, symbol_function(EQL), symbol_function(IDENTITY), ZERO_INTEGER, NIL, uri_start, end);
-                    SubLObject cdolist_list_var = prefix_map;
-                    SubLObject cons = NIL;
-                    for (cons = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , cons = cdolist_list_var.first()) {
-                        {
-                            SubLObject datum = cons;
-                            SubLObject current = datum;
-                            SubLObject abbrev = NIL;
-                            SubLObject prefix = NIL;
-                            destructuring_bind_must_consp(current, datum, $list_alt19);
-                            abbrev = current.first();
-                            current = current.rest();
-                            prefix = current;
-                            {
-                                SubLObject match = search(prefix, string, symbol_function(EQL), symbol_function(IDENTITY), ZERO_INTEGER, NIL, uri_start, uri_end);
-                                if (NIL != match) {
-                                    {
-                                        SubLObject abbrev_length = length(abbrev);
-                                        SubLObject prefix_length = length(prefix);
-                                        SubLObject postfix_start = add(uri_start, prefix_length);
-                                        SubLObject postfix_end = uri_end;
-                                        SubLObject postfix_length = subtract(postfix_end, postfix_start);
-                                        SubLObject uri_length = add(abbrev_length, ONE_INTEGER, postfix_length);
-                                        SubLObject uri = Strings.make_string(uri_length, UNPROVIDED);
-                                        replace(uri, abbrev, ZERO_INTEGER, abbrev_length, ZERO_INTEGER, abbrev_length);
-                                        Strings.set_char(uri, abbrev_length, CHAR_colon);
-                                        replace(uri, string, f_1X(abbrev_length), length(uri), postfix_start, postfix_end);
-                                        return uri;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    {
-                        SubLObject uri = Strings.make_string(add(TWO_INTEGER, subtract(uri_end, uri_start)), UNPROVIDED);
-                        Strings.set_char(uri, ZERO_INTEGER, CHAR_less);
-                        Strings.set_char(uri, f_1_(length(uri)), CHAR_greater);
-                        replace(uri, string, ONE_INTEGER, f_1_(length(uri)), uri_start, uri_end);
-                        return uri;
-                    }
-                }
-            }
         }
         return NIL;
     }
@@ -782,27 +471,6 @@ public final class sparql_result_stream extends SubLTranslatedFile implements V1
         return NIL;
     }
 
-    public static final SubLObject sparql_extract_bnode_from_line_buffer_alt(SubLObject line_buffer) {
-        {
-            SubLObject string = stream_buffer.string_buffer_string(line_buffer);
-            SubLObject end = stream_buffer.string_buffer_position(line_buffer);
-            SubLObject bnode_tag_start = search($str_alt13$_bnode, string, symbol_function(EQL), symbol_function(IDENTITY), ZERO_INTEGER, NIL, ZERO_INTEGER, end);
-            if (NIL != bnode_tag_start) {
-                {
-                    SubLObject bnode_tag_end = search($str_alt16$_, string, symbol_function(EQL), symbol_function(IDENTITY), ZERO_INTEGER, NIL, bnode_tag_start, end);
-                    SubLObject bnode_start = f_1X(bnode_tag_end);
-                    SubLObject bnode_end = search($str_alt20$__bnode_, string, symbol_function(EQL), symbol_function(IDENTITY), ZERO_INTEGER, NIL, bnode_start, end);
-                    SubLObject bnode = Strings.make_string(add(TWO_INTEGER, subtract(bnode_end, bnode_start)), UNPROVIDED);
-                    Strings.set_char(bnode, ZERO_INTEGER, CHAR_underbar);
-                    Strings.set_char(bnode, ONE_INTEGER, CHAR_colon);
-                    replace(bnode, string, TWO_INTEGER, length(bnode), bnode_start, bnode_end);
-                    return bnode;
-                }
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject sparql_extract_bnode_from_line_buffer(final SubLObject line_buffer) {
         final SubLObject string = stream_buffer.string_buffer_string(line_buffer);
         final SubLObject end = stream_buffer.string_buffer_position(line_buffer);
@@ -818,55 +486,6 @@ public final class sparql_result_stream extends SubLTranslatedFile implements V1
             return bnode;
         }
         return NIL;
-    }
-
-    public static final SubLObject process_sparql_file_batch_tokenize_alt(SubLObject filename, SubLObject sparql, SubLObject access_path) {
-        if (access_path == UNPROVIDED) {
-            access_path = sksi_sks_interaction.$access_path$.getGlobalValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject variable_names = sksi_sks_interaction.sparql_extract_variable_names(sparql);
-                SubLObject prefix_map = sksi_access_path.access_path_rdf_prefix_map(access_path);
-                SubLObject xml_tokens = NIL;
-                SubLObject stream = NIL;
-                try {
-                    {
-                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                        try {
-                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                            stream = compatibility.open_text(filename, $INPUT, NIL);
-                        } finally {
-                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    if (!stream.isStream()) {
-                        Errors.error($str_alt22$Unable_to_open__S, filename);
-                    }
-                    {
-                        SubLObject s = stream;
-                        xml_tokens = web_utilities.xml_tokenize(s, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            if (stream.isStream()) {
-                                close(stream, UNPROVIDED);
-                            }
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                {
-                    SubLObject result_set = sksi_sks_interaction.sksi_sparql_xml_tokens_to_result_set(xml_tokens, variable_names, prefix_map);
-                    return result_set;
-                }
-            }
-        }
     }
 
     public static SubLObject process_sparql_file_batch_tokenize(final SubLObject filename, final SubLObject sparql, SubLObject access_path) {
@@ -906,86 +525,6 @@ public final class sparql_result_stream extends SubLTranslatedFile implements V1
         }
         final SubLObject result_set = sksi_sks_interaction.sksi_sparql_xml_tokens_to_result_set(xml_tokens, variable_names, prefix_map);
         return result_set;
-    }
-
-    public static final SubLObject process_sparql_file_iterative_tokenize_alt(SubLObject filename, SubLObject sparql, SubLObject access_path) {
-        if (access_path == UNPROVIDED) {
-            access_path = sksi_sks_interaction.$access_path$.getGlobalValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject variable_names = sksi_sks_interaction.sparql_extract_variable_names(sparql);
-                SubLObject prefix_map = sksi_access_path.access_path_rdf_prefix_map(access_path);
-                SubLObject result_set = NIL;
-                SubLObject stream = NIL;
-                try {
-                    {
-                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                        try {
-                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                            stream = compatibility.open_text(filename, $INPUT, NIL);
-                        } finally {
-                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    if (!stream.isStream()) {
-                        Errors.error($str_alt22$Unable_to_open__S, filename);
-                    }
-                    {
-                        SubLObject s = stream;
-                        SubLObject iterator = web_utilities.new_xml_token_iterator(s, NIL, UNPROVIDED, UNPROVIDED);
-                        SubLObject token = iteration_next_without_values(iterator, UNPROVIDED);
-                        while (NIL == web_utilities.xml_token_starts_with(token, $str_alt1$_results)) {
-                            token = iteration_next_without_values(iterator, UNPROVIDED);
-                        } 
-                        token = iteration_next_without_values(iterator, UNPROVIDED);
-                        {
-                            SubLObject catch_var = NIL;
-                            try {
-                                while (true) {
-                                    while ((NIL == iteration_done(iterator)) && (NIL == web_utilities.xml_token_starts_with(token, $str_alt8$_result))) {
-                                        token = iteration_next_without_values(iterator, UNPROVIDED);
-                                    } 
-                                    if (NIL != iteration_done(iterator)) {
-                                        sublisp_throw($PARSING_DONE, T);
-                                    }
-                                    {
-                                        SubLObject result_tokens = NIL;
-                                        while (NIL == web_utilities.xml_token_starts_with(token, $str_alt24$__result)) {
-                                            result_tokens = cons(token, result_tokens);
-                                            token = iteration_next_without_values(iterator, UNPROVIDED);
-                                        } 
-                                        result_tokens = cons(token, result_tokens);
-                                        result_tokens = nreverse(result_tokens);
-                                        {
-                                            SubLObject result = sparql_utilities.sparql_extract_result(variable_names, result_tokens, prefix_map);
-                                            print(result, UNPROVIDED);
-                                            result_set = cons(result, result_set);
-                                        }
-                                    }
-                                } 
-                            } catch (Throwable ccatch_env_var) {
-                                catch_var = Errors.handleThrowable(ccatch_env_var, $PARSING_DONE);
-                            }
-                        }
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            if (stream.isStream()) {
-                                close(stream, UNPROVIDED);
-                            }
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                return nreverse(result_set);
-            }
-        }
     }
 
     public static SubLObject process_sparql_file_iterative_tokenize(final SubLObject filename, final SubLObject sparql, SubLObject access_path) {
@@ -1055,58 +594,6 @@ public final class sparql_result_stream extends SubLTranslatedFile implements V1
         return nreverse(result_set);
     }
 
-    static private final SubLString $str_alt1$_results = makeString("<results");
-
-    static private final SubLString $str_alt2$__ = makeString("/>");
-
-    static private final SubLSymbol $sym3$SPARQL_RESULT_STREAM_ITERATOR_DONE_ = makeSymbol("SPARQL-RESULT-STREAM-ITERATOR-DONE?");
-
-    public static final SubLObject process_sparql_file_line_buffer_alt(SubLObject filename, SubLObject sparql, SubLObject access_path) {
-        if (access_path == UNPROVIDED) {
-            access_path = sksi_sks_interaction.$access_path$.getGlobalValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject variable_names = sksi_sks_interaction.sparql_extract_variable_names(sparql);
-                SubLObject prefix_map = sksi_access_path.access_path_rdf_prefix_map(access_path);
-                SubLObject result_set = NIL;
-                SubLObject stream = NIL;
-                try {
-                    {
-                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                        try {
-                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                            stream = compatibility.open_text(filename, $INPUT, NIL);
-                        } finally {
-                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    if (!stream.isStream()) {
-                        Errors.error($str_alt22$Unable_to_open__S, filename);
-                    }
-                    {
-                        SubLObject stream_1 = stream;
-                        result_set = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sparql_result_stream.batch_process_sparql_result_stream(stream_1, variable_names, prefix_map);
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            if (stream.isStream()) {
-                                close(stream, UNPROVIDED);
-                            }
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                return result_set;
-            }
-        }
-    }
-
     public static SubLObject process_sparql_file_line_buffer(final SubLObject filename, final SubLObject sparql, SubLObject access_path) {
         if (access_path == UNPROVIDED) {
             access_path = sksi_sks_interaction.$access_path$.getGlobalValue();
@@ -1146,120 +633,29 @@ public final class sparql_result_stream extends SubLTranslatedFile implements V1
         return result_set;
     }
 
-    static private final SubLList $list_alt6 = list(makeSymbol("LINE-BUFFER"), makeSymbol("&REST"), makeSymbol("REST"));
-
-    static private final SubLList $list_alt7 = list(makeSymbol("LINE-BUFFER"), makeSymbol("LINE-ITERATOR"), makeSymbol("VARIABLE-NAMES"), makeSymbol("PREFIX-MAP"));
-
-    static private final SubLString $str_alt8$_result = makeString("<result");
-
-    static private final SubLList $list_alt9 = list(makeSymbol("LINE-BUFFER"), makeSymbol("LINE-ITERATOR"), makeSymbol("&REST"), makeSymbol("REST"));
-
-    static private final SubLString $str_alt10$_binding = makeString("<binding");
-
-    static private final SubLString $str_alt11$_uri = makeString("<uri");
-
-    static private final SubLString $str_alt12$_literal = makeString("<literal");
-
-    static private final SubLString $str_alt13$_bnode = makeString("<bnode");
-
-    static private final SubLString $str_alt14$Unexpected_line__S = makeString("Unexpected line ~S");
-
-    static private final SubLString $str_alt15$_binding_name_ = makeString("<binding name=");
-
-    static private final SubLString $str_alt16$_ = makeString(">");
-
-    static private final SubLString $str_alt17$__literal_ = makeString("</literal>");
-
-    static private final SubLString $str_alt18$__uri_ = makeString("</uri>");
-
-    static private final SubLList $list_alt19 = cons(makeSymbol("ABBREV"), makeSymbol("PREFIX"));
-
-    static private final SubLString $str_alt20$__bnode_ = makeString("</bnode>");
-
-    static private final SubLString $str_alt22$Unable_to_open__S = makeString("Unable to open ~S");
-
-    static private final SubLString $str_alt24$__result = makeString("</result");
-
-    public static final SubLObject declare_sparql_result_stream_file_alt() {
-        declareFunction("string_buffer_current_string", "STRING-BUFFER-CURRENT-STRING", 1, 0, false);
-        declareFunction("new_sparql_result_stream_iterator", "NEW-SPARQL-RESULT-STREAM-ITERATOR", 3, 0, false);
-        declareFunction("batch_process_sparql_result_stream", "BATCH-PROCESS-SPARQL-RESULT-STREAM", 3, 0, false);
-        declareFunction("make_sparql_result_stream_iterator_state", "MAKE-SPARQL-RESULT-STREAM-ITERATOR-STATE", 4, 0, false);
-        declareFunction("sparql_result_stream_iterator_doneP", "SPARQL-RESULT-STREAM-ITERATOR-DONE?", 1, 0, false);
-        declareFunction("sparql_result_stream_iterator_next", "SPARQL-RESULT-STREAM-ITERATOR-NEXT", 1, 0, false);
-        declareFunction("sparql_result_stream_iterator_finalize", "SPARQL-RESULT-STREAM-ITERATOR-FINALIZE", 1, 0, false);
-        declareFunction("string_buffer_containsP", "STRING-BUFFER-CONTAINS?", 2, 0, false);
-        declareFunction("process_sparql_file_line_buffer_result", "PROCESS-SPARQL-FILE-LINE-BUFFER-RESULT", 4, 0, false);
-        declareFunction("sparql_extract_binding_value_from_line_buffer", "SPARQL-EXTRACT-BINDING-VALUE-FROM-LINE-BUFFER", 4, 0, false);
-        declareFunction("sparql_line_buffer_variable_index", "SPARQL-LINE-BUFFER-VARIABLE-INDEX", 2, 0, false);
-        declareFunction("sparql_extract_literal_from_line_buffer", "SPARQL-EXTRACT-LITERAL-FROM-LINE-BUFFER", 1, 0, false);
-        declareFunction("sparql_extract_uri_from_line_buffer", "SPARQL-EXTRACT-URI-FROM-LINE-BUFFER", 2, 0, false);
-        declareFunction("sparql_extract_bnode_from_line_buffer", "SPARQL-EXTRACT-BNODE-FROM-LINE-BUFFER", 1, 0, false);
-        declareFunction("process_sparql_file_batch_tokenize", "PROCESS-SPARQL-FILE-BATCH-TOKENIZE", 2, 1, false);
-        declareFunction("process_sparql_file_iterative_tokenize", "PROCESS-SPARQL-FILE-ITERATIVE-TOKENIZE", 2, 1, false);
-        declareFunction("process_sparql_file_line_buffer", "PROCESS-SPARQL-FILE-LINE-BUFFER", 2, 1, false);
-        return NIL;
-    }
-
     public static SubLObject declare_sparql_result_stream_file() {
-        if (SubLFiles.USE_V1) {
-            declareFunction("string_buffer_current_string", "STRING-BUFFER-CURRENT-STRING", 1, 0, false);
-            declareFunction("sparql_line_iterator_next", "SPARQL-LINE-ITERATOR-NEXT", 1, 0, false);
-            declareFunction("new_sparql_result_stream_iterator", "NEW-SPARQL-RESULT-STREAM-ITERATOR", 3, 1, false);
-            declareFunction("batch_process_sparql_result_stream", "BATCH-PROCESS-SPARQL-RESULT-STREAM", 4, 1, false);
-            declareFunction("batch_process_boolean_sparql_result_stream", "BATCH-PROCESS-BOOLEAN-SPARQL-RESULT-STREAM", 1, 0, false);
-            declareFunction("make_sparql_result_stream_iterator_state", "MAKE-SPARQL-RESULT-STREAM-ITERATOR-STATE", 5, 0, false);
-            declareFunction("sparql_result_stream_iterator_doneP", "SPARQL-RESULT-STREAM-ITERATOR-DONE?", 1, 0, false);
-            declareFunction("sparql_result_stream_iterator_next", "SPARQL-RESULT-STREAM-ITERATOR-NEXT", 1, 0, false);
-            declareFunction("sparql_result_stream_iterator_finalize", "SPARQL-RESULT-STREAM-ITERATOR-FINALIZE", 1, 0, false);
-            declareFunction("string_buffer_containsP", "STRING-BUFFER-CONTAINS?", 2, 0, false);
-            declareFunction("process_sparql_file_line_buffer_result", "PROCESS-SPARQL-FILE-LINE-BUFFER-RESULT", 4, 1, false);
-            declareFunction("sparql_extract_binding_value_from_line_buffer", "SPARQL-EXTRACT-BINDING-VALUE-FROM-LINE-BUFFER", 4, 1, false);
-            declareFunction("sparql_line_buffer_variable_index", "SPARQL-LINE-BUFFER-VARIABLE-INDEX", 2, 0, false);
-            declareFunction("sparql_extract_literal_from_line_buffer", "SPARQL-EXTRACT-LITERAL-FROM-LINE-BUFFER", 2, 0, false);
-            declareFunction("sparql_extract_literal_from_line_buffer_int", "SPARQL-EXTRACT-LITERAL-FROM-LINE-BUFFER-INT", 1, 0, false);
-            declareFunction("sparql_extract_rdf_literal_from_line_buffer", "SPARQL-EXTRACT-RDF-LITERAL-FROM-LINE-BUFFER", 1, 0, false);
-            declareFunction("sparql_extract_uri_from_line_buffer", "SPARQL-EXTRACT-URI-FROM-LINE-BUFFER", 2, 0, false);
-            declareFunction("sparql_extract_uri_from_string", "SPARQL-EXTRACT-URI-FROM-STRING", 2, 1, false);
-            declareFunction("sparql_extract_bnode_from_line_buffer", "SPARQL-EXTRACT-BNODE-FROM-LINE-BUFFER", 1, 0, false);
-            declareFunction("process_sparql_file_batch_tokenize", "PROCESS-SPARQL-FILE-BATCH-TOKENIZE", 2, 1, false);
-            declareFunction("process_sparql_file_iterative_tokenize", "PROCESS-SPARQL-FILE-ITERATIVE-TOKENIZE", 2, 1, false);
-            declareFunction("process_sparql_file_line_buffer", "PROCESS-SPARQL-FILE-LINE-BUFFER", 2, 1, false);
-        }
-        if (SubLFiles.USE_V2) {
-            declareFunction("new_sparql_result_stream_iterator", "NEW-SPARQL-RESULT-STREAM-ITERATOR", 3, 0, false);
-            declareFunction("batch_process_sparql_result_stream", "BATCH-PROCESS-SPARQL-RESULT-STREAM", 3, 0, false);
-            declareFunction("make_sparql_result_stream_iterator_state", "MAKE-SPARQL-RESULT-STREAM-ITERATOR-STATE", 4, 0, false);
-            declareFunction("process_sparql_file_line_buffer_result", "PROCESS-SPARQL-FILE-LINE-BUFFER-RESULT", 4, 0, false);
-            declareFunction("sparql_extract_binding_value_from_line_buffer", "SPARQL-EXTRACT-BINDING-VALUE-FROM-LINE-BUFFER", 4, 0, false);
-            declareFunction("sparql_extract_literal_from_line_buffer", "SPARQL-EXTRACT-LITERAL-FROM-LINE-BUFFER", 1, 0, false);
-        }
-        return NIL;
-    }
-
-    public static SubLObject declare_sparql_result_stream_file_Previous() {
-        declareFunction("string_buffer_current_string", "STRING-BUFFER-CURRENT-STRING", 1, 0, false);
-        declareFunction("sparql_line_iterator_next", "SPARQL-LINE-ITERATOR-NEXT", 1, 0, false);
-        declareFunction("new_sparql_result_stream_iterator", "NEW-SPARQL-RESULT-STREAM-ITERATOR", 3, 1, false);
-        declareFunction("batch_process_sparql_result_stream", "BATCH-PROCESS-SPARQL-RESULT-STREAM", 4, 1, false);
-        declareFunction("batch_process_boolean_sparql_result_stream", "BATCH-PROCESS-BOOLEAN-SPARQL-RESULT-STREAM", 1, 0, false);
-        declareFunction("make_sparql_result_stream_iterator_state", "MAKE-SPARQL-RESULT-STREAM-ITERATOR-STATE", 5, 0, false);
-        declareFunction("sparql_result_stream_iterator_doneP", "SPARQL-RESULT-STREAM-ITERATOR-DONE?", 1, 0, false);
-        declareFunction("sparql_result_stream_iterator_next", "SPARQL-RESULT-STREAM-ITERATOR-NEXT", 1, 0, false);
-        declareFunction("sparql_result_stream_iterator_finalize", "SPARQL-RESULT-STREAM-ITERATOR-FINALIZE", 1, 0, false);
-        declareFunction("string_buffer_containsP", "STRING-BUFFER-CONTAINS?", 2, 0, false);
-        declareFunction("process_sparql_file_line_buffer_result", "PROCESS-SPARQL-FILE-LINE-BUFFER-RESULT", 4, 1, false);
-        declareFunction("sparql_extract_binding_value_from_line_buffer", "SPARQL-EXTRACT-BINDING-VALUE-FROM-LINE-BUFFER", 4, 1, false);
-        declareFunction("sparql_line_buffer_variable_index", "SPARQL-LINE-BUFFER-VARIABLE-INDEX", 2, 0, false);
-        declareFunction("sparql_extract_literal_from_line_buffer", "SPARQL-EXTRACT-LITERAL-FROM-LINE-BUFFER", 2, 0, false);
-        declareFunction("sparql_extract_literal_from_line_buffer_int", "SPARQL-EXTRACT-LITERAL-FROM-LINE-BUFFER-INT", 1, 0, false);
-        declareFunction("sparql_extract_rdf_literal_from_line_buffer", "SPARQL-EXTRACT-RDF-LITERAL-FROM-LINE-BUFFER", 1, 0, false);
-        declareFunction("sparql_extract_uri_from_line_buffer", "SPARQL-EXTRACT-URI-FROM-LINE-BUFFER", 2, 0, false);
-        declareFunction("sparql_extract_uri_from_string", "SPARQL-EXTRACT-URI-FROM-STRING", 2, 1, false);
-        declareFunction("sparql_extract_bnode_from_line_buffer", "SPARQL-EXTRACT-BNODE-FROM-LINE-BUFFER", 1, 0, false);
-        declareFunction("process_sparql_file_batch_tokenize", "PROCESS-SPARQL-FILE-BATCH-TOKENIZE", 2, 1, false);
-        declareFunction("process_sparql_file_iterative_tokenize", "PROCESS-SPARQL-FILE-ITERATIVE-TOKENIZE", 2, 1, false);
-        declareFunction("process_sparql_file_line_buffer", "PROCESS-SPARQL-FILE-LINE-BUFFER", 2, 1, false);
+        declareFunction(me, "string_buffer_current_string", "STRING-BUFFER-CURRENT-STRING", 1, 0, false);
+        declareFunction(me, "sparql_line_iterator_next", "SPARQL-LINE-ITERATOR-NEXT", 1, 0, false);
+        declareFunction(me, "new_sparql_result_stream_iterator", "NEW-SPARQL-RESULT-STREAM-ITERATOR", 3, 1, false);
+        declareFunction(me, "batch_process_sparql_result_stream", "BATCH-PROCESS-SPARQL-RESULT-STREAM", 4, 1, false);
+        declareFunction(me, "batch_process_boolean_sparql_result_stream", "BATCH-PROCESS-BOOLEAN-SPARQL-RESULT-STREAM", 1, 0, false);
+        declareFunction(me, "make_sparql_result_stream_iterator_state", "MAKE-SPARQL-RESULT-STREAM-ITERATOR-STATE", 5, 0, false);
+        declareFunction(me, "sparql_result_stream_iterator_doneP", "SPARQL-RESULT-STREAM-ITERATOR-DONE?", 1, 0, false);
+        declareFunction(me, "sparql_result_stream_iterator_next", "SPARQL-RESULT-STREAM-ITERATOR-NEXT", 1, 0, false);
+        declareFunction(me, "sparql_result_stream_iterator_finalize", "SPARQL-RESULT-STREAM-ITERATOR-FINALIZE", 1, 0, false);
+        declareFunction(me, "string_buffer_containsP", "STRING-BUFFER-CONTAINS?", 2, 0, false);
+        declareFunction(me, "process_sparql_file_line_buffer_result", "PROCESS-SPARQL-FILE-LINE-BUFFER-RESULT", 4, 1, false);
+        declareFunction(me, "sparql_extract_binding_value_from_line_buffer", "SPARQL-EXTRACT-BINDING-VALUE-FROM-LINE-BUFFER", 4, 1, false);
+        declareFunction(me, "sparql_line_buffer_variable_index", "SPARQL-LINE-BUFFER-VARIABLE-INDEX", 2, 0, false);
+        declareFunction(me, "sparql_extract_literal_from_line_buffer", "SPARQL-EXTRACT-LITERAL-FROM-LINE-BUFFER", 2, 0, false);
+        declareFunction(me, "sparql_extract_literal_from_line_buffer_int", "SPARQL-EXTRACT-LITERAL-FROM-LINE-BUFFER-INT", 1, 0, false);
+        declareFunction(me, "sparql_extract_rdf_literal_from_line_buffer", "SPARQL-EXTRACT-RDF-LITERAL-FROM-LINE-BUFFER", 1, 0, false);
+        declareFunction(me, "sparql_extract_uri_from_line_buffer", "SPARQL-EXTRACT-URI-FROM-LINE-BUFFER", 2, 0, false);
+        declareFunction(me, "sparql_extract_uri_from_string", "SPARQL-EXTRACT-URI-FROM-STRING", 2, 1, false);
+        declareFunction(me, "sparql_extract_bnode_from_line_buffer", "SPARQL-EXTRACT-BNODE-FROM-LINE-BUFFER", 1, 0, false);
+        declareFunction(me, "process_sparql_file_batch_tokenize", "PROCESS-SPARQL-FILE-BATCH-TOKENIZE", 2, 1, false);
+        declareFunction(me, "process_sparql_file_iterative_tokenize", "PROCESS-SPARQL-FILE-ITERATIVE-TOKENIZE", 2, 1, false);
+        declareFunction(me, "process_sparql_file_line_buffer", "PROCESS-SPARQL-FILE-LINE-BUFFER", 2, 1, false);
         return NIL;
     }
 
@@ -1268,26 +664,7 @@ public final class sparql_result_stream extends SubLTranslatedFile implements V1
         return NIL;
     }
 
-    public static final SubLObject setup_sparql_result_stream_file_alt() {
-        note_funcall_helper_function($sym3$SPARQL_RESULT_STREAM_ITERATOR_DONE_);
-        note_funcall_helper_function(SPARQL_RESULT_STREAM_ITERATOR_NEXT);
-        note_funcall_helper_function(SPARQL_RESULT_STREAM_ITERATOR_FINALIZE);
-        return NIL;
-    }
-
     public static SubLObject setup_sparql_result_stream_file() {
-        if (SubLFiles.USE_V1) {
-            note_funcall_helper_function($sym9$SPARQL_RESULT_STREAM_ITERATOR_DONE_);
-            note_funcall_helper_function(SPARQL_RESULT_STREAM_ITERATOR_NEXT);
-            note_funcall_helper_function(SPARQL_RESULT_STREAM_ITERATOR_FINALIZE);
-        }
-        if (SubLFiles.USE_V2) {
-            note_funcall_helper_function($sym3$SPARQL_RESULT_STREAM_ITERATOR_DONE_);
-        }
-        return NIL;
-    }
-
-    public static SubLObject setup_sparql_result_stream_file_Previous() {
         note_funcall_helper_function($sym9$SPARQL_RESULT_STREAM_ITERATOR_DONE_);
         note_funcall_helper_function(SPARQL_RESULT_STREAM_ITERATOR_NEXT);
         note_funcall_helper_function(SPARQL_RESULT_STREAM_ITERATOR_FINALIZE);
@@ -1310,6 +687,42 @@ public final class sparql_result_stream extends SubLTranslatedFile implements V1
     }
 
     static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
 

@@ -1364,7 +1364,7 @@ public final class cb_uia_launchers extends SubLTranslatedFile implements V02 {
                                         html_utilities.html_newline(UNPROVIDED);
                                         html_utilities.html_newline(UNPROVIDED);
                                         html_utilities.html_princ($str_alt142$occurring_);
-                                        html_utilities.html_radio_input($str_alt143$_search_type, $str_alt144$_prefix, NIL);
+                                        html_utilities.html_radio_input($str_alt143$_search_type, $str_alt144$_prefix, NIL, UNPROVIDED_SYM);
                                         html_utilities.html_princ($$$at_the_beginning);
                                         html_utilities.html_indent(UNPROVIDED);
                                         html_utilities.html_radio_input($str_alt143$_search_type, $str_alt146$_infix, T);
@@ -1821,20 +1821,7 @@ public final class cb_uia_launchers extends SubLTranslatedFile implements V02 {
                     try {
                         memoization_state.$memoization_state$.bind(local_state, thread);
                         {
-                            SubLObject original_memoization_process = NIL;
-                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                {
-                                    SubLObject current_proc = current_process();
-                                    if (NIL == original_memoization_process) {
-                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                    } else {
-                                        if (original_memoization_process != current_proc) {
-                                            Errors.error($str_alt196$Invalid_attempt_to_reuse_memoizat);
-                                        }
-                                    }
-                                }
-                            }
+                            SubLObject original_memoization_process = memoization_state.aquireMemoStateLock(local_state);
                             try {
                                 {
                                     SubLObject tool_cycl = $$CycRuleConstructor;

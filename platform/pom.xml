@@ -85,21 +85,6 @@
 				<version>1.7</version>
 				<executions>
 					<execution>
-						<id>validate.platform</id>
-						<phase>validate</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<target>
-								<ant antfile="${basedir}/build.xml">
-									<target name="abcl.compile.lisp" />
-								</ant>
-							</target>
-							<failOnError>false</failOnError>
-						</configuration>
-					</execution>
-					<execution>
 						<id>process-sources.platform</id>
 						<phase>process-sources</phase>
 						<goals>

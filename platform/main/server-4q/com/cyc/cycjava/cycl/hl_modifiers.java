@@ -104,7 +104,7 @@ public final class hl_modifiers extends SubLTranslatedFile implements V02 {
             {
                 SubLObject result = NIL;
                 hl_interface_infrastructure.define_hl_modifier_preamble();
-                hl_interface_infrastructure.note_hl_modifier_invocation(KB_CREATE_ASSERTED_ARGUMENT, assertion, truth, strength, UNPROVIDED, UNPROVIDED);
+                hl_interface_infrastructure.note_hl_modifier_invocation(KB_CREATE_ASSERTED_ARGUMENT, assertion, truth, strength, UNPROVIDED, UNPROVIDED, UNPROVIDED_SYM, UNPROVIDED_SYM);
                 if (NIL != hl_interface_infrastructure.hl_modify_remoteP()) {
                     result = hl_interface_infrastructure.hl_store_remote_eval(list(KB_CREATE_ASSERTED_ARGUMENT, list(QUOTE, assertion), list(QUOTE, truth), list(QUOTE, strength)));
                 }
@@ -153,7 +153,7 @@ public final class hl_modifiers extends SubLTranslatedFile implements V02 {
             {
                 SubLObject result = NIL;
                 hl_interface_infrastructure.define_hl_modifier_preamble();
-                hl_interface_infrastructure.note_hl_modifier_invocation(KB_REMOVE_ASSERTED_ARGUMENT, assertion, asserted_argument, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                hl_interface_infrastructure.note_hl_modifier_invocation(KB_REMOVE_ASSERTED_ARGUMENT, assertion, asserted_argument, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED_SYM, UNPROVIDED_SYM);
                 if (NIL != hl_interface_infrastructure.hl_modify_remoteP()) {
                     result = hl_interface_infrastructure.hl_store_remote_eval(list(KB_REMOVE_ASSERTED_ARGUMENT, list(QUOTE, assertion), list(QUOTE, asserted_argument)));
                 }
@@ -203,7 +203,7 @@ public final class hl_modifiers extends SubLTranslatedFile implements V02 {
             {
                 SubLObject result = NIL;
                 hl_interface_infrastructure.define_hl_modifier_preamble();
-                hl_interface_infrastructure.note_hl_modifier_invocation(HL_ASSERT_BOOKKEEPING_BINARY_GAF, pred, arg1, arg2, mt, UNPROVIDED);
+                hl_interface_infrastructure.note_hl_modifier_invocation(HL_ASSERT_BOOKKEEPING_BINARY_GAF, pred, arg1, arg2, mt, UNPROVIDED, UNPROVIDED_SYM, UNPROVIDED_SYM);
                 if (NIL != hl_interface_infrastructure.hl_modify_remoteP()) {
                     result = hl_interface_infrastructure.hl_store_remote_eval(list(HL_ASSERT_BOOKKEEPING_BINARY_GAF, list(QUOTE, pred), list(QUOTE, arg1), list(QUOTE, arg2), list(QUOTE, mt)));
                 }
@@ -246,7 +246,7 @@ public final class hl_modifiers extends SubLTranslatedFile implements V02 {
             {
                 SubLObject result = NIL;
                 hl_interface_infrastructure.define_hl_modifier_preamble();
-                hl_interface_infrastructure.note_hl_modifier_invocation(HL_UNASSERT_BOOKKEEPING_BINARY_GAF, pred, arg1, arg2, mt, UNPROVIDED);
+                hl_interface_infrastructure.note_hl_modifier_invocation(HL_UNASSERT_BOOKKEEPING_BINARY_GAF, pred, arg1, arg2, mt, UNPROVIDED, UNPROVIDED_SYM, UNPROVIDED_SYM);
                 if (NIL != hl_interface_infrastructure.hl_modify_remoteP()) {
                     result = hl_interface_infrastructure.hl_store_remote_eval(list(HL_UNASSERT_BOOKKEEPING_BINARY_GAF, list(QUOTE, pred), list(QUOTE, arg1), list(QUOTE, arg2), list(QUOTE, mt)));
                 }

@@ -1,103 +1,11 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl;
 
-
-import static com.cyc.cycjava.cycl.constant_handles.invalid_constantP;
-import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_empty_p;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_id_and_object_validP;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_next_id;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_next_state;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_state_object;
-import static com.cyc.cycjava.cycl.id_index.id_index_dense_objects;
-import static com.cyc.cycjava.cycl.id_index.id_index_dense_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_next_id;
-import static com.cyc.cycjava.cycl.id_index.id_index_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_skip_tombstones_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_id_threshold;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_objects;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_tombstone_p;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_index$;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_prediction$;
-import static com.cyc.cycjava.cycl.utilities_macros.$percent_progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_note$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_sofar$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_total$;
-import static com.cyc.cycjava.cycl.utilities_macros.$within_noting_percent_progress$;
-import static com.cyc.cycjava.cycl.utilities_macros.note_percent_progress;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_percent_progress_postamble;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_percent_progress_preamble;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.append;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.identity;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.getEntryKey;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.getEntrySetIterator;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.getEntryValue;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.gethash_without_values;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.iteratorHasNext;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.iteratorNextEntry;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.make_hash_table;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.releaseEntrySetIterator;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.sethash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.numG;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.subtract;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.length;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.nreverse;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.reverse;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.def_csetf;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.makeStructDeclNative;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.register_method;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.get_universal_time;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.hash_table_p;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.listp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.stringp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.sublisp_null;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.aref;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeDouble;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cadr;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cddr;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.putf;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.second;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_pretty$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.bq_cons;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.read;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.close;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.write_string;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
-import static com.cyc.tool.subl.util.SubLFiles.defconstant;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-
-import java.util.Iterator;
-import java.util.Map;
-
-import org.armedbear.lisp.Lisp;
 
 import com.cyc.cycjava.cycl.inference.ask_utilities;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_store;
 import com.cyc.cycjava.cycl.nl.document_disambiguation;
+import com.cyc.cycjava.cycl.rule_disambiguation;
+import com.cyc.cycjava.cycl.utilities_macros;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Filesys;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
@@ -117,109 +25,96 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
+import java.util.Iterator;
+import java.util.Map;
+import org.armedbear.lisp.Lisp;
+
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.id_index.*;
+import static com.cyc.cycjava.cycl.rule_disambiguation.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.MINUS_ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_pretty$;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- * module:      RULE-DISAMBIGUATION
- * source file: /cyc/top/cycl/rule-disambiguation.lisp
- * created:     2019/07/03 17:38:57
- */
-public final class rule_disambiguation extends SubLTranslatedFile implements V12 {
-    public static final class $rule_disambiguator_native extends SubLStructNative {
-        public SubLStructDecl getStructDecl() {
-            return structDecl;
-        }
-
-        public SubLObject getField2() {
-            return com.cyc.cycjava.cycl.rule_disambiguation.$rule_disambiguator_native.this.$rule_file;
-        }
-
-        public SubLObject getField3() {
-            return com.cyc.cycjava.cycl.rule_disambiguation.$rule_disambiguator_native.this.$count_file;
-        }
-
-        public SubLObject getField4() {
-            return com.cyc.cycjava.cycl.rule_disambiguation.$rule_disambiguator_native.this.$rules;
-        }
-
-        public SubLObject getField5() {
-            return com.cyc.cycjava.cycl.rule_disambiguation.$rule_disambiguator_native.this.$counts;
-        }
-
-        public SubLObject setField2(SubLObject value) {
-            return com.cyc.cycjava.cycl.rule_disambiguation.$rule_disambiguator_native.this.$rule_file = value;
-        }
-
-        public SubLObject setField3(SubLObject value) {
-            return com.cyc.cycjava.cycl.rule_disambiguation.$rule_disambiguator_native.this.$count_file = value;
-        }
-
-        public SubLObject setField4(SubLObject value) {
-            return com.cyc.cycjava.cycl.rule_disambiguation.$rule_disambiguator_native.this.$rules = value;
-        }
-
-        public SubLObject setField5(SubLObject value) {
-            return com.cyc.cycjava.cycl.rule_disambiguation.$rule_disambiguator_native.this.$counts = value;
-        }
-
-        public SubLObject $rule_file = Lisp.NIL;
-
-        public SubLObject $count_file = Lisp.NIL;
-
-        public SubLObject $rules = Lisp.NIL;
-
-        public SubLObject $counts = Lisp.NIL;
-
-        private static final SubLStructDeclNative structDecl = makeStructDeclNative(com.cyc.cycjava.cycl.rule_disambiguation.$rule_disambiguator_native.class, RULE_DISAMBIGUATOR, RULE_DISAMBIGUATOR_P, $list_alt8, $list_alt9, new String[]{ "$rule_file", "$count_file", "$rules", "$counts" }, $list_alt10, $list_alt11, RDIS_PRINT);
-    }
-
+import static com.cyc.cycjava.cycl.rule_disambiguation.*; 
+ public final class rule_disambiguation extends SubLTranslatedFile {
     public static final SubLFile me = new rule_disambiguation();
 
+    public static final String myName = "com.cyc.cycjava.cycl.rule_disambiguation";
 
+    public static final String myFingerPrint = "891c642dbb822fe6626a2e438c6789a014bae17b876bd1204b065b2df69a6775";
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $word_sense_disambiguation_rule_file$ = makeSymbol("*WORD-SENSE-DISAMBIGUATION-RULE-FILE*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $word_sense_disambiguation_count_file$ = makeSymbol("*WORD-SENSE-DISAMBIGUATION-COUNT-FILE*");
 
     // defconstant
-    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $dtp_rule_disambiguator$ = makeSymbol("*DTP-RULE-DISAMBIGUATOR*");
 
     // Internal Constants
-    @LispMethod(comment = "Internal Constants")
-    static private final SubLString $str0$data_word_sense_disambiguation_ru = makeString("data/word-sense-disambiguation-rules.fht");
+    public static final SubLString $str0$data_word_sense_disambiguation_ru = makeString("data/word-sense-disambiguation-rules.fht");
 
-    static private final SubLString $str1$data_word_sense_disambiguation_co = makeString("data/word-sense-disambiguation-counts.fht");
+    public static final SubLString $str1$data_word_sense_disambiguation_co = makeString("data/word-sense-disambiguation-counts.fht");
 
-    static private final SubLList $list2 = list(list(makeSymbol("DISAMBIGUATOR")), makeSymbol("&BODY"), makeSymbol("BODY"));
+    public static final SubLList $list2 = list(list(makeSymbol("DISAMBIGUATOR")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
-    static private final SubLList $list4 = list(list(makeSymbol("NEW-RULE-DISAMBIGUATOR")));
 
-    private static final SubLSymbol FINALIZE_RULE_DISAMBIGUATOR = makeSymbol("FINALIZE-RULE-DISAMBIGUATOR");
 
-    private static final SubLSymbol RULE_DISAMBIGUATOR = makeSymbol("RULE-DISAMBIGUATOR");
+    public static final SubLList $list4 = list(list(makeSymbol("NEW-RULE-DISAMBIGUATOR")));
 
-    private static final SubLSymbol RULE_DISAMBIGUATOR_P = makeSymbol("RULE-DISAMBIGUATOR-P");
+    public static final SubLSymbol FINALIZE_RULE_DISAMBIGUATOR = makeSymbol("FINALIZE-RULE-DISAMBIGUATOR");
 
-    static private final SubLList $list8 = list(makeSymbol("RULE-FILE"), makeSymbol("COUNT-FILE"), makeSymbol("RULES"), makeSymbol("COUNTS"));
+    public static final SubLSymbol RULE_DISAMBIGUATOR = makeSymbol("RULE-DISAMBIGUATOR");
 
-    static private final SubLList $list9 = list(makeKeyword("RULE-FILE"), makeKeyword("COUNT-FILE"), makeKeyword("RULES"), makeKeyword("COUNTS"));
+    public static final SubLSymbol RULE_DISAMBIGUATOR_P = makeSymbol("RULE-DISAMBIGUATOR-P");
 
-    static private final SubLList $list10 = list(makeSymbol("RDIS-RULE-FILE"), makeSymbol("RDIS-COUNT-FILE"), makeSymbol("RDIS-RULES"), makeSymbol("RDIS-COUNTS"));
+    public static final SubLList $list8 = list(makeSymbol("RULE-FILE"), makeSymbol("COUNT-FILE"), makeSymbol("RULES"), makeSymbol("COUNTS"));
 
-    static private final SubLList $list11 = list(makeSymbol("_CSETF-RDIS-RULE-FILE"), makeSymbol("_CSETF-RDIS-COUNT-FILE"), makeSymbol("_CSETF-RDIS-RULES"), makeSymbol("_CSETF-RDIS-COUNTS"));
+    public static final SubLList $list9 = list(makeKeyword("RULE-FILE"), makeKeyword("COUNT-FILE"), makeKeyword("RULES"), makeKeyword("COUNTS"));
 
-    private static final SubLSymbol RDIS_PRINT = makeSymbol("RDIS-PRINT");
+    public static final SubLList $list10 = list(makeSymbol("RDIS-RULE-FILE"), makeSymbol("RDIS-COUNT-FILE"), makeSymbol("RDIS-RULES"), makeSymbol("RDIS-COUNTS"));
 
-    private static final SubLSymbol RULE_DISAMBIGUATOR_PRINT_FUNCTION_TRAMPOLINE = makeSymbol("RULE-DISAMBIGUATOR-PRINT-FUNCTION-TRAMPOLINE");
+    public static final SubLList $list11 = list(makeSymbol("_CSETF-RDIS-RULE-FILE"), makeSymbol("_CSETF-RDIS-COUNT-FILE"), makeSymbol("_CSETF-RDIS-RULES"), makeSymbol("_CSETF-RDIS-COUNTS"));
+
+    public static final SubLSymbol RDIS_PRINT = makeSymbol("RDIS-PRINT");
+
+    public static final SubLSymbol RULE_DISAMBIGUATOR_PRINT_FUNCTION_TRAMPOLINE = makeSymbol("RULE-DISAMBIGUATOR-PRINT-FUNCTION-TRAMPOLINE");
 
     private static final SubLList $list14 = list(makeSymbol("OPTIMIZE-FUNCALL"), makeSymbol("RULE-DISAMBIGUATOR-P"));
 
@@ -239,11 +134,27 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
 
     private static final SubLSymbol _CSETF_RDIS_COUNTS = makeSymbol("_CSETF-RDIS-COUNTS");
 
+
+
+
+
+
+
+
+
     private static final SubLString $str27$Invalid_slot__S_for_construction_ = makeString("Invalid slot ~S for construction function");
+
+
 
     private static final SubLSymbol MAKE_RULE_DISAMBIGUATOR = makeSymbol("MAKE-RULE-DISAMBIGUATOR");
 
+
+
+
+
     private static final SubLSymbol VISIT_DEFSTRUCT_OBJECT_RULE_DISAMBIGUATOR_METHOD = makeSymbol("VISIT-DEFSTRUCT-OBJECT-RULE-DISAMBIGUATOR-METHOD");
+
+
 
     private static final SubLString $str34$__RULE_DISAMBIGUATOR_ = makeString("#<RULE-DISAMBIGUATOR ");
 
@@ -256,6 +167,10 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
     private static final SubLSymbol $sym38$CYCL = makeUninternedSymbol("CYCL");
 
     private static final SubLSymbol $sym39$GENL_CYCL = makeUninternedSymbol("GENL-CYCL");
+
+
+
+
 
     private static final SubLSymbol WORD_CYCLS = makeSymbol("WORD-CYCLS");
 
@@ -271,7 +186,13 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
 
 
 
-    private static final SubLObject $const51$ContextuallyDependentLexicalMappi = reader_make_constant_shell("ContextuallyDependentLexicalMapping");
+
+
+    private static final SubLObject $$VanishinglyRareLexicalMapping = reader_make_constant_shell(makeString("VanishinglyRareLexicalMapping"));
+
+    private static final SubLObject $const51$ContextuallyDependentLexicalMappi = reader_make_constant_shell(makeString("ContextuallyDependentLexicalMapping"));
+
+
 
     private static final SubLString $str53$Can_t_load_rules_from__a = makeString("Can't load rules from ~a");
 
@@ -281,17 +202,19 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
 
     private static final SubLList $list56 = list(makeSymbol("?X"), makeSymbol("?Y"));
 
-
+    private static final SubLObject $$InferencePSC = reader_make_constant_shell(makeString("InferencePSC"));
 
     private static final SubLList $list58 = list(new SubLObject[]{ makeKeyword("INFERENCE-MODE"), makeKeyword("SHALLOW"), makeKeyword("ALLOW-INDETERMINATE-RESULTS?"), NIL, makeKeyword("DISJUNCTION-FREE-EL-VARS-POLICY"), makeKeyword("COMPUTE-INTERSECTION"), makeKeyword("INTERMEDIATE-STEP-VALIDATION-LEVEL"), makeKeyword("MINIMAL"), makeKeyword("MAX-TIME"), makeInteger(57600), makeKeyword("PROBABLY-APPROXIMATELY-DONE"), makeDouble(1.0), makeKeyword("ANSWER-LANGUAGE"), makeKeyword("EL"), makeKeyword("CONTINUABLE?"), NIL });
 
     private static final SubLString $str59$data_word_sense_disambiguation_ru = makeString("data/word-sense-disambiguation-rules.txt");
 
+    private static final SubLObject $$isLicensedBy = reader_make_constant_shell(makeString("isLicensedBy"));
 
-
-
+    private static final SubLObject $$isDelicensedBy = reader_make_constant_shell(makeString("isDelicensedBy"));
 
     private static final SubLInteger $int$65536 = makeInteger(65536);
+
+
 
     private static final SubLString $str64$Unable_to_open__S = makeString("Unable to open ~S");
 
@@ -301,13 +224,25 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
 
     private static final SubLString $str67$___ = makeString(")~%");
 
+
+
     private static final SubLList $list69 = list(makeSymbol("?LICENSOR"));
+
+
+
+
 
     private static final SubLSymbol $kw72$ALLOW_INDETERMINATE_RESULTS_ = makeKeyword("ALLOW-INDETERMINATE-RESULTS?");
 
     private static final SubLSymbol $DISJUNCTION_FREE_EL_VARS_POLICY = makeKeyword("DISJUNCTION-FREE-EL-VARS-POLICY");
 
+
+
     private static final SubLSymbol $INTERMEDIATE_STEP_VALIDATION_LEVEL = makeKeyword("INTERMEDIATE-STEP-VALIDATION-LEVEL");
+
+
+
+
 
     private static final SubLInteger $int$57600 = makeInteger(57600);
 
@@ -315,11 +250,23 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
 
     private static final SubLFloat $float$1_0 = makeDouble(1.0);
 
+
+
+
+
+
+
+
+
     private static final SubLString $str85$_tmp_ = makeString("/tmp/");
+
+
 
     private static final SubLString $str87$_a_is_invalid = makeString("~a is invalid");
 
     private static final SubLString $str88$Can_t_load__a___a = makeString("Can't load ~a: ~a");
+
+
 
     private static final SubLString $$$cdolist = makeString("cdolist");
 
@@ -341,6 +288,8 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
 
     private static final SubLString $$$mapping_Cyc_FORTs = makeString("mapping Cyc FORTs");
 
+
+
     private static final SubLString $str101$_host_george_term_id_lists_ = makeString("/host/george/term-id-lists/");
 
     private static final SubLString $str102$_host_george_disambig_rules_ = makeString("/host/george/disambig-rules/");
@@ -354,34 +303,6 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
     private static final SubLString $str106$arguments______progn__load____hom = makeString("arguments = \"\'(progn (load \"\"/home/daves/cycl/rule-disambiguation.lisp\"\") (load-transcript-file \"\"/cyc/top/transcripts/0917/billie-20061025103022-21843-local-0-sent.ts\"\" nil :none) (load-transcript-file \"\"/cyc/top/transcripts/0917/billie-20061025103022-21843-local-1-sent.ts\"\" nil :none) (create-disambiguator-rules-file-from-fort-file-id ~A))\'\"~%");
 
     private static final SubLString $str107$queue____ = makeString("queue~%~%");
-
-    public static final SubLObject with_new_rule_disambiguator_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            destructuring_bind_must_consp(current, datum, $list_alt2);
-            {
-                SubLObject temp = current.rest();
-                current = current.first();
-                {
-                    SubLObject disambiguator = NIL;
-                    destructuring_bind_must_consp(current, datum, $list_alt2);
-                    disambiguator = current.first();
-                    current = current.rest();
-                    if (NIL == current) {
-                        current = temp;
-                        {
-                            SubLObject body = current;
-                            return listS(CLET, list(bq_cons(disambiguator, $list_alt4)), append(body, list(list(FINALIZE_RULE_DISAMBIGUATOR, disambiguator))));
-                        }
-                    } else {
-                        cdestructuring_bind_error(datum, $list_alt2);
-                    }
-                }
-            }
-        }
-        return NIL;
-    }
 
     public static SubLObject with_new_rule_disambiguator(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
@@ -402,144 +323,60 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
         return NIL;
     }
 
-    public static final SubLObject rule_disambiguator_print_function_trampoline_alt(SubLObject v_object, SubLObject stream) {
-        rdis_print(v_object, stream, ZERO_INTEGER);
-        return NIL;
-    }
-
     public static SubLObject rule_disambiguator_print_function_trampoline(final SubLObject v_object, final SubLObject stream) {
         rdis_print(v_object, stream, ZERO_INTEGER);
         return NIL;
     }
 
-    public static final SubLObject rule_disambiguator_p_alt(SubLObject v_object) {
-        return v_object.getClass() == com.cyc.cycjava.cycl.rule_disambiguation.$rule_disambiguator_native.class ? ((SubLObject) (T)) : NIL;
-    }
-
     public static SubLObject rule_disambiguator_p(final SubLObject v_object) {
-        return v_object.getClass() == com.cyc.cycjava.cycl.rule_disambiguation.$rule_disambiguator_native.class ? T : NIL;
-    }
-
-    public static final SubLObject rdis_rule_file_alt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, RULE_DISAMBIGUATOR_P);
-        return v_object.getField2();
+        return v_object.getClass() == $rule_disambiguator_native.class ? T : NIL;
     }
 
     public static SubLObject rdis_rule_file(final SubLObject v_object) {
-        assert NIL != rule_disambiguator_p(v_object) : "! rule_disambiguation.rule_disambiguator_p(v_object) " + "rule_disambiguation.rule_disambiguator_p error :" + v_object;
+        assert NIL != rule_disambiguator_p(v_object) : "rule_disambiguation.rule_disambiguator_p error :" + v_object;
         return v_object.getField2();
     }
 
-    public static final SubLObject rdis_count_file_alt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, RULE_DISAMBIGUATOR_P);
-        return v_object.getField3();
-    }
-
     public static SubLObject rdis_count_file(final SubLObject v_object) {
-        assert NIL != rule_disambiguator_p(v_object) : "! rule_disambiguation.rule_disambiguator_p(v_object) " + "rule_disambiguation.rule_disambiguator_p error :" + v_object;
+        assert NIL != rule_disambiguator_p(v_object) : "rule_disambiguation.rule_disambiguator_p error :" + v_object;
         return v_object.getField3();
-    }
-
-    public static final SubLObject rdis_rules_alt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, RULE_DISAMBIGUATOR_P);
-        return v_object.getField4();
     }
 
     public static SubLObject rdis_rules(final SubLObject v_object) {
-        assert NIL != rule_disambiguator_p(v_object) : "! rule_disambiguation.rule_disambiguator_p(v_object) " + "rule_disambiguation.rule_disambiguator_p error :" + v_object;
+        assert NIL != rule_disambiguator_p(v_object) : "rule_disambiguation.rule_disambiguator_p error :" + v_object;
         return v_object.getField4();
     }
 
-    public static final SubLObject rdis_counts_alt(SubLObject v_object) {
-        SubLTrampolineFile.checkType(v_object, RULE_DISAMBIGUATOR_P);
-        return v_object.getField5();
-    }
-
     public static SubLObject rdis_counts(final SubLObject v_object) {
-        assert NIL != rule_disambiguator_p(v_object) : "! rule_disambiguation.rule_disambiguator_p(v_object) " + "rule_disambiguation.rule_disambiguator_p error :" + v_object;
+        assert NIL != rule_disambiguator_p(v_object) : "rule_disambiguation.rule_disambiguator_p error :" + v_object;
         return v_object.getField5();
-    }
-
-    public static final SubLObject _csetf_rdis_rule_file_alt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, RULE_DISAMBIGUATOR_P);
-        return v_object.setField2(value);
     }
 
     public static SubLObject _csetf_rdis_rule_file(final SubLObject v_object, final SubLObject value) {
-        assert NIL != rule_disambiguator_p(v_object) : "! rule_disambiguation.rule_disambiguator_p(v_object) " + "rule_disambiguation.rule_disambiguator_p error :" + v_object;
+        assert NIL != rule_disambiguator_p(v_object) : "rule_disambiguation.rule_disambiguator_p error :" + v_object;
         return v_object.setField2(value);
     }
 
-    public static final SubLObject _csetf_rdis_count_file_alt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, RULE_DISAMBIGUATOR_P);
-        return v_object.setField3(value);
-    }
-
     public static SubLObject _csetf_rdis_count_file(final SubLObject v_object, final SubLObject value) {
-        assert NIL != rule_disambiguator_p(v_object) : "! rule_disambiguation.rule_disambiguator_p(v_object) " + "rule_disambiguation.rule_disambiguator_p error :" + v_object;
+        assert NIL != rule_disambiguator_p(v_object) : "rule_disambiguation.rule_disambiguator_p error :" + v_object;
         return v_object.setField3(value);
-    }
-
-    public static final SubLObject _csetf_rdis_rules_alt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, RULE_DISAMBIGUATOR_P);
-        return v_object.setField4(value);
     }
 
     public static SubLObject _csetf_rdis_rules(final SubLObject v_object, final SubLObject value) {
-        assert NIL != rule_disambiguator_p(v_object) : "! rule_disambiguation.rule_disambiguator_p(v_object) " + "rule_disambiguation.rule_disambiguator_p error :" + v_object;
+        assert NIL != rule_disambiguator_p(v_object) : "rule_disambiguation.rule_disambiguator_p error :" + v_object;
         return v_object.setField4(value);
     }
 
-    public static final SubLObject _csetf_rdis_counts_alt(SubLObject v_object, SubLObject value) {
-        SubLTrampolineFile.checkType(v_object, RULE_DISAMBIGUATOR_P);
-        return v_object.setField5(value);
-    }
-
     public static SubLObject _csetf_rdis_counts(final SubLObject v_object, final SubLObject value) {
-        assert NIL != rule_disambiguator_p(v_object) : "! rule_disambiguation.rule_disambiguator_p(v_object) " + "rule_disambiguation.rule_disambiguator_p error :" + v_object;
+        assert NIL != rule_disambiguator_p(v_object) : "rule_disambiguation.rule_disambiguator_p error :" + v_object;
         return v_object.setField5(value);
-    }
-
-    public static final SubLObject make_rule_disambiguator_alt(SubLObject arglist) {
-        if (arglist == UNPROVIDED) {
-            arglist = NIL;
-        }
-        {
-            SubLObject v_new = new com.cyc.cycjava.cycl.rule_disambiguation.$rule_disambiguator_native();
-            SubLObject next = NIL;
-            for (next = arglist; NIL != next; next = cddr(next)) {
-                {
-                    SubLObject current_arg = next.first();
-                    SubLObject current_value = cadr(next);
-                    SubLObject pcase_var = current_arg;
-                    if (pcase_var.eql($RULE_FILE)) {
-                        _csetf_rdis_rule_file(v_new, current_value);
-                    } else {
-                        if (pcase_var.eql($COUNT_FILE)) {
-                            _csetf_rdis_count_file(v_new, current_value);
-                        } else {
-                            if (pcase_var.eql($RULES)) {
-                                _csetf_rdis_rules(v_new, current_value);
-                            } else {
-                                if (pcase_var.eql($COUNTS)) {
-                                    _csetf_rdis_counts(v_new, current_value);
-                                } else {
-                                    Errors.error($str_alt26$Invalid_slot__S_for_construction_, current_arg);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return v_new;
-        }
     }
 
     public static SubLObject make_rule_disambiguator(SubLObject arglist) {
         if (arglist == UNPROVIDED) {
             arglist = NIL;
         }
-        final SubLObject v_new = new com.cyc.cycjava.cycl.rule_disambiguation.$rule_disambiguator_native();
+        final SubLObject v_new = new $rule_disambiguator_native();
         SubLObject next;
         SubLObject current_arg;
         SubLObject current_value;
@@ -583,33 +420,6 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
         return visit_defstruct_rule_disambiguator(obj, visitor_fn);
     }
 
-    /**
-     * returns a new rule-disambiguator using the rules in PATH
-     */
-    @LispMethod(comment = "returns a new rule-disambiguator using the rules in PATH")
-    public static final SubLObject new_rule_disambiguator_alt(SubLObject rulepath, SubLObject countpath) {
-        if (rulepath == UNPROVIDED) {
-            rulepath = $word_sense_disambiguation_rule_file$.getDynamicValue();
-        }
-        if (countpath == UNPROVIDED) {
-            countpath = $word_sense_disambiguation_count_file$.getDynamicValue();
-        }
-        SubLTrampolineFile.checkType(rulepath, STRINGP);
-        SubLTrampolineFile.checkType(countpath, STRINGP);
-        {
-            SubLObject dis = make_rule_disambiguator(UNPROVIDED);
-            _csetf_rdis_rule_file(dis, rulepath);
-            _csetf_rdis_rules(dis, load_disambiguator_rules(rulepath));
-            _csetf_rdis_count_file(dis, countpath);
-            _csetf_rdis_counts(dis, load_disambiguator_counts(countpath));
-            return dis;
-        }
-    }
-
-    /**
-     * returns a new rule-disambiguator using the rules in PATH
-     */
-    @LispMethod(comment = "returns a new rule-disambiguator using the rules in PATH")
     public static SubLObject new_rule_disambiguator(SubLObject rulepath, SubLObject countpath) {
         if (rulepath == UNPROVIDED) {
             rulepath = $word_sense_disambiguation_rule_file$.getDynamicValue();
@@ -617,8 +427,8 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
         if (countpath == UNPROVIDED) {
             countpath = $word_sense_disambiguation_count_file$.getDynamicValue();
         }
-        assert NIL != stringp(rulepath) : "! stringp(rulepath) " + ("Types.stringp(rulepath) " + "CommonSymbols.NIL != Types.stringp(rulepath) ") + rulepath;
-        assert NIL != stringp(countpath) : "! stringp(countpath) " + ("Types.stringp(countpath) " + "CommonSymbols.NIL != Types.stringp(countpath) ") + countpath;
+        assert NIL != stringp(rulepath) : "Types.stringp(rulepath) " + "CommonSymbols.NIL != Types.stringp(rulepath) " + rulepath;
+        assert NIL != stringp(countpath) : "Types.stringp(countpath) " + "CommonSymbols.NIL != Types.stringp(countpath) " + countpath;
         final SubLObject dis = make_rule_disambiguator(UNPROVIDED);
         _csetf_rdis_rule_file(dis, rulepath);
         _csetf_rdis_rules(dis, load_disambiguator_rules(rulepath));
@@ -627,45 +437,13 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
         return dis;
     }
 
-    /**
-     * frees all resources of disambiguator RDIS
-     */
-    @LispMethod(comment = "frees all resources of disambiguator RDIS")
-    public static final SubLObject finalize_rule_disambiguator_alt(SubLObject rdis) {
-        SubLTrampolineFile.checkType(rdis, RULE_DISAMBIGUATOR_P);
-        file_backed_cache.file_backed_cache_finalize(rdis_rules(rdis));
-        file_backed_cache.file_backed_cache_finalize(rdis_counts(rdis));
-        return T;
-    }
-
-    /**
-     * frees all resources of disambiguator RDIS
-     */
-    @LispMethod(comment = "frees all resources of disambiguator RDIS")
     public static SubLObject finalize_rule_disambiguator(final SubLObject rdis) {
-        assert NIL != rule_disambiguator_p(rdis) : "! rule_disambiguation.rule_disambiguator_p(rdis) " + ("rule_disambiguation.rule_disambiguator_p(rdis) " + "CommonSymbols.NIL != rule_disambiguation.rule_disambiguator_p(rdis) ") + rdis;
+        assert NIL != rule_disambiguator_p(rdis) : "rule_disambiguation.rule_disambiguator_p(rdis) " + "CommonSymbols.NIL != rule_disambiguation.rule_disambiguator_p(rdis) " + rdis;
         file_backed_cache.file_backed_cache_finalize(rdis_rules(rdis));
         file_backed_cache.file_backed_cache_finalize(rdis_counts(rdis));
         return T;
     }
 
-    /**
-     * prints RDIS to STREAM, ignoring DEPTH
-     */
-    @LispMethod(comment = "prints RDIS to STREAM, ignoring DEPTH")
-    public static final SubLObject rdis_print_alt(SubLObject rdis, SubLObject stream, SubLObject depth) {
-        write_string($str_alt28$__RULE_DISAMBIGUATOR_, stream, UNPROVIDED, UNPROVIDED);
-        write_string(rdis_rule_file(rdis), stream, UNPROVIDED, UNPROVIDED);
-        write_string($str_alt29$_, stream, UNPROVIDED, UNPROVIDED);
-        write_string(rdis_count_file(rdis), stream, UNPROVIDED, UNPROVIDED);
-        write_string($str_alt30$_, stream, UNPROVIDED, UNPROVIDED);
-        return rdis;
-    }
-
-    /**
-     * prints RDIS to STREAM, ignoring DEPTH
-     */
-    @LispMethod(comment = "prints RDIS to STREAM, ignoring DEPTH")
     public static SubLObject rdis_print(final SubLObject rdis, final SubLObject stream, final SubLObject depth) {
         write_string($str34$__RULE_DISAMBIGUATOR_, stream, UNPROVIDED, UNPROVIDED);
         write_string(rdis_rule_file(rdis), stream, UNPROVIDED, UNPROVIDED);
@@ -675,50 +453,6 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
         return rdis;
     }
 
-    /**
-     * Don't use any of the senses that were added to bag because of this word.  Expected to be used
-     * when disambiguating WORD.
-     */
-    @LispMethod(comment = "Don\'t use any of the senses that were added to bag because of this word.  Expected to be used\r\nwhen disambiguating WORD.\nDon\'t use any of the senses that were added to bag because of this word.  Expected to be used\nwhen disambiguating WORD.")
-    public static final SubLObject with_sense_bag_excepting_word_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            destructuring_bind_must_consp(current, datum, $list_alt31);
-            {
-                SubLObject temp = current.rest();
-                current = current.first();
-                {
-                    SubLObject v_bag = NIL;
-                    SubLObject word = NIL;
-                    destructuring_bind_must_consp(current, datum, $list_alt31);
-                    v_bag = current.first();
-                    current = current.rest();
-                    destructuring_bind_must_consp(current, datum, $list_alt31);
-                    word = current.first();
-                    current = current.rest();
-                    if (NIL == current) {
-                        current = temp;
-                        {
-                            SubLObject body = current;
-                            SubLObject cycl = $sym32$CYCL;
-                            SubLObject genl_cycl = $sym33$GENL_CYCL;
-                            return listS(PROGN, list(CDOLIST, list(cycl, list(WORD_CYCLS, word)), listS(CINC_HASH, cycl, v_bag, $list_alt38), list(CDOLIST, list(genl_cycl, list(GET_UPWARDS_CLOSURE, cycl)), listS(CINC_HASH, genl_cycl, v_bag, $list_alt38))), append(body, list(list(CDOLIST, list(cycl, list(WORD_CYCLS, word)), list(CINC_HASH, cycl, v_bag), list(CDOLIST, list(genl_cycl, list(GET_UPWARDS_CLOSURE, cycl)), list(CINC_HASH, genl_cycl, v_bag))))));
-                        }
-                    } else {
-                        cdestructuring_bind_error(datum, $list_alt31);
-                    }
-                }
-            }
-        }
-        return NIL;
-    }
-
-    /**
-     * Don't use any of the senses that were added to bag because of this word.  Expected to be used
-     * when disambiguating WORD.
-     */
-    @LispMethod(comment = "Don\'t use any of the senses that were added to bag because of this word.  Expected to be used\r\nwhen disambiguating WORD.\nDon\'t use any of the senses that were added to bag because of this word.  Expected to be used\nwhen disambiguating WORD.")
     public static SubLObject with_sense_bag_excepting_word(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -751,106 +485,13 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
         return rdis_disambiguate(disambiguator, doc, v_context);
     }
 
-    /**
-     * disambiguates each word in DOC by discarding senses that aren't licensed by sense set CONTEXT
-     */
-    @LispMethod(comment = "disambiguates each word in DOC by discarding senses that aren\'t licensed by sense set CONTEXT")
-    public static final SubLObject rdis_disambiguate_alt(SubLObject rdis, SubLObject doc, SubLObject v_context) {
-        if (v_context == UNPROVIDED) {
-            v_context = new_sense_bag(doc);
-        }
-        SubLTrampolineFile.checkType(rdis, RULE_DISAMBIGUATOR_P);
-        SubLTrampolineFile.checkType(doc, DOCUMENT_P);
-        SubLTrampolineFile.checkType(v_context, HASH_TABLE_P);
-        {
-            SubLObject vector_var = document.document_paragraphs(doc);
-            SubLObject backwardP_var = NIL;
-            SubLObject length = length(vector_var);
-            SubLObject v_iteration = NIL;
-            for (v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = add(v_iteration, ONE_INTEGER)) {
-                {
-                    SubLObject element_num = (NIL != backwardP_var) ? ((SubLObject) (subtract(length, v_iteration, ONE_INTEGER))) : v_iteration;
-                    SubLObject paragraph = aref(vector_var, element_num);
-                    SubLObject vector_var_1 = document.paragraph_sentences(paragraph);
-                    SubLObject backwardP_var_2 = NIL;
-                    SubLObject length_3 = length(vector_var_1);
-                    SubLObject v_iteration_4 = NIL;
-                    for (v_iteration_4 = ZERO_INTEGER; v_iteration_4.numL(length_3); v_iteration_4 = add(v_iteration_4, ONE_INTEGER)) {
-                        {
-                            SubLObject element_num_5 = (NIL != backwardP_var_2) ? ((SubLObject) (subtract(length_3, v_iteration_4, ONE_INTEGER))) : v_iteration_4;
-                            SubLObject sentence = aref(vector_var_1, element_num_5);
-                            SubLObject vector_var_6 = document.sentence_yield(sentence);
-                            SubLObject backwardP_var_7 = NIL;
-                            SubLObject length_8 = length(vector_var_6);
-                            SubLObject v_iteration_9 = NIL;
-                            for (v_iteration_9 = ZERO_INTEGER; v_iteration_9.numL(length_8); v_iteration_9 = add(v_iteration_9, ONE_INTEGER)) {
-                                {
-                                    SubLObject element_num_10 = (NIL != backwardP_var_7) ? ((SubLObject) (subtract(length_8, v_iteration_9, ONE_INTEGER))) : v_iteration_9;
-                                    SubLObject word = aref(vector_var_6, element_num_10);
-                                    {
-                                        SubLObject cdolist_list_var = document.word_cycls(word);
-                                        SubLObject cycl = NIL;
-                                        for (cycl = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , cycl = cdolist_list_var.first()) {
-                                            hash_table_utilities.cinc_hash(cycl, v_context, MINUS_ONE_INTEGER, UNPROVIDED);
-                                            {
-                                                SubLObject cdolist_list_var_11 = document_annotation_widgets.get_upwards_closure(cycl);
-                                                SubLObject genl_cycl = NIL;
-                                                for (genl_cycl = cdolist_list_var_11.first(); NIL != cdolist_list_var_11; cdolist_list_var_11 = cdolist_list_var_11.rest() , genl_cycl = cdolist_list_var_11.first()) {
-                                                    hash_table_utilities.cinc_hash(genl_cycl, v_context, MINUS_ONE_INTEGER, UNPROVIDED);
-                                                }
-                                            }
-                                        }
-                                    }
-                                    {
-                                        SubLObject sense_markers = document.word_interps(word);
-                                        SubLObject new_senses = NIL;
-                                        SubLObject cdolist_list_var = sense_markers;
-                                        SubLObject sense_marker = NIL;
-                                        for (sense_marker = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , sense_marker = cdolist_list_var.first()) {
-                                            if (NIL != is_licensed_p(sense_marker, rdis_rules(rdis), v_context)) {
-                                                new_senses = cons(sense_marker, new_senses);
-                                            }
-                                        }
-                                        if (NIL == new_senses) {
-                                            new_senses = sense_markers_not_requiring_licensing(rule_void(sense_markers, rdis_rules(rdis)));
-                                        }
-                                        putf(document.word_info(word), $INTERPS, new_senses);
-                                    }
-                                    {
-                                        SubLObject cdolist_list_var = document.word_cycls(word);
-                                        SubLObject cycl = NIL;
-                                        for (cycl = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , cycl = cdolist_list_var.first()) {
-                                            hash_table_utilities.cinc_hash(cycl, v_context, UNPROVIDED, UNPROVIDED);
-                                            {
-                                                SubLObject cdolist_list_var_12 = document_annotation_widgets.get_upwards_closure(cycl);
-                                                SubLObject genl_cycl = NIL;
-                                                for (genl_cycl = cdolist_list_var_12.first(); NIL != cdolist_list_var_12; cdolist_list_var_12 = cdolist_list_var_12.rest() , genl_cycl = cdolist_list_var_12.first()) {
-                                                    hash_table_utilities.cinc_hash(genl_cycl, v_context, UNPROVIDED, UNPROVIDED);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return doc;
-    }
-
-    /**
-     * disambiguates each word in DOC by discarding senses that aren't licensed by sense set CONTEXT
-     */
-    @LispMethod(comment = "disambiguates each word in DOC by discarding senses that aren\'t licensed by sense set CONTEXT")
     public static SubLObject rdis_disambiguate(final SubLObject rdis, final SubLObject doc, SubLObject v_context) {
         if (v_context == UNPROVIDED) {
             v_context = new_sense_bag(doc);
         }
-        assert NIL != rule_disambiguator_p(rdis) : "! rule_disambiguation.rule_disambiguator_p(rdis) " + ("rule_disambiguation.rule_disambiguator_p(rdis) " + "CommonSymbols.NIL != rule_disambiguation.rule_disambiguator_p(rdis) ") + rdis;
-        assert NIL != document.document_p(doc) : "! document.document_p(doc) " + ("document.document_p(doc) " + "CommonSymbols.NIL != document.document_p(doc) ") + doc;
-        assert NIL != hash_table_p(v_context) : "! hash_table_p(v_context) " + ("Types.hash_table_p(v_context) " + "CommonSymbols.NIL != Types.hash_table_p(v_context) ") + v_context;
+        assert NIL != rule_disambiguator_p(rdis) : "rule_disambiguation.rule_disambiguator_p(rdis) " + "CommonSymbols.NIL != rule_disambiguation.rule_disambiguator_p(rdis) " + rdis;
+        assert NIL != document.document_p(doc) : "document.document_p(doc) " + "CommonSymbols.NIL != document.document_p(doc) " + doc;
+        assert NIL != hash_table_p(v_context) : "Types.hash_table_p(v_context) " + "CommonSymbols.NIL != Types.hash_table_p(v_context) " + v_context;
         final SubLObject vector_var = document.document_paragraphs(doc);
         final SubLObject backwardP_var = NIL;
         SubLObject length;
@@ -943,20 +584,6 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
         return doc;
     }
 
-    public static final SubLObject sense_markers_not_requiring_licensing_alt(SubLObject sense_markers) {
-        {
-            SubLObject valid_markers = NIL;
-            SubLObject cdolist_list_var = sense_markers;
-            SubLObject sense_marker = NIL;
-            for (sense_marker = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , sense_marker = cdolist_list_var.first()) {
-                if (!((NIL != list_utilities.tree_find($$VanishinglyRareLexicalMapping, nl_api_datastructures.get_nl_interp_pragmatics(sense_marker), UNPROVIDED, UNPROVIDED)) || (NIL != list_utilities.tree_find($const44$ContextuallyDependentLexicalMappi, nl_api_datastructures.get_nl_interp_pragmatics(sense_marker), UNPROVIDED, UNPROVIDED)))) {
-                    valid_markers = cons(sense_marker, valid_markers);
-                }
-            }
-            return valid_markers;
-        }
-    }
-
     public static SubLObject sense_markers_not_requiring_licensing(final SubLObject sense_markers) {
         SubLObject valid_markers = NIL;
         SubLObject cdolist_list_var = sense_markers;
@@ -972,28 +599,6 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
         return valid_markers;
     }
 
-    /**
-     * returns those sense markers in SENSE-MARKERS that don't have a rule in RULES
-     */
-    @LispMethod(comment = "returns those sense markers in SENSE-MARKERS that don\'t have a rule in RULES")
-    public static final SubLObject rule_void_alt(SubLObject sense_markers, SubLObject rules) {
-        {
-            SubLObject rule_void = NIL;
-            SubLObject cdolist_list_var = sense_markers;
-            SubLObject sense_marker = NIL;
-            for (sense_marker = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , sense_marker = cdolist_list_var.first()) {
-                if (file_backed_cache.file_backed_cache_lookup(sense_marker, rules, UNPROVIDED, UNPROVIDED) == $NOT_FOUND) {
-                    rule_void = cons(sense_marker, rule_void);
-                }
-            }
-            return rule_void;
-        }
-    }
-
-    /**
-     * returns those sense markers in SENSE-MARKERS that don't have a rule in RULES
-     */
-    @LispMethod(comment = "returns those sense markers in SENSE-MARKERS that don\'t have a rule in RULES")
     public static SubLObject rule_void(final SubLObject sense_markers, final SubLObject rules) {
         SubLObject rule_void = NIL;
         SubLObject cdolist_list_var = sense_markers;
@@ -1009,21 +614,6 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
         return rule_void;
     }
 
-    /**
-     * returns a file hash table connected to PATH
-     */
-    @LispMethod(comment = "returns a file hash table connected to PATH")
-    public static final SubLObject load_disambiguator_rules_alt(SubLObject path) {
-        if (NIL == Filesys.probe_file(path)) {
-            Errors.error($str_alt46$Can_t_load_rules_from__a, path);
-        }
-        return file_backed_cache.file_backed_cache_create(path, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-    }
-
-    /**
-     * returns a file hash table connected to PATH
-     */
-    @LispMethod(comment = "returns a file hash table connected to PATH")
     public static SubLObject load_disambiguator_rules(final SubLObject path) {
         if (NIL == Filesys.probe_file(path)) {
             Errors.error($str53$Can_t_load_rules_from__a, path);
@@ -1031,21 +621,6 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
         return file_backed_cache.file_backed_cache_create(path, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
-    /**
-     * returns a file hash table connected to PATH
-     */
-    @LispMethod(comment = "returns a file hash table connected to PATH")
-    public static final SubLObject load_disambiguator_counts_alt(SubLObject path) {
-        if (NIL == Filesys.probe_file(path)) {
-            Errors.error($str_alt47$Can_t_load_counts_from__a, path);
-        }
-        return file_backed_cache.file_backed_cache_create(path, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-    }
-
-    /**
-     * returns a file hash table connected to PATH
-     */
-    @LispMethod(comment = "returns a file hash table connected to PATH")
     public static SubLObject load_disambiguator_counts(final SubLObject path) {
         if (NIL == Filesys.probe_file(path)) {
             Errors.error($str54$Can_t_load_counts_from__a, path);
@@ -1053,40 +628,6 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
         return file_backed_cache.file_backed_cache_create(path, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
-    /**
-     * returns the subset of SENSE-MARKERS with the highest counts according to table COUNTS
-     *
-     * @unknown that SENSE-MARKERS as used in this file are instances of nl-interpretation-p
-     */
-    @LispMethod(comment = "returns the subset of SENSE-MARKERS with the highest counts according to table COUNTS\r\n\r\n@unknown that SENSE-MARKERS as used in this file are instances of nl-interpretation-p")
-    public static final SubLObject highest_count_sense_markers_alt(SubLObject sense_markers, SubLObject counts) {
-        {
-            SubLObject max_count = ZERO_INTEGER;
-            SubLObject highest_count_sense_markers = NIL;
-            SubLObject count = NIL;
-            SubLObject cdolist_list_var = sense_markers;
-            SubLObject sense_marker = NIL;
-            for (sense_marker = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , sense_marker = cdolist_list_var.first()) {
-                count = file_backed_cache.file_backed_cache_lookup(nl_api_datastructures.get_nl_interp_cycl(sense_marker), counts, ZERO_INTEGER, UNPROVIDED);
-                if (count.numG(max_count)) {
-                    max_count = count;
-                    highest_count_sense_markers = list(sense_marker);
-                } else {
-                    if (count.numE(max_count)) {
-                        highest_count_sense_markers = cons(sense_marker, highest_count_sense_markers);
-                    }
-                }
-            }
-            return nreverse(highest_count_sense_markers);
-        }
-    }
-
-    /**
-     * returns the subset of SENSE-MARKERS with the highest counts according to table COUNTS
-     *
-     * @unknown that SENSE-MARKERS as used in this file are instances of nl-interpretation-p
-     */
-    @LispMethod(comment = "returns the subset of SENSE-MARKERS with the highest counts according to table COUNTS\r\n\r\n@unknown that SENSE-MARKERS as used in this file are instances of nl-interpretation-p")
     public static SubLObject highest_count_sense_markers(final SubLObject sense_markers, final SubLObject counts) {
         SubLObject max_count = ZERO_INTEGER;
         SubLObject highest_count_sense_markers = NIL;
@@ -1110,68 +651,10 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
         return nreverse(highest_count_sense_markers);
     }
 
-    /**
-     * returns t if WORD has more than one sense associated with it, nil otherwise
-     */
-    @LispMethod(comment = "returns t if WORD has more than one sense associated with it, nil otherwise")
-    public static final SubLObject ambiguous_p_alt(SubLObject word) {
-        return numG(length(document.word_interps(word)), ONE_INTEGER);
-    }
-
-    /**
-     * returns t if WORD has more than one sense associated with it, nil otherwise
-     */
-    @LispMethod(comment = "returns t if WORD has more than one sense associated with it, nil otherwise")
     public static SubLObject ambiguous_p(final SubLObject word) {
         return numG(length(document.word_interps(word)), ONE_INTEGER);
     }
 
-    /**
-     * return t if SENSE-MARKER is licensed according the RULES and CONTEXT
-     */
-    @LispMethod(comment = "return t if SENSE-MARKER is licensed according the RULES and CONTEXT")
-    public static final SubLObject is_licensed_p_alt(SubLObject sense_marker, SubLObject rules, SubLObject v_context) {
-        {
-            SubLObject sense = nl_api_datastructures.get_nl_interp_cycl(sense_marker);
-            SubLObject rule = file_backed_cache.file_backed_cache_lookup(sense, rules, NIL, UNPROVIDED);
-            SubLObject is_licensed = NIL;
-            SubLObject not_licensed = NIL;
-            SubLObject v_term = NIL;
-            if (NIL == is_licensed) {
-                {
-                    SubLObject csome_list_var = rule;
-                    SubLObject clause = NIL;
-                    for (clause = csome_list_var.first(); !((NIL != is_licensed) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , clause = csome_list_var.first()) {
-                        if (NIL != positive_clause_p(clause)) {
-                            v_term = clause_term(clause);
-                            is_licensed = makeBoolean((NIL != is_licensed) || (NIL != sense_bag_licensesP(v_term, v_context)));
-                        }
-                    }
-                }
-            }
-            if (NIL != is_licensed) {
-                if (NIL == not_licensed) {
-                    {
-                        SubLObject csome_list_var = rule;
-                        SubLObject clause = NIL;
-                        for (clause = csome_list_var.first(); !((NIL != not_licensed) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , clause = csome_list_var.first()) {
-                            if (NIL != negative_clause_p(clause)) {
-                                v_term = clause_term(clause);
-                                is_licensed = makeBoolean((NIL != is_licensed) && (NIL == sense_bag_licensesP(v_term, v_context)));
-                                not_licensed = makeBoolean(NIL == is_licensed);
-                            }
-                        }
-                    }
-                }
-            }
-            return is_licensed;
-        }
-    }
-
-    /**
-     * return t if SENSE-MARKER is licensed according the RULES and CONTEXT
-     */
-    @LispMethod(comment = "return t if SENSE-MARKER is licensed according the RULES and CONTEXT")
     public static SubLObject is_licensed_p(final SubLObject sense_marker, final SubLObject rules, final SubLObject v_context) {
         final SubLObject sense = nl_api_datastructures.get_nl_interp_cycl(sense_marker);
         final SubLObject rule = file_backed_cache.file_backed_cache_lookup(sense, rules, NIL, UNPROVIDED);
@@ -1208,132 +691,24 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
         return is_licensed;
     }
 
-    /**
-     * returns t iff CLAUSE is a positive clause
-     */
-    @LispMethod(comment = "returns t iff CLAUSE is a positive clause")
-    public static final SubLObject positive_clause_p_alt(SubLObject clause) {
-        return clause_sign(clause);
-    }
-
-    /**
-     * returns t iff CLAUSE is a positive clause
-     */
-    @LispMethod(comment = "returns t iff CLAUSE is a positive clause")
     public static SubLObject positive_clause_p(final SubLObject clause) {
         return clause_sign(clause);
     }
 
-    /**
-     * returns t iff CLAUSE is a negative clause
-     */
-    @LispMethod(comment = "returns t iff CLAUSE is a negative clause")
-    public static final SubLObject negative_clause_p_alt(SubLObject clause) {
-        return makeBoolean(NIL == clause_sign(clause));
-    }
-
-    /**
-     * returns t iff CLAUSE is a negative clause
-     */
-    @LispMethod(comment = "returns t iff CLAUSE is a negative clause")
     public static SubLObject negative_clause_p(final SubLObject clause) {
         return makeBoolean(NIL == clause_sign(clause));
     }
 
-    /**
-     * returns the sign of CLAUSE
-     */
-    @LispMethod(comment = "returns the sign of CLAUSE")
-    public static final SubLObject clause_sign_alt(SubLObject clause) {
-        return clause.first();
-    }
-
-    /**
-     * returns the sign of CLAUSE
-     */
-    @LispMethod(comment = "returns the sign of CLAUSE")
     public static SubLObject clause_sign(final SubLObject clause) {
         return clause.first();
     }
 
-    /**
-     * returns the term of CLAUSE
-     */
-    @LispMethod(comment = "returns the term of CLAUSE")
-    public static final SubLObject clause_term_alt(SubLObject clause) {
-        return clause.rest();
-    }
-
-    /**
-     * returns the term of CLAUSE
-     */
-    @LispMethod(comment = "returns the term of CLAUSE")
     public static SubLObject clause_term(final SubLObject clause) {
         return clause.rest();
     }
 
-    /**
-     * returns a set containing all senses in DOC
-     */
-    @LispMethod(comment = "returns a set containing all senses in DOC")
-    public static final SubLObject new_sense_bag_alt(SubLObject doc) {
-        SubLTrampolineFile.checkType(doc, DOCUMENT_P);
-        {
-            SubLObject senses = make_hash_table($int$1024, EQUAL, UNPROVIDED);
-            SubLObject sense = NIL;
-            SubLObject vector_var = document.document_paragraphs(doc);
-            SubLObject backwardP_var = NIL;
-            SubLObject length = length(vector_var);
-            SubLObject v_iteration = NIL;
-            for (v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = add(v_iteration, ONE_INTEGER)) {
-                {
-                    SubLObject element_num = (NIL != backwardP_var) ? ((SubLObject) (subtract(length, v_iteration, ONE_INTEGER))) : v_iteration;
-                    SubLObject paragraph = aref(vector_var, element_num);
-                    SubLObject vector_var_13 = document.paragraph_sentences(paragraph);
-                    SubLObject backwardP_var_14 = NIL;
-                    SubLObject length_15 = length(vector_var_13);
-                    SubLObject v_iteration_16 = NIL;
-                    for (v_iteration_16 = ZERO_INTEGER; v_iteration_16.numL(length_15); v_iteration_16 = add(v_iteration_16, ONE_INTEGER)) {
-                        {
-                            SubLObject element_num_17 = (NIL != backwardP_var_14) ? ((SubLObject) (subtract(length_15, v_iteration_16, ONE_INTEGER))) : v_iteration_16;
-                            SubLObject sentence = aref(vector_var_13, element_num_17);
-                            SubLObject vector_var_18 = document.sentence_yield(sentence);
-                            SubLObject backwardP_var_19 = NIL;
-                            SubLObject length_20 = length(vector_var_18);
-                            SubLObject v_iteration_21 = NIL;
-                            for (v_iteration_21 = ZERO_INTEGER; v_iteration_21.numL(length_20); v_iteration_21 = add(v_iteration_21, ONE_INTEGER)) {
-                                {
-                                    SubLObject element_num_22 = (NIL != backwardP_var_19) ? ((SubLObject) (subtract(length_20, v_iteration_21, ONE_INTEGER))) : v_iteration_21;
-                                    SubLObject word = aref(vector_var_18, element_num_22);
-                                    SubLObject cdolist_list_var = document.word_interps(word);
-                                    SubLObject sense_marker = NIL;
-                                    for (sense_marker = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , sense_marker = cdolist_list_var.first()) {
-                                        sense = nl_api_datastructures.get_nl_interp_cycl(sense_marker);
-                                        hash_table_utilities.cinc_hash(sense, senses, UNPROVIDED, UNPROVIDED);
-                                        {
-                                            SubLObject cdolist_list_var_23 = document_annotation_widgets.get_upwards_closure(sense);
-                                            SubLObject general = NIL;
-                                            for (general = cdolist_list_var_23.first(); NIL != cdolist_list_var_23; cdolist_list_var_23 = cdolist_list_var_23.rest() , general = cdolist_list_var_23.first()) {
-                                                hash_table_utilities.cinc_hash(general, senses, UNPROVIDED, UNPROVIDED);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return senses;
-        }
-    }
-
-    /**
-     * returns a set containing all senses in DOC
-     */
-    @LispMethod(comment = "returns a set containing all senses in DOC")
     public static SubLObject new_sense_bag(final SubLObject doc) {
-        assert NIL != document.document_p(doc) : "! document.document_p(doc) " + ("document.document_p(doc) " + "CommonSymbols.NIL != document.document_p(doc) ") + doc;
+        assert NIL != document.document_p(doc) : "document.document_p(doc) " + "CommonSymbols.NIL != document.document_p(doc) " + doc;
         final SubLObject senses = make_hash_table($int$1024, EQUAL, UNPROVIDED);
         SubLObject sense = NIL;
         final SubLObject vector_var = document.document_paragraphs(doc);
@@ -1391,108 +766,12 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
         return senses;
     }
 
-    /**
-     * returns t if TERM is licensed by sense bag BAG
-     */
-    @LispMethod(comment = "returns t if TERM is licensed by sense bag BAG")
-    public static final SubLObject sense_bag_licensesP_alt(SubLObject v_term, SubLObject v_bag) {
-        return subl_promotions.positive_integer_p(gethash_without_values(v_term, v_bag, UNPROVIDED));
-    }
-
-    /**
-     * returns t if TERM is licensed by sense bag BAG
-     */
-    @LispMethod(comment = "returns t if TERM is licensed by sense bag BAG")
     public static SubLObject sense_bag_licensesP(final SubLObject v_term, final SubLObject v_bag) {
         return subl_promotions.positive_integer_p(gethash_without_values(v_term, v_bag, UNPROVIDED));
     }
 
-    public static final SubLObject disambiguation_rule_query_alt(SubLObject pred) {
-        return ask_utilities.query_template($list_alt49, bq_cons(pred, $list_alt49), $$InferencePSC, $list_alt51);
-    }
-
     public static SubLObject disambiguation_rule_query(final SubLObject pred) {
         return ask_utilities.query_template($list56, bq_cons(pred, $list56), $$InferencePSC, $list58);
-    }
-
-    public static final SubLObject create_disambiguator_rules_file_alt(SubLObject f_out) {
-        if (f_out == UNPROVIDED) {
-            f_out = $str_alt52$data_word_sense_disambiguation_ru;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject licensing_term_pairs = disambiguation_rule_query($$isLicensedBy);
-                SubLObject delicensing_term_pairs = disambiguation_rule_query($$isDelicensedBy);
-                SubLObject rule_hash_table = make_hash_table($int$65536, EQUAL, UNPROVIDED);
-                {
-                    SubLObject cdolist_list_var = licensing_term_pairs;
-                    SubLObject licensing_term_pair = NIL;
-                    for (licensing_term_pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , licensing_term_pair = cdolist_list_var.first()) {
-                        hash_table_utilities.push_hash(licensing_term_pair.first(), cons(T, second(licensing_term_pair)), rule_hash_table);
-                    }
-                }
-                {
-                    SubLObject cdolist_list_var = delicensing_term_pairs;
-                    SubLObject delicensing_term_pair = NIL;
-                    for (delicensing_term_pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , delicensing_term_pair = cdolist_list_var.first()) {
-                        hash_table_utilities.push_hash(delicensing_term_pair.first(), cons(NIL, second(delicensing_term_pair)), rule_hash_table);
-                    }
-                }
-                {
-                    SubLObject stream = NIL;
-                    try {
-                        stream = compatibility.open_text(f_out, $OUTPUT, NIL);
-                        if (!stream.isStream()) {
-                            Errors.error($str_alt57$Unable_to_open__S, f_out);
-                        }
-                        {
-                            SubLObject s_out = stream;
-                            {
-                                SubLObject _prev_bind_0 = $print_pretty$.currentBinding(thread);
-                                try {
-                                    $print_pretty$.bind(NIL, thread);
-                                    format(s_out, $str_alt58$___);
-                                    {
-                                        SubLObject key = NIL;
-                                        SubLObject value = NIL;
-                                        {
-                                            final Iterator cdohash_iterator = getEntrySetIterator(rule_hash_table);
-                                            try {
-                                                while (iteratorHasNext(cdohash_iterator)) {
-                                                    final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
-                                                    key = getEntryKey(cdohash_entry);
-                                                    value = getEntryValue(cdohash_entry);
-                                                    format(s_out, $str_alt59$__S____S___, key, value);
-                                                } 
-                                            } finally {
-                                                releaseEntrySetIterator(cdohash_iterator);
-                                            }
-                                        }
-                                    }
-                                    format(s_out, $str_alt60$___);
-                                } finally {
-                                    $print_pretty$.rebind(_prev_bind_0, thread);
-                                }
-                            }
-                        }
-                    } finally {
-                        {
-                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                            try {
-                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                if (stream.isStream()) {
-                                    close(stream, UNPROVIDED);
-                                }
-                            } finally {
-                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                }
-                return $DONE;
-            }
-        }
     }
 
     public static SubLObject create_disambiguator_rules_file(SubLObject f_out) {
@@ -1563,53 +842,10 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
         return $DONE;
     }
 
-    public static final SubLObject fort_disambiguation_rule_query_alt(SubLObject fort, SubLObject pred, SubLObject pstore) {
-        return ask_utilities.query_template(bq_cons(fort, $list_alt62), listS(pred, fort, $list_alt62), $$InferencePSC, list(new SubLObject[]{ $INFERENCE_MODE, $SHALLOW, $kw65$ALLOW_INDETERMINATE_RESULTS_, NIL, $DISJUNCTION_FREE_EL_VARS_POLICY, $COMPUTE_INTERSECTION, $INTERMEDIATE_STEP_VALIDATION_LEVEL, $MINIMAL, $MAX_TIME, $int$57600, $PROBABLY_APPROXIMATELY_DONE, $float$1_0, $ANSWER_LANGUAGE, $EL, $CONTINUABLE_, NIL, $PROBLEM_STORE, pstore }));
-    }
-
     public static SubLObject fort_disambiguation_rule_query(final SubLObject fort, final SubLObject pred, final SubLObject pstore) {
         return ask_utilities.query_template(bq_cons(fort, $list69), listS(pred, fort, $list69), $$InferencePSC, list(new SubLObject[]{ $INFERENCE_MODE, $SHALLOW, $kw72$ALLOW_INDETERMINATE_RESULTS_, NIL, $DISJUNCTION_FREE_EL_VARS_POLICY, $COMPUTE_INTERSECTION, $INTERMEDIATE_STEP_VALIDATION_LEVEL, $MINIMAL, $MAX_TIME, $int$57600, $PROBABLY_APPROXIMATELY_DONE, $float$1_0, $ANSWER_LANGUAGE, $EL, $CONTINUABLE_, NIL, $PROBLEM_STORE, pstore }));
     }
 
-    /**
-     * Creates a file hash table at PATH using TESTFN and SERIALIZATION with the same contents as ALIST
-     */
-    @LispMethod(comment = "Creates a file hash table at PATH using TESTFN and SERIALIZATION with the same contents as ALIST")
-    public static final SubLObject term_alist_to_file_hash_table_alt(SubLObject alist, SubLObject path, SubLObject testfn, SubLObject serialization, SubLObject tempstem) {
-        if (testfn == UNPROVIDED) {
-            testfn = file_hash_table.$default_fht_test_function$.getGlobalValue();
-        }
-        if (serialization == UNPROVIDED) {
-            serialization = file_hash_table.$default_fht_serialization_protocol$.getGlobalValue();
-        }
-        if (tempstem == UNPROVIDED) {
-            tempstem = $str_alt78$_tmp_;
-        }
-        SubLTrampolineFile.checkType(alist, LISTP);
-        SubLTrampolineFile.checkType(path, STRINGP);
-        {
-            SubLObject fht = file_hash_table.fast_create_file_hash_table(path, tempstem, testfn, serialization);
-            SubLObject cdolist_list_var = reverse(alist);
-            SubLObject keyXvalue = NIL;
-            for (keyXvalue = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , keyXvalue = cdolist_list_var.first()) {
-                {
-                    SubLObject key = keyXvalue.first();
-                    if ((NIL != invalid_constantP(key, UNPROVIDED)) || (NIL != narts_high.invalid_nartP(key, UNPROVIDED))) {
-                        Errors.warn($str_alt80$_a_is_invalid, key);
-                    } else {
-                        file_hash_table.fast_put_file_hash_table(keyXvalue.first(), fht, keyXvalue.rest());
-                    }
-                }
-            }
-            file_hash_table.finalize_fast_create_file_hash_table(fht, UNPROVIDED, UNPROVIDED);
-        }
-        return path;
-    }
-
-    /**
-     * Creates a file hash table at PATH using TESTFN and SERIALIZATION with the same contents as ALIST
-     */
-    @LispMethod(comment = "Creates a file hash table at PATH using TESTFN and SERIALIZATION with the same contents as ALIST")
     public static SubLObject term_alist_to_file_hash_table(final SubLObject alist, final SubLObject path, SubLObject testfn, SubLObject serialization, SubLObject tempstem) {
         if (testfn == UNPROVIDED) {
             testfn = file_hash_table.$default_fht_test_function$.getGlobalValue();
@@ -1620,8 +856,8 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
         if (tempstem == UNPROVIDED) {
             tempstem = $str85$_tmp_;
         }
-        assert NIL != listp(alist) : "! listp(alist) " + ("Types.listp(alist) " + "CommonSymbols.NIL != Types.listp(alist) ") + alist;
-        assert NIL != stringp(path) : "! stringp(path) " + ("Types.stringp(path) " + "CommonSymbols.NIL != Types.stringp(path) ") + path;
+        assert NIL != listp(alist) : "Types.listp(alist) " + "CommonSymbols.NIL != Types.listp(alist) " + alist;
+        assert NIL != stringp(path) : "Types.stringp(path) " + "CommonSymbols.NIL != Types.stringp(path) " + path;
         final SubLObject fht = file_hash_table.fast_create_file_hash_table(path, tempstem, testfn, serialization);
         SubLObject cdolist_list_var = reverse(alist);
         SubLObject keyXvalue = NIL;
@@ -1640,91 +876,10 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
         return path;
     }
 
-    public static final SubLObject alist_file_to_fht_alt(SubLObject infile, SubLObject outfht) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(infile, STRINGP);
-            SubLTrampolineFile.checkType(outfht, STRINGP);
-            if (NIL == Filesys.probe_file(infile)) {
-                Errors.error($str_alt81$Can_t_load__a___a, infile, file_utilities.why_not_probe_fileP(infile));
-            }
-            {
-                SubLObject alist = NIL;
-                SubLObject hash = make_hash_table($int$1024, EQUAL, UNPROVIDED);
-                SubLObject stream = NIL;
-                try {
-                    stream = compatibility.open_text(infile, $INPUT, NIL);
-                    if (!stream.isStream()) {
-                        Errors.error($str_alt57$Unable_to_open__S, infile);
-                    }
-                    {
-                        SubLObject in = stream;
-                        alist = read(in, T, NIL, UNPROVIDED);
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            if (stream.isStream()) {
-                                close(stream, UNPROVIDED);
-                            }
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                {
-                    SubLObject list_var = alist;
-                    $progress_note$.setDynamicValue($$$cdolist, thread);
-                    $progress_start_time$.setDynamicValue(get_universal_time(), thread);
-                    $progress_total$.setDynamicValue(length(list_var), thread);
-                    $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
-                    {
-                        SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                        SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                        SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                        SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                        try {
-                            $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                            $last_percent_progress_prediction$.bind(NIL, thread);
-                            $within_noting_percent_progress$.bind(T, thread);
-                            $percent_progress_start_time$.bind(get_universal_time(), thread);
-                            noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
-                            {
-                                SubLObject csome_list_var = list_var;
-                                SubLObject keyXvalue = NIL;
-                                for (keyXvalue = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , keyXvalue = csome_list_var.first()) {
-                                    note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
-                                    $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
-                                    {
-                                        SubLObject key = keyXvalue.first();
-                                        if ((NIL != invalid_constantP(key, UNPROVIDED)) || (NIL != narts_high.invalid_nartP(key, UNPROVIDED))) {
-                                            Errors.warn($str_alt80$_a_is_invalid, key);
-                                        } else {
-                                            sethash(keyXvalue.first(), hash, keyXvalue.rest());
-                                        }
-                                    }
-                                }
-                            }
-                            noting_percent_progress_postamble();
-                        } finally {
-                            $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                            $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                            $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                            $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                return file_hash_table.hash_table_to_file_hash_table(hash, outfht, $str_alt78$_tmp_, EQUAL, $IMAGE_INDEPENDENT_CFASL, UNPROVIDED);
-            }
-        }
-    }
-
     public static SubLObject alist_file_to_fht(final SubLObject infile, final SubLObject outfht) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != stringp(infile) : "! stringp(infile) " + ("Types.stringp(infile) " + "CommonSymbols.NIL != Types.stringp(infile) ") + infile;
-        assert NIL != stringp(outfht) : "! stringp(outfht) " + ("Types.stringp(outfht) " + "CommonSymbols.NIL != Types.stringp(outfht) ") + outfht;
+        assert NIL != stringp(infile) : "Types.stringp(infile) " + "CommonSymbols.NIL != Types.stringp(infile) " + infile;
+        assert NIL != stringp(outfht) : "Types.stringp(outfht) " + "CommonSymbols.NIL != Types.stringp(outfht) " + outfht;
         if (NIL == Filesys.probe_file(infile)) {
             Errors.error($str88$Can_t_load__a___a, infile, file_utilities.why_not_probe_fileP(infile));
         }
@@ -1808,130 +963,6 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
             $progress_note$.rebind(_prev_bind_2, thread);
         }
         return file_hash_table.hash_table_to_file_hash_table(hash, outfht, $str85$_tmp_, EQUAL, $IMAGE_INDEPENDENT_CFASL, UNPROVIDED);
-    }
-
-    public static final SubLObject disambiguator_rule_fht_to_hl_id_text_file_alt(SubLObject infht, SubLObject outfile) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == Filesys.probe_file(infht)) {
-                Errors.error($str_alt81$Can_t_load__a___a, infht, file_utilities.why_not_probe_fileP(infht));
-            }
-            {
-                SubLObject fht = file_hash_table.open_file_hash_table_read_only(infht, UNPROVIDED, UNPROVIDED);
-                SubLObject doneP = NIL;
-                SubLObject stream = NIL;
-                try {
-                    {
-                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
-                        try {
-                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
-                            stream = compatibility.open_text(outfile, $OUTPUT, NIL);
-                        } finally {
-                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    if (!stream.isStream()) {
-                        Errors.error($str_alt57$Unable_to_open__S, outfile);
-                    }
-                    {
-                        SubLObject out = stream;
-                        SubLObject table_var = fht;
-                        $progress_note$.setDynamicValue($$$Iterating_over_FHT, thread);
-                        $progress_start_time$.setDynamicValue(get_universal_time(), thread);
-                        $progress_total$.setDynamicValue(file_hash_table.file_hash_table_count(table_var), thread);
-                        $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
-                        {
-                            SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                            SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                            SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                            SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                            try {
-                                $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                                $last_percent_progress_prediction$.bind(NIL, thread);
-                                $within_noting_percent_progress$.bind(T, thread);
-                                $percent_progress_start_time$.bind(get_universal_time(), thread);
-                                noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
-                                {
-                                    SubLObject continuation = NIL;
-                                    SubLObject completeP = NIL;
-                                    while ((NIL == doneP) && (NIL == completeP)) {
-                                        thread.resetMultipleValues();
-                                        {
-                                            SubLObject the_key = file_hash_table.get_file_hash_table_any(table_var, continuation, NIL);
-                                            SubLObject the_value = thread.secondMultipleValue();
-                                            SubLObject next = thread.thirdMultipleValue();
-                                            thread.resetMultipleValues();
-                                            if (NIL != next) {
-                                                {
-                                                    SubLObject key = the_key;
-                                                    SubLObject licensers = the_value;
-                                                    note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
-                                                    $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
-                                                    {
-                                                        SubLObject licensing_terms = NIL;
-                                                        {
-                                                            SubLObject cdolist_list_var = licensers;
-                                                            SubLObject licenser = NIL;
-                                                            for (licenser = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , licenser = cdolist_list_var.first()) {
-                                                                {
-                                                                    SubLObject datum = licenser;
-                                                                    SubLObject current = datum;
-                                                                    SubLObject licensedP = NIL;
-                                                                    SubLObject v_term = NIL;
-                                                                    destructuring_bind_must_consp(current, datum, $list_alt86);
-                                                                    licensedP = current.first();
-                                                                    current = current.rest();
-                                                                    v_term = current;
-                                                                    if (licensedP == T) {
-                                                                        licensing_terms = cons(v_term, licensing_terms);
-                                                                    } else {
-                                                                        Errors.warn($str_alt87$don_t_know_how_to_convert__A, licensedP);
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                        format(out, $str_alt88$_A__A_, kb_utilities.compact_hl_external_id_string(key), T);
-                                                        {
-                                                            SubLObject cdolist_list_var = licensing_terms;
-                                                            SubLObject v_term = NIL;
-                                                            for (v_term = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_term = cdolist_list_var.first()) {
-                                                                format(out, $str_alt89$_A_, kb_utilities.compact_hl_external_id_string(v_term));
-                                                            }
-                                                        }
-                                                    }
-                                                    format(out, $str_alt90$__);
-                                                }
-                                            }
-                                            continuation = next;
-                                            completeP = sublisp_null(next);
-                                        }
-                                    } 
-                                }
-                                noting_percent_progress_postamble();
-                            } finally {
-                                $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                                $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                                $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                                $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            if (stream.isStream()) {
-                                close(stream, UNPROVIDED);
-                            }
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-            }
-            return outfile;
-        }
     }
 
     public static SubLObject disambiguator_rule_fht_to_hl_id_text_file(final SubLObject infht, final SubLObject outfile) {
@@ -2049,145 +1080,9 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
         return outfile;
     }
 
-    public static final SubLObject create_disambiguator_rules_file_from_forts_alt(SubLObject f_out) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(f_out, STRINGP);
-            {
-                SubLObject rule_hash_table = make_hash_table($int$65536, EQUAL, UNPROVIDED);
-                SubLObject store = NIL;
-                try {
-                    store = inference_datastructures_problem_store.new_problem_store($list_alt91);
-                    {
-                        SubLObject message = $$$mapping_Cyc_FORTs;
-                        SubLObject total = forts.fort_count();
-                        SubLObject sofar = ZERO_INTEGER;
-                        {
-                            SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                            SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                            SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                            SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                            try {
-                                $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                                $last_percent_progress_prediction$.bind(NIL, thread);
-                                $within_noting_percent_progress$.bind(T, thread);
-                                $percent_progress_start_time$.bind(get_universal_time(), thread);
-                                noting_percent_progress_preamble(message);
-                                {
-                                    SubLObject cdolist_list_var = forts.do_forts_tables();
-                                    SubLObject table_var = NIL;
-                                    for (table_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , table_var = cdolist_list_var.first()) {
-                                        if (NIL == do_id_index_empty_p(table_var, $SKIP)) {
-                                            {
-                                                SubLObject id = do_id_index_next_id(table_var, T, NIL, NIL);
-                                                SubLObject state_var = do_id_index_next_state(table_var, T, id, NIL);
-                                                SubLObject fort = NIL;
-                                                while (NIL != id) {
-                                                    fort = do_id_index_state_object(table_var, $SKIP, id, state_var);
-                                                    if (NIL != do_id_index_id_and_object_validP(id, fort, $SKIP)) {
-                                                        sofar = add(sofar, ONE_INTEGER);
-                                                        note_percent_progress(sofar, total);
-                                                        {
-                                                            SubLObject cdolist_list_var_24 = fort_disambiguation_rule_query(fort, $$isLicensedBy, store);
-                                                            SubLObject pair = NIL;
-                                                            for (pair = cdolist_list_var_24.first(); NIL != cdolist_list_var_24; cdolist_list_var_24 = cdolist_list_var_24.rest() , pair = cdolist_list_var_24.first()) {
-                                                                hash_table_utilities.push_hash(pair.first(), cons(T, second(pair)), rule_hash_table);
-                                                            }
-                                                        }
-                                                        {
-                                                            SubLObject cdolist_list_var_25 = fort_disambiguation_rule_query(fort, $$isDelicensedBy, store);
-                                                            SubLObject pair = NIL;
-                                                            for (pair = cdolist_list_var_25.first(); NIL != cdolist_list_var_25; cdolist_list_var_25 = cdolist_list_var_25.rest() , pair = cdolist_list_var_25.first()) {
-                                                                hash_table_utilities.push_hash(pair.first(), cons(NIL, second(pair)), rule_hash_table);
-                                                            }
-                                                        }
-                                                    }
-                                                    id = do_id_index_next_id(table_var, T, id, state_var);
-                                                    state_var = do_id_index_next_state(table_var, T, id, state_var);
-                                                } 
-                                            }
-                                        }
-                                    }
-                                }
-                                noting_percent_progress_postamble();
-                            } finally {
-                                $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                                $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                                $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                                $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            inference_datastructures_problem_store.destroy_problem_store(store);
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-                {
-                    SubLObject stream = NIL;
-                    try {
-                        stream = compatibility.open_text(f_out, $OUTPUT, NIL);
-                        if (!stream.isStream()) {
-                            Errors.error($str_alt57$Unable_to_open__S, f_out);
-                        }
-                        {
-                            SubLObject s_out = stream;
-                            {
-                                SubLObject _prev_bind_0 = $print_pretty$.currentBinding(thread);
-                                try {
-                                    $print_pretty$.bind(NIL, thread);
-                                    format(s_out, $str_alt58$___);
-                                    {
-                                        SubLObject key = NIL;
-                                        SubLObject value = NIL;
-                                        {
-                                            final Iterator cdohash_iterator = getEntrySetIterator(rule_hash_table);
-                                            try {
-                                                while (iteratorHasNext(cdohash_iterator)) {
-                                                    final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
-                                                    key = getEntryKey(cdohash_entry);
-                                                    value = getEntryValue(cdohash_entry);
-                                                    format(s_out, $str_alt59$__S____S___, key, value);
-                                                } 
-                                            } finally {
-                                                releaseEntrySetIterator(cdohash_iterator);
-                                            }
-                                        }
-                                    }
-                                    format(s_out, $str_alt60$___);
-                                } finally {
-                                    $print_pretty$.rebind(_prev_bind_0, thread);
-                                }
-                            }
-                        }
-                    } finally {
-                        {
-                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                            try {
-                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                if (stream.isStream()) {
-                                    close(stream, UNPROVIDED);
-                                }
-                            } finally {
-                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                }
-                return $DONE;
-            }
-        }
-    }
-
     public static SubLObject create_disambiguator_rules_file_from_forts(final SubLObject f_out) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != stringp(f_out) : "! stringp(f_out) " + ("Types.stringp(f_out) " + "CommonSymbols.NIL != Types.stringp(f_out) ") + f_out;
+        assert NIL != stringp(f_out) : "Types.stringp(f_out) " + "CommonSymbols.NIL != Types.stringp(f_out) " + f_out;
         final SubLObject rule_hash_table = make_hash_table($int$65536, EQUAL, UNPROVIDED);
         SubLObject store = NIL;
         try {
@@ -2358,133 +1253,9 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
         return $DONE;
     }
 
-    public static final SubLObject create_disambiguator_rules_file_from_fort_list_alt(SubLObject fort_list, SubLObject f_out) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(f_out, STRINGP);
-            {
-                SubLObject rule_hash_table = make_hash_table($int$65536, EQUAL, UNPROVIDED);
-                SubLObject list_var = fort_list;
-                $progress_note$.setDynamicValue($$$cdolist, thread);
-                $progress_start_time$.setDynamicValue(get_universal_time(), thread);
-                $progress_total$.setDynamicValue(length(list_var), thread);
-                $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
-                {
-                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                    try {
-                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                        $last_percent_progress_prediction$.bind(NIL, thread);
-                        $within_noting_percent_progress$.bind(T, thread);
-                        $percent_progress_start_time$.bind(get_universal_time(), thread);
-                        noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
-                        {
-                            SubLObject csome_list_var = list_var;
-                            SubLObject fort = NIL;
-                            for (fort = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , fort = csome_list_var.first()) {
-                                note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
-                                $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
-                                {
-                                    SubLObject store = NIL;
-                                    try {
-                                        store = inference_datastructures_problem_store.new_problem_store(NIL);
-                                        {
-                                            SubLObject cdolist_list_var = fort_disambiguation_rule_query(fort, $$isLicensedBy, store);
-                                            SubLObject pair = NIL;
-                                            for (pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pair = cdolist_list_var.first()) {
-                                                hash_table_utilities.push_hash(pair.first(), cons(T, second(pair)), rule_hash_table);
-                                            }
-                                        }
-                                        {
-                                            SubLObject cdolist_list_var = fort_disambiguation_rule_query(fort, $$isDelicensedBy, store);
-                                            SubLObject pair = NIL;
-                                            for (pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pair = cdolist_list_var.first()) {
-                                                hash_table_utilities.push_hash(pair.first(), cons(NIL, second(pair)), rule_hash_table);
-                                            }
-                                        }
-                                    } finally {
-                                        {
-                                            SubLObject _prev_bind_0_26 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                            try {
-                                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                                inference_datastructures_problem_store.destroy_problem_store(store);
-                                            } finally {
-                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_26, thread);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        noting_percent_progress_postamble();
-                    } finally {
-                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                {
-                    SubLObject stream = NIL;
-                    try {
-                        stream = compatibility.open_text(f_out, $OUTPUT, NIL);
-                        if (!stream.isStream()) {
-                            Errors.error($str_alt57$Unable_to_open__S, f_out);
-                        }
-                        {
-                            SubLObject s_out = stream;
-                            {
-                                SubLObject _prev_bind_0 = $print_pretty$.currentBinding(thread);
-                                try {
-                                    $print_pretty$.bind(NIL, thread);
-                                    format(s_out, $str_alt58$___);
-                                    {
-                                        SubLObject key = NIL;
-                                        SubLObject value = NIL;
-                                        {
-                                            final Iterator cdohash_iterator = getEntrySetIterator(rule_hash_table);
-                                            try {
-                                                while (iteratorHasNext(cdohash_iterator)) {
-                                                    final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
-                                                    key = getEntryKey(cdohash_entry);
-                                                    value = getEntryValue(cdohash_entry);
-                                                    format(s_out, $str_alt59$__S____S___, key, value);
-                                                } 
-                                            } finally {
-                                                releaseEntrySetIterator(cdohash_iterator);
-                                            }
-                                        }
-                                    }
-                                    format(s_out, $str_alt60$___);
-                                } finally {
-                                    $print_pretty$.rebind(_prev_bind_0, thread);
-                                }
-                            }
-                        }
-                    } finally {
-                        {
-                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                            try {
-                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                if (stream.isStream()) {
-                                    close(stream, UNPROVIDED);
-                                }
-                            } finally {
-                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                }
-                return $DONE;
-            }
-        }
-    }
-
     public static SubLObject create_disambiguator_rules_file_from_fort_list(final SubLObject fort_list, final SubLObject f_out) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != stringp(f_out) : "! stringp(f_out) " + ("Types.stringp(f_out) " + "CommonSymbols.NIL != Types.stringp(f_out) ") + f_out;
+        assert NIL != stringp(f_out) : "Types.stringp(f_out) " + "CommonSymbols.NIL != Types.stringp(f_out) " + f_out;
         final SubLObject rule_hash_table = make_hash_table($int$65536, EQUAL, UNPROVIDED);
         final SubLObject _prev_bind_0 = $progress_note$.currentBinding(thread);
         final SubLObject _prev_bind_2 = $progress_start_time$.currentBinding(thread);
@@ -2609,21 +1380,6 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
         return $DONE;
     }
 
-    public static final SubLObject create_disambiguator_rules_file_from_fort_file_id_alt(SubLObject file_id_num, SubLObject in_path, SubLObject out_path) {
-        if (in_path == UNPROVIDED) {
-            in_path = $str_alt94$_host_george_term_id_lists_;
-        }
-        if (out_path == UNPROVIDED) {
-            out_path = $str_alt95$_host_george_disambig_rules_;
-        }
-        {
-            SubLObject file_name = format(NIL, $str_alt96$_Afort_id__4__0D_cfasl, in_path, file_id_num);
-            SubLObject terms = cfasl_utilities.cfasl_load(file_name);
-            SubLObject out_file_name = format(NIL, $str_alt97$_Adisambiguator_rule_file__4__0D_, out_path, file_id_num);
-            return create_disambiguator_rules_file_from_fort_list(terms, out_file_name);
-        }
-    }
-
     public static SubLObject create_disambiguator_rules_file_from_fort_file_id(final SubLObject file_id_num, SubLObject in_path, SubLObject out_path) {
         if (in_path == UNPROVIDED) {
             in_path = $str101$_host_george_term_id_lists_;
@@ -2637,18 +1393,6 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
         return create_disambiguator_rules_file_from_fort_list(terms, out_file_name);
     }
 
-    public static final SubLObject create_rule_disambugation_condor_jobs_alt(SubLObject count) {
-        {
-            SubLObject n = NIL;
-            for (n = ZERO_INTEGER; n.numL(count); n = add(n, ONE_INTEGER)) {
-                format(T, $str_alt98$created_using_CREATE_RULE_DISAMBI);
-                format(T, $str_alt99$arguments______progn__load____hom, n);
-                format(T, $str_alt100$queue____);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject create_rule_disambugation_condor_jobs(final SubLObject count) {
         SubLObject n;
         for (n = NIL, n = ZERO_INTEGER; n.numL(count); n = add(n, ONE_INTEGER)) {
@@ -2660,70 +1404,52 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
     }
 
     public static SubLObject declare_rule_disambiguation_file() {
-        declareMacro("with_new_rule_disambiguator", "WITH-NEW-RULE-DISAMBIGUATOR");
-        declareFunction("rule_disambiguator_print_function_trampoline", "RULE-DISAMBIGUATOR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction("rule_disambiguator_p", "RULE-DISAMBIGUATOR-P", 1, 0, false);
+        declareMacro(me, "with_new_rule_disambiguator", "WITH-NEW-RULE-DISAMBIGUATOR");
+        declareFunction(me, "rule_disambiguator_print_function_trampoline", "RULE-DISAMBIGUATOR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction(me, "rule_disambiguator_p", "RULE-DISAMBIGUATOR-P", 1, 0, false);
         new rule_disambiguation.$rule_disambiguator_p$UnaryFunction();
-        declareFunction("rdis_rule_file", "RDIS-RULE-FILE", 1, 0, false);
-        declareFunction("rdis_count_file", "RDIS-COUNT-FILE", 1, 0, false);
-        declareFunction("rdis_rules", "RDIS-RULES", 1, 0, false);
-        declareFunction("rdis_counts", "RDIS-COUNTS", 1, 0, false);
-        declareFunction("_csetf_rdis_rule_file", "_CSETF-RDIS-RULE-FILE", 2, 0, false);
-        declareFunction("_csetf_rdis_count_file", "_CSETF-RDIS-COUNT-FILE", 2, 0, false);
-        declareFunction("_csetf_rdis_rules", "_CSETF-RDIS-RULES", 2, 0, false);
-        declareFunction("_csetf_rdis_counts", "_CSETF-RDIS-COUNTS", 2, 0, false);
-        declareFunction("make_rule_disambiguator", "MAKE-RULE-DISAMBIGUATOR", 0, 1, false);
-        declareFunction("visit_defstruct_rule_disambiguator", "VISIT-DEFSTRUCT-RULE-DISAMBIGUATOR", 2, 0, false);
-        declareFunction("visit_defstruct_object_rule_disambiguator_method", "VISIT-DEFSTRUCT-OBJECT-RULE-DISAMBIGUATOR-METHOD", 2, 0, false);
-        declareFunction("new_rule_disambiguator", "NEW-RULE-DISAMBIGUATOR", 0, 2, false);
-        declareFunction("finalize_rule_disambiguator", "FINALIZE-RULE-DISAMBIGUATOR", 1, 0, false);
-        declareFunction("rdis_print", "RDIS-PRINT", 3, 0, false);
-        declareMacro("with_sense_bag_excepting_word", "WITH-SENSE-BAG-EXCEPTING-WORD");
-        declareFunction("document_disambiguate_rule_disambiguator_method", "DOCUMENT-DISAMBIGUATE-RULE-DISAMBIGUATOR-METHOD", 2, 1, false);
-        declareFunction("rdis_disambiguate", "RDIS-DISAMBIGUATE", 2, 1, false);
-        declareFunction("sense_markers_not_requiring_licensing", "SENSE-MARKERS-NOT-REQUIRING-LICENSING", 1, 0, false);
-        declareFunction("rule_void", "RULE-VOID", 2, 0, false);
-        declareFunction("load_disambiguator_rules", "LOAD-DISAMBIGUATOR-RULES", 1, 0, false);
-        declareFunction("load_disambiguator_counts", "LOAD-DISAMBIGUATOR-COUNTS", 1, 0, false);
-        declareFunction("highest_count_sense_markers", "HIGHEST-COUNT-SENSE-MARKERS", 2, 0, false);
-        declareFunction("ambiguous_p", "AMBIGUOUS-P", 1, 0, false);
-        declareFunction("is_licensed_p", "IS-LICENSED-P", 3, 0, false);
-        declareFunction("positive_clause_p", "POSITIVE-CLAUSE-P", 1, 0, false);
-        declareFunction("negative_clause_p", "NEGATIVE-CLAUSE-P", 1, 0, false);
-        declareFunction("clause_sign", "CLAUSE-SIGN", 1, 0, false);
-        declareFunction("clause_term", "CLAUSE-TERM", 1, 0, false);
-        declareFunction("new_sense_bag", "NEW-SENSE-BAG", 1, 0, false);
-        declareFunction("sense_bag_licensesP", "SENSE-BAG-LICENSES?", 2, 0, false);
-        declareFunction("disambiguation_rule_query", "DISAMBIGUATION-RULE-QUERY", 1, 0, false);
-        declareFunction("create_disambiguator_rules_file", "CREATE-DISAMBIGUATOR-RULES-FILE", 0, 1, false);
-        declareFunction("fort_disambiguation_rule_query", "FORT-DISAMBIGUATION-RULE-QUERY", 3, 0, false);
-        declareFunction("term_alist_to_file_hash_table", "TERM-ALIST-TO-FILE-HASH-TABLE", 2, 3, false);
-        declareFunction("alist_file_to_fht", "ALIST-FILE-TO-FHT", 2, 0, false);
-        declareFunction("disambiguator_rule_fht_to_hl_id_text_file", "DISAMBIGUATOR-RULE-FHT-TO-HL-ID-TEXT-FILE", 2, 0, false);
-        declareFunction("create_disambiguator_rules_file_from_forts", "CREATE-DISAMBIGUATOR-RULES-FILE-FROM-FORTS", 1, 0, false);
-        declareFunction("create_disambiguator_rules_file_from_fort_list", "CREATE-DISAMBIGUATOR-RULES-FILE-FROM-FORT-LIST", 2, 0, false);
-        declareFunction("create_disambiguator_rules_file_from_fort_file_id", "CREATE-DISAMBIGUATOR-RULES-FILE-FROM-FORT-FILE-ID", 1, 2, false);
-        declareFunction("create_rule_disambugation_condor_jobs", "CREATE-RULE-DISAMBUGATION-CONDOR-JOBS", 1, 0, false);
+        declareFunction(me, "rdis_rule_file", "RDIS-RULE-FILE", 1, 0, false);
+        declareFunction(me, "rdis_count_file", "RDIS-COUNT-FILE", 1, 0, false);
+        declareFunction(me, "rdis_rules", "RDIS-RULES", 1, 0, false);
+        declareFunction(me, "rdis_counts", "RDIS-COUNTS", 1, 0, false);
+        declareFunction(me, "_csetf_rdis_rule_file", "_CSETF-RDIS-RULE-FILE", 2, 0, false);
+        declareFunction(me, "_csetf_rdis_count_file", "_CSETF-RDIS-COUNT-FILE", 2, 0, false);
+        declareFunction(me, "_csetf_rdis_rules", "_CSETF-RDIS-RULES", 2, 0, false);
+        declareFunction(me, "_csetf_rdis_counts", "_CSETF-RDIS-COUNTS", 2, 0, false);
+        declareFunction(me, "make_rule_disambiguator", "MAKE-RULE-DISAMBIGUATOR", 0, 1, false);
+        declareFunction(me, "visit_defstruct_rule_disambiguator", "VISIT-DEFSTRUCT-RULE-DISAMBIGUATOR", 2, 0, false);
+        declareFunction(me, "visit_defstruct_object_rule_disambiguator_method", "VISIT-DEFSTRUCT-OBJECT-RULE-DISAMBIGUATOR-METHOD", 2, 0, false);
+        declareFunction(me, "new_rule_disambiguator", "NEW-RULE-DISAMBIGUATOR", 0, 2, false);
+        declareFunction(me, "finalize_rule_disambiguator", "FINALIZE-RULE-DISAMBIGUATOR", 1, 0, false);
+        declareFunction(me, "rdis_print", "RDIS-PRINT", 3, 0, false);
+        declareMacro(me, "with_sense_bag_excepting_word", "WITH-SENSE-BAG-EXCEPTING-WORD");
+        declareFunction(me, "document_disambiguate_rule_disambiguator_method", "DOCUMENT-DISAMBIGUATE-RULE-DISAMBIGUATOR-METHOD", 2, 1, false);
+        declareFunction(me, "rdis_disambiguate", "RDIS-DISAMBIGUATE", 2, 1, false);
+        declareFunction(me, "sense_markers_not_requiring_licensing", "SENSE-MARKERS-NOT-REQUIRING-LICENSING", 1, 0, false);
+        declareFunction(me, "rule_void", "RULE-VOID", 2, 0, false);
+        declareFunction(me, "load_disambiguator_rules", "LOAD-DISAMBIGUATOR-RULES", 1, 0, false);
+        declareFunction(me, "load_disambiguator_counts", "LOAD-DISAMBIGUATOR-COUNTS", 1, 0, false);
+        declareFunction(me, "highest_count_sense_markers", "HIGHEST-COUNT-SENSE-MARKERS", 2, 0, false);
+        declareFunction(me, "ambiguous_p", "AMBIGUOUS-P", 1, 0, false);
+        declareFunction(me, "is_licensed_p", "IS-LICENSED-P", 3, 0, false);
+        declareFunction(me, "positive_clause_p", "POSITIVE-CLAUSE-P", 1, 0, false);
+        declareFunction(me, "negative_clause_p", "NEGATIVE-CLAUSE-P", 1, 0, false);
+        declareFunction(me, "clause_sign", "CLAUSE-SIGN", 1, 0, false);
+        declareFunction(me, "clause_term", "CLAUSE-TERM", 1, 0, false);
+        declareFunction(me, "new_sense_bag", "NEW-SENSE-BAG", 1, 0, false);
+        declareFunction(me, "sense_bag_licensesP", "SENSE-BAG-LICENSES?", 2, 0, false);
+        declareFunction(me, "disambiguation_rule_query", "DISAMBIGUATION-RULE-QUERY", 1, 0, false);
+        declareFunction(me, "create_disambiguator_rules_file", "CREATE-DISAMBIGUATOR-RULES-FILE", 0, 1, false);
+        declareFunction(me, "fort_disambiguation_rule_query", "FORT-DISAMBIGUATION-RULE-QUERY", 3, 0, false);
+        declareFunction(me, "term_alist_to_file_hash_table", "TERM-ALIST-TO-FILE-HASH-TABLE", 2, 3, false);
+        declareFunction(me, "alist_file_to_fht", "ALIST-FILE-TO-FHT", 2, 0, false);
+        declareFunction(me, "disambiguator_rule_fht_to_hl_id_text_file", "DISAMBIGUATOR-RULE-FHT-TO-HL-ID-TEXT-FILE", 2, 0, false);
+        declareFunction(me, "create_disambiguator_rules_file_from_forts", "CREATE-DISAMBIGUATOR-RULES-FILE-FROM-FORTS", 1, 0, false);
+        declareFunction(me, "create_disambiguator_rules_file_from_fort_list", "CREATE-DISAMBIGUATOR-RULES-FILE-FROM-FORT-LIST", 2, 0, false);
+        declareFunction(me, "create_disambiguator_rules_file_from_fort_file_id", "CREATE-DISAMBIGUATOR-RULES-FILE-FROM-FORT-FILE-ID", 1, 2, false);
+        declareFunction(me, "create_rule_disambugation_condor_jobs", "CREATE-RULE-DISAMBUGATION-CONDOR-JOBS", 1, 0, false);
         return NIL;
     }
-
-    // Internal Constants
-    @LispMethod(comment = "Internal Constants")
-    static private final SubLString $str_alt0$data_word_sense_disambiguation_ru = makeString("data/word-sense-disambiguation-rules.fht");
-
-    static private final SubLString $str_alt1$data_word_sense_disambiguation_co = makeString("data/word-sense-disambiguation-counts.fht");
-
-    static private final SubLList $list_alt2 = list(list(makeSymbol("DISAMBIGUATOR")), makeSymbol("&BODY"), makeSymbol("BODY"));
-
-    static private final SubLList $list_alt4 = list(list(makeSymbol("NEW-RULE-DISAMBIGUATOR")));
-
-    static private final SubLList $list_alt8 = list(makeSymbol("RULE-FILE"), makeSymbol("COUNT-FILE"), makeSymbol("RULES"), makeSymbol("COUNTS"));
-
-    static private final SubLList $list_alt9 = list(makeKeyword("RULE-FILE"), makeKeyword("COUNT-FILE"), makeKeyword("RULES"), makeKeyword("COUNTS"));
-
-    static private final SubLList $list_alt10 = list(makeSymbol("RDIS-RULE-FILE"), makeSymbol("RDIS-COUNT-FILE"), makeSymbol("RDIS-RULES"), makeSymbol("RDIS-COUNTS"));
-
-    static private final SubLList $list_alt11 = list(makeSymbol("_CSETF-RDIS-RULE-FILE"), makeSymbol("_CSETF-RDIS-COUNT-FILE"), makeSymbol("_CSETF-RDIS-RULES"), makeSymbol("_CSETF-RDIS-COUNTS"));
 
     public static SubLObject init_rule_disambiguation_file() {
         defparameter("*WORD-SENSE-DISAMBIGUATION-RULE-FILE*", $str0$data_word_sense_disambiguation_ru);
@@ -2745,26 +1471,10 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
         return NIL;
     }
 
-    static private final SubLString $str_alt26$Invalid_slot__S_for_construction_ = makeString("Invalid slot ~S for construction function");
-
-    static private final SubLString $str_alt28$__RULE_DISAMBIGUATOR_ = makeString("#<RULE-DISAMBIGUATOR ");
-
-    static private final SubLString $str_alt29$_ = makeString(" ");
-
-    static private final SubLString $str_alt30$_ = makeString(">");
-
-    static private final SubLList $list_alt31 = list(list(makeSymbol("BAG"), makeSymbol("WORD")), makeSymbol("&BODY"), makeSymbol("BODY"));
-
-    static private final SubLSymbol $sym32$CYCL = makeUninternedSymbol("CYCL");
-
-    static private final SubLSymbol $sym33$GENL_CYCL = makeUninternedSymbol("GENL-CYCL");
-
     @Override
     public void declareFunctions() {
         declare_rule_disambiguation_file();
     }
-
-    static private final SubLList $list_alt38 = list(MINUS_ONE_INTEGER);
 
     @Override
     public void initializeVariables() {
@@ -2777,27 +1487,187 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
     }
 
     static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
-    public static final SubLObject $const44$ContextuallyDependentLexicalMappi = reader_make_constant_shell("ContextuallyDependentLexicalMapping");
+    public static final class $rule_disambiguator_native extends SubLStructNative {
+        public SubLObject $rule_file;
 
-    static private final SubLString $str_alt46$Can_t_load_rules_from__a = makeString("Can't load rules from ~a");
+        public SubLObject $count_file;
 
-    static private final SubLString $str_alt47$Can_t_load_counts_from__a = makeString("Can't load counts from ~a");
+        public SubLObject $rules;
 
-    static private final SubLList $list_alt49 = list(makeSymbol("?X"), makeSymbol("?Y"));
+        public SubLObject $counts;
 
-    static private final SubLList $list_alt51 = list(new SubLObject[]{ makeKeyword("INFERENCE-MODE"), makeKeyword("SHALLOW"), makeKeyword("ALLOW-INDETERMINATE-RESULTS?"), NIL, makeKeyword("DISJUNCTION-FREE-EL-VARS-POLICY"), makeKeyword("COMPUTE-INTERSECTION"), makeKeyword("INTERMEDIATE-STEP-VALIDATION-LEVEL"), makeKeyword("MINIMAL"), makeKeyword("MAX-TIME"), makeInteger(57600), makeKeyword("PROBABLY-APPROXIMATELY-DONE"), makeDouble(1.0), makeKeyword("ANSWER-LANGUAGE"), makeKeyword("EL"), makeKeyword("CONTINUABLE?"), NIL });
+        private static final SubLStructDeclNative structDecl;
 
-    static private final SubLString $str_alt52$data_word_sense_disambiguation_ru = makeString("data/word-sense-disambiguation-rules.txt");
+        private $rule_disambiguator_native() {
+            this.$rule_file = Lisp.NIL;
+            this.$count_file = Lisp.NIL;
+            this.$rules = Lisp.NIL;
+            this.$counts = Lisp.NIL;
+        }
 
-    static private final SubLString $str_alt57$Unable_to_open__S = makeString("Unable to open ~S");
+        @Override
+        public SubLStructDecl getStructDecl() {
+            return structDecl;
+        }
 
-    static private final SubLString $str_alt58$___ = makeString("(~%");
+        @Override
+        public SubLObject getField2() {
+            return this.$rule_file;
+        }
 
-    static private final SubLString $str_alt59$__S____S___ = makeString("(~S . ~S)~%");
+        @Override
+        public SubLObject getField3() {
+            return this.$count_file;
+        }
 
-    static private final SubLString $str_alt60$___ = makeString(")~%");
+        @Override
+        public SubLObject getField4() {
+            return this.$rules;
+        }
+
+        @Override
+        public SubLObject getField5() {
+            return this.$counts;
+        }
+
+        @Override
+        public SubLObject setField2(final SubLObject value) {
+            return this.$rule_file = value;
+        }
+
+        @Override
+        public SubLObject setField3(final SubLObject value) {
+            return this.$count_file = value;
+        }
+
+        @Override
+        public SubLObject setField4(final SubLObject value) {
+            return this.$rules = value;
+        }
+
+        @Override
+        public SubLObject setField5(final SubLObject value) {
+            return this.$counts = value;
+        }
+
+        static {
+            structDecl = makeStructDeclNative($rule_disambiguator_native.class, RULE_DISAMBIGUATOR, RULE_DISAMBIGUATOR_P, $list8, $list9, new String[]{ "$rule_file", "$count_file", "$rules", "$counts" }, $list10, $list11, RDIS_PRINT);
+        }
+    }
 
     public static final class $rule_disambiguator_p$UnaryFunction extends UnaryFunction {
         public $rule_disambiguator_p$UnaryFunction() {
@@ -2809,42 +1679,6 @@ public final class rule_disambiguation extends SubLTranslatedFile implements V12
             return rule_disambiguator_p(arg1);
         }
     }
-
-    static private final SubLList $list_alt62 = list(makeSymbol("?LICENSOR"));
-
-    public static final SubLSymbol $kw65$ALLOW_INDETERMINATE_RESULTS_ = makeKeyword("ALLOW-INDETERMINATE-RESULTS?");
-
-    static private final SubLString $str_alt78$_tmp_ = makeString("/tmp/");
-
-    static private final SubLString $str_alt80$_a_is_invalid = makeString("~a is invalid");
-
-    static private final SubLString $str_alt81$Can_t_load__a___a = makeString("Can't load ~a: ~a");
-
-    static private final SubLList $list_alt86 = cons(makeSymbol("LICENSED?"), makeSymbol("TERM"));
-
-    static private final SubLString $str_alt87$don_t_know_how_to_convert__A = makeString("don't know how to convert ~A");
-
-    static private final SubLString $str_alt88$_A__A_ = makeString("~A,~A,");
-
-    static private final SubLString $str_alt89$_A_ = makeString("~A,");
-
-    static private final SubLString $str_alt90$__ = makeString("~%");
-
-    static private final SubLList $list_alt91 = list(makeKeyword("INTERMEDIATE-STEP-VALIDATION-LEVEL"), makeKeyword("MINIMAL"));
-
-    static private final SubLString $str_alt94$_host_george_term_id_lists_ = makeString("/host/george/term-id-lists/");
-
-    static private final SubLString $str_alt95$_host_george_disambig_rules_ = makeString("/host/george/disambig-rules/");
-
-    static private final SubLString $str_alt96$_Afort_id__4__0D_cfasl = makeString("~Afort-id-~4,'0D.cfasl");
-
-    static private final SubLString $str_alt97$_Adisambiguator_rule_file__4__0D_ = makeString("~Adisambiguator-rule-file-~4,'0D.txt");
-
-    static private final SubLString $str_alt98$created_using_CREATE_RULE_DISAMBI = makeString("created using CREATE-RULE-DISAMBIGUATION-CONDOR-JOBS in RULE-DISAMBIGUATION");
-
-    static private final SubLString $str_alt99$arguments______progn__load____hom = makeString("arguments = \"\'(progn (load \"\"/home/daves/cycl/rule-disambiguation.lisp\"\") (load-transcript-file \"\"/cyc/top/transcripts/0917/billie-20061025103022-21843-local-0-sent.ts\"\" nil :none) (load-transcript-file \"\"/cyc/top/transcripts/0917/billie-20061025103022-21843-local-1-sent.ts\"\" nil :none) (create-disambiguator-rules-file-from-fort-file-id ~A))\'\"~%");
-
-    static private final SubLString $str_alt100$queue____ = makeString("queue~%~%");
 }
 
 /**

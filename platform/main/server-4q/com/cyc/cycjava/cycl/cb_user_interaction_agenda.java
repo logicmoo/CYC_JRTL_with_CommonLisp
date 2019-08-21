@@ -964,7 +964,7 @@ public final class cb_user_interaction_agenda extends SubLTranslatedFile impleme
                 if (rate.isNumber()) {
                     html_utilities.html_markup(html_macros.$html_head_head$.getGlobalValue());
                     html_macros.html_head_content_type();
-                    html_utilities.html_refresh(rate);
+                    html_utilities.html_refresh(rate, UNPROVIDED_SYM);
                     html_utilities.html_markup(html_macros.$html_head_tail$.getGlobalValue());
                     html_utilities.html_source_readability_terpri(UNPROVIDED);
                 }

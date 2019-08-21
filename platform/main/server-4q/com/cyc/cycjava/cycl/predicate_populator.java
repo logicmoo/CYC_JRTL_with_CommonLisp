@@ -654,7 +654,7 @@ public final class predicate_populator extends SubLTranslatedFile implements V02
                     SubLObject luc_passage = NIL;
                     for (luc_passage = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , luc_passage = cdolist_list_var.first()) {
                         {
-                            SubLObject v_document = document.new_document(methods.funcall_instance_method_with_0_args(luc_passage, GET_CONTENT), UNPROVIDED);
+                            SubLObject v_document = document.new_document(methods.funcall_instance_method_with_0_args(luc_passage, GET_CONTENT), UNPROVIDED, UNPROVIDED_SYM);
                             SubLObject vector_var = document.document_paragraphs(v_document);
                             SubLObject backwardP_var = NIL;
                             SubLObject length = length(vector_var);
@@ -744,7 +744,7 @@ public final class predicate_populator extends SubLTranslatedFile implements V02
             SubLObject luc_passage = NIL;
             for (luc_passage = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , luc_passage = cdolist_list_var.first()) {
                 {
-                    SubLObject v_document = document.new_document(methods.funcall_instance_method_with_0_args(luc_passage, GET_CONTENT), UNPROVIDED);
+                    SubLObject v_document = document.new_document(methods.funcall_instance_method_with_0_args(luc_passage, GET_CONTENT), UNPROVIDED, UNPROVIDED_SYM);
                     SubLObject vector_var = document.document_paragraphs(v_document);
                     SubLObject backwardP_var = NIL;
                     SubLObject length = length(vector_var);
@@ -1014,7 +1014,7 @@ public final class predicate_populator extends SubLTranslatedFile implements V02
             for (v_term = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_term = cdolist_list_var.first()) {
                 {
                     SubLObject phrase_list_reversed = NIL;
-                    SubLObject cdolist_list_var_21 = pph_methods_lexicon.all_phrases_for_term(v_term, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                    SubLObject cdolist_list_var_21 = pph_methods_lexicon.all_phrases_for_term(v_term, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED_SYM);
                     SubLObject phrase = NIL;
                     for (phrase = cdolist_list_var_21.first(); NIL != cdolist_list_var_21; cdolist_list_var_21 = cdolist_list_var_21.rest() , phrase = cdolist_list_var_21.first()) {
                         {

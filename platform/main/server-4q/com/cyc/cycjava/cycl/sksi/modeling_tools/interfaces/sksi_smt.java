@@ -1,188 +1,6 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces;
 
 
-import static com.cyc.cycjava.cycl.access_macros.register_external_symbol;
-import static com.cyc.cycjava.cycl.assertion_handles.assertion_p;
-import static com.cyc.cycjava.cycl.assertions_high.asserted_assertionP;
-import static com.cyc.cycjava.cycl.assertions_high.assertion_mt;
-import static com.cyc.cycjava.cycl.cb_parameters.$cb_permit_robots_to_followP$;
-import static com.cyc.cycjava.cycl.cb_parameters.$cb_permit_robots_to_indexP$;
-import static com.cyc.cycjava.cycl.cb_parameters.cb_head_shortcut_icon;
-import static com.cyc.cycjava.cycl.cb_parameters.cyc_cgi_url_int;
-import static com.cyc.cycjava.cycl.cb_utilities.$cb_default_fort_handler$;
-import static com.cyc.cycjava.cycl.cb_utilities.cb_assertion_ball;
-import static com.cyc.cycjava.cycl.cb_utilities.cb_form;
-import static com.cyc.cycjava.cycl.cb_utilities.cb_frame_name;
-import static com.cyc.cycjava.cycl.cb_utilities.declare_cb_tool;
-import static com.cyc.cycjava.cycl.cb_utilities.setup_cb_link_method;
-import static com.cyc.cycjava.cycl.constant_handles.constant_p;
-import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
-import static com.cyc.cycjava.cycl.constant_handles.valid_constant;
-import static com.cyc.cycjava.cycl.constants_high.constant_name;
-import static com.cyc.cycjava.cycl.cycl_utilities.sentence_arg0;
-import static com.cyc.cycjava.cycl.cycl_utilities.sentence_arg1;
-import static com.cyc.cycjava.cycl.cycl_utilities.sentence_arg2;
-import static com.cyc.cycjava.cycl.cycl_utilities.sentence_arg3;
-import static com.cyc.cycjava.cycl.cycl_utilities.sentence_arg4;
-import static com.cyc.cycjava.cycl.el_utilities.lambda_function_p;
-import static com.cyc.cycjava.cycl.el_utilities.make_binary_formula;
-import static com.cyc.cycjava.cycl.el_utilities.make_formula;
-import static com.cyc.cycjava.cycl.el_utilities.make_quaternary_formula;
-import static com.cyc.cycjava.cycl.el_utilities.make_ternary_formula;
-import static com.cyc.cycjava.cycl.el_utilities.make_unary_formula;
-import static com.cyc.cycjava.cycl.format_nil.format_nil_a_no_copy;
-import static com.cyc.cycjava.cycl.html_macros.$html_anchor_head$;
-import static com.cyc.cycjava.cycl.html_macros.$html_anchor_href$;
-import static com.cyc.cycjava.cycl.html_macros.$html_anchor_tail$;
-import static com.cyc.cycjava.cycl.html_macros.$html_anchor_target$;
-import static com.cyc.cycjava.cycl.html_macros.$html_blockquote_head$;
-import static com.cyc.cycjava.cycl.html_macros.$html_blockquote_tail$;
-import static com.cyc.cycjava.cycl.html_macros.$html_body_head$;
-import static com.cyc.cycjava.cycl.html_macros.$html_body_tail$;
-import static com.cyc.cycjava.cycl.html_macros.$html_bold_head$;
-import static com.cyc.cycjava.cycl.html_macros.$html_bold_tail$;
-import static com.cyc.cycjava.cycl.html_macros.$html_color_sat_red$;
-import static com.cyc.cycjava.cycl.html_macros.$html_font_color$;
-import static com.cyc.cycjava.cycl.html_macros.$html_font_head$;
-import static com.cyc.cycjava.cycl.html_macros.$html_font_tail$;
-import static com.cyc.cycjava.cycl.html_macros.$html_form_action$;
-import static com.cyc.cycjava.cycl.html_macros.$html_form_field_uniquifier_code$;
-import static com.cyc.cycjava.cycl.html_macros.$html_form_head$;
-import static com.cyc.cycjava.cycl.html_macros.$html_form_method$;
-import static com.cyc.cycjava.cycl.html_macros.$html_form_method_post$;
-import static com.cyc.cycjava.cycl.html_macros.$html_form_tail$;
-import static com.cyc.cycjava.cycl.html_macros.$html_form_target$;
-import static com.cyc.cycjava.cycl.html_macros.$html_head_head$;
-import static com.cyc.cycjava.cycl.html_macros.$html_head_tail$;
-import static com.cyc.cycjava.cycl.html_macros.$html_heading_head$;
-import static com.cyc.cycjava.cycl.html_macros.$html_heading_tail$;
-import static com.cyc.cycjava.cycl.html_macros.$html_html_head$;
-import static com.cyc.cycjava.cycl.html_macros.$html_html_tail$;
-import static com.cyc.cycjava.cycl.html_macros.$html_inside_bodyP$;
-import static com.cyc.cycjava.cycl.html_macros.$html_option_head$;
-import static com.cyc.cycjava.cycl.html_macros.$html_option_selected$;
-import static com.cyc.cycjava.cycl.html_macros.$html_option_tail$;
-import static com.cyc.cycjava.cycl.html_macros.$html_option_value$;
-import static com.cyc.cycjava.cycl.html_macros.$html_safe_print$;
-import static com.cyc.cycjava.cycl.html_macros.$html_select_head$;
-import static com.cyc.cycjava.cycl.html_macros.$html_select_name$;
-import static com.cyc.cycjava.cycl.html_macros.$html_select_tail$;
-import static com.cyc.cycjava.cycl.html_macros.$html_stream$;
-import static com.cyc.cycjava.cycl.html_macros.$html_table_border$;
-import static com.cyc.cycjava.cycl.html_macros.$html_table_cellpadding$;
-import static com.cyc.cycjava.cycl.html_macros.$html_table_cellspacing$;
-import static com.cyc.cycjava.cycl.html_macros.$html_table_data_align$;
-import static com.cyc.cycjava.cycl.html_macros.$html_table_data_colspan$;
-import static com.cyc.cycjava.cycl.html_macros.$html_table_data_head$;
-import static com.cyc.cycjava.cycl.html_macros.$html_table_data_rowspan$;
-import static com.cyc.cycjava.cycl.html_macros.$html_table_data_tail$;
-import static com.cyc.cycjava.cycl.html_macros.$html_table_data_valign$;
-import static com.cyc.cycjava.cycl.html_macros.$html_table_head$;
-import static com.cyc.cycjava.cycl.html_macros.$html_table_header_head$;
-import static com.cyc.cycjava.cycl.html_macros.$html_table_header_tail$;
-import static com.cyc.cycjava.cycl.html_macros.$html_table_row_head$;
-import static com.cyc.cycjava.cycl.html_macros.$html_table_row_tail$;
-import static com.cyc.cycjava.cycl.html_macros.$html_table_tail$;
-import static com.cyc.cycjava.cycl.html_macros.$within_html_form$;
-import static com.cyc.cycjava.cycl.html_macros.embed_form_field_code;
-import static com.cyc.cycjava.cycl.html_macros.html_head_content_type;
-import static com.cyc.cycjava.cycl.html_macros.next_html_form_field_uniquifier_code;
-import static com.cyc.cycjava.cycl.html_macros.note_html_handler_function;
-import static com.cyc.cycjava.cycl.html_utilities.html_align;
-import static com.cyc.cycjava.cycl.html_utilities.html_char;
-import static com.cyc.cycjava.cycl.html_utilities.html_color;
-import static com.cyc.cycjava.cycl.html_utilities.html_glyph;
-import static com.cyc.cycjava.cycl.html_utilities.html_hidden_input;
-import static com.cyc.cycjava.cycl.html_utilities.html_indent;
-import static com.cyc.cycjava.cycl.html_utilities.html_markup;
-import static com.cyc.cycjava.cycl.html_utilities.html_meta_robot_instructions;
-import static com.cyc.cycjava.cycl.html_utilities.html_newline;
-import static com.cyc.cycjava.cycl.html_utilities.html_princ;
-import static com.cyc.cycjava.cycl.html_utilities.html_simple_attribute;
-import static com.cyc.cycjava.cycl.html_utilities.html_source_readability_terpri;
-import static com.cyc.cycjava.cycl.kb_mapping_utilities.fpred_u_v_holds_gaf_in_any_mt;
-import static com.cyc.cycjava.cycl.kb_mapping_utilities.fpred_value_in_any_mt;
-import static com.cyc.cycjava.cycl.kb_mapping_utilities.pred_value_gafs;
-import static com.cyc.cycjava.cycl.kb_mapping_utilities.pred_values_in_any_mt;
-import static com.cyc.cycjava.cycl.kb_paths.fort_name;
-import static com.cyc.cycjava.cycl.mt_relevance_macros.$mt$;
-import static com.cyc.cycjava.cycl.mt_relevance_macros.$relevant_mt_function$;
-import static com.cyc.cycjava.cycl.nart_handles.nart_p;
-import static com.cyc.cycjava.cycl.narts_high.nart_el_formula;
-import static com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_assert;
-import static com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_assert_if_new;
-import static com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_create;
-import static com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_edit_assertion;
-import static com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_find_nart;
-import static com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_find_or_create;
-import static com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_kill;
-import static com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_unassert;
-import static com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_unassert_assertion;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.declare_defglobal;
-import static com.cyc.cycjava.cycl.system_parameters.$cyc_cgi_program$;
-import static com.cyc.cycjava.cycl.uncanonicalizer.assertion_el_formula;
-import static com.cyc.cycjava.cycl.utilities_macros.$is_noting_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_elapsed_seconds_for_notification$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_last_pacification_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_notification_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_pacifications_since_last_nl$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$silent_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$suppress_all_progress_faster_than_seconds$;
-import static com.cyc.cycjava.cycl.utilities_macros.note_progress;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_progress_postamble;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_progress_preamble;
-import static com.cyc.cycjava.cycl.utilities_macros.register_html_state_variable;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.bind;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.currentBinding;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.rebind;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.eq;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.apply;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.cconcatenate;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.find;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.nreverse;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.remove;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.remove_if;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.boundp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.make_keyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.get_universal_time;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.arg2;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.multiple_value_list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.resetMultipleValues;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.values;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cadr;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cddr;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.member;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.second;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.set_difference;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.bq_cons;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-
-import com.cyc.cycjava.cycl.V12;
 import com.cyc.cycjava.cycl.api_widgets;
 import com.cyc.cycjava.cycl.assertion_handles;
 import com.cyc.cycjava.cycl.assertions_high;
@@ -203,6 +21,7 @@ import com.cyc.cycjava.cycl.hlmt_czer;
 import com.cyc.cycjava.cycl.html_arghash;
 import com.cyc.cycjava.cycl.html_complete;
 import com.cyc.cycjava.cycl.html_macros;
+import com.cyc.cycjava.cycl.inference.ask_utilities;
 import com.cyc.cycjava.cycl.integer_sequence_generator;
 import com.cyc.cycjava.cycl.isa;
 import com.cyc.cycjava.cycl.iteration;
@@ -222,17 +41,17 @@ import com.cyc.cycjava.cycl.operation_communication;
 import com.cyc.cycjava.cycl.quantities;
 import com.cyc.cycjava.cycl.rkf_relevance_utilities;
 import com.cyc.cycjava.cycl.sdbc;
+import com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt;
+import com.cyc.cycjava.cycl.sksi.modeling_tools.sksi_sks_structure_importer_utilities;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_infrastructure_utilities;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_sks_accessors;
 import com.cyc.cycjava.cycl.string_utilities;
 import com.cyc.cycjava.cycl.subl_promotions;
 import com.cyc.cycjava.cycl.system_parameters;
 import com.cyc.cycjava.cycl.uncanonicalizer;
 import com.cyc.cycjava.cycl.virtual_indexing;
 import com.cyc.cycjava.cycl.web_utilities;
-import com.cyc.cycjava.cycl.inference.ask_utilities;
-import com.cyc.cycjava.cycl.sksi.modeling_tools.sksi_sks_structure_importer_utilities;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_infrastructure_utilities;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_sks_accessors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
@@ -244,34 +63,92 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
+import java.util.function.Supplier;
+
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.cb_parameters.$cb_permit_robots_to_followP$;
+import static com.cyc.cycjava.cycl.cb_parameters.$cb_permit_robots_to_indexP$;
+import static com.cyc.cycjava.cycl.cb_parameters.*;
+import static com.cyc.cycjava.cycl.cb_utilities.$cb_default_fort_handler$;
+import static com.cyc.cycjava.cycl.cb_utilities.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.html_utilities.*;
+import static com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.$is_noting_progressP$;
+import static com.cyc.cycjava.cycl.utilities_macros.$progress_count$;
+import static com.cyc.cycjava.cycl.utilities_macros.$progress_elapsed_seconds_for_notification$;
+import static com.cyc.cycjava.cycl.utilities_macros.$progress_last_pacification_time$;
+import static com.cyc.cycjava.cycl.utilities_macros.$progress_notification_count$;
+import static com.cyc.cycjava.cycl.utilities_macros.$progress_pacifications_since_last_nl$;
+import static com.cyc.cycjava.cycl.utilities_macros.$progress_start_time$;
+import static com.cyc.cycjava.cycl.utilities_macros.$silent_progressP$;
+import static com.cyc.cycjava.cycl.utilities_macros.$suppress_all_progress_faster_than_seconds$;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWENTY_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- * module:      SKSI-SMT
- * source file: /cyc/top/cycl/sksi/modeling-tools/interfaces/sksi-smt.lisp
- * created:     2019/07/03 17:38:35
- */
-public final class sksi_smt extends SubLTranslatedFile implements V12 {
+public final class sksi_smt extends SubLTranslatedFile {
     public static final SubLFile me = new sksi_smt();
+
+    public static final String myName = "com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt";
+
+    public static final String myFingerPrint = "601700c03d9e67f93a0cfc6081e613eb7682ca00a68b9d009c19307540bcc4e0";
+
+    // defparameter
+    public static final SubLSymbol $allow_smt_editing_links$ = makeSymbol("*ALLOW-SMT-EDITING-LINKS*");
+
+    // deflexical
+    private static final SubLSymbol $sksi_smt_sd_parameters$ = makeSymbol("*SKSI-SMT-SD-PARAMETERS*");
+
+
+
+    // deflexical
+    private static final SubLSymbol $sksi_smt_mode$ = makeSymbol("*SKSI-SMT-MODE*");
 
 
 
     // defparameter
-    @LispMethod(comment = "defparameter")
-    public static final SubLSymbol $allow_smt_editing_links$ = makeSymbol("*ALLOW-SMT-EDITING-LINKS*");
-
-    // deflexical
-    @LispMethod(comment = "deflexical")
-    private static final SubLSymbol $sksi_smt_sd_parameters$ = makeSymbol("*SKSI-SMT-SD-PARAMETERS*");
-
-    // deflexical
-    @LispMethod(comment = "deflexical")
-    private static final SubLSymbol $sksi_smt_mode$ = makeSymbol("*SKSI-SMT-MODE*");
+    public static final SubLSymbol $sksi_smt_warn_about_invariantsP$ = makeSymbol("*SKSI-SMT-WARN-ABOUT-INVARIANTS?*");
 
 
 
@@ -301,11 +178,15 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str12$___ = makeString("');");
 
-    @LispMethod(comment = "Internal Constants")
-    // Internal Constants
+
+
     private static final SubLString $$$CMT = makeString("CMT");
 
+
+
     private static final SubLString $str16$sksi_smt = makeString("sksi-smt");
+
+
 
     private static final SubLSymbol CB_LINK_SMT = makeSymbol("CB-LINK-SMT");
 
@@ -314,6 +195,8 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
     private static final SubLString $$$Schema_Modeling_Tool = makeString("Schema Modeling Tool");
 
     private static final SubLSymbol SKSI_SMT = makeSymbol("SKSI-SMT");
+
+
 
     private static final SubLSymbol ARGHASH_P = makeSymbol("ARGHASH-P");
 
@@ -339,9 +222,15 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol $ON_EDIT_T = makeKeyword("ON-EDIT-T");
 
+
+
     private static final SubLString $str36$__DOCTYPE_html_PUBLIC_____W3C__DT = makeString("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
 
     private static final SubLString $str37$_meta_http_equiv__X_UA_Compatible = makeString("<meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\" >");
+
+
+
+
 
     private static final SubLString $str40$cg_sksi_smt = makeString("cg?sksi-smt");
 
@@ -349,19 +238,31 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
 
 
 
+    private static final SubLObject $$StructuredKnowledgeSource = reader_make_constant_shell(makeString("StructuredKnowledgeSource"));
+
+
+
     private static final SubLSymbol $TO_EDIT_SKS = makeKeyword("TO-EDIT-SKS");
+
+    private static final SubLObject $$PhysicalSchema = reader_make_constant_shell(makeString("PhysicalSchema"));
 
 
 
     private static final SubLSymbol $TO_EDIT_PS = makeKeyword("TO-EDIT-PS");
 
+    private static final SubLObject $$LogicalSchema = reader_make_constant_shell(makeString("LogicalSchema"));
+
 
 
     private static final SubLSymbol $TO_EDIT_LS = makeKeyword("TO-EDIT-LS");
 
+    private static final SubLObject $$PhysicalField = reader_make_constant_shell(makeString("PhysicalField"));
+
 
 
     private static final SubLSymbol $TO_EDIT_PF = makeKeyword("TO-EDIT-PF");
+
+    private static final SubLObject $$LogicalField = reader_make_constant_shell(makeString("LogicalField"));
 
 
 
@@ -371,7 +272,13 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $$$_not_implemented = makeString(" not implemented");
 
+
+
     private static final SubLString $str61$Error__ = makeString("Error: ");
+
+
+
+
 
     private static final SubLString $str64$Success__ = makeString("Success: ");
 
@@ -382,6 +289,8 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
     private static final SubLSymbol $TO_EDIT_TS = makeKeyword("TO-EDIT-TS");
 
     private static final SubLSymbol $TO_EDIT_T = makeKeyword("TO-EDIT-T");
+
+
 
     private static final SubLSymbol $TO_DECODE_PSB = makeKeyword("TO-DECODE-PSB");
 
@@ -395,13 +304,17 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol $NEW_SKS_NAME = makeKeyword("NEW-SKS-NAME");
 
-
+    private static final SubLInteger $int$40 = makeInteger(40);
 
     private static final SubLString $$$Create = makeString("Create");
 
     private static final SubLSymbol $COMMAND_EDIT_SKS = makeKeyword("COMMAND-EDIT-SKS");
 
     private static final SubLString $str79$Knowledge_Source_ = makeString("Knowledge Source:");
+
+
+
+
 
     private static final SubLString $str82$Source_Description__ = makeString("Source Description: ");
 
@@ -425,7 +338,11 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
 
 
 
+    private static final SubLObject $$nameString = reader_make_constant_shell(makeString("nameString"));
+
     private static final SubLInteger $int$80 = makeInteger(80);
+
+
 
     private static final SubLString $$$Add = makeString("Add");
 
@@ -433,19 +350,33 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $$$Decode = makeString("Decode");
 
+
+
     private static final SubLString $$$Remove = makeString("Remove");
 
+
+
     private static final SubLSymbol $COMMAND_REMOVE_LSB = makeKeyword("COMMAND-REMOVE-LSB");
+
+
 
     private static final SubLSymbol $COMMAND_EDIT_LSB = makeKeyword("COMMAND-EDIT-LSB");
 
     private static final SubLSymbol $COMMAND_REMOVE_TSB = makeKeyword("COMMAND-REMOVE-TSB");
 
+
+
     private static final SubLString $$$Refresh = makeString("Refresh");
+
+
 
     private static final SubLString $$$OK = makeString("OK");
 
+
+
     private static final SubLString $$$Cancel = makeString("Cancel");
+
+
 
     private static final SubLString $str113$Physical_Schemata_ = makeString("Physical Schemata:");
 
@@ -461,11 +392,11 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol $COMMAND_EDIT_TS = makeKeyword("COMMAND-EDIT-TS");
 
+    private static final SubLObject $$sksPhysicalSchemaDescriptionMt = reader_make_constant_shell(makeString("sksPhysicalSchemaDescriptionMt"));
 
+    private static final SubLObject $$UniversalVocabularyMt = reader_make_constant_shell(makeString("UniversalVocabularyMt"));
 
-
-
-    private static final SubLList $list122 = list(new SubLObject[]{ reader_make_constant_shell("sksIsa"), reader_make_constant_shell("SKSISupportedStructuredKnowledgeSourceType"), reader_make_constant_shell("structuredKnowledgeSourceName"), reader_make_constant_shell("CharacterString"), reader_make_constant_shell("sqlProgramForSKS"), reader_make_constant_shell("SKSISupportedDatabaseServerProgram"), reader_make_constant_shell("subProtocolForSKS"), reader_make_constant_shell("CharacterString"), reader_make_constant_shell("userNameForSKS"), reader_make_constant_shell("CharacterString"), reader_make_constant_shell("passwordForSKS"), reader_make_constant_shell("CharacterString"), reader_make_constant_shell("serverOfSKS"), reader_make_constant_shell("CharacterString"), reader_make_constant_shell("portNumberForSKS"), reader_make_constant_shell("Integer"), reader_make_constant_shell("sksProxyHost"), reader_make_constant_shell("CharacterString"), reader_make_constant_shell("sksProxyPort"), reader_make_constant_shell("Integer") });
+    private static final SubLList $list122 = list(new SubLObject[]{ reader_make_constant_shell(makeString("sksIsa")), reader_make_constant_shell(makeString("SKSISupportedStructuredKnowledgeSourceType")), reader_make_constant_shell(makeString("structuredKnowledgeSourceName")), reader_make_constant_shell(makeString("CharacterString")), reader_make_constant_shell(makeString("sqlProgramForSKS")), reader_make_constant_shell(makeString("SKSISupportedDatabaseServerProgram")), reader_make_constant_shell(makeString("subProtocolForSKS")), reader_make_constant_shell(makeString("CharacterString")), reader_make_constant_shell(makeString("userNameForSKS")), reader_make_constant_shell(makeString("CharacterString")), reader_make_constant_shell(makeString("passwordForSKS")), reader_make_constant_shell(makeString("CharacterString")), reader_make_constant_shell(makeString("serverOfSKS")), reader_make_constant_shell(makeString("CharacterString")), reader_make_constant_shell(makeString("portNumberForSKS")), reader_make_constant_shell(makeString("Integer")), reader_make_constant_shell(makeString("sksProxyHost")), reader_make_constant_shell(makeString("CharacterString")), reader_make_constant_shell(makeString("sksProxyPort")), reader_make_constant_shell(makeString("Integer")) });
 
     private static final SubLString $$$This_SKS_is_currently_ = makeString("This SKS is currently ");
 
@@ -475,11 +406,19 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str126$_ = makeString(".");
 
+
+
     private static final SubLString $str128$Edit_Source_Description__ = makeString("Edit Source Description: ");
 
     private static final SubLString $$$Parameter = makeString("Parameter");
 
     private static final SubLString $$$Value = makeString("Value");
+
+    private static final SubLObject $$CharacterString = reader_make_constant_shell(makeString("CharacterString"));
+
+    private static final SubLObject $$Integer = reader_make_constant_shell(makeString("Integer"));
+
+
 
 
 
@@ -497,11 +436,11 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol SKSI_SMT_COMPILE_PARAM_DEFINITIONS = makeSymbol("SKSI-SMT-COMPILE-PARAM-DEFINITIONS");
 
+    private static final SubLObject $$sksIsa = reader_make_constant_shell(makeString("sksIsa"));
 
+    private static final SubLObject $$subProtocolForSKS = reader_make_constant_shell(makeString("subProtocolForSKS"));
 
-
-
-    private static final SubLObject $const144$SKSISupportedDatabaseServerProgra = reader_make_constant_shell("SKSISupportedDatabaseServerProgram");
+    private static final SubLObject $const144$SKSISupportedDatabaseServerProgra = reader_make_constant_shell(makeString("SKSISupportedDatabaseServerProgram"));
 
     private static final SubLString $str145$Do_not_know_what_to_do_with_const = makeString("Do not know what to do with constraint ~A.");
 
@@ -511,7 +450,19 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol $sym148$SKSI_SMT_STRUCTURED_KNOWLEDGE_SOURCE_REGISTERED_ = makeSymbol("SKSI-SMT-STRUCTURED-KNOWLEDGE-SOURCE-REGISTERED?");
 
+
+
     private static final SubLSymbol SKSI_PS_COMPILE_PFS_INFO = makeSymbol("SKSI-PS-COMPILE-PFS-INFO");
+
+
+
+
+
+
+
+
+
+
 
     private static final SubLString $str156$Edit_Physical_Schema__ = makeString("Edit Physical Schema: ");
 
@@ -529,11 +480,13 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str163$No_fields_in_this_physical_schema = makeString("No fields in this physical schema.");
 
-
+    private static final SubLObject $$TheLogicalFieldValueFn = reader_make_constant_shell(makeString("TheLogicalFieldValueFn"));
 
     private static final SubLSymbol SKSI_SMT_FETCH_SIMPLE_LOGICAL_SCHEMATA = makeSymbol("SKSI-SMT-FETCH-SIMPLE-LOGICAL-SCHEMATA");
 
 
+
+    private static final SubLObject $$logicalPhysicalSchemaMap = reader_make_constant_shell(makeString("logicalPhysicalSchemaMap"));
 
     private static final SubLSymbol SKSI_SMT_RETRIEVE_SIMPLE_LOGICAL_SCHEMATA = makeSymbol("SKSI-SMT-RETRIEVE-SIMPLE-LOGICAL-SCHEMATA");
 
@@ -543,7 +496,7 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol $sym171$_BASE_PRED = makeSymbol("?BASE-PRED");
 
-
+    private static final SubLObject $$correspondingSKSIPredicate = reader_make_constant_shell(makeString("correspondingSKSIPredicate"));
 
     private static final SubLString $str173$Dont_support_more_than_binary_pre = makeString("Dont support more than binary predicates at this point.");
 
@@ -551,7 +504,7 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
 
     private static final SubLList $list175 = list(makeSymbol("PRED"), makeSymbol("LS"), makeSymbol("LFI"), makeSymbol("PS"), makeSymbol("PFI-EXPR"));
 
-
+    private static final SubLObject $$fieldDecoding = reader_make_constant_shell(makeString("fieldDecoding"));
 
     private static final SubLString $str177$Expected___fieldDecoding_sentence = makeString("Expected #$fieldDecoding sentence, got ~A.");
 
@@ -561,13 +514,29 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
 
 
 
+
+
+
+
+
+
+    private static final SubLObject $$SchemaObjectFn = reader_make_constant_shell(makeString("SchemaObjectFn"));
+
+    private static final SubLObject $$SchemaObjectIDFn = reader_make_constant_shell(makeString("SchemaObjectIDFn"));
+
+    private static final SubLObject $$TheTerm = reader_make_constant_shell(makeString("TheTerm"));
+
     private static final SubLList $list187 = list(makeSymbol("LAMBDA-OPERATOR"), makeSymbol("VAR-LIST"), makeSymbol("EXPRESSION"));
 
     private static final SubLString $str188$Do_not_know_how_to_unpack_decodin = makeString("Do not know how to unpack decoding expression ~A.");
 
+
+
     private static final SubLSymbol ENABLE_SKSI_SMT_MODE = makeSymbol("ENABLE-SKSI-SMT-MODE");
 
     private static final SubLSymbol DISABLE_SKSI_SMT_MODE = makeSymbol("DISABLE-SKSI-SMT-MODE");
+
+
 
     private static final SubLSymbol $sym193$IS_SKSI_SMT_MODE_ENABLED_ = makeSymbol("IS-SKSI-SMT-MODE-ENABLED?");
 
@@ -577,7 +546,7 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol SKSI_SMT_UNINTERESTING_UNITS_FILTER_FN = makeSymbol("SKSI-SMT-UNINTERESTING-UNITS-FILTER-FN");
 
-
+    private static final SubLObject $$InferencePSC = reader_make_constant_shell(makeString("InferencePSC"));
 
     private static final SubLList $list198 = list(makeSymbol("STRING-SPEC"), makeSymbol("FORT"));
 
@@ -589,53 +558,57 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str202$_LS = makeString("-LS");
 
+    private static final SubLObject $$logicalSchemaFieldTypeList = reader_make_constant_shell(makeString("logicalSchemaFieldTypeList"));
 
+    private static final SubLObject $$TheList = reader_make_constant_shell(makeString("TheList"));
 
-
-
-
+    private static final SubLObject $$meaningSentenceOfSchema = reader_make_constant_shell(makeString("meaningSentenceOfSchema"));
 
     private static final SubLList $list206 = list(makeSymbol("PF"), makeSymbol("LFI"), makeSymbol("CONVERT"));
 
+    private static final SubLObject $$fieldEncoding = reader_make_constant_shell(makeString("fieldEncoding"));
 
+    private static final SubLObject $$sksRepresentationComplete = reader_make_constant_shell(makeString("sksRepresentationComplete"));
 
-
-
-
+    private static final SubLObject $$SKSIMt = reader_make_constant_shell(makeString("SKSIMt"));
 
     private static final SubLString $str210$_Pred = makeString("-Pred");
 
+    private static final SubLObject $$isa = reader_make_constant_shell(makeString("isa"));
 
+    private static final SubLList $list212 = list(reader_make_constant_shell(makeString("BinaryPredicate")));
 
-    private static final SubLList $list212 = list(reader_make_constant_shell("BinaryPredicate"));
+    private static final SubLObject $$termDependsOn = reader_make_constant_shell(makeString("termDependsOn"));
 
+    private static final SubLObject $$BaseKB = reader_make_constant_shell(makeString("BaseKB"));
 
+    private static final SubLObject $$arg1Isa = reader_make_constant_shell(makeString("arg1Isa"));
 
+    private static final SubLObject $$arg2Isa = reader_make_constant_shell(makeString("arg2Isa"));
 
+    private static final SubLObject $$backchainForbidden = reader_make_constant_shell(makeString("backchainForbidden"));
 
+    private static final SubLList $list218 = list(reader_make_constant_shell(makeString("SKSIOnlyPredicate")));
 
+    private static final SubLObject $$backchainRequired = reader_make_constant_shell(makeString("backchainRequired"));
 
-
-
-
-
-    private static final SubLList $list218 = list(reader_make_constant_shell("SKSIOnlyPredicate"));
-
-
-
-
+    private static final SubLObject $$implies = reader_make_constant_shell(makeString("implies"));
 
     private static final SubLList $list221 = list(makeSymbol("?X"), makeSymbol("?Y"));
 
 
 
+    private static final SubLObject $$ThePhysicalFieldValueFn = reader_make_constant_shell(makeString("ThePhysicalFieldValueFn"));
+
+    private static final SubLObject $$PhysicalFieldFn = reader_make_constant_shell(makeString("PhysicalFieldFn"));
+
+    private static final SubLList $list225 = list(reader_make_constant_shell(makeString("Lambda")), list(makeSymbol("?LFI")), list(reader_make_constant_shell(makeString("FormulaArgFn")), ONE_INTEGER, list(reader_make_constant_shell(makeString("QuantityConversionFn")), makeKeyword("OPERATOR"), makeSymbol("?LFI"))));
 
 
-    private static final SubLList $list225 = list(reader_make_constant_shell("Lambda"), list(makeSymbol("?LFI")), list(reader_make_constant_shell("FormulaArgFn"), ONE_INTEGER, list(reader_make_constant_shell("QuantityConversionFn"), makeKeyword("OPERATOR"), makeSymbol("?LFI"))));
 
     private static final SubLString $str227$No_implementation_yet_for_LF_conv = makeString("No implementation yet for LF conversion pattern ~A.");
 
-    private static final SubLList $list228 = list(reader_make_constant_shell("Lambda"), list(makeSymbol("?PFI")), list(makeKeyword("OPERATOR"), makeSymbol("?PFI")));
+    private static final SubLList $list228 = list(reader_make_constant_shell(makeString("Lambda")), list(makeSymbol("?PFI")), list(makeKeyword("OPERATOR"), makeSymbol("?PFI")));
 
     private static final SubLString $str229$No_implementation_yet_for_PF_conv = makeString("No implementation yet for PF conversion pattern ~A.");
 
@@ -655,9 +628,15 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str237$__user_MS_s = makeString("# user MS's");
 
+
+
+
+
     private static final SubLSymbol $COMMAND_EDIT_LF = makeKeyword("COMMAND-EDIT-LF");
 
     private static final SubLString $$$Delete = makeString("Delete");
+
+
 
     private static final SubLString $str243$No_fields_in_this_logical_schema_ = makeString("No fields in this logical schema.");
 
@@ -666,6 +645,10 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
     private static final SubLString $str245$Meaning_sentences_ = makeString("Meaning sentences:");
 
     private static final SubLSymbol $COMMAND_EDIT_MS = makeKeyword("COMMAND-EDIT-MS");
+
+
+
+
 
     private static final SubLString $str249$No_meaning_sentences_in_this_logi = makeString("No meaning sentences in this logical schema.");
 
@@ -683,15 +666,27 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
 
 
 
+
+
+    private static final SubLInteger $int$30 = makeInteger(30);
+
     private static final SubLString $$$Complete = makeString("Complete");
 
-
+    private static final SubLObject $$Collection = reader_make_constant_shell(makeString("Collection"));
 
     private static final SubLString $$$Change = makeString("Change");
+
+
+
+
+
+
 
     private static final SubLString $$$Add_isa = makeString("Add isa");
 
 
+
+    private static final SubLObject $$fieldIsa = reader_make_constant_shell(makeString("fieldIsa"));
 
     private static final SubLString $str268$Edit_Translation_Schema__ = makeString("Edit Translation Schema: ");
 
@@ -701,15 +696,31 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str271$_note__editing_is_not_yet_enabled = makeString("@note: editing is not yet enabled");
 
+
+
     private static final SubLString $str273$___ = makeString("<->");
+
+
 
     private static final SubLInteger $int$50 = makeInteger(50);
 
+
+
     private static final SubLString $str277$Edit_Meaning_Sentence_in__ = makeString("Edit Meaning Sentence in: ");
+
+
+
+
+
+
 
     private static final SubLString $str281$Formula_invalid_ = makeString("Formula invalid.");
 
     private static final SubLString $str282$Formula_wasn_t_changed_ = makeString("Formula wasn't changed.");
+
+
+
+
 
     private static final SubLString $str285$Select_Database_Tables_to_Decode_ = makeString("Select Database Tables to Decode for ");
 
@@ -719,6 +730,8 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol $sym288$STRING_ = makeSymbol("STRING=");
 
+
+
     private static final SubLString $$$Schema_ = makeString("Schema ");
 
     private static final SubLString $str291$__ = makeString(": ");
@@ -727,35 +740,43 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $$$Hide = makeString("Hide");
 
+
+
+
+
     private static final SubLString $$$Table_Name = makeString("Table Name");
 
     private static final SubLString $$$Physical_Schemata = makeString("Physical Schemata");
 
+
+
     private static final SubLSymbol SKS_P = makeSymbol("SKS-P");
 
+    private static final SubLObject $$sksSourceDescriptionMt = reader_make_constant_shell(makeString("sksSourceDescriptionMt"));
 
+    private static final SubLObject $$MappingMtFn = reader_make_constant_shell(makeString("MappingMtFn"));
 
+    private static final SubLObject $$SKSISourceDescriptionMicrotheory = reader_make_constant_shell(makeString("SKSISourceDescriptionMicrotheory"));
 
-
-
-
-
+    private static final SubLObject $$genlMt = reader_make_constant_shell(makeString("genlMt"));
 
     private static final SubLString $str304$_KS = makeString("-KS");
 
     private static final SubLString $$$PhysicalSchemaMt = makeString("PhysicalSchemaMt");
 
-    private static final SubLObject $const306$SKSIPhysicalSchemaDescriptionMicr = reader_make_constant_shell("SKSIPhysicalSchemaDescriptionMicrotheory");
+    private static final SubLObject $const306$SKSIPhysicalSchemaDescriptionMicr = reader_make_constant_shell(makeString("SKSIPhysicalSchemaDescriptionMicrotheory"));
+
+    private static final SubLObject $$sksLogicalSchemaDescriptionMt = reader_make_constant_shell(makeString("sksLogicalSchemaDescriptionMt"));
+
+    private static final SubLObject $$sksSchemaTranslationMt = reader_make_constant_shell(makeString("sksSchemaTranslationMt"));
+
+    private static final SubLObject $$contentMt = reader_make_constant_shell(makeString("contentMt"));
+
+    private static final SubLObject $$bridgingMtForKS = reader_make_constant_shell(makeString("bridgingMtForKS"));
 
 
 
-
-
-
-
-
-
-    public static final SubLSymbol $sksi_smt_warn_about_invariantsP$ = makeSymbol("*SKSI-SMT-WARN-ABOUT-INVARIANTS?*");
+    private static final SubLSymbol $sym312$_SKSI_SMT_WARN_ABOUT_INVARIANTS__ = makeSymbol("*SKSI-SMT-WARN-ABOUT-INVARIANTS?*");
 
     private static final SubLString $str313$SMT_invariant_broken___A_is_not_a = makeString("SMT invariant broken: ~A is not an instance of ~A");
 
@@ -765,19 +786,19 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol SKSI_PHYSICAL_SCHEMA_P = makeSymbol("SKSI-PHYSICAL-SCHEMA-P");
 
-
+    private static final SubLObject $$schemaFieldNameList = reader_make_constant_shell(makeString("schemaFieldNameList"));
 
     private static final SubLSymbol SKSI_PHYSICAL_FIELD_P = makeSymbol("SKSI-PHYSICAL-FIELD-P");
 
-    private static final SubLObject $$fieldName_SKS = reader_make_constant_shell("fieldName-SKS");
+    private static final SubLObject $$fieldName_SKS = reader_make_constant_shell(makeString("fieldName-SKS"));
 
+    private static final SubLObject $$fieldDataType = reader_make_constant_shell(makeString("fieldDataType"));
 
+    private static final SubLObject $$nonNullFields = reader_make_constant_shell(makeString("nonNullFields"));
 
+    private static final SubLObject $$defaultFieldValue = reader_make_constant_shell(makeString("defaultFieldValue"));
 
-
-
-
-
+    private static final SubLObject $$primaryKey = reader_make_constant_shell(makeString("primaryKey"));
 
     private static final SubLList $list324 = list(makeSymbol("THE-LIST"), makeSymbol("&REST"), makeSymbol("KEYS"));
 
@@ -785,7 +806,11 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol SKSI_PF_GET_NAME = makeSymbol("SKSI-PF-GET-NAME");
 
-    private static final SubLObject $const329$SKSILogicalSchemaDescriptionMicro = reader_make_constant_shell("SKSILogicalSchemaDescriptionMicrotheory");
+
+
+
+
+    private static final SubLObject $const329$SKSILogicalSchemaDescriptionMicro = reader_make_constant_shell(makeString("SKSILogicalSchemaDescriptionMicrotheory"));
 
     private static final SubLString $$$LogicalSchemaMt = makeString("LogicalSchemaMt");
 
@@ -793,33 +818,35 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str332$_LS_ = makeString("-LS-");
 
+    private static final SubLObject $$ObjectDefiningSchema = reader_make_constant_shell(makeString("ObjectDefiningSchema"));
 
+    private static final SubLObject $$definingMt = reader_make_constant_shell(makeString("definingMt"));
 
-
-
-
+    private static final SubLObject $$schemaIsa = reader_make_constant_shell(makeString("schemaIsa"));
 
     private static final SubLSymbol SKSI_LOGICAL_SCHEMA_P = makeSymbol("SKSI-LOGICAL-SCHEMA-P");
 
+    private static final SubLObject $$logicalFields = reader_make_constant_shell(makeString("logicalFields"));
 
 
 
+    private static final SubLObject $$EverythingPSC = reader_make_constant_shell(makeString("EverythingPSC"));
 
     private static final SubLSymbol $sksi_isg$ = makeSymbol("*SKSI-ISG*");
 
     private static final SubLString $str341$_LF_ = makeString("-LF-");
 
+    private static final SubLObject $$quotedIsa = reader_make_constant_shell(makeString("quotedIsa"));
 
-
-
+    private static final SubLObject $$IndexicalConcept = reader_make_constant_shell(makeString("IndexicalConcept"));
 
     private static final SubLSymbol SKSI_LOGICAL_FIELD_P = makeSymbol("SKSI-LOGICAL-FIELD-P");
 
-
+    private static final SubLObject $$fieldGenls = reader_make_constant_shell(makeString("fieldGenls"));
 
     private static final SubLSymbol SKSI_MEANING_SENTENCE_P = makeSymbol("SKSI-MEANING-SENTENCE-P");
 
-
+    private static final SubLObject $$SKSISchemaTranslationMicrotheory = reader_make_constant_shell(makeString("SKSISchemaTranslationMicrotheory"));
 
     private static final SubLString $$$TranslationSchemaMt = makeString("TranslationSchemaMt");
 
@@ -829,29 +856,39 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol NEW_STRUCTURED_KNOWLEDGE_SOURCE = makeSymbol("NEW-STRUCTURED-KNOWLEDGE-SOURCE");
 
+    private static final SubLObject $$ContentMtFn = reader_make_constant_shell(makeString("ContentMtFn"));
 
+    private static final SubLObject $$Database_Physical = reader_make_constant_shell(makeString("Database-Physical"));
 
-    private static final SubLObject $$Database_Physical = reader_make_constant_shell("Database-Physical");
+    private static final SubLObject $$BridgingMtForKSFn = reader_make_constant_shell(makeString("BridgingMtForKSFn"));
 
-
-
-
+    private static final SubLObject $$SKSIVocabularyMt = reader_make_constant_shell(makeString("SKSIVocabularyMt"));
 
     private static final SubLSymbol NEW_CONCEPTUAL_MAPPING_LOGICAL_SCHEMA = makeSymbol("NEW-CONCEPTUAL-MAPPING-LOGICAL-SCHEMA");
 
     private static final SubLString $str357$_CMLS = makeString("-CMLS");
 
-    private static final SubLList $list358 = list(reader_make_constant_shell("ReifiedMapping"));
+    private static final SubLList $list358 = list(reader_make_constant_shell(makeString("ReifiedMapping")));
 
     private static final SubLSymbol SKSI_SMT_GET_AVAILABLE_DATABASE_TYPES = makeSymbol("SKSI-SMT-GET-AVAILABLE-DATABASE-TYPES");
 
     private static final SubLSymbol $sym360$HL_PROTOTYPICAL_INSTANCE_ = makeSymbol("HL-PROTOTYPICAL-INSTANCE?");
 
-
+    private static final SubLObject $$SKSISchemaDescriptionMicrotheory = reader_make_constant_shell(makeString("SKSISchemaDescriptionMicrotheory"));
 
     private static final SubLSymbol $sym362$GENERALITY_ESTIMATE_ = makeSymbol("GENERALITY-ESTIMATE<");
 
-    private static final SubLObject $$subKS_Direct = reader_make_constant_shell("subKS-Direct");
+    private static final SubLObject $$subKS_Direct = reader_make_constant_shell(makeString("subKS-Direct"));
+
+    private static final SubLObject $$physicalSchemaSourceMap = reader_make_constant_shell(makeString("physicalSchemaSourceMap"));
+
+    private static final SubLObject $$physicalFields = reader_make_constant_shell(makeString("physicalFields"));
+
+
+
+    private static final SubLObject $$enumerableSchema = reader_make_constant_shell(makeString("enumerableSchema"));
+
+
 
 
 
@@ -861,9 +898,9 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol SKSI_PSB_GET_LABELED_SCHEMATA = makeSymbol("SKSI-PSB-GET-LABELED-SCHEMATA");
 
-    private static final SubLObject $$schemaName_SKS = reader_make_constant_shell("schemaName-SKS");
+    private static final SubLObject $$schemaName_SKS = reader_make_constant_shell(makeString("schemaName-SKS"));
 
-    private static final SubLObject $$schemaNameSchema_SKS = reader_make_constant_shell("schemaNameSchema-SKS");
+    private static final SubLObject $$schemaNameSchema_SKS = reader_make_constant_shell(makeString("schemaNameSchema-SKS"));
 
     private static final SubLList $list375 = list(makeSymbol("PS"), makeSymbol("LSS"));
 
@@ -936,47 +973,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return sks;
     }
 
-    // Definitions
-    public static final SubLObject cb_link_smt_alt(SubLObject linktext) {
-        if (linktext == UNPROVIDED) {
-            linktext = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == linktext) {
-                linktext = $$$CMT;
-            }
-            {
-                SubLObject frame_name_var = cb_frame_name($MAIN);
-                html_markup($html_anchor_head$.getGlobalValue());
-                html_markup($html_anchor_href$.getGlobalValue());
-                html_char(CHAR_quotation, UNPROVIDED);
-                cyc_cgi_url_int();
-                html_princ($str_alt2$sksi_smt);
-                html_char(CHAR_quotation, UNPROVIDED);
-                if (NIL != frame_name_var) {
-                    html_markup($html_anchor_target$.getGlobalValue());
-                    html_char(CHAR_quotation, UNPROVIDED);
-                    html_markup(frame_name_var);
-                    html_char(CHAR_quotation, UNPROVIDED);
-                }
-                html_char(CHAR_greater, UNPROVIDED);
-                {
-                    SubLObject _prev_bind_0 = $html_safe_print$.currentBinding(thread);
-                    try {
-                        $html_safe_print$.bind(T, thread);
-                        html_princ(linktext);
-                    } finally {
-                        $html_safe_print$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                html_markup($html_anchor_tail$.getGlobalValue());
-            }
-            return NIL;
-        }
-    }
-
-    // Definitions
     public static SubLObject cb_link_smt(SubLObject linktext) {
         if (linktext == UNPROVIDED) {
             linktext = NIL;
@@ -1010,17 +1006,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject sksi_smt_alt(SubLObject args) {
-        if (args == UNPROVIDED) {
-            args = NIL;
-        }
-        {
-            SubLObject arghash = html_arghash.arglist_to_arghash(args);
-            com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_int(arghash);
-        }
-        return NIL;
-    }
-
     public static SubLObject sksi_smt(SubLObject args) {
         if (args == UNPROVIDED) {
             args = NIL;
@@ -1030,388 +1015,9 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject sksi_smt_int_alt(SubLObject arghash) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(arghash, ARGHASH_P);
-            hash_table_utilities.printhash(arghash, UNPROVIDED);
-            {
-                SubLObject button_clickedP = NIL;
-                {
-                    SubLObject cdolist_list_var = html_arghash.get_arghash_keys(arghash);
-                    SubLObject key = NIL;
-                    for (key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , key = cdolist_list_var.first()) {
-                        if (key.isCons()) {
-                            {
-                                SubLObject command_key = key.first();
-                                SubLObject command_args = key.rest();
-                                SubLObject command_to_key = make_keyword(string_utilities.replace_substring_once(string_utilities.string_from_keyword(command_key), $$$COMMAND, $$$TO, UNPROVIDED));
-                                button_clickedP = command_key;
-                                {
-                                    SubLObject remainder = NIL;
-                                    for (remainder = command_args; NIL != remainder; remainder = cddr(remainder)) {
-                                        {
-                                            SubLObject arghash_key = remainder.first();
-                                            SubLObject arghash_value = cadr(remainder);
-                                            html_arghash.set_arghash_value(arghash_key, arghash, arghash_value);
-                                        }
-                                    }
-                                }
-                                html_arghash.set_arghash_value(command_to_key, arghash, T);
-                                html_arghash.rem_arghash_value(key, arghash);
-                            }
-                        }
-                    }
-                }
-                if (NIL != html_arghash.get_arghash_value($ON_EDIT_SKS, arghash)) {
-                    arghash = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_edit_sks_actions(arghash);
-                } else {
-                    if (NIL != html_arghash.get_arghash_value($ON_EDIT_SD, arghash)) {
-                        arghash = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_edit_sd_actions(arghash);
-                    } else {
-                        if (NIL != html_arghash.get_arghash_value($ON_EDIT_PS, arghash)) {
-                            arghash = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_edit_ps_actions(arghash);
-                        } else {
-                            if (NIL != html_arghash.get_arghash_value($ON_EDIT_LS, arghash)) {
-                                arghash = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_edit_ls_actions(arghash);
-                            } else {
-                                if (NIL != html_arghash.get_arghash_value($ON_EDIT_LF, arghash)) {
-                                    arghash = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_edit_lf_actions(arghash);
-                                } else {
-                                    if (NIL != html_arghash.get_arghash_value($ON_EDIT_MS, arghash)) {
-                                        arghash = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_edit_ms_actions(arghash);
-                                    } else {
-                                        if (NIL != html_arghash.get_arghash_value($ON_EDIT_TS, arghash)) {
-                                            arghash = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_edit_ts_actions(arghash);
-                                        } else {
-                                            if (NIL != html_arghash.get_arghash_value($ON_EDIT_T, arghash)) {
-                                                arghash = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_edit_t_actions(arghash);
-                                            } else {
-                                                if (NIL != html_arghash.get_arghash_value($ON_MAIN, arghash)) {
-                                                    arghash = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_main_actions(arghash);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                html_markup($html_html_head$.getGlobalValue());
-                html_markup($html_head_head$.getGlobalValue());
-                html_head_content_type();
-                sksi_smt_macros.sksi_smt_html_title($$$Schema_Modeling_Tool);
-                html_complete.html_complete_script();
-                html_markup($html_head_tail$.getGlobalValue());
-                html_source_readability_terpri(UNPROVIDED);
-                {
-                    SubLObject _prev_bind_0 = $html_inside_bodyP$.currentBinding(thread);
-                    try {
-                        $html_inside_bodyP$.bind(T, thread);
-                        html_markup($html_body_head$.getGlobalValue());
-                        html_char(CHAR_greater, UNPROVIDED);
-                        {
-                            SubLObject _prev_bind_0_1 = $html_safe_print$.currentBinding(thread);
-                            try {
-                                $html_safe_print$.bind(T, thread);
-                                html_markup($html_heading_head$.getGlobalValue());
-                                html_markup(TWO_INTEGER);
-                                html_char(CHAR_greater, UNPROVIDED);
-                                html_markup($html_anchor_head$.getGlobalValue());
-                                html_markup($html_anchor_href$.getGlobalValue());
-                                html_char(CHAR_quotation, UNPROVIDED);
-                                html_markup($str_alt20$cg_sksi_smt);
-                                html_char(CHAR_quotation, UNPROVIDED);
-                                html_char(CHAR_greater, UNPROVIDED);
-                                {
-                                    SubLObject _prev_bind_0_2 = $html_safe_print$.currentBinding(thread);
-                                    try {
-                                        $html_safe_print$.bind(T, thread);
-                                        html_princ($$$Schema_Modeling_Tool);
-                                    } finally {
-                                        $html_safe_print$.rebind(_prev_bind_0_2, thread);
-                                    }
-                                }
-                                html_markup($html_anchor_tail$.getGlobalValue());
-                                html_markup($html_heading_tail$.getGlobalValue());
-                                html_markup(TWO_INTEGER);
-                                html_char(CHAR_greater, UNPROVIDED);
-                                {
-                                    SubLObject frame_name_var = cb_frame_name(NIL);
-                                    html_markup($html_form_head$.getGlobalValue());
-                                    html_markup($html_form_action$.getGlobalValue());
-                                    html_char(CHAR_quotation, UNPROVIDED);
-                                    html_markup($cyc_cgi_program$.getDynamicValue(thread));
-                                    html_char(CHAR_quotation, UNPROVIDED);
-                                    if (NIL != $html_form_method_post$.getGlobalValue()) {
-                                        html_markup($html_form_method$.getGlobalValue());
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                        html_markup($html_form_method_post$.getGlobalValue());
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                    }
-                                    if (NIL != frame_name_var) {
-                                        html_markup($html_form_target$.getGlobalValue());
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                        html_markup(frame_name_var);
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                    }
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_3 = $html_safe_print$.currentBinding(thread);
-                                        SubLObject _prev_bind_1 = $within_html_form$.currentBinding(thread);
-                                        SubLObject _prev_bind_2 = $html_form_field_uniquifier_code$.currentBinding(thread);
-                                        try {
-                                            $html_safe_print$.bind(T, thread);
-                                            $within_html_form$.bind(T, thread);
-                                            $html_form_field_uniquifier_code$.bind(next_html_form_field_uniquifier_code(), thread);
-                                            html_hidden_input($str_alt2$sksi_smt, T, UNPROVIDED);
-                                            {
-                                                SubLObject fort_selectedP = NIL;
-                                                SubLObject fort = html_arghash.get_arghash_value($JUST_FORT, arghash);
-                                                if (NIL != forts.fort_p(fort)) {
-                                                    fort_selectedP = fort;
-                                                    if (NIL != isa.isa_in_any_mtP(fort, $$StructuredKnowledgeSource)) {
-                                                        html_arghash.set_arghash_value($SKS, arghash, fort);
-                                                        html_arghash.set_arghash_value($TO_EDIT_SKS, arghash, T);
-                                                    } else {
-                                                        if (NIL != isa.isa_in_any_mtP(fort, $$PhysicalSchema)) {
-                                                            html_arghash.set_arghash_value($PS, arghash, fort);
-                                                            html_arghash.set_arghash_value($TO_EDIT_PS, arghash, T);
-                                                        } else {
-                                                            if (NIL != isa.isa_in_any_mtP(fort, $$LogicalSchema)) {
-                                                                html_arghash.set_arghash_value($LS, arghash, fort);
-                                                                html_arghash.set_arghash_value($TO_EDIT_LS, arghash, T);
-                                                            } else {
-                                                                if (NIL != isa.isa_in_any_mtP(fort, $$PhysicalField)) {
-                                                                    html_arghash.set_arghash_value($PF, arghash, fort);
-                                                                    html_arghash.set_arghash_value($TO_EDIT_PF, arghash, T);
-                                                                } else {
-                                                                    if (NIL != isa.isa_in_any_mtP(fort, $$LogicalField)) {
-                                                                        html_arghash.set_arghash_value($LF, arghash, fort);
-                                                                        html_arghash.set_arghash_value($TO_EDIT_LF, arghash, T);
-                                                                    } else {
-                                                                        html_markup($html_font_head$.getGlobalValue());
-                                                                        if (NIL != $html_color_sat_red$.getDynamicValue(thread)) {
-                                                                            html_markup($html_font_color$.getGlobalValue());
-                                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                                            html_markup(html_color($html_color_sat_red$.getDynamicValue(thread)));
-                                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                                        }
-                                                                        html_char(CHAR_greater, UNPROVIDED);
-                                                                        {
-                                                                            SubLObject _prev_bind_0_4 = $html_safe_print$.currentBinding(thread);
-                                                                            try {
-                                                                                $html_safe_print$.bind(T, thread);
-                                                                                html_princ($str_alt37$Error__Support_for_term_);
-                                                                                com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_form(fort);
-                                                                                html_princ($str_alt38$_not_implemented);
-                                                                            } finally {
-                                                                                $html_safe_print$.rebind(_prev_bind_0_4, thread);
-                                                                            }
-                                                                        }
-                                                                        html_markup($html_font_tail$.getGlobalValue());
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                html_arghash.rem_arghash_value($JUST_FORT, arghash);
-                                                {
-                                                    SubLObject cdolist_list_var = html_arghash.get_arghash_value_list($ERROR, arghash);
-                                                    SubLObject error = NIL;
-                                                    for (error = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , error = cdolist_list_var.first()) {
-                                                        html_arghash.rem_arghash_value($ERROR, arghash);
-                                                        html_markup($html_font_head$.getGlobalValue());
-                                                        if (NIL != $html_color_sat_red$.getDynamicValue(thread)) {
-                                                            html_markup($html_font_color$.getGlobalValue());
-                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                            html_markup(html_color($html_color_sat_red$.getDynamicValue(thread)));
-                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                        }
-                                                        html_char(CHAR_greater, UNPROVIDED);
-                                                        {
-                                                            SubLObject _prev_bind_0_5 = $html_safe_print$.currentBinding(thread);
-                                                            try {
-                                                                $html_safe_print$.bind(T, thread);
-                                                                html_princ($str_alt40$Error__);
-                                                                apply(FORMAT, cons($html_stream$.getDynamicValue(thread), error));
-                                                                html_newline(UNPROVIDED);
-                                                            } finally {
-                                                                $html_safe_print$.rebind(_prev_bind_0_5, thread);
-                                                            }
-                                                        }
-                                                        html_markup($html_font_tail$.getGlobalValue());
-                                                    }
-                                                }
-                                                {
-                                                    SubLObject cdolist_list_var = html_arghash.get_arghash_value_list($SUCCESS, arghash);
-                                                    SubLObject success = NIL;
-                                                    for (success = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , success = cdolist_list_var.first()) {
-                                                        html_arghash.rem_arghash_value($SUCCESS, arghash);
-                                                        html_princ($str_alt43$Success__);
-                                                        apply(FORMAT, cons($html_stream$.getDynamicValue(thread), success));
-                                                        html_newline(UNPROVIDED);
-                                                    }
-                                                }
-                                                if (NIL != html_arghash.get_arghash_value($TO_EDIT_SKS, arghash)) {
-                                                    html_arghash.rem_arghash_value($TO_EDIT_SKS, arghash);
-                                                    com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_edit_sks_page(arghash);
-                                                } else {
-                                                    if (NIL != html_arghash.get_arghash_value($TO_EDIT_SD, arghash)) {
-                                                        html_arghash.rem_arghash_value($TO_EDIT_SD, arghash);
-                                                        com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_edit_sd_page(arghash);
-                                                    } else {
-                                                        if (NIL != html_arghash.get_arghash_value($TO_EDIT_PS, arghash)) {
-                                                            html_arghash.rem_arghash_value($TO_EDIT_PS, arghash);
-                                                            com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_edit_ps_page(arghash);
-                                                        } else {
-                                                            if (NIL != html_arghash.get_arghash_value($TO_EDIT_LS, arghash)) {
-                                                                html_arghash.rem_arghash_value($TO_EDIT_LS, arghash);
-                                                                com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_edit_ls_page(arghash);
-                                                            } else {
-                                                                if (NIL != html_arghash.get_arghash_value($TO_EDIT_LF, arghash)) {
-                                                                    html_arghash.rem_arghash_value($TO_EDIT_LF, arghash);
-                                                                    com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_edit_lf_page(arghash);
-                                                                } else {
-                                                                    if (NIL != html_arghash.get_arghash_value($TO_EDIT_MS, arghash)) {
-                                                                        html_arghash.rem_arghash_value($TO_EDIT_MS, arghash);
-                                                                        com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_edit_ms_page(arghash);
-                                                                    } else {
-                                                                        if (NIL != html_arghash.get_arghash_value($TO_EDIT_TS, arghash)) {
-                                                                            html_arghash.rem_arghash_value($TO_EDIT_TS, arghash);
-                                                                            com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_edit_ts_page(arghash);
-                                                                        } else {
-                                                                            if (NIL != html_arghash.get_arghash_value($TO_EDIT_T, arghash)) {
-                                                                                html_arghash.rem_arghash_value($TO_EDIT_T, arghash);
-                                                                                com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_edit_t_page(arghash);
-                                                                            } else {
-                                                                                if (NIL != html_arghash.get_arghash_value($TO_MAIN, arghash)) {
-                                                                                    html_arghash.rem_arghash_value($TO_MAIN, arghash);
-                                                                                    com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_main_page(arghash);
-                                                                                } else {
-                                                                                    if (NIL != button_clickedP) {
-                                                                                        html_markup($html_font_head$.getGlobalValue());
-                                                                                        if (NIL != $html_color_sat_red$.getDynamicValue(thread)) {
-                                                                                            html_markup($html_font_color$.getGlobalValue());
-                                                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                                                            html_markup(html_color($html_color_sat_red$.getDynamicValue(thread)));
-                                                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                                                        }
-                                                                                        html_char(CHAR_greater, UNPROVIDED);
-                                                                                        {
-                                                                                            SubLObject _prev_bind_0_6 = $html_safe_print$.currentBinding(thread);
-                                                                                            try {
-                                                                                                $html_safe_print$.bind(T, thread);
-                                                                                                html_princ($str_alt49$Error__button_);
-                                                                                                html_princ(button_clickedP);
-                                                                                                html_princ($str_alt38$_not_implemented);
-                                                                                            } finally {
-                                                                                                $html_safe_print$.rebind(_prev_bind_0_6, thread);
-                                                                                            }
-                                                                                        }
-                                                                                        html_markup($html_font_tail$.getGlobalValue());
-                                                                                    }
-                                                                                    if (NIL != html_arghash.get_arghash_value($ON_EDIT_SKS, arghash)) {
-                                                                                        com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_edit_sks_page(arghash);
-                                                                                    } else {
-                                                                                        if (NIL != html_arghash.get_arghash_value($ON_EDIT_SD, arghash)) {
-                                                                                            com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_edit_sd_page(arghash);
-                                                                                        } else {
-                                                                                            if (NIL != html_arghash.get_arghash_value($ON_EDIT_PS, arghash)) {
-                                                                                                com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_edit_ps_page(arghash);
-                                                                                            } else {
-                                                                                                if (NIL != html_arghash.get_arghash_value($ON_EDIT_LS, arghash)) {
-                                                                                                    com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_edit_ls_page(arghash);
-                                                                                                } else {
-                                                                                                    if (NIL != html_arghash.get_arghash_value($ON_EDIT_LF, arghash)) {
-                                                                                                        com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_edit_lf_page(arghash);
-                                                                                                    } else {
-                                                                                                        if (NIL != html_arghash.get_arghash_value($ON_EDIT_MS, arghash)) {
-                                                                                                            com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_edit_ms_page(arghash);
-                                                                                                        } else {
-                                                                                                            if (NIL != html_arghash.get_arghash_value($ON_EDIT_TS, arghash)) {
-                                                                                                                com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_edit_ts_page(arghash);
-                                                                                                            } else {
-                                                                                                                if (NIL != html_arghash.get_arghash_value($ON_EDIT_T, arghash)) {
-                                                                                                                    com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_edit_t_page(arghash);
-                                                                                                                } else {
-                                                                                                                    if (NIL != html_arghash.get_arghash_value($ON_MAIN, arghash)) {
-                                                                                                                        com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_main_page(arghash);
-                                                                                                                    } else {
-                                                                                                                        if (NIL != fort_selectedP) {
-                                                                                                                            html_markup($html_font_head$.getGlobalValue());
-                                                                                                                            if (NIL != $html_color_sat_red$.getDynamicValue(thread)) {
-                                                                                                                                html_markup($html_font_color$.getGlobalValue());
-                                                                                                                                html_char(CHAR_quotation, UNPROVIDED);
-                                                                                                                                html_markup(html_color($html_color_sat_red$.getDynamicValue(thread)));
-                                                                                                                                html_char(CHAR_quotation, UNPROVIDED);
-                                                                                                                            }
-                                                                                                                            html_char(CHAR_greater, UNPROVIDED);
-                                                                                                                            {
-                                                                                                                                SubLObject _prev_bind_0_7 = $html_safe_print$.currentBinding(thread);
-                                                                                                                                try {
-                                                                                                                                    $html_safe_print$.bind(T, thread);
-                                                                                                                                    html_princ($str_alt50$Error__fort_type_for_);
-                                                                                                                                    com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_form(html_arghash.get_arghash_value($JUST_FORT, arghash));
-                                                                                                                                    html_princ($str_alt51$_not_supported);
-                                                                                                                                } finally {
-                                                                                                                                    $html_safe_print$.rebind(_prev_bind_0_7, thread);
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                            html_markup($html_font_tail$.getGlobalValue());
-                                                                                                                        }
-                                                                                                                        com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_main_page(arghash);
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            embed_form_field_code($html_form_field_uniquifier_code$.getDynamicValue(thread));
-                                        } finally {
-                                            $html_form_field_uniquifier_code$.rebind(_prev_bind_2, thread);
-                                            $within_html_form$.rebind(_prev_bind_1, thread);
-                                            $html_safe_print$.rebind(_prev_bind_0_3, thread);
-                                        }
-                                    }
-                                    html_markup($html_form_tail$.getGlobalValue());
-                                }
-                                html_source_readability_terpri(UNPROVIDED);
-                            } finally {
-                                $html_safe_print$.rebind(_prev_bind_0_1, thread);
-                            }
-                        }
-                        html_markup($html_body_tail$.getGlobalValue());
-                        html_source_readability_terpri(UNPROVIDED);
-                    } finally {
-                        $html_inside_bodyP$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                html_markup($html_html_tail$.getGlobalValue());
-                html_source_readability_terpri(UNPROVIDED);
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject sksi_smt_int(SubLObject arghash) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != html_arghash.arghash_p(arghash) : "! html_arghash.arghash_p(arghash) " + ("html_arghash.arghash_p(arghash) " + "CommonSymbols.NIL != html_arghash.arghash_p(arghash) ") + arghash;
+        assert NIL != html_arghash.arghash_p(arghash) : "html_arghash.arghash_p(arghash) " + "CommonSymbols.NIL != html_arghash.arghash_p(arghash) " + arghash;
         SubLObject button_clickedP = NIL;
         SubLObject cdolist_list_var = html_arghash.get_arghash_keys(arghash);
         SubLObject key = NIL;
@@ -1789,466 +1395,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         }
         html_source_readability_terpri(UNPROVIDED);
         return NIL;
-    }
-
-    public static final SubLObject sksi_smt_main_page_alt(SubLObject arghash) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            html_arghash.html_arghash_hidden_input(arghash, $ON_MAIN, T, UNPROVIDED);
-            {
-                SubLObject skss = sksi_sks_accessors.get_all_skss();
-                SubLObject sdss = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.get_all_sds();
-                SubLObject psbs = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.get_all_psbs();
-                SubLObject lsbs = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.get_all_lsbs();
-                SubLObject tsbs = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.get_all_tsbs();
-                SubLObject used_sds = NIL;
-                SubLObject used_psbs = NIL;
-                SubLObject used_lsbs = NIL;
-                SubLObject used_tsbs = NIL;
-                html_markup($html_table_head$.getGlobalValue());
-                if (true) {
-                    html_markup($html_table_border$.getGlobalValue());
-                    html_char(CHAR_quotation, UNPROVIDED);
-                    html_markup(ONE_INTEGER);
-                    html_char(CHAR_quotation, UNPROVIDED);
-                }
-                if (true) {
-                    html_markup($html_table_cellpadding$.getGlobalValue());
-                    html_char(CHAR_quotation, UNPROVIDED);
-                    html_markup(TWO_INTEGER);
-                    html_char(CHAR_quotation, UNPROVIDED);
-                }
-                if (true) {
-                    html_markup($html_table_cellspacing$.getGlobalValue());
-                    html_char(CHAR_quotation, UNPROVIDED);
-                    html_markup(ZERO_INTEGER);
-                    html_char(CHAR_quotation, UNPROVIDED);
-                }
-                html_char(CHAR_greater, UNPROVIDED);
-                {
-                    SubLObject _prev_bind_0 = $html_safe_print$.currentBinding(thread);
-                    try {
-                        $html_safe_print$.bind(T, thread);
-                        html_markup($html_table_row_head$.getGlobalValue());
-                        html_char(CHAR_greater, UNPROVIDED);
-                        {
-                            SubLObject _prev_bind_0_8 = $html_safe_print$.currentBinding(thread);
-                            try {
-                                $html_safe_print$.bind(T, thread);
-                                html_markup($html_table_data_head$.getGlobalValue());
-                                if (true) {
-                                    html_markup($html_table_data_colspan$.getGlobalValue());
-                                    html_char(CHAR_quotation, UNPROVIDED);
-                                    html_markup(SIX_INTEGER);
-                                    html_char(CHAR_quotation, UNPROVIDED);
-                                }
-                                html_char(CHAR_greater, UNPROVIDED);
-                                {
-                                    SubLObject _prev_bind_0_9 = $html_safe_print$.currentBinding(thread);
-                                    try {
-                                        $html_safe_print$.bind(T, thread);
-                                        html_princ($str_alt52$Create_new_SKS_named__);
-                                        html_arghash.html_arghash_text_input(arghash, $NEW_SKS_NAME, NIL, $int$40, UNPROVIDED);
-                                        html_arghash.html_arghash_submit_input(arghash, $$$Create, list($COMMAND_EDIT_SKS, T), UNPROVIDED);
-                                    } finally {
-                                        $html_safe_print$.rebind(_prev_bind_0_9, thread);
-                                    }
-                                }
-                                html_markup($html_table_data_tail$.getGlobalValue());
-                            } finally {
-                                $html_safe_print$.rebind(_prev_bind_0_8, thread);
-                            }
-                        }
-                        html_markup($html_table_row_tail$.getGlobalValue());
-                        html_source_readability_terpri(UNPROVIDED);
-                        html_markup($html_table_row_head$.getGlobalValue());
-                        html_char(CHAR_greater, UNPROVIDED);
-                        {
-                            SubLObject _prev_bind_0_10 = $html_safe_print$.currentBinding(thread);
-                            try {
-                                $html_safe_print$.bind(T, thread);
-                                html_markup($html_table_header_head$.getGlobalValue());
-                                html_char(CHAR_greater, UNPROVIDED);
-                                {
-                                    SubLObject _prev_bind_0_11 = $html_safe_print$.currentBinding(thread);
-                                    try {
-                                        $html_safe_print$.bind(T, thread);
-                                        html_princ($str_alt57$Knowledge_Source_);
-                                    } finally {
-                                        $html_safe_print$.rebind(_prev_bind_0_11, thread);
-                                    }
-                                }
-                                html_markup($html_table_header_tail$.getGlobalValue());
-                                html_markup($html_table_header_head$.getGlobalValue());
-                                html_char(CHAR_greater, UNPROVIDED);
-                                {
-                                    SubLObject _prev_bind_0_12 = $html_safe_print$.currentBinding(thread);
-                                    try {
-                                        $html_safe_print$.bind(T, thread);
-                                        html_glyph($NBSP, UNPROVIDED);
-                                    } finally {
-                                        $html_safe_print$.rebind(_prev_bind_0_12, thread);
-                                    }
-                                }
-                                html_markup($html_table_header_tail$.getGlobalValue());
-                                html_markup($html_table_header_head$.getGlobalValue());
-                                html_char(CHAR_greater, UNPROVIDED);
-                                {
-                                    SubLObject _prev_bind_0_13 = $html_safe_print$.currentBinding(thread);
-                                    try {
-                                        $html_safe_print$.bind(T, thread);
-                                        html_glyph($NBSP, UNPROVIDED);
-                                    } finally {
-                                        $html_safe_print$.rebind(_prev_bind_0_13, thread);
-                                    }
-                                }
-                                html_markup($html_table_header_tail$.getGlobalValue());
-                            } finally {
-                                $html_safe_print$.rebind(_prev_bind_0_10, thread);
-                            }
-                        }
-                        html_markup($html_table_row_tail$.getGlobalValue());
-                        html_source_readability_terpri(UNPROVIDED);
-                        {
-                            SubLObject cdolist_list_var = skss;
-                            SubLObject sks = NIL;
-                            for (sks = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , sks = cdolist_list_var.first()) {
-                                {
-                                    SubLObject sd = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_get_source_description_mt(sks);
-                                    SubLObject psb = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_get_physical_schemabase_mt(sks);
-                                    SubLObject lsb = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_get_logical_schemabase_mt(sks);
-                                    SubLObject tsb = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_get_translation_schemabase_mt(sks);
-                                    {
-                                        SubLObject item_var = sd;
-                                        if (NIL == member(item_var, used_sds, symbol_function(EQL), symbol_function(IDENTITY))) {
-                                            used_sds = cons(item_var, used_sds);
-                                        }
-                                    }
-                                    {
-                                        SubLObject item_var = psb;
-                                        if (NIL == member(item_var, used_psbs, symbol_function(EQL), symbol_function(IDENTITY))) {
-                                            used_psbs = cons(item_var, used_psbs);
-                                        }
-                                    }
-                                    {
-                                        SubLObject item_var = lsb;
-                                        if (NIL == member(item_var, used_lsbs, symbol_function(EQL), symbol_function(IDENTITY))) {
-                                            used_lsbs = cons(item_var, used_lsbs);
-                                        }
-                                    }
-                                    {
-                                        SubLObject item_var = tsb;
-                                        if (NIL == member(item_var, used_tsbs, symbol_function(EQL), symbol_function(IDENTITY))) {
-                                            used_tsbs = cons(item_var, used_tsbs);
-                                        }
-                                    }
-                                    html_markup($html_table_row_head$.getGlobalValue());
-                                    if (true) {
-                                        html_markup($html_table_data_valign$.getGlobalValue());
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                        html_markup(html_align($TOP));
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                    }
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_14 = $html_safe_print$.currentBinding(thread);
-                                        try {
-                                            $html_safe_print$.bind(T, thread);
-                                            html_markup($html_table_data_head$.getGlobalValue());
-                                            html_char(CHAR_greater, UNPROVIDED);
-                                            {
-                                                SubLObject _prev_bind_0_15 = $html_safe_print$.currentBinding(thread);
-                                                try {
-                                                    $html_safe_print$.bind(T, thread);
-                                                    if (NIL != sks) {
-                                                        com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_form(sks);
-                                                    } else {
-                                                        html_glyph($NBSP, UNPROVIDED);
-                                                    }
-                                                } finally {
-                                                    $html_safe_print$.rebind(_prev_bind_0_15, thread);
-                                                }
-                                            }
-                                            html_markup($html_table_data_tail$.getGlobalValue());
-                                            html_markup($html_table_data_head$.getGlobalValue());
-                                            html_char(CHAR_greater, UNPROVIDED);
-                                            {
-                                                SubLObject _prev_bind_0_16 = $html_safe_print$.currentBinding(thread);
-                                                try {
-                                                    $html_safe_print$.bind(T, thread);
-                                                    if (NIL != sks) {
-                                                        html_arghash.html_arghash_submit_input(arghash, $$$Edit, list($COMMAND_EDIT_SKS, $SKS, sks), UNPROVIDED);
-                                                    } else {
-                                                        html_glyph($NBSP, UNPROVIDED);
-                                                    }
-                                                } finally {
-                                                    $html_safe_print$.rebind(_prev_bind_0_16, thread);
-                                                }
-                                            }
-                                            html_markup($html_table_data_tail$.getGlobalValue());
-                                            html_markup($html_table_data_head$.getGlobalValue());
-                                            html_char(CHAR_greater, UNPROVIDED);
-                                            {
-                                                SubLObject _prev_bind_0_17 = $html_safe_print$.currentBinding(thread);
-                                                try {
-                                                    $html_safe_print$.bind(T, thread);
-                                                    if (NIL != sd) {
-                                                        html_princ($str_alt61$Source_Description__);
-                                                        com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_arghash_form(arghash, sd);
-                                                        html_newline(UNPROVIDED);
-                                                    }
-                                                    if (NIL != psb) {
-                                                        html_princ($str_alt62$Physical_Schemabase__);
-                                                        com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_arghash_form(arghash, psb);
-                                                        html_newline(UNPROVIDED);
-                                                    }
-                                                    if (NIL != lsb) {
-                                                        html_princ($str_alt63$Logical_Schemabase__);
-                                                        com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_arghash_form(arghash, lsb);
-                                                        html_newline(UNPROVIDED);
-                                                    }
-                                                    if (NIL != tsb) {
-                                                        html_princ($str_alt64$Translation_Schemabase__);
-                                                        com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_arghash_form(arghash, tsb);
-                                                    }
-                                                } finally {
-                                                    $html_safe_print$.rebind(_prev_bind_0_17, thread);
-                                                }
-                                            }
-                                            html_markup($html_table_data_tail$.getGlobalValue());
-                                        } finally {
-                                            $html_safe_print$.rebind(_prev_bind_0_14, thread);
-                                        }
-                                    }
-                                    html_markup($html_table_row_tail$.getGlobalValue());
-                                    html_source_readability_terpri(UNPROVIDED);
-                                }
-                            }
-                        }
-                    } finally {
-                        $html_safe_print$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                html_markup($html_table_tail$.getGlobalValue());
-                {
-                    SubLObject other_psbs = set_difference(psbs, used_psbs, UNPROVIDED, UNPROVIDED);
-                    if (NIL != other_psbs) {
-                        html_markup($html_table_head$.getGlobalValue());
-                        html_char(CHAR_greater, UNPROVIDED);
-                        {
-                            SubLObject _prev_bind_0 = $html_safe_print$.currentBinding(thread);
-                            try {
-                                $html_safe_print$.bind(T, thread);
-                                html_markup($html_table_row_head$.getGlobalValue());
-                                html_char(CHAR_greater, UNPROVIDED);
-                                {
-                                    SubLObject _prev_bind_0_18 = $html_safe_print$.currentBinding(thread);
-                                    try {
-                                        $html_safe_print$.bind(T, thread);
-                                        html_markup($html_table_header_head$.getGlobalValue());
-                                        html_char(CHAR_greater, UNPROVIDED);
-                                        {
-                                            SubLObject _prev_bind_0_19 = $html_safe_print$.currentBinding(thread);
-                                            try {
-                                                $html_safe_print$.bind(T, thread);
-                                                html_princ($str_alt65$Other_Physical_Schemabases_);
-                                            } finally {
-                                                $html_safe_print$.rebind(_prev_bind_0_19, thread);
-                                            }
-                                        }
-                                        html_markup($html_table_header_tail$.getGlobalValue());
-                                    } finally {
-                                        $html_safe_print$.rebind(_prev_bind_0_18, thread);
-                                    }
-                                }
-                                html_markup($html_table_row_tail$.getGlobalValue());
-                                html_source_readability_terpri(UNPROVIDED);
-                                {
-                                    SubLObject cdolist_list_var = other_psbs;
-                                    SubLObject psb = NIL;
-                                    for (psb = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , psb = cdolist_list_var.first()) {
-                                        html_markup($html_table_row_head$.getGlobalValue());
-                                        html_char(CHAR_greater, UNPROVIDED);
-                                        {
-                                            SubLObject _prev_bind_0_20 = $html_safe_print$.currentBinding(thread);
-                                            try {
-                                                $html_safe_print$.bind(T, thread);
-                                                html_markup($html_table_data_head$.getGlobalValue());
-                                                html_char(CHAR_greater, UNPROVIDED);
-                                                {
-                                                    SubLObject _prev_bind_0_21 = $html_safe_print$.currentBinding(thread);
-                                                    try {
-                                                        $html_safe_print$.bind(T, thread);
-                                                        if (NIL != psb) {
-                                                            com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_arghash_form(arghash, psb);
-                                                        }
-                                                    } finally {
-                                                        $html_safe_print$.rebind(_prev_bind_0_21, thread);
-                                                    }
-                                                }
-                                                html_markup($html_table_data_tail$.getGlobalValue());
-                                            } finally {
-                                                $html_safe_print$.rebind(_prev_bind_0_20, thread);
-                                            }
-                                        }
-                                        html_markup($html_table_row_tail$.getGlobalValue());
-                                        html_source_readability_terpri(UNPROVIDED);
-                                    }
-                                }
-                            } finally {
-                                $html_safe_print$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                        html_markup($html_table_tail$.getGlobalValue());
-                    }
-                }
-                {
-                    SubLObject other_lsbs = set_difference(lsbs, used_lsbs, UNPROVIDED, UNPROVIDED);
-                    if (NIL != other_lsbs) {
-                        html_markup($html_table_head$.getGlobalValue());
-                        html_char(CHAR_greater, UNPROVIDED);
-                        {
-                            SubLObject _prev_bind_0 = $html_safe_print$.currentBinding(thread);
-                            try {
-                                $html_safe_print$.bind(T, thread);
-                                html_markup($html_table_row_head$.getGlobalValue());
-                                html_char(CHAR_greater, UNPROVIDED);
-                                {
-                                    SubLObject _prev_bind_0_22 = $html_safe_print$.currentBinding(thread);
-                                    try {
-                                        $html_safe_print$.bind(T, thread);
-                                        html_markup($html_table_header_head$.getGlobalValue());
-                                        html_char(CHAR_greater, UNPROVIDED);
-                                        {
-                                            SubLObject _prev_bind_0_23 = $html_safe_print$.currentBinding(thread);
-                                            try {
-                                                $html_safe_print$.bind(T, thread);
-                                                html_princ($str_alt66$Other_Logical_Schemabases_);
-                                            } finally {
-                                                $html_safe_print$.rebind(_prev_bind_0_23, thread);
-                                            }
-                                        }
-                                        html_markup($html_table_header_tail$.getGlobalValue());
-                                    } finally {
-                                        $html_safe_print$.rebind(_prev_bind_0_22, thread);
-                                    }
-                                }
-                                html_markup($html_table_row_tail$.getGlobalValue());
-                                html_source_readability_terpri(UNPROVIDED);
-                                {
-                                    SubLObject cdolist_list_var = other_lsbs;
-                                    SubLObject lsb = NIL;
-                                    for (lsb = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , lsb = cdolist_list_var.first()) {
-                                        html_markup($html_table_row_head$.getGlobalValue());
-                                        html_char(CHAR_greater, UNPROVIDED);
-                                        {
-                                            SubLObject _prev_bind_0_24 = $html_safe_print$.currentBinding(thread);
-                                            try {
-                                                $html_safe_print$.bind(T, thread);
-                                                html_markup($html_table_data_head$.getGlobalValue());
-                                                html_char(CHAR_greater, UNPROVIDED);
-                                                {
-                                                    SubLObject _prev_bind_0_25 = $html_safe_print$.currentBinding(thread);
-                                                    try {
-                                                        $html_safe_print$.bind(T, thread);
-                                                        if (NIL != lsb) {
-                                                            com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_arghash_form(arghash, lsb);
-                                                        }
-                                                    } finally {
-                                                        $html_safe_print$.rebind(_prev_bind_0_25, thread);
-                                                    }
-                                                }
-                                                html_markup($html_table_data_tail$.getGlobalValue());
-                                            } finally {
-                                                $html_safe_print$.rebind(_prev_bind_0_24, thread);
-                                            }
-                                        }
-                                        html_markup($html_table_row_tail$.getGlobalValue());
-                                        html_source_readability_terpri(UNPROVIDED);
-                                    }
-                                }
-                            } finally {
-                                $html_safe_print$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                        html_markup($html_table_tail$.getGlobalValue());
-                    }
-                }
-                {
-                    SubLObject other_tsbs = set_difference(tsbs, used_tsbs, UNPROVIDED, UNPROVIDED);
-                    if (NIL != other_tsbs) {
-                        html_markup($html_table_head$.getGlobalValue());
-                        html_char(CHAR_greater, UNPROVIDED);
-                        {
-                            SubLObject _prev_bind_0 = $html_safe_print$.currentBinding(thread);
-                            try {
-                                $html_safe_print$.bind(T, thread);
-                                html_markup($html_table_row_head$.getGlobalValue());
-                                html_char(CHAR_greater, UNPROVIDED);
-                                {
-                                    SubLObject _prev_bind_0_26 = $html_safe_print$.currentBinding(thread);
-                                    try {
-                                        $html_safe_print$.bind(T, thread);
-                                        html_markup($html_table_header_head$.getGlobalValue());
-                                        html_char(CHAR_greater, UNPROVIDED);
-                                        {
-                                            SubLObject _prev_bind_0_27 = $html_safe_print$.currentBinding(thread);
-                                            try {
-                                                $html_safe_print$.bind(T, thread);
-                                                html_princ($str_alt67$Other_Translations_Schemabases_);
-                                            } finally {
-                                                $html_safe_print$.rebind(_prev_bind_0_27, thread);
-                                            }
-                                        }
-                                        html_markup($html_table_header_tail$.getGlobalValue());
-                                    } finally {
-                                        $html_safe_print$.rebind(_prev_bind_0_26, thread);
-                                    }
-                                }
-                                html_markup($html_table_row_tail$.getGlobalValue());
-                                html_source_readability_terpri(UNPROVIDED);
-                                {
-                                    SubLObject cdolist_list_var = other_tsbs;
-                                    SubLObject tsb = NIL;
-                                    for (tsb = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , tsb = cdolist_list_var.first()) {
-                                        html_markup($html_table_row_head$.getGlobalValue());
-                                        html_char(CHAR_greater, UNPROVIDED);
-                                        {
-                                            SubLObject _prev_bind_0_28 = $html_safe_print$.currentBinding(thread);
-                                            try {
-                                                $html_safe_print$.bind(T, thread);
-                                                html_markup($html_table_data_head$.getGlobalValue());
-                                                html_char(CHAR_greater, UNPROVIDED);
-                                                {
-                                                    SubLObject _prev_bind_0_29 = $html_safe_print$.currentBinding(thread);
-                                                    try {
-                                                        $html_safe_print$.bind(T, thread);
-                                                        if (NIL != tsb) {
-                                                            com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_arghash_form(arghash, tsb);
-                                                        }
-                                                    } finally {
-                                                        $html_safe_print$.rebind(_prev_bind_0_29, thread);
-                                                    }
-                                                }
-                                                html_markup($html_table_data_tail$.getGlobalValue());
-                                            } finally {
-                                                $html_safe_print$.rebind(_prev_bind_0_28, thread);
-                                            }
-                                        }
-                                        html_markup($html_table_row_tail$.getGlobalValue());
-                                        html_source_readability_terpri(UNPROVIDED);
-                                    }
-                                }
-                            } finally {
-                                $html_safe_print$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                        html_markup($html_table_tail$.getGlobalValue());
-                    }
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject sksi_smt_main_page(final SubLObject arghash) {
@@ -2637,30 +1783,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject sksi_smt_main_actions_alt(SubLObject arghash) {
-        if (NIL != html_arghash.get_arghash_value($TO_EDIT_SKS, arghash)) {
-            {
-                SubLObject sks = html_arghash.get_arghash_value($SKS, arghash);
-                if (NIL == sks) {
-                    {
-                        SubLObject new_sks_name = html_arghash.get_arghash_value($NEW_SKS_NAME, arghash);
-                        html_arghash.rem_arghash_value($NEW_SKS_NAME, arghash);
-                        if (NIL != string_utilities.empty_stringP(new_sks_name)) {
-                            html_arghash.push_arghash_value($ERROR, list($ERROR, $str_alt68$Please_enter_an_SKS_name_), arghash);
-                            html_arghash.rem_arghash_value($TO_EDIT_SKS, arghash);
-                            html_arghash.set_arghash_value($TO_MAIN, arghash, T);
-                        } else {
-                            sks = sksi_sks_accessors.new_sks_complex(new_sks_name, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                            com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_new_sd(sks);
-                            html_arghash.set_arghash_value($SKS, arghash, sks);
-                        }
-                    }
-                }
-            }
-        }
-        return arghash;
-    }
-
     public static SubLObject sksi_smt_main_actions(final SubLObject arghash) {
         if (NIL != html_arghash.get_arghash_value($TO_EDIT_SKS, arghash)) {
             SubLObject sks = html_arghash.get_arghash_value($SKS, arghash);
@@ -2679,329 +1801,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
             }
         }
         return arghash;
-    }
-
-    public static final SubLObject sksi_smt_edit_sks_page_alt(SubLObject arghash) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            html_arghash.html_arghash_hidden_input(arghash, $ON_EDIT_SKS, T, UNPROVIDED);
-            {
-                SubLObject sks = html_arghash.get_arghash_value($SKS, arghash);
-                html_arghash.html_arghash_hidden_input(arghash, $SKS, UNPROVIDED, UNPROVIDED);
-                {
-                    SubLObject sd = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_get_source_description_mt(sks);
-                    SubLObject psb = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_get_physical_schemabase_mt(sks);
-                    SubLObject lsb = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_get_logical_schemabase_mt(sks);
-                    SubLObject tsb = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_get_translation_schemabase_mt(sks);
-                    html_markup($html_heading_head$.getGlobalValue());
-                    html_markup(FOUR_INTEGER);
-                    html_char(CHAR_greater, UNPROVIDED);
-                    html_markup($html_bold_head$.getGlobalValue());
-                    html_princ($str_alt69$Edit_SKS__);
-                    html_markup($html_bold_tail$.getGlobalValue());
-                    com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_form(sks);
-                    html_markup($html_heading_tail$.getGlobalValue());
-                    html_markup(FOUR_INTEGER);
-                    html_char(CHAR_greater, UNPROVIDED);
-                    com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_html_sks_status_line(sks);
-                    html_markup($html_bold_head$.getGlobalValue());
-                    html_princ($str_alt70$Name__);
-                    html_markup($html_bold_tail$.getGlobalValue());
-                    html_arghash.html_arghash_text_input(arghash, $SKS_NAMESTRING, sksi_sks_accessors.sks_fget(sks, $$nameString, UNPROVIDED), $int$80, UNPROVIDED);
-                    html_newline(TWO_INTEGER);
-                    html_markup($html_table_head$.getGlobalValue());
-                    if (true) {
-                        html_markup($html_table_border$.getGlobalValue());
-                        html_char(CHAR_quotation, UNPROVIDED);
-                        html_markup(ONE_INTEGER);
-                        html_char(CHAR_quotation, UNPROVIDED);
-                    }
-                    if (true) {
-                        html_markup($html_table_cellpadding$.getGlobalValue());
-                        html_char(CHAR_quotation, UNPROVIDED);
-                        html_markup(TWO_INTEGER);
-                        html_char(CHAR_quotation, UNPROVIDED);
-                    }
-                    if (true) {
-                        html_markup($html_table_cellspacing$.getGlobalValue());
-                        html_char(CHAR_quotation, UNPROVIDED);
-                        html_markup(ZERO_INTEGER);
-                        html_char(CHAR_quotation, UNPROVIDED);
-                    }
-                    html_char(CHAR_greater, UNPROVIDED);
-                    {
-                        SubLObject _prev_bind_0 = $html_safe_print$.currentBinding(thread);
-                        try {
-                            $html_safe_print$.bind(T, thread);
-                            html_markup($html_table_row_head$.getGlobalValue());
-                            html_char(CHAR_greater, UNPROVIDED);
-                            {
-                                SubLObject _prev_bind_0_30 = $html_safe_print$.currentBinding(thread);
-                                try {
-                                    $html_safe_print$.bind(T, thread);
-                                    html_markup($html_table_header_head$.getGlobalValue());
-                                    if (true) {
-                                        html_markup($html_table_data_align$.getGlobalValue());
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                        html_markup(html_align($RIGHT));
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                    }
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_31 = $html_safe_print$.currentBinding(thread);
-                                        try {
-                                            $html_safe_print$.bind(T, thread);
-                                            html_princ($str_alt61$Source_Description__);
-                                        } finally {
-                                            $html_safe_print$.rebind(_prev_bind_0_31, thread);
-                                        }
-                                    }
-                                    html_markup($html_table_header_tail$.getGlobalValue());
-                                    html_markup($html_table_data_head$.getGlobalValue());
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_32 = $html_safe_print$.currentBinding(thread);
-                                        try {
-                                            $html_safe_print$.bind(T, thread);
-                                            if (NIL != sd) {
-                                                com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_arghash_form(arghash, sd);
-                                            } else {
-                                                html_glyph($NBSP, UNPROVIDED);
-                                            }
-                                        } finally {
-                                            $html_safe_print$.rebind(_prev_bind_0_32, thread);
-                                        }
-                                    }
-                                    html_markup($html_table_data_tail$.getGlobalValue());
-                                    html_markup($html_table_data_head$.getGlobalValue());
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_33 = $html_safe_print$.currentBinding(thread);
-                                        try {
-                                            $html_safe_print$.bind(T, thread);
-                                            if (NIL != sd) {
-                                                html_arghash.html_arghash_submit_input(arghash, $$$Edit, list($COMMAND_EDIT_SD, $SKS, sks, $SD, sd), UNPROVIDED);
-                                            } else {
-                                                html_arghash.html_arghash_submit_input(arghash, $$$Add, list($COMMAND_EDIT_SD, $SKS, sks), UNPROVIDED);
-                                            }
-                                        } finally {
-                                            $html_safe_print$.rebind(_prev_bind_0_33, thread);
-                                        }
-                                    }
-                                    html_markup($html_table_data_tail$.getGlobalValue());
-                                } finally {
-                                    $html_safe_print$.rebind(_prev_bind_0_30, thread);
-                                }
-                            }
-                            html_markup($html_table_row_tail$.getGlobalValue());
-                            html_source_readability_terpri(UNPROVIDED);
-                            html_markup($html_table_row_head$.getGlobalValue());
-                            html_char(CHAR_greater, UNPROVIDED);
-                            {
-                                SubLObject _prev_bind_0_34 = $html_safe_print$.currentBinding(thread);
-                                try {
-                                    $html_safe_print$.bind(T, thread);
-                                    html_markup($html_table_header_head$.getGlobalValue());
-                                    if (true) {
-                                        html_markup($html_table_data_align$.getGlobalValue());
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                        html_markup(html_align($RIGHT));
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                    }
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_35 = $html_safe_print$.currentBinding(thread);
-                                        try {
-                                            $html_safe_print$.bind(T, thread);
-                                            html_princ($str_alt62$Physical_Schemabase__);
-                                        } finally {
-                                            $html_safe_print$.rebind(_prev_bind_0_35, thread);
-                                        }
-                                    }
-                                    html_markup($html_table_header_tail$.getGlobalValue());
-                                    html_markup($html_table_data_head$.getGlobalValue());
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_36 = $html_safe_print$.currentBinding(thread);
-                                        try {
-                                            $html_safe_print$.bind(T, thread);
-                                            if (NIL != psb) {
-                                                com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_arghash_form(arghash, psb);
-                                            } else {
-                                                html_glyph($NBSP, UNPROVIDED);
-                                            }
-                                        } finally {
-                                            $html_safe_print$.rebind(_prev_bind_0_36, thread);
-                                        }
-                                    }
-                                    html_markup($html_table_data_tail$.getGlobalValue());
-                                    html_markup($html_table_data_head$.getGlobalValue());
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_37 = $html_safe_print$.currentBinding(thread);
-                                        try {
-                                            $html_safe_print$.bind(T, thread);
-                                            if (NIL != psb) {
-                                                html_arghash.html_arghash_submit_input(arghash, $$$Remove, list($COMMAND_EDIT_SKS, $SKS, sks, $REMOVE_PSB, T), UNPROVIDED);
-                                            } else {
-                                                if (NIL != sksi_infrastructure_utilities.sk_source_accessibleP(sks, com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_sd_get_mt(sd))) {
-                                                    html_arghash.html_arghash_submit_input(arghash, $$$Decode, list($COMMAND_EDIT_SKS, $SKS, sks, $DECODE_PSB, T), UNPROVIDED);
-                                                } else {
-                                                    html_glyph($NBSP, UNPROVIDED);
-                                                }
-                                            }
-                                        } finally {
-                                            $html_safe_print$.rebind(_prev_bind_0_37, thread);
-                                        }
-                                    }
-                                    html_markup($html_table_data_tail$.getGlobalValue());
-                                } finally {
-                                    $html_safe_print$.rebind(_prev_bind_0_34, thread);
-                                }
-                            }
-                            html_markup($html_table_row_tail$.getGlobalValue());
-                            html_source_readability_terpri(UNPROVIDED);
-                            html_markup($html_table_row_head$.getGlobalValue());
-                            html_char(CHAR_greater, UNPROVIDED);
-                            {
-                                SubLObject _prev_bind_0_38 = $html_safe_print$.currentBinding(thread);
-                                try {
-                                    $html_safe_print$.bind(T, thread);
-                                    html_markup($html_table_header_head$.getGlobalValue());
-                                    if (true) {
-                                        html_markup($html_table_data_align$.getGlobalValue());
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                        html_markup(html_align($RIGHT));
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                    }
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_39 = $html_safe_print$.currentBinding(thread);
-                                        try {
-                                            $html_safe_print$.bind(T, thread);
-                                            html_princ($str_alt63$Logical_Schemabase__);
-                                        } finally {
-                                            $html_safe_print$.rebind(_prev_bind_0_39, thread);
-                                        }
-                                    }
-                                    html_markup($html_table_header_tail$.getGlobalValue());
-                                    html_markup($html_table_data_head$.getGlobalValue());
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_40 = $html_safe_print$.currentBinding(thread);
-                                        try {
-                                            $html_safe_print$.bind(T, thread);
-                                            if (NIL != lsb) {
-                                                com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_arghash_form(arghash, lsb);
-                                            } else {
-                                                html_glyph($NBSP, UNPROVIDED);
-                                            }
-                                        } finally {
-                                            $html_safe_print$.rebind(_prev_bind_0_40, thread);
-                                        }
-                                    }
-                                    html_markup($html_table_data_tail$.getGlobalValue());
-                                    html_markup($html_table_data_head$.getGlobalValue());
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_41 = $html_safe_print$.currentBinding(thread);
-                                        try {
-                                            $html_safe_print$.bind(T, thread);
-                                            if (NIL != lsb) {
-                                                html_arghash.html_arghash_submit_input(arghash, $$$Remove, list($COMMAND_REMOVE_LSB, $SKS, sks, $LSB, lsb), UNPROVIDED);
-                                            } else {
-                                                html_arghash.html_arghash_submit_input(arghash, $$$Create, list($COMMAND_EDIT_LSB, $SKS, sks), UNPROVIDED);
-                                            }
-                                        } finally {
-                                            $html_safe_print$.rebind(_prev_bind_0_41, thread);
-                                        }
-                                    }
-                                    html_markup($html_table_data_tail$.getGlobalValue());
-                                } finally {
-                                    $html_safe_print$.rebind(_prev_bind_0_38, thread);
-                                }
-                            }
-                            html_markup($html_table_row_tail$.getGlobalValue());
-                            html_source_readability_terpri(UNPROVIDED);
-                            html_markup($html_table_row_head$.getGlobalValue());
-                            html_char(CHAR_greater, UNPROVIDED);
-                            {
-                                SubLObject _prev_bind_0_42 = $html_safe_print$.currentBinding(thread);
-                                try {
-                                    $html_safe_print$.bind(T, thread);
-                                    html_markup($html_table_header_head$.getGlobalValue());
-                                    if (true) {
-                                        html_markup($html_table_data_align$.getGlobalValue());
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                        html_markup(html_align($RIGHT));
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                    }
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_43 = $html_safe_print$.currentBinding(thread);
-                                        try {
-                                            $html_safe_print$.bind(T, thread);
-                                            html_princ($str_alt64$Translation_Schemabase__);
-                                        } finally {
-                                            $html_safe_print$.rebind(_prev_bind_0_43, thread);
-                                        }
-                                    }
-                                    html_markup($html_table_header_tail$.getGlobalValue());
-                                    html_markup($html_table_data_head$.getGlobalValue());
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_44 = $html_safe_print$.currentBinding(thread);
-                                        try {
-                                            $html_safe_print$.bind(T, thread);
-                                            if (NIL != tsb) {
-                                                com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_arghash_form(arghash, tsb);
-                                            } else {
-                                                html_glyph($NBSP, UNPROVIDED);
-                                            }
-                                        } finally {
-                                            $html_safe_print$.rebind(_prev_bind_0_44, thread);
-                                        }
-                                    }
-                                    html_markup($html_table_data_tail$.getGlobalValue());
-                                    html_markup($html_table_data_head$.getGlobalValue());
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_45 = $html_safe_print$.currentBinding(thread);
-                                        try {
-                                            $html_safe_print$.bind(T, thread);
-                                            if (NIL != tsb) {
-                                                html_arghash.html_arghash_submit_input(arghash, $$$Remove, list($COMMAND_REMOVE_TSB, $SKS, sks, $TSB, tsb), UNPROVIDED);
-                                            } else {
-                                                html_glyph($NBSP, UNPROVIDED);
-                                            }
-                                        } finally {
-                                            $html_safe_print$.rebind(_prev_bind_0_45, thread);
-                                        }
-                                    }
-                                    html_markup($html_table_data_tail$.getGlobalValue());
-                                } finally {
-                                    $html_safe_print$.rebind(_prev_bind_0_42, thread);
-                                }
-                            }
-                            html_markup($html_table_row_tail$.getGlobalValue());
-                            html_source_readability_terpri(UNPROVIDED);
-                        } finally {
-                            $html_safe_print$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    html_markup($html_table_tail$.getGlobalValue());
-                    html_newline(TWO_INTEGER);
-                    com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_edit_sks_page_main_table(arghash, sks, sd, psb, lsb, tsb);
-                    html_newline(TWO_INTEGER);
-                    html_arghash.html_arghash_submit_input(arghash, $$$Refresh, $REFRESH, UNPROVIDED);
-                    html_indent(UNPROVIDED);
-                    html_arghash.html_arghash_submit_input(arghash, $$$OK, $OK, UNPROVIDED);
-                    html_indent(UNPROVIDED);
-                    html_arghash.html_arghash_submit_input(arghash, $$$Cancel, $TO_MAIN, UNPROVIDED);
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject sksi_smt_edit_sks_page(final SubLObject arghash) {
@@ -3269,331 +2068,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         html_indent(UNPROVIDED);
         html_arghash.html_arghash_submit_input(arghash, $$$Cancel, $TO_MAIN, UNPROVIDED);
         return NIL;
-    }
-
-    public static final SubLObject sksi_smt_edit_sks_page_main_table_alt(SubLObject arghash, SubLObject sks, SubLObject sd, SubLObject psb, SubLObject lsb, SubLObject tsb) {
-        if (sd == UNPROVIDED) {
-            sd = NIL;
-        }
-        if (psb == UNPROVIDED) {
-            psb = NIL;
-        }
-        if (lsb == UNPROVIDED) {
-            lsb = NIL;
-        }
-        if (tsb == UNPROVIDED) {
-            tsb = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject physical_schemata = (NIL != psb) ? ((SubLObject) (com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_psb_get_schemata(psb))) : NIL;
-                SubLObject logical_schemata = (NIL != lsb) ? ((SubLObject) (com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_lsb_get_schemata(lsb))) : NIL;
-                SubLObject translations = (NIL != tsb) ? ((SubLObject) (com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_tsb_get_translation_pairs(tsb))) : NIL;
-                if (((NIL != physical_schemata) || (NIL != logical_schemata)) || (NIL != translations)) {
-                    html_markup($html_table_head$.getGlobalValue());
-                    if (true) {
-                        html_markup($html_table_border$.getGlobalValue());
-                        html_char(CHAR_quotation, UNPROVIDED);
-                        html_markup(ONE_INTEGER);
-                        html_char(CHAR_quotation, UNPROVIDED);
-                    }
-                    if (true) {
-                        html_markup($html_table_cellpadding$.getGlobalValue());
-                        html_char(CHAR_quotation, UNPROVIDED);
-                        html_markup(TWO_INTEGER);
-                        html_char(CHAR_quotation, UNPROVIDED);
-                    }
-                    if (true) {
-                        html_markup($html_table_cellspacing$.getGlobalValue());
-                        html_char(CHAR_quotation, UNPROVIDED);
-                        html_markup(ZERO_INTEGER);
-                        html_char(CHAR_quotation, UNPROVIDED);
-                    }
-                    html_char(CHAR_greater, UNPROVIDED);
-                    {
-                        SubLObject _prev_bind_0 = $html_safe_print$.currentBinding(thread);
-                        try {
-                            $html_safe_print$.bind(T, thread);
-                            html_markup($html_table_row_head$.getGlobalValue());
-                            if (true) {
-                                html_markup($html_table_data_align$.getGlobalValue());
-                                html_char(CHAR_quotation, UNPROVIDED);
-                                html_markup(html_align($LEFT));
-                                html_char(CHAR_quotation, UNPROVIDED);
-                            }
-                            html_char(CHAR_greater, UNPROVIDED);
-                            {
-                                SubLObject _prev_bind_0_46 = $html_safe_print$.currentBinding(thread);
-                                try {
-                                    $html_safe_print$.bind(T, thread);
-                                    html_markup($html_table_header_head$.getGlobalValue());
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_47 = $html_safe_print$.currentBinding(thread);
-                                        try {
-                                            $html_safe_print$.bind(T, thread);
-                                            html_princ($str_alt93$Physical_Schemata_);
-                                        } finally {
-                                            $html_safe_print$.rebind(_prev_bind_0_47, thread);
-                                        }
-                                    }
-                                    html_markup($html_table_header_tail$.getGlobalValue());
-                                    html_markup($html_table_header_head$.getGlobalValue());
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_48 = $html_safe_print$.currentBinding(thread);
-                                        try {
-                                            $html_safe_print$.bind(T, thread);
-                                            html_glyph($NBSP, UNPROVIDED);
-                                        } finally {
-                                            $html_safe_print$.rebind(_prev_bind_0_48, thread);
-                                        }
-                                    }
-                                    html_markup($html_table_header_tail$.getGlobalValue());
-                                    html_markup($html_table_header_head$.getGlobalValue());
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_49 = $html_safe_print$.currentBinding(thread);
-                                        try {
-                                            $html_safe_print$.bind(T, thread);
-                                            html_princ($str_alt94$Logical_Schemata_);
-                                        } finally {
-                                            $html_safe_print$.rebind(_prev_bind_0_49, thread);
-                                        }
-                                    }
-                                    html_markup($html_table_header_tail$.getGlobalValue());
-                                    html_markup($html_table_header_head$.getGlobalValue());
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_50 = $html_safe_print$.currentBinding(thread);
-                                        try {
-                                            $html_safe_print$.bind(T, thread);
-                                            html_glyph($NBSP, UNPROVIDED);
-                                        } finally {
-                                            $html_safe_print$.rebind(_prev_bind_0_50, thread);
-                                        }
-                                    }
-                                    html_markup($html_table_header_tail$.getGlobalValue());
-                                    html_markup($html_table_header_head$.getGlobalValue());
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_51 = $html_safe_print$.currentBinding(thread);
-                                        try {
-                                            $html_safe_print$.bind(T, thread);
-                                            html_princ($str_alt95$Translations_);
-                                        } finally {
-                                            $html_safe_print$.rebind(_prev_bind_0_51, thread);
-                                        }
-                                    }
-                                    html_markup($html_table_header_tail$.getGlobalValue());
-                                } finally {
-                                    $html_safe_print$.rebind(_prev_bind_0_46, thread);
-                                }
-                            }
-                            html_markup($html_table_row_tail$.getGlobalValue());
-                            html_source_readability_terpri(UNPROVIDED);
-                            {
-                                SubLObject cdolist_list_var = physical_schemata;
-                                SubLObject ps = NIL;
-                                for (ps = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ps = cdolist_list_var.first()) {
-                                    {
-                                        SubLObject ls = list_utilities.alist_lookup(translations, ps, UNPROVIDED, UNPROVIDED).first();
-                                        if (NIL != ls) {
-                                            logical_schemata = remove(ls, logical_schemata, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                        }
-                                        html_markup($html_table_row_head$.getGlobalValue());
-                                        if (true) {
-                                            html_markup($html_table_data_align$.getGlobalValue());
-                                            html_char(CHAR_quotation, UNPROVIDED);
-                                            html_markup(html_align($LEFT));
-                                            html_char(CHAR_quotation, UNPROVIDED);
-                                        }
-                                        html_char(CHAR_greater, UNPROVIDED);
-                                        {
-                                            SubLObject _prev_bind_0_52 = $html_safe_print$.currentBinding(thread);
-                                            try {
-                                                $html_safe_print$.bind(T, thread);
-                                                html_markup($html_table_data_head$.getGlobalValue());
-                                                html_char(CHAR_greater, UNPROVIDED);
-                                                {
-                                                    SubLObject _prev_bind_0_53 = $html_safe_print$.currentBinding(thread);
-                                                    try {
-                                                        $html_safe_print$.bind(T, thread);
-                                                        com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_arghash_form(arghash, ps);
-                                                    } finally {
-                                                        $html_safe_print$.rebind(_prev_bind_0_53, thread);
-                                                    }
-                                                }
-                                                html_markup($html_table_data_tail$.getGlobalValue());
-                                                html_markup($html_table_data_head$.getGlobalValue());
-                                                html_char(CHAR_greater, UNPROVIDED);
-                                                {
-                                                    SubLObject _prev_bind_0_54 = $html_safe_print$.currentBinding(thread);
-                                                    try {
-                                                        $html_safe_print$.bind(T, thread);
-                                                        html_arghash.html_arghash_submit_input(arghash, $$$View, list($COMMAND_EDIT_PS, $SKS, sks, $PS, ps), UNPROVIDED);
-                                                    } finally {
-                                                        $html_safe_print$.rebind(_prev_bind_0_54, thread);
-                                                    }
-                                                }
-                                                html_markup($html_table_data_tail$.getGlobalValue());
-                                                html_markup($html_table_data_head$.getGlobalValue());
-                                                html_char(CHAR_greater, UNPROVIDED);
-                                                {
-                                                    SubLObject _prev_bind_0_55 = $html_safe_print$.currentBinding(thread);
-                                                    try {
-                                                        $html_safe_print$.bind(T, thread);
-                                                        if (NIL != ls) {
-                                                            com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_arghash_form(arghash, ls);
-                                                        } else {
-                                                            html_glyph($NBSP, UNPROVIDED);
-                                                        }
-                                                    } finally {
-                                                        $html_safe_print$.rebind(_prev_bind_0_55, thread);
-                                                    }
-                                                }
-                                                html_markup($html_table_data_tail$.getGlobalValue());
-                                                html_markup($html_table_data_head$.getGlobalValue());
-                                                html_char(CHAR_greater, UNPROVIDED);
-                                                {
-                                                    SubLObject _prev_bind_0_56 = $html_safe_print$.currentBinding(thread);
-                                                    try {
-                                                        $html_safe_print$.bind(T, thread);
-                                                        if (NIL != ls) {
-                                                            html_arghash.html_arghash_submit_input(arghash, $$$Edit, list($COMMAND_EDIT_LS, $SKS, sks, $LS, ls), UNPROVIDED);
-                                                        } else {
-                                                            html_arghash.html_arghash_submit_input(arghash, $$$Create, list($COMMAND_EDIT_LS, $SKS, sks, $PS, ps), UNPROVIDED);
-                                                        }
-                                                    } finally {
-                                                        $html_safe_print$.rebind(_prev_bind_0_56, thread);
-                                                    }
-                                                }
-                                                html_markup($html_table_data_tail$.getGlobalValue());
-                                                html_markup($html_table_data_head$.getGlobalValue());
-                                                if (true) {
-                                                    html_markup($html_table_data_align$.getGlobalValue());
-                                                    html_char(CHAR_quotation, UNPROVIDED);
-                                                    html_markup(html_align($RIGHT));
-                                                    html_char(CHAR_quotation, UNPROVIDED);
-                                                }
-                                                html_char(CHAR_greater, UNPROVIDED);
-                                                {
-                                                    SubLObject _prev_bind_0_57 = $html_safe_print$.currentBinding(thread);
-                                                    try {
-                                                        $html_safe_print$.bind(T, thread);
-                                                        if (NIL != ls) {
-                                                            html_arghash.html_arghash_submit_input(arghash, $$$Edit, list($COMMAND_EDIT_TS, $SKS, sks, $PS, ps, $LS, ls), UNPROVIDED);
-                                                        } else {
-                                                            html_glyph($NBSP, UNPROVIDED);
-                                                        }
-                                                    } finally {
-                                                        $html_safe_print$.rebind(_prev_bind_0_57, thread);
-                                                    }
-                                                }
-                                                html_markup($html_table_data_tail$.getGlobalValue());
-                                            } finally {
-                                                $html_safe_print$.rebind(_prev_bind_0_52, thread);
-                                            }
-                                        }
-                                        html_markup($html_table_row_tail$.getGlobalValue());
-                                        html_source_readability_terpri(UNPROVIDED);
-                                    }
-                                }
-                            }
-                            {
-                                SubLObject cdolist_list_var = logical_schemata;
-                                SubLObject logical_schema = NIL;
-                                for (logical_schema = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , logical_schema = cdolist_list_var.first()) {
-                                    html_markup($html_table_row_head$.getGlobalValue());
-                                    if (true) {
-                                        html_markup($html_table_data_align$.getGlobalValue());
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                        html_markup(html_align($LEFT));
-                                        html_char(CHAR_quotation, UNPROVIDED);
-                                    }
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_58 = $html_safe_print$.currentBinding(thread);
-                                        try {
-                                            $html_safe_print$.bind(T, thread);
-                                            html_markup($html_table_data_head$.getGlobalValue());
-                                            html_char(CHAR_greater, UNPROVIDED);
-                                            {
-                                                SubLObject _prev_bind_0_59 = $html_safe_print$.currentBinding(thread);
-                                                try {
-                                                    $html_safe_print$.bind(T, thread);
-                                                    html_glyph($NBSP, UNPROVIDED);
-                                                } finally {
-                                                    $html_safe_print$.rebind(_prev_bind_0_59, thread);
-                                                }
-                                            }
-                                            html_markup($html_table_data_tail$.getGlobalValue());
-                                            html_markup($html_table_data_head$.getGlobalValue());
-                                            html_char(CHAR_greater, UNPROVIDED);
-                                            {
-                                                SubLObject _prev_bind_0_60 = $html_safe_print$.currentBinding(thread);
-                                                try {
-                                                    $html_safe_print$.bind(T, thread);
-                                                    html_glyph($NBSP, UNPROVIDED);
-                                                } finally {
-                                                    $html_safe_print$.rebind(_prev_bind_0_60, thread);
-                                                }
-                                            }
-                                            html_markup($html_table_data_tail$.getGlobalValue());
-                                            html_markup($html_table_data_head$.getGlobalValue());
-                                            html_char(CHAR_greater, UNPROVIDED);
-                                            {
-                                                SubLObject _prev_bind_0_61 = $html_safe_print$.currentBinding(thread);
-                                                try {
-                                                    $html_safe_print$.bind(T, thread);
-                                                    com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_arghash_form(arghash, logical_schema);
-                                                } finally {
-                                                    $html_safe_print$.rebind(_prev_bind_0_61, thread);
-                                                }
-                                            }
-                                            html_markup($html_table_data_tail$.getGlobalValue());
-                                            html_markup($html_table_data_head$.getGlobalValue());
-                                            html_char(CHAR_greater, UNPROVIDED);
-                                            {
-                                                SubLObject _prev_bind_0_62 = $html_safe_print$.currentBinding(thread);
-                                                try {
-                                                    $html_safe_print$.bind(T, thread);
-                                                    html_glyph($NBSP, UNPROVIDED);
-                                                } finally {
-                                                    $html_safe_print$.rebind(_prev_bind_0_62, thread);
-                                                }
-                                            }
-                                            html_markup($html_table_data_tail$.getGlobalValue());
-                                            html_markup($html_table_data_head$.getGlobalValue());
-                                            html_char(CHAR_greater, UNPROVIDED);
-                                            {
-                                                SubLObject _prev_bind_0_63 = $html_safe_print$.currentBinding(thread);
-                                                try {
-                                                    $html_safe_print$.bind(T, thread);
-                                                    html_glyph($NBSP, UNPROVIDED);
-                                                } finally {
-                                                    $html_safe_print$.rebind(_prev_bind_0_63, thread);
-                                                }
-                                            }
-                                            html_markup($html_table_data_tail$.getGlobalValue());
-                                        } finally {
-                                            $html_safe_print$.rebind(_prev_bind_0_58, thread);
-                                        }
-                                    }
-                                    html_markup($html_table_row_tail$.getGlobalValue());
-                                    html_source_readability_terpri(UNPROVIDED);
-                                }
-                            }
-                        } finally {
-                            $html_safe_print$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    html_markup($html_table_tail$.getGlobalValue());
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject sksi_smt_edit_sks_page_main_table(final SubLObject arghash, final SubLObject sks, SubLObject sd, SubLObject psb, SubLObject lsb, SubLObject tsb) {
@@ -3865,41 +2339,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject sksi_smt_edit_sks_actions_alt(SubLObject arghash) {
-        {
-            SubLObject sks = html_arghash.get_arghash_value($SKS, arghash);
-            SubLObject new_sks_namestring = html_arghash.get_arghash_value($SKS_NAMESTRING, arghash);
-            if (!sksi_sks_accessors.sks_fget(sks, $$nameString, UNPROVIDED).equal(new_sks_namestring)) {
-                sksi_sks_accessors.sks_fset(sks, $$nameString, new_sks_namestring, UNPROVIDED);
-            }
-            if (NIL != html_arghash.get_arghash_value($DECODE_PSB, arghash)) {
-                html_arghash.rem_arghash_value($DECODE_PSB, arghash);
-                if (NIL == com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_get_psb(sks)) {
-                    {
-                        SubLObject psb = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_new_psb(sks);
-                        sksi_sks_structure_importer_utilities.sks_physical_structure_decode(sks);
-                    }
-                }
-            } else {
-                if (NIL != html_arghash.get_arghash_value($REMOVE_PSB, arghash)) {
-                    html_arghash.rem_arghash_value($REMOVE_PSB, arghash);
-                    sksi_sks_accessors.sks_fset(sks, $$sksPhysicalSchemaDescriptionMt, NIL, $$UniversalVocabularyMt);
-                }
-            }
-        }
-        if (NIL != html_arghash.get_arghash_value($REFRESH, arghash)) {
-            html_arghash.rem_arghash_value($REFRESH, arghash);
-            html_arghash.set_arghash_value($TO_EDIT_SKS, arghash, T);
-        } else {
-            if (NIL != html_arghash.get_arghash_value($OK, arghash)) {
-                html_arghash.rem_arghash_value($OK, arghash);
-                html_arghash.rem_arghash_value($ON_EDIT_SKS, arghash);
-                html_arghash.set_arghash_value($TO_MAIN, arghash, T);
-            }
-        }
-        return arghash;
-    }
-
     public static SubLObject sksi_smt_edit_sks_actions(final SubLObject arghash) {
         final SubLObject sks = html_arghash.get_arghash_value($SKS, arghash);
         final SubLObject new_sks_namestring = html_arghash.get_arghash_value($SKS_NAMESTRING, arghash);
@@ -3931,24 +2370,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return arghash;
     }
 
-    public static final SubLObject sksi_smt_html_sks_status_line_alt(SubLObject sks) {
-        {
-            SubLObject sd = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_get_sd(sks);
-            SubLObject sd_mt = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_sd_get_mt(sd);
-            html_princ($str_alt103$This_SKS_is_currently_);
-            html_markup($html_bold_head$.getGlobalValue());
-            if (NIL != sksi_infrastructure_utilities.sk_source_accessibleP(sks, sd_mt)) {
-                html_princ($$$accessible);
-            } else {
-                html_princ($$$not_accessible);
-            }
-            html_markup($html_bold_tail$.getGlobalValue());
-            html_princ($str_alt106$_);
-            html_newline(TWO_INTEGER);
-        }
-        return NIL;
-    }
-
     public static SubLObject sksi_smt_html_sks_status_line(final SubLObject sks) {
         final SubLObject sd = sks_get_sd(sks);
         final SubLObject sd_mt = sksi_sd_get_mt(sd);
@@ -3963,191 +2384,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         html_princ($str126$_);
         html_newline(TWO_INTEGER);
         return NIL;
-    }
-
-    public static final SubLObject sksi_smt_edit_sd_page_alt(SubLObject arghash) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            html_arghash.html_arghash_hidden_input(arghash, $ON_EDIT_SD, T, UNPROVIDED);
-            {
-                SubLObject sks = html_arghash.get_arghash_value($SKS, arghash);
-                SubLObject sd = html_arghash.get_arghash_value($SD, arghash);
-                SubLObject sd_mt = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_sd_get_mt(sd);
-                html_arghash.html_arghash_hidden_input(arghash, $SKS, UNPROVIDED, UNPROVIDED);
-                html_arghash.html_arghash_hidden_input(arghash, $SD, UNPROVIDED, UNPROVIDED);
-                html_markup($html_heading_head$.getGlobalValue());
-                html_markup(FOUR_INTEGER);
-                html_char(CHAR_greater, UNPROVIDED);
-                html_princ($str_alt107$Edit_Source_Description__);
-                com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_form(sks);
-                html_markup($html_heading_tail$.getGlobalValue());
-                html_markup(FOUR_INTEGER);
-                html_char(CHAR_greater, UNPROVIDED);
-                com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_smt_html_sks_status_line(sks);
-                html_markup($html_table_head$.getGlobalValue());
-                html_char(CHAR_greater, UNPROVIDED);
-                {
-                    SubLObject _prev_bind_0 = $html_safe_print$.currentBinding(thread);
-                    try {
-                        $html_safe_print$.bind(T, thread);
-                        html_markup($html_table_row_head$.getGlobalValue());
-                        html_char(CHAR_greater, UNPROVIDED);
-                        {
-                            SubLObject _prev_bind_0_64 = $html_safe_print$.currentBinding(thread);
-                            try {
-                                $html_safe_print$.bind(T, thread);
-                                html_markup($html_table_header_head$.getGlobalValue());
-                                html_char(CHAR_greater, UNPROVIDED);
-                                {
-                                    SubLObject _prev_bind_0_65 = $html_safe_print$.currentBinding(thread);
-                                    try {
-                                        $html_safe_print$.bind(T, thread);
-                                        html_princ($$$Parameter);
-                                    } finally {
-                                        $html_safe_print$.rebind(_prev_bind_0_65, thread);
-                                    }
-                                }
-                                html_markup($html_table_header_tail$.getGlobalValue());
-                                html_markup($html_table_header_head$.getGlobalValue());
-                                html_char(CHAR_greater, UNPROVIDED);
-                                {
-                                    SubLObject _prev_bind_0_66 = $html_safe_print$.currentBinding(thread);
-                                    try {
-                                        $html_safe_print$.bind(T, thread);
-                                        html_princ($$$Value);
-                                    } finally {
-                                        $html_safe_print$.rebind(_prev_bind_0_66, thread);
-                                    }
-                                }
-                                html_markup($html_table_header_tail$.getGlobalValue());
-                            } finally {
-                                $html_safe_print$.rebind(_prev_bind_0_64, thread);
-                            }
-                        }
-                        html_markup($html_table_row_tail$.getGlobalValue());
-                        html_source_readability_terpri(UNPROVIDED);
-                        {
-                            SubLObject remainder = NIL;
-                            for (remainder = $sksi_smt_sd_parameters$.getGlobalValue(); NIL != remainder; remainder = cddr(remainder)) {
-                                {
-                                    SubLObject predicate = remainder.first();
-                                    SubLObject type = cadr(remainder);
-                                    html_markup($html_table_row_head$.getGlobalValue());
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_67 = $html_safe_print$.currentBinding(thread);
-                                        try {
-                                            $html_safe_print$.bind(T, thread);
-                                            html_markup($html_table_data_head$.getGlobalValue());
-                                            html_char(CHAR_greater, UNPROVIDED);
-                                            {
-                                                SubLObject _prev_bind_0_68 = $html_safe_print$.currentBinding(thread);
-                                                try {
-                                                    $html_safe_print$.bind(T, thread);
-                                                    com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_form(predicate);
-                                                } finally {
-                                                    $html_safe_print$.rebind(_prev_bind_0_68, thread);
-                                                }
-                                            }
-                                            html_markup($html_table_data_tail$.getGlobalValue());
-                                            html_markup($html_table_data_head$.getGlobalValue());
-                                            html_char(CHAR_greater, UNPROVIDED);
-                                            {
-                                                SubLObject _prev_bind_0_69 = $html_safe_print$.currentBinding(thread);
-                                                try {
-                                                    $html_safe_print$.bind(T, thread);
-                                                    if (NIL != genls.genl_in_any_mtP(type, $$CharacterString)) {
-                                                        html_arghash.html_arghash_text_input(arghash, predicate, sksi_sks_accessors.sks_fget(sks, predicate, sd_mt), $int$40, UNPROVIDED);
-                                                    } else {
-                                                        if (NIL != genls.genl_in_any_mtP(type, $$Integer)) {
-                                                            html_arghash.html_arghash_text_input(arghash, predicate, sksi_sks_accessors.sks_fget(sks, predicate, sd_mt), $int$40, $INTEGER);
-                                                        } else {
-                                                            if (NIL != forts.fort_p(type)) {
-                                                                html_arghash.set_arghash_value(predicate, arghash, sksi_sks_accessors.sks_fget(sks, predicate, sd_mt));
-                                                                {
-                                                                    SubLObject key_string = html_arghash.arghash_make_key_string(predicate, $FORT);
-                                                                    html_markup($html_select_head$.getGlobalValue());
-                                                                    html_markup($html_select_name$.getGlobalValue());
-                                                                    html_char(CHAR_quotation, UNPROVIDED);
-                                                                    html_markup(key_string);
-                                                                    html_char(CHAR_quotation, UNPROVIDED);
-                                                                    html_char(CHAR_greater, UNPROVIDED);
-                                                                    {
-                                                                        SubLObject _prev_bind_0_70 = $html_safe_print$.currentBinding(thread);
-                                                                        try {
-                                                                            $html_safe_print$.bind(T, thread);
-                                                                            {
-                                                                                SubLObject value = NIL;
-                                                                                SubLObject value_71 = NIL;
-                                                                                SubLObject value_string = NIL;
-                                                                                SubLObject value_string_72 = NIL;
-                                                                                for (value = isa.all_fort_instances_in_all_mts(type), value_71 = value.first(), value_string = Mapping.mapcar(FORT_NAME, isa.all_fort_instances_in_all_mts(type)), value_string_72 = value_string.first(); !((NIL == value_string) && (NIL == value)); value = value.rest() , value_71 = value.first() , value_string = value_string.rest() , value_string_72 = value_string.first()) {
-                                                                                    {
-                                                                                        SubLObject selected = list_utilities.member_equalP(value_71, html_arghash.get_arghash_value_list(predicate, arghash));
-                                                                                        SubLObject value_string_73 = html_arghash.arghash_get_string(value_71, $FORT);
-                                                                                        html_markup($html_option_head$.getGlobalValue());
-                                                                                        if (NIL != selected) {
-                                                                                            html_simple_attribute($html_option_selected$.getGlobalValue());
-                                                                                        }
-                                                                                        if (NIL != value_string_73) {
-                                                                                            html_markup($html_option_value$.getGlobalValue());
-                                                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                                                            html_markup(value_string_73);
-                                                                                            html_char(CHAR_quotation, UNPROVIDED);
-                                                                                        }
-                                                                                        html_char(CHAR_greater, UNPROVIDED);
-                                                                                        {
-                                                                                            SubLObject _prev_bind_0_74 = $html_safe_print$.currentBinding(thread);
-                                                                                            try {
-                                                                                                $html_safe_print$.bind(T, thread);
-                                                                                                html_princ(value_string_72);
-                                                                                            } finally {
-                                                                                                $html_safe_print$.rebind(_prev_bind_0_74, thread);
-                                                                                            }
-                                                                                        }
-                                                                                        html_markup($html_option_tail$.getGlobalValue());
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        } finally {
-                                                                            $html_safe_print$.rebind(_prev_bind_0_70, thread);
-                                                                        }
-                                                                    }
-                                                                    html_markup($html_select_tail$.getGlobalValue());
-                                                                }
-                                                            } else {
-                                                                html_princ(type);
-                                                            }
-                                                        }
-                                                    }
-                                                } finally {
-                                                    $html_safe_print$.rebind(_prev_bind_0_69, thread);
-                                                }
-                                            }
-                                            html_markup($html_table_data_tail$.getGlobalValue());
-                                        } finally {
-                                            $html_safe_print$.rebind(_prev_bind_0_67, thread);
-                                        }
-                                    }
-                                    html_markup($html_table_row_tail$.getGlobalValue());
-                                    html_source_readability_terpri(UNPROVIDED);
-                                }
-                            }
-                        }
-                    } finally {
-                        $html_safe_print$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                html_markup($html_table_tail$.getGlobalValue());
-                html_newline(UNPROVIDED);
-                html_arghash.html_arghash_submit_input(arghash, $$$Refresh, $REFRESH, UNPROVIDED);
-                html_indent(UNPROVIDED);
-                html_arghash.html_arghash_submit_input(arghash, $$$OK, $OK, UNPROVIDED);
-                html_indent(UNPROVIDED);
-                html_arghash.html_arghash_submit_input(arghash, $$$Cancel, $TO_EDIT_SKS, UNPROVIDED);
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject sksi_smt_edit_sd_page(final SubLObject arghash) {
@@ -4328,38 +2564,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject sksi_smt_edit_sd_actions_alt(SubLObject arghash) {
-        if ((NIL != html_arghash.get_arghash_value($REFRESH, arghash)) || (NIL != html_arghash.get_arghash_value($OK, arghash))) {
-            {
-                SubLObject sks = html_arghash.get_arghash_value($SKS, arghash);
-                SubLObject sd_mt = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_get_source_description_mt(sks);
-                SubLObject remainder = NIL;
-                for (remainder = $sksi_smt_sd_parameters$.getGlobalValue(); NIL != remainder; remainder = cddr(remainder)) {
-                    {
-                        SubLObject predicate = remainder.first();
-                        SubLObject type = cadr(remainder);
-                        SubLObject current_value = sksi_sks_accessors.sks_fget(sks, predicate, sd_mt);
-                        SubLObject new_value = html_arghash.get_arghash_value(predicate, arghash);
-                        html_arghash.rem_arghash_value(predicate, arghash);
-                        if (!current_value.equal(new_value)) {
-                            sksi_sks_accessors.sks_fset(sks, predicate, new_value, sd_mt);
-                            html_arghash.push_arghash_value($SUCCESS, list($str_alt115$Changed__A__A_from__A_to__A, sks, predicate, current_value, new_value), arghash);
-                        }
-                    }
-                }
-            }
-        }
-        if (NIL != html_arghash.get_arghash_value($REFRESH, arghash)) {
-            html_arghash.set_arghash_value($TO_EDIT_SD, arghash, T);
-        } else {
-            if (NIL != html_arghash.get_arghash_value($OK, arghash)) {
-                html_arghash.rem_arghash_value($ON_EDIT_SD, arghash);
-                html_arghash.set_arghash_value($TO_EDIT_SKS, arghash, T);
-            }
-        }
-        return arghash;
-    }
-
     public static SubLObject sksi_smt_edit_sd_actions(final SubLObject arghash) {
         if ((NIL != html_arghash.get_arghash_value($REFRESH, arghash)) || (NIL != html_arghash.get_arghash_value($OK, arghash))) {
             final SubLObject sks = html_arghash.get_arghash_value($SKS, arghash);
@@ -4530,227 +2734,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
             pf = cdolist_list_var.first();
         } 
         return nreverse(result);
-    }
-
-    public static final SubLObject sksi_smt_edit_ps_page_alt(SubLObject arghash) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            html_arghash.html_arghash_hidden_input(arghash, $ON_EDIT_PS, T, UNPROVIDED);
-            {
-                SubLObject sks = html_arghash.get_arghash_value($SKS, arghash);
-                SubLObject ps = html_arghash.get_arghash_value($PS, arghash);
-                html_arghash.html_arghash_hidden_input(arghash, $SKS, sks, UNPROVIDED);
-                html_arghash.html_arghash_hidden_input(arghash, $PS, ps, UNPROVIDED);
-                html_markup($html_heading_head$.getGlobalValue());
-                html_markup(FOUR_INTEGER);
-                html_char(CHAR_greater, UNPROVIDED);
-                html_princ($str_alt116$Edit_Physical_Schema__);
-                com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_form(sks);
-                html_princ($str_alt117$___);
-                com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_arghash_form(arghash, ps);
-                html_markup($html_heading_tail$.getGlobalValue());
-                html_markup(FOUR_INTEGER);
-                html_char(CHAR_greater, UNPROVIDED);
-                {
-                    SubLObject pfs = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_ps_get_pfs(ps);
-                    if (NIL != pfs) {
-                        html_markup($html_bold_head$.getGlobalValue());
-                        html_princ($str_alt118$Physical_fields_);
-                        html_markup($html_bold_tail$.getGlobalValue());
-                        html_markup($html_table_head$.getGlobalValue());
-                        if (true) {
-                            html_markup($html_table_border$.getGlobalValue());
-                            html_char(CHAR_quotation, UNPROVIDED);
-                            html_markup(ONE_INTEGER);
-                            html_char(CHAR_quotation, UNPROVIDED);
-                        }
-                        if (true) {
-                            html_markup($html_table_cellpadding$.getGlobalValue());
-                            html_char(CHAR_quotation, UNPROVIDED);
-                            html_markup(TWO_INTEGER);
-                            html_char(CHAR_quotation, UNPROVIDED);
-                        }
-                        if (true) {
-                            html_markup($html_table_cellspacing$.getGlobalValue());
-                            html_char(CHAR_quotation, UNPROVIDED);
-                            html_markup(ZERO_INTEGER);
-                            html_char(CHAR_quotation, UNPROVIDED);
-                        }
-                        html_char(CHAR_greater, UNPROVIDED);
-                        {
-                            SubLObject _prev_bind_0 = $html_safe_print$.currentBinding(thread);
-                            try {
-                                $html_safe_print$.bind(T, thread);
-                                html_markup($html_table_row_head$.getGlobalValue());
-                                html_char(CHAR_greater, UNPROVIDED);
-                                {
-                                    SubLObject _prev_bind_0_75 = $html_safe_print$.currentBinding(thread);
-                                    try {
-                                        $html_safe_print$.bind(T, thread);
-                                        html_markup($html_table_header_head$.getGlobalValue());
-                                        html_char(CHAR_greater, UNPROVIDED);
-                                        {
-                                            SubLObject _prev_bind_0_76 = $html_safe_print$.currentBinding(thread);
-                                            try {
-                                                $html_safe_print$.bind(T, thread);
-                                                html_glyph($NBSP, UNPROVIDED);
-                                            } finally {
-                                                $html_safe_print$.rebind(_prev_bind_0_76, thread);
-                                            }
-                                        }
-                                        html_markup($html_table_header_tail$.getGlobalValue());
-                                        html_markup($html_table_header_head$.getGlobalValue());
-                                        html_char(CHAR_greater, UNPROVIDED);
-                                        {
-                                            SubLObject _prev_bind_0_77 = $html_safe_print$.currentBinding(thread);
-                                            try {
-                                                $html_safe_print$.bind(T, thread);
-                                                html_princ($$$Name);
-                                            } finally {
-                                                $html_safe_print$.rebind(_prev_bind_0_77, thread);
-                                            }
-                                        }
-                                        html_markup($html_table_header_tail$.getGlobalValue());
-                                        html_markup($html_table_header_head$.getGlobalValue());
-                                        html_char(CHAR_greater, UNPROVIDED);
-                                        {
-                                            SubLObject _prev_bind_0_78 = $html_safe_print$.currentBinding(thread);
-                                            try {
-                                                $html_safe_print$.bind(T, thread);
-                                                html_princ($$$Datatype);
-                                            } finally {
-                                                $html_safe_print$.rebind(_prev_bind_0_78, thread);
-                                            }
-                                        }
-                                        html_markup($html_table_header_tail$.getGlobalValue());
-                                        html_markup($html_table_header_head$.getGlobalValue());
-                                        html_char(CHAR_greater, UNPROVIDED);
-                                        {
-                                            SubLObject _prev_bind_0_79 = $html_safe_print$.currentBinding(thread);
-                                            try {
-                                                $html_safe_print$.bind(T, thread);
-                                                html_princ($$$Nullable);
-                                            } finally {
-                                                $html_safe_print$.rebind(_prev_bind_0_79, thread);
-                                            }
-                                        }
-                                        html_markup($html_table_header_tail$.getGlobalValue());
-                                        html_markup($html_table_header_head$.getGlobalValue());
-                                        html_char(CHAR_greater, UNPROVIDED);
-                                        {
-                                            SubLObject _prev_bind_0_80 = $html_safe_print$.currentBinding(thread);
-                                            try {
-                                                $html_safe_print$.bind(T, thread);
-                                                html_princ($$$Default_Value);
-                                            } finally {
-                                                $html_safe_print$.rebind(_prev_bind_0_80, thread);
-                                            }
-                                        }
-                                        html_markup($html_table_header_tail$.getGlobalValue());
-                                    } finally {
-                                        $html_safe_print$.rebind(_prev_bind_0_75, thread);
-                                    }
-                                }
-                                html_markup($html_table_row_tail$.getGlobalValue());
-                                html_source_readability_terpri(UNPROVIDED);
-                                {
-                                    SubLObject cdolist_list_var = pfs;
-                                    SubLObject pf = NIL;
-                                    for (pf = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pf = cdolist_list_var.first()) {
-                                        {
-                                            SubLObject pf_name = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_pf_get_name(pf);
-                                            SubLObject pf_datatype = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_pf_get_datatype(pf);
-                                            SubLObject pf_nullable = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_pf_get_nullable(pf);
-                                            SubLObject pf_default_value = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_pf_get_default_value(pf);
-                                            html_markup($html_table_row_head$.getGlobalValue());
-                                            html_char(CHAR_greater, UNPROVIDED);
-                                            {
-                                                SubLObject _prev_bind_0_81 = $html_safe_print$.currentBinding(thread);
-                                                try {
-                                                    $html_safe_print$.bind(T, thread);
-                                                    html_markup($html_table_data_head$.getGlobalValue());
-                                                    html_char(CHAR_greater, UNPROVIDED);
-                                                    {
-                                                        SubLObject _prev_bind_0_82 = $html_safe_print$.currentBinding(thread);
-                                                        try {
-                                                            $html_safe_print$.bind(T, thread);
-                                                            com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_form(pf);
-                                                        } finally {
-                                                            $html_safe_print$.rebind(_prev_bind_0_82, thread);
-                                                        }
-                                                    }
-                                                    html_markup($html_table_data_tail$.getGlobalValue());
-                                                    html_markup($html_table_data_head$.getGlobalValue());
-                                                    html_char(CHAR_greater, UNPROVIDED);
-                                                    {
-                                                        SubLObject _prev_bind_0_83 = $html_safe_print$.currentBinding(thread);
-                                                        try {
-                                                            $html_safe_print$.bind(T, thread);
-                                                            com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_form(pf_name);
-                                                        } finally {
-                                                            $html_safe_print$.rebind(_prev_bind_0_83, thread);
-                                                        }
-                                                    }
-                                                    html_markup($html_table_data_tail$.getGlobalValue());
-                                                    html_markup($html_table_data_head$.getGlobalValue());
-                                                    html_char(CHAR_greater, UNPROVIDED);
-                                                    {
-                                                        SubLObject _prev_bind_0_84 = $html_safe_print$.currentBinding(thread);
-                                                        try {
-                                                            $html_safe_print$.bind(T, thread);
-                                                            com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_form(pf_datatype);
-                                                        } finally {
-                                                            $html_safe_print$.rebind(_prev_bind_0_84, thread);
-                                                        }
-                                                    }
-                                                    html_markup($html_table_data_tail$.getGlobalValue());
-                                                    html_markup($html_table_data_head$.getGlobalValue());
-                                                    html_char(CHAR_greater, UNPROVIDED);
-                                                    {
-                                                        SubLObject _prev_bind_0_85 = $html_safe_print$.currentBinding(thread);
-                                                        try {
-                                                            $html_safe_print$.bind(T, thread);
-                                                            com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_form(pf_nullable);
-                                                        } finally {
-                                                            $html_safe_print$.rebind(_prev_bind_0_85, thread);
-                                                        }
-                                                    }
-                                                    html_markup($html_table_data_tail$.getGlobalValue());
-                                                    html_markup($html_table_data_head$.getGlobalValue());
-                                                    html_char(CHAR_greater, UNPROVIDED);
-                                                    {
-                                                        SubLObject _prev_bind_0_86 = $html_safe_print$.currentBinding(thread);
-                                                        try {
-                                                            $html_safe_print$.bind(T, thread);
-                                                            com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_form(pf_default_value);
-                                                        } finally {
-                                                            $html_safe_print$.rebind(_prev_bind_0_86, thread);
-                                                        }
-                                                    }
-                                                    html_markup($html_table_data_tail$.getGlobalValue());
-                                                } finally {
-                                                    $html_safe_print$.rebind(_prev_bind_0_81, thread);
-                                                }
-                                            }
-                                            html_markup($html_table_row_tail$.getGlobalValue());
-                                            html_source_readability_terpri(UNPROVIDED);
-                                        }
-                                    }
-                                }
-                            } finally {
-                                $html_safe_print$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                        html_markup($html_table_tail$.getGlobalValue());
-                    } else {
-                        html_princ($str_alt123$No_fields_in_this_physical_schema);
-                    }
-                }
-                html_newline(UNPROVIDED);
-                html_arghash.html_arghash_submit_input(arghash, $$$OK, $OK, UNPROVIDED);
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject sksi_smt_edit_ps_page(final SubLObject arghash) {
@@ -4933,13 +2916,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         html_newline(UNPROVIDED);
         html_arghash.html_arghash_submit_input(arghash, $$$OK, $OK, UNPROVIDED);
         return NIL;
-    }
-
-    public static final SubLObject sksi_smt_edit_ps_actions_alt(SubLObject arghash) {
-        if (NIL != html_arghash.get_arghash_value($OK, arghash)) {
-            html_arghash.set_arghash_value($TO_EDIT_SKS, arghash, T);
-        }
-        return arghash;
     }
 
     public static SubLObject sksi_smt_edit_ps_actions(final SubLObject arghash) {
@@ -5363,365 +3339,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return memoization_state.caching_results(results);
     }
 
-    public static final SubLObject sksi_smt_edit_ls_page_alt(SubLObject arghash) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            html_arghash.html_arghash_hidden_input(arghash, $ON_EDIT_LS, T, UNPROVIDED);
-            {
-                SubLObject sks = html_arghash.get_arghash_value($SKS, arghash);
-                SubLObject ps = html_arghash.get_arghash_value($PS, arghash);
-                SubLObject ls = (NIL != html_arghash.get_arghash_value($LS, arghash)) ? ((SubLObject) (html_arghash.get_arghash_value($LS, arghash))) : com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.new_logical_schema(sks, ps);
-                SubLObject lfs = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_ls_get_lfs(ls);
-                SubLObject mss = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_ls_get_mss(ls);
-                html_arghash.html_arghash_hidden_input(arghash, $SKS, sks, UNPROVIDED);
-                html_arghash.html_arghash_hidden_input(arghash, $LS, ls, UNPROVIDED);
-                html_markup($html_heading_head$.getGlobalValue());
-                html_markup(FOUR_INTEGER);
-                html_char(CHAR_greater, UNPROVIDED);
-                html_princ($str_alt124$Edit_Logical_Schema__);
-                com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_form(sks);
-                html_princ($str_alt117$___);
-                com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_arghash_form(arghash, ls);
-                html_markup($html_heading_tail$.getGlobalValue());
-                html_markup(FOUR_INTEGER);
-                html_char(CHAR_greater, UNPROVIDED);
-                if (NIL != lfs) {
-                    html_markup($html_bold_head$.getGlobalValue());
-                    html_princ($str_alt125$Logical_fields_);
-                    html_markup($html_bold_tail$.getGlobalValue());
-                    html_markup($html_table_head$.getGlobalValue());
-                    if (true) {
-                        html_markup($html_table_border$.getGlobalValue());
-                        html_char(CHAR_quotation, UNPROVIDED);
-                        html_markup(ONE_INTEGER);
-                        html_char(CHAR_quotation, UNPROVIDED);
-                    }
-                    if (true) {
-                        html_markup($html_table_cellpadding$.getGlobalValue());
-                        html_char(CHAR_quotation, UNPROVIDED);
-                        html_markup(TWO_INTEGER);
-                        html_char(CHAR_quotation, UNPROVIDED);
-                    }
-                    if (true) {
-                        html_markup($html_table_cellspacing$.getGlobalValue());
-                        html_char(CHAR_quotation, UNPROVIDED);
-                        html_markup(ZERO_INTEGER);
-                        html_char(CHAR_quotation, UNPROVIDED);
-                    }
-                    html_char(CHAR_greater, UNPROVIDED);
-                    {
-                        SubLObject _prev_bind_0 = $html_safe_print$.currentBinding(thread);
-                        try {
-                            $html_safe_print$.bind(T, thread);
-                            html_markup($html_table_row_head$.getGlobalValue());
-                            html_char(CHAR_greater, UNPROVIDED);
-                            {
-                                SubLObject _prev_bind_0_87 = $html_safe_print$.currentBinding(thread);
-                                try {
-                                    $html_safe_print$.bind(T, thread);
-                                    html_markup($html_table_header_head$.getGlobalValue());
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_88 = $html_safe_print$.currentBinding(thread);
-                                        try {
-                                            $html_safe_print$.bind(T, thread);
-                                            html_princ($$$CycL);
-                                        } finally {
-                                            $html_safe_print$.rebind(_prev_bind_0_88, thread);
-                                        }
-                                    }
-                                    html_markup($html_table_header_tail$.getGlobalValue());
-                                    html_markup($html_table_header_head$.getGlobalValue());
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_89 = $html_safe_print$.currentBinding(thread);
-                                        try {
-                                            $html_safe_print$.bind(T, thread);
-                                            html_princ($$$Field_isa);
-                                        } finally {
-                                            $html_safe_print$.rebind(_prev_bind_0_89, thread);
-                                        }
-                                    }
-                                    html_markup($html_table_header_tail$.getGlobalValue());
-                                    html_markup($html_table_header_head$.getGlobalValue());
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_90 = $html_safe_print$.currentBinding(thread);
-                                        try {
-                                            $html_safe_print$.bind(T, thread);
-                                            html_princ($str_alt128$__user_MS_s);
-                                        } finally {
-                                            $html_safe_print$.rebind(_prev_bind_0_90, thread);
-                                        }
-                                    }
-                                    html_markup($html_table_header_tail$.getGlobalValue());
-                                    html_markup($html_table_header_head$.getGlobalValue());
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_91 = $html_safe_print$.currentBinding(thread);
-                                        try {
-                                            $html_safe_print$.bind(T, thread);
-                                            html_indent(UNPROVIDED);
-                                        } finally {
-                                            $html_safe_print$.rebind(_prev_bind_0_91, thread);
-                                        }
-                                    }
-                                    html_markup($html_table_header_tail$.getGlobalValue());
-                                } finally {
-                                    $html_safe_print$.rebind(_prev_bind_0_87, thread);
-                                }
-                            }
-                            html_markup($html_table_row_tail$.getGlobalValue());
-                            html_source_readability_terpri(UNPROVIDED);
-                            {
-                                SubLObject cdolist_list_var = lfs;
-                                SubLObject lf = NIL;
-                                for (lf = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , lf = cdolist_list_var.first()) {
-                                    {
-                                        SubLObject lf_cycl = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_lf_get_cycl(lf);
-                                        SubLObject lf_isas = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_lf_get_isas(lf);
-                                        SubLObject lf_ms_count = ZERO_INTEGER;
-                                        {
-                                            SubLObject cdolist_list_var_92 = mss;
-                                            SubLObject ms = NIL;
-                                            for (ms = cdolist_list_var_92.first(); NIL != cdolist_list_var_92; cdolist_list_var_92 = cdolist_list_var_92.rest() , ms = cdolist_list_var_92.first()) {
-                                                if (NIL != com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_ms_get_asserted(ms)) {
-                                                    {
-                                                        SubLObject ms_cycl = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_ms_get_cycl(ms);
-                                                        if (NIL != subl_promotions.memberP(lf_cycl, ms_cycl, UNPROVIDED, UNPROVIDED)) {
-                                                            lf_ms_count = add(lf_ms_count, ONE_INTEGER);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        html_markup($html_table_row_head$.getGlobalValue());
-                                        if (true) {
-                                            html_markup($html_table_data_valign$.getGlobalValue());
-                                            html_char(CHAR_quotation, UNPROVIDED);
-                                            html_markup(html_align($TOP));
-                                            html_char(CHAR_quotation, UNPROVIDED);
-                                        }
-                                        html_char(CHAR_greater, UNPROVIDED);
-                                        {
-                                            SubLObject _prev_bind_0_93 = $html_safe_print$.currentBinding(thread);
-                                            try {
-                                                $html_safe_print$.bind(T, thread);
-                                                html_markup($html_table_data_head$.getGlobalValue());
-                                                html_char(CHAR_greater, UNPROVIDED);
-                                                {
-                                                    SubLObject _prev_bind_0_94 = $html_safe_print$.currentBinding(thread);
-                                                    try {
-                                                        $html_safe_print$.bind(T, thread);
-                                                        com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_arghash_form(arghash, lf_cycl);
-                                                    } finally {
-                                                        $html_safe_print$.rebind(_prev_bind_0_94, thread);
-                                                    }
-                                                }
-                                                html_markup($html_table_data_tail$.getGlobalValue());
-                                                html_markup($html_table_data_head$.getGlobalValue());
-                                                html_char(CHAR_greater, UNPROVIDED);
-                                                {
-                                                    SubLObject _prev_bind_0_95 = $html_safe_print$.currentBinding(thread);
-                                                    try {
-                                                        $html_safe_print$.bind(T, thread);
-                                                        if (NIL != lf_isas) {
-                                                            {
-                                                                SubLObject cdolist_list_var_96 = lf_isas;
-                                                                SubLObject lf_isa = NIL;
-                                                                for (lf_isa = cdolist_list_var_96.first(); NIL != cdolist_list_var_96; cdolist_list_var_96 = cdolist_list_var_96.rest() , lf_isa = cdolist_list_var_96.first()) {
-                                                                    com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_form(lf_isa);
-                                                                    html_newline(UNPROVIDED);
-                                                                }
-                                                            }
-                                                        } else {
-                                                            html_glyph($NBSP, UNPROVIDED);
-                                                        }
-                                                    } finally {
-                                                        $html_safe_print$.rebind(_prev_bind_0_95, thread);
-                                                    }
-                                                }
-                                                html_markup($html_table_data_tail$.getGlobalValue());
-                                                html_markup($html_table_data_head$.getGlobalValue());
-                                                html_char(CHAR_greater, UNPROVIDED);
-                                                {
-                                                    SubLObject _prev_bind_0_97 = $html_safe_print$.currentBinding(thread);
-                                                    try {
-                                                        $html_safe_print$.bind(T, thread);
-                                                        html_princ(lf_ms_count);
-                                                    } finally {
-                                                        $html_safe_print$.rebind(_prev_bind_0_97, thread);
-                                                    }
-                                                }
-                                                html_markup($html_table_data_tail$.getGlobalValue());
-                                                html_markup($html_table_data_head$.getGlobalValue());
-                                                html_char(CHAR_greater, UNPROVIDED);
-                                                {
-                                                    SubLObject _prev_bind_0_98 = $html_safe_print$.currentBinding(thread);
-                                                    try {
-                                                        $html_safe_print$.bind(T, thread);
-                                                        html_arghash.html_arghash_submit_input(arghash, $$$Edit, list($COMMAND_EDIT_LF, $SKS, sks, $LS, ls, $LF, lf), UNPROVIDED);
-                                                        html_glyph($NBSP, UNPROVIDED);
-                                                        html_arghash.html_arghash_submit_input(arghash, $$$Delete, list(new SubLObject[]{ $COMMAND_EDIT_LS, $DELETE_LF, lf, $SKS, sks, $LS, ls, $LF, lf }), UNPROVIDED);
-                                                    } finally {
-                                                        $html_safe_print$.rebind(_prev_bind_0_98, thread);
-                                                    }
-                                                }
-                                                html_markup($html_table_data_tail$.getGlobalValue());
-                                            } finally {
-                                                $html_safe_print$.rebind(_prev_bind_0_93, thread);
-                                            }
-                                        }
-                                        html_markup($html_table_row_tail$.getGlobalValue());
-                                        html_source_readability_terpri(UNPROVIDED);
-                                    }
-                                }
-                            }
-                        } finally {
-                            $html_safe_print$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    html_markup($html_table_tail$.getGlobalValue());
-                } else {
-                    html_princ($str_alt132$No_fields_in_this_logical_schema_);
-                }
-                html_newline(UNPROVIDED);
-                html_arghash.html_arghash_submit_input(arghash, $$$Add_logical_field, list($COMMAND_EDIT_LF, $SKS, sks, $LS, ls), UNPROVIDED);
-                html_newline(TWO_INTEGER);
-                if (NIL != mss) {
-                    html_markup($html_bold_head$.getGlobalValue());
-                    html_princ($str_alt134$Meaning_sentences_);
-                    html_markup($html_bold_tail$.getGlobalValue());
-                    html_markup($html_table_head$.getGlobalValue());
-                    if (true) {
-                        html_markup($html_table_border$.getGlobalValue());
-                        html_char(CHAR_quotation, UNPROVIDED);
-                        html_markup(ONE_INTEGER);
-                        html_char(CHAR_quotation, UNPROVIDED);
-                    }
-                    if (true) {
-                        html_markup($html_table_cellpadding$.getGlobalValue());
-                        html_char(CHAR_quotation, UNPROVIDED);
-                        html_markup(TWO_INTEGER);
-                        html_char(CHAR_quotation, UNPROVIDED);
-                    }
-                    if (true) {
-                        html_markup($html_table_cellspacing$.getGlobalValue());
-                        html_char(CHAR_quotation, UNPROVIDED);
-                        html_markup(ZERO_INTEGER);
-                        html_char(CHAR_quotation, UNPROVIDED);
-                    }
-                    html_char(CHAR_greater, UNPROVIDED);
-                    {
-                        SubLObject _prev_bind_0 = $html_safe_print$.currentBinding(thread);
-                        try {
-                            $html_safe_print$.bind(T, thread);
-                            html_markup($html_table_row_head$.getGlobalValue());
-                            html_char(CHAR_greater, UNPROVIDED);
-                            {
-                                SubLObject _prev_bind_0_99 = $html_safe_print$.currentBinding(thread);
-                                try {
-                                    $html_safe_print$.bind(T, thread);
-                                    html_markup($html_table_header_head$.getGlobalValue());
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_100 = $html_safe_print$.currentBinding(thread);
-                                        try {
-                                            $html_safe_print$.bind(T, thread);
-                                            html_princ($$$CycL);
-                                        } finally {
-                                            $html_safe_print$.rebind(_prev_bind_0_100, thread);
-                                        }
-                                    }
-                                    html_markup($html_table_header_tail$.getGlobalValue());
-                                    html_markup($html_table_header_head$.getGlobalValue());
-                                    html_char(CHAR_greater, UNPROVIDED);
-                                    {
-                                        SubLObject _prev_bind_0_101 = $html_safe_print$.currentBinding(thread);
-                                        try {
-                                            $html_safe_print$.bind(T, thread);
-                                            html_indent(UNPROVIDED);
-                                        } finally {
-                                            $html_safe_print$.rebind(_prev_bind_0_101, thread);
-                                        }
-                                    }
-                                    html_markup($html_table_header_tail$.getGlobalValue());
-                                } finally {
-                                    $html_safe_print$.rebind(_prev_bind_0_99, thread);
-                                }
-                            }
-                            html_markup($html_table_row_tail$.getGlobalValue());
-                            html_source_readability_terpri(UNPROVIDED);
-                            {
-                                SubLObject cdolist_list_var = mss;
-                                SubLObject ms = NIL;
-                                for (ms = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ms = cdolist_list_var.first()) {
-                                    {
-                                        SubLObject ms_cycl = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_ms_get_cycl(ms);
-                                        html_markup($html_table_row_head$.getGlobalValue());
-                                        html_char(CHAR_greater, UNPROVIDED);
-                                        {
-                                            SubLObject _prev_bind_0_102 = $html_safe_print$.currentBinding(thread);
-                                            try {
-                                                $html_safe_print$.bind(T, thread);
-                                                html_markup($html_table_data_head$.getGlobalValue());
-                                                html_char(CHAR_greater, UNPROVIDED);
-                                                {
-                                                    SubLObject _prev_bind_0_103 = $html_safe_print$.currentBinding(thread);
-                                                    try {
-                                                        $html_safe_print$.bind(T, thread);
-                                                        cb_assertion_ball(ms, UNPROVIDED);
-                                                        com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_form(ms_cycl);
-                                                    } finally {
-                                                        $html_safe_print$.rebind(_prev_bind_0_103, thread);
-                                                    }
-                                                }
-                                                html_markup($html_table_data_tail$.getGlobalValue());
-                                                html_markup($html_table_data_head$.getGlobalValue());
-                                                html_char(CHAR_greater, UNPROVIDED);
-                                                {
-                                                    SubLObject _prev_bind_0_104 = $html_safe_print$.currentBinding(thread);
-                                                    try {
-                                                        $html_safe_print$.bind(T, thread);
-                                                        if (NIL != com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_ms_get_asserted(ms)) {
-                                                            html_arghash.html_arghash_submit_input(arghash, $$$Edit, list($COMMAND_EDIT_MS, $SKS, sks, $LS, ls, $MS, ms), UNPROVIDED);
-                                                            html_glyph($NBSP, UNPROVIDED);
-                                                            html_arghash.html_arghash_submit_input(arghash, $$$Delete, list(new SubLObject[]{ $COMMAND_EDIT_LS, $DELETE_MS, ms, $SKS, sks, $LS, ls, $MS, ms }), UNPROVIDED);
-                                                        } else {
-                                                            html_glyph($NBSP, UNPROVIDED);
-                                                        }
-                                                    } finally {
-                                                        $html_safe_print$.rebind(_prev_bind_0_104, thread);
-                                                    }
-                                                }
-                                                html_markup($html_table_data_tail$.getGlobalValue());
-                                            } finally {
-                                                $html_safe_print$.rebind(_prev_bind_0_102, thread);
-                                            }
-                                        }
-                                        html_markup($html_table_row_tail$.getGlobalValue());
-                                        html_source_readability_terpri(UNPROVIDED);
-                                    }
-                                }
-                            }
-                        } finally {
-                            $html_safe_print$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    html_markup($html_table_tail$.getGlobalValue());
-                } else {
-                    html_princ($str_alt138$No_meaning_sentences_in_this_logi);
-                }
-                html_newline(UNPROVIDED);
-                html_arghash.html_arghash_submit_input(arghash, $$$Add_meaning_sentence, list($COMMAND_EDIT_MS, $SKS, sks, $LS, ls), UNPROVIDED);
-                html_newline(TWO_INTEGER);
-                html_arghash.html_arghash_submit_input(arghash, $$$OK, $OK, UNPROVIDED);
-                html_indent(UNPROVIDED);
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject sksi_smt_edit_ls_page(final SubLObject arghash) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         html_arghash.html_arghash_hidden_input(arghash, $ON_EDIT_LS, T, UNPROVIDED);
@@ -6050,28 +3667,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject sksi_smt_edit_ls_actions_alt(SubLObject arghash) {
-        {
-            SubLObject sks = html_arghash.get_arghash_value($SKS, arghash);
-            SubLObject ls = html_arghash.get_arghash_value($LS, arghash);
-            SubLObject lf = html_arghash.get_arghash_value($LF, arghash);
-            SubLObject ms = html_arghash.get_arghash_value($MS, arghash);
-            if (NIL != html_arghash.get_arghash_value($DELETE_LF, arghash)) {
-                html_arghash.rem_arghash_value($DELETE_LF, arghash);
-                html_arghash.rem_arghash_value($LF, arghash);
-                sksi_kill(lf);
-            }
-            if (NIL != html_arghash.get_arghash_value($DELETE_MS, arghash)) {
-                html_arghash.rem_arghash_value($DELETE_MS, arghash);
-                sksi_unassert(make_binary_formula($$meaningSentenceOfSchema, ls, ms), com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_get_logical_schemabase_mt(sks));
-            }
-        }
-        if (NIL != html_arghash.get_arghash_value($OK, arghash)) {
-            html_arghash.set_arghash_value($TO_EDIT_SKS, arghash, T);
-        }
-        return arghash;
-    }
-
     public static SubLObject sksi_smt_edit_ls_actions(final SubLObject arghash) {
         final SubLObject lf = html_arghash.get_arghash_value($LF, arghash);
         final SubLObject ms = html_arghash.get_arghash_value($MS, arghash);
@@ -6089,95 +3684,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
             html_arghash.set_arghash_value($TO_EDIT_SKS, arghash, T);
         }
         return arghash;
-    }
-
-    public static final SubLObject sksi_smt_edit_lf_page_alt(SubLObject arghash) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            html_arghash.html_arghash_hidden_input(arghash, $ON_EDIT_LF, T, UNPROVIDED);
-            {
-                SubLObject sks = html_arghash.get_arghash_value($SKS, arghash);
-                SubLObject ls = html_arghash.get_arghash_value($LS, arghash);
-                SubLObject lf = html_arghash.get_arghash_value($LF, arghash);
-                html_arghash.html_arghash_hidden_input(arghash, $SKS, sks, UNPROVIDED);
-                html_arghash.html_arghash_hidden_input(arghash, $LS, sks, UNPROVIDED);
-                if (NIL == lf) {
-                    lf = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.new_logical_field(sks, ls);
-                }
-                html_arghash.html_arghash_hidden_input(arghash, $LF, lf, UNPROVIDED);
-                html_markup($html_heading_head$.getGlobalValue());
-                html_markup(FOUR_INTEGER);
-                html_char(CHAR_greater, UNPROVIDED);
-                html_princ($str_alt141$Edit_Logical_Field__);
-                com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_form(sks);
-                html_princ($str_alt117$___);
-                com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_arghash_form(arghash, ls);
-                html_princ($str_alt117$___);
-                com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_arghash_form(arghash, lf);
-                html_markup($html_heading_tail$.getGlobalValue());
-                html_markup(FOUR_INTEGER);
-                html_char(CHAR_greater, UNPROVIDED);
-                if (NIL != nart_p(lf)) {
-                    html_markup($html_font_head$.getGlobalValue());
-                    if (NIL != $html_color_sat_red$.getDynamicValue(thread)) {
-                        html_markup($html_font_color$.getGlobalValue());
-                        html_char(CHAR_quotation, UNPROVIDED);
-                        html_markup(html_color($html_color_sat_red$.getDynamicValue(thread)));
-                        html_char(CHAR_quotation, UNPROVIDED);
-                    }
-                    html_char(CHAR_greater, UNPROVIDED);
-                    {
-                        SubLObject _prev_bind_0 = $html_safe_print$.currentBinding(thread);
-                        try {
-                            $html_safe_print$.bind(T, thread);
-                            html_princ($str_alt142$Editing_this_field_will_automatic);
-                        } finally {
-                            $html_safe_print$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    html_markup($html_font_tail$.getGlobalValue());
-                    html_newline(TWO_INTEGER);
-                }
-                {
-                    SubLObject lf_cycl = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_lf_get_cycl(lf);
-                    SubLObject lf_isas = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_lf_get_isas(lf);
-                    html_markup($html_bold_head$.getGlobalValue());
-                    html_princ($str_alt143$Logical_field_);
-                    com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_arghash_form(arghash, lf_cycl);
-                    html_markup($html_bold_tail$.getGlobalValue());
-                    html_newline(TWO_INTEGER);
-                    html_markup($html_bold_head$.getGlobalValue());
-                    html_princ($$$Field_isa);
-                    html_markup($html_bold_tail$.getGlobalValue());
-                    html_newline(UNPROVIDED);
-                    html_markup($html_blockquote_head$.getGlobalValue());
-                    {
-                        SubLObject cdolist_list_var = lf_isas;
-                        SubLObject lf_isa = NIL;
-                        for (lf_isa = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , lf_isa = cdolist_list_var.first()) {
-                            html_arghash.html_arghash_hidden_input(arghash, $ISA, lf_isa, UNPROVIDED);
-                            html_arghash.html_arghash_fort_input(arghash, $NEW_ISA, lf_isa, $int$30, $$$Complete, $$Collection);
-                            html_glyph($NBSP, UNPROVIDED);
-                            html_arghash.html_arghash_submit_input(arghash, $$$Change, $OK, UNPROVIDED);
-                            html_glyph($NBSP, UNPROVIDED);
-                            html_arghash.html_arghash_submit_input(arghash, $$$Delete, list(new SubLObject[]{ $COMMAND_EDIT_LF, $REMOVE_ISA, T, $REMOVED_ISA, lf_isa, $SKS, sks, $LS, ls }), UNPROVIDED);
-                            html_newline(UNPROVIDED);
-                        }
-                    }
-                    html_arghash.html_arghash_fort_input(arghash, $ADDED_ISA, NIL, $int$30, $$$Complete, $$Collection);
-                    html_glyph($NBSP, UNPROVIDED);
-                    html_arghash.html_arghash_submit_input(arghash, $$$Add_isa, list($COMMAND_EDIT_LF, $ADD_ISA, T, $SKS, sks, $LS, ls), UNPROVIDED);
-                    html_markup($html_blockquote_tail$.getGlobalValue());
-                }
-                html_newline(UNPROVIDED);
-                html_arghash.html_arghash_submit_input(arghash, $$$Refresh, $REFRESH, UNPROVIDED);
-                html_indent(UNPROVIDED);
-                html_arghash.html_arghash_submit_input(arghash, $$$OK, $OK, UNPROVIDED);
-                html_indent(UNPROVIDED);
-                html_arghash.html_arghash_submit_input(arghash, $$$Cancel, $TO_EDIT_LS, UNPROVIDED);
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject sksi_smt_edit_lf_page(final SubLObject arghash) {
@@ -6262,75 +3768,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject sksi_smt_edit_lf_actions_alt(SubLObject arghash) {
-        {
-            SubLObject sks = html_arghash.get_arghash_value($SKS, arghash);
-            SubLObject ls = html_arghash.get_arghash_value($LS, arghash);
-            SubLObject lf = html_arghash.get_arghash_value($LF, arghash);
-            SubLObject lsb_mt = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_get_logical_schemabase_mt(sks);
-            SubLObject isas = html_arghash.get_arghash_value_list($ISA, arghash);
-            SubLObject new_isas = html_arghash.get_arghash_value_list($NEW_ISA, arghash);
-            html_arghash.rem_arghash_value($ISA, arghash);
-            html_arghash.rem_arghash_value($NEW_ISA, arghash);
-            {
-                SubLObject unassert_isas = set_difference(isas, new_isas, UNPROVIDED, UNPROVIDED);
-                SubLObject assert_isas = set_difference(new_isas, isas, UNPROVIDED, UNPROVIDED);
-                if (((NIL != unassert_isas) || (NIL != assert_isas)) && (NIL != nart_p(lf))) {
-                    lf = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_lf_convert_to_constant(sks, ls, lf);
-                    html_arghash.set_arghash_value($LF, arghash, lf);
-                }
-                {
-                    SubLObject cdolist_list_var = unassert_isas;
-                    SubLObject unassert_isa = NIL;
-                    for (unassert_isa = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , unassert_isa = cdolist_list_var.first()) {
-                        sksi_unassert(make_binary_formula($$fieldIsa, lf, unassert_isa), lsb_mt);
-                    }
-                }
-                {
-                    SubLObject cdolist_list_var = assert_isas;
-                    SubLObject assert_isa = NIL;
-                    for (assert_isa = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , assert_isa = cdolist_list_var.first()) {
-                        sksi_assert_if_new(make_binary_formula($$fieldIsa, lf, assert_isa), lsb_mt);
-                    }
-                }
-            }
-            if (NIL != html_arghash.get_arghash_value($REMOVE_ISA, arghash)) {
-                html_arghash.rem_arghash_value($REMOVE_ISA, arghash);
-                if (NIL != nart_p(lf)) {
-                    lf = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_lf_convert_to_constant(sks, ls, lf);
-                    html_arghash.set_arghash_value($LF, arghash, lf);
-                }
-                {
-                    SubLObject removed_isa = html_arghash.get_arghash_value($REMOVED_ISA, arghash);
-                    html_arghash.rem_arghash_value($REMOVED_ISA, arghash);
-                    sksi_unassert(make_binary_formula($$fieldIsa, lf, removed_isa), lsb_mt);
-                }
-            }
-            if (NIL != html_arghash.get_arghash_value($ADD_ISA, arghash)) {
-                html_arghash.rem_arghash_value($ADD_ISA, arghash);
-                if (NIL != nart_p(lf)) {
-                    lf = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_lf_convert_to_constant(sks, ls, lf);
-                    html_arghash.set_arghash_value($LF, arghash, lf);
-                }
-                {
-                    SubLObject isa_col = html_arghash.get_arghash_value($ADDED_ISA, arghash);
-                    html_arghash.rem_arghash_value($ADDED_ISA, arghash);
-                    if (NIL != isa_col) {
-                        sksi_assert_if_new(make_binary_formula($$fieldIsa, lf, isa_col), lsb_mt);
-                    }
-                }
-            }
-        }
-        if (NIL != html_arghash.get_arghash_value($REFRESH, arghash)) {
-            html_arghash.set_arghash_value($TO_EDIT_LF, arghash, T);
-        } else {
-            if (NIL != html_arghash.get_arghash_value($OK, arghash)) {
-                html_arghash.set_arghash_value($TO_EDIT_LS, arghash, T);
-            }
-        }
-        return arghash;
-    }
-
     public static SubLObject sksi_smt_edit_lf_actions(final SubLObject arghash) {
         final SubLObject sks = html_arghash.get_arghash_value($SKS, arghash);
         final SubLObject ls = html_arghash.get_arghash_value($LS, arghash);
@@ -6392,99 +3829,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
             }
 
         return arghash;
-    }
-
-    public static final SubLObject sksi_smt_edit_ts_page_alt(SubLObject arghash) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            html_arghash.html_arghash_hidden_input(arghash, $ON_EDIT_TS, T, UNPROVIDED);
-            {
-                SubLObject sks = html_arghash.get_arghash_value($SKS, arghash);
-                SubLObject ps = html_arghash.get_arghash_value($PS, arghash);
-                SubLObject ls = html_arghash.get_arghash_value($LS, arghash);
-                html_arghash.html_arghash_hidden_input(arghash, $SKS, sks, UNPROVIDED);
-                html_arghash.html_arghash_hidden_input(arghash, $PS, ps, UNPROVIDED);
-                html_arghash.html_arghash_hidden_input(arghash, $LS, ls, UNPROVIDED);
-                html_markup($html_heading_head$.getGlobalValue());
-                html_markup(FOUR_INTEGER);
-                html_char(CHAR_greater, UNPROVIDED);
-                html_princ($str_alt156$Edit_Translation_Schema__);
-                com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_form(sks);
-                html_princ($str_alt117$___);
-                com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_arghash_form(arghash, ps);
-                {
-                    SubLObject this_arghash = hash_table_utilities.copy_hashtable(arghash, UNPROVIDED);
-                    html_arghash.set_arghash_value(list($COMMAND_EDIT_TS, T), this_arghash, T);
-                    {
-                        SubLObject href = format(NIL, $str_alt157$_A__A, $cyc_cgi_program$.getDynamicValue(thread), html_arghash.html_arghash_href(this_arghash, $str_alt2$sksi_smt));
-                        html_markup($html_anchor_head$.getGlobalValue());
-                        html_markup($html_anchor_href$.getGlobalValue());
-                        html_char(CHAR_quotation, UNPROVIDED);
-                        html_markup(href);
-                        html_char(CHAR_quotation, UNPROVIDED);
-                        html_char(CHAR_greater, UNPROVIDED);
-                        {
-                            SubLObject _prev_bind_0 = $html_safe_print$.currentBinding(thread);
-                            try {
-                                $html_safe_print$.bind(T, thread);
-                                html_princ($str_alt158$___);
-                            } finally {
-                                $html_safe_print$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                        html_markup($html_anchor_tail$.getGlobalValue());
-                    }
-                }
-                com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_arghash_form(arghash, ls);
-                html_markup($html_heading_tail$.getGlobalValue());
-                html_markup(FOUR_INTEGER);
-                html_char(CHAR_greater, UNPROVIDED);
-                html_markup($html_font_head$.getGlobalValue());
-                if (NIL != $html_color_sat_red$.getDynamicValue(thread)) {
-                    html_markup($html_font_color$.getGlobalValue());
-                    html_char(CHAR_quotation, UNPROVIDED);
-                    html_markup(html_color($html_color_sat_red$.getDynamicValue(thread)));
-                    html_char(CHAR_quotation, UNPROVIDED);
-                }
-                html_char(CHAR_greater, UNPROVIDED);
-                {
-                    SubLObject _prev_bind_0 = $html_safe_print$.currentBinding(thread);
-                    try {
-                        $html_safe_print$.bind(T, thread);
-                        html_princ($str_alt159$_note__editing_is_not_yet_enabled);
-                    } finally {
-                        $html_safe_print$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                html_markup($html_font_tail$.getGlobalValue());
-                thread.resetMultipleValues();
-                {
-                    SubLObject translation_pairs = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_sks_get_translations(sks, ps, ls);
-                    SubLObject encodings_only = thread.secondMultipleValue();
-                    SubLObject decodings_only = thread.thirdMultipleValue();
-                    thread.resetMultipleValues();
-                    html_markup($html_table_head$.getGlobalValue());
-                    html_char(CHAR_greater, UNPROVIDED);
-                    {
-                        SubLObject _prev_bind_0 = $html_safe_print$.currentBinding(thread);
-                        try {
-                            $html_safe_print$.bind(T, thread);
-                            {
-                                SubLObject cdolist_list_var = translation_pairs;
-                                SubLObject translation_pair = NIL;
-                                for (translation_pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , translation_pair = cdolist_list_var.first()) {
-                                    com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.html_sksi_show_translation(arghash, translation_pair);
-                                }
-                            }
-                        } finally {
-                            $html_safe_print$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                    html_markup($html_table_tail$.getGlobalValue());
-                }
-            }
-            return arghash;
-        }
     }
 
     public static SubLObject sksi_smt_edit_ts_page(final SubLObject arghash) {
@@ -6563,192 +3907,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         }
         html_markup(html_macros.$html_table_tail$.getGlobalValue());
         return arghash;
-    }
-
-    public static final SubLObject html_sksi_show_translation_alt(SubLObject arghash, SubLObject translation) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject physical_field = NIL;
-                SubLObject logical_field = NIL;
-                SubLObject encoding = NIL;
-                SubLObject decoding = NIL;
-                SubLObject decoding_formula = NIL;
-                SubLObject encoding_formula = NIL;
-                if (translation.isList()) {
-                    encoding = translation.first();
-                    decoding = second(translation);
-                    physical_field = sentence_arg2(assertion_el_formula(encoding), UNPROVIDED);
-                    logical_field = sentence_arg2(assertion_el_formula(decoding), UNPROVIDED);
-                    decoding_formula = sentence_arg4(assertion_el_formula(decoding), UNPROVIDED);
-                    encoding_formula = sentence_arg4(assertion_el_formula(encoding), UNPROVIDED);
-                } else {
-                    if (sentence_arg0(translation) == $$fieldEncoding) {
-                        {
-                            SubLObject encoding_105 = assertion_el_formula(translation);
-                            physical_field = sentence_arg2(encoding_105, UNPROVIDED);
-                            encoding_formula = sentence_arg4(encoding_105, UNPROVIDED);
-                        }
-                    } else {
-                        if (sentence_arg0(translation) == $$fieldDecoding) {
-                            {
-                                SubLObject decoding_106 = assertion_el_formula(translation);
-                                logical_field = sentence_arg2(decoding_106, UNPROVIDED);
-                                decoding_formula = sentence_arg4(decoding_106, UNPROVIDED);
-                            }
-                        }
-                    }
-                }
-                html_markup($html_table_row_head$.getGlobalValue());
-                html_char(CHAR_greater, UNPROVIDED);
-                {
-                    SubLObject _prev_bind_0 = $html_safe_print$.currentBinding(thread);
-                    try {
-                        $html_safe_print$.bind(T, thread);
-                        html_markup($html_table_data_head$.getGlobalValue());
-                        if (true) {
-                            html_markup($html_table_data_align$.getGlobalValue());
-                            html_char(CHAR_quotation, UNPROVIDED);
-                            html_markup(html_align($RIGHT));
-                            html_char(CHAR_quotation, UNPROVIDED);
-                        }
-                        html_char(CHAR_greater, UNPROVIDED);
-                        {
-                            SubLObject _prev_bind_0_107 = $html_safe_print$.currentBinding(thread);
-                            try {
-                                $html_safe_print$.bind(T, thread);
-                                com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_form(physical_field);
-                            } finally {
-                                $html_safe_print$.rebind(_prev_bind_0_107, thread);
-                            }
-                        }
-                        html_markup($html_table_data_tail$.getGlobalValue());
-                        html_markup($html_table_data_head$.getGlobalValue());
-                        if (true) {
-                            html_markup($html_table_data_rowspan$.getGlobalValue());
-                            html_char(CHAR_quotation, UNPROVIDED);
-                            html_markup(TWO_INTEGER);
-                            html_char(CHAR_quotation, UNPROVIDED);
-                        }
-                        if (true) {
-                            html_markup($html_table_data_align$.getGlobalValue());
-                            html_char(CHAR_quotation, UNPROVIDED);
-                            html_markup(html_align($CENTER));
-                            html_char(CHAR_quotation, UNPROVIDED);
-                        }
-                        if (true) {
-                            html_markup($html_table_data_valign$.getGlobalValue());
-                            html_char(CHAR_quotation, UNPROVIDED);
-                            html_markup(html_align($TOP));
-                            html_char(CHAR_quotation, UNPROVIDED);
-                        }
-                        html_char(CHAR_greater, UNPROVIDED);
-                        {
-                            SubLObject _prev_bind_0_108 = $html_safe_print$.currentBinding(thread);
-                            try {
-                                $html_safe_print$.bind(T, thread);
-                                html_princ($str_alt163$___);
-                                html_newline(UNPROVIDED);
-                                cb_assertion_ball(decoding, UNPROVIDED);
-                                cb_assertion_ball(encoding, UNPROVIDED);
-                            } finally {
-                                $html_safe_print$.rebind(_prev_bind_0_108, thread);
-                            }
-                        }
-                        html_markup($html_table_data_tail$.getGlobalValue());
-                        html_markup($html_table_data_head$.getGlobalValue());
-                        if (true) {
-                            html_markup($html_table_data_align$.getGlobalValue());
-                            html_char(CHAR_quotation, UNPROVIDED);
-                            html_markup(html_align($LEFT));
-                            html_char(CHAR_quotation, UNPROVIDED);
-                        }
-                        html_char(CHAR_greater, UNPROVIDED);
-                        {
-                            SubLObject _prev_bind_0_109 = $html_safe_print$.currentBinding(thread);
-                            try {
-                                $html_safe_print$.bind(T, thread);
-                                com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_form(logical_field);
-                            } finally {
-                                $html_safe_print$.rebind(_prev_bind_0_109, thread);
-                            }
-                        }
-                        html_markup($html_table_data_tail$.getGlobalValue());
-                    } finally {
-                        $html_safe_print$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                html_markup($html_table_row_tail$.getGlobalValue());
-                html_source_readability_terpri(UNPROVIDED);
-                html_markup($html_table_row_head$.getGlobalValue());
-                html_char(CHAR_greater, UNPROVIDED);
-                {
-                    SubLObject _prev_bind_0 = $html_safe_print$.currentBinding(thread);
-                    try {
-                        $html_safe_print$.bind(T, thread);
-                        html_markup($html_table_data_head$.getGlobalValue());
-                        html_char(CHAR_greater, UNPROVIDED);
-                        {
-                            SubLObject _prev_bind_0_110 = $html_safe_print$.currentBinding(thread);
-                            try {
-                                $html_safe_print$.bind(T, thread);
-                                html_arghash.html_arghash_sentence_input(arghash, $DECODING_FORMULA, decoding_formula, THREE_INTEGER, $int$50, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                            } finally {
-                                $html_safe_print$.rebind(_prev_bind_0_110, thread);
-                            }
-                        }
-                        html_markup($html_table_data_tail$.getGlobalValue());
-                        html_markup($html_table_data_head$.getGlobalValue());
-                        html_char(CHAR_greater, UNPROVIDED);
-                        {
-                            SubLObject _prev_bind_0_111 = $html_safe_print$.currentBinding(thread);
-                            try {
-                                $html_safe_print$.bind(T, thread);
-                                html_arghash.html_arghash_sentence_input(arghash, $ENCODING_FORMULA, encoding_formula, THREE_INTEGER, $int$50, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                            } finally {
-                                $html_safe_print$.rebind(_prev_bind_0_111, thread);
-                            }
-                        }
-                        html_markup($html_table_data_tail$.getGlobalValue());
-                    } finally {
-                        $html_safe_print$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                html_markup($html_table_row_tail$.getGlobalValue());
-                html_source_readability_terpri(UNPROVIDED);
-                html_markup($html_table_row_head$.getGlobalValue());
-                html_char(CHAR_greater, UNPROVIDED);
-                {
-                    SubLObject _prev_bind_0 = $html_safe_print$.currentBinding(thread);
-                    try {
-                        $html_safe_print$.bind(T, thread);
-                        html_markup($html_table_data_head$.getGlobalValue());
-                        if (true) {
-                            html_markup($html_table_data_colspan$.getGlobalValue());
-                            html_char(CHAR_quotation, UNPROVIDED);
-                            html_markup(FIVE_INTEGER);
-                            html_char(CHAR_quotation, UNPROVIDED);
-                        }
-                        html_char(CHAR_greater, UNPROVIDED);
-                        {
-                            SubLObject _prev_bind_0_112 = $html_safe_print$.currentBinding(thread);
-                            try {
-                                $html_safe_print$.bind(T, thread);
-                                html_glyph($NBSP, UNPROVIDED);
-                            } finally {
-                                $html_safe_print$.rebind(_prev_bind_0_112, thread);
-                            }
-                        }
-                        html_markup($html_table_data_tail$.getGlobalValue());
-                    } finally {
-                        $html_safe_print$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                html_markup($html_table_row_tail$.getGlobalValue());
-                html_source_readability_terpri(UNPROVIDED);
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject html_sksi_show_translation(final SubLObject arghash, final SubLObject translation) {
@@ -6899,15 +4057,7 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject sksi_smt_edit_ts_actions_alt(SubLObject arghash) {
-        return NIL;
-    }
-
     public static SubLObject sksi_smt_edit_ts_actions(final SubLObject arghash) {
-        return NIL;
-    }
-
-    public static final SubLObject sksi_smt_edit_t_page_alt(SubLObject arghash) {
         return NIL;
     }
 
@@ -6915,45 +4065,8 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject sksi_smt_edit_t_actions_alt(SubLObject arghash) {
-        return arghash;
-    }
-
     public static SubLObject sksi_smt_edit_t_actions(final SubLObject arghash) {
         return arghash;
-    }
-
-    public static final SubLObject sksi_smt_edit_ms_page_alt(SubLObject arghash) {
-        html_arghash.html_arghash_hidden_input(arghash, $ON_EDIT_MS, T, UNPROVIDED);
-        {
-            SubLObject sks = html_arghash.get_arghash_value($SKS, arghash);
-            SubLObject ls = html_arghash.get_arghash_value($LS, arghash);
-            SubLObject ms = html_arghash.get_arghash_value($MS, arghash);
-            SubLObject ms_formula = (NIL != ms) ? ((SubLObject) (assertion_el_formula(ms))) : NIL;
-            html_arghash.html_arghash_hidden_input(arghash, $SKS, sks, UNPROVIDED);
-            html_arghash.html_arghash_hidden_input(arghash, $LS, ls, UNPROVIDED);
-            html_arghash.html_arghash_hidden_input(arghash, $MS, ms, UNPROVIDED);
-            html_markup($html_heading_head$.getGlobalValue());
-            html_markup(FOUR_INTEGER);
-            html_char(CHAR_greater, UNPROVIDED);
-            html_princ($str_alt167$Edit_Meaning_Sentence_in__);
-            com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_form(sks);
-            html_princ($str_alt117$___);
-            com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_arghash_form(arghash, ls);
-            html_markup($html_heading_tail$.getGlobalValue());
-            html_markup(FOUR_INTEGER);
-            html_char(CHAR_greater, UNPROVIDED);
-            if (NIL != ms_formula) {
-                html_arghash.html_arghash_sentence_input(arghash, $MS_FORMULA, ms_formula, TEN_INTEGER, $int$60, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            } else {
-                html_arghash.html_arghash_textarea_input(arghash, $MS_FORMULA, cconcatenate($str_alt170$_, new SubLObject[]{ format_nil_a_no_copy($$meaningSentenceOfSchema), $str_alt171$_, format_nil_a_no_copy(ls), $str_alt172$_____enter_sentence_here__ }), $int$60, TEN_INTEGER, T, $EL_FORMULA);
-            }
-            html_newline(UNPROVIDED);
-            html_arghash.html_arghash_submit_input(arghash, $$$OK, $OK, UNPROVIDED);
-            html_indent(UNPROVIDED);
-            html_arghash.html_arghash_submit_input(arghash, $$$Cancel, list($COMMAND_EDIT_MS, $SKS, sks, $LS, ls), UNPROVIDED);
-        }
-        return NIL;
     }
 
     public static SubLObject sksi_smt_edit_ms_page(final SubLObject arghash) {
@@ -6990,44 +4103,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         html_indent(UNPROVIDED);
         html_arghash.html_arghash_submit_input(arghash, $$$Cancel, list($COMMAND_EDIT_MS, $SKS, sks, $LS, ls), UNPROVIDED);
         return NIL;
-    }
-
-    public static final SubLObject sksi_smt_edit_ms_actions_alt(SubLObject arghash) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != html_arghash.get_arghash_value($OK, arghash)) {
-                html_arghash.rem_arghash_value($OK, arghash);
-                html_arghash.set_arghash_value($TO_EDIT_LS, arghash, T);
-                {
-                    SubLObject ms = html_arghash.get_arghash_value($MS, arghash);
-                    SubLObject old_ms_formula = assertion_el_formula(ms);
-                    SubLObject ms_formula = html_arghash.get_arghash_value($MS_FORMULA, arghash);
-                    if (NIL == ms_formula) {
-                        html_arghash.push_arghash_value($ERROR, list($NULL_FORMULA, $str_alt175$Formula_invalid_), arghash);
-                    } else {
-                        if (old_ms_formula.equal(ms_formula)) {
-                            html_arghash.push_arghash_value($ERROR, list($NULL_FORMULA, $str_alt176$Formula_wasn_t_changed_), arghash);
-                        } else {
-                            thread.resetMultipleValues();
-                            {
-                                SubLObject result = sksi_edit_assertion(ms, ms_formula);
-                                SubLObject error = thread.secondMultipleValue();
-                                thread.resetMultipleValues();
-                                if (NIL != error) {
-                                    html_arghash.push_arghash_value($ERROR, error, arghash);
-                                }
-                            }
-                        }
-                    }
-                }
-            } else {
-                if (NIL != html_arghash.get_arghash_value($CANCEL, arghash)) {
-                    html_arghash.rem_arghash_value($OK, arghash);
-                    html_arghash.set_arghash_value($TO_EDIT_LS, arghash, T);
-                }
-            }
-            return arghash;
-        }
     }
 
     public static SubLObject sksi_smt_edit_ms_actions(final SubLObject arghash) {
@@ -7349,29 +4424,13 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return arghash;
     }
 
-    public static final SubLObject sks_get_sd_alt(SubLObject sks) {
-        SubLTrampolineFile.checkType(sks, SKS_P);
-        return sksi_sks_accessors.sks_fget(sks, $$sksSourceDescriptionMt, $$UniversalVocabularyMt);
-    }
-
     public static SubLObject sks_get_sd(final SubLObject sks) {
-        assert NIL != sksi_sks_accessors.sks_p(sks) : "! sksi_sks_accessors.sks_p(sks) " + ("sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) ") + sks;
+        assert NIL != sksi_sks_accessors.sks_p(sks) : "sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) " + sks;
         return sksi_sks_accessors.sks_fget(sks, $$sksSourceDescriptionMt, $$UniversalVocabularyMt);
-    }
-
-    public static final SubLObject sks_get_source_description_mt_alt(SubLObject sks) {
-        SubLTrampolineFile.checkType(sks, SKS_P);
-        {
-            SubLObject sd = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_get_sd(sks);
-            if (NIL != sd) {
-                return com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_sd_get_mt(sd);
-            }
-        }
-        return NIL;
     }
 
     public static SubLObject sks_get_source_description_mt(final SubLObject sks) {
-        assert NIL != sksi_sks_accessors.sks_p(sks) : "! sksi_sks_accessors.sks_p(sks) " + ("sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) ") + sks;
+        assert NIL != sksi_sks_accessors.sks_p(sks) : "sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) " + sks;
         final SubLObject sd = sks_get_sd(sks);
         if (NIL != sd) {
             return sksi_sd_get_mt(sd);
@@ -7379,19 +4438,8 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject sks_new_sd_alt(SubLObject sks) {
-        SubLTrampolineFile.checkType(sks, SKS_P);
-        {
-            SubLObject sks_string = sksi_sks_accessors.sks_get_string(sks);
-            SubLObject new_sd = sksi_find_or_create(cconcatenate(string_utilities.post_remove(sks_string, $str_alt180$_KS, UNPROVIDED), $$$SourceMt));
-            sksi_assert_if_new(make_binary_formula($$isa, new_sd, $$SKSISourceDescriptionMicrotheory), $$UniversalVocabularyMt);
-            sksi_sks_accessors.sks_fset(sks, $$sksSourceDescriptionMt, new_sd, $$UniversalVocabularyMt);
-            return new_sd;
-        }
-    }
-
     public static SubLObject sks_new_sd(final SubLObject sks) {
-        assert NIL != sksi_sks_accessors.sks_p(sks) : "! sksi_sks_accessors.sks_p(sks) " + ("sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) ") + sks;
+        assert NIL != sksi_sks_accessors.sks_p(sks) : "sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) " + sks;
         final SubLObject new_sd = make_unary_formula($$MappingMtFn, sks);
         sksi_kb_accessors.sksi_assert_if_new(make_binary_formula($$isa, new_sd, $$SKSISourceDescriptionMicrotheory), $$UniversalVocabularyMt);
         sksi_sks_accessors.sks_fset(sks, $$sksSourceDescriptionMt, new_sd, $$UniversalVocabularyMt);
@@ -7402,27 +4450,12 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return new_sd;
     }
 
-    public static final SubLObject sks_get_psb_alt(SubLObject sks) {
-        return sksi_sks_accessors.sks_fget(sks, $$sksPhysicalSchemaDescriptionMt, $$UniversalVocabularyMt);
-    }
-
     public static SubLObject sks_get_psb(final SubLObject sks) {
         return sksi_sks_accessors.sks_fget(sks, $$sksPhysicalSchemaDescriptionMt, $$UniversalVocabularyMt);
     }
 
-    public static final SubLObject sks_get_physical_schemabase_mt_alt(SubLObject sks) {
-        SubLTrampolineFile.checkType(sks, SKS_P);
-        {
-            SubLObject psb = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_get_psb(sks);
-            if (NIL != psb) {
-                return com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_psb_get_mt(psb);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject sks_get_physical_schemabase_mt(final SubLObject sks) {
-        assert NIL != sksi_sks_accessors.sks_p(sks) : "! sksi_sks_accessors.sks_p(sks) " + ("sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) ") + sks;
+        assert NIL != sksi_sks_accessors.sks_p(sks) : "sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) " + sks;
         final SubLObject psb = sks_get_psb(sks);
         if (NIL != psb) {
             return sksi_psb_get_mt(psb);
@@ -7430,20 +4463,8 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject sks_new_psb_alt(SubLObject sks) {
-        SubLTrampolineFile.checkType(sks, SKS_P);
-        {
-            SubLObject sks_string = sksi_sks_accessors.sks_get_string(sks);
-            SubLObject new_psb = sksi_find_or_create(cconcatenate(string_utilities.post_remove(sks_string, $str_alt180$_KS, UNPROVIDED), $$$PhysicalSchemaMt));
-            sksi_assert_if_new(make_binary_formula($$isa, new_psb, $const185$SKSIPhysicalSchemaDescriptionMicr), $$UniversalVocabularyMt);
-            sksi_assert_if_new(make_binary_formula($$genlMt, new_psb, $$SKSIMt), $$UniversalVocabularyMt);
-            sksi_sks_accessors.sks_fset(sks, $$sksPhysicalSchemaDescriptionMt, new_psb, $$UniversalVocabularyMt);
-            return new_psb;
-        }
-    }
-
     public static SubLObject sks_new_psb(final SubLObject sks) {
-        assert NIL != sksi_sks_accessors.sks_p(sks) : "! sksi_sks_accessors.sks_p(sks) " + ("sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) ") + sks;
+        assert NIL != sksi_sks_accessors.sks_p(sks) : "sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) " + sks;
         final SubLObject sks_string = sksi_sks_accessors.sks_get_string(sks);
         final SubLObject new_psb = sksi_kb_accessors.sksi_find_or_create(cconcatenate(string_utilities.post_remove(sks_string, $str304$_KS, UNPROVIDED), $$$PhysicalSchemaMt));
         sksi_kb_accessors.sksi_assert_if_new(make_binary_formula($$isa, new_psb, $const306$SKSIPhysicalSchemaDescriptionMicr), $$UniversalVocabularyMt);
@@ -7456,29 +4477,13 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return new_psb;
     }
 
-    public static final SubLObject sks_get_lsb_alt(SubLObject sks) {
-        SubLTrampolineFile.checkType(sks, SKS_P);
-        return sksi_sks_accessors.sks_fget(sks, $$sksLogicalSchemaDescriptionMt, $$UniversalVocabularyMt);
-    }
-
     public static SubLObject sks_get_lsb(final SubLObject sks) {
-        assert NIL != sksi_sks_accessors.sks_p(sks) : "! sksi_sks_accessors.sks_p(sks) " + ("sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) ") + sks;
+        assert NIL != sksi_sks_accessors.sks_p(sks) : "sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) " + sks;
         return sksi_sks_accessors.sks_fget(sks, $$sksLogicalSchemaDescriptionMt, $$UniversalVocabularyMt);
-    }
-
-    public static final SubLObject sks_get_logical_schemabase_mt_alt(SubLObject sks) {
-        SubLTrampolineFile.checkType(sks, SKS_P);
-        {
-            SubLObject lsb = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_get_lsb(sks);
-            if (NIL != lsb) {
-                return com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_lsb_get_mt(lsb);
-            }
-        }
-        return NIL;
     }
 
     public static SubLObject sks_get_logical_schemabase_mt(final SubLObject sks) {
-        assert NIL != sksi_sks_accessors.sks_p(sks) : "! sksi_sks_accessors.sks_p(sks) " + ("sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) ") + sks;
+        assert NIL != sksi_sks_accessors.sks_p(sks) : "sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) " + sks;
         final SubLObject lsb = sks_get_lsb(sks);
         if (NIL != lsb) {
             return sksi_lsb_get_mt(lsb);
@@ -7486,29 +4491,13 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject sks_get_tsb_alt(SubLObject sks) {
-        SubLTrampolineFile.checkType(sks, SKS_P);
-        return sksi_sks_accessors.sks_fget(sks, $$sksSchemaTranslationMt, $$UniversalVocabularyMt);
-    }
-
     public static SubLObject sks_get_tsb(final SubLObject sks) {
-        assert NIL != sksi_sks_accessors.sks_p(sks) : "! sksi_sks_accessors.sks_p(sks) " + ("sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) ") + sks;
+        assert NIL != sksi_sks_accessors.sks_p(sks) : "sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) " + sks;
         return sksi_sks_accessors.sks_fget(sks, $$sksSchemaTranslationMt, $$UniversalVocabularyMt);
-    }
-
-    public static final SubLObject sks_get_translation_schemabase_mt_alt(SubLObject sks) {
-        SubLTrampolineFile.checkType(sks, SKS_P);
-        {
-            SubLObject tsb = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_get_tsb(sks);
-            if (NIL != tsb) {
-                return com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_tsb_get_mt(tsb);
-            }
-        }
-        return NIL;
     }
 
     public static SubLObject sks_get_translation_schemabase_mt(final SubLObject sks) {
-        assert NIL != sksi_sks_accessors.sks_p(sks) : "! sksi_sks_accessors.sks_p(sks) " + ("sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) ") + sks;
+        assert NIL != sksi_sks_accessors.sks_p(sks) : "sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) " + sks;
         final SubLObject tsb = sks_get_tsb(sks);
         if (NIL != tsb) {
             return sksi_tsb_get_mt(tsb);
@@ -7525,60 +4514,36 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
     }
 
     public static SubLObject sks_get_cmt(final SubLObject sks) {
-        assert NIL != sksi_sks_accessors.sks_p(sks) : "! sksi_sks_accessors.sks_p(sks) " + ("sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) ") + sks;
+        assert NIL != sksi_sks_accessors.sks_p(sks) : "sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) " + sks;
         return sksi_sks_accessors.sks_fget(sks, $$contentMt, $$BaseKB);
     }
 
     public static SubLObject sks_get_bmt(final SubLObject sks) {
-        assert NIL != sksi_sks_accessors.sks_p(sks) : "! sksi_sks_accessors.sks_p(sks) " + ("sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) ") + sks;
+        assert NIL != sksi_sks_accessors.sks_p(sks) : "sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) " + sks;
         return sksi_sks_accessors.sks_fget(sks, $$bridgingMtForKS, $$BaseKB);
     }
 
-    public static final SubLObject sks_set_source_description_mt_alt(SubLObject sks, SubLObject sd) {
-        SubLTrampolineFile.checkType(sks, SKS_P);
-        SubLTrampolineFile.checkType(sd, HLMT_P);
-        return sksi_assert_if_new(make_binary_formula($$sksSourceDescriptionMt, sks, sd), $$UniversalVocabularyMt);
-    }
-
     public static SubLObject sks_set_source_description_mt(final SubLObject sks, final SubLObject sd) {
-        assert NIL != sksi_sks_accessors.sks_p(sks) : "! sksi_sks_accessors.sks_p(sks) " + ("sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) ") + sks;
-        assert NIL != hlmt.hlmt_p(sd) : "! hlmt.hlmt_p(sd) " + ("hlmt.hlmt_p(sd) " + "CommonSymbols.NIL != hlmt.hlmt_p(sd) ") + sd;
+        assert NIL != sksi_sks_accessors.sks_p(sks) : "sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) " + sks;
+        assert NIL != hlmt.hlmt_p(sd) : "hlmt.hlmt_p(sd) " + "CommonSymbols.NIL != hlmt.hlmt_p(sd) " + sd;
         return sksi_kb_accessors.sksi_assert_if_new(make_binary_formula($$sksSourceDescriptionMt, sks, sd), $$UniversalVocabularyMt);
     }
 
-    public static final SubLObject sks_set_physical_schemabase_mt_alt(SubLObject sks, SubLObject psb) {
-        SubLTrampolineFile.checkType(sks, SKS_P);
-        SubLTrampolineFile.checkType(psb, HLMT_P);
-        return sksi_assert_if_new(make_binary_formula($$sksPhysicalSchemaDescriptionMt, sks, psb), $$UniversalVocabularyMt);
-    }
-
     public static SubLObject sks_set_physical_schemabase_mt(final SubLObject sks, final SubLObject psb) {
-        assert NIL != sksi_sks_accessors.sks_p(sks) : "! sksi_sks_accessors.sks_p(sks) " + ("sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) ") + sks;
-        assert NIL != hlmt.hlmt_p(psb) : "! hlmt.hlmt_p(psb) " + ("hlmt.hlmt_p(psb) " + "CommonSymbols.NIL != hlmt.hlmt_p(psb) ") + psb;
+        assert NIL != sksi_sks_accessors.sks_p(sks) : "sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) " + sks;
+        assert NIL != hlmt.hlmt_p(psb) : "hlmt.hlmt_p(psb) " + "CommonSymbols.NIL != hlmt.hlmt_p(psb) " + psb;
         return sksi_kb_accessors.sksi_assert_if_new(make_binary_formula($$sksPhysicalSchemaDescriptionMt, sks, psb), $$UniversalVocabularyMt);
     }
 
-    public static final SubLObject sks_set_logical_schemabase_mt_alt(SubLObject sks, SubLObject lsb) {
-        SubLTrampolineFile.checkType(sks, SKS_P);
-        SubLTrampolineFile.checkType(lsb, HLMT_P);
-        return sksi_assert_if_new(make_binary_formula($$sksLogicalSchemaDescriptionMt, sks, lsb), $$UniversalVocabularyMt);
-    }
-
     public static SubLObject sks_set_logical_schemabase_mt(final SubLObject sks, final SubLObject lsb) {
-        assert NIL != sksi_sks_accessors.sks_p(sks) : "! sksi_sks_accessors.sks_p(sks) " + ("sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) ") + sks;
-        assert NIL != hlmt.hlmt_p(lsb) : "! hlmt.hlmt_p(lsb) " + ("hlmt.hlmt_p(lsb) " + "CommonSymbols.NIL != hlmt.hlmt_p(lsb) ") + lsb;
+        assert NIL != sksi_sks_accessors.sks_p(sks) : "sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) " + sks;
+        assert NIL != hlmt.hlmt_p(lsb) : "hlmt.hlmt_p(lsb) " + "CommonSymbols.NIL != hlmt.hlmt_p(lsb) " + lsb;
         return sksi_kb_accessors.sksi_assert_if_new(make_binary_formula($$sksLogicalSchemaDescriptionMt, sks, lsb), $$UniversalVocabularyMt);
     }
 
-    public static final SubLObject sks_set_translation_schemabase_mt_alt(SubLObject sks, SubLObject tsb) {
-        SubLTrampolineFile.checkType(sks, SKS_P);
-        SubLTrampolineFile.checkType(tsb, HLMT_P);
-        return sksi_assert_if_new(make_binary_formula($$sksSchemaTranslationMt, sks, tsb), $$UniversalVocabularyMt);
-    }
-
     public static SubLObject sks_set_translation_schemabase_mt(final SubLObject sks, final SubLObject tsb) {
-        assert NIL != sksi_sks_accessors.sks_p(sks) : "! sksi_sks_accessors.sks_p(sks) " + ("sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) ") + sks;
-        assert NIL != hlmt.hlmt_p(tsb) : "! hlmt.hlmt_p(tsb) " + ("hlmt.hlmt_p(tsb) " + "CommonSymbols.NIL != hlmt.hlmt_p(tsb) ") + tsb;
+        assert NIL != sksi_sks_accessors.sks_p(sks) : "sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) " + sks;
+        assert NIL != hlmt.hlmt_p(tsb) : "hlmt.hlmt_p(tsb) " + "CommonSymbols.NIL != hlmt.hlmt_p(tsb) " + tsb;
         return sksi_kb_accessors.sksi_assert_if_new(make_binary_formula($$sksSchemaTranslationMt, sks, tsb), $$UniversalVocabularyMt);
     }
 
@@ -7590,33 +4555,14 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return v_object;
     }
 
-    public static final SubLObject sksi_source_description_p_alt(SubLObject v_object) {
-        if (NIL == isa.isa_in_any_mtP(v_object, $$SKSISourceDescriptionMicrotheory)) {
-            Errors.warn($str_alt191$SMT_invariant_broken___A_is_not_a, v_object, $$SKSISourceDescriptionMicrotheory);
-        }
-        return T;
-    }
-
     public static SubLObject sksi_source_description_p(final SubLObject v_object) {
         sksi_smt_check_isa_invariant(v_object, $$SKSISourceDescriptionMicrotheory);
         return T;
     }
 
-    public static final SubLObject sksi_sd_get_mt_alt(SubLObject sd) {
-        SubLTrampolineFile.checkType(sd, SKSI_SOURCE_DESCRIPTION_P);
-        return sd;
-    }
-
     public static SubLObject sksi_sd_get_mt(final SubLObject sd) {
-        assert NIL != sksi_source_description_p(sd) : "! sksi_smt.sksi_source_description_p(sd) " + ("sksi_smt.sksi_source_description_p(sd) " + "CommonSymbols.NIL != sksi_smt.sksi_source_description_p(sd) ") + sd;
+        assert NIL != sksi_source_description_p(sd) : "sksi_smt.sksi_source_description_p(sd) " + "CommonSymbols.NIL != sksi_smt.sksi_source_description_p(sd) " + sd;
         return sd;
-    }
-
-    public static final SubLObject sksi_physical_schemabase_p_alt(SubLObject v_object) {
-        if (NIL == isa.isa_in_any_mtP(v_object, $const185$SKSIPhysicalSchemaDescriptionMicr)) {
-            Errors.warn($str_alt191$SMT_invariant_broken___A_is_not_a, v_object, $const185$SKSIPhysicalSchemaDescriptionMicr);
-        }
-        return T;
     }
 
     public static SubLObject sksi_physical_schemabase_p(final SubLObject v_object) {
@@ -7624,65 +4570,27 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return T;
     }
 
-    public static final SubLObject sksi_psb_get_name_alt(SubLObject psb) {
-        SubLTrampolineFile.checkType(psb, SKSI_PHYSICAL_SCHEMABASE_P);
-        return fort_name(psb);
-    }
-
     public static SubLObject sksi_psb_get_name(final SubLObject psb) {
-        assert NIL != sksi_physical_schemabase_p(psb) : "! sksi_smt.sksi_physical_schemabase_p(psb) " + ("sksi_smt.sksi_physical_schemabase_p(psb) " + "CommonSymbols.NIL != sksi_smt.sksi_physical_schemabase_p(psb) ") + psb;
+        assert NIL != sksi_physical_schemabase_p(psb) : "sksi_smt.sksi_physical_schemabase_p(psb) " + "CommonSymbols.NIL != sksi_smt.sksi_physical_schemabase_p(psb) " + psb;
         return kb_paths.fort_name(psb);
     }
 
-    public static final SubLObject sksi_psb_get_mt_alt(SubLObject psb) {
-        SubLTrampolineFile.checkType(psb, SKSI_PHYSICAL_SCHEMABASE_P);
-        return psb;
-    }
-
     public static SubLObject sksi_psb_get_mt(final SubLObject psb) {
-        assert NIL != sksi_physical_schemabase_p(psb) : "! sksi_smt.sksi_physical_schemabase_p(psb) " + ("sksi_smt.sksi_physical_schemabase_p(psb) " + "CommonSymbols.NIL != sksi_smt.sksi_physical_schemabase_p(psb) ") + psb;
+        assert NIL != sksi_physical_schemabase_p(psb) : "sksi_smt.sksi_physical_schemabase_p(psb) " + "CommonSymbols.NIL != sksi_smt.sksi_physical_schemabase_p(psb) " + psb;
         return psb;
-    }
-
-    public static final SubLObject sksi_physical_schema_p_alt(SubLObject v_object) {
-        return isa.isa_in_any_mtP(v_object, $$PhysicalSchema);
     }
 
     public static SubLObject sksi_physical_schema_p(final SubLObject v_object) {
         return isa.isa_in_any_mtP(v_object, $$PhysicalSchema);
     }
 
-    public static final SubLObject sksi_ps_get_name_alt(SubLObject ps) {
-        SubLTrampolineFile.checkType(ps, SKSI_PHYSICAL_SCHEMA_P);
-        return fort_name(ps);
-    }
-
     public static SubLObject sksi_ps_get_name(final SubLObject ps) {
-        assert NIL != sksi_physical_schema_p(ps) : "! sksi_smt.sksi_physical_schema_p(ps) " + ("sksi_smt.sksi_physical_schema_p(ps) " + "CommonSymbols.NIL != sksi_smt.sksi_physical_schema_p(ps) ") + ps;
+        assert NIL != sksi_physical_schema_p(ps) : "sksi_smt.sksi_physical_schema_p(ps) " + "CommonSymbols.NIL != sksi_smt.sksi_physical_schema_p(ps) " + ps;
         return kb_paths.fort_name(ps);
     }
 
-    public static final SubLObject sksi_ps_get_pfs_alt(SubLObject ps) {
-        SubLTrampolineFile.checkType(ps, SKSI_PHYSICAL_SCHEMA_P);
-        {
-            SubLObject pf_strings = fpred_value_in_any_mt(ps, $$schemaFieldNameList, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            SubLObject result = NIL;
-            SubLObject cdolist_list_var = pf_strings;
-            SubLObject pf_string = NIL;
-            for (pf_string = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pf_string = cdolist_list_var.first()) {
-                {
-                    SubLObject pf = sksi_find_nart(make_binary_formula($$PhysicalFieldFn, ps, pf_string));
-                    if (NIL != pf) {
-                        result = cons(pf, result);
-                    }
-                }
-            }
-            return nreverse(result);
-        }
-    }
-
     public static SubLObject sksi_ps_get_pfs(final SubLObject ps) {
-        assert NIL != sksi_physical_schema_p(ps) : "! sksi_smt.sksi_physical_schema_p(ps) " + ("sksi_smt.sksi_physical_schema_p(ps) " + "CommonSymbols.NIL != sksi_smt.sksi_physical_schema_p(ps) ") + ps;
+        assert NIL != sksi_physical_schema_p(ps) : "sksi_smt.sksi_physical_schema_p(ps) " + "CommonSymbols.NIL != sksi_smt.sksi_physical_schema_p(ps) " + ps;
         final SubLObject pf_strings = kb_mapping_utilities.fpred_value_in_any_mt(ps, $$schemaFieldNameList, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         SubLObject result = NIL;
         SubLObject cdolist_list_var = pf_strings;
@@ -7699,58 +4607,27 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return nreverse(result);
     }
 
-    public static final SubLObject sksi_physical_field_p_alt(SubLObject v_object) {
-        return isa.isa_in_any_mtP(v_object, $$PhysicalField);
-    }
-
     public static SubLObject sksi_physical_field_p(final SubLObject v_object) {
         return isa.isa_in_any_mtP(v_object, $$PhysicalField);
     }
 
-    public static final SubLObject sksi_pf_get_ps_alt(SubLObject pf) {
-        SubLTrampolineFile.checkType(pf, SKSI_PHYSICAL_FIELD_P);
-        return sentence_arg1(pf, UNPROVIDED);
-    }
-
     public static SubLObject sksi_pf_get_ps(final SubLObject pf) {
-        assert NIL != sksi_physical_field_p(pf) : "! sksi_smt.sksi_physical_field_p(pf) " + ("sksi_smt.sksi_physical_field_p(pf) " + "CommonSymbols.NIL != sksi_smt.sksi_physical_field_p(pf) ") + pf;
+        assert NIL != sksi_physical_field_p(pf) : "sksi_smt.sksi_physical_field_p(pf) " + "CommonSymbols.NIL != sksi_smt.sksi_physical_field_p(pf) " + pf;
         return cycl_utilities.sentence_arg1(pf, UNPROVIDED);
     }
 
-    public static final SubLObject sksi_pf_get_name_alt(SubLObject pf) {
-        SubLTrampolineFile.checkType(pf, SKSI_PHYSICAL_FIELD_P);
-        return fpred_value_in_any_mt(pf, $$fieldName_SKS, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject sksi_pf_get_name(final SubLObject pf) {
-        assert NIL != sksi_physical_field_p(pf) : "! sksi_smt.sksi_physical_field_p(pf) " + ("sksi_smt.sksi_physical_field_p(pf) " + "CommonSymbols.NIL != sksi_smt.sksi_physical_field_p(pf) ") + pf;
+        assert NIL != sksi_physical_field_p(pf) : "sksi_smt.sksi_physical_field_p(pf) " + "CommonSymbols.NIL != sksi_smt.sksi_physical_field_p(pf) " + pf;
         return kb_mapping_utilities.fpred_value_in_any_mt(pf, $$fieldName_SKS, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
-    public static final SubLObject sksi_pf_get_datatype_alt(SubLObject pf) {
-        SubLTrampolineFile.checkType(pf, SKSI_PHYSICAL_FIELD_P);
-        return fpred_value_in_any_mt(pf, $$fieldDataType, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject sksi_pf_get_datatype(final SubLObject pf) {
-        assert NIL != sksi_physical_field_p(pf) : "! sksi_smt.sksi_physical_field_p(pf) " + ("sksi_smt.sksi_physical_field_p(pf) " + "CommonSymbols.NIL != sksi_smt.sksi_physical_field_p(pf) ") + pf;
+        assert NIL != sksi_physical_field_p(pf) : "sksi_smt.sksi_physical_field_p(pf) " + "CommonSymbols.NIL != sksi_smt.sksi_physical_field_p(pf) " + pf;
         return kb_mapping_utilities.fpred_value_in_any_mt(pf, $$fieldDataType, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
-    public static final SubLObject sksi_pf_get_nullable_alt(SubLObject pf) {
-        SubLTrampolineFile.checkType(pf, SKSI_PHYSICAL_FIELD_P);
-        {
-            SubLObject ps = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_pf_get_ps(pf);
-            SubLObject not_nullable_pfs = pred_values_in_any_mt(ps, $$nonNullFields, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            if (NIL == subl_promotions.memberP(pf, not_nullable_pfs, UNPROVIDED, UNPROVIDED)) {
-                return T;
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject sksi_pf_get_nullable(final SubLObject pf) {
-        assert NIL != sksi_physical_field_p(pf) : "! sksi_smt.sksi_physical_field_p(pf) " + ("sksi_smt.sksi_physical_field_p(pf) " + "CommonSymbols.NIL != sksi_smt.sksi_physical_field_p(pf) ") + pf;
+        assert NIL != sksi_physical_field_p(pf) : "sksi_smt.sksi_physical_field_p(pf) " + "CommonSymbols.NIL != sksi_smt.sksi_physical_field_p(pf) " + pf;
         final SubLObject ps = sksi_pf_get_ps(pf);
         final SubLObject not_nullable_pfs = kb_mapping_utilities.pred_values_in_any_mt(ps, $$nonNullFields, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         if (NIL == subl_promotions.memberP(pf, not_nullable_pfs, UNPROVIDED, UNPROVIDED)) {
@@ -7759,21 +4636,8 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject sksi_pf_get_default_value_alt(SubLObject pf) {
-        SubLTrampolineFile.checkType(pf, SKSI_PHYSICAL_FIELD_P);
-        {
-            SubLObject ps = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_pf_get_ps(pf);
-            SubLObject gaf = fpred_u_v_holds_gaf_in_any_mt($$defaultFieldValue, ps, pf, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            SubLObject default_value = NIL;
-            if (NIL != gaf) {
-                default_value = sentence_arg3(gaf, UNPROVIDED);
-            }
-            return default_value;
-        }
-    }
-
     public static SubLObject sksi_pf_get_default_value(final SubLObject pf) {
-        assert NIL != sksi_physical_field_p(pf) : "! sksi_smt.sksi_physical_field_p(pf) " + ("sksi_smt.sksi_physical_field_p(pf) " + "CommonSymbols.NIL != sksi_smt.sksi_physical_field_p(pf) ") + pf;
+        assert NIL != sksi_physical_field_p(pf) : "sksi_smt.sksi_physical_field_p(pf) " + "CommonSymbols.NIL != sksi_smt.sksi_physical_field_p(pf) " + pf;
         final SubLObject ps = sksi_pf_get_ps(pf);
         final SubLObject gaf = kb_mapping_utilities.fpred_u_v_holds_gaf_in_any_mt($$defaultFieldValue, ps, pf, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         SubLObject default_value = NIL;
@@ -7785,7 +4649,7 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
 
     public static SubLObject sksi_pf_get_key_type(final SubLObject pf) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != sksi_physical_field_p(pf) : "! sksi_smt.sksi_physical_field_p(pf) " + ("sksi_smt.sksi_physical_field_p(pf) " + "CommonSymbols.NIL != sksi_smt.sksi_physical_field_p(pf) ") + pf;
+        assert NIL != sksi_physical_field_p(pf) : "sksi_smt.sksi_physical_field_p(pf) " + "CommonSymbols.NIL != sksi_smt.sksi_physical_field_p(pf) " + pf;
         final SubLObject ps = sksi_pf_get_ps(pf);
         final SubLObject pf_name = sksi_pf_get_name(pf);
         final SubLObject pks = kb_mapping_utilities.pred_values_in_any_mt(ps, $$primaryKey, UNPROVIDED, UNPROVIDED, UNPROVIDED).first();
@@ -7806,32 +4670,13 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return $NONE;
     }
 
-    public static final SubLObject sksi_logical_schemabase_p_alt(SubLObject v_object) {
-        if (NIL == isa.isa_in_any_mtP(v_object, $const202$SKSILogicalSchemaDescriptionMicro)) {
-            Errors.warn($str_alt191$SMT_invariant_broken___A_is_not_a, v_object, $const202$SKSILogicalSchemaDescriptionMicro);
-        }
-        return T;
-    }
-
     public static SubLObject sksi_logical_schemabase_p(final SubLObject v_object) {
         sksi_smt_check_isa_invariant(v_object, $const329$SKSILogicalSchemaDescriptionMicro);
         return T;
     }
 
-    public static final SubLObject new_logical_schemabase_alt(SubLObject sks) {
-        SubLTrampolineFile.checkType(sks, SKS_P);
-        {
-            SubLObject psb = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_get_physical_schemabase_mt(sks);
-            SubLObject lsb = sksi_create(string_utilities.make_valid_constant_name(cconcatenate(string_utilities.post_remove(com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_psb_get_name(psb), $$$PhysicalSchemaMt, UNPROVIDED), $$$LogicalSchemaMt), UNPROVIDED));
-            sksi_assert_if_new(make_binary_formula($$isa, lsb, $const202$SKSILogicalSchemaDescriptionMicro), $$UniversalVocabularyMt);
-            sksi_assert_if_new(make_binary_formula($$genlMt, lsb, $$SKSIMt), $$UniversalVocabularyMt);
-            sksi_assert_if_new(make_binary_formula($$sksLogicalSchemaDescriptionMt, sks, lsb), $$UniversalVocabularyMt);
-            return lsb;
-        }
-    }
-
     public static SubLObject new_logical_schemabase(final SubLObject sks) {
-        assert NIL != sksi_sks_accessors.sks_p(sks) : "! sksi_sks_accessors.sks_p(sks) " + ("sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) ") + sks;
+        assert NIL != sksi_sks_accessors.sks_p(sks) : "sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) " + sks;
         final SubLObject psb = sks_get_physical_schemabase_mt(sks);
         final SubLObject lsb = sksi_kb_accessors.sksi_create(string_utilities.make_valid_constant_name(cconcatenate(string_utilities.post_remove(sksi_psb_get_name(psb), $$$PhysicalSchemaMt, UNPROVIDED), $$$LogicalSchemaMt), UNPROVIDED));
         sksi_kb_accessors.sksi_assert_if_new(make_binary_formula($$isa, lsb, $const329$SKSILogicalSchemaDescriptionMicro), $$UniversalVocabularyMt);
@@ -7840,56 +4685,13 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return lsb;
     }
 
-    public static final SubLObject sksi_lsb_get_mt_alt(SubLObject lsb) {
-        SubLTrampolineFile.checkType(lsb, SKSI_LOGICAL_SCHEMABASE_P);
-        return lsb;
-    }
-
     public static SubLObject sksi_lsb_get_mt(final SubLObject lsb) {
-        assert NIL != sksi_logical_schemabase_p(lsb) : "! sksi_smt.sksi_logical_schemabase_p(lsb) " + ("sksi_smt.sksi_logical_schemabase_p(lsb) " + "CommonSymbols.NIL != sksi_smt.sksi_logical_schemabase_p(lsb) ") + lsb;
+        assert NIL != sksi_logical_schemabase_p(lsb) : "sksi_smt.sksi_logical_schemabase_p(lsb) " + "CommonSymbols.NIL != sksi_smt.sksi_logical_schemabase_p(lsb) " + lsb;
         return lsb;
-    }
-
-    public static final SubLObject sksi_logical_schema_p_alt(SubLObject v_object) {
-        return isa.isa_in_any_mtP(v_object, $$LogicalSchema);
     }
 
     public static SubLObject sksi_logical_schema_p(final SubLObject v_object) {
         return isa.isa_in_any_mtP(v_object, $$LogicalSchema);
-    }
-
-    public static final SubLObject new_logical_schema(SubLObject sks, SubLObject ps) {
-        SubLTrampolineFile.checkType(sks, SKS_P);
-        if (NIL != ps) {
-            SubLTrampolineFile.checkType(ps, SKSI_PHYSICAL_SCHEMA_P);
-        }
-        {
-            SubLObject lsb = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_get_lsb(sks);
-            SubLObject ls = sksi_create(string_utilities.make_valid_constant_name(NIL != com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_physical_schema_p(ps) ? ((SubLObject) (cconcatenate(string_utilities.post_remove(com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_ps_get_name(ps), $str_alt205$_PS, UNPROVIDED), $str_alt206$_LS))) : cconcatenate(fort_name(sksi_sks_accessors.sks_get_term(sks)), new SubLObject[]{ $str_alt207$_LS_, string_utilities.to_string(com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_next_id()) }), UNPROVIDED));
-            sksi_assert_if_new(make_binary_formula($$isa, ls, $$ObjectDefiningSchema), $$UniversalVocabularyMt);
-            {
-                SubLObject lsb_mt = NIL;
-                if (NIL == lsb) {
-                    lsb = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.new_logical_schemabase(sks);
-                }
-                lsb_mt = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_lsb_get_mt(lsb);
-                sksi_assert_if_new(make_binary_formula($$isa, ls, $$LogicalSchema), lsb_mt);
-                sksi_assert_if_new(make_binary_formula($$definingMt, ls, lsb_mt), $$BaseKB);
-            }
-            if (NIL != ps) {
-                {
-                    SubLObject psb = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_get_psb(sks);
-                    SubLObject tsb = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_get_tsb(sks);
-                    SubLObject tsb_mt = NIL;
-                    if (NIL == tsb) {
-                        tsb = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.new_translation_schemabase(sks, psb, lsb);
-                    }
-                    tsb_mt = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_tsb_get_mt(tsb);
-                    sksi_assert_if_new(make_binary_formula($$logicalPhysicalSchemaMap, ls, ps), tsb_mt);
-                }
-            }
-            return ls;
-        }
     }
 
     public static SubLObject new_logical_schema(final SubLObject sks, final SubLObject ps, SubLObject ls_name, SubLObject isas) {
@@ -7912,7 +4714,7 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         if (isas == UNPROVIDED) {
             isas = NIL;
         }
-        assert NIL != sksi_sks_accessors.sks_p(sks) : "! sksi_sks_accessors.sks_p(sks) " + ("sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) ") + sks;
+        assert NIL != sksi_sks_accessors.sks_p(sks) : "sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) " + sks;
         if (((NIL != ps) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == sksi_physical_schema_p(ps))) {
             throw new AssertionError(ps);
         }
@@ -7951,52 +4753,19 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return ls;
     }
 
-    public static final SubLObject sksi_ls_get_name_alt(SubLObject ls) {
-        SubLTrampolineFile.checkType(ls, SKSI_LOGICAL_SCHEMA_P);
-        return constant_name(ls);
-    }
-
     public static SubLObject sksi_ls_get_name(final SubLObject ls) {
-        assert NIL != sksi_logical_schema_p(ls) : "! sksi_smt.sksi_logical_schema_p(ls) " + ("sksi_smt.sksi_logical_schema_p(ls) " + "CommonSymbols.NIL != sksi_smt.sksi_logical_schema_p(ls) ") + ls;
+        assert NIL != sksi_logical_schema_p(ls) : "sksi_smt.sksi_logical_schema_p(ls) " + "CommonSymbols.NIL != sksi_smt.sksi_logical_schema_p(ls) " + ls;
         return constants_high.constant_name(ls);
     }
 
-    public static final SubLObject sksi_ls_get_lfs_alt(SubLObject ls) {
-        SubLTrampolineFile.checkType(ls, SKSI_LOGICAL_SCHEMA_P);
-        return pred_values_in_any_mt(ls, $$logicalFields, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject sksi_ls_get_lfs(final SubLObject ls) {
-        assert NIL != sksi_logical_schema_p(ls) : "! sksi_smt.sksi_logical_schema_p(ls) " + ("sksi_smt.sksi_logical_schema_p(ls) " + "CommonSymbols.NIL != sksi_smt.sksi_logical_schema_p(ls) ") + ls;
+        assert NIL != sksi_logical_schema_p(ls) : "sksi_smt.sksi_logical_schema_p(ls) " + "CommonSymbols.NIL != sksi_smt.sksi_logical_schema_p(ls) " + ls;
         return kb_mapping_utilities.pred_values_in_any_mt(ls, $$logicalFields, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-    }
-
-    public static final SubLObject sksi_ls_get_mss_alt(SubLObject ls) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(ls, SKSI_LOGICAL_SCHEMA_P);
-            {
-                SubLObject result = NIL;
-                {
-                    SubLObject _prev_bind_0 = $relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $mt$.currentBinding(thread);
-                    try {
-                        $relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                        $mt$.bind($$EverythingPSC, thread);
-                        result = pred_value_gafs(ls, $$meaningSentenceOfSchema, UNPROVIDED, UNPROVIDED);
-                    } finally {
-                        $mt$.rebind(_prev_bind_1, thread);
-                        $relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return result;
-            }
-        }
     }
 
     public static SubLObject sksi_ls_get_mss(final SubLObject ls) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != sksi_logical_schema_p(ls) : "! sksi_smt.sksi_logical_schema_p(ls) " + ("sksi_smt.sksi_logical_schema_p(ls) " + "CommonSymbols.NIL != sksi_smt.sksi_logical_schema_p(ls) ") + ls;
+        assert NIL != sksi_logical_schema_p(ls) : "sksi_smt.sksi_logical_schema_p(ls) " + "CommonSymbols.NIL != sksi_smt.sksi_logical_schema_p(ls) " + ls;
         SubLObject result = NIL;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
         final SubLObject _prev_bind_2 = mt_relevance_macros.$mt$.currentBinding(thread);
@@ -8012,42 +4781,21 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
     }
 
     public static SubLObject sksi_ls_get_ps(final SubLObject ls) {
-        assert NIL != sksi_logical_schema_p(ls) : "! sksi_smt.sksi_logical_schema_p(ls) " + ("sksi_smt.sksi_logical_schema_p(ls) " + "CommonSymbols.NIL != sksi_smt.sksi_logical_schema_p(ls) ") + ls;
+        assert NIL != sksi_logical_schema_p(ls) : "sksi_smt.sksi_logical_schema_p(ls) " + "CommonSymbols.NIL != sksi_smt.sksi_logical_schema_p(ls) " + ls;
         return kb_mapping_utilities.pred_values_in_any_mt(ls, $$logicalPhysicalSchemaMap, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-    }
-
-    public static final SubLObject sksi_logical_field_p_alt(SubLObject v_object) {
-        return isa.isa_in_any_mtP(v_object, $$LogicalField);
     }
 
     public static SubLObject sksi_logical_field_p(final SubLObject v_object) {
         return isa.isa_in_any_mtP(v_object, $$LogicalField);
     }
 
-    public static final SubLObject sksi_next_id_alt() {
-        return integer_sequence_generator.integer_sequence_generator_next($sksi_isg$.getGlobalValue());
-    }
-
     public static SubLObject sksi_next_id() {
         return integer_sequence_generator.integer_sequence_generator_next($sksi_isg$.getGlobalValue());
     }
 
-    public static final SubLObject new_logical_field_alt(SubLObject sks, SubLObject ls) {
-        SubLTrampolineFile.checkType(sks, SKS_P);
-        SubLTrampolineFile.checkType(ls, SKSI_LOGICAL_SCHEMA_P);
-        {
-            SubLObject sks_mt = sksi_sks_accessors.sks_get_defining_mt(sks, UNPROVIDED);
-            SubLObject lf = sksi_create(string_utilities.make_valid_constant_name(cconcatenate(fort_name(sksi_sks_accessors.sks_get_term(sks)), new SubLObject[]{ $str_alt217$_, com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_ls_get_name(ls), $str_alt218$_LF_, string_utilities.to_string(com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_next_id()) }), UNPROVIDED));
-            sksi_assert_if_new(make_binary_formula($$quotedIsa, lf, $$IndexicalConcept), $$UniversalVocabularyMt);
-            sksi_assert_if_new(make_binary_formula($$isa, lf, $$LogicalField), $$UniversalVocabularyMt);
-            sksi_assert_if_new(make_binary_formula($$logicalFields, ls, lf), sks_mt);
-            return lf;
-        }
-    }
-
     public static SubLObject new_logical_field(final SubLObject sks, final SubLObject ls) {
-        assert NIL != sksi_sks_accessors.sks_p(sks) : "! sksi_sks_accessors.sks_p(sks) " + ("sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) ") + sks;
-        assert NIL != sksi_logical_schema_p(ls) : "! sksi_smt.sksi_logical_schema_p(ls) " + ("sksi_smt.sksi_logical_schema_p(ls) " + "CommonSymbols.NIL != sksi_smt.sksi_logical_schema_p(ls) ") + ls;
+        assert NIL != sksi_sks_accessors.sks_p(sks) : "sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) " + sks;
+        assert NIL != sksi_logical_schema_p(ls) : "sksi_smt.sksi_logical_schema_p(ls) " + "CommonSymbols.NIL != sksi_smt.sksi_logical_schema_p(ls) " + ls;
         final SubLObject sks_mt = sksi_sks_accessors.sks_get_defining_mt(sks, UNPROVIDED);
         final SubLObject lf = sksi_kb_accessors.sksi_create(string_utilities.make_valid_constant_name(cconcatenate(kb_paths.fort_name(sksi_sks_accessors.sks_get_term(sks)), new SubLObject[]{ $str201$_, sksi_ls_get_name(ls), $str341$_LF_, string_utilities.to_string(sksi_next_id()) }), UNPROVIDED));
         sksi_kb_accessors.sksi_assert_if_new(make_binary_formula($$quotedIsa, lf, $$IndexicalConcept), $$UniversalVocabularyMt);
@@ -8056,114 +4804,10 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return lf;
     }
 
-    public static final SubLObject sksi_lf_convert_to_constant_alt(SubLObject sks, SubLObject ls, SubLObject lf) {
-        SubLTrampolineFile.checkType(sks, SKS_P);
-        SubLTrampolineFile.checkType(ls, SKSI_LOGICAL_SCHEMA_P);
-        SubLTrampolineFile.checkType(lf, SKSI_LOGICAL_FIELD_P);
-        if (NIL == nart_p(lf)) {
-            return lf;
-        }
-        {
-            SubLObject lf_el_formula = nart_el_formula(lf);
-            SubLObject new_lf = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.new_logical_field(sks, ls);
-            SubLObject sks_mt = sksi_sks_accessors.sks_get_defining_mt(sks, UNPROVIDED);
-            SubLObject lsb_mt = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_get_logical_schemabase_mt(sks);
-            SubLObject tsb_mt = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_get_translation_schemabase_mt(sks);
-            if (NIL != kb_mapping_macros.do_mt_index_key_validator(lsb_mt, NIL)) {
-                {
-                    SubLObject final_index_spec = kb_mapping_macros.mt_final_index_spec(lsb_mt);
-                    SubLObject final_index_iterator = NIL;
-                    try {
-                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, NIL, NIL, NIL);
-                        {
-                            SubLObject done_var = NIL;
-                            SubLObject token_var = NIL;
-                            while (NIL == done_var) {
-                                {
-                                    SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var);
-                                    SubLObject valid = makeBoolean(token_var != assertion);
-                                    if (NIL != valid) {
-                                        {
-                                            SubLObject assertion_el_formula = assertion_el_formula(assertion);
-                                            SubLObject assertion_mt = assertion_mt(assertion);
-                                            if (NIL != subl_promotions.memberP(lf_el_formula, assertion_el_formula, EQUAL, UNPROVIDED)) {
-                                                sksi_unassert_assertion(assertion);
-                                                sksi_assert(list_utilities.tree_substitute(assertion_el_formula, lf_el_formula, new_lf), assertion_mt);
-                                            }
-                                        }
-                                    }
-                                    done_var = makeBoolean(NIL == valid);
-                                }
-                            } 
-                        }
-                    } finally {
-                        {
-                            SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
-                            try {
-                                bind($is_thread_performing_cleanupP$, T);
-                                if (NIL != final_index_iterator) {
-                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                }
-                            } finally {
-                                rebind($is_thread_performing_cleanupP$, _prev_bind_0);
-                            }
-                        }
-                    }
-                }
-            }
-            if (lsb_mt != tsb_mt) {
-                if (NIL != kb_mapping_macros.do_mt_index_key_validator(tsb_mt, NIL)) {
-                    {
-                        SubLObject final_index_spec = kb_mapping_macros.mt_final_index_spec(tsb_mt);
-                        SubLObject final_index_iterator = NIL;
-                        try {
-                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, NIL, NIL, NIL);
-                            {
-                                SubLObject done_var = NIL;
-                                SubLObject token_var = NIL;
-                                while (NIL == done_var) {
-                                    {
-                                        SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var);
-                                        SubLObject valid = makeBoolean(token_var != assertion);
-                                        if (NIL != valid) {
-                                            {
-                                                SubLObject assertion_el_formula = assertion_el_formula(assertion);
-                                                SubLObject assertion_mt = assertion_mt(assertion);
-                                                if (NIL != subl_promotions.memberP(lf_el_formula, assertion_el_formula, EQUAL, UNPROVIDED)) {
-                                                    sksi_unassert_assertion(assertion);
-                                                    sksi_assert(list_utilities.tree_substitute(assertion_el_formula, lf_el_formula, new_lf), assertion_mt);
-                                                }
-                                            }
-                                        }
-                                        done_var = makeBoolean(NIL == valid);
-                                    }
-                                } 
-                            }
-                        } finally {
-                            {
-                                SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
-                                try {
-                                    bind($is_thread_performing_cleanupP$, T);
-                                    if (NIL != final_index_iterator) {
-                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                    }
-                                } finally {
-                                    rebind($is_thread_performing_cleanupP$, _prev_bind_0);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            sksi_unassert(make_binary_formula($$logicalFields, ls, lf), sks_mt);
-            return new_lf;
-        }
-    }
-
     public static SubLObject sksi_lf_convert_to_constant(final SubLObject sks, final SubLObject ls, final SubLObject lf) {
-        assert NIL != sksi_sks_accessors.sks_p(sks) : "! sksi_sks_accessors.sks_p(sks) " + ("sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) ") + sks;
-        assert NIL != sksi_logical_schema_p(ls) : "! sksi_smt.sksi_logical_schema_p(ls) " + ("sksi_smt.sksi_logical_schema_p(ls) " + "CommonSymbols.NIL != sksi_smt.sksi_logical_schema_p(ls) ") + ls;
-        assert NIL != sksi_logical_field_p(lf) : "! sksi_smt.sksi_logical_field_p(lf) " + ("sksi_smt.sksi_logical_field_p(lf) " + "CommonSymbols.NIL != sksi_smt.sksi_logical_field_p(lf) ") + lf;
+        assert NIL != sksi_sks_accessors.sks_p(sks) : "sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) " + sks;
+        assert NIL != sksi_logical_schema_p(ls) : "sksi_smt.sksi_logical_schema_p(ls) " + "CommonSymbols.NIL != sksi_smt.sksi_logical_schema_p(ls) " + ls;
+        assert NIL != sksi_logical_field_p(lf) : "sksi_smt.sksi_logical_field_p(lf) " + "CommonSymbols.NIL != sksi_smt.sksi_logical_field_p(lf) " + lf;
         if (NIL == nart_handles.nart_p(lf)) {
             return lf;
         }
@@ -8244,67 +4888,32 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return new_lf;
     }
 
-    public static final SubLObject sksi_lf_get_genls_alt(SubLObject lf) {
-        SubLTrampolineFile.checkType(lf, SKSI_LOGICAL_FIELD_P);
-        return pred_values_in_any_mt(lf, $$fieldGenls, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject sksi_lf_get_genls(final SubLObject lf) {
-        assert NIL != sksi_logical_field_p(lf) : "! sksi_smt.sksi_logical_field_p(lf) " + ("sksi_smt.sksi_logical_field_p(lf) " + "CommonSymbols.NIL != sksi_smt.sksi_logical_field_p(lf) ") + lf;
+        assert NIL != sksi_logical_field_p(lf) : "sksi_smt.sksi_logical_field_p(lf) " + "CommonSymbols.NIL != sksi_smt.sksi_logical_field_p(lf) " + lf;
         return kb_mapping_utilities.pred_values_in_any_mt(lf, $$fieldGenls, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
-    public static final SubLObject sksi_lf_get_isas_alt(SubLObject lf) {
-        SubLTrampolineFile.checkType(lf, SKSI_LOGICAL_FIELD_P);
-        return pred_values_in_any_mt(lf, $$fieldIsa, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject sksi_lf_get_isas(final SubLObject lf) {
-        assert NIL != sksi_logical_field_p(lf) : "! sksi_smt.sksi_logical_field_p(lf) " + ("sksi_smt.sksi_logical_field_p(lf) " + "CommonSymbols.NIL != sksi_smt.sksi_logical_field_p(lf) ") + lf;
+        assert NIL != sksi_logical_field_p(lf) : "sksi_smt.sksi_logical_field_p(lf) " + "CommonSymbols.NIL != sksi_smt.sksi_logical_field_p(lf) " + lf;
         return kb_mapping_utilities.pred_values_in_any_mt(lf, $$fieldIsa, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
-    public static final SubLObject sksi_lf_get_cycl_alt(SubLObject lf) {
-        SubLTrampolineFile.checkType(lf, SKSI_LOGICAL_FIELD_P);
-        return lf;
-    }
-
     public static SubLObject sksi_lf_get_cycl(final SubLObject lf) {
-        assert NIL != sksi_logical_field_p(lf) : "! sksi_smt.sksi_logical_field_p(lf) " + ("sksi_smt.sksi_logical_field_p(lf) " + "CommonSymbols.NIL != sksi_smt.sksi_logical_field_p(lf) ") + lf;
+        assert NIL != sksi_logical_field_p(lf) : "sksi_smt.sksi_logical_field_p(lf) " + "CommonSymbols.NIL != sksi_smt.sksi_logical_field_p(lf) " + lf;
         return lf;
-    }
-
-    public static final SubLObject sksi_meaning_sentence_p_alt(SubLObject v_object) {
-        return makeBoolean(((NIL != assertion_p(v_object)) && (sentence_arg0(v_object) == $$meaningSentenceOfSchema)) && (NIL != com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_logical_schema_p(sentence_arg1(v_object, UNPROVIDED))));
     }
 
     public static SubLObject sksi_meaning_sentence_p(final SubLObject v_object) {
         return makeBoolean(((NIL != assertion_handles.assertion_p(v_object)) && cycl_utilities.sentence_arg0(v_object).eql($$meaningSentenceOfSchema)) && (NIL != sksi_logical_schema_p(cycl_utilities.sentence_arg1(v_object, UNPROVIDED))));
     }
 
-    public static final SubLObject sksi_ms_get_cycl_alt(SubLObject ms) {
-        SubLTrampolineFile.checkType(ms, SKSI_MEANING_SENTENCE_P);
-        return sentence_arg2(ms, UNPROVIDED);
-    }
-
     public static SubLObject sksi_ms_get_cycl(final SubLObject ms) {
-        assert NIL != sksi_meaning_sentence_p(ms) : "! sksi_smt.sksi_meaning_sentence_p(ms) " + ("sksi_smt.sksi_meaning_sentence_p(ms) " + "CommonSymbols.NIL != sksi_smt.sksi_meaning_sentence_p(ms) ") + ms;
+        assert NIL != sksi_meaning_sentence_p(ms) : "sksi_smt.sksi_meaning_sentence_p(ms) " + "CommonSymbols.NIL != sksi_smt.sksi_meaning_sentence_p(ms) " + ms;
         return cycl_utilities.sentence_arg2(ms, UNPROVIDED);
-    }
-
-    public static final SubLObject sksi_ms_get_asserted_alt(SubLObject ms) {
-        return asserted_assertionP(ms);
     }
 
     public static SubLObject sksi_ms_get_asserted(final SubLObject ms) {
         return assertions_high.asserted_assertionP(ms);
-    }
-
-    public static final SubLObject sksi_translation_schemabase_p_alt(SubLObject v_object) {
-        if (NIL == isa.isa_in_any_mtP(v_object, $$SKSISchemaTranslationMicrotheory)) {
-            Errors.warn($str_alt191$SMT_invariant_broken___A_is_not_a, v_object, $$SKSISchemaTranslationMicrotheory);
-        }
-        return T;
     }
 
     public static SubLObject sksi_translation_schemabase_p(final SubLObject v_object) {
@@ -8312,28 +4921,10 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return T;
     }
 
-    public static final SubLObject new_translation_schemabase_alt(SubLObject sks, SubLObject psb, SubLObject lsb) {
-        SubLTrampolineFile.checkType(sks, SKS_P);
-        SubLTrampolineFile.checkType(psb, SKSI_PHYSICAL_SCHEMABASE_P);
-        SubLTrampolineFile.checkType(lsb, SKSI_LOGICAL_SCHEMABASE_P);
-        {
-            SubLObject tsb = sksi_create(string_utilities.make_valid_constant_name(cconcatenate(string_utilities.post_remove(com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_psb_get_name(psb), $$$PhysicalSchemaMt, UNPROVIDED), $$$TranslationSchemaMt), UNPROVIDED));
-            sksi_assert_if_new(make_binary_formula($$isa, tsb, $$SKSISchemaTranslationMicrotheory), $$UniversalVocabularyMt);
-            {
-                SubLObject psb_mt = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_psb_get_mt(psb);
-                SubLObject lsb_mt = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sksi_lsb_get_mt(lsb);
-                sksi_assert_if_new(make_binary_formula($$genlMt, tsb, psb_mt), $$UniversalVocabularyMt);
-                sksi_assert_if_new(make_binary_formula($$genlMt, tsb, lsb_mt), $$UniversalVocabularyMt);
-                sksi_assert_if_new(make_binary_formula($$sksSchemaTranslationMt, sks, tsb), $$UniversalVocabularyMt);
-            }
-            return tsb;
-        }
-    }
-
     public static SubLObject new_translation_schemabase(final SubLObject sks, final SubLObject psb, final SubLObject lsb) {
-        assert NIL != sksi_sks_accessors.sks_p(sks) : "! sksi_sks_accessors.sks_p(sks) " + ("sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) ") + sks;
-        assert NIL != sksi_physical_schemabase_p(psb) : "! sksi_smt.sksi_physical_schemabase_p(psb) " + ("sksi_smt.sksi_physical_schemabase_p(psb) " + "CommonSymbols.NIL != sksi_smt.sksi_physical_schemabase_p(psb) ") + psb;
-        assert NIL != sksi_logical_schemabase_p(lsb) : "! sksi_smt.sksi_logical_schemabase_p(lsb) " + ("sksi_smt.sksi_logical_schemabase_p(lsb) " + "CommonSymbols.NIL != sksi_smt.sksi_logical_schemabase_p(lsb) ") + lsb;
+        assert NIL != sksi_sks_accessors.sks_p(sks) : "sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) " + sks;
+        assert NIL != sksi_physical_schemabase_p(psb) : "sksi_smt.sksi_physical_schemabase_p(psb) " + "CommonSymbols.NIL != sksi_smt.sksi_physical_schemabase_p(psb) " + psb;
+        assert NIL != sksi_logical_schemabase_p(lsb) : "sksi_smt.sksi_logical_schemabase_p(lsb) " + "CommonSymbols.NIL != sksi_smt.sksi_logical_schemabase_p(lsb) " + lsb;
         final SubLObject tsb = sksi_kb_accessors.sksi_create(string_utilities.make_valid_constant_name(cconcatenate(string_utilities.post_remove(sksi_psb_get_name(psb), $$$PhysicalSchemaMt, UNPROVIDED), $$$TranslationSchemaMt), UNPROVIDED));
         sksi_kb_accessors.sksi_assert_if_new(make_binary_formula($$isa, tsb, $$SKSISchemaTranslationMicrotheory), $$UniversalVocabularyMt);
         final SubLObject psb_mt = sksi_psb_get_mt(psb);
@@ -8344,13 +4935,8 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return tsb;
     }
 
-    public static final SubLObject sksi_tsb_get_mt_alt(SubLObject tsb) {
-        SubLTrampolineFile.checkType(tsb, SKSI_TRANSLATION_SCHEMABASE_P);
-        return tsb;
-    }
-
     public static SubLObject sksi_tsb_get_mt(final SubLObject tsb) {
-        assert NIL != sksi_translation_schemabase_p(tsb) : "! sksi_smt.sksi_translation_schemabase_p(tsb) " + ("sksi_smt.sksi_translation_schemabase_p(tsb) " + "CommonSymbols.NIL != sksi_smt.sksi_translation_schemabase_p(tsb) ") + tsb;
+        assert NIL != sksi_translation_schemabase_p(tsb) : "sksi_smt.sksi_translation_schemabase_p(tsb) " + "CommonSymbols.NIL != sksi_smt.sksi_translation_schemabase_p(tsb) " + tsb;
         return tsb;
     }
 
@@ -8411,17 +4997,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return results;
     }
 
-    public static final SubLObject sks_initialize_all_sks_description_mts_alt() {
-        {
-            SubLObject cdolist_list_var = sksi_sks_accessors.get_all_skss();
-            SubLObject sks = NIL;
-            for (sks = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , sks = cdolist_list_var.first()) {
-                com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_initialize_description_mts(sks);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject sks_initialize_all_sks_description_mts() {
         SubLObject cdolist_list_var = sksi_sks_accessors.get_all_skss();
         SubLObject sks = NIL;
@@ -8434,49 +5009,8 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject sks_initialize_description_mts_alt(SubLObject sks) {
-        SubLTrampolineFile.checkType(sks, SKS_P);
-        if (NIL == com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_get_source_description_mt(sks)) {
-            {
-                SubLObject sd = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_guess_sd(sks);
-                if (NIL != sd) {
-                    sksi_assert_if_new(make_binary_formula($$isa, sd, $$SKSISourceDescriptionMicrotheory), $$UniversalVocabularyMt);
-                    com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_set_source_description_mt(sks, sd);
-                }
-            }
-        }
-        if (NIL == com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_get_physical_schemabase_mt(sks)) {
-            {
-                SubLObject psb = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_guess_psb(sks);
-                if (NIL != psb) {
-                    sksi_assert_if_new(make_binary_formula($$isa, psb, $const185$SKSIPhysicalSchemaDescriptionMicr), $$UniversalVocabularyMt);
-                    com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_set_physical_schemabase_mt(sks, psb);
-                }
-            }
-        }
-        if (NIL == com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_get_logical_schemabase_mt(sks)) {
-            {
-                SubLObject lsb = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_guess_lsb(sks);
-                if (NIL != lsb) {
-                    sksi_assert_if_new(make_binary_formula($$isa, lsb, $const202$SKSILogicalSchemaDescriptionMicro), $$UniversalVocabularyMt);
-                    com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_set_logical_schemabase_mt(sks, lsb);
-                }
-            }
-        }
-        if (NIL == com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_get_translation_schemabase_mt(sks)) {
-            {
-                SubLObject tsb = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_guess_tsb(sks);
-                if (NIL != tsb) {
-                    sksi_assert_if_new(make_binary_formula($$isa, tsb, $$SKSISchemaTranslationMicrotheory), $$UniversalVocabularyMt);
-                    com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_set_translation_schemabase_mt(sks, tsb);
-                }
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject sks_initialize_description_mts(final SubLObject sks) {
-        assert NIL != sksi_sks_accessors.sks_p(sks) : "! sksi_sks_accessors.sks_p(sks) " + ("sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) ") + sks;
+        assert NIL != sksi_sks_accessors.sks_p(sks) : "sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) " + sks;
         if (NIL == sks_get_source_description_mt(sks)) {
             final SubLObject sd = sks_guess_sd(sks);
             if (NIL != sd) {
@@ -8508,52 +5042,20 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject get_all_sds_alt() {
-        return isa.all_fort_instances($$SKSISchemaDescriptionMicrotheory, $$UniversalVocabularyMt, UNPROVIDED);
-    }
-
     public static SubLObject get_all_sds() {
         return isa.all_fort_instances($$SKSISchemaDescriptionMicrotheory, $$UniversalVocabularyMt, UNPROVIDED);
-    }
-
-    public static final SubLObject get_all_psbs_alt() {
-        return isa.all_fort_instances($const185$SKSIPhysicalSchemaDescriptionMicr, $$UniversalVocabularyMt, UNPROVIDED);
     }
 
     public static SubLObject get_all_psbs() {
         return isa.all_fort_instances($const306$SKSIPhysicalSchemaDescriptionMicr, $$UniversalVocabularyMt, UNPROVIDED);
     }
 
-    public static final SubLObject get_all_lsbs_alt() {
-        return isa.all_fort_instances($const202$SKSILogicalSchemaDescriptionMicro, $$UniversalVocabularyMt, UNPROVIDED);
-    }
-
     public static SubLObject get_all_lsbs() {
         return isa.all_fort_instances($const329$SKSILogicalSchemaDescriptionMicro, $$UniversalVocabularyMt, UNPROVIDED);
     }
 
-    public static final SubLObject get_all_tsbs_alt() {
-        return isa.all_fort_instances($$SKSISchemaTranslationMicrotheory, $$UniversalVocabularyMt, UNPROVIDED);
-    }
-
     public static SubLObject get_all_tsbs() {
         return isa.all_fort_instances($$SKSISchemaTranslationMicrotheory, $$UniversalVocabularyMt, UNPROVIDED);
-    }
-
-    public static final SubLObject sksi_form_alt(SubLObject v_object) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject _prev_bind_0 = $cb_default_fort_handler$.currentBinding(thread);
-                try {
-                    $cb_default_fort_handler$.bind($str_alt2$sksi_smt, thread);
-                    cb_form(v_object, UNPROVIDED, UNPROVIDED);
-                } finally {
-                    $cb_default_fort_handler$.rebind(_prev_bind_0, thread);
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject sksi_form(final SubLObject v_object) {
@@ -8568,22 +5070,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject sksi_arghash_form_alt(SubLObject arghash, SubLObject v_object) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject _prev_bind_0 = $cb_default_fort_handler$.currentBinding(thread);
-                try {
-                    $cb_default_fort_handler$.bind(html_arghash.html_arghash_href(arghash, $str_alt2$sksi_smt), thread);
-                    cb_form(v_object, UNPROVIDED, UNPROVIDED);
-                } finally {
-                    $cb_default_fort_handler$.rebind(_prev_bind_0, thread);
-                }
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject sksi_arghash_form(final SubLObject arghash, final SubLObject v_object) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject _prev_bind_0 = $cb_default_fort_handler$.currentBinding(thread);
@@ -8594,45 +5080,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
             $cb_default_fort_handler$.rebind(_prev_bind_0, thread);
         }
         return NIL;
-    }
-
-    public static final SubLObject amt_mts_alt(SubLObject term_list, SubLObject include_meta_assertionsP) {
-        if (include_meta_assertionsP == UNPROVIDED) {
-            include_meta_assertionsP = T;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                {
-                    SubLObject _prev_bind_0 = $relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $mt$.currentBinding(thread);
-                    try {
-                        $relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-                        $mt$.bind($$EverythingPSC, thread);
-                        {
-                            SubLObject assertions = virtual_indexing.assertions_mentioning_terms(term_list, include_meta_assertionsP);
-                            SubLObject mts = NIL;
-                            SubLObject cdolist_list_var = assertions;
-                            SubLObject assertion = NIL;
-                            for (assertion = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , assertion = cdolist_list_var.first()) {
-                                {
-                                    SubLObject item_var = assertion_mt(assertion);
-                                    if (NIL == member(item_var, mts, symbol_function(EQL), symbol_function(IDENTITY))) {
-                                        mts = cons(item_var, mts);
-                                    }
-                                }
-                            }
-                            result = Sort.sort(mts, $sym228$GENERALITY_ESTIMATE_, UNPROVIDED);
-                        }
-                    } finally {
-                        $mt$.rebind(_prev_bind_1, thread);
-                        $relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return result;
-            }
-        }
     }
 
     public static SubLObject amt_mts(final SubLObject term_list, SubLObject include_meta_assertionsP) {
@@ -8667,32 +5114,9 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return result;
     }
 
-    public static final SubLObject sks_guess_sd_alt(SubLObject sks) {
-        SubLTrampolineFile.checkType(sks, SKS_P);
-        return com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.amt_mts(list(sks, $$sksIsa), UNPROVIDED).first();
-    }
-
     public static SubLObject sks_guess_sd(final SubLObject sks) {
-        assert NIL != sksi_sks_accessors.sks_p(sks) : "! sksi_sks_accessors.sks_p(sks) " + ("sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) ") + sks;
+        assert NIL != sksi_sks_accessors.sks_p(sks) : "sksi_sks_accessors.sks_p(sks) " + "CommonSymbols.NIL != sksi_sks_accessors.sks_p(sks) " + sks;
         return amt_mts(list(sks, $$sksIsa), UNPROVIDED).first();
-    }
-
-    public static final SubLObject sks_guess_psb_alt(SubLObject sks) {
-        {
-            SubLObject sub_skss = sksi_sks_accessors.sks_get(sks, $$subKS_Direct, UNPROVIDED);
-            SubLObject mt_list = NIL;
-            SubLObject cdolist_list_var = sub_skss;
-            SubLObject sub_sks = NIL;
-            for (sub_sks = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , sub_sks = cdolist_list_var.first()) {
-                {
-                    SubLObject poss_ps = sksi_sks_accessors.sks_fget(sub_sks, $$physicalSchemaSourceMap, UNPROVIDED);
-                    if (NIL != poss_ps) {
-                        mt_list = cons(com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.amt_mts(list($$physicalFields, poss_ps), UNPROVIDED), mt_list);
-                    }
-                }
-            }
-            return list_utilities.hash_remove_duplicates(apply(APPEND, mt_list), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED).first();
-        }
     }
 
     public static SubLObject sks_guess_psb(final SubLObject sks) {
@@ -8710,29 +5134,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
             sub_sks = cdolist_list_var.first();
         } 
         return list_utilities.hash_remove_duplicates(apply(APPEND, mt_list), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED).first();
-    }
-
-    public static final SubLObject sks_guess_lsb_alt(SubLObject sks) {
-        {
-            SubLObject sub_skss = sksi_sks_accessors.sks_get(sks, $$subKS_Direct, UNPROVIDED);
-            SubLObject mt_list = NIL;
-            SubLObject cdolist_list_var = sub_skss;
-            SubLObject sub_sks = NIL;
-            for (sub_sks = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , sub_sks = cdolist_list_var.first()) {
-                {
-                    SubLObject poss_ps = sksi_sks_accessors.sks_fget(sub_sks, $$physicalSchemaSourceMap, UNPROVIDED);
-                    if (NIL != poss_ps) {
-                        {
-                            SubLObject poss_ls = fpred_value_in_any_mt(poss_ps, $$logicalPhysicalSchemaMap, TWO_INTEGER, ONE_INTEGER, UNPROVIDED);
-                            if (NIL != poss_ls) {
-                                mt_list = cons(com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.amt_mts(list($$logicalFields, poss_ls), UNPROVIDED), mt_list);
-                            }
-                        }
-                    }
-                }
-            }
-            return list_utilities.hash_remove_duplicates(apply(APPEND, mt_list), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED).first();
-        }
     }
 
     public static SubLObject sks_guess_lsb(final SubLObject sks) {
@@ -8755,29 +5156,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return list_utilities.hash_remove_duplicates(apply(APPEND, mt_list), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED).first();
     }
 
-    public static final SubLObject sks_guess_tsb_alt(SubLObject sks) {
-        {
-            SubLObject sub_skss = sksi_sks_accessors.sks_get(sks, $$subKS_Direct, UNPROVIDED);
-            SubLObject mt_list = NIL;
-            SubLObject cdolist_list_var = sub_skss;
-            SubLObject sub_sks = NIL;
-            for (sub_sks = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , sub_sks = cdolist_list_var.first()) {
-                {
-                    SubLObject poss_ps = sksi_sks_accessors.sks_fget(sub_sks, $$physicalSchemaSourceMap, UNPROVIDED);
-                    if (NIL != poss_ps) {
-                        {
-                            SubLObject poss_ls = fpred_value_in_any_mt(poss_ps, $$logicalPhysicalSchemaMap, TWO_INTEGER, ONE_INTEGER, UNPROVIDED);
-                            if (NIL != poss_ls) {
-                                mt_list = cons(com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.amt_mts(list(poss_ps, poss_ls), UNPROVIDED), mt_list);
-                            }
-                        }
-                    }
-                }
-            }
-            return list_utilities.hash_remove_duplicates(apply(APPEND, mt_list), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED).first();
-        }
-    }
-
     public static SubLObject sks_guess_tsb(final SubLObject sks) {
         final SubLObject sub_skss = sksi_sks_accessors.sks_get(sks, $$subKS_Direct, UNPROVIDED);
         SubLObject mt_list = NIL;
@@ -8796,83 +5174,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
             sub_sks = cdolist_list_var.first();
         } 
         return list_utilities.hash_remove_duplicates(apply(APPEND, mt_list), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED).first();
-    }
-
-    public static final SubLObject sksi_psb_get_schemata_alt(SubLObject psb) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject physical_schemata = NIL;
-                {
-                    SubLObject _prev_bind_0 = $relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $mt$.currentBinding(thread);
-                    try {
-                        $relevant_mt_function$.bind(RELEVANT_MT_IS_EQ, thread);
-                        $mt$.bind(psb, thread);
-                        {
-                            SubLObject pred_var = $$physicalFields;
-                            if (NIL != kb_mapping_macros.do_predicate_extent_index_key_validator(pred_var)) {
-                                {
-                                    SubLObject iterator_var = kb_mapping_macros.new_predicate_extent_final_index_spec_iterator(pred_var);
-                                    SubLObject done_var = NIL;
-                                    SubLObject token_var = NIL;
-                                    while (NIL == done_var) {
-                                        {
-                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                            if (NIL != valid) {
-                                                {
-                                                    SubLObject final_index_iterator = NIL;
-                                                    try {
-                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
-                                                        {
-                                                            SubLObject done_var_113 = NIL;
-                                                            SubLObject token_var_114 = NIL;
-                                                            while (NIL == done_var_113) {
-                                                                {
-                                                                    SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_114);
-                                                                    SubLObject valid_115 = makeBoolean(token_var_114 != assertion);
-                                                                    if (NIL != valid_115) {
-                                                                        {
-                                                                            SubLObject item_var = sentence_arg1(assertion, UNPROVIDED);
-                                                                            if (NIL == member(item_var, physical_schemata, symbol_function(EQL), symbol_function(IDENTITY))) {
-                                                                                physical_schemata = cons(item_var, physical_schemata);
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                    done_var_113 = makeBoolean(NIL == valid_115);
-                                                                }
-                                                            } 
-                                                        }
-                                                    } finally {
-                                                        {
-                                                            SubLObject _prev_bind_0_116 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                            try {
-                                                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                if (NIL != final_index_iterator) {
-                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                }
-                                                            } finally {
-                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_116, thread);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            done_var = makeBoolean(NIL == valid);
-                                        }
-                                    } 
-                                }
-                            }
-                        }
-                    } finally {
-                        $mt$.rebind(_prev_bind_1, thread);
-                        $relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return list_utilities.hash_remove_duplicates(physical_schemata, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            }
-        }
     }
 
     public static SubLObject sksi_psb_get_schemata(final SubLObject psb) {
@@ -8968,8 +5269,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return list_utilities.hash_remove_duplicates(physical_schemata, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
-    static private final SubLString $str_alt2$sksi_smt = makeString("sksi-smt");
-
     public static SubLObject sksi_psb_get_labeled_schemata(final SubLObject psb) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject results = NIL;
@@ -8996,80 +5295,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
             } 
         }
         return nreverse(results);
-    }
-
-    static private final SubLString $str_alt20$cg_sksi_smt = makeString("cg?sksi-smt");
-
-    public static final SubLObject sksi_lsb_get_schemata_alt(SubLObject lsb) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject logical_schemata = NIL;
-                {
-                    SubLObject _prev_bind_0 = $relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $mt$.currentBinding(thread);
-                    try {
-                        $relevant_mt_function$.bind(RELEVANT_MT_IS_EQ, thread);
-                        $mt$.bind(lsb, thread);
-                        {
-                            SubLObject pred_var = $$logicalFields;
-                            if (NIL != kb_mapping_macros.do_predicate_extent_index_key_validator(pred_var)) {
-                                {
-                                    SubLObject iterator_var = kb_mapping_macros.new_predicate_extent_final_index_spec_iterator(pred_var);
-                                    SubLObject done_var = NIL;
-                                    SubLObject token_var = NIL;
-                                    while (NIL == done_var) {
-                                        {
-                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                            if (NIL != valid) {
-                                                {
-                                                    SubLObject final_index_iterator = NIL;
-                                                    try {
-                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
-                                                        {
-                                                            SubLObject done_var_117 = NIL;
-                                                            SubLObject token_var_118 = NIL;
-                                                            while (NIL == done_var_117) {
-                                                                {
-                                                                    SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_118);
-                                                                    SubLObject valid_119 = makeBoolean(token_var_118 != assertion);
-                                                                    if (NIL != valid_119) {
-                                                                        logical_schemata = cons(sentence_arg1(assertion, UNPROVIDED), logical_schemata);
-                                                                    }
-                                                                    done_var_117 = makeBoolean(NIL == valid_119);
-                                                                }
-                                                            } 
-                                                        }
-                                                    } finally {
-                                                        {
-                                                            SubLObject _prev_bind_0_120 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                            try {
-                                                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                if (NIL != final_index_iterator) {
-                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                }
-                                                            } finally {
-                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_120, thread);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            done_var = makeBoolean(NIL == valid);
-                                        }
-                                    } 
-                                }
-                            }
-                        }
-                    } finally {
-                        $mt$.rebind(_prev_bind_1, thread);
-                        $relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                return list_utilities.hash_remove_duplicates(logical_schemata, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            }
-        }
     }
 
     public static SubLObject sksi_lsb_get_schemata(final SubLObject lsb) {
@@ -9157,130 +5382,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return list_utilities.hash_remove_duplicates(logical_schemata, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
-    static private final SubLString $str_alt37$Error__Support_for_term_ = makeString("Error: Support for term ");
-
-    static private final SubLString $str_alt38$_not_implemented = makeString(" not implemented");
-
-    static private final SubLString $str_alt40$Error__ = makeString("Error: ");
-
-    static private final SubLString $str_alt43$Success__ = makeString("Success: ");
-
-    static private final SubLString $str_alt49$Error__button_ = makeString("Error: button ");
-
-    static private final SubLString $str_alt50$Error__fort_type_for_ = makeString("Error: fort-type for ");
-
-    static private final SubLString $str_alt51$_not_supported = makeString(" not supported");
-
-    static private final SubLString $str_alt52$Create_new_SKS_named__ = makeString("Create new SKS named: ");
-
-    static private final SubLString $str_alt57$Knowledge_Source_ = makeString("Knowledge Source:");
-
-    static private final SubLString $str_alt61$Source_Description__ = makeString("Source Description: ");
-
-    static private final SubLString $str_alt62$Physical_Schemabase__ = makeString("Physical Schemabase: ");
-
-    static private final SubLString $str_alt63$Logical_Schemabase__ = makeString("Logical Schemabase: ");
-
-    static private final SubLString $str_alt64$Translation_Schemabase__ = makeString("Translation Schemabase: ");
-
-    static private final SubLString $str_alt65$Other_Physical_Schemabases_ = makeString("Other Physical Schemabases:");
-
-    static private final SubLString $str_alt66$Other_Logical_Schemabases_ = makeString("Other Logical Schemabases:");
-
-    static private final SubLString $str_alt67$Other_Translations_Schemabases_ = makeString("Other Translations Schemabases:");
-
-    static private final SubLString $str_alt68$Please_enter_an_SKS_name_ = makeString("Please enter an SKS name.");
-
-    static private final SubLString $str_alt69$Edit_SKS__ = makeString("Edit SKS: ");
-
-    static private final SubLString $str_alt70$Name__ = makeString("Name: ");
-
-    static private final SubLString $str_alt93$Physical_Schemata_ = makeString("Physical Schemata:");
-
-    static private final SubLString $str_alt94$Logical_Schemata_ = makeString("Logical Schemata:");
-
-    static private final SubLString $str_alt95$Translations_ = makeString("Translations:");
-
-    static private final SubLList $list_alt102 = list(new SubLObject[]{ reader_make_constant_shell("sksIsa"), reader_make_constant_shell("SKSISupportedStructuredKnowledgeSourceType"), reader_make_constant_shell("structuredKnowledgeSourceName"), reader_make_constant_shell("CharacterString"), reader_make_constant_shell("sqlProgramForSKS"), reader_make_constant_shell("SKSISupportedDatabaseServerProgram"), reader_make_constant_shell("subProtocolForSKS"), reader_make_constant_shell("CharacterString"), reader_make_constant_shell("userNameForSKS"), reader_make_constant_shell("CharacterString"), reader_make_constant_shell("passwordForSKS"), reader_make_constant_shell("CharacterString"), reader_make_constant_shell("serverOfSKS"), reader_make_constant_shell("CharacterString"), reader_make_constant_shell("portNumberForSKS"), reader_make_constant_shell("Integer"), reader_make_constant_shell("sksProxyHost"), reader_make_constant_shell("CharacterString"), reader_make_constant_shell("sksProxyPort"), reader_make_constant_shell("Integer") });
-
-    public static final SubLObject sksi_tsb_get_translation_pairs_alt(SubLObject tsb) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject translation_pairs = NIL;
-                {
-                    SubLObject _prev_bind_0 = $relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $mt$.currentBinding(thread);
-                    try {
-                        $relevant_mt_function$.bind(RELEVANT_MT_IS_EQ, thread);
-                        $mt$.bind(tsb, thread);
-                        {
-                            SubLObject pred_var = $$logicalPhysicalSchemaMap;
-                            if (NIL != kb_mapping_macros.do_predicate_extent_index_key_validator(pred_var)) {
-                                {
-                                    SubLObject iterator_var = kb_mapping_macros.new_predicate_extent_final_index_spec_iterator(pred_var);
-                                    SubLObject done_var = NIL;
-                                    SubLObject token_var = NIL;
-                                    while (NIL == done_var) {
-                                        {
-                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                            if (NIL != valid) {
-                                                {
-                                                    SubLObject final_index_iterator = NIL;
-                                                    try {
-                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
-                                                        {
-                                                            SubLObject done_var_121 = NIL;
-                                                            SubLObject token_var_122 = NIL;
-                                                            while (NIL == done_var_121) {
-                                                                {
-                                                                    SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_122);
-                                                                    SubLObject valid_123 = makeBoolean(token_var_122 != assertion);
-                                                                    if (NIL != valid_123) {
-                                                                        {
-                                                                            SubLObject item_var = list(sentence_arg2(assertion, UNPROVIDED), sentence_arg1(assertion, UNPROVIDED));
-                                                                            if (NIL == member(item_var, translation_pairs, symbol_function(EQUAL), symbol_function(IDENTITY))) {
-                                                                                translation_pairs = cons(item_var, translation_pairs);
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                    done_var_121 = makeBoolean(NIL == valid_123);
-                                                                }
-                                                            } 
-                                                        }
-                                                    } finally {
-                                                        {
-                                                            SubLObject _prev_bind_0_124 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                            try {
-                                                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                if (NIL != final_index_iterator) {
-                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                }
-                                                            } finally {
-                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_124, thread);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            done_var = makeBoolean(NIL == valid);
-                                        }
-                                    } 
-                                }
-                            }
-                        }
-                    } finally {
-                        $mt$.rebind(_prev_bind_1, thread);
-                        $relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                translation_pairs = Sort.sort(translation_pairs, $sym236$FORT_NAME_, FIRST);
-                return translation_pairs;
-            }
-        }
-    }
-
     public static SubLObject sksi_tsb_get_translation_pairs(final SubLObject tsb) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject translation_pairs = NIL;
@@ -9319,26 +5420,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         translation_pairs = Sort.sort(translation_pairs, $sym376$FORT_NAME_, FIRST);
         return translation_pairs;
     }
-
-    static private final SubLString $str_alt103$This_SKS_is_currently_ = makeString("This SKS is currently ");
-
-    static private final SubLString $str_alt106$_ = makeString(".");
-
-    static private final SubLString $str_alt107$Edit_Source_Description__ = makeString("Edit Source Description: ");
-
-    static private final SubLString $str_alt115$Changed__A__A_from__A_to__A = makeString("Changed ~A ~A from ~A to ~A");
-
-    static private final SubLString $str_alt116$Edit_Physical_Schema__ = makeString("Edit Physical Schema: ");
-
-    static private final SubLString $str_alt117$___ = makeString(" : ");
-
-    static private final SubLString $str_alt118$Physical_fields_ = makeString("Physical fields:");
-
-    static private final SubLString $str_alt123$No_fields_in_this_physical_schema = makeString("No fields in this physical schema.");
-
-    static private final SubLString $str_alt124$Edit_Logical_Schema__ = makeString("Edit Logical Schema: ");
-
-    static private final SubLString $str_alt125$Logical_fields_ = makeString("Logical fields:");
 
     public static SubLObject sksi_tsb_get_lss_for_pss(final SubLObject tsb) {
         final SubLThread thread = SubLProcess.currentSubLThread();
@@ -9451,236 +5532,6 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
             }
         }
         return mappings;
-    }
-
-    static private final SubLString $str_alt128$__user_MS_s = makeString("# user MS's");
-
-    static private final SubLString $str_alt132$No_fields_in_this_logical_schema_ = makeString("No fields in this logical schema.");
-
-    static private final SubLString $str_alt134$Meaning_sentences_ = makeString("Meaning sentences:");
-
-    static private final SubLString $str_alt138$No_meaning_sentences_in_this_logi = makeString("No meaning sentences in this logical schema.");
-
-    static private final SubLString $str_alt141$Edit_Logical_Field__ = makeString("Edit Logical Field: ");
-
-    static private final SubLString $str_alt142$Editing_this_field_will_automatic = makeString("Editing this field will automatically convert it into a constant.");
-
-    static private final SubLString $str_alt143$Logical_field_ = makeString("Logical field:");
-
-    static private final SubLString $str_alt156$Edit_Translation_Schema__ = makeString("Edit Translation Schema: ");
-
-    static private final SubLString $str_alt157$_A__A = makeString("~A?~A");
-
-    static private final SubLString $str_alt158$___ = makeString(" & ");
-
-    static private final SubLString $str_alt159$_note__editing_is_not_yet_enabled = makeString("@note: editing is not yet enabled");
-
-    static private final SubLString $str_alt163$___ = makeString("<->");
-
-    static private final SubLString $str_alt167$Edit_Meaning_Sentence_in__ = makeString("Edit Meaning Sentence in: ");
-
-    static private final SubLString $str_alt170$_ = makeString("(");
-
-    static private final SubLString $str_alt171$_ = makeString(" ");
-
-    static private final SubLString $str_alt172$_____enter_sentence_here__ = makeString("\n ;; enter sentence here\n)");
-
-    static private final SubLString $str_alt175$Formula_invalid_ = makeString("Formula invalid.");
-
-    static private final SubLString $str_alt176$Formula_wasn_t_changed_ = makeString("Formula wasn't changed.");
-
-    static private final SubLString $str_alt180$_KS = makeString("-KS");
-
-    static private final SubLString $$$SourceMt = makeString("SourceMt");
-
-    public static final SubLObject $const185$SKSIPhysicalSchemaDescriptionMicr = reader_make_constant_shell("SKSIPhysicalSchemaDescriptionMicrotheory");
-
-    static private final SubLString $str_alt191$SMT_invariant_broken___A_is_not_a = makeString("SMT invariant broken: ~A is not an instance of ~A");
-
-    public static final SubLObject $const202$SKSILogicalSchemaDescriptionMicro = reader_make_constant_shell("SKSILogicalSchemaDescriptionMicrotheory");
-
-    static private final SubLString $str_alt205$_PS = makeString("-PS");
-
-    static private final SubLString $str_alt206$_LS = makeString("-LS");
-
-    static private final SubLString $str_alt207$_LS_ = makeString("-LS-");
-
-    public static final SubLObject sksi_sks_get_translations(SubLObject sks, SubLObject ps, SubLObject ls) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject tsb = com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_smt.sks_get_tsb(sks);
-                SubLObject translation_pairs = NIL;
-                SubLObject encodings = NIL;
-                SubLObject encodings_matched = NIL;
-                SubLObject decodings = NIL;
-                SubLObject decodings_matched = NIL;
-                {
-                    SubLObject _prev_bind_0 = $relevant_mt_function$.currentBinding(thread);
-                    SubLObject _prev_bind_1 = $mt$.currentBinding(thread);
-                    try {
-                        $relevant_mt_function$.bind(RELEVANT_MT_IS_EQ, thread);
-                        $mt$.bind(tsb, thread);
-                        {
-                            SubLObject pred_var = $$fieldEncoding;
-                            if (NIL != kb_mapping_macros.do_predicate_extent_index_key_validator(pred_var)) {
-                                {
-                                    SubLObject iterator_var = kb_mapping_macros.new_predicate_extent_final_index_spec_iterator(pred_var);
-                                    SubLObject done_var = NIL;
-                                    SubLObject token_var = NIL;
-                                    while (NIL == done_var) {
-                                        {
-                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                            if (NIL != valid) {
-                                                {
-                                                    SubLObject final_index_iterator = NIL;
-                                                    try {
-                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
-                                                        {
-                                                            SubLObject done_var_125 = NIL;
-                                                            SubLObject token_var_126 = NIL;
-                                                            while (NIL == done_var_125) {
-                                                                {
-                                                                    SubLObject encoding = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_126);
-                                                                    SubLObject valid_127 = makeBoolean(token_var_126 != encoding);
-                                                                    if (NIL != valid_127) {
-                                                                        if ((sentence_arg3(encoding, UNPROVIDED) == ls) && (sentence_arg1(encoding, UNPROVIDED) == ps)) {
-                                                                            {
-                                                                                SubLObject item_var = encoding;
-                                                                                if (NIL == member(item_var, encodings, symbol_function(EQL), symbol_function(IDENTITY))) {
-                                                                                    encodings = cons(item_var, encodings);
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                    done_var_125 = makeBoolean(NIL == valid_127);
-                                                                }
-                                                            } 
-                                                        }
-                                                    } finally {
-                                                        {
-                                                            SubLObject _prev_bind_0_128 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                            try {
-                                                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                if (NIL != final_index_iterator) {
-                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                }
-                                                            } finally {
-                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_128, thread);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            done_var = makeBoolean(NIL == valid);
-                                        }
-                                    } 
-                                }
-                            }
-                        }
-                        {
-                            SubLObject pred_var = $$fieldDecoding;
-                            if (NIL != kb_mapping_macros.do_predicate_extent_index_key_validator(pred_var)) {
-                                {
-                                    SubLObject iterator_var = kb_mapping_macros.new_predicate_extent_final_index_spec_iterator(pred_var);
-                                    SubLObject done_var = NIL;
-                                    SubLObject token_var = NIL;
-                                    while (NIL == done_var) {
-                                        {
-                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
-                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
-                                            if (NIL != valid) {
-                                                {
-                                                    SubLObject final_index_iterator = NIL;
-                                                    try {
-                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
-                                                        {
-                                                            SubLObject done_var_129 = NIL;
-                                                            SubLObject token_var_130 = NIL;
-                                                            while (NIL == done_var_129) {
-                                                                {
-                                                                    SubLObject decoding = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_130);
-                                                                    SubLObject valid_131 = makeBoolean(token_var_130 != decoding);
-                                                                    if (NIL != valid_131) {
-                                                                        if ((sentence_arg3(decoding, UNPROVIDED) == ps) && (sentence_arg1(decoding, UNPROVIDED) == ls)) {
-                                                                            {
-                                                                                SubLObject item_var = decoding;
-                                                                                if (NIL == member(item_var, decodings, symbol_function(EQL), symbol_function(IDENTITY))) {
-                                                                                    decodings = cons(item_var, decodings);
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                    done_var_129 = makeBoolean(NIL == valid_131);
-                                                                }
-                                                            } 
-                                                        }
-                                                    } finally {
-                                                        {
-                                                            SubLObject _prev_bind_0_132 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                            try {
-                                                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                if (NIL != final_index_iterator) {
-                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                                }
-                                                            } finally {
-                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_132, thread);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            done_var = makeBoolean(NIL == valid);
-                                        }
-                                    } 
-                                }
-                            }
-                        }
-                    } finally {
-                        $mt$.rebind(_prev_bind_1, thread);
-                        $relevant_mt_function$.rebind(_prev_bind_0, thread);
-                    }
-                }
-                {
-                    SubLObject cdolist_list_var = encodings;
-                    SubLObject encoding = NIL;
-                    for (encoding = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , encoding = cdolist_list_var.first()) {
-                        {
-                            SubLObject cdolist_list_var_133 = decodings;
-                            SubLObject decoding = NIL;
-                            for (decoding = cdolist_list_var_133.first(); NIL != cdolist_list_var_133; cdolist_list_var_133 = cdolist_list_var_133.rest() , decoding = cdolist_list_var_133.first()) {
-                                {
-                                    SubLObject physical_field = sentence_arg2(encoding, UNPROVIDED);
-                                    SubLObject logical_field = sentence_arg2(decoding, UNPROVIDED);
-                                    if ((NIL != list_utilities.tree_find(physical_field, sentence_arg4(decoding, UNPROVIDED), UNPROVIDED, UNPROVIDED)) || (NIL != list_utilities.tree_find(logical_field, sentence_arg4(encoding, UNPROVIDED), UNPROVIDED, UNPROVIDED))) {
-                                        {
-                                            SubLObject item_var = encoding;
-                                            if (NIL == member(item_var, encodings_matched, symbol_function(EQL), symbol_function(IDENTITY))) {
-                                                encodings_matched = cons(item_var, encodings_matched);
-                                            }
-                                        }
-                                        {
-                                            SubLObject item_var = decoding;
-                                            if (NIL == member(item_var, decodings_matched, symbol_function(EQL), symbol_function(IDENTITY))) {
-                                                decodings_matched = cons(item_var, decodings_matched);
-                                            }
-                                        }
-                                        {
-                                            SubLObject item_var = list(encoding, decoding);
-                                            if (NIL == member(item_var, translation_pairs, symbol_function(EQUAL), symbol_function(IDENTITY))) {
-                                                translation_pairs = cons(item_var, translation_pairs);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                return values(translation_pairs, set_difference(encodings, encodings_matched, UNPROVIDED, UNPROVIDED), set_difference(decodings, decodings_matched, UNPROVIDED, UNPROVIDED));
-            }
-        }
     }
 
     public static SubLObject sksi_sks_get_translations(final SubLObject sks, final SubLObject ps, final SubLObject ls, SubLObject tsb) {
@@ -9884,426 +5735,151 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return values(translation_pairs, set_difference(encodings, encodings_matched, UNPROVIDED, UNPROVIDED), set_difference(decodings, decodings_matched, UNPROVIDED, UNPROVIDED));
     }
 
-    static private final SubLString $str_alt217$_ = makeString("-");
-
-    static private final SubLString $str_alt218$_LF_ = makeString("-LF-");
-
-    static private final SubLSymbol $sym228$GENERALITY_ESTIMATE_ = makeSymbol("GENERALITY-ESTIMATE<");
-
-    static private final SubLSymbol $sym236$FORT_NAME_ = makeSymbol("FORT-NAME<");
-
-    public static final SubLObject declare_sksi_smt_file_alt() {
-        declareFunction("cb_link_smt", "CB-LINK-SMT", 0, 1, false);
-        declareFunction("sksi_smt", "SKSI-SMT", 0, 1, false);
-        declareFunction("sksi_smt_int", "SKSI-SMT-INT", 1, 0, false);
-        declareFunction("sksi_smt_main_page", "SKSI-SMT-MAIN-PAGE", 1, 0, false);
-        declareFunction("sksi_smt_main_actions", "SKSI-SMT-MAIN-ACTIONS", 1, 0, false);
-        declareFunction("sksi_smt_edit_sks_page", "SKSI-SMT-EDIT-SKS-PAGE", 1, 0, false);
-        declareFunction("sksi_smt_edit_sks_page_main_table", "SKSI-SMT-EDIT-SKS-PAGE-MAIN-TABLE", 2, 4, false);
-        declareFunction("sksi_smt_edit_sks_actions", "SKSI-SMT-EDIT-SKS-ACTIONS", 1, 0, false);
-        declareFunction("sksi_smt_html_sks_status_line", "SKSI-SMT-HTML-SKS-STATUS-LINE", 1, 0, false);
-        declareFunction("sksi_smt_edit_sd_page", "SKSI-SMT-EDIT-SD-PAGE", 1, 0, false);
-        declareFunction("sksi_smt_edit_sd_actions", "SKSI-SMT-EDIT-SD-ACTIONS", 1, 0, false);
-        declareFunction("sksi_smt_edit_ps_page", "SKSI-SMT-EDIT-PS-PAGE", 1, 0, false);
-        declareFunction("sksi_smt_edit_ps_actions", "SKSI-SMT-EDIT-PS-ACTIONS", 1, 0, false);
-        declareFunction("sksi_smt_edit_ls_page", "SKSI-SMT-EDIT-LS-PAGE", 1, 0, false);
-        declareFunction("sksi_smt_edit_ls_actions", "SKSI-SMT-EDIT-LS-ACTIONS", 1, 0, false);
-        declareFunction("sksi_smt_edit_lf_page", "SKSI-SMT-EDIT-LF-PAGE", 1, 0, false);
-        declareFunction("sksi_smt_edit_lf_actions", "SKSI-SMT-EDIT-LF-ACTIONS", 1, 0, false);
-        declareFunction("sksi_smt_edit_ts_page", "SKSI-SMT-EDIT-TS-PAGE", 1, 0, false);
-        declareFunction("html_sksi_show_translation", "HTML-SKSI-SHOW-TRANSLATION", 2, 0, false);
-        declareFunction("sksi_smt_edit_ts_actions", "SKSI-SMT-EDIT-TS-ACTIONS", 1, 0, false);
-        declareFunction("sksi_smt_edit_t_page", "SKSI-SMT-EDIT-T-PAGE", 1, 0, false);
-        declareFunction("sksi_smt_edit_t_actions", "SKSI-SMT-EDIT-T-ACTIONS", 1, 0, false);
-        declareFunction("sksi_smt_edit_ms_page", "SKSI-SMT-EDIT-MS-PAGE", 1, 0, false);
-        declareFunction("sksi_smt_edit_ms_actions", "SKSI-SMT-EDIT-MS-ACTIONS", 1, 0, false);
-        declareFunction("sks_get_sd", "SKS-GET-SD", 1, 0, false);
-        declareFunction("sks_get_source_description_mt", "SKS-GET-SOURCE-DESCRIPTION-MT", 1, 0, false);
-        declareFunction("sks_new_sd", "SKS-NEW-SD", 1, 0, false);
-        declareFunction("sks_get_psb", "SKS-GET-PSB", 1, 0, false);
-        declareFunction("sks_get_physical_schemabase_mt", "SKS-GET-PHYSICAL-SCHEMABASE-MT", 1, 0, false);
-        declareFunction("sks_new_psb", "SKS-NEW-PSB", 1, 0, false);
-        declareFunction("sks_get_lsb", "SKS-GET-LSB", 1, 0, false);
-        declareFunction("sks_get_logical_schemabase_mt", "SKS-GET-LOGICAL-SCHEMABASE-MT", 1, 0, false);
-        declareFunction("sks_get_tsb", "SKS-GET-TSB", 1, 0, false);
-        declareFunction("sks_get_translation_schemabase_mt", "SKS-GET-TRANSLATION-SCHEMABASE-MT", 1, 0, false);
-        declareFunction("sks_set_source_description_mt", "SKS-SET-SOURCE-DESCRIPTION-MT", 2, 0, false);
-        declareFunction("sks_set_physical_schemabase_mt", "SKS-SET-PHYSICAL-SCHEMABASE-MT", 2, 0, false);
-        declareFunction("sks_set_logical_schemabase_mt", "SKS-SET-LOGICAL-SCHEMABASE-MT", 2, 0, false);
-        declareFunction("sks_set_translation_schemabase_mt", "SKS-SET-TRANSLATION-SCHEMABASE-MT", 2, 0, false);
-        declareFunction("sksi_source_description_p", "SKSI-SOURCE-DESCRIPTION-P", 1, 0, false);
-        declareFunction("sksi_sd_get_mt", "SKSI-SD-GET-MT", 1, 0, false);
-        declareFunction("sksi_physical_schemabase_p", "SKSI-PHYSICAL-SCHEMABASE-P", 1, 0, false);
-        declareFunction("sksi_psb_get_name", "SKSI-PSB-GET-NAME", 1, 0, false);
-        declareFunction("sksi_psb_get_mt", "SKSI-PSB-GET-MT", 1, 0, false);
-        declareFunction("sksi_physical_schema_p", "SKSI-PHYSICAL-SCHEMA-P", 1, 0, false);
-        declareFunction("sksi_ps_get_name", "SKSI-PS-GET-NAME", 1, 0, false);
-        declareFunction("sksi_ps_get_pfs", "SKSI-PS-GET-PFS", 1, 0, false);
-        declareFunction("sksi_physical_field_p", "SKSI-PHYSICAL-FIELD-P", 1, 0, false);
-        declareFunction("sksi_pf_get_ps", "SKSI-PF-GET-PS", 1, 0, false);
-        declareFunction("sksi_pf_get_name", "SKSI-PF-GET-NAME", 1, 0, false);
-        declareFunction("sksi_pf_get_datatype", "SKSI-PF-GET-DATATYPE", 1, 0, false);
-        declareFunction("sksi_pf_get_nullable", "SKSI-PF-GET-NULLABLE", 1, 0, false);
-        declareFunction("sksi_pf_get_default_value", "SKSI-PF-GET-DEFAULT-VALUE", 1, 0, false);
-        declareFunction("sksi_logical_schemabase_p", "SKSI-LOGICAL-SCHEMABASE-P", 1, 0, false);
-        declareFunction("new_logical_schemabase", "NEW-LOGICAL-SCHEMABASE", 1, 0, false);
-        declareFunction("sksi_lsb_get_mt", "SKSI-LSB-GET-MT", 1, 0, false);
-        declareFunction("sksi_logical_schema_p", "SKSI-LOGICAL-SCHEMA-P", 1, 0, false);
-        declareFunction("new_logical_schema", "NEW-LOGICAL-SCHEMA", 2, 0, false);
-        declareFunction("sksi_ls_get_name", "SKSI-LS-GET-NAME", 1, 0, false);
-        declareFunction("sksi_ls_get_lfs", "SKSI-LS-GET-LFS", 1, 0, false);
-        declareFunction("sksi_ls_get_mss", "SKSI-LS-GET-MSS", 1, 0, false);
-        declareFunction("sksi_logical_field_p", "SKSI-LOGICAL-FIELD-P", 1, 0, false);
-        declareFunction("sksi_next_id", "SKSI-NEXT-ID", 0, 0, false);
-        declareFunction("new_logical_field", "NEW-LOGICAL-FIELD", 2, 0, false);
-        declareFunction("sksi_lf_convert_to_constant", "SKSI-LF-CONVERT-TO-CONSTANT", 3, 0, false);
-        declareFunction("sksi_lf_get_genls", "SKSI-LF-GET-GENLS", 1, 0, false);
-        declareFunction("sksi_lf_get_isas", "SKSI-LF-GET-ISAS", 1, 0, false);
-        declareFunction("sksi_lf_get_cycl", "SKSI-LF-GET-CYCL", 1, 0, false);
-        declareFunction("sksi_meaning_sentence_p", "SKSI-MEANING-SENTENCE-P", 1, 0, false);
-        declareFunction("sksi_ms_get_cycl", "SKSI-MS-GET-CYCL", 1, 0, false);
-        declareFunction("sksi_ms_get_asserted", "SKSI-MS-GET-ASSERTED", 1, 0, false);
-        declareFunction("sksi_translation_schemabase_p", "SKSI-TRANSLATION-SCHEMABASE-P", 1, 0, false);
-        declareFunction("new_translation_schemabase", "NEW-TRANSLATION-SCHEMABASE", 3, 0, false);
-        declareFunction("sksi_tsb_get_mt", "SKSI-TSB-GET-MT", 1, 0, false);
-        declareFunction("sks_initialize_all_sks_description_mts", "SKS-INITIALIZE-ALL-SKS-DESCRIPTION-MTS", 0, 0, false);
-        declareFunction("sks_initialize_description_mts", "SKS-INITIALIZE-DESCRIPTION-MTS", 1, 0, false);
-        declareFunction("get_all_sds", "GET-ALL-SDS", 0, 0, false);
-        declareFunction("get_all_psbs", "GET-ALL-PSBS", 0, 0, false);
-        declareFunction("get_all_lsbs", "GET-ALL-LSBS", 0, 0, false);
-        declareFunction("get_all_tsbs", "GET-ALL-TSBS", 0, 0, false);
-        declareFunction("sksi_form", "SKSI-FORM", 1, 0, false);
-        declareFunction("sksi_arghash_form", "SKSI-ARGHASH-FORM", 2, 0, false);
-        declareFunction("amt_mts", "AMT-MTS", 1, 1, false);
-        declareFunction("sks_guess_sd", "SKS-GUESS-SD", 1, 0, false);
-        declareFunction("sks_guess_psb", "SKS-GUESS-PSB", 1, 0, false);
-        declareFunction("sks_guess_lsb", "SKS-GUESS-LSB", 1, 0, false);
-        declareFunction("sks_guess_tsb", "SKS-GUESS-TSB", 1, 0, false);
-        declareFunction("sksi_psb_get_schemata", "SKSI-PSB-GET-SCHEMATA", 1, 0, false);
-        declareFunction("sksi_lsb_get_schemata", "SKSI-LSB-GET-SCHEMATA", 1, 0, false);
-        declareFunction("sksi_tsb_get_translation_pairs", "SKSI-TSB-GET-TRANSLATION-PAIRS", 1, 0, false);
-        declareFunction("sksi_sks_get_translations", "SKSI-SKS-GET-TRANSLATIONS", 3, 0, false);
-        return NIL;
-    }
-
     public static SubLObject declare_sksi_smt_file() {
-        if (SubLFiles.USE_V1) {
-            declareFunction("cb_link_edit_in_smt", "CB-LINK-EDIT-IN-SMT", 1, 1, false);
-            declareFunction("smt_edit_button", "SMT-EDIT-BUTTON", 1, 1, false);
-            declareFunction("cb_link_smt", "CB-LINK-SMT", 0, 1, false);
-            declareFunction("sksi_smt", "SKSI-SMT", 0, 1, false);
-            declareFunction("sksi_smt_int", "SKSI-SMT-INT", 1, 0, false);
-            declareFunction("sksi_smt_main_page", "SKSI-SMT-MAIN-PAGE", 1, 0, false);
-            declareFunction("sksi_smt_main_actions", "SKSI-SMT-MAIN-ACTIONS", 1, 0, false);
-            declareFunction("sksi_smt_edit_sks_page", "SKSI-SMT-EDIT-SKS-PAGE", 1, 0, false);
-            declareFunction("sksi_smt_edit_sks_page_main_table", "SKSI-SMT-EDIT-SKS-PAGE-MAIN-TABLE", 2, 4, false);
-            declareFunction("sksi_smt_edit_sks_actions", "SKSI-SMT-EDIT-SKS-ACTIONS", 1, 0, false);
-            declareFunction("sksi_smt_html_sks_status_line", "SKSI-SMT-HTML-SKS-STATUS-LINE", 1, 0, false);
-            declareFunction("sksi_smt_edit_sd_page", "SKSI-SMT-EDIT-SD-PAGE", 1, 0, false);
-            declareFunction("sksi_smt_edit_sd_actions", "SKSI-SMT-EDIT-SD-ACTIONS", 1, 0, false);
-            declareFunction("sksi_smt_update_source_description", "SKSI-SMT-UPDATE-SOURCE-DESCRIPTION", 2, 0, false);
-            declareFunction("sksi_smt_compile_source_description", "SKSI-SMT-COMPILE-SOURCE-DESCRIPTION", 1, 0, false);
-            declareFunction("clear_sksi_smt_compile_param_definitions", "CLEAR-SKSI-SMT-COMPILE-PARAM-DEFINITIONS", 0, 0, false);
-            declareFunction("remove_sksi_smt_compile_param_definitions", "REMOVE-SKSI-SMT-COMPILE-PARAM-DEFINITIONS", 1, 0, false);
-            declareFunction("sksi_smt_compile_param_definitions_internal", "SKSI-SMT-COMPILE-PARAM-DEFINITIONS-INTERNAL", 1, 0, false);
-            declareFunction("sksi_smt_compile_param_definitions", "SKSI-SMT-COMPILE-PARAM-DEFINITIONS", 1, 0, false);
-            declareFunction("sksi_smt_register_structured_knowledge_source", "SKSI-SMT-REGISTER-STRUCTURED-KNOWLEDGE-SOURCE", 1, 0, false);
-            declareFunction("sksi_smt_structured_knowledge_source_registeredP", "SKSI-SMT-STRUCTURED-KNOWLEDGE-SOURCE-REGISTERED?", 1, 0, false);
-            declareFunction("sksi_ps_compile_pfs_info", "SKSI-PS-COMPILE-PFS-INFO", 1, 0, false);
-            declareFunction("sksi_smt_edit_ps_page", "SKSI-SMT-EDIT-PS-PAGE", 1, 0, false);
-            declareFunction("sksi_smt_edit_ps_actions", "SKSI-SMT-EDIT-PS-ACTIONS", 1, 0, false);
-            declareFunction("sksi_smt_logical_field_values_for_logical_schema", "SKSI-SMT-LOGICAL-FIELD-VALUES-FOR-LOGICAL-SCHEMA", 3, 0, false);
-            declareFunction("sksi_smt_fetch_simple_logical_schemata", "SKSI-SMT-FETCH-SIMPLE-LOGICAL-SCHEMATA", 2, 0, false);
-            declareFunction("sksi_smt_retrieve_simple_logical_schemata", "SKSI-SMT-RETRIEVE-SIMPLE-LOGICAL-SCHEMATA", 2, 0, false);
-            declareFunction("sksi_smt_retrieve_simple_logical_schema", "SKSI-SMT-RETRIEVE-SIMPLE-LOGICAL-SCHEMA", 3, 0, false);
-            declareFunction("sksi_smt_unpack_decoding_conversion_expression", "SKSI-SMT-UNPACK-DECODING-CONVERSION-EXPRESSION", 2, 0, false);
-            declareFunction("enable_sksi_smt_mode", "ENABLE-SKSI-SMT-MODE", 0, 0, false);
-            declareFunction("disable_sksi_smt_mode", "DISABLE-SKSI-SMT-MODE", 0, 0, false);
-            declareFunction("is_sksi_smt_mode_enabledP", "IS-SKSI-SMT-MODE-ENABLED?", 0, 0, false);
-            declareFunction("get_sksi_smt_mode", "GET-SKSI-SMT-MODE", 0, 0, false);
-            declareFunction("sksi_smt_get_units_of_measurement", "SKSI-SMT-GET-UNITS-OF-MEASUREMENT", 0, 0, false);
-            declareFunction("sksi_smt_assemble_units_result", "SKSI-SMT-ASSEMBLE-UNITS-RESULT", 2, 0, false);
-            declareFunction("sksi_smt_uninteresting_units_filter_fn", "SKSI-SMT-UNINTERESTING-UNITS-FILTER-FN", 1, 0, false);
-            declareFunction("sksi_smt_get_rendering_tuples", "SKSI-SMT-GET-RENDERING-TUPLES", 1, 0, false);
-            declareFunction("sksi_smt_derive_simple_logical_schema", "SKSI-SMT-DERIVE-SIMPLE-LOGICAL-SCHEMA", 9, 1, false);
-            declareFunction("sksi_smt_derive_indirecting_relation", "SKSI-SMT-DERIVE-INDIRECTING-RELATION", 5, 0, false);
-            declareFunction("sksi_smt_physical_field_value_indexical_for_pf", "SKSI-SMT-PHYSICAL-FIELD-VALUE-INDEXICAL-FOR-PF", 1, 0, false);
-            declareFunction("sksi_smt_physical_field_for_pfi", "SKSI-SMT-PHYSICAL-FIELD-FOR-PFI", 1, 0, false);
-            declareFunction("sksi_smt_determine_dependent_colname", "SKSI-SMT-DETERMINE-DEPENDENT-COLNAME", 3, 0, false);
-            declareFunction("sksi_smt_determine_lf_conversion", "SKSI-SMT-DETERMINE-LF-CONVERSION", 2, 0, false);
-            declareFunction("sksi_smt_determine_pf_conversion", "SKSI-SMT-DETERMINE-PF-CONVERSION", 2, 0, false);
-            declareFunction("clear_sksi_smt_column_or_fort_name", "CLEAR-SKSI-SMT-COLUMN-OR-FORT-NAME", 0, 0, false);
-            declareFunction("remove_sksi_smt_column_or_fort_name", "REMOVE-SKSI-SMT-COLUMN-OR-FORT-NAME", 1, 0, false);
-            declareFunction("sksi_smt_column_or_fort_name_internal", "SKSI-SMT-COLUMN-OR-FORT-NAME-INTERNAL", 1, 0, false);
-            declareFunction("sksi_smt_column_or_fort_name", "SKSI-SMT-COLUMN-OR-FORT-NAME", 1, 0, false);
-            declareFunction("sksi_smt_edit_ls_page", "SKSI-SMT-EDIT-LS-PAGE", 1, 0, false);
-            declareFunction("sksi_smt_edit_ls_actions", "SKSI-SMT-EDIT-LS-ACTIONS", 1, 0, false);
-            declareFunction("sksi_smt_edit_lf_page", "SKSI-SMT-EDIT-LF-PAGE", 1, 0, false);
-            declareFunction("sksi_smt_edit_lf_actions", "SKSI-SMT-EDIT-LF-ACTIONS", 1, 0, false);
-            declareFunction("sksi_smt_edit_ts_page", "SKSI-SMT-EDIT-TS-PAGE", 1, 0, false);
-            declareFunction("html_sksi_show_translation", "HTML-SKSI-SHOW-TRANSLATION", 2, 0, false);
-            declareFunction("sksi_smt_edit_ts_actions", "SKSI-SMT-EDIT-TS-ACTIONS", 1, 0, false);
-            declareFunction("sksi_smt_edit_t_page", "SKSI-SMT-EDIT-T-PAGE", 1, 0, false);
-            declareFunction("sksi_smt_edit_t_actions", "SKSI-SMT-EDIT-T-ACTIONS", 1, 0, false);
-            declareFunction("sksi_smt_edit_ms_page", "SKSI-SMT-EDIT-MS-PAGE", 1, 0, false);
-            declareFunction("sksi_smt_edit_ms_actions", "SKSI-SMT-EDIT-MS-ACTIONS", 1, 0, false);
-            declareFunction("sksi_smt_decode_psb_page", "SKSI-SMT-DECODE-PSB-PAGE", 1, 0, false);
-            declareFunction("sksi_smt_decode_psb_actions", "SKSI-SMT-DECODE-PSB-ACTIONS", 1, 0, false);
-            declareFunction("sks_get_sd", "SKS-GET-SD", 1, 0, false);
-            declareFunction("sks_get_source_description_mt", "SKS-GET-SOURCE-DESCRIPTION-MT", 1, 0, false);
-            declareFunction("sks_new_sd", "SKS-NEW-SD", 1, 0, false);
-            declareFunction("sks_get_psb", "SKS-GET-PSB", 1, 0, false);
-            declareFunction("sks_get_physical_schemabase_mt", "SKS-GET-PHYSICAL-SCHEMABASE-MT", 1, 0, false);
-            declareFunction("sks_new_psb", "SKS-NEW-PSB", 1, 0, false);
-            declareFunction("sks_get_lsb", "SKS-GET-LSB", 1, 0, false);
-            declareFunction("sks_get_logical_schemabase_mt", "SKS-GET-LOGICAL-SCHEMABASE-MT", 1, 0, false);
-            declareFunction("sks_get_tsb", "SKS-GET-TSB", 1, 0, false);
-            declareFunction("sks_get_translation_schemabase_mt", "SKS-GET-TRANSLATION-SCHEMABASE-MT", 1, 0, false);
-            declareFunction("sks_get_bridging_or_content_mt", "SKS-GET-BRIDGING-OR-CONTENT-MT", 1, 0, false);
-            declareFunction("sks_get_cmt", "SKS-GET-CMT", 1, 0, false);
-            declareFunction("sks_get_bmt", "SKS-GET-BMT", 1, 0, false);
-            declareFunction("sks_set_source_description_mt", "SKS-SET-SOURCE-DESCRIPTION-MT", 2, 0, false);
-            declareFunction("sks_set_physical_schemabase_mt", "SKS-SET-PHYSICAL-SCHEMABASE-MT", 2, 0, false);
-            declareFunction("sks_set_logical_schemabase_mt", "SKS-SET-LOGICAL-SCHEMABASE-MT", 2, 0, false);
-            declareFunction("sks_set_translation_schemabase_mt", "SKS-SET-TRANSLATION-SCHEMABASE-MT", 2, 0, false);
-            declareFunction("sksi_smt_check_isa_invariant", "SKSI-SMT-CHECK-ISA-INVARIANT", 2, 0, false);
-            declareFunction("sksi_source_description_p", "SKSI-SOURCE-DESCRIPTION-P", 1, 0, false);
-            declareFunction("sksi_sd_get_mt", "SKSI-SD-GET-MT", 1, 0, false);
-            declareFunction("sksi_physical_schemabase_p", "SKSI-PHYSICAL-SCHEMABASE-P", 1, 0, false);
-            declareFunction("sksi_psb_get_name", "SKSI-PSB-GET-NAME", 1, 0, false);
-            declareFunction("sksi_psb_get_mt", "SKSI-PSB-GET-MT", 1, 0, false);
-            declareFunction("sksi_physical_schema_p", "SKSI-PHYSICAL-SCHEMA-P", 1, 0, false);
-            declareFunction("sksi_ps_get_name", "SKSI-PS-GET-NAME", 1, 0, false);
-            declareFunction("sksi_ps_get_pfs", "SKSI-PS-GET-PFS", 1, 0, false);
-            declareFunction("sksi_physical_field_p", "SKSI-PHYSICAL-FIELD-P", 1, 0, false);
-            declareFunction("sksi_pf_get_ps", "SKSI-PF-GET-PS", 1, 0, false);
-            declareFunction("sksi_pf_get_name", "SKSI-PF-GET-NAME", 1, 0, false);
-            declareFunction("sksi_pf_get_datatype", "SKSI-PF-GET-DATATYPE", 1, 0, false);
-            declareFunction("sksi_pf_get_nullable", "SKSI-PF-GET-NULLABLE", 1, 0, false);
-            declareFunction("sksi_pf_get_default_value", "SKSI-PF-GET-DEFAULT-VALUE", 1, 0, false);
-            declareFunction("sksi_pf_get_key_type", "SKSI-PF-GET-KEY-TYPE", 1, 0, false);
-            declareFunction("sksi_logical_schemabase_p", "SKSI-LOGICAL-SCHEMABASE-P", 1, 0, false);
-            declareFunction("new_logical_schemabase", "NEW-LOGICAL-SCHEMABASE", 1, 0, false);
-            declareFunction("sksi_lsb_get_mt", "SKSI-LSB-GET-MT", 1, 0, false);
-            declareFunction("sksi_logical_schema_p", "SKSI-LOGICAL-SCHEMA-P", 1, 0, false);
-            declareFunction("new_logical_schema", "NEW-LOGICAL-SCHEMA", 2, 2, false);
-            declareFunction("new_or_recycled_logical_schema", "NEW-OR-RECYCLED-LOGICAL-SCHEMA", 2, 3, false);
-            declareFunction("sksi_ls_get_name", "SKSI-LS-GET-NAME", 1, 0, false);
-            declareFunction("sksi_ls_get_lfs", "SKSI-LS-GET-LFS", 1, 0, false);
-            declareFunction("sksi_ls_get_mss", "SKSI-LS-GET-MSS", 1, 0, false);
-            declareFunction("sksi_ls_get_ps", "SKSI-LS-GET-PS", 1, 0, false);
-            declareFunction("sksi_logical_field_p", "SKSI-LOGICAL-FIELD-P", 1, 0, false);
-            declareFunction("sksi_next_id", "SKSI-NEXT-ID", 0, 0, false);
-            declareFunction("new_logical_field", "NEW-LOGICAL-FIELD", 2, 0, false);
-            declareFunction("sksi_lf_convert_to_constant", "SKSI-LF-CONVERT-TO-CONSTANT", 3, 0, false);
-            declareFunction("sksi_lf_get_genls", "SKSI-LF-GET-GENLS", 1, 0, false);
-            declareFunction("sksi_lf_get_isas", "SKSI-LF-GET-ISAS", 1, 0, false);
-            declareFunction("sksi_lf_get_cycl", "SKSI-LF-GET-CYCL", 1, 0, false);
-            declareFunction("sksi_meaning_sentence_p", "SKSI-MEANING-SENTENCE-P", 1, 0, false);
-            declareFunction("sksi_ms_get_cycl", "SKSI-MS-GET-CYCL", 1, 0, false);
-            declareFunction("sksi_ms_get_asserted", "SKSI-MS-GET-ASSERTED", 1, 0, false);
-            declareFunction("sksi_translation_schemabase_p", "SKSI-TRANSLATION-SCHEMABASE-P", 1, 0, false);
-            declareFunction("new_translation_schemabase", "NEW-TRANSLATION-SCHEMABASE", 3, 0, false);
-            declareFunction("sksi_tsb_get_mt", "SKSI-TSB-GET-MT", 1, 0, false);
-            declareFunction("decode_physical_structure_of_sks", "DECODE-PHYSICAL-STRUCTURE-OF-SKS", 1, 0, false);
-            declareFunction("new_structured_knowledge_source", "NEW-STRUCTURED-KNOWLEDGE-SOURCE", 1, 0, false);
-            declareFunction("new_conceptual_mapping_logical_schema", "NEW-CONCEPTUAL-MAPPING-LOGICAL-SCHEMA", 4, 0, false);
-            declareFunction("sksi_smt_get_available_database_types", "SKSI-SMT-GET-AVAILABLE-DATABASE-TYPES", 0, 0, false);
-            declareFunction("sks_initialize_all_sks_description_mts", "SKS-INITIALIZE-ALL-SKS-DESCRIPTION-MTS", 0, 0, false);
-            declareFunction("sks_initialize_description_mts", "SKS-INITIALIZE-DESCRIPTION-MTS", 1, 0, false);
-            declareFunction("get_all_sds", "GET-ALL-SDS", 0, 0, false);
-            declareFunction("get_all_psbs", "GET-ALL-PSBS", 0, 0, false);
-            declareFunction("get_all_lsbs", "GET-ALL-LSBS", 0, 0, false);
-            declareFunction("get_all_tsbs", "GET-ALL-TSBS", 0, 0, false);
-            declareFunction("sksi_form", "SKSI-FORM", 1, 0, false);
-            declareFunction("sksi_arghash_form", "SKSI-ARGHASH-FORM", 2, 0, false);
-            declareFunction("amt_mts", "AMT-MTS", 1, 1, false);
-            declareFunction("sks_guess_sd", "SKS-GUESS-SD", 1, 0, false);
-            declareFunction("sks_guess_psb", "SKS-GUESS-PSB", 1, 0, false);
-            declareFunction("sks_guess_lsb", "SKS-GUESS-LSB", 1, 0, false);
-            declareFunction("sks_guess_tsb", "SKS-GUESS-TSB", 1, 0, false);
-            declareFunction("sksi_psb_get_schemata", "SKSI-PSB-GET-SCHEMATA", 1, 0, false);
-            declareFunction("sksi_psb_get_labeled_schemata", "SKSI-PSB-GET-LABELED-SCHEMATA", 1, 0, false);
-            declareFunction("sksi_lsb_get_schemata", "SKSI-LSB-GET-SCHEMATA", 1, 0, false);
-            declareFunction("sksi_tsb_get_translation_pairs", "SKSI-TSB-GET-TRANSLATION-PAIRS", 1, 0, false);
-            declareFunction("sksi_tsb_get_lss_for_pss", "SKSI-TSB-GET-LSS-FOR-PSS", 1, 0, false);
-            declareFunction("sksi_sks_get_translations", "SKSI-SKS-GET-TRANSLATIONS", 3, 1, false);
-        }
-        if (SubLFiles.USE_V2) {
-            declareFunction("new_logical_schema", "NEW-LOGICAL-SCHEMA", 2, 0, false);
-            declareFunction("sksi_sks_get_translations", "SKSI-SKS-GET-TRANSLATIONS", 3, 0, false);
-        }
-        return NIL;
-    }
-
-    public static SubLObject declare_sksi_smt_file_Previous() {
-        declareFunction("cb_link_edit_in_smt", "CB-LINK-EDIT-IN-SMT", 1, 1, false);
-        declareFunction("smt_edit_button", "SMT-EDIT-BUTTON", 1, 1, false);
-        declareFunction("cb_link_smt", "CB-LINK-SMT", 0, 1, false);
-        declareFunction("sksi_smt", "SKSI-SMT", 0, 1, false);
-        declareFunction("sksi_smt_int", "SKSI-SMT-INT", 1, 0, false);
-        declareFunction("sksi_smt_main_page", "SKSI-SMT-MAIN-PAGE", 1, 0, false);
-        declareFunction("sksi_smt_main_actions", "SKSI-SMT-MAIN-ACTIONS", 1, 0, false);
-        declareFunction("sksi_smt_edit_sks_page", "SKSI-SMT-EDIT-SKS-PAGE", 1, 0, false);
-        declareFunction("sksi_smt_edit_sks_page_main_table", "SKSI-SMT-EDIT-SKS-PAGE-MAIN-TABLE", 2, 4, false);
-        declareFunction("sksi_smt_edit_sks_actions", "SKSI-SMT-EDIT-SKS-ACTIONS", 1, 0, false);
-        declareFunction("sksi_smt_html_sks_status_line", "SKSI-SMT-HTML-SKS-STATUS-LINE", 1, 0, false);
-        declareFunction("sksi_smt_edit_sd_page", "SKSI-SMT-EDIT-SD-PAGE", 1, 0, false);
-        declareFunction("sksi_smt_edit_sd_actions", "SKSI-SMT-EDIT-SD-ACTIONS", 1, 0, false);
-        declareFunction("sksi_smt_update_source_description", "SKSI-SMT-UPDATE-SOURCE-DESCRIPTION", 2, 0, false);
-        declareFunction("sksi_smt_compile_source_description", "SKSI-SMT-COMPILE-SOURCE-DESCRIPTION", 1, 0, false);
-        declareFunction("clear_sksi_smt_compile_param_definitions", "CLEAR-SKSI-SMT-COMPILE-PARAM-DEFINITIONS", 0, 0, false);
-        declareFunction("remove_sksi_smt_compile_param_definitions", "REMOVE-SKSI-SMT-COMPILE-PARAM-DEFINITIONS", 1, 0, false);
-        declareFunction("sksi_smt_compile_param_definitions_internal", "SKSI-SMT-COMPILE-PARAM-DEFINITIONS-INTERNAL", 1, 0, false);
-        declareFunction("sksi_smt_compile_param_definitions", "SKSI-SMT-COMPILE-PARAM-DEFINITIONS", 1, 0, false);
-        declareFunction("sksi_smt_register_structured_knowledge_source", "SKSI-SMT-REGISTER-STRUCTURED-KNOWLEDGE-SOURCE", 1, 0, false);
-        declareFunction("sksi_smt_structured_knowledge_source_registeredP", "SKSI-SMT-STRUCTURED-KNOWLEDGE-SOURCE-REGISTERED?", 1, 0, false);
-        declareFunction("sksi_ps_compile_pfs_info", "SKSI-PS-COMPILE-PFS-INFO", 1, 0, false);
-        declareFunction("sksi_smt_edit_ps_page", "SKSI-SMT-EDIT-PS-PAGE", 1, 0, false);
-        declareFunction("sksi_smt_edit_ps_actions", "SKSI-SMT-EDIT-PS-ACTIONS", 1, 0, false);
-        declareFunction("sksi_smt_logical_field_values_for_logical_schema", "SKSI-SMT-LOGICAL-FIELD-VALUES-FOR-LOGICAL-SCHEMA", 3, 0, false);
-        declareFunction("sksi_smt_fetch_simple_logical_schemata", "SKSI-SMT-FETCH-SIMPLE-LOGICAL-SCHEMATA", 2, 0, false);
-        declareFunction("sksi_smt_retrieve_simple_logical_schemata", "SKSI-SMT-RETRIEVE-SIMPLE-LOGICAL-SCHEMATA", 2, 0, false);
-        declareFunction("sksi_smt_retrieve_simple_logical_schema", "SKSI-SMT-RETRIEVE-SIMPLE-LOGICAL-SCHEMA", 3, 0, false);
-        declareFunction("sksi_smt_unpack_decoding_conversion_expression", "SKSI-SMT-UNPACK-DECODING-CONVERSION-EXPRESSION", 2, 0, false);
-        declareFunction("enable_sksi_smt_mode", "ENABLE-SKSI-SMT-MODE", 0, 0, false);
-        declareFunction("disable_sksi_smt_mode", "DISABLE-SKSI-SMT-MODE", 0, 0, false);
-        declareFunction("is_sksi_smt_mode_enabledP", "IS-SKSI-SMT-MODE-ENABLED?", 0, 0, false);
-        declareFunction("get_sksi_smt_mode", "GET-SKSI-SMT-MODE", 0, 0, false);
-        declareFunction("sksi_smt_get_units_of_measurement", "SKSI-SMT-GET-UNITS-OF-MEASUREMENT", 0, 0, false);
-        declareFunction("sksi_smt_assemble_units_result", "SKSI-SMT-ASSEMBLE-UNITS-RESULT", 2, 0, false);
-        declareFunction("sksi_smt_uninteresting_units_filter_fn", "SKSI-SMT-UNINTERESTING-UNITS-FILTER-FN", 1, 0, false);
-        declareFunction("sksi_smt_get_rendering_tuples", "SKSI-SMT-GET-RENDERING-TUPLES", 1, 0, false);
-        declareFunction("sksi_smt_derive_simple_logical_schema", "SKSI-SMT-DERIVE-SIMPLE-LOGICAL-SCHEMA", 9, 1, false);
-        declareFunction("sksi_smt_derive_indirecting_relation", "SKSI-SMT-DERIVE-INDIRECTING-RELATION", 5, 0, false);
-        declareFunction("sksi_smt_physical_field_value_indexical_for_pf", "SKSI-SMT-PHYSICAL-FIELD-VALUE-INDEXICAL-FOR-PF", 1, 0, false);
-        declareFunction("sksi_smt_physical_field_for_pfi", "SKSI-SMT-PHYSICAL-FIELD-FOR-PFI", 1, 0, false);
-        declareFunction("sksi_smt_determine_dependent_colname", "SKSI-SMT-DETERMINE-DEPENDENT-COLNAME", 3, 0, false);
-        declareFunction("sksi_smt_determine_lf_conversion", "SKSI-SMT-DETERMINE-LF-CONVERSION", 2, 0, false);
-        declareFunction("sksi_smt_determine_pf_conversion", "SKSI-SMT-DETERMINE-PF-CONVERSION", 2, 0, false);
-        declareFunction("clear_sksi_smt_column_or_fort_name", "CLEAR-SKSI-SMT-COLUMN-OR-FORT-NAME", 0, 0, false);
-        declareFunction("remove_sksi_smt_column_or_fort_name", "REMOVE-SKSI-SMT-COLUMN-OR-FORT-NAME", 1, 0, false);
-        declareFunction("sksi_smt_column_or_fort_name_internal", "SKSI-SMT-COLUMN-OR-FORT-NAME-INTERNAL", 1, 0, false);
-        declareFunction("sksi_smt_column_or_fort_name", "SKSI-SMT-COLUMN-OR-FORT-NAME", 1, 0, false);
-        declareFunction("sksi_smt_edit_ls_page", "SKSI-SMT-EDIT-LS-PAGE", 1, 0, false);
-        declareFunction("sksi_smt_edit_ls_actions", "SKSI-SMT-EDIT-LS-ACTIONS", 1, 0, false);
-        declareFunction("sksi_smt_edit_lf_page", "SKSI-SMT-EDIT-LF-PAGE", 1, 0, false);
-        declareFunction("sksi_smt_edit_lf_actions", "SKSI-SMT-EDIT-LF-ACTIONS", 1, 0, false);
-        declareFunction("sksi_smt_edit_ts_page", "SKSI-SMT-EDIT-TS-PAGE", 1, 0, false);
-        declareFunction("html_sksi_show_translation", "HTML-SKSI-SHOW-TRANSLATION", 2, 0, false);
-        declareFunction("sksi_smt_edit_ts_actions", "SKSI-SMT-EDIT-TS-ACTIONS", 1, 0, false);
-        declareFunction("sksi_smt_edit_t_page", "SKSI-SMT-EDIT-T-PAGE", 1, 0, false);
-        declareFunction("sksi_smt_edit_t_actions", "SKSI-SMT-EDIT-T-ACTIONS", 1, 0, false);
-        declareFunction("sksi_smt_edit_ms_page", "SKSI-SMT-EDIT-MS-PAGE", 1, 0, false);
-        declareFunction("sksi_smt_edit_ms_actions", "SKSI-SMT-EDIT-MS-ACTIONS", 1, 0, false);
-        declareFunction("sksi_smt_decode_psb_page", "SKSI-SMT-DECODE-PSB-PAGE", 1, 0, false);
-        declareFunction("sksi_smt_decode_psb_actions", "SKSI-SMT-DECODE-PSB-ACTIONS", 1, 0, false);
-        declareFunction("sks_get_sd", "SKS-GET-SD", 1, 0, false);
-        declareFunction("sks_get_source_description_mt", "SKS-GET-SOURCE-DESCRIPTION-MT", 1, 0, false);
-        declareFunction("sks_new_sd", "SKS-NEW-SD", 1, 0, false);
-        declareFunction("sks_get_psb", "SKS-GET-PSB", 1, 0, false);
-        declareFunction("sks_get_physical_schemabase_mt", "SKS-GET-PHYSICAL-SCHEMABASE-MT", 1, 0, false);
-        declareFunction("sks_new_psb", "SKS-NEW-PSB", 1, 0, false);
-        declareFunction("sks_get_lsb", "SKS-GET-LSB", 1, 0, false);
-        declareFunction("sks_get_logical_schemabase_mt", "SKS-GET-LOGICAL-SCHEMABASE-MT", 1, 0, false);
-        declareFunction("sks_get_tsb", "SKS-GET-TSB", 1, 0, false);
-        declareFunction("sks_get_translation_schemabase_mt", "SKS-GET-TRANSLATION-SCHEMABASE-MT", 1, 0, false);
-        declareFunction("sks_get_bridging_or_content_mt", "SKS-GET-BRIDGING-OR-CONTENT-MT", 1, 0, false);
-        declareFunction("sks_get_cmt", "SKS-GET-CMT", 1, 0, false);
-        declareFunction("sks_get_bmt", "SKS-GET-BMT", 1, 0, false);
-        declareFunction("sks_set_source_description_mt", "SKS-SET-SOURCE-DESCRIPTION-MT", 2, 0, false);
-        declareFunction("sks_set_physical_schemabase_mt", "SKS-SET-PHYSICAL-SCHEMABASE-MT", 2, 0, false);
-        declareFunction("sks_set_logical_schemabase_mt", "SKS-SET-LOGICAL-SCHEMABASE-MT", 2, 0, false);
-        declareFunction("sks_set_translation_schemabase_mt", "SKS-SET-TRANSLATION-SCHEMABASE-MT", 2, 0, false);
-        declareFunction("sksi_smt_check_isa_invariant", "SKSI-SMT-CHECK-ISA-INVARIANT", 2, 0, false);
-        declareFunction("sksi_source_description_p", "SKSI-SOURCE-DESCRIPTION-P", 1, 0, false);
-        declareFunction("sksi_sd_get_mt", "SKSI-SD-GET-MT", 1, 0, false);
-        declareFunction("sksi_physical_schemabase_p", "SKSI-PHYSICAL-SCHEMABASE-P", 1, 0, false);
-        declareFunction("sksi_psb_get_name", "SKSI-PSB-GET-NAME", 1, 0, false);
-        declareFunction("sksi_psb_get_mt", "SKSI-PSB-GET-MT", 1, 0, false);
-        declareFunction("sksi_physical_schema_p", "SKSI-PHYSICAL-SCHEMA-P", 1, 0, false);
-        declareFunction("sksi_ps_get_name", "SKSI-PS-GET-NAME", 1, 0, false);
-        declareFunction("sksi_ps_get_pfs", "SKSI-PS-GET-PFS", 1, 0, false);
-        declareFunction("sksi_physical_field_p", "SKSI-PHYSICAL-FIELD-P", 1, 0, false);
-        declareFunction("sksi_pf_get_ps", "SKSI-PF-GET-PS", 1, 0, false);
-        declareFunction("sksi_pf_get_name", "SKSI-PF-GET-NAME", 1, 0, false);
-        declareFunction("sksi_pf_get_datatype", "SKSI-PF-GET-DATATYPE", 1, 0, false);
-        declareFunction("sksi_pf_get_nullable", "SKSI-PF-GET-NULLABLE", 1, 0, false);
-        declareFunction("sksi_pf_get_default_value", "SKSI-PF-GET-DEFAULT-VALUE", 1, 0, false);
-        declareFunction("sksi_pf_get_key_type", "SKSI-PF-GET-KEY-TYPE", 1, 0, false);
-        declareFunction("sksi_logical_schemabase_p", "SKSI-LOGICAL-SCHEMABASE-P", 1, 0, false);
-        declareFunction("new_logical_schemabase", "NEW-LOGICAL-SCHEMABASE", 1, 0, false);
-        declareFunction("sksi_lsb_get_mt", "SKSI-LSB-GET-MT", 1, 0, false);
-        declareFunction("sksi_logical_schema_p", "SKSI-LOGICAL-SCHEMA-P", 1, 0, false);
-        declareFunction("new_logical_schema", "NEW-LOGICAL-SCHEMA", 2, 2, false);
-        declareFunction("new_or_recycled_logical_schema", "NEW-OR-RECYCLED-LOGICAL-SCHEMA", 2, 3, false);
-        declareFunction("sksi_ls_get_name", "SKSI-LS-GET-NAME", 1, 0, false);
-        declareFunction("sksi_ls_get_lfs", "SKSI-LS-GET-LFS", 1, 0, false);
-        declareFunction("sksi_ls_get_mss", "SKSI-LS-GET-MSS", 1, 0, false);
-        declareFunction("sksi_ls_get_ps", "SKSI-LS-GET-PS", 1, 0, false);
-        declareFunction("sksi_logical_field_p", "SKSI-LOGICAL-FIELD-P", 1, 0, false);
-        declareFunction("sksi_next_id", "SKSI-NEXT-ID", 0, 0, false);
-        declareFunction("new_logical_field", "NEW-LOGICAL-FIELD", 2, 0, false);
-        declareFunction("sksi_lf_convert_to_constant", "SKSI-LF-CONVERT-TO-CONSTANT", 3, 0, false);
-        declareFunction("sksi_lf_get_genls", "SKSI-LF-GET-GENLS", 1, 0, false);
-        declareFunction("sksi_lf_get_isas", "SKSI-LF-GET-ISAS", 1, 0, false);
-        declareFunction("sksi_lf_get_cycl", "SKSI-LF-GET-CYCL", 1, 0, false);
-        declareFunction("sksi_meaning_sentence_p", "SKSI-MEANING-SENTENCE-P", 1, 0, false);
-        declareFunction("sksi_ms_get_cycl", "SKSI-MS-GET-CYCL", 1, 0, false);
-        declareFunction("sksi_ms_get_asserted", "SKSI-MS-GET-ASSERTED", 1, 0, false);
-        declareFunction("sksi_translation_schemabase_p", "SKSI-TRANSLATION-SCHEMABASE-P", 1, 0, false);
-        declareFunction("new_translation_schemabase", "NEW-TRANSLATION-SCHEMABASE", 3, 0, false);
-        declareFunction("sksi_tsb_get_mt", "SKSI-TSB-GET-MT", 1, 0, false);
-        declareFunction("decode_physical_structure_of_sks", "DECODE-PHYSICAL-STRUCTURE-OF-SKS", 1, 0, false);
-        declareFunction("new_structured_knowledge_source", "NEW-STRUCTURED-KNOWLEDGE-SOURCE", 1, 0, false);
-        declareFunction("new_conceptual_mapping_logical_schema", "NEW-CONCEPTUAL-MAPPING-LOGICAL-SCHEMA", 4, 0, false);
-        declareFunction("sksi_smt_get_available_database_types", "SKSI-SMT-GET-AVAILABLE-DATABASE-TYPES", 0, 0, false);
-        declareFunction("sks_initialize_all_sks_description_mts", "SKS-INITIALIZE-ALL-SKS-DESCRIPTION-MTS", 0, 0, false);
-        declareFunction("sks_initialize_description_mts", "SKS-INITIALIZE-DESCRIPTION-MTS", 1, 0, false);
-        declareFunction("get_all_sds", "GET-ALL-SDS", 0, 0, false);
-        declareFunction("get_all_psbs", "GET-ALL-PSBS", 0, 0, false);
-        declareFunction("get_all_lsbs", "GET-ALL-LSBS", 0, 0, false);
-        declareFunction("get_all_tsbs", "GET-ALL-TSBS", 0, 0, false);
-        declareFunction("sksi_form", "SKSI-FORM", 1, 0, false);
-        declareFunction("sksi_arghash_form", "SKSI-ARGHASH-FORM", 2, 0, false);
-        declareFunction("amt_mts", "AMT-MTS", 1, 1, false);
-        declareFunction("sks_guess_sd", "SKS-GUESS-SD", 1, 0, false);
-        declareFunction("sks_guess_psb", "SKS-GUESS-PSB", 1, 0, false);
-        declareFunction("sks_guess_lsb", "SKS-GUESS-LSB", 1, 0, false);
-        declareFunction("sks_guess_tsb", "SKS-GUESS-TSB", 1, 0, false);
-        declareFunction("sksi_psb_get_schemata", "SKSI-PSB-GET-SCHEMATA", 1, 0, false);
-        declareFunction("sksi_psb_get_labeled_schemata", "SKSI-PSB-GET-LABELED-SCHEMATA", 1, 0, false);
-        declareFunction("sksi_lsb_get_schemata", "SKSI-LSB-GET-SCHEMATA", 1, 0, false);
-        declareFunction("sksi_tsb_get_translation_pairs", "SKSI-TSB-GET-TRANSLATION-PAIRS", 1, 0, false);
-        declareFunction("sksi_tsb_get_lss_for_pss", "SKSI-TSB-GET-LSS-FOR-PSS", 1, 0, false);
-        declareFunction("sksi_sks_get_translations", "SKSI-SKS-GET-TRANSLATIONS", 3, 1, false);
-        return NIL;
-    }
-
-    public static final SubLObject init_sksi_smt_file_alt() {
-        deflexical("*SKSI-SMT-SD-PARAMETERS*", $list_alt102);
-        deflexical("*SKSI-ISG*", NIL != boundp($sksi_isg$) ? ((SubLObject) ($sksi_isg$.getGlobalValue())) : integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED));
+        declareFunction(me, "cb_link_edit_in_smt", "CB-LINK-EDIT-IN-SMT", 1, 1, false);
+        declareFunction(me, "smt_edit_button", "SMT-EDIT-BUTTON", 1, 1, false);
+        declareFunction(me, "cb_link_smt", "CB-LINK-SMT", 0, 1, false);
+        declareFunction(me, "sksi_smt", "SKSI-SMT", 0, 1, false);
+        declareFunction(me, "sksi_smt_int", "SKSI-SMT-INT", 1, 0, false);
+        declareFunction(me, "sksi_smt_main_page", "SKSI-SMT-MAIN-PAGE", 1, 0, false);
+        declareFunction(me, "sksi_smt_main_actions", "SKSI-SMT-MAIN-ACTIONS", 1, 0, false);
+        declareFunction(me, "sksi_smt_edit_sks_page", "SKSI-SMT-EDIT-SKS-PAGE", 1, 0, false);
+        declareFunction(me, "sksi_smt_edit_sks_page_main_table", "SKSI-SMT-EDIT-SKS-PAGE-MAIN-TABLE", 2, 4, false);
+        declareFunction(me, "sksi_smt_edit_sks_actions", "SKSI-SMT-EDIT-SKS-ACTIONS", 1, 0, false);
+        declareFunction(me, "sksi_smt_html_sks_status_line", "SKSI-SMT-HTML-SKS-STATUS-LINE", 1, 0, false);
+        declareFunction(me, "sksi_smt_edit_sd_page", "SKSI-SMT-EDIT-SD-PAGE", 1, 0, false);
+        declareFunction(me, "sksi_smt_edit_sd_actions", "SKSI-SMT-EDIT-SD-ACTIONS", 1, 0, false);
+        declareFunction(me, "sksi_smt_update_source_description", "SKSI-SMT-UPDATE-SOURCE-DESCRIPTION", 2, 0, false);
+        declareFunction(me, "sksi_smt_compile_source_description", "SKSI-SMT-COMPILE-SOURCE-DESCRIPTION", 1, 0, false);
+        declareFunction(me, "clear_sksi_smt_compile_param_definitions", "CLEAR-SKSI-SMT-COMPILE-PARAM-DEFINITIONS", 0, 0, false);
+        declareFunction(me, "remove_sksi_smt_compile_param_definitions", "REMOVE-SKSI-SMT-COMPILE-PARAM-DEFINITIONS", 1, 0, false);
+        declareFunction(me, "sksi_smt_compile_param_definitions_internal", "SKSI-SMT-COMPILE-PARAM-DEFINITIONS-INTERNAL", 1, 0, false);
+        declareFunction(me, "sksi_smt_compile_param_definitions", "SKSI-SMT-COMPILE-PARAM-DEFINITIONS", 1, 0, false);
+        declareFunction(me, "sksi_smt_register_structured_knowledge_source", "SKSI-SMT-REGISTER-STRUCTURED-KNOWLEDGE-SOURCE", 1, 0, false);
+        declareFunction(me, "sksi_smt_structured_knowledge_source_registeredP", "SKSI-SMT-STRUCTURED-KNOWLEDGE-SOURCE-REGISTERED?", 1, 0, false);
+        declareFunction(me, "sksi_ps_compile_pfs_info", "SKSI-PS-COMPILE-PFS-INFO", 1, 0, false);
+        declareFunction(me, "sksi_smt_edit_ps_page", "SKSI-SMT-EDIT-PS-PAGE", 1, 0, false);
+        declareFunction(me, "sksi_smt_edit_ps_actions", "SKSI-SMT-EDIT-PS-ACTIONS", 1, 0, false);
+        declareFunction(me, "sksi_smt_logical_field_values_for_logical_schema", "SKSI-SMT-LOGICAL-FIELD-VALUES-FOR-LOGICAL-SCHEMA", 3, 0, false);
+        declareFunction(me, "sksi_smt_fetch_simple_logical_schemata", "SKSI-SMT-FETCH-SIMPLE-LOGICAL-SCHEMATA", 2, 0, false);
+        declareFunction(me, "sksi_smt_retrieve_simple_logical_schemata", "SKSI-SMT-RETRIEVE-SIMPLE-LOGICAL-SCHEMATA", 2, 0, false);
+        declareFunction(me, "sksi_smt_retrieve_simple_logical_schema", "SKSI-SMT-RETRIEVE-SIMPLE-LOGICAL-SCHEMA", 3, 0, false);
+        declareFunction(me, "sksi_smt_unpack_decoding_conversion_expression", "SKSI-SMT-UNPACK-DECODING-CONVERSION-EXPRESSION", 2, 0, false);
+        declareFunction(me, "enable_sksi_smt_mode", "ENABLE-SKSI-SMT-MODE", 0, 0, false);
+        declareFunction(me, "disable_sksi_smt_mode", "DISABLE-SKSI-SMT-MODE", 0, 0, false);
+        declareFunction(me, "is_sksi_smt_mode_enabledP", "IS-SKSI-SMT-MODE-ENABLED?", 0, 0, false);
+        declareFunction(me, "get_sksi_smt_mode", "GET-SKSI-SMT-MODE", 0, 0, false);
+        declareFunction(me, "sksi_smt_get_units_of_measurement", "SKSI-SMT-GET-UNITS-OF-MEASUREMENT", 0, 0, false);
+        declareFunction(me, "sksi_smt_assemble_units_result", "SKSI-SMT-ASSEMBLE-UNITS-RESULT", 2, 0, false);
+        declareFunction(me, "sksi_smt_uninteresting_units_filter_fn", "SKSI-SMT-UNINTERESTING-UNITS-FILTER-FN", 1, 0, false);
+        declareFunction(me, "sksi_smt_get_rendering_tuples", "SKSI-SMT-GET-RENDERING-TUPLES", 1, 0, false);
+        declareFunction(me, "sksi_smt_derive_simple_logical_schema", "SKSI-SMT-DERIVE-SIMPLE-LOGICAL-SCHEMA", 9, 1, false);
+        declareFunction(me, "sksi_smt_derive_indirecting_relation", "SKSI-SMT-DERIVE-INDIRECTING-RELATION", 5, 0, false);
+        declareFunction(me, "sksi_smt_physical_field_value_indexical_for_pf", "SKSI-SMT-PHYSICAL-FIELD-VALUE-INDEXICAL-FOR-PF", 1, 0, false);
+        declareFunction(me, "sksi_smt_physical_field_for_pfi", "SKSI-SMT-PHYSICAL-FIELD-FOR-PFI", 1, 0, false);
+        declareFunction(me, "sksi_smt_determine_dependent_colname", "SKSI-SMT-DETERMINE-DEPENDENT-COLNAME", 3, 0, false);
+        declareFunction(me, "sksi_smt_determine_lf_conversion", "SKSI-SMT-DETERMINE-LF-CONVERSION", 2, 0, false);
+        declareFunction(me, "sksi_smt_determine_pf_conversion", "SKSI-SMT-DETERMINE-PF-CONVERSION", 2, 0, false);
+        declareFunction(me, "clear_sksi_smt_column_or_fort_name", "CLEAR-SKSI-SMT-COLUMN-OR-FORT-NAME", 0, 0, false);
+        declareFunction(me, "remove_sksi_smt_column_or_fort_name", "REMOVE-SKSI-SMT-COLUMN-OR-FORT-NAME", 1, 0, false);
+        declareFunction(me, "sksi_smt_column_or_fort_name_internal", "SKSI-SMT-COLUMN-OR-FORT-NAME-INTERNAL", 1, 0, false);
+        declareFunction(me, "sksi_smt_column_or_fort_name", "SKSI-SMT-COLUMN-OR-FORT-NAME", 1, 0, false);
+        declareFunction(me, "sksi_smt_edit_ls_page", "SKSI-SMT-EDIT-LS-PAGE", 1, 0, false);
+        declareFunction(me, "sksi_smt_edit_ls_actions", "SKSI-SMT-EDIT-LS-ACTIONS", 1, 0, false);
+        declareFunction(me, "sksi_smt_edit_lf_page", "SKSI-SMT-EDIT-LF-PAGE", 1, 0, false);
+        declareFunction(me, "sksi_smt_edit_lf_actions", "SKSI-SMT-EDIT-LF-ACTIONS", 1, 0, false);
+        declareFunction(me, "sksi_smt_edit_ts_page", "SKSI-SMT-EDIT-TS-PAGE", 1, 0, false);
+        declareFunction(me, "html_sksi_show_translation", "HTML-SKSI-SHOW-TRANSLATION", 2, 0, false);
+        declareFunction(me, "sksi_smt_edit_ts_actions", "SKSI-SMT-EDIT-TS-ACTIONS", 1, 0, false);
+        declareFunction(me, "sksi_smt_edit_t_page", "SKSI-SMT-EDIT-T-PAGE", 1, 0, false);
+        declareFunction(me, "sksi_smt_edit_t_actions", "SKSI-SMT-EDIT-T-ACTIONS", 1, 0, false);
+        declareFunction(me, "sksi_smt_edit_ms_page", "SKSI-SMT-EDIT-MS-PAGE", 1, 0, false);
+        declareFunction(me, "sksi_smt_edit_ms_actions", "SKSI-SMT-EDIT-MS-ACTIONS", 1, 0, false);
+        declareFunction(me, "sksi_smt_decode_psb_page", "SKSI-SMT-DECODE-PSB-PAGE", 1, 0, false);
+        declareFunction(me, "sksi_smt_decode_psb_actions", "SKSI-SMT-DECODE-PSB-ACTIONS", 1, 0, false);
+        declareFunction(me, "sks_get_sd", "SKS-GET-SD", 1, 0, false);
+        declareFunction(me, "sks_get_source_description_mt", "SKS-GET-SOURCE-DESCRIPTION-MT", 1, 0, false);
+        declareFunction(me, "sks_new_sd", "SKS-NEW-SD", 1, 0, false);
+        declareFunction(me, "sks_get_psb", "SKS-GET-PSB", 1, 0, false);
+        declareFunction(me, "sks_get_physical_schemabase_mt", "SKS-GET-PHYSICAL-SCHEMABASE-MT", 1, 0, false);
+        declareFunction(me, "sks_new_psb", "SKS-NEW-PSB", 1, 0, false);
+        declareFunction(me, "sks_get_lsb", "SKS-GET-LSB", 1, 0, false);
+        declareFunction(me, "sks_get_logical_schemabase_mt", "SKS-GET-LOGICAL-SCHEMABASE-MT", 1, 0, false);
+        declareFunction(me, "sks_get_tsb", "SKS-GET-TSB", 1, 0, false);
+        declareFunction(me, "sks_get_translation_schemabase_mt", "SKS-GET-TRANSLATION-SCHEMABASE-MT", 1, 0, false);
+        declareFunction(me, "sks_get_bridging_or_content_mt", "SKS-GET-BRIDGING-OR-CONTENT-MT", 1, 0, false);
+        declareFunction(me, "sks_get_cmt", "SKS-GET-CMT", 1, 0, false);
+        declareFunction(me, "sks_get_bmt", "SKS-GET-BMT", 1, 0, false);
+        declareFunction(me, "sks_set_source_description_mt", "SKS-SET-SOURCE-DESCRIPTION-MT", 2, 0, false);
+        declareFunction(me, "sks_set_physical_schemabase_mt", "SKS-SET-PHYSICAL-SCHEMABASE-MT", 2, 0, false);
+        declareFunction(me, "sks_set_logical_schemabase_mt", "SKS-SET-LOGICAL-SCHEMABASE-MT", 2, 0, false);
+        declareFunction(me, "sks_set_translation_schemabase_mt", "SKS-SET-TRANSLATION-SCHEMABASE-MT", 2, 0, false);
+        declareFunction(me, "sksi_smt_check_isa_invariant", "SKSI-SMT-CHECK-ISA-INVARIANT", 2, 0, false);
+        declareFunction(me, "sksi_source_description_p", "SKSI-SOURCE-DESCRIPTION-P", 1, 0, false);
+        declareFunction(me, "sksi_sd_get_mt", "SKSI-SD-GET-MT", 1, 0, false);
+        declareFunction(me, "sksi_physical_schemabase_p", "SKSI-PHYSICAL-SCHEMABASE-P", 1, 0, false);
+        declareFunction(me, "sksi_psb_get_name", "SKSI-PSB-GET-NAME", 1, 0, false);
+        declareFunction(me, "sksi_psb_get_mt", "SKSI-PSB-GET-MT", 1, 0, false);
+        declareFunction(me, "sksi_physical_schema_p", "SKSI-PHYSICAL-SCHEMA-P", 1, 0, false);
+        declareFunction(me, "sksi_ps_get_name", "SKSI-PS-GET-NAME", 1, 0, false);
+        declareFunction(me, "sksi_ps_get_pfs", "SKSI-PS-GET-PFS", 1, 0, false);
+        declareFunction(me, "sksi_physical_field_p", "SKSI-PHYSICAL-FIELD-P", 1, 0, false);
+        declareFunction(me, "sksi_pf_get_ps", "SKSI-PF-GET-PS", 1, 0, false);
+        declareFunction(me, "sksi_pf_get_name", "SKSI-PF-GET-NAME", 1, 0, false);
+        declareFunction(me, "sksi_pf_get_datatype", "SKSI-PF-GET-DATATYPE", 1, 0, false);
+        declareFunction(me, "sksi_pf_get_nullable", "SKSI-PF-GET-NULLABLE", 1, 0, false);
+        declareFunction(me, "sksi_pf_get_default_value", "SKSI-PF-GET-DEFAULT-VALUE", 1, 0, false);
+        declareFunction(me, "sksi_pf_get_key_type", "SKSI-PF-GET-KEY-TYPE", 1, 0, false);
+        declareFunction(me, "sksi_logical_schemabase_p", "SKSI-LOGICAL-SCHEMABASE-P", 1, 0, false);
+        declareFunction(me, "new_logical_schemabase", "NEW-LOGICAL-SCHEMABASE", 1, 0, false);
+        declareFunction(me, "sksi_lsb_get_mt", "SKSI-LSB-GET-MT", 1, 0, false);
+        declareFunction(me, "sksi_logical_schema_p", "SKSI-LOGICAL-SCHEMA-P", 1, 0, false);
+        declareFunction(me, "new_logical_schema", "NEW-LOGICAL-SCHEMA", 2, 2, false);
+        declareFunction(me, "new_or_recycled_logical_schema", "NEW-OR-RECYCLED-LOGICAL-SCHEMA", 2, 3, false);
+        declareFunction(me, "sksi_ls_get_name", "SKSI-LS-GET-NAME", 1, 0, false);
+        declareFunction(me, "sksi_ls_get_lfs", "SKSI-LS-GET-LFS", 1, 0, false);
+        declareFunction(me, "sksi_ls_get_mss", "SKSI-LS-GET-MSS", 1, 0, false);
+        declareFunction(me, "sksi_ls_get_ps", "SKSI-LS-GET-PS", 1, 0, false);
+        declareFunction(me, "sksi_logical_field_p", "SKSI-LOGICAL-FIELD-P", 1, 0, false);
+        declareFunction(me, "sksi_next_id", "SKSI-NEXT-ID", 0, 0, false);
+        declareFunction(me, "new_logical_field", "NEW-LOGICAL-FIELD", 2, 0, false);
+        declareFunction(me, "sksi_lf_convert_to_constant", "SKSI-LF-CONVERT-TO-CONSTANT", 3, 0, false);
+        declareFunction(me, "sksi_lf_get_genls", "SKSI-LF-GET-GENLS", 1, 0, false);
+        declareFunction(me, "sksi_lf_get_isas", "SKSI-LF-GET-ISAS", 1, 0, false);
+        declareFunction(me, "sksi_lf_get_cycl", "SKSI-LF-GET-CYCL", 1, 0, false);
+        declareFunction(me, "sksi_meaning_sentence_p", "SKSI-MEANING-SENTENCE-P", 1, 0, false);
+        declareFunction(me, "sksi_ms_get_cycl", "SKSI-MS-GET-CYCL", 1, 0, false);
+        declareFunction(me, "sksi_ms_get_asserted", "SKSI-MS-GET-ASSERTED", 1, 0, false);
+        declareFunction(me, "sksi_translation_schemabase_p", "SKSI-TRANSLATION-SCHEMABASE-P", 1, 0, false);
+        declareFunction(me, "new_translation_schemabase", "NEW-TRANSLATION-SCHEMABASE", 3, 0, false);
+        declareFunction(me, "sksi_tsb_get_mt", "SKSI-TSB-GET-MT", 1, 0, false);
+        declareFunction(me, "decode_physical_structure_of_sks", "DECODE-PHYSICAL-STRUCTURE-OF-SKS", 1, 0, false);
+        declareFunction(me, "new_structured_knowledge_source", "NEW-STRUCTURED-KNOWLEDGE-SOURCE", 1, 0, false);
+        declareFunction(me, "new_conceptual_mapping_logical_schema", "NEW-CONCEPTUAL-MAPPING-LOGICAL-SCHEMA", 4, 0, false);
+        declareFunction(me, "sksi_smt_get_available_database_types", "SKSI-SMT-GET-AVAILABLE-DATABASE-TYPES", 0, 0, false);
+        declareFunction(me, "sks_initialize_all_sks_description_mts", "SKS-INITIALIZE-ALL-SKS-DESCRIPTION-MTS", 0, 0, false);
+        declareFunction(me, "sks_initialize_description_mts", "SKS-INITIALIZE-DESCRIPTION-MTS", 1, 0, false);
+        declareFunction(me, "get_all_sds", "GET-ALL-SDS", 0, 0, false);
+        declareFunction(me, "get_all_psbs", "GET-ALL-PSBS", 0, 0, false);
+        declareFunction(me, "get_all_lsbs", "GET-ALL-LSBS", 0, 0, false);
+        declareFunction(me, "get_all_tsbs", "GET-ALL-TSBS", 0, 0, false);
+        declareFunction(me, "sksi_form", "SKSI-FORM", 1, 0, false);
+        declareFunction(me, "sksi_arghash_form", "SKSI-ARGHASH-FORM", 2, 0, false);
+        declareFunction(me, "amt_mts", "AMT-MTS", 1, 1, false);
+        declareFunction(me, "sks_guess_sd", "SKS-GUESS-SD", 1, 0, false);
+        declareFunction(me, "sks_guess_psb", "SKS-GUESS-PSB", 1, 0, false);
+        declareFunction(me, "sks_guess_lsb", "SKS-GUESS-LSB", 1, 0, false);
+        declareFunction(me, "sks_guess_tsb", "SKS-GUESS-TSB", 1, 0, false);
+        declareFunction(me, "sksi_psb_get_schemata", "SKSI-PSB-GET-SCHEMATA", 1, 0, false);
+        declareFunction(me, "sksi_psb_get_labeled_schemata", "SKSI-PSB-GET-LABELED-SCHEMATA", 1, 0, false);
+        declareFunction(me, "sksi_lsb_get_schemata", "SKSI-LSB-GET-SCHEMATA", 1, 0, false);
+        declareFunction(me, "sksi_tsb_get_translation_pairs", "SKSI-TSB-GET-TRANSLATION-PAIRS", 1, 0, false);
+        declareFunction(me, "sksi_tsb_get_lss_for_pss", "SKSI-TSB-GET-LSS-FOR-PSS", 1, 0, false);
+        declareFunction(me, "sksi_sks_get_translations", "SKSI-SKS-GET-TRANSLATIONS", 3, 1, false);
         return NIL;
     }
 
     public static SubLObject init_sksi_smt_file() {
-        if (SubLFiles.USE_V1) {
-            defparameter("*ALLOW-SMT-EDITING-LINKS*", NIL);
-            deflexical("*SKSI-SMT-SD-PARAMETERS*", $list122);
-            deflexical("*SKSI-SMT-COMPILE-PARAM-DEFINITIONS-CACHING-STATE*", NIL);
-            deflexical("*SKSI-SMT-MODE*", $ENABLED);
-            deflexical("*SKSI-SMT-COLUMN-OR-FORT-NAME-CACHING-STATE*", NIL);
-            defparameter("*SKSI-SMT-WARN-ABOUT-INVARIANTS?*", NIL);
-            deflexical("*SKSI-ISG*", SubLTrampolineFile.maybeDefault($sksi_isg$, $sksi_isg$, () -> integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED)));
-        }
-        if (SubLFiles.USE_V2) {
-            deflexical("*SKSI-SMT-SD-PARAMETERS*", $list_alt102);
-            deflexical("*SKSI-ISG*", NIL != boundp($sksi_isg$) ? ((SubLObject) ($sksi_isg$.getGlobalValue())) : integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED));
-        }
-        return NIL;
-    }
-
-    public static SubLObject init_sksi_smt_file_Previous() {
         defparameter("*ALLOW-SMT-EDITING-LINKS*", NIL);
         deflexical("*SKSI-SMT-SD-PARAMETERS*", $list122);
         deflexical("*SKSI-SMT-COMPILE-PARAM-DEFINITIONS-CACHING-STATE*", NIL);
@@ -10314,51 +5890,7 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject setup_sksi_smt_file_alt() {
-        setup_cb_link_method($SMT, CB_LINK_SMT, ONE_INTEGER);
-        declare_cb_tool($SMT, $$$SMT, $$$SMT, $$$Schema_Modeling_Tool);
-        note_html_handler_function(SKSI_SMT);
-        declare_defglobal($sksi_isg$);
-        return NIL;
-    }
-
     public static SubLObject setup_sksi_smt_file() {
-        if (SubLFiles.USE_V1) {
-            setup_cb_link_method($EDIT_IN_SMT, CB_LINK_EDIT_IN_SMT, TWO_INTEGER);
-            setup_cb_link_method($SMT, CB_LINK_SMT, ONE_INTEGER);
-            declare_cb_tool($SMT, $$$SMT, $$$SMT, $$$Schema_Modeling_Tool);
-            html_macros.note_cgi_handler_function(SKSI_SMT, $HTML_HANDLER);
-            register_external_symbol(SKSI_SMT_UPDATE_SOURCE_DESCRIPTION);
-            register_external_symbol(SKSI_SMT_COMPILE_SOURCE_DESCRIPTION);
-            memoization_state.note_globally_cached_function(SKSI_SMT_COMPILE_PARAM_DEFINITIONS);
-            register_external_symbol(SKSI_SMT_REGISTER_STRUCTURED_KNOWLEDGE_SOURCE);
-            register_external_symbol($sym148$SKSI_SMT_STRUCTURED_KNOWLEDGE_SOURCE_REGISTERED_);
-            register_external_symbol(SKSI_PS_COMPILE_PFS_INFO);
-            register_external_symbol(SKSI_SMT_FETCH_SIMPLE_LOGICAL_SCHEMATA);
-            register_external_symbol(SKSI_SMT_RETRIEVE_SIMPLE_LOGICAL_SCHEMATA);
-            register_external_symbol(SKSI_SMT_RETRIEVE_SIMPLE_LOGICAL_SCHEMA);
-            register_external_symbol(ENABLE_SKSI_SMT_MODE);
-            register_external_symbol(DISABLE_SKSI_SMT_MODE);
-            register_external_symbol($sym193$IS_SKSI_SMT_MODE_ENABLED_);
-            register_external_symbol(GET_SKSI_SMT_MODE);
-            register_external_symbol(SKSI_SMT_GET_UNITS_OF_MEASUREMENT);
-            register_external_symbol(SKSI_SMT_DERIVE_SIMPLE_LOGICAL_SCHEMA);
-            memoization_state.note_globally_cached_function(SKSI_SMT_COLUMN_OR_FORT_NAME);
-            register_html_state_variable($sksi_smt_warn_about_invariantsP$);
-            declare_defglobal($sksi_isg$);
-            register_external_symbol(DECODE_PHYSICAL_STRUCTURE_OF_SKS);
-            register_external_symbol(NEW_STRUCTURED_KNOWLEDGE_SOURCE);
-            register_external_symbol(NEW_CONCEPTUAL_MAPPING_LOGICAL_SCHEMA);
-            register_external_symbol(SKSI_SMT_GET_AVAILABLE_DATABASE_TYPES);
-            register_external_symbol(SKSI_PSB_GET_LABELED_SCHEMATA);
-        }
-        if (SubLFiles.USE_V2) {
-            note_html_handler_function(SKSI_SMT);
-        }
-        return NIL;
-    }
-
-    public static SubLObject setup_sksi_smt_file_Previous() {
         setup_cb_link_method($EDIT_IN_SMT, CB_LINK_EDIT_IN_SMT, TWO_INTEGER);
         setup_cb_link_method($SMT, CB_LINK_SMT, ONE_INTEGER);
         declare_cb_tool($SMT, $$$SMT, $$$SMT, $$$Schema_Modeling_Tool);
@@ -10379,7 +5911,7 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
         register_external_symbol(SKSI_SMT_GET_UNITS_OF_MEASUREMENT);
         register_external_symbol(SKSI_SMT_DERIVE_SIMPLE_LOGICAL_SCHEMA);
         memoization_state.note_globally_cached_function(SKSI_SMT_COLUMN_OR_FORT_NAME);
-        register_html_state_variable($sksi_smt_warn_about_invariantsP$);
+        register_html_state_variable($sym312$_SKSI_SMT_WARN_ABOUT_INVARIANTS__);
         declare_defglobal($sksi_isg$);
         register_external_symbol(DECODE_PHYSICAL_STRUCTURE_OF_SKS);
         register_external_symbol(NEW_STRUCTURED_KNOWLEDGE_SOURCE);
@@ -10405,6 +5937,391 @@ public final class sksi_smt extends SubLTranslatedFile implements V12 {
     }
 
     static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
 

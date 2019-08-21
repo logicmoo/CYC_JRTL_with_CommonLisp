@@ -678,7 +678,7 @@ public final class term_learner extends SubLTranslatedFile implements V02 {
                     if (NIL != def_preds) {
                         {
                             SubLObject def_strings = NIL;
-                            SubLObject cdolist_list_var = pph_methods_lexicon.all_phrases_for_term(instance, $list_alt29, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                            SubLObject cdolist_list_var = pph_methods_lexicon.all_phrases_for_term(instance, $list_alt29, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED_SYM);
                             SubLObject v_term = NIL;
                             for (v_term = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_term = cdolist_list_var.first()) {
                                 {
@@ -1577,7 +1577,7 @@ public final class term_learner extends SubLTranslatedFile implements V02 {
      */
     public static final SubLObject term_learner_user_substitution_selection_renderer_test(SubLObject cycl_sentence, SubLObject new_string, SubLObject arg_pos_string, SubLObject expected_answers) {
         {
-            SubLObject actual_answer = cure_api.term_learner_user_substitution(document_annotation_widgets.term_learner_id(cycl_sentence), new_string, arg_pos_string, $$$nil, UNPROVIDED, UNPROVIDED);
+            SubLObject actual_answer = cure_api.term_learner_user_substitution(document_annotation_widgets.term_learner_id(cycl_sentence), new_string, arg_pos_string, $$$nil, UNPROVIDED, UNPROVIDED, UNPROVIDED_SYM, UNPROVIDED_SYM, UNPROVIDED_SYM);
             SubLObject selection_renderers = NIL;
             SubLObject failP = NIL;
             SubLObject cdolist_list_var = actual_answer;

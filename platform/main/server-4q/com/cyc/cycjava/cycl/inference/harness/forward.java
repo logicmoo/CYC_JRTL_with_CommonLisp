@@ -1,68 +1,89 @@
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- */
 package com.cyc.cycjava.cycl.inference.harness;
 
 
-import static com.cyc.cycjava.cycl.arguments.support_formula;
-import static com.cyc.cycjava.cycl.assertion_handles.assertion_p;
-import static com.cyc.cycjava.cycl.assertion_handles.do_assertions_table;
-import static com.cyc.cycjava.cycl.assertion_utilities.all_forward_rules_relevant_to_terms;
-import static com.cyc.cycjava.cycl.constant_handles.reader_make_constant_shell;
+import com.cyc.cycjava.cycl.arguments;
+import com.cyc.cycjava.cycl.assertion_handles;
+import com.cyc.cycjava.cycl.assertion_utilities;
+import com.cyc.cycjava.cycl.assertions_high;
+import com.cyc.cycjava.cycl.at_vars;
+import com.cyc.cycjava.cycl.auxiliary_indexing;
+import com.cyc.cycjava.cycl.backward;
+import com.cyc.cycjava.cycl.bindings;
+import com.cyc.cycjava.cycl.cardinality_estimates;
+import com.cyc.cycjava.cycl.clauses;
+import com.cyc.cycjava.cycl.conflicts;
+import com.cyc.cycjava.cycl.cycl_utilities;
+import com.cyc.cycjava.cycl.czer_main;
+import com.cyc.cycjava.cycl.czer_vars;
+import com.cyc.cycjava.cycl.deduction_handles;
+import com.cyc.cycjava.cycl.deductions_high;
+import com.cyc.cycjava.cycl.enumeration_types;
+import com.cyc.cycjava.cycl.format_nil;
+import com.cyc.cycjava.cycl.fort_types_interface;
+import com.cyc.cycjava.cycl.forts;
+import com.cyc.cycjava.cycl.genl_mts;
+import com.cyc.cycjava.cycl.hl_macros;
+import com.cyc.cycjava.cycl.hl_storage_modules;
+import com.cyc.cycjava.cycl.hl_supports;
+import com.cyc.cycjava.cycl.hlmt;
+import com.cyc.cycjava.cycl.inference.ask_utilities;
+import com.cyc.cycjava.cycl.inference.harness.forward;
+import com.cyc.cycjava.cycl.inference.inference_trampolines;
+import com.cyc.cycjava.cycl.inference.modules.forward_modules;
+import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_ist;
+import com.cyc.cycjava.cycl.isa;
+import com.cyc.cycjava.cycl.iteration;
+import com.cyc.cycjava.cycl.kb_accessors;
+import com.cyc.cycjava.cycl.kb_control_vars;
+import com.cyc.cycjava.cycl.kb_indexing;
+import com.cyc.cycjava.cycl.kb_mapping_macros;
+import com.cyc.cycjava.cycl.kb_mapping_utilities;
+import com.cyc.cycjava.cycl.kb_utilities;
+import com.cyc.cycjava.cycl.list_utilities;
+import com.cyc.cycjava.cycl.memoization_state;
+import com.cyc.cycjava.cycl.misc_utilities;
+import com.cyc.cycjava.cycl.mt_relevance_cache;
+import com.cyc.cycjava.cycl.mt_relevance_macros;
+import com.cyc.cycjava.cycl.mt_vars;
+import com.cyc.cycjava.cycl.number_utilities;
+import com.cyc.cycjava.cycl.numeric_date_utilities;
+import com.cyc.cycjava.cycl.queues;
+import com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars;
+import com.cyc.cycjava.cycl.set;
+import com.cyc.cycjava.cycl.somewhere_cache;
+import com.cyc.cycjava.cycl.subl_promotions;
+import com.cyc.cycjava.cycl.tms;
+import com.cyc.cycjava.cycl.unification_utilities;
+import com.cyc.cycjava.cycl.variables;
+import com.cyc.cycjava.cycl.wff;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
+import java.util.function.Supplier;
+
+import static com.cyc.cycjava.cycl.constant_handles.*;
 import static com.cyc.cycjava.cycl.control_vars.$conflicts_from_invalid_deductions$;
 import static com.cyc.cycjava.cycl.control_vars.$filter_deductions_for_trivially_derivable_gafs$;
 import static com.cyc.cycjava.cycl.control_vars.$forward_inference_removal_cost_cutoff$;
 import static com.cyc.cycjava.cycl.control_vars.$inference_debugP$;
 import static com.cyc.cycjava.cycl.control_vars.$prefer_forward_skolemization$;
 import static com.cyc.cycjava.cycl.control_vars.$within_assert$;
-import static com.cyc.cycjava.cycl.control_vars.browse_forward_inferencesP;
-import static com.cyc.cycjava.cycl.cycl_utilities.atomic_sentence_arg1;
-import static com.cyc.cycjava.cycl.cycl_utilities.atomic_sentence_predicate;
-import static com.cyc.cycjava.cycl.cycl_utilities.negate;
-import static com.cyc.cycjava.cycl.cycl_utilities.possibly_negate;
-import static com.cyc.cycjava.cycl.deductions_high.create_deduction_spec;
-import static com.cyc.cycjava.cycl.el_utilities.compatible_formula_arity_p;
-import static com.cyc.cycjava.cycl.el_utilities.hl_ground_tree_p;
-import static com.cyc.cycjava.cycl.el_utilities.ist_sentence_p;
-import static com.cyc.cycjava.cycl.el_utilities.literal_arg2;
-import static com.cyc.cycjava.cycl.el_utilities.same_formula_arity_p;
-import static com.cyc.cycjava.cycl.el_utilities.sefify;
-import static com.cyc.cycjava.cycl.el_utilities.tou_asentP;
-import static com.cyc.cycjava.cycl.el_utilities.tou_litP;
-import static com.cyc.cycjava.cycl.fort_types_interface.microtheory_p;
-import static com.cyc.cycjava.cycl.genl_mts.all_spec_mts;
-import static com.cyc.cycjava.cycl.genl_mts.genl_mt_of_anyP;
-import static com.cyc.cycjava.cycl.genl_mts.min_mts;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_empty_p;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_id_and_object_validP;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_next_id;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_next_state;
-import static com.cyc.cycjava.cycl.id_index.do_id_index_state_object;
-import static com.cyc.cycjava.cycl.id_index.id_index_count;
-import static com.cyc.cycjava.cycl.id_index.id_index_dense_objects;
-import static com.cyc.cycjava.cycl.id_index.id_index_dense_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_next_id;
-import static com.cyc.cycjava.cycl.id_index.id_index_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_skip_tombstones_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_id_threshold;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_objects;
-import static com.cyc.cycjava.cycl.id_index.id_index_sparse_objects_empty_p;
-import static com.cyc.cycjava.cycl.id_index.id_index_tombstone_p;
-import static com.cyc.cycjava.cycl.kb_mapping_utilities.pred_values_in_any_mt;
-import static com.cyc.cycjava.cycl.kb_mapping_utilities.some_pred_value_in_relevant_mts;
-import static com.cyc.cycjava.cycl.list_utilities.delete_subsumed_items;
-import static com.cyc.cycjava.cycl.list_utilities.lengthGE;
-import static com.cyc.cycjava.cycl.list_utilities.lengthLE;
-import static com.cyc.cycjava.cycl.list_utilities.make_plist;
-import static com.cyc.cycjava.cycl.list_utilities.mapcar_product;
-import static com.cyc.cycjava.cycl.list_utilities.member_eqP;
-import static com.cyc.cycjava.cycl.list_utilities.merge_plist;
-import static com.cyc.cycjava.cycl.list_utilities.partition_list;
-import static com.cyc.cycjava.cycl.list_utilities.remove_if_not;
-import static com.cyc.cycjava.cycl.list_utilities.sublisp_boolean;
-import static com.cyc.cycjava.cycl.list_utilities.tree_find_if;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.declare_defglobal;
-import static com.cyc.cycjava.cycl.tms.atomic_cnf_trivially_derivable;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.id_index.*;
+import static com.cyc.cycjava.cycl.inference.harness.forward.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
 import static com.cyc.cycjava.cycl.utilities_macros.$current_forward_problem_store$;
 import static com.cyc.cycjava.cycl.utilities_macros.$is_noting_progressP$;
 import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_index$;
@@ -82,289 +103,58 @@ import static com.cyc.cycjava.cycl.utilities_macros.$progress_total$;
 import static com.cyc.cycjava.cycl.utilities_macros.$silent_progressP$;
 import static com.cyc.cycjava.cycl.utilities_macros.$suppress_all_progress_faster_than_seconds$;
 import static com.cyc.cycjava.cycl.utilities_macros.$within_noting_percent_progress$;
-import static com.cyc.cycjava.cycl.utilities_macros.note_funcall_helper_function;
-import static com.cyc.cycjava.cycl.utilities_macros.note_percent_progress;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_percent_progress_postamble;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_percent_progress_preamble;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_progress_postamble;
-import static com.cyc.cycjava.cycl.utilities_macros.noting_progress_preamble;
-import static com.cyc.cycjava.cycl.utilities_macros.possibly_get_forward_inference_environment;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.append;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.nconc;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.eq;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.funcall;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.gethash_without_values;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.make_lock;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.release_lock;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.seize_lock;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.add;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.divide;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.numL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.subtract;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.format;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.cconcatenate;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.delete;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.delete_duplicates;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.find_if;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.length;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.nreverse;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.remove;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.remove_if;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.symbol_function;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.MINUS_ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SEVENTEEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWENTY_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.current_process;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.get_internal_real_time;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.get_universal_time;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.stringp;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.sublisp_null;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.arg2;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.getValuesAsVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.multiple_value_list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.nth_value_step_1;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.nth_value_step_2;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.resetMultipleValues;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.restoreValuesFromVector;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.values;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.aref;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.cdestructuring_bind_error;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_consp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.destructuring_bind_must_listp;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cadr;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.cddr;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.copy_list;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.copy_tree;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.getf;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.member;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.putf;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.second;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.union;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.bq_cons;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-import static com.cyc.tool.subl.util.SubLFiles.defvar;
-
-import com.cyc.cycjava.cycl.V12;
-import com.cyc.cycjava.cycl.arguments;
-import com.cyc.cycjava.cycl.assertion_handles;
-import com.cyc.cycjava.cycl.assertion_utilities;
-import com.cyc.cycjava.cycl.assertions_high;
-import com.cyc.cycjava.cycl.at_vars;
-import com.cyc.cycjava.cycl.auxiliary_indexing;
-import com.cyc.cycjava.cycl.backward;
-import com.cyc.cycjava.cycl.bindings;
-import com.cyc.cycjava.cycl.cardinality_estimates;
-import com.cyc.cycjava.cycl.clauses;
-import com.cyc.cycjava.cycl.conflicts;
-import com.cyc.cycjava.cycl.cycl_grammar;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.czer_main;
-import com.cyc.cycjava.cycl.czer_vars;
-import com.cyc.cycjava.cycl.deduction_handles;
-import com.cyc.cycjava.cycl.deductions_high;
-import com.cyc.cycjava.cycl.enumeration_types;
-import com.cyc.cycjava.cycl.format_nil;
-import com.cyc.cycjava.cycl.fort_types_interface;
-import com.cyc.cycjava.cycl.forts;
-import com.cyc.cycjava.cycl.function_terms;
-import com.cyc.cycjava.cycl.genl_mts;
-import com.cyc.cycjava.cycl.hl_macros;
-import com.cyc.cycjava.cycl.hl_storage_modules;
-import com.cyc.cycjava.cycl.hl_supports;
-import com.cyc.cycjava.cycl.hlmt;
-import com.cyc.cycjava.cycl.isa;
-import com.cyc.cycjava.cycl.iteration;
-import com.cyc.cycjava.cycl.kb_accessors;
-import com.cyc.cycjava.cycl.kb_control_vars;
-import com.cyc.cycjava.cycl.kb_indexing;
-import com.cyc.cycjava.cycl.kb_mapping_macros;
-import com.cyc.cycjava.cycl.kb_mapping_utilities;
-import com.cyc.cycjava.cycl.kb_utilities;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.memoization_state;
-import com.cyc.cycjava.cycl.misc_utilities;
-import com.cyc.cycjava.cycl.mt_relevance_cache;
-import com.cyc.cycjava.cycl.mt_relevance_macros;
-import com.cyc.cycjava.cycl.mt_vars;
-import com.cyc.cycjava.cycl.number_utilities;
-import com.cyc.cycjava.cycl.numeric_date_utilities;
-import com.cyc.cycjava.cycl.queues;
-import com.cyc.cycjava.cycl.set;
-import com.cyc.cycjava.cycl.somewhere_cache;
-import com.cyc.cycjava.cycl.subl_promotions;
-import com.cyc.cycjava.cycl.tms;
-import com.cyc.cycjava.cycl.unification_utilities;
-import com.cyc.cycjava.cycl.variables;
-import com.cyc.cycjava.cycl.wff;
-import com.cyc.cycjava.cycl.inference.ask_utilities;
-import com.cyc.cycjava.cycl.inference.inference_trampolines;
-import com.cyc.cycjava.cycl.inference.modules.forward_modules;
-import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_ist;
-import com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLFiles.LispMethod;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
-/**
- * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
- * module:      FORWARD
- * source file: /cyc/top/cycl/inference/harness/forward.lisp
- * created:     2019/07/03 17:37:47
- */
-public final class forward extends SubLTranslatedFile implements V12 {
-    public static final SubLObject with_forward_inference_gaf(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            SubLObject gaf = NIL;
-            destructuring_bind_must_consp(current, datum, $list_alt0);
-            gaf = current.first();
-            current = current.rest();
-            {
-                SubLObject body = current;
-                return listS(CLET, list(list($forward_inference_gaf$, gaf)), append(body, NIL));
-            }
-        }
-    }
-
-    /**
-     * Initialize global forward inference environment.
-     */
-    @LispMethod(comment = "Initialize global forward inference environment.")
-    public static final SubLObject initialize_forward_inference_environment() {
-        kb_control_vars.$forward_inference_environment$.setDynamicValue(com.cyc.cycjava.cycl.inference.harness.forward.get_forward_inference_environment());
-        return NIL;
-    }
-
-    public static final SubLObject forward_propagate_gaf_expansions(SubLObject source_asent, SubLObject source_sense, SubLObject propagation_mt, SubLObject source_gaf_assertion) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject cdolist_list_var = forward_modules.forward_tactic_specs(source_asent, source_sense, propagation_mt);
-                SubLObject forward_tactic_spec = NIL;
-                for (forward_tactic_spec = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , forward_tactic_spec = cdolist_list_var.first()) {
-                    {
-                        SubLObject datum = forward_tactic_spec;
-                        SubLObject current = datum;
-                        SubLObject trigger_asent = NIL;
-                        SubLObject trigger_sense = NIL;
-                        SubLObject examine_asent = NIL;
-                        SubLObject examine_sense = NIL;
-                        SubLObject rule = NIL;
-                        destructuring_bind_must_consp(current, datum, $list_alt15);
-                        trigger_asent = current.first();
-                        current = current.rest();
-                        destructuring_bind_must_consp(current, datum, $list_alt15);
-                        trigger_sense = current.first();
-                        current = current.rest();
-                        destructuring_bind_must_consp(current, datum, $list_alt15);
-                        examine_asent = current.first();
-                        current = current.rest();
-                        destructuring_bind_must_consp(current, datum, $list_alt15);
-                        examine_sense = current.first();
-                        current = current.rest();
-                        destructuring_bind_must_consp(current, datum, $list_alt15);
-                        rule = current.first();
-                        current = current.rest();
-                        {
-                            SubLObject additional_supports = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
-                            destructuring_bind_must_listp(current, datum, $list_alt15);
-                            current = current.rest();
-                            if (NIL == current) {
-                                if (($NEG == examine_sense) || (NIL != kb_control_vars.$forward_propagate_from_negations$.getDynamicValue(thread))) {
-                                    {
-                                        SubLObject trigger_supports = com.cyc.cycjava.cycl.inference.harness.forward.make_forward_trigger_supports(source_gaf_assertion, additional_supports);
-                                        com.cyc.cycjava.cycl.inference.harness.forward.forward_propagate_gaf_internal(trigger_asent, examine_asent, examine_sense, propagation_mt, rule, trigger_supports);
-                                    }
-                                }
-                            } else {
-                                cdestructuring_bind_error(datum, $list_alt15);
-                            }
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
-    public static final SubLObject forward_propagate_gaf(SubLObject source_gaf_assertion, SubLObject propagation_mt) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject _prev_bind_0 = $forward_inference_gaf$.currentBinding(thread);
-                try {
-                    $forward_inference_gaf$.bind(source_gaf_assertion, thread);
-                    {
-                        SubLObject source_sense = enumeration_types.truth_sense(assertions_high.assertion_truth(source_gaf_assertion));
-                        if (($POS == source_sense) || (NIL != kb_control_vars.$forward_propagate_from_negations$.getDynamicValue(thread))) {
-                            {
-                                SubLObject source_asent = copy_tree(assertions_high.gaf_formula(source_gaf_assertion));
-                                {
-                                    SubLObject _prev_bind_0_14 = kb_control_vars.$relax_type_restrictions_for_nats$.currentBinding(thread);
-                                    try {
-                                        kb_control_vars.$relax_type_restrictions_for_nats$.bind(makeBoolean((NIL != kb_control_vars.$relax_type_restrictions_for_nats$.getDynamicValue(thread)) || (NIL != tou_asentP(source_asent))), thread);
-                                        com.cyc.cycjava.cycl.inference.harness.forward.forward_propagate_gaf_expansions(source_asent, source_sense, propagation_mt, source_gaf_assertion);
-                                    } finally {
-                                        kb_control_vars.$relax_type_restrictions_for_nats$.rebind(_prev_bind_0_14, thread);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } finally {
-                    $forward_inference_gaf$.rebind(_prev_bind_0, thread);
-                }
-            }
-            return NIL;
-        }
-    }
-
-    /**
-     * temporary control parameter; @todo eliminate
-     */
-    // defvar
-    @LispMethod(comment = "temporary control parameter; @todo eliminate\ndefvar")
-    private static final SubLSymbol $forward_non_trigger_literal_pruning_enabledP$ = makeSymbol("*FORWARD-NON-TRIGGER-LITERAL-PRUNING-ENABLED?*");
-
+public final class forward extends SubLTranslatedFile {
     public static final SubLFile me = new forward();
 
+    public static final String myName = "com.cyc.cycjava.cycl.inference.harness.forward";
 
+    public static final String myFingerPrint = "db16bacaab6eb1686d653ddc6b127294ee07d610a047dc8d636b200ca9b04469";
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $forward_inference_traceP$ = makeSymbol("*FORWARD-INFERENCE-TRACE?*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $tracing_forward_inference$ = makeSymbol("*TRACING-FORWARD-INFERENCE*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $forward_inference_debugP$ = makeSymbol("*FORWARD-INFERENCE-DEBUG?*");
 
     // defparameter
@@ -373,7 +163,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
      * Whether forward inference requires that a computed placement mt for a forward
      * deduction be the mt of one of its supports.
      */
-    @LispMethod(comment = "Whether forward inference requires that a computed placement mt for a forward\r\ndeduction be the mt of one of its supports.\ndefparameter\nWhether forward inference requires that a computed placement mt for a forward\ndeduction be the mt of one of its supports.")
     public static final SubLSymbol $require_cached_gaf_mt_from_supports$ = makeSymbol("*REQUIRE-CACHED-GAF-MT-FROM-SUPPORTS*");
 
     // defvar
@@ -382,7 +171,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
      * passed an inference-p as its arg1 (the forward inference object) and a
      * rule-assertion? as its arg2 (the forward rule being used).
      */
-    @LispMethod(comment = "A function-spec-p to call on each browsable forward inference. It will be\r\npassed an inference-p as its arg1 (the forward inference object) and a\r\nrule-assertion? as its arg2 (the forward rule being used).\ndefvar\nA function-spec-p to call on each browsable forward inference. It will be\npassed an inference-p as its arg1 (the forward inference object) and a\nrule-assertion? as its arg2 (the forward rule being used).")
     public static final SubLSymbol $forward_inference_browsing_callback$ = makeSymbol("*FORWARD-INFERENCE-BROWSING-CALLBACK*");
 
     // defparameter
@@ -392,91 +180,71 @@ public final class forward extends SubLTranslatedFile implements V12 {
      * trigger-bindings trigger-supports forward-results. @see
      * forward-propagate-dnf.
      */
-    @LispMethod(comment = "Optionally, store more info about each forward inference by passing it to the\r\ncallback. Additions are stored in a plist and are: target-asent target-truth\r\ntrigger-bindings trigger-supports forward-results. @see\r\nforward-propagate-dnf.\ndefparameter\nOptionally, store more info about each forward inference by passing it to the\ncallback. Additions are stored in a plist and are: target-asent target-truth\ntrigger-bindings trigger-supports forward-results. @see\nforward-propagate-dnf.")
     public static final SubLSymbol $forward_inference_browsing_callback_more_infoP$ = makeSymbol("*FORWARD-INFERENCE-BROWSING-CALLBACK-MORE-INFO?*");
 
     // defvar
     // Variable for debugging
-    /**
-     * Variable for debugging
-     */
-    @LispMethod(comment = "Variable for debugging\ndefvar")
     private static final SubLSymbol $block_forward_inferencesP$ = makeSymbol("*BLOCK-FORWARD-INFERENCES?*");
 
     // deflexical
-    @LispMethod(comment = "deflexical")
     public static final SubLSymbol $forward_inference_asserted_asent_fast_fail_cutoff$ = makeSymbol("*FORWARD-INFERENCE-ASSERTED-ASENT-FAST-FAIL-CUTOFF*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $respect_defining_mt_for_hypothetical_termsP$ = makeSymbol("*RESPECT-DEFINING-MT-FOR-HYPOTHETICAL-TERMS?*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $support_forward_propagate_rule_via_trigger_gafsP$ = makeSymbol("*SUPPORT-FORWARD-PROPAGATE-RULE-VIA-TRIGGER-GAFS?*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $forward_propagate_rule_via_trigger_gafs_problem_store_size$ = makeSymbol("*FORWARD-PROPAGATE-RULE-VIA-TRIGGER-GAFS-PROBLEM-STORE-SIZE*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $forward_inference_callback_reasons$ = makeSymbol("*FORWARD-INFERENCE-CALLBACK-REASONS*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $suppressed_forward_inference_callback_reasons$ = makeSymbol("*SUPPRESSED-FORWARD-INFERENCE-CALLBACK-REASONS*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $forced_forward_inference_callback_reasons$ = makeSymbol("*FORCED-FORWARD-INFERENCE-CALLBACK-REASONS*");
 
+
+
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $global_forward_inference_environment$ = makeSymbol("*GLOBAL-FORWARD-INFERENCE-ENVIRONMENT*");
 
+
+
     // deflexical
-    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $currently_forward_propagating_supports_lock$ = makeSymbol("*CURRENTLY-FORWARD-PROPAGATING-SUPPORTS-LOCK*");
+
+
+
+
 
     // deflexical
     // Problem store properties assumed by forward inference.
-    /**
-     * Problem store properties assumed by forward inference.
-     */
-    @LispMethod(comment = "Problem store properties assumed by forward inference.\ndeflexical")
     private static final SubLSymbol $forward_problem_store_properties$ = makeSymbol("*FORWARD-PROBLEM-STORE-PROPERTIES*");
 
     // defparameter
     // temp control variable
-    /**
-     * temp control variable
-     */
-    @LispMethod(comment = "temp control variable\ndefparameter")
     public static final SubLSymbol $forward_inference_shares_same_problem_storeP$ = makeSymbol("*FORWARD-INFERENCE-SHARES-SAME-PROBLEM-STORE?*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $forward_inference_recursion_depth$ = makeSymbol("*FORWARD-INFERENCE-RECURSION-DEPTH*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $someone_else_will_process_this_forward_inference_environment$ = makeSymbol("*SOMEONE-ELSE-WILL-PROCESS-THIS-FORWARD-INFERENCE-ENVIRONMENT*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $someone_else_will_process_the_global_forward_inference_environmentP$ = makeSymbol("*SOMEONE-ELSE-WILL-PROCESS-THE-GLOBAL-FORWARD-INFERENCE-ENVIRONMENT?*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $default_forward_propagation_mt$ = makeSymbol("*DEFAULT-FORWARD-PROPAGATION-MT*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $allow_forward_propagation_mt_overrideP$ = makeSymbol("*ALLOW-FORWARD-PROPAGATION-MT-OVERRIDE?*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $debug_forward_propagation_mt_overrideP$ = makeSymbol("*DEBUG-FORWARD-PROPAGATION-MT-OVERRIDE?*");
 
     // defparameter
@@ -484,27 +252,21 @@ public final class forward extends SubLTranslatedFile implements V12 {
      * The queue of new assertibles (hl-assertible-p) computed during one forward
      * theory revision cycle.
      */
-    @LispMethod(comment = "The queue of new assertibles (hl-assertible-p) computed during one forward\r\ntheory revision cycle.\ndefparameter\nThe queue of new assertibles (hl-assertible-p) computed during one forward\ntheory revision cycle.")
     public static final SubLSymbol $forward_inference_assertibles_queue$ = makeSymbol("*FORWARD-INFERENCE-ASSERTIBLES-QUEUE*");
+
+
 
     // defparameter
     // Should we bother to type-filter a prospective forward DNF.
-    /**
-     * Should we bother to type-filter a prospective forward DNF.
-     */
-    @LispMethod(comment = "Should we bother to type-filter a prospective forward DNF.\ndefparameter")
     public static final SubLSymbol $type_filter_forward_dnf$ = makeSymbol("*TYPE-FILTER-FORWARD-DNF*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $forward_non_trigger_literal_restricted_examine_asent$ = makeSymbol("*FORWARD-NON-TRIGGER-LITERAL-RESTRICTED-EXAMINE-ASENT*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $handle_one_forward_propagation_callback$ = makeSymbol("*HANDLE-ONE-FORWARD-PROPAGATION-CALLBACK*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $check_forward_propagate_doomed_due_to_null_max_floor_mtsP$ = makeSymbol("*CHECK-FORWARD-PROPAGATE-DOOMED-DUE-TO-NULL-MAX-FLOOR-MTS?*");
 
     // defparameter
@@ -514,43 +276,33 @@ public final class forward extends SubLTranslatedFile implements V12 {
      * as to warrant eager forward inference mt-pruning analysis. A negative value
      * therefore disables this feature.
      */
-    @LispMethod(comment = "integerp; Reified microtheories whose spec-cardinality is at or below this\r\nthreshold are considered to be sufficiently close to being a leaf microtheory\r\nas to warrant eager forward inference mt-pruning analysis. A negative value\r\ntherefore disables this feature.\ndefparameter\nintegerp; Reified microtheories whose spec-cardinality is at or below this\nthreshold are considered to be sufficiently close to being a leaf microtheory\nas to warrant eager forward inference mt-pruning analysis. A negative value\ntherefore disables this feature.")
     private static final SubLSymbol $forward_leafy_mt_threshold$ = makeSymbol("*FORWARD-LEAFY-MT-THRESHOLD*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $forward_inference_show_propagation_results_progress_cutoff$ = makeSymbol("*FORWARD-INFERENCE-SHOW-PROPAGATION-RESULTS-PROGRESS-CUTOFF*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $forward_inference_overriding_query_properties$ = makeSymbol("*FORWARD-INFERENCE-OVERRIDING-QUERY-PROPERTIES*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $rule_forward_inference_productivity_aggressive_whacking_modeP$ = makeSymbol("*RULE-FORWARD-INFERENCE-PRODUCTIVITY-AGGRESSIVE-WHACKING-MODE?*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $minimum_rule_forward_inference_productivity_limit$ = makeSymbol("*MINIMUM-RULE-FORWARD-INFERENCE-PRODUCTIVITY-LIMIT*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $assertive_wff_rule_whacking_factor$ = makeSymbol("*ASSERTIVE-WFF-RULE-WHACKING-FACTOR*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $old_rule_without_dependents_or_bookkeeping_whacking_factor$ = makeSymbol("*OLD-RULE-WITHOUT-DEPENDENTS-OR-BOOKKEEPING-WHACKING-FACTOR*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $old_rule_without_dependents_whacking_compensation_factor$ = makeSymbol("*OLD-RULE-WITHOUT-DEPENDENTS-WHACKING-COMPENSATION-FACTOR*");
 
     // defvar
-    @LispMethod(comment = "defvar")
     public static final SubLSymbol $compute_decontextualized_deduction_mtP$ = makeSymbol("*COMPUTE-DECONTEXTUALIZED-DEDUCTION-MT?*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $add_forward_deductions_from_supports_callback$ = makeSymbol("*ADD-FORWARD-DEDUCTIONS-FROM-SUPPORTS-CALLBACK*");
 
     // defvar
@@ -558,7 +310,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
      * When non-NIL, the deductions that result from forward inference are assumed
      * to be WFF.
      */
-    @LispMethod(comment = "When non-NIL, the deductions that result from forward inference are assumed\r\nto be WFF.\ndefvar\nWhen non-NIL, the deductions that result from forward inference are assumed\nto be WFF.")
     public static final SubLSymbol $assume_forward_deduction_is_wfP$ = makeSymbol("*ASSUME-FORWARD-DEDUCTION-IS-WF?*");
 
     // defvar
@@ -567,20 +318,21 @@ public final class forward extends SubLTranslatedFile implements V12 {
      * #$constraint are treated as constraints that must be already true rather than
      * mechanisms to add deductions to the KB.
      */
-    @LispMethod(comment = "Temporary control variable; When non-nil, forward rules labelled with\r\n#$constraint are treated as constraints that must be already true rather than\r\nmechanisms to add deductions to the KB.\ndefvar\nTemporary control variable; When non-nil, forward rules labelled with\n#$constraint are treated as constraints that must be already true rather than\nmechanisms to add deductions to the KB.")
     private static final SubLSymbol $forward_constraint_inference_enabledP$ = makeSymbol("*FORWARD-CONSTRAINT-INFERENCE-ENABLED?*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $compute_all_mt_and_support_combinations_exceptions$ = makeSymbol("*COMPUTE-ALL-MT-AND-SUPPORT-COMBINATIONS-EXCEPTIONS*");
 
     // defparameter
-    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $verify_some_support_combinations_possible$ = makeSymbol("*VERIFY-SOME-SUPPORT-COMBINATIONS-POSSIBLE*");
 
     private static final SubLInteger $int$10000 = makeInteger(10000);
 
     private static final SubLList $list1 = list(new SubLObject[]{ makeKeyword("SYNTACTICALLY-INVALID-FORWARD-NON-TRIGGER-ASENT"), makeKeyword("SYNTACTICALLY-INVALID-FORWARD-TRIGGER-ASENT"), makeKeyword("SYNTACTICALLY-INVALID-TERM-OF-UNIT"), makeKeyword("SEMANTICALLY-INVALID-ASSERTED-SENTENCE-ASENT"), makeKeyword("SEMANTICALLY-INVALID-COMPLETE-EXTENT-ASSERTED-ASENT"), makeKeyword("SEMANTICALLY-INVALID-ISA-ASENT"), makeKeyword("SEMANTICALLY-INVALID-GENLS-ASENT"), makeKeyword("NULL-MAX-FLOOR-MTS-OF-RULE-AND-GAF-MTS"), makeKeyword("SEMANTICALLY-INVALID-CLOSED-ASENT-VIA-QUERY"), makeKeyword("CONCLUDED-ASENT-NOT-HL-GROUND-TREE"), makeKeyword("NULL-MT-SUPPORT-COMBINATIONS"), makeKeyword("INVALID-LIFT"), makeKeyword("INVALID-PLACEMENT"), makeKeyword("FORWARD-BINDINGS-ABNORMAL"), makeKeyword("FORWARD-BINDINGS-EXCEPTED"), makeKeyword("FORWARD-CONCLUSION-FORBIDDEN-IN-MT"), makeKeyword("INVALIDATED-SUPPORT"), makeKeyword("FORWARD-CONCLUSION-TAUTOLOGICAL"), makeKeyword("FORWARD-CONCLUSION-CONTRADICTION"), makeKeyword("CZER-INVALIDATED-SUPPORT"), makeKeyword("FORWARD-CONCLUSION-NOT-WF"), makeKeyword("FORWARD-CONCLUSION-TRIVIALLY-DERIVABLE") });
+
+
+
+
 
     private static final SubLString $str4$______S__ = makeString("~&;; ~S~%");
 
@@ -598,11 +350,21 @@ public final class forward extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol $sym11$SUPPORT_VAR = makeUninternedSymbol("SUPPORT-VAR");
 
+
+
     private static final SubLSymbol WITH_CURRENTLY_FORWARD_PROPAGATING_SUPPORT = makeSymbol("WITH-CURRENTLY-FORWARD-PROPAGATING-SUPPORT");
+
+
+
+
 
     private static final SubLSymbol ADD_CURRENTLY_FORWARD_PROPAGATING_SUPPORT = makeSymbol("ADD-CURRENTLY-FORWARD-PROPAGATING-SUPPORT");
 
     private static final SubLSymbol REM_CURRENTLY_FORWARD_PROPAGATING_SUPPORT = makeSymbol("REM-CURRENTLY-FORWARD-PROPAGATING-SUPPORT");
+
+
+
+
 
     private static final SubLSymbol $forward_inference_gaf$ = makeSymbol("*FORWARD-INFERENCE-GAF*");
 
@@ -610,7 +372,7 @@ public final class forward extends SubLTranslatedFile implements V12 {
 
     public static final SubLSymbol $forward_inference_rule$ = makeSymbol("*FORWARD-INFERENCE-RULE*");
 
-    private static final SubLList $list23 = list(new SubLObject[]{ makeKeyword("TRANSFORMATION-ALLOWED?"), NIL, makeKeyword("INTERMEDIATE-STEP-VALIDATION-LEVEL"), $NONE, makeKeyword("NEGATION-BY-FAILURE?"), NIL, makeKeyword("ADD-RESTRICTION-LAYER-OF-INDIRECTION?"), T, makeKeyword("DIRECTION"), makeKeyword("FORWARD") });
+    private static final SubLList $list23 = list(new SubLObject[]{ makeKeyword("TRANSFORMATION-ALLOWED?"), NIL, makeKeyword("INTERMEDIATE-STEP-VALIDATION-LEVEL"), makeKeyword("NONE"), makeKeyword("NEGATION-BY-FAILURE?"), NIL, makeKeyword("ADD-RESTRICTION-LAYER-OF-INDIRECTION?"), T, makeKeyword("DIRECTION"), makeKeyword("FORWARD") });
 
     private static final SubLSymbol $MAX_PROBLEM_COUNT = makeKeyword("MAX-PROBLEM-COUNT");
 
@@ -622,6 +384,8 @@ public final class forward extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str28$___S = makeString("~%~S");
 
+
+
     private static final SubLSymbol $sym30$_EXIT = makeSymbol("%EXIT");
 
     private static final SubLString $str31$Forward_inference_recursion_probl = makeString("Forward inference recursion problem? depth = ~S");
@@ -632,11 +396,15 @@ public final class forward extends SubLTranslatedFile implements V12 {
 
 
 
+    private static final SubLObject $$InferencePSC = reader_make_constant_shell(makeString("InferencePSC"));
+
+    private static final SubLObject $$termForwardPropagationOverrideMt = reader_make_constant_shell(makeString("termForwardPropagationOverrideMt"));
+
+    private static final SubLObject $$mtHasForwardPropagationOverrideMt = reader_make_constant_shell(makeString("mtHasForwardPropagationOverrideMt"));
+
+    private static final SubLObject $const38$ruleRestrictedToSingleInstancesOf = reader_make_constant_shell(makeString("ruleRestrictedToSingleInstancesOfCol"));
 
 
-
-
-    private static final SubLObject $const38$ruleRestrictedToSingleInstancesOf = reader_make_constant_shell("ruleRestrictedToSingleInstancesOfCol");
 
     private static final SubLString $str40$Could_not_find_forward_inference_ = makeString("Could not find forward inference override for ~S for rule ~S (gaf=~S)");
 
@@ -644,11 +412,17 @@ public final class forward extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str42$More_than_one_instance_of__S_in__ = makeString("More than one instance of ~S in ~S for rule ~S");
 
-
+    private static final SubLObject $$MtUnionFn = reader_make_constant_shell(makeString("MtUnionFn"));
 
     private static final SubLString $str44$inference_psc_override_mt___S = makeString("inference-psc-override-mt: ~S");
 
+
+
     private static final SubLSymbol $FORWARD_PROPAGATE_SUPPORT = makeKeyword("FORWARD-PROPAGATE-SUPPORT");
+
+
+
+
 
     private static final SubLSymbol $FORWARD_PROPAGATE_ONE_SUPPORT_AND_GENERATE_ASSERTIBLES = makeKeyword("FORWARD-PROPAGATE-ONE-SUPPORT-AND-GENERATE-ASSERTIBLES");
 
@@ -656,11 +430,15 @@ public final class forward extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol $forward_propagate_one_support_wrt_rule_and_generate_assertibles_cached_caching_state$ = makeSymbol("*FORWARD-PROPAGATE-ONE-SUPPORT-WRT-RULE-AND-GENERATE-ASSERTIBLES-CACHED-CACHING-STATE*");
 
+
+
     private static final SubLSymbol $sym53$CLEAR_FORWARD_PROPAGATE_ONE_SUPPORT_WRT_RULE_AND_GENERATE_ASSERTI = makeSymbol("CLEAR-FORWARD-PROPAGATE-ONE-SUPPORT-WRT-RULE-AND-GENERATE-ASSERTIBLES-CACHED");
+
+
 
     private static final SubLSymbol $FORWARD_PROPAGATE_SUPPORT_GENERATE_ASSERTIBLES = makeKeyword("FORWARD-PROPAGATE-SUPPORT-GENERATE-ASSERTIBLES");
 
-
+    private static final SubLInteger $int$30 = makeInteger(30);
 
     private static final SubLString $str57$__Propagating__S_ = makeString("~&Propagating ~S ");
 
@@ -671,6 +449,8 @@ public final class forward extends SubLTranslatedFile implements V12 {
     private static final SubLSymbol $sym60$INVALID_ASSERTION_ = makeSymbol("INVALID-ASSERTION?");
 
     private static final SubLString $str61$invalid_assertion_in_hl_assertibl = makeString("invalid assertion in hl-assertible ~s encountered during forward inference");
+
+
 
     private static final SubLSymbol $sym63$INVALID_KB_HL_SUPPORT_ = makeSymbol("INVALID-KB-HL-SUPPORT?");
 
@@ -684,9 +464,17 @@ public final class forward extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol $FORWARD_TACTIC_SPECS = makeKeyword("FORWARD-TACTIC-SPECS");
 
+
+
+
+
     private static final SubLList $list71 = list(makeSymbol("TRIGGER-ASENT"), makeSymbol("TRIGGER-SENSE"), makeSymbol("EXAMINE-ASENT"), makeSymbol("TRIGGER-SUPPORT"), makeSymbol("RULE"), makeSymbol("&OPTIONAL"), makeSymbol("ADDITIONAL-SUPPORTS"));
 
+
+
     private static final SubLSymbol $sym73$VALID_ASSERTION_ = makeSymbol("VALID-ASSERTION?");
+
+
 
     private static final SubLSymbol $kw75$FORWARD_INFERENCE_RULE_ALLOWED_ = makeKeyword("FORWARD-INFERENCE-RULE-ALLOWED?");
 
@@ -700,35 +488,75 @@ public final class forward extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol $HANDLE_FORWARD_PROPAGATION_FROM_GAF = makeKeyword("HANDLE-FORWARD-PROPAGATION-FROM-GAF");
 
+    private static final SubLObject $$creationTemplateFORTs = reader_make_constant_shell(makeString("creationTemplateFORTs"));
+
 
 
     private static final SubLSymbol $sym83$_TEMPLATE = makeSymbol("?TEMPLATE");
 
-
+    private static final SubLObject $$genlCreationTemplate = reader_make_constant_shell(makeString("genlCreationTemplate"));
 
     private static final SubLList $list85 = list(makeSymbol("?TEMPLATE"));
 
+    private static final SubLObject $$EverythingPSC = reader_make_constant_shell(makeString("EverythingPSC"));
+
+    private static final SubLObject $$creationTemplateAllowableRules = reader_make_constant_shell(makeString("creationTemplateAllowableRules"));
+
+    private static final SubLObject $const88$creationTemplateAllowsAllRulesFro = reader_make_constant_shell(makeString("creationTemplateAllowsAllRulesFromMt"));
 
 
 
 
-    private static final SubLObject $const88$creationTemplateAllowsAllRulesFro = reader_make_constant_shell("creationTemplateAllowsAllRulesFromMt");
+
+
 
     private static final SubLString $str92$do_broad_mt_index = makeString("do-broad-mt-index");
 
+
+
+
+
+
+
+
+
+
+
+
+
     private static final SubLSymbol $FORWARD_PROPAGATION_SUPPORTS_DOOMED = makeKeyword("FORWARD-PROPAGATION-SUPPORTS-DOOMED");
 
+
+
+
+
+
+
+
+
     private static final SubLSymbol $SYNTACTICALLY_INVALID_FORWARD_DNF = makeKeyword("SYNTACTICALLY-INVALID-FORWARD-DNF");
+
+
+
+
 
     private static final SubLSymbol $SEMANTICALLY_INVALID_FORWARD_DNF = makeKeyword("SEMANTICALLY-INVALID-FORWARD-DNF");
 
     private static final SubLSymbol $NULL_MAX_FLOOR_MTS_OF_RULE_AND_GAF_MTS = makeKeyword("NULL-MAX-FLOOR-MTS-OF-RULE-AND-GAF-MTS");
+
+
+
+
+
+
 
     private static final SubLSymbol $sym112$FORWARD_PRAGMATIC_TRIGGER_LITERAL_LIT_ = makeSymbol("FORWARD-PRAGMATIC-TRIGGER-LITERAL-LIT?");
 
     private static final SubLInteger $int$5000 = makeInteger(5000);
 
     private static final SubLSymbol $FORWARD_PROPAGATE_DNF = makeKeyword("FORWARD-PROPAGATE-DNF");
+
+
 
     private static final SubLString $$$Propagating_results = makeString("Propagating results");
 
@@ -744,13 +572,31 @@ public final class forward extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str122$Forward_inference_incomplete_for_ = makeString("Forward inference incomplete for ~S and ~S due to: ~A");
 
+
+
     private static final SubLString $str124$Tried_to_do_forward_inference_out = makeString("Tried to do forward inference outside of a problem store");
+
+
 
     private static final SubLSymbol $NON_EXPLANATORY_SENTENCE = makeKeyword("NON-EXPLANATORY-SENTENCE");
 
     private static final SubLSymbol $kw127$ALLOW_INDETERMINATE_RESULTS_ = makeKeyword("ALLOW-INDETERMINATE-RESULTS?");
 
+
+
+
+
+
+
     private static final SubLSymbol $PROBABLY_APPROXIMATELY_DONE = makeKeyword("PROBABLY-APPROXIMATELY-DONE");
+
+
+
+
+
+
+
+
 
     private static final SubLSymbol $BINDINGS_AND_SUPPORTS_AND_PRAGMATIC_SUPPORTS = makeKeyword("BINDINGS-AND-SUPPORTS-AND-PRAGMATIC-SUPPORTS");
 
@@ -760,17 +606,29 @@ public final class forward extends SubLTranslatedFile implements V12 {
 
     private static final SubLInteger $int$150000 = makeInteger(150000);
 
+
+
     private static final SubLSymbol $ADD_FORWARD_PROPAGATION_RESULT = makeKeyword("ADD-FORWARD-PROPAGATION-RESULT");
 
     private static final SubLList $list142 = list(makeSymbol("INFERENCE-BINDINGS"), makeSymbol("INFERENCE-SUPPORTS"), makeSymbol("INFERENCE-PRAGMATIC-SUPPORTS"));
 
     private static final SubLSymbol $CONCLUDED_ASENT_NOT_HL_GROUND_TREE = makeKeyword("CONCLUDED-ASENT-NOT-HL-GROUND-TREE");
 
+
+
     private static final SubLList $list145 = list(NIL, NIL, NIL);
 
     private static final SubLSymbol $NULL_MT_SUPPORT_COMBINATIONS = makeKeyword("NULL-MT-SUPPORT-COMBINATIONS");
 
+
+
     private static final SubLSymbol COMPUTE_ALL_MT_AND_SUPPORT_COMBINATIONS = makeSymbol("COMPUTE-ALL-MT-AND-SUPPORT-COMBINATIONS");
+
+
+
+
+
+
 
     private static final SubLSymbol $MT_SUPPORT_COMBINATIONS = makeKeyword("MT-SUPPORT-COMBINATIONS");
 
@@ -778,13 +636,25 @@ public final class forward extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol $NO_MT_SUPPORT_COMBINATION_CONCLUDED_MTS_FOUND = makeKeyword("NO-MT-SUPPORT-COMBINATION-CONCLUDED-MTS-FOUND");
 
+
+
+
+
     private static final SubLSymbol CONCLUDED_ASENT = makeSymbol("CONCLUDED-ASENT");
 
     private static final SubLSymbol PROPAGATION_MT = makeSymbol("PROPAGATION-MT");
 
+
+
     private static final SubLSymbol CONCLUDED_MT = makeSymbol("CONCLUDED-MT");
 
     private static final SubLSymbol $HANDLE_FORWARD_DEDUCTION_IN_MT = makeKeyword("HANDLE-FORWARD-DEDUCTION-IN-MT");
+
+
+
+
+
+
 
     private static final SubLSymbol $kw165$FORWARD_BINDINGS_ABNORMAL_ = makeKeyword("FORWARD-BINDINGS-ABNORMAL?");
 
@@ -802,13 +672,17 @@ public final class forward extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str172$Something_between_queueing_and_pr = makeString("Something between queueing and processing of ~s in ~s invalidated the forward supports ~s");
 
+
+
     private static final SubLSymbol $CANONICALIZE_WF_GAF = makeKeyword("CANONICALIZE-WF-GAF");
 
 
 
+    private static final SubLObject $$True = reader_make_constant_shell(makeString("True"));
+
     private static final SubLSymbol $FORWARD_CONCLUSION_TAUTOLOGICAL = makeKeyword("FORWARD-CONCLUSION-TAUTOLOGICAL");
 
-
+    private static final SubLObject $$False = reader_make_constant_shell(makeString("False"));
 
     private static final SubLSymbol $FORWARD_CONCLUSION_CONTRADICTION = makeKeyword("FORWARD-CONCLUSION-CONTRADICTION");
 
@@ -822,33 +696,39 @@ public final class forward extends SubLTranslatedFile implements V12 {
 
     private static final SubLList $list184 = list(makeSymbol("CANON-CNF"), makeSymbol("&OPTIONAL"), makeSymbol("BINDING-LIST"));
 
+
+
     private static final SubLSymbol $FORWARD_CONCLUSION_TRIVIALLY_DERIVABLE = makeKeyword("FORWARD-CONCLUSION-TRIVIALLY-DERIVABLE");
 
     private static final SubLSymbol CORE_MICROTHEORY_P = makeSymbol("CORE-MICROTHEORY-P");
+
+
 
     private static final SubLSymbol $sym189$ASSERTIVE_WFF_RULE_ = makeSymbol("ASSERTIVE-WFF-RULE?");
 
     private static final SubLSymbol $sym190$WFF_CONSTRAINT_SUPPORT_ = makeSymbol("WFF-CONSTRAINT-SUPPORT?");
 
+    private static final SubLObject $$WFFConstraintPredicate = reader_make_constant_shell(makeString("WFFConstraintPredicate"));
 
+    private static final SubLObject $$wffConstraintMt = reader_make_constant_shell(makeString("wffConstraintMt"));
 
-
-
-
+    private static final SubLObject $$constraint = reader_make_constant_shell(makeString("constraint"));
 
     private static final SubLSymbol $FORWARD_DEDUCTION_CONSTRAINT_VIOLATION = makeKeyword("FORWARD-DEDUCTION-CONSTRAINT-VIOLATION");
 
     private static final SubLSymbol $sym195$FORWARD_TRIGGER_LITERAL_LIT_ = makeSymbol("FORWARD-TRIGGER-LITERAL-LIT?");
 
-
+    private static final SubLObject $$forwardTriggerLiteral = reader_make_constant_shell(makeString("forwardTriggerLiteral"));
 
     private static final SubLSymbol $SYNTACTICALLY_INVALID_FORWARD_TRIGGER_ASENT = makeKeyword("SYNTACTICALLY-INVALID-FORWARD-TRIGGER-ASENT");
 
     private static final SubLSymbol $sym198$FORWARD_NON_TRIGGER_LITERAL_LIT_ = makeSymbol("FORWARD-NON-TRIGGER-LITERAL-LIT?");
 
-
+    private static final SubLObject $$forwardNonTriggerLiteral = reader_make_constant_shell(makeString("forwardNonTriggerLiteral"));
 
     private static final SubLSymbol $SYNTACTICALLY_INVALID_FORWARD_NON_TRIGGER_ASENT = makeKeyword("SYNTACTICALLY-INVALID-FORWARD-NON-TRIGGER-ASENT");
+
+
 
     private static final SubLSymbol FORWARD_LEAFY_MT_P = makeSymbol("FORWARD-LEAFY-MT-P");
 
@@ -862,9 +742,13 @@ public final class forward extends SubLTranslatedFile implements V12 {
 
     private static final SubLSymbol $SOME_SUPPORT_COMBINATIONS_EXTENSIONALLY_POSSIBLE = makeKeyword("SOME-SUPPORT-COMBINATIONS-EXTENSIONALLY-POSSIBLE");
 
+
+
     private static final SubLSymbol $ALL_FORWARD_SUPPORT_MT_COMBINATIONS = makeKeyword("ALL-FORWARD-SUPPORT-MT-COMBINATIONS");
 
     private static final SubLList $list210 = cons(makeSymbol("FIRST"), makeSymbol("REST"));
+
+
 
     private static final SubLSymbol $sym212$SPEC_MT_ = makeSymbol("SPEC-MT?");
 
@@ -874,7 +758,7 @@ public final class forward extends SubLTranslatedFile implements V12 {
 
     private static final SubLString $str215$Skipping_max_floor_mts_call_due_t = makeString("Skipping max-floor-mts call due to universal lifting rule: ~S");
 
-
+    private static final SubLObject $$BaseKB = reader_make_constant_shell(makeString("BaseKB"));
 
     private static final SubLSymbol $NULL_INFERENCE_MAX_FLOOR_MTS_WITH_CYCLES_PRUNED = makeKeyword("NULL-INFERENCE-MAX-FLOOR-MTS-WITH-CYCLES-PRUNED");
 
@@ -919,44 +803,21 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return result;
     }
 
-    public static final SubLObject current_forward_inference_environment_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return kb_control_vars.$forward_inference_environment$.getDynamicValue(thread);
-        }
-    }
-
     public static SubLObject current_forward_inference_environment() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return kb_control_vars.$forward_inference_environment$.getDynamicValue(thread);
-    }
-
-    public static final SubLObject get_forward_inference_environment_alt() {
-        return com.cyc.cycjava.cycl.inference.harness.forward.new_forward_inference_environment();
     }
 
     public static SubLObject get_forward_inference_environment() {
         return new_forward_inference_environment();
     }
 
-    public static final SubLObject free_forward_inference_enviornment_alt(SubLObject environment) {
-        return NIL;
-    }
-
     public static SubLObject free_forward_inference_enviornment(final SubLObject environment) {
         return NIL;
     }
 
-    public static final SubLObject clear_forward_inference_environment_alt(SubLObject environment) {
-        return queues.clear_queue(environment);
-    }
-
     public static SubLObject clear_forward_inference_environment(final SubLObject environment) {
         return queues.clear_queue(environment);
-    }
-
-    public static final SubLObject new_forward_inference_environment_alt() {
-        return queues.create_queue();
     }
 
     public static SubLObject new_forward_inference_environment() {
@@ -1094,7 +955,7 @@ public final class forward extends SubLTranslatedFile implements V12 {
     }
 
     public static SubLObject add_currently_forward_propagating_support(final SubLObject support) {
-        assert NIL != arguments.support_p(support) : "! arguments.support_p(support) " + ("arguments.support_p(support) " + "CommonSymbols.NIL != arguments.support_p(support) ") + support;
+        assert NIL != arguments.support_p(support) : "arguments.support_p(support) " + "CommonSymbols.NIL != arguments.support_p(support) " + support;
         SubLObject release = NIL;
         try {
             release = seize_lock($currently_forward_propagating_supports_lock$.getGlobalValue());
@@ -1108,7 +969,7 @@ public final class forward extends SubLTranslatedFile implements V12 {
     }
 
     public static SubLObject rem_currently_forward_propagating_support(final SubLObject support) {
-        assert NIL != arguments.support_p(support) : "! arguments.support_p(support) " + ("arguments.support_p(support) " + "CommonSymbols.NIL != arguments.support_p(support) ") + support;
+        assert NIL != arguments.support_p(support) : "arguments.support_p(support) " + "CommonSymbols.NIL != arguments.support_p(support) " + support;
         SubLObject result = NIL;
         SubLObject release = NIL;
         try {
@@ -1133,21 +994,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return listS(CLET, list(list($forward_inference_gaf$, support)), append(body, NIL));
     }
 
-    public static final SubLObject with_forward_inference_rule_alt(SubLObject macroform, SubLObject environment) {
-        {
-            SubLObject datum = macroform.rest();
-            SubLObject current = datum;
-            SubLObject rule = NIL;
-            destructuring_bind_must_consp(current, datum, $list_alt3);
-            rule = current.first();
-            current = current.rest();
-            {
-                SubLObject body = current;
-                return listS(CLET, list(list($forward_inference_rule$, rule)), append(body, NIL));
-            }
-        }
-    }
-
     public static SubLObject with_forward_inference_rule(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -1159,35 +1005,14 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return listS(CLET, list(list($forward_inference_rule$, rule)), append(body, NIL));
     }
 
-    public static final SubLObject current_forward_inference_gaf_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return $forward_inference_gaf$.getDynamicValue(thread);
-        }
-    }
-
     public static SubLObject current_forward_inference_gaf() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return $forward_inference_gaf$.getDynamicValue(thread);
     }
 
-    public static final SubLObject current_forward_inference_rule_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return $forward_inference_rule$.getDynamicValue(thread);
-        }
-    }
-
     public static SubLObject current_forward_inference_rule() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return $forward_inference_rule$.getDynamicValue(thread);
-    }
-
-    public static final SubLObject current_forward_inference_assertion_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return NIL != $forward_inference_gaf$.getDynamicValue(thread) ? ((SubLObject) ($forward_inference_gaf$.getDynamicValue(thread))) : $forward_inference_rule$.getDynamicValue(thread);
-        }
     }
 
     public static SubLObject current_forward_inference_assertion() {
@@ -1203,17 +1028,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return copy_list($forward_problem_store_properties$.getGlobalValue());
     }
 
-    /**
-     *
-     *
-     * @return problem-store-p ; a new problem-store suitable for forward inference.
-     */
-    @LispMethod(comment = "@return problem-store-p ; a new problem-store suitable for forward inference.")
-    public static final SubLObject new_forward_problem_store() {
-        inference_metrics.increment_forward_problem_store_historical_count();
-        return inference_datastructures_problem_store.new_problem_store($forward_problem_store_properties$.getGlobalValue());
-    }
-
     public static SubLObject new_forward_problem_store(SubLObject support) {
         if (support == UNPROVIDED) {
             support = NIL;
@@ -1227,23 +1041,10 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return inference_datastructures_problem_store.new_problem_store(problem_store_properties);
     }
 
-    public static final SubLObject destroy_forward_problem_store_alt(SubLObject store) {
-        inference_metrics.update_forward_problem_historical_count(store);
-        inference_metrics.update_maximum_forward_problem_store_historical_problem_count(store);
-        return inference_datastructures_problem_store.destroy_problem_store(store);
-    }
-
     public static SubLObject destroy_forward_problem_store(final SubLObject store) {
         inference_metrics.update_forward_problem_historical_count(store);
         inference_metrics.update_maximum_forward_problem_store_historical_problem_count(store);
         return inference_datastructures_problem_store.destroy_problem_store(store);
-    }
-
-    public static final SubLObject forward_inference_shares_same_problem_storeP() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return $forward_inference_shares_same_problem_storeP$.getDynamicValue(thread);
-        }
     }
 
     public static SubLObject forward_inference_shares_same_problem_storeP(SubLObject support) {
@@ -1255,22 +1056,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
             return NIL;
         }
         return $forward_inference_shares_same_problem_storeP$.getDynamicValue(thread);
-    }
-
-    public static final SubLObject get_forward_problem_store() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject store = (NIL != com.cyc.cycjava.cycl.inference.harness.forward.forward_inference_shares_same_problem_storeP()) ? ((SubLObject) ($current_forward_problem_store$.getDynamicValue(thread))) : NIL;
-                if (NIL == store) {
-                    store = com.cyc.cycjava.cycl.inference.harness.forward.new_forward_problem_store();
-                    if (NIL != com.cyc.cycjava.cycl.inference.harness.forward.forward_inference_shares_same_problem_storeP()) {
-                        $current_forward_problem_store$.setDynamicValue(store, thread);
-                    }
-                }
-                return store;
-            }
-        }
     }
 
     public static SubLObject get_forward_problem_store(SubLObject support) {
@@ -1311,38 +1096,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return store;
     }
 
-    /**
-     * Clear and destroy the current forward problem store (if any)
-     */
-    @LispMethod(comment = "Clear and destroy the current forward problem store (if any)")
-    public static final SubLObject clear_current_forward_problem_store_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != $current_forward_problem_store$.getDynamicValue(thread)) {
-                try {
-                    if (NIL == browse_forward_inferencesP()) {
-                        com.cyc.cycjava.cycl.inference.harness.forward.destroy_forward_problem_store($current_forward_problem_store$.getDynamicValue(thread));
-                    }
-                } finally {
-                    {
-                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                        try {
-                            $is_thread_performing_cleanupP$.bind(T, thread);
-                            $current_forward_problem_store$.setDynamicValue(NIL, thread);
-                        } finally {
-                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
-    /**
-     * Clear and destroy the current forward problem store (if any)
-     */
-    @LispMethod(comment = "Clear and destroy the current forward problem store (if any)")
     public static SubLObject clear_current_forward_problem_store() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (((NIL != inference_datastructures_problem_store.problem_store_p($current_forward_problem_store$.getDynamicValue(thread))) && (NIL != inference_datastructures_problem_store.valid_problem_store_p($current_forward_problem_store$.getDynamicValue(thread)))) && (NIL != inference_datastructures_problem_store.problem_store_running_inferences($current_forward_problem_store$.getDynamicValue(thread)))) {
@@ -1377,34 +1130,13 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject clear_current_forward_inference_environment_alt() {
-        return com.cyc.cycjava.cycl.inference.harness.forward.clear_forward_inference_environment(com.cyc.cycjava.cycl.inference.harness.forward.current_forward_inference_environment());
-    }
-
     public static SubLObject clear_current_forward_inference_environment() {
         return clear_forward_inference_environment(current_forward_inference_environment());
     }
 
-    public static final SubLObject queue_forward_assertion_alt(SubLObject assertion) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(assertion, ASSERTION_P);
-            if (NIL != kb_control_vars.$forward_inference_enabledP$.getDynamicValue(thread)) {
-                {
-                    SubLObject environment = com.cyc.cycjava.cycl.inference.harness.forward.current_forward_inference_environment();
-                    queues.enqueue(assertion, environment);
-                }
-                if (NIL != $tracing_forward_inference$.getDynamicValue(thread)) {
-                    format(T, $str_alt7$___S, assertion);
-                }
-            }
-            return assertion;
-        }
-    }
-
     public static SubLObject queue_forward_assertion(final SubLObject assertion) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
+        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
         if (NIL != kb_control_vars.$forward_inference_enabledP$.getDynamicValue(thread)) {
             final SubLObject environment = current_forward_inference_environment();
             if (NIL != misc_utilities.initialized_p(environment)) {
@@ -1419,19 +1151,8 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return assertion;
     }
 
-    public static final SubLObject remqueue_forward_assertion_alt(SubLObject assertion) {
-        SubLTrampolineFile.checkType(assertion, ASSERTION_P);
-        {
-            SubLObject environment = com.cyc.cycjava.cycl.inference.harness.forward.current_forward_inference_environment();
-            if (NIL != environment) {
-                return queues.remqueue(assertion, environment, UNPROVIDED);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject remqueue_forward_assertion(final SubLObject assertion) {
-        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
+        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
         final SubLObject environment = current_forward_inference_environment();
         if (NIL != misc_utilities.initialized_p(environment)) {
             return queues.remqueue(assertion, environment, UNPROVIDED);
@@ -1455,7 +1176,7 @@ public final class forward extends SubLTranslatedFile implements V12 {
                     kb_control_vars.$within_assertion_forward_propagationP$.bind(NIL, thread);
                     $prefer_forward_skolemization$.bind(NIL, thread);
                     final SubLObject environment_$1 = get_forward_inference_environment();
-                    assert NIL != queues.queue_p(environment_$1) : "! queues.queue_p(environment_$1) " + ("queues.queue_p(environment_$1) " + "CommonSymbols.NIL != queues.queue_p(environment_$1) ") + environment_$1;
+                    assert NIL != queues.queue_p(environment_$1) : "queues.queue_p(environment_$1) " + "CommonSymbols.NIL != queues.queue_p(environment_$1) " + environment_$1;
                     final SubLObject _prev_bind_0_$2 = kb_control_vars.$forward_inference_environment$.currentBinding(thread);
                     final SubLObject _prev_bind_1_$3 = $current_forward_problem_store$.currentBinding(thread);
                     try {
@@ -1512,7 +1233,7 @@ public final class forward extends SubLTranslatedFile implements V12 {
                 kb_control_vars.$within_assertion_forward_propagationP$.bind(NIL, thread);
                 $prefer_forward_skolemization$.bind(NIL, thread);
                 final SubLObject environment_$5 = get_forward_inference_environment();
-                assert NIL != queues.queue_p(environment_$5) : "! queues.queue_p(environment_$5) " + ("queues.queue_p(environment_$5) " + "CommonSymbols.NIL != queues.queue_p(environment_$5) ") + environment_$5;
+                assert NIL != queues.queue_p(environment_$5) : "queues.queue_p(environment_$5) " + "CommonSymbols.NIL != queues.queue_p(environment_$5) " + environment_$5;
                 final SubLObject _prev_bind_0_$6 = kb_control_vars.$forward_inference_environment$.currentBinding(thread);
                 final SubLObject _prev_bind_1_$7 = $current_forward_problem_store$.currentBinding(thread);
                 try {
@@ -1576,67 +1297,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return result;
     }
 
-    /**
-     * Exhaustively complete all pending forward inference
-     */
-    @LispMethod(comment = "Exhaustively complete all pending forward inference")
-    public static final SubLObject perform_forward_inference_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject result = NIL;
-                if (NIL != kb_control_vars.$forward_inference_enabledP$.getDynamicValue(thread)) {
-                    {
-                        SubLObject environment = com.cyc.cycjava.cycl.inference.harness.forward.current_forward_inference_environment();
-                        {
-                            SubLObject _prev_bind_0 = $current_forward_problem_store$.currentBinding(thread);
-                            try {
-                                $current_forward_problem_store$.bind(NIL, thread);
-                                try {
-                                    {
-                                        SubLObject _prev_bind_0_1 = $forward_inference_recursion_depth$.currentBinding(thread);
-                                        try {
-                                            $forward_inference_recursion_depth$.bind(number_utilities.f_1X($forward_inference_recursion_depth$.getDynamicValue(thread)), thread);
-                                            if ((NIL != $inference_debugP$.getDynamicValue(thread)) && $forward_inference_recursion_depth$.getDynamicValue(thread).numGE(TWENTY_INTEGER)) {
-                                                Errors.sublisp_break($str_alt8$Forward_inference_recursion_probl, new SubLObject[]{ $forward_inference_recursion_depth$.getDynamicValue(thread) });
-                                            }
-                                            while (NIL == queues.queue_empty_p(environment)) {
-                                                {
-                                                    SubLObject assertion = queues.dequeue(environment);
-                                                    SubLObject some_results = com.cyc.cycjava.cycl.inference.harness.forward.forward_propagate_assertion(assertion, UNPROVIDED);
-                                                    result = nconc(nreverse(some_results), result);
-                                                }
-                                            } 
-                                        } finally {
-                                            $forward_inference_recursion_depth$.rebind(_prev_bind_0_1, thread);
-                                        }
-                                    }
-                                } finally {
-                                    {
-                                        SubLObject _prev_bind_0_2 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                        try {
-                                            $is_thread_performing_cleanupP$.bind(T, thread);
-                                            com.cyc.cycjava.cycl.inference.harness.forward.clear_current_forward_problem_store();
-                                        } finally {
-                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_2, thread);
-                                        }
-                                    }
-                                }
-                            } finally {
-                                $current_forward_problem_store$.rebind(_prev_bind_0, thread);
-                            }
-                        }
-                    }
-                }
-                return nreverse(result);
-            }
-        }
-    }
-
-    /**
-     * Exhaustively complete all pending forward inference
-     */
-    @LispMethod(comment = "Exhaustively complete all pending forward inference")
     public static SubLObject perform_forward_inference() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject result = NIL;
@@ -1716,37 +1376,15 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return makeBoolean((NIL != dynamic_forward_inference_to_doP(environment)) || (NIL != global_forward_inference_to_doP()));
     }
 
-    /**
-     * Exhaustively repropagate the forward ASSERTION.
-     */
-    @LispMethod(comment = "Exhaustively repropagate the forward ASSERTION.")
-    public static final SubLObject repropagate_forward_assertion_alt(SubLObject assertion) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            SubLTrampolineFile.checkType(assertion, ASSERTION_P);
-            if (NIL != kb_control_vars.$forward_inference_enabledP$.getDynamicValue(thread)) {
-                if (NIL != assertions_high.forward_assertionP(assertion)) {
-                    com.cyc.cycjava.cycl.inference.harness.forward.queue_forward_assertion(assertion);
-                    return com.cyc.cycjava.cycl.inference.harness.forward.perform_forward_inference();
-                }
-            }
-            return NIL;
-        }
-    }
-
-    /**
-     * Exhaustively repropagate the forward ASSERTION.
-     */
-    @LispMethod(comment = "Exhaustively repropagate the forward ASSERTION.")
     public static SubLObject repropagate_forward_assertion(final SubLObject assertion) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
+        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
         if ((NIL == kb_control_vars.$forward_inference_enabledP$.getDynamicValue(thread)) || (NIL == assertions_high.forward_assertionP(assertion))) {
             return NIL;
         }
         SubLObject result = NIL;
         final SubLObject environment = possibly_get_forward_inference_environment();
-        assert NIL != queues.queue_p(environment) : "! queues.queue_p(environment) " + ("queues.queue_p(environment) " + "CommonSymbols.NIL != queues.queue_p(environment) ") + environment;
+        assert NIL != queues.queue_p(environment) : "queues.queue_p(environment) " + "CommonSymbols.NIL != queues.queue_p(environment) " + environment;
         final SubLObject _prev_bind_0 = kb_control_vars.$forward_inference_environment$.currentBinding(thread);
         try {
             kb_control_vars.$forward_inference_environment$.bind(environment, thread);
@@ -1760,8 +1398,8 @@ public final class forward extends SubLTranslatedFile implements V12 {
 
     public static SubLObject repropagate_forward_gaf_wrt_rule(final SubLObject gaf, final SubLObject rule) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != assertions_high.gaf_assertionP(gaf) : "! assertions_high.gaf_assertionP(gaf) " + ("assertions_high.gaf_assertionP(gaf) " + "CommonSymbols.NIL != assertions_high.gaf_assertionP(gaf) ") + gaf;
-        assert NIL != assertions_high.rule_assertionP(rule) : "! assertions_high.rule_assertionP(rule) " + ("assertions_high.rule_assertionP(rule) " + "CommonSymbols.NIL != assertions_high.rule_assertionP(rule) ") + rule;
+        assert NIL != assertions_high.gaf_assertionP(gaf) : "assertions_high.gaf_assertionP(gaf) " + "CommonSymbols.NIL != assertions_high.gaf_assertionP(gaf) " + gaf;
+        assert NIL != assertions_high.rule_assertionP(rule) : "assertions_high.rule_assertionP(rule) " + "CommonSymbols.NIL != assertions_high.rule_assertionP(rule) " + rule;
         SubLObject result = NIL;
         final SubLObject _prev_bind_0 = kb_control_vars.$forward_inference_forbidden_rules$.currentBinding(thread);
         final SubLObject _prev_bind_2 = kb_control_vars.$forward_inference_allowed_rules$.currentBinding(thread);
@@ -1906,24 +1544,9 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return kb_utilities.kbeq($$InferencePSC, mt);
     }
 
-    public static final SubLObject forward_inference_assertibles_queue_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return $forward_inference_assertibles_queue$.getDynamicValue(thread);
-        }
-    }
-
     public static SubLObject forward_inference_assertibles_queue() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return $forward_inference_assertibles_queue$.getDynamicValue(thread);
-    }
-
-    public static final SubLObject note_new_forward_assertible_alt(SubLObject hl_assertible) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            queues.enqueue(hl_assertible, $forward_inference_assertibles_queue$.getDynamicValue(thread));
-            return NIL;
-        }
     }
 
     public static SubLObject note_new_forward_assertible(final SubLObject hl_assertible) {
@@ -1932,193 +1555,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     *
-     *
-     * @unknown When *current-forward-problem-store* is NIL, this function will set it as a side-effect (to support forward problem store reuse.)  This can be very bad if it's not dynamically bound as a global forward problem store will exist, quickly become stale, and cause incorrectness.  Be safe and wrap rogue calls to forward-propagate-assertion with the with-normal-forward-inference macro (or at least with-clean-forward-problem-store-environment if you're tweaking forward inference behavior.)
-     */
-    @LispMethod(comment = "@unknown When *current-forward-problem-store* is NIL, this function will set it as a side-effect (to support forward problem store reuse.)  This can be very bad if it\'s not dynamically bound as a global forward problem store will exist, quickly become stale, and cause incorrectness.  Be safe and wrap rogue calls to forward-propagate-assertion with the with-normal-forward-inference macro (or at least with-clean-forward-problem-store-environment if you\'re tweaking forward inference behavior.)")
-    public static final SubLObject forward_propagate_assertion_alt(SubLObject assertion, SubLObject propagation_mt) {
-        if (propagation_mt == UNPROVIDED) {
-            propagation_mt = $$InferencePSC;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject assertibles = NIL;
-                if ((NIL != kb_control_vars.$forward_inference_enabledP$.getDynamicValue(thread)) && (NIL != assertions_high.valid_assertion(assertion, UNPROVIDED))) {
-                    if (!($$InferencePSC.equal(propagation_mt) && (NIL == assertions_high.forward_assertionP(assertion)))) {
-                        {
-                            SubLObject store_var = com.cyc.cycjava.cycl.inference.harness.forward.get_forward_problem_store();
-                            SubLObject local_state = inference_datastructures_problem_store.problem_store_memoization_state(store_var);
-                            {
-                                SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
-                                try {
-                                    memoization_state.$memoization_state$.bind(local_state, thread);
-                                    {
-                                        SubLObject original_memoization_process = NIL;
-                                        if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
-                                            original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
-                                            {
-                                                SubLObject current_proc = current_process();
-                                                if (NIL == original_memoization_process) {
-                                                    memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
-                                                } else {
-                                                    if (original_memoization_process != current_proc) {
-                                                        Errors.error($str_alt10$Invalid_attempt_to_reuse_memoizat);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        try {
-                                            {
-                                                SubLObject space_var = inference_datastructures_problem_store.problem_store_sbhl_resource_space(store_var);
-                                                {
-                                                    SubLObject _prev_bind_0_3 = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.currentBinding(thread);
-                                                    SubLObject _prev_bind_1 = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.currentBinding(thread);
-                                                    SubLObject _prev_bind_2 = sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.currentBinding(thread);
-                                                    try {
-                                                        sbhl_marking_vars.$resourced_sbhl_marking_spaces$.bind(space_var, thread);
-                                                        sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.bind(T, thread);
-                                                        sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.bind(sbhl_marking_vars.determine_marking_space_limit(sbhl_marking_vars.$resourced_sbhl_marking_spaces$.getDynamicValue(thread)), thread);
-                                                        {
-                                                            SubLObject _prev_bind_0_4 = kb_control_vars.$within_forward_inferenceP$.currentBinding(thread);
-                                                            SubLObject _prev_bind_1_5 = kb_control_vars.$recursive_ist_justificationsP$.currentBinding(thread);
-                                                            SubLObject _prev_bind_2_6 = $forward_inference_assertibles_queue$.currentBinding(thread);
-                                                            try {
-                                                                kb_control_vars.$within_forward_inferenceP$.bind(T, thread);
-                                                                kb_control_vars.$recursive_ist_justificationsP$.bind(NIL, thread);
-                                                                $forward_inference_assertibles_queue$.bind(queues.create_queue(), thread);
-                                                                if (NIL != assertions_high.gaf_assertionP(assertion)) {
-                                                                    com.cyc.cycjava.cycl.inference.harness.forward.forward_propagate_gaf(assertion, propagation_mt);
-                                                                } else {
-                                                                    com.cyc.cycjava.cycl.inference.harness.forward.forward_propagate_rule(assertion, propagation_mt);
-                                                                }
-                                                                if (NIL == queues.queue_empty_p(com.cyc.cycjava.cycl.inference.harness.forward.forward_inference_assertibles_queue())) {
-                                                                    if (!((NIL != kb_control_vars.$within_assertion_forward_propagationP$.getDynamicValue(thread)) || (NIL != $prefer_forward_skolemization$.getDynamicValue(thread)))) {
-                                                                        com.cyc.cycjava.cycl.inference.harness.forward.clear_current_forward_problem_store();
-                                                                    }
-                                                                    {
-                                                                        SubLObject _prev_bind_0_7 = $current_forward_problem_store$.currentBinding(thread);
-                                                                        try {
-                                                                            $current_forward_problem_store$.bind(NIL, thread);
-                                                                            try {
-                                                                                {
-                                                                                    SubLObject _prev_bind_0_8 = kb_control_vars.$within_assertion_forward_propagationP$.currentBinding(thread);
-                                                                                    SubLObject _prev_bind_1_9 = $prefer_forward_skolemization$.currentBinding(thread);
-                                                                                    try {
-                                                                                        kb_control_vars.$within_assertion_forward_propagationP$.bind(NIL, thread);
-                                                                                        $prefer_forward_skolemization$.bind(NIL, thread);
-                                                                                        {
-                                                                                            SubLObject doneP = NIL;
-                                                                                            SubLObject rest = NIL;
-                                                                                            for (rest = queues.do_queue_elements_queue_elements(com.cyc.cycjava.cycl.inference.harness.forward.forward_inference_assertibles_queue()); !((NIL != doneP) || (NIL == rest)); rest = rest.rest()) {
-                                                                                                {
-                                                                                                    SubLObject hl_assertible = rest.first();
-                                                                                                    if (NIL != assertions_high.invalid_assertionP(assertion, UNPROVIDED)) {
-                                                                                                        Errors.warn($str_alt11$_s_was_removed_by_its_own_forward, assertion);
-                                                                                                        doneP = T;
-                                                                                                    } else {
-                                                                                                        {
-                                                                                                            SubLObject hl_assertible_var = hl_assertible;
-                                                                                                            SubLObject argument_spec = hl_storage_modules.hl_assertible_argument_spec(hl_assertible_var);
-                                                                                                            SubLObject hl_assertion_spec_var = hl_storage_modules.hl_assertible_hl_assertion_spec(hl_assertible_var);
-                                                                                                            SubLObject hl_assertion_spec_var_10 = hl_assertion_spec_var;
-                                                                                                            SubLObject cnf = hl_storage_modules.hl_assertion_spec_cnf(hl_assertion_spec_var_10);
-                                                                                                            SubLObject mt = hl_storage_modules.hl_assertion_spec_mt(hl_assertion_spec_var_10);
-                                                                                                            SubLObject direction = hl_storage_modules.hl_assertion_spec_direction(hl_assertion_spec_var_10);
-                                                                                                            SubLObject variable_map = hl_storage_modules.hl_assertion_spec_variable_map(hl_assertion_spec_var_10);
-                                                                                                            if (NIL != tree_find_if($sym12$INVALID_ASSERTION_, argument_spec, UNPROVIDED)) {
-                                                                                                                Errors.warn($str_alt13$invalid_hl_assertible__s_encounte);
-                                                                                                            } else {
-                                                                                                                {
-                                                                                                                    SubLObject _prev_bind_0_11 = kb_control_vars.$within_forward_inferenceP$.currentBinding(thread);
-                                                                                                                    try {
-                                                                                                                        kb_control_vars.$within_forward_inferenceP$.bind(NIL, thread);
-                                                                                                                        {
-                                                                                                                            SubLObject var = hl_storage_modules.hl_add_assertible(hl_assertible);
-                                                                                                                            if (NIL != var) {
-                                                                                                                                assertibles = cons(var, assertibles);
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    } finally {
-                                                                                                                        kb_control_vars.$within_forward_inferenceP$.rebind(_prev_bind_0_11, thread);
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    } finally {
-                                                                                        $prefer_forward_skolemization$.rebind(_prev_bind_1_9, thread);
-                                                                                        kb_control_vars.$within_assertion_forward_propagationP$.rebind(_prev_bind_0_8, thread);
-                                                                                    }
-                                                                                }
-                                                                            } finally {
-                                                                                {
-                                                                                    SubLObject _prev_bind_0_12 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                                                    try {
-                                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
-                                                                                        com.cyc.cycjava.cycl.inference.harness.forward.clear_current_forward_problem_store();
-                                                                                    } finally {
-                                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_12, thread);
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        } finally {
-                                                                            $current_forward_problem_store$.rebind(_prev_bind_0_7, thread);
-                                                                        }
-                                                                    }
-                                                                }
-                                                            } finally {
-                                                                $forward_inference_assertibles_queue$.rebind(_prev_bind_2_6, thread);
-                                                                kb_control_vars.$recursive_ist_justificationsP$.rebind(_prev_bind_1_5, thread);
-                                                                kb_control_vars.$within_forward_inferenceP$.rebind(_prev_bind_0_4, thread);
-                                                            }
-                                                        }
-                                                        space_var = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.getDynamicValue(thread);
-                                                    } finally {
-                                                        sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.rebind(_prev_bind_2, thread);
-                                                        sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.rebind(_prev_bind_1, thread);
-                                                        sbhl_marking_vars.$resourced_sbhl_marking_spaces$.rebind(_prev_bind_0_3, thread);
-                                                    }
-                                                }
-                                                inference_datastructures_problem_store.set_problem_store_sbhl_resource_space(store_var, space_var);
-                                            }
-                                        } finally {
-                                            {
-                                                SubLObject _prev_bind_0_13 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                                try {
-                                                    $is_thread_performing_cleanupP$.bind(T, thread);
-                                                    if ((NIL != local_state) && (NIL == original_memoization_process)) {
-                                                        memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
-                                                    }
-                                                } finally {
-                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_13, thread);
-                                                }
-                                            }
-                                        }
-                                    }
-                                } finally {
-                                    memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
-                                }
-                            }
-                        }
-                    }
-                }
-                return nreverse(assertibles);
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @unknown When *current-forward-problem-store* is NIL, this function will set it as a side-effect (to support forward problem store reuse.)  This can be very bad if it's not dynamically bound as a global forward problem store will exist, quickly become stale, and cause incorrectness.  Be safe and wrap rogue calls to forward-propagate-assertion with the with-normal-forward-inference macro (or at least with-clean-forward-problem-store-environment if you're tweaking forward inference behavior.)
-     */
-    @LispMethod(comment = "@unknown When *current-forward-problem-store* is NIL, this function will set it as a side-effect (to support forward problem store reuse.)  This can be very bad if it\'s not dynamically bound as a global forward problem store will exist, quickly become stale, and cause incorrectness.  Be safe and wrap rogue calls to forward-propagate-assertion with the with-normal-forward-inference macro (or at least with-clean-forward-problem-store-environment if you\'re tweaking forward inference behavior.)")
     public static SubLObject forward_propagate_assertion(final SubLObject assertion, SubLObject propagation_mt) {
         if (propagation_mt == UNPROVIDED) {
             propagation_mt = $default_forward_propagation_mt$.getDynamicValue();
@@ -2231,7 +1667,7 @@ public final class forward extends SubLTranslatedFile implements V12 {
             propagation_mt = $default_forward_propagation_mt$.getDynamicValue();
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != arguments.support_p(support) : "! arguments.support_p(support) " + ("arguments.support_p(support) " + "CommonSymbols.NIL != arguments.support_p(support) ") + support;
+        assert NIL != arguments.support_p(support) : "arguments.support_p(support) " + "CommonSymbols.NIL != arguments.support_p(support) " + support;
         final SubLObject outermost_initP = sublisp_null(inference_metrics.$forward_inference_last_metric_time$.getDynamicValue(thread));
         try {
             final SubLObject _prev_bind_0 = inference_metrics.$forward_inference_last_metric_time$.currentBinding(thread);
@@ -2258,7 +1694,7 @@ public final class forward extends SubLTranslatedFile implements V12 {
                         try {
                             add_currently_forward_propagating_support(support);
                             final SubLObject environment = get_forward_inference_environment();
-                            assert NIL != queues.queue_p(environment) : "! queues.queue_p(environment) " + ("queues.queue_p(environment) " + "CommonSymbols.NIL != queues.queue_p(environment) ") + environment;
+                            assert NIL != queues.queue_p(environment) : "queues.queue_p(environment) " + "CommonSymbols.NIL != queues.queue_p(environment) " + environment;
                             final SubLObject _prev_bind_0_$18 = kb_control_vars.$forward_inference_environment$.currentBinding(thread);
                             try {
                                 kb_control_vars.$forward_inference_environment$.bind(environment, thread);
@@ -2364,8 +1800,8 @@ public final class forward extends SubLTranslatedFile implements V12 {
             propagation_mt = $default_forward_propagation_mt$.getDynamicValue();
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != arguments.support_p(support) : "! arguments.support_p(support) " + ("arguments.support_p(support) " + "CommonSymbols.NIL != arguments.support_p(support) ") + support;
-        assert NIL != assertions_high.rule_assertionP(rule) : "! assertions_high.rule_assertionP(rule) " + ("assertions_high.rule_assertionP(rule) " + "CommonSymbols.NIL != assertions_high.rule_assertionP(rule) ") + rule;
+        assert NIL != arguments.support_p(support) : "arguments.support_p(support) " + "CommonSymbols.NIL != arguments.support_p(support) " + support;
+        assert NIL != assertions_high.rule_assertionP(rule) : "assertions_high.rule_assertionP(rule) " + "CommonSymbols.NIL != assertions_high.rule_assertionP(rule) " + rule;
         SubLObject result = NIL;
         final SubLObject _prev_bind_0 = kb_control_vars.$forward_inference_forbidden_rules$.currentBinding(thread);
         final SubLObject _prev_bind_2 = kb_control_vars.$forward_inference_allowed_rules$.currentBinding(thread);
@@ -2393,7 +1829,7 @@ public final class forward extends SubLTranslatedFile implements V12 {
             kb_control_vars.$within_assertion_forward_propagationP$.bind(NIL, thread);
             $prefer_forward_skolemization$.bind(NIL, thread);
             final SubLObject environment = get_forward_inference_environment();
-            assert NIL != queues.queue_p(environment) : "! queues.queue_p(environment) " + ("queues.queue_p(environment) " + "CommonSymbols.NIL != queues.queue_p(environment) ") + environment;
+            assert NIL != queues.queue_p(environment) : "queues.queue_p(environment) " + "CommonSymbols.NIL != queues.queue_p(environment) " + environment;
             final SubLObject _prev_bind_0_$21 = kb_control_vars.$forward_inference_environment$.currentBinding(thread);
             final SubLObject _prev_bind_1_$22 = $current_forward_problem_store$.currentBinding(thread);
             try {
@@ -2440,18 +1876,18 @@ public final class forward extends SubLTranslatedFile implements V12 {
             propagation_mt = $default_forward_propagation_mt$.getDynamicValue();
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != list_utilities.non_dotted_list_p(supports) : "! list_utilities.non_dotted_list_p(supports) " + ("list_utilities.non_dotted_list_p(supports) " + "CommonSymbols.NIL != list_utilities.non_dotted_list_p(supports) ") + supports;
+        assert NIL != list_utilities.non_dotted_list_p(supports) : "list_utilities.non_dotted_list_p(supports) " + "CommonSymbols.NIL != list_utilities.non_dotted_list_p(supports) " + supports;
         SubLObject cdolist_list_var = supports;
         SubLObject elem = NIL;
         elem = cdolist_list_var.first();
         while (NIL != cdolist_list_var) {
-            assert NIL != arguments.support_p(elem) : "! arguments.support_p(elem) " + ("arguments.support_p(elem) " + "CommonSymbols.NIL != arguments.support_p(elem) ") + elem;
+            assert NIL != arguments.support_p(elem) : "arguments.support_p(elem) " + "CommonSymbols.NIL != arguments.support_p(elem) " + elem;
             cdolist_list_var = cdolist_list_var.rest();
             elem = cdolist_list_var.first();
         } 
         final SubLObject all_assertibles_queue = queues.create_queue(UNPROVIDED);
         final SubLObject environment = get_forward_inference_environment();
-        assert NIL != queues.queue_p(environment) : "! queues.queue_p(environment) " + ("queues.queue_p(environment) " + "CommonSymbols.NIL != queues.queue_p(environment) ") + environment;
+        assert NIL != queues.queue_p(environment) : "queues.queue_p(environment) " + "CommonSymbols.NIL != queues.queue_p(environment) " + environment;
         final SubLObject _prev_bind_0 = kb_control_vars.$forward_inference_environment$.currentBinding(thread);
         try {
             kb_control_vars.$forward_inference_environment$.bind(environment, thread);
@@ -2850,88 +2286,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return nreverse(assertibles);
     }
 
-    // Internal Constants
-    @LispMethod(comment = "Internal Constants")
-    static private final SubLList $list_alt0 = list(makeSymbol("GAF"), makeSymbol("&BODY"), makeSymbol("BODY"));
-
-    static private final SubLList $list_alt3 = list(makeSymbol("RULE"), makeSymbol("&BODY"), makeSymbol("BODY"));
-
-    static private final SubLList $list_alt5 = list(new SubLObject[]{ makeKeyword("TRANSFORMATION-ALLOWED?"), NIL, makeKeyword("INTERMEDIATE-STEP-VALIDATION-LEVEL"), $NONE, makeKeyword("NEGATION-BY-FAILURE?"), NIL, makeKeyword("ADD-RESTRICTION-LAYER-OF-INDIRECTION?"), T, makeKeyword("DIRECTION"), makeKeyword("FORWARD") });
-
-    static private final SubLString $str_alt7$___S = makeString("~%~S");
-
-    static private final SubLString $str_alt8$Forward_inference_recursion_probl = makeString("Forward inference recursion problem? depth = ~S");
-
-    static private final SubLString $str_alt10$Invalid_attempt_to_reuse_memoizat = makeString("Invalid attempt to reuse memoization state in multiple threads simultaneously.");
-
-    static private final SubLString $str_alt11$_s_was_removed_by_its_own_forward = makeString("~s was removed by its own forward propagation");
-
-    static private final SubLSymbol $sym12$INVALID_ASSERTION_ = makeSymbol("INVALID-ASSERTION?");
-
-    static private final SubLString $str_alt13$invalid_hl_assertible__s_encounte = makeString("invalid hl-assertible ~s encountered during forward inference");
-
-    static private final SubLList $list_alt15 = list(makeSymbol("TRIGGER-ASENT"), makeSymbol("TRIGGER-SENSE"), makeSymbol("EXAMINE-ASENT"), makeSymbol("EXAMINE-SENSE"), makeSymbol("RULE"), makeSymbol("&OPTIONAL"), makeSymbol("ADDITIONAL-SUPPORTS"));
-
-    static private final SubLSymbol $sym20$_TEMPLATE = makeSymbol("?TEMPLATE");
-
-    static private final SubLList $list_alt22 = list(makeSymbol("?TEMPLATE"));
-
-    public static final SubLObject $const25$creationTemplateAllowsAllRulesFro = reader_make_constant_shell("creationTemplateAllowsAllRulesFromMt");
-
-    static private final SubLString $str_alt29$do_broad_mt_index = makeString("do-broad-mt-index");
-
-    static private final SubLSymbol $sym34$FORWARD_NON_TRIGGER_LITERAL_LIT_ = makeSymbol("FORWARD-NON-TRIGGER-LITERAL-LIT?");
-
-    static private final SubLString $str_alt40$Tried_to_do_forward_inference_out = makeString("Tried to do forward inference outside of a problem store");
-
-    public static final SubLSymbol $kw43$ALLOW_INDETERMINATE_RESULTS_ = makeKeyword("ALLOW-INDETERMINATE-RESULTS?");
-
-    private static final SubLSymbol $BINDINGS_AND_SUPPORTS = makeKeyword("BINDINGS-AND-SUPPORTS");
-
-    public static final SubLSymbol $kw53$NEW_TERMS_ALLOWED_ = makeKeyword("NEW-TERMS-ALLOWED?");
-
-    static private final SubLList $list_alt54 = list(makeSymbol("INFERENCE-BINDINGS"), makeSymbol("INFERENCE-SUPPORTS"));
-
-    static private final SubLList $list_alt55 = list(NIL, NIL);
-
-    static private final SubLList $list_alt56 = list(makeSymbol("CONCLUDED-MTS"), makeSymbol("SUPPORT-COMBINATION"));
-
-    static private final SubLList $list_alt57 = list(makeSymbol("RULE"), makeSymbol("&REST"), makeSymbol("OTHER-SUPPORTS"));
-
-    static private final SubLString $str_alt58$Canonicalization_of__s_in__s_inva = makeString("Canonicalization of ~s in ~s invalidated the forward supports ~s");
-
-    static private final SubLList $list_alt59 = list(makeSymbol("CANON-CNF"), makeSymbol("&OPTIONAL"), makeSymbol("BINDING-LIST"));
-
-    static private final SubLSymbol $sym69$FORWARD_POSSIBLY_SOME_COMMON_SPEC_MT_ = makeSymbol("FORWARD-POSSIBLY-SOME-COMMON-SPEC-MT?");
-
-    static private final SubLList $list_alt70 = list(makeSymbol("LEAFY-MT"), makeSymbol("&REST"), makeSymbol("OTHER-LEAFY-MTS"));
-
-    public static final SubLSymbol $kw71$_MEMOIZED_ITEM_NOT_FOUND_ = makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
-
-    static private final SubLList $list_alt73 = cons(makeSymbol("FIRST"), makeSymbol("REST"));
-
-    static private final SubLSymbol $sym75$SPEC_MT_ = makeSymbol("SPEC-MT?");
-
-    public static final SubLObject forward_propagate_rule_alt(SubLObject rule, SubLObject propagation_mt) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject _prev_bind_0 = $forward_inference_rule$.currentBinding(thread);
-                try {
-                    $forward_inference_rule$.bind(rule, thread);
-                    {
-                        SubLObject rule_cnf = assertions_high.assertion_cnf(rule);
-                        SubLObject pragmatic_dnf = inference_worker_transformation.forward_rule_pragmatic_dnf(rule, propagation_mt);
-                        com.cyc.cycjava.cycl.inference.harness.forward.handle_forward_propagation(rule_cnf, pragmatic_dnf, propagation_mt, NIL, rule, NIL);
-                    }
-                } finally {
-                    $forward_inference_rule$.rebind(_prev_bind_0, thread);
-                }
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject forward_propagate_rule(final SubLObject rule, final SubLObject propagation_mt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject _prev_bind_0 = $forward_inference_rule$.currentBinding(thread);
@@ -3072,16 +2426,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject make_forward_trigger_supports_alt(SubLObject source_gaf_assertion, SubLObject additional_supports) {
-        {
-            SubLObject trigger_supports = copy_list(additional_supports);
-            if (NIL != source_gaf_assertion) {
-                trigger_supports = cons(source_gaf_assertion, trigger_supports);
-            }
-            return trigger_supports;
-        }
-    }
-
     public static SubLObject make_forward_trigger_supports(final SubLObject source_gaf_assertion, final SubLObject additional_supports) {
         SubLObject trigger_supports = copy_list(additional_supports);
         if (NIL != source_gaf_assertion) {
@@ -3090,35 +2434,14 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return trigger_supports;
     }
 
-    public static final SubLObject forward_inference_allowed_rules_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return kb_control_vars.$forward_inference_allowed_rules$.getDynamicValue(thread);
-        }
-    }
-
     public static SubLObject forward_inference_allowed_rules() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return kb_control_vars.$forward_inference_allowed_rules$.getDynamicValue(thread).isList() ? list_utilities.find_all_if($sym73$VALID_ASSERTION_, kb_control_vars.$forward_inference_allowed_rules$.getDynamicValue(thread), UNPROVIDED) : kb_control_vars.$forward_inference_allowed_rules$.getDynamicValue(thread);
     }
 
-    public static final SubLObject forward_inference_all_rules_allowedP_alt() {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return eq(kb_control_vars.$forward_inference_allowed_rules$.getDynamicValue(thread), $ALL);
-        }
-    }
-
     public static SubLObject forward_inference_all_rules_allowedP() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return eq(kb_control_vars.$forward_inference_allowed_rules$.getDynamicValue(thread), $ALL);
-    }
-
-    public static final SubLObject forward_inference_rule_allowedP_alt(SubLObject rule) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return makeBoolean((NIL != com.cyc.cycjava.cycl.inference.harness.forward.forward_inference_all_rules_allowedP()) || (NIL != member_eqP(rule, kb_control_vars.$forward_inference_allowed_rules$.getDynamicValue(thread))));
-        }
     }
 
     public static SubLObject forward_inference_rule_allowedP(final SubLObject rule) {
@@ -3139,55 +2462,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
     public static SubLObject forward_inference_rule_forbiddenP(final SubLObject rule) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return makeBoolean((NIL == forward_inference_no_rules_forbiddenP()) && (NIL != (NIL != set.set_p(kb_control_vars.$forward_inference_forbidden_rules$.getDynamicValue(thread)) ? set.set_memberP(rule, kb_control_vars.$forward_inference_forbidden_rules$.getDynamicValue(thread)) : list_utilities.member_kbeqP(rule, kb_control_vars.$forward_inference_forbidden_rules$.getDynamicValue(thread)))));
-    }
-
-    public static final SubLObject forward_propagate_gaf_internal_alt(SubLObject trigger_asent, SubLObject examine_asent, SubLObject examine_sense, SubLObject propagation_mt, SubLObject rule, SubLObject trigger_supports) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == com.cyc.cycjava.cycl.inference.harness.forward.forward_inference_rule_allowedP(rule)) {
-                return NIL;
-            }
-            {
-                SubLObject _prev_bind_0 = $forward_inference_rule$.currentBinding(thread);
-                try {
-                    $forward_inference_rule$.bind(rule, thread);
-                    {
-                        SubLObject cnf = assertions_high.assertion_cnf(rule);
-                        SubLObject pos_lits = clauses.pos_lits(cnf);
-                        SubLObject neg_lits = clauses.neg_lits(cnf);
-                        SubLObject examine_lits = ($POS == examine_sense) ? ((SubLObject) (pos_lits)) : neg_lits;
-                        SubLObject other_lits = ($POS == examine_sense) ? ((SubLObject) (neg_lits)) : pos_lits;
-                        SubLObject pragmatic_dnf = inference_worker_transformation.forward_rule_pragmatic_dnf(rule, propagation_mt);
-                        if (atomic_sentence_predicate(trigger_asent).equal(atomic_sentence_predicate(examine_asent)) || ((NIL != auxiliary_indexing.unbound_predicate_literal(examine_asent)) && (NIL != same_formula_arity_p(examine_asent, trigger_asent, UNPROVIDED)))) {
-                            thread.resetMultipleValues();
-                            {
-                                SubLObject trigger_bindings = unification_utilities.gaf_asent_unify(trigger_asent, examine_asent, T, T);
-                                SubLObject gaf_asent = thread.secondMultipleValue();
-                                SubLObject unify_justification = thread.thirdMultipleValue();
-                                thread.resetMultipleValues();
-                                if (NIL != trigger_bindings) {
-                                    {
-                                        SubLObject remainder_neg_lits = NIL;
-                                        SubLObject remainder_pos_lits = NIL;
-                                        if ($POS == examine_sense) {
-                                            remainder_neg_lits = other_lits;
-                                            remainder_pos_lits = remove(examine_asent, examine_lits, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                        } else {
-                                            remainder_neg_lits = remove(examine_asent, examine_lits, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                            remainder_pos_lits = other_lits;
-                                        }
-                                        com.cyc.cycjava.cycl.inference.harness.forward.handle_forward_propagation_from_gaf(examine_asent, remainder_neg_lits, remainder_pos_lits, pragmatic_dnf, propagation_mt, trigger_bindings, rule, append(trigger_supports, unify_justification));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } finally {
-                    $forward_inference_rule$.rebind(_prev_bind_0, thread);
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject forward_propagate_gaf_internal(SubLObject trigger_asent, SubLObject examine_asent, final SubLObject examine_sense, SubLObject propagation_mt, final SubLObject rule, final SubLObject trigger_supports) {
@@ -3423,70 +2697,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     * Assume TRIGGER-ASENT is the sentence that triggered this forward propagation.
-     *
-     * @param EXAMINE-ASENT;
-     * 		the literal of RULE that unified with TRIGGER-ASENT
-     * @param REMAINDER-NEG-LITS;
-     * 		the other neg-lits of RULE, minus EXAMINE-ASENT (if TRIGGER-ASENT is a neg-lit).
-     * @param REMAINDER-POS-LITS;
-     * 		the other pos-lits of RULE, minus EXAMINE-ASENT (if TRIGGER-ASENT is a pos-lit).
-     * @param PRAGMATIC-DNF;
-     * 		a DNF of additional pragmatic constraints on RULE in PROPAGATION-MT.
-     * @param PROPAGATION-MT;
-     * 		the microtheory of the forward inference propagation.
-     * @param TRIGGER-BINDINGS;
-     * 		bindings resulting from unifying the TRIGGER-ASENT with EXAMINE-ASENT from RULE.
-     * @param RULE;
-     * 		the rule assertion that being triggerd by the TRIGGER-ASENT.
-     * @param TRIGGER-SUPPORTS;
-     * 		the supports that justify TRIGGER-ASENT.
-     */
-    @LispMethod(comment = "Assume TRIGGER-ASENT is the sentence that triggered this forward propagation.\r\n\r\n@param EXAMINE-ASENT;\r\n\t\tthe literal of RULE that unified with TRIGGER-ASENT\r\n@param REMAINDER-NEG-LITS;\r\n\t\tthe other neg-lits of RULE, minus EXAMINE-ASENT (if TRIGGER-ASENT is a neg-lit).\r\n@param REMAINDER-POS-LITS;\r\n\t\tthe other pos-lits of RULE, minus EXAMINE-ASENT (if TRIGGER-ASENT is a pos-lit).\r\n@param PRAGMATIC-DNF;\r\n\t\ta DNF of additional pragmatic constraints on RULE in PROPAGATION-MT.\r\n@param PROPAGATION-MT;\r\n\t\tthe microtheory of the forward inference propagation.\r\n@param TRIGGER-BINDINGS;\r\n\t\tbindings resulting from unifying the TRIGGER-ASENT with EXAMINE-ASENT from RULE.\r\n@param RULE;\r\n\t\tthe rule assertion that being triggerd by the TRIGGER-ASENT.\r\n@param TRIGGER-SUPPORTS;\r\n\t\tthe supports that justify TRIGGER-ASENT.")
-    public static final SubLObject handle_forward_propagation_from_gaf_alt(SubLObject examine_asent, SubLObject remainder_neg_lits, SubLObject remainder_pos_lits, SubLObject pragmatic_dnf, SubLObject propagation_mt, SubLObject trigger_bindings, SubLObject rule, SubLObject trigger_supports) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject restricted_remainder_neg_lits = bindings.apply_bindings(trigger_bindings, remainder_neg_lits);
-                SubLObject restricted_remainder_pos_lits = bindings.apply_bindings(trigger_bindings, remainder_pos_lits);
-                SubLObject restricted_rule_remainder_cnf = clauses.make_cnf(restricted_remainder_neg_lits, restricted_remainder_pos_lits);
-                SubLObject restricted_pragmatic_dnf = bindings.apply_bindings(trigger_bindings, pragmatic_dnf);
-                {
-                    SubLObject _prev_bind_0 = $forward_non_trigger_literal_restricted_examine_asent$.currentBinding(thread);
-                    try {
-                        $forward_non_trigger_literal_restricted_examine_asent$.bind(bindings.apply_bindings(trigger_bindings, examine_asent), thread);
-                        com.cyc.cycjava.cycl.inference.harness.forward.handle_forward_propagation(restricted_rule_remainder_cnf, restricted_pragmatic_dnf, propagation_mt, trigger_bindings, rule, trigger_supports);
-                    } finally {
-                        $forward_non_trigger_literal_restricted_examine_asent$.rebind(_prev_bind_0, thread);
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
-    /**
-     * Assume TRIGGER-ASENT is the sentence that triggered this forward propagation.
-     *
-     * @param EXAMINE-ASENT;
-     * 		the literal of RULE that unified with TRIGGER-ASENT
-     * @param REMAINDER-NEG-LITS;
-     * 		the other neg-lits of RULE, minus EXAMINE-ASENT (if TRIGGER-ASENT is a neg-lit).
-     * @param REMAINDER-POS-LITS;
-     * 		the other pos-lits of RULE, minus EXAMINE-ASENT (if TRIGGER-ASENT is a pos-lit).
-     * @param PRAGMATIC-DNF;
-     * 		a DNF of additional pragmatic constraints on RULE in PROPAGATION-MT.
-     * @param PROPAGATION-MT;
-     * 		the microtheory of the forward inference propagation.
-     * @param TRIGGER-BINDINGS;
-     * 		bindings resulting from unifying the TRIGGER-ASENT with EXAMINE-ASENT from RULE.
-     * @param RULE;
-     * 		the rule assertion that being triggerd by the TRIGGER-ASENT.
-     * @param TRIGGER-SUPPORTS;
-     * 		the supports that justify TRIGGER-ASENT.
-     */
-    @LispMethod(comment = "Assume TRIGGER-ASENT is the sentence that triggered this forward propagation.\r\n\r\n@param EXAMINE-ASENT;\r\n\t\tthe literal of RULE that unified with TRIGGER-ASENT\r\n@param REMAINDER-NEG-LITS;\r\n\t\tthe other neg-lits of RULE, minus EXAMINE-ASENT (if TRIGGER-ASENT is a neg-lit).\r\n@param REMAINDER-POS-LITS;\r\n\t\tthe other pos-lits of RULE, minus EXAMINE-ASENT (if TRIGGER-ASENT is a pos-lit).\r\n@param PRAGMATIC-DNF;\r\n\t\ta DNF of additional pragmatic constraints on RULE in PROPAGATION-MT.\r\n@param PROPAGATION-MT;\r\n\t\tthe microtheory of the forward inference propagation.\r\n@param TRIGGER-BINDINGS;\r\n\t\tbindings resulting from unifying the TRIGGER-ASENT with EXAMINE-ASENT from RULE.\r\n@param RULE;\r\n\t\tthe rule assertion that being triggerd by the TRIGGER-ASENT.\r\n@param TRIGGER-SUPPORTS;\r\n\t\tthe supports that justify TRIGGER-ASENT.")
     public static SubLObject handle_forward_propagation_from_gaf(final SubLObject examine_asent, final SubLObject remainder_neg_lits, final SubLObject remainder_pos_lits, final SubLObject pragmatic_dnf, final SubLObject propagation_mt, final SubLObject trigger_bindings, final SubLObject rule, final SubLObject trigger_supports) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject last_metric_type = hl_macros.$forward_inference_metric_last_metric_type$.getDynamicValue(thread);
@@ -3537,62 +2747,13 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     *
-     *
-     * @return list of assertion-p; the forward rules that are relevant
-    to the exemplars for the outcome of CREATION-TEMPLATE
-     */
-    @LispMethod(comment = "@return list of assertion-p; the forward rules that are relevant\r\nto the exemplars for the outcome of CREATION-TEMPLATE")
-    public static final SubLObject creation_template_forward_rules_via_exemplars_alt(SubLObject creation_template) {
-        {
-            SubLObject exemplars = com.cyc.cycjava.cycl.inference.harness.forward.creation_template_exemplars(creation_template);
-            return all_forward_rules_relevant_to_terms(exemplars);
-        }
-    }
-
-    /**
-     *
-     *
-     * @return list of assertion-p; the forward rules that are relevant
-    to the exemplars for the outcome of CREATION-TEMPLATE
-     */
-    @LispMethod(comment = "@return list of assertion-p; the forward rules that are relevant\r\nto the exemplars for the outcome of CREATION-TEMPLATE")
     public static SubLObject creation_template_forward_rules_via_exemplars(final SubLObject creation_template) {
         final SubLObject exemplars = creation_template_exemplars(creation_template);
         return assertion_utilities.all_forward_rules_relevant_to_terms(exemplars);
     }
 
-    /**
-     *
-     *
-     * @return list of fort-p; the terms that are exemplars for the outcome of CREATION-TEMPLATE.
-     */
-    @LispMethod(comment = "@return list of fort-p; the terms that are exemplars for the outcome of CREATION-TEMPLATE.")
-    public static final SubLObject creation_template_exemplars_alt(SubLObject creation_template) {
-        return pred_values_in_any_mt(creation_template, $$creationTemplateFORTs, ONE_INTEGER, TWO_INTEGER, $TRUE);
-    }
-
-    /**
-     *
-     *
-     * @return list of fort-p; the terms that are exemplars for the outcome of CREATION-TEMPLATE.
-     */
-    @LispMethod(comment = "@return list of fort-p; the terms that are exemplars for the outcome of CREATION-TEMPLATE.")
     public static SubLObject creation_template_exemplars(final SubLObject creation_template) {
         return kb_mapping_utilities.pred_values_in_any_mt(creation_template, $$creationTemplateFORTs, ONE_INTEGER, TWO_INTEGER, $TRUE);
-    }
-
-    public static final SubLObject creation_template_allowable_rules_alt(SubLObject creation_template) {
-        {
-            SubLObject rules = NIL;
-            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.harness.forward.all_genl_creation_templates(creation_template);
-            SubLObject template = NIL;
-            for (template = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , template = cdolist_list_var.first()) {
-                rules = append(rules, com.cyc.cycjava.cycl.inference.harness.forward.creation_template_allowable_rules_internal(template));
-            }
-            return rules;
-        }
     }
 
     public static SubLObject creation_template_allowable_rules(final SubLObject creation_template) {
@@ -3615,130 +2776,8 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return rule_set;
     }
 
-    public static final SubLObject all_genl_creation_templates_alt(SubLObject creation_template) {
-        return backward.removal_ask_variable($sym20$_TEMPLATE, listS($$genlCreationTemplate, creation_template, $list_alt22), $$EverythingPSC, UNPROVIDED, UNPROVIDED);
-    }
-
     public static SubLObject all_genl_creation_templates(final SubLObject creation_template) {
         return backward.removal_ask_variable($sym83$_TEMPLATE, listS($$genlCreationTemplate, creation_template, $list85), $$EverythingPSC, UNPROVIDED, UNPROVIDED);
-    }
-
-    public static final SubLObject creation_template_allowable_rules_internal_alt(SubLObject creation_template) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject rules = pred_values_in_any_mt(creation_template, $$creationTemplateAllowableRules, ONE_INTEGER, TWO_INTEGER, $TRUE);
-                SubLObject mts = pred_values_in_any_mt(creation_template, $const25$creationTemplateAllowsAllRulesFro, ONE_INTEGER, TWO_INTEGER, $TRUE);
-                SubLObject cdolist_list_var = mts;
-                SubLObject mt = NIL;
-                for (mt = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , mt = cdolist_list_var.first()) {
-                    {
-                        SubLObject pcase_var = kb_mapping_macros.do_mt_contents_method(mt);
-                        if (pcase_var.eql($MT)) {
-                            if (NIL != kb_mapping_macros.do_mt_index_key_validator(mt, $RULE)) {
-                                {
-                                    SubLObject final_index_spec = kb_mapping_macros.mt_final_index_spec(mt);
-                                    SubLObject final_index_iterator = NIL;
-                                    try {
-                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $RULE, $TRUE, NIL);
-                                        {
-                                            SubLObject done_var = NIL;
-                                            SubLObject token_var = NIL;
-                                            while (NIL == done_var) {
-                                                {
-                                                    SubLObject rule = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var);
-                                                    SubLObject valid = makeBoolean(token_var != rule);
-                                                    if (NIL != valid) {
-                                                        if (NIL != assertions_high.forward_assertionP(rule)) {
-                                                            {
-                                                                SubLObject item_var = rule;
-                                                                if (NIL == member(item_var, rules, symbol_function(EQL), symbol_function(IDENTITY))) {
-                                                                    rules = cons(item_var, rules);
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    done_var = makeBoolean(NIL == valid);
-                                                }
-                                            } 
-                                        }
-                                    } finally {
-                                        {
-                                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
-                                            try {
-                                                $is_thread_performing_cleanupP$.bind(T, thread);
-                                                if (NIL != final_index_iterator) {
-                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
-                                                }
-                                            } finally {
-                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            if (pcase_var.eql($BROAD_MT)) {
-                                if (NIL != kb_mapping_macros.do_broad_mt_index_key_validator(mt, $RULE)) {
-                                    {
-                                        SubLObject idx = do_assertions_table();
-                                        SubLObject total = id_index_count(idx);
-                                        SubLObject sofar = ZERO_INTEGER;
-                                        SubLTrampolineFile.checkType($str_alt29$do_broad_mt_index, STRINGP);
-                                        {
-                                            SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
-                                            SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
-                                            SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
-                                            SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
-                                            try {
-                                                $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
-                                                $last_percent_progress_prediction$.bind(NIL, thread);
-                                                $within_noting_percent_progress$.bind(T, thread);
-                                                $percent_progress_start_time$.bind(get_universal_time(), thread);
-                                                noting_percent_progress_preamble($str_alt29$do_broad_mt_index);
-                                                if (NIL == do_id_index_empty_p(idx, $SKIP)) {
-                                                    {
-                                                        SubLObject id = do_id_index_next_id(idx, T, NIL, NIL);
-                                                        SubLObject state_var = do_id_index_next_state(idx, T, id, NIL);
-                                                        SubLObject rule = NIL;
-                                                        while (NIL != id) {
-                                                            rule = do_id_index_state_object(idx, $SKIP, id, state_var);
-                                                            if (NIL != do_id_index_id_and_object_validP(id, rule, $SKIP)) {
-                                                                note_percent_progress(sofar, total);
-                                                                sofar = add(sofar, ONE_INTEGER);
-                                                                if (NIL != kb_mapping_macros.do_broad_mt_index_match_p(rule, mt, $RULE, $TRUE)) {
-                                                                    if (NIL != assertions_high.forward_assertionP(rule)) {
-                                                                        {
-                                                                            SubLObject item_var = rule;
-                                                                            if (NIL == member(item_var, rules, symbol_function(EQL), symbol_function(IDENTITY))) {
-                                                                                rules = cons(item_var, rules);
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                            id = do_id_index_next_id(idx, T, id, state_var);
-                                                            state_var = do_id_index_next_state(idx, T, id, state_var);
-                                                        } 
-                                                    }
-                                                }
-                                                noting_percent_progress_postamble();
-                                            } finally {
-                                                $percent_progress_start_time$.rebind(_prev_bind_3, thread);
-                                                $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
-                                                $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
-                                                $last_percent_progress_index$.rebind(_prev_bind_0, thread);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                return rules;
-            }
-        }
     }
 
     public static SubLObject creation_template_allowable_rules_internal(final SubLObject creation_template) {
@@ -3789,7 +2828,7 @@ public final class forward extends SubLTranslatedFile implements V12 {
                     final SubLObject mess = $str92$do_broad_mt_index;
                     final SubLObject total = id_index_count(idx);
                     SubLObject sofar = ZERO_INTEGER;
-                    assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
+                    assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
                     final SubLObject _prev_bind_2 = $last_percent_progress_index$.currentBinding(thread);
                     final SubLObject _prev_bind_3 = $last_percent_progress_prediction$.currentBinding(thread);
                     final SubLObject _prev_bind_4 = $within_noting_percent_progress$.currentBinding(thread);
@@ -3880,44 +2919,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return rules;
     }
 
-    public static final SubLObject handle_forward_propagation_alt(SubLObject rule_remainder_cnf, SubLObject pragmatic_dnf, SubLObject propagation_mt, SubLObject trigger_bindings, SubLObject rule, SubLObject trigger_supports) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL != com.cyc.cycjava.cycl.inference.harness.forward.forward_propagation_supports_doomedP(rule, trigger_supports)) {
-                return NIL;
-            }
-            {
-                SubLObject rule_remainder_neg_lits = clauses.neg_lits(rule_remainder_cnf);
-                SubLObject rule_remainder_pos_lits = clauses.pos_lits(rule_remainder_cnf);
-                {
-                    SubLObject cdolist_list_var = rule_remainder_pos_lits;
-                    SubLObject target_asent = NIL;
-                    for (target_asent = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , target_asent = cdolist_list_var.first()) {
-                        {
-                            SubLObject other_pos_lits = remove(target_asent, rule_remainder_pos_lits, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                            SubLObject query_dnf = clauses.make_dnf(other_pos_lits, rule_remainder_neg_lits);
-                            com.cyc.cycjava.cycl.inference.harness.forward.handle_one_forward_propagation(query_dnf, pragmatic_dnf, propagation_mt, target_asent, $TRUE, trigger_bindings, rule, trigger_supports);
-                        }
-                    }
-                }
-                if (NIL != kb_control_vars.$forward_propagate_to_negations$.getDynamicValue(thread)) {
-                    {
-                        SubLObject cdolist_list_var = rule_remainder_neg_lits;
-                        SubLObject target_asent = NIL;
-                        for (target_asent = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , target_asent = cdolist_list_var.first()) {
-                            {
-                                SubLObject other_neg_lits = remove(target_asent, rule_remainder_neg_lits, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                                SubLObject query_dnf = clauses.make_dnf(rule_remainder_pos_lits, other_neg_lits);
-                                com.cyc.cycjava.cycl.inference.harness.forward.handle_one_forward_propagation(query_dnf, pragmatic_dnf, propagation_mt, target_asent, $FALSE, trigger_bindings, rule, trigger_supports);
-                            }
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
     public static SubLObject handle_forward_propagation(final SubLObject rule_remainder_cnf, final SubLObject pragmatic_dnf, final SubLObject propagation_mt, final SubLObject trigger_bindings, final SubLObject rule, final SubLObject trigger_supports) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject failureP = forward_propagation_supports_doomedP(rule, trigger_supports);
@@ -3950,28 +2951,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
                 cdolist_list_var = cdolist_list_var.rest();
                 target_asent = cdolist_list_var.first();
             } 
-        }
-        return NIL;
-    }
-
-    public static final SubLObject handle_one_forward_propagation_alt(SubLObject query_dnf, SubLObject pragmatic_dnf, SubLObject propagation_mt, SubLObject target_asent, SubLObject target_truth, SubLObject trigger_bindings, SubLObject rule, SubLObject trigger_supports) {
-        {
-            SubLObject catch_var = NIL;
-            try {
-                if ((NIL != clauses.empty_clauseP(query_dnf)) && (NIL != clauses.empty_clauseP(pragmatic_dnf))) {
-                    com.cyc.cycjava.cycl.inference.harness.forward.add_empty_forward_propagation_result(target_asent, target_truth, propagation_mt, trigger_bindings, rule, trigger_supports);
-                } else {
-                    if ((NIL == com.cyc.cycjava.cycl.inference.harness.forward.semantically_valid_forward_dnf(query_dnf, propagation_mt)) || (NIL == com.cyc.cycjava.cycl.inference.harness.forward.semantically_valid_forward_dnf(pragmatic_dnf, propagation_mt))) {
-                    } else {
-                        {
-                            SubLObject filtered_pragmatic_dnf = com.cyc.cycjava.cycl.inference.harness.forward.filter_forward_pragmatic_dnf(pragmatic_dnf);
-                            com.cyc.cycjava.cycl.inference.harness.forward.forward_propagate_dnf(query_dnf, filtered_pragmatic_dnf, propagation_mt, target_asent, target_truth, trigger_bindings, rule, trigger_supports);
-                        }
-                    }
-                }
-            } catch (Throwable ccatch_env_var) {
-                catch_var = Errors.handleThrowable(ccatch_env_var, $INFERENCE_REJECTED);
-            }
         }
         return NIL;
     }
@@ -4184,28 +3163,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     * Removes #$forwardNonTriggerLiteral pos-lits from PRAGMATIC-DNF.
-     */
-    @LispMethod(comment = "Removes #$forwardNonTriggerLiteral pos-lits from PRAGMATIC-DNF.")
-    public static final SubLObject filter_forward_pragmatic_dnf_alt(SubLObject pragmatic_dnf) {
-        {
-            SubLObject pos_lits = clauses.pos_lits(pragmatic_dnf);
-            if (NIL == find_if($sym34$FORWARD_NON_TRIGGER_LITERAL_LIT_, pos_lits, UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
-                return pragmatic_dnf;
-            } else {
-                {
-                    SubLObject new_pos_lits = remove_if($sym34$FORWARD_NON_TRIGGER_LITERAL_LIT_, pos_lits, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    return clauses.make_dnf(clauses.neg_lits(pragmatic_dnf), new_pos_lits);
-                }
-            }
-        }
-    }
-
-    /**
-     * Removes #$forwardNonTriggerLiteral pos-lits from PRAGMATIC-DNF.
-     */
-    @LispMethod(comment = "Removes #$forwardNonTriggerLiteral pos-lits from PRAGMATIC-DNF.")
     public static SubLObject filter_forward_pragmatic_dnf(final SubLObject pragmatic_dnf) {
         final SubLObject pos_lits = clauses.pos_lits(pragmatic_dnf);
         if (NIL == find_if($sym112$FORWARD_PRAGMATIC_TRIGGER_LITERAL_LIT_, pos_lits, UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
@@ -4213,39 +3170,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
         }
         final SubLObject new_pos_lits = remove_if($sym112$FORWARD_PRAGMATIC_TRIGGER_LITERAL_LIT_, pos_lits, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         return clauses.make_dnf(clauses.neg_lits(pragmatic_dnf), new_pos_lits);
-    }
-
-    public static final SubLObject forward_propagate_dnf_alt(SubLObject query_dnf, SubLObject pragmatic_dnf, SubLObject propagation_mt, SubLObject target_asent, SubLObject target_truth, SubLObject trigger_bindings, SubLObject rule, SubLObject trigger_supports) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject forward_results = com.cyc.cycjava.cycl.inference.harness.forward.new_forward_query_from_dnf(query_dnf, pragmatic_dnf, propagation_mt, UNPROVIDED);
-                SubLObject inference = thread.secondMultipleValue();
-                SubLObject query_time = thread.thirdMultipleValue();
-                thread.resetMultipleValues();
-                if (NIL != $forward_inference_browsing_callback$.getDynamicValue(thread)) {
-                    if (NIL != $forward_inference_browsing_callback_more_infoP$.getDynamicValue(thread)) {
-                        funcall($forward_inference_browsing_callback$.getDynamicValue(thread), inference, rule, make_plist(list($TARGET_ASENT, $TARGET_TRUTH, $TRIGGER_BINDINGS, $TRIGGER_SUPPORTS, $FORWARD_RESULTS), list(target_asent, target_truth, trigger_bindings, trigger_supports, forward_results)));
-                    } else {
-                        funcall($forward_inference_browsing_callback$.getDynamicValue(thread), inference, rule);
-                    }
-                }
-                inference_metrics.increment_forward_inference_historical_count();
-                inference_metrics.increment_forward_inference_metrics(rule, query_time, inference);
-                if (NIL != forward_results) {
-                    inference_metrics.increment_successful_forward_inference_historical_count();
-                }
-                {
-                    SubLObject cdolist_list_var = forward_results;
-                    SubLObject forward_result = NIL;
-                    for (forward_result = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , forward_result = cdolist_list_var.first()) {
-                        com.cyc.cycjava.cycl.inference.harness.forward.add_forward_propagation_result(target_asent, target_truth, propagation_mt, trigger_bindings, rule, trigger_supports, forward_result);
-                    }
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject forward_propagate_dnf(final SubLObject query_dnf, final SubLObject pragmatic_dnf, final SubLObject propagation_mt, final SubLObject target_asent, final SubLObject target_truth, final SubLObject trigger_bindings, final SubLObject rule, final SubLObject trigger_supports) {
@@ -4367,7 +3291,7 @@ public final class forward extends SubLTranslatedFile implements V12 {
                             try {
                                 clear_current_forward_problem_store();
                                 final SubLObject environment = get_forward_inference_environment();
-                                assert NIL != queues.queue_p(environment) : "! queues.queue_p(environment) " + ("queues.queue_p(environment) " + "CommonSymbols.NIL != queues.queue_p(environment) ") + environment;
+                                assert NIL != queues.queue_p(environment) : "queues.queue_p(environment) " + "CommonSymbols.NIL != queues.queue_p(environment) " + environment;
                                 final SubLObject _prev_bind_0_$106 = kb_control_vars.$forward_inference_environment$.currentBinding(thread);
                                 try {
                                     kb_control_vars.$forward_inference_environment$.bind(environment, thread);
@@ -4467,35 +3391,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject new_forward_query_from_dnf_alt(SubLObject query_dnf, SubLObject pragmatic_dnf, SubLObject propagation_mt, SubLObject overriding_query_properties) {
-        if (overriding_query_properties == UNPROVIDED) {
-            overriding_query_properties = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject query_properties = com.cyc.cycjava.cycl.inference.harness.forward.forward_inference_query_properties(pragmatic_dnf, overriding_query_properties);
-                SubLObject forward_results = NIL;
-                SubLObject halt_reason = NIL;
-                SubLObject inference = NIL;
-                SubLObject query_time = NIL;
-                SubLObject time_var = get_internal_real_time();
-                thread.resetMultipleValues();
-                {
-                    SubLObject forward_results_15 = inference_kernel.new_cyc_query_from_dnf(query_dnf, propagation_mt, NIL, query_properties);
-                    SubLObject halt_reason_16 = thread.secondMultipleValue();
-                    SubLObject inference_17 = thread.thirdMultipleValue();
-                    thread.resetMultipleValues();
-                    forward_results = forward_results_15;
-                    halt_reason = halt_reason_16;
-                    inference = inference_17;
-                }
-                query_time = divide(subtract(get_internal_real_time(), time_var), time_high.$internal_time_units_per_second$.getGlobalValue());
-                return values(forward_results, inference, query_time);
-            }
-        }
-    }
-
     public static SubLObject new_forward_query_from_dnf(final SubLObject query_dnf, final SubLObject pragmatic_dnf, final SubLObject propagation_mt, SubLObject overriding_query_properties) {
         if (overriding_query_properties == UNPROVIDED) {
             overriding_query_properties = $forward_inference_overriding_query_properties$.getDynamicValue();
@@ -4553,19 +3448,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return values(forward_results, inference, query_time, halt_reason);
     }
 
-    public static final SubLObject new_cyc_trivial_forward_query_from_dnf_alt(SubLObject dnf, SubLObject mt, SubLObject scoped_vars, SubLObject overriding_query_properties) {
-        if (scoped_vars == UNPROVIDED) {
-            scoped_vars = NIL;
-        }
-        if (overriding_query_properties == UNPROVIDED) {
-            overriding_query_properties = NIL;
-        }
-        {
-            SubLObject query_properties = com.cyc.cycjava.cycl.inference.harness.forward.trivial_forward_inference_query_properties(clauses.empty_clause(), overriding_query_properties);
-            return inference_trivial.new_cyc_trivial_query_from_dnf(dnf, mt, scoped_vars, query_properties);
-        }
-    }
-
     public static SubLObject new_cyc_trivial_forward_query_from_dnf(final SubLObject dnf, final SubLObject mt, SubLObject scoped_vars, SubLObject overriding_query_properties) {
         if (scoped_vars == UNPROVIDED) {
             scoped_vars = NIL;
@@ -4577,46 +3459,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return inference_trivial.new_cyc_trivial_query_from_dnf(dnf, mt, scoped_vars, query_properties);
     }
 
-    /**
-     * This method is similar to @xref new-forward-query-from-dnf and is useful for testing.
-     */
-    @LispMethod(comment = "This method is similar to @xref new-forward-query-from-dnf and is useful for testing.")
-    public static final SubLObject new_forward_query_alt(SubLObject query_sentence, SubLObject pragmatic_dnf, SubLObject propagation_mt) {
-        if (pragmatic_dnf == UNPROVIDED) {
-            pragmatic_dnf = clauses.empty_clause();
-        }
-        if (propagation_mt == UNPROVIDED) {
-            propagation_mt = $$InferencePSC;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject query_properties = com.cyc.cycjava.cycl.inference.harness.forward.forward_inference_query_properties(pragmatic_dnf, UNPROVIDED);
-                SubLObject forward_results = NIL;
-                SubLObject halt_reason = NIL;
-                SubLObject inference = NIL;
-                SubLObject query_time = NIL;
-                SubLObject time_var = get_internal_real_time();
-                thread.resetMultipleValues();
-                {
-                    SubLObject forward_results_18 = inference_kernel.new_cyc_query(query_sentence, propagation_mt, query_properties);
-                    SubLObject halt_reason_19 = thread.secondMultipleValue();
-                    SubLObject inference_20 = thread.thirdMultipleValue();
-                    thread.resetMultipleValues();
-                    forward_results = forward_results_18;
-                    halt_reason = halt_reason_19;
-                    inference = inference_20;
-                }
-                query_time = divide(subtract(get_internal_real_time(), time_var), time_high.$internal_time_units_per_second$.getGlobalValue());
-                return values(forward_results, inference, query_time);
-            }
-        }
-    }
-
-    /**
-     * This method is similar to @xref new-forward-query-from-dnf and is useful for testing.
-     */
-    @LispMethod(comment = "This method is similar to @xref new-forward-query-from-dnf and is useful for testing.")
     public static SubLObject new_forward_query(final SubLObject query_sentence, SubLObject pragmatic_dnf, SubLObject propagation_mt) {
         if (pragmatic_dnf == UNPROVIDED) {
             pragmatic_dnf = clauses.empty_clause();
@@ -4643,36 +3485,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return values(forward_results, inference, query_time, halt_reason);
     }
 
-    public static final SubLObject forward_inference_query_properties_alt(SubLObject pragmatic_dnf, SubLObject overriding_query_properties) {
-        if (overriding_query_properties == UNPROVIDED) {
-            overriding_query_properties = NIL;
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject store = com.cyc.cycjava.cycl.inference.harness.forward.get_forward_problem_store();
-                SubLObject non_explanatory_sentence = (NIL != clauses.empty_clauseP(pragmatic_dnf)) ? ((SubLObject) (NIL)) : clauses.dnf_formula(pragmatic_dnf);
-                SubLObject browsableP = sublisp_boolean(browse_forward_inferencesP());
-                SubLObject blockP = sublisp_boolean($block_forward_inferencesP$.getDynamicValue(thread));
-                SubLObject max_time = kb_control_vars.$forward_inference_time_cutoff$.getDynamicValue(thread);
-                SubLObject productivity_limit = ask_utilities.productivity_limit_from_removal_cost_cutoff($forward_inference_removal_cost_cutoff$.getDynamicValue(thread));
-                SubLObject new_terms_allowed = $prefer_forward_skolemization$.getDynamicValue(thread);
-                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
-                    if (NIL == inference_datastructures_problem_store.problem_store_p(store)) {
-                        Errors.error($str_alt40$Tried_to_do_forward_inference_out);
-                    }
-                }
-                {
-                    SubLObject query_properties = list(new SubLObject[]{ $PROBLEM_STORE, store, $NON_EXPLANATORY_SENTENCE, non_explanatory_sentence, $kw43$ALLOW_INDETERMINATE_RESULTS_, T, $BROWSABLE_, browsableP, $BLOCK_, blockP, $PRODUCTIVITY_LIMIT, productivity_limit, $PROBABLY_APPROXIMATELY_DONE, ONE_INTEGER, $MAX_TIME, max_time, $RESULT_UNIQUENESS, $PROOF, $RETURN, $BINDINGS_AND_SUPPORTS, $kw53$NEW_TERMS_ALLOWED_, new_terms_allowed });
-                    if (NIL != overriding_query_properties) {
-                        query_properties = merge_plist(query_properties, overriding_query_properties);
-                    }
-                    return query_properties;
-                }
-            }
-        }
-    }
-
     public static SubLObject forward_inference_query_properties(final SubLObject pragmatic_dnf, SubLObject overriding_query_properties) {
         if (overriding_query_properties == UNPROVIDED) {
             overriding_query_properties = NIL;
@@ -4693,27 +3505,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
             query_properties = list_utilities.merge_plist(query_properties, overriding_query_properties);
         }
         return query_properties;
-    }
-
-    public static final SubLObject trivial_forward_inference_query_properties_alt(SubLObject pragmatic_dnf, SubLObject overriding_query_properties) {
-        if (overriding_query_properties == UNPROVIDED) {
-            overriding_query_properties = NIL;
-        }
-        {
-            SubLObject query_properties = com.cyc.cycjava.cycl.inference.harness.forward.forward_inference_query_properties(pragmatic_dnf, overriding_query_properties);
-            SubLObject trivial_query_properties = NIL;
-            SubLObject remainder = NIL;
-            for (remainder = query_properties; NIL != remainder; remainder = cddr(remainder)) {
-                {
-                    SubLObject property = remainder.first();
-                    SubLObject value = cadr(remainder);
-                    if (NIL != inference_trivial.trivial_strategist_can_handle_query_propertyP(property, value)) {
-                        trivial_query_properties = putf(trivial_query_properties, property, value);
-                    }
-                }
-            }
-            return trivial_query_properties;
-        }
     }
 
     public static SubLObject trivial_forward_inference_query_properties(final SubLObject pragmatic_dnf, SubLObject overriding_query_properties) {
@@ -4766,37 +3557,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
             productivity_limit = $minimum_rule_forward_inference_productivity_limit$.getDynamicValue(thread);
         }
         return productivity_limit;
-    }
-
-    public static final SubLObject add_forward_propagation_result_alt(SubLObject target_asent, SubLObject target_truth, SubLObject propagation_mt, SubLObject trigger_bindings, SubLObject rule, SubLObject trigger_supports, SubLObject forward_result) {
-        {
-            SubLObject datum = forward_result;
-            SubLObject current = datum;
-            SubLObject inference_bindings = NIL;
-            SubLObject inference_supports = NIL;
-            destructuring_bind_must_consp(current, datum, $list_alt54);
-            inference_bindings = current.first();
-            current = current.rest();
-            destructuring_bind_must_consp(current, datum, $list_alt54);
-            inference_supports = current.first();
-            current = current.rest();
-            if (NIL == current) {
-                {
-                    SubLObject concluded_asent = bindings.apply_bindings(inference_bindings, target_asent);
-                    if (NIL != hl_ground_tree_p(concluded_asent)) {
-                        if (NIL == abnormal.forward_bindings_abnormalP(propagation_mt, rule, trigger_bindings, inference_bindings)) {
-                            {
-                                SubLObject concluded_supports = com.cyc.cycjava.cycl.inference.harness.forward.new_forward_concluded_supports(rule, trigger_supports, inference_supports);
-                                com.cyc.cycjava.cycl.inference.harness.forward.add_forward_deductions_from_supports(propagation_mt, concluded_asent, target_truth, concluded_supports);
-                            }
-                        }
-                    }
-                }
-            } else {
-                cdestructuring_bind_error(datum, $list_alt54);
-            }
-        }
-        return NIL;
     }
 
     public static SubLObject add_forward_propagation_result(final SubLObject target_asent, final SubLObject target_truth, final SubLObject propagation_mt, final SubLObject trigger_bindings, final SubLObject rule, final SubLObject trigger_supports, final SubLObject forward_result) {
@@ -4863,10 +3623,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject add_empty_forward_propagation_result_alt(SubLObject target_asent, SubLObject target_truth, SubLObject propagation_mt, SubLObject trigger_bindings, SubLObject rule, SubLObject trigger_supports) {
-        return com.cyc.cycjava.cycl.inference.harness.forward.add_forward_propagation_result(target_asent, target_truth, propagation_mt, trigger_bindings, rule, trigger_supports, $list_alt55);
-    }
-
     public static SubLObject add_empty_forward_propagation_result(final SubLObject target_asent, final SubLObject target_truth, final SubLObject propagation_mt, final SubLObject trigger_bindings, final SubLObject rule, final SubLObject trigger_supports) {
         if (NIL != call_forward_inference_browsing_callbackP()) {
             call_forward_inference_browsing_callback(NIL, rule, list(new SubLObject[]{ $TARGET_ASENT, target_asent, $TARGET_TRUTH, target_truth, $TRIGGER_BINDINGS, trigger_bindings, $TRIGGER_SUPPORTS, trigger_supports, $FORWARD_RESULTS, NIL, $ANSWER_COUNT, ONE_INTEGER }));
@@ -4874,86 +3630,11 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return add_forward_propagation_result(target_asent, target_truth, propagation_mt, trigger_bindings, rule, trigger_supports, $list145);
     }
 
-    /**
-     * Combine RULE, TRIGGER-SUPPORTS and INFERENCE-SUPPORTS (if any)
-     * into a single list of support-p that represents one complete justification for
-     * a new forward conclusion.
-     */
-    @LispMethod(comment = "Combine RULE, TRIGGER-SUPPORTS and INFERENCE-SUPPORTS (if any)\r\ninto a single list of support-p that represents one complete justification for\r\na new forward conclusion.\nCombine RULE, TRIGGER-SUPPORTS and INFERENCE-SUPPORTS (if any)\ninto a single list of support-p that represents one complete justification for\na new forward conclusion.")
-    public static final SubLObject new_forward_concluded_supports_alt(SubLObject rule, SubLObject trigger_supports, SubLObject inference_supports) {
-        if (inference_supports == UNPROVIDED) {
-            inference_supports = NIL;
-        }
-        return bq_cons(rule, append(NIL != trigger_supports ? ((SubLObject) (copy_list(trigger_supports))) : NIL, NIL != inference_supports ? ((SubLObject) (copy_list(inference_supports))) : NIL, NIL));
-    }
-
-    /**
-     * Combine RULE, TRIGGER-SUPPORTS and INFERENCE-SUPPORTS (if any)
-     * into a single list of support-p that represents one complete justification for
-     * a new forward conclusion.
-     */
-    @LispMethod(comment = "Combine RULE, TRIGGER-SUPPORTS and INFERENCE-SUPPORTS (if any)\r\ninto a single list of support-p that represents one complete justification for\r\na new forward conclusion.\nCombine RULE, TRIGGER-SUPPORTS and INFERENCE-SUPPORTS (if any)\ninto a single list of support-p that represents one complete justification for\na new forward conclusion.")
     public static SubLObject new_forward_concluded_supports(final SubLObject rule, final SubLObject trigger_supports, SubLObject inference_supports) {
         if (inference_supports == UNPROVIDED) {
             inference_supports = NIL;
         }
         return bq_cons(rule, append(NIL != trigger_supports ? copy_list(trigger_supports) : NIL, NIL != inference_supports ? copy_list(inference_supports) : NIL, NIL));
-    }
-
-    public static final SubLObject add_forward_deductions_from_supports(SubLObject propagation_mt, SubLObject concluded_asent, SubLObject concluded_truth, SubLObject concluded_supports) {
-        if (NIL != kb_accessors.decontextualized_literalP(concluded_asent)) {
-            {
-                SubLObject convention_mt = kb_accessors.decontextualized_literal_convention_mt(concluded_asent);
-                if ($$InferencePSC.equal(propagation_mt)) {
-                    {
-                        SubLObject support_combinations = com.cyc.cycjava.cycl.inference.harness.forward.compute_decontextualized_support_combinations(concluded_supports);
-                        SubLObject cdolist_list_var = support_combinations;
-                        SubLObject support_combination = NIL;
-                        for (support_combination = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , support_combination = cdolist_list_var.first()) {
-                            com.cyc.cycjava.cycl.inference.harness.forward.handle_forward_deduction_in_mt(concluded_asent, concluded_truth, convention_mt, support_combination);
-                        }
-                    }
-                } else {
-                    com.cyc.cycjava.cycl.inference.harness.forward.handle_forward_deduction_in_mt(concluded_asent, concluded_truth, convention_mt, concluded_supports);
-                }
-            }
-        } else {
-            if ($$InferencePSC.equal(propagation_mt)) {
-                {
-                    SubLObject mt_support_combinations = com.cyc.cycjava.cycl.inference.harness.forward.compute_all_mt_and_support_combinations(concluded_supports);
-                    SubLObject cdolist_list_var = mt_support_combinations;
-                    SubLObject mt_support_combination = NIL;
-                    for (mt_support_combination = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , mt_support_combination = cdolist_list_var.first()) {
-                        {
-                            SubLObject datum = mt_support_combination;
-                            SubLObject current = datum;
-                            SubLObject concluded_mts = NIL;
-                            SubLObject support_combination = NIL;
-                            destructuring_bind_must_consp(current, datum, $list_alt56);
-                            concluded_mts = current.first();
-                            current = current.rest();
-                            destructuring_bind_must_consp(current, datum, $list_alt56);
-                            support_combination = current.first();
-                            current = current.rest();
-                            if (NIL == current) {
-                                {
-                                    SubLObject cdolist_list_var_21 = concluded_mts;
-                                    SubLObject concluded_mt = NIL;
-                                    for (concluded_mt = cdolist_list_var_21.first(); NIL != cdolist_list_var_21; cdolist_list_var_21 = cdolist_list_var_21.rest() , concluded_mt = cdolist_list_var_21.first()) {
-                                        com.cyc.cycjava.cycl.inference.harness.forward.handle_forward_deduction_in_mt(concluded_asent, concluded_truth, concluded_mt, support_combination);
-                                    }
-                                }
-                            } else {
-                                cdestructuring_bind_error(datum, $list_alt56);
-                            }
-                        }
-                    }
-                }
-            } else {
-                com.cyc.cycjava.cycl.inference.harness.forward.handle_forward_deduction_in_mt(concluded_asent, concluded_truth, propagation_mt, concluded_supports);
-            }
-        }
-        return NIL;
     }
 
     public static SubLObject add_forward_deductions_from_supports(final SubLObject propagation_mt, final SubLObject concluded_asent, final SubLObject concluded_truth, final SubLObject concluded_supports, final SubLObject pragmatic_supports, final SubLObject rule, final SubLObject trigger_bindings, final SubLObject inference_bindings) {
@@ -5116,28 +3797,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject handle_forward_deduction_in_mt(SubLObject asent, SubLObject truth, SubLObject mt, SubLObject supports) {
-        if (NIL == (NIL != abnormal.abnormality_except_support_enabledP() ? ((SubLObject) (inference_worker_transformation.supports_contain_excepted_assertion_in_mtP(supports, mt, UNPROVIDED_SYM))) : NIL)) {
-            {
-                SubLObject datum = supports;
-                SubLObject current = datum;
-                SubLObject rule = NIL;
-                destructuring_bind_must_consp(current, datum, $list_alt57);
-                rule = current.first();
-                current = current.rest();
-                {
-                    SubLObject other_supports = current;
-                    if (NIL != com.cyc.cycjava.cycl.inference.harness.forward.constraint_ruleP(rule, mt)) {
-                        return com.cyc.cycjava.cycl.inference.harness.forward.handle_forward_deduction_in_mt_as_constraint(asent, truth, mt, supports);
-                    } else {
-                        return com.cyc.cycjava.cycl.inference.harness.forward.handle_forward_deduction_in_mt_as_assertible(asent, truth, mt, supports);
-                    }
-                }
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject handle_forward_deduction_in_mt(final SubLObject asent, final SubLObject truth, final SubLObject mt, final SubLObject placement_mt, final SubLObject supports, final SubLObject pragmatic_supports, final SubLObject rule, final SubLObject trigger_bindings, final SubLObject inference_bindings) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject result = NIL;
@@ -5282,74 +3941,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
             return handle_forward_deduction_in_mt_as_constraint(asent, truth, mt, placement_mt, supports, pragmatic_supports, v_bindings);
         }
         return handle_forward_deduction_in_mt_as_assertible(asent, truth, mt, placement_mt, supports, pragmatic_supports, v_bindings);
-    }
-
-    public static final SubLObject handle_forward_deduction_in_mt_as_assertible(SubLObject asent, SubLObject truth, SubLObject mt, SubLObject supports) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject gaf_formula = possibly_negate(asent, truth);
-                SubLObject canon_cnfs = NIL;
-                if (NIL != $assume_forward_deduction_is_wfP$.getDynamicValue(thread)) {
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject canon_cnfs_22 = czer_main.canonicalize_wf_gaf(gaf_formula, mt);
-                        SubLObject mt_23 = thread.secondMultipleValue();
-                        thread.resetMultipleValues();
-                        canon_cnfs = canon_cnfs_22;
-                        mt = mt_23;
-                    }
-                } else {
-                    thread.resetMultipleValues();
-                    {
-                        SubLObject canon_cnfs_24 = czer_main.canonicalize_gaf(gaf_formula, mt);
-                        SubLObject mt_25 = thread.secondMultipleValue();
-                        thread.resetMultipleValues();
-                        canon_cnfs = canon_cnfs_24;
-                        mt = mt_25;
-                    }
-                }
-                if (NIL == cycl_grammar.cycl_truth_value_p(canon_cnfs)) {
-                    if (NIL != find_if($sym12$INVALID_ASSERTION_, supports, UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
-                        Errors.warn($str_alt58$Canonicalization_of__s_in__s_inva, gaf_formula, mt, supports);
-                        canon_cnfs = NIL;
-                    } else {
-                        if (NIL == canon_cnfs) {
-                            conflicts.handle_invalid_deduction_conflict(asent, truth, mt);
-                            return NIL;
-                        }
-                    }
-                    {
-                        SubLObject cdolist_list_var = canon_cnfs;
-                        SubLObject canon_cnf_bind_list_pair = NIL;
-                        for (canon_cnf_bind_list_pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , canon_cnf_bind_list_pair = cdolist_list_var.first()) {
-                            {
-                                SubLObject datum = canon_cnf_bind_list_pair;
-                                SubLObject current = datum;
-                                SubLObject canon_cnf = NIL;
-                                destructuring_bind_must_consp(current, datum, $list_alt59);
-                                canon_cnf = current.first();
-                                current = current.rest();
-                                {
-                                    SubLObject binding_list = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
-                                    destructuring_bind_must_listp(current, datum, $list_alt59);
-                                    current = current.rest();
-                                    if (NIL == current) {
-                                        SubLTrampolineFile.checkType(canon_cnf, CNF_P);
-                                        if (!(((NIL != $filter_deductions_for_trivially_derivable_gafs$.getDynamicValue(thread)) && (NIL != clauses.atomic_clause_p(canon_cnf))) && (NIL != atomic_cnf_trivially_derivable(canon_cnf, mt)))) {
-                                            com.cyc.cycjava.cycl.inference.harness.forward.handle_forward_deduction_in_mt_as_assertible_int(canon_cnf, mt, supports, binding_list);
-                                        }
-                                    } else {
-                                        cdestructuring_bind_error(datum, $list_alt59);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject handle_forward_deduction_in_mt_as_assertible(final SubLObject asent, final SubLObject truth, SubLObject mt, SubLObject placement_mt, final SubLObject supports, SubLObject pragmatic_supports, SubLObject v_bindings) {
@@ -5532,7 +4123,7 @@ public final class forward extends SubLTranslatedFile implements V12 {
             destructuring_bind_must_listp(current, datum, $list184);
             current = current.rest();
             if (NIL == current) {
-                assert NIL != clauses.cnf_p(canon_cnf) : "! clauses.cnf_p(canon_cnf) " + ("clauses.cnf_p(canon_cnf) " + "CommonSymbols.NIL != clauses.cnf_p(canon_cnf) ") + canon_cnf;
+                assert NIL != clauses.cnf_p(canon_cnf) : "clauses.cnf_p(canon_cnf) " + "CommonSymbols.NIL != clauses.cnf_p(canon_cnf) " + canon_cnf;
                 if (((NIL != $filter_deductions_for_trivially_derivable_gafs$.getDynamicValue(thread)) && (NIL != clauses.atomic_clause_p(canon_cnf))) && (NIL != tms.atomic_cnf_trivially_derivable(canon_cnf, mt))) {
                     return subl_promotions.values2($FORWARD_CONCLUSION_TRIVIALLY_DERIVABLE, NIL);
                 }
@@ -5544,19 +4135,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
                 canon_cnf_bind_list_pair = cdolist_list_var.first();
             }
         } 
-        return NIL;
-    }
-
-    public static final SubLObject handle_forward_deduction_in_mt_as_assertible_int(SubLObject cnf, SubLObject mt, SubLObject supports, SubLObject variable_map) {
-        if (variable_map == UNPROVIDED) {
-            variable_map = NIL;
-        }
-        {
-            SubLObject deduction_spec = create_deduction_spec(supports);
-            SubLObject hl_assertion_spec = hl_storage_modules.new_hl_assertion_spec(cnf, mt, $FORWARD, variable_map);
-            SubLObject hl_assertible = hl_storage_modules.new_hl_assertible(hl_assertion_spec, deduction_spec);
-            com.cyc.cycjava.cycl.inference.harness.forward.note_new_forward_assertible(hl_assertible);
-        }
         return NIL;
     }
 
@@ -5598,82 +4176,11 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return somewhere_cache.some_pred_assertion_somewhereP($$wffConstraintMt, monad, ONE_INTEGER, UNPROVIDED);
     }
 
-    /**
-     * Return T iff RULE is a rule assertion labelled as a #$constraint in MT
-     */
-    @LispMethod(comment = "Return T iff RULE is a rule assertion labelled as a #$constraint in MT")
-    public static final SubLObject constraint_ruleP_alt(SubLObject rule, SubLObject mt) {
-        if (mt == UNPROVIDED) {
-            mt = NIL;
-        }
-        return makeBoolean((NIL != assertions_high.rule_assertionP(rule)) && (NIL != some_pred_value_in_relevant_mts(rule, $$constraint, mt, ONE_INTEGER, $TRUE)));
-    }
-
-    /**
-     * Return T iff RULE is a rule assertion labelled as a #$constraint in MT
-     */
-    @LispMethod(comment = "Return T iff RULE is a rule assertion labelled as a #$constraint in MT")
     public static SubLObject constraint_ruleP(final SubLObject rule, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
         return makeBoolean((NIL != assertions_high.rule_assertionP(rule)) && (NIL != kb_mapping_utilities.some_pred_value_in_relevant_mts(rule, $$constraint, mt, ONE_INTEGER, $TRUE)));
-    }
-
-    public static final SubLObject handle_forward_deduction_in_mt_as_constraint(SubLObject asent, SubLObject truth, SubLObject mt, SubLObject supports) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (!((NIL != $forward_constraint_inference_enabledP$.getDynamicValue(thread)) && (NIL != $conflicts_from_invalid_deductions$.getDynamicValue(thread)))) {
-                return com.cyc.cycjava.cycl.inference.harness.forward.handle_forward_deduction_in_mt_as_assertible(asent, truth, mt, supports);
-            }
-            {
-                SubLObject gaf_formula = negate(possibly_negate(asent, truth));
-                SubLObject canon_cnfs = NIL;
-                thread.resetMultipleValues();
-                {
-                    SubLObject canon_cnfs_26 = czer_main.canonicalize_gaf(gaf_formula, mt);
-                    SubLObject mt_27 = thread.secondMultipleValue();
-                    thread.resetMultipleValues();
-                    canon_cnfs = canon_cnfs_26;
-                    mt = mt_27;
-                }
-                if ((NIL == canon_cnfs) || ($$False == canon_cnfs)) {
-                    conflicts.handle_invalid_deduction_conflict(asent, truth, mt);
-                    return NIL;
-                }
-                if ($$True != canon_cnfs) {
-                    {
-                        SubLObject cdolist_list_var = canon_cnfs;
-                        SubLObject canon_cnf_bind_list_pair = NIL;
-                        for (canon_cnf_bind_list_pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , canon_cnf_bind_list_pair = cdolist_list_var.first()) {
-                            {
-                                SubLObject datum = canon_cnf_bind_list_pair;
-                                SubLObject current = datum;
-                                SubLObject canon_cnf = NIL;
-                                destructuring_bind_must_consp(current, datum, $list_alt59);
-                                canon_cnf = current.first();
-                                current = current.rest();
-                                {
-                                    SubLObject binding_list = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
-                                    destructuring_bind_must_listp(current, datum, $list_alt59);
-                                    current = current.rest();
-                                    if (NIL == current) {
-                                        SubLTrampolineFile.checkType(canon_cnf, CNF_P);
-                                        if (NIL != com.cyc.cycjava.cycl.inference.harness.forward.verify_forward_deduction_constraint(canon_cnf, mt)) {
-                                            conflicts.handle_invalid_deduction_conflict(asent, truth, mt);
-                                            return NIL;
-                                        }
-                                    } else {
-                                        cdestructuring_bind_error(datum, $list_alt59);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return T;
-        }
     }
 
     public static SubLObject handle_forward_deduction_in_mt_as_constraint(final SubLObject asent, final SubLObject truth, SubLObject mt, final SubLObject placement_mt, final SubLObject supports, SubLObject pragma_supports, SubLObject v_bindings) {
@@ -5726,7 +4233,7 @@ public final class forward extends SubLTranslatedFile implements V12 {
             destructuring_bind_must_listp(current, datum, $list184);
             current = current.rest();
             if (NIL == current) {
-                assert NIL != clauses.cnf_p(canon_cnf) : "! clauses.cnf_p(canon_cnf) " + ("clauses.cnf_p(canon_cnf) " + "CommonSymbols.NIL != clauses.cnf_p(canon_cnf) ") + canon_cnf;
+                assert NIL != clauses.cnf_p(canon_cnf) : "clauses.cnf_p(canon_cnf) " + "CommonSymbols.NIL != clauses.cnf_p(canon_cnf) " + canon_cnf;
                 if (NIL != verify_forward_deduction_constraint(canon_cnf, mt)) {
                     conflicts.handle_invalid_deduction_conflict(asent, truth, mt);
                     return $FORWARD_DEDUCTION_CONSTRAINT_VIOLATION;
@@ -5740,20 +4247,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     * Try to prove the negation of the constraint. If query returns non-nil, we
-     * have a constraint violation.
-     */
-    @LispMethod(comment = "Try to prove the negation of the constraint. If query returns non-nil, we\r\nhave a constraint violation.\nTry to prove the negation of the constraint. If query returns non-nil, we\nhave a constraint violation.")
-    public static final SubLObject verify_forward_deduction_constraint_alt(SubLObject constraint_clause, SubLObject mt) {
-        return sublisp_boolean(inference_kernel.new_cyc_query_from_dnf(constraint_clause, mt, NIL, com.cyc.cycjava.cycl.inference.harness.forward.forward_inference_query_properties(clauses.empty_clause(), UNPROVIDED)));
-    }
-
-    /**
-     * Try to prove the negation of the constraint. If query returns non-nil, we
-     * have a constraint violation.
-     */
-    @LispMethod(comment = "Try to prove the negation of the constraint. If query returns non-nil, we\r\nhave a constraint violation.\nTry to prove the negation of the constraint. If query returns non-nil, we\nhave a constraint violation.")
     public static SubLObject verify_forward_deduction_constraint(final SubLObject constraint_clause, final SubLObject mt) {
         SubLObject result = NIL;
         result = list_utilities.sublisp_boolean(inference_kernel.new_cyc_query_from_dnf(constraint_clause, mt, NIL, forward_inference_query_properties(clauses.empty_clause(), UNPROVIDED)));
@@ -5788,36 +4281,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
             justifyP = NIL;
         }
         return syntactically_valid_forward_non_trigger_asents(query_dnf, pragmatic_dnf, justifyP);
-    }
-
-    public static final SubLObject syntactically_valid_forward_non_trigger_asents(SubLObject dnf) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject invalidP = NIL;
-                if (NIL != $forward_non_trigger_literal_pruning_enabledP$.getDynamicValue(thread)) {
-                    {
-                        SubLObject pos_lits = clauses.pos_lits(dnf);
-                        if (NIL != find_if($sym34$FORWARD_NON_TRIGGER_LITERAL_LIT_, pos_lits, UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
-                            if (NIL == invalidP) {
-                                {
-                                    SubLObject csome_list_var = pos_lits;
-                                    SubLObject asent = NIL;
-                                    for (asent = csome_list_var.first(); !((NIL != invalidP) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , asent = csome_list_var.first()) {
-                                        if ($$forwardNonTriggerLiteral == atomic_sentence_predicate(asent)) {
-                                            if ((NIL != variables.fully_bound_p(asent)) && atomic_sentence_arg1(asent, UNPROVIDED).equal($forward_non_trigger_literal_restricted_examine_asent$.getDynamicValue(thread))) {
-                                                invalidP = T;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                return makeBoolean(NIL == invalidP);
-            }
-        }
     }
 
     public static SubLObject syntactically_valid_forward_non_trigger_asents(final SubLObject query_dnf, final SubLObject pragmatic_dnf, SubLObject justifyP) {
@@ -5869,19 +4332,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return values(makeBoolean(NIL == invalidP), reason);
     }
 
-    public static final SubLObject semantically_valid_forward_dnf(SubLObject dnf, SubLObject propagation_mt) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == com.cyc.cycjava.cycl.inference.harness.forward.syntactically_valid_forward_non_trigger_asents(dnf)) {
-                return NIL;
-            }
-            if (NIL == $type_filter_forward_dnf$.getDynamicValue(thread)) {
-                return T;
-            }
-            return backward.inference_semantically_valid_dnf(dnf, propagation_mt);
-        }
-    }
-
     public static SubLObject semantically_valid_forward_dnf(final SubLObject query_dnf, final SubLObject pragmatic_dnf, final SubLObject propagation_mt, SubLObject justifyP) {
         if (justifyP == UNPROVIDED) {
             justifyP = NIL;
@@ -5928,50 +4378,9 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return values(current_validP, current_reason);
     }
 
-    /**
-     * Return T iff OBJECT is a reified MT which is sufficiently close to being a leaf
-     * microtheory as to warrant eager forward inference mt-pruning analysis.
-     */
-    @LispMethod(comment = "Return T iff OBJECT is a reified MT which is sufficiently close to being a leaf\r\nmicrotheory as to warrant eager forward inference mt-pruning analysis.\nReturn T iff OBJECT is a reified MT which is sufficiently close to being a leaf\nmicrotheory as to warrant eager forward inference mt-pruning analysis.")
-    public static final SubLObject forward_leafy_mt_p_alt(SubLObject v_object) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            return com.cyc.cycjava.cycl.inference.harness.forward.leafy_mt_p(v_object, $forward_leafy_mt_threshold$.getDynamicValue(thread));
-        }
-    }
-
-    /**
-     * Return T iff OBJECT is a reified MT which is sufficiently close to being a leaf
-     * microtheory as to warrant eager forward inference mt-pruning analysis.
-     */
-    @LispMethod(comment = "Return T iff OBJECT is a reified MT which is sufficiently close to being a leaf\r\nmicrotheory as to warrant eager forward inference mt-pruning analysis.\nReturn T iff OBJECT is a reified MT which is sufficiently close to being a leaf\nmicrotheory as to warrant eager forward inference mt-pruning analysis.")
     public static SubLObject forward_leafy_mt_p(final SubLObject v_object) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return leafy_mt_p(v_object, $forward_leafy_mt_threshold$.getDynamicValue(thread));
-    }
-
-    public static final SubLObject forward_propagation_supports_doomedP_alt(SubLObject rule, SubLObject trigger_supports) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if ($forward_leafy_mt_threshold$.getDynamicValue(thread).isNegative()) {
-                return NIL;
-            }
-            {
-                SubLObject mts = cons(assertions_high.assertion_mt(rule), Mapping.mapcar(symbol_function(SUPPORT_MT), trigger_supports));
-                mts = delete($$InferencePSC, mts, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                mts = delete_duplicates(mts, symbol_function(HLMT_EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                if (NIL != lengthGE(mts, TWO_INTEGER, UNPROVIDED)) {
-                    mts = min_mts(mts, UNPROVIDED);
-                    if (NIL != lengthGE(mts, TWO_INTEGER, UNPROVIDED)) {
-                        {
-                            SubLObject result = com.cyc.cycjava.cycl.inference.harness.forward.forward_propagation_mts_doomedP(mts);
-                            return result;
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
     }
 
     public static SubLObject forward_propagation_supports_doomedP(final SubLObject rule, final SubLObject trigger_supports) {
@@ -6031,50 +4440,8 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return result;
     }
 
-    public static final SubLObject forward_propagation_mts_doomedP_alt(SubLObject mts) {
-        return makeBoolean((NIL != find_if(symbol_function(FORWARD_LEAFY_MT_P), mts, UNPROVIDED, UNPROVIDED, UNPROVIDED)) && (NIL == com.cyc.cycjava.cycl.inference.harness.forward.forward_possibly_some_common_spec_mtP(mts)));
-    }
-
     public static SubLObject forward_propagation_mts_doomedP(final SubLObject mts) {
         return makeBoolean((NIL != find_if(symbol_function(FORWARD_LEAFY_MT_P), mts, UNPROVIDED, UNPROVIDED, UNPROVIDED)) && (NIL == forward_possibly_some_common_spec_mtP(mts)));
-    }
-
-    public static final SubLObject forward_possibly_some_common_spec_mtP_internal_alt(SubLObject mts) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject leafy_mts = partition_list(mts, FORWARD_LEAFY_MT_P);
-                SubLObject non_leafy_mts = thread.secondMultipleValue();
-                thread.resetMultipleValues();
-                if (NIL != leafy_mts) {
-                    {
-                        SubLObject datum = leafy_mts;
-                        SubLObject current = datum;
-                        SubLObject leafy_mt = NIL;
-                        destructuring_bind_must_consp(current, datum, $list_alt70);
-                        leafy_mt = current.first();
-                        current = current.rest();
-                        {
-                            SubLObject other_leafy_mts = current;
-                            SubLObject leafy_specs = all_spec_mts(leafy_mt, UNPROVIDED, UNPROVIDED);
-                            if (NIL != lengthLE(leafy_specs, $forward_leafy_mt_threshold$.getDynamicValue(thread), UNPROVIDED)) {
-                                {
-                                    SubLObject cdolist_list_var = append(other_leafy_mts, non_leafy_mts);
-                                    SubLObject other_mt = NIL;
-                                    for (other_mt = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , other_mt = cdolist_list_var.first()) {
-                                        if (NIL == genl_mt_of_anyP(leafy_specs, other_mt, UNPROVIDED, UNPROVIDED)) {
-                                            return NIL;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return T;
-        }
     }
 
     public static SubLObject forward_possibly_some_common_spec_mtP_internal(final SubLObject mts) {
@@ -6109,32 +4476,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return result;
     }
 
-    public static final SubLObject forward_possibly_some_common_spec_mtP_alt(SubLObject mts) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            {
-                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
-                SubLObject caching_state = NIL;
-                if (NIL == v_memoization_state) {
-                    return com.cyc.cycjava.cycl.inference.harness.forward.forward_possibly_some_common_spec_mtP_internal(mts);
-                }
-                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, $sym69$FORWARD_POSSIBLY_SOME_COMMON_SPEC_MT_, UNPROVIDED);
-                if (NIL == caching_state) {
-                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), $sym69$FORWARD_POSSIBLY_SOME_COMMON_SPEC_MT_, ONE_INTEGER, NIL, EQUAL, UNPROVIDED);
-                    memoization_state.memoization_state_put(v_memoization_state, $sym69$FORWARD_POSSIBLY_SOME_COMMON_SPEC_MT_, caching_state);
-                }
-                {
-                    SubLObject results = memoization_state.caching_state_lookup(caching_state, mts, $kw71$_MEMOIZED_ITEM_NOT_FOUND_);
-                    if (results == $kw71$_MEMOIZED_ITEM_NOT_FOUND_) {
-                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.inference.harness.forward.forward_possibly_some_common_spec_mtP_internal(mts)));
-                        memoization_state.caching_state_put(caching_state, mts, results, UNPROVIDED);
-                    }
-                    return memoization_state.caching_results(results);
-                }
-            }
-        }
-    }
-
     public static SubLObject forward_possibly_some_common_spec_mtP(final SubLObject mts) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
@@ -6155,48 +4496,11 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return memoization_state.caching_results(results);
     }
 
-    /**
-     * Return T iff OBJECT is a refied microtheory that is deemed 'leafy'
-     * by having a spec-cardinality at or below THRESHOLD.
-     */
-    @LispMethod(comment = "Return T iff OBJECT is a refied microtheory that is deemed \'leafy\'\r\nby having a spec-cardinality at or below THRESHOLD.\nReturn T iff OBJECT is a refied microtheory that is deemed \'leafy\'\nby having a spec-cardinality at or below THRESHOLD.")
-    public static final SubLObject leafy_mt_p_alt(SubLObject v_object, SubLObject threshold) {
-        if (threshold == UNPROVIDED) {
-            threshold = ZERO_INTEGER;
-        }
-        return makeBoolean(((NIL != forts.fort_p(v_object)) && (NIL != microtheory_p(v_object))) && cardinality_estimates.spec_cardinality(v_object).numLE(threshold));
-    }
-
-    /**
-     * Return T iff OBJECT is a refied microtheory that is deemed 'leafy'
-     * by having a spec-cardinality at or below THRESHOLD.
-     */
-    @LispMethod(comment = "Return T iff OBJECT is a refied microtheory that is deemed \'leafy\'\r\nby having a spec-cardinality at or below THRESHOLD.\nReturn T iff OBJECT is a refied microtheory that is deemed \'leafy\'\nby having a spec-cardinality at or below THRESHOLD.")
     public static SubLObject leafy_mt_p(final SubLObject v_object, SubLObject threshold) {
         if (threshold == UNPROVIDED) {
             threshold = ZERO_INTEGER;
         }
         return makeBoolean(((NIL != forts.fort_p(v_object)) && (NIL != fort_types_interface.microtheory_p(v_object))) && cardinality_estimates.spec_cardinality(v_object).numLE(threshold));
-    }
-
-    public static final SubLObject compute_all_mt_and_support_combinations(SubLObject supports) {
-        if (NIL != com.cyc.cycjava.cycl.inference.harness.forward.some_support_combinations_extensionally_possible(supports)) {
-            {
-                SubLObject support_combinations = com.cyc.cycjava.cycl.inference.harness.forward.all_forward_support_mt_combinations(supports);
-                SubLObject v_answer = NIL;
-                SubLObject cdolist_list_var = support_combinations;
-                SubLObject support_combination = NIL;
-                for (support_combination = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , support_combination = cdolist_list_var.first()) {
-                    support_combination = delete_duplicates(support_combination, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    {
-                        SubLObject mts = com.cyc.cycjava.cycl.inference.harness.forward.compute_mts_from_supports(support_combination, UNPROVIDED);
-                        v_answer = cons(list(mts, support_combination), v_answer);
-                    }
-                }
-                return nreverse(v_answer);
-            }
-        }
-        return NIL;
     }
 
     public static SubLObject compute_all_mt_and_support_combinations(final SubLObject supports, SubLObject pragmatic_supports) {
@@ -6312,23 +4616,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
         }
     }
 
-    public static final SubLObject compute_decontextualized_support_combinations(SubLObject supports) {
-        if (NIL != com.cyc.cycjava.cycl.inference.harness.forward.some_support_combinations_theoretically_possible(supports)) {
-            {
-                SubLObject support_combinations = com.cyc.cycjava.cycl.inference.harness.forward.all_forward_support_mt_combinations(supports);
-                SubLObject v_answer = NIL;
-                SubLObject cdolist_list_var = support_combinations;
-                SubLObject support_combination = NIL;
-                for (support_combination = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , support_combination = cdolist_list_var.first()) {
-                    support_combination = delete_duplicates(support_combination, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED);
-                    v_answer = cons(support_combination, v_answer);
-                }
-                return nreverse(v_answer);
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject compute_decontextualized_support_combinations(final SubLObject supports, final SubLObject pragmatic_supports) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != some_support_combinations_theoretically_possible(supports)) {
@@ -6362,42 +4649,8 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    /**
-     * We don't care whether there exists an mt that can see all the SUPPORTS,
-     * but could there possibly exist one?  This should return t most of the time,
-     * unless two of the supports are in negationMts of each other or something.
-     */
-    @LispMethod(comment = "We don\'t care whether there exists an mt that can see all the SUPPORTS,\r\nbut could there possibly exist one?  This should return t most of the time,\r\nunless two of the supports are in negationMts of each other or something.\nWe don\'t care whether there exists an mt that can see all the SUPPORTS,\nbut could there possibly exist one?  This should return t most of the time,\nunless two of the supports are in negationMts of each other or something.")
-    public static final SubLObject some_support_combinations_theoretically_possible_alt(SubLObject supports) {
-        return T;
-    }
-
-    /**
-     * We don't care whether there exists an mt that can see all the SUPPORTS,
-     * but could there possibly exist one?  This should return t most of the time,
-     * unless two of the supports are in negationMts of each other or something.
-     */
-    @LispMethod(comment = "We don\'t care whether there exists an mt that can see all the SUPPORTS,\r\nbut could there possibly exist one?  This should return t most of the time,\r\nunless two of the supports are in negationMts of each other or something.\nWe don\'t care whether there exists an mt that can see all the SUPPORTS,\nbut could there possibly exist one?  This should return t most of the time,\nunless two of the supports are in negationMts of each other or something.")
     public static SubLObject some_support_combinations_theoretically_possible(final SubLObject supports) {
         return T;
-    }
-
-    public static final SubLObject some_support_combinations_extensionally_possible_alt(SubLObject supports) {
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            if (NIL == $verify_some_support_combinations_possible$.getDynamicValue(thread)) {
-                return T;
-            }
-            supports = remove_if_not(symbol_function(ASSERTION_P), supports, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-            if (NIL == supports) {
-                return T;
-            } else {
-                {
-                    SubLObject mts = Mapping.mapcar(symbol_function(ASSERTION_MT), supports);
-                    return inference_trampolines.inference_some_max_floor_mts(mts);
-                }
-            }
-        }
     }
 
     public static SubLObject some_support_combinations_extensionally_possible(SubLObject supports) {
@@ -6453,34 +4706,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
             hl_macros.$forward_inference_metric_last_metric_type$.rebind(_prev_bind_0, thread);
         }
         return result;
-    }
-
-    public static final SubLObject all_forward_support_mt_combinations_alt(SubLObject supports) {
-        if (NIL == supports) {
-            return list(NIL);
-        } else {
-            {
-                SubLObject datum = supports;
-                SubLObject current = datum;
-                SubLObject first = NIL;
-                SubLObject rest = NIL;
-                destructuring_bind_must_consp(current, datum, $list_alt73);
-                first = current.first();
-                current = current.rest();
-                rest = current;
-                {
-                    SubLObject first_combos = com.cyc.cycjava.cycl.inference.harness.forward.forward_support_mt_combinations(first);
-                    if (NIL != first_combos) {
-                        {
-                            SubLObject rest_combos = com.cyc.cycjava.cycl.inference.harness.forward.all_forward_support_mt_combinations(rest);
-                            return mapcar_product(symbol_function(CONS), first_combos, rest_combos);
-                        }
-                    } else {
-                        return NIL;
-                    }
-                }
-            }
-        }
     }
 
     public static SubLObject all_forward_support_mt_combinations(final SubLObject supports) {
@@ -6545,14 +4770,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return result;
     }
 
-    public static final SubLObject forward_support_mt_combinations_alt(SubLObject support) {
-        if (NIL != assertion_p(support)) {
-            return list(support);
-        } else {
-            return hl_supports.hl_forward_mt_combos(support);
-        }
-    }
-
     public static SubLObject forward_support_mt_combinations(final SubLObject support) {
         if (NIL != assertion_handles.assertion_p(support)) {
             return list(support);
@@ -6560,50 +4777,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return hl_supports.hl_forward_mt_combos(support);
     }
 
-    /**
-     * From SUPPORTS, compute the microtheories in which such an argument should be placed.
-     */
-    @LispMethod(comment = "From SUPPORTS, compute the microtheories in which such an argument should be placed.")
-    public static final SubLObject compute_mts_from_supports_alt(SubLObject supports, SubLObject require_from_listP) {
-        if (require_from_listP == UNPROVIDED) {
-            require_from_listP = $require_cached_gaf_mt_from_supports$.getDynamicValue();
-        }
-        {
-            final SubLThread thread = SubLProcess.currentSubLThread();
-            thread.resetMultipleValues();
-            {
-                SubLObject assume_wff_supports = com.cyc.cycjava.cycl.inference.harness.forward.separate_supports_for_mt_placement(supports);
-                SubLObject compute_where_wff_supports = thread.secondMultipleValue();
-                thread.resetMultipleValues();
-                {
-                    SubLObject mts_from_assumed_wff_supports = Mapping.mapcar(symbol_function(SUPPORT_MT), assume_wff_supports);
-                    if (NIL == compute_where_wff_supports) {
-                        return com.cyc.cycjava.cycl.inference.harness.forward.forward_mt_placements_from_support_mts(mts_from_assumed_wff_supports, require_from_listP);
-                    } else {
-                        {
-                            SubLObject additional_mt_combinations = com.cyc.cycjava.cycl.inference.harness.forward.all_computed_wff_mt_combinations(compute_where_wff_supports);
-                            SubLObject answer_mts = NIL;
-                            SubLObject cdolist_list_var = additional_mt_combinations;
-                            SubLObject additional_mts = NIL;
-                            for (additional_mts = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , additional_mts = cdolist_list_var.first()) {
-                                answer_mts = union(answer_mts, com.cyc.cycjava.cycl.inference.harness.forward.forward_mt_placements_from_support_mts(append(additional_mts, mts_from_assumed_wff_supports), require_from_listP), UNPROVIDED, UNPROVIDED);
-                            }
-                            if (NIL != answer_mts) {
-                                answer_mts = delete_subsumed_items(answer_mts, symbol_function($sym75$SPEC_MT_), UNPROVIDED);
-                                return answer_mts;
-                            }
-                        }
-                    }
-                }
-            }
-            return NIL;
-        }
-    }
-
-    /**
-     * From SUPPORTS, compute the microtheories in which such an argument should be placed.
-     */
-    @LispMethod(comment = "From SUPPORTS, compute the microtheories in which such an argument should be placed.")
     public static SubLObject compute_mts_from_supports(final SubLObject supports, SubLObject require_from_listP) {
         if (require_from_listP == UNPROVIDED) {
             require_from_listP = $require_cached_gaf_mt_from_supports$.getDynamicValue();
@@ -6668,45 +4841,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return answer_mts;
     }
 
-    /**
-     * Separate SUPPORTS into two lists, which are returned as multiple values:
-     *
-     * @return 0 ; supports where we can safely assume the support is WFF.
-     * @return 1 ; supports where can must compute the mts where the support is WFF.
-     */
-    @LispMethod(comment = "Separate SUPPORTS into two lists, which are returned as multiple values:\r\n\r\n@return 0 ; supports where we can safely assume the support is WFF.\r\n@return 1 ; supports where can must compute the mts where the support is WFF.")
-    public static final SubLObject separate_supports_for_mt_placement_alt(SubLObject supports) {
-        {
-            SubLObject assume_wff_supports = NIL;
-            SubLObject compute_where_wff_supports = NIL;
-            SubLObject cdolist_list_var = supports;
-            SubLObject support = NIL;
-            for (support = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , support = cdolist_list_var.first()) {
-                if (NIL != assertion_p(support)) {
-                    if (NIL != function_terms.term_of_unit_assertion_p(support)) {
-                        compute_where_wff_supports = cons(support, compute_where_wff_supports);
-                    } else {
-                        assume_wff_supports = cons(support, assume_wff_supports);
-                    }
-                } else {
-                    if (NIL != tou_litP(support_formula(support))) {
-                        compute_where_wff_supports = cons(support, compute_where_wff_supports);
-                    } else {
-                        assume_wff_supports = cons(support, assume_wff_supports);
-                    }
-                }
-            }
-            return values(nreverse(assume_wff_supports), nreverse(compute_where_wff_supports));
-        }
-    }
-
-    /**
-     * Separate SUPPORTS into two lists, which are returned as multiple values:
-     *
-     * @return 0 ; supports where we can safely assume the support is WFF.
-     * @return 1 ; supports where can must compute the mts where the support is WFF.
-     */
-    @LispMethod(comment = "Separate SUPPORTS into two lists, which are returned as multiple values:\r\n\r\n@return 0 ; supports where we can safely assume the support is WFF.\r\n@return 1 ; supports where can must compute the mts where the support is WFF.")
     public static SubLObject separate_supports_for_mt_placement(final SubLObject supports) {
         SubLObject assume_wff_supports = NIL;
         SubLObject compute_where_wff_supports = NIL;
@@ -6733,16 +4867,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
 
     public static SubLObject assume_where_wff_formulaP(final SubLObject formula) {
         return makeBoolean(NIL == tou_litP(formula));
-    }
-
-    public static final SubLObject forward_mt_placements_from_support_mts_alt(SubLObject mts, SubLObject require_from_listP) {
-        if (require_from_listP == UNPROVIDED) {
-            require_from_listP = NIL;
-        }
-        if (NIL != kb_control_vars.within_forward_inferenceP()) {
-            mts = remove($$InferencePSC, mts, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
-        }
-        return inference_trampolines.inference_max_floor_mts_with_cycles_pruned(mts, NIL != require_from_listP ? ((SubLObject) (mts)) : NIL);
     }
 
     public static SubLObject forward_mt_placements_from_support_mts(SubLObject mts, SubLObject require_from_listP) {
@@ -6806,40 +4930,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return result;
     }
 
-    /**
-     *
-     *
-     * @unknown result is assumed to be destructible
-     */
-    @LispMethod(comment = "@unknown result is assumed to be destructible")
-    public static final SubLObject all_computed_wff_mt_combinations_alt(SubLObject supports) {
-        if (NIL == supports) {
-            return list(NIL);
-        } else {
-            {
-                SubLObject datum = supports;
-                SubLObject current = datum;
-                SubLObject first = NIL;
-                SubLObject rest = NIL;
-                destructuring_bind_must_consp(current, datum, $list_alt73);
-                first = current.first();
-                current = current.rest();
-                rest = current;
-                {
-                    SubLObject first_combos = com.cyc.cycjava.cycl.inference.harness.forward.computed_wff_mt_combinations(first);
-                    SubLObject rest_combos = com.cyc.cycjava.cycl.inference.harness.forward.all_computed_wff_mt_combinations(rest);
-                    return mapcar_product(symbol_function(CONS), first_combos, rest_combos);
-                }
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @unknown result is assumed to be destructible
-     */
-    @LispMethod(comment = "@unknown result is assumed to be destructible")
     public static SubLObject all_computed_wff_mt_combinations(final SubLObject supports) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject result = NIL;
@@ -6895,19 +4985,6 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return list_utilities.mapcar_product(symbol_function(CONS), first_combos, rest_combos);
     }
 
-    public static final SubLObject computed_wff_mt_combinations_alt(SubLObject support) {
-        {
-            SubLObject formula = support_formula(support);
-            if (NIL != tou_litP(formula)) {
-                {
-                    SubLObject nat = literal_arg2(formula, UNPROVIDED);
-                    return copy_list(inference_trampolines.inference_max_floor_mts_of_nat(nat));
-                }
-            }
-        }
-        return NIL;
-    }
-
     public static SubLObject computed_wff_mt_combinations(final SubLObject support) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject formula = arguments.support_formula(support);
@@ -6953,479 +5030,153 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return nreverse(mts);
     }
 
-    public static final SubLObject declare_forward_file_alt() {
-        declareFunction("current_forward_inference_environment", "CURRENT-FORWARD-INFERENCE-ENVIRONMENT", 0, 0, false);
-        declareFunction("get_forward_inference_environment", "GET-FORWARD-INFERENCE-ENVIRONMENT", 0, 0, false);
-        declareFunction("free_forward_inference_enviornment", "FREE-FORWARD-INFERENCE-ENVIORNMENT", 1, 0, false);
-        declareFunction("clear_forward_inference_environment", "CLEAR-FORWARD-INFERENCE-ENVIRONMENT", 1, 0, false);
-        declareFunction("new_forward_inference_environment", "NEW-FORWARD-INFERENCE-ENVIRONMENT", 0, 0, false);
-        declareFunction("initialize_forward_inference_environment", "INITIALIZE-FORWARD-INFERENCE-ENVIRONMENT", 0, 0, false);
-        declareMacro("with_forward_inference_gaf", "WITH-FORWARD-INFERENCE-GAF");
-        declareMacro("with_forward_inference_rule", "WITH-FORWARD-INFERENCE-RULE");
-        declareFunction("current_forward_inference_gaf", "CURRENT-FORWARD-INFERENCE-GAF", 0, 0, false);
-        declareFunction("current_forward_inference_rule", "CURRENT-FORWARD-INFERENCE-RULE", 0, 0, false);
-        declareFunction("current_forward_inference_assertion", "CURRENT-FORWARD-INFERENCE-ASSERTION", 0, 0, false);
-        declareFunction("new_forward_problem_store", "NEW-FORWARD-PROBLEM-STORE", 0, 0, false);
-        declareFunction("destroy_forward_problem_store", "DESTROY-FORWARD-PROBLEM-STORE", 1, 0, false);
-        declareFunction("forward_inference_shares_same_problem_storeP", "FORWARD-INFERENCE-SHARES-SAME-PROBLEM-STORE?", 0, 0, false);
-        declareFunction("get_forward_problem_store", "GET-FORWARD-PROBLEM-STORE", 0, 0, false);
-        declareFunction("clear_current_forward_problem_store", "CLEAR-CURRENT-FORWARD-PROBLEM-STORE", 0, 0, false);
-        declareFunction("clear_current_forward_inference_environment", "CLEAR-CURRENT-FORWARD-INFERENCE-ENVIRONMENT", 0, 0, false);
-        declareFunction("queue_forward_assertion", "QUEUE-FORWARD-ASSERTION", 1, 0, false);
-        declareFunction("remqueue_forward_assertion", "REMQUEUE-FORWARD-ASSERTION", 1, 0, false);
-        declareFunction("perform_forward_inference", "PERFORM-FORWARD-INFERENCE", 0, 0, false);
-        declareFunction("repropagate_forward_assertion", "REPROPAGATE-FORWARD-ASSERTION", 1, 0, false);
-        declareFunction("forward_inference_assertibles_queue", "FORWARD-INFERENCE-ASSERTIBLES-QUEUE", 0, 0, false);
-        declareFunction("note_new_forward_assertible", "NOTE-NEW-FORWARD-ASSERTIBLE", 1, 0, false);
-        declareFunction("forward_propagate_assertion", "FORWARD-PROPAGATE-ASSERTION", 1, 1, false);
-        declareFunction("forward_propagate_rule", "FORWARD-PROPAGATE-RULE", 2, 0, false);
-        declareFunction("forward_propagate_gaf", "FORWARD-PROPAGATE-GAF", 2, 0, false);
-        declareFunction("forward_propagate_gaf_expansions", "FORWARD-PROPAGATE-GAF-EXPANSIONS", 4, 0, false);
-        declareFunction("make_forward_trigger_supports", "MAKE-FORWARD-TRIGGER-SUPPORTS", 2, 0, false);
-        declareFunction("forward_inference_allowed_rules", "FORWARD-INFERENCE-ALLOWED-RULES", 0, 0, false);
-        declareFunction("forward_inference_all_rules_allowedP", "FORWARD-INFERENCE-ALL-RULES-ALLOWED?", 0, 0, false);
-        declareFunction("forward_inference_rule_allowedP", "FORWARD-INFERENCE-RULE-ALLOWED?", 1, 0, false);
-        declareFunction("forward_propagate_gaf_internal", "FORWARD-PROPAGATE-GAF-INTERNAL", 6, 0, false);
-        declareFunction("handle_forward_propagation_from_gaf", "HANDLE-FORWARD-PROPAGATION-FROM-GAF", 8, 0, false);
-        declareFunction("creation_template_forward_rules_via_exemplars", "CREATION-TEMPLATE-FORWARD-RULES-VIA-EXEMPLARS", 1, 0, false);
-        declareFunction("creation_template_exemplars", "CREATION-TEMPLATE-EXEMPLARS", 1, 0, false);
-        declareFunction("creation_template_allowable_rules", "CREATION-TEMPLATE-ALLOWABLE-RULES", 1, 0, false);
-        declareFunction("all_genl_creation_templates", "ALL-GENL-CREATION-TEMPLATES", 1, 0, false);
-        declareFunction("creation_template_allowable_rules_internal", "CREATION-TEMPLATE-ALLOWABLE-RULES-INTERNAL", 1, 0, false);
-        declareFunction("handle_forward_propagation", "HANDLE-FORWARD-PROPAGATION", 6, 0, false);
-        declareFunction("handle_one_forward_propagation", "HANDLE-ONE-FORWARD-PROPAGATION", 8, 0, false);
-        declareFunction("filter_forward_pragmatic_dnf", "FILTER-FORWARD-PRAGMATIC-DNF", 1, 0, false);
-        declareFunction("forward_propagate_dnf", "FORWARD-PROPAGATE-DNF", 8, 0, false);
-        declareFunction("new_forward_query_from_dnf", "NEW-FORWARD-QUERY-FROM-DNF", 3, 1, false);
-        declareFunction("new_cyc_trivial_forward_query_from_dnf", "NEW-CYC-TRIVIAL-FORWARD-QUERY-FROM-DNF", 2, 2, false);
-        declareFunction("new_forward_query", "NEW-FORWARD-QUERY", 1, 2, false);
-        declareFunction("forward_inference_query_properties", "FORWARD-INFERENCE-QUERY-PROPERTIES", 1, 1, false);
-        declareFunction("trivial_forward_inference_query_properties", "TRIVIAL-FORWARD-INFERENCE-QUERY-PROPERTIES", 1, 1, false);
-        declareFunction("add_forward_propagation_result", "ADD-FORWARD-PROPAGATION-RESULT", 7, 0, false);
-        declareFunction("add_empty_forward_propagation_result", "ADD-EMPTY-FORWARD-PROPAGATION-RESULT", 6, 0, false);
-        declareFunction("new_forward_concluded_supports", "NEW-FORWARD-CONCLUDED-SUPPORTS", 2, 1, false);
-        declareFunction("add_forward_deductions_from_supports", "ADD-FORWARD-DEDUCTIONS-FROM-SUPPORTS", 4, 0, false);
-        declareFunction("handle_forward_deduction_in_mt", "HANDLE-FORWARD-DEDUCTION-IN-MT", 4, 0, false);
-        declareFunction("handle_forward_deduction_in_mt_as_assertible", "HANDLE-FORWARD-DEDUCTION-IN-MT-AS-ASSERTIBLE", 4, 0, false);
-        declareFunction("handle_forward_deduction_in_mt_as_assertible_int", "HANDLE-FORWARD-DEDUCTION-IN-MT-AS-ASSERTIBLE-INT", 3, 1, false);
-        declareFunction("constraint_ruleP", "CONSTRAINT-RULE?", 1, 1, false);
-        declareFunction("handle_forward_deduction_in_mt_as_constraint", "HANDLE-FORWARD-DEDUCTION-IN-MT-AS-CONSTRAINT", 4, 0, false);
-        declareFunction("verify_forward_deduction_constraint", "VERIFY-FORWARD-DEDUCTION-CONSTRAINT", 2, 0, false);
-        declareFunction("syntactically_valid_forward_non_trigger_asents", "SYNTACTICALLY-VALID-FORWARD-NON-TRIGGER-ASENTS", 1, 0, false);
-        declareFunction("semantically_valid_forward_dnf", "SEMANTICALLY-VALID-FORWARD-DNF", 2, 0, false);
-        declareFunction("forward_leafy_mt_p", "FORWARD-LEAFY-MT-P", 1, 0, false);
-        declareFunction("forward_propagation_supports_doomedP", "FORWARD-PROPAGATION-SUPPORTS-DOOMED?", 2, 0, false);
-        declareFunction("forward_propagation_mts_doomedP", "FORWARD-PROPAGATION-MTS-DOOMED?", 1, 0, false);
-        declareFunction("forward_possibly_some_common_spec_mtP_internal", "FORWARD-POSSIBLY-SOME-COMMON-SPEC-MT?-INTERNAL", 1, 0, false);
-        declareFunction("forward_possibly_some_common_spec_mtP", "FORWARD-POSSIBLY-SOME-COMMON-SPEC-MT?", 1, 0, false);
-        declareFunction("leafy_mt_p", "LEAFY-MT-P", 1, 1, false);
-        declareFunction("compute_all_mt_and_support_combinations", "COMPUTE-ALL-MT-AND-SUPPORT-COMBINATIONS", 1, 0, false);
-        declareFunction("compute_decontextualized_support_combinations", "COMPUTE-DECONTEXTUALIZED-SUPPORT-COMBINATIONS", 1, 0, false);
-        declareFunction("some_support_combinations_theoretically_possible", "SOME-SUPPORT-COMBINATIONS-THEORETICALLY-POSSIBLE", 1, 0, false);
-        declareFunction("some_support_combinations_extensionally_possible", "SOME-SUPPORT-COMBINATIONS-EXTENSIONALLY-POSSIBLE", 1, 0, false);
-        declareFunction("all_forward_support_mt_combinations", "ALL-FORWARD-SUPPORT-MT-COMBINATIONS", 1, 0, false);
-        declareFunction("forward_support_mt_combinations", "FORWARD-SUPPORT-MT-COMBINATIONS", 1, 0, false);
-        declareFunction("compute_mts_from_supports", "COMPUTE-MTS-FROM-SUPPORTS", 1, 1, false);
-        declareFunction("separate_supports_for_mt_placement", "SEPARATE-SUPPORTS-FOR-MT-PLACEMENT", 1, 0, false);
-        declareFunction("forward_mt_placements_from_support_mts", "FORWARD-MT-PLACEMENTS-FROM-SUPPORT-MTS", 1, 1, false);
-        declareFunction("all_computed_wff_mt_combinations", "ALL-COMPUTED-WFF-MT-COMBINATIONS", 1, 0, false);
-        declareFunction("computed_wff_mt_combinations", "COMPUTED-WFF-MT-COMBINATIONS", 1, 0, false);
-        return NIL;
-    }
-
     public static SubLObject declare_forward_file() {
-        if (SubLFiles.USE_V1) {
-            declareFunction("forward_propagate_rule_via_trigger_gafsP", "FORWARD-PROPAGATE-RULE-VIA-TRIGGER-GAFS?", 0, 0, false);
-            declareFunction("call_forward_inference_browsing_callbackP", "CALL-FORWARD-INFERENCE-BROWSING-CALLBACK?", 0, 0, false);
-            declareFunction("call_forward_inference_browsing_callback", "CALL-FORWARD-INFERENCE-BROWSING-CALLBACK", 2, 1, false);
-            declareFunction("current_forward_inference_environment", "CURRENT-FORWARD-INFERENCE-ENVIRONMENT", 0, 0, false);
-            declareFunction("get_forward_inference_environment", "GET-FORWARD-INFERENCE-ENVIRONMENT", 0, 0, false);
-            declareFunction("free_forward_inference_enviornment", "FREE-FORWARD-INFERENCE-ENVIORNMENT", 1, 0, false);
-            declareFunction("clear_forward_inference_environment", "CLEAR-FORWARD-INFERENCE-ENVIRONMENT", 1, 0, false);
-            declareFunction("new_forward_inference_environment", "NEW-FORWARD-INFERENCE-ENVIRONMENT", 0, 0, false);
-            declareFunction("queue_global_forward_assertion", "QUEUE-GLOBAL-FORWARD-ASSERTION", 1, 0, false);
-            declareFunction("dequeue_global_forward_assertion", "DEQUEUE-GLOBAL-FORWARD-ASSERTION", 0, 0, false);
-            declareFunction("global_forward_assertion_queue_empty_p", "GLOBAL-FORWARD-ASSERTION-QUEUE-EMPTY-P", 0, 0, false);
-            declareFunction("clear_global_forward_inference_environment", "CLEAR-GLOBAL-FORWARD-INFERENCE-ENVIRONMENT", 0, 0, false);
-            declareMacro("with_currently_forward_propagating_support", "WITH-CURRENTLY-FORWARD-PROPAGATING-SUPPORT");
-            declareFunction("currently_forward_propagating_supportP", "CURRENTLY-FORWARD-PROPAGATING-SUPPORT?", 1, 0, false);
-            declareFunction("all_currently_forward_propagating_supports", "ALL-CURRENTLY-FORWARD-PROPAGATING-SUPPORTS", 0, 0, false);
-            declareFunction("currently_forward_propagating_assertionP", "CURRENTLY-FORWARD-PROPAGATING-ASSERTION?", 1, 0, false);
-            declareFunction("all_currently_forward_propagating_assertions", "ALL-CURRENTLY-FORWARD-PROPAGATING-ASSERTIONS", 0, 0, false);
-            declareFunction("clear_currently_forward_propagating_supports", "CLEAR-CURRENTLY-FORWARD-PROPAGATING-SUPPORTS", 0, 0, false);
-            declareFunction("add_currently_forward_propagating_support", "ADD-CURRENTLY-FORWARD-PROPAGATING-SUPPORT", 1, 0, false);
-            declareFunction("rem_currently_forward_propagating_support", "REM-CURRENTLY-FORWARD-PROPAGATING-SUPPORT", 1, 0, false);
-            declareMacro("with_forward_inference_source_support", "WITH-FORWARD-INFERENCE-SOURCE-SUPPORT");
-            declareMacro("with_forward_inference_rule", "WITH-FORWARD-INFERENCE-RULE");
-            declareFunction("current_forward_inference_gaf", "CURRENT-FORWARD-INFERENCE-GAF", 0, 0, false);
-            declareFunction("current_forward_inference_rule", "CURRENT-FORWARD-INFERENCE-RULE", 0, 0, false);
-            declareFunction("current_forward_inference_assertion", "CURRENT-FORWARD-INFERENCE-ASSERTION", 0, 0, false);
-            declareFunction("current_forward_inference_fully_propagating_ruleP", "CURRENT-FORWARD-INFERENCE-FULLY-PROPAGATING-RULE?", 0, 0, false);
-            declareFunction("forward_problem_store_properties", "FORWARD-PROBLEM-STORE-PROPERTIES", 0, 0, false);
-            declareFunction("new_forward_problem_store", "NEW-FORWARD-PROBLEM-STORE", 0, 1, false);
-            declareFunction("destroy_forward_problem_store", "DESTROY-FORWARD-PROBLEM-STORE", 1, 0, false);
-            declareFunction("forward_inference_shares_same_problem_storeP", "FORWARD-INFERENCE-SHARES-SAME-PROBLEM-STORE?", 0, 1, false);
-            declareFunction("get_forward_problem_store", "GET-FORWARD-PROBLEM-STORE", 0, 1, false);
-            declareFunction("clear_current_forward_problem_store", "CLEAR-CURRENT-FORWARD-PROBLEM-STORE", 0, 0, false);
-            declareFunction("clear_current_forward_problem_store_int", "CLEAR-CURRENT-FORWARD-PROBLEM-STORE-INT", 0, 0, false);
-            declareFunction("clear_current_forward_inference_environment", "CLEAR-CURRENT-FORWARD-INFERENCE-ENVIRONMENT", 0, 0, false);
-            declareFunction("queue_forward_assertion", "QUEUE-FORWARD-ASSERTION", 1, 0, false);
-            declareFunction("remqueue_forward_assertion", "REMQUEUE-FORWARD-ASSERTION", 1, 0, false);
-            declareFunction("queue_or_repropagate_forward_assertion", "QUEUE-OR-REPROPAGATE-FORWARD-ASSERTION", 1, 0, false);
-            declareFunction("queue_or_repropagate_forward_assertions", "QUEUE-OR-REPROPAGATE-FORWARD-ASSERTIONS", 1, 0, false);
-            declareFunction("someone_else_will_process_this_forward_inference_environmentP", "SOMEONE-ELSE-WILL-PROCESS-THIS-FORWARD-INFERENCE-ENVIRONMENT?", 1, 0, false);
-            declareFunction("performing_forward_inferenceP", "PERFORMING-FORWARD-INFERENCE?", 0, 0, false);
-            declareFunction("perform_forward_inference_now", "PERFORM-FORWARD-INFERENCE-NOW", 0, 0, false);
-            declareFunction("perform_forward_inference", "PERFORM-FORWARD-INFERENCE", 0, 0, false);
-            declareFunction("dynamic_forward_inference_to_doP", "DYNAMIC-FORWARD-INFERENCE-TO-DO?", 1, 0, false);
-            declareFunction("global_forward_inference_to_doP", "GLOBAL-FORWARD-INFERENCE-TO-DO?", 0, 0, false);
-            declareFunction("forward_inference_to_doP", "FORWARD-INFERENCE-TO-DO?", 1, 0, false);
-            declareFunction("repropagate_forward_assertion", "REPROPAGATE-FORWARD-ASSERTION", 1, 0, false);
-            declareFunction("repropagate_forward_gaf_wrt_rule", "REPROPAGATE-FORWARD-GAF-WRT-RULE", 2, 0, false);
-            declareFunction("inference_psc_overriding_termP", "INFERENCE-PSC-OVERRIDING-TERM?", 1, 0, false);
-            declareFunction("inference_psc_overriding_term_mt", "INFERENCE-PSC-OVERRIDING-TERM-MT", 1, 0, false);
-            declareFunction("inference_psc_overriding_mt_mt", "INFERENCE-PSC-OVERRIDING-MT-MT", 1, 0, false);
-            declareFunction("inference_psc_override_mt", "INFERENCE-PSC-OVERRIDE-MT", 3, 0, false);
-            declareFunction("global_forward_propagation_mtP", "GLOBAL-FORWARD-PROPAGATION-MT?", 1, 0, false);
-            declareFunction("forward_inference_assertibles_queue", "FORWARD-INFERENCE-ASSERTIBLES-QUEUE", 0, 0, false);
-            declareFunction("note_new_forward_assertible", "NOTE-NEW-FORWARD-ASSERTIBLE", 1, 0, false);
-            declareFunction("forward_propagate_assertion", "FORWARD-PROPAGATE-ASSERTION", 1, 1, false);
-            declareFunction("forward_propagate_assertion_int", "FORWARD-PROPAGATE-ASSERTION-INT", 3, 0, false);
-            declareFunction("forward_propagation_permittedP", "FORWARD-PROPAGATION-PERMITTED?", 2, 0, false);
-            declareFunction("forward_propagate_support", "FORWARD-PROPAGATE-SUPPORT", 1, 2, false);
-            declareFunction("forward_propagate_one_support_and_generate_assertibles", "FORWARD-PROPAGATE-ONE-SUPPORT-AND-GENERATE-ASSERTIBLES", 1, 1, false);
-            declareFunction("clear_forward_propagate_one_support_wrt_rule_and_generate_assertibles_cached", "CLEAR-FORWARD-PROPAGATE-ONE-SUPPORT-WRT-RULE-AND-GENERATE-ASSERTIBLES-CACHED", 0, 0, false);
-            declareFunction("remove_forward_propagate_one_support_wrt_rule_and_generate_assertibles_cached", "REMOVE-FORWARD-PROPAGATE-ONE-SUPPORT-WRT-RULE-AND-GENERATE-ASSERTIBLES-CACHED", 2, 0, false);
-            declareFunction("forward_propagate_one_support_wrt_rule_and_generate_assertibles_cached_internal", "FORWARD-PROPAGATE-ONE-SUPPORT-WRT-RULE-AND-GENERATE-ASSERTIBLES-CACHED-INTERNAL", 2, 0, false);
-            declareFunction("forward_propagate_one_support_wrt_rule_and_generate_assertibles_cached", "FORWARD-PROPAGATE-ONE-SUPPORT-WRT-RULE-AND-GENERATE-ASSERTIBLES-CACHED", 2, 0, false);
-            declareFunction("forward_propagate_one_support_wrt_rule_and_generate_assertibles", "FORWARD-PROPAGATE-ONE-SUPPORT-WRT-RULE-AND-GENERATE-ASSERTIBLES", 2, 1, false);
-            declareFunction("forward_propagate_one_assertion_wrt_rules_and_queue_or_repropagate_assertibles", "FORWARD-PROPAGATE-ONE-ASSERTION-WRT-RULES-AND-QUEUE-OR-REPROPAGATE-ASSERTIBLES", 2, 1, false);
-            declareFunction("forward_propagate_supports_and_generate_assertibles", "FORWARD-PROPAGATE-SUPPORTS-AND-GENERATE-ASSERTIBLES", 1, 1, false);
-            declareFunction("forward_propagate_support_generate_assertibles", "FORWARD-PROPAGATE-SUPPORT-GENERATE-ASSERTIBLES", 2, 0, false);
-            declareFunction("forward_propagate_handle_batched_assertibles", "FORWARD-PROPAGATE-HANDLE-BATCHED-ASSERTIBLES", 1, 1, false);
-            declareFunction("forward_propagate_support_handle_assertibles", "FORWARD-PROPAGATE-SUPPORT-HANDLE-ASSERTIBLES", 1, 2, false);
-            declareFunction("forward_propagate_rule", "FORWARD-PROPAGATE-RULE", 2, 0, false);
-            declareFunction("support_truth_sense", "SUPPORT-TRUTH-SENSE", 1, 0, false);
-            declareFunction("support_asent", "SUPPORT-ASENT", 1, 0, false);
-            declareFunction("forward_propagate_asent_support", "FORWARD-PROPAGATE-ASENT-SUPPORT", 2, 0, false);
-            declareFunction("forward_propagate_asent_tactic_specs", "FORWARD-PROPAGATE-ASENT-TACTIC-SPECS", 2, 0, false);
-            declareFunction("forward_propagate_one_tactic_spec", "FORWARD-PROPAGATE-ONE-TACTIC-SPEC", 3, 0, false);
-            declareFunction("make_forward_trigger_supports", "MAKE-FORWARD-TRIGGER-SUPPORTS", 2, 0, false);
-            declareFunction("forward_inference_allowed_rules", "FORWARD-INFERENCE-ALLOWED-RULES", 0, 0, false);
-            declareFunction("forward_inference_all_rules_allowedP", "FORWARD-INFERENCE-ALL-RULES-ALLOWED?", 0, 0, false);
-            declareFunction("forward_inference_rule_allowedP", "FORWARD-INFERENCE-RULE-ALLOWED?", 1, 0, false);
-            declareFunction("forward_inference_forbidden_rules", "FORWARD-INFERENCE-FORBIDDEN-RULES", 0, 0, false);
-            declareFunction("forward_inference_no_rules_forbiddenP", "FORWARD-INFERENCE-NO-RULES-FORBIDDEN?", 0, 0, false);
-            declareFunction("forward_inference_rule_forbiddenP", "FORWARD-INFERENCE-RULE-FORBIDDEN?", 1, 0, false);
-            declareFunction("forward_propagate_gaf_internal", "FORWARD-PROPAGATE-GAF-INTERNAL", 6, 0, false);
-            declareFunction("handle_forward_propagation_from_gaf", "HANDLE-FORWARD-PROPAGATION-FROM-GAF", 8, 0, false);
-            declareFunction("creation_template_forward_rules_via_exemplars", "CREATION-TEMPLATE-FORWARD-RULES-VIA-EXEMPLARS", 1, 0, false);
-            declareFunction("creation_template_exemplars", "CREATION-TEMPLATE-EXEMPLARS", 1, 0, false);
-            declareFunction("creation_template_allowable_rules", "CREATION-TEMPLATE-ALLOWABLE-RULES", 1, 0, false);
-            declareFunction("all_genl_creation_templates", "ALL-GENL-CREATION-TEMPLATES", 1, 0, false);
-            declareFunction("creation_template_allowable_rules_internal", "CREATION-TEMPLATE-ALLOWABLE-RULES-INTERNAL", 1, 0, false);
-            declareFunction("handle_forward_propagation", "HANDLE-FORWARD-PROPAGATION", 6, 0, false);
-            declareFunction("handle_one_forward_propagation", "HANDLE-ONE-FORWARD-PROPAGATION", 8, 0, false);
-            declareFunction("forward_propagate_doomed_due_to_null_max_floor_mtsP", "FORWARD-PROPAGATE-DOOMED-DUE-TO-NULL-MAX-FLOOR-MTS?", 2, 1, false);
-            declareFunction("filter_forward_pragmatic_dnf", "FILTER-FORWARD-PRAGMATIC-DNF", 1, 0, false);
-            declareFunction("forward_propagate_dnf", "FORWARD-PROPAGATE-DNF", 8, 0, false);
-            declareFunction("new_forward_query_from_dnf", "NEW-FORWARD-QUERY-FROM-DNF", 3, 1, false);
-            declareFunction("new_cyc_trivial_forward_query_from_dnf", "NEW-CYC-TRIVIAL-FORWARD-QUERY-FROM-DNF", 2, 2, false);
-            declareFunction("new_forward_query", "NEW-FORWARD-QUERY", 1, 2, false);
-            declareFunction("forward_inference_query_properties", "FORWARD-INFERENCE-QUERY-PROPERTIES", 1, 1, false);
-            declareFunction("trivial_forward_inference_query_properties", "TRIVIAL-FORWARD-INFERENCE-QUERY-PROPERTIES", 1, 1, false);
-            declareFunction("forward_inference_productivity_limit", "FORWARD-INFERENCE-PRODUCTIVITY-LIMIT", 0, 0, false);
-            declareFunction("rule_forward_inference_productivity_limit", "RULE-FORWARD-INFERENCE-PRODUCTIVITY-LIMIT", 1, 0, false);
-            declareFunction("add_forward_propagation_result", "ADD-FORWARD-PROPAGATION-RESULT", 7, 0, false);
-            declareFunction("add_empty_forward_propagation_result", "ADD-EMPTY-FORWARD-PROPAGATION-RESULT", 6, 0, false);
-            declareFunction("new_forward_concluded_supports", "NEW-FORWARD-CONCLUDED-SUPPORTS", 2, 1, false);
-            declareFunction("add_forward_deductions_from_supports", "ADD-FORWARD-DEDUCTIONS-FROM-SUPPORTS", 8, 0, false);
-            declareFunction("handle_forward_deduction_in_mt", "HANDLE-FORWARD-DEDUCTION-IN-MT", 9, 0, false);
-            declareFunction("handle_forward_deduction_in_mt_int", "HANDLE-FORWARD-DEDUCTION-IN-MT-INT", 9, 0, false);
-            declareFunction("handle_forward_deduction_in_mt_as_assertible", "HANDLE-FORWARD-DEDUCTION-IN-MT-AS-ASSERTIBLE", 5, 2, false);
-            declareFunction("handle_forward_deduction_in_mt_as_assertible_int", "HANDLE-FORWARD-DEDUCTION-IN-MT-AS-ASSERTIBLE-INT", 3, 3, false);
-            declareFunction("forbid_forward_conclusion_in_mtP", "FORBID-FORWARD-CONCLUSION-IN-MT?", 5, 0, false);
-            declareFunction("wff_constraint_supportP", "WFF-CONSTRAINT-SUPPORT?", 1, 0, false);
-            declareFunction("wff_constraint_mtP", "WFF-CONSTRAINT-MT?", 1, 0, false);
-            declareFunction("constraint_ruleP", "CONSTRAINT-RULE?", 1, 1, false);
-            declareFunction("handle_forward_deduction_in_mt_as_constraint", "HANDLE-FORWARD-DEDUCTION-IN-MT-AS-CONSTRAINT", 5, 2, false);
-            declareFunction("verify_forward_deduction_constraint", "VERIFY-FORWARD-DEDUCTION-CONSTRAINT", 2, 0, false);
-            declareFunction("cycl_sentence_for_forward_inference_canonicalP", "CYCL-SENTENCE-FOR-FORWARD-INFERENCE-CANONICAL?", 3, 0, false);
-            declareFunction("syntactically_valid_forward_dnf", "SYNTACTICALLY-VALID-FORWARD-DNF", 3, 1, false);
-            declareFunction("syntactically_valid_forward_non_trigger_asents", "SYNTACTICALLY-VALID-FORWARD-NON-TRIGGER-ASENTS", 2, 1, false);
-            declareFunction("semantically_valid_forward_dnf", "SEMANTICALLY-VALID-FORWARD-DNF", 3, 1, false);
-            declareFunction("forward_leafy_mt_p", "FORWARD-LEAFY-MT-P", 1, 0, false);
-            declareFunction("forward_propagation_supports_doomedP", "FORWARD-PROPAGATION-SUPPORTS-DOOMED?", 2, 0, false);
-            declareFunction("forward_propagation_mts_doomedP", "FORWARD-PROPAGATION-MTS-DOOMED?", 1, 0, false);
-            declareFunction("forward_possibly_some_common_spec_mtP_internal", "FORWARD-POSSIBLY-SOME-COMMON-SPEC-MT?-INTERNAL", 1, 0, false);
-            declareFunction("forward_possibly_some_common_spec_mtP", "FORWARD-POSSIBLY-SOME-COMMON-SPEC-MT?", 1, 0, false);
-            declareFunction("leafy_mt_p", "LEAFY-MT-P", 1, 1, false);
-            declareFunction("compute_all_mt_and_support_combinations", "COMPUTE-ALL-MT-AND-SUPPORT-COMBINATIONS", 1, 1, false);
-            declareFunction("compute_decontextualized_support_combinations", "COMPUTE-DECONTEXTUALIZED-SUPPORT-COMBINATIONS", 2, 0, false);
-            declareFunction("some_support_combinations_theoretically_possible", "SOME-SUPPORT-COMBINATIONS-THEORETICALLY-POSSIBLE", 1, 0, false);
-            declareFunction("some_support_combinations_extensionally_possible", "SOME-SUPPORT-COMBINATIONS-EXTENSIONALLY-POSSIBLE", 1, 0, false);
-            declareFunction("all_forward_support_mt_combinations", "ALL-FORWARD-SUPPORT-MT-COMBINATIONS", 1, 0, false);
-            declareFunction("all_forward_support_mt_combinations_int", "ALL-FORWARD-SUPPORT-MT-COMBINATIONS-INT", 1, 0, false);
-            declareFunction("forward_support_mt_combinations", "FORWARD-SUPPORT-MT-COMBINATIONS", 1, 0, false);
-            declareFunction("compute_mts_from_supports", "COMPUTE-MTS-FROM-SUPPORTS", 1, 1, false);
-            declareFunction("separate_supports_for_mt_placement", "SEPARATE-SUPPORTS-FOR-MT-PLACEMENT", 1, 0, false);
-            declareFunction("compute_where_wff_formulaP", "COMPUTE-WHERE-WFF-FORMULA?", 1, 0, false);
-            declareFunction("assume_where_wff_formulaP", "ASSUME-WHERE-WFF-FORMULA?", 1, 0, false);
-            declareFunction("forward_mt_placements_from_support_mts", "FORWARD-MT-PLACEMENTS-FROM-SUPPORT-MTS", 1, 1, false);
-            declareFunction("all_computed_wff_mt_combinations", "ALL-COMPUTED-WFF-MT-COMBINATIONS", 1, 0, false);
-            declareFunction("all_computed_wff_mt_combinations_int", "ALL-COMPUTED-WFF-MT-COMBINATIONS-INT", 1, 0, false);
-            declareFunction("computed_wff_mt_combinations", "COMPUTED-WFF-MT-COMBINATIONS", 1, 0, false);
-            declareFunction("computed_wff_mt_combinations_wrt_term_of_unit", "COMPUTED-WFF-MT-COMBINATIONS-WRT-TERM-OF-UNIT", 1, 0, false);
-            declareFunction("computed_wff_mt_combinations_wrt_hypothetical_terms", "COMPUTED-WFF-MT-COMBINATIONS-WRT-HYPOTHETICAL-TERMS", 1, 0, false);
-        }
-        if (SubLFiles.USE_V2) {
-            declareFunction("initialize_forward_inference_environment", "INITIALIZE-FORWARD-INFERENCE-ENVIRONMENT", 0, 0, false);
-            declareMacro("with_forward_inference_gaf", "WITH-FORWARD-INFERENCE-GAF");
-            declareFunction("new_forward_problem_store", "NEW-FORWARD-PROBLEM-STORE", 0, 0, false);
-            declareFunction("forward_inference_shares_same_problem_storeP", "FORWARD-INFERENCE-SHARES-SAME-PROBLEM-STORE?", 0, 0, false);
-            declareFunction("get_forward_problem_store", "GET-FORWARD-PROBLEM-STORE", 0, 0, false);
-            declareFunction("forward_propagate_gaf", "FORWARD-PROPAGATE-GAF", 2, 0, false);
-            declareFunction("forward_propagate_gaf_expansions", "FORWARD-PROPAGATE-GAF-EXPANSIONS", 4, 0, false);
-            declareFunction("add_forward_deductions_from_supports", "ADD-FORWARD-DEDUCTIONS-FROM-SUPPORTS", 4, 0, false);
-            declareFunction("handle_forward_deduction_in_mt", "HANDLE-FORWARD-DEDUCTION-IN-MT", 4, 0, false);
-            declareFunction("handle_forward_deduction_in_mt_as_assertible", "HANDLE-FORWARD-DEDUCTION-IN-MT-AS-ASSERTIBLE", 4, 0, false);
-            declareFunction("handle_forward_deduction_in_mt_as_assertible_int", "HANDLE-FORWARD-DEDUCTION-IN-MT-AS-ASSERTIBLE-INT", 3, 1, false);
-            declareFunction("handle_forward_deduction_in_mt_as_constraint", "HANDLE-FORWARD-DEDUCTION-IN-MT-AS-CONSTRAINT", 4, 0, false);
-            declareFunction("syntactically_valid_forward_non_trigger_asents", "SYNTACTICALLY-VALID-FORWARD-NON-TRIGGER-ASENTS", 1, 0, false);
-            declareFunction("semantically_valid_forward_dnf", "SEMANTICALLY-VALID-FORWARD-DNF", 2, 0, false);
-            declareFunction("compute_all_mt_and_support_combinations", "COMPUTE-ALL-MT-AND-SUPPORT-COMBINATIONS", 1, 0, false);
-            declareFunction("compute_decontextualized_support_combinations", "COMPUTE-DECONTEXTUALIZED-SUPPORT-COMBINATIONS", 1, 0, false);
-        }
-        return NIL;
-    }
-
-    public static SubLObject declare_forward_file_Previous() {
-        declareFunction("forward_propagate_rule_via_trigger_gafsP", "FORWARD-PROPAGATE-RULE-VIA-TRIGGER-GAFS?", 0, 0, false);
-        declareFunction("call_forward_inference_browsing_callbackP", "CALL-FORWARD-INFERENCE-BROWSING-CALLBACK?", 0, 0, false);
-        declareFunction("call_forward_inference_browsing_callback", "CALL-FORWARD-INFERENCE-BROWSING-CALLBACK", 2, 1, false);
-        declareFunction("current_forward_inference_environment", "CURRENT-FORWARD-INFERENCE-ENVIRONMENT", 0, 0, false);
-        declareFunction("get_forward_inference_environment", "GET-FORWARD-INFERENCE-ENVIRONMENT", 0, 0, false);
-        declareFunction("free_forward_inference_enviornment", "FREE-FORWARD-INFERENCE-ENVIORNMENT", 1, 0, false);
-        declareFunction("clear_forward_inference_environment", "CLEAR-FORWARD-INFERENCE-ENVIRONMENT", 1, 0, false);
-        declareFunction("new_forward_inference_environment", "NEW-FORWARD-INFERENCE-ENVIRONMENT", 0, 0, false);
-        declareFunction("queue_global_forward_assertion", "QUEUE-GLOBAL-FORWARD-ASSERTION", 1, 0, false);
-        declareFunction("dequeue_global_forward_assertion", "DEQUEUE-GLOBAL-FORWARD-ASSERTION", 0, 0, false);
-        declareFunction("global_forward_assertion_queue_empty_p", "GLOBAL-FORWARD-ASSERTION-QUEUE-EMPTY-P", 0, 0, false);
-        declareFunction("clear_global_forward_inference_environment", "CLEAR-GLOBAL-FORWARD-INFERENCE-ENVIRONMENT", 0, 0, false);
-        declareMacro("with_currently_forward_propagating_support", "WITH-CURRENTLY-FORWARD-PROPAGATING-SUPPORT");
-        declareFunction("currently_forward_propagating_supportP", "CURRENTLY-FORWARD-PROPAGATING-SUPPORT?", 1, 0, false);
-        declareFunction("all_currently_forward_propagating_supports", "ALL-CURRENTLY-FORWARD-PROPAGATING-SUPPORTS", 0, 0, false);
-        declareFunction("currently_forward_propagating_assertionP", "CURRENTLY-FORWARD-PROPAGATING-ASSERTION?", 1, 0, false);
-        declareFunction("all_currently_forward_propagating_assertions", "ALL-CURRENTLY-FORWARD-PROPAGATING-ASSERTIONS", 0, 0, false);
-        declareFunction("clear_currently_forward_propagating_supports", "CLEAR-CURRENTLY-FORWARD-PROPAGATING-SUPPORTS", 0, 0, false);
-        declareFunction("add_currently_forward_propagating_support", "ADD-CURRENTLY-FORWARD-PROPAGATING-SUPPORT", 1, 0, false);
-        declareFunction("rem_currently_forward_propagating_support", "REM-CURRENTLY-FORWARD-PROPAGATING-SUPPORT", 1, 0, false);
-        declareMacro("with_forward_inference_source_support", "WITH-FORWARD-INFERENCE-SOURCE-SUPPORT");
-        declareMacro("with_forward_inference_rule", "WITH-FORWARD-INFERENCE-RULE");
-        declareFunction("current_forward_inference_gaf", "CURRENT-FORWARD-INFERENCE-GAF", 0, 0, false);
-        declareFunction("current_forward_inference_rule", "CURRENT-FORWARD-INFERENCE-RULE", 0, 0, false);
-        declareFunction("current_forward_inference_assertion", "CURRENT-FORWARD-INFERENCE-ASSERTION", 0, 0, false);
-        declareFunction("current_forward_inference_fully_propagating_ruleP", "CURRENT-FORWARD-INFERENCE-FULLY-PROPAGATING-RULE?", 0, 0, false);
-        declareFunction("forward_problem_store_properties", "FORWARD-PROBLEM-STORE-PROPERTIES", 0, 0, false);
-        declareFunction("new_forward_problem_store", "NEW-FORWARD-PROBLEM-STORE", 0, 1, false);
-        declareFunction("destroy_forward_problem_store", "DESTROY-FORWARD-PROBLEM-STORE", 1, 0, false);
-        declareFunction("forward_inference_shares_same_problem_storeP", "FORWARD-INFERENCE-SHARES-SAME-PROBLEM-STORE?", 0, 1, false);
-        declareFunction("get_forward_problem_store", "GET-FORWARD-PROBLEM-STORE", 0, 1, false);
-        declareFunction("clear_current_forward_problem_store", "CLEAR-CURRENT-FORWARD-PROBLEM-STORE", 0, 0, false);
-        declareFunction("clear_current_forward_problem_store_int", "CLEAR-CURRENT-FORWARD-PROBLEM-STORE-INT", 0, 0, false);
-        declareFunction("clear_current_forward_inference_environment", "CLEAR-CURRENT-FORWARD-INFERENCE-ENVIRONMENT", 0, 0, false);
-        declareFunction("queue_forward_assertion", "QUEUE-FORWARD-ASSERTION", 1, 0, false);
-        declareFunction("remqueue_forward_assertion", "REMQUEUE-FORWARD-ASSERTION", 1, 0, false);
-        declareFunction("queue_or_repropagate_forward_assertion", "QUEUE-OR-REPROPAGATE-FORWARD-ASSERTION", 1, 0, false);
-        declareFunction("queue_or_repropagate_forward_assertions", "QUEUE-OR-REPROPAGATE-FORWARD-ASSERTIONS", 1, 0, false);
-        declareFunction("someone_else_will_process_this_forward_inference_environmentP", "SOMEONE-ELSE-WILL-PROCESS-THIS-FORWARD-INFERENCE-ENVIRONMENT?", 1, 0, false);
-        declareFunction("performing_forward_inferenceP", "PERFORMING-FORWARD-INFERENCE?", 0, 0, false);
-        declareFunction("perform_forward_inference_now", "PERFORM-FORWARD-INFERENCE-NOW", 0, 0, false);
-        declareFunction("perform_forward_inference", "PERFORM-FORWARD-INFERENCE", 0, 0, false);
-        declareFunction("dynamic_forward_inference_to_doP", "DYNAMIC-FORWARD-INFERENCE-TO-DO?", 1, 0, false);
-        declareFunction("global_forward_inference_to_doP", "GLOBAL-FORWARD-INFERENCE-TO-DO?", 0, 0, false);
-        declareFunction("forward_inference_to_doP", "FORWARD-INFERENCE-TO-DO?", 1, 0, false);
-        declareFunction("repropagate_forward_assertion", "REPROPAGATE-FORWARD-ASSERTION", 1, 0, false);
-        declareFunction("repropagate_forward_gaf_wrt_rule", "REPROPAGATE-FORWARD-GAF-WRT-RULE", 2, 0, false);
-        declareFunction("inference_psc_overriding_termP", "INFERENCE-PSC-OVERRIDING-TERM?", 1, 0, false);
-        declareFunction("inference_psc_overriding_term_mt", "INFERENCE-PSC-OVERRIDING-TERM-MT", 1, 0, false);
-        declareFunction("inference_psc_overriding_mt_mt", "INFERENCE-PSC-OVERRIDING-MT-MT", 1, 0, false);
-        declareFunction("inference_psc_override_mt", "INFERENCE-PSC-OVERRIDE-MT", 3, 0, false);
-        declareFunction("global_forward_propagation_mtP", "GLOBAL-FORWARD-PROPAGATION-MT?", 1, 0, false);
-        declareFunction("forward_inference_assertibles_queue", "FORWARD-INFERENCE-ASSERTIBLES-QUEUE", 0, 0, false);
-        declareFunction("note_new_forward_assertible", "NOTE-NEW-FORWARD-ASSERTIBLE", 1, 0, false);
-        declareFunction("forward_propagate_assertion", "FORWARD-PROPAGATE-ASSERTION", 1, 1, false);
-        declareFunction("forward_propagate_assertion_int", "FORWARD-PROPAGATE-ASSERTION-INT", 3, 0, false);
-        declareFunction("forward_propagation_permittedP", "FORWARD-PROPAGATION-PERMITTED?", 2, 0, false);
-        declareFunction("forward_propagate_support", "FORWARD-PROPAGATE-SUPPORT", 1, 2, false);
-        declareFunction("forward_propagate_one_support_and_generate_assertibles", "FORWARD-PROPAGATE-ONE-SUPPORT-AND-GENERATE-ASSERTIBLES", 1, 1, false);
-        declareFunction("clear_forward_propagate_one_support_wrt_rule_and_generate_assertibles_cached", "CLEAR-FORWARD-PROPAGATE-ONE-SUPPORT-WRT-RULE-AND-GENERATE-ASSERTIBLES-CACHED", 0, 0, false);
-        declareFunction("remove_forward_propagate_one_support_wrt_rule_and_generate_assertibles_cached", "REMOVE-FORWARD-PROPAGATE-ONE-SUPPORT-WRT-RULE-AND-GENERATE-ASSERTIBLES-CACHED", 2, 0, false);
-        declareFunction("forward_propagate_one_support_wrt_rule_and_generate_assertibles_cached_internal", "FORWARD-PROPAGATE-ONE-SUPPORT-WRT-RULE-AND-GENERATE-ASSERTIBLES-CACHED-INTERNAL", 2, 0, false);
-        declareFunction("forward_propagate_one_support_wrt_rule_and_generate_assertibles_cached", "FORWARD-PROPAGATE-ONE-SUPPORT-WRT-RULE-AND-GENERATE-ASSERTIBLES-CACHED", 2, 0, false);
-        declareFunction("forward_propagate_one_support_wrt_rule_and_generate_assertibles", "FORWARD-PROPAGATE-ONE-SUPPORT-WRT-RULE-AND-GENERATE-ASSERTIBLES", 2, 1, false);
-        declareFunction("forward_propagate_one_assertion_wrt_rules_and_queue_or_repropagate_assertibles", "FORWARD-PROPAGATE-ONE-ASSERTION-WRT-RULES-AND-QUEUE-OR-REPROPAGATE-ASSERTIBLES", 2, 1, false);
-        declareFunction("forward_propagate_supports_and_generate_assertibles", "FORWARD-PROPAGATE-SUPPORTS-AND-GENERATE-ASSERTIBLES", 1, 1, false);
-        declareFunction("forward_propagate_support_generate_assertibles", "FORWARD-PROPAGATE-SUPPORT-GENERATE-ASSERTIBLES", 2, 0, false);
-        declareFunction("forward_propagate_handle_batched_assertibles", "FORWARD-PROPAGATE-HANDLE-BATCHED-ASSERTIBLES", 1, 1, false);
-        declareFunction("forward_propagate_support_handle_assertibles", "FORWARD-PROPAGATE-SUPPORT-HANDLE-ASSERTIBLES", 1, 2, false);
-        declareFunction("forward_propagate_rule", "FORWARD-PROPAGATE-RULE", 2, 0, false);
-        declareFunction("support_truth_sense", "SUPPORT-TRUTH-SENSE", 1, 0, false);
-        declareFunction("support_asent", "SUPPORT-ASENT", 1, 0, false);
-        declareFunction("forward_propagate_asent_support", "FORWARD-PROPAGATE-ASENT-SUPPORT", 2, 0, false);
-        declareFunction("forward_propagate_asent_tactic_specs", "FORWARD-PROPAGATE-ASENT-TACTIC-SPECS", 2, 0, false);
-        declareFunction("forward_propagate_one_tactic_spec", "FORWARD-PROPAGATE-ONE-TACTIC-SPEC", 3, 0, false);
-        declareFunction("make_forward_trigger_supports", "MAKE-FORWARD-TRIGGER-SUPPORTS", 2, 0, false);
-        declareFunction("forward_inference_allowed_rules", "FORWARD-INFERENCE-ALLOWED-RULES", 0, 0, false);
-        declareFunction("forward_inference_all_rules_allowedP", "FORWARD-INFERENCE-ALL-RULES-ALLOWED?", 0, 0, false);
-        declareFunction("forward_inference_rule_allowedP", "FORWARD-INFERENCE-RULE-ALLOWED?", 1, 0, false);
-        declareFunction("forward_inference_forbidden_rules", "FORWARD-INFERENCE-FORBIDDEN-RULES", 0, 0, false);
-        declareFunction("forward_inference_no_rules_forbiddenP", "FORWARD-INFERENCE-NO-RULES-FORBIDDEN?", 0, 0, false);
-        declareFunction("forward_inference_rule_forbiddenP", "FORWARD-INFERENCE-RULE-FORBIDDEN?", 1, 0, false);
-        declareFunction("forward_propagate_gaf_internal", "FORWARD-PROPAGATE-GAF-INTERNAL", 6, 0, false);
-        declareFunction("handle_forward_propagation_from_gaf", "HANDLE-FORWARD-PROPAGATION-FROM-GAF", 8, 0, false);
-        declareFunction("creation_template_forward_rules_via_exemplars", "CREATION-TEMPLATE-FORWARD-RULES-VIA-EXEMPLARS", 1, 0, false);
-        declareFunction("creation_template_exemplars", "CREATION-TEMPLATE-EXEMPLARS", 1, 0, false);
-        declareFunction("creation_template_allowable_rules", "CREATION-TEMPLATE-ALLOWABLE-RULES", 1, 0, false);
-        declareFunction("all_genl_creation_templates", "ALL-GENL-CREATION-TEMPLATES", 1, 0, false);
-        declareFunction("creation_template_allowable_rules_internal", "CREATION-TEMPLATE-ALLOWABLE-RULES-INTERNAL", 1, 0, false);
-        declareFunction("handle_forward_propagation", "HANDLE-FORWARD-PROPAGATION", 6, 0, false);
-        declareFunction("handle_one_forward_propagation", "HANDLE-ONE-FORWARD-PROPAGATION", 8, 0, false);
-        declareFunction("forward_propagate_doomed_due_to_null_max_floor_mtsP", "FORWARD-PROPAGATE-DOOMED-DUE-TO-NULL-MAX-FLOOR-MTS?", 2, 1, false);
-        declareFunction("filter_forward_pragmatic_dnf", "FILTER-FORWARD-PRAGMATIC-DNF", 1, 0, false);
-        declareFunction("forward_propagate_dnf", "FORWARD-PROPAGATE-DNF", 8, 0, false);
-        declareFunction("new_forward_query_from_dnf", "NEW-FORWARD-QUERY-FROM-DNF", 3, 1, false);
-        declareFunction("new_cyc_trivial_forward_query_from_dnf", "NEW-CYC-TRIVIAL-FORWARD-QUERY-FROM-DNF", 2, 2, false);
-        declareFunction("new_forward_query", "NEW-FORWARD-QUERY", 1, 2, false);
-        declareFunction("forward_inference_query_properties", "FORWARD-INFERENCE-QUERY-PROPERTIES", 1, 1, false);
-        declareFunction("trivial_forward_inference_query_properties", "TRIVIAL-FORWARD-INFERENCE-QUERY-PROPERTIES", 1, 1, false);
-        declareFunction("forward_inference_productivity_limit", "FORWARD-INFERENCE-PRODUCTIVITY-LIMIT", 0, 0, false);
-        declareFunction("rule_forward_inference_productivity_limit", "RULE-FORWARD-INFERENCE-PRODUCTIVITY-LIMIT", 1, 0, false);
-        declareFunction("add_forward_propagation_result", "ADD-FORWARD-PROPAGATION-RESULT", 7, 0, false);
-        declareFunction("add_empty_forward_propagation_result", "ADD-EMPTY-FORWARD-PROPAGATION-RESULT", 6, 0, false);
-        declareFunction("new_forward_concluded_supports", "NEW-FORWARD-CONCLUDED-SUPPORTS", 2, 1, false);
-        declareFunction("add_forward_deductions_from_supports", "ADD-FORWARD-DEDUCTIONS-FROM-SUPPORTS", 8, 0, false);
-        declareFunction("handle_forward_deduction_in_mt", "HANDLE-FORWARD-DEDUCTION-IN-MT", 9, 0, false);
-        declareFunction("handle_forward_deduction_in_mt_int", "HANDLE-FORWARD-DEDUCTION-IN-MT-INT", 9, 0, false);
-        declareFunction("handle_forward_deduction_in_mt_as_assertible", "HANDLE-FORWARD-DEDUCTION-IN-MT-AS-ASSERTIBLE", 5, 2, false);
-        declareFunction("handle_forward_deduction_in_mt_as_assertible_int", "HANDLE-FORWARD-DEDUCTION-IN-MT-AS-ASSERTIBLE-INT", 3, 3, false);
-        declareFunction("forbid_forward_conclusion_in_mtP", "FORBID-FORWARD-CONCLUSION-IN-MT?", 5, 0, false);
-        declareFunction("wff_constraint_supportP", "WFF-CONSTRAINT-SUPPORT?", 1, 0, false);
-        declareFunction("wff_constraint_mtP", "WFF-CONSTRAINT-MT?", 1, 0, false);
-        declareFunction("constraint_ruleP", "CONSTRAINT-RULE?", 1, 1, false);
-        declareFunction("handle_forward_deduction_in_mt_as_constraint", "HANDLE-FORWARD-DEDUCTION-IN-MT-AS-CONSTRAINT", 5, 2, false);
-        declareFunction("verify_forward_deduction_constraint", "VERIFY-FORWARD-DEDUCTION-CONSTRAINT", 2, 0, false);
-        declareFunction("cycl_sentence_for_forward_inference_canonicalP", "CYCL-SENTENCE-FOR-FORWARD-INFERENCE-CANONICAL?", 3, 0, false);
-        declareFunction("syntactically_valid_forward_dnf", "SYNTACTICALLY-VALID-FORWARD-DNF", 3, 1, false);
-        declareFunction("syntactically_valid_forward_non_trigger_asents", "SYNTACTICALLY-VALID-FORWARD-NON-TRIGGER-ASENTS", 2, 1, false);
-        declareFunction("semantically_valid_forward_dnf", "SEMANTICALLY-VALID-FORWARD-DNF", 3, 1, false);
-        declareFunction("forward_leafy_mt_p", "FORWARD-LEAFY-MT-P", 1, 0, false);
-        declareFunction("forward_propagation_supports_doomedP", "FORWARD-PROPAGATION-SUPPORTS-DOOMED?", 2, 0, false);
-        declareFunction("forward_propagation_mts_doomedP", "FORWARD-PROPAGATION-MTS-DOOMED?", 1, 0, false);
-        declareFunction("forward_possibly_some_common_spec_mtP_internal", "FORWARD-POSSIBLY-SOME-COMMON-SPEC-MT?-INTERNAL", 1, 0, false);
-        declareFunction("forward_possibly_some_common_spec_mtP", "FORWARD-POSSIBLY-SOME-COMMON-SPEC-MT?", 1, 0, false);
-        declareFunction("leafy_mt_p", "LEAFY-MT-P", 1, 1, false);
-        declareFunction("compute_all_mt_and_support_combinations", "COMPUTE-ALL-MT-AND-SUPPORT-COMBINATIONS", 1, 1, false);
-        declareFunction("compute_decontextualized_support_combinations", "COMPUTE-DECONTEXTUALIZED-SUPPORT-COMBINATIONS", 2, 0, false);
-        declareFunction("some_support_combinations_theoretically_possible", "SOME-SUPPORT-COMBINATIONS-THEORETICALLY-POSSIBLE", 1, 0, false);
-        declareFunction("some_support_combinations_extensionally_possible", "SOME-SUPPORT-COMBINATIONS-EXTENSIONALLY-POSSIBLE", 1, 0, false);
-        declareFunction("all_forward_support_mt_combinations", "ALL-FORWARD-SUPPORT-MT-COMBINATIONS", 1, 0, false);
-        declareFunction("all_forward_support_mt_combinations_int", "ALL-FORWARD-SUPPORT-MT-COMBINATIONS-INT", 1, 0, false);
-        declareFunction("forward_support_mt_combinations", "FORWARD-SUPPORT-MT-COMBINATIONS", 1, 0, false);
-        declareFunction("compute_mts_from_supports", "COMPUTE-MTS-FROM-SUPPORTS", 1, 1, false);
-        declareFunction("separate_supports_for_mt_placement", "SEPARATE-SUPPORTS-FOR-MT-PLACEMENT", 1, 0, false);
-        declareFunction("compute_where_wff_formulaP", "COMPUTE-WHERE-WFF-FORMULA?", 1, 0, false);
-        declareFunction("assume_where_wff_formulaP", "ASSUME-WHERE-WFF-FORMULA?", 1, 0, false);
-        declareFunction("forward_mt_placements_from_support_mts", "FORWARD-MT-PLACEMENTS-FROM-SUPPORT-MTS", 1, 1, false);
-        declareFunction("all_computed_wff_mt_combinations", "ALL-COMPUTED-WFF-MT-COMBINATIONS", 1, 0, false);
-        declareFunction("all_computed_wff_mt_combinations_int", "ALL-COMPUTED-WFF-MT-COMBINATIONS-INT", 1, 0, false);
-        declareFunction("computed_wff_mt_combinations", "COMPUTED-WFF-MT-COMBINATIONS", 1, 0, false);
-        declareFunction("computed_wff_mt_combinations_wrt_term_of_unit", "COMPUTED-WFF-MT-COMBINATIONS-WRT-TERM-OF-UNIT", 1, 0, false);
-        declareFunction("computed_wff_mt_combinations_wrt_hypothetical_terms", "COMPUTED-WFF-MT-COMBINATIONS-WRT-HYPOTHETICAL-TERMS", 1, 0, false);
-        return NIL;
-    }
-
-    public static final SubLObject init_forward_file_alt() {
-        defparameter("*REQUIRE-CACHED-GAF-MT-FROM-SUPPORTS*", NIL);
-        defvar("*FORWARD-INFERENCE-BROWSING-CALLBACK*", NIL);
-        defparameter("*FORWARD-INFERENCE-BROWSING-CALLBACK-MORE-INFO?*", NIL);
-        defvar("*BLOCK-FORWARD-INFERENCES?*", NIL);
-        defparameter("*TRACING-FORWARD-INFERENCE*", NIL);
-        defparameter("*FORWARD-INFERENCE-GAF*", NIL);
-        defparameter("*FORWARD-INFERENCE-RULE*", NIL);
-        deflexical("*FORWARD-PROBLEM-STORE-PROPERTIES*", $list_alt5);
-        defparameter("*FORWARD-INFERENCE-SHARES-SAME-PROBLEM-STORE?*", T);
-        defparameter("*FORWARD-INFERENCE-RECURSION-DEPTH*", ZERO_INTEGER);
-        defparameter("*FORWARD-INFERENCE-ASSERTIBLES-QUEUE*", NIL);
-        defparameter("*TYPE-FILTER-FORWARD-DNF*", T);
-        defparameter("*FORWARD-NON-TRIGGER-LITERAL-RESTRICTED-EXAMINE-ASENT*", NIL);
-        defvar("*ASSUME-FORWARD-DEDUCTION-IS-WF?*", NIL);
-        defvar("*FORWARD-CONSTRAINT-INFERENCE-ENABLED?*", NIL);
-        defvar("*FORWARD-NON-TRIGGER-LITERAL-PRUNING-ENABLED?*", T);
-        defparameter("*FORWARD-LEAFY-MT-THRESHOLD*", MINUS_ONE_INTEGER);
-        defparameter("*VERIFY-SOME-SUPPORT-COMBINATIONS-POSSIBLE*", T);
+        declareFunction(me, "forward_propagate_rule_via_trigger_gafsP", "FORWARD-PROPAGATE-RULE-VIA-TRIGGER-GAFS?", 0, 0, false);
+        declareFunction(me, "call_forward_inference_browsing_callbackP", "CALL-FORWARD-INFERENCE-BROWSING-CALLBACK?", 0, 0, false);
+        declareFunction(me, "call_forward_inference_browsing_callback", "CALL-FORWARD-INFERENCE-BROWSING-CALLBACK", 2, 1, false);
+        declareFunction(me, "current_forward_inference_environment", "CURRENT-FORWARD-INFERENCE-ENVIRONMENT", 0, 0, false);
+        declareFunction(me, "get_forward_inference_environment", "GET-FORWARD-INFERENCE-ENVIRONMENT", 0, 0, false);
+        declareFunction(me, "free_forward_inference_enviornment", "FREE-FORWARD-INFERENCE-ENVIORNMENT", 1, 0, false);
+        declareFunction(me, "clear_forward_inference_environment", "CLEAR-FORWARD-INFERENCE-ENVIRONMENT", 1, 0, false);
+        declareFunction(me, "new_forward_inference_environment", "NEW-FORWARD-INFERENCE-ENVIRONMENT", 0, 0, false);
+        declareFunction(me, "queue_global_forward_assertion", "QUEUE-GLOBAL-FORWARD-ASSERTION", 1, 0, false);
+        declareFunction(me, "dequeue_global_forward_assertion", "DEQUEUE-GLOBAL-FORWARD-ASSERTION", 0, 0, false);
+        declareFunction(me, "global_forward_assertion_queue_empty_p", "GLOBAL-FORWARD-ASSERTION-QUEUE-EMPTY-P", 0, 0, false);
+        declareFunction(me, "clear_global_forward_inference_environment", "CLEAR-GLOBAL-FORWARD-INFERENCE-ENVIRONMENT", 0, 0, false);
+        declareMacro(me, "with_currently_forward_propagating_support", "WITH-CURRENTLY-FORWARD-PROPAGATING-SUPPORT");
+        declareFunction(me, "currently_forward_propagating_supportP", "CURRENTLY-FORWARD-PROPAGATING-SUPPORT?", 1, 0, false);
+        declareFunction(me, "all_currently_forward_propagating_supports", "ALL-CURRENTLY-FORWARD-PROPAGATING-SUPPORTS", 0, 0, false);
+        declareFunction(me, "currently_forward_propagating_assertionP", "CURRENTLY-FORWARD-PROPAGATING-ASSERTION?", 1, 0, false);
+        declareFunction(me, "all_currently_forward_propagating_assertions", "ALL-CURRENTLY-FORWARD-PROPAGATING-ASSERTIONS", 0, 0, false);
+        declareFunction(me, "clear_currently_forward_propagating_supports", "CLEAR-CURRENTLY-FORWARD-PROPAGATING-SUPPORTS", 0, 0, false);
+        declareFunction(me, "add_currently_forward_propagating_support", "ADD-CURRENTLY-FORWARD-PROPAGATING-SUPPORT", 1, 0, false);
+        declareFunction(me, "rem_currently_forward_propagating_support", "REM-CURRENTLY-FORWARD-PROPAGATING-SUPPORT", 1, 0, false);
+        declareMacro(me, "with_forward_inference_source_support", "WITH-FORWARD-INFERENCE-SOURCE-SUPPORT");
+        declareMacro(me, "with_forward_inference_rule", "WITH-FORWARD-INFERENCE-RULE");
+        declareFunction(me, "current_forward_inference_gaf", "CURRENT-FORWARD-INFERENCE-GAF", 0, 0, false);
+        declareFunction(me, "current_forward_inference_rule", "CURRENT-FORWARD-INFERENCE-RULE", 0, 0, false);
+        declareFunction(me, "current_forward_inference_assertion", "CURRENT-FORWARD-INFERENCE-ASSERTION", 0, 0, false);
+        declareFunction(me, "current_forward_inference_fully_propagating_ruleP", "CURRENT-FORWARD-INFERENCE-FULLY-PROPAGATING-RULE?", 0, 0, false);
+        declareFunction(me, "forward_problem_store_properties", "FORWARD-PROBLEM-STORE-PROPERTIES", 0, 0, false);
+        declareFunction(me, "new_forward_problem_store", "NEW-FORWARD-PROBLEM-STORE", 0, 1, false);
+        declareFunction(me, "destroy_forward_problem_store", "DESTROY-FORWARD-PROBLEM-STORE", 1, 0, false);
+        declareFunction(me, "forward_inference_shares_same_problem_storeP", "FORWARD-INFERENCE-SHARES-SAME-PROBLEM-STORE?", 0, 1, false);
+        declareFunction(me, "get_forward_problem_store", "GET-FORWARD-PROBLEM-STORE", 0, 1, false);
+        declareFunction(me, "clear_current_forward_problem_store", "CLEAR-CURRENT-FORWARD-PROBLEM-STORE", 0, 0, false);
+        declareFunction(me, "clear_current_forward_problem_store_int", "CLEAR-CURRENT-FORWARD-PROBLEM-STORE-INT", 0, 0, false);
+        declareFunction(me, "clear_current_forward_inference_environment", "CLEAR-CURRENT-FORWARD-INFERENCE-ENVIRONMENT", 0, 0, false);
+        declareFunction(me, "queue_forward_assertion", "QUEUE-FORWARD-ASSERTION", 1, 0, false);
+        declareFunction(me, "remqueue_forward_assertion", "REMQUEUE-FORWARD-ASSERTION", 1, 0, false);
+        declareFunction(me, "queue_or_repropagate_forward_assertion", "QUEUE-OR-REPROPAGATE-FORWARD-ASSERTION", 1, 0, false);
+        declareFunction(me, "queue_or_repropagate_forward_assertions", "QUEUE-OR-REPROPAGATE-FORWARD-ASSERTIONS", 1, 0, false);
+        declareFunction(me, "someone_else_will_process_this_forward_inference_environmentP", "SOMEONE-ELSE-WILL-PROCESS-THIS-FORWARD-INFERENCE-ENVIRONMENT?", 1, 0, false);
+        declareFunction(me, "performing_forward_inferenceP", "PERFORMING-FORWARD-INFERENCE?", 0, 0, false);
+        declareFunction(me, "perform_forward_inference_now", "PERFORM-FORWARD-INFERENCE-NOW", 0, 0, false);
+        declareFunction(me, "perform_forward_inference", "PERFORM-FORWARD-INFERENCE", 0, 0, false);
+        declareFunction(me, "dynamic_forward_inference_to_doP", "DYNAMIC-FORWARD-INFERENCE-TO-DO?", 1, 0, false);
+        declareFunction(me, "global_forward_inference_to_doP", "GLOBAL-FORWARD-INFERENCE-TO-DO?", 0, 0, false);
+        declareFunction(me, "forward_inference_to_doP", "FORWARD-INFERENCE-TO-DO?", 1, 0, false);
+        declareFunction(me, "repropagate_forward_assertion", "REPROPAGATE-FORWARD-ASSERTION", 1, 0, false);
+        declareFunction(me, "repropagate_forward_gaf_wrt_rule", "REPROPAGATE-FORWARD-GAF-WRT-RULE", 2, 0, false);
+        declareFunction(me, "inference_psc_overriding_termP", "INFERENCE-PSC-OVERRIDING-TERM?", 1, 0, false);
+        declareFunction(me, "inference_psc_overriding_term_mt", "INFERENCE-PSC-OVERRIDING-TERM-MT", 1, 0, false);
+        declareFunction(me, "inference_psc_overriding_mt_mt", "INFERENCE-PSC-OVERRIDING-MT-MT", 1, 0, false);
+        declareFunction(me, "inference_psc_override_mt", "INFERENCE-PSC-OVERRIDE-MT", 3, 0, false);
+        declareFunction(me, "global_forward_propagation_mtP", "GLOBAL-FORWARD-PROPAGATION-MT?", 1, 0, false);
+        declareFunction(me, "forward_inference_assertibles_queue", "FORWARD-INFERENCE-ASSERTIBLES-QUEUE", 0, 0, false);
+        declareFunction(me, "note_new_forward_assertible", "NOTE-NEW-FORWARD-ASSERTIBLE", 1, 0, false);
+        declareFunction(me, "forward_propagate_assertion", "FORWARD-PROPAGATE-ASSERTION", 1, 1, false);
+        declareFunction(me, "forward_propagate_assertion_int", "FORWARD-PROPAGATE-ASSERTION-INT", 3, 0, false);
+        declareFunction(me, "forward_propagation_permittedP", "FORWARD-PROPAGATION-PERMITTED?", 2, 0, false);
+        declareFunction(me, "forward_propagate_support", "FORWARD-PROPAGATE-SUPPORT", 1, 2, false);
+        declareFunction(me, "forward_propagate_one_support_and_generate_assertibles", "FORWARD-PROPAGATE-ONE-SUPPORT-AND-GENERATE-ASSERTIBLES", 1, 1, false);
+        declareFunction(me, "clear_forward_propagate_one_support_wrt_rule_and_generate_assertibles_cached", "CLEAR-FORWARD-PROPAGATE-ONE-SUPPORT-WRT-RULE-AND-GENERATE-ASSERTIBLES-CACHED", 0, 0, false);
+        declareFunction(me, "remove_forward_propagate_one_support_wrt_rule_and_generate_assertibles_cached", "REMOVE-FORWARD-PROPAGATE-ONE-SUPPORT-WRT-RULE-AND-GENERATE-ASSERTIBLES-CACHED", 2, 0, false);
+        declareFunction(me, "forward_propagate_one_support_wrt_rule_and_generate_assertibles_cached_internal", "FORWARD-PROPAGATE-ONE-SUPPORT-WRT-RULE-AND-GENERATE-ASSERTIBLES-CACHED-INTERNAL", 2, 0, false);
+        declareFunction(me, "forward_propagate_one_support_wrt_rule_and_generate_assertibles_cached", "FORWARD-PROPAGATE-ONE-SUPPORT-WRT-RULE-AND-GENERATE-ASSERTIBLES-CACHED", 2, 0, false);
+        declareFunction(me, "forward_propagate_one_support_wrt_rule_and_generate_assertibles", "FORWARD-PROPAGATE-ONE-SUPPORT-WRT-RULE-AND-GENERATE-ASSERTIBLES", 2, 1, false);
+        declareFunction(me, "forward_propagate_one_assertion_wrt_rules_and_queue_or_repropagate_assertibles", "FORWARD-PROPAGATE-ONE-ASSERTION-WRT-RULES-AND-QUEUE-OR-REPROPAGATE-ASSERTIBLES", 2, 1, false);
+        declareFunction(me, "forward_propagate_supports_and_generate_assertibles", "FORWARD-PROPAGATE-SUPPORTS-AND-GENERATE-ASSERTIBLES", 1, 1, false);
+        declareFunction(me, "forward_propagate_support_generate_assertibles", "FORWARD-PROPAGATE-SUPPORT-GENERATE-ASSERTIBLES", 2, 0, false);
+        declareFunction(me, "forward_propagate_handle_batched_assertibles", "FORWARD-PROPAGATE-HANDLE-BATCHED-ASSERTIBLES", 1, 1, false);
+        declareFunction(me, "forward_propagate_support_handle_assertibles", "FORWARD-PROPAGATE-SUPPORT-HANDLE-ASSERTIBLES", 1, 2, false);
+        declareFunction(me, "forward_propagate_rule", "FORWARD-PROPAGATE-RULE", 2, 0, false);
+        declareFunction(me, "support_truth_sense", "SUPPORT-TRUTH-SENSE", 1, 0, false);
+        declareFunction(me, "support_asent", "SUPPORT-ASENT", 1, 0, false);
+        declareFunction(me, "forward_propagate_asent_support", "FORWARD-PROPAGATE-ASENT-SUPPORT", 2, 0, false);
+        declareFunction(me, "forward_propagate_asent_tactic_specs", "FORWARD-PROPAGATE-ASENT-TACTIC-SPECS", 2, 0, false);
+        declareFunction(me, "forward_propagate_one_tactic_spec", "FORWARD-PROPAGATE-ONE-TACTIC-SPEC", 3, 0, false);
+        declareFunction(me, "make_forward_trigger_supports", "MAKE-FORWARD-TRIGGER-SUPPORTS", 2, 0, false);
+        declareFunction(me, "forward_inference_allowed_rules", "FORWARD-INFERENCE-ALLOWED-RULES", 0, 0, false);
+        declareFunction(me, "forward_inference_all_rules_allowedP", "FORWARD-INFERENCE-ALL-RULES-ALLOWED?", 0, 0, false);
+        declareFunction(me, "forward_inference_rule_allowedP", "FORWARD-INFERENCE-RULE-ALLOWED?", 1, 0, false);
+        declareFunction(me, "forward_inference_forbidden_rules", "FORWARD-INFERENCE-FORBIDDEN-RULES", 0, 0, false);
+        declareFunction(me, "forward_inference_no_rules_forbiddenP", "FORWARD-INFERENCE-NO-RULES-FORBIDDEN?", 0, 0, false);
+        declareFunction(me, "forward_inference_rule_forbiddenP", "FORWARD-INFERENCE-RULE-FORBIDDEN?", 1, 0, false);
+        declareFunction(me, "forward_propagate_gaf_internal", "FORWARD-PROPAGATE-GAF-INTERNAL", 6, 0, false);
+        declareFunction(me, "handle_forward_propagation_from_gaf", "HANDLE-FORWARD-PROPAGATION-FROM-GAF", 8, 0, false);
+        declareFunction(me, "creation_template_forward_rules_via_exemplars", "CREATION-TEMPLATE-FORWARD-RULES-VIA-EXEMPLARS", 1, 0, false);
+        declareFunction(me, "creation_template_exemplars", "CREATION-TEMPLATE-EXEMPLARS", 1, 0, false);
+        declareFunction(me, "creation_template_allowable_rules", "CREATION-TEMPLATE-ALLOWABLE-RULES", 1, 0, false);
+        declareFunction(me, "all_genl_creation_templates", "ALL-GENL-CREATION-TEMPLATES", 1, 0, false);
+        declareFunction(me, "creation_template_allowable_rules_internal", "CREATION-TEMPLATE-ALLOWABLE-RULES-INTERNAL", 1, 0, false);
+        declareFunction(me, "handle_forward_propagation", "HANDLE-FORWARD-PROPAGATION", 6, 0, false);
+        declareFunction(me, "handle_one_forward_propagation", "HANDLE-ONE-FORWARD-PROPAGATION", 8, 0, false);
+        declareFunction(me, "forward_propagate_doomed_due_to_null_max_floor_mtsP", "FORWARD-PROPAGATE-DOOMED-DUE-TO-NULL-MAX-FLOOR-MTS?", 2, 1, false);
+        declareFunction(me, "filter_forward_pragmatic_dnf", "FILTER-FORWARD-PRAGMATIC-DNF", 1, 0, false);
+        declareFunction(me, "forward_propagate_dnf", "FORWARD-PROPAGATE-DNF", 8, 0, false);
+        declareFunction(me, "new_forward_query_from_dnf", "NEW-FORWARD-QUERY-FROM-DNF", 3, 1, false);
+        declareFunction(me, "new_cyc_trivial_forward_query_from_dnf", "NEW-CYC-TRIVIAL-FORWARD-QUERY-FROM-DNF", 2, 2, false);
+        declareFunction(me, "new_forward_query", "NEW-FORWARD-QUERY", 1, 2, false);
+        declareFunction(me, "forward_inference_query_properties", "FORWARD-INFERENCE-QUERY-PROPERTIES", 1, 1, false);
+        declareFunction(me, "trivial_forward_inference_query_properties", "TRIVIAL-FORWARD-INFERENCE-QUERY-PROPERTIES", 1, 1, false);
+        declareFunction(me, "forward_inference_productivity_limit", "FORWARD-INFERENCE-PRODUCTIVITY-LIMIT", 0, 0, false);
+        declareFunction(me, "rule_forward_inference_productivity_limit", "RULE-FORWARD-INFERENCE-PRODUCTIVITY-LIMIT", 1, 0, false);
+        declareFunction(me, "add_forward_propagation_result", "ADD-FORWARD-PROPAGATION-RESULT", 7, 0, false);
+        declareFunction(me, "add_empty_forward_propagation_result", "ADD-EMPTY-FORWARD-PROPAGATION-RESULT", 6, 0, false);
+        declareFunction(me, "new_forward_concluded_supports", "NEW-FORWARD-CONCLUDED-SUPPORTS", 2, 1, false);
+        declareFunction(me, "add_forward_deductions_from_supports", "ADD-FORWARD-DEDUCTIONS-FROM-SUPPORTS", 8, 0, false);
+        declareFunction(me, "handle_forward_deduction_in_mt", "HANDLE-FORWARD-DEDUCTION-IN-MT", 9, 0, false);
+        declareFunction(me, "handle_forward_deduction_in_mt_int", "HANDLE-FORWARD-DEDUCTION-IN-MT-INT", 9, 0, false);
+        declareFunction(me, "handle_forward_deduction_in_mt_as_assertible", "HANDLE-FORWARD-DEDUCTION-IN-MT-AS-ASSERTIBLE", 5, 2, false);
+        declareFunction(me, "handle_forward_deduction_in_mt_as_assertible_int", "HANDLE-FORWARD-DEDUCTION-IN-MT-AS-ASSERTIBLE-INT", 3, 3, false);
+        declareFunction(me, "forbid_forward_conclusion_in_mtP", "FORBID-FORWARD-CONCLUSION-IN-MT?", 5, 0, false);
+        declareFunction(me, "wff_constraint_supportP", "WFF-CONSTRAINT-SUPPORT?", 1, 0, false);
+        declareFunction(me, "wff_constraint_mtP", "WFF-CONSTRAINT-MT?", 1, 0, false);
+        declareFunction(me, "constraint_ruleP", "CONSTRAINT-RULE?", 1, 1, false);
+        declareFunction(me, "handle_forward_deduction_in_mt_as_constraint", "HANDLE-FORWARD-DEDUCTION-IN-MT-AS-CONSTRAINT", 5, 2, false);
+        declareFunction(me, "verify_forward_deduction_constraint", "VERIFY-FORWARD-DEDUCTION-CONSTRAINT", 2, 0, false);
+        declareFunction(me, "cycl_sentence_for_forward_inference_canonicalP", "CYCL-SENTENCE-FOR-FORWARD-INFERENCE-CANONICAL?", 3, 0, false);
+        declareFunction(me, "syntactically_valid_forward_dnf", "SYNTACTICALLY-VALID-FORWARD-DNF", 3, 1, false);
+        declareFunction(me, "syntactically_valid_forward_non_trigger_asents", "SYNTACTICALLY-VALID-FORWARD-NON-TRIGGER-ASENTS", 2, 1, false);
+        declareFunction(me, "semantically_valid_forward_dnf", "SEMANTICALLY-VALID-FORWARD-DNF", 3, 1, false);
+        declareFunction(me, "forward_leafy_mt_p", "FORWARD-LEAFY-MT-P", 1, 0, false);
+        declareFunction(me, "forward_propagation_supports_doomedP", "FORWARD-PROPAGATION-SUPPORTS-DOOMED?", 2, 0, false);
+        declareFunction(me, "forward_propagation_mts_doomedP", "FORWARD-PROPAGATION-MTS-DOOMED?", 1, 0, false);
+        declareFunction(me, "forward_possibly_some_common_spec_mtP_internal", "FORWARD-POSSIBLY-SOME-COMMON-SPEC-MT?-INTERNAL", 1, 0, false);
+        declareFunction(me, "forward_possibly_some_common_spec_mtP", "FORWARD-POSSIBLY-SOME-COMMON-SPEC-MT?", 1, 0, false);
+        declareFunction(me, "leafy_mt_p", "LEAFY-MT-P", 1, 1, false);
+        declareFunction(me, "compute_all_mt_and_support_combinations", "COMPUTE-ALL-MT-AND-SUPPORT-COMBINATIONS", 1, 1, false);
+        declareFunction(me, "compute_decontextualized_support_combinations", "COMPUTE-DECONTEXTUALIZED-SUPPORT-COMBINATIONS", 2, 0, false);
+        declareFunction(me, "some_support_combinations_theoretically_possible", "SOME-SUPPORT-COMBINATIONS-THEORETICALLY-POSSIBLE", 1, 0, false);
+        declareFunction(me, "some_support_combinations_extensionally_possible", "SOME-SUPPORT-COMBINATIONS-EXTENSIONALLY-POSSIBLE", 1, 0, false);
+        declareFunction(me, "all_forward_support_mt_combinations", "ALL-FORWARD-SUPPORT-MT-COMBINATIONS", 1, 0, false);
+        declareFunction(me, "all_forward_support_mt_combinations_int", "ALL-FORWARD-SUPPORT-MT-COMBINATIONS-INT", 1, 0, false);
+        declareFunction(me, "forward_support_mt_combinations", "FORWARD-SUPPORT-MT-COMBINATIONS", 1, 0, false);
+        declareFunction(me, "compute_mts_from_supports", "COMPUTE-MTS-FROM-SUPPORTS", 1, 1, false);
+        declareFunction(me, "separate_supports_for_mt_placement", "SEPARATE-SUPPORTS-FOR-MT-PLACEMENT", 1, 0, false);
+        declareFunction(me, "compute_where_wff_formulaP", "COMPUTE-WHERE-WFF-FORMULA?", 1, 0, false);
+        declareFunction(me, "assume_where_wff_formulaP", "ASSUME-WHERE-WFF-FORMULA?", 1, 0, false);
+        declareFunction(me, "forward_mt_placements_from_support_mts", "FORWARD-MT-PLACEMENTS-FROM-SUPPORT-MTS", 1, 1, false);
+        declareFunction(me, "all_computed_wff_mt_combinations", "ALL-COMPUTED-WFF-MT-COMBINATIONS", 1, 0, false);
+        declareFunction(me, "all_computed_wff_mt_combinations_int", "ALL-COMPUTED-WFF-MT-COMBINATIONS-INT", 1, 0, false);
+        declareFunction(me, "computed_wff_mt_combinations", "COMPUTED-WFF-MT-COMBINATIONS", 1, 0, false);
+        declareFunction(me, "computed_wff_mt_combinations_wrt_term_of_unit", "COMPUTED-WFF-MT-COMBINATIONS-WRT-TERM-OF-UNIT", 1, 0, false);
+        declareFunction(me, "computed_wff_mt_combinations_wrt_hypothetical_terms", "COMPUTED-WFF-MT-COMBINATIONS-WRT-HYPOTHETICAL-TERMS", 1, 0, false);
         return NIL;
     }
 
     public static SubLObject init_forward_file() {
-        if (SubLFiles.USE_V1) {
-            defparameter("*FORWARD-INFERENCE-TRACE?*", NIL);
-            defparameter("*TRACING-FORWARD-INFERENCE*", NIL);
-            defparameter("*FORWARD-INFERENCE-DEBUG?*", NIL);
-            defparameter("*REQUIRE-CACHED-GAF-MT-FROM-SUPPORTS*", NIL);
-            defvar("*FORWARD-INFERENCE-BROWSING-CALLBACK*", NIL);
-            defparameter("*FORWARD-INFERENCE-BROWSING-CALLBACK-MORE-INFO?*", NIL);
-            defvar("*BLOCK-FORWARD-INFERENCES?*", NIL);
-            deflexical("*FORWARD-INFERENCE-ASSERTED-ASENT-FAST-FAIL-CUTOFF*", ONE_INTEGER);
-            defparameter("*RESPECT-DEFINING-MT-FOR-HYPOTHETICAL-TERMS?*", T);
-            defparameter("*SUPPORT-FORWARD-PROPAGATE-RULE-VIA-TRIGGER-GAFS?*", T);
-            defparameter("*FORWARD-PROPAGATE-RULE-VIA-TRIGGER-GAFS-PROBLEM-STORE-SIZE*", $int$10000);
-            defparameter("*FORWARD-INFERENCE-CALLBACK-REASONS*", $list1);
-            defparameter("*SUPPRESSED-FORWARD-INFERENCE-CALLBACK-REASONS*", NIL);
-            defparameter("*FORCED-FORWARD-INFERENCE-CALLBACK-REASONS*", NIL);
-            deflexical("*GLOBAL-FORWARD-INFERENCE-ENVIRONMENT-LOCK*", SubLTrampolineFile.maybeDefault($global_forward_inference_environment_lock$, $global_forward_inference_environment_lock$, () -> make_lock($str7$Global_forward_inference_environm)));
-            defparameter("*GLOBAL-FORWARD-INFERENCE-ENVIRONMENT*", queues.create_queue(UNPROVIDED));
-            deflexical("*CURRENTLY-FORWARD-PROPAGATING-SUPPORTS*", SubLTrampolineFile.maybeDefault($currently_forward_propagating_supports$, $currently_forward_propagating_supports$, () -> set.new_set(symbol_function(EQUAL), UNPROVIDED)));
-            deflexical("*CURRENTLY-FORWARD-PROPAGATING-SUPPORTS-LOCK*", make_lock($str9$Currently_Forward_Propagating_Sup));
-            defparameter("*FORWARD-INFERENCE-GAF*", NIL);
-            defparameter("*FORWARD-INFERENCE-RULE*", NIL);
-            deflexical("*FORWARD-PROBLEM-STORE-PROPERTIES*", $list23);
-            defparameter("*FORWARD-INFERENCE-SHARES-SAME-PROBLEM-STORE?*", T);
-            defparameter("*FORWARD-INFERENCE-RECURSION-DEPTH*", ZERO_INTEGER);
-            defparameter("*SOMEONE-ELSE-WILL-PROCESS-THIS-FORWARD-INFERENCE-ENVIRONMENT*", NIL);
-            defparameter("*SOMEONE-ELSE-WILL-PROCESS-THE-GLOBAL-FORWARD-INFERENCE-ENVIRONMENT?*", NIL);
-            defparameter("*DEFAULT-FORWARD-PROPAGATION-MT*", $$InferencePSC);
-            defparameter("*ALLOW-FORWARD-PROPAGATION-MT-OVERRIDE?*", NIL);
-            defparameter("*DEBUG-FORWARD-PROPAGATION-MT-OVERRIDE?*", NIL);
-            defparameter("*FORWARD-INFERENCE-ASSERTIBLES-QUEUE*", NIL);
-            deflexical("*FORWARD-PROPAGATE-ONE-SUPPORT-WRT-RULE-AND-GENERATE-ASSERTIBLES-CACHED-CACHING-STATE*", NIL);
-            defparameter("*TYPE-FILTER-FORWARD-DNF*", T);
-            defparameter("*FORWARD-NON-TRIGGER-LITERAL-RESTRICTED-EXAMINE-ASENT*", NIL);
-            defparameter("*HANDLE-ONE-FORWARD-PROPAGATION-CALLBACK*", NIL);
-            defparameter("*CHECK-FORWARD-PROPAGATE-DOOMED-DUE-TO-NULL-MAX-FLOOR-MTS?*", T);
-            defparameter("*FORWARD-LEAFY-MT-THRESHOLD*", MINUS_ONE_INTEGER);
-            defparameter("*FORWARD-INFERENCE-SHOW-PROPAGATION-RESULTS-PROGRESS-CUTOFF*", $int$5000);
-            defparameter("*FORWARD-INFERENCE-OVERRIDING-QUERY-PROPERTIES*", NIL);
-            defparameter("*RULE-FORWARD-INFERENCE-PRODUCTIVITY-AGGRESSIVE-WHACKING-MODE?*", NIL);
-            defparameter("*MINIMUM-RULE-FORWARD-INFERENCE-PRODUCTIVITY-LIMIT*", $int$10000);
-            defparameter("*ASSERTIVE-WFF-RULE-WHACKING-FACTOR*", $int$200);
-            defparameter("*OLD-RULE-WITHOUT-DEPENDENTS-OR-BOOKKEEPING-WHACKING-FACTOR*", $int$150000);
-            defparameter("*OLD-RULE-WITHOUT-DEPENDENTS-WHACKING-COMPENSATION-FACTOR*", $int$1000);
-            defvar("*COMPUTE-DECONTEXTUALIZED-DEDUCTION-MT?*", T);
-            defparameter("*ADD-FORWARD-DEDUCTIONS-FROM-SUPPORTS-CALLBACK*", NIL);
-            defvar("*ASSUME-FORWARD-DEDUCTION-IS-WF?*", NIL);
-            defvar("*FORWARD-CONSTRAINT-INFERENCE-ENABLED?*", NIL);
-            defparameter("*COMPUTE-ALL-MT-AND-SUPPORT-COMBINATIONS-EXCEPTIONS*", NIL);
-            defparameter("*VERIFY-SOME-SUPPORT-COMBINATIONS-POSSIBLE*", T);
-        }
-        if (SubLFiles.USE_V2) {
-            deflexical("*FORWARD-PROBLEM-STORE-PROPERTIES*", $list_alt5);
-            defvar("*FORWARD-NON-TRIGGER-LITERAL-PRUNING-ENABLED?*", T);
-        }
-        return NIL;
-    }
-
-    public static SubLObject init_forward_file_Previous() {
         defparameter("*FORWARD-INFERENCE-TRACE?*", NIL);
         defparameter("*TRACING-FORWARD-INFERENCE*", NIL);
         defparameter("*FORWARD-INFERENCE-DEBUG?*", NIL);
@@ -7477,28 +5228,7 @@ public final class forward extends SubLTranslatedFile implements V12 {
         return NIL;
     }
 
-    public static final SubLObject setup_forward_file_alt() {
-        com.cyc.cycjava.cycl.inference.harness.forward.initialize_forward_inference_environment();
-        memoization_state.note_memoized_function($sym69$FORWARD_POSSIBLY_SOME_COMMON_SPEC_MT_);
-        return NIL;
-    }
-
     public static SubLObject setup_forward_file() {
-        if (SubLFiles.USE_V1) {
-            declare_defglobal($global_forward_inference_environment_lock$);
-            declare_defglobal($currently_forward_propagating_supports$);
-            memoization_state.note_globally_cached_function($sym50$FORWARD_PROPAGATE_ONE_SUPPORT_WRT_RULE_AND_GENERATE_ASSERTIBLES_C);
-            note_funcall_helper_function($sym190$WFF_CONSTRAINT_SUPPORT_);
-            memoization_state.note_memoized_function($sym203$FORWARD_POSSIBLY_SOME_COMMON_SPEC_MT_);
-        }
-        if (SubLFiles.USE_V2) {
-            com.cyc.cycjava.cycl.inference.harness.forward.initialize_forward_inference_environment();
-            memoization_state.note_memoized_function($sym69$FORWARD_POSSIBLY_SOME_COMMON_SPEC_MT_);
-        }
-        return NIL;
-    }
-
-    public static SubLObject setup_forward_file_Previous() {
         declare_defglobal($global_forward_inference_environment_lock$);
         declare_defglobal($currently_forward_propagating_supports$);
         memoization_state.note_globally_cached_function($sym50$FORWARD_PROPAGATE_ONE_SUPPORT_WRT_RULE_AND_GENERATE_ASSERTIBLES_C);
@@ -7523,6 +5253,275 @@ public final class forward extends SubLTranslatedFile implements V12 {
     }
 
     static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
 
