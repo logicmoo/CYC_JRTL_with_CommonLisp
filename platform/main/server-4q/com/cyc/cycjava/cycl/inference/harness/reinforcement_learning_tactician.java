@@ -387,7 +387,7 @@ public final class reinforcement_learning_tactician extends SubLTranslatedFile i
 			    inference_worker_split.$meta_split_tactics_enabledP$.bind(NIL, thread);
 			    {
 				SubLObject query_properties = putf(copy_list($reinforcement_learning_tactician_query_properties$.getGlobalValue()), $MAX_TIME, max_time);
-				SubLObject query_run = kbq_query_run.kbq_run_query(query, $reinforcement_learning_tactician_metrics$.getGlobalValue(), NIL, query_properties, UNPROVIDED);
+				SubLObject query_run = kbq_query_run.kbq_run_query(query, $reinforcement_learning_tactician_metrics$.getGlobalValue(), NIL, query_properties, UNPROVIDED, UNPROVIDED_SYM);
 				query_run = putf(query_run, $RL_TACTICIAN_TIME, $rl_tactician_time$.getDynamicValue(thread));
 				result = query_run;
 			    }

@@ -1737,7 +1737,7 @@ public final class probably_approximately_done extends SubLTranslatedFile implem
                 }
                 {
                     SubLObject query_spec = listS($$QueryFn, list($$Quote, list($$ist, mt, sentence)), $list_alt115);
-                    return kbq_query_run.kbq_run_query(query_spec, $list_alt116, $pad_outlier_timeout$.getGlobalValue(), query_properties, NIL);
+                    return kbq_query_run.kbq_run_query(query_spec, $list_alt116, $pad_outlier_timeout$.getGlobalValue(), query_properties, NIL, UNPROVIDED_SYM);
                 }
             } else {
                 cdestructuring_bind_error(datum, $list_alt7);
